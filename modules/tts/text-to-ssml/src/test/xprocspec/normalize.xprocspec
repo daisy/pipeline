@@ -6,8 +6,7 @@
 	       xmlns:xml="http://www.w3.org/XML/1998/namespace"
 	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
 	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tts"
-               script="../../main/resources/xml/xproc/text-to-ssml.xpl">
+	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tts">
 
   <x:script>
     <p:declare-step version="1.0" name="main"

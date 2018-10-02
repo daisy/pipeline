@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
 	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 	       xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/"
@@ -123,9 +124,7 @@
       <x:expect label="result" type="compare">
 	<x:document type="inline">
 	  <speak version="1.1">
-	    <s id="s1" xml:lang="en"><token>text1</token> <mark name="s1___s2"/> <token>text2</token> <mark name="s2___s3"/> <token>text3</token></s>
-	  </speak>
-	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>text1</token> <mark name="sp1___sp2"/> <token>text2</token> <mark name="sp2___sp3"/> <token>text3</token></s>
 	    <s id="internal-holder-of-sk1" xml:lang="en">13 , <mark name="sk1___sk2"/> . 14 ,</s>
 	  </speak>
 	</x:document>
@@ -304,9 +303,6 @@
       <x:expect label="result" type="compare">
 	<x:document type="inline">
 	  <speak version="1.1">
-	    <!-- regular doc -->
-	  </speak>
-	  <speak version="1.1">
 	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
               <prosody volume="2">1</prosody>
 	    </s>
@@ -330,9 +326,6 @@
       </x:context>
       <x:expect label="result" type="compare">
 	<x:document type="inline">
-	  <speak version="1.1">
-	    <!-- regular doc -->
-	  </speak>
 	  <speak version="1.1">
 	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
               <prosody volume="2">1</prosody>
@@ -367,8 +360,6 @@
               <mark name="left___right"/>
               <token>right</token>
 	    </s>
-	  </speak>
-	  <speak version="1.1">
 	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
               <prosody volume="2">1</prosody>
 	    </s>
@@ -404,8 +395,6 @@
 		<token>right</token>
 	      </prosody>
 	    </s>
-	  </speak>
-	  <speak version="1.1">
 	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
               <prosody volume="2">1</prosody>
 	    </s>
@@ -443,8 +432,6 @@
 	      <mark name="middle___right"/>
 	      <token>right</token>
 	    </s>
-	  </speak>
-	  <speak version="1.1">
 	    <s id="internal-holder-of-sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
 	      1, <mark name="sk1___sk2"/> . 2,
 	    </s>

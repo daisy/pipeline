@@ -84,7 +84,7 @@ public class ESpeakEngine extends MarklessTTSEngine {
 				result.add(b);
 			}
 			fi.close();
-			p.waitFor();
+			waitFor(p, mCmd);
 		} catch (MemoryException e) {
 			SoundUtil.cancelFootPrint(result, bufferAllocator);
 			p.destroy();
@@ -122,9 +122,10 @@ public class ESpeakEngine extends MarklessTTSEngine {
 		try {
 			//First: get the list of all the available languages
 			Set<String> languages = new HashSet<String>();
-			proc = Runtime.getRuntime().exec(new String[]{
-			        mESpeakPath, "--voices"
-			});
+			String[] cmd = new String[]{
+				mESpeakPath, "--voices"
+			};
+			proc = Runtime.getRuntime().exec(cmd);
 			is = proc.getInputStream();
 			mr = Pattern.compile("\\s*[0-9]+\\s+([-a-z]+)").matcher("");
 			scanner = new Scanner(is);
@@ -135,7 +136,7 @@ public class ESpeakEngine extends MarklessTTSEngine {
 				languages.add(mr.group(1).split("-")[0]);
 			}
 			is.close();
-			proc.waitFor();
+			waitFor(proc, cmd);
 			proc = null;
 
 			//Second: get the list of the voices for the found languages.
@@ -143,9 +144,10 @@ public class ESpeakEngine extends MarklessTTSEngine {
 			result = new ArrayList<Voice>();
 			mr = Pattern.compile("^\\s*[0-9]+\\s+[-a-z]+\\s+([FM]\\s+)?([^ ]+)").matcher("");
 			for (String lang : languages) {
-				proc = Runtime.getRuntime().exec(new String[]{
-				        mESpeakPath, "--voices=" + lang
-				});
+				cmd = new String[]{
+					mESpeakPath, "--voices=" + lang
+				};
+				proc = Runtime.getRuntime().exec(cmd);
 				is = proc.getInputStream();
 				scanner = new Scanner(is);
 				scanner.nextLine(); //headers
@@ -155,7 +157,7 @@ public class ESpeakEngine extends MarklessTTSEngine {
 					result.add(new Voice(getProvider().getName(), mr.group(2).trim()));
 				}
 				is.close();
-				proc.waitFor();
+				waitFor(proc, cmd);
 			}
 
 		} catch (InterruptedException e) {
@@ -187,4 +189,11 @@ public class ESpeakEngine extends MarklessTTSEngine {
 		return new TTSResource();
 	}
 
+	private void waitFor(Process proc, String[] command) throws InterruptedException {
+		try {
+			proc.waitFor();
+		} catch (InterruptedException e) {
+			throw new InterruptedException("Interrupted while running command `" + String.join(" ", command) + "`");
+		}
+	}
 }

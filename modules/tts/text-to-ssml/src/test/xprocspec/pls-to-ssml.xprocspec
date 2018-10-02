@@ -19,7 +19,6 @@
 	</x:document>
       </x:input>
       <x:input port="user-lexicons">
-	<x:empty/>
       </x:input>
       <x:option name="lang" select="'en'"/>
     </x:call>

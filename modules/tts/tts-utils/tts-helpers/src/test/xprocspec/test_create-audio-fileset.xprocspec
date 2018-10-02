@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/create-audio-fileset.xpl">
+    
+    <x:scenario label="create-audio-fileset">
+        <x:call step="px:create-audio-fileset">
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:audio-clips>
+                        <d:clip idref="std5512e7246"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:03.289"
+                                src="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_00_000.mp3"/>
+                        <d:clip idref="std5512e7256"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:02.856"
+                                src="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_01_000.mp3"/>
+                        <d:clip idref="std5512e8252"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:05.041"
+                                src="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_00_000.mp3"/>
+                        <d:clip idref="std5512e8263"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:04.993"
+                                src="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_01_000.mp3"/>
+                        <d:clip idref="std5512e9701"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:04.011"
+                                src="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_00_000.mp3"/>
+                        <d:clip idref="std5512e9711"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:01.448"
+                                src="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_01_000.mp3"/>
+                    </d:audio-clips>
+                </x:document>
+            </x:input>
+            <x:option name="output-dir" select="'file:/users/me/dir/'"/>
+            <x:option name="audio-relative-dir" select="'audio/'"/>
+        </x:call>
+        <x:context label="the fileset.out port">
+            <x:document type="port" port="fileset.out"/>
+        </x:context>
+        <x:expect type="compare" label="the fileset.out port">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="file:/users/me/dir/audio/part0000_00_000.mp3"
+                            original-href="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_00_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/users/me/dir/audio/part0000_01_000.mp3"
+                            original-href="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_01_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/users/me/dir/audio/part0001_00_000.mp3"
+                            original-href="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_00_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/users/me/dir/audio/part0001_01_000.mp3"
+                            original-href="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_01_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/users/me/dir/audio/part0002_00_000.mp3"
+                            original-href="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_00_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/users/me/dir/audio/part0002_01_000.mp3"
+                            original-href="file:/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_01_000.mp3"
+                            media-type="audio/mpeg"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

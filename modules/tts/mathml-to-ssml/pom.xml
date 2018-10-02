@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -16,5 +16,35 @@
 
   <name>DAISY Pipeline 2 module :: Production of SSML chunks from MathML</name>
   <description>Convert MathML islands (both Content and Presentation) into SSML for TTS</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xproc-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>xprocspec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xproc-engine-calabash</artifactId>
+            <version>1.1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>org.daisy.xprocspec</groupId>
+            <artifactId>xprocspec</artifactId>
+            <version>1.2.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

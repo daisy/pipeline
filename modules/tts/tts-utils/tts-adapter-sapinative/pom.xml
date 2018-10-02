@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-		<version>1.11.1-SNAPSHOT</version>
+		<version>1.11.2-SNAPSHOT</version>
 		<relativePath>../../parent</relativePath>
   </parent>
 
@@ -109,7 +109,7 @@
               <tasks>
                 <copy todir="target/generated-resources/">
                   <fileset dir="target/dependency">
-                    <include name="**/*.dll" />
+                    <include name="**/*.dll"/>
                   </fileset>
                 </copy>
               </tasks>
@@ -125,7 +125,7 @@
         <configuration>
           <instructions>
 	    <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package />
+	    <Export-Package/>
           </instructions>
         </configuration>
         <executions>

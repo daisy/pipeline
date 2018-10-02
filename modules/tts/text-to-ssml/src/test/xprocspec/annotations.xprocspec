@@ -20,6 +20,7 @@
 	  <tts:sentence-ids/>
   	</x:document>
       </x:input>
+    </x:call>
       <x:context label="result">
   	<x:document type="port" port="result"/>
       </x:context>
@@ -28,7 +29,6 @@
   	  <dt:book/>
   	</x:document>
       </x:expect>
-    </x:call>
   </x:scenario>
 
   <x:scenario label="Annotation Test">

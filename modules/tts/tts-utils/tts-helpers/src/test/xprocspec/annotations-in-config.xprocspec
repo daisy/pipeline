@@ -3,11 +3,11 @@
 	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 	       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="../../../../src/main/resources/xml/xproc/get-config-annotations.xpl">
+               script="../../main/resources/xml/xproc/get-tts-annotations.xpl">
 
 
   <x:scenario label="Two embedded annotation">
-    <x:call step="px:get-config-annotations">
+    <x:call step="px:get-tts-annotations">
       <x:option name="content-type" select="'some-type'"/>
       <x:input port="config">
 	<x:document type="inline">
@@ -31,14 +31,18 @@
     </x:context>
     <x:expect label="annotated" type="compare">
       <x:document type="inline">
-	<xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
-	  <xsl:template match="dt:*" name="t1"/>
-	</xsl:stylesheet>
+	<d:annotations type="some-type">
+	  <xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+	    <xsl:template match="dt:*" name="t1"/>
+	  </xsl:stylesheet>
+	</d:annotations>
       </x:document>
       <x:document type="inline">
-	<xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
-	  <xsl:template match="dt:*" name="t2"/>
-	</xsl:stylesheet>
+	<d:annotations type="some-type">
+	  <xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+	    <xsl:template match="dt:*" name="t2"/>
+	  </xsl:stylesheet>
+	</d:annotations>
       </x:document>
     </x:expect>
   </x:scenario>

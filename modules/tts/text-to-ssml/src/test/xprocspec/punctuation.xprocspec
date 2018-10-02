@@ -57,9 +57,6 @@
 	    <ssml:s xml:lang="en" id="s3"><ssml:token>Third</ssml:token> <ssml:token>test</ssml:token>?</ssml:s>
 	    <ssml:s xml:lang="en" id="s4"><ssml:token>Fourth</ssml:token> <ssml:token>test</ssml:token></ssml:s>
 	  </ssml:speak>
-	  <ssml:speak version="1.1">
-	    <!-- SSML for skippable elements -->
-	  </ssml:speak>
 	</x:document>
       </x:expect>
     </x:scenario>
@@ -84,9 +81,6 @@
 	    <ssml:s xml:lang="en" id="s1"><ssml:token>first</ssml:token> <ssml:token>sentence</ssml:token>.</ssml:s>
 	    <ssml:s xml:lang="en" id="s2"><ssml:token>second</ssml:token> <ssml:token>sentence</ssml:token> !</ssml:s>
 	  </ssml:speak>
-	  <ssml:speak version="1.1">
-	    <!-- SSML for skippable elements -->
-	  </ssml:speak>
 	</x:document>
       </x:expect>
     </x:scenario>
@@ -94,7 +88,6 @@
     <x:scenario label="Filter characters">
       <x:call step="px:text-to-ssml">
 	<x:input port="fileset.in">
-	  <x:empty/>
 	</x:input>
 	<x:input port="content.in">
 	  <x:document type="inline">
@@ -113,9 +106,6 @@
 	  <ssml:speak version="1.1">
 	    <ssml:s id="s1" xml:lang="en">??!,(“;ຯ:'".</ssml:s>
 	    <ssml:s id="s2" xml:lang="en"><ssml:token>to remove:</ssml:token> .</ssml:s>
-	  </ssml:speak>
-	  <ssml:speak version="1.1">
-	  <!-- SSML for skippable elements -->
 	  </ssml:speak>
 	</x:document>
       </x:expect>

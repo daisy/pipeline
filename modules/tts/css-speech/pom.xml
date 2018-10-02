@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -59,7 +59,7 @@
         <configuration>
           <instructions>
             <Service-Component>OSGI-INF/inline-css.xml</Service-Component>
-	    <Export-Package />
+	    <Export-Package/>
           </instructions>
         </configuration>
       </plugin>

@@ -218,8 +218,9 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 		//get a voice supporting SSML marks (so far as they are supported by the engine)
 		Voice firstVoice = null;
+		int timeoutSecs = 5;
 		try {
-			timeout.enableForCurrentThread(2);
+			timeout.enableForCurrentThread(timeoutSecs);
 			for (Voice v : engine.getAvailableVoices()) {
 				if (engine.endingMark() == null
 				        || v.getMarkSupport() != MarkSupport.MARK_NOT_SUPPORTED) {
@@ -233,6 +234,13 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				ServerLogger.error(err);
 				return null;
 			}
+		} catch (InterruptedException e) {
+			String err = "Timeout while retrieving the voices of "
+			        + TTSServiceUtil.displayName(service) + " (exceeded " + timeoutSecs
+			        + " seconds)\n" + getStack(e);
+			mTTSlog.addGeneralError(ErrorCode.WARNING, err);
+			ServerLogger.error(err);
+			return null;
 		} catch (Exception e) {
 			String err = TTSServiceUtil.displayName(service)
 			        + " failed to return voices, cause: " + e.getMessage() + ": "
