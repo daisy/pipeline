@@ -1,4 +1,0 @@
-#+type:translation
-#+locale:da
-include ../da-dk-g26.ctb
-include ../braille-patterns.cti

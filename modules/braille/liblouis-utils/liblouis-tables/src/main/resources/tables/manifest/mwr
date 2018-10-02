@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:mwr
-include ../spaces.ctb
-include ../mwr.ctb
-include ../braille-patterns.cti

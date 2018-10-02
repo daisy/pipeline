@@ -1,4 +1,0 @@
-#+type:translation
-#+locale:ga
-include ../ga-g2.ctb
-include ../braille-patterns.cti

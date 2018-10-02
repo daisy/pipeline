@@ -217,9 +217,9 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 						public LiblouisTableJnaImpl _apply() {
 							MutableQuery q = mutableQuery(query);
 							String table = null;
-							String type = "translation";
 							boolean unicode = false;
 							boolean whiteSpace = false;
+							boolean display = false;
 							if (q.containsKey("unicode")) {
 								q.removeOnly("unicode");
 								unicode = true; }
@@ -231,18 +231,26 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								if (unicode) {
 									logger.warn("A query with '(unicode)(display)' never matches anything");
 									throw new NoSuchElementException(); }
-								type = "display"; }
+								display = true; }
 							if (q.containsKey("table"))
-								// FIXME: type and remaining features in query are ignored
+								// FIXME: display and remaining features in query are ignored
 								table = q.removeOnly("table").getValue().get();
 							else if (q.containsKey("liblouis-table"))
-								// FIXME: type and remaining features in query are ignored
+								// FIXME: display and remaining features in query are ignored
 								table = q.removeOnly("liblouis-table").getValue().get();
 							else if (!q.isEmpty()) {
 								StringBuilder b = new StringBuilder();
-								b.append("type:");
-								b.append(type);
-								b.append(" ");
+								if (display)
+									b.append("type:display ");
+								
+								// FIXME: if !display, need to match for absence of "type:display"
+								// -> i.e. Liblouis query syntax must support negation!
+								// -> this used to be solved by matching "type:translation" but the downside of this
+								//    is that this feature had to be added to every table which is not desired
+								// -> another solution would be to let Liblouis return a list of possible matches and
+								//    select the first match that does not end with ".dis" (or that does not have the
+								//    feature "type:display")
+								
 								for (Feature f : q) {
 									String k = f.getKey();
 									if (!k.matches("[a-zA-Z0-9_-]+")) {

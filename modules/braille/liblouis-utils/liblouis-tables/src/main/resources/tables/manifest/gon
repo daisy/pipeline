@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:gon
-include ../spaces.ctb
-include ../gon.ctb
-include ../braille-patterns.cti

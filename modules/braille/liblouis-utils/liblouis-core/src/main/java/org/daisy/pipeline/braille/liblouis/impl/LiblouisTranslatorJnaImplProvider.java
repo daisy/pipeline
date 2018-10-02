@@ -194,7 +194,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			q.add("table", table);
 		if (locale != null)
 			try {
-				q.add("locale", parseLocale(locale).toLanguageTag().replace('-', '_')); }
+				q.add("locale", parseLocale(locale).toLanguageTag()); }
 			catch (IllegalArgumentException e) {
 				logger.error("Invalid locale", e);
 				return empty; }
@@ -312,7 +312,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		public FromTypeformedTextToBraille fromTypeformedTextToBraille() {
 			if (fromTypeformedTextToBraille == null)
 				fromTypeformedTextToBraille = new FromTypeformedTextToBraille() {
-					public String[] transform(String[] text, byte[] typeform) {
+					public String[] transform(String[] text, short[] typeform) {
 						return LiblouisTranslatorImpl.this.transform(text, typeform);
 					}
 				};
@@ -389,7 +389,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				// FIXME: remove duplication!!
 				
 				// convert style into typeform, hyphenate, preserveLines, preserveSpace and letterSpacing arrays
-				final byte[] typeform;
+				final short[] typeform;
 				final boolean[] hyphenate;
 				final boolean[] preserveLines;
 				final boolean[] preserveSpace;
@@ -459,7 +459,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					boolean someNotTransform = false;
 					
 					{ // compute typeform, hyphenate, preserveLines, preserveSpace and letterSpacing
-						typeform = new byte[size];
+						typeform = new short[size];
 						hyphenate = new boolean[size];
 						preserveLines = new boolean[size];
 						preserveSpace = new boolean[size];
@@ -886,13 +886,13 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						for (int i = 0; i < joinedText.length() - 1; i++)
 							interCharacterIndices[i] = i; }
 					
-					// typeform var with the same length as joinedText and short[] instead of byte[]
+					// typeform var with the same length as joinedText
 					short[] _typeform = null;
-					for (byte b : typeform)
-						if (b != Typeform.PLAIN) {
+					for (short t : typeform)
+						if (t != Typeform.PLAIN) {
 							_typeform = new short[joinedText.length()];
 							for (int i = 0; i < _typeform.length; i++)
-								_typeform[i] = (short)typeform[textWithWsMapping[joinedTextMapping[i]]];
+								_typeform[i] = typeform[textWithWsMapping[joinedTextMapping[i]]];
 							break; }
 					try {
 						TranslationResult r = liblouisTranslator.translate(joinedText, _typeform, characterIndices, interCharacterIndices);
@@ -929,7 +929,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		
 		private String[] transform(String[] text, SimpleInlineStyle[] styles, boolean forceBraille, boolean failWhenNonStandardHyphenation) {
 			int size = text.length;
-			byte[] typeform = new byte[size];
+			short[] typeform = new short[size];
 			boolean[] hyphenate = new boolean[size];
 			boolean[] preserveLines = new boolean[size];
 			boolean[] preserveSpace = new boolean[size];
@@ -996,7 +996,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			                 forceBraille, failWhenNonStandardHyphenation);
 		}
 		
-		private String[] transform(String[] text, byte[] typeform) {
+		private String[] transform(String[] text, short[] typeform) {
 			int size = text.length;
 			boolean[] hyphenate = new boolean[size];
 			boolean[] preserveLines = new boolean[size];
@@ -1026,7 +1026,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		}
 		
 		private String[] transform(String[] text,
-		                           byte[] typeform,
+		                           short[] typeform,
 		                           boolean[] hyphenate,
 		                           boolean[] preserveLines,
 		                           boolean[] preserveSpace,
@@ -1165,13 +1165,13 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			if (someLetterSpacing)
 				inputAttrs = detectLetterBoundaries(inputAttrs, joinedText, (byte)4);
 			
-			// typeform var with the same length as joinedText and short[] instead of byte[]
+			// typeform var with the same length as joinedText
 			short[] _typeform = null;
-			for (byte b : typeform)
-				if (b != Typeform.PLAIN) {
+			for (short t : typeform)
+				if (t != Typeform.PLAIN) {
 					_typeform = new short[joinedText.length()];
 					for (int i = 0; i < _typeform.length; i++)
-						_typeform[i] = (short)typeform[textWithWsMapping[joinedTextMapping[i]]];
+						_typeform[i] = typeform[textWithWsMapping[joinedTextMapping[i]]];
 					break; }
 			
 			// translate to braille with hyphens and restored white space
@@ -1435,13 +1435,13 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	 * @return the corresponding typeform. Possible values are:
 	 * - 0 = PLAIN
 	 * - 1 = ITALIC (font-style: italic|oblique)
-	 * - 2 = BOLD (font-weight: bold)
-	 * - 4 = UNDERLINE (text-decoration: underline)
+	 * - 2 = UNDERLINE (text-decoration: underline)
+	 * - 4 = BOLD (font-weight: bold)
 	 * These values can be added for multiple emphasis.
 	 * @see <a href="http://liblouis.googlecode.com/svn/documentation/liblouis.html#lou_translateString">lou_translateString</a>
 	 */
-	protected static byte typeformFromInlineCSS(SimpleInlineStyle style) {
-		byte typeform = Typeform.PLAIN;
+	protected static short typeformFromInlineCSS(SimpleInlineStyle style) {
+		short typeform = Typeform.PLAIN;
 		for (String prop : style.getPropertyNames()) {
 			if (prop.equals("font-style")) {
 				CSSProperty value = style.getProperty(prop);
@@ -1474,7 +1474,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				text = text.toUpperCase();
 			else if (tt.equals("lowercase"))
 				text = text.toLowerCase();
-			else
+			else if (!LOUIS_TEXT_TRANSFORM.matcher(tt).matches())
 				logger.warn("text-transform: {} not supported", tt);
 		}
 		return text;
@@ -1484,29 +1484,52 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	 * @param textTransform A text-transform value as a space separated list of keywords.
 	 * @return the corresponding typeform. Possible values are:
 	 * - 0 = PLAIN
-	 * - 1 = ITALIC (louis-ital)
-	 * - 2 = BOLD (louis-bold)
-	 * - 4 = UNDERLINE (louis-under)
-	 * - 8 = COMPUTER (louis-comp)
+	 * - 1 = ITALIC (-louis-italic)
+	 * - 2 = UNDERLINE (-louis-underline)
+	 * - 4 = BOLD (-louis-bold)
+	 * - 1024 = COMPUTER (-louis-computer)
 	 * These values can be added for multiple emphasis.
 	 * @see <a href="http://liblouis.googlecode.com/svn/documentation/liblouis.html#lou_translateString">lou_translateString</a>
 	 */
-	protected static byte typeformFromTextTransform(TermList textTransform) {
-		byte typeform = Typeform.PLAIN;
+	protected static short typeformFromTextTransform(TermList textTransform) {
+		short typeform = Typeform.PLAIN;
 		for (Term<?> t : textTransform) {
 			String tt = ((TermIdent)t).getValue();
-			if (tt.equals("louis-ital"))
-				typeform |= Typeform.ITALIC;
-			else if (tt.equals("louis-bold"))
-				typeform |= Typeform.BOLD;
-			else if (tt.equals("louis-under"))
-				typeform |= Typeform.UNDERLINE;
-			else if (tt.equals("louis-comp"))
-				typeform |= Typeform.COMPUTER;
-			else
-				logger.warn("text-transform: {} not supported", tt); }
+			Matcher m = LOUIS_TEXT_TRANSFORM.matcher(tt);
+			if (m.matches()) {
+				String emphClass = m.group("class");
+				if (emphClass.equals("italic") || emphClass.equals("ital")) {
+					typeform |= Typeform.ITALIC;
+					continue;
+				} else if (emphClass.equals("underline") || emphClass.equals("under")) {
+					typeform |= Typeform.UNDERLINE;
+					continue;
+				} else if (emphClass.equals("bold")) {
+					typeform |= Typeform.BOLD;
+					continue;
+				} else if (emphClass.equals("computer") || emphClass.equals("comp")) {
+					typeform |= Typeform.COMPUTER;
+					continue;
+				} else {
+					m = LOUIS_NUMBERED_EMPH_CLASS.matcher(emphClass);
+					if (m.matches()) {
+						int num = Integer.parseInt(m.group("num"));
+						typeform |= (((short)0x1) <<(num - 1));
+						continue;
+					} else {
+						// FIXME: use lou_getTypeformForEmphClass function
+					}
+				}
+			} else if (tt.equals("uppercase") || tt.equals("lowercase")) {
+				continue;
+			}
+			logger.warn("text-transform: {} not supported", tt);
+		}
 		return typeform;
 	}
+	
+	private final static Pattern LOUIS_TEXT_TRANSFORM = Pattern.compile("^-?(lib)?louis-(?<class>.+)$");
+	private final static Pattern LOUIS_NUMBERED_EMPH_CLASS = Pattern.compile("^emph-(?<num>[1-9]|10)$");
 	
 	@SuppressWarnings("unused")
 	private static int mod(int a, int n) {

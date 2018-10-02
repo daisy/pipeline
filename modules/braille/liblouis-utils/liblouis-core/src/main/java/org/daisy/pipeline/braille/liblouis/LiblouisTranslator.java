@@ -10,11 +10,11 @@ public interface LiblouisTranslator extends BrailleTranslator {
 	public FromTypeformedTextToBraille fromTypeformedTextToBraille();
 	
 	public static abstract class Typeform {
-		public static final byte PLAIN = 0;
-		public static final byte ITALIC = 1;
-		public static final byte BOLD = 2;
-		public static final byte UNDERLINE = 4;
-		public static final byte COMPUTER = 8;
+		public static final short PLAIN = 0;
+		public static final short ITALIC = 1;
+		public static final short BOLD = 4;
+		public static final short UNDERLINE = 2;
+		public static final short COMPUTER = 1024;
 	}
 	
 	public interface FromTypeformedTextToBraille {
@@ -24,7 +24,7 @@ public interface LiblouisTranslator extends BrailleTranslator {
 		 * @param typeform The typeform. Array must have the same length as <code>text</code>.
 		 * @return The translated text segments. Has the same length as <code>text</code>.
 		 */
-		public String[] transform(String[] text, byte[] typeform);
+		public String[] transform(String[] text, short[] typeform);
 		
 	}
 	

@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:kn
-include ../spaces.ctb
-include ../ka-in-g1.utb
-include ../braille-patterns.cti

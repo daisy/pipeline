@@ -21,24 +21,24 @@ public class LiblouisTablesTest extends AbstractXSpecAndXProcSpecTest {
 	LiblouisTranslator.Provider provider;
 	
 	@Test
-	public void testCompileAllTablesInManifest() throws IOException {
-		File manifest = new File(new File(PathUtils.getBaseDir()), "target/classes/tables/manifest");
-		for (File f : manifest.listFiles()) {
-			String table = "manifest/" + f.getName();
-			assertNotEmpty("Table " + table + " does not compile", provider.get(query("(table:'" + table + "')"))); }
+	public void testCompileAllTables() throws IOException {
+		File manifest = new File(new File(PathUtils.getBaseDir()), "target/classes/tables");
+		for (File f : manifest.listFiles())
+			if (f.getName().endsWith(".tbl"))
+				assertNotEmpty("Table " + f.getName() + " does not compile", provider.get(query("(table:'" + f.getName() + "')")));
 	}
 	
 	@Test
 	public void testQueryTranslator() {
-		assertTrue(provider.get(query("(locale:nl_BE)")).iterator().next()
-		           .asLiblouisTable().asURIs()[2].toString().endsWith("manifest/nl_BE"));
+		assertTrue(provider.get(query("(locale:nl-BE)")).iterator().next()
+		           .asLiblouisTable().asURIs()[2].toString().endsWith("/nl_BE.tbl"));
 	}
 	
 	@Test
 	public void testUnicodeBraille() {
-		assertTrue(provider.get(query("(locale:nl_BE)")).iterator().next()
+		assertTrue(provider.get(query("(locale:nl-BE)")).iterator().next()
 		           .fromTypeformedTextToBraille()
-		           .transform(new String[]{"foobar"}, new byte[]{LiblouisTranslator.Typeform.PLAIN})[0]
+		           .transform(new String[]{"foobar"}, new short[]{LiblouisTranslator.Typeform.PLAIN})[0]
 		           .matches("[\\s\\t\\n\u00a0\u00ad\u200b\u2800-\u28ff]*"));
 	}
 	

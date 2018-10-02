@@ -2,7 +2,7 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
                stylesheet="../../main/resources/xml/transform/liblouis-block-translate.xsl">
   
-  <x:param name="text-transform" select="'(locale:en)'"/>
+  <x:param name="text-transform" select="'(locale:en-US)(grade:2)'"/>
   <x:param name="main-locale" select="'en'"/>
   
   <x:scenario label="test_01">

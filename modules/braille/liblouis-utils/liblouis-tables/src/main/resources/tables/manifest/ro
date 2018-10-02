@@ -1,4 +1,0 @@
-#+type:translation
-#+locale:ro
-include ../ro.ctb
-include ../braille-patterns.cti

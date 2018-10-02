@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:awa
-include ../spaces.ctb
-include ../aw-in-g1.utb
-include ../braille-patterns.cti

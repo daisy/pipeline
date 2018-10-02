@@ -10,7 +10,7 @@
 
 ### Calabash steps (`org.daisy.common.xproc.calabash.XProcStepProvider`)
 
-- [`{http://www.daisy.org/ns/pipeline/braille-css}inline`](java/org/daisy/pipeline/braille/css/calabash/impl/CSSInlineStep.java)
+- [`{http://www.daisy.org/ns/pipeline/braille-css}inline`](java/org/daisy/pipeline/braille/css/calabash/impl/CssInlineStep.java)
 
 
 

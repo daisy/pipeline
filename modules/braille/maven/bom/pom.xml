@@ -12,7 +12,7 @@
 
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-bom</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>DAISY Pipeline 2 :: Braille Modules Bill Of Materials</name>
@@ -42,7 +42,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>css-utils</artifactId>
-                <version>3.4.0</version>
+                <version>3.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -57,7 +57,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-formatter</artifactId>
-                <version>1.12.1</version>
+                <version>1.12.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -115,7 +115,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-core</artifactId>
-                <version>4.1.4</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -131,19 +131,19 @@
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-native</artifactId>
                 <classifier>linux</classifier>
-                <version>1.4.0</version>
+                <version>1.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-native</artifactId>
                 <classifier>mac</classifier>
-                <version>1.4.0</version>
+                <version>1.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-native</artifactId>
                 <classifier>windows</classifier>
-                <version>1.4.0</version>
+                <version>1.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -153,7 +153,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-tables</artifactId>
-                <version>2.6.3-3</version>
+                <version>3.6.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -198,7 +198,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>xml-to-pef</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
             </dependency>
             <!--
                 Third-Party Libraries

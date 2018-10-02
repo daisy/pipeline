@@ -70,7 +70,7 @@
     </p:count>
     <p:choose>
         <p:when test="number(string(/*)) &gt; 0"> <!-- must be 0 or 1 -->
-            <p:store>
+            <p:store encoding="utf-8" omit-xml-declaration="false">
                 <p:input port="source">
                     <p:pipe step="main" port="obfl"/>
                 </p:input>

@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:mni
-include ../spaces.ctb
-include ../mn-in-g1.utb
-include ../braille-patterns.cti

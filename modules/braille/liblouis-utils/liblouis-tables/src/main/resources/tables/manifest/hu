@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:hu
-include ../hu-hu-g1.ctb
-include ../hyph_hu_HU.dic
-include ../braille-patterns.cti

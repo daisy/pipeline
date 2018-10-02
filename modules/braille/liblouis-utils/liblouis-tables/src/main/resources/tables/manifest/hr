@@ -1,4 +1,0 @@
-#+type:translation
-#+locale:hr
-include ../hr.ctb
-include ../braille-patterns.cti

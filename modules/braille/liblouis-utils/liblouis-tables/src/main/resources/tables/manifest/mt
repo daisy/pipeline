@@ -1,4 +1,0 @@
-#+type:translation
-#+locale:mt
-include ../mt.ctb
-include ../braille-patterns.cti

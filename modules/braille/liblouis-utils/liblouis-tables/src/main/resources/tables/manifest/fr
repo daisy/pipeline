@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:fr
-include ../Fr-Fr-g2.ctb
-include ../hyph_fr_FR.dic
-include ../braille-patterns.cti

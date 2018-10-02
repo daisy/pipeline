@@ -56,6 +56,25 @@
     <xsl:variable name="css:NON_NEGATIVE_INTEGER_RE_groups" select="0"/>
     
     <!--
+        positive <integer>
+    -->
+    <xsl:variable name="css:POSITIVE_INTEGER_RE" select="'[1-9][0-9]*'"/>
+    <xsl:variable name="css:POSITIVE_INTEGER_RE_groups" select="0"/>
+    
+    <!--
+        positive <number> (normalized)
+    -->
+    <xsl:variable name="css:POSITIVE_NUMBER_RE" select="'[1-9][0-9]*|(0|[1-9][0-9]*)\.[0-9]*?[1-9]'"/>
+    <xsl:variable name="css:POSITIVE_NUMBER_RE_groups" select="1"/>
+    
+    <!--
+        positive <percentage>
+    -->
+    <xsl:variable name="css:POSITIVE_PERCENTAGE_RE" select="concat('(',$css:POSITIVE_NUMBER_RE,')%')"/>
+    <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_number" select="1"/>
+    <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_groups" select="1 + $css:POSITIVE_NUMBER_RE_groups"/>
+
+    <!--
         <string>
     -->
     <xsl:variable name="css:STRING_RE">'[^']*'|"[^"]*"</xsl:variable>
@@ -138,11 +157,15 @@
     <xsl:variable name="css:TARGET_CONTENT_FN_RE_groups" select="$css:TARGET_CONTENT_FN_RE_url + $css:URL_RE_groups"/>
     
     <!--
-        leader(<braille-string>): http://braillespecs.github.io/braille-css/#dfn-leader
+        leader(<braille-string>[,[<integer>|<percentage>][,[left|center|right]]?]?): http://braillespecs.github.io/braille-css/#dfn-leader
     -->
-    <xsl:variable name="css:LEADER_FN_RE" select="concat('leader\(\s*(',$css:BRAILLE_STRING_RE,')\s*\)')"/>
+    <xsl:variable name="css:LEADER_FN_RE" select="concat('leader\(\s*(',$css:BRAILLE_STRING_RE,')\s*(,\s*((',$css:POSITIVE_NUMBER_RE,')|(',$css:POSITIVE_PERCENTAGE_RE,'))\s*(,\s*(left|center|right))?)?\s*\)')"/>
     <xsl:variable name="css:LEADER_FN_RE_pattern" select="1"/>
-    <xsl:variable name="css:LEADER_FN_RE_groups" select="$css:LEADER_FN_RE_pattern + $css:BRAILLE_STRING_RE_groups"/>
+    <xsl:variable name="css:LEADER_FN_RE_position" select="$css:LEADER_FN_RE_pattern + $css:BRAILLE_STRING_RE_groups + 2"/>
+    <xsl:variable name="css:LEADER_FN_RE_position_abs" select="$css:LEADER_FN_RE_position + 1"/>
+    <xsl:variable name="css:LEADER_FN_RE_position_rel" select="$css:LEADER_FN_RE_position_abs + $css:POSITIVE_NUMBER_RE_groups + 1"/>
+    <xsl:variable name="css:LEADER_FN_RE_alignment" select="$css:LEADER_FN_RE_position_rel + $css:POSITIVE_PERCENTAGE_RE_groups + 2"/>
+    <xsl:variable name="css:LEADER_FN_RE_groups" select="$css:LEADER_FN_RE_alignment"/>
     
     <!--
         flow(<ident>,<scope>?): http://braillespecs.github.io/braille-css/#dfn-flow-1
@@ -208,6 +231,10 @@
     <xsl:variable name="css:CONTENT_RE_target_content_fn_url_attr" select="$css:CONTENT_RE_target_content_fn + $css:TARGET_CONTENT_FN_RE_url_attr"/>
     <xsl:variable name="css:CONTENT_RE_leader_fn" select="$css:CONTENT_RE_target_content_fn + $css:TARGET_CONTENT_FN_RE_groups + 1"/>
     <xsl:variable name="css:CONTENT_RE_leader_fn_pattern" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_pattern"/>
+    <xsl:variable name="css:CONTENT_RE_leader_fn_position" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_position"/>
+    <xsl:variable name="css:CONTENT_RE_leader_fn_position_abs" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_position_abs"/>
+    <xsl:variable name="css:CONTENT_RE_leader_fn_position_rel" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_position_rel"/>
+    <xsl:variable name="css:CONTENT_RE_leader_fn_alignment" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_alignment"/>
     <xsl:variable name="css:CONTENT_RE_flow_fn" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_groups + 1"/>
     <xsl:variable name="css:CONTENT_RE_flow_fn_ident" select="$css:CONTENT_RE_flow_fn + $css:FLOW_FN_RE_ident"/>
     <xsl:variable name="css:CONTENT_RE_flow_fn_scope" select="$css:CONTENT_RE_flow_fn + $css:FLOW_FN_RE_scope"/>
@@ -478,11 +505,18 @@
                                                   else string($context/@*[name()=regex-group($css:CONTENT_RE_target_content_fn_url_attr)])}"/>
                         </xsl:when>
                         <!--
-                            leader(<braille-string>)
+                            leader(<braille-string>[,[<integer>|<percentage>][,[left|center|right]]?]?)
                         -->
                         <xsl:when test="regex-group($css:CONTENT_RE_leader_fn)!=''">
                             <css:leader pattern="{substring(regex-group($css:CONTENT_RE_leader_fn_pattern),
-                                                            2, string-length(regex-group($css:CONTENT_RE_leader_fn_pattern))-2)}"/>
+                                                            2, string-length(regex-group($css:CONTENT_RE_leader_fn_pattern))-2)}">
+                                <xsl:if test="regex-group($css:CONTENT_RE_leader_fn_position)!=''">
+                                    <xsl:attribute name="position" select="regex-group($css:CONTENT_RE_leader_fn_position)"/>
+                                    <xsl:if test="regex-group($css:CONTENT_RE_leader_fn_alignment)!=''">
+                                        <xsl:attribute name="alignment" select="regex-group($css:CONTENT_RE_leader_fn_alignment)"/>
+                                    </xsl:if>
+                                </xsl:if>
+                            </css:leader>
                         </xsl:when>
                         <!--
                             flow(<ident>)
@@ -929,7 +963,7 @@
     </xsl:template>
     
     <xsl:template match="css:leader" mode="css:serialize" as="xs:string">
-        <xsl:sequence select="concat('leader(&quot;',@pattern,'&quot;)')"/>
+        <xsl:sequence select="concat('leader(',string-join((concat('&quot;',@pattern,'&quot;'),@position,@alignment),', '),')')"/>
     </xsl:template>
     
     <xsl:template match="css:flow[@from]" mode="css:serialize" as="xs:string">

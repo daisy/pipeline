@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:bra
-include ../spaces.ctb
-include ../br-in-g1.utb
-include ../braille-patterns.cti

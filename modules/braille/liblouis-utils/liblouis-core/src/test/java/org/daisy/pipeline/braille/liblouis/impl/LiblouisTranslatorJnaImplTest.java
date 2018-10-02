@@ -41,7 +41,7 @@ import org.liblouis.Translator;
 
 public class LiblouisTranslatorJnaImplTest {
 	
-	private static byte typeformFromInlineCSS(String style) {
+	private static short typeformFromInlineCSS(String style) {
 		return LiblouisTranslatorJnaImplProvider.typeformFromInlineCSS(new SimpleInlineStyle(style));
 	}
 	
@@ -74,7 +74,7 @@ public class LiblouisTranslatorJnaImplTest {
 			textFromTextTransform("Ik ben Moos", "foo", "bar"));
 	}
 	
-	private static byte typeformFromTextTransform(String... textTransform) {
+	private static short typeformFromTextTransform(String... textTransform) {
 		TermList list = new TermListImpl() {};
 		for (String t : textTransform)
 			list.add((new TermIdentImpl() {}).setValue(t));

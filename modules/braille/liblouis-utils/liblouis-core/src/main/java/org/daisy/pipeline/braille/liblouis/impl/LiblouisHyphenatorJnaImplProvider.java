@@ -100,7 +100,7 @@ public class LiblouisHyphenatorJnaImplProvider implements LiblouisHyphenator.Pro
 				q.add("table", table);
 			if (locale != null)
 				try {
-					q.add("locale", parseLocale(locale).toLanguageTag().replace('-', '_')); }
+					q.add("locale", parseLocale(locale).toLanguageTag()); }
 				catch (IllegalArgumentException e) {
 					logger.error("Invalid locale", e);
 					return empty; }

@@ -1,4 +1,0 @@
-#+type:translation
-#+locale:sr
-include ../sr-g1.ctb
-include ../braille-patterns.cti

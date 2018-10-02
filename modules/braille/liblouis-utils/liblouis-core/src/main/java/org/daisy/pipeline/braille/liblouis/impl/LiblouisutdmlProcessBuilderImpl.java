@@ -68,7 +68,7 @@ public class LiblouisutdmlProcessBuilderImpl implements Liblouisutdml {
 		policy = ReferencePolicy.STATIC
 	)
 	protected void bindExecutable(NativePath nativePath) {
-		URI executablePath = nativePath.get("file2brl").iterator().next();
+		URI executablePath = nativePath.get("liblouisutdml/file2brl").iterator().next();
 		file2brl = asFile(nativePath.resolve(executablePath));
 		logger.debug("Registering file2brl executable: " + executablePath);
 	}

@@ -1,0 +1,9 @@
+sign \x2804 3
+sign \x2828 46
+
+emphclass italic
+begemphphrase italic 46-46
+endemphphrase italic before 46
+begemphword italic 46
+endemphword italic 46
+lenemphphrase italic 3

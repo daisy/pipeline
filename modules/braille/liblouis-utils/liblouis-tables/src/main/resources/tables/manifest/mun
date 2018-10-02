@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:mun
-include ../spaces.ctb
-include ../mun.ctb
-include ../braille-patterns.cti

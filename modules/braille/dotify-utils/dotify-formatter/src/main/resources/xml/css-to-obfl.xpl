@@ -513,8 +513,19 @@
                 <p:delete match="/*//*/@css:counter-set"/>
                 <p:delete match="/*//*/@css:volume"/>
             </p:group>
-            <p:delete match="css:box[@part[not(.='first')]]/@css:page-break-before"/>
-            <p:delete match="css:box[@part[not(.='last')]]/@css:page-break-after"/>
+            <p:group>
+                <p:documentation>
+                    Delete properties connected to the top of a box if it is not the first part of a
+                    split up box. Delete properties connected to the bottom of a box if it is not
+                    the last part of a split up box.
+                </p:documentation>
+                <p:delete match="css:box[@part[not(.='first')]]/@css:margin-top|
+                                 css:box[@part[not(.='first')]]/@css:padding-top|
+                                 css:box[@part[not(.='first')]]/@css:page-break-before|
+                                 css:box[@part[not(.='last')]]/@css:margin-bottom|
+                                 css:box[@part[not(.='last')]]/@css:padding-bottom|
+                                 css:box[@part[not(.='last')]]/@css:page-break-after"/>
+            </p:group>
             <p:group>
                 <p:documentation>
                     Move around and change page breaking related properties so that they can be mapped

@@ -1,4 +1,0 @@
-#+type:translation
-#+locale:eo
-include ../eo-g1.ctb
-include ../braille-patterns.cti

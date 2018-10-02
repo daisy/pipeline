@@ -6,21 +6,26 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>liblouis-tables</artifactId>
-  <version>2.6.3-4-SNAPSHOT</version>
+  <version>3.6.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: liblouis-utils :: liblouis-tables</name>
 
-  <properties>
-    <liblouis.version>2.6.3</liblouis.version>
-    <liblouis.tarball.url>https://github.com/liblouis/liblouis/tarball/v${liblouis.version}</liblouis.tarball.url>
-    <liblouis.tarball.sha1>c3dcdcae2082cc85efc2eacd4923d0b762d27084</liblouis.tarball.sha1>
-  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.liblouis</groupId>
+        <artifactId>louis</artifactId>
+        <version>${liblouis.version}</version>
+        <type>nar</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   
   <dependencies>
     <!--
@@ -95,10 +100,11 @@
           <execution>
             <id>htmlize-sources</id>
             <configuration>
-              <sourceDirectory>${project.basedir}</sourceDirectory>
+              <sourceDirectory>${project.build.directory}/classes</sourceDirectory>
+              <outputDirectory>${project.build.directory}/doc/src/main/resources</outputDirectory>
               <includes>
-                src/main/resources/tables/,
-                src/main/resources/tables/*
+                tables/,
+                tables/*
               </includes>
             </configuration>
           </execution>
@@ -111,43 +117,49 @@
     <profile>
       <id>generate-liblouis-files</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
+            <artifactId>maven-dependency-plugin</artifactId>
             <executions>
               <execution>
-                <id>checkout</id>
                 <phase>generate-resources</phase>
                 <goals>
-                  <goal>run</goal>
+                  <goal>unpack</goal>
                 </goals>
                 <configuration>
-                  <target>
-                    <mkdir dir="target/checkout" />
-                    <get dest="target/checkout/liblouis.tar.gz" src="${liblouis.tarball.url}" usetimestamp="true" skipexisting="true" />
-                    <local name="checksum.matches" />
-                    <local name="checksum.matches.fail" />
-                    <checksum file="target/checkout/liblouis.tar.gz" algorithm="sha1" property="${liblouis.tarball.sha1}" verifyproperty="checksum.matches" />
-                    <condition property="checksum.matches.fail">
-                      <equals arg1="${checksum.matches}" arg2="false" />
-                    </condition>
-                    <fail if="checksum.matches.fail">Checksum error</fail>
-                    <untar src="target/checkout/liblouis.tar.gz" compression="gzip" dest="src/main/resources">
-                      <patternset>
-                        <include name="*/tables/*" />
-                        <exclude name="*/tables/lang2table" />
-                        <exclude name="*/tables/Makefile.am" />
-                        <exclude name="*/tables/maketablelist.sh" />
-                        <exclude name="*/tables/README" />
-                      </patternset>
-                      <mapper>
-                        <globmapper from="liblouis-liblouis-e043e8c/*" to="*" />
-                      </mapper>
-                    </untar>
-                  </target>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.liblouis</groupId>
+                      <artifactId>louis</artifactId>
+                      <classifier>noarch</classifier>
+                      <type>nar</type>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <id>add-tables</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>add-resource</goal>
+                </goals>
+                <configuration>
+                  <resources>
+                    <resource>
+                      <directory>target/dependency/share/liblouis/tables</directory>
+                      <targetPath>tables</targetPath>
+                    </resource>
+                  </resources>
                 </configuration>
               </execution>
             </executions>

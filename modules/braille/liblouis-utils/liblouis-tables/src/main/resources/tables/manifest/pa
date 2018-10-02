@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:pa
-include ../spaces.ctb
-include ../pu-in-g1.utb
-include ../braille-patterns.cti

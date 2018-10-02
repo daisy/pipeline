@@ -130,10 +130,10 @@ public class LiblouisCoreTest extends AbstractTest {
 	
 	@Test
 	public void testTranslateStyled() {
-		assertArrayEquals(new String[]{"⠋⠕⠕⠃⠁⠗"},
+		assertArrayEquals(new String[]{"⠨⠋⠕⠕⠃⠁⠗"},
 		                  provider.withContext(messageBus)
-		                          .get(query("(table:'foobar.cti')")).iterator().next()
-		                          .fromTypeformedTextToBraille().transform(new String[]{"foobar"}, new byte[]{Typeform.ITALIC}));
+		                          .get(query("(table:'foobar.cti,ital.cti')")).iterator().next()
+		                          .fromTypeformedTextToBraille().transform(new String[]{"foobar"}, new short[]{Typeform.ITALIC}));
 	}
 	
 	@Test
@@ -145,6 +145,17 @@ public class LiblouisCoreTest extends AbstractTest {
 		             translator.transform(text("foo","bar")));
 		assertEquals(braille("⠋⠕⠕","","⠃⠁⠗"),
 		             translator.transform(text("foo","","bar")));
+	}
+	
+	@Test
+	public void testTranslateStyledSegments() {
+		FromStyledTextToBraille translator = provider.withContext(messageBus)
+		                                             .get(query("(table:'foobar.cti,ital.cti')")).iterator().next()
+		                                             .fromStyledTextToBraille();
+		assertEquals(braille("⠋⠕⠕ ", "⠨⠃⠁⠗", " ⠃⠁⠵"),
+		             translator.transform(styledText("foo ", "",
+		                                             "bar",  "text-transform:-louis-ital",
+		                                             " baz", "")));
 	}
 	
 	@Test
@@ -507,7 +518,7 @@ public class LiblouisCoreTest extends AbstractTest {
 		// assertEquals(table, tableCatalog.newTable(id));
 	}
 	
-	@Test(expected=ComparisonFailure.class)
+	@Test//(expected=ComparisonFailure.class)
 	public void testTranslatorStatefulBug() {
 		FromStyledTextToBraille translator = provider.withContext(messageBus)
 		                                             .get(query("(table:'stateful.utb')")).iterator().next()

@@ -1,4 +1,0 @@
-<xproc-config xmlns="http://xmlcalabash.com/ns/configuration"
-              xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
-	<implementation type="px:mkdir" class-name="com.xmlcalabash.extensions.fileutils.Mkdir"/>
-</xproc-config>

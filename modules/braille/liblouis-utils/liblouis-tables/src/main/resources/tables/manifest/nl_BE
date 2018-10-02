@@ -1,5 +1,0 @@
-#+type:translation
-#+locale:nl_BE
-include ../nl-BE-g1.ctb
-include ../hyph_nl_NL.dic
-include ../braille-patterns.cti

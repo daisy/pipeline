@@ -72,4 +72,23 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_04">
+    <x:context>
+      <toc>
+        <entry ref="h1" style="display: block">
+          <css:after css:content="leader('⠄⠄', 150%, center)"/>
+        </entry>
+      </toc>
+    </x:context>
+    <x:expect label="result">
+      <toc>
+        <entry ref="h1" style="display: block">
+          <css:after>
+            <css:leader pattern="⠄⠄" position="150%" alignment="center"/>
+          </css:after>
+        </entry>
+      </toc>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

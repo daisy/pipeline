@@ -1,3 +1,41 @@
+v1.11.1
+=======
+
+Changes
+-------
+- Support for extended `leader(<braille-string>[,[<integer>|<percentage>][,[left|center|right]]?]?)`
+  function (https://github.com/sbsdev/pipeline-mod-sbs/issues/51,
+  https://github.com/nlbdev/pipeline/issues/169)
+- Support for `text-transform: -louis-emph-4` to `-louis-emph-10`
+  (https://github.com/nlbdev/pipeline/issues/107)
+- Support for `::after` and `::before` pseudo-elements inside elements with `display: none`
+- Bugfixes (https://github.com/daisy/pipeline-mod-braille/issues/173, ...)
+- Update to Liblouis 3.6.0
+
+Components
+----------
+- **liblouis** ([**3.6.0**](https://github.com/liblouis/liblouis/releases/tag/v3.6.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),,
+  liblouis-java ([3.1.0](https://github.com/liblouis/liblouis-java/releases/tag/3.1.0))
+- dotify (api [4.1.0](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv4.1.0), common
+  [4.1.0](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv4.1.0), hyphenator.impl
+  [4.0.0](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv4.0.0), translator.impl
+  [4.0.0](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv4.0.0), formatter.impl
+  [4.1.0](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv4.1.0), text.impl
+  [4.0.0](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv4.0.0), streamline-api
+  [1.0.0](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.0.0), streamline-engine
+  [1.1.0](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.1.0), task.impl
+  [4.1.0](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv4.1.0))
+- brailleutils (api
+  [3.0.1](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.1), impl
+  [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
+  [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
+- braille-css ([1.13.0](https://github.com/daisy/braille-css/releases/tag/1.13.0))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.11.0
 =======
 
@@ -34,7 +72,7 @@ Changes
 
 Components
 ----------
-- liblouis ([**3.0.0.alpha1**](https://github.com/liblouis/liblouis/releases/tag/v3.0.0.alpha1)),
+- liblouis ([3.0.0.alpha1](https://github.com/liblouis/liblouis/releases/tag/v3.0.0.alpha1)),
   liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
   liblouis-java ([3.1.0](https://github.com/liblouis/liblouis-java/releases/tag/3.1.0))
 - **dotify** (**api** [**4.1.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv4.1.0), **common**
