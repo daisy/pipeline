@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet exclude-result-prefixes="#all" version="2.0" xmlns:mo="http://www.w3.org/ns/SMIL"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <!--
+        Note: this file is currently not used
+    -->
     <xsl:param name="src" required="yes"/>
     <xsl:param name="fragment" required="yes"/>
     <xsl:template match="/*">

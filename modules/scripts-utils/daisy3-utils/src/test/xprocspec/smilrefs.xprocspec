@@ -543,6 +543,8 @@
               </note>
 	    </level>
     	  </dtbook>
+        </x:document>
+    	  <x:document type="inline">
 	  <smil xmlns="http://www.w3.org/2001/SMIL20/">
 	    <head>
               <meta content="uid" name="dtb:uid"/>

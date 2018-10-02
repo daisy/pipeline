@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               stylesheet="../../main/resources/xml/upgrade-smil-daisy202.xsl">
+	
+	<x:scenario label="Minimal SMIL 1.0">
+		<x:context>
+			<smil>
+				<head>
+					<meta name="dc:format" content="Daisy 2.02"/>
+					<layout>
+						<region id="txt-view"/>
+					</layout>
+				</head>
+				<body>
+					<seq>
+						<par>
+							<text src="content.html#fragment" id="content1"/>
+						</par>
+					</seq>
+				</body>
+			</smil>
+		</x:context>
+		<x:expect label="SMIL 3.0">
+			<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+				<metadata>
+					<meta name="dc:format" content="EPUB3"/>
+					<meta name="dtb:generator" content="DAISY Pipeline 2"/>
+					<layout xmlns="">
+						<region id="txt-view"/>
+					</layout>
+				</metadata>
+				<body/>
+			</smil>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

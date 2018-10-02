@@ -6,7 +6,7 @@
     xmlns:math="http://www.w3.org/1998/Math/MathML"
     xmlns="http://www.w3.org/2001/SMIL20/" exclude-result-prefixes="#all" version="2.0">
 
-  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
   <xsl:param name="mo-dir"/>
   <xsl:param name="audio-dir"/>

@@ -2,14 +2,6 @@
 <p:library xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" version="1.0"
     xmlns:c="http://www.w3.org/ns/xproc-step">
 
-    <p:declare-step type="pxi:epubcheck">
-        <!-- step declaration for the epubcheck-adapter implemented in java -->
-        <p:option name="epub" required="true"/>
-        <p:option name="mode" required="false"/>
-        <p:option name="version" required="false"/>
-        <p:output port="result" sequence="true"/>
-    </p:declare-step>
-
     <p:declare-step type="px:epubcheck" name="main">
         <!-- anyFileURI to the epub -->
         <p:option name="epub" required="true"/>
@@ -23,6 +15,43 @@
         <!-- The epubcheck XML report. See Java implementation for more details about the grammar: https://github.com/IDPF/epubcheck/blob/master/src/main/java/com/adobe/epubcheck/util/XmlReportImpl.java#L176 -->
         <p:output port="result" sequence="true"/>
 
+        <p:declare-step type="pxi:epubcheck">
+            <!-- step declaration for the epubcheck-adapter implemented in java -->
+            <p:option name="epub" required="true"/>
+            <p:option name="mode" required="false"/>
+            <p:option name="version" required="false"/>
+            <p:output port="result" sequence="true"/>
+        </p:declare-step>
+
+        <p:declare-step type="pxi:epubcheck-locate-mimetype-dir">
+            <p:documentation>Walks up the directory tree looking for the directory that the 'mimetype' file is stored in.</p:documentation>
+            <p:option name="path" required="true"/>
+            <p:output port="result"/>
+            <p:variable name="parent" select="replace($path,'[^/]+/?$','')"/>
+            <p:directory-list>
+                <p:with-option name="path" select="$parent"/>
+            </p:directory-list>
+            <p:choose>
+                <p:when test="/*/c:file/@name='mimetype'">
+                    <p:delete match="/*/*"/>
+                </p:when>
+                <p:when test="matches($parent,'^\w+:/+[^/]+/')">
+                    <pxi:epubcheck-locate-mimetype-dir>
+                        <p:with-option name="path" select="$parent"/>
+                    </pxi:epubcheck-locate-mimetype-dir>
+                </p:when>
+                <p:otherwise>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:inline>
+                                <c:directory/>
+                            </p:inline>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+        </p:declare-step>
+        
         <p:variable name="_mode"
             select="if (p:value-available('mode') and not($mode='')) then $mode else if ((not(p:value-available('mode')) or $mode='') and matches(lower-case($epub),'\.(opf|xml)$')) then 'expanded' else 'epub'"/>
         <p:variable name="_version" select="if (p:value-available('version') and not($version='')) then $version else '3'"/>
@@ -81,40 +110,6 @@
 
             </p:otherwise>
         </p:choose>
-    </p:declare-step>
-
-    <p:declare-step type="pxi:epubcheck-locate-mimetype-dir">
-        <p:documentation>Walks up the directory tree looking for the directory that the 'mimetype' file is stored in.</p:documentation>
-
-        <p:option name="path" required="true"/>
-        <p:output port="result"/>
-
-        <p:variable name="parent" select="replace($path,'[^/]+/?$','')"/>
-
-        <p:directory-list>
-            <p:with-option name="path" select="$parent"/>
-        </p:directory-list>
-
-        <p:choose>
-            <p:when test="/*/c:file/@name='mimetype'">
-                <p:delete match="/*/*"/>
-            </p:when>
-            <p:when test="matches($parent,'^\w+:/+[^/]+/')">
-                <pxi:epubcheck-locate-mimetype-dir>
-                    <p:with-option name="path" select="$parent"/>
-                </pxi:epubcheck-locate-mimetype-dir>
-            </p:when>
-            <p:otherwise>
-                <p:identity>
-                    <p:input port="source">
-                        <p:inline>
-                            <c:directory/>
-                        </p:inline>
-                    </p:input>
-                </p:identity>
-            </p:otherwise>
-        </p:choose>
-
     </p:declare-step>
 
 </p:library>

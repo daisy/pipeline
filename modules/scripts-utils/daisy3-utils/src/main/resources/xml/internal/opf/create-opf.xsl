@@ -6,7 +6,7 @@
 		xmlns="http://openebook.org/namespaces/oeb-package/1.0/"
 		exclude-result-prefixes="xsl d pf xs" version="2.0">
 
-  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
 
   <!-- input: the fileset -->

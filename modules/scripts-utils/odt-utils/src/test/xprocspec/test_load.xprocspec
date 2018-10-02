@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/load.xpl">
+  
+  <x:scenario label="load">
+    <x:call step="odt:load">
+      <x:option name="href" select="resolve-uri('../resources/odt/test.odt')"/>
+      <x:option name="target" select="'file:/users/me/dir/'"/>
+    </x:call>
+    <x:context label="fileset.out">
+      <x:document type="port" port="fileset.out"/>
+    </x:context>
+    <!--
+        FIXME: <x:expect type="custom" href="fileset-compare.xpl" step="pxi:fileset-compare"> ...
+    -->
+    <x:expect label="files" type="xpath"
+              test="/*/d:file[resolve-uri(@href, base-uri(.))='file:/users/me/dir/'
+                              and @media-type='application/vnd.oasis.opendocument.text']"/>
+  </x:scenario>
+  
+</x:description>

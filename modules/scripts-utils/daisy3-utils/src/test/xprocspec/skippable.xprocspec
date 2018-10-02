@@ -1,14 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <x:description script="../../main/resources/xml/internal/dtbook/isolate-daisy3-skippable.xpl"
 	       xmlns:x="http://www.daisy.org/ns/xprocspec"
 	       xmlns:p="http://www.w3.org/ns/xproc"
 	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
-	       xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	       xmlns="http://www.daisy.org/z3986/2005/dtbook/" pending="TODO: expected results">
 
   <x:scenario label="General scenario">
     <x:call step="px:isolate-daisy3-skippable">
       <x:input port="sentence-ids">
-	<x:document>
+	<x:document type="inline">
 	  <d:sentences>
 	    <d:sentence id="sent1"/>
 	    <d:sentence id="sent2"/>

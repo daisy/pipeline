@@ -94,9 +94,11 @@
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <!--
         <x:expect type="compare" label="The result should be as expected">
-            <!--            <x:document type="file" method="xml" href="resources/expected_6.xml"/>-->
+                       <x:document type="file" method="xml" href="resources/expected_6.xml"/>
         </x:expect>
+        -->
     </x:scenario>
     
     <x:scenario label="px:mediaoverlay-rearrange - another test that took forever to run in v1.7">
@@ -113,9 +115,11 @@
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <!--
         <x:expect type="compare" label="The result should be as expected">
-            <!--            <x:document type="file" method="xml" href="resources/expected_47.xml"/>-->
+                       <x:document type="file" method="xml" href="resources/expected_47.xml"/>
         </x:expect>
+        -->
     </x:scenario>
 
 </x:description>

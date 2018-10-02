@@ -6,7 +6,7 @@
 
   <!-- Prerequesite: SMIL nodes must have @ids -->
 
-  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
   <xsl:param name="no-smilref"/>
   <xsl:param name="mo-dir"/>

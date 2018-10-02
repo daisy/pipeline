@@ -10,7 +10,7 @@
   <!-- main: dtbook content document -->
   <!-- collection(): audio map -->
 
-  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
   <xsl:output indent="yes"/>
 
   <xsl:param name="mo-dir"/>

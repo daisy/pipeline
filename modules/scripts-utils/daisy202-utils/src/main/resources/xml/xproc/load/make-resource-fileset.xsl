@@ -3,6 +3,10 @@
 
     <!-- TODO: move to html-utils -->
 
+    <!--
+        Note: this file is currently not used
+    -->
+
     <xsl:template match="/*">
         <d:fileset>
             <xsl:attribute name="xml:base" select="replace(base-uri(.),'^(.+/)[^/]*','$1')"/>

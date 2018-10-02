@@ -5,7 +5,7 @@
 		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
 		exclude-result-prefixes="#all" version="2.0">
 
-  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
   <!-- This script adds @smilref attributes to the input document, but
        not all the nodes and attributes are copied, because the output

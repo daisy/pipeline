@@ -8,7 +8,7 @@
     <xsl:variable name="base" select="//d:file[starts-with(@media-type,'application/vnd.oasis.opendocument')]
                                       /resolve-uri(@href, base-uri(.))"/>
     
-    <xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
     
     <xsl:template match="d:fileset">
         <xsl:if test="not($base)">

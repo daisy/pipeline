@@ -27,16 +27,17 @@
         <x:context label="the dtbook 2005-3">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the dtbook 2005-3 should be as expected" type="compare">
+        <x:expect label="the dtbook 2005-3 should be as expected"
+                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
             <x:document type="inline">
                 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
                     <head>
                         <meta name="dc:Title" content="Title"/>
                     </head>
-                    <book id="d2114e11">
+                    <book id="a">
                         <bodymatter>
                             <level1>
-                                <p id="d2114e17">Blah</p>
+                                <p id="b">Blah</p>
                             </level1>
                         </bodymatter>
                     </book>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/xproc/ocf-finalize.xpl">
+
+	<x:scenario label="test-default">
+		<x:call step="px:epub3-ocf-finalize">
+			<x:input port="source">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp/dir/">
+						<d:file href="Content/package.opf"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="compare">
+			<x:document type="inline">
+				<d:fileset xml:base="file:/tmp/dir/">
+					<d:file href="Content/package.opf"/>
+					<d:file href="META-INF/container.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test-multiple-opf">
+		<x:call step="px:epub3-ocf-finalize">
+			<x:input port="source">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp/dir/">
+						<d:file href="Content/package.opf"/>
+						<d:file href="Alternate/other.opf"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="compare">
+			<x:document type="inline">
+				<d:fileset xml:base="file:/tmp/dir/">
+					<d:file href="Content/package.opf"/>
+					<d:file href="Alternate/other.opf"/>
+					<d:file href="META-INF/container.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the container port">
+			<x:document type="port" port="container"/>
+		</x:context>
+		<x:expect label="the container document" type="compare">
+			<x:document type="inline">
+				<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+					<rootfiles>
+						<rootfile full-path="Content/package.opf"
+						          media-type="application/oebps-package+xml"/>
+						<rootfile full-path="Alternate/other.opf"
+						          media-type="application/oebps-package+xml"/>
+					</rootfiles>
+				</container>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test-no-opf">
+		<x:call step="px:epub3-ocf-finalize">
+			<x:input port="source">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp/dir/">
+					</d:fileset>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the errors">
+			<x:document type="errors"/>
+		</x:context>
+		<x:expect label="the error" type="xpath"
+		          test="/c:errors/c:error/concat('[',@code,'] ',normalize-space(string(.)))"
+		          equals="'[err:EOU002] No OPF was found in the source file set.'"/>
+	</x:scenario>
+	
+</x:description>
