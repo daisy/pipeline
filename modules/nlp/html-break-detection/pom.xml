@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>nlp-modules-parent</artifactId>
-    <version>1.11.0</version>
+    <version>1.11.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>html-break-detection</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: HTML break detection</name>

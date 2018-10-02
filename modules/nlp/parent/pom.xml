@@ -5,16 +5,15 @@
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
     <version>1.6</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <artifactId>nlp-modules-parent</artifactId>
-  <version>1.11.0</version>
+  <version>1.11.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: NLP Modules Parent POM</name>
   <description>Parent POM for modules related to Natural Language Processing</description>
-
 
   <dependencyManagement>
     <dependencies>
@@ -24,7 +23,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -51,7 +50,12 @@
     </dependencies>
   </dependencyManagement>
 
-  <scm>
-    <tag>v1.11.0</tag>
-  </scm>
+  <repositories>
+    <repository>
+      <id>restlet-repo</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
+    </repository>
+  </repositories>
+
 </project>

@@ -10,7 +10,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>nlp-modules-bom</artifactId>
-  <version>1.11.0</version>
+  <version>1.11.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: NLP Modules BoM</name>
@@ -65,8 +65,4 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <scm>
-    <tag>v1.11.0</tag>
-  </scm>
 </project>
