@@ -1,0 +1,10 @@
+.git
+.gitignore
+
+.dockerignore
+Dockerfile
+
+target
+
+# building the docker image fails if this file is around
+dist/bin/pipeline2-webui.bat

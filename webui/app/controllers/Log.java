@@ -75,7 +75,7 @@ public class Log extends Controller {
 		}
 		
 		// Web UI log
-		{
+		if (controllers.Application.DP2DATA != null && new File(controllers.Application.DP2DATA).exists()) {
 			List<String> webuiLog = new ArrayList<String>();
 			File webuiLogFile = new File(new File(new File(controllers.Application.DP2DATA), "logs"), "webui.log");
 			try {
@@ -102,7 +102,7 @@ public class Log extends Controller {
 		}
 		
 		// Engine log
-		{
+		if (controllers.Application.DP2DATA_ENGINE != null && new File(controllers.Application.DP2DATA_ENGINE).exists()) {
 			List<String> daisyPipelineLog = new ArrayList<String>();
 			File daisyPipelineLogFile = new File(new File(new File(controllers.Application.DP2DATA_ENGINE), "log"), "daisy-pipeline.log");
 			try {
@@ -119,17 +119,17 @@ public class Log extends Controller {
 			} catch (IOException e) {
 				daisyPipelineLog.add("An error occured while trying to read "+daisyPipelineLogFile.getAbsolutePath());
 				StringWriter sw = new StringWriter();
-	            PrintWriter pw = new PrintWriter(sw);
-	            e.printStackTrace(pw);
-	            daisyPipelineLog.add(sw.toString()); // stack trace as a string
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				daisyPipelineLog.add(sw.toString()); // stack trace as a string
 			}
 			Map<String,List<String>> log = new HashMap<String,List<String>>();
 			log.put("Pipeline 2 Engine - daisy-pipeline.log", daisyPipelineLog);
 			logs.add(log);
 		}
-		
+			
 		// Engine DB log
-		{
+		if (controllers.Application.DP2DATA_ENGINE != null && new File(controllers.Application.DP2DATA_ENGINE).exists()) {
 			List<String> derbyLog = new ArrayList<String>();
 			File derbyLogFile = new File(new File(new File(controllers.Application.DP2DATA_ENGINE), "log"), "derby.log");
 			if (derbyLogFile.exists()) {
@@ -160,7 +160,7 @@ public class Log extends Controller {
 		}
 		
 		// Web UI DB log
-		{
+		if (controllers.Application.DP2DATA != null && new File(controllers.Application.DP2DATA).exists()) {
 			File derbyLogFile = new File(new File(new File(controllers.Application.DP2DATA), "logs"), "webui-database.log");
 			if (derbyLogFile.exists()) {
 				List<String> derbyLog = new ArrayList<String>();

@@ -781,6 +781,7 @@ public class Jobs extends Controller {
 		job.pushNotifications();
 		
 		if (user.getId() < 0 && scriptForm.guestEmail != null && scriptForm.guestEmail.length() > 0) {
+			scriptForm.guestEmail = scriptForm.guestEmail.toLowerCase();
 			String jobUrl = Application.absoluteURL(routes.Jobs.getJob(job.getId()).absoluteURL(request())+"?guestid="+(models.User.parseUserId(session())!=null?-models.User.parseUserId(session()):""));
 			String html = views.html.Account.emailJobCreated.render(jobUrl, job.getNicename()).body();
 			String text = "To view your Pipeline 2 job, go to this web address: " + jobUrl;

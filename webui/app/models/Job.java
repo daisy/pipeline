@@ -572,7 +572,7 @@ public class Job extends Model implements Comparable<Job> {
 	}
 
 	public void setGuestEmail(String guestEmail) {
-		this.guestEmail = guestEmail;
+		this.guestEmail = guestEmail == null ? null : guestEmail.toLowerCase();
 	}
 
 	public String getScriptId() {

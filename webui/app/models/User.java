@@ -75,7 +75,7 @@ public class User extends Model {
 	 * Constructor
 	 */
 	public User(String email, String name, String password, boolean admin) {
-		this.email = email;
+		this.email = email.toLowerCase();
 		this.name = name;
 		if ("".equals(password)) {
 			this.password = "";
@@ -148,7 +148,7 @@ public class User extends Model {
 
 	/** Retrieve a User from email. */
 	public static User findByEmail(String email) {
-		List<User> users = find.where().eq("email", email).findList();
+		List<User> users = find.where().eq("email", email.toLowerCase()).findList();
 		for (int u = users.size()-1; u > 0; u--)
 			users.get(u).delete();
 		if (users.size() == 0)
@@ -242,7 +242,7 @@ public class User extends Model {
 	public static User authenticateUnencrypted(String email, String password, Session session) {
 		try {
 			User user = find.where()
-					.eq("email", email)
+					.eq("email", email.toLowerCase())
 					.eq("password", play.Play.application().injector().instanceOf(Crypto.class).sign(password))
 					.findUnique();
 			user.login(session);
@@ -283,10 +283,13 @@ public class User extends Model {
 	/**
 	 * Validate changes for a user.
 	 * @param filledForm
-	 * @param user 
+	 * @param user
 	 */
 	public void validateChange(Form<User> filledForm, User user) {
-		if (!this.email.equals(filledForm.field("email").value()) && User.findByEmail(filledForm.field("email").valueOr("")) != null)
+		String formEmail = filledForm.field("email").value();
+		if (formEmail != null)
+			formEmail = formEmail.toLowerCase();
+		if (!this.email.equals(formEmail) && User.findByEmail(formEmail) != null)
 			filledForm.reject("email", "That e-mail address is already taken");
 		
 		String password = filledForm.field("password").valueOr("");
@@ -322,7 +325,10 @@ public class User extends Model {
 		if (!this.name.equals(filledForm.field("name").valueOr("")))
 			return true;
 		
-		if (!this.email.equals(filledForm.field("email").valueOr("")))
+		String formEmail = filledForm.field("email").valueOr("");
+		if (formEmail != null)
+			formEmail = formEmail.toLowerCase();
+		if (!this.email.equals(formEmail))
 			return true;
 		
 		if (filledForm.field("password").valueOr("").length() != 0 && !this.password.equals(play.Play.application().injector().instanceOf(Crypto.class).sign(filledForm.field("password").valueOr(""))))
@@ -390,7 +396,7 @@ public class User extends Model {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = email == null ? email : email.toLowerCase();
 	}
 
 	public String getName() {

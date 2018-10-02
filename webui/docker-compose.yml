@@ -1,0 +1,23 @@
+version: "2.1"
+services:
+  pipeline:
+    image: daisyorg/pipeline-assembly
+    environment:
+      PIPELINE2_WS_HOST: "pipeline"
+      PIPELINE2_WS_AUTHENTICATION: "false"
+    volumes:
+      - "pipeline-data:/opt/daisy-pipeline2/data"
+  webui:
+    image: daisyorg/pipeline-webui
+    environment:
+      DAISY_PIPELINE2_URL: http://pipeline:8181/ws
+    ports:
+      - "9000:9000"
+    volumes:
+      - "webui-data:/opt/daisy-pipeline2-webui/data"
+    depends_on:
+      pipeline:
+        condition: service_healthy
+volumes:
+  pipeline-data:
+  webui-data:

@@ -66,6 +66,7 @@ public class Login extends Controller {
     
     public static Result resetPassword() {
     	String email = request().queryString().containsKey("email") ? request().queryString().get("email")[0] : "";
+    	email = email.toLowerCase();
     	User user = User.findByEmail(email);
     	
     	if ("".equals(email)) {

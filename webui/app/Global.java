@@ -61,6 +61,14 @@ public class Global extends GlobalSettings {
 			Setting.set("userTracking", "false");
 		}
 		
+		String endpoint = Setting.get("dp2ws.endpoint");
+		if (endpoint == null) {
+			controllers.Application.ws.setEndpoint(controllers.Application.DEFAULT_DP2_ENDPOINT);
+		} else {
+			controllers.Application.ws.setEndpoint(Setting.get("dp2ws.endpoint"));
+			controllers.Application.ws.setCredentials(Setting.get("dp2ws.authid"), Setting.get("dp2ws.secret"));
+		}
+		
 		Akka.system().scheduler().schedule(
 				Duration.create(0, TimeUnit.SECONDS),
 				Duration.create(10, TimeUnit.SECONDS),
@@ -71,6 +79,10 @@ public class Global extends GlobalSettings {
 							if (endpoint == null) {
 								Application.setAlive(null);
 								return;
+							}
+							if (!endpoint.equals(controllers.Application.ws.getEndpoint())) {
+								controllers.Application.ws.setEndpoint(endpoint);
+								controllers.Application.ws.setCredentials(Setting.get("dp2ws.authid"), Setting.get("dp2ws.secret"));
 							}
 
 							Application.setAlive(controllers.Application.ws.alive());

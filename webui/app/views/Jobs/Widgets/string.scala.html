@@ -9,7 +9,7 @@
 		<div class="controls">
 			<input name="@{arg.getName()}" id="text-@scriptId-@{arg.getName()}" type="text" @if(arg.getDefaultValue() != null){ value="@arg.getDefaultValue().replaceAll("\"","'")" }
 				@if(Scripts.chooseWidget(arg)=="regex"){
-					pattern="@{Application.ws.getDataType(arg.getDataType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].regex}"
+					pattern="@{Application.ws.getDataType(arg.getDataType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].regex.replaceAll("\"","&quot;")}"
 				}
 			/>
 			@Helpers.ArgumentDescription(arg, scriptId)

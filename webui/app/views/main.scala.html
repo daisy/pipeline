@@ -63,7 +63,7 @@
 			var ws = "@{routes.Notifications.websocket(-1L).webSocketURL(request)}".replace("-1",browserId);
 			var http = "@{routes.Notifications.xhr(-1L)}".replace("-1",browserId);
 			ws = ws.replace(/[^/]+:\/\/[^/]+/,"");
-			ws = "ws://"+window.location.host+ws;
+			ws = (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host + ws;
 			http = window.location.protocol+"//"+window.location.host+http;
 			Notifications.init(ws, http);
 		}

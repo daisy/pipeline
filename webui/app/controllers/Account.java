@@ -122,6 +122,8 @@ public class Account extends Controller {
 		if (FirstUse.isFirstUse())
     		return redirect(routes.FirstUse.getFirstUse());
 		
+		email = email == null ? null : email.toLowerCase();
+		
 		User user = User.findByEmail(email);
 		if (user == null || user.getId() < 0)
 			return redirect(routes.Login.login());
@@ -145,6 +147,8 @@ public class Account extends Controller {
 	public static Result resetPassword(String email, String resetUid) {
 		if (FirstUse.isFirstUse())
     		return redirect(routes.FirstUse.getFirstUse());
+		
+		email = email == null ? null : email.toLowerCase();
 		
 		User user = User.findByEmail(email);
 		if (user == null || user.getId() < 0)
@@ -217,7 +221,7 @@ public class Account extends Controller {
 			email.setSubject("[DAISY Pipeline 2] "+subject);
 			email.setHtmlMsg(html);
 			email.setTextMsg(text);
-			email.addTo(recipientEmail, recipientName);
+			email.addTo(recipientEmail.toLowerCase(), recipientName);
 			
 			String prefix = "true".equals(ssl) ? "mail.smtps" : "mail.smtp";
 			email.setSSL("true".equals(ssl));

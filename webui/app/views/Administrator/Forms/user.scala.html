@@ -54,7 +54,7 @@
 				<div class="control-group @("error".when(userForm.field("userid").valueOr("") == ""+user.getId() && userForm.error("email") != null))" id="user-@{user.getId()}-emailGroup">
 					<label for="user-@{user.getId()}-email" class="control-label">E-mail</label>
 					<div class="controls">
-						<input type="email" name="email" id="user-@{user.getId()}-email" class="input-xlarge"
+						<input autocomplete="off" type="email" name="email" id="user-@{user.getId()}-email" class="input-xlarge"
 							placeholder="&quot;@user.getEmail()&quot; is your current e-mail address."
 							value="@{if (user.getId()+""==userForm.field("userid").valueOr("") && userForm.hasErrors()) userForm.field("email").valueOr(""); else user.getEmail();}"
 							onkeyup="toggleChanged('user-@{user.getId()}-email', this.value==='@user.getEmail()');"/>

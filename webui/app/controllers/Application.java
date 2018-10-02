@@ -23,12 +23,19 @@ public class Application extends Controller {
 	
 	public static final boolean debug = "DEBUG".equals(Configuration.root().getString("logger.application"));
 	
-	public static final String DEFAULT_DP2_ENDPOINT = "http://localhost:8181/ws";
+	public static final String DEFAULT_DP2_ENDPOINT;
 	public static final String DP2DATA;
 	public static final String DP2DATA_ENGINE;
 	static {
 		String os = System.getProperty("os.name");
 		String home = System.getProperty("user.home");
+		
+		String dp2endpoint = System.getenv("DAISY_PIPELINE2_URL");
+		if (dp2endpoint == null || "".equals(dp2endpoint)) {
+			DEFAULT_DP2_ENDPOINT = "http://localhost:8181/ws";
+		} else {
+			DEFAULT_DP2_ENDPOINT = dp2endpoint;
+		}
 		
 		// get data directory for webui
 		String dp2data = System.getenv("DP2DATA");
