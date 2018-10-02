@@ -2,6 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Dynamic Calabash Configuration Factory">
    <implementation class="org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory"/>
    <reference bind="addStep" cardinality="0..n" interface="org.daisy.common.xproc.calabash.XProcStepProvider" name="XProcStepProvider" policy="dynamic" unbind="removeStep"/> 
+   <reference bind="addConfigurationFile" cardinality="0..n" interface="org.daisy.common.xproc.calabash.ConfigurationFileProvider" name="ConfigurationFileProvider" policy="dynamic" unbind="removeConfigurationFile"/> 
    <reference bind="setXPathFunctionRegistry" cardinality="0..1" interface="org.daisy.pipeline.xpath.XPathFunctionRegistry" name="FunctionLibary" policy="dynamic" />
    <service>
       <provide interface="org.daisy.common.xproc.calabash.XProcConfigurationFactory"/>

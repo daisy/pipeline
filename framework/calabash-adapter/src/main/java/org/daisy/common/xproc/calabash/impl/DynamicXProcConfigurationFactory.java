@@ -1,7 +1,14 @@
 package org.daisy.common.xproc.calabash.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
@@ -13,6 +20,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XProcStepRegistry;
@@ -45,6 +53,7 @@ public class DynamicXProcConfigurationFactory implements
 
 	// private FunctionLibraryList mFunctionLibrary=new FunctionLibraryList();
 	private XPathFunctionRegistry mXPathRegistry = null;
+	private final List<ConfigurationFileProvider> configurationFiles = new ArrayList<>();
 
 	/*
 	 * (non-Javadoc)
@@ -56,7 +65,11 @@ public class DynamicXProcConfigurationFactory implements
 	@Override
 	public XProcConfiguration newConfiguration() {
 		XProcConfiguration config = new DynamicXProcConfiguration(this);
-		loadConfigurationFile(config);
+		loadMainConfigurationFile(config);
+		for (ConfigurationFileProvider f : configurationFiles) {
+			logger.debug("Reading {}", f);
+			loadConfigurationFile(config, f.get());
+		}
 		registerExtensionFunctions(config);
 		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 
@@ -81,7 +94,11 @@ public class DynamicXProcConfigurationFactory implements
 	public XProcConfiguration newConfiguration(boolean schemaAware) {
 		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware,
 				this);
-		loadConfigurationFile(config);
+		loadMainConfigurationFile(config);
+		for (ConfigurationFileProvider f : configurationFiles) {
+			logger.debug("Reading {}", f);
+			loadConfigurationFile(config, f.get());
+		}
 		registerExtensionFunctions(config);
 		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 		return config;
@@ -98,7 +115,11 @@ public class DynamicXProcConfigurationFactory implements
 	public XProcConfiguration newConfiguration(Processor processor) {
 		XProcConfiguration config = new DynamicXProcConfiguration(processor,
 				this);
-		loadConfigurationFile(config);
+		loadMainConfigurationFile(config);
+		for (ConfigurationFileProvider f : configurationFiles) {
+			logger.debug("Reading {}", f);
+			loadConfigurationFile(config, f.get());
+		}
 		registerExtensionFunctions(config);
 		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
 		return config;
@@ -130,6 +151,22 @@ public class DynamicXProcConfigurationFactory implements
 		QName type = QName.fromClarkName((String) properties.get("type"));
 		logger.debug("Removing step from registry: {}", type.toString());
 		stepProviders.remove(type);
+	}
+
+	/**
+	 * Adds a configuration file
+	 */
+	public void addConfigurationFile(ConfigurationFileProvider provider) {
+		logger.debug("Adding " + provider);
+		configurationFiles.add(provider);
+	}
+
+	/**
+	 * Removes a configuration file
+	 */
+	public void removeConfigurationFile(ConfigurationFileProvider provider) {
+		logger.debug("Removing " + provider);
+		configurationFiles.remove(provider);
 	}
 
 	/*
@@ -165,29 +202,38 @@ public class DynamicXProcConfigurationFactory implements
 	 * @param conf
 	 *            the conf
 	 */
-	private void loadConfigurationFile(XProcConfiguration conf) {
+	private void loadMainConfigurationFile(XProcConfiguration conf) {
 		// TODO cleanup and cache
-		String configPath = System.getProperty(CONFIG_PATH);
-		if (configPath != null) {
-			if (!configPath.startsWith("file:")) {
-				configPath = new File(configPath).toURI().toString();
+		String prop = System.getProperty(CONFIG_PATH);
+		if (prop != null) {
+			File configPath; {
+				if (prop.startsWith("file:")) {
+					configPath = new File(URI.create(prop));
+				} else {
+					configPath = new File(prop);
+				}
 			}
 			logger.debug("Reading Calabash configuration from {}", configPath);
-			// Make this absolute because sometimes it fails from the command
-			// line otherwise. WTF?
-
-			SAXSource source = new SAXSource(new InputSource(configPath));
-			DocumentBuilder builder = conf.getProcessor().newDocumentBuilder();
-			XdmNode doc;
 			try {
-				doc = builder.build(source);
-			} catch (SaxonApiException e) {
-				logger.error("Error loading configuration file", e);
-				throw new RuntimeException("error loading configuration file",
-						e);
+				loadConfigurationFile(conf, new FileInputStream(configPath));
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
 			}
-			conf.parse(doc);
 		}
+	}
+
+	private void loadConfigurationFile(XProcConfiguration conf, InputStream config) {
+		SAXSource source = new SAXSource(new InputSource(config));
+		DocumentBuilder builder = conf.getProcessor().newDocumentBuilder();
+		XdmNode doc;
+		try {
+			doc = builder.build(source);
+		} catch (SaxonApiException e) {
+			logger.error("Error loading configuration file", e);
+			throw new RuntimeException("error loading configuration file",
+					e);
+		}
+		conf.parse(doc);
 	}
 
 	public void setXPathFunctionRegistry(XPathFunctionRegistry xpathFunctions) {
