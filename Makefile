@@ -1,6 +1,7 @@
 JEKYLL_SRC_DIR := src
 SHELL := bash
-RUBY := ruby
+RUBY := bundle exec
+JEKYLL := $(RUBY) jekyll
 JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_gui,_wiki_webui} -type f -not -name '_*' -not -name '*.png' )
 JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/ -type f -name '_Sidebar.md')
 JEKYLL_SRC_FILES_OTHER := $(filter-out $(JEKYLL_SRC_FILES_CONTENT) $(JEKYLL_SRC_FILES_MUSTACHE),\
@@ -29,7 +30,7 @@ all : $(JEKYLL_DIR)/_site
 
 $(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
-	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
+	cd $(dir $@) && $(JEKYLL) build --destination $(CURDIR)/$@$(baseurl)/
 	if ! $(RUBY) make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
 		rm -rf $@; \
 		exit 1; \
@@ -86,7 +87,7 @@ $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	fi
 
 $(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(META_JEKYLL_FILES)
-	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)
+	cd $(dir $@) && $(JEKYLL) build --destination $(CURDIR)/$@$(baseurl)
 	touch $@
 
 $(META_JEKYLL_FILES_CONTENT) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
