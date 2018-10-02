@@ -19,11 +19,11 @@
 	<x:scenario label="test">
 		<x:call step="pxi:dummy"/>
 		<x:context label="The JAR content">
-			<x:document type="zip" href="../../../target/it-pipeline-module-0-SNAPSHOT.jar"/>
+			<x:document type="zip" href="${project.build.directory}/it-pipeline-module-${project.version}.jar"/>
 		</x:context>
 		<x:expect label="The JAR content" type="compare">
 			<x:document type="inline">
-				<c:zipfile name="it-pipeline-module-0-SNAPSHOT.jar">
+				<c:zipfile name="it-pipeline-module-${project.version}.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
 					<c:file name="META-INF/catalog.xml"/>
 					<c:file name="OSGI-INF/choice.xml"/>
@@ -43,7 +43,7 @@
 			</x:document>
 		</x:expect>
 		<x:context label="The META-INF/catalog.xml file">
-			<x:document type="file" href="../../../target/it-pipeline-module-0-SNAPSHOT.jar!/META-INF/catalog.xml"/>
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/META-INF/catalog.xml"/>
 		</x:context>
 		<x:expect label="The META-INF/catalog.xml file" type="compare">
 			<x:document type="inline">
@@ -56,7 +56,7 @@
 			</x:document>
 		</x:expect>
 		<x:context label="The OSGI-INF/script.xml file">
-			<x:document type="file" href="../../../target/it-pipeline-module-0-SNAPSHOT.jar!/OSGI-INF/script.xml"/>
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/script.xml"/>
 		</x:context>
 		<x:expect label="The OSGI-INF/script.xml file" type="compare">
 			<x:document type="inline">
@@ -69,12 +69,12 @@
 					<scr:property name="script.name" type="String" value="Example script"/>
 					<scr:property name="script.description" type="String" value="Does stuff."/>
 					<scr:property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/foo-utils/script.xpl"/>
-					<scr:property name="script.version" type="String" value="0-SNAPSHOT"/>
+					<scr:property name="script.version" type="String" value="${project.version}"/>
 				</scr:component>
 			</x:document>
 		</x:expect>
 		<x:context label="The OSGI-INF/choice.xml file">
-			<x:document type="file" href="../../../target/it-pipeline-module-0-SNAPSHOT.jar!/OSGI-INF/choice.xml"/>
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/choice.xml"/>
 		</x:context>
 		<x:expect label="The OSGI-INF/choice.xml file" type="compare">
 			<x:document type="inline">
@@ -90,11 +90,11 @@
 			</x:document>
 		</x:expect>
 		<x:context label="The 'doc' JAR content">
-			<x:document type="zip" href="../../../target/it-pipeline-module-0-SNAPSHOT-doc.jar"/>
+			<x:document type="zip" href="${project.build.directory}/it-pipeline-module-${project.version}-doc.jar" ordered="true"/>
 		</x:context>
-		<x:expect label="The 'doc' JAR content" type="compare" pending="order of zip entries is undeterministic">
+		<x:expect label="The 'doc' JAR content" type="compare">
 			<x:document type="inline">
-				<c:zipfile name="it-pipeline-module-0-SNAPSHOT-doc.jar">
+				<c:zipfile name="it-pipeline-module-${project.version}-doc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
 					<c:file name="src/main/java/allclasses-frame.html"/>
 					<c:file name="src/main/java/impl/JavaStep.html"/>
@@ -116,15 +116,15 @@
 			</x:document>
 		</x:expect>
 		<x:context label="The 'javadoc' JAR content">
-			<x:document type="zip" href="../../../target/it-pipeline-module-0-SNAPSHOT-javadoc.jar"/>
+			<x:document type="zip" href="${project.build.directory}/it-pipeline-module-${project.version}-javadoc.jar"/>
 		</x:context>
 		<x:expect label="The 'javadoc' JAR contains the JavaStep javadoc" type="xpath" test="/c:zipfile/c:file[@name='impl/JavaStep.html']"/>
 		<x:context label="The 'xprocdoc' JAR content">
-			<x:document type="zip" href="../../../target/it-pipeline-module-0-SNAPSHOT-xprocdoc.jar"/>
+			<x:document type="zip" href="${project.build.directory}/it-pipeline-module-${project.version}-xprocdoc.jar"/>
 		</x:context>
 		<x:expect label="The 'xprocdoc' JAR content" type="compare" pending="order of zip entries is undeterministic">
 			<x:document type="inline">
-				<c:zipfile name="it-pipeline-module-0-SNAPSHOT-xprocdoc.jar">
+				<c:zipfile name="it-pipeline-module-${project.version}-xprocdoc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
 					<c:file name="d191e56.html"/>
 					<c:file name="index.html"/>

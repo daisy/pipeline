@@ -77,8 +77,11 @@ public abstract class Options {
 	}
 	
 	public static Option calabashConfigFile() {
+		File configFile = new File(PathUtils.getBaseDir() + "/src/test/resources/config-calabash.xml");
 		return composite(
-			systemProperty("org.daisy.pipeline.xproc.configuration").value(PathUtils.getBaseDir() + "/src/test/resources/config-calabash.xml"),
+			configFile.exists()
+				? systemProperty("org.daisy.pipeline.xproc.configuration").value(configFile.toString())
+				: null,
 			systemProperty("com.xmlcalabash.config.user").value("")
 		);
 	}

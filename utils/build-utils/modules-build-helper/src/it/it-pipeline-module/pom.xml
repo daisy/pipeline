@@ -116,6 +116,27 @@
         </executions>
       </plugin>
       <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>filter-xprocspec</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/it/xprocspec</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+              <outputDirectory>${project.build.directory}/generated-test-resources/xprocspec</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-maven-plugin</artifactId>
         <version>1.0.0</version>
@@ -126,7 +147,7 @@
               <goal>xprocspec</goal>
             </goals>
             <configuration>
-              <xprocspecDirectory>src/it/xprocspec</xprocspecDirectory>
+              <xprocspecDirectory>${project.build.directory}/generated-test-resources/xprocspec</xprocspecDirectory>
               <reportsDirectory>${project.build.directory}/xprocspec-reports-it</reportsDirectory>
             </configuration>
           </execution>

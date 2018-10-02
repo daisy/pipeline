@@ -12,7 +12,7 @@
   
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>pax-exam-helper</artifactId>
-  <version>2.3.1-SNAPSHOT</version>
+  <version>2.3.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 :: Pax Exam Helper</name>

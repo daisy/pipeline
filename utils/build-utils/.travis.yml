@@ -21,6 +21,7 @@ after_failure:
 branches:
   only:
   - master
+  - /^super\/.+$/
 
 env:
   global:
