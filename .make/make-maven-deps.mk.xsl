@@ -221,6 +221,11 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:result-document href="{concat($module,'/',$OUTPUT_FILENAME)}" method="text">
+			<xsl:value-of select="concat($dirname,'VERSION')"/>
+			<xsl:text> := </xsl:text>
+			<xsl:value-of select="$version"/>
+			<xsl:text>&#x0A;</xsl:text>
+			<xsl:text>&#x0A;</xsl:text>
 			<xsl:choose>
 				<xsl:when test="$is-aggregator">
 					<xsl:text>.SECONDARY : </xsl:text>

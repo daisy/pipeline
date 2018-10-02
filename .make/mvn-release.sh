@@ -82,6 +82,11 @@ fi
 release_branch=release/$tag
 echo "git checkout -b $release_branch $base_commit && \\"
 
+if [ $release_dir == "modules/braille" ]; then
+    echo ": Finalize the release notes and commit. If there are no notes yet for this release, create a template with:"
+    echo ": make release-notes"
+fi
+
 if [ $release_dir != $gitrepo_dir ]; then
     echo "cd ${release_dir#${gitrepo_dir}/} && \\"
 fi
@@ -94,9 +99,9 @@ echo "java -cp $SAXON \\
      -s:pom.xml \\
      OUTPUT_FILENAME=pom.xml.new \\
      >/dev/null && \\"
-echo "find . -name pom.xml.new -execdir bash -c 'diff -Bw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
+echo "find . -name pom.xml.new -execdir bash -c 'diff -Biw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
 echo "git add -u && \\"
-echo "( git commit -m 'Resolve snapshot dependencies (BOMs)' >/dev/null || true ) && \\"
+echo "( git commit -m 'Resolve snapshot dependencies (BOMs/parents)' >/dev/null || true ) && \\"
 
 # disable modules that should not be released
 if [ ${#modules[@]} -gt 0 ]; then
@@ -107,7 +112,7 @@ if [ ${#modules[@]} -gt 0 ]; then
      ENABLED_MODULES='${modules[@]}' \\
      OUTPUT_FILENAME=pom.xml.new \\
      >/dev/null && \\"
-    echo "find . -name pom.xml.new -execdir bash -c 'diff -Bw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
+    echo "find . -name pom.xml.new -execdir bash -c 'diff -Biw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
     echo "git add -u && \\"
     echo "( git commit -m 'Disable modules that should not be released' >/dev/null || true ) && \\"
 fi
@@ -128,7 +133,8 @@ if [ ${#modules[@]} -gt 0 ]; then
     echo "env org.ops4j.pax.url.mvn.settings='$tmp_dir/settings.xml' \\"
 fi
 printf "mvn clean release:clean release:prepare \\
-    -DupdateDependencies=false"
+    -DupdateDependencies=false \\
+    -DpushChanges=false"
 if [[ -z $tag_format ]]; then
     printf " \\
     -DtagNameFormat=$tag"
@@ -150,7 +156,7 @@ if [ ${#modules[@]} -gt 0 ]; then
      -s:pom.xml \\
      OUTPUT_FILENAME=pom.xml.new \\
      >/dev/null && \\"
-    echo "find . -name pom.xml.new -execdir bash -c 'diff -Bw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
+    echo "find . -name pom.xml.new -execdir bash -c 'diff -Biw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
     echo "git add -u && \\"
     echo "git commit --amend --no-edit && \\"
 fi
@@ -165,7 +171,8 @@ echo "java -cp $SAXON \\
 echo "mv pom.xml.fixed pom.xml && \\"
 
 # skipping tests during perform: they were run during prepare step, no need to run them again
-echo "mvn release:perform -Dgoals=\"verify \\
+echo "mvn release:perform -DlocalCheckout=true \\
+                    -Dgoals=\"verify \\
                              org.sonatype.plugins:nexus-staging-maven-plugin:1.6.8:deploy\" \\
                     -Darguments=\"-Psonatype-oss-release \\
                                  -DskipTests -Dinvoker.skip=true \\
@@ -216,14 +223,19 @@ if [ $github_owner == "daisy" ]; then
         curl https://api.github.com/repos/$github_owner/$github_repo/milestones 2>/dev/null \
         | jq --arg title "v${milestone}" '.[] | select(.title == $title)' )
     if [ -z "$milestone_json" ]; then
-        echo ": Milestone 'v${milestone}' does not exist" >&2
+        echo ": Milestone 'v${milestone}' does not exist. Create it:"
+        echo "echo \"{\\\"title\\\": \\\"v${milestone}\\\", \\"
+        echo "       \\\"state\\\": \\\"open\\\"}\" \\"
+        echo "| curl -u \"\$credentials\" -X POST --data @- \\"
+        echo "       https://api.github.com/repos/$github_owner/$github_repo/milestones"
+        echo ": Now add the issue to the milestone"
     else
         milestone_nr=$( echo "$milestone_json" | jq -r '.number' )
         echo "echo \"{\\\"milestone\\\": \\\"${milestone_nr}\\\"}\" \\"
         echo "| curl -u \"\$credentials\" -X PATCH --data @- \\"
         echo "       https://api.github.com/repos/$github_owner/$github_repo/issues/\$pr_number"
     fi
-    echo ": open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
+    echo "open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
 fi
 
 if [ $release_dir == "assembly" ]; then

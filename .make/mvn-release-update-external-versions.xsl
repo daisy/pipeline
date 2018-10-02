@@ -33,7 +33,8 @@
 		</xsl:copy>
 	</xsl:template>
 	
-	<xsl:template match="/project/dependencyManagement/dependencies/dependency/version[ends-with(.,'-SNAPSHOT')]">
+	<xsl:template match="/project/dependencyManagement/dependencies/dependency/version[ends-with(.,'-SNAPSHOT')]|
+	                     /project/parent/version[ends-with(.,'-SNAPSHOT')]">
 		<xsl:param name="internal-artifacts" tunnel="yes"/>
 		<xsl:choose>
 			<xsl:when test="not($internal-artifacts[string(groupId)=string(current()/parent::*/groupId) and

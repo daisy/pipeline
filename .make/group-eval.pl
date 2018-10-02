@@ -44,10 +44,13 @@ sub pretty_print_and_eval {
 			print join(" ", @cmd), "\n";
 		}
 		print color("reset");
-	    system("bash", "-c", join(" ",@cmd));
+		system("bash", "-c", join(" ",@cmd));
 		if ($? == 0) {
 		} elsif ($? == -1) {
-			printf STDERR "\nfailed to execute: $!\n";
+			printf STDERR color("bold red");
+			printf STDERR "\nfailed to execute command: $!\n";
+			printf STDERR color("reset");
+			exit 1;
 		} elsif ($? & 127) {
 			printf STDERR "\ncommand died with signal %d\n", ($? & 127);
 			exit 1;
