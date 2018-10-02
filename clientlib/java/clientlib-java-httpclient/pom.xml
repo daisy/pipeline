@@ -47,6 +47,15 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <pax.exam.logging>none</pax.exam.logging>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.ops4j.pax.exam</groupId>
                 <artifactId>maven-paxexam-plugin</artifactId>
                 <version>1.2.4</version>
@@ -96,18 +105,45 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.daisy.pipeline.build</groupId>
+                <artifactId>modules-build-helper</artifactId>
+                <version>2.1.0</version>
+                <executions>
+                    <execution>
+                        <id>package-list</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>dependencies-package-list</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+                            <includes>
+                                org.daisy.pipeline.*,
+                                org.daisy.common.*
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                            <offlineLinks>
+                                <offlineLink>
+                                    <url>http://daisy.github.io/pipeline/api/</url>
+                                    <location>${project.build.directory}/dependencies-package-list/</location>
+                                </offlineLink>
+                            </offlineLinks>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
