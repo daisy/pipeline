@@ -32,6 +32,7 @@ rem Code to return to launcher on failure
 rem 0:success, 1:unhandled, 2:user-fixable, 3:fatal(we must fix)
 set exitCode=0
 
+
 title Pipeline2
 
 if "%PIPELINE2_DATA%" == "" (
@@ -49,7 +50,6 @@ rem # # SUBROUTINES # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 :warn
     echo %PROGNAME%: %*
-    echo %PROGNAME%: %* >> "%PIPELINE2_DATA%/log/daisy-pipeline-launch.log"
 goto :EOF
 
 :append_to_classpath
@@ -70,15 +70,17 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     set PIPELINE2_HOME=%DIRNAME%..
     if not exist "%PIPELINE2_HOME%" (
         call:warn PIPELINE2_HOME is not valid: !PIPELINE2_HOME!
+        rem fatal
         set exitCode=3
         goto END
     )
 
     if not "%PIPELINE2_BASE%" == "" (
         if not exist "%PIPELINE2_BASE%" (
-           call:warn PIPELINE2_BASE is not valid: !PIPELINE2_BASE!
-           set exitCode=3
-           goto END
+            call:warn PIPELINE2_BASE is not valid: !PIPELINE2_BASE!
+            rem fatal
+            set exitCode=3
+            goto END
         )
     )
 
@@ -106,108 +108,18 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     rem Support for loading native libraries
     set PATH=%PATH%;%PIPELINE2_BASE%\lib;%PIPELINE2_HOME%\lib
     rem Setup the Java Virtual Machine
-    if not "%JAVA%" == "" goto :Check_JAVA_END
-        if not "%JAVA_HOME%" == "" goto :TryJDKEnd
-            call:warn JAVA_HOME not set; results may vary
-
-:TryJRE
-    start /w regedit /e __reg1.txt "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment"
-    if not exist __reg1.txt goto :TryJDK
-
-    type __reg1.txt | find "CurrentVersion" > __reg2.txt
-    if errorlevel 1 goto :TryJDK
-
-    for /f "tokens=2 delims==" %%x in (__reg2.txt) do set JavaTemp=%%~x
-    if errorlevel 1 goto :TryJDK
-
-    set JavaTemp=%JavaTemp%##
-    set JavaTemp=%JavaTemp:                ##=##%
-    set JavaTemp=%JavaTemp:        ##=##%
-    set JavaTemp=%JavaTemp:    ##=##%
-    set JavaTemp=%JavaTemp:  ##=##%
-    set JavaTemp=%JavaTemp: ##=##%
-    set JavaTemp=%JavaTemp:##=%
-
-    del __reg1.txt
-    del __reg2.txt
-
-    start /w regedit /e __reg1.txt "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment\%JavaTemp%"
-    if not exist __reg1.txt goto :TryJDK
-
-    type __reg1.txt | find "JavaHome" > __reg2.txt
-    if errorlevel 1 goto :TryJDK
-
-    for /f "tokens=2 delims==" %%x in (__reg2.txt) do set JAVA_HOME=%%~x
-    if errorlevel 1 goto :TryJDK
-
-    del __reg1.txt
-    del __reg2.txt
-goto TryJDKEnd
-
-:TryJDK
-    start /w regedit /e __reg1.txt "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Development Kit"
-    if not exist __reg1.txt (
-        call:warn Unable to retrieve JAVA_HOME
-        set exitCode=2
+    call "%~dp0\checkJavaVersion.bat"
+    if errorLevel 1 (
+        call:warn Compatible JVM not found
+        if errorLevel 2 (
+            rem fatal
+            set exitCode=3
+        ) else (
+            rem user-fixable
+            set exitCode=2
+        )
         goto END
     )
-
-    type __reg1.txt | find "CurrentVersion" > __reg2.txt
-    if errorlevel 1 (
-        call:warn Unable to retrieve JAVA_HOME
-        set exitCode=2
-        goto END
-    )
-
-    for /f "tokens=2 delims==" %%x in (__reg2.txt) do set JavaTemp=%%~x
-    if errorlevel 1 (
-        call:warn Unable to retrieve JAVA_HOME
-        set exitCode=2
-        goto END
-    )
-
-    set JavaTemp=%JavaTemp%##
-    set JavaTemp=%JavaTemp:                ##=##%
-    set JavaTemp=%JavaTemp:        ##=##%
-    set JavaTemp=%JavaTemp:    ##=##%
-    set JavaTemp=%JavaTemp:  ##=##%
-    set JavaTemp=%JavaTemp: ##=##%
-    set JavaTemp=%JavaTemp:##=%
-
-    del __reg1.txt
-    del __reg2.txt
-
-    start /w regedit /e __reg1.txt "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Development Kit\%JavaTemp%"
-    if not exist __reg1.txt (
-        call:warn Unable to retrieve JAVA_HOME from JDK
-        set exitCode=2
-        goto END
-    )
-
-    type __reg1.txt | find "JavaHome" > __reg2.txt
-    if errorlevel 1 (
-        call:warn Unable to retrieve JAVA_HOME
-        set exitCode=2
-        goto END
-    )
-
-    for /f "tokens=2 delims==" %%x in (__reg2.txt) do set JAVA_HOME=%%~x
-    if errorlevel 1 (
-        call:warn Unable to retrieve JAVA_HOME
-        set exitCode=2
-        goto END
-    )
-
-    del __reg1.txt
-    del __reg2.txt
-
-:TryJDKEnd
-    if not exist "%JAVA_HOME%" (
-        call:warn JAVA_HOME is not valid: "%JAVA_HOME%"
-        set exitCode=2
-        goto END
-    )
-    set JAVA=%JAVA_HOME%\bin\java
 
 :Check_JAVA_END
     if "%JAVA_OPTS%" == "" set JAVA_OPTS=%DEFAULT_JAVA_OPTS%
@@ -226,12 +138,13 @@ goto TryJDKEnd
 
     if exist "%PIPELINE2_PROFILER_SCRIPT%" goto :PIPELINE2_PROFILER_END (
         call:warn Missing configuration for profiler '%PIPELINE2_PROFILER%': %PIPELINE2_PROFILER_SCRIPT%
+        rem fatal
         set exitCode=3
         goto END
     )
 
 :PIPELINE2_PROFILER_END
-    set BOOTSTRAP=${bundles.bootstrap}
+    set BOOTSTRAP=system/bootstrap
     rem Setup the classpath
     pushd "%PIPELINE2_HOME%\%BOOTSTRAP:/=\%"
     for %%G in (*.jar) do call:append_to_classpath %%G
@@ -256,6 +169,7 @@ goto CLASSPATH_END
     if "%1" == "clean" goto :EXECUTE_CLEAN
     if "%1" == "gui" goto :EXECUTE_GUI
     if "%1" == "debug" goto :EXECUTE_DEBUG
+    if "%1" == "shell" goto :EXECUTE_SHELL
 goto :EXECUTE
 
 :EXECUTE_REMOTE
@@ -284,25 +198,32 @@ goto :RUN_LOOP
     shift
 goto :RUN_LOOP
 
+:EXECUTE_SHELL
+    for /f %%F in ('dir /b "%PIPELINE2_BASE%\system\felix\gogo\*.jar"') do (
+         set GOGO_BUNDLES=!GOGO_BUNDLES! file:system\felix\gogo\%%F
+    )
+    set FELIX_OPTS=%FELIX_OPTS% -Dfelix.auto.start.1="%GOGO_BUNDLES%"
+    shift
+goto :RUN_LOOP
+
 :EXECUTE
     SET ARGS=%1 %2 %3 %4 %5 %6 %7 %8
     rem Execute the Java Virtual Machine
     cd "%PIPELINE2_BASE%"
 
-    rem FIXME: put command in variable and evaluate
-    call:warn Starting java: "%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" -Djava.endorsed.dirs="%JAVA_HOME%\jre\lib\endorsed;%JAVA_HOME%\lib\endorsed;%PIPELINE2_HOME%\lib\endorsed" -Djava.ext.dirs="%JAVA_HOME%\jre\lib\ext;%JAVA_HOME%\lib\ext;%PIPELINE2_HOME%\lib\ext" -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" %MODE% %PIPELINE2_OPTS% %MAIN% %ARGS%
-    call:warn Output is written to daisy-pipeline-java.log
+    SET COMMAND="%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" --add-opens java.base/java.security=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED --add-exports=java.xml.bind/com.sun.xml.internal.bind.v2.runtime=ALL-UNNAMED --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED --add-modules java.xml.ws.annotation,java.corba,java.transaction,java.xml.bind,java.xml.ws -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" %FELIX_OPTS% %MODE% %PIPELINE2_OPTS% %MAIN% %ARGS%
+    call:warn Starting java: %COMMAND%
 
-    rem FIXME: sometimes you want to print to terminal
-    "%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" -Djava.endorsed.dirs="%JAVA_HOME%\jre\lib\endorsed;%JAVA_HOME%\lib\endorsed;%PIPELINE2_HOME%\lib\endorsed" -Djava.ext.dirs="%JAVA_HOME%\jre\lib\ext;%JAVA_HOME%\lib\ext;%PIPELINE2_HOME%\lib\ext" -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" %MODE% %PIPELINE2_OPTS% %MAIN% %ARGS% > "%PIPELINE2_DATA%/log/daisy-pipeline-java.log"
+    if not "%GOGO_BUNDLES%" == "" (
+        %COMMAND%
+    ) else (
+        call:warn Output is written to daisy-pipeline-java.log
+        %COMMAND% > "%PIPELINE2_DATA%/log/daisy-pipeline-java.log"
+    )
 
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 :END
     call:warn Exiting with value %exitCode%
-    endlocal & set exitCode=%exitCode%
     if not "%PAUSE%" == "" pause
-goto EXIT
-
-:EXIT
     exit /b %exitCode%

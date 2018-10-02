@@ -1,3 +1,31 @@
+Changes in release v1.11.1
+==========================
+
+### Distribution/Installation
+
+- **FIX** Installation and launch issues on Windows
+
+### Modules
+
+- **FIX** Error in **epub3-to-daisy202** when EPUB has multiple `dc:identifier` in OPF
+- **FIX** Support "dir" attribute on dtbook element in **dtbook-to-epub3**
+- **FIX** Support validating unzipped EPUBs
+- **FIX** Issue with adapter for Qfrency speech engine
+- various changes to braille scripts, see [release notes of Braille modules v1.11.1](https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1111)
+
+### Details
+
+- [Closed issues in pipeline-tasks](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.11.1)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.11.1)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.11.1)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.11.1)
+- [Closed issues in pipeline-modules-common](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules-common+milestone%3Av1.11.1)
+- [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.11.1)
+- [Closed issues in pipeline-mod-tts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-tts+milestone%3Av1.11.1)
+- [Closed issues in pipeline-scripts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts+milestone%3Av1.11.1)
+- [Closed issues in pipeline-scripts-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts-utils+milestone%3Av1.11.1)
+
+
 Changes in release v1.11
 ========================
 

@@ -1,6 +1,6 @@
-FROM openjdk:8-jre
+FROM openjdk:9-jre
 LABEL maintainer="DAISY Consortium (http://www.daisy.org/)"
-ADD target/pipeline2-*_linux/daisy-pipeline /opt/daisy-pipeline2
+ADD target/daisy-pipeline /opt/daisy-pipeline2
 ENV PIPELINE2_WS_LOCALFS=false \
     PIPELINE2_WS_AUTHENTICATION=true \
     PIPELINE2_WS_AUTHENTICATION_KEY=clientid \

@@ -44,6 +44,9 @@ while ! curl localhost:8181/ws/alive >/dev/null 2>/dev/null; do
         sleep 2
         (( tries-- ))
     else
+        docker logs pipeline
+        docker stop pipeline
+        docker rm pipeline
         exit 1
     fi
 done

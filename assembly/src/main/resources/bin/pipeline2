@@ -234,9 +234,10 @@ locateJava() {
 
 checkJavaVersion() {
     local VERSION
-    VERSION=$( "$JAVA" -version 2>&1 | sed 's/[^ ]* version "\(.*\)\.\(.*\)\..*"/\1\2/; 1q' )
-    if [ "$VERSION" -lt "18" ]; then
-        die "Java version must be at least 1.8"
+    VERSION=$( "$JAVA" -version 2>&1 | sed 's/[^ ]* version "\([^\.]*\)\..*"/\1/; 1q' )
+    # FIXME: what if this returns "9-Debian"? => integer expression expected
+    if [ "$VERSION" -lt "9" ]; then
+        die "Java version must be at least 9"
     fi
     return 0
 }
@@ -428,7 +429,24 @@ run() {
     export PIPELINE2_WS_LOCALFS
     export PIPELINE2_WS_AUTHENTICATION
     
-    eval exec "\"$JAVA"\" "$JAVA_OPTS" -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\" -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@"\"
+    eval exec "\"$JAVA"\" "$JAVA_OPTS" \
+         --illegal-access=warn \
+         --add-opens java.base/java.security=ALL-UNNAMED \
+         --add-opens java.base/java.net=ALL-UNNAMED \
+         --add-opens java.base/java.lang=ALL-UNNAMED \
+         --add-opens java.base/java.util=ALL-UNNAMED \
+         --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED \
+         --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED \
+         --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED \
+         --add-exports=java.xml.bind/com.sun.xml.internal.bind.v2.runtime=ALL-UNNAMED \
+         --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED \
+         --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED \
+         --add-modules java.xml.ws.annotation,java.corba,java.transaction,java.xml.bind,java.xml.ws \
+         -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" \
+         -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
+         -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
+         -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
+         $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
 }
 
 main() {

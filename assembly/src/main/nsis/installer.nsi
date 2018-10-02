@@ -16,7 +16,7 @@
 !define PRODUCT_REG_VALUENAME_STARTMENU "StartMenuGroup"
 !define PRODUCT_REG_KEY_UNINST "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 !define UNINSTALLER_NAME "Uninstall ${APPNAME}"
-!define REQUIRED_JAVA_VER "1.8.0.45"
+!define REQUIRED_JAVA_VER "9.0.0"
 
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)
 
@@ -64,30 +64,15 @@ var SMGROUP
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_REG_VALUENAME_STARTMENU}"
 
 ;----------------------------------------------------------
-;  Environ variables defines
-;----------------------------------------------------------
-
-!define env_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
-!define env_hkcu 'HKCU "Environment"'
-!include EnvVarUpdate.nsh
-
-
-;----------------------------------------------------------
-; Java version retrieval  
-;----------------------------------------------------------
-!include GetJavaVersion.nsh
-
-;----------------------------------------------------------
 ;   Headers and Macros
 ;----------------------------------------------------------
-; required for JRE check:
-!include WordFunc.nsh
-!insertmacro VersionConvert
-!insertmacro VersionCompare
+;JRECheck
+!include MultiDetailPrint.nsh
 ;other
 !include LogicLib.nsh
 !include "Sections.nsh"
 !include "winmessages.nsh"
+!include EnvVarUpdate.nsh
 
 
 ;----------------------------------------------------------
@@ -176,90 +161,22 @@ function .onInit
 functionEnd
 
 ;----------------------------------------------------------
-;   JRE Check
-;----------------------------------------------------------
-
-Section -JRECheck SEC00-1
-
-  var /GLOBAL JAVA_VER
-  var /GLOBAL JAVA_SEM_VER
-  var /GLOBAL JAVA_HOME
-
-  StrCmp $CHECK_JRE "false" End
-  DetailPrint "Checking JRE version..."
-  Call GetJavaVersion 
-  pop $0 ; major version
-  pop $1 ; minor version
-  pop $2 ; micro version
-  pop $3 ; build/update version
-
-  StrCpy $JAVA_SEM_VER "$0.$1.$2.$3" ;use . instead of _ for the build so the comparison works
-  StrCpy $JAVA_VER "$0.$1"
-  
-  Goto CheckJavaVersion
-
-  CheckJavaVersion:
-    ;First check version number
-    StrCmp "no" "$0" InstallJava
-    ${VersionConvert} $JAVA_SEM_VER "" $R1
-    ${VersionCompare} $R1 ${REQUIRED_JAVA_VER} $R2
-    IntCmp 2 $R2 InstallJava
-    ;Then check binary file exist
-    ReadRegStr $JAVA_HOME HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$JAVA_VER" JavaHome
-    ${if} $JAVA_HOME == ""
-      SetRegView 64
-      ReadRegStr $JAVA_HOME HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$JAVA_VER" JavaHome
-      SetRegView 32
-    ${endif}
-    IfFileExists "$JAVA_HOME\bin\java.exe" 0 InstallJava
-    DetailPrint "Found a compatible JVM ($JAVA_VER)"
-    ;Set JAVA_HOME env var
-    ; HKLM (all users) vs HKCU (current user) defines
-    WriteRegExpandStr ${env_hklm} JAVA_HOME "$JAVA_HOME"
-    ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$JAVA_HOME\bin"
-    ; make sure windows knows about the change
-    SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
-
-    DetailPrint "JAVA_HOME set to $JAVA_HOME\bin"
-    Goto End
-
-  InstallJava:
-        ClearErrors
-        messageBox mb_yesno "Java JRE not found or too old. Daisy Pipeline 2 needs at least Java ${REQUIRED_JAVA_VER}, would you like to install it now?" IDNO Exit
-	setOutPath $TEMP
-        File "jre-8u102-windows-i586-iftw.exe"
-        ExecWait '"$TEMP\jre-8u102-windows-i586-iftw.exe" WEB_JAVA=0 SPONSORS=0'
-
-        IfErrors 0 End 
-        messageBox mb_iconstop "Java installation returned an error. Please contact the Daisy Pipeline 2 developing team."
-        setErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
-        quit
-
-  Exit:
-        quit
-
-
-
-  End:
-SectionEnd
-
-;----------------------------------------------------------
 ;   Main Section
 ;----------------------------------------------------------
 
 section -Main SEC01
 
-        
-	#Remove from previous versions 
-        DetailPrint "Removing old data..."
+	# Remove previous versions
+	DetailPrint "Removing old files..."
+	rmDir /r "$INSTDIR\daisy-pipeline"
 	ReadEnvStr $0 APPDATA
-        IfFileExists "$0\DAISY Pipeline 2" +1 +2 #Because relative jumping instructions is a way of writing really maintainable code
+	IfFileExists "$0\DAISY Pipeline 2" +1 +2
 	rmDir /r "$0\DAISY Pipeline 2"
 
 	setOutPath $INSTDIR
 	SetOverwrite on
-	file .\logo.ico 
-        
+	file .\logo.ico
+
 	writeUninstaller "$INSTDIR\uninstall.exe"
 	#setOutPath "$INSTDIR\${PROJECT_ARTIFACT_ID}"
 
@@ -294,6 +211,49 @@ section -Main SEC01
 	; make sure windows knows about the change
 	SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 sectionEnd
+
+;----------------------------------------------------------
+;   JRE Check
+;----------------------------------------------------------
+
+Section -JRECheck SEC00-1
+  CheckJavaVersion:
+    ${if} $CHECK_JRE == "FALSE"
+        goto Exit
+    ${endIf}
+
+    nsExec::ExecToStack "$INSTDIR\daisy-pipeline\bin\checkJavaVersion.bat"
+    pop $0 ;exitCode
+    pop $1 ;output
+    ;print output
+    push $1
+    Call MultiDetailPrint
+
+    IntCmp $0 0 Exit InstallJava InstallJava
+
+    InstallJava:
+          ClearErrors
+          messageBox mb_yesno "Java was not found, or your version doesn't meet our requirements. $\n$\nDAISY Pipeline 2 needs at least Java ${REQUIRED_JAVA_VER}, would you like to install the latest version of Java?" IDNO NoJava
+          MessageBox MB_OK "You will now be redirected to the Java 10 downloads page. $\n$\nPlease accept the license agreement, download the Java 10 installer for Windows, and run it."
+          ExecShell "open" "http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html"
+          MessageBox MB_YESNO "Please accept the license agreement, download the Java 10 installer for Windows, and run it. $\n$\nWould you like additional instructions for installing Java? " IDNO Wait
+          ExecShell "open" "https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#JSJIG-GUID-371F38CC-248F-49EC-BB9C-C37FC89E52A0"
+          Wait:
+            MessageBox MB_OK "Once Java 10 has been installed, click OK to resume DAISY Pipeline 2 installation. " IDOK TryAgain
+
+          IfErrors 0 Exit
+          messageBox mb_iconstop "Java installation returned an error. Please contact the DAISY Pipeline 2 developing team."
+          setErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+          quit
+
+      TryAgain:
+          goto CheckJavaVersion
+
+      NoJava:
+          MessageBox MB_OK "Not installing Java. DAISY Pipeline 2 will fail to launch. $\n$\nPlease install Java version ≥ ${REQUIRED_JAVA_VER}. It is possible that Java ${REQUIRED_JAVA_VER} is already installed, but that DAISY Pipeline 2 can not locate it. In order to fix this, set the JAVA_HOME environment variable. For more information go to http://daisy.github.io/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows/#setting-java_home."
+
+      Exit:
+SectionEnd
 
 ;----------------------------------------------------------
 ;   Start Menu

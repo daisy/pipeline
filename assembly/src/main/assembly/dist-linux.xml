@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <assembly>
-  <id>mac</id>
+  <id>linux</id>
   <formats>
     <format>zip</format>
     <format>dir</format>

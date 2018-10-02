@@ -6,12 +6,14 @@
 FROM maven:3.5-jdk-8 as builder
 ADD . /usr/src/daisy-pipeline2
 WORKDIR /usr/src/daisy-pipeline2
+RUN curl -fsSL https://raw.github.com/daisy/maven-parents/travis/settings.xml > $HOME/.m2/settings.xml
 RUN mvn clean package
+RUN cd target && unzip assembly-*-linux.zip
 
 # then use the build artifacts to create an image where the pipeline is installed
-FROM openjdk:8-jre
+FROM openjdk:9-jre
 LABEL maintainer="DAISY Consortium (http://www.daisy.org/)"
-COPY --from=builder /usr/src/daisy-pipeline2/target/pipeline2-*_linux/daisy-pipeline /opt/daisy-pipeline2
+COPY --from=builder /usr/src/daisy-pipeline2/target/daisy-pipeline /opt/daisy-pipeline2
 ENV PIPELINE2_WS_LOCALFS=false \
     PIPELINE2_WS_AUTHENTICATION=true \
     PIPELINE2_WS_AUTHENTICATION_KEY=clientid \

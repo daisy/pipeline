@@ -7,7 +7,6 @@ Dim logPath: logPath = oShell.ExpandEnvironmentStrings("%APPDATA%") & "\DAISY Pi
 ' ERROR CODES
 Const USER_FIXABLE = "2"
 Const FATAL = "3"
-Const UNKNOWN = "1" 'or whatever else'
 
 catchErrors oArgs(0)
 
@@ -26,7 +25,8 @@ Sub catchErrors(ByVal exitCode)
             Case FATAL
                 msg = "DAISY Pipeline 2 failed to start." & _
                       vbCrlf & vbCrlf & _
-                      readLogs & vbCrlf & _
+                      "For more information see the file daisy-pipeline-launch.log " & _
+                      "(folder was opened in a new Explorer window)." & vbCrlf & _
                       "Would you like to report this issue?"
                 If errorPrompt(msg) Then reportNewIssue
             Case Else
@@ -46,8 +46,10 @@ Sub catchErrors(ByVal exitCode)
     End If
 End Sub
 
+' FIXME: This prints the whole log file but we are only interested in the most recent messages.
+' Also, we if the log is long we can't see the question "Would you like to report this issue?"
 Function readLogs()
-    Set objFile = fso.OpenTextFile("" & logPath & "\daisy-pipeline-launch.log""", 1)
+    Set objFile = fso.OpenTextFile(logPath & "\daisy-pipeline-launch.log", 1)
     Do While Not objFile.AtEndOfStream
         readLogs = readLogs & objFile.ReadLine & vbCrLf 'return'
     Loop

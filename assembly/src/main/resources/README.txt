@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.11.0 - March 30, 2018
+              DAISY Pipeline 2 - 1.11.1 - October 1, 2018
 ==============================================================================
 
 
@@ -76,37 +76,26 @@ The package includes the 1.11.0 version of the project.
 
 ### Distribution/Installation
 
-- [NEW] The application is now available as a set of Docker images
-
-### Graphical User Interface
-
-- Improved accessibility
-- Improved troubleshooting for application launch issues on Windows
-
-### Framework
-
-- Simplified configuration
+- [FIX] Installation and launch issues on Windows
 
 ### Modules
 
-- [NEW] DTBook to ODT (OpenDocument Text) script
-- [NEW] DTBook to RTF (Rich Text Format) script
-- [NEW] Adapter for Qfrency speech engine
-- [NEW] EPUB 3 enhancer script for adding a braille rendition to an EPUB
+- [FIX] Error in **epub3-to-daisy202** when EPUB has multiple `dc:identifier` in OPF
+- [FIX] Support "dir" attribute on dtbook element in **dtbook-to-epub3**
+- [FIX] Support validating unzipped EPUBs
+- [FIX] Issue with adapter for Qfrency speech engine
 - various changes to braille scripts, see the release notes of the Braille modules
-  v1.11.0: https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1110
-- [FIX] Issues with lost significant spaces in dtbook-to-zedai and zedai-to-html
-- [FIX] Improve support for DTBook 1.1.0
-- Simplified configuration of text-to-speech
+  v1.11.1: https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1111
+
 
 See also the full release notes on the release page:
-  https://github.com/daisy/pipeline-assembly/releases/tag/v1.11.0
+  https://github.com/daisy/pipeline-assembly/releases/tag/v1.11.1
 
 4. Prerequisites
 ------------------------------------------------------------------------------
 
 Modules already include their dependent libraries and only require a recent
-Java environment (Java SE 8 update 45 or later).
+Java environment (Java SE 9 or later).
 
 To get the latest version of Java, go to http://www.java.com/
 

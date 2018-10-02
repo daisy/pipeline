@@ -7,9 +7,12 @@ help :
 	echo "make check-docker:"      >&2
 	echo "	Test the Docker image" >&2
 
-docker :
+target/daisy-pipeline :
+	cd target && unzip assembly-*-linux.zip
+
+docker : target/daisy-pipeline
 	$(GTAR) -cz \
-	     target/pipeline2-*_linux \
+	     target/daisy-pipeline \
 	     Dockerfile.without_builder \
 	     --transform='s/Dockerfile.without_builder/Dockerfile/' \
 	| $(DOCKER) build -t daisyorg/pipeline-assembly -
