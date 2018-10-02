@@ -18,6 +18,7 @@
   <x:scenario label="test default.css + reset.css + style.css">
     <x:call step="px:epub3-to-pef">
       <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
+      <x:option name="transform" select="'(grade:2)'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'2/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'2/temp-dir/')"/>
       <x:option name="stylesheet" select="string-join((resolve-uri('../resources/reset.css'), resolve-uri('../resources/style.css')), ' ')"/>
@@ -40,7 +41,7 @@
             <meta>
               <dc:format>application/x-pef+xml</dc:format>
               <dc:title>Test</dc:title>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>

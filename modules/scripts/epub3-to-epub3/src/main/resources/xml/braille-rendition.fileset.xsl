@@ -5,7 +5,7 @@
                 xmlns:opf="http://www.idpf.org/2007/opf"
                 version="2.0">
 	
-	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	
 	<xsl:variable name="target.base.fileset" select="collection()[1]"/>
 	<xsl:variable name="default-rendition.package-document" select="collection()[2]"/>

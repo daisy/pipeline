@@ -15,7 +15,7 @@
         The secondary resultl documents contain the HTML documents created from the DIAGRAM descriptions.
         
     -->
-    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
     <xsl:import href="diagram-to-html.xsl"/>
 
     <xsl:param name="content-dir" as="xs:string" required="yes"/>

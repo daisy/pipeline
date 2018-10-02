@@ -6,8 +6,8 @@
     xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
     exclude-result-prefixes="#all">
 
-    <xsl:import  href="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype-functions.xsl"/>
-    <xsl:import  href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    <xsl:import  href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xsl"/>
+    <xsl:import  href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
     
 
     <xsl:output indent="yes" method="xml"/>

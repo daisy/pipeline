@@ -4,14 +4,19 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl">
   
+  <x:scenario label="_">
+  <x:call step="px:dtbook-to-pef">
+    <x:option name="transform" select="'(grade:2)'"/>
+  </x:call>
+    
   <x:scenario label="page-size">
     <x:documentation>
       Tests page-width and page-height options.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <book>
               <level1>
                 <h1>simple test</h1>
@@ -34,7 +39,7 @@
           <head xmlns:dc="http://purl.org/dc/elements/1.1/">
             <meta>
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -55,10 +60,10 @@
     <x:documentation>
       Tests duplex option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <book>
               <level1>
                 <h1>simple test</h1>
@@ -80,7 +85,7 @@
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -101,10 +106,10 @@
     <x:documentation>
       Tests levels-in-footer option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <head>
               <style type="text/css">
                 @page {
@@ -144,7 +149,7 @@
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -183,10 +188,10 @@
     <x:documentation>
       Tests hyphenation option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <head>
               <style type="text/css">
                 @page {
@@ -218,7 +223,7 @@
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
-                <dc:language>en</dc:language>
+                <dc:language>en-US</dc:language>
               </meta>
             </head>
             <body>
@@ -250,7 +255,7 @@
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
-                <dc:language>en</dc:language>
+                <dc:language>en-US</dc:language>
               </meta>
             </head>
             <body>
@@ -274,10 +279,10 @@
     <x:documentation>
       Tests line-spacing option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <head>
               <style type="text/css">
                 @page {
@@ -306,7 +311,7 @@
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -329,10 +334,10 @@
     <x:documentation>
       Tests capital-letters option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <book>
               <level1>
                 <h1>Simple test</h1>
@@ -354,7 +359,7 @@
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -375,10 +380,10 @@
     <x:documentation>
       Tests include-captions option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <book>
               <level1>
                 <imggroup>
@@ -403,7 +408,7 @@
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -424,10 +429,10 @@
     <x:documentation>
       Tests include-images option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <book>
               <level1>
                 <imggroup>
@@ -452,7 +457,7 @@
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -473,10 +478,10 @@
     <x:documentation>
       Tests include-line-groups option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <book>
               <level1>
                 <linegroup>
@@ -505,7 +510,7 @@
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
-                <dc:language>en</dc:language>
+                <dc:language>en-US</dc:language>
               </meta>
             </head>
             <body>
@@ -538,7 +543,7 @@
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
-                <dc:language>en</dc:language>
+                <dc:language>en-US</dc:language>
               </meta>
             </head>
             <body>
@@ -558,10 +563,10 @@
   </x:scenario>
   
   <x:scenario label="print-page-numbers">
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
         <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <head>
               <style type="text/css">
                 @page {
@@ -612,7 +617,7 @@
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
-                <dc:language>en</dc:language>
+                <dc:language>en-US</dc:language>
               </meta>
             </head>
             <body>
@@ -656,7 +661,7 @@
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
-                <dc:language>en</dc:language>
+                <dc:language>en-US</dc:language>
               </meta>
             </head>
             <body>
@@ -699,10 +704,10 @@
     <x:documentation>
       Tests maximum-number-of-sheets option.
     </x:documentation>
-    <x:call step="px:dtbook-to-pef">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
-          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
             <book>
               <level1>
                 <h1>simple test</h1>
@@ -734,7 +739,7 @@
           <head xmlns:dc="http://purl.org/dc/elements/1.1/">
             <meta>
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>
@@ -798,5 +803,6 @@
       </x:document>
     </x:expect>
   </x:scenario>
-  
+
+  </x:scenario>
 </x:description>

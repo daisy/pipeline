@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:epub3-to-daisy202-convert" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:opf="http://www.idpf.org/2007/opf">
+    xmlns:opf="http://www.idpf.org/2007/opf"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -27,7 +28,10 @@
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </px:fileset-load>
-    <px:assert message="There must be exactly one package document" test-count-min="1" test-count-max="1"/>
+    <px:assert test-count-min="1" test-count-max="1" error-code="PED01" message="The EPUB must contain exactly one OPF document"/>
+    <px:assert error-code="PED02" message="There must be at least one dc:identifier meta element in the OPF document">
+        <p:with-option name="test" select="exists(/opf:package/opf:metadata/dc:identifier)"/>
+    </px:assert>
     <p:identity name="opf.in"/>
     <p:sink/>
 
@@ -352,24 +356,35 @@
     <p:delete match="//d:file[@media-type=('application/oebps-package+xml','application/x-dtbncx+xml') or starts-with(@href,'..') or starts-with(@href,'META-INF/') or @href='mimetype']"/>
     <p:viewport match="//d:file[@media-type='application/xhtml+xml']">
         <p:variable name="base-uri" select="resolve-uri(/*/@href,base-uri(/*))"/>
-        <p:add-attribute match="/*" attribute-name="doctype-public" attribute-value="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
-        <p:add-attribute match="/*" attribute-name="doctype-system" attribute-value="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
         <p:choose>
             <p:when test="(//opf:item[tokenize(@properties,'\s+')='nav']/resolve-uri(@href,base-uri()))[1] = $base-uri">
                 <p:xpath-context>
                     <p:pipe port="result" step="opf.in"/>
                 </p:xpath-context>
-                <p:add-attribute attribute-name="href" match="/*">
-                    <p:with-option name="attribute-value" select="replace(/*/@href,'^(.*?)[^/]+$','$1ncc.html')"/>
-                </p:add-attribute>
+                <p:output port="result" sequence="true">
+                    <p:empty/>
+                </p:output>
+                <p:sink>
+                    <p:documentation>Delete original navigation document. It will be replaced with the generated NCC.</p:documentation>
+                </p:sink>
             </p:when>
             <p:otherwise>
+                <p:output port="result"/>
                 <p:add-attribute attribute-name="href" match="/*">
                     <p:with-option name="attribute-value" select="replace(/*/@href,'^(.*)\.([^/\.]*)$','$1.html')"/>
                 </p:add-attribute>
             </p:otherwise>
         </p:choose>
     </p:viewport>
+    <px:fileset-add-entry href="ncc.html" media-type="application/xhtml+xml">
+        <p:documentation>Add generated NCC</p:documentation>
+    </px:fileset-add-entry>
+    <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']"
+                     attribute-name="doctype-public"
+                     attribute-value="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
+    <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']"
+                     attribute-name="doctype-system"
+                     attribute-value="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
     <p:viewport match="//d:file[@media-type='application/smil+xml']">
         <p:add-attribute match="/*" attribute-name="doctype-public" attribute-value="-//W3C//DTD SMIL 1.0//EN"/>
         <p:add-attribute match="/*" attribute-name="doctype-system" attribute-value="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>

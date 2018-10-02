@@ -5,6 +5,7 @@ before_install:
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
   # see https://github.com/travis-ci/travis-cookbooks/issues/964
   - rm -f /opt/jdk_switcher/jdk_switcher.sh
+  - sudo apt-get install -y lame
   
 install: mvn install -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=true -B -V
 
@@ -19,6 +20,7 @@ after_success:
 branches:
   only:
   - master
+  - /^super\/.+$/
 
 env:
   global:

@@ -5,7 +5,7 @@
     xmlns:d="http://www.daisy.org/z3986/2005/dtbook/" xmlns:s="http://www.w3.org/2001/SMIL20/"
     exclude-result-prefixes="#all" version="2.0">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
     <xsl:param name="audio-base"/>
 

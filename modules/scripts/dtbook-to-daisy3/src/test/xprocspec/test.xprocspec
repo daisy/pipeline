@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/dtbook-to-daisy3.xpl">
+	
+	<x:scenario label="test_1">
+		<x:call step="px:dtbook-to-daisy3">
+			<x:input port="source">
+				<x:document type="file" href="../resources/samples/shuffled_7019_xmldtbook_1.xml"/>
+			</x:input>
+			<x:option name="tts-config" select="resolve-uri('tts-config.xml')"/>
+		</x:call>
+		<x:scenario label="without-audio">
+			<x:call>
+				<x:option name="audio" select="false()"/>
+				<x:option name="output-dir" select="resolve-uri('test_1/without-audio/output-dir/',$temp-dir)"/>
+			</x:call>
+			<x:context label="the output directory">
+				<x:document type="directory" base-uri="temp-dir" href="test_1/without-audio/output-dir/" recursive="true"/>
+			</x:context>
+			<x:expect label="the output directory should contain the DAISY 3 without mp3 files" type="compare" >
+				<x:document type="inline">
+					<c:directory name="output-dir">
+						<c:file name="book.opf"/>
+						<c:file name="mo0.smil"/>
+						<c:file name="navigation.ncx"/>
+						<c:file name="resources.res"/>
+						<c:file name="shuffled_7019_xmldtbook_1.xml"/>
+					</c:directory>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="with-audio">
+			<x:call>
+				<x:option name="audio" select="true()"/>
+				<x:option name="output-dir" select="resolve-uri('test_1/with-audio/output-dir/',$temp-dir)"/>
+			</x:call>
+			<x:context label="the output directory">
+				<x:document type="directory" base-uri="temp-dir" href="test_1/with-audio/output-dir/" recursive="true"/>
+			</x:context>
+			<x:expect label="the output directory should contain the DAISY 3 with mp3 files" type="compare" >
+				<x:document type="inline">
+					<c:directory name="output-dir">
+						<c:file name="book.opf"/>
+						<c:file name="mo0.smil"/>
+						<c:file name="navigation.ncx"/>
+						<c:file name="part0000_00_000.mp3"/>
+						<c:file name="part0001_00_000.mp3"/>
+						<c:file name="part0002_00_000.mp3"/>
+						<c:file name="part0003_00_000.mp3"/>
+						<c:file name="part0004_00_000.mp3"/>
+						<c:file name="part0005_00_000.mp3"/>
+						<c:file name="part0006_00_000.mp3"/>
+						<c:file name="part0007_00_000.mp3"/>
+						<c:file name="part0008_00_000.mp3"/>
+						<c:file name="part0009_00_000.mp3"/>
+						<c:file name="part0010_00_000.mp3"/>
+						<c:file name="part0011_00_000.mp3"/>
+						<c:file name="part0012_00_000.mp3"/>
+						<c:file name="part0013_00_000.mp3"/>
+						<c:file name="part0014_00_000.mp3"/>
+						<c:file name="part0015_00_000.mp3"/>
+						<c:file name="part0016_00_000.mp3"/>
+						<c:file name="part0017_00_000.mp3"/>
+						<c:file name="part0018_00_000.mp3"/>
+						<c:file name="part0019_00_000.mp3"/>
+						<c:file name="part0020_00_000.mp3"/>
+						<c:file name="part0021_00_000.mp3"/>
+						<c:file name="part0022_00_000.mp3"/>
+						<c:file name="part0023_00_000.mp3"/>
+						<c:file name="part0024_00_000.mp3"/>
+						<c:file name="part0025_00_000.mp3"/>
+						<c:file name="part0026_00_000.mp3"/>
+						<c:file name="part0027_00_000.mp3"/>
+						<c:file name="part0028_00_000.mp3"/>
+						<c:file name="part0029_00_000.mp3"/>
+						<c:file name="part0030_00_000.mp3"/>
+						<c:file name="part0031_00_000.mp3"/>
+						<c:file name="part0032_00_000.mp3"/>
+						<c:file name="part0033_00_000.mp3"/>
+						<c:file name="part0034_00_000.mp3"/>
+						<c:file name="part0035_00_000.mp3"/>
+						<c:file name="part0036_00_000.mp3"/>
+						<c:file name="part0037_00_000.mp3"/>
+						<c:file name="part0038_00_000.mp3"/>
+						<c:file name="part0039_00_000.mp3"/>
+						<c:file name="part0040_00_000.mp3"/>
+						<c:file name="part0041_00_000.mp3"/>
+						<c:file name="part0042_00_000.mp3"/>
+						<c:file name="part0043_00_000.mp3"/>
+						<c:file name="part0044_00_000.mp3"/>
+						<c:file name="part0045_00_000.mp3"/>
+						<c:file name="part0046_00_000.mp3"/>
+						<c:file name="part0047_00_000.mp3"/>
+						<c:file name="part0048_00_000.mp3"/>
+						<c:file name="part0049_00_000.mp3"/>
+						<c:file name="part0050_00_000.mp3"/>
+						<c:file name="part0051_00_000.mp3"/>
+						<c:file name="part0052_00_000.mp3"/>
+						<c:file name="part0053_00_000.mp3"/>
+						<c:file name="part0054_00_000.mp3"/>
+						<c:file name="part0055_00_000.mp3"/>
+						<c:file name="part0056_00_000.mp3"/>
+						<c:file name="part0057_00_000.mp3"/>
+						<c:file name="part0058_00_000.mp3"/>
+						<c:file name="resources.res"/>
+						<c:file name="shuffled_7019_xmldtbook_1.xml"/>
+					</c:directory>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+	
+</x:description>

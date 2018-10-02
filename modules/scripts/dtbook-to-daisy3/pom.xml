@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
@@ -69,6 +69,11 @@
         test dependencies
     -->
     <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy</groupId>
       <artifactId>zedval</artifactId>
       <version>2.1</version>
@@ -103,6 +108,21 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-omnilang-lexer</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-entities</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-encoder-lame</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-common</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

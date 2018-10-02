@@ -24,7 +24,7 @@
     <x:call step="px:zedai-to-pef">
       <x:input port="source">
         <x:document type="inline">
-          <document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en">
+          <document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en-US">
             <head>
               <meta>foobar</meta>
               <link rel="stylesheet" media="embossed" type="text/css" href="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/reset.css"/>
@@ -38,6 +38,7 @@
           </document>
         </x:document>
       </x:input>
+      <x:option name="transform" select="'(grade:2)'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'2/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'2/temp-dir/')"/>
     </x:call>
@@ -51,7 +52,7 @@
             <meta>
               <dc:format>application/x-pef+xml</dc:format>
               <dc:title>foo</dc:title>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>

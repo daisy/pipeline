@@ -44,7 +44,7 @@
 
     <px:epubcheck>
         <p:with-option name="epub" select="$epub"/>
-        <p:with-option name="mode" select="'epub'"/>
+        <p:with-option name="mode" select="if (ends-with(lower-case($epub),'.epub')) then 'epub' else 'expanded'"/>
         <p:with-option name="version" select="'3'"/>
     </px:epubcheck>
     

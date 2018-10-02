@@ -8,6 +8,7 @@
   <x:scenario label="ascii-file-format has priority over dc:language">
     <x:call step="px:epub3-to-pef">
       <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_1/package.opf')"/>
+      <x:option name="transform" select="'(grade:2)'"/>
       <x:option name="include-brf" select="'true'"/>
       <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
                                                   (line-breaks:DOS)

@@ -6,7 +6,7 @@
                 xmlns:opf="http://www.idpf.org/2007/opf"
                 version="2.0">
 	
-	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	
 	<xsl:param name="braille-rendition.package-document.base"/>
 	

@@ -25,7 +25,7 @@
     <x:call step="px:dtbook-to-pef">
       <x:input port="source">
         <x:document type="inline">
-          <dtbook version="2005-2" xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <dtbook version="2005-2" xml:lang="en-US" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
             <head>
               <meta>foobar</meta>
             </head>
@@ -38,6 +38,7 @@
           </dtbook>
         </x:document>
       </x:input>
+      <x:option name="transform" select="'(grade:2)'"/>
       <x:option name="pef-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
       <x:option name="brf-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
       <x:option name="preview-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
@@ -54,7 +55,7 @@
           <head xmlns:dc="http://purl.org/dc/elements/1.1/">
             <meta>
               <dc:format>application/x-pef+xml</dc:format>
-              <dc:language>en</dc:language>
+              <dc:language>en-US</dc:language>
             </meta>
           </head>
           <body>

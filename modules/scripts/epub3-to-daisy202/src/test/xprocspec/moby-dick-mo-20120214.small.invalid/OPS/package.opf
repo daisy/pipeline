@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="pub-id">
+  <!--I'm assuming prefixes for marc, onix, and xsd are predefined-->
+
+  <!--
+      Same as moby-dick-mo-20120214.small. It is invalid because css/stylesheet.css is not declared
+      in the OPF manifest but it is referenced in chapter_001.xhtml, chapter_002.xhtml,
+      chapter_003.xhtml and toc.xhtml.
+  -->
+
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <dc:title id="title">Moby-Dick</dc:title>
+    <meta refines="#title" property="title-type">main</meta>
+
+    <dc:creator id="creator">Herman Melville</dc:creator>
+    <meta refines="#creator" property="file-as">MELVILLE, HERMAN</meta>
+    <meta refines="#creator" property="role" scheme="marc:relators">aut</meta>
+
+    <dc:identifier id="pub-id">urn:isbn:9780316000000</dc:identifier>
+    <meta refines="#pub-id" property="identifier-type" scheme="onix:codelist5">15</meta>
+
+    <dc:language>en-US</dc:language>
+
+    <meta property="dcterms:modified">2012-01-13T01:13:00Z</meta>
+
+    <dc:publisher>Harper &amp; Brothers, Publishers</dc:publisher>
+
+    <dc:contributor id="contrib1">Dave Cramer</dc:contributor>
+    <meta refines="#contrib1" property="role" scheme="marc:relators">mrk</meta>
+
+    <!--MEDIA OVERLAY METADATA-->
+    <meta property="media:duration" refines="#chapter_001_overlay">0:14:20.500</meta>
+    <meta property="media:duration" refines="#chapter_002_overlay">0:09:03.000</meta>
+    <meta property="media:duration">0:23:23.500</meta>
+    <meta property="media:narrator">Stuart Wills</meta>
+
+    <meta property="media:active-class">-epub-media-overlay-active</meta>
+  </metadata>
+  <manifest>
+    <item id="font.stix.regular" href="fonts/STIXGeneral.otf" media-type="application/vnd.ms-opentype"/>
+    <item id="font.stix.italic" href="fonts/STIXGeneralItalic.otf" media-type="application/vnd.ms-opentype"/>
+    <item id="font.stix.bold" href="fonts/STIXGeneralBol.otf" media-type="application/vnd.ms-opentype"/>
+    <item id="font.stix.bold.italic" href="fonts/STIXGeneralBolIta.otf" media-type="application/vnd.ms-opentype"/>
+    <!-- <item id="style" href="css/stylesheet.css" media-type="text/css"/> -->
+    <item id="toc" properties="nav" href="toc.xhtml" media-type="application/xhtml+xml"/>
+    <item id="xchapter_001" href="chapter_001.xhtml" media-type="application/xhtml+xml" media-overlay="chapter_001_overlay"/>
+    <item id="chapter_001_overlay" href="chapter_001_overlay.smil" media-type="application/smil+xml"/>
+    <item id="xchapter_002" href="chapter_002.xhtml" media-type="application/xhtml+xml" media-overlay="chapter_002_overlay"/>
+    <item id="chapter_002_overlay" href="chapter_002_overlay.smil" media-type="application/smil+xml"/>
+    <item id="xchapter_003" href="chapter_003.xhtml" media-type="application/xhtml+xml"/>
+    <item id="chapter_001_audio" href="audio/mobydick_001_002_melville.mp4" media-type="audio/mp4"/>
+  </manifest>
+  <spine>
+    <itemref linear="yes" idref="xchapter_001"/>
+    <itemref linear="yes" idref="xchapter_002"/>
+    <itemref linear="yes" idref="xchapter_003"/>
+    <itemref idref="toc" linear="no"/>
+  </spine>
+</package>

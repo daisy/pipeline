@@ -4,7 +4,7 @@
     
     <!-- provided a sequence of all html documents as well as the opf document wrapped in a wrapper element, will sort the html documents in spine order, and remove the opf as well as any documents not in the spine. -->
     
-    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
     <!--<xsl:import href="../../../../test/xspec/mock-functions.xsl"/>-->
 
     <xsl:template match="/*">

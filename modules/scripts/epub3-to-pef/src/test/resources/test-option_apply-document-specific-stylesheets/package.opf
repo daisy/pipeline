@@ -4,7 +4,7 @@
     <metadata>
         <dc:identifier id="pub-identifier">test</dc:identifier>
         <dc:title>Test</dc:title>
-        <dc:language>en</dc:language>
+        <dc:language>en-US</dc:language>
     </metadata>
     <manifest>
         <item id="item_1" media-type="application/xhtml+xml" href="content-1.xhtml"/>

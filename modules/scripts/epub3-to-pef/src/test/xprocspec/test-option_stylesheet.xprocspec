@@ -11,6 +11,7 @@
         </x:documentation>
         <x:call step="px:epub3-to-pef">
             <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+            <x:option name="transform" select="'(grade:2)'"/>
             <x:option name="stylesheet" select="'../test-option_apply-document-specific-stylesheets.override.css'"/>
             <x:option name="pef-output-dir" select="concat($temp-dir,'stylesheet-relative/output-dir/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'stylesheet-relative/temp-dir/')"/>
@@ -25,7 +26,7 @@
                         <meta>
                             <dc:format>application/x-pef+xml</dc:format>
                             <dc:title>Test</dc:title>
-                            <dc:language>en</dc:language>
+                            <dc:language>en-US</dc:language>
                         </meta>
                     </head>
                     <body>

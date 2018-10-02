@@ -7,7 +7,7 @@
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 version="2.0">
 	
-	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	
 	<xsl:variable name="braille-rendition.package-document" select="collection()[1]"/>
 	<xsl:variable name="braille-rendition.css.fileset" select="collection()[2]"/>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+               xmlns:its="http://www.w3.org/2005/11/its"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               stylesheet="../../main/resources/xml/xslt/zedai-to-html.xsl">
+    
+    <x:scenario label="dir attribute on document">
+        <x:call template="html">
+            <x:param name="nodes" select="z:document/z:body/*">
+                <document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en" its:dir="rtl">
+                    <body>
+                        <frontmatter>
+                            <section>
+                                <h role="title">Minimal DTBook</h>
+                                <p role="author">Bert</p>
+                            </section>
+                        </frontmatter>
+                        <bodymatter>
+                            <section>
+                                <h>Chapter</h>
+                                <p>Paragraph</p>
+                            </section>
+                        </bodymatter>
+                    </body>
+                </document>
+            </x:param>
+        </x:call>
+        <x:expect label="">
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="rtl">
+                <head>
+                    <meta charset="UTF-8"/>
+                    <title/>
+                </head>
+                <body>
+                    <section epub:type="frontmatter">
+                        <section>
+                            <h1 epub:type="title">Minimal DTBook</h1>
+                            <p>Bert</p>
+                        </section>
+                    </section>
+                    <section epub:type="bodymatter">
+                        <section>
+                            <h1>Chapter</h1>
+                            <p>Paragraph</p>
+                        </section>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

@@ -9,7 +9,7 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
 	
-	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	
 	<xsl:variable name="braille-rendition.fileset" select="collection()[2]"/>
 	

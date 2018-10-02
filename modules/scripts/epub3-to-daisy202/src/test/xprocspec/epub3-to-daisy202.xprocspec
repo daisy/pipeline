@@ -51,4 +51,120 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="issue-529">
+        <x:documentation>
+            Regression test for https://github.com/daisy/pipeline/issues/529
+        </x:documentation>
+        <x:call step="px:epub3-to-daisy202">
+            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.2/OPS/package.opf')"/>
+            <x:option name="validation" select="'report'"/>
+            <x:option name="output-dir" select="resolve-uri('issue-529/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('issue-529/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the validation-status port">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the job should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
+        <x:context label="the validation-report port">
+            <x:document type="port" port="validation-report"/>
+        </x:context>
+        <x:expect label="the input should be valid EPUB" type="count" max="0"/>
+        <x:context label="the output directory">
+            <x:document type="directory" base-uri="temp-dir" href="issue-529/output-dir/" recursive="true"/>
+        </x:context>
+        <x:expect label="the output directory should contain the DAISY 2.02" type="compare" >
+            <x:document type="inline">
+                <c:directory name="output-dir">
+                    <c:directory name="urn_isbn_9780316000000">
+                        <c:directory name="audio">
+                            <c:file name="mobydick_001_002_melville.mp4"/>
+                        </c:directory>
+                        <c:directory name="css">
+                            <c:file name="stylesheet.css"/>
+                        </c:directory>
+                        <c:directory name="fonts">
+                            <c:file name="STIXGeneral.otf"/>
+                            <c:file name="STIXGeneralBol.otf"/>
+                            <c:file name="STIXGeneralBolIta.otf"/>
+                            <c:file name="STIXGeneralItalic.otf"/>
+                        </c:directory>
+                        <c:file name="ncc.html"/>
+                        <c:directory name="smil">
+                            <c:file name="chapter_001_overlay.smil"/>
+                            <c:file name="chapter_002_overlay.smil"/>
+                        </c:directory>
+                        <c:directory name="text">
+                            <c:file name="chapter_001.html"/>
+                            <c:file name="chapter_002.html"/>
+                            <c:file name="chapter_003.html"/>
+                        </c:directory>
+                    </c:directory>
+                </c:directory>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="validation">
+        <x:call step="px:epub3-to-daisy202">
+            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.invalid/OPS/package.opf')"/>
+        </x:call>
+        <x:scenario label="validation = off">
+            <x:call>
+                <x:option name="validation" select="'off'"/>
+                <x:option name="output-dir" select="resolve-uri('validation/off/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('validation/off/temp-dir/',$temp-dir)"/>
+            </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the job should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
+            <x:context label="the validation-report port">
+                <x:document type="port" port="validation-report"/>
+            </x:context>
+            <x:expect label="there should be no report" type="count" max="0"/>
+            <x:context label="the output directory">
+                <x:document type="directory" base-uri="temp-dir" href="validation/off/output-dir/" recursive="true"/>
+            </x:context>
+            <x:expect label="the script should produce an output" type="xpath" test="/*/c:directory[@name='urn_isbn_9780316000000']"/>
+        </x:scenario>
+        <x:scenario label="validation = report">
+            <x:call>
+                <x:option name="validation" select="'report'"/>
+                <x:option name="output-dir" select="resolve-uri('validation/report/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('validation/report/temp-dir/',$temp-dir)"/>
+            </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the job should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
+            <x:context label="the validation-report port">
+                <x:document type="port" port="validation-report"/>
+            </x:context>
+            <x:expect label="the input should be reported as invalid" type="count" min="1"/>
+            <x:context label="the output directory">
+                <x:document type="directory" base-uri="temp-dir" href="validation/report/output-dir/" recursive="true"/>
+            </x:context>
+            <x:expect label="the script should produce an output" type="xpath" test="/*/c:directory[@name='urn_isbn_9780316000000']"/>
+        </x:scenario>
+        <x:scenario label="validation = abort">
+            <x:call>
+                <x:option name="validation" select="'abort'"/>
+                <x:option name="output-dir" select="resolve-uri('validation/abort/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('validation/abort/temp-dir/',$temp-dir)"/>
+            </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the job should fail" type="xpath" test="/d:validation-status[@result='error']"/>
+            <x:context label="the validation-report port">
+                <x:document type="port" port="validation-report"/>
+            </x:context>
+            <x:expect label="the input should be reported as invalid" type="count" min="1"/>
+            <x:context label="the output directory">
+                <x:document type="directory" base-uri="temp-dir" href="validation/" recursive="true"/>
+            </x:context>
+            <x:expect label="the script should produce no output" type="xpath" test="not(/*/c:directory[@name='abort'])"/>
+        </x:scenario>
+    </x:scenario>
+    
 </x:description>

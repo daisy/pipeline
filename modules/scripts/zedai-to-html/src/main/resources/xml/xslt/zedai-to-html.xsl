@@ -27,6 +27,7 @@
     <!--TODO config: externalize the profile definition-->
     <xsl:variable name="lang" select="$nodes/ancestor::*/@xml:lang[1]"/>
     <html xml:lang="{if ($lang) then $lang else 'en'}">
+      <xsl:apply-templates select="$nodes/ancestor::*/@its:dir[1]"/>
       <head>
         <meta charset="UTF-8"/>
         <title><xsl:value-of
@@ -1085,8 +1086,11 @@
   </xsl:template>
   <xsl:template match="@base|@class|@xml:space|@xml:base|@xml:lang|@its:dir">
     <xsl:copy/>
-    <!--TODO translate: @its:dir lro and rlo values -->
     <!--TODO translate: @its:translate-->
+  </xsl:template>
+  <xsl:template match="@its:dir">
+    <xsl:attribute name="dir" select="string(.)"/>
+    <!--TODO translate: @its:dir lro and rlo values -->
   </xsl:template>
   <xsl:template match="@role">
     <xsl:variable name="epub-type" select="pf:to-epub(.)"/>

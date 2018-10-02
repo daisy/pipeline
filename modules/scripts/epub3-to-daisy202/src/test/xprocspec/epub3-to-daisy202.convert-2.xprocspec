@@ -178,10 +178,6 @@
         </x:context>
         <x:expect label="The DAISY 2.02 fileset should contain all expected HTML-files, with the correct doctypes" type="compare">
             <x:document type="inline">
-                <d:file href="ncc.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-                    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
-            </x:document>
-            <x:document type="inline">
                 <d:file href="copyright.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
                     doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
             </x:document>
@@ -752,6 +748,10 @@
             <x:document type="inline">
                 <d:file doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" media-type="application/xhtml+xml"
                     href="toc-short.html"/>
+            </x:document>
+            <x:document type="inline">
+                <d:file href="ncc.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+                    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
             </x:document>
         </x:expect>
 
