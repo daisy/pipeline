@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data">
+  
+    <x:script>
+        <p:declare-step type="pxi:fileset-move" name="main" version="1.0">
+            <p:input port="fileset.in" primary="true"/>
+            <p:input port="in-memory.in" sequence="true"/>
+            <p:output port="fileset.out" primary="true"/>
+            <p:output port="in-memory.out" sequence="true">
+                <p:pipe step="in-memory.out.relativized" port="result"/>
+            </p:output>
+            <p:option name="new-base" required="true"/>
+            <p:option name="temp-dir" required="true"/>
+            <p:import href="../../main/resources/xml/xproc/fileset-move.xpl"/>
+            <p:variable name="project.base.uri" select="resolve-uri('../../../', base-uri(.))">
+                <p:inline>
+                    <this/>
+                </p:inline>
+            </p:variable>
+            <px:fileset-move name="move">
+                <p:input port="in-memory.in">
+                    <p:pipe step="main" port="in-memory.in"/>
+                </p:input>
+                <p:with-option name="new-base" select="resolve-uri($new-base,$temp-dir)"/>
+            </px:fileset-move>
+            <p:for-each>
+                <p:iteration-source>
+                    <p:pipe step="move" port="in-memory.out"/>
+                </p:iteration-source>
+                <p:label-elements match="/*[@xml:base]" attribute="xml:base" replace="true">
+                    <p:with-option name="label" select="concat('
+                                                          for $temp-dir in &quot;',$temp-dir,'&quot;
+                                                          return substring-after(@xml:base,$temp-dir)
+                                                          ')"/>
+                </p:label-elements>
+            </p:for-each>
+            <p:identity name="in-memory.out.relativized"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="move" port="fileset.out"/>
+                </p:input>
+            </p:identity>
+            <p:label-elements match="*[@original-href]" attribute="original-href" replace="true">
+                <p:with-option name="label"
+                               select="concat('
+                                         for $project.base.uri in &quot;',$project.base.uri,'&quot;
+                                         return concat(&quot;{$project.base.uri}/&quot;,substring-after(@original-href,$project.base.uri))
+                                         ')"/>
+            </p:label-elements>
+            <p:label-elements match="/*[@xml:base]" attribute="xml:base" replace="true">
+                <p:with-option name="label" select="concat('
+                                                      for $temp-dir in &quot;',$temp-dir,'&quot;
+                                                      return substring-after(@xml:base,$temp-dir)
+                                                      ')"/>
+            </p:label-elements>
+            <p:identity name="fileset.out.relativized"/>
+        </p:declare-step>
+    </x:script>
+
+    <x:scenario label="fileset-move" xfail="bug">
+        <x:call step="pxi:fileset-move">
+            <x:input port="fileset.in">
+                <x:document type="inline">
+                    <d:fileset xml:base="samples/fileset2/">
+                        <d:file href="c.gif" media-type="image/gif"/>
+                        <d:file href="a/a.html" media-type="text/html"/>
+                        <d:file href="a/MimeDetector.java" media-type="application/octet-stream"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in">
+                <x:document type="inline" xml:base="samples/fileset2/a/a.html">
+                    <html/>
+                </x:document>
+            </x:input>
+            <x:option name="new-base" select="'output-dir/'"/>
+            <x:option name="temp-dir" select="$temp-dir"/>
+        </x:call>
+        <x:context label="the fileset port">
+            <x:document type="port" port="fileset.out"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline">
+                <d:fileset xml:base="output-dir/">
+                    <d:file href="c.gif" media-type="image/gif"
+                            original-href="{$project.base.uri}/src/test/xprocspec/samples/fileset2/c.gif"/>
+                    <d:file href="a/a.html" media-type="text/html"
+                            original-href="{$project.base.uri}/src/test/xprocspec/samples/fileset2/a/a.html"/>
+                    <d:file href="a/MimeDetector.java" media-type="application/octet-stream"
+                            original-href="{$project.base.uri}/src/test/xprocspec/samples/fileset2/a/MimeDetector.java"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+        <x:context label="the in-memory port">
+            <x:document type="port" port="in-memory.out"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline">
+                <html xml:base="output-dir/a/a.html"/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

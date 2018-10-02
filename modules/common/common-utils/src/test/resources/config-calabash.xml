@@ -1,7 +1,0 @@
-<!--*- nxml -*-->
-<xproc-config xmlns="http://xmlcalabash.com/ns/configuration"
-              xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-              xmlns:letex="http://www.le-tex.de/namespace">
-
-
-</xproc-config>

@@ -1,0 +1,1106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/xslt/html5-outliner.xsl">
+
+	<!-- ========================================================================== -->
+	<!-- the first heading element in sectioning content is the section heading     -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="section heading: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">heading</h1>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">heading</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="section heading: 'a' in heading content is translated to 'span'">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">heading <a href="#dummy" class="foo">with a link</a> and <span><a href="#dummy" class="bar">another link</a></span></h1>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">heading <span class="foo">with a link</span> and <span><span class="bar">another link</span></span></a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="section heading: not h1">
+		<x:context>
+			<html>
+				<body id="body">
+					<h3 id="h1">heading</h3>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">heading</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="section heading: hgroup">
+		<x:context>
+			<html>
+				<body id="body">
+					<hgroup id="hg">
+						<h1>heading</h1>
+						<h2>other</h2>
+					</hgroup>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">heading</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="section heading: hgroup with highest rank not first child">
+		<x:context>
+			<html>
+				<body id="body">
+					<hgroup id="hg">
+						<h3>other</h3>
+						<h1>heading</h1>
+					</hgroup>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">heading</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="section heading: not first child">
+		<x:context>
+			<html>
+				<body id="body">
+					<p>paragraph</p>
+					<h1 id="h1">heading</h1>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">heading</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="section heading: after subsection">
+		<x:context>
+			<html>
+				<body id="body">
+					<section id="section">
+						<h1 id="h11">h11</h1>
+					</section>
+					<h1 id="h12">h12</h1>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h12</a>
+				<ol>
+					<li><a href="#section">h11</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="section heading: between subsections">
+		<x:context>
+			<html>
+				<body id="body">
+					<section id="section1">
+						<h1 id="h11">h11</h1>
+					</section>
+					<h1 id="h12">h12</h1>
+					<section id="section2">
+						<h1 id="h13">h13</h1>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h12</a>
+				<ol>
+					<li><a href="#section1">h11</a></li>
+					<li><a href="#section2">h13</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+
+	<!-- ========================================================================== -->
+	<!-- sectioning content elements are always considered subsections              -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="'section' subsection: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<section id="section">
+						<h1 id="h12">h12</h1>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#section">h12</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="'section' subsection: nested">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<section id="section1">
+						<h1 id="h12">h12</h1>
+						<section id="section2">
+							<h1 id="h13">h13</h1>
+						</section>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#section1">h12</a>
+					<ol>
+						<li><a href="#section2">h13</a></li>
+					</ol>
+					</li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="'section' subsection: siblings">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<section id="section1">
+						<h1 id="h12">h12</h1>
+					</section>
+					<section id="section2">
+						<h1 id="h13">h13</h1>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#section1">h12</a></li>
+					<li><a href="#section2">h13</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="'article' subsection: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<article id="article">
+						<h1 id="h12">h12</h1>
+					</article>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#article">h12</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="'aside' subsection: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<aside id="aside">
+						<h1 id="h12">h12</h1>
+					</aside>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#aside">h12</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="'nav' subsection: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<nav id="nav">
+						<h1 id="h12">h12</h1>
+					</nav>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#nav">h12</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="mixed subsections: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<section id="section">
+						<h1 id="h12">h12</h1>
+						<aside id="aside">
+							<h1 id="h13">h13</h1>
+						</aside>
+					</section>
+					<article id="article">
+						<h1 id="h14">h14</h1>
+						<nav id="nav">
+							<h1 id="h15">h15</h1>
+						</nav>
+					</article>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#section">h12</a>
+					<ol>
+						<li><a href="#aside">h13</a></li>
+					</ol>
+					</li>
+					<li><a href="#article">h14</a>
+					<ol>
+						<li><a href="#nav">h15</a></li>
+					</ol>
+					</li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+
+	<!-- ========================================================================== -->
+	<!-- headings of lower rank start implied subsections                           -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="lower rank heading: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<h2 id="h2">h2</h2>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li><a href="#h2">h2</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="lower rank heading: skip rank">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<h3 id="h3">h3</h3>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li><a href="#h3">h3</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="lower rank heading: hgroup">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<hgroup id="hg">
+						<h2 id="h2">h2</h2>
+						<h3 id="h3">h3</h3>
+					</hgroup>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li><a href="#hg">h2</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="lower rank heading: hgroup with highest rank not first child">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<hgroup id="hg">
+						<h3 id="h3">h3</h3>
+						<h2 id="h2">h2</h2>
+					</hgroup>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li><a href="#hg">h2</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="lower rank heading: successively">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<h2 id="h2">h2</h2>
+					<h3 id="h3">h3</h3>
+					<h4 id="h4">h4</h4>
+					<h5 id="h5">h5</h5>
+					<h6 id="h6">h6</h6>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li><a href="#h2">h2</a>
+					<ol>
+						<li><a href="#h3">h3</a>
+						<ol>
+							<li><a href="#h4">h4</a>
+							<ol>
+								<li><a href="#h5">h5</a>
+								<ol>
+									<li><a href="#h6">h6</a></li>
+								</ol>
+								</li>
+							</ol>
+							</li>
+						</ol>
+						</li>
+					</ol>
+					</li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="lower rank heading: after subsection">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<section id="section">
+						<h1 id="h12">h12</h1>
+					</section>
+					<h2 id="h2">h2</h2>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#section">h12</a></li>
+					<li><a href="#h2">h2</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+
+	<!-- ========================================================================== -->
+	<!-- subsequent headings of equal rank start new (implied) sections             -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="same rank heading: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<h1 id="h12">h12</h1>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+				<li><a href="#h12">h12</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="same rank heading: within nested divs">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<div id="div">
+						<div>
+							<h1 id="h12">h12</h1>
+						</div>
+					</div>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+				<li><a href="#h12">h12</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="same rank heading: within an hgroup">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<hgroup id="hg">
+						<h2 id="h2">h2</h2>
+						<h1 id="h12">h12</h1>
+					</hgroup>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+				<li><a href="#hg">h12</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="same rank heading: within a section">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<section id="section">
+						<h1 id="h12">h12</h1>
+						<h1 id="h13">h13</h1>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#section">h12</a></li>
+					<li><a href="#h13">h13</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<!-- ========================================================================== -->
+	<!-- subsequent headings of higher rank start new (implied) sections            -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="higher rank heading: basic">
+		<x:context>
+			<html>
+				<body id="body">
+					<h2 id="h2">h2</h2>
+					<h1 id="h1">h1</h1>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h2</a></li>
+				<li><a href="#h1">h1</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="higher rank heading: within nested divs">
+		<x:context>
+			<html>
+				<body id="body">
+					<h2 id="h2">h2</h2>
+					<div id="div">
+						<div>
+							<h1 id="h1">h1</h1>
+						</div>
+					</div>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h2</a></li>
+				<li><a href="#h1">h1</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="higher rank heading: within an hgroup">
+		<x:context>
+			<html>
+				<body id="body">
+					<h2 id="h2">h2</h2>
+					<hgroup id="hg">
+						<h3 id="h3">h3</h3>
+						<h1 id="h1">h1</h1>
+					</hgroup>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h2</a></li>
+				<li><a href="#hg">h1</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="higher rank heading: within a section">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<section id="section">
+						<h2 id="h2">h2</h2>
+						<h1 id="h12">h12</h1>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a>
+				<ol>
+					<li><a href="#section">h2</a></li>
+					<li><a href="#h12">h12</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+
+	<!-- ========================================================================== -->
+	<!-- user agents should provide default headings                                -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="default heading: body">
+		<x:context>
+			<html>
+				<body id="body"/>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li data-generated="true"><a href="#body">Untitled document</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="default heading: section">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<section id="section"/>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li data-generated="true"><a href="#section">Untitled section</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="default heading: article">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<article id="article"/>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li data-generated="true"><a href="#article">Article</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="default heading: aside">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<aside id="aside"/>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li data-generated="true"><a href="#aside">Sidebar</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="default heading: nav">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<nav id="nav"/>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li data-generated="true"><a href="#nav">Navigation</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+
+	<!-- ========================================================================== -->
+	<!-- sectioning root should not contribute to the ancestor outline              -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="sectioning root: blockquote">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<blockquote id="root">
+						<h1 id="h12">h12</h1>
+					</blockquote>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="sectioning root: details">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<details id="root">
+						<h1 id="h12">h12</h1>
+					</details>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="sectioning root: fieldset">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<fieldset id="root">
+						<h1 id="h12">h12</h1>
+					</fieldset>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="sectioning root: figure">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<figure id="root">
+						<h1 id="h12">h12</h1>
+					</figure>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="sectioning root: td">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h11</h1>
+					<table>
+						<tr>
+							<td id="td">
+								<h1 id="h12">h12</h1>
+							</td>
+						</tr>
+					</table>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h11</a></li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<!-- ========================================================================== -->
+	<!-- complex documents                                                          -->
+	<!-- ========================================================================== -->
+	
+	<x:scenario label="complex 1">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="foo">Foo</h1>
+					<h2 id="bar">Bar</h2>
+					<blockquote id="blockquote">
+						<h3 id="bla">Bla</h3>
+					</blockquote>
+					<p>Baz</p>
+					<h2 id="quux">Quux</h2>
+					<section id="section">
+						<h3 id="thud">Thud</h3>
+					</section>
+					<p>Grunt</p>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">Foo</a>
+				<ol>
+					<li><a href="#bar">Bar</a></li>
+					<li><a href="#quux">Quux</a></li>
+					<li><a href="#section">Thud</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="complex 2">
+		<x:context>
+			<html>
+				<body id="body">
+					<section id="section1">
+						<h3>Thud</h3>
+					</section>
+					<h1 id="foo">Foo</h1>
+					<h1 id="bar">Bar</h1>
+					<h2 id="quux">Quux</h2>
+					<section id="section2">
+						<h3>Thud</h3>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">Foo</a>
+				<ol>
+					<li><a href="#section1">Thud</a></li>
+				</ol>
+				</li>
+				<li><a href="#bar">Bar</a>
+				<ol>
+					<li><a href="#quux">Quux</a></li>
+					<li><a href="#section2">Thud</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="complex 3">
+		<x:context>
+			<html>
+				<body id="body">
+					<section id="section1">
+						<h3>Thud</h3>
+					</section>
+					<h3 id="foo">Foo</h3>
+					<h2 id="bar1">Bar</h2>
+					<section id="section2">
+						<h3>Thud</h3>
+					</section>
+					<h2 id="bar2">Bar</h2>
+					<h3 id="quux">Quux</h3>
+					<section id="section3">
+						<h3>Thud</h3>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">Foo</a>
+				<ol>
+					<li><a href="#section1">Thud</a></li>
+				</ol>
+				</li>
+				<li><a href="#bar1">Bar</a>
+				<ol>
+					<li><a href="#section2">Thud</a></li>
+				</ol>
+				</li>
+				<li><a href="#bar2">Bar</a>
+				<ol>
+					<li><a href="#quux">Quux</a></li>
+					<li><a href="#section3">Thud</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="complex 4">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h1</h1>
+					<h1 id="h12">h1</h1>
+					<h2 id="h21">h2</h2>
+					<h3 id="h31">h3</h3>
+					<section id="section">
+						<h1>h1</h1>
+					</section>
+					<h3 id="h32">h3</h3>
+					<h2 id="h22">h2</h2>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a></li>
+				<li><a href="#h12">h1</a>
+				<ol>
+					<li><a href="#h21">h2</a>
+					<ol>
+						<li><a href="#h31">h3</a></li>
+					</ol>
+					</li>
+					<li><a href="#section">h1</a></li>
+					<li><a href="#h32">h3</a></li>
+					<li><a href="#h22">h2</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="complex 5">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h11">h1</h1>
+					<h1 id="h12">h1</h1>
+					<section id="section">
+						<h1>h1</h1>
+					</section>
+					<h3 id="h31">h3</h3>
+					<h2 id="h21">h2</h2>
+					<h3 id="h32">h3</h3>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a></li>
+				<li><a href="#h12">h1</a>
+				<ol>
+					<li><a href="#section">h1</a></li>
+					<li><a href="#h31">h3</a></li>
+					<li><a href="#h21">h2</a>
+					<ol>
+						<li><a href="#h32">h3</a></li>
+					</ol>
+					</li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="complex 6">
+		<x:context>
+			<html>
+				<body id="body">
+					<section id="section">
+						<h1>h1</h1>
+					</section>
+					<h2 id="h21">h2</h2>
+					<h3 id="h31">h3</h3>
+					<h2 id="h22">h2</h2>
+					<h3 id="h32">h3</h3>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h2</a>
+				<ol>
+					<li><a href="#section">h1</a></li>
+					<li><a href="#h31">h3</a></li>
+				</ol>
+				</li>
+				<li><a href="#h22">h2</a>
+				<ol>
+					<li><a href="#h32">h3</a></li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="complex 7">
+		<x:context>
+			<html>
+				<body id="body">
+					<h1 id="h1">h1</h1>
+					<h2 id="h2">h2</h2>
+					<h3 id="h31">h3</h3>
+					<h3 id="h32">h3</h3>
+					<h4 id="h41">h4</h4>
+					<h4 id="h42">h4</h4>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol>
+				<li><a href="#body">h1</a>
+				<ol>
+					<li><a href="#h2">h2</a>
+					<ol>
+						<li><a href="#h31">h3</a></li>
+						<li><a href="#h32">h3</a>
+						<ol>
+							<li><a href="#h41">h4</a></li>
+							<li><a href="#h42">h4</a></li>
+						</ol>
+						</li>
+					</ol>
+					</li>
+				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

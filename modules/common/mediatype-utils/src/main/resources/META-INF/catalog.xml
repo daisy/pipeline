@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
    <uri name="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl" uri="../xml/xproc/library.xpl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xsl" uri="../xml/xslt/mediatype-functions.xsl"/>
+   <!-- FIXME: remove -->
    <uri name="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype-functions.xsl" uri="../xml/xslt/mediatype-functions.xsl"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
 </catalog>

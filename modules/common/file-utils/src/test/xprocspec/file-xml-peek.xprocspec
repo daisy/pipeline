@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../src/main/resources/xml/xproc/xml-peek.xpl" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <x:scenario label="Scenario for testing px:file-xml-peek">
@@ -20,7 +20,7 @@
                 <x:document type="inline">
                     <x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../src/main/resources/xml/xproc/xml-peek.xpl" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script"
                         xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                        xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"/>
                 </x:document>
             </x:expect>
             <x:expect label="the xmlns:x namespace must be defined" type="xpath" test="namespace-uri-for-prefix('x',/*)" equals="'http://www.daisy.org/ns/xprocspec'"/>
@@ -29,9 +29,10 @@
             <x:expect label="the xmlns:c namespace must be defined" type="xpath" test="namespace-uri-for-prefix('c',/*)" equals="'http://www.w3.org/ns/xproc-step'"/>
             <x:expect label="the xmlns:px namespace must be defined" type="xpath" test="namespace-uri-for-prefix('px',/*)" equals="'http://www.daisy.org/ns/pipeline/xproc'"/>
             <x:expect label="the xmlns:d namespace must be defined" type="xpath" test="namespace-uri-for-prefix('d',/*)" equals="'http://www.daisy.org/ns/pipeline/data'"/>
+            <x:expect label="the xmlns:dpx namespace must be defined" type="xpath" test="namespace-uri-for-prefix('dpx',/*)" equals="'http://www.daisy.org/ns/pipeline/xproc'"/>
             <x:expect label="the xmlns:xs namespace must be defined" type="xpath" test="namespace-uri-for-prefix('xs',/*)" equals="'http://www.w3.org/2001/XMLSchema'"/>
             <x:expect label="no other namespaces should be defined" type="xpath"
-                test="string-join(/*/namespace::*[not(name()=('c','d','p','px','test','x','xs','xml','cx'))]/concat('xmlns:',name(),'=&quot;',string(.),'&quot;'),' ')" equals="''"/>
+                test="string-join(/*/namespace::*[not(name()=('c','d','p','px','dpx','test','x','xs','xml','cx'))]/concat('xmlns:',name(),'=&quot;',string(.),'&quot;'),' ')" equals="''"/>
 
             <x:context label="the escaped port">
                 <x:document type="port" port="escaped"/>
@@ -42,7 +43,7 @@
                     <c:result content-type="text/plain; charset=utf-8"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../src/main/resources/xml/xproc/xml-peek.xpl" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"/>]]></c:result>
                 </x:document>
             </x:expect>

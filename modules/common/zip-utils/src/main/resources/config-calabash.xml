@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xproc-config xmlns="http://xmlcalabash.com/ns/configuration" xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+    <implementation type="px:unzip" class-name="com.xmlcalabash.extensions.Unzip"/>
+    <implementation type="px:zip" class-name="com.xmlcalabash.extensions.Zip"/>
+</xproc-config>

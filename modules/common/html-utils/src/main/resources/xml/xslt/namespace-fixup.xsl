@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
     exclude-result-prefixes="#all" xmlns="http://www.w3.org/1999/xhtml">
 
-    <xsl:template match="processing-instruction()|comment()">
+    <xsl:template match="processing-instruction()|comment()" mode="#all">
         <xsl:copy-of select="."/>
     </xsl:template>
 

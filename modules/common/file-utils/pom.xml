@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>common-utils-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>file-utils</artifactId>
-  <version>1.3.4-SNAPSHOT</version>
+  <version>1.4.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: File Utilities</name>
@@ -59,6 +59,16 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>xspecTest</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
         <executions>
@@ -76,7 +86,14 @@
         <configuration>
           <instructions>
             <Service-Component>
-              OSGI-INF/file-exists.xml,OSGI-INF/file-expand83.xml,OSGI-INF/copy-resource-step.xml,OSGI-INF/peek-step.xml,OSGI-INF/xml-peek-step.xml,OSGI-INF/set-doctype-step.xml,OSGI-INF/set-xml-declaration-step.xml
+              OSGI-INF/file-exists.xml,
+              OSGI-INF/file-expand83.xml,
+              OSGI-INF/copy-resource-step.xml,
+              OSGI-INF/peek-step.xml,
+              OSGI-INF/xml-peek-step.xml,
+              OSGI-INF/set-doctype-step.xml,
+              OSGI-INF/set-xml-declaration-step.xml,
+              OSGI-INF/config-calabash.xml
             </Service-Component>
           </instructions>
         </configuration>

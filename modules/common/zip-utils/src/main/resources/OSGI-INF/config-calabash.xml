@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="XMLCalabash configuration for zip-utils" activate="activate">
+	<scr:implementation class="org.daisy.common.xproc.calabash.BundledConfigurationFileProvider"/>
+	<scr:service>
+		<scr:provide interface="org.daisy.common.xproc.calabash.ConfigurationFileProvider"/>
+	</scr:service>
+	<scr:property name="path" type="String" value="/config-calabash.xml"/>
+</scr:component>

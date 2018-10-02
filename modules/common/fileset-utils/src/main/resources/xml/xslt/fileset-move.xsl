@@ -2,7 +2,7 @@
 <xsl:stylesheet exclude-result-prefixes="#all" version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
     xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
     <xsl:param name="new-base" required="yes"/>
 

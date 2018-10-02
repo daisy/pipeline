@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri name="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" uri="../mock/xslt/uri-functions.xsl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" uri="../mock/xslt/uri-functions.xsl"/>
 </catalog>

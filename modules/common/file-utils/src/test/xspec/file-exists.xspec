@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               stylesheet="../../main/resources/xml/xslt/library.xsl">
+
+    <x:scenario label="existing file">
+        <x:call function="pf:file-exists">
+            <x:param select="substring-after(resolve-uri('../../../../fileset-utils/src/test/xprocspec/samples/fileset2/b.jpg'),'file:')"/>
+        </x:call>
+        <x:expect label="result" select="true()"/>
+    </x:scenario>
+    
+    <x:scenario label="unexisting file">
+        <x:call function="pf:file-exists">
+            <x:param select="resolve-uri('unexisting')"/>
+        </x:call>
+        <x:expect label="result" select="false()"/>
+    </x:scenario>
+    
+</x:description>

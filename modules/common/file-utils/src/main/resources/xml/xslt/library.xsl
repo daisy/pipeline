@@ -8,7 +8,8 @@
     -->
     
     <!--
-        TODO: <xsl:include href="uri-functions.xsl"/> and delete uri-functions.xsl from catalog.xml
+        TODO: delete uri-functions.xsl from catalog.xml
     -->
+    <xsl:include href="uri-functions.xsl"/>
     
 </xsl:stylesheet>

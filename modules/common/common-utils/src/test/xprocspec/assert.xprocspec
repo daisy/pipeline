@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../../src/main/resources/xml/xproc/assert.xpl">
+
+    <x:scenario label="test">
+        <x:call step="px:assert">
+            <x:option name="error-code" select="'FOO'"/>
+            <x:option name="message" select="'foobar'"/>
+            <x:option name="test" select="'false'"/>
+        </x:call>
+        <x:context label="the error">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="the error" type="xpath" test="/*/c:error[@code='FOO']/normalize-space(string())" equals="'foobar'"/>
+    </x:scenario>
+
+    <x:scenario label="test-count-min">
+        <x:call step="px:assert">
+            <x:input port="source">
+                <x:document type="inline">
+                    <_/>
+                </x:document>
+            </x:input>
+            <x:option name="error-code" select="'FOO'"/>
+            <x:option name="message" select="'foobar'"/>
+            <x:option name="test-count-min" select="1"/>
+        </x:call>
+        <x:scenario label="minimum 2">
+            <x:call>
+                <x:option name="test-count-min" select="2"/>
+            </x:call>
+            <x:context label="the error">
+                <x:document type="errors"/>
+            </x:context>
+            <x:expect label="the error" type="xpath" test="/*/c:error[@code='FOO']/normalize-space(string())" equals="'foobar (was: 1)'"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="message params">
+        <x:call step="px:assert">
+            <x:option name="error-code" select="'FOO'"/>
+            <x:option name="message" select="'$1-$2'"/>
+            <x:option name="param1" select="'foo'"/>
+            <x:option name="param2" select="'bar'"/>
+            <x:option name="test" select="'false'"/>
+        </x:call>
+        <x:context label="the error">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="the error" type="xpath" test="/*/c:error[@code='FOO']/normalize-space(string())" equals="'foo-bar'"/>
+    </x:scenario>
+    
+</x:description>

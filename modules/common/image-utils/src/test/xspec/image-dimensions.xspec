@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               stylesheet="../../main/resources/xml/library.xsl">
+
+    <x:scenario label="get the dimensions of an image">
+        <x:call function="pf:image-dimensions">
+            <x:param select="resolve-uri('../../../../fileset-utils/src/test/xprocspec/samples/fileset2/b.jpg')"/>
+        </x:call>
+        <x:expect label="the dimensions are 48 by 48 pixels" select="(48, 48)"/>
+    </x:scenario>
+
+</x:description>

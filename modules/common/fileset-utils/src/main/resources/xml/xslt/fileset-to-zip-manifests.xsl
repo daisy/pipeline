@@ -5,7 +5,7 @@
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 	
-	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" name="zip-manifest"/>
 	

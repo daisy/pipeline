@@ -61,8 +61,6 @@
         </x:scenario>
     </x:scenario>
 
-
-
     <x:scenario label="MathML">
         <x:scenario label="with a namespace">
             <x:context>
@@ -304,4 +302,34 @@
             </x:scenario>
         </x:scenario>
     </x:scenario>
+    
+    <x:scenario label="Remove non-XHTML namespaces">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body id="body">
+                    text
+                    <!-- comment -->
+                    <![CDATA[CDATA]]>
+                    <non-xhtml xmlns="http://example.net/non-xhtml" xmlns:other="http://example.net/non-xhtml/other-namespace">
+                        <p>xmlns --&gt; inside non-xhtml</p>
+                        <other:p>xmlns:other --&gt; inside non-xhtml</other:p>
+                    </non-xhtml>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="Non-XHTML namespace should be removed">
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <body id="body">
+                    text
+                    <!-- comment -->
+                    <![CDATA[CDATA]]>
+                    <non-xhtml>
+                        <p>xmlns --&gt; inside non-xhtml</p>
+                        <p>xmlns:other --&gt; inside non-xhtml</p>
+                    </non-xhtml>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

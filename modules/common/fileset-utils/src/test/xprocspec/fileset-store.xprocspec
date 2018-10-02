@@ -54,9 +54,13 @@
     <x:context label="result fileset">
       <x:document type="directory" base-uri="temp-dir" href="1/" recursive="true"/>
     </x:context>
-    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
-    <x:expect type="xpath" label="The number of files stored should be 1" test="count(//c:file)=1"/>
-    <x:expect type="xpath" label="The file c.gif should be stored" test="/*/c:file[@name='c.gif']"/>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="1">
+          <c:file name="c.gif"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
   </x:scenario>
   
   <x:scenario label="store from zip">
@@ -76,11 +80,17 @@
     <x:context label="result fileset">
       <x:document type="directory" base-uri="temp-dir" href="2/" recursive="true"/>
     </x:context>
-    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
-    <x:expect type="xpath" label="The number of files stored should be 3" test="count(//c:file)=3"/>
-    <x:expect type="xpath" label="The file c.gif should be stored" test="/*/c:file[@name='c.gif']"/>
-    <x:expect type="xpath" label="The file a.html should be stored" test="/*/c:directory[@name='a']/c:file[@name='a.html']"/>
-    <x:expect type="xpath" label="The file MimeDetector.java should be stored" test="/*/c:directory[@name='a']/c:file[@name='MimeDetector.java']"/>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="2">
+          <c:directory name="a">
+            <c:file name="MimeDetector.java"/>
+            <c:file name="a.html"/>
+          </c:directory>
+          <c:file name="c.gif"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
   </x:scenario>
   
   <x:scenario label="store to zip">
@@ -98,9 +108,23 @@
     <x:context label="result fileset">
       <x:document type="directory" base-uri="temp-dir" href="3/" recursive="true"/>
     </x:context>
-    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
-    <x:expect type="xpath" label="The number of files stored should be 1" test="count(//c:file)=1"/>
-    <x:expect type="xpath" label="The file c.zip should be stored" test="/*/c:file[@name='c.zip']"/>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="3">
+          <c:file name="c.zip"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The zip content">
+      <x:document type="zip" base-uri="temp-dir" href="3/c.zip"/>
+    </x:context>
+    <x:expect label="The zip content" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="c.zip">
+          <c:file name="c.gif"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
   </x:scenario>
   
   <x:scenario label="store from zip to zip">
@@ -120,10 +144,27 @@
     <x:context label="result fileset">
       <x:document type="directory" base-uri="temp-dir" href="4/" recursive="true"/>
     </x:context>
-    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
-    <x:expect type="xpath" label="The number of files stored should be 2" test="count(//c:file)=2"/>
-    <x:expect type="xpath" label="The file c.zip should be stored" test="/*/c:file[@name='c.zip']"/>
-    <x:expect type="xpath" label="The file MimeDetector.java should be stored" test="/*/c:directory[@name='a']/c:file[@name='MimeDetector.java']"/>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="4">
+          <c:directory name="a">
+            <c:file name="MimeDetector.java"/>
+          </c:directory>
+          <c:file name="c.zip"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The zip content">
+      <x:document type="zip" base-uri="temp-dir" href="4/c.zip" ordered="true"/>
+    </x:context>
+    <x:expect label="The zip content" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="c.zip">
+          <c:file name="a.html"/>
+          <c:file name="c.gif"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
   </x:scenario>
   
 </x:description>
