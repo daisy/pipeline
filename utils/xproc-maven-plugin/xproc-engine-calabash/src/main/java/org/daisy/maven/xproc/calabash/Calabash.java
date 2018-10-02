@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class Calabash implements XProcEngine {
 	
 	private URIResolver nextURIResolver = null;
-	private File nextCatalogFile = null;
+	private String nextCatalogFile = null;
 	private Reader nextConfig = null;
 	private Reader nextDefaultConfig = null;
 	
@@ -67,8 +67,18 @@ public class Calabash implements XProcEngine {
 		nextURIResolver = uriResolver;
 	}
 	
+	public void setCatalog(URL catalogFile) {
+		if (catalogFile != null)
+			nextCatalogFile = catalogFile.toString();
+		else
+			nextCatalogFile = null;
+	}
+	
 	public void setCatalog(File catalogFile) {
-		nextCatalogFile = catalogFile;
+		if (catalogFile != null && catalogFile.exists())
+			nextCatalogFile = catalogFile.getPath();
+		else
+			nextCatalogFile = null;
 	}
 	
 	// Settings from a custom calabash.xml
@@ -89,7 +99,7 @@ public class Calabash implements XProcEngine {
 	
 	private XProcRuntime currentRuntime = null;
 	private URIResolver currentURIResolver = null;
-	private File currentCatalogFile = null;
+	private String currentCatalogFile = null;
 	private Reader currentConfig = null;
 	private Reader currentDefaultConfig = null;
 	
@@ -112,9 +122,10 @@ public class Calabash implements XProcEngine {
 		if (nextURIResolver == null)
 			nextURIResolver = simpleURIResolver();
 		if (!equal(nextCatalogFile, currentCatalogFile) || nextURIResolver != currentURIResolver) {
-			if (nextCatalogFile != null && nextCatalogFile.exists()) {
+			if (nextCatalogFile != null) {
 				CatalogManager catalogManager = new CatalogManager();
-				catalogManager.setCatalogFiles(nextCatalogFile.getPath());
+				catalogManager.setUseStaticCatalog(false);
+				catalogManager.setCatalogFiles(nextCatalogFile);
 				currentRuntime.setURIResolver(fallingBackURIResolver(jarURIResolver(), nextURIResolver, new CatalogResolver(catalogManager))); }
 			else
 				currentRuntime.setURIResolver(fallingBackURIResolver(jarURIResolver(), nextURIResolver)); }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:my="my">
+  
+  <x:script>
+    <p:pipeline version="1.0" type="my:identity">
+      <p:identity/>
+    </p:pipeline>
+  </x:script>
+  
+  <x:scenario label="test x:compare-exact">
+    <x:call step="my:identity">
+      <x:input port="source">
+        <x:document type="inline">
+          <_ xmlns:foo="foo">
+            <foo:bar/>
+          </_>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="the input document">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="equal" type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-exact">
+      <x:document type="inline">
+        <_ xmlns:foo="foo">
+          <foo:bar/>
+        </_>
+      </x:document>
+    </x:expect>
+    <x:expect label="not equal" type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-exact" xfail="true">
+      <x:document type="inline">
+        <_ xmlns:foo="foo">
+          <foo:bar xmlns:baz="baz"/>
+        </_>
+      </x:document>
+    </x:expect>
+    <x:expect label="not equal" type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-exact" xfail="true">
+      <x:document type="inline">
+        <_>
+          <foo:bar xmlns:foo="foo"/>
+        </_>
+      </x:document>
+    </x:expect>
+    <x:expect label="not equal" type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-exact" xfail="true">
+      <x:document type="inline">
+        <_ xmlns:fu="foo">
+          <fu:bar/>
+        </_>
+      </x:document>
+    </x:expect>
+    <x:expect label="not equal" type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-exact" xfail="true">
+      <x:document type="inline">
+        <_>
+          <fu:bar xmlns:fu="foo"/>
+        </_>
+      </x:document>
+    </x:expect>
+    <x:expect label="not equal" type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-exact" xfail="true">
+      <x:document type="inline">
+        <_ xmlns="foo">
+          <bar/>
+        </_>
+      </x:document>
+    </x:expect>
+    <x:expect label="not equal" type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-exact" xfail="true">
+      <x:document type="inline">
+        <_>
+          <bar xmlns="foo"/>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

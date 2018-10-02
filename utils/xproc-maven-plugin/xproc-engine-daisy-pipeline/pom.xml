@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.maven</groupId>
     <artifactId>xproc-maven-plugin-parent</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
   
@@ -34,7 +34,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.0.1</version>
+      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>

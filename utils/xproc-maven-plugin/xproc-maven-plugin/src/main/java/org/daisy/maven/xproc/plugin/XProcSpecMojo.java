@@ -93,6 +93,8 @@ public class XProcSpecMojo extends AbstractMojo {
 			getLog().info("Tests are skipped.");
 			return; }
 		
+		try {
+		
 		// configure logging
 		File logbackXml = new File(new File(project.getBuild().getTestOutputDirectory()), "logback.xml");
 		org.slf4j.Logger rootLogger = LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
@@ -124,19 +126,16 @@ public class XProcSpecMojo extends AbstractMojo {
 		File calabashXml = new File(new File(project.getBuild().getTestOutputDirectory()), "calabash.xml");
 		if (calabashXml.exists()) {
 			ClassRealm realm = (ClassRealm)Thread.currentThread().getContextClassLoader();
-			try {
-				for (String path : project.getTestClasspathElements())
-					realm.addURL(new File(path).toURI().toURL());
-				for (Artifact artifact : project.getArtifacts())
-					realm.addURL(artifact.getFile().toURI().toURL());
+			for (String path : project.getTestClasspathElements())
+				realm.addURL(new File(path).toURI().toURL());
+			for (Artifact artifact : project.getArtifacts())
+				realm.addURL(artifact.getFile().toURI().toURL());
 				
-				// assumes that this is the same engine as is used by the runner
-				XProcEngine engine = ServiceLoader.load(XProcEngine.class).iterator().next();
-				engine.getClass().getMethod("setConfiguration", File.class).invoke(engine, calabashXml);
-				runner.setXProcEngine(engine); }
-			catch (Throwable e) {
-				e.printStackTrace();
-				throw new RuntimeException(e); }}
+			// assumes that this is the same engine as is used by the runner
+			XProcEngine engine = ServiceLoader.load(XProcEngine.class).iterator().next();
+			engine.getClass().getMethod("setConfiguration", File.class).invoke(engine, calabashXml);
+			runner.setXProcEngine(engine);
+		}
 		
 		Reporter.DefaultReporter reporter = new Reporter.DefaultReporter(System.out);
 		
@@ -147,5 +146,9 @@ public class XProcSpecMojo extends AbstractMojo {
 		                reporter))
 			throw new MojoFailureException("There are test failures.");
 		
+		} catch (Throwable e) {
+			e.printStackTrace();
+			throw new MojoFailureException(e.getMessage(), e);
+		}
 	}
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,11 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	
 	@Activate
 	protected void activate() {}
+	
+	public void setCatalog(URL catalog) {
+		if (catalog != null)
+			throw new UnsupportedOperationException("Setting catalog not supported.");
+	}
 	
 	public void setCatalog(File catalog) {
 		if (catalog != null)

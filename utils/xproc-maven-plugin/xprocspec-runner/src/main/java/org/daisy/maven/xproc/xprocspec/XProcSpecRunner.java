@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -111,12 +112,35 @@ public class XProcSpecRunner {
 	                   File reportsDir,
 	                   File surefireReportsDir,
 	                   File tempDir,
-	                   File catalog,
+	                   File catalogFile,
 	                   Reporter reporter) {
 		
 		if (engine == null)
 			activate();
-		engine.setCatalog(catalog);
+		URL catalog = null;
+		if (catalogFile != null)
+			try {
+				catalog = catalogFile.toURL(); }
+			catch (MalformedURLException e) {
+				throw new RuntimeException(e); }
+			
+		// register catalog file that contains http://www.daisy.org/xprocspec/custom-assertion-steps.xpl
+		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
+			
+			// if you want to specify a catalog AND use custom-assertion-steps.xpl, you're out of luck
+			if (catalog == null)
+				try {
+					catalog = new URL(
+						XProcSpecRunner.class.getResource("/xprocspec-extra/custom-assertion-steps/library.xpl"),
+						"../../META-INF/catalog.xml");
+				} catch (MalformedURLException e) {
+					throw new RuntimeException(e); }
+		} else if (engine.getClass().getName().equals("org.daisy.maven.xproc.pipeline.DaisyPipeline2")) {
+			// Pipeline module registered through declarative services or SPI
+		}
+		
+		if (catalog != null)
+			engine.setCatalog(catalog);
 		
 		// register Java implementation of px:message
 		// FIXME: make a generic step that can be used by all XProc engines
@@ -125,9 +149,9 @@ public class XProcSpecRunner {
 				engine.getClass().getMethod("setDefaultConfiguration", Reader.class).invoke(engine, new StringReader(
 				    "<xproc-config xmlns=\"http://xmlcalabash.com/ns/configuration\" xmlns:px=\"http://www.daisy.org/ns/xprocspec\">" +
 				    "  <implementation type=\"px:message\" class-name=\"org.daisy.maven.xproc.xprocspec.logging.calabash.impl.MessageStep\"/>" +
-				    "</xproc-config>")); }
-			catch (NoSuchMethodException e) {
-				System.out.println("WARNING: Please use a version of xproc-engine-calabash >= 1.0.1-SNAPSHOT");
+				    "</xproc-config>"));
+			} catch (NoSuchMethodException e) {
+				System.out.println("WARNING: Please use a version of xproc-engine-calabash >= 1.1.0");
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);
 			} catch (InvocationTargetException e) {
