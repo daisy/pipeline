@@ -8,11 +8,11 @@ before_install:
   - rm -f /opt/jdk_switcher/jdk_switcher.sh
 script:
   # skip webservice test for now because it uses pax-exam-container-forked which sometimes causes problems
-  - make framework/webservice/.dependencies
+  - make RUBY=ruby framework/webservice/.dependencies
   - touch framework/webservice/.last-tested
   # skip because it takes too much time to run all tests
   # - make check
-  - make GTAR=/bin/tar dist-docker-image
-  - cd assembly && make check-docker
+  - make RUBY=ruby GTAR=/bin/tar dist-docker-image
+  - cd assembly && make RUBY=ruby check-docker
 after_failure:
  - cat maven.log
