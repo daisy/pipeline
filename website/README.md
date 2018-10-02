@@ -4,15 +4,7 @@
 ## Prerequisites
 [Jekyll][]
 
-    gem install jekyll
-    gem install sparql
-    gem install rdf-turtle
-    gem install rdf-rdfa
-    gem install commaparty
-    gem install nokogiri
-    gem install mustache
-    gem install github-markup
-    gem install coderay
+    bundle install --path gems
 
 ## Usage
 

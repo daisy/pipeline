@@ -1,6 +1,38 @@
 ## For file names and sizes, see:
 ## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases
-## | jq '.[] | select(.tag_name == "v1.11.0") |.assets'
+## | jq '.[] | select(.tag_name == "v1.11.1") |.assets'
+
+- group: main
+  version: "1.11.1"
+  sort: "1.11.1"
+  state: stable
+  github_tag: "v1.11.1"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.11.1"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Windows (an installer EXE), Mac OS (a DMG
+    disk image containing a standard Mac OS application) and Linux (ZIP and DEB files).
+  files:
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.11.1/pipeline2-1.11.1_windows.exe"
+      size: 75941265
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.11.1/pipeline2-1.11.1_mac.dmg"
+      size: 113064583
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.11.1/pipeline2-1.11.1_linux.zip"
+      size: 51086707
+    - platform: debian
+      package: deb
+      content: [gui, server]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.11.1/pipeline2-1.11.1_debian.deb"
+      size: 46136702
 
 - group: main
   version: "1.11.0"

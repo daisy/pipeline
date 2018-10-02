@@ -70,6 +70,9 @@ end
 $data_type_rng = File.open("#{File.dirname(__FILE__)}/data-type.rng", 'r') { |f| Nokogiri::XML::RelaxNG(f) }
 
 def render_data_type(definition, sequence)
+  # workaround for issue that data type definitions, when coming from
+  # documentation, do not contain namespaces
+  definition.gsub!("<a:documentation", "<documentation xmlns=\"http://relaxng.org/ns/compatibility/annotations/1.0\"")
   xml = Nokogiri::XML(definition)
   $data_type_rng.validate(xml).each do |error|
     puts error.message

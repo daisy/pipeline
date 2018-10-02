@@ -199,27 +199,31 @@ The announcement can be based on the following template:
 > Version XYZ of the DAISY Pipeline 2 project is now available for download. The following alternative packages are proposed:
 >
 > - for Windows users (exe file, XX MB):
->   https://github.com/daisy-consortium/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_windows.exe
+>   https://github.com/daisy/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_windows.exe
 > - for Mac OS X users (dmg file, XX MB):
->   https://github.com/daisy-consortium/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_mac.dmg
+>   https://github.com/daisy/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_mac.dmg
 > - for Linux users  (zip file, XX MB):
->   https://github.com/daisy-consortium/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_linux.zip
+>   https://github.com/daisy/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_linux.zip
+> - for Linux users (debian package, XX MB):
+>   https://github.com/daisy/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_debian.deb
 >
-> All distributions include the new graphical user interface (GUI), all the conversion scripts, and a native command line tool (CLI).
+> All distributions include the graphical user interface (GUI), all the conversion scripts, and a native command line tool (CLI).
 >
 > This release features notably:
 > - **XXX** _insert highlights of the release_
 >
-> If you have any problems or identify some bugs, please report them to the Pipeline team using our issue tracker on GitHub:
-> https://github.com/daisy/pipeline/issues
->
 > For details, please refer to the full release notes:
 > https://github.com/daisy/pipeline-assembly/releases/tag/vXYZ
->
+> 
 > User documentation is available on the project’s web site:
 > http://daisy.github.io/pipeline/
->
+> 
+> If you have any problems or identify some bugs, please report them to the Pipeline team using our issue tracker on GitHub:
+> https://github.com/daisy/pipeline/issues
+> 
 > As usual, feedback is warmly welcome!
+> 
+> Bert and Romain, for the Pipeline team
 
 pipeline-webui and other components that are not included in
 pipeline-assembly are released separately.

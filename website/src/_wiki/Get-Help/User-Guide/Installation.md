@@ -118,13 +118,13 @@ web service to the host:
 ~~~sh
 docker run --detach \
            --name pipeline \
-           -e PIPELINE2_WS_HOST=pipeline \
+           -e PIPELINE2_WS_HOST=0.0.0.0 \
            -e PIPELINE2_WS_AUTHENTICATION=false \
            daisyorg/pipeline-assembly
 docker run --detach \
            --link pipeline \
            -p 9000:9000 \
-           -e DAISY_PIPELINE2_URL: http://pipeline:8181/ws \
+           -e DAISY_PIPELINE2_URL=http://pipeline:8181/ws \
            daisyorg/pipeline-webui
 ~~~
 
@@ -209,7 +209,7 @@ you have unpacked the ZIP file to.
 The server and the desktop application require a Java runtime
 environment. Windows and Mac users do not have to worry about Java
 because it is included in the DAISY Pipeline installation. Linux users
-however are on their own. The minimum required version of Java is 8.
+however are on their own. The minimum required version of Java is 9.
 
 ### JavaFX
 
