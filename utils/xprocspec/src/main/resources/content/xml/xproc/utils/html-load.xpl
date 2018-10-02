@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step type="pxi:html-load" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+    xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/"
     xmlns:cx="http://xmlcalabash.com/ns/extensions" exclude-inline-prefixes="#all" version="1.0">
     <p:documentation>Tries first to p:load the HTML-file. An exception will be thrown if the file is

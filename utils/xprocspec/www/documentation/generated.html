@@ -355,16 +355,21 @@
 
 
 <section id="the-document-element">
-<h2>The <code>document</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd>One element from any namespace. (optional)</dd><dt>Content attributes:</dt><dd><a href="#attr-document-base-uri"><code>base-uri</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-href"><code>href</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-method"><code>method</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-port"><code>port</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-position"><code>position</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-recursive"><code>recursive</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-select"><code>select</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-type"><code>type</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<h2>The <code>document</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd>One element from any namespace. (optional)</dd><dt>Content attributes:</dt><dd><a href="#attr-document-base-uri"><code>base-uri</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-href"><code>href</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-method"><code>method</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-ordered"><code>ordered</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-port"><code>port</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-position"><code>position</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-recursive"><code>recursive</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-select"><code>select</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-type"><code>type</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
 <p>The <a href="#the-document-element"><code>document</code></a> element is used to define which documents are provided on a steps input ports, what the context is when making assertions, and for assertions when making comparisons
                     or performing validations. It can be used in a number of ways:</p>
 
 <p id="attr-document-base-uri">If the <code>base-uri</code> attribute is <code>temp-dir</code>, then the URI in the <a href="#attr-document-href"><code>href</code></a> attribute (or the xml:base attribute of the
                                 <code>document</code> or inline element in the case of inline documents) will be resolved against the temporary directory used for the test, instead of the base URI of the
-                                xprocspec document.</p><!-- documented in the "inline" group --><!-- documented in the "inline" group -->
-<p id="attr-document-href">When <code>type</code> is <code>file</code>; the <a href="#attr-document-href"><code>href</code></a> attribute is a URI pointing to the file you want the contents of.</p><p>When <code>type</code> is <code>directory</code>; the <a href="#attr-document-href"><code>href</code></a> attribute is a URI pointing to the directory you want listed.</p>
+                                xprocspec document.</p><!-- documented in the "inline" group --><!-- documented in the "inline" group --><!-- documented in the "inline" group -->
+<p id="attr-document-href">When <code>type</code> is <code>file</code>; the <a href="#attr-document-href"><code>href</code></a> attribute is a URI pointing to the file you want the contents of.</p><p>When <code>type</code> is <code>directory</code>; the <a href="#attr-document-href"><code>href</code></a> attribute is a URI pointing to the directory you want listed.</p><p>When <code>type</code> is <code>zip</code>;
+                        the <a href="#attr-document-href"><code>href</code></a> attribute is a URI pointing to the ZIP file you want
+                        listed.</p>
 <p id="attr-document-method">By default, files loaded by using <code>method="file"</code> will be loaded as XML files. Non-XML files can be loaded by
                                 specifying another <code>method</code>.</p>
+<p id="attr-document-ordered">When <code>ordered</code> is
+                            <code>true</code>, the ZIP entries are listed in lexicographical
+                            order.</p>
 <p id="attr-document-port">
                             The <code>port</code> is the name of a XProc input or output port.
                             The <code>x:document</code> element will represent the sequence of documents provided on the input port, or the sequence of documents returned on the output port.
@@ -392,6 +397,13 @@
                             If the <a href="#attr-document-type"><code>type</code></a> attribute is <a href="#the-directory-element"><code>directory</code></a>, then the <a href="#the-document-element"><code>document</code></a> element will be replaced with a directory listing of the directory pointed to by the <a href="#attr-document-href"><code>href</code></a> attribute. The <code>href</code> URI is
                             by default resolved against the base URI of the xprocspec test document. However, if you provide the <code>base-uri</code> attribute with a value of <code>temp-dir</code>, then the <code>href</code> URI will be resolved against the temporary directory
                             used for the test instead.
+                        </p><p>
+                            If the <a href="#attr-document-type"><code>type</code></a> attribute is <a href="#the-zip-element"><code>zip</code></a>, then the <a href="#the-document-element"><code>document</code></a> element will be
+                            replaced with a listing of the ZIP file pointed to by the <a href="#attr-document-href"><code>href</code></a>
+                            attribute. The <code>href</code> URI is by default resolved against the base URI of
+                            the xprocspec test document. However, if you provide the <code>base-uri</code>
+                            attribute with a value of <code>temp-dir</code>, then the <code>href</code> URI will be
+                            resolved against the temporary directory used for the test instead.
                         </p><p>
                             If the <a href="#attr-document-type"><code>type</code></a> attribute is <code>errors</code>, then a <code>c:errors</code> document (as defined in the XProc spec) will be made available if any errors occur during step execution.
                             If no errors occur, an empty sequence is returned.

@@ -703,6 +703,42 @@
                     </optional>
                 </group>
                 <group>
+                    <!-- zip -->
+                    <attribute name="type">
+                        <a:documentation xmlns="http://www.w3.org/1999/xhtml" xml:space="preserve">
+                            If the `type` attribute is `zip`, then the `document` element will be
+                            replaced with a listing of the ZIP file pointed to by the `href`
+                            attribute. The `href` URI is by default resolved against the base URI of
+                            the xprocspec test document. However, if you provide the `base-uri`
+                            attribute with a value of `temp-dir`, then the `href` URI will be
+                            resolved against the temporary directory used for the test instead.
+                        </a:documentation>
+                        <value>directory</value>
+                    </attribute>
+                    <attribute name="href">
+                        <a:documentation xmlns="http://www.w3.org/1999/xhtml">When `type` is `zip`;
+                        the `href` attribute is a URI pointing to the ZIP file you want
+                        listed.</a:documentation>
+                        <data type="anyURI"/>
+                    </attribute>
+                    <optional>
+                        <attribute name="ordered">
+                            <a:documentation xmlns="http://www.w3.org/1999/xhtml">When `ordered` is
+                            `true`, the ZIP entries are listed in lexicographical
+                            order.</a:documentation>
+                            <data type="boolean"/>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <attribute name="base-uri">
+                            <a:documentation xmlns="http://www.w3.org/1999/xhtml"><!-- documented in the "inline" group --></a:documentation>
+                            <choice>
+                                <value>temp-dir</value>
+                            </choice>
+                        </attribute>
+                    </optional>
+                </group>
+                <group>
                     <!-- errors -->
                     <attribute name="type">
                         <a:documentation xmlns="http://www.w3.org/1999/xhtml" xml:space="preserve">

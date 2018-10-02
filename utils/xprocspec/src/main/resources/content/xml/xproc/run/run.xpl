@@ -1,4 +1,4 @@
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" type="pxi:test-run" name="main" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" type="pxi:test-run" name="main" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"
     version="1.0" xpath-version="2.0" xmlns:x="http://www.daisy.org/ns/xprocspec">
 
     <p:input port="source" sequence="true"/>
@@ -14,7 +14,7 @@
     <p:import href="../utils/logging-library.xpl"/>
     <p:import href="../utils/validate-with-relax-ng.xpl"/>
     
-    <p:for-each>
+    <p:for-each dpx:progress="1">
         <pxi:message message="   * loading '$1'">
             <p:with-option name="param1" select="string(/*)"/>
             <p:with-option name="logfile" select="$logfile">
@@ -24,7 +24,7 @@
         <p:load name="test">
             <p:with-option name="href" select="/*"/>
         </p:load>
-        <p:choose>
+        <p:choose dpx:message=" " dpx:progress="1">
             <p:when test="/*[self::c:errors]">
                 <pxi:message message=" * error document; skipping">
                     <p:with-option name="logfile" select="$logfile">
@@ -36,9 +36,9 @@
             <p:otherwise>
                 <p:variable name="test-href" select="(//x:description)[1]/@test-base-uri"/>
                 <p:identity name="try.input"/>
-                <p:try>
+                <p:try dpx:progress="1">
                     <p:group>
-                        <cx:eval>
+                        <cx:eval dpx:progress="1">
                             <p:input port="pipeline">
                                 <p:pipe port="result" step="test"/>
                             </p:input>

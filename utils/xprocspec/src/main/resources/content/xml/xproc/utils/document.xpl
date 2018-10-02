@@ -24,6 +24,7 @@
     <p:variable name="href" select="resolve-uri(/*/@href, $base-dir)"/>
     <p:variable name="method" select="if (/*/@method=('xml','html','text','binary')) then /*/@method else 'xml'"/>
     <p:variable name="recursive" select="if (/*/@recursive=('true','false')) then /*/@recursive else 'false'"/>
+    <p:variable name="ordered" select="/*/@ordered"/>
 
     <p:identity>
         <p:input port="source">
@@ -225,6 +226,21 @@
                     <p:label-elements match="/c:zipfile" attribute="name" label="replace(@href,'^.*/([^/]*)$','$1')"/>
                     <p:delete match="c:directory"/>
                     <p:delete match="@*[not(namespace-uri()='' and local-name()='name')]"/>
+                    <p:choose>
+                        <p:when test="$ordered='true'">
+                            <p:xslt>
+                                <p:input port="stylesheet">
+                                    <p:document href="sort-zip-entries.xsl"/>
+                                </p:input>
+                                <p:input port="parameters">
+                                    <p:empty/>
+                                </p:input>
+                            </p:xslt>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
                     <p:wrap-sequence wrapper="x:document"/>
                     <p:add-attribute match="/*" attribute-name="xml:base">
                         <p:with-option name="attribute-value" select="$href"/>

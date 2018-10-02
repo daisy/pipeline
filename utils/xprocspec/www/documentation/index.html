@@ -1199,6 +1199,12 @@
                         <small title="optional">?</small>
                     </dd>
                     <dd>
+                        <a href="#attr-document-ordered">
+                            <code>ordered</code>
+                        </a>
+                        <small title="optional">?</small>
+                    </dd>
+                    <dd>
                         <a href="#attr-document-port">
                             <code>port</code>
                         </a>
@@ -1249,9 +1255,14 @@
                 <p>When <code>type</code> is <code>directory</code>; the <a
                         href="#attr-document-href"><code>href</code></a> attribute is a URI pointing
                     to the directory you want listed.</p>
+                <p>When <code>type</code> is <code>zip</code>; the <a
+                        href="#attr-document-href"><code>href</code></a> attribute is a URI pointing
+                        to the ZIP file you want listed.</p>
                 <p id="attr-document-method">By default, files loaded by using
                         <code>method="file"</code> will be loaded as XML files. Non-XML files can be
                     loaded by specifying another <code>method</code>.</p>
+                <p id="attr-document-ordered">When <code>ordered</code> is
+                        <code>true</code>, the ZIP entries are listed in lexicographical order.</p>
                 <p id="attr-document-port"> The <code>port</code> is the name of a XProc input or
                     output port. The <code>x:document</code> element will represent the sequence of
                     documents provided on the input port, or the sequence of documents returned on
@@ -1305,6 +1316,16 @@
                     xprocspec test document. However, if you provide the <code>base-uri</code>
                     attribute with a value of <code>temp-dir</code>, then the <code>href</code> URI
                     will be resolved against the temporary directory used for the test instead. </p>
+                <p>
+                    If the <a href="#attr-document-type"><code>type</code></a> attribute is
+                    <a href="#the-zip-element"><code>zip</code></a>, then the
+                    <a href="#the-document-element"><code>document</code></a> element will be
+                    replaced with a listing of the ZIP file pointed to by the
+                    <a href="#attr-document-href"><code>href</code></a>
+                    attribute. The <code>href</code> URI is by default resolved against the base URI of
+                    the xprocspec test document. However, if you provide the <code>base-uri</code>
+                    attribute with a value of <code>temp-dir</code>, then the <code>href</code> URI will be
+                    resolved against the temporary directory used for the test instead.</p>
                 <p> If the <a href="#attr-document-type"><code>type</code></a> attribute is
                         <code>errors</code>, then a <code>c:errors</code> document (as defined in
                     the XProc spec) will be made available if any errors occur during step

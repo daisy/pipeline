@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:p="http://www.w3.org/ns/xproc" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:c="http://www.w3.org/ns/xproc-step">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:p="http://www.w3.org/ns/xproc" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc">
 
     <xsl:output indent="yes" method="xml"/>
     <xsl:param name="test-base-uri" required="yes"/>
@@ -52,7 +52,7 @@
                 <xsl:otherwise>
                     <xsl:text>
     </xsl:text>
-                    <p:try>
+                    <p:try dpx:progress="1">
                         <xsl:text>
         </xsl:text>
                         <p:group>
@@ -60,6 +60,7 @@
         </xsl:text>
                             <xsl:element name="{replace(/*/x:step-declaration/*/@type,'.*\}','')}" namespace="{replace(/*/x:step-declaration/*/@x:type,'^\{(.*)\}.*$','$1')}">
                                 <xsl:attribute name="name" select="'test'"/>
+                                <xsl:attribute name="dpx:progress" select="'1'"/>
                                 <xsl:for-each select="/*/x:scenario/x:call/x:option">
                                     <xsl:text>
         </xsl:text>

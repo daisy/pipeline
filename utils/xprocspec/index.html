@@ -29,8 +29,8 @@
           <h2>A tool for testing XProc scripts</h2>
         </header>
         <section class="buttons clearfix">
-          <a href="https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.2.0/xprocspec-1.2.0.jar" id="button-left" class="button">
-            <span>Download v1.2.0</span>
+          <a href="https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.3.0/xprocspec-1.3.0.jar" id="button-left" class="button">
+            <span>Download v1.3.0</span>
           </a>
           <a href="www/documentation/index.html" id="button-middle" class="button">
             <span>Documentation</span>
@@ -109,50 +109,91 @@
 <p>The next sub-sections describe ways of running this xprocspec test.</p>
 
 
-<h3>Calabash</h3>
+<h3>XML Calabash</h3>
 
 <p>If you haven't already, install <a href="http://xmlcalabash.com/" target="_blank">XML Calabash</a>.</p>
 
-<p><strong>Known issue: Something seems to have been broken from XML Calabash 1.0.32 and onwards, so if you're getting the error <code style="white-space: nowrap;">ERROR: Pipeline failed: null</code>, then please use 1.0.31 or earlier for now.</strong></p>
+<p><strong>Note: XML Calabash 1.1.16 or newer is required.</strong></p>
 
-<pre><code class="bash"># download and unzip xprocspec v1.2.0
-wget https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.2.0/xprocspec-1.2.0.jar
-unzip xprocspec-1.2.0.jar -d xprocspec
+<pre><code class="bash"># download and unzip xprocspec v1.3.0
+wget https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.3.0/xprocspec-1.3.0.jar
+unzip xprocspec-1.3.0.jar -d xprocspec
 
-# run the xprocspec test
-calabash -i src/test/xprocspec/test.xprocspec \
-         -o html=result.html \
-         -o junit=junit.xml \
-         -o result=result.xml \
-         xprocspec/content/xml/xproc/xprocspec.xpl
+# run the xprocspec test (change calabash path if necessary)
+java -jar ~/xmlcalabash-1.1.16-97/xmlcalabash-1.1.16-97.jar \
+     -i src/test/xprocspec/test.xprocspec \
+     -o html=result.html \
+     -o junit=junit.xml \
+     -o result=result.xml \
+     xprocspec/content/xml/xproc/xprocspec.xpl
 </code></pre>
 
-<p>Now, open <code>result.html</code> in a browser to view the detailed results.</p>
+<p>Now, open <code>result.html</code> in a browser to view the HTML report.</p>
 
+<!--
+<h3>Morgana XProc</h3>
+
+<p>Morgana XProc homepage: <a href="http://www.xml-project.com/morganaxproc/" target="_blank">http://www.xml-project.com/morganaxproc/</a></p>
+
+<p>Download the ZIP from the Morgana XProc homepage, and unzip it:</p>
+
+<pre><code class="bash">
+unzip MorganaXProc-1-0-8.zip -d morgana
+</code></pre>
+
+<pre><code class="bash"># download and unzip xprocspec v1.3.0
+wget https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.3.0/xprocspec-1.3.0.jar
+unzip xprocspec-1.3.0.jar -d xprocspec
+</code></pre>
+
+<h4>Morgana XProc CLI</h4>
+
+TODO
+
+<h4>Morgana XProc GUI</h4>
+
+<p>Run the Morgana XProc JAR:</p>
+
+<pre><code class="bash">
+java -jar morgana/MorganaXProc.jar
+</code></pre>
+
+<ol>
+  <li>Drag and drop <code>xprocspec/content/xml/xproc/xprocspec.xpl</code> into the GUI.</li>
+  <li>Drag and drop <code>src/main/resources/xml/script.xpl</code> into the input source part of the GUI.</li>
+  <li>Set the output base folder to <code>file:/tmp/</code> and change the file extension of the <code>html</code> port to <code>.html</code>.</li>
+</ol>
+
+TODO:
+- Security Exception in importing 'http://xmlcalabash.com/extension/steps/library-1.0.xpl'
+- No declaration found for step 'cx:unzip'
+
+<p>Now, open <code>file:/tmp/result.html</code> in a browser to view the detailed results.</p>
+-->
 
 <h3>EXPath Packaging System</h3>
 
 <p>If you haven't already, install the <a href="http://expath.org/files" target="_blank">EXPath Packaging - Repository Manager</a>.</p>
 
 <pre><code class="bash"># create a local expath repository
-xrepo create repo
+~/expath/pkg/bin/xrepo create repo
 export EXPATH_REPO=`pwd`/repo
 
-# download and install xprocspec v1.2.0
-wget https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.2.0/xprocspec-1.2.0.jar
-xrepo install xprocspec-1.2.0.jar
+# download and install xprocspec v1.3.0
+wget https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.3.0/xprocspec-1.3.0.jar
+~/expath/pkg/bin/xrepo install xprocspec-1.3.0.jar
 
 # optionally, observe that xprocspec is installed
-xrepo list
-xrepo lookup xproc http://www.daisy.org/ns/xprocspec/xprocspec.xpl
-xrepo lookup rng http://www.daisy.org/ns/xprocspec/xprocspec.rng
+~/expath/pkg/bin/xrepo list
+~/expath/pkg/bin/xrepo lookup xproc http://www.daisy.org/ns/xprocspec/xprocspec.xpl
+~/expath/pkg/bin/xrepo lookup rng http://www.daisy.org/ns/xprocspec/xprocspec.rng
 
 # run the xprocspec test
-calabash -i src/test/xprocspec/test.xprocspec \
-         -o html=result.html \
-         -o junit=junit.xml \
-         -o result=result.xml \
-         http://www.daisy.org/ns/xprocspec/xprocspec.xpl
+~/expath/pkg/bin/calabash -i src/test/xprocspec/test.xprocspec \
+                          -o html=result.html \
+                          -o junit=junit.xml \
+                          -o result=result.xml \
+                          http://www.daisy.org/ns/xprocspec/xprocspec.xpl
 </code></pre>
 
 <p>Now, open <code>result.html</code> in a browser to view the detailed results.</p>
@@ -199,12 +240,12 @@ to run xprocspec as part of the Maven test phase.</p>
                 &lt;dependency&gt;
                   &lt;groupId&gt;org.daisy.xprocspec&lt;/groupId&gt;
                   &lt;artifactId&gt;xprocspec&lt;/artifactId&gt;
-                  &lt;version&gt;1.2.0&lt;/version&gt;
+                  &lt;version&gt;1.3.0&lt;/version&gt;
                 &lt;/dependency&gt;
                 &lt;dependency&gt;
                   &lt;groupId&gt;org.daisy.maven&lt;/groupId&gt;
                   &lt;artifactId&gt;xproc-engine-calabash&lt;/artifactId&gt;
-                  &lt;version&gt;1.0.0&lt;/version&gt;
+                  &lt;version&gt;1.1.0&lt;/version&gt;
                 &lt;/dependency&gt;
               &lt;/dependencies&gt;
             &lt;/plugin&gt;
@@ -234,6 +275,8 @@ to run xprocspec as part of the Maven test phase.</p>
 
 <pre><code class="bash">mvn test
 </code></pre>
+
+<p>This will run all xprocspec tests that are stored under <code>src/test/xprocspec</code></p>
 
 <p>Now, open <code>target/xprocspec-reports/index.html</code> in a browser to view the detailed results.</p>
 
