@@ -18,6 +18,7 @@
 	    directories from which multiple modules are released at once
 	-->
 	<xsl:param name="RELEASE_DIRS"/>
+	<xsl:param name="OUTPUT_BASEDIR"/>
 	<xsl:param name="OUTPUT_FILENAME"/>
 	
 	<xsl:output method="xml" indent="yes"/>
@@ -220,7 +221,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:result-document href="{concat($module,'/',$OUTPUT_FILENAME)}" method="text">
+		<xsl:result-document href="{concat($OUTPUT_BASEDIR,'/',$module,'/',$OUTPUT_FILENAME)}" method="text">
 			<xsl:value-of select="concat($dirname,'VERSION')"/>
 			<xsl:text> := </xsl:text>
 			<xsl:value-of select="$version"/>

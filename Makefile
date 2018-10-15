@@ -209,14 +209,6 @@ libs/dotify/dotify.formatter.impl/.eclipse-dependencies : \
 	$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar
 endif
 
-.SECONDARY : .dependencies-init
-.dependencies-init :
-	echo "Recomputing dependencies between modules..." >&2
-
-$(addsuffix /.deps.mk,$(MODULES)) .maven-deps.mk \
-$(SUPER_BUILD_SCRIPT_TARGET_DIR)/effective-pom.xml \
-$(SUPER_BUILD_SCRIPT_TARGET_DIR)/maven-modules : | .dependencies-init
-
 .maven-init : | $(MVN_WORKSPACE)
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 $(MVN_WORKSPACE) :
@@ -256,6 +248,7 @@ clean-old :
 	rm -f .effective-pom.xml
 	rm -f .gradle-pom.xml
 	rm -f .maven-build.mk
+	find . -name .deps.mk -exec rm -r "{}" \;
 	find . -name .build.mk -exec rm -r "{}" \;
 	find * -name .maven-to-install -exec rm -r "{}" \;
 	find * -name .maven-to-test -exec rm -r "{}" \;
@@ -296,7 +289,7 @@ website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.ym
 
 export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)' -Pstaged-releases
 
-$(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.deps.mk website/target/maven/.dependencies
+$(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.dependencies
 	rm -rf $@
 	cd website && \
 	target=$@ && \
