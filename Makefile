@@ -1,3 +1,4 @@
+MVN ?= mvn
 JEKYLL_SRC_DIR := src
 SHELL := bash
 RUBY := bundle exec
@@ -153,7 +154,7 @@ $(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
 	rm -rf $(MAVEN_DIR)/xprocdoc
 	rm -rf $(MAVEN_DIR)/sources
 	cd $(MAVEN_DIR) && \
-	if ! mvn --quiet $(MVN_OPTS) "process-sources"; then \
+	if ! $(MVN) "process-sources" >/dev/null ; then \
 		rm -rf $(MAVEN_DIR)/doc; \
 		rm -rf $(MAVEN_DIR)/javadoc; \
 		exit 1; \
