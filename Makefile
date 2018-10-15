@@ -284,36 +284,24 @@ checked :
 	touch $(addsuffix /.last-tested,$(MODULES))
 
 website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
-	cd website && \
-	$(MAKE) target/maven/pom.xml
+	$(MAKE) -C website target/maven/pom.xml
 
-export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)' -Pstaged-releases
+.PHONY : website
+website :
+	$(MAKE) -C website
+
+.PHONY : serve-website publish-website clean-website
+serve-website publish-website clean-website :
+	target=$@ && \
+	$(MAKE) -C website $${target%-website}
+
+# this dependency is also defined in website/Makefile, but we need to repeat it here to enable the transitive dependency below
+website serve-website publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 
 $(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.dependencies
 	rm -rf $@
-	cd website && \
 	target=$@ && \
-	$(MAKE) $${target#website/}
-
-.PHONY : website
-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
-	cd website && \
-	make
-
-.PHONY : serve-website
-serve-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
-	cd website && \
-	$(MAKE) serve
-
-.PHONY : publish-website
-publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
-	cd website && \
-	$(MAKE) publish
-
-.PHONY : clean-website
-clean-website :
-	cd website && \
-	$(MAKE) clean
+	$(MAKE) -C website $${target#website/}
 
 .PHONY : dump-maven-cmd
 dump-maven-cmd :
