@@ -12,7 +12,7 @@ script:
   - touch framework/webservice/.last-tested
   # skip because it takes too much time to run all tests
   # - make check
-  - make RUBY=ruby GTAR=/bin/tar dist-docker-image
-  - cd assembly && make RUBY=ruby check-docker
+  - make RUBY=ruby dist-docker-image
+  - make RUBY=ruby -C assembly check-docker
 after_failure:
  - cat maven.log
