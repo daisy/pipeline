@@ -13,7 +13,10 @@ MVN_LOG           := tee -a $(ROOT_DIR)/maven.log \
 override GRADLE   := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(GRADLE) $(MVN_PROPERTIES)
 EVAL              := :
 
-export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST_PLATFORM MAKE MAKEFLAGS MAKECMDGOALS
+export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST_PLATFORM MAKE
+# MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
+export MAKECMDGOALS
+# MAKEFLAGS exported by default
 
 rwildcard = $(shell [ -d $1 ] && find $1 -type f | sed 's/ /\\ /g')
 # alternative, but does not support spaces in file names:
