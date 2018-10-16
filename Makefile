@@ -74,9 +74,14 @@ dist-webui-rpm : assembly/.dependencies
 
 ifeq ($(shell uname), Darwin)
 dev_launcher := assembly/target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
+dp2 := cli/build/bin/darwin_386/dp2
 else
 dev_launcher := assembly/target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+dp2 := cli/build/bin/linux_386/dp2
 endif
+
+.PHONY : dp2
+dp2 : $(dp2)
 
 .PHONY : run
 run : $(dev_launcher)
@@ -85,6 +90,12 @@ run : $(dev_launcher)
 .PHONY : run-gui
 run-gui : $(dev_launcher)
 	$< gui
+
+.PHONY : run-cli
+run-cli :
+	echo "dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && JAVA_HOME=`/usr/libexec/java_home -v 9` $(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"\$$@\"; }"
+	echo '# Run this command to configure your shell: '
+	echo '# eval $$(make $@)'
 
 .PHONY : run-webui
 run-webui : # webui/.dependencies
@@ -187,6 +198,8 @@ assembly/.dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-darwin_386.zip \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-linux_386.zip \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-windows_386.zip
+
+cli/build/bin/darwin_386/dp2 cli/build/bin/linux_386/dp2 : cli/.install
 
 cli/.install : cli/cli/*.go
 
