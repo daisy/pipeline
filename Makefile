@@ -182,18 +182,21 @@ assembly/.install.dmg : assembly/.dependencies | .maven-init .group-eval
 assembly/.install.exe : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,exe)
 
-.SECONDARY : cli/.install.zip
-cli/.install.zip : cli/.install
+# FIXME: hard code dependency because unpack-cli-{mac,win,linux} are inside profiles
+assembly/.dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-darwin_386.zip \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-linux_386.zip \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-windows_386.zip
 
 cli/.install : cli/cli/*.go
 
-.SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip
-cli/.install-darwin_386.zip cli/.install-linux_386.zip : cli/.install
+.SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip
+cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip : cli/.install
 
 updater/cli/.install : updater/cli/*.go
 
-.SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip
-updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip : updater/cli/.install
+.SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
+updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip : updater/cli/.install
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
