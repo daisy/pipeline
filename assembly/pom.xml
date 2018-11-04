@@ -1214,24 +1214,13 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.2</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-provider-gitexe</artifactId>
-            <version>1.9.1</version>
-          </dependency>
-        </dependencies>
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
-          <arguments>-Pnoartifacts</arguments>
         </configuration>
       </plugin>
           <plugin>
             <artifactId>maven-help-plugin</artifactId>
-            <version>2.1.1</version>
             <executions>
               <execution>
                 <id>generate-effective-pom</id>
@@ -1240,7 +1229,7 @@
                   <goal>effective-pom</goal>
                 </goals>
                 <configuration>
-                  <output>target/tmp/effective-pom.xml</output>
+                  <output>target/effective-pom.xml</output>
                 </configuration>
               </execution>
             </executions>
@@ -1257,7 +1246,7 @@
                 <configuration>
                   <target>
                     <java classname="net.sf.saxon.Transform" failonerror="true">
-                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/target/effective-pom.xml" />
                       <arg value="${project.basedir}/src/main/xslt/pom-to-release.xslt" />
                       <arg value="time=${maven.build.timestamp}" />
                       <arg line="-o:${project.basedir}/target/release-descriptor/releaseDescriptor.xml" />
@@ -1283,6 +1272,51 @@
           <configuration>
             <prependGroupId>true</prependGroupId>
           </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.2</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.scm</groupId>
+              <artifactId>maven-scm-provider-gitexe</artifactId>
+              <version>1.9.1</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <artifactId>maven-help-plugin</artifactId>
+          <version>2.1.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <version>1.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>nsis-maven-plugin</artifactId>
+          <version>1.0-alpha-1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.vafer</groupId>
+          <artifactId>jdeb</artifactId>
+          <version>1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          <version>2.0.1</version>
         </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
@@ -1325,94 +1359,9 @@
       </plugins>
     </pluginManagement>
   </build>
-
   <profiles>
     <profile>
-      <id>minimal</id>
-      <!--
-        This profile contains the updater, and any files not downloaded by the updater.
-        These files are not downloaded by the updater, and so are included here (except `/samples`):
-        - `/bin`
-        - `/*.txt`
-        - `/etc`
-      -->
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-updater-all</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>linux_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
-                    </artifactItem>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>darwin_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/mac32</outputDirectory>
-                    </artifactItem>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>windows_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-minimal</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <formats>
-                    <format>dir</format>
-                    <format>zip</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-minimal.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
-                  </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>pipeline2-${project.version}_minimal</finalName>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    
-    <profile>
-      <id>mac</id>
-      <activation>
-        <os>
-          <family>mac</family>
-        </os>
-      </activation>
+      <id>unpack-cli-mac</id>
       <build>
         <plugins>
           <plugin>
@@ -1420,6 +1369,7 @@
             <executions>
               <execution>
                 <id>unpack-cli-mac</id>
+                <phase>generate-resources</phase>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
@@ -1435,8 +1385,81 @@
                   </artifactItems>
                 </configuration>
               </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>unpack-cli-linux</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-cli-linux</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>cli</artifactId>
+                      <type>zip</type>
+                      <classifier>linux_386</classifier>
+                      <outputDirectory>${project.build.directory}/cli/linux32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>unpack-cli-win</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-cli-win</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>cli</artifactId>
+                      <type>zip</type>
+                      <classifier>windows_386</classifier>
+                      <outputDirectory>${project.build.directory}/cli/win32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>unpack-updater-mac</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
               <execution>
                 <id>unpack-updater-mac</id>
+                <phase>generate-resources</phase>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
@@ -1454,12 +1477,109 @@
               </execution>
             </executions>
           </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>unpack-updater-linux</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-updater-linux</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>linux_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>unpack-updater-win</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-updater-win</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>windows_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>unpack-updater-gui-win</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-updater-gui-win</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater-gui</artifactId>
+                      <type>zip</type>
+                      <classifier>windows_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>assemble-mac-dir</id>
+      <build>
+        <plugins>
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>dist-mac-dir</id>
-                <phase>package</phase>
+                <id>assemble-mac-dir</id>
+                <phase>prepare-package</phase>
                 <goals>
                   <goal>single</goal>
                 </goals>
@@ -1475,11 +1595,246 @@
                     <filter>src/main/assembly/dist.properties</filter>
                     <filter>src/main/assembly/dist-nix.properties</filter>
                   </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>pipeline2-${project.version}_mac</finalName>
+                  <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
               </execution>
             </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>assemble-linux-dir</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>assemble-linux-dir</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>false</attach>
+                  <formats>
+                    <format>dir</format>
+                  </formats>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-linux.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-nix.properties</filter>
+                  </filters>
+                  <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>assemble-win-dir</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>assemble-win-dir</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>false</attach>
+                  <formats>
+                    <format>dir</format>
+                  </formats>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-win.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-win.properties</filter>
+                  </filters>
+                  <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>assemble-mac-zip</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>assemble-mac-zip</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>true</attach>
+                  <formats>
+                    <format>zip</format>
+                  </formats>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-mac.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-nix.properties</filter>
+                  </filters>
+                  <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>assemble-linux-zip</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>assemble-linux-zip</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>true</attach>
+                  <formats>
+                    <format>zip</format>
+                  </formats>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-linux.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-nix.properties</filter>
+                  </filters>
+                  <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>assemble-win-zip</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>assemble-win-zip</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>true</attach>
+                  <formats>
+                    <format>zip</format>
+                  </formats>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-win.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-win.properties</filter>
+                  </filters>
+                  <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>assemble-minimal-zip</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>assemble-minimal-zip</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>true</attach>
+                  <formats>
+                    <format>zip</format>
+                  </formats>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-minimal.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-nix.properties</filter>
+                  </filters>
+                  <appendAssemblyId>false</appendAssemblyId>
+                  <finalName>assemble-${project.version}-minimal</finalName>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>package-dmg</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>install-node</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>install-node-and-yarn</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>v6.9.1</nodeVersion>
+                  <yarnVersion>v0.17.8</yarnVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-appdmg</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>add appdmg</arguments>
+                </configuration>
+              </execution>
+            </executions>
+            <configuration>
+              <workingDirectory>${project.build.directory}</workingDirectory>
+            </configuration>
           </plugin>
           <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
@@ -1491,7 +1846,7 @@
                     reason we depend on Java 9 is to avoid JAWS crashes, in other words it is only
                     required for Windows.
                 -->
-                <id>generate-app-package</id>
+                <id>javapackager</id>
                 <phase>package</phase>
                 <goals>
                   <goal>run</goal>
@@ -1520,9 +1875,9 @@
                         <fx:property name="felix.system.properties" value="file:etc/system.properties" />
                       </fx:platform>
                       <fx:resources>
-                        <fx:fileset type="jar" dir="${project.build.directory}/pipeline2-${project.version}_mac/daisy-pipeline" includes="system/bootstrap/felix.jar" />
-                        <fx:fileset type="license" os="osx" dir="${project.build.directory}/pipeline2-${project.version}_mac/daisy-pipeline" includes="NOTICE.txt" />
-                        <fx:fileset dir="${project.build.directory}/pipeline2-${project.version}_mac/daisy-pipeline">
+                        <fx:fileset type="jar" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline" includes="system/bootstrap/felix.jar" />
+                        <fx:fileset type="license" os="osx" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline" includes="NOTICE.txt" />
+                        <fx:fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
                           <include name="**/*" />
                         </fx:fileset>
                       </fx:resources>
@@ -1535,41 +1890,14 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <version>1.3</version>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <goals>
-                  <goal>install-node-and-yarn</goal>
-                </goals>
-                <configuration>
-                  <nodeVersion>v6.9.1</nodeVersion>
-                  <yarnVersion>v0.17.8</yarnVersion>
-                </configuration>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>add appdmg</arguments>
-                </configuration>
-              </execution>
-            </executions>
-            <configuration>
-              <workingDirectory>${project.build.directory}</workingDirectory>
-            </configuration>
-          </plugin>
-          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>1.5.0</version>
             <executions>
               <execution>
-                <id>exec-appdmg</id>
+                <!--
+                    this execution must come after javapackager
+                -->
+                <id>package-appdmg</id>
                 <phase>package</phase>
                 <goals>
                   <goal>exec</goal>
@@ -1580,7 +1908,7 @@
                   <arguments>
                     <argument>node_modules/appdmg/bin/appdmg.js</argument>
                     <argument>${project.basedir}/src/main/mac/dmg.json</argument>
-                    <argument>pipeline2-${project.version}_mac.dmg</argument>
+                    <argument>assembly-${project.version}.dmg</argument>
                   </arguments>
                 </configuration>
               </execution>
@@ -1589,7 +1917,6 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>build-helper-maven-plugin</artifactId>
-            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>parse-version</id>
@@ -1599,6 +1926,9 @@
                 </goals>
               </execution>
               <execution>
+                <!--
+                    this execution must come after package-appdmg
+                -->
                 <id>attach-dmg</id>
                 <phase>package</phase>
                 <goals>
@@ -1607,9 +1937,8 @@
                 <configuration>
                   <artifacts>
                     <artifact>
-                      <file>${project.build.directory}/pipeline2-${project.version}_mac.dmg</file>
+                      <file>${project.build.directory}/assembly-${project.version}.dmg</file>
                       <type>dmg</type>
-                      <classifier>mac</classifier>
                     </artifact>
                   </artifacts>
                 </configuration>
@@ -1619,365 +1948,25 @@
         </plugins>
       </build>
     </profile>
-
     <profile>
-      <id>zip-mac</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-cli-mac</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>cli</artifactId>
-                      <type>zip</type>
-                      <classifier>darwin_386</classifier>
-                      <outputDirectory>${project.build.directory}/cli/mac32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <execution>
-                <id>unpack-updater-mac</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>darwin_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/mac32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-mac-zip</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>true</attach>
-                  <formats>
-                    <format>zip</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-mac.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
-                  </filters>
-                  <appendAssemblyId>true</appendAssemblyId>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-app-package</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>exec-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-dmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>linux</id>
-      <activation>
-        <os>
-          <name>linux</name>
-        </os>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-cli-linux</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>cli</artifactId>
-                      <type>zip</type>
-                      <classifier>linux_386</classifier>
-                      <outputDirectory>${project.build.directory}/cli/linux32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <execution>
-                <id>unpack-updater-linux</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>linux_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-linux</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>true</attach>
-                  <formats>
-                    <format>zip</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-linux.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
-                  </filters>
-                  <appendAssemblyId>true</appendAssemblyId>
-                </configuration>
-              </execution>
-              <execution>
-                <id>dist-mac-dir</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-mac-zip</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-win</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-app-package</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>exec-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-dmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>win</id>
-      <activation>
-        <os>
-          <family>windows</family>
-        </os>
-      </activation>
+      <id>package-exe</id>
       <properties>
-        <nsis.scriptfile>target/nsis/installer.nsi</nsis.scriptfile>
-        <nsis.output.file>pipeline2-${project.version}_windows.exe</nsis.output.file>
+        <nsis.scriptfile>${project.build.directory}/nsis/installer.nsi</nsis.scriptfile>
+        <nsis.output.file>assembly-${project.version}-win.exe</nsis.output.file>
       </properties>
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-cli-win</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>cli</artifactId>
-                      <version>2.0.0</version>
-                      <type>zip</type>
-                      <classifier>windows_386</classifier>
-                      <outputDirectory>${project.build.directory}/cli/win32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <execution>
-                <id>unpack-updater-win</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>windows_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <execution>
-                <id>unpack-updater-gui-win</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater-gui</artifactId>
-                      <type>zip</type>
-                      <classifier>windows_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-win</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <formats>
-                    <format>dir</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-win.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-win.properties</filter>
-                  </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>pipeline2-${project.version}_win</finalName>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <!-- NSIS Installer -->
-          <plugin>
             <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
-                <id>copy-resources</id>
-                <phase>process-resources</phase>
+                <id>copy-nsis-resources</id>
+                <phase>prepare-package</phase>
                 <goals>
                   <goal>copy-resources</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${basedir}/target/nsis</outputDirectory>
+                  <outputDirectory>${project.build.directory}/nsis</outputDirectory>
                   <resources>
                     <resource>
                       <directory>src/main/nsis</directory>
@@ -2001,90 +1990,16 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>nsis-maven-plugin</artifactId>
-            <version>1.0-alpha-1</version>
             <executions>
               <execution>
+                <id>package-exe</id>
                 <phase>package</phase>
                 <goals>
                   <goal>generate-headerfile</goal>
                   <goal>make</goal>
                 </goals>
                 <configuration>
-                  <attach>false</attach>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-app-package</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>exec-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-dmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>test-batch</id>
-      <activation>
-        <os>
-          <family>windows</family>
-        </os>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.5.0</version>
-            <executions>
-              <execution>
-                <id>test-checkJavaVersion</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>test-checkJavaVersion.bat</executable>
-                  <workingDirectory>src/test/resources</workingDirectory>
+                  <attach>true</attach>
                 </configuration>
               </execution>
             </executions>
@@ -2092,205 +2007,14 @@
         </plugins>
       </build>
     </profile>
-
     <profile>
-      <id>dev-launcher</id>
-      <build>
-        <plugins>
-          <!--<plugin>-->
-            <!--<artifactId>maven-help-plugin</artifactId>-->
-            <!--<version>2.1.1</version>-->
-            <!--<executions>-->
-              <!--<execution>-->
-                <!--<id>generate-effective-pom</id>-->
-                <!--<phase>generate-resources</phase>-->
-                <!--<goals>-->
-                  <!--<goal>effective-pom</goal>-->
-                <!--</goals>-->
-                <!--<configuration>-->
-                  <!--<output>target/tmp/effective-pom.xml</output>-->
-                <!--</configuration>-->
-              <!--</execution>-->
-            <!--</executions>-->
-          <!--</plugin>-->
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-fileinstall-cfg-files</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target>
-                    <java classname="net.sf.saxon.Transform" failonerror="true">
-                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
-                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-modules-linux-bundles" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform" failonerror="true">
-                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
-                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-webservice-bundles" />
-                      <arg value="startLevel=100" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
-                      <arg value="prefix=frontend" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform" failonerror="true">
-                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
-                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-modules-mac-bundles" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform" failonerror="true">
-                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
-                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-modules-win-bundles" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform" failonerror="true">
-                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
-                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-volatile-bundles" />
-                      <arg value="startLevel=100" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui" />
-                      <arg value="prefix=frontend" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform" failonerror="true">
-                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
-                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-persistence-pipeline-bundles" />
-                      <arg value="startLevel=100" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
-                      <arg value="prefix=frontend" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                  </target>
-                </configuration>
-              </execution>
-            </executions>
-            <dependencies>
-              <dependency>
-                <groupId>net.sf.saxon</groupId>
-                <artifactId>Saxon-HE</artifactId>
-                <version>9.5.1-5</version>
-              </dependency>
-            </dependencies>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-mac-dir</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-linux</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-win</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dev-launcher-assembly</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dev.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>${project.basedir}/src/main/assembly/dev.properties</filter>
-                  </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>dev-launcher</finalName>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>nsis-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-app-package</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>exec-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-dmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>deb</id>
+      <id>package-deb</id>
       <properties>
         <pipeline.user>pipeline2</pipeline.user>
         <pipeline.home>/opt/daisy-pipeline2</pipeline.home>
         <pipeline.data>/var/opt/daisy-pipeline2</pipeline.data>
         <pipeline.log>/var/log/daisy-pipeline2</pipeline.log>
         <pipeline.config>/etc/opt/daisy-pipeline2</pipeline.config>
-        <pipeline.cli.home>/opt/daisy-pipeline2-cli</pipeline.cli.home>
-        <pipeline.cli.config>/etc/opt/daisy-pipeline2-cli</pipeline.cli.config>
         <bundles.auto.deploy>system/felix</bundles.auto.deploy>
         <bundles.bootstrap>system/bootstrap</bundles.bootstrap>
         <bundles.modules>modules</bundles.modules>
@@ -2310,55 +2034,16 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-cli-linux</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>cli</artifactId>
-                      <type>zip</type>
-                      <classifier>linux_386</classifier>
-                      <outputDirectory>${project.build.directory}/cli/linux32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-              <execution>
-                <id>unpack-updater-linux</id>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>linux_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
-                <id>filter-debian-resources</id>
-                <phase>package</phase>
+                <id>filter-deb-resources</id>
+                <phase>process-resources</phase>
                 <goals>
                   <goal>copy-resources</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>target/filtered-resources</outputDirectory>
+                  <outputDirectory>${project.build.directory}/filtered-resources</outputDirectory>
                   <resources>
                     <resource>
                       <directory>src/main/resources</directory>
@@ -2393,7 +2078,6 @@
           <plugin>
             <groupId>org.vafer</groupId>
             <artifactId>jdeb</artifactId>
-            <version>1.0</version>
             <executions>
               <execution>
                 <id>package-deb</id>
@@ -2402,17 +2086,16 @@
                   <goal>jdeb</goal>
                 </goals>
                 <configuration>
-                  <controlDir>target/filtered-resources/deb/DEBIAN</controlDir>
+                  <controlDir>${project.build.directory}/filtered-resources/deb/DEBIAN</controlDir>
                   <timestamped>true</timestamped>
-                  <classifier>all</classifier>
-                  <deb>target/daisy-pipeline2_${project.version}_all.deb</deb>
+                  <deb>${project.build.directory}/assembly-${project.version}.deb</deb>
                   <dataSet>
                     <!-- ======== -->
                     <!-- binaries -->
                     <!-- ======== -->
                     <data>
                       <type>directory</type>
-                      <src>target/filtered-resources/resources/bin</src>
+                      <src>${project.build.directory}/filtered-resources/resources/bin</src>
                       <includes>
                         pipeline2
                       </includes>
@@ -2424,14 +2107,14 @@
                     </data>
                     <data>
                       <type>file</type>
-                      <src>target/filtered-resources/deb${pipeline.home}/bin/debian.cfg</src>
+                      <src>${project.build.directory}/filtered-resources/deb${pipeline.home}/bin/debian.cfg</src>
                       <dst>${pipeline.home}/bin/debian.cfg</dst>
                     </data>
                     <!-- ====== -->
                     <!-- daemon -->
                     <!-- ====== -->
                     <data>
-                      <src>target/filtered-resources/deb/etc/init.d/daisy-pipeline2</src>
+                      <src>${project.build.directory}/filtered-resources/deb/etc/init.d/daisy-pipeline2</src>
                       <type>file</type>
                       <mapper>
                         <type>perm</type>
@@ -2458,7 +2141,7 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>target/filtered-resources/resources/etc</src>
+                      <src>${project.build.directory}/filtered-resources/resources/etc</src>
                       <includes>
                         config.properties,
                         org.apache.felix.fileinstall-modules.cfg,
@@ -2471,7 +2154,7 @@
                     </data>
                     <data>
                       <type>file</type>
-                      <src>target/filtered-resources/resources/etc/config-logback.xml</src>
+                      <src>${project.build.directory}/filtered-resources/resources/etc/config-logback.xml</src>
                       <dst>${pipeline.config}/config-logback.xml</dst>
                     </data>
                     <data>
@@ -2490,7 +2173,7 @@
                     <!-- ============== -->
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/bootstrap</src>
+                      <src>${project.build.directory}/bundles/bootstrap</src>
                       <mapper>
                         <prefix>${pipeline.home}/${bundles.bootstrap}</prefix>
                         <type>perm</type>
@@ -2498,7 +2181,7 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/felix</src>
+                      <src>${project.build.directory}/bundles/felix</src>
                       <excludes>
                         org.apache.felix.org.apache.felix.gogo*
                       </excludes>
@@ -2509,7 +2192,7 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/felix</src>
+                      <src>${project.build.directory}/bundles/felix</src>
                       <includes>
                         org.apache.felix.org.apache.felix.gogo*
                       </includes>
@@ -2520,7 +2203,7 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/libs</src>
+                      <src>${project.build.directory}/bundles/libs</src>
                       <mapper>
                         <prefix>${pipeline.home}/system/framework</prefix>
                         <type>perm</type>
@@ -2528,7 +2211,7 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/pipeline</src>
+                      <src>${project.build.directory}/bundles/pipeline</src>
                       <mapper>
                         <prefix>${pipeline.home}/system/framework</prefix>
                         <type>perm</type>
@@ -2536,7 +2219,7 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/frontend</src>
+                      <src>${project.build.directory}/bundles/frontend</src>
                       <mapper>
                         <prefix>${pipeline.home}/system/frontend</prefix>
                         <type>perm</type>
@@ -2547,7 +2230,7 @@
                     <!-- ======= -->
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/modules</src>
+                      <src>${project.build.directory}/bundles/modules</src>
                       <excludes>
                         linux, linux/*,
                         win,   win/*,
@@ -2560,7 +2243,7 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>target/bundles/modules/linux</src>
+                      <src>${project.build.directory}/bundles/modules/linux</src>
                       <mapper>
                         <prefix>${pipeline.home}/${bundles.auto.deploy}</prefix>
                         <type>perm</type>
@@ -2578,6 +2261,23 @@
                   </dataSet>
                 </configuration>
               </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>package-deb-cli</id>
+      <properties>
+        <pipeline.cli.home>/opt/daisy-pipeline2-cli</pipeline.cli.home>
+        <pipeline.cli.config>/etc/opt/daisy-pipeline2-cli</pipeline.cli.config>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.vafer</groupId>
+            <artifactId>jdeb</artifactId>
+            <executions>
               <execution>
                 <id>package-deb-cli</id>
                 <phase>package</phase>
@@ -2585,17 +2285,17 @@
                   <goal>jdeb</goal>
                 </goals>
                 <configuration>
-                  <controlDir>target/filtered-resources/deb/DEBIAN.cli</controlDir>
+                  <controlDir>${project.build.directory}/filtered-resources/deb/DEBIAN.cli</controlDir>
                   <timestamped>true</timestamped>
-                  <classifier>cli_all</classifier>
-                  <deb>target/daisy-pipeline2-cli_${cli.version}_all.deb</deb>
+                  <classifier>cli</classifier>
+                  <deb>${project.build.directory}/assembly-${project.version}-cli.deb</deb>
                   <dataSet>
                     <!-- ============ -->
                     <!-- cli binaries -->
                     <!-- ============ -->
                     <data>
                       <type>directory</type>
-                      <src>target/cli/linux32</src>
+                      <src>${project.build.directory}/cli/linux32</src>
                       <includes>
                         dp2
                       </includes>
@@ -2610,7 +2310,7 @@
                     <!-- ======================= -->
                     <data>
                       <type>file</type>
-                      <src>target/filtered-resources/cli/config.yml</src>
+                      <src>${project.build.directory}/filtered-resources/cli/config.yml</src>
                       <dst>${pipeline.cli.home}/config.yml</dst>
                     </data>
                     <data>
@@ -2624,73 +2324,11 @@
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-mac-dir</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-linux</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-win</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-app-package</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>exec-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-dmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
         </plugins>
       </build>
     </profile>
-
-    <!-- REDHAT/CentOS RPM packet server engine -->
     <profile>
-      <id>rpm</id>
+      <id>package-rpm</id>
       <properties>
         <pipeline.user>root</pipeline.user>
         <pipeline.group>root</pipeline.group>
@@ -2702,228 +2340,191 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>rpm-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>dist-linux</id>
+                <id>package-rpm</id>
                 <phase>package</phase>
                 <goals>
-                  <goal>single</goal>
+                  <goal>attached-rpm</goal>
                 </goals>
                 <configuration>
-                  <attach>false</attach>
-                  <formats>
-                    <format>dir</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-linux.xml</descriptor>
-                  </descriptors>
+                  <name>pipeline2</name>
+                  <group>daisy-pipeline2</group>
+                  <description>daisy-pipeline2</description>
+                  <needarch>x86_64</needarch>
+                  <mappings>
+                    <mapping>
+                      <directory>${pipeline.home}</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>src/main/resources</location>
+                          <includes>
+                            <include>etc/**</include>
+                            <include>NOTICE.txt</include>
+                            <include>README.txt</include>
+                          </includes>
+                          <excludes>
+                            <exclude>etc/system.properties</exclude>
+                            <exclude>etc/config.properties</exclude>
+                            <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
+                          </excludes>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}</directory>
+                      <filemode>0640</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>src/main/resources</location>
+                          <includes>
+                            <include>etc/system.properties</include>
+                            <include>etc/config.properties</include>
+                            <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
+                            <include>etc/config-logback.xml</include>
+                          </includes>
+                          <filter>true</filter>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}</directory>
+                      <filemode>0550</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>src/main/resources</location>
+                          <includes>
+                            <include>bin/**</include>
+                          </includes>
+                          <excludes>
+                            <exclude>bin/pipeline2.bat</exclude>
+                          </excludes>
+                          <filter>true</filter>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}/${bundles.bootstrap}</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/bundles/bootstrap</location>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}/${bundles.auto.deploy}</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/bundles/felix</location>
+                          <excludes>
+                            <exclude>org.apache.felix.org.apache.felix.gogo*</exclude>
+                          </excludes>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}/${bundles.auto.deploy}/gogo</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/bundles/felix</location>
+                          <includes>
+                            <include>org.apache.felix.org.apache.felix.gogo*</include>
+                          </includes>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}/system/framework</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/bundles/libs</location>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}/system/framework</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/bundles/pipeline</location>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}/system/frontend</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/bundles/frontend</location>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.home}/${bundles.auto.deploy}</directory>
+                      <filemode>0644</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/bundles/modules</location>
+                          <excludes>
+                            <exclude>linux</exclude>
+                            <exclude>linux/*</exclude>
+                            <exclude>win</exclude>
+                            <exclude>win/*</exclude>
+                            <exclude>mac</exclude>
+                            <exclude>mac/*</exclude>
+                          </excludes>
+                        </source>
+                        <source>
+                          <location>${project.build.directory}/bundles/modules/linux</location>
+                        </source>
+                      </sources>
+                    </mapping>
+                  </mappings>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
                     <filter>src/main/assembly/dist-nix.properties</filter>
                   </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>pipeline2-${project.version}_linux</finalName>
+                  <postremoveScriptlet>
+                    <script>
+                      rm -rf /opt/daisy-pipeline2
+                    </script>
+                  </postremoveScriptlet>
                 </configuration>
               </execution>
-              <execution>
-                <id>dist-mac-dir</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-win</id>
-                <phase>none</phase>
-              </execution>
             </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>rpm-maven-plugin</artifactId>
-            <version>2.0.1</version>
-            <executions>
-              <execution>
-                <id>generate-rpm</id>
-                <goals>
-                  <goal>attached-rpm</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <name>pipeline2</name>
-              <group>daisy-pipeline2</group>
-              <description>daisy-pipeline2</description>
-              <needarch>x86_64</needarch>
-              <mappings>
-                <mapping>
-                  <directory>${pipeline.home}</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>src/main/resources</location>
-                      <includes>
-                        <include>etc/**</include>
-                        <include>NOTICE.txt</include>
-                        <include>README.txt</include>
-                      </includes>
-                      <excludes>
-                        <exclude>etc/system.properties</exclude>
-                        <exclude>etc/config.properties</exclude>
-                        <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
-                      </excludes>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}</directory>
-                  <filemode>0640</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>src/main/resources</location>
-                      <includes>
-                        <include>etc/system.properties</include>
-                        <include>etc/config.properties</include>
-                        <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
-                        <include>etc/config-logback.xml</include>
-                      </includes>
-                      <filter>true</filter>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}</directory>
-                  <filemode>0550</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>src/main/resources</location>
-                      <includes>
-                        <include>bin/**</include>
-                      </includes>
-                      <excludes>
-                        <exclude>bin/pipeline2.bat</exclude>
-                      </excludes>
-                      <filter>true</filter>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}/${bundles.bootstrap}</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/bundles/bootstrap</location>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}/${bundles.auto.deploy}</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/bundles/felix</location>
-                      <excludes>
-                        <exclude>org.apache.felix.org.apache.felix.gogo*</exclude>
-                      </excludes>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}/${bundles.auto.deploy}/gogo</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/bundles/felix</location>
-                      <includes>
-                        <include>org.apache.felix.org.apache.felix.gogo*</include>
-                      </includes>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}/system/framework</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/bundles/libs</location>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}/system/framework</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/bundles/pipeline</location>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}/system/frontend</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/bundles/frontend</location>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.home}/${bundles.auto.deploy}</directory>
-                  <filemode>0644</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/bundles/modules</location>
-                      <excludes>
-                        <exclude>linux</exclude>
-                        <exclude>linux/*</exclude>
-                        <exclude>win</exclude>
-                        <exclude>win/*</exclude>
-                        <exclude>mac</exclude>
-                        <exclude>mac/*</exclude>
-                      </excludes>
-                    </source>
-                    <source>
-                      <location>${project.basedir}/target/bundles/modules/linux</location>
-                    </source>
-                  </sources>
-                </mapping>
-              </mappings>
-              <filters>
-                <filter>src/main/assembly/dist.properties</filter>
-                <filter>src/main/assembly/dist-nix.properties</filter>
-              </filters>
-              <postremoveScriptlet>
-                <script>
-rm -rf /opt/daisy-pipeline2
-                </script>
-              </postremoveScriptlet>
-            </configuration>
           </plugin>
         </plugins>
       </build>
     </profile>
-
-    <!-- REDHAT/CentOS RPM packet cli -->
     <profile>
-      <id>rpm-cli</id>
+      <id>package-rpm-cli</id>
       <properties>
         <pipeline.user>root</pipeline.user>
         <pipeline.group>root</pipeline.group>
@@ -2933,167 +2534,200 @@ rm -rf /opt/daisy-pipeline2
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>rpm-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>unpack-cli-linux</id>
+                <id>package-rpm-cli</id>
+                <phase>package</phase>
                 <goals>
-                  <goal>unpack</goal>
+                  <goal>rpm</goal>
                 </goals>
                 <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>cli</artifactId>
-                      <type>zip</type>
-                      <classifier>linux_386</classifier>
-                      <outputDirectory>${project.build.directory}/cli/linux32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
+                  <name>pipeline2-cli</name>
+                  <group>daisy-pipeline2-cli</group>
+                  <projversion>${cli.version}</projversion>
+                  <description>daisy-pipeline2-cli</description>
+                  <needarch>x86_64</needarch>
+                  <mappings>
+                    <mapping>
+                      <directory>${pipeline.cli.home}</directory>
+                      <filemode>0640</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>src/main/resources/cli</location>
+                          <includes>
+                            <include>config.yml</include>
+                          </includes>
+                        </source>
+                      </sources>
+                    </mapping>
+                    <mapping>
+                      <directory>${pipeline.cli.home}</directory>
+                      <filemode>0640</filemode>
+                      <username>${pipeline.user}</username>
+                      <groupname>${pipeline.group}</groupname>
+                      <sources>
+                        <source>
+                          <location>${project.build.directory}/cli/linux32</location>
+                          <includes>
+                            <include>dp2</include>
+                          </includes>
+                        </source>
+                      </sources>
+                    </mapping>
+                  </mappings>
+                  <postremoveScriptlet>
+                    <script>
+                      rm -rf /opt/daisy-pipeline2/cli
+                    </script>
+                  </postremoveScriptlet>
                 </configuration>
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>rpm-maven-plugin</artifactId>
-            <version>2.0.1</version>
-            <executions>
-              <execution>
-                <id>generate-rpm</id>
-                <goals>
-                  <goal>rpm</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <name>pipeline2-cli</name>
-              <group>daisy-pipeline2-cli</group>
-              <projversion>${cli.version}</projversion>
-              <description>daisy-pipeline2-cli</description>
-              <needarch>x86_64</needarch>
-              <mappings>
-                <mapping>
-                  <directory>${pipeline.cli.home}</directory>
-                  <filemode>0640</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>src/main/resources/cli</location>
-                      <includes>
-                        <include>config.yml</include>
-                      </includes>
-                    </source>
-                  </sources>
-                </mapping>
-                <mapping>
-                  <directory>${pipeline.cli.home}</directory>
-                  <filemode>0640</filemode>
-                  <username>${pipeline.user}</username>
-                  <groupname>${pipeline.group}</groupname>
-                  <sources>
-                    <source>
-                      <location>${project.basedir}/target/cli/linux32</location>
-                      <includes>
-                        <include>dp2</include>
-                      </includes>
-                    </source>
-                  </sources>
-                </mapping>
-              </mappings>
-              <postremoveScriptlet>
-                <script>
-rm -rf /opt/daisy-pipeline2/cli
-                </script>
-              </postremoveScriptlet>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
-
     <profile>
-      <id>noartifacts</id>
+      <id>dev-launcher</id>
       <build>
         <plugins>
           <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
               <execution>
-                <id>generate-app-package</id>
-                <phase>none</phase>
+                <id>generate-fileinstall-cfg-files</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-modules-linux-bundles" />
+                      <arg value="startLevel=50" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=modules" />
+                      <arg value="localRepository=${settings.localRepository}" />
+                    </java>
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-webservice-bundles" />
+                      <arg value="startLevel=100" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
+                      <arg value="prefix=frontend" />
+                      <arg value="localRepository=${settings.localRepository}" />
+                    </java>
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-modules-mac-bundles" />
+                      <arg value="startLevel=50" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=modules" />
+                      <arg value="localRepository=${settings.localRepository}" />
+                    </java>
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-modules-win-bundles" />
+                      <arg value="startLevel=50" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=modules" />
+                      <arg value="localRepository=${settings.localRepository}" />
+                    </java>
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-volatile-bundles" />
+                      <arg value="startLevel=100" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui" />
+                      <arg value="prefix=frontend" />
+                      <arg value="localRepository=${settings.localRepository}" />
+                    </java>
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-persistence-pipeline-bundles" />
+                      <arg value="startLevel=100" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
+                      <arg value="prefix=frontend" />
+                      <arg value="localRepository=${settings.localRepository}" />
+                    </java>
+                  </target>
+                </configuration>
               </execution>
             </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>exec-appdmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-dmg</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>9.5.1-5</version>
+              </dependency>
+            </dependencies>
           </plugin>
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>dist-mac-dir</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-mac-zip</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-win</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-linux</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>nsis-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>none</phase>
+                <id>assemble-dev-dir</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>false</attach>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dev.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>${project.basedir}/src/main/assembly/dev.properties</filter>
+                  </filters>
+                  <appendAssemblyId>false</appendAssemblyId>
+                  <finalName>dev-launcher</finalName>
+                </configuration>
               </execution>
             </executions>
           </plugin>
         </plugins>
       </build>
     </profile>
-
+    <profile>
+      <id>test-batch</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.5.0</version>
+            <executions>
+              <execution>
+                <id>test-checkJavaVersion</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>test-checkJavaVersion.bat</executable>
+                  <workingDirectory>src/test/resources</workingDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
   <repositories>
     <!--

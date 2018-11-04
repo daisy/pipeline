@@ -179,7 +179,7 @@ goto END
 
 :CheckJavaExecutable
     call:parse_java_version "java.exe"
-    if errorLevel 1 goto END
+    if errorLevel 1 goto CheckCurrentVersion
     call:check_version
     if errorLevel 3 goto END
     if errorLevel 1 (

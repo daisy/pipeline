@@ -4,8 +4,7 @@ services:
 before_install:
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
 script:
-  - mvn clean package -Plinux &&
-    make GTAR=/bin/tar docker &&
+  - make docker &&
     make check-docker
 branches:
   except:
