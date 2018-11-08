@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.libs</groupId>
   <artifactId>saxon-he</artifactId>
-  <version>9.5.1.5-2-SNAPSHOT</version>
+  <version>9.8.0.8-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>Saxon HE (OSGi Bundle)</name>
@@ -57,7 +57,7 @@
   <properties>
     <lib.groupId>net.sf.saxon</lib.groupId>
     <lib.artifactId>Saxon-HE</lib.artifactId>
-    <lib.version>9.5.1-5</lib.version>
+    <lib.version>9.8.0-8</lib.version>
   </properties>
 
   <dependencies>
@@ -65,6 +65,12 @@
       <groupId>${lib.groupId}</groupId>
       <artifactId>${lib.artifactId}</artifactId>
       <version>${lib.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${lib.groupId}</groupId>
+      <artifactId>${lib.artifactId}</artifactId>
+      <version>${lib.version}</version>
+      <classifier>xqj</classifier>
     </dependency>
   </dependencies>
 
@@ -82,18 +88,21 @@
             <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
             <Main-Class>net.sf.saxon.Transform</Main-Class>
             <Export-Package>
-              net.sf.saxon.*;version=${project.version}
+              !net.sf.saxon.data.*,
+              net.sf.saxon.*;version=${project.version},
+              com.saxonica.xqj.pull;version=${project.version}
             </Export-Package>
             <Import-Package>
               javax.xml.stream;version="1.0.1";resolution:=optional,
               javax.xml.stream.events;version="1.0.1";resolution:=optional,
               javax.xml.xquery;resolution:=optional,
               org.apache.xml.resolver.*;resolution:=optional,
-              com.saxonica.*;resolution:=optional,
               !net.sf.saxon.*,
               *
             </Import-Package>
-            <Embed-Dependency>*;inline=META-INF/services/**|*w3c/**|javax/**|net/**|*.xml|*.xsl|*.properties</Embed-Dependency>
+            <Embed-Dependency>
+              *;inline=META-INF/services/**|com/saxonica/xqj/pull/**|net/sf/saxon/**|*.xml|*.xsl|*.properties
+            </Embed-Dependency>
             <SPI-Provider>*</SPI-Provider>
             <SPI-Consumer>javax.xml.parsers.SAXParserFactory#newInstance</SPI-Consumer>
             <_removeheaders>Built-By,Bnd-LastModified,Embed-Dependency,Include-Resource,Private-Package</_removeheaders>
