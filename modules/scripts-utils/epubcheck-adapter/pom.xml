@@ -17,12 +17,14 @@
   <name>DAISY Pipeline 2 module :: EpubCheck Adapter</name>
 
   <dependencies>
-    <!-- Framework bundles -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
-    <!-- EpubCheck -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.idpf</groupId>
       <artifactId>epubcheck</artifactId>
@@ -37,7 +39,10 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Import-Package>org.daisy.pipeline.script,*</Import-Package>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/epubcheck.xml,OSGI-INF/column-number.xml,OSGI-INF/line-number.xml,OSGI-INF/system-id.xml</Service-Component>
           </instructions>
         </configuration>

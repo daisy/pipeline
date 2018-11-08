@@ -3,7 +3,8 @@
     <xsl:output indent="yes"/>
 
     <xsl:template match="/*">
-        <d:fileset xml:base="{base-uri(/*/d:fileset[1])}">
+        <d:fileset>
+            <xsl:attribute name="xml:base" select="base-uri(/*/d:fileset[1])"/>
             <xsl:for-each select="d:fileset[1]/d:file">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>

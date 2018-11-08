@@ -35,7 +35,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.1</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -45,7 +45,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.11.1</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -55,22 +55,16 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>1.0.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xspec-runner</artifactId>
-        <version>1.0.2</version>
-        <exclusions>
-          <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>1.0.3-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
+  <properties>
+    <!-- must match version from framework-bom -->
+    <saxon.versionRange>[9.8.0,9.8.1)</saxon.versionRange>
+  </properties>
+
   <dependencies>
     <!--
         common test dependencies
@@ -152,6 +146,12 @@
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

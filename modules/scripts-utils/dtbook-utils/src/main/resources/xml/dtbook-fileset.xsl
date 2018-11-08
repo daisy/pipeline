@@ -12,7 +12,8 @@
     
     <xsl:template match="/">
         <xsl:variable name="base" select="base-uri(/*)"/>
-        <d:fileset xml:base="{replace($base,'[^/]+$','')}">
+        <d:fileset>
+            <xsl:attribute name="xml:base" select="replace($base,'[^/]+$','')"/>
             <d:file href="{replace($base,'^.*/([^/]+)$','$1')}" media-type="application/x-dtbook+xml" original-href="{$base}"/>
             <xsl:for-each select="processing-instruction('xml-stylesheet')">
                 <xsl:variable name="href" select="replace(replace(.,'type=&quot;[^&quot;]*&quot;',''),'\s*href=&quot;(.*)&quot;\s*','$1')"/>

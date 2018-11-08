@@ -8,7 +8,8 @@
     <xsl:output indent="yes" method="xml"/>
 
     <xsl:template match="package">
-        <d:fileset xml:base="{replace(base-uri(.),'[^/]+$','')}">
+        <d:fileset>
+            <xsl:attribute name="xml:base" select="replace(base-uri(.),'[^/]+$','')"/>
             <xsl:message select="'creating fileset'"/>
 
             <!--get the SMILs in spine order-->

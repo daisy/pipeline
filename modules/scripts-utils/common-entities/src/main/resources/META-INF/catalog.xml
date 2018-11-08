@@ -28,6 +28,9 @@
 	<public publicId='-//W3C//DTD XHTML 1.0 Transitional//EN' uri='../xml/xhtml1-transitional.dtd'/>
 	<system systemId='http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd' uri='../xml/xhtml1-transitional.dtd'/>
 	
+	<public publicId='-//W3C//DTD MathML 2.0//EN' uri='../xml/mathml2.dtd'/>
+	<system systemId='http://www.w3.org/Math/DTD/mathml2/mathml2.dtd' uri='../xml/mathml2.dtd'/>
+	
 	<public publicId='-//W3C//ENTITIES Latin 1 for XHTML//EN' uri='../xml/xhtml-lat1.ent'/>
 	<system systemId='http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent' uri='../xml/xhtml-lat1.ent'/>
 

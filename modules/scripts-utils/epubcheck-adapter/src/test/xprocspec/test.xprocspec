@@ -4,7 +4,8 @@
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="../../main/resources/xml/xproc/library.xpl">
     
-    <x:scenario label="regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'">
+    <x:scenario label="regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'"
+                pending="epubcheck needs older version of Saxon but this is not expressed in OSGi metadata">
         <x:call step="px:epubcheck">
             <x:option name="mode" select="'expanded'"/>
             <x:option name="version" select="'3'"/>

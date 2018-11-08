@@ -18,7 +18,8 @@
     
     <xsl:template match="mo:text">
         <xsl:variable name="base" select="base-uri(.)"/>
-        <text smil-id="{@id}" src-fragment="{@fragment}" xml:base="{$base}">
+        <text smil-id="{@id}" src-fragment="{@fragment}">
+            <xsl:attribute name="xml:base" select="$base"/>
             <xsl:apply-templates select="../mo:audio"/>
         </text>
     </xsl:template>

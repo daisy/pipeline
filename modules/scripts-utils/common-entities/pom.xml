@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>common-entities</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Common Entities</name>
