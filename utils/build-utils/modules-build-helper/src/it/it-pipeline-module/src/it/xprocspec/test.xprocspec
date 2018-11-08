@@ -27,6 +27,7 @@
 					<c:file name="META-INF/MANIFEST.MF"/>
 					<c:file name="META-INF/catalog.xml"/>
 					<c:file name="OSGI-INF/choice.xml"/>
+					<c:file name="OSGI-INF/liblouis-tables.xml"/>
 					<c:file name="OSGI-INF/script.xml"/>
 					<c:file name="css/foo.css"/>
 					<c:file name="data-types/type.xml"/>
@@ -48,10 +49,8 @@
 		<x:expect label="The META-INF/catalog.xml file" type="compare">
 			<x:document type="inline">
 				<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/script.xpl" uri="../xml/script.xpl"/>
 					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/library.xpl" uri="../xml/library.xpl"/>
 					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/foo.css" uri="../css/foo.css"/>
-					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/type.xml" uri="../data-types/type.xml"/>
 				</catalog>
 			</x:document>
 		</x:expect>
@@ -68,7 +67,7 @@
 					<scr:property name="script.id" type="String" value="script"/>
 					<scr:property name="script.name" type="String" value="Example script"/>
 					<scr:property name="script.description" type="String" value="Does stuff."/>
-					<scr:property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/foo-utils/script.xpl"/>
+					<scr:property name="script.url" type="String" value="/xml/script.xpl"/>
 					<scr:property name="script.version" type="String" value="${project.version}"/>
 				</scr:component>
 			</x:document>
@@ -83,9 +82,24 @@
 					<scr:service>
 						<scr:provide interface="org.daisy.pipeline.datatypes.DatatypeService"/>
 					</scr:service>
-					<scr:reference bind="setUriResolver" cardinality="1..1" interface="javax.xml.transform.URIResolver" name="resolver" policy="static"/>
 					<scr:property name="data-type.id" type="String" value="foo:choice"/>
-					<scr:property name="data-type.url" type="String" value="http://www.daisy.org/pipeline/modules/foo-utils/type.xml"/>
+					<scr:property name="data-type.url" type="String" value="/data-types/type.xml"/>
+				</scr:component>
+			</x:document>
+		</x:expect>
+		<x:context label="The OSGI-INF/liblouis-tables.xml file">
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/liblouis-tables.xml"/>
+		</x:context>
+		<x:expect label="The OSGI-INF/liblouis-tables.xml file" type="compare">
+			<x:document type="inline">
+				<scr:component activate="activate" name="Liblouis table path http://www.daisy.org/pipeline/modules/foo-utils/liblouis/">
+					<scr:implementation class="org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
+					<scr:service>
+						<scr:provide interface="org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
+					</scr:service>
+					<scr:property name="identifier" type="String" value="http://www.daisy.org/pipeline/modules/foo-utils/liblouis/"/>
+					<scr:property name="path" type="String" value="/liblouis/"/>
+					<scr:property name="includes" type="String" value="*"/>
 				</scr:component>
 			</x:document>
 		</x:expect>

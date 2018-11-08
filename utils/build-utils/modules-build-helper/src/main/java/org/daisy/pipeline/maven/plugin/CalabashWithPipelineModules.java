@@ -16,10 +16,10 @@ import com.ctc.wstx.stax.WstxInputFactory;
 
 import org.daisy.maven.xproc.calabash.Calabash;
 
+import org.daisy.pipeline.modules.AbstractModuleBuilder;
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver;
-import org.daisy.pipeline.modules.impl.tracker.OSGIModuleBuilder;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.daisy.pipeline.modules.ResourceLoader;
@@ -88,8 +88,7 @@ class CalabashWithPipelineModules extends Calabash {
 						throw new UnsupportedOperationException("not implemented");
 					}
 				};
-				// using OSGIModuleBuilder but not calling withBundle()
-				Module module = new OSGIModuleBuilder().withLoader(resourceLoader).withCatalog(catalog).build();
+				Module module = new ModuleBuilder().withLoader(resourceLoader).withCatalog(catalog).build();
 				for (Component component : module.getComponents())
 					components.put(component.getURI(), module);
 				for (Entity entity: module.getEntities())
@@ -115,5 +114,9 @@ class CalabashWithPipelineModules extends Calabash {
 			throw new UnsupportedOperationException("not implemented"); }
 		public Iterable<String> getEntities() {
 			throw new UnsupportedOperationException("not implemented"); }
+	}
+	
+	private static class ModuleBuilder extends AbstractModuleBuilder<ModuleBuilder> {
+		public ModuleBuilder self() { return this; }
 	}
 }

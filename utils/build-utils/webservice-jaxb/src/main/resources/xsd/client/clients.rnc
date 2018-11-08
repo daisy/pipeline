@@ -1,9 +1,0 @@
-default namespace = "http://www.daisy.org/ns/pipeline/data"
-
-include "clientElement.rnc"
-
-start = 
-    element clients {
-        attribute href { xsd:anyURI }?,
-        client*
-    }

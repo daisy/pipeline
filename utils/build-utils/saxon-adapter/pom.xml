@@ -22,7 +22,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -95,6 +95,11 @@
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
           <instructions>
+            <!-- must match version from framework-bom -->
+            <Import-Package>
+              net.sf.saxon.*;version="[9.8.0,9.8.1)",
+              *
+            </Import-Package>
             <Service-Component>
               OSGI-INF/saxon-processor.xml,
               OSGI-INF/saxon-transformer-factory.xml,
@@ -115,6 +120,12 @@
       <id>eclipselink</id>
       <name>EclipseLink Releases</name>
       <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

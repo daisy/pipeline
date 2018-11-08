@@ -43,7 +43,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>15.0</version>
+      <version>24.0-android</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>

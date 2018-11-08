@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
 		 xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/foo-utils/script.xpl" uri="../xml/script.xpl" px:script="true"/>
+  <uri uri="../xml/script.xpl" px:content-type="script"/>
   <uri name="http://www.daisy.org/pipeline/modules/foo-utils/library.xpl" uri="../xml/library.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/foo-utils/foo.css" uri="../css/foo.css"/>
-  <uri name="http://www.daisy.org/pipeline/modules/foo-utils/type.xml" uri="../data-types/type.xml" px:data-type="true"/>
+  <uri uri="../data-types/type.xml" px:content-type="data-type" px:id="foo:choice"/>
+  <uri name="http://www.daisy.org/pipeline/modules/foo-utils/liblouis/" uri="../liblouis/"
+	   px:content-type="liblouis-tables" px:include="*"/>
 </catalog>

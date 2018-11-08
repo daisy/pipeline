@@ -58,7 +58,7 @@
 	</xsl:template>
 	
 	<xsl:template mode="serialize"
-	              match="/*/p:option/p:pipeinfo/pxd:data-type">
+	              match="/*/p:option/p:pipeinfo/pxd:type">
 		<xsl:variable name="data-type-xml" as="node()*">
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>
@@ -82,8 +82,8 @@
 	</xsl:template>
 	
 	<xsl:template mode="attribute-value"
-	              match="/*/p:option/p:pipeinfo/pxd:data-type/@id|
-	                     /*/p:option/p:pipeinfo/pxd:data-type/*[not(@id)]/@id">
+	              match="/*/p:option/p:pipeinfo/pxd:type/@id|
+	                     /*/p:option/p:pipeinfo/pxd:type/*[not(@id)]/@id">
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'id'"/>
 		</xsl:call-template>

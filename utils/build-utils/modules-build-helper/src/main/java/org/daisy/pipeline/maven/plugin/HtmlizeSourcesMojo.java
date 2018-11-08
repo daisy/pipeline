@@ -328,6 +328,7 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 				writer.close();
 			}
 		} catch (Throwable e) {
+			e.printStackTrace();
 			throw new MojoFailureException(e.getMessage(), e);
 		}
 	}

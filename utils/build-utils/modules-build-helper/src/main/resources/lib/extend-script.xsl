@@ -55,12 +55,12 @@
                                                                    or concat('{',namespace-uri(.),'}',name(.))='{}select'
                                                                       and current()/@required = 'true'
                                                                    or concat('{',namespace-uri(.),'}',name(.))='{http://www.daisy.org/ns/pipeline/xproc}data-type'
-                                                                      and current()/p:pipeinfo/pxd:data-type)]"/>
+                                                                      and current()/p:pipeinfo/pxd:type)]"/>
             <xsl:if test="not(p:pipeinfo)
-                          and not(@pxd:data-type)
-                          and $original-input-or-option/p:pipeinfo/pxd:data-type">
+                          and not(@pxd:type)
+                          and $original-input-or-option/p:pipeinfo/pxd:type">
                 <p:pipeinfo>
-                    <xsl:sequence select="$original-input-or-option/p:pipeinfo/pxd:data-type"/>
+                    <xsl:sequence select="$original-input-or-option/p:pipeinfo/pxd:type"/>
                 </p:pipeinfo>
             </xsl:if>
             <xsl:if test="not(p:documentation)">
@@ -78,8 +78,8 @@
         <xsl:param name="original-input-or-option" as="element()?" tunnel="yes"/>
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="#current"/>
-            <xsl:if test="not(pxd:data-type) and not(parent::*/@pxd:data-type)">
-                <xsl:sequence select="$original-input-or-option/p:pipeinfo/pxd:data-type"/>
+            <xsl:if test="not(pxd:type) and not(parent::*/@pxd:type)">
+                <xsl:sequence select="$original-input-or-option/p:pipeinfo/pxd:type"/>
             </xsl:if>
             <xsl:apply-templates mode="#current"/>
         </xsl:copy>

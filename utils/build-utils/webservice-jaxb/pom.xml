@@ -41,6 +41,48 @@
           </instructions>
         </configuration>
       </plugin>
+      <!-- get rnc files from webservice-utils -->
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>download-rnc</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>webservice-utils</artifactId>
+                  <version>3.1.0-SNAPSHOT</version>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-rnc</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/generated-resources/rnc</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>target/dependency/org/daisy/pipeline/webservice-utils/resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <!-- rnc to xsd so we can generate the classes -->
       <plugin>
         <groupId>us.bryon</groupId>
@@ -55,7 +97,7 @@
           </execution>
         </executions>
         <configuration>
-          <src>${project.basedir}/src/main/resources/xsd</src>
+          <src>${project.basedir}/target/generated-resources/rnc</src>
         </configuration>
       </plugin>
       <!--generate the jaxb2 objects -->

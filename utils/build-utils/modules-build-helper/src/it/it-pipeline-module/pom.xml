@@ -19,11 +19,21 @@
   <artifactId>it-pipeline-module</artifactId>
   <version>0-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-bom</artifactId>
+      <version>${framework.version}</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
-      <artifactId>calabash-adapter</artifactId>
       <groupId>org.daisy.pipeline</groupId>
-      <version>2.0.5</version>
+      <artifactId>calabash-adapter</artifactId>
     </dependency>
   </dependencies>
   <build>

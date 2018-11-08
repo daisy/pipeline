@@ -12,7 +12,7 @@
 	
 	<xsl:template mode="serialize" match="/*">
 		<xsl:param name="parent-in-original-script" tunnel="yes" as="element()?" select="()"/>
-		<xsl:if test="not($entry-in-catalog/@px:script='true')">
+		<xsl:if test="not($entry-in-catalog/@px:content-type='script')">
 			<xsl:message terminate="yes">Error</xsl:message>
 		</xsl:if>
 		<xsl:choose>
@@ -64,28 +64,28 @@
 		</xsl:call-template>
 	</xsl:template>
 	
-	<xsl:template match="/*/p:option[p:pipeinfo/pxd:data-type]" mode="finalize-script">
+	<xsl:template match="/*/p:option[p:pipeinfo/pxd:type]" mode="finalize-script">
 		<xsl:copy>
 			<xsl:apply-templates select="@*" mode="#current"/>
-			<xsl:attribute name="pxd:data-type"
-			               select="(p:pipeinfo/pxd:data-type/@id,
-			                        p:pipeinfo/pxd:data-type/child::*/@id,
+			<xsl:attribute name="pxd:type"
+			               select="(p:pipeinfo/pxd:type/@id,
+			                        p:pipeinfo/pxd:type/child::*/@id,
 			                        concat(/*/@type,'-',@name))[1]"/>
-			<xsl:apply-templates select="p:pipeinfo/pxd:data-type" mode="data-type-attribute"/>
+			<xsl:apply-templates select="p:pipeinfo/pxd:type" mode="data-type-attribute"/>
 			<xsl:apply-templates select="node()" mode="#current"/>
 		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template match="/*/p:option/p:pipeinfo" mode="finalize-script">
-		<xsl:if test="p:pipeinfo/(* except pxd:data-type)">
+		<xsl:if test="p:pipeinfo/(* except pxd:type)">
 			<xsl:next-match/>
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="/*/p:option/p:pipeinfo/pxd:data-type" mode="finalize-script"/>
+	<xsl:template match="/*/p:option/p:pipeinfo/pxd:type" mode="finalize-script"/>
 	
 	<xsl:template match="/*/p:option/@pxd:data" mode="serialize" priority="1.1">
-		<xsl:if test="not(parent::*/p:pipeinfo/pxd:data-type)">
+		<xsl:if test="not(parent::*/p:pipeinfo/pxd:type)">
 			<xsl:next-match/>
 		</xsl:if>
 	</xsl:template>
@@ -95,7 +95,7 @@
 	              match="/*/p:option|
 	                     /*/p:option/@*|
 	                     /*/p:option/p:pipeinfo|
-	                     /*/p:option/p:pipeinfo/pxd:data-type|
+	                     /*/p:option/p:pipeinfo/pxd:type|
 	                     /*/p:option/p:documentation|
 	                     /*/p:input|
 	                     /*/p:input/@*|
@@ -192,8 +192,8 @@
 		</xsl:call-template>
 	</xsl:template>
 	
-	<xsl:template mode="attribute-value" match="/*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI')]/@pxd:data-type|
-	                                            /*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI' or @pxd:data-type or p:pipeinfo/pxd:data-type)]/@pxd:type">
+	<xsl:template mode="attribute-value" match="/*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI')]/@pxd:type|
+	                                            /*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI' or @pxd:type or p:pipeinfo/pxd:type)]/@pxd:type">
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'data-type'"/>
 			<xsl:with-param name="content" select="replace(.,'^xsd?:','')"/>
@@ -202,7 +202,7 @@
 	
 	<xsl:template priority="0.6"
 	              mode="serialize"
-	              match="/*/p:option/p:pipeinfo/pxd:data-type">
+	              match="/*/p:option/p:pipeinfo/pxd:type">
 		<span rel="data-type">
 			<xsl:next-match/>
 		</span>

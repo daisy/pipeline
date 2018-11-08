@@ -1,3 +1,0 @@
-include "scriptElement.rnc"
-
-start = script
