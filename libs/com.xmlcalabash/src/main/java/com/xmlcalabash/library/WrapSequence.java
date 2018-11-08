@@ -55,7 +55,7 @@ public class WrapSequence extends DefaultStep {
     private QName wrapper = null;
     private RuntimeValue groupAdjacent = null;
 
-    /** Creates a new instance of WrapSequence */
+    /* Creates a new instance of WrapSequence */
     public WrapSequence(XProcRuntime runtime, XAtomicStep step) {
         super(runtime,step);
     }
@@ -185,7 +185,7 @@ public class WrapSequence extends DefaultStep {
                 // Then evaluate the expression by calling iterate() on the
                 // net.sf.saxon.sxpath.XPathExpression object.
 
-                SequenceIterator<?> results = xexpr.iterate(xdc);
+                SequenceIterator results = xexpr.iterate(xdc);
                 item = results.next();
 
                 if (item == null) {

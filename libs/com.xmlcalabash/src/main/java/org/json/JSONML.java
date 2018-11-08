@@ -236,7 +236,7 @@ public class JSONML {
      * Comments, prologs, DTDs, and <code>&lt;[ [ ]]&gt;</code> are ignored.
      * @param string The source string.
      * @return A JSONArray containing the structured data from the XML string.
-     * @throws JSONException
+	 * @throws JSONException If syntax error.
      */
     public static JSONArray toJSONArray(String string) throws JSONException {
     	return toJSONArray(new XMLTokener(string));
@@ -253,7 +253,7 @@ public class JSONML {
      * Comments, prologs, DTDs, and <code>&lt;[ [ ]]&gt;</code> are ignored.
      * @param x An XMLTokener.
      * @return A JSONArray containing the structured data from the XML string.
-     * @throws JSONException
+	 * @throws JSONException If syntax error.
      */
     public static JSONArray toJSONArray(XMLTokener x) throws JSONException {
     	return (JSONArray)parse(x, true, null);
@@ -272,7 +272,7 @@ public class JSONML {
      * Comments, prologs, DTDs, and <code>&lt;[ [ ]]&gt;</code> are ignored.
      * @param x An XMLTokener of the XML source text.
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException
+	 * @throws JSONException If syntax error.
      */
     public static JSONObject toJSONObject(XMLTokener x) throws JSONException {
        	return (JSONObject)parse(x, false, null);
@@ -288,7 +288,7 @@ public class JSONML {
      * Comments, prologs, DTDs, and <code>&lt;[ [ ]]&gt;</code> are ignored.
      * @param string The XML source text.
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException
+	 * @throws JSONException If syntax error.
      */
     public static JSONObject toJSONObject(String string) throws JSONException {
     	return toJSONObject(new XMLTokener(string));
@@ -299,7 +299,7 @@ public class JSONML {
      * Reverse the JSONML transformation, making an XML text from a JSONArray.
      * @param ja A JSONArray.
      * @return An XML string.
-     * @throws JSONException
+	 * @throws JSONException If syntax error.
      */
     public static String toString(JSONArray ja) throws JSONException {
     	Object		 e;
@@ -381,7 +381,7 @@ public class JSONML {
      * The other properties are attributes with string values.
      * @param jo A JSONObject.
      * @return An XML string.
-     * @throws JSONException
+	 * @throws JSONException If syntax error.
      */
 	public static String toString(JSONObject jo) throws JSONException {
 	    StringBuffer sb = new StringBuffer();

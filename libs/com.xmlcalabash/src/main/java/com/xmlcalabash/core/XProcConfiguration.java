@@ -1,9 +1,20 @@
 package com.xmlcalabash.core;
 
 import com.nwalsh.annotations.SaxonExtensionFunction;
+import com.xmlcalabash.io.DocumentSequence;
+import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.model.Step;
 import com.xmlcalabash.piperack.PipelineSource;
-import com.xmlcalabash.util.*;
-import net.sf.saxon.Configuration;
+import com.xmlcalabash.runtime.XAtomicStep;
+import com.xmlcalabash.util.AxisNodes;
+import com.xmlcalabash.util.Input;
+import com.xmlcalabash.util.JSONtoXML;
+import com.xmlcalabash.util.LogOptions;
+import com.xmlcalabash.util.Output;
+import com.xmlcalabash.util.S9apiUtils;
+import com.xmlcalabash.util.URIUtils;
+import net.sf.saxon.Version;
+import net.sf.saxon.om.NoElementsSpaceStrippingRule;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
@@ -13,38 +24,6 @@ import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmValue;
-import net.sf.saxon.value.Whitespace;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Vector;
-import java.util.HashSet;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.io.InputStream;
-import java.io.File;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
-
-import com.xmlcalabash.io.ReadablePipe;
-import com.xmlcalabash.io.DocumentSequence;
-import com.xmlcalabash.runtime.XAtomicStep;
-import com.xmlcalabash.model.Step;
-
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.Source;
-
 import org.atteo.classindex.ClassFilter;
 import org.atteo.classindex.ClassIndex;
 import org.osgi.framework.Bundle;
@@ -52,6 +31,31 @@ import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 
 import static com.xmlcalabash.util.URIUtils.encode;
 import static java.lang.String.format;
@@ -86,6 +90,7 @@ public class XProcConfiguration {
     public Input saxonConfig = null;
     public Hashtable<String,String> nsBindings = new Hashtable<String,String> ();
     public boolean debug = false;
+    public boolean showMessages = false;
     public Output profile = null;
     public Hashtable<String,Vector<ReadablePipe>> inputs = new Hashtable<String,Vector<ReadablePipe>> ();
     public ReadablePipe pipeline = null;
@@ -110,6 +115,7 @@ public class XProcConfiguration {
     public String mailUser = null;
     public String mailPass = null;
     public Hashtable<String,String> loaders = new Hashtable<String,String> ();
+    public HashSet<String> setSaxonProperties = new HashSet<String>();
 
     public boolean extensionValues = false;
     public boolean xpointerOnText = false;
@@ -178,7 +184,7 @@ public class XProcConfiguration {
         // If we got a schema aware processor, make sure it's reflected in our config
         // FIXME: are there other things that should be reflected this way?
         this.schemaAware = cfgProcessor.isSchemaAware();
-        saxonProcessor = Configuration.softwareEdition.toLowerCase();
+        saxonProcessor = Version.softwareEdition.toLowerCase();
 
         if (saxoncfg != null) {
             // If there was a Saxon configuration, then it wins
@@ -204,7 +210,7 @@ public class XProcConfiguration {
             // If we got a schema aware processor, make sure it's reflected in our config
             // FIXME: are there other things that should be reflected this way?
             this.schemaAware = cfgProcessor.isSchemaAware();
-            saxonProcessor = Configuration.softwareEdition.toLowerCase();
+            saxonProcessor = Version.softwareEdition.toLowerCase();
         }
     }
 
@@ -212,25 +218,48 @@ public class XProcConfiguration {
         // If we got a schema aware processor, make sure it's reflected in our config
         // FIXME: are there other things that should be reflected this way?
         this.schemaAware = cfgProcessor.isSchemaAware();
-        saxonProcessor = Configuration.softwareEdition.toLowerCase();
+        saxonProcessor = Version.softwareEdition.toLowerCase();
         findStepClasses();
         findExtensionFunctions();
 
+        URI cwd = URIUtils.cwdAsURI();
+
         String classPath = System.getProperty("java.class.path");
         String[] pathElements = classPath.split(System.getProperty("path.separator"));
-        for (String s : pathElements) {
+        for (String path : pathElements) {
+            // Issue #272, make sure the path is UTF-8
+            try {
+                path = URLEncoder.encode(path, "utf-8");
+            } catch (UnsupportedEncodingException uee) {
+                // This can't happen with utf-8!?
+            }
+
+            // Make the path absolute wrt the cwd so that it can be opened later regardless of context
+            String s = cwd.resolve(path).getPath();
             try {
                 JarFile jar = new JarFile(s);
                 ZipEntry catalog = jar.getEntry("catalog.xml");
                 if (catalog != null) {
                     catalogs.add("jar:file://" + s + "!/catalog.xml");
+                    logger.debug("Using catalog: jar:file://" + s + "!/catalog.xml");
                 }
                 catalog = jar.getEntry("META-INF/catalog.xml");
                 if (catalog != null) {
                     catalogs.add("jar:file://" + s + "!/META-INF/catalog.xml");
+                    logger.debug("Using catalog: jar:file://" + s + "!/META-INF/catalog.xml");
                 }
             } catch (IOException e) {
-                // nevermind
+                // If it's not a jar file, maybe it's a directory with a catalog
+                String catfn = s;
+                if (!catfn.endsWith("/")) {
+                    catfn += "/";
+                }
+                catfn += "catalog.xml";
+                File f = new File(catfn);
+                if (f.exists() && f.isFile()) {
+                    catalogs.add(catfn);
+                    logger.debug("Using catalog: " + catfn);
+                }
             }
         }
     }
@@ -266,10 +295,9 @@ public class XProcConfiguration {
             cfgProcessor = new Processor(licensed);
         }
 
-        cfgProcessor.getUnderlyingConfiguration().setStripsAllWhiteSpace(false);
-        cfgProcessor.getUnderlyingConfiguration().setStripsWhiteSpace(Whitespace.NONE);
+        cfgProcessor.getUnderlyingConfiguration().getParseOptions().setSpaceStrippingRule(NoElementsSpaceStrippingRule.getInstance());
 
-        String actualtype = Configuration.softwareEdition;
+        String actualtype = Version.softwareEdition;
         if ((proctype != null) && !"he".equals(proctype) && (!actualtype.toLowerCase().equals(proctype))) {
             System.err.println("Failed to obtain " + proctype.toUpperCase() + " processor; using " + actualtype + " instead.");
         }
@@ -368,7 +396,10 @@ public class XProcConfiguration {
             if (cfg == null) {
                 instream = getClass().getResourceAsStream("/etc/configuration.xml");
                 if (instream == null) {
-                    throw new UnsupportedOperationException("Failed to load configuration from JAR file");
+                    // This may happen in OSGi.
+                    // Because /etc/configuration.xml is empty anyway, we ignore this error.
+                    return;
+                    // throw new UnsupportedOperationException("Failed to load configuration from JAR file");
                 }
                 // No resolver, we don't have one yet
                 SAXSource source = new SAXSource(new InputSource(instream));
@@ -429,6 +460,7 @@ public class XProcConfiguration {
 
         schemaAware = "true".equals(System.getProperty("com.xmlcalabash.schema-aware", ""+schemaAware));
         debug = "true".equals(System.getProperty("com.xmlcalabash.debug", ""+debug));
+        showMessages = "true".equals(System.getProperty("com.xmlcalabash.show-messages", ""+showMessages));
         String profileProperty = System.getProperty("com.xmlcalabash.profile");
         if (profileProperty != null) {
             profile = new Output("file://" + fixUpURI(profileProperty));
@@ -549,6 +581,8 @@ public class XProcConfiguration {
                     parseNamespaceBinding(node);
                 } else if ("debug".equals(localName)) {
                     parseDebug(node);
+                } else if ("show-messages".equals(localName)) {
+                    parseShowMessages(node);
                 } else if ("profile".equals(localName)) {
                     parseProfile(node);
                 } else if ("entity-resolver".equals(localName)) {
@@ -713,6 +747,14 @@ public class XProcConfiguration {
         }
     }
 
+    private void parseShowMessages(XdmNode node) {
+        String value = node.getStringValue().trim();
+        showMessages = "true".equals(value);
+        if (!"true".equals(value) && !"false".equals(value)) {
+            throw new XProcException(node, "Invalid configuration value for show-messages: "+ value);
+        }
+    }
+
     private void parseProfile(XdmNode node) {
         profile = new Output("file://" + fixUpURI(node.getStringValue().trim()));
     }
@@ -830,6 +872,7 @@ public class XProcConfiguration {
         }
 
         try {
+            setSaxonProperties.add(key);
             cfgProcessor.setConfigurationProperty(key, valueObj);
         } catch (Exception e) {
             throw new XProcException(e);

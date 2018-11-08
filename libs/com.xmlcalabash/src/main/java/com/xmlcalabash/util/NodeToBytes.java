@@ -32,14 +32,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URI;
 import java.net.URLConnection;
 
@@ -88,7 +81,7 @@ public class NodeToBytes {
     private static void storeXML(XProcRuntime runtime, XdmNode doc, OutputStream stream) {
         try {
             try {
-                Serializer serializer = new Serializer();
+                Serializer serializer = runtime.getProcessor().newSerializer();
                 serializer.setOutputProperty(Serializer.Property.ENCODING, "utf-8");
                 serializer.setOutputProperty(Serializer.Property.INDENT, "no");
                 serializer.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");
@@ -122,7 +115,7 @@ public class NodeToBytes {
     private static void storeJSON(XdmNode doc, OutputStream stream) {
         try {
             try {
-                PrintWriter writer = new PrintWriter(stream);
+                PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream, "UTF-8"));
                 String json = XMLtoJSON.convert(doc);
                 writer.print(json);
             } finally {

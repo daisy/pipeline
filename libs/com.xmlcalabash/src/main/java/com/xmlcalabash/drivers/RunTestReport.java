@@ -19,48 +19,50 @@
 
 package com.xmlcalabash.drivers;
 
-import java.io.IOException;
-import java.io.File;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
+import com.xmlcalabash.core.XProcConfiguration;
+import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcConstants;
-import com.xmlcalabash.core.XProcConfiguration;
-import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.model.RuntimeValue;
+import com.xmlcalabash.runtime.XPipeline;
 import com.xmlcalabash.util.AxisNodes;
 import com.xmlcalabash.util.DefaultTestReporter;
 import com.xmlcalabash.util.S9apiUtils;
 import com.xmlcalabash.util.TestReporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
+import net.sf.saxon.s9api.Axis;
+import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.DocumentBuilder;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XdmSequenceIterator;
-import net.sf.saxon.s9api.Axis;
-import net.sf.saxon.s9api.XdmNodeKind;
+import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XPathCompiler;
 import net.sf.saxon.s9api.XPathExecutable;
 import net.sf.saxon.s9api.XPathSelector;
-import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XdmDestination;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmNodeKind;
+import net.sf.saxon.s9api.XdmSequenceIterator;
 import net.sf.saxon.s9api.XdmValue;
-import net.sf.saxon.s9api.Serializer;
-
-import javax.xml.transform.sax.SAXSource;
-
-import com.xmlcalabash.runtime.XPipeline;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import javax.xml.transform.sax.SAXSource;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
 
 
 /**
@@ -96,7 +98,7 @@ public class RunTestReport {
     protected Logger logger = LoggerFactory.getLogger(RunTestReport.class);
 
 
-    /** Creates a new instance of RunTest */
+    /* Creates a new instance of RunTest */
     public RunTestReport(XProcRuntime runtime, TestReporter reporter) {
         this.runtime = runtime;
         this.reporter = reporter;
@@ -535,7 +537,7 @@ public class RunTestReport {
 
     public String serializeAsXML(XdmNode node) {
         try {
-            Serializer serializer = new Serializer();
+            Serializer serializer = runtime.getProcessor().newSerializer();
 
             serializer.setOutputProperty(Serializer.Property.BYTE_ORDER_MARK, "no");
             serializer.setOutputProperty(Serializer.Property.ENCODING, "utf-8");
@@ -651,7 +653,15 @@ public class RunTestReport {
             } else {
                 for (XdmNode node : new AxisNodes(input, Axis.CHILD, AxisNodes.ALL)) {
                     if (node.getNodeKind() != XdmNodeKind.ELEMENT) {
-                        continue;
+                        if (node.getNodeKind() == XdmNodeKind.TEXT) {
+                            if ("".equals(node.getStringValue().trim())) {
+                                continue;
+                            } else {
+                                throw new IllegalArgumentException("Content of t:input/t:output must be well-formed XML");
+                            }
+                        } else {
+                            continue;
+                        }
                     }
 
                     if (t_document.equals(node.getNodeName())) {
@@ -672,9 +682,10 @@ public class RunTestReport {
                     } else {
                         // Make sure that we have a document
                         XdmDestination dest = new XdmDestination();
+                        dest.setBaseURI(node.getBaseURI());
                         S9apiUtils.writeXdmValue(runtime, node, dest, node.getBaseURI());
                         XdmNode newNode = dest.getXdmNode();
-                        add(input, port, dest.getXdmNode());
+                        add(input, port, newNode);
                     }
                 }
             }

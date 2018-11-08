@@ -19,11 +19,44 @@
 
 package com.xmlcalabash.library;
 
-import java.io.ByteArrayOutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Hashtable;
-import java.util.Vector;
+import com.xmlcalabash.core.XMLCalabash;
+import com.xmlcalabash.core.XProcConstants;
+import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.WritablePipe;
+import com.xmlcalabash.model.RuntimeValue;
+import com.xmlcalabash.runtime.XAtomicStep;
+import com.xmlcalabash.util.MessageFormatter;
+import com.xmlcalabash.util.S9apiUtils;
+import com.xmlcalabash.util.TreeWriter;
+import com.xmlcalabash.util.XProcCollectionFinder;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.expr.parser.Location;
+import net.sf.saxon.lib.CollectionFinder;
+import net.sf.saxon.lib.OutputURIResolver;
+import net.sf.saxon.lib.UnparsedTextURIResolver;
+import net.sf.saxon.om.NamespaceBindingSet;
+import net.sf.saxon.om.NodeName;
+import net.sf.saxon.s9api.DocumentBuilder;
+import net.sf.saxon.s9api.MessageListener;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.ValidationMode;
+import net.sf.saxon.s9api.XdmDestination;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
+import net.sf.saxon.trans.XPathException;
+import net.sf.saxon.type.SchemaType;
+import net.sf.saxon.type.SimpleType;
+import org.xml.sax.InputSource;
+
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -33,38 +66,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
-
-import com.xmlcalabash.core.XMLCalabash;
-import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcConstants;
-import com.xmlcalabash.io.ReadablePipe;
-import com.xmlcalabash.io.WritablePipe;
-import com.xmlcalabash.model.RuntimeValue;
-import com.xmlcalabash.util.MessageFormatter;
-import com.xmlcalabash.util.TreeWriter;
-import com.xmlcalabash.util.CollectionResolver;
-import com.xmlcalabash.util.S9apiUtils;
-import net.sf.saxon.Configuration;
-import net.sf.saxon.lib.CollectionURIResolver;
-import net.sf.saxon.lib.OutputURIResolver;
-import net.sf.saxon.lib.UnparsedTextURIResolver;
-import net.sf.saxon.s9api.DocumentBuilder;
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmDestination;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XsltCompiler;
-import net.sf.saxon.s9api.XsltExecutable;
-import net.sf.saxon.s9api.XsltTransformer;
-import net.sf.saxon.s9api.XdmAtomicValue;
-import net.sf.saxon.s9api.MessageListener;
-import net.sf.saxon.s9api.ValidationMode;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.event.Receiver;
-import com.xmlcalabash.runtime.XAtomicStep;
-import org.xml.sax.InputSource;
+import java.io.ByteArrayOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  *
@@ -89,7 +95,7 @@ public class XSLT extends DefaultStep {
     private Hashtable<QName,RuntimeValue> params = new Hashtable<QName,RuntimeValue> ();
     private Hashtable<String, XdmDestination> secondaryResults = new Hashtable<String, XdmDestination> ();
 
-    /**
+    /*
      * Creates a new instance of XSLT
      */
     public XSLT(XProcRuntime runtime, XAtomicStep step) {
@@ -145,19 +151,17 @@ public class XSLT extends DefaultStep {
         String version = null;
         if (getOption(_version) == null) {
             XdmNode ssroot = S9apiUtils.getDocumentElement(stylesheet);
-            version = ssroot.getAttributeValue(new QName("","version"));
-            if (version == null) {
-                version = ssroot.getAttributeValue(new QName("http://www.w3.org/1999/XSL/Transform","version"));
+            if (ssroot != null) {
+                version = ssroot.getAttributeValue(new QName("","version"));
+                if (version == null) {
+                    version = ssroot.getAttributeValue(new QName("http://www.w3.org/1999/XSL/Transform","version"));
+                }
             }
             if (version == null) {
                 version = "2.0"; // WTF?
             }
         } else {
             version = getOption(_version).getString();
-        }
-        
-        if ("3.0".equals(version) && Configuration.softwareEdition.toLowerCase().equals("he")) {
-            throw XProcException.stepError(38, "XSLT version '" + version + "' is not supported (Saxon PE or EE processor required).");
         }
         
         // We used to check if the XSLT version was supported, but I've removed that check.
@@ -198,11 +202,12 @@ public class XSLT extends DefaultStep {
         runtime.getConfigurer().getSaxonConfigurer().configXSLT(config);
 
         OutputURIResolver uriResolver = config.getOutputURIResolver();
-        CollectionURIResolver collectionResolver = config.getCollectionURIResolver();
+        CollectionFinder collectionFinder = config.getCollectionFinder();
         UnparsedTextURIResolver unparsedTextURIResolver = runtime.getResolver();
 
         config.setOutputURIResolver(new OutputResolver());
-        config.setCollectionURIResolver(new CollectionResolver(runtime, defaultCollection, collectionResolver));
+        config.setDefaultCollection(XProcCollectionFinder.DEFAULT);
+        config.setCollectionFinder(new XProcCollectionFinder(runtime, defaultCollection, collectionFinder));
 
         XdmDestination result = null;
         try {
@@ -251,18 +256,24 @@ public class XSLT extends DefaultStep {
             transformer.transform();
         } finally {
             config.setOutputURIResolver(uriResolver);
-            config.setCollectionURIResolver(collectionResolver);
+            config.setCollectionFinder(collectionFinder);
         }
 
         XdmNode xformed = result.getXdmNode();
 
         // Can be null when nothing is written to the principle result tree...
         if (xformed != null) {
-            if (document != null
-                && (xformed.getBaseURI() == null
-                    || "".equals(xformed.getBaseURI().toASCIIString()))) {
-                String sysId = document.getBaseURI().toASCIIString();
-                xformed.getUnderlyingNode().setSystemId(sysId);
+            if (getOption(_output_base_uri) == null && document != null) {
+                // Before Saxon 9.8, it was possible to simply set the base uri of the
+                // output document. That became impossible in Saxon 9.8, but I still
+                // think there might be XProc pipelines that rely on the fact that the
+                // base URI doesn't change when processed by XSLT. So we're doing it
+                // the hard way.
+                TreeWriter fixbase = new TreeWriter(runtime);
+                fixbase.startDocument(document.getBaseURI());
+                fixbase.addSubtree(xformed);
+                fixbase.endDocument();
+                xformed = fixbase.getResult();
             }
 
             // If the document isn't well-formed XML, encode it as text
@@ -326,12 +337,8 @@ public class XSLT extends DefaultStep {
 
             // Can be null when nothing is written to the principle result tree...
             if (xformed != null) {
-                if (document != null
-                        && (xformed.getBaseURI() == null
-                        || "".equals(xformed.getBaseURI().toASCIIString()))) {
-                    String sysId = document.getBaseURI().toASCIIString();
-                    xformed.getUnderlyingNode().setSystemId(sysId);
-                }
+                // There used to be an attempt to set the system identifier of the xformed
+                // document, but that's not allowed in Saxon 9.8.
                 resultPipe.write(xformed);
             }
         } catch (SaxonApiException sae) {
@@ -367,8 +374,7 @@ public class XSLT extends DefaultStep {
                 XdmDestination xdmResult = new XdmDestination();
                 secondaryResults.put(baseURI.toASCIIString(), xdmResult);
                 Receiver receiver = xdmResult.getReceiver(runtime.getProcessor().getUnderlyingConfiguration());
-                receiver.setSystemId(baseURI.toASCIIString());
-                return receiver;
+                return new FixedSysidReceiver(receiver, baseURI.toASCIIString());
             } catch (SaxonApiException sae) {
                 throw new XProcException(sae);
             }
@@ -408,6 +414,10 @@ public class XSLT extends DefaultStep {
         }
 
         public void message(XdmNode content, boolean terminate, javax.xml.transform.SourceLocator locator) {
+            if (runtime.getShowMessages()) {
+                System.err.println(content.toString());
+            }
+
             TreeWriter treeWriter = new TreeWriter(runtime);
             treeWriter.startDocument(content.getBaseURI());
             treeWriter.addStartElement(XProcConstants.c_error);
@@ -423,6 +433,109 @@ public class XSLT extends DefaultStep {
         }
     }
 
+    private static class FixedSysidReceiver implements Receiver
+    {
+        private final String   mySysid;
+        private final Receiver myWrapped;
+
+        public FixedSysidReceiver(Receiver wrapped, String sysid) {
+            mySysid   = sysid;
+            myWrapped = wrapped;
+            myWrapped.setSystemId(sysid);
+        }
+
+        @Override
+        public void open() throws XPathException {
+            myWrapped.open();
+        }
+
+        @Override
+        public void setUnparsedEntity(String name, String sysid, String pubid) throws XPathException {
+            myWrapped.setUnparsedEntity(name, sysid, pubid);
+        }
+
+        @Override
+        public String getSystemId() {
+            return mySysid;
+        }
+
+        @Override
+        public void setSystemId(String sysid) {
+            // propagate it to the wrapped receiver, but do not take it into account here...
+            myWrapped.setSystemId(sysid);
+        }
+
+        @Override
+        public void setPipelineConfiguration(PipelineConfiguration conf) {
+            myWrapped.setPipelineConfiguration(conf);
+        }
+
+        @Override
+        public void startDocument(int i) throws XPathException {
+            myWrapped.startDocument(i);
+        }
+
+        @Override
+        public void endDocument() throws XPathException {
+            myWrapped.endDocument();
+        }
+
+        @Override
+        public void startElement(NodeName name, SchemaType st, Location loc, int i) throws XPathException {
+            myWrapped.startElement(name, st, loc, i);
+        }
+
+        @Override
+        public void namespace(NamespaceBindingSet namespaceBindings, int properties) throws XPathException {
+            myWrapped.namespace(namespaceBindings, properties);
+        }
+
+        @Override
+        public void attribute(NodeName name, SimpleType st, CharSequence cs, Location loc, int i) throws XPathException {
+            myWrapped.attribute(name, st, cs, loc, i);
+        }
+
+        @Override
+        public void startContent() throws XPathException {
+            myWrapped.startContent();
+        }
+
+        @Override
+        public void endElement() throws XPathException {
+            myWrapped.endElement();
+        }
+
+        @Override
+        public void characters(CharSequence cs, Location loc, int i) throws XPathException {
+            myWrapped.characters(cs, loc, i);
+        }
+
+        @Override
+        public void processingInstruction(String string, CharSequence cs, Location loc, int i) throws XPathException {
+            myWrapped.processingInstruction(string, cs, loc, i);
+        }
+
+        @Override
+        public void comment(CharSequence cs, Location loc, int i) throws XPathException {
+            myWrapped.comment(cs, loc, i);
+        }
+
+        @Override
+        public void close() throws XPathException {
+            myWrapped.close();
+        }
+
+        @Override
+        public boolean usesTypeAnnotations() {
+            return myWrapped.usesTypeAnnotations();
+        }
+
+        @Override
+        public PipelineConfiguration getPipelineConfiguration() {
+            return myWrapped.getPipelineConfiguration();
+        }
+    }
+    
     class LogCompileErrors implements ErrorListener {
         public void error(TransformerException exception) {
             logger.error(exception.getMessage());

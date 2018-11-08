@@ -1,19 +1,13 @@
 package com.xmlcalabash.library;
 
 import com.xmlcalabash.core.XMLCalabash;
-import net.sf.saxon.om.StandardNames;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.Configuration;
-import net.sf.saxon.sxpath.IndependentContext;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.functions.FunctionLibraryList;
-import net.sf.saxon.functions.SystemFunctionLibrary;
-import net.sf.saxon.functions.ConstructorFunctionLibrary;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.S9apiUtils;
 import com.xmlcalabash.model.RuntimeValue;
@@ -27,6 +21,8 @@ import java.io.InputStream;
 import java.util.Vector;
 import java.util.Hashtable;
 import java.util.Iterator;
+import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.type.SchemaType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,6 +37,7 @@ import java.util.Iterator;
         type = "{http://www.w3.org/ns/xproc}validate-with-schematron")
 
 public class ValidateWithSCH extends DefaultStep {
+    private static final StructuredQName _untyped = StructuredQName.fromClarkName("{http://www.w3.org/2001/XMLSchema}untyped");
     private static final QName _assert_valid = new QName("", "assert-valid");
     private static final QName _phase = new QName("", "phase");
     private InputStream  skeleton = null;
@@ -52,7 +49,7 @@ public class ValidateWithSCH extends DefaultStep {
     private boolean schemaAware = false;
 
 
-    /** Creates a new instance of ValidateWithXSD */
+    /* Creates a new instance of ValidateWithXSD */
     public ValidateWithSCH(XProcRuntime runtime, XAtomicStep step) {
         super(runtime,step);
     }
@@ -90,7 +87,8 @@ public class ValidateWithSCH extends DefaultStep {
         XdmNode sourceXML = source.read();
 
         // If we're dealing with a typed document, we must compile the XSLT in schema-aware mode
-        schemaAware = (sourceXML.getUnderlyingNode().getTypeAnnotation() != StandardNames.XS_UNTYPED);
+        SchemaType type = sourceXML.getUnderlyingNode().getSchemaType();
+        schemaAware = ! ( type == null || type.getStructuredQName().equals(_untyped) );
 
         XdmNode schemaXML = schema.read();
 

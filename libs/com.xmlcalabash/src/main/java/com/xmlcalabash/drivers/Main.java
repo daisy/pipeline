@@ -75,7 +75,7 @@ public class Main {
     private boolean debug = false;
     private int chaseMemoryLeaks = 0;
 
-    /**
+    /*
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
@@ -186,7 +186,7 @@ public class Main {
             if (debug) {
                 System.err.println("Implicit pipeline:");
 
-                Serializer serializer = new Serializer();
+                Serializer serializer = runtime.getProcessor().newSerializer();
 
                 serializer.setOutputProperty(Serializer.Property.INDENT, "yes");
                 serializer.setOutputProperty(Serializer.Property.METHOD, "xml");

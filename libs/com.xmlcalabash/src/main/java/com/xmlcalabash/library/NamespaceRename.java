@@ -62,7 +62,7 @@ public class NamespaceRename extends DefaultStep implements ProcessMatchingNodes
     private String to = null;
     private String applyTo = null;
 
-    /** Creates a new instance of NamespaceRename */
+    /* Creates a new instance of NamespaceRename */
     public NamespaceRename(XProcRuntime runtime, XAtomicStep step) {
         super(runtime,step);
     }
@@ -129,7 +129,7 @@ public class NamespaceRename extends DefaultStep implements ProcessMatchingNodes
         NamespaceBinding newNS[] = null;
 
         if ("attributes".equals(applyTo)) {
-            matcher.addStartElement(new NameOfNode(inode), inode.getSchemaType(), inscopeNS);
+            matcher.addStartElement(NameOfNode.makeName(inode), inode.getSchemaType(), inscopeNS);
         } else {
             if (inscopeNS.length > 0) {
                 int countNS = 0;
@@ -163,7 +163,7 @@ public class NamespaceRename extends DefaultStep implements ProcessMatchingNodes
 
             // Careful, we're messing with the namespace bindings
             // Make sure the nameCode is right...
-            NodeName nameCode = new NameOfNode(inode);
+            NodeName nameCode = NameOfNode.makeName(inode);
             String pfx = nameCode.getPrefix();
             String uri = nameCode.getURI();
 
@@ -183,7 +183,7 @@ public class NamespaceRename extends DefaultStep implements ProcessMatchingNodes
             while (iter.hasNext()) {
                 XdmNode attr = (XdmNode) iter.next();
                 inode = attr.getUnderlyingNode();
-                NodeName nameCode = new NameOfNode(inode);
+                NodeName nameCode = NameOfNode.makeName(inode);
                 String pfx = nameCode.getPrefix();
                 String uri = nameCode.getURI();
 

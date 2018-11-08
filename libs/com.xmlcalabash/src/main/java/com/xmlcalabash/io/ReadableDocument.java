@@ -19,6 +19,22 @@
 
 package com.xmlcalabash.io;
 
+import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.io.DataStore.DataInfo;
+import com.xmlcalabash.io.DataStore.DataReader;
+import com.xmlcalabash.model.Step;
+import com.xmlcalabash.util.HttpUtils;
+import com.xmlcalabash.util.JSONtoXML;
+import com.xmlcalabash.util.MessageFormatter;
+import com.xmlcalabash.util.XPointer;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
+import org.json.JSONTokener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,31 +44,13 @@ import java.nio.charset.Charset;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-import com.xmlcalabash.util.MessageFormatter;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.XdmNode;
-
-import org.json.JSONTokener;
-
-import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.io.DataStore.DataInfo;
-import com.xmlcalabash.io.DataStore.DataReader;
-import com.xmlcalabash.model.Step;
-import com.xmlcalabash.util.HttpUtils;
-import com.xmlcalabash.util.JSONtoXML;
-import com.xmlcalabash.util.XPointer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  * @author ndw
  */
 public class ReadableDocument implements ReadablePipe {
     private static final String ACCEPT_XML = "application/xml, text/xml, application/xml-external-parsed-entity, text/xml-external-parsed-entity";
-    private static final String ACCPET_JSON = "application/json, application/javascript, text/javascript, text/*, */*";
+    private static final String ACCEPT_JSON = "application/json, application/javascript, text/javascript, text/*, */*";
     private Logger logger = LoggerFactory.getLogger(ReadableDocument.class);
     protected DocumentSequence documents = null;
     protected String uri = null;
@@ -70,7 +68,7 @@ public class ReadableDocument implements ReadablePipe {
         documents = new DocumentSequence(runtime);
     }
 
-    /** Creates a new instance of ReadableDocument */
+    /* Creates a new instance of ReadableDocument */
     public ReadableDocument(XProcRuntime runtime, XdmNode node, String uri, String base, String mask) {
         this.runtime = runtime;
         this.node = node;
@@ -186,7 +184,7 @@ public class ReadableDocument implements ReadablePipe {
                         if (runtime.transparentJSON()) {
                             try {
                                 DataStore store = runtime.getDataStore();
-                                store.readEntry(uri, base, ACCPET_JSON, null, new DataReader() {
+                                store.readEntry(uri, base, ACCEPT_JSON, null, new DataReader() {
                                     public void load(URI id, String media, InputStream content, long len)
                                             throws IOException {
                                         String cs = HttpUtils.getCharset(media);
@@ -226,7 +224,7 @@ public class ReadableDocument implements ReadablePipe {
                 ptr = "element(" + ptr + ")";
             }
 
-            XPointer xptr = new XPointer(ptr, 1024 * 1000); // does this need to be configurable? No, because there can be only one fragid, right?
+            XPointer xptr = new XPointer(runtime, ptr, 1024 * 1000); // does this need to be configurable? No, because there can be only one fragid, right?
             Vector<XdmNode> nodes = xptr.selectNodes(runtime, doc);
 
             if (nodes.size() == 1) {

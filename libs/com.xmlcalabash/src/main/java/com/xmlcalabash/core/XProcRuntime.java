@@ -20,61 +20,7 @@
 
 package com.xmlcalabash.core;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Stack;
-import java.util.Vector;
-
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXSource;
-
 import com.nwalsh.annotations.SaxonExtensionFunction;
-import com.xmlcalabash.util.Input;
-import com.xmlcalabash.util.Output;
-import net.sf.saxon.Configuration;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
-import net.sf.saxon.s9api.ExtensionFunction;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmDestination;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XsltCompiler;
-import net.sf.saxon.s9api.XsltExecutable;
-import net.sf.saxon.s9api.XsltTransformer;
-
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.utils.HttpClientUtils;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
-import org.apache.http.impl.client.SystemDefaultHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-
 import com.xmlcalabash.config.XProcConfigurer;
 import com.xmlcalabash.functions.BaseURI;
 import com.xmlcalabash.functions.Cwd;
@@ -103,12 +49,66 @@ import com.xmlcalabash.runtime.XRootStep;
 import com.xmlcalabash.runtime.XStep;
 import com.xmlcalabash.util.DefaultXProcConfigurer;
 import com.xmlcalabash.util.DefaultXProcMessageListener;
+import com.xmlcalabash.util.Input;
 import com.xmlcalabash.util.JSONtoXML;
+import com.xmlcalabash.util.Output;
 import com.xmlcalabash.util.S9apiUtils;
 import com.xmlcalabash.util.StepErrorListener;
 import com.xmlcalabash.util.TreeWriter;
 import com.xmlcalabash.util.URIUtils;
+import com.xmlcalabash.util.XProcSystemPropertySet;
 import com.xmlcalabash.util.XProcURIResolver;
+import com.xmlcalabash.util.XProcURIResolverX;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.lib.FeatureKeys;
+import net.sf.saxon.s9api.ExtensionFunction;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmDestination;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.utils.HttpClientUtils;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.sax.SAXSource;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Stack;
+import java.util.Vector;
 
 import static java.lang.String.format;
 
@@ -149,6 +149,7 @@ public class XProcRuntime {
     private XProcConfigurer configurer = null;
     private String htmlParser = null;
     private Vector<XProcExtensionFunctionDefinition> exFuncs = new Vector<XProcExtensionFunctionDefinition>();
+    private Vector<XProcSystemPropertySet> systemPropertySets = new Vector<XProcSystemPropertySet>();
 
     private Output profile = null;
     private Hashtable<XStep,Calendar> profileHash = null;
@@ -197,6 +198,19 @@ public class XProcRuntime {
 
         Configuration saxonConfig = processor.getUnderlyingConfiguration();
         uriResolver = new XProcURIResolver(this);
+
+        // Make sure that the Saxon processor uses *our* resolver for everything.
+        // Unless the user has already provided a class of their own, of course.
+        XProcURIResolverX saxonFakeStaticResolver = new XProcURIResolverX();
+        String saxonFakeClassName = saxonFakeStaticResolver.getClass().getName();
+        saxonFakeStaticResolver.setRealResolver(uriResolver);
+        if (!config.setSaxonProperties.contains(FeatureKeys.ENTITY_RESOLVER_CLASS)) {
+            saxonConfig.setConfigurationProperty(FeatureKeys.ENTITY_RESOLVER_CLASS, saxonFakeClassName);
+        }
+        if (!config.setSaxonProperties.contains(FeatureKeys.URI_RESOLVER_CLASS)) {
+            saxonConfig.setConfigurationProperty(FeatureKeys.URI_RESOLVER_CLASS, saxonFakeClassName);
+        }
+
         saxonConfig.setURIResolver(uriResolver);
         staticBaseURI = URIUtils.cwdAsURI();
 
@@ -269,6 +283,7 @@ public class XProcRuntime {
         }
 
         htmlParser = config.htmlParser;
+        addSystemPropertySet(XProcSystemPropertySet.BUILTIN);
 
         reset();
 
@@ -313,7 +328,7 @@ public class XProcRuntime {
 
         initializeSteps();
     }
-    
+
     public void resetExtensionFunctions() {
         for (XProcExtensionFunctionDefinition xf : exFuncs) {
             processor.registerExtensionFunction(xf);
@@ -321,7 +336,7 @@ public class XProcRuntime {
     }
 
     private void initializeSteps() {
-        for (Class klass : config.implementations.values()) {
+        for (Class<?> klass : config.implementations.values()) {
             try {
                 Method config = klass.getMethod("configureStep", XProcRuntime.class);
                 config.invoke(null, this);
@@ -341,8 +356,10 @@ public class XProcRuntime {
         HttpClientUtils.closeQuietly(httpClient);
         httpClient = null;
 
-        for (XProcExtensionFunctionDefinition xf : exFuncs) {
-            xf.close();
+        if (exFuncs != null) {
+            for (XProcExtensionFunctionDefinition xf : exFuncs) {
+                xf.close();
+            }
         }
         exFuncs = null;
     }
@@ -361,6 +378,10 @@ public class XProcRuntime {
 
     public boolean getDebug() {
         return config.debug;
+    }
+
+    public boolean getShowMessages() {
+        return config.showMessages;
     }
 
     public Output getProfile() {
@@ -931,10 +952,10 @@ public class XProcRuntime {
 
     public synchronized HttpClient getHttpClient() {
     	if (this.httpClient == null) {
-            SystemDefaultHttpClient httpClient = new SystemDefaultHttpClient();
+    	    HttpClientBuilder builder = HttpClientBuilder.create();
             // Provide custom retry handler is necessary
-            httpClient.setHttpRequestRetryHandler(new StandardHttpRequestRetryHandler(3, false));
-            return this.httpClient = httpClient;
+            builder.setRetryHandler(new StandardHttpRequestRetryHandler(3, false));
+            return this.httpClient = builder.build();
     	} else {
     		return httpClient;
     	}
@@ -1071,7 +1092,7 @@ public class XProcRuntime {
                 transformer.setDestination(result);
                 transformer.transform();
 
-                Serializer serializer = new Serializer();
+                Serializer serializer = getProcessor().newSerializer();
                 serializer.setOutputProperty(Serializer.Property.INDENT, "yes");
 
                 OutputStream outstr = null;
@@ -1108,5 +1129,47 @@ public class XProcRuntime {
                 throw new XProcException(ioe);
             }
         }
+    }
+
+    /**
+     * Registers an {@code XProcSystemPropertySet}.
+     * It will be consulted whenever the
+     * <a href="http://www.w3.org/TR/xproc/#f.system-property">{@code p:system-property}</a> function is evaluated.
+     *
+     * <p>The {@linkplain com.xmlcalabash.util.XProcSystemPropertySet#BUILTIN built-in}
+     * {@code XProcSystemPropertySet} is added automatically.
+     * Other property sets may be added with this method by applications using XML Calabash.</p>
+     *
+     * @see #getSystemProperty
+     * @param systemPropertySet The set of values to add.
+     */
+    public void addSystemPropertySet(XProcSystemPropertySet systemPropertySet) {
+        systemPropertySets.add(systemPropertySet);
+    }
+
+    /**
+     * Looks up a <a href="http://www.w3.org/TR/xproc/#f.system-property">system property</a> by the given name.
+     * If no such system property is found, this method returns {@code null}.
+     *
+     * <p>This method consults {@linkplain com.xmlcalabash.util.XProcSystemPropertySet#BUILTIN the built-in}
+     * {@link com.xmlcalabash.util.XProcSystemPropertySet}, and any other
+     * {@code XProcSystemPropertySet}s that have been {@linkplain #addSystemPropertySet registered}.</p>
+     *
+     * @see #addSystemPropertySet
+     * @see com.xmlcalabash.util.XProcSystemPropertySet#systemProperty
+     * @param propertyName the name of the system property to look up
+     * @return the string value of that system property, or {@code null}
+     * @throws XProcException if any error occurs
+     */
+    public String getSystemProperty(QName propertyName) throws XProcException {
+        synchronized (systemPropertySets) {
+            for (XProcSystemPropertySet propSet : systemPropertySets) {
+                String value = propSet.systemProperty(this, propertyName);
+                if (value != null)
+                    return value;
+            }
+        }
+
+        return null;
     }
 }

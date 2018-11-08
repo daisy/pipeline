@@ -1,8 +1,8 @@
 package com.xmlcalabash.util;
 
 import net.sf.saxon.expr.LastPositionFinder;
+import net.sf.saxon.om.FocusIterator;
 import net.sf.saxon.om.Item;
-import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.trans.XPathException;
 
@@ -13,7 +13,7 @@ import net.sf.saxon.trans.XPathException;
  * Time: 4:35:36 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DocumentSequenceIterator implements SequenceIterator<Item>, LastPositionFinder<Item> {
+public class DocumentSequenceIterator implements FocusIterator, LastPositionFinder {
     int position = 0;
     int last = 0;
     Item item = null;
@@ -46,7 +46,7 @@ public class DocumentSequenceIterator implements SequenceIterator<Item>, LastPos
         // ???
     }
 
-    public SequenceIterator<Item> getAnother() throws XPathException {
+    public FocusIterator getAnother() throws XPathException {
         throw new UnsupportedOperationException("Don't know what to do for getAnother() on DocumentSequenceIterator");
     }
 

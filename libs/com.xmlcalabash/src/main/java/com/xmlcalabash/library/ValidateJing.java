@@ -76,7 +76,7 @@ public class ValidateJing extends DefaultStep {
     private WritablePipe result = null;
     private URI docBaseURI = null;
 
-    /** Creates a new instance of Delete */
+    /* Creates a new instance of Delete */
     public ValidateJing(XProcRuntime runtime, XAtomicStep step) {
         super(runtime,step);
     }
@@ -105,7 +105,7 @@ public class ValidateJing extends DefaultStep {
         boolean checkIdRefs = getOption(_dtd_id_idref_warnings,false);
         boolean dtdAugment  = getOption(_dtd_attribute_values,false);
 
-        ErrorHandler eh = new RNGErrorHandler();
+        RNGErrorHandler eh = new RNGErrorHandler();
         PropertyMapBuilder properties = new PropertyMapBuilder();
         properties.put(ValidateProperty.ERROR_HANDLER, eh);
         properties.put(ValidateProperty.URI_RESOLVER, runtime.getResolver());
@@ -156,7 +156,7 @@ public class ValidateJing extends DefaultStep {
                 InputSource din = S9apiUtils.xdmToInputSource(runtime, doc);
                 if (!driver.validate(din)) {
                     if (assertValid) {
-                        throw XProcException.stepError(53);
+                        throw XProcException.stepError(53, eh.getErr());
                     }
                 }
             } else {
@@ -164,7 +164,7 @@ public class ValidateJing extends DefaultStep {
             }
         } catch (SAXParseException e) {
             if (assertValid) {
-                throw XProcException.stepError(53);
+                throw XProcException.stepError(53, e);
             }
         } catch (SAXException e) {
             throw new XProcException("SAX Exception", e);
@@ -188,11 +188,19 @@ public class ValidateJing extends DefaultStep {
     class RNGErrorHandler implements ErrorHandler {
         SAXParseException err = null;
 
+        public SAXParseException getErr() {
+            return err;
+        }
+
         public void fatalError(SAXParseException e) throws SAXException {
             error(e);
         }
 
         public void error(SAXParseException e) throws SAXException {
+            if (runtime.getShowMessages()) {
+                System.err.println(e.getMessage());
+            }
+
             TreeWriter treeWriter = new TreeWriter(runtime);
             treeWriter.startDocument(docBaseURI);
             treeWriter.addStartElement(XProcConstants.c_error);
@@ -213,13 +221,15 @@ public class ValidateJing extends DefaultStep {
             treeWriter.endDocument();
 
             step.reportError(treeWriter.getResult());
-            if (err != null) {
+            if (err == null) {
                 err = e;
             }
         }
 
-        public void warning( SAXParseException e ) {
-            // ignore warnings
+        public void warning(SAXParseException e) {
+            if (runtime.getShowMessages()) {
+                System.err.println(e.getMessage());
+            }
         }
     }
 }

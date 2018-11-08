@@ -2,7 +2,7 @@
 
 This project contains the "1.1" version of XML Calabash.
 
-[![Build Status](https://travis-ci.org/ndw/xmlcalabash1.svg?branch=saxon95)](https://travis-ci.org/ndw/xmlcalabash1.svg?branch=saxon95)
+[![Build Status](https://travis-ci.org/daisy/xmlcalabash1.svg?branch=org.daisy.libs-98)](https://travis-ci.org/daisy/xmlcalabash1.svg?branch=org.daisy.libs-98)
 
 XML Calabash depends on Saxon and the sources vary a bit depending on
 the version of Saxon that you want to use.

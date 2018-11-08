@@ -22,7 +22,18 @@ package com.xmlcalabash.util;
 
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
-import net.sf.saxon.om.*;
+import com.xmlcalabash.core.XProcRuntime;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.event.TreeReceiver;
+import net.sf.saxon.om.FingerprintedQName;
+import net.sf.saxon.om.InscopeNamespaceResolver;
+import net.sf.saxon.om.Item;
+import net.sf.saxon.om.NameOfNode;
+import net.sf.saxon.om.NamespaceBinding;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.om.NodeName;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.Destination;
 import net.sf.saxon.s9api.Processor;
@@ -43,12 +54,10 @@ import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.event.Receiver;
-import net.sf.saxon.event.TreeReceiver;
-import net.sf.saxon.event.NamespaceReducer;
-import net.sf.saxon.event.PipelineConfiguration;
-import net.sf.saxon.Configuration;
-import com.xmlcalabash.core.XProcRuntime;
+import net.sf.saxon.tree.util.NamespaceIterator;
+import nu.validator.htmlparser.sax.HtmlSerializer;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -57,15 +66,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.net.URI;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.HashSet;
-import java.net.URI;
-
-import net.sf.saxon.tree.util.NamespaceIterator;
-import nu.validator.htmlparser.sax.HtmlSerializer;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
 
 /**
  *
@@ -81,8 +85,11 @@ public class S9apiUtils {
      * in XSLT or XQuery with this sequence as the content expression), and the resulting document is
      * then copied to the destination. If the destination is a serializer this has the effect of serializing
      * the sequence as described in the W3C specifications.
+     * @param runtime The runtime
      * @param values the value to be written
      * @param destination the destination to which the value is to be written
+     * @param baseURI the base URI
+     * @throws SaxonApiException if something goes wrong
      */
 
     public static void writeXdmValue(XProcRuntime runtime, Vector<XdmValue> values, Destination destination, URI baseURI) throws SaxonApiException {
@@ -95,7 +102,6 @@ public class S9apiUtils {
             PipelineConfiguration pipeConfig = config.makePipelineConfiguration();
 
             Receiver out = destination.getReceiver(config);
-            out = new NamespaceReducer(out);
             TreeReceiver tree = new TreeReceiver(out);
             tree.setPipelineConfiguration(pipeConfig);
             if (baseURI != null) {
@@ -105,7 +111,7 @@ public class S9apiUtils {
             tree.startDocument(0);
             for (XdmValue value : values) {
                 for (XdmItem item : (Iterable<XdmItem>) value) {
-                    tree.append((Item) item.getUnderlyingValue(), 0,
+                    tree.append((Item) item.getUnderlyingValue(), VoidLocation.instance(),
                             NodeInfo.ALL_NAMESPACES);
                 }
             }
@@ -123,7 +129,6 @@ public class S9apiUtils {
             PipelineConfiguration pipeConfig = config.makePipelineConfiguration();
 
             Receiver out = destination.getReceiver(config);
-            out = new NamespaceReducer(out);
             TreeReceiver tree = new TreeReceiver(out);
             tree.setPipelineConfiguration(pipeConfig);
             if (baseURI != null) {
@@ -131,7 +136,8 @@ public class S9apiUtils {
             }
             tree.open();
             tree.startDocument(0);
-            tree.append((Item) node.getUnderlyingValue(), 0, NodeInfo.ALL_NAMESPACES);
+            tree.append((Item) node.getUnderlyingValue(), VoidLocation.instance(),
+                    NodeInfo.ALL_NAMESPACES);
             tree.endDocument();
             tree.close();
         } catch (XPathException err) {
@@ -232,7 +238,7 @@ public class S9apiUtils {
     // FIXME: THIS METHOD IS A GROTESQUE HACK!
     public static InputSource xdmToInputSource(XProcRuntime runtime, XdmNode node) throws SaxonApiException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Serializer serializer = new Serializer();
+        Serializer serializer = runtime.getProcessor().newSerializer();
         serializer.setOutputStream(out);
         serialize(runtime, node, serializer);
         InputSource isource = new InputSource(new ByteArrayInputStream(out.toByteArray()));
@@ -351,7 +357,7 @@ public class S9apiUtils {
                 newNS = onlyNewNS;
             }
 
-            NodeName newName = new NameOfNode(inode);
+            NodeName newName = NameOfNode.makeName(inode);
             if (!preserveUsed) {
                 NamespaceBinding binding = newName.getNamespaceBinding();
                 if (excludeNS.contains(binding.getURI())) {

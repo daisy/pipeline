@@ -53,7 +53,7 @@ public class WritableDocument implements WritablePipe {
     private Step writer = null;
     private OutputStream ostream = null;
 
-    /** Creates a new instance of ReadableDocument */
+    /* Creates a new instance of ReadableDocument */
     public WritableDocument(XProcRuntime xproc, String uri, Serialization serial) {
         this.runtime = xproc;
         this.uri = uri;
@@ -110,7 +110,7 @@ public class WritableDocument implements WritablePipe {
 
     public void write(final XdmNode doc) {
         try {
-            serializer = new Serializer();
+            serializer = runtime.getProcessor().newSerializer();
 
             serializer.setOutputProperty(Serializer.Property.BYTE_ORDER_MARK, serial.getByteOrderMark() ? "yes" : "no");
             // FIXME: support CDATA_SECTION_ELEMENTS

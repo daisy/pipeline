@@ -1,8 +1,3 @@
-/* Requires gradle 2.x */
-
-import groovy.swing.SwingBuilder
-import java.awt.Point
-
 buildscript {
   repositories {
     mavenCentral()
@@ -33,7 +28,7 @@ repositories {
   mavenLocal()
   mavenCentral()
   maven { url "http://maven.restlet.org" }
-  maven { url "http://developer.marklogic.com/maven2" }
+  maven { url "https://developer.marklogic.com/maven2" }
   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
@@ -65,8 +60,8 @@ dependencies {
     [group: 'com.ibm.icu', name: 'icu4j', version: '49.1'],
     [group: 'nu.validator.htmlparser', name: 'htmlparser', version: '1.4'],
     [group: 'org.apache.ant', name: 'ant', version: '1.9.4'],
-    [group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.2.5'],
-    [group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.2.5'],
+    [group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'],
+    [group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'],
     [group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'],
     [group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.1'],
     [group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.1'],
@@ -75,9 +70,10 @@ dependencies {
     [group: 'org.restlet.jee', name: 'org.restlet', version: '2.2.2'],
     [group: 'org.restlet.jee', name: 'org.restlet.ext.fileupload', version: '2.2.2'],
     [group: 'org.restlet.jee', name: 'org.restlet.ext.slf4j', version: '2.2.2'],
+    [group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.3'],
     [group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.10'],
     [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.10'],
-    [group: 'org.xmlresolver', name: 'xmlresolver', version: '0.12.3'],
+    [group: 'org.xmlresolver', name: 'xmlresolver', version: '0.13.1'],
     [group: 'org.osgi', name: 'org.osgi.core', version: '4.3.1'],
     // OSGi bundle that provides isorelax (which is a dependency of net.java.dev.msv, needed for validate-rng)
     [group: 'com.sun.xml.bind', name: 'jaxb-extra-osgi', version: '2.2.11'],
@@ -114,7 +110,7 @@ sourceSets {
 }
 
 // Variables
-project.ext.saxonRelease = saxonVersion.substring(0,5)
+project.ext.saxonRange = '[' + saxonVersion.substring(0,5) + ',' + saxonVersion.substring(0,4) + (saxonVersion.substring(4,5).toInteger() + 1) + ')'
 project.ext.saxonBranch  = saxonVersion.substring(0,3).replaceAll("\\.", "")
 project.ext.releaseVersion = version
 project.ext.distVersion = version + "-" + saxonBranch + snapshot
@@ -158,7 +154,7 @@ jar {
   com.nwalsh.annotations,\
   org.xmlresolver,\
   etc'
-    instruction 'Import-Package', 'net.sf.saxon.*;version=' + project.ext.saxonRelease + ',\
+    instruction 'Import-Package', 'net.sf.saxon.*;version="' + project.ext.saxonRange + '",\
   javax.crypto.*,\
   javax.xml.*,\
   org.apache.commons.httpclient.*,\
@@ -229,10 +225,12 @@ task copyXpl(type: Copy) {
 }
 
 // Just depend on something that will create build/dist
-task copyVERSION(dependsOn: copyXpl) << {
-  def outputFile = new File("$buildDir/dist", "VERSION")
-  outputFile.withPrintWriter { writer ->
-    writer.println project.ext.distVersion
+task copyVERSION(dependsOn: copyXpl) {
+  doLast {
+    def outputFile = new File("$buildDir/dist", "VERSION")
+    outputFile.withPrintWriter { writer ->
+      writer.println project.ext.distVersion
+    }
   }
 }
 
@@ -263,8 +261,10 @@ task copyJavaDoc(dependsOn: javadoc, type: Copy) {
   into "build/dist/docs"
 }
 
-task makeDist(dependsOn: [ build, copyJar, copyLib ]) << {
-  println "Created distribution in build/dist"
+task makeDist(dependsOn: [ build, copyJar, copyLib ]) {
+  doLast {
+    println "Created distribution in build/dist"
+  }
 }
 
 task zipDist(dependsOn: makeDist, type: Zip) {
@@ -282,9 +282,11 @@ task dist(dependsOn: [zipDist, izPackDist]) {
   // nop
 }
 
-task testSuiteMessages << {
-  println "Running test-suite...this may take a few minutes..."
-  println "  Sending report to " + testsReport + "; errors to " + testsErrors
+task testSuiteMessages {
+  doLast {
+    println "Running test-suite...this may take a few minutes..."
+    println "  Sending report to " + testsReport + "; errors to " + testsErrors
+  }
 }
 
 task testSuite(dependsOn: [makeDist, testSuiteMessages], type: JavaExec) {
@@ -302,6 +304,14 @@ task testSuite(dependsOn: [makeDist, testSuiteMessages], type: JavaExec) {
 
   standardOutput = new FileOutputStream(new File(testsReport))
   errorOutput = new FileOutputStream(new File(testsErrors))
+}
+
+task testSuiteClassPath {
+  doLast {
+    configurations.reportruntime.each { println it }
+    configurations.runtime.each { println it }
+    sourceSets.main.output.each { println it }
+  }
 }
 
 task htmlReport(dependsOn: testSuite, type: JavaExec) {
@@ -335,17 +345,19 @@ task report(dependsOn: [htmlReport,aDocReport,aDocErrReport]) {
 }
 
 // Just depend on something that will create build/dist
-task makeIZPackShell(dependsOn: copyVERSION) << {
-  def shell = new File("$buildDir/dist", "calabash")
-  shell.withPrintWriter { writer ->
-    writer.println '#!/bin/bash'
-    writer.println 'java -Xmx1024m -cp %INSTALL_PATH/xmlcalabash-' + version + '.jar com.xmlcalabash.drivers.Main "$@"'
-  }
-  shell.setExecutable(true)
+task makeIZPackShell(dependsOn: copyVERSION) {
+  doLast {
+    def shell = new File("$buildDir/dist", "calabash")
+    shell.withPrintWriter { writer ->
+      writer.println '#!/bin/bash'
+      writer.println 'java -Xmx1024m -cp %INSTALL_PATH/xmlcalabash-' + version + '.jar com.xmlcalabash.drivers.Main "$@"'
+    }
+    shell.setExecutable(true)
 
-  def batch = new File("$buildDir/dist", "calabash.bat")
-  batch.withPrintWriter { writer ->
-    writer.println 'java -Xmx1024m -cp %INSTALL_PATH/xmlcalabash-' + version + '.jar com.xmlcalabash.drivers.Main %*'
+    def batch = new File("$buildDir/dist", "calabash.bat")
+    batch.withPrintWriter { writer ->
+      writer.println 'java -Xmx1024m -cp %INSTALL_PATH/xmlcalabash-' + version + '.jar com.xmlcalabash.drivers.Main %*'
+    }
   }
 }
 
@@ -388,54 +400,51 @@ signing {
   sign configurations.archives
 }
 
-// I refuse to put my PGP password in a file.
-//
-// Adapted from
-// https://www.timroes.de/2014/01/19/using-password-prompts-with-gradle-build-files/
-//
-// N.B. This can't work in a CI environment so there's no way to
-// automatically publish the artifacts from, for example, Travis CI.
-//
-gradle.taskGraph.whenReady { taskGraph ->
-  if(taskGraph.hasTask(':uploadArchives')) {
+def mavenPom = {
+  name 'XML Calabash'
+  packaging 'jar'
+  description 'An XProc 1.0 processor'
+  url 'https://github.com/ndw/xmlcalabash1'
 
-    def pass = ''
-    if(System.console() == null) {
-      new SwingBuilder().edt {
-        dialog(modal: true,
-            title: 'Enter password',
-            alwaysOnTop: true,
-            resizable: false,
-            locationRelativeTo: null,
-            locationByPlatform: true,
-            // On my Linux multi-monitor setup, the dialog "appears" at
-            // the top of the virtual desktop below my desktop. So move
-            // the damned thing somewhere visible. Meh.
-            location: new Point(100,100),
-            pack: true,
-            show: true
-        ) {
-          vbox { //
-            label(text: "Please enter key passphrase:")
-            input = passwordField()
-            button(defaultButton: true, text: 'OK', actionPerformed: {
-              pass = input.password;
-              dispose();
-            })
-          }
-        }
-      }
-    } else {
-      pass = System.console().readPassword("\nPlease enter key passphrase: ")
-      pass = new String(pass)
+  scm {
+    url 'scm:git@github.com:ndw/xmlcalabash1.git'
+    connection 'scm:git@github.com:ndw/xmlcalabash1.git'
+    developerConnection 'scm:git@github.com:ndw/xmlcalabash1.git'
+  }
+
+  licenses {
+    license {
+      name 'Common Development and Distribution License (CDDL) version 1.0'
+      url 'https://opensource.org/licenses/CDDL-1.0'
+      distribution 'repo'
     }
-
-    if (pass.size() <= 0) {
-      throw new InvalidUserDataException("You must enter a password to proceed.")
+    license {
+      name 'GNU General Public License version 2'
+      url 'https://www.gnu.org/licenses/gpl-2.0.txt'
+      distribution 'repo'
     }
+  }
 
-    allprojects { ext."signing.password" = pass }
+  developers {
+    developer {
+      id 'ndw'
+      name 'Norman Walsh'
+    }
+  }
 
+  repositories {
+    repository {
+      id 'restlet'
+      url 'https://maven.restlet.org'
+    }
+  }
+}
+
+install {
+  repositories {
+    mavenInstaller {
+      pom.project(mavenPom)
+    }
   }
 }
 
@@ -454,38 +463,7 @@ uploadArchives {
         authentication(userName: "ignored")
       }
 
-      pom.project {
-        name 'XML Calabash'
-        packaging 'jar'
-        description 'An XProc 1.0 processor'
-        url 'https://github.com/ndw/xmlcalabash1'
-
-        scm {
-          url 'scm:git@github.com:ndw/xmlcalabash1.git'
-          connection 'scm:git@github.com:ndw/xmlcalabash1.git'
-          developerConnection 'scm:git@github.com:ndw/xmlcalabash1.git'
-        }
-
-        licenses {
-          license {
-            name 'Common Development and Distribution License (CDDL) version 1.0'
-            url 'http://www.opensource.org/licenses/cddl1.txt'
-            distribution 'repo'
-          }
-          license {
-            name 'GNU General Public License version 2'
-            url 'http://www.gnu.org/licenses/gpl-2.0.txt'
-            distribution 'repo'
-          }
-        }
-
-        developers {
-          developer {
-            id 'ndw'
-            name 'Norman Walsh'
-          }
-        }
-      }
+      pom.project(mavenPom)
     }
     // settings.xml is not automatically consulted for authentication settings
     // this workaround is taken from https://issues.gradle.org/browse/GRADLE-1039

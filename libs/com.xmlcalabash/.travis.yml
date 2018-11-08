@@ -2,7 +2,7 @@ language: java
 sudu: false
 before_install: source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
 script: gradle check
-after_success: gradle uploadArchives
+after_success: if [ "$TRAVIS_BRANCH" == "org.daisy.libs" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then gradle uploadArchives; fi
 env:
   global:
     secure: gzPPdWJ1WK+JtsFz7S+xFZrTE35ssVZzhIxatVm5G2Y163+k7Qa8PvOUYPoN/n+fVNyvNiuJNCmBA1E6qFc2rZB+hpK3cXbUoPp5LMcf6jU5fvljX4UqYSVw+D345NsR611I9FKAJv7xKXBMuoaagMh/p6Xw10F72kWa7zo7kmvVAx5Mz5yybXmoMGzwPMrhu1c0jZoJY67qDUwFoC0dXBGDzWDS44J6Xb/y/1PwN8oHrhFUuJWzLtP4XOIYAAmSa/ETiO3fMJmeNeCf4ggfmKp5dCEIFgnY/WwzqImZEiD1xozZZLe063TbrS5tT2FRnNvMPOUL/F1yIJ8hVB7Oz1QqXOvHl+3gXP2MOniWJqNfaLxgHbsV4rp2ODKFngVvZNJzHs/47T9IqehCS5jAyeXDMrbfRncQfEI/ygBN4Os1XkntK+dU8nzFwmlOoqR8lFmKOGcaS6YtMBEkqHwZ2OBRWLvNVAGaue4zgSH95Xootvn1LK0TfJsaHuv8zEH7lF5b7j85aTFnFfGMPsSRjWag1uu5m3lD1UNWWFMzZkznFA4WeyT5+u1Mi7DRQxvwZSy8MMDFHRrw+7orOLSY9Vp7VvlJnsiWBPdhvhVA6fEOqAZ+z90EGEXXXTlTYp8UPSZOUj+9nBMGArPAJbZA5eMhj3KO6UsDuoXhNrMKOaA=

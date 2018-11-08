@@ -90,7 +90,7 @@ public class ValidateWithXSD extends DefaultStep {
     private URI docBaseURI = null;
     private Throwable validationException = null;
 
-    /** Creates a new instance of ValidateWithXSD */
+    /* Creates a new instance of ValidateWithXSD */
     public ValidateWithXSD(XProcRuntime runtime, XAtomicStep step) {
         super(runtime,step);
     }
@@ -283,6 +283,10 @@ public class ValidateWithXSD extends DefaultStep {
 
         @Override
         public void error(SAXParseException e) throws SAXException {
+            if (runtime.getShowMessages()) {
+                System.err.println(e.getMessage());
+            }
+
             TreeWriter treeWriter = new TreeWriter(runtime);
             treeWriter.startDocument(docBaseURI);
             treeWriter.addStartElement(XProcConstants.c_error);
@@ -312,16 +316,24 @@ public class ValidateWithXSD extends DefaultStep {
 
         @Override
         public void warning( SAXParseException e ) {
-            // ignore warnings
+            if (runtime.getShowMessages()) {
+                System.err.println(e.getMessage());
+            }
         }
 
         @Override
         public void warning(TransformerException e) throws TransformerException {
-            // Ignore warnings?
+            if (runtime.getShowMessages()) {
+                System.err.println(e.getMessage());
+            }
         }
 
         @Override
         public void error(TransformerException e) throws TransformerException {
+            if (runtime.getShowMessages()) {
+                System.err.println(e.getMessage());
+            }
+
             TreeWriter treeWriter = new TreeWriter(runtime);
             treeWriter.startDocument(docBaseURI);
             treeWriter.addStartElement(XProcConstants.c_error);

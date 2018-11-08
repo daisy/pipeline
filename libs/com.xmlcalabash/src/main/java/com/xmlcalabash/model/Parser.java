@@ -1912,7 +1912,7 @@ public class Parser {
                 StaticQueryContext sqc = xqcomp.getUnderlyingStaticContext();
                 sqc.compileLibrary(connection.getInputStream(), "utf-8");
                 XQueryExpression xqe = sqc.compileQuery("import module namespace f='" + ns + "'; .");
-                QueryModule qm = xqe.getStaticContext();
+                QueryModule qm = xqe.getMainModule();
                 fl = qm.getGlobalFunctionLibrary();
             }
 

@@ -87,7 +87,7 @@ public class XMLTokener extends JSONTokener {
      *
      * @return  A string, or a '&lt;' Character, or null if there is no more
      * source text.
-     * @throws JSONException
+     * @throws JSONException If something goes wrong.
      */
     public Object nextContent() throws JSONException {
         char         c;
@@ -119,7 +119,7 @@ public class XMLTokener extends JSONTokener {
 
     /**
      * Return the next entity. These entities are translated to Characters:
-     *     <code>&amp;  '  &gt;  &lt;  &quot;</code>.
+     *     <code>&amp;amp;  &amp;apos;  &amp;gt;  &amp;lt;  &amp;quot;</code>.
      * @param a An ampersand character.
      * @return  A Character or an entity String if the entity is not recognized.
      * @throws JSONException If missing ';' in XML entity.
@@ -296,7 +296,8 @@ public class XMLTokener extends JSONTokener {
      * Skip characters until past the requested string.
      * If it is not found, we are left at the end of the source with a result of false.
      * @param to A string to skip past.
-     * @throws JSONException
+     * @return true if we found the string
+     * @throws JSONException If something goes wrong.
      */
     public boolean skipPast(String to) throws JSONException {
     	boolean b;

@@ -20,14 +20,20 @@
 
 package com.xmlcalabash.util;
 
-import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcRuntime;
 import net.sf.saxon.Controller;
-import net.sf.saxon.event.NamespaceReducer;
-import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.PipelineConfiguration;
+import net.sf.saxon.event.Receiver;
 import net.sf.saxon.expr.instruct.Executable;
-import net.sf.saxon.om.*;
+import net.sf.saxon.expr.parser.Location;
+import net.sf.saxon.om.FingerprintedQName;
+import net.sf.saxon.om.NameOfNode;
+import net.sf.saxon.om.NamePool;
+import net.sf.saxon.om.NamespaceBinding;
+import net.sf.saxon.om.NodeInfo;
+import net.sf.saxon.om.NodeName;
+import net.sf.saxon.om.StandardNames;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
@@ -73,25 +79,21 @@ public class TreeWriter {
     protected NamePool pool = null;
     protected XdmDestination destination = null;
     protected Receiver receiver = null;
-    protected XProcLocationProvider xLocationProvider = null;
     protected boolean seenRoot = false;
     protected boolean inDocument = false;
 
-    /**
+    /*
      * Creates a new instance of ProcessMatch
      */
     public TreeWriter(XProcRuntime xproc) {
         runtime = xproc;
+        pool = xproc.getProcessor().getUnderlyingConfiguration().getNamePool();
         controller = new Controller(runtime.getProcessor().getUnderlyingConfiguration());
-        pool = controller.getNamePool();
-        xLocationProvider = new XProcLocationProvider();
     }
 
     public TreeWriter(Processor proc) {
+        pool = proc.getUnderlyingConfiguration().getNamePool();
         controller = new Controller(proc.getUnderlyingConfiguration());
-        pool = controller.getNamePool();
-        xLocationProvider = new XProcLocationProvider();
-
     }
 
     public XdmNode getResult() {
@@ -109,10 +111,8 @@ public class TreeWriter {
             exec = new Executable(controller.getConfiguration());
             destination = new XdmDestination();
             receiver = destination.getReceiver(controller.getConfiguration());
-            receiver = new NamespaceReducer(receiver);
-            
+
             PipelineConfiguration pipe = controller.makePipelineConfiguration();
-            pipe.setLocationProvider(xLocationProvider);
             receiver.setPipelineConfiguration(pipe);
 
             if (baseURI != null) {
@@ -249,16 +249,16 @@ public class TreeWriter {
     }
 
     public void addStartElement(NodeName elemName, SchemaType typeCode, NamespaceBinding nscodes[]) {
-        int locId;
+        Location loc;
         String sysId = receiver.getSystemId();
         if (sysId == null) {
-            locId = 0;
+            loc = VoidLocation.instance();
         } else {
-            locId = xLocationProvider.allocateLocation(sysId);
+            loc = new SysIdLocation(sysId);
         }
 
         try {
-            receiver.startElement(elemName, typeCode, locId, 0);
+            receiver.startElement(elemName, typeCode, loc, 0);
             if (nscodes != null) {
                 for (NamespaceBinding ns : nscodes) {
                     receiver.namespace(ns, 0);
@@ -292,11 +292,11 @@ public class TreeWriter {
 
     public void addAttribute(XdmNode xdmattr, String newValue) {
         NodeInfo inode = xdmattr.getUnderlyingNode();
-        NodeName attrName = new NameOfNode(inode);
+        NodeName attrName = NameOfNode.makeName(inode);
         SimpleType typeCode = (SimpleType) inode.getSchemaType();
 
         try {
-            receiver.attribute(attrName, typeCode, newValue, 0, 0);
+            receiver.attribute(attrName, typeCode, newValue, VoidLocation.instance(), 0);
         } catch (XPathException e) {
             throw new XProcException(e);
         }
@@ -304,7 +304,7 @@ public class TreeWriter {
 
     public void addAttribute(NodeName elemName, SimpleType typeCode, String newValue) {
         try {
-            receiver.attribute(elemName, typeCode, newValue, 0, 0);
+            receiver.attribute(elemName, typeCode, newValue, VoidLocation.instance(), 0);
         } catch (XPathException e) {
             throw new XProcException(e);
         }
@@ -314,7 +314,7 @@ public class TreeWriter {
         NodeName elemName = new FingerprintedQName(attrName.getPrefix(),attrName.getNamespaceURI(),attrName.getLocalName());
         SimpleType typeCode = (SimpleType) BuiltInType.getSchemaType(StandardNames.XS_UNTYPED_ATOMIC);
         try {
-            receiver.attribute(elemName, typeCode, newValue, 0, 0);
+            receiver.attribute(elemName, typeCode, newValue, VoidLocation.instance(), 0);
         } catch (XPathException e) {
             throw new XProcException(e);
         }
@@ -339,7 +339,7 @@ public class TreeWriter {
 
     public void addComment(String comment) {
         try {
-            receiver.comment(comment, 0, 0);
+            receiver.comment(comment, VoidLocation.instance(), 0);
         } catch (XPathException e) {
             throw new XProcException(e);
         }
@@ -347,7 +347,7 @@ public class TreeWriter {
 
     public void addText(String text) {
         try {
-            receiver.characters(text, 0, 0);
+            receiver.characters(text, VoidLocation.instance(), 0);
         } catch (XPathException e) {
             throw new XProcException(e);
         }
@@ -355,7 +355,7 @@ public class TreeWriter {
 
     public void addPI(String target, String data) {
         try {
-            receiver.processingInstruction(target, data, 0, 0);
+            receiver.processingInstruction(target, data, VoidLocation.instance(), 0);
         } catch (XPathException e) {
             throw new XProcException(e);
         }

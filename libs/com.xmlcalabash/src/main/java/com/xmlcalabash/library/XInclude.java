@@ -60,12 +60,15 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 public class XInclude extends DefaultStep implements ProcessMatchingNodes {
     private static final String localAttrNS = "http://www.w3.org/2001/XInclude/local-attributes";
+    private static final String xiNS = "http://www.w3.org/2001/XInclude";
 
-    private static final QName xi_include = new QName("http://www.w3.org/2001/XInclude","include");
-    private static final QName xi_fallback = new QName("http://www.w3.org/2001/XInclude","fallback");
+    private static final QName xi_include = new QName(xiNS,"include");
+    private static final QName xi_fallback = new QName(xiNS,"fallback");
     private static final QName _fixup_xml_base = new QName("", "fixup-xml-base");
     private static final QName _fixup_xml_lang = new QName("", "fixup-xml-lang");
     private static final QName _set_xml_id = new QName("", "set-xml-id");
+    private static final QName _accept = new QName("", "accept");
+    private static final QName _accept_language = new QName("", "accept-language");
     private static final QName cx_trim = new QName("cx", XProcConstants.NS_CALABASH_EX, "trim");
     private static final QName cx_read_limit = new QName("cx", XProcConstants.NS_CALABASH_EX, "read-limit");
     private static final QName _encoding = new QName("", "encoding");
@@ -88,7 +91,7 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
     private int readLimit = 1024 * 1000 * 100;
     private Exception mostRecentException = null;
 
-    /**
+    /*
      * Creates a new instance of XInclude
      */
     public XInclude(XProcRuntime runtime, XAtomicStep step) {
@@ -170,6 +173,38 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
             String xptr = node.getAttributeValue(_xpointer);
             String fragid = node.getAttributeValue(_fragid);
             String setId = node.getAttributeValue(_set_xml_id);
+            String accept = node.getAttributeValue(_accept);
+            String accept_lang = node.getAttributeValue(_accept_language);
+
+            if (href == null) {
+                href = "";
+            }
+
+            if (accept != null && accept.matches(".*[^\u0020-\u007e].*")) {
+                throw new XProcException("Invalid characters in accept value");
+            }
+
+            if (accept_lang != null && accept_lang.matches(".*[^\u0020-\u007e].*")) {
+                throw new XProcException("Invalid characters in accept value");
+            }
+
+            // FIXME: Take accept and accept_language into consideration when retrieving resources
+
+            XdmNode fallback = null;
+            for (XdmNode child : new AxisNodes(node, Axis.CHILD, AxisNodes.SIGNIFICANT)) {
+                if (child.getNodeKind() == XdmNodeKind.ELEMENT) {
+                    if (xi_fallback.equals(child.getNodeName())) {
+                        if (fallback != null) {
+                            throw new XProcException(step.getNode(), "XInclude element must contain at most one xi:fallback element.");
+                        }
+                        fallback = child;
+                    } else if (xiNS.equals(child.getNodeName().getNamespaceURI())) {
+                        throw new XProcException(step.getNode(), "Element not allowed as child of XInclude: " + child.getNodeKind());
+                    }
+                }
+            }
+
+            boolean forceFallback = false;
             XPointer xpointer = null;
             XdmNode subdoc = null;
 
@@ -186,8 +221,10 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
             } else if ("text".equals(parse) || parse.startsWith("text/")) {
                 parse = "text";
             } else {
-                logger.info("Unrecognized parse value on XInclude: " + parse + " using 'xml' instead.");
-                parse = "xml";
+                logger.info("Unrecognized parse value on XInclude: " + parse);
+                xptr = null;
+                fragid = null;
+                forceFallback = true;
             }
 
             if (xptr != null && fragid != null) {
@@ -217,19 +254,29 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
 
             if (xptr != null) {
                 /* HACK */
-                if ("text".equals(parse) && !xptr.trim().startsWith("text(")) {
-                    xptr = "text(" + xptr + ")";
-                }
-                xpointer = new XPointer(xptr, readLimit);
+                if ("text".equals(parse)) {
+                    String xtrim = xptr.trim();
+                    // What about spaces around the "=" !
+                    if (xtrim.startsWith("line=") || xtrim.startsWith("char=")) {
+                        xptr = "text(" + xptr + ")";
+                    } else if (xtrim.startsWith("search=")) {
+                        xptr = "search(" + xptr + ")";
+                    }
+               }
+                xpointer = new XPointer(runtime, xptr, readLimit);
             }
 
-            if ("text".equals(parse)) {
+            if (forceFallback) {
+                logger.trace(MessageFormatter.nodeMessage(node, "XInclude fallback forced"));
+                fallback(node, href);
+                return false;
+            } else if ("text".equals(parse)) {
                 readText(href, node, node.getBaseURI().toASCIIString(), xpointer, matcher);
                 return false;
             } else {
                 setXmlId.push(setId);
 
-                subdoc = readXML(href, node.getBaseURI().toASCIIString());
+                subdoc = readXML(node, href, node.getBaseURI().toASCIIString());
 
                 String iuri = null;
 
@@ -292,6 +339,8 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
 
                 return false;
             }
+        } else if (xi_fallback.equals(node.getNodeName())) {
+            throw new XProcException("Invalid placement for xi:fallback element");
         } else {
             matcher.addStartElement(node);
             matcher.addAttributes(node);
@@ -385,34 +434,36 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
         }
     }
 
-    public XdmNode readXML(String href, String base) {
+    public XdmNode readXML(XdmNode node, String href, String base) {
         logger.trace("XInclude read XML: " + href + " (" + base + ")");
 
-        try {
-            XdmNode doc = runtime.parse(href, base);
-            return doc;
-        } catch (Exception e) {
-            logger.debug("XInclude read XML failed");
-            mostRecentException = e;
-            return null;
+        if (href == null || "".equals(href)) {
+            XdmNode ptr = node;
+            while (ptr.getParent() != null) {
+                ptr = ptr.getParent();
+            }
+            return ptr;
+        } else {
+            try {
+                XdmNode doc = runtime.parse(href, base);
+                return doc;
+            } catch (Exception e) {
+                logger.debug("XInclude read XML failed");
+                mostRecentException = e;
+                return null;
+            }
         }
     }
 
     public void fallback(XdmNode node, String href) {
         logger.trace(MessageFormatter.nodeMessage(node, "fallback: " + node.getNodeName()));
-        boolean valid = true;
+
+        // N.B. We've already tested for at most one xi:fallback element
         XdmNode fallback = null;
         for (XdmNode child : new AxisNodes(node, Axis.CHILD, AxisNodes.SIGNIFICANT)) {
-            if (child.getNodeKind() == XdmNodeKind.ELEMENT) {
-                valid = valid && xi_fallback.equals(child.getNodeName()) && (fallback == null);
+            if (child.getNodeKind() == XdmNodeKind.ELEMENT && xi_fallback.equals(child.getNodeName())) {
                 fallback = child;
-            } else {
-                valid = false;
             }
-        }
-
-        if (!valid) {
-            throw new XProcException(step.getNode(), "XInclude element must contain exactly one xi:fallback element.");
         }
 
         if (fallback == null) {

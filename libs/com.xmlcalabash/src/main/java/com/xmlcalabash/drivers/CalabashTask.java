@@ -302,7 +302,7 @@ public class CalabashTask extends MatchingTask {
         }
     }
 
-    /**
+    /*
      * Whether the build should fail if the nested resource collection is empty.
      */
     public void setFailOnNoResources(boolean b) {
@@ -438,7 +438,7 @@ public class CalabashTask extends MatchingTask {
         isTargetExtensionSet = true;
     }
 
-    /**
+    /*
      * Whether any errors should make the build fail.
      */
     public void setFailOnError(boolean b) {
@@ -510,14 +510,14 @@ public class CalabashTask extends MatchingTask {
         this.force = force;
     }
 
-    /**
+    /*
      * A system property to set during transformation.
      */
     public void addSysproperty(Environment.Variable sysp) {
         sysProperties.addVariable(sysp);
     }
 
-    /**
+    /*
      * A set of system properties to set during transformation.
      */
     public void addSyspropertyset(PropertySet sysp) {
@@ -1344,7 +1344,7 @@ public class CalabashTask extends MatchingTask {
         }
     }
 
-    /**
+    /*
      * Throws an exception with the given message if failOnError is
      * true, otherwise logs the message using the WARN level.
      */
@@ -1355,7 +1355,7 @@ public class CalabashTask extends MatchingTask {
         log(msg, Project.MSG_WARN);
     }
 
-    /**
+    /*
      * Throws an exception with the given nested exception if
      * failOnError is true, otherwise logs the message using the WARN level.
      */

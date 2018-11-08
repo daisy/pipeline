@@ -1,17 +1,48 @@
 package com.xmlcalabash.extensions;
 
 
+import com.xmlcalabash.core.XMLCalabash;
+import com.xmlcalabash.core.XProcConstants;
+import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.io.DataStore;
+import com.xmlcalabash.io.DataStore.DataInfo;
+import com.xmlcalabash.io.DataStore.DataReader;
+import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.WritablePipe;
+import com.xmlcalabash.library.DefaultStep;
+import com.xmlcalabash.runtime.XAtomicStep;
+import com.xmlcalabash.util.AxisNodes;
+import com.xmlcalabash.util.Base64;
+import com.xmlcalabash.util.JSONtoXML;
+import com.xmlcalabash.util.S9apiUtils;
+import com.xmlcalabash.util.TreeWriter;
+import com.xmlcalabash.util.XMLtoJSON;
+import net.sf.saxon.s9api.Axis;
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmNodeKind;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -20,34 +51,9 @@ import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import com.xmlcalabash.core.XMLCalabash;
-import com.xmlcalabash.util.*;
-import net.sf.saxon.s9api.Axis;
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XdmNodeKind;
-
-import com.xmlcalabash.core.XProcConstants;
-import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.io.DataStore;
-import com.xmlcalabash.io.DataStore.DataInfo;
-import com.xmlcalabash.io.DataStore.DataReader;
-import com.xmlcalabash.io.WritablePipe;
-import com.xmlcalabash.io.ReadablePipe;
-import com.xmlcalabash.library.DefaultStep;
-import com.xmlcalabash.runtime.XAtomicStep;
-import com.xmlcalabash.util.S9apiUtils;
-import com.xmlcalabash.util.TreeWriter;
 
 /**
  *
@@ -108,7 +114,7 @@ public class Zip extends DefaultStep {
     private Map<String, FileToZip> zipManifest = new LinkedHashMap<String, FileToZip> ();
     private Map<String, XdmNode> srcManifest = new LinkedHashMap<String, XdmNode> ();
 
-    /** Creates a new instance of Unzip */
+    /* Creates a new instance of Unzip */
     public Zip(XProcRuntime runtime, XAtomicStep step) {
         super(runtime,step);
     }
@@ -137,6 +143,9 @@ public class Zip extends DefaultStep {
         final String zipFn = getOption(_href).getString();
 
         XdmNode man = S9apiUtils.getDocumentElement(manifest.read());
+        if (man == null) {
+            throw new NullPointerException("XML document " + man.getDocumentURI() + " has no root element.");
+        }
 
         if (!c_zip_manifest.equals(man.getNodeName())) {
             throw new XProcException(step.getNode(), "The cx:zip manifest must be a c:zip-manifest.");
@@ -145,6 +154,9 @@ public class Zip extends DefaultStep {
         while (source.moreDocuments()) {
             XdmNode doc = source.read();
             XdmNode root = S9apiUtils.getDocumentElement(doc);
+            if (root == null) {
+                throw new NullPointerException("XML document " + doc.getDocumentURI() + " has no root element.");
+            }
             srcManifest.put(root.getBaseURI().toASCIIString(), doc);
         }
 
@@ -183,9 +195,23 @@ public class Zip extends DefaultStep {
             final DatatypeFactory dfactory = DatatypeFactory.newInstance();
             DataStore store = runtime.getDataStore();
             store.readEntry(zipFn, zipFn, "application/zip, */*", null, new DataReader() {
-                public void load(URI id, String media, InputStream stream,
-                        long len) throws IOException {
-                    read(id, stream, dfactory);
+                public void load(URI id, String media, InputStream stream, long len) throws IOException {
+                    TreeWriter tree = new TreeWriter(runtime);
+
+                    tree.startDocument(step.getNode().getBaseURI());
+                    tree.addStartElement(c_zipfile);
+                    tree.addAttribute(_href, id.toASCIIString());
+                    tree.startContent();
+
+                    if (zipFn.startsWith("file:/")) {
+                        readFile(tree, id, zipFn, dfactory);
+                    } else {
+                        readStream(tree, id, stream, dfactory);
+                    }
+
+                    tree.addEndElement();
+                    tree.endDocument();
+                    result.write(tree.getResult());
                 }
             });
         } catch (MalformedURLException mue) {
@@ -197,7 +223,7 @@ public class Zip extends DefaultStep {
         }
     }
 
-    void update(ZipInputStream inZip, final ZipOutputStream outZip) {
+    private void update(ZipInputStream inZip, final ZipOutputStream outZip) {
         String command = getOption(_command).getString();
     
         if ("create".equals(command)) {
@@ -222,52 +248,63 @@ public class Zip extends DefaultStep {
         }
     }
 
-    void read(URI id, InputStream stream, final DatatypeFactory dfactory)
+    private void readFile(TreeWriter tree, URI id, String zipFn, final DatatypeFactory dfactory)
             throws IOException {
-        TreeWriter tree = new TreeWriter(runtime);
-    
-        tree.startDocument(step.getNode().getBaseURI());
-        tree.addStartElement(c_zipfile);
-        tree.addAttribute(_href, id.toASCIIString());
-        tree.startContent();
-    
-        ZipInputStream zipStream = new ZipInputStream(stream);
-    
+        ZipFile zipFile = null;
         try {
-            GregorianCalendar cal = new GregorianCalendar();
+            File uriFile = new File(new URI(zipFn));
+            zipFile = new ZipFile(uriFile);
 
+            Enumeration<? extends ZipEntry> zipEntryEnum = zipFile.entries();
+            while (zipEntryEnum.hasMoreElements()) {
+                ZipEntry entry = zipEntryEnum.nextElement();
+                processEntry(tree, entry, dfactory);
+            }
+        } catch (URISyntaxException e) {
+            throw new XProcException(e);
+        } finally {
+            if (zipFile != null) {
+                zipFile.close();
+            }
+        }
+    }
+
+    private void readStream(TreeWriter tree, URI id, InputStream stream, final DatatypeFactory dfactory)
+            throws IOException {
+        ZipInputStream zipStream = new ZipInputStream(stream);
+
+        try {
             ZipEntry entry = zipStream.getNextEntry();
             while (entry != null) {
-                cal.setTimeInMillis(entry.getTime());
-                XMLGregorianCalendar xmlCal = dfactory.newXMLGregorianCalendar(cal);
-
-                if (entry.isDirectory()) {
-                    tree.addStartElement(c_directory);
-                } else {
-                    tree.addStartElement(c_file);
-
-                    tree.addAttribute(_compressed_size, ""+entry.getCompressedSize());
-                    tree.addAttribute(_size, ""+entry.getSize());
-                }
-
-                if (entry.getComment() != null) {
-                    tree.addAttribute(_comment, entry.getComment());
-                }
-
-                tree.addAttribute(_name, ""+entry.getName());
-                tree.addAttribute(_date, xmlCal.toXMLFormat());
-                tree.startContent();
-                tree.addEndElement();
-                entry = zipStream.getNextEntry();
+                processEntry(tree, entry, dfactory);
             }
-
-            tree.addEndElement();
-            tree.endDocument();
-            result.write(tree.getResult());
-
         } finally {
             zipStream.close();
         }
+   }
+
+    private void processEntry(TreeWriter tree, ZipEntry entry, DatatypeFactory dfactory) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(entry.getTime());
+        XMLGregorianCalendar xmlCal = dfactory.newXMLGregorianCalendar(cal);
+
+        if (entry.isDirectory()) {
+            tree.addStartElement(c_directory);
+        } else {
+            tree.addStartElement(c_file);
+
+            tree.addAttribute(_compressed_size, ""+entry.getCompressedSize());
+            tree.addAttribute(_size, ""+entry.getSize());
+        }
+
+        if (entry.getComment() != null) {
+            tree.addAttribute(_comment, entry.getComment());
+        }
+
+        tree.addAttribute(_name, ""+entry.getName());
+        tree.addAttribute(_date, xmlCal.toXMLFormat());
+        tree.startContent();
+        tree.addEndElement();
     }
 
     private void parseManifest(XdmNode man) {
@@ -342,7 +379,9 @@ public class Zip extends DefaultStep {
                     }
 
                     if (!skip) {
-                        outZip.putNextEntry(entry);
+                        ZipEntry copy = new ZipEntry(entry);
+                        copy.setCompressedSize(-1);
+                        outZip.putNextEntry(copy);
                         int read = inZip.read(buffer, 0, bufsize);
                         while (read >= 0) {
                             outZip.write(buffer,0, read);
@@ -581,7 +620,12 @@ public class Zip extends DefaultStep {
     }
 
     public void storeJSON(FileToZip file, XdmNode doc, OutputStream out) {
-        PrintWriter writer = new PrintWriter(out);
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(new OutputStreamWriter(out, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // This can't happen
+        }
         try {
             String json = XMLtoJSON.convert(doc);
             writer.print(json);
@@ -597,7 +641,7 @@ public class Zip extends DefaultStep {
     }
 
     public Serializer makeSerializer(Hashtable<QName,String> options) {
-        Serializer serializer = new Serializer();
+        Serializer serializer = runtime.getProcessor().newSerializer();
 
         if (options == null) {
             return serializer;
