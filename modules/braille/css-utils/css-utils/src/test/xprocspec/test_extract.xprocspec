@@ -26,12 +26,12 @@
 					<html>
 						<body xml:id="a" style="@page {
 						                          @top-left { content: 'foo' }}">
-							<section xml:id="b" style="@page {
+							<section xml:id="b" style="display: block;
+							                           @page {
 							                             @top-left { content: 'foo' }}
 							                           @page:left {
 							                             @top-left { content: 'foo' }
-							                             @top-right { content: 'bar' }}
-							                           { display: block }">
+							                             @top-right { content: 'bar' }}">
 								<h1 xml:id="c" style="display: block;
 								                      border-bottom-align: center;
 								                      border-bottom-pattern: ⠒;
@@ -39,7 +39,7 @@
 								                      border-bottom-width: 1;"/>
 								<p xml:id="d" style="display: block"/>
 								<p xml:id="e" style="display: block"/>
-								<p xml:id="f" style="{ display: block } ::before { content: 'foo' }"/>
+								<p xml:id="f" style="display: block; &amp;::before { content: 'foo' }"/>
 							</section>
 						</body>
 					</html>
@@ -90,8 +90,8 @@
 	page: page-1
 }
 #b {
-	page: page-2;
-	display: block
+	display: block;
+	page: page-2
 }
 #c {
 	display: block;

@@ -69,6 +69,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <_dsannotations>*</_dsannotations>
             <Provide-Capability>xpath.function;name="{http://hunspell.sourceforge.net/Hyphen}hyphenate"</Provide-Capability>
           </instructions>

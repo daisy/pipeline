@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.net.URI;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
 
 import org.daisy.pipeline.braille.common.AbstractTransform;
@@ -120,7 +120,7 @@ public interface DotifyCSSStyledDocumentTransform {
 			
 			@Override
 			public ToStringHelper toStringHelper() {
-				return Objects.toStringHelper("o.d.p.b.dotify.impl.DotifyCSSStyledDocumentTransform$Provider$TransformImpl")
+				return MoreObjects.toStringHelper("o.d.p.b.dotify.impl.DotifyCSSStyledDocumentTransform$Provider$TransformImpl")
 					.add("output", output)
 					.add("blockTransform", blockTransform);
 			}

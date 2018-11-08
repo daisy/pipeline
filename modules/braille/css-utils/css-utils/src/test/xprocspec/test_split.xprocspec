@@ -61,7 +61,6 @@
   <x:scenario label="test_02">
     <x:call step="css:split">
       <x:option name="split-before" select="'*[@css:counter-set-page]'"/>
-      <x:option name="split-after" select="'nomatch'"/>
       <x:input port="source">
         <x:document type="inline">
           <css:box type="block" css:counter-set-page="1">
@@ -155,7 +154,6 @@
   <x:scenario label="test_04">
     <x:call step="css:split">
       <x:option name="split-before" select="'css:box[preceding::css:box][@css:counter-set-page or @css:page-break-before=''right'']'"/>
-      <x:option name="split-after" select="'nomatch'"/>
       <x:input port="source">
         <x:document type="inline">
           <css:_>

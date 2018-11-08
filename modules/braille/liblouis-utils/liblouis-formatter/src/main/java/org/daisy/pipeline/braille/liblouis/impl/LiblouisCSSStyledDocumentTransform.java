@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.net.URI;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -102,7 +102,7 @@ public interface LiblouisCSSStyledDocumentTransform {
 			
 			@Override
 			public ToStringHelper toStringHelper() {
-				return Objects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisCSSStyledDocumentTransform$Provider$TransformImpl")
+				return MoreObjects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisCSSStyledDocumentTransform$Provider$TransformImpl")
 					.add("blockTransform", blockTransform);
 			}
 		}

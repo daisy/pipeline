@@ -39,4 +39,8 @@ public class WindowsWorkaroundTest extends PaxExamConfig {
 		                                      new XProcSpecRunner.Reporter.DefaultReporter());
 		assertTrue("XProcSpec tests should run with success", success);
 	}
+	
+	@Override @Test
+	public void runXSpec() throws Exception {
+	}
 }

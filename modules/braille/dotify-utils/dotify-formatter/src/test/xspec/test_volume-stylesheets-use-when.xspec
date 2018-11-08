@@ -10,10 +10,14 @@
   <x:scenario label="test_01">
     <x:call function="obfl:volume-stylesheets-use-when">
       <x:param>
-        <css:rule/>
-        <css:rule selector=":first"/>
-        <css:rule selector=":nth(1)"/>
-        <css:rule selector=":nth(2)"/>
+        <css:rule selector="@volume">
+          <css:rule selector="&amp;:first"/>
+          <css:rule selector="&amp;:nth(1)"/>
+          <css:rule selector="&amp;:nth(2)"/>
+        </css:rule>
+        <css:rule selector="&amp;:first"/>
+        <css:rule selector="&amp;:nth(1)"/>
+        <css:rule selector="&amp;:nth(2)"/>
       </x:param>
     </x:call>
     <x:expect label="layout-master" select="('(! (| (= $volume 1) (= $volume 2)))',

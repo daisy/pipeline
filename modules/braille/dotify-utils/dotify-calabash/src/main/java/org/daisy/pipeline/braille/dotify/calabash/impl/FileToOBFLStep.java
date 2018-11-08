@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.transform.stream.StreamSource;
@@ -40,7 +41,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
@@ -141,7 +141,7 @@ public class FileToOBFLStep extends DefaultStep {
 					String key = f.getKey();
 					Optional<String> val = f.getValue();
 					//if there isn't a value, just repeat the key
-					params.put(key, val.or(key));
+					params.put(key, val.orElse(key));
 				}
 			}
 			

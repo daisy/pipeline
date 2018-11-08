@@ -38,8 +38,8 @@
         <body>
           <table>
             <tr>
-              <td style="::after { content: ','; }">foo</td>
-              <td style="::after { content: none; }">bar</td>
+              <td style="&amp;::after { content: ','; }">foo</td>
+              <td style="&amp;::after { content: none; }">bar</td>
             </tr>
           </table>
         </body>
@@ -146,7 +146,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <br style="::before { content: '&#xA;'; white-space: pre-line; }"/>
+          <br style="&amp;::before { content: '\A'; white-space: pre-line; }"/>
         </body>
       </x:document>
     </x:expect>
@@ -183,7 +183,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h style="{ counter-increment: heading 1; } ::before { content: counter(heading) '. '; }">foo</h>
+          <h style="counter-increment: heading 1; &amp;::before { content: counter(heading) '. '; }">foo</h>
         </body>
       </x:document>
     </x:expect>

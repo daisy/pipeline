@@ -6,7 +6,7 @@
   <x:scenario label="test_01">
     <x:context>
       <doc>
-        <body style="{{ display: block }} @page {{ size: 30 30; @top-center {{ content: string(running-header) }} }}">
+        <body style="display: block; @page {{ size: 30 30; @top-center {{ content: string(running-header) }} }}">
           <p>
             foo
           </p>
@@ -15,8 +15,8 @@
     </x:context>
     <x:expect label="result">
       <doc>
-        <body style="display: block"
-              css:page="size: 30 30; @top-center {{ content: string(running-header) }}"
+        <body style="display: block;"
+              css:page="size: 30 30; @top-center {{ content: string(running-header); }}"
               xml:id="...">
           <p>
             foo

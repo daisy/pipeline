@@ -8,7 +8,7 @@
       <doc>
         <body>
           <p style="display: block
-                    ::before {{ display: block;
+                    &amp;::before {{ display: block;
                                 margin-left: 2;
                                 content: 'bar' }}">
             foo
@@ -19,10 +19,8 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p style="display: block">
-            <css:before style="display: block;
-                                margin-left: 2;
-                                content: 'bar'"/>
+          <p style="display: block;">
+            <css:before style="display: block; margin-left: 2; content: 'bar';"/>
             foo
           </p>
         </body>
@@ -34,7 +32,7 @@
     <x:context>
       <doc>
         <body>
-          <p foo="bar" style="::after {{ content: attr(foo) }}"/>
+          <p foo="bar" style="&amp;::after {{ content: attr(foo) }}"/>
         </body>
       </doc>
     </x:context>
@@ -42,7 +40,7 @@
       <doc>
         <body>
           <p foo="bar">
-            <css:after style="content: attr(foo)"/>
+            <css:after style="content: attr(foo);"/>
           </p>
         </body>
       </doc>

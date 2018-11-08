@@ -34,8 +34,9 @@
         <css:parse-stylesheet>
             <p:documentation>
                 Make css:page, css:volume, css:after, css:before, css:footnote-call, css:duplicate,
-                css:alternate, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-                css:_obfl-on-volume-end and css:_obfl-on-toc-end attributes.
+                css:alternate, css:_obfl-alternate-scenario, css:_obfl-on-toc-start,
+                css:_obfl-on-volume-start, css:_obfl-on-volume-end and css:_obfl-on-toc-end
+                attributes.
             </p:documentation>
         </css:parse-stylesheet>
         <p:delete match="@css:*[matches(local-name(),'^text-transform-')]">
@@ -48,6 +49,11 @@
                 Make css:flow attributes.
             </p:documentation>
         </css:parse-properties>
+        <p:delete match="css:_obfl-alternate-scenario/@css:flow">
+            <p:documentation>
+                ::-obfl-alternate-scenario pseudo-elements must participate in the normal flow.
+            </p:documentation>
+        </p:delete>
         <p:choose>
             <p:when test="//*/@css:before|
                           //*/@css:after|
@@ -57,7 +63,9 @@
                           //*/@css:_obfl-on-toc-start|
                           //*/@css:_obfl-on-volume-start|
                           //*/@css:_obfl-on-volume-end|
-                          //*/@css:_obfl-on-toc-end">
+                          //*/@css:_obfl-on-toc-end|
+                          //*/@css:_obfl-alternate-scenario
+                          ">
                 <css:make-pseudo-elements>
                     <p:documentation>
                         Make css:before, css:after, css:duplicate, css:alternate and
@@ -68,9 +76,16 @@
                 <pxi:make-obfl-pseudo-elements>
                     <p:documentation>
                         Make css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-                        css:_obfl-on-volume-end and css:_obfl-on-toc-end pseudo-elements.
+                        css:_obfl-on-volume-end, css:_obfl-on-toc-end and
+                        css:_obfl-alternate-scenario pseudo-elements.
                     </p:documentation>
                 </pxi:make-obfl-pseudo-elements>
+                <p:viewport match="//*[@css:_obfl-scenario and @style]">
+                    <p:documentation>
+                        Apply possible relative rules.
+                    </p:documentation>
+                    <css:inline/>
+                </p:viewport>
                 <pxi:recursive-parse-stylesheet-and-make-pseudo-elements/>
             </p:when>
             <p:otherwise>
@@ -99,6 +114,14 @@
         </p:input>
     </p:xslt>
     
+    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+        <p:documentation>
+            Make css:page and css:volume attributes, css:after, css:before, css:duplicate,
+            css:alternate, css:footnote-call, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
+            css:_obfl-on-volume-end and css:_obfl-on-toc-end pseudo-elements.
+        </p:documentation>
+    </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+    
     <css:parse-properties properties="display render-table-by table-header-policy">
         <p:documentation>
             Make css:display, css:render-table-by and css:table-header-policy attributes.
@@ -111,21 +134,25 @@
         </p:documentation>
     </css:render-table-by>
     
-    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements name="parse-stylesheet">
-        <p:documentation>
-            Make css:page and css:volume attributes, css:after, css:before, css:duplicate,
-            css:alternate, css:footnote-call, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-            css:_obfl-on-volume-end and css:_obfl-on-toc-end pseudo-elements.
-        </p:documentation>
-    </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+    <p:viewport match="*[@css:render-table-by and not(@css:display='table')]">
+        <pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+            <p:documentation>
+                Need another pass because css:render-table-by inserts new styles.
+            </p:documentation>
+        </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+    </p:viewport>
     
-    <pxi:deep-parse-page-and-volume-stylesheets name="page-and-volume-styles"/>
-    <p:sink/>
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="parse-stylesheet" port="result"/>
-        </p:input>
-    </p:identity>
+    <p:group name="extract-page-and-volume-styles">
+        <p:output port="result" primary="true">
+            <p:pipe step="_1" port="result"/>
+        </p:output>
+        <p:output port="styles" sequence="true">
+            <p:pipe step="page-and-volume-styles" port="result"/>
+        </p:output>
+        <p:identity name="_1"/>
+        <pxi:deep-parse-page-and-volume-stylesheets name="page-and-volume-styles"/>
+        <p:sink/>
+    </p:group>
     
     <p:for-each>
         <pxi:extract-obfl-pseudo-elements>
@@ -211,6 +238,13 @@
                 Make css:white-space elements from css:white-space attributes.
             </p:documentation>
         </css:preserve-white-space>
+        <p:add-attribute match="css:_[@css:_obfl-scenario and not(css:inline[not(.=('block','table'))])]"
+                         attribute-name="css:display"
+                         attribute-value="block">
+            <p:documentation>
+                Force "obfl-scenario" elements to be blocks.
+            </p:documentation>
+        </p:add-attribute>
         <p:add-attribute match="*[@css:display=('-obfl-toc','-obfl-table-of-contents')]"
                          attribute-name="css:_obfl-toc" attribute-value="_">
             <p:documentation>
@@ -259,7 +293,12 @@
             <p:label-elements match="*[@css:_obfl-preferred-empty-space]/css:box[@type='table']"
                               attribute="css:_obfl-preferred-empty-space"
                               label="parent::*/@css:_obfl-preferred-empty-space"/>
-            <p:delete match="*[not(self::css:box[@type='table'])]/@css:render-table-by"/>
+            <p:delete match="*[not(self::css:box[@type='table'])]/@css:render-table-by">
+                <!--
+                    This also deletes the css:render-table-by attributes that where already
+                    processed with the css:render-table-by step above.
+                -->
+            </p:delete>
             <p:delete match="*[not(self::css:box[@type='table'])]/@css:_obfl-table-col-spacing"/>
             <p:delete match="*[not(self::css:box[@type='table'])]/@css:_obfl-table-row-spacing"/>
             <p:delete match="*[not(self::css:box[@type='table'])]/@css:_obfl-preferred-empty-space"/>
@@ -299,7 +338,7 @@
                                    else $rr/*[not(@selector)]/css:property)
                                   [@name='counter-increment']/@value,'post-page')[1]
                           )),' ')">
-        <p:pipe step="page-and-volume-styles" port="result"/>
+        <p:pipe step="extract-page-and-volume-styles" port="styles"/>
     </p:variable>
     
     <css:eval-counter>
@@ -461,39 +500,34 @@
         <p:for-each>
             <pxi:propagate-page-break>
                 <p:documentation>
-                    Propagate css:page-break-before, css:page-break-after, css:volume-break-before
-                    and css:volume-break-after attributes, so that splitting can be performed
-                    without creating empty boxes, and also insert forced page breaks to satisfy the
-                    'page' and 'volume' properties. <!-- depends on make-anonymous-block-boxes -->
+                    Insert forced page breaks to satisfy the 'page' and 'volume' properties. <!--
+                    depends on make-anonymous-block-boxes -->
                 </p:documentation>
             </pxi:propagate-page-break>
             <p:group>
                 <p:documentation>
-                    Convert css:page-break-after="right" to a css:page-break-before on the following
-                    sibling, and css:volume-break-after="always" to a css:volume-break-before on the
-                    following sibling.
+                    Convert css:page-break-after="auto-right" to a css:page-break-before on the
+                    following sibling, and css:volume-break-after="always" to a
+                    css:volume-break-before on the following sibling.
                 </p:documentation>
-                <p:add-attribute match="css:box[@type='block'][preceding-sibling::*[1]/@css:page-break-after='right']"
+                <p:add-attribute match="css:box[@type='block'][preceding-sibling::*[1]/@css:page-break-after='auto-right']"
                                  attribute-name="css:page-break-before"
-                                 attribute-value="right"/>
+                                 attribute-value="auto-right"/>
                 <p:add-attribute match="css:box[@type='block'][preceding-sibling::*[1]/@css:volume-break-after='always']"
                                  attribute-name="css:volume-break-before"
                                  attribute-value="always"/>
-                <p:delete match="css:box[@type='block'][following-sibling::*]/@css:page-break-after[.='right']"/>
+                <p:delete match="css:box[@type='block'][following-sibling::*]/@css:page-break-after[.='auto-right']"/>
                 <p:delete match="css:box[@type='block'][following-sibling::*]/@css:volume-break-after[.='always']"/>
             </p:group>
             <css:split split-before="css:box[preceding::css:box]
                                             [@css:counter-set or
-                                             @css:page-break-before='right' or
-                                             @css:volume-break-before='always' or
-                                             @type='table']"
-                       split-after="css:box[following::css:box]
-                                           [@type='table']">
+                                             @css:page-break-before='auto-right' or
+                                             @css:volume-break-before='always']
+                                            [not(ancestor::*[@css:_obfl-scenarios])]">
                 <p:documentation>
-                    Split before and after tables, before css:counter-set attributes, before
-                    css:page-break-before attributes with value 'right', and before
-                    css:volume-break-before attributes with value 'always'. <!-- depends on
-                    make-boxes and propagate-page-break -->
+                    Split before css:counter-set attributes, and before css:volume-break-before
+                    attributes with value 'always'. <!-- depends on make-boxes and
+                    propagate-page-break -->
                 </p:documentation>
             </css:split>
         </p:for-each>
@@ -540,6 +574,18 @@
                         all the wait to the root box.)
                     </p:documentation>
                 </pxi:propagate-page-break>
+                <p:group>
+                    <p:documentation>
+                        Rename 'auto-right' (the special forced page break value to satisfy the
+                        'page' property) to 'right'.
+                    </p:documentation>
+                    <p:add-attribute match="css:box[@css:page-break-after='auto-right']"
+                                     attribute-name="css:page-break-after"
+                                     attribute-value='right'/>
+                    <p:add-attribute match="css:box[@css:page-break-before='auto-right']"
+                                     attribute-name="css:page-break-before"
+                                     attribute-value='right'/>
+                </p:group>
                 <p:group>
                     <p:documentation>
                         Convert css:page-break-before="avoid" to a css:page-break-after on the
@@ -630,7 +676,7 @@
     <p:xslt template-name="start">
         <p:input port="source">
             <p:pipe step="sections" port="result"/>
-            <p:pipe step="page-and-volume-styles" port="result"/>
+            <p:pipe step="extract-page-and-volume-styles" port="styles"/>
         </p:input>
         <p:input port="stylesheet">
             <p:document href="css-to-obfl.xsl"/>

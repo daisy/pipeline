@@ -74,7 +74,7 @@
         <css:rule>
           <css:property name="size" value="15 15"/>
         </css:rule>
-        <css:rule selector=":right">
+        <css:rule selector="&amp;:right">
           <css:rule>
             <css:property name="margin-top" value="1"/>
           </css:rule>
@@ -82,7 +82,7 @@
             <css:property name="content" value="counter(page)"/>
           </css:rule>
         </css:rule>
-        <css:rule selector=":left">
+        <css:rule selector="&amp;:left">
           <css:rule>
             <css:property name="margin-top" value="2"/>
           </css:rule>
@@ -299,7 +299,7 @@
     <x:call function="obfl:generate-layout-master">
       <x:param>
         <css:rule selector="@bottom-left">
-          <css:property name="content" value="&quot;⠆&#x0a;⠆⠆&quot;"/>
+          <css:property name="content" value="&quot;⠆\A⠆⠆&quot;"/>
           <css:property name="white-space" value="pre-wrap"/>
         </css:rule>
         <css:rule>
@@ -345,7 +345,7 @@
     <x:call function="obfl:generate-layout-master">
       <x:param>
         <css:rule selector="@bottom-left">
-          <css:property name="content" value="&quot;⠆&#x0a;⠆⠆&quot;"/>
+          <css:property name="content" value="&quot;⠆\A⠆⠆&quot;"/>
           <css:property name="white-space" value="pre-wrap"/>
         </css:rule>
         <css:rule>
@@ -393,7 +393,7 @@
         <css:rule>
           <css:property name="size" value="28 28"/>
         </css:rule>
-        <css:rule selector=":right">
+        <css:rule selector="&amp;:right">
           <css:rule>
             <css:property name="margin-bottom" value="1"/>
           </css:rule>

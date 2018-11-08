@@ -141,7 +141,9 @@ public class PEF2TextStep extends DefaultStep {
 				
 				// Read source PEF
 				ByteArrayOutputStream s = new ByteArrayOutputStream();
-				Serializer serializer = new Serializer(s);
+				Serializer serializer = runtime.getProcessor().newSerializer();
+				serializer.setOutputStream(s);
+				serializer.setCloseOnCompletion(true);
 				serializer.serializeNode(source.read());
 				serializer.close();
 				InputStream pefStream = new ByteArrayInputStream(s.toByteArray());

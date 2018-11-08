@@ -16,16 +16,16 @@
         </x:document>
       </x:input>
       <x:input port="context">
-        <x:document type="inline">
-          <c:result content-type="text/plain" xml:base="http://example.org/default.scss">
-			@import "mod.scss";
+        <x:document type="inline" xml:base="http://example.org/default.scss">
+          <c:result content-type="text/plain">
+            @import "mod.scss";
             h {
               text-align: center
             }
           </c:result>
-		</x:document>
-        <x:document type="inline">
-          <c:result content-type="text/plain" xml:base="http://example.org/mod.scss">
+        </x:document>
+        <x:document type="inline" xml:base="http://example.org/mod.scss">
+          <c:result content-type="text/plain">
             h {
               page-break-after: avoid
             }

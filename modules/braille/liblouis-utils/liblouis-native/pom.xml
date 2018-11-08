@@ -33,7 +33,7 @@
       <dependency>
         <groupId>org.liblouis</groupId>
         <artifactId>louis</artifactId>
-        <version>3.6.0</version>
+        <version>${liblouis.version}</version>
         <type>nar</type>
       </dependency>
       <dependency>

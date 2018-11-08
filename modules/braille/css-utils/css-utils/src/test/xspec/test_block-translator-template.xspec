@@ -7,7 +7,7 @@
     <x:context>
       <doc>
         <h css:display="block" style="string-set: running-footer content()">foobar</h>
-        <p css:display="block" style="::after {{ content: 'bar' }}">foo</p>
+        <p css:display="block" style="&amp;::after {{ content: 'bar' }}">foo</p>
         <pagenum style="display: none; string-set: print-page content()">ii</pagenum>
       </doc>
     </x:context>
@@ -15,7 +15,7 @@
       <_ style="text-transform: none">
         <doc>
           <h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
-          <p style="{{ display: block }} ::after {{ content: &quot;BAR&quot;; text-transform: auto }}">FOO</p>
+          <p style="display: block &amp;::after {{ content: &quot;BAR&quot;; text-transform: auto }}">FOO</p>
           <pagenum style="display: none; string-set: print-page &quot;ii&quot;">II</pagenum>
         </doc>
       </_>
@@ -25,13 +25,13 @@
   <x:scenario label="test_02">
     <x:context>
       <doc xml:lang="en">
-        <br style="::before {{ content: '&#xA;'; white-space: pre-line }}"/>
+        <br style="&amp;::before {{ content: '\A'; white-space: pre-line }}"/>
       </doc>
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
         <doc xml:lang="en-Brai">
-          <br style="::before {{ content: &quot;&#xA;&quot;; white-space: pre-line; text-transform: auto }}"/>
+          <br style="&amp;::before {{ content: &quot;\A&quot;; white-space: pre-line; text-transform: auto }}"/>
         </doc>
       </_>
     </x:expect>
@@ -55,13 +55,13 @@
   <x:scenario label="test_04">
     <x:context>
       <doc>
-        <div style="::after {{ content: 'foo' }} ::after::before {{ display: block; content: 'bar' }}"/>
+        <div style="&amp;::after {{ content: 'foo' }} &amp;::after::before {{ display: block; content: 'bar' }}"/>
       </doc>
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
         <doc>
-          <div style="::after {{ content: &quot;FOO&quot;; text-transform: auto }} ::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
+          <div style="&amp;::after {{ content: &quot;FOO&quot;; text-transform: auto }} &amp;::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
         </doc>
       </_>
     </x:expect>
@@ -70,13 +70,13 @@
   <x:scenario label="test_05">
     <x:context>
       <doc>
-        <div style="::table-by(foo)::list-item::after {{ content: ', ' }} ::table-by(foo)::list-item:last-child::after {{ content: none }}"/>
+        <div style="&amp;::table-by(foo)::list-item::after {{ content: ', ' }} &amp;::table-by(foo)::list-item:last-child::after {{ content: none }}"/>
       </doc>
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
         <doc>
-          <div style="::table-by(foo)::list-item::after {{ content: &quot;,&quot;; text-transform: auto }} ::table-by(foo)::list-item:last-child::after {{ content: none; text-transform: auto }}"/>
+          <div style="&amp;::table-by(foo)::list-item::after {{ content: &quot;, &quot;; text-transform: auto }} &amp;::table-by(foo)::list-item:last-child::after {{ content: none; text-transform: auto }}"/>
         </doc>
       </_>
     </x:expect>

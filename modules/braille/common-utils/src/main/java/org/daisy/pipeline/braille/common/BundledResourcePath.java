@@ -64,7 +64,9 @@ public class BundledResourcePath extends AbstractResourcePath {
 		if (path == null)
 			throw new IllegalArgumentException("Resource path at location " + pathAsRelativeFilePath + " could not be found");
 		final Predicate<Object> includes =
-			(properties.get(INCLUDES) != null && !properties.get(INCLUDES).toString().isEmpty()) ?
+			(properties.get(INCLUDES) != null
+			 && !properties.get(INCLUDES).toString().isEmpty()
+			 && !properties.get(INCLUDES).toString().equals("*")) ?
 				Predicates.compose(
 					matchesGlobPattern(properties.get(INCLUDES).toString()),
 					Functions.compose(decode, toStringFunction())) :

@@ -80,7 +80,7 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 											frmt.setFeature("table", table);
 										for (Feature f : q)
 											try {
-												frmt.setFeature(f.getKey(), f.getValue().or(f.getKey())); }
+												frmt.setFeature(f.getKey(), f.getValue().orElse(f.getKey())); }
 											catch (Exception e) {
 												return null; }
 										return frmt; }}),

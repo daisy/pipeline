@@ -13,17 +13,21 @@
     </xsl:template>
     
     <xsl:template match="@style">
-        <xsl:apply-templates select="css:parse-stylesheet(.)"/>
-    </xsl:template>
-    
-    <xsl:template match="css:rule[not(@selector)]">
-        <xsl:sequence select="css:style-attribute(@style)"/>
+        <xsl:variable name="style" as="element()*" select="css:parse-stylesheet(.)"/> <!-- css:rule*-->
+        <xsl:variable name="extract-styles" as="element()*"
+                      select="$style/self::css:rule[@selector[not(contains(.,'(')
+                                                                  or .='&amp;::list-item'
+                                                                  or .='&amp;::list-header')]]"/> <!-- css:rule*-->
+        <xsl:if test="exists($style except $extract-styles)">
+            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($style except $extract-styles))"/>
+        </xsl:if>
+        <xsl:apply-templates select="$extract-styles"/>
     </xsl:template>
     
     <xsl:template match="css:rule">
-        <xsl:attribute name="css:{replace(replace(replace(@selector, '^(@|::|:)' , ''  ),
-                                                                     '^-'        , '_' ),
-                                                                     ' +'        , '-' )}"
+        <xsl:attribute name="css:{replace(replace(replace(@selector, '^(@|&amp;::|&amp;:)' , ''  ),
+                                                                     '^-'                  , '_' ),
+                                                                     ' +'                  , '-' )}"
                        select="@style"/>
     </xsl:template>
     

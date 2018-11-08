@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns="http://www.daisy.org/ns/2011/obfl"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:_xsl="http://www.w3.org/1999/XSL/TransformAlias"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0" >
+    
+    <xsl:namespace-alias stylesheet-prefix="_xsl" result-prefix="xsl"/>
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     
@@ -56,10 +60,8 @@
         <css:rule selector="@page" style=""/>
         <xsl:sequence select="$page-and-volume-styles[@selector='@page']"/>
         <xsl:for-each select="$volume-stylesheets">
-            <xsl:sequence select="(if (*[matches(@selector,'^:')])
-                                   then */*
-                                   else *)
-                                  [@selector=('@begin','@end')]
+            <xsl:sequence select="(.|*[matches(@selector,'^&amp;:')])
+                                  /*[@selector=('@begin','@end')]
                                   /css:rule[@selector='@page']"/>
         </xsl:for-each>
     </xsl:variable>
@@ -74,23 +76,27 @@
         <xsl:for-each select="$stylesheets">
             <xsl:variable name="i" select="position()"/>
             <xsl:choose>
-                <xsl:when test="not(@selector)">
-                    <xsl:sequence select="obfl:not(obfl:or($stylesheets[position()&lt;$i or @selector]/obfl:volume-stylesheets-use-when(.)))"/>
+                <xsl:when test="@selector='@volume'">
+                    <xsl:sequence select="obfl:not(obfl:or($stylesheets[position()&lt;$i or @selector[not(.='@volume')]]
+                                                                       /obfl:volume-stylesheets-use-when(.)))"/>
                 </xsl:when>
-                <xsl:when test="@selector=':first'">
+                <xsl:when test="@selector='&amp;:first'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume 1)',
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
+                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                                                         /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
-                <xsl:when test="@selector=':last'">
+                <xsl:when test="@selector='&amp;:last'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume $volumes)',
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
+                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                                                         /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
-                <xsl:when test="matches(@selector,'^:nth\([1-9][0-9]*\)$')">
+                <xsl:when test="matches(@selector,'^&amp;:nth\([1-9][0-9]*\)$')">
                     <xsl:sequence select="obfl:and((
-                                            concat('(= $volume ',substring(@selector,6)),
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector]/obfl:volume-stylesheets-use-when(.)))))"/>
+                                            concat('(= $volume ',substring(@selector,7)),
+                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                                                         /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="'nil'"/>
@@ -109,16 +115,14 @@
     <xsl:variable name="collection-flows" as="xs:string*">
         <xsl:for-each select="$page-stylesheets">
             <xsl:sequence select="css:parse-content-list(
-                                    (if (*[matches(@selector,'^:')]) then css:rule[not(@selector)] else .)
+                                    (if (*[matches(@selector,'^&amp;:')]) then css:rule[not(@selector)] else .)
                                     /css:rule[@selector='@footnotes'][1]
                                     /css:property[@name='content'][1]/@value,())
                                   /self::css:flow[@from and (not(@scope) or @scope='page')]/@from"/>
         </xsl:for-each>
         <xsl:for-each select="$volume-stylesheets">
-            <xsl:for-each select="(if (*[matches(@selector,'^:')])
-                                   then */*
-                                   else *)
-                                  [@selector=('@begin','@end')]">
+            <xsl:for-each select="(.|*[matches(@selector,'^&amp;:')])
+                                  /*[@selector=('@begin','@end')]">
                 <xsl:variable name="volume-area-content" as="element()*"
                               select="css:parse-content-list(
                                         (if (css:property) then . else *[not(@selector)])
@@ -134,6 +138,93 @@
             </xsl:for-each>
         </xsl:for-each>
     </xsl:variable>
+    
+    <!-- ================== -->
+    <!-- xml-data renderers -->
+    <!-- ================== -->
+    
+    <xsl:function name="pxi:renderer-to-string" as="xs:string">
+        <xsl:param name="elem" as="element()"/>
+        <xsl:sequence select="string-join($elem/child::*/(@css:_obfl-scenario-cost,'none')[1],' ')"/>
+    </xsl:function>
+    
+    <xsl:variable name="renderers" as="xs:string*"
+                  select="distinct-values(collection()//css:box[@type='block'][@css:_obfl-scenarios]/pxi:renderer-to-string(.))"/>
+    
+    <xsl:function name="pxi:renderer-name" as="xs:string">
+        <xsl:param name="renderer"/> <!-- element()|xs:string -->
+        <xsl:choose>
+            <xsl:when test="$renderer instance of xs:string">
+                <xsl:sequence select="concat('renderer_',index-of($renderers,$renderer))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="pxi:renderer-name(pxi:renderer-to-string($renderer))"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:variable name="_OBFL_SCENARIO_COST_RE" select="concat('none|(',$css:INTEGER_RE,')|-obfl-evaluate\((',$css:STRING_RE,')\)')"/>
+    <xsl:variable name="_OBFL_SCENARIO_COST_RE_integer" select="1"/>
+    <xsl:variable name="_OBFL_SCENARIO_COST_RE_eval" select="$_OBFL_SCENARIO_COST_RE_integer + $css:INTEGER_RE_groups + 1"/>
+    
+    <xsl:function name="pxi:parse-scenario-cost" as="xs:string">
+        <xsl:param name="cost-attr" as="attribute()?"/>
+        <xsl:analyze-string select="($cost-attr/string(),'none')[1]" regex="^{$_OBFL_SCENARIO_COST_RE}$">
+            <xsl:matching-substring>
+                <xsl:choose>
+                    <xsl:when test=".='none'">
+                        <xsl:sequence select="'0'"/>
+                    </xsl:when>
+                    <xsl:when test="regex-group($_OBFL_SCENARIO_COST_RE_integer)!=''">
+                        <xsl:sequence select="regex-group($_OBFL_SCENARIO_COST_RE_integer)"/>
+                    </xsl:when>
+                    <xsl:when test="regex-group($_OBFL_SCENARIO_COST_RE_eval)!=''">
+                        <xsl:sequence select="substring(regex-group($_OBFL_SCENARIO_COST_RE_eval),
+                                                        2, string-length(regex-group($_OBFL_SCENARIO_COST_RE_eval))-2)"/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring>
+                <xsl:call-template name="coding-error">
+                    <xsl:with-param name="context" select="$cost-attr"/>
+                </xsl:call-template>
+            </xsl:non-matching-substring>
+        </xsl:analyze-string>
+    </xsl:function>
+    
+    <xsl:key name="renderer" match="css:box[@type='block'][@css:_obfl-scenarios]" use="pxi:renderer-to-string(.)"/>
+    
+    <xsl:template name="renderers">
+        <xml-processor name="take-nth">
+            <!--
+                FIXME: without the "bogus" attributes, Dotify currently does not preserve the in
+                scope namespace declarations
+            -->
+            <_xsl:stylesheet version="2.0"
+                             d:bogus=""
+                             xs:bogus="">
+                <_xsl:param name="n" as="xs:integer"/>
+                <_xsl:template match="/">
+                    <_xsl:sequence select="/*/d:scenario[position()=$n]"/>
+                </_xsl:template>
+            </_xsl:stylesheet>
+        </xml-processor>
+        <xsl:for-each select="$renderers">
+            <xsl:variable name="renderer" as="xs:string" select="."/>
+            <renderer name="{pxi:renderer-name($renderer)}">
+                <xsl:for-each select="(collection()/key('renderer',$renderer))[1]/child::*">
+                    <!--
+                        revert order because in case of equal costs Dotify selects the last scenario
+                        while CSS expects the first to be selected
+                    -->
+                    <xsl:sort select="position()" data-type="number" order="descending"/>
+                    <rendering-scenario processor="take-nth" cost="{pxi:parse-scenario-cost(@css:_obfl-scenario-cost)}">
+                        <parameter name="n" value="{last()-position()+1}"/>
+                    </rendering-scenario>
+                </xsl:for-each>
+            </renderer>
+        </xsl:for-each>
+    </xsl:template>
     
     <!-- ===== -->
     <!-- Start -->
@@ -167,13 +258,14 @@
             <xsl:if test="not(exists($volume-stylesheets))">
                 <xsl:message>Document does not have an associated volume style.</xsl:message>
             </xsl:if>
+            <xsl:if test="collection()//*/@css:_obfl-scenarios">
+                <xsl:call-template name="renderers"/>
+            </xsl:if>
             <xsl:if test="$volume-stylesheets[1]/*">
                 <xsl:variable name="volume-stylesheets" as="element()*"
-                              select="if ($volume-stylesheets[1]/*[matches(@selector,'^:')])
-                                      then $volume-stylesheets/*
-                                      else $volume-stylesheets"/>
+                              select="$volume-stylesheets[1]/(.|*[matches(@selector,'^&amp;:')])"/>
                 <xsl:variable name="volume-stylesheets-use-when" as="xs:string*"
-                              select="if ($volume-stylesheets[@selector='@volume'])
+                              select="if (count($volume-stylesheets)=1)
                                       then ('t')
                                       else obfl:volume-stylesheets-use-when($volume-stylesheets)"/>
                 <xsl:if test="not(obfl:or($volume-stylesheets-use-when)='nil')">
@@ -250,8 +342,6 @@
                                                             <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
                                                         </xsl:if>
                                                     </xsl:variable>
-                                                    <xsl:for-each-group select="current-group()" group-ending-with="css:_[*/@css:page-break-after='right']">
-                                                        <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:page-break-before='right']">
                                                             <xsl:variable name="counter-set" as="element()*"
                                                                           select="current-group()[1]/@css:counter-set/css:parse-counter-set(.,0)"/>
                                                             <xsl:if test="$counter-set[not(@name=$counter-increment/@name)]">
@@ -400,8 +490,6 @@
                                                             </xsl:choose>
                                                         </xsl:for-each-group>
                                                     </xsl:for-each-group>
-                                                </xsl:for-each-group>
-                                            </xsl:for-each-group>
                                         </xsl:element>
                                     </xsl:if>
                                 </xsl:for-each>
@@ -462,9 +550,7 @@
                                     [css:parse-counter-set(@value,1)[@name='page']]"/>
             <xsl:variable name="some-volume-areas-use-counter-page" as="xs:boolean"
                           select="some $a in (for $v in $volume-stylesheets
-                                              return (if ($v/*[matches(@selector,'^:')])
-                                                      then $v/*
-                                                      else $v)
+                                              return $v/(.|*[matches(@selector,'^&amp;:')])
                                                      /*[@selector=('@begin','@end')])
                                   satisfies
                                     if (not($a/*[@selector='@page']))
@@ -496,10 +582,6 @@
                             <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
                         </xsl:if>
                     </xsl:variable>
-                    <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:page-break-before='right']">
-                        <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
-                        <xsl:for-each-group select="current-group()" group-ending-with="css:_[*/@css:page-break-after='right']">
-                            <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
                             <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:volume-break-before='always']">
                                 <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
                                 <sequence css:page="{$page-style/@style}">
@@ -538,8 +620,6 @@
                                                          select="current-group()[position()&gt;1]/*"/>
                                 </sequence>
                             </xsl:for-each-group>
-                        </xsl:for-each-group>
-                    </xsl:for-each-group>
                 </xsl:for-each-group>
             </xsl:for-each-group>
     </xsl:template>
@@ -894,7 +974,7 @@
                                           @css:border-top-pattern or @css:border-bottom-pattern))]">
         <xsl:apply-templates mode="block-attr"
                              select="@css:line-height|@css:text-align|@css:text-indent|@page-break-inside"/>
-        <xsl:apply-templates mode="#current"/>
+        <xsl:next-match/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
     </xsl:template>
     <xsl:template priority="0.6"
@@ -909,8 +989,46 @@
             repeat orphans/widows (why?)
         -->
         <xsl:apply-templates mode="block-attr" select="@css:orphans|@css:widows"/>
-        <xsl:apply-templates mode="#current"/>
+        <xsl:next-match/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
+    </xsl:template>
+    
+    <xsl:template priority="0.59"
+                  mode="block toc-entry"
+                  match="css:box[@type='block']">
+        <xsl:apply-templates mode="#current"/>
+    </xsl:template>
+    
+    <!--
+        Rendering scenarios
+    -->
+    <xsl:template priority="0.591"
+                  mode="block"
+                  match="css:box[@type='block'][@css:_obfl-scenarios]">
+        <xml-data renderer="{pxi:renderer-name(.)}">
+            <d:scenarios>
+                <xsl:apply-templates mode="xml-data"/>
+            </d:scenarios>
+        </xml-data>
+    </xsl:template>
+    
+    <xsl:template mode="xml-data"
+                  match="css:box[@type=('block','table')][@css:_obfl-scenario]">
+        <d:scenario>
+            <xsl:apply-templates mode="block" select="."/>
+        </d:scenario>
+    </xsl:template>
+    
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:_obfl-scenarios|
+                         css:box[@type='block'][@css:_obfl-scenarios]/css:box[@type=('block','table')]/@css:_obfl-scenario|
+                         css:box[@type='block'][@css:_obfl-scenarios]/css:box[@type=('block','table')]/@css:_obfl-scenario-cost"/>
+    
+    <xsl:template priority="0.7"
+                  mode="toc-entry"
+                  match="css:box[@type='block']">
+        <xsl:apply-templates mode="assert-nil-attr" select="@css:_obfl-scenarios"/>
+        <xsl:next-match/>
     </xsl:template>
     
     <!--
@@ -958,28 +1076,15 @@
     <!-- Tables -->
     <!-- ====== -->
     
-    <xsl:template priority="0.8"
-                  mode="sequence"
-                  match="css:box[@type='table']|
-                         css:box[@type='block'][descendant::css:box[@type='table']]">
+    <xsl:template priority="0.6"
+                  mode="sequence block"
+                  match="css:box[@type='table']">
         <table>
-            <xsl:apply-templates mode="table" select="."/>
+            <xsl:call-template name="insert-text-attributes-and-next-match"/>
         </table>
     </xsl:template>
     
-    <xsl:template priority="0.6"
-                  mode="table"
-                  match="css:box[@type=('block','table')]">
-        <xsl:call-template name="insert-text-attributes-and-next-match"/>
-    </xsl:template>
-    
-    <xsl:template mode="table"
-                  match="css:box[@type='block']">
-        <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:text-transform|@css:hyphens)"/>
-        <xsl:apply-templates mode="#current"/>
-    </xsl:template>
-    
-    <xsl:template mode="table"
+    <xsl:template mode="sequence block"
                   match="css:box[@type='table']">
         <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:render-table-by|
                                                                   @css:text-transform|@css:hyphens)"/>
@@ -1388,12 +1493,17 @@
         <xsl:attribute name="break-before" select="'page'"/>
     </xsl:template>
     
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:page-break-before[.='right']">
+        <xsl:attribute name="break-before" select="'sheet'"/>
+    </xsl:template>
+    
     <!--
         ignore page-break-before on first box of sequence
     -->
     <xsl:template mode="block-attr
                         table-attr"
-                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.='always']">
+                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.=('always','right')]">
         <xsl:param name="first-in-sequence" as="xs:boolean" tunnel="yes" select="true()"/>
         <xsl:if test="not($first-in-sequence)">
             <xsl:next-match/>
@@ -1422,7 +1532,7 @@
     </xsl:template>
     
     <!--
-        page-break-after:always becomes break-before="page" on next block unless there is no next block
+        page-break-after:always|right becomes break-before="page|sheet" on next block unless there is no next block
     -->
     <xsl:template priority="1"
                   mode="block"
@@ -1432,20 +1542,20 @@
     </xsl:template>
     <xsl:template mode="block-attr"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='always']"/>
-    
-    <!--
-        'right' is handled by starting new sequences
-    -->
+    <xsl:template priority="1"
+                  mode="block"
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)][@css:page-break-after[.='right']]">
+        <xsl:next-match/>
+        <block break-before="sheet"/>
+    </xsl:template>
     <xsl:template mode="block-attr"
-                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.='right']|
-                         css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='right']"/>
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='right']"/>
     
     <!--
         FIXME: 'left' not supported
     -->
     <xsl:template mode="block-attr"
-                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.='left']|
-                         css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='left']"/>
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='left']"/>
     
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:page-break-inside[.='avoid']">
@@ -1618,8 +1728,11 @@
     
     <xsl:template mode="css:eval-string"
                   match="css:string[@value]">
+        <xsl:variable name="evaluated" as="xs:string">
+            <xsl:apply-templates mode="css:eval" select="."/>
+        </xsl:variable>
         <xsl:call-template name="text">
-            <xsl:with-param name="text" select="string(@value)"/>
+            <xsl:with-param name="text" select="$evaluated"/>
         </xsl:call-template>
     </xsl:template>
     
@@ -2184,6 +2297,7 @@
     <xsl:template match="pxi:print-mode" mode="toc-entry-attr">toc-entry-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="assert-nil-attr">assert-nil-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="marker">marker</xsl:template>
+    <xsl:template match="pxi:print-mode" mode="xml-data">xml-data</xsl:template>
     <xsl:template match="pxi:print-mode" mode="#all" priority="-1">?</xsl:template>
     
     <!-- =========== -->

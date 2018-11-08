@@ -6,7 +6,7 @@
                 version="1.0">
     
     <p:documentation>
-        Extract pseudo-element rules and at-rules from style sheets.
+        Extract pseudo rules and at-rules from style sheets.
     </p:documentation>
     
     <p:input port="source">
@@ -18,8 +18,8 @@
     
     <p:output port="result">
         <p:documentation>
-            Elements in the output will get a css:* attribute for each pseudo-element rule or
-            at-rule in the element's style attribute. Rules with the same keyword but different
+            Elements in the output will get a css:* attribute for each pseudo-element, pseudo-class
+            or at-rule in the element's style attribute. Rules with the same keyword but different
             pseudo-classes are combined into a single attribute. For example, the rule `@page {
             size: 40 25 }' becomes the attribute css:page="size: 40 25", the rules `@volume {
             max-length: 100 } @volume:first { max-length: 50 }` become the attribute css:volume="{

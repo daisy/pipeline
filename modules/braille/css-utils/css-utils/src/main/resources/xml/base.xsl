@@ -254,27 +254,34 @@
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_ident" select="1"/>
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_value" select="$css:COUNTER_SET_PAIR_RE_ident + $css:IDENT_RE_groups + 2"/>
     
-    <xsl:variable name="css:DECLARATION_LIST_RE">([^'"\{\}]+|'[^']*'|"[^"]*")*</xsl:variable>
-    <xsl:variable name="css:DECLARATION_LIST_RE_groups" select="1"/>
+    <xsl:variable name="css:PROPERTY_VALUE_RE">([^'"\{\}@&amp;;:]+|'[^']*'|"[^"]*")*</xsl:variable>
+    <xsl:variable name="css:PROPERTY_VALUE_RE_groups" select="1"/>
+    
+    <xsl:variable name="css:DECLARATION_RE" select="concat('(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')\s*:(',$css:PROPERTY_VALUE_RE,')')"/>
+    <xsl:variable name="css:DECLARATION_RE_property" select="1"/>
+    <xsl:variable name="css:DECLARATION_RE_value" select="$css:DECLARATION_RE_property + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
+    <xsl:variable name="css:DECLARATION_RE_groups" select="$css:DECLARATION_RE_value + $css:PROPERTY_VALUE_RE_groups"/>
+    
+    <xsl:variable name="css:DECLARATION_LIST_RE" select="concat('\s*(', $css:DECLARATION_RE ,')?(;\s*(', $css:DECLARATION_RE ,')?)*')"/>
+    <xsl:variable name="css:DECLARATION_LIST_RE_groups" select="1 + $css:DECLARATION_RE_groups + 2 + $css:DECLARATION_RE_groups"/>
     
     <xsl:variable name="css:NESTED_NESTED_NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{',$css:DECLARATION_LIST_RE,'\}')"/>
     <xsl:variable name="css:NESTED_NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_NESTED_RULE_RE,')*)\}')"/>
     <xsl:variable name="css:NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_RULE_RE,')*)\}')"/>
     
-    <xsl:variable name="css:PSEUDOCLASS_RE" select="concat(':',$css:IDENT_RE,'(\([1-9][0-9]*\))?')"/>
-    <xsl:variable name="css:PSEUDOCLASS_RE_groups" select="$css:IDENT_RE_groups + 1"/>
+    <xsl:variable name="css:PSEUDOCLASS_RE" select="concat(':(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\([1-9][0-9]*\))?')"/>
+    <xsl:variable name="css:PSEUDOCLASS_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
     
     <xsl:variable name="css:PSEUDOELEMENT_RE" select="concat('::(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\(',$css:IDENT_RE,'\))?')"/>
     <xsl:variable name="css:PSEUDOELEMENT_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1 + $css:IDENT_RE_groups"/>
     
-    <xsl:variable name="css:RULE_RE" select="concat('(((@',$css:IDENT_RE,')','(\s+(',$css:IDENT_RE,'))?','(',$css:PSEUDOCLASS_RE,')?|(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*)?\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
-    <xsl:variable name="css:RULE_RE_selector" select="2"/>
+    <xsl:variable name="css:RULE_RE" select="concat('((@',$css:IDENT_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?\s*|([^\s\{;@][^\{;@&amp;]*))\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:RULE_RE_selector" select="1"/>
     <xsl:variable name="css:RULE_RE_selector_atrule" select="$css:RULE_RE_selector + 1"/>
     <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 2"/>
     <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule_name + $css:IDENT_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_pseudo" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_pseudo_stack" select="$css:RULE_RE_selector_pseudo + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_pseudo_stack + 1 + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
+    <xsl:variable name="css:RULE_RE_selector_relative" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
+    <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_relative + 1"/>
     
     <!-- ======= -->
     <!-- Parsing -->
@@ -301,116 +308,59 @@
         <xsl:attribute name="css:{replace(@name,'^-','_')}" select="@value"/>
     </xsl:template>
     
-    <xsl:function name="css:parse-stylesheet" as="element()*"> <!-- css:rule* -->
+    <!--
+        css:parse-stylesheet implemented in Java
+    -->
+    <!--
+    <xsl:function name="css:parse-stylesheet" as="css:rule*">
         <xsl:param name="stylesheet" as="xs:string?"/>
-        <xsl:if test="$stylesheet">
-            <xsl:variable name="rules" as="element()*">
-                <xsl:analyze-string select="$stylesheet" regex="{$css:RULE_RE}">
-                    <xsl:matching-substring>
-                        <xsl:element name="css:rule">
-                            <xsl:if test="regex-group($css:RULE_RE_selector)!=''">
-                                <xsl:attribute name="selector" select="concat(
-                                                                         normalize-space(
-                                                                           concat(regex-group($css:RULE_RE_selector_atrule),
-                                                                                  ' ',
-                                                                                  regex-group($css:RULE_RE_selector_atrule_name))),
-                                                                         regex-group($css:RULE_RE_selector_pseudo)[1])"/>
-                            </xsl:if>
-                            <xsl:variable name="style" as="xs:string"
-                                          select="replace(regex-group($css:RULE_RE_value), '(^\s+|\s+$)', '')"/>
-                            <xsl:choose>
-                                <xsl:when test="regex-group($css:RULE_RE_selector_atrule_pseudoclass)!='' or
-                                                regex-group($css:RULE_RE_selector_pseudo_stack)!=''">
-                                    <xsl:element name="css:rule">
-                                        <xsl:attribute name="selector" select="concat(
-                                                                                 regex-group($css:RULE_RE_selector_atrule_pseudoclass),
-                                                                                 regex-group($css:RULE_RE_selector_pseudo_stack)[1])"/>
-                                        <xsl:attribute name="style" select="$style"/>
-                                    </xsl:element>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:attribute name="style" select="$style"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:element>
-                    </xsl:matching-substring>
-                    <xsl:non-matching-substring>
-                        <xsl:if test="not(normalize-space(.)='')">
-                            <css:rule style="{replace(., '(^\s+|\s+$)', '')}"/>
-                        </xsl:if>
-                    </xsl:non-matching-substring>
-                </xsl:analyze-string>
-            </xsl:variable>
-            <xsl:for-each-group select="$rules" group-by="string(@selector)">
-                <xsl:variable name="selector" as="xs:string" select="current-grouping-key()"/>
-                <xsl:choose>
-                    <xsl:when test="not(current-group()/*)">
-                        <xsl:sequence select="current-group()[last()]"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:variable name="nested-rules" as="xs:string*">
-                            <xsl:if test="current-group()/@style">
-                                <xsl:sequence select="concat('{ ',(current-group()/@style)[last()],' }')"/>
-                            </xsl:if>
-                            <xsl:for-each-group select="current-group()/*" group-by="@selector">
-                                <xsl:sequence select="concat(current-grouping-key(),' { ',current-group()[last()]/@style,' }')"/>
-                            </xsl:for-each-group>
-                        </xsl:variable>
-                        <xsl:element name="css:rule">
-                            <xsl:attribute name="selector" select="current-grouping-key()"/>
-                            <xsl:attribute name="style" select="string-join($nested-rules,' ')"/>
-                        </xsl:element>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each-group>
-        </xsl:if>
+        <xsl:param name="deep" as="xs:boolean"/>
+        <xsl:param name="context" as="xs:QName?"/>
     </xsl:function>
+    -->
     
     <xsl:function name="css:parse-declaration-list" as="element()*"> <!-- css:property* -->
         <xsl:param name="declaration-list" as="xs:string?"/>
         <xsl:if test="$declaration-list">
-            <xsl:for-each select="tokenize($declaration-list, ';')[not(normalize-space(.)='')]">
-                <xsl:sequence select="css:property(
-                                        normalize-space(substring-before(.,':')),
-                                        replace(substring-after(.,':'), '(^\s+|\s+$)', ''))"/>
-            </xsl:for-each>
+            <xsl:analyze-string select="$declaration-list" regex="{$css:DECLARATION_RE}">
+                <xsl:matching-substring>
+                    <xsl:sequence select="css:property(
+                                            regex-group($css:DECLARATION_RE_property),
+                                            replace(regex-group($css:DECLARATION_RE_value), '(^\s+|\s+$)', '')
+                                            )"/>
+                </xsl:matching-substring>
+            </xsl:analyze-string>
         </xsl:if>
     </xsl:function>
     
-    <!--
-        TODO: also parse content lists
-    -->
-    <xsl:template name="css:deep-parse-stylesheet" as="element()*"> <!-- css:rule*|css:property* -->
-        <xsl:param name="stylesheet" as="xs:string?" required="yes"/>
-        <xsl:param name="recursive-call" as="xs:boolean" select="false()"/>
-        <xsl:if test="$stylesheet">
-            <xsl:variable name="stylesheet" as="element()*" select="css:parse-stylesheet($stylesheet)"/> <!-- css:rule* -->
-            <xsl:choose>
-                <xsl:when test="$recursive-call and not($stylesheet[@selector])">
-                    <xsl:for-each select="$stylesheet">
-                        <xsl:sequence select="css:parse-declaration-list(@style)"/>
-                    </xsl:for-each>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:for-each select="$stylesheet">
-                        <xsl:copy>
-                            <xsl:copy-of select="@selector"/>
-                            <xsl:call-template name="css:deep-parse-stylesheet">
-                                <xsl:with-param name="stylesheet" select="@style"/>
-                                <xsl:with-param name="recursive-call" select="true()"/>
-                            </xsl:call-template>
-                        </xsl:copy>
-                    </xsl:for-each>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-    </xsl:template>
-    
     <xsl:function name="css:deep-parse-stylesheet" as="element()*"> <!-- css:rule* -->
+        <xsl:param name="stylesheet"/>
+        <xsl:choose>
+            <xsl:when test="not(exists($stylesheet))"/>
+            <xsl:when test="$stylesheet instance of attribute()">
+                <xsl:sequence select="css:parse-stylesheet(
+                                        $stylesheet,
+                                        true(),
+                                        if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@page'])
+                                          then QName('','page')
+                                          else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@volume'])
+                                            then QName('','volume')
+                                            else ())"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="css:parse-stylesheet($stylesheet, true())"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="css:deep-parse-page-stylesheet" as="element()*"> <!-- css:rule* -->
         <xsl:param name="stylesheet" as="xs:string?"/>
-        <xsl:call-template name="css:deep-parse-stylesheet">
-            <xsl:with-param name="stylesheet" select="$stylesheet"/>
-        </xsl:call-template>
+        <xsl:sequence select="css:parse-stylesheet($stylesheet, true(), QName('','page'))"/>
+    </xsl:function>
+    
+    <xsl:function name="css:deep-parse-volume-stylesheet" as="element()*"> <!-- css:rule* -->
+        <xsl:param name="stylesheet" as="xs:string?"/>
+        <xsl:sequence select="css:parse-stylesheet($stylesheet, true(), QName('','volume'))"/>
     </xsl:function>
     
     <xsl:template name="css:parse-content-list" as="element()*">
@@ -424,8 +374,10 @@
                             <string>
                         -->
                         <xsl:when test="regex-group($css:CONTENT_RE_string)!=''">
-                            <css:string value="{substring(regex-group($css:CONTENT_RE_string),
-                                                          2, string-length(regex-group($css:CONTENT_RE_string))-2)}"/>
+                            <css:string value="{replace(
+                                                  substring(regex-group($css:CONTENT_RE_string),
+                                                            2, string-length(regex-group($css:CONTENT_RE_string))-2),
+                                                  '\\A','&#xA;')}"/>
                         </xsl:when>
                         <!--
                             content()
@@ -883,28 +835,28 @@
                                       then string(@style)
                                       else css:serialize-stylesheet(*,(),$level,$indent)"/>
             </xsl:when>
-            <xsl:when test="exists($base) and not(matches(@selector,'^:'))">
+            <xsl:when test="exists($base) and not(matches(@selector,'^&amp;:'))">
                 <xsl:sequence select="string-join((
                                         string-join($base,', '),' {',$newline,$indent,
                                         css:serialize-stylesheet(
                                           if (@style)
-                                            then css:parse-stylesheet(@style)
+                                            then css:deep-parse-stylesheet(@style)
                                             else *,
                                           @selector,
                                           $level+1,
                                           $indent),
                                         $newline,'}'),'')"/>
             </xsl:when>
-            <xsl:otherwise>
+            <xsl:otherwise> <!-- matches(@selector,'^&amp;:') -->
                 <xsl:sequence select="css:serialize-stylesheet(
                                         if (@style)
-                                          then css:parse-stylesheet(@style)
+                                          then css:deep-parse-stylesheet(@style)
                                           else *,
                                         if (exists($base))
                                           then for $s in @selector return
                                                for $b in $base return
                                                  for $bb in tokenize($b,'\s*,\s*') return
-                                                   concat($bb,$s)
+                                                   concat($bb,substring($s,2))
                                           else @selector,
                                         $level,
                                         $indent)"/>
@@ -925,7 +877,7 @@
     </xsl:template>
     
     <xsl:template match="css:string[@value]" mode="css:serialize" as="xs:string">
-        <xsl:sequence select="concat('&quot;',@value,'&quot;')"/>
+        <xsl:sequence select="concat('&quot;',replace(@value,'\n','\\A'),'&quot;')"/>
     </xsl:template>
     
     <xsl:template match="css:content[not(@target)]" mode="css:serialize" as="xs:string">
@@ -979,7 +931,7 @@
     </xsl:template>
     
     <xsl:function name="css:serialize-stylesheet" as="xs:string">
-        <xsl:param name="rules" as="element()*"/>
+        <xsl:param name="rules" as="element()*"/> <!-- css:rule*|css:property* -->
         <xsl:sequence select="css:serialize-stylesheet($rules,())"/>
     </xsl:function>
     
@@ -1004,14 +956,14 @@
         <xsl:variable name="newline" as="xs:string"
                       select="if (exists($indent)) then string-join(('&#xa;',for $i in 2 to $level return $indent),'') else ' '"/>
         <xsl:variable name="serialized-pseudo-rules" as="xs:string*">
-            <xsl:apply-templates select="$rules[self::css:rule and @selector[matches(.,'^:')]]" mode="css:serialize">
+            <xsl:apply-templates select="$rules[self::css:rule and @selector[matches(.,'^&amp;:')]]" mode="css:serialize">
                 <xsl:with-param name="base" select="$base"/>
                 <xsl:with-param name="level" select="$level"/>
                 <xsl:with-param name="indent" select="$indent"/>
             </xsl:apply-templates>
         </xsl:variable>
         <xsl:variable name="serialized-at-rules" as="xs:string*">
-            <xsl:apply-templates select="$rules[self::css:rule and @selector[not(matches(.,'^:'))]]" mode="css:serialize">
+            <xsl:apply-templates select="$rules[self::css:rule and @selector[not(matches(.,'^&amp;:'))]]" mode="css:serialize">
                 <xsl:with-param name="level" select="if (exists($base)) then $level+1 else $level"/>
                 <xsl:with-param name="indent" select="$indent"/>
             </xsl:apply-templates>
@@ -1041,12 +993,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:if test="exists($serialized-declarations)">
-                        <xsl:sequence select="if (exists(($serialized-at-rules,$serialized-pseudo-rules)) and $level=1)
-                                              then string-join((
-                                                     '{',$newline,$indent,
-                                                     string-join($serialized-declarations,string-join((';',$newline,$indent),'')),
-                                                     $newline,'}'),'')
-                                              else string-join($serialized-declarations,string-join((';',$newline),''))"/>
+                        <xsl:sequence select="string-join($serialized-declarations,string-join((';',$newline),''))"/>
                     </xsl:if>
                     <xsl:sequence select="$serialized-at-rules"/>
                 </xsl:otherwise>

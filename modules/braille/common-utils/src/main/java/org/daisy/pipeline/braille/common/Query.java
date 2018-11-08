@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ForwardingList;
 import com.google.common.collect.ImmutableList;
 
@@ -71,7 +71,7 @@ public interface Query extends Iterable<Query.Feature> {
 							value = integer;
 						else
 							throw new RuntimeException("Coding error"); }
-					mq.add(key, Optional.fromNullable(value)); }
+					mq.add(key, Optional.ofNullable(value)); }
 				return mq.asImmutable(); }
 			throw new RuntimeException("Could not parse query: " + query);
 		}
@@ -146,12 +146,12 @@ public interface Query extends Iterable<Query.Feature> {
 			}
 			
 			public MutableQuery add(String key) {
-				add(key, Optional.<String>absent());
+				add(key, Optional.<String>empty());
 				return this;
 			}
 			
 			public MutableQuery add(String key, String value) {
-				add(key, Optional.<String>fromNullable(value));
+				add(key, Optional.<String>ofNullable(value));
 				return this;
 			}
 			
@@ -232,7 +232,7 @@ public interface Query extends Iterable<Query.Feature> {
 			}
 			
 			public String getValueOrNull() {
-				return getValue().orNull();
+				return getValue().orElse(null);
 			}
 			
 			public Optional<String> getValue() {

@@ -39,10 +39,10 @@
             certain property, 'left' and 'right' win from 'always', 'always' wins from 'avoid', and
             'avoid' wins from 'auto'. When 'left' and 'right' are combined, the value specified on
             the latest element in the document wins. In case of conflicting values between adjacent
-            siblings, the same precedence rules apply. Forced page breaks of type 'right' are
+            siblings, the same precedence rules apply. Forced page breaks of type 'auto-right' are
             introduced where needed to satisfy the 'page' properties. Forced page breaks of type
-            'always' are introduced where needed to satisfy the 'volume' properties. These forced
-            page breaks are propagated also as described above.
+            'auto-always' are introduced where needed to satisfy the 'volume' properties. These
+            forced page breaks are propagated also as described above.
         </p:documentation>
     </p:output>
     
@@ -77,12 +77,11 @@
     -->
     <p:delete match="@css:page-break-after[.='auto']"/>
     <p:delete match="@css:page-break-before[.='auto']"/>
-    <p:delete match="@css:page-break-after[.='avoid' and parent::*/following-sibling::*[1]/@css:page-break-before=('always','right','left')]"/>
-    <p:delete match="@css:page-break-before[.='avoid' and parent::*/preceding-sibling::*[1]/@css:page-break-after=('always','right','left')]"/>
-    <p:delete match="@css:page-break-after[.='always' and parent::*/following-sibling::*[1]/@css:page-break-before=('right','left')]"/>
-    <p:delete match="@css:page-break-before[.='always' and parent::*/preceding-sibling::*[1]/@css:page-break-after=('right','left')]"/>
-    <p:delete match="@css:page-break-after[.=('right','left') and parent::*/following-sibling::*[1]/@css:page-break-before=('right','left')]"/>
-    
+    <p:delete match="@css:page-break-after[.='avoid' and parent::*/following-sibling::*[1]/@css:page-break-before=('always','right','auto-right','left')]"/>
+    <p:delete match="@css:page-break-before[.='avoid' and parent::*/preceding-sibling::*[1]/@css:page-break-after=('always','right','auto-right','left')]"/>
+    <p:delete match="@css:page-break-after[.=('always','right','left') and parent::*/following-sibling::*[1]/@css:page-break-before=('right','auto-right','left')]"/>
+    <p:delete match="@css:page-break-before[.='always' and parent::*/preceding-sibling::*[1]/@css:page-break-after=('right','auto-right','left')]"/>
+    <p:delete match="@css:page-break-before[.=('right','left') and parent::*/preceding-sibling::*[1]/@css:page-break-after='auto-right']"/>
     <p:delete match="@css:volume-break-after[.='auto']"/>
     <p:delete match="@css:volume-break-before[.='auto']"/>
     

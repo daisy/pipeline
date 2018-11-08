@@ -18,6 +18,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
@@ -97,6 +101,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <_dsannotations>
               org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
               org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,

@@ -195,7 +195,7 @@
 		</xsl:variable>
 		<xsl:variable name="translated-style" as="element()*">
 			<xsl:sequence select="$translated-main-style"/>
-			<xsl:apply-templates mode="translate-style" select="$style[@selector=('::before','::after')]">
+			<xsl:apply-templates mode="translate-style" select="$style[@selector=('&amp;::before','&amp;::after')]">
 				<!--
 				    Text style is restored because only strings and attr() values are translated,
 				    not counter() values etc. This may lead to certain text being translated twice.
@@ -205,7 +205,7 @@
 				<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
 			</xsl:apply-templates>
 			<xsl:sequence select="$style[@selector and matches(@selector,'^@text-transform')]"/>
-			<xsl:apply-templates mode="translate-style" select="$style[@selector and not(matches(@selector,'^(::(before|after)$|@text-transform)'))]">
+			<xsl:apply-templates mode="translate-style" select="$style[@selector and not(matches(@selector,'^(&amp;::(before|after)$|@text-transform)'))]">
 				<xsl:with-param name="restore-text-style" tunnel="yes" select="true()"/>
 			</xsl:apply-templates>
 		</xsl:variable>
@@ -218,8 +218,8 @@
 		<xsl:param name="restore-text-style" as="xs:boolean" tunnel="yes" select="false()"/>
 		<xsl:copy>
 			<xsl:sequence select="@selector"/>
-			<xsl:variable name="mode" as="xs:string" select="if (@selector='::before') then 'before'
-			                                                 else if (@selector='::after') then 'after'
+			<xsl:variable name="mode" as="xs:string" select="if (@selector='&amp;::before') then 'before'
+			                                                 else if (@selector='&amp;::after') then 'after'
 			                                                 else $mode"/>
 			<xsl:variable name="translated-style" as="element()*">
 				<xsl:choose>

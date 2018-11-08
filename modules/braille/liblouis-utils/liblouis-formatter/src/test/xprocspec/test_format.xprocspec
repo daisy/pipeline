@@ -396,7 +396,7 @@
               <bodymatter>
                 ⠤⠤⠤
               </bodymatter>
-              <rearmatter style="{ counter-reset: braille-page 1 }
+              <rearmatter style="counter-reset: braille-page 1
                                  @page {
                                  size: 15 5;
                                  @bottom-right { content: counter(braille-page, lower-roman) }}">
@@ -862,9 +862,9 @@
             <body style="@page { size: 30 2; }">
               <table>
                 <tr style="display: block">
-                  <td style="::after { content: '⠆' } ">⠤⠤⠤</td>
-                  <td style="::after { content: '⠆' } ">⠤⠤⠤</td>
-                  <td style="::after { content: '⠆' } ">⠤⠤⠤</td>
+                  <td style="&amp;::after { content: '⠆' } ">⠤⠤⠤</td>
+                  <td style="&amp;::after { content: '⠆' } ">⠤⠤⠤</td>
+                  <td style="&amp;::after { content: '⠆' } ">⠤⠤⠤</td>
                   <td>⠤⠤⠤</td>
                 </tr>
               </table>

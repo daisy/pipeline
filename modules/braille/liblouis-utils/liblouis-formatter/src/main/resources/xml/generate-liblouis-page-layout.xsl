@@ -16,9 +16,8 @@
     
     <xsl:template match="/*">
         <xsl:variable name="page-stylesheet" as="xs:string" select="string(@css:page)"/>
-        <xsl:variable name="rules" as="element()*" select="css:parse-stylesheet($page-stylesheet)"/>
-        <xsl:variable name="properties" as="element()*"
-                      select="css:parse-declaration-list($rules[not(@selector)]/@style)"/>
+        <xsl:variable name="rules" as="element()*" select="css:deep-parse-page-stylesheet($page-stylesheet)"/>
+        <xsl:variable name="properties" as="element()*" select="$rules[not(@selector)]/*"/>
         <xsl:variable name="size" as="xs:string"
                       select="($properties[@name='size'][css:is-valid(.)]/@value, css:initial-value('size'))[1]"/>
         <xsl:variable name="top-right-content" as="element()*" select="pxi:margin-content($rules, '@top-right')"/>
@@ -98,8 +97,8 @@
         <xsl:param name="margin-rules" as="element()*"/>
         <xsl:param name="selector" as="xs:string"/>
         <xsl:sequence select="css:parse-content-list(
-                                css:parse-declaration-list($margin-rules[@selector=$selector]/@style)
-                                [@name='content'][1]/@value, ())"/>
+                                $margin-rules[@selector=$selector]/*[@name='content'][1]/@value,
+                                ())"/>
     </xsl:function>
 
 </xsl:stylesheet>

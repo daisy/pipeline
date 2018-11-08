@@ -11,7 +11,7 @@
   </parent>
   
   <artifactId>dotify-formatter</artifactId>
-  <version>1.12.3-SNAPSHOT</version>
+  <version>1.13.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DP2 Braille Modules :: dotify-utils :: dotify-formatter</name>
@@ -26,12 +26,20 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.dotify</groupId>
       <artifactId>dotify.api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.dotify</groupId>
       <artifactId>dotify.common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -137,6 +145,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <!--
                 in order to avoid including services in the same package in other bundles
             -->

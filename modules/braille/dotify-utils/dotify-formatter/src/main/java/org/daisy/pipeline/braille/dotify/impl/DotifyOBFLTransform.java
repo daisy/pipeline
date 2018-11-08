@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
 
 import org.daisy.pipeline.braille.common.AbstractTransform;
@@ -78,7 +78,7 @@ public interface DotifyOBFLTransform {
 			
 			@Override
 			public ToStringHelper toStringHelper() {
-				return Objects.toStringHelper("o.d.p.b.dotify.impl.DotifyOBFLTransform$Provider$TransformImpl");
+				return MoreObjects.toStringHelper("o.d.p.b.dotify.impl.DotifyOBFLTransform$Provider$TransformImpl");
 			}
 		}
 	}

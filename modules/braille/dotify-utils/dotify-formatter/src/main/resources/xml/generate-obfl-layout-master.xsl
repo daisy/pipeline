@@ -91,8 +91,8 @@
         <xsl:param name="name" as="xs:string"/>
         <xsl:param name="default-page-counter-name" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
         <xsl:variable name="duplex" as="xs:boolean" select="$duplex='true'"/>
-        <xsl:variable name="right-page-stylesheet" as="element()*" select="$page-stylesheet[@selector=':right']/*"/>
-        <xsl:variable name="left-page-stylesheet" as="element()*" select="$page-stylesheet[@selector=':left']/*"/>
+        <xsl:variable name="right-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:right']/*"/>
+        <xsl:variable name="left-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:left']/*"/>
         <xsl:variable name="default-page-stylesheet" as="element()*"
                       select="if ($right-page-stylesheet or $left-page-stylesheet)
                               then $page-stylesheet[not(@selector)]/*

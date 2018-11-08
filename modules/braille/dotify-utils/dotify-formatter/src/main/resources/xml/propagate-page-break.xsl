@@ -65,40 +65,43 @@
                                 [not(following::* intersect $self/descendant::css:box[@type='block'])]
                                 /@css:page-break-after/string())"/>
         <!--
-            Forced page breaks of type 'right' are introduced where needed to satisfy the 'page'
-            properties.
+            Forced page breaks of type 'auto-right' are introduced where needed to satisfy the
+            'page' properties.
         -->
         <xsl:variable name="page-break-before" as="xs:string*"
-                      select="if (
-                                exists(
-                                  .[preceding-sibling::* or not(parent::css:box)]
-                                  /(.|descendant::css:box)
-                                   [@css:start-page]
-                                   [not(preceding::* intersect $self/descendant::css:box)]))
-                              then ('right')
-                              else $page-break-before"/>
+                      select="($page-break-before,
+                               if (
+                                 exists(
+                                   .[preceding-sibling::* or not(parent::css:box)]
+                                   /(.|descendant::css:box)
+                                    [@css:start-page]
+                                    [not(preceding::* intersect $self/descendant::css:box)]))
+                               then ('auto-right')
+                               else ())"/>
         <xsl:variable name="page-break-after" as="xs:string*"
-                      select="if (
-                                exists(
-                                  .[following-sibling::* or not(parent::css:box)]
-                                  /(.|descendant::css:box)
-                                   [@css:end-page]
-                                   [not(following::* intersect $self/descendant::css:box)]))
-                              then ('right')
-                              else $page-break-after"/>
+                      select="($page-break-after,
+                               if (
+                                 exists(
+                                   .[following-sibling::* or not(parent::css:box)]
+                                   /(.|descendant::css:box)
+                                    [@css:end-page]
+                                    [not(following::* intersect $self/descendant::css:box)]))
+                               then ('auto-right')
+                               else ())"/>
         <!--
-            Forced page breaks of type 'always' are introduced where needed to satisfy the 'volume'
-            properties.
+            Forced page breaks of type 'auto-always' are introduced where needed to satisfy the
+            'volume' properties.
         -->
         <xsl:variable name="volume-break-before" as="xs:string*"
-                      select="if (
-                                exists(
-                                  .[preceding-sibling::* or not(parent::css:box)]
-                                  /(.|descendant::css:box)
-                                   [@css:start-volume]
-                                   [not(preceding::* intersect $self/descendant::css:box)]))
-                              then ('always')
-                              else $volume-break-before"/>
+                      select="($volume-break-before,
+                               if (
+                                 exists(
+                                   .[preceding-sibling::* or not(parent::css:box)]
+                                   /(.|descendant::css:box)
+                                    [@css:start-volume]
+                                    [not(preceding::* intersect $self/descendant::css:box)]))
+                               then ('auto-always')
+                               else ())"/>
         <xsl:variable name="volume-break-after" as="xs:string*"
                       select="if (
                                 exists(
@@ -106,7 +109,7 @@
                                   /(.|descendant::css:box)
                                    [@css:end-volume]
                                    [not(following::* intersect $self/descendant::css:box)]))
-                              then ('always')
+                              then ('auto-always')
                               else ()"/>
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
@@ -155,11 +158,17 @@
     <xsl:function name="pxi:combine" as="xs:string">
         <xsl:param name="values" as="xs:string*"/>
         <xsl:choose>
+          <xsl:when test="'auto-right'=$values">
+              <xsl:sequence select="'auto-right'"/>
+          </xsl:when>
           <xsl:when test="exists($values[.=('left','right')])">
               <xsl:sequence select="$values[.=('left','right')][last()]"/>
           </xsl:when>
           <xsl:when test="'always'=$values">
               <xsl:sequence select="'always'"/>
+          </xsl:when>
+          <xsl:when test="'auto-always'=$values">
+              <xsl:sequence select="'auto-always'"/>
           </xsl:when>
           <xsl:when test="'avoid'=$values">
               <xsl:sequence select="'avoid'"/>

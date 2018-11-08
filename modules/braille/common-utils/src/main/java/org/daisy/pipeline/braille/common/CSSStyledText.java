@@ -3,8 +3,8 @@ package org.daisy.pipeline.braille.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.css.InlinedStyle;
-import org.daisy.braille.css.InlinedStyle.RuleMainBlock;
+import org.daisy.braille.css.InlineStyle;
+import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.SimpleInlineStyle;
 
@@ -96,10 +96,10 @@ public class CSSStyledText implements Cloneable {
 	// distinct styles due to things like "-dotify-def: tmp_d52242e3"
 	private static Memoizing<String,Style> parseCSS = new Memoizing.util.CloningMemoizing<String,Style>() {
 		protected Style _apply(String style) {
-			InlinedStyle inlinedStyle = new InlinedStyle(style);
+			InlineStyle inlineStyle = new InlineStyle(style);
 			Style s = new Style();
-			s.properties = new SimpleInlineStyle(inlinedStyle.getMainStyle());
-			for (RuleBlock<?> b : inlinedStyle)
+			s.properties = new SimpleInlineStyle(inlineStyle.getMainStyle());
+			for (RuleBlock<?> b : inlineStyle)
 				if (b instanceof RuleMainBlock) {} // already handled
 				else if (b instanceof RuleTextTransform) {
 					if (s.textTransformDefs == null)

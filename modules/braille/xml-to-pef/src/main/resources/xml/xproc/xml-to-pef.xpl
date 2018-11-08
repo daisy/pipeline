@@ -40,7 +40,7 @@ For info on how to use SASS (Syntactically Awesome StyleSheets) see the [SASS
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
-    <p:option name="transform" required="false" px:data-type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
+    <p:option name="transform" required="false" px:type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Transformer query</h2>
             <p px:role="desc">The transformer query.</p>
@@ -64,7 +64,7 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         <p px:role="desc" xml:space="preserve">Keeps the intermediary OBFL-file for debugging.</p>
       </p:documentation>
     </p:option>
-    <p:option name="ascii-file-format" required="false" px:type="string" px:data-type="transform-query" select="''">
+    <p:option name="ascii-file-format" required="false" px:type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Plain text (BRF) file format</h2>
             <p px:role="desc" xml:space="preserve">The file format to store the plain text version.
@@ -72,7 +72,7 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 If left blank, the locale information in the input document will be used to select a suitable file format.</p>
         </p:documentation>
     </p:option>
-    <p:option name="ascii-table" required="false" px:type="string" px:data-type="transform-query" select="''">
+    <p:option name="ascii-table" required="false" px:type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ASCII braille table</h2>
             <p px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
@@ -212,14 +212,14 @@ See the CSS specification for more info:
     </p:option>
     <p:option name="line-spacing" required="false" select="'single'">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <value>single</value>
                     <documentation xml:lang="en">Single</documentation>
                     <value>double</value>
                     <documentation xml:lang="en">Double</documentation>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Translation/formatting of text: Line spacing</h2>

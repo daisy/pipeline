@@ -141,7 +141,7 @@
       <x:document type="inline">
         <body>
           <p id="1"/>
-          <p id="2" style="::-x-foo { display: block; }"/>
+          <p id="2" style="&amp;::-x-foo { display: block; }"/>
         </body>
       </x:document>
     </x:expect>

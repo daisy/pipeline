@@ -1,6 +1,7 @@
 package org.daisy.pipeline.braille.liblouis.calabash.impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -227,7 +228,9 @@ public class TranslateFileStep extends DefaultStep {
 			// Write XML document to file
 			XdmNode xml = source.read();
 			File xmlFile = File.createTempFile("liblouisutdml.", ".xml", tempDir);
-			Serializer serializer = new Serializer(xmlFile);
+			Serializer serializer = runtime.getProcessor().newSerializer();
+			serializer.setOutputStream(new FileOutputStream(xmlFile));
+			serializer.setCloseOnCompletion(true);
 			serializer.serializeNode(xml);
 			serializer.close();
 			

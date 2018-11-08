@@ -76,7 +76,9 @@ public class ValidateStep extends DefaultStep {
 			// Write PEF document to file
 			File pefFile = File.createTempFile("validate.", ".pef", tempDir);
 			OutputStream pefStream = new FileOutputStream(pefFile);
-			Serializer serializer = new Serializer(pefStream);
+			Serializer serializer = runtime.getProcessor().newSerializer();
+			serializer.setOutputStream(pefStream);
+			serializer.setCloseOnCompletion(true);
 			XdmNode pef = source.read();
 			serializer.serializeNode(pef);
 			serializer.close();

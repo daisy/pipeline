@@ -11,8 +11,7 @@
     
     <p:input port="source">
         <p:documentation>
-            Style sheets of elements in the input must be simple declaration lists and must be
-            declared in style attributes.
+            Style sheets of elements must be declared in `style` attributes.
         </p:documentation>
     </p:input>
     

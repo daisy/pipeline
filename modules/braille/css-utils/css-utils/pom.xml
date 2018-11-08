@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>css-utils</artifactId>
-  <version>3.5.1-SNAPSHOT</version>
+  <version>3.6.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: css-utils :: css-utils</name>
@@ -20,6 +20,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>css-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -70,6 +74,10 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+    </dependency>
     <!--
         test dependencies
     -->
@@ -104,10 +112,15 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <_dsannotations>
               org.daisy.pipeline.braille.css.calabash.impl.CssInlineStep$Provider,
               org.daisy.pipeline.braille.css.calabash.impl.CssShiftStringSetStep$Provider,
               org.daisy.pipeline.braille.css.calabash.impl.CssSplitStep$Provider,
+              org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition,
               org.daisy.pipeline.braille.css.saxon.impl.RenderTableByDefinition
             </_dsannotations>
           </instructions>

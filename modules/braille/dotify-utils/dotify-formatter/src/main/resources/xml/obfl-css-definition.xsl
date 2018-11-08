@@ -16,7 +16,7 @@
                            'padding-bottom',                                                              '-obfl-underline',
                            'border-left-pattern',   'border-left-style',                                  '-obfl-keep-with-previous-sheets',
                            'border-right-pattern',  'border-right-style',                                 '-obfl-keep-with-next-sheets',
-                           'border-top-pattern',    'border-top-style',
+                           'border-top-pattern',    'border-top-style',                                   '-obfl-scenario-cost',
                            'border-bottom-pattern', 'border-bottom-style')"/>
     
     <xsl:variable name="_OBFL_KEEP_FN_RE">-obfl-keep\(\s*[1-9]\s*\)</xsl:variable>
@@ -45,6 +45,8 @@
                                 then matches($css:property/@value,'^[0-9]$')
                                 else if ($css:property/@name='volume-break-inside')
                                 then matches($css:property/@value,re:exact(re:or(('auto',$_OBFL_KEEP_FN_RE))))
+                                else if ($css:property/@name='-obfl-scenario-cost')
+                                then matches($css:property/@value,re:exact(re:or(('none',$css:INTEGER_RE,$css:VENDOR_PRF_FN_RE))))
                                 else (
                                   css:is-valid($css:property)
                                   and not($css:property/@value=('inherit','initial'))
@@ -82,6 +84,8 @@
                               then 'none'
                               else if ($property=('-obfl-keep-with-previous-sheets','-obfl-keep-with-next-sheets'))
                               then '0'
+                              else if ($property='-obfl-scenario-cost')
+                              then 'none'
                               else css:initial-value($property)"/>
     </xsl:function>
     

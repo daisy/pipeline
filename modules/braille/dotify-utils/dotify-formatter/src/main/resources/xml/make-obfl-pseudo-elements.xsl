@@ -35,4 +35,39 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="*[@css:_obfl-alternate-scenario]">
+        <xsl:if test="@css:flow[not(.='normal')]">
+            <xsl:message terminate="yes">Elements with a ::-obfl-alternate-scenario pseudo-element must participate in the normal flow.</xsl:message>
+        </xsl:if>
+        <!--
+            The reason we use attributes to tag the scenarios, and not elements, is because elements
+            are renamed later in the process. We ensure the tree structure is not changed by forcing
+            the "obfl-scenarios" and "obfl-scenario" elements to be blocks (this happens later in
+            pxi:css-to-obfl).
+        -->
+        <xsl:variable name="id" select="if (@css:id) then string(@css:id)
+                                        else if (@css:anchor) then @css:anchor
+                                        else generate-id(.)"/>
+        <css:_ css:_obfl-scenarios="_" css:display="block">
+            <xsl:copy>
+                <xsl:attribute name="css:_obfl-scenario" select="'_'"/>
+                <xsl:sequence select="@* except @css:_obfl-alternate-scenario"/>
+                <xsl:if test="not(@name)">
+                    <xsl:attribute name="name" select="name(.)"/>
+                </xsl:if>
+                <xsl:apply-templates/>
+            </xsl:copy>
+            <!--
+                Copy element because it may be a html:table, which is needed if it has a
+                render-table-by property.
+            -->
+            <xsl:copy>
+                <xsl:attribute name="css:_obfl-scenario" select="'_'"/>
+                <xsl:attribute name="style" select="@css:_obfl-alternate-scenario"/>
+                <xsl:sequence select="@* except (@style|@css:*)"/>
+                <xsl:apply-templates/>
+            </xsl:copy>
+        </css:_>
+    </xsl:template>
+    
 </xsl:stylesheet>

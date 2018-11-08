@@ -31,12 +31,12 @@
   <x:scenario label="test_02">
     <x:context>
       <doc xml:lang="en">
-        foo<br style="::before {{ content: '&#xA;'; white-space: pre-line }}"/>bar
+        foo<br style="&amp;::before {{ content: '\A'; white-space: pre-line }}"/>bar
       </doc>
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
-      <doc xml:lang="en-Brai">         ⠋⠕⠕<br style="::before {{ content: &quot;&#xA;&quot;; white-space: pre-line; text-transform: auto }}"/>⠃⠜       </doc>
+      <doc xml:lang="en-Brai">         ⠋⠕⠕<br style="&amp;::before {{ content: &quot;\A&quot;; white-space: pre-line; text-transform: auto }}"/>⠃⠜       </doc>
       </_>
     </x:expect>
   </x:scenario>

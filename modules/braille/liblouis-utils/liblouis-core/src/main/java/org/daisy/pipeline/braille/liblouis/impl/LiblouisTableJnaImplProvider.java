@@ -6,8 +6,8 @@ import java.util.NoSuchElementException;
 
 import com.google.common.base.Function;
 import static com.google.common.base.Functions.toStringFunction;
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 
@@ -205,7 +205,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	
 	@Override
 	public ToStringHelper toStringHelper() {
-		return Objects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTableJnaImplProvider");
+		return MoreObjects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTableJnaImplProvider");
 	}
 	
 	private TransformProvider<LiblouisTableJnaImpl> _provider

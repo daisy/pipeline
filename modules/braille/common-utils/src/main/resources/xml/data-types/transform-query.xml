@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<data type="string" id="transform-query">
+<data type="string">
     <documentation xml:lang="en">A query
 
 The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):

@@ -1,3 +1,8 @@
+Changes
+-------
+- Syntax of style attributes has changed:
+  http://braillespecs.github.io/braille-css/20181031/#style-attribute
+
 v1.11.1
 =======
 

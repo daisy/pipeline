@@ -9,6 +9,7 @@
   
   <!-- other -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl" uri="../xml/xslt/generate-toc.xsl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/volume-breaking.xsl" uri="../xml/xslt/volume-breaking.xsl"/>
   
   <!-- dependencies -->
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>

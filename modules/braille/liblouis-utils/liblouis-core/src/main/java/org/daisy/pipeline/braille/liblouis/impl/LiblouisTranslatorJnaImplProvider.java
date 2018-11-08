@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import static com.google.common.collect.Iterables.size;
@@ -257,7 +257,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	
 	@Override
 	public ToStringHelper toStringHelper() {
-		return Objects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider");
+		return MoreObjects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider");
 	}
 	
 	static class LiblouisTranslatorImpl extends AbstractBrailleTranslator implements LiblouisTranslator {
@@ -619,7 +619,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							if (hyphenate[textWithWsMapping[curSegment]] || segmentInBraille.length() > available)
 								logger.warn("hyphens:auto not supported");
 							
-							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[curSegment]);
+							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 							next += segmentInBraille;
 							available -= segmentInBraille.length();
 							curPos = curSegmentEnd;
@@ -630,7 +630,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						if (fullHyphenator != null) {
 							try {
 								
-								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, letterSpacing[curSegment]);
+								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 								next += segmentInBraille;
 								available -= segmentInBraille.length();
 								curPos = curSegmentEnd;
@@ -661,7 +661,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										// try standard hyphenation of the whole word
 										try {
 											
-											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, letterSpacing[curSegment]);
+											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 											next += wordInBraille;
 											available -= wordInBraille.length();
 											curPos = wordEnd;
@@ -695,7 +695,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 												int lineEnd = curPos + line.length();
 												int lineEndInBraille = positionInBraille(lineEnd);
 												String lineInBraille = joinedBraille.substring(curPosInBraille, lineEndInBraille);
-												lineInBraille = addLetterSpacing(line, lineInBraille, letterSpacing[curSegment]);
+												lineInBraille = addLetterSpacing(line, lineInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 												int lineInBrailleLength = lineInBraille.length();
 												if (lines.lineHasHyphen()) {
 													lineInBraille += "\u00ad";
@@ -1347,7 +1347,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		
 		@Override
 		public ToStringHelper toStringHelper() {
-			return Objects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl")
+			return MoreObjects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl")
 				.add("translator", translator)
 				.add("hyphenator", hyphenator);
 		}
@@ -1392,7 +1392,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		
 		@Override
 		public ToStringHelper toStringHelper() {
-			return Objects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl")
+			return MoreObjects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl")
 				.add("translator", translator)
 				.add("hyphenator", "self");
 		}

@@ -100,7 +100,9 @@ public class OBFLToPEFStep extends DefaultStep {
 			
 			// Read OBFL
 			ByteArrayOutputStream s = new ByteArrayOutputStream();
-			Serializer serializer = new Serializer(s);
+			Serializer serializer = runtime.getProcessor().newSerializer();
+			serializer.setOutputStream(s);
+			serializer.setCloseOnCompletion(true);
 			serializer.serializeNode(source.read());
 			serializer.close();
 			InputStream obflStream = new ByteArrayInputStream(s.toByteArray());

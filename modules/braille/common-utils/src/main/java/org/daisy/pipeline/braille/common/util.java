@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.IllformedLocaleException;
@@ -131,7 +132,20 @@ public abstract class util {
 			return true;
 		}
 	}
-		
+	
+	@FunctionalInterface
+	public static interface ThrowingSupplier<T> extends Supplier<T> {
+		@Override
+		default T get() {
+			try {
+				return getThrows();
+			} catch (Throwable e) {
+				throw new RuntimeException(e);
+			}
+		}
+		T getThrows() throws Throwable;
+	}
+	
 	public static abstract class Functions {
 		
 		public static Function0<Void> noOp = new Function0<Void> () {
@@ -153,6 +167,20 @@ public abstract class util {
 					for (Function<? super F,Void> f : functions)
 						f.apply(input);
 					return null;
+				}
+			};
+		}
+		
+		public static <T,E extends RuntimeException> Supplier<T> propagateException(ThrowingSupplier<T> f, Function<Throwable,E> newEx) {
+			return new Supplier<T>() {
+				public T get() throws E {
+					try {
+						return f.getThrows();
+					} catch (RuntimeException e) {
+						throw e;
+					} catch (Throwable e) {
+						throw newEx.apply(e);
+					}
 				}
 			};
 		}

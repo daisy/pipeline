@@ -35,6 +35,8 @@ public class DotifyCalabashTest extends AbstractXSpecAndXProcSpecTest {
 			brailleModule("css-core"),
 			// other
 			"org.daisy.pipeline:calabash-adapter:?",
+			"org.codehaus.woodstox:stax2-api:jar:?", // FIXME: because otherwise the exclusion of com.fasterxml.woodstox:woodstox-core
+			                                         // from the dotify.formatter.impl dependencies would cause stax2-api to be excluded too
 			brailleModule("common-utils"),
 			brailleModule("obfl-utils"),
 			brailleModule("pef-utils"),

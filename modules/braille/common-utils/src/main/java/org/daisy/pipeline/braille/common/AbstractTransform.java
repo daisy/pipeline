@@ -2,8 +2,8 @@ package org.daisy.pipeline.braille.common;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 public abstract class AbstractTransform implements Transform {
 	
@@ -24,7 +24,7 @@ public abstract class AbstractTransform implements Transform {
 	}
 	
 	public ToStringHelper toStringHelper() {
-		return Objects.toStringHelper(this);
+		return MoreObjects.toStringHelper(this);
 	}
 	
 	@Override

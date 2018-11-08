@@ -18,13 +18,13 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="split-before" required="true">
+    <p:option name="split-before" required="false" select="''">
         <p:documentation>
             The 'split-before' option must be an XSLTMatchPattern that matches only elements.
         </p:documentation>
     </p:option>
     
-    <p:option name="split-after" required="true">
+    <p:option name="split-after" required="false" select="''">
         <p:documentation>
             The 'split-after' option must be an XSLTMatchPattern that matches only elements.
         </p:documentation>

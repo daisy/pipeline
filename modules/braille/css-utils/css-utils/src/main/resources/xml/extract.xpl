@@ -4,7 +4,8 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                exclude-inline-prefixes="#all">
+                exclude-inline-prefixes="#all"
+                name="main">
 	
 	<p:documentation>
 		Extract inlined CSS (defined in attributes) into an external stylesheet. This is the inverse
@@ -39,7 +40,16 @@
 		</p:documentation>
 	</p:option>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:error
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+		<p:documentation>
+			px:set-base-uri
+		</p:documentation>
+	</p:import>
 	
 	<p:choose>
 		<p:when test="contains($attribute-name,':')">
@@ -58,6 +68,16 @@
 		</p:input>
 		<p:with-param name="attribute-name" select="$attribute-name"/>
 	</p:xslt>
+	
+	<!--
+	    FIXME: for some reason output-base-uri option does not work when there are documents on
+	    secondary port
+	-->
+	<px:set-base-uri>
+		<p:with-option name="base-uri" select="base-uri(/)">
+			<p:pipe step="main" port="source"/>
+		</p:with-option>
+	</px:set-base-uri>
 	
 	<p:choose>
 		<p:when test="count(distinct-values((//@id|//@xml:id)/string())) != count(//*[@id or @xml:id])">

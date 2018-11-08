@@ -566,4 +566,121 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="scenario-renderer">
+    <x:documentation>
+      Tests the scenario-renderer feature. The `$forced-break-count` variable may be used to avoid
+      tables with small columns. If a scenario can not be rendered, it should simply be ignored
+      (should not result in an error).
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data">
+            <layout-master name="main" duplex="false" page-width="20" page-height="10">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <xml-processor name="take-nth">
+              <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                              xpath-default-namespace="http://www.daisy.org/ns/pipeline/data">
+                <xsl:param name="n" as="xs:integer" required="yes"/>
+                <xsl:template match="/">
+                  <xsl:sequence select="/*/scenario[position()=$n]"/>
+                </xsl:template>
+              </xsl:stylesheet>
+            </xml-processor>
+            <renderer name="renderer">
+              <rendering-scenario processor="take-nth" cost="0">
+                <parameter name="n" value="1"/>
+              </rendering-scenario>
+              <rendering-scenario processor="take-nth" cost="(+ 1 (* $forced-break-count 10))">
+                <parameter name="n" value="2"/>
+              </rendering-scenario>
+              <rendering-scenario processor="take-nth" cost="(+ 2 (* $forced-break-count 10))">
+                <parameter name="n" value="3"/>
+              </rendering-scenario>
+              <rendering-scenario processor="take-nth" cost="3">
+                <parameter name="n" value="4"/>
+              </rendering-scenario>
+            </renderer>
+            <sequence master="main">
+              <xml-data renderer="renderer">
+                <d:scenarios>
+                  <d:scenario>
+                    <table table-col-spacing="4">
+                      <tr>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                      </tr>
+                    </table>
+                  </d:scenario>
+                  <d:scenario>
+                    <table table-col-spacing="2">
+                      <tr>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                      </tr>
+                    </table>
+                  </d:scenario>
+                  <d:scenario>
+                    <table table-col-spacing="1">
+                      <tr>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                      </tr>
+                    </table>
+                  </d:scenario>
+                  <d:scenario>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                  </d:scenario>
+                </d:scenarios>
+              </xml-data>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="the third scenario wins"
+              type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="20" rows="10" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

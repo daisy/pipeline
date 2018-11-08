@@ -6,14 +6,14 @@
   <x:scenario label="test_01">
     <x:context>
       <doc>
-        <body style="{{ display: block }} @page {{ size: 30 30; @top-center {{ content: string(running-header) }} }}">
+        <body style="display: block; @page {{ size: 30 30; @top-center {{ content: string(running-header) }} }}">
           <p> foo </p>
         </body>
       </doc>
     </x:context>
     <x:expect label="result">
       <doc>
-        <body style="display: block" css:page="size: 30 30; @top-center {{ content: string(running-header) }}">
+        <body style="display: block;" css:page="size: 30 30; @top-center {{ content: string(running-header); }}">
           <p> foo </p>
         </body>
       </doc>
@@ -24,8 +24,8 @@
     <x:context>
       <doc>
         <body>
-          <p style="{{ display: block }}
-                    ::before {{ display: block; margin-left: 2; content: 'bar' }}">
+          <p style="display: block;
+                    &amp;::before {{ display: block; margin-left: 2; content: 'bar' }}">
             foo
           </p>
         </body>
@@ -34,7 +34,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p style="display: block" css:before="display: block; margin-left: 2; content: 'bar'">
+          <p style="display: block;" css:before="display: block; margin-left: 2; content: 'bar';">
             foo
           </p>
         </body>
@@ -47,16 +47,16 @@
       <doc style="@page {{ margin-top: 1 }} @page:left {{ margin-top: 2 }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:page="{{ margin-top: 1 }} :left {{ margin-top: 2 }}"/>
+      <doc css:page="margin-top: 1; &amp;:left {{ margin-top: 2; }}"/>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_04">
     <x:context>
-      <doc style="::-x-foo::before {{ display: block }}"/>
+      <doc style="&amp;::-x-foo::before {{ display: block }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:_x-foo="::before {{ display: block }}"/>
+      <doc css:_x-foo="&amp;::before {{ display: block; }}"/>
     </x:expect>
   </x:scenario>
   
@@ -65,8 +65,49 @@
       <doc style="@text-transform  foo  {{ system: foo }} @text-transform  bar  {{ system: bar }} "/>
     </x:context>
     <x:expect label="result">
-      <doc css:text-transform-foo="system: foo"
-           css:text-transform-bar="system: bar"/>
+      <doc css:text-transform-foo="system: foo;"
+           css:text-transform-bar="system: bar;"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_06">
+    <x:context>
+      <doc style="&amp;::list-item {{ x:y }} &amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }} &amp;::after::table-by(row) {{ x:y }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc style="&amp;::list-item {{ x: y }} &amp;::table-by(row) {{ x: y }} &amp;::table-by(row)::list-item {{ x: y }}"
+           css:after="&amp;::table-by(row) {{ x: y; }}"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_07">
+    <x:context>
+      <table style="&amp;:-obfl-alternate-scenario {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row) {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row)::list-item {{ x:y }}"/>
+    </x:context>
+    <x:expect label="result">
+      <table css:_obfl-alternate-scenario="x: y; &amp;::table-by(row) {{ x: y; }} &amp;::table-by(row)::list-item {{ x: y; }}" />
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_08">
+    <x:context>
+      <doc style="@volume {{ max-length: 3; @begin {{ content: flow(next-front) }} }} @volume:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:volume="max-length: 3; @begin {{ content: flow(next-front); }} &amp;:first {{ max-length: 3; @begin {{ content: flow(first-front); }} }}" />
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_09">
+    <x:context>
+      <table style="&amp;:-obfl-alternate-scenario tr:blank::after {{ content: '(empty)'; }}">
+        <tr/>
+      </table>
+    </x:context>
+    <x:expect label="result">
+      <table css:_obfl-alternate-scenario="&amp; tr:blank::after {{ content: '(empty)'; }}">
+        <tr/>
+      </table>
     </x:expect>
   </x:scenario>
   

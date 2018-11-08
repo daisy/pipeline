@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Optional;
 
 import org.daisy.braille.api.embosser.EmbosserWriter;
@@ -242,7 +242,7 @@ public class ConfigurableFileFormat implements FileFormat {
 	
 	@Override
 	public String toString() {
-		ToStringHelper h = Objects.toStringHelper("o.d.p.b.pef.impl.ConfigurableFileFormat");
+		ToStringHelper h = MoreObjects.toStringHelper("o.d.p.b.pef.impl.ConfigurableFileFormat");
 		for (String k : new String[]{"table","locale","line-breaks","page-breaks","pad","file-extension"})
 			h.add(k, getFeature(k));
 		return h.toString();
@@ -285,7 +285,7 @@ public class ConfigurableFileFormat implements FileFormat {
 			ConfigurableFileFormat format = new ConfigurableFileFormat(tableProvider);
 			for (Feature f : q)
 				try {
-					format.setFeature(f.getKey(), f.getValue().or(f.getKey())); }
+					format.setFeature(f.getKey(), f.getValue().orElse(f.getKey())); }
 				catch (Exception e) {
 					return empty; }
 			try {

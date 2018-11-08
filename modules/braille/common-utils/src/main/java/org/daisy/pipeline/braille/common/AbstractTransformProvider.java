@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Optional;
 import com.google.common.collect.AbstractIterator;
 
@@ -57,7 +57,7 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 	}
 	
 	public ToStringHelper toStringHelper() {
-		return Objects.toStringHelper(this);
+		return MoreObjects.toStringHelper(this);
 	}
 	
 	@Override

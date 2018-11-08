@@ -140,6 +140,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <_dsannotations>*</_dsannotations>
             <Provide-Capability>
               xproc.step;name="{http://code.google.com/p/dotify/}obfl-to-pef",

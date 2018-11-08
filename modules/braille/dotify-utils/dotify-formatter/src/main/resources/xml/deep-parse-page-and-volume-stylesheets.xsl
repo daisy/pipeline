@@ -10,12 +10,12 @@
         <_>
             <xsl:for-each select="distinct-values(collection()//@css:volume)">
                 <css:rule selector="@volume" style="{.}">
-                    <xsl:sequence select="css:deep-parse-stylesheet(.)"/>
+                    <xsl:sequence select="css:deep-parse-volume-stylesheet(.)"/>
                 </css:rule>
             </xsl:for-each>
             <xsl:for-each select="distinct-values(collection()//@css:page)">
                 <css:rule selector="@page" style="{.}">
-                    <xsl:sequence select="css:deep-parse-stylesheet(.)"/>
+                    <xsl:sequence select="css:deep-parse-page-stylesheet(.)"/>
                 </css:rule>
             </xsl:for-each>
         </_>

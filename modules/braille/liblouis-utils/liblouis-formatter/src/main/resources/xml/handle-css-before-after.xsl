@@ -16,15 +16,15 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="*[matches(string(@style), '::before|::after')]">
+    <xsl:template match="*[matches(string(@style), '&amp;::before|&amp;::after')]">
         <xsl:variable name="rules" as="element()*" select="css:parse-stylesheet(@style)"/>
-        <xsl:variable name="before-style" as="xs:string?" select="$rules[@selector='::before']/@style"/>
-        <xsl:variable name="after-style" as="xs:string?" select="$rules[@selector='::after']/@style"/>
+        <xsl:variable name="before-style" as="xs:string?" select="$rules[@selector='&amp;::before']/@style"/>
+        <xsl:variable name="after-style" as="xs:string?" select="$rules[@selector='&amp;::after']/@style"/>
         <xsl:choose>
             <xsl:when test="$before-style or $after-style">
                 <xsl:copy>
                     <xsl:sequence select="@*[not(name()='style')]"/>
-                    <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($rules[not(@selector=('::before','::after'))]))"/>
+                    <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($rules[not(@selector=('&amp;::before','&amp;::after'))]))"/>
                     <xsl:if test="$before-style">
                         <xsl:element name="css:before">
                             <xsl:attribute name="style" select="$before-style"/>
