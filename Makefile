@@ -55,7 +55,6 @@ dist-rpm : pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
 dist-docker-image : assembly/.dependencies
-	export MVN_LOG="cat >> $(ROOT_DIR)/maven.log" && \
 	unset MAKECMDGOALS && \
 	$(MAKE) -C assembly docker
 

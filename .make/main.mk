@@ -6,10 +6,7 @@ GRADLE_MODULES    := $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADL
 MODULES            = $(MAVEN_MODULES) $(GRADLE_MODULES)
 GITREPOS          := $(shell find * -name .gitrepo -exec dirname {} \;)
 MVN               := mvn --batch-mode --settings "$(ROOT_DIR)/$(MVN_SETTINGS)" $(MVN_PROPERTIES)
-MVN_LOG           := tee -a $(ROOT_DIR)/maven.log \
-                     | cut -c1-1000 \
-                     | pcregrep -M "^\[INFO\] -+\n\[INFO\] Building .*\n\[INFO\] -+$$|^\[(ERROR|WARNING)\]"; \
-                     test $${PIPESTATUS[0]} -eq 0
+MVN_LOG           := cat>>$(ROOT_DIR)/maven.log
 override GRADLE   := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(GRADLE) $(MVN_PROPERTIES)
 EVAL              := :
 
