@@ -172,4 +172,21 @@ public class XSpecRunnerTest {
 		assertThat(results.toString(),
 				startsWith("Tests run: 0, Failures: 0, Errors: 1, Skipped: 0"));
 	}
+	
+	@org.junit.Ignore
+	@Test
+	public void testResolveUri() {
+		Map<String, File> tests = ImmutableMap.of("test", new File(testsDir,
+				"resolve-uri.xspec"));
+		TestResults results = xspecRunner.run(tests, reportDir);
+		assertThat(results.getName(), isEmptyString());
+		assertThat(results.getRuns(), is(1L));
+		assertThat(results.getErrors(), is(0L));
+		assertThat(results.getFailures(), is(0L));
+		assertThat(results.getSkipped(), is(0L));
+		assertThat(
+				results.toString(),
+				startsWith("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: "));
+		assertThat(results.toString(), not(endsWith("<<< FAILURE!")));
+	}
 }

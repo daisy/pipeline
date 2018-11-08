@@ -4,8 +4,8 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:daisy/xspec-maven-plugin
+	remote = https://github.com/xspec/xspec.git
 	branch = master
-	commit = 20ec78add7499b32c11bc2b5456ec05af5bff79a
-	parent = 52c9b97af28585d68d7dd4c17065efc7606de3e1
+	commit = 63cf95d7eade5678e5c994fae18ff69d3410ac5d
+	parent = 40bbafb7cfd071017c7302865b8cf4ac2734dd6d
 	cmdver = 0.3.1

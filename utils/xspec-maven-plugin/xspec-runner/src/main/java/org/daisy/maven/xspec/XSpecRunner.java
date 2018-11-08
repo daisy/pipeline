@@ -17,6 +17,7 @@ package org.daisy.maven.xspec;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -60,8 +61,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
-import com.google.common.io.InputSupplier;
 import com.google.common.io.Resources;
 
 public class XSpecRunner {
@@ -83,7 +84,7 @@ public class XSpecRunner {
 	private XsltExecutable xspecHtmlFormatterLoader;
 	private XsltExecutable xspecHtmlSummaryFormatterLoader;
 	private XsltExecutable xspecJUnitFormatterLoader;
-	private InputSupplier<InputStream> cssSupplier;
+	private ByteSource cssSupplier;
 
 	public void setProcessor(Processor processor) {
 		this.processor = processor;
@@ -200,7 +201,6 @@ public class XSpecRunner {
 			processor.getUnderlyingConfiguration().setErrorListener(
 					saxonReporter);
 			Source compiledTestAsSource = xspecTestCompiled.getXdmNode().asSource();
-			compiledTestAsSource.setSystemId(testAsSource.getSystemId());
 			XsltTransformer xspecTestRunner = xspecTestCompiler.compile(
 					compiledTestAsSource).load();
 			xspecTestRunner.setInitialTemplate(XSPEC_MAIN_TEMPLATE);
@@ -233,13 +233,13 @@ public class XSpecRunner {
 				// Write XSpec report
 				File xspecReport = new File(reportDir, "XSPEC-" + testName
 						+ ".xml");
-				new Serializer(xspecReport).serializeNode(xspecTestResult
+				serializeToFile(xspecReport).serializeNode(xspecTestResult
 						.getXdmNode());
 
 				// Write HTML report
 				File css = new File(reportDir, XSPEC_CSS_NAME);
 				if (!css.exists()) {
-					Files.copy(cssSupplier, css);
+					cssSupplier.copyTo(new FileOutputStream(css));
 				}
 				File htmlReport = new File(reportDir, "HTML-" + testName
 						+ ".html");
@@ -247,7 +247,7 @@ public class XSpecRunner {
 				htmlFormatter
 						.setSource(xspecTestResult.getXdmNode().asSource());
 				htmlFormatter.setParameter(XSPEC_CSS_URI_PARAM, XSPEC_CSS_URI);
-				htmlFormatter.setDestination(new Serializer(htmlReport));
+				htmlFormatter.setDestination(serializeToFile(htmlReport));
 				htmlFormatter.setMessageListener(SaxonSinkReporter.INSTANCE);
 				htmlFormatter.transform();
 
@@ -258,7 +258,7 @@ public class XSpecRunner {
 						.load();
 				junitFormatter.setSource(xspecTestResult.getXdmNode()
 						.asSource());
-				junitFormatter.setDestination(new Serializer(surefireReport));
+				junitFormatter.setDestination(serializeToFile(surefireReport));
 				junitFormatter.setParameter(JUNIT_NAME_PARAM,
 						new XdmAtomicValue(testName));
 				junitFormatter.setParameter(
@@ -294,12 +294,21 @@ public class XSpecRunner {
 			formatter.setParameter(new QName("report-dir"),
 					new XdmAtomicValue(reportDir.toURI()));
 			formatter.setDestination(
-					new Serializer(new File(reportDir, "index.html")));
+					serializeToFile(new File(reportDir, "index.html")));
 			formatter.setMessageListener(SaxonSinkReporter.INSTANCE);
 			formatter.transform();
 		} catch (SaxonApiException e) {
 			throw new RuntimeException(e);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
 		}
+	}
+
+	private Serializer serializeToFile(File file) throws FileNotFoundException {
+		Serializer serializer = processor.newSerializer();
+		serializer.setOutputStream(new FileOutputStream(file));
+		serializer.setCloseOnCompletion(true);
+		return serializer;
 	}
 
 	public void init() {
@@ -336,7 +345,7 @@ public class XSpecRunner {
 		xpathCompiler.declareNamespace("", XSPEC_NAMESPACE);
 
 		// Input supplier for the report CSS
-		cssSupplier = Resources.newInputStreamSupplier(XSpecRunner.class
+		cssSupplier = Resources.asByteSource(XSpecRunner.class
 				.getResource("/xspec/reporter/test-report.css"));
 
 		} catch (SaxonApiException e) {
