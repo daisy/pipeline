@@ -5,13 +5,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.net.URI;
+import java.net.URL;
 import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 
-import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -30,23 +29,23 @@ import com.google.common.collect.Iterables;
  */
 public class XProcScriptParserTest {
 	public static class MockScriptService extends XProcScriptService{
-		public URI uri;
+		public URL url;
 
 		/**
-		 * @param uri
+		 * @param url
 		 */
-		public MockScriptService(URI uri) {
-			this.uri = uri;
+		public MockScriptService(URL url) {
+			this.url = url;
 		}
 
 		@Override
-		public URI getURI() {
-			return this.uri;
+		public URL getURL() {
+			return this.url;
 		}
 
 		@Override
 		public String toString() {
-			return String.format("MockedXProcScriptService[uri=%s]",this.uri);
+			return String.format("MockedXProcScriptService[url=%s]",this.url);
 		}
 
 	} 
@@ -63,10 +62,10 @@ public class XProcScriptParserTest {
 	 public void setUp() throws URISyntaxException {
 	 
 	 
-		 URI uri=this.getClass().getClassLoader().getResource("script.xpl").toURI();
+		 URL url=this.getClass().getClassLoader().getResource("script.xpl");
 		 StaxXProcScriptParser parser = new StaxXProcScriptParser();
 		 parser.setFactory(XMLInputFactory.newInstance());
-		 scp = parser.parse(new MockScriptService(uri)); //Try to fix this using a service
+		 scp = parser.parse(new MockScriptService(url)); //Try to fix this using a service
 	 
 	 
 	 }
@@ -189,10 +188,9 @@ public class XProcScriptParserTest {
 	 @Test
 	 public void testOption() {
 		 XProcOptionMetadata opt = scp.getOptionMetadata(new QName("option1"));
-		 assertEquals("anyDirURI", opt.getType());
+		 assertEquals("dtbook:mydatatype", opt.getType());
 		 //assertEquals(Direction.OUTPUT, opt.getDirection());
 		 assertEquals("Option 1", opt.getNiceName());
-		 assertEquals("dtbook:mydatatype", opt.getDatatype());
 	 }
 	 
 	 /**

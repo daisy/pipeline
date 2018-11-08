@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -206,11 +205,11 @@ public final class PersistentJobContext extends AbstractJobContext {
          *
          * @return The script.
          */
-        @Column(name="script_uri")
+        @Column(name="script_id")
         @Access(AccessType.PROPERTY)
-        private String getScriptUri() {
+        private String getScriptId() {
                 if(this.getScript()!=null){
-                        return this.getScript().getURI().toString();
+                        return this.getScript().getDescriptor().getId();
                 }else{
                         //throw new IllegalStateException("Script is null");
                         return "";
@@ -220,23 +219,19 @@ public final class PersistentJobContext extends AbstractJobContext {
 
 
         @SuppressWarnings("unused") //used by jpa
-        private void setScriptUri(String uri) {
+        private void setScriptId(String id) {
                 if(registry!=null){
-                        XProcScriptService service=registry.getScript(URI.create(uri));
+                        XProcScriptService service=registry.getScript(id);
                         if (service!=null){
                                 XProcScript xcript=service.load();
                                 logger.debug(String.format("load script %s",xcript));
                                 this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
-                        }else{
-                                XProcScript empty= new XProcScript.Builder().withPipelineInfo(new XProcPipelineInfo.Builder().withURI(URI.create(uri)).build()).build();
-                                this.setScript(empty);
+                                return;
                         }
-                }else{
-                        throw new IllegalStateException(
-                                        String.format("Illegal state for recovering XProcScript: registry %s"
-                                                ,this.getScript(),registry));
                 }
-
+                throw new IllegalStateException(
+                                String.format("Illegal state for recovering XProcScript: registry %s"
+                                        ,this.getScript(),registry));
         }
 
         /**

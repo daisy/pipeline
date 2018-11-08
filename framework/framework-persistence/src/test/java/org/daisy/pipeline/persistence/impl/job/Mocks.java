@@ -29,8 +29,9 @@ import org.daisy.pipeline.script.XProcScriptService;
 import com.google.common.base.Supplier;
 
 public class Mocks   {
-	
+
 	public static final String scriptUri= "http://daisy.com";
+	public static final String scriptId= "foo-to-bar";
 	public static final String testLogFile="http://daisy.com/log.txt";
 	public static final String file1="file:/tmp/f1.xml";
 	public static final String file2="file:/tmp/f2.xml";
@@ -63,19 +64,12 @@ public class Mocks   {
 		}
 
 		@Override
-		public XProcScriptService getScript(URI uri){
+		public XProcScriptService getScript(String name) {
 			return new XProcScriptService(){
-				
 				public XProcScript load(){
 					return DummyScriptService.this.script;
 				}
 			};
-
-		}
-
-		@Override
-		public XProcScriptService getScript(String name) {
-			return null;
 		}
 
 		@Override
@@ -118,7 +112,11 @@ public class Mocks   {
 		XProcPortInfo ppinfo= XProcPortInfo.newParameterPort(Mocks.paramPort,true);
 		XProcPipelineInfo pipelineInfo = new XProcPipelineInfo.Builder().withURI(URI.create(Mocks.scriptUri)).withPort(pinfo).withPort(ppinfo).build();
 		List<String> fileset=Collections.emptyList();	
-		final XProcScript script = new XProcScript(pipelineInfo, "", "", "", null, null, null,fileset,fileset); 
+		final XProcScript script = new XProcScript(pipelineInfo, "", "", "", null, null,
+		                                           new XProcScriptService() {
+		                                               public String getId() {
+		                                                   return Mocks.scriptId; }},
+		                                           fileset, fileset);
 		return script;
 	}
 

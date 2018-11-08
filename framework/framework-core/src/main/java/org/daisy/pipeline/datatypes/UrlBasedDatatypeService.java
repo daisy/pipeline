@@ -14,13 +14,11 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.URIResolver;
 
 import com.google.common.collect.ImmutableList;
 
@@ -46,6 +44,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import org.osgi.service.component.ComponentContext;
+
 public class UrlBasedDatatypeService implements DatatypeService{
         
         private static final Logger logger = LoggerFactory.getLogger(UrlBasedDatatypeService.class);
@@ -59,14 +59,13 @@ public class UrlBasedDatatypeService implements DatatypeService{
         private static final URL TYPE_DECL_SCHEMA_URL = UrlBasedDatatypeService.class.getResource("/org/daisy/pipeline/datatypes/resources/data-type.rnc");
         
         private String id;
-        private URI uri;
-        private URIResolver resolver;
+        private URL url;
         private boolean typeDeclRead = false;
         private Document typeDecl;
         private boolean typeDeclValid;
         private List<String> enumerationValues = null;
 
-        public void activate(Map<?, ?> properties) {
+        public void activate(ComponentContext context, Map<?, ?> properties) {
                 if (properties.get(DATATYPE_ID) == null
                                 || properties.get(DATATYPE_ID).toString().isEmpty()) {
                         throw new IllegalArgumentException(DATATYPE_ID
@@ -78,12 +77,10 @@ public class UrlBasedDatatypeService implements DatatypeService{
                         throw new IllegalArgumentException(DATATYPE_URL
                                         + " property must not be empty");
                 }
-                try {
-                        uri = new URI(properties.get(DATATYPE_URL).toString());
-                } catch (URISyntaxException e) {
-                        throw new IllegalArgumentException(DATATYPE_URL
-                                        + " property must not be a legal URI");
-                }
+                String path = properties.get(DATATYPE_URL).toString();
+                url = context.getBundleContext().getBundle().getEntry(path);
+                if (url == null)
+                        throw new IllegalArgumentException("Resource at location " + path + " could not be found");
                 id = properties.get(DATATYPE_ID).toString();
                 
                 logger.debug("Activating"+this.toString());
@@ -94,36 +91,17 @@ public class UrlBasedDatatypeService implements DatatypeService{
                 return this.id;
         }
 
-        /**
-         * Gets the datatype uri.
-         *
-         * @return the id
-         */
-        public URI getURI() {
-                return this.uri;
-        }
-
         public Document asDocument() throws Exception {
-                Source src=this.resolver.resolve(this.uri.toString(),"");
-                if (src==null){
-                        logger.error(String.format("Uri not found when resolving datatype %s", this.uri));
-                        throw new RuntimeException(String.format("Uri not found when resolving datatype %s",this.uri));
-                }
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
-                Document document = builder.parse(src.getSystemId());
+                Document document = builder.parse(url.openStream());
                 return document;
         }
 
         @Override
         public String toString() {
                 // TODO Auto-generated method stub
-                return String.format("[DatatypeService #id=%s #uri=%s ]",this.id,this.uri.toString());
-        }
-
-        public void setUriResolver(URIResolver resolver) {
-                this.resolver=resolver;
-
+                return String.format("[DatatypeService #id=%s #url=%s ]",this.id,this.url.toString());
         }
 
         @Override

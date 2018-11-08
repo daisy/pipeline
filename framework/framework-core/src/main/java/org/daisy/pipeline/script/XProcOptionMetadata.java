@@ -53,8 +53,6 @@ public class XProcOptionMetadata {
         final private boolean isOrdered;
         final private String separator;
 
-        final private String datatype;
-
         /**
          * Instantiates a new {@link XProcOptionMetadata} object.
          *
@@ -71,7 +69,7 @@ public class XProcOptionMetadata {
          */
         private XProcOptionMetadata(String niceName, String description,
                         String type, String mediaType, /*Direction direction,*/ Output output,
-                        boolean sequence, boolean ordered, String separator,boolean primary,String datatype) {
+                        boolean sequence, boolean ordered, String separator, boolean primary) {
                 super();
                 this.niceName = niceName;
                 this.description = description;
@@ -83,7 +81,6 @@ public class XProcOptionMetadata {
                 this.isOrdered = ordered;
                 this.separator=separator;
                 this.primary=primary;
-                this.datatype=datatype;
         }
 
         /**
@@ -151,13 +148,6 @@ public class XProcOptionMetadata {
         }
 
         /**
-         * @return the datatype
-         */
-        public String getDatatype() {
-                return datatype;
-        }
-
-        /**
          * Builds the {@link XProcOptionMetadata} object.
          */
         public static final class Builder {
@@ -193,8 +183,6 @@ public class XProcOptionMetadata {
 
                 private boolean primary;
 
-                private String datatype;
-
                 /**
                  * With description.
                  *
@@ -204,17 +192,6 @@ public class XProcOptionMetadata {
                  */
                 public Builder withDescription(String description) {
                         this.description = description;
-                        return this;
-                }
-                /**
-                 * With datatype.
-                 * 
-                 * @param datatype 
-                 *            the nice name
-                 * @return the builder
-                 */
-                public Builder withDataType(String datatype) {
-                        this.datatype= datatype;
                         return this;
                 }
 
@@ -307,7 +284,7 @@ public class XProcOptionMetadata {
                  */
                 public XProcOptionMetadata build() {
                         return new XProcOptionMetadata(niceName, description, type,
-                                        mediaType, /*direction,*/ output, sequence, ordered, separator,primary,datatype);
+                                        mediaType, /*direction,*/ output, sequence, ordered, separator, primary);
                 }
 
 

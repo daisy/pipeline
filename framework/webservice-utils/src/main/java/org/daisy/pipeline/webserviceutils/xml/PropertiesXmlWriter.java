@@ -5,10 +5,14 @@ import org.daisy.common.properties.Property;
 
 import org.daisy.pipeline.webserviceutils.Routes;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class PropertiesXmlWriter {
+	private static Logger logger = LoggerFactory.getLogger(PropertiesXmlWriter.class.getName());
 	private List<? extends Property> properties;
 
 	/**
@@ -33,9 +37,9 @@ public class PropertiesXmlWriter {
 			writer.addAsElementChild(propsElm);
 		}
 		// for debugging only
-//		if (!XmlValidator.validate(doc, XmlValidator.CLIENTS_SCHEMA_URL)) {
-//			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-//		}
+		if (!XmlValidator.validate(doc, XmlValidator.PROPERTIES_SCHEMA_URL)) {
+			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+		}
 		return doc;
 	}
 

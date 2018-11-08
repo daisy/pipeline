@@ -4,13 +4,16 @@
         <nicename>ZedAI to EPUB3</nicename>
         <description>Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3
             publication.</description>
+        <version>1.3.2</version>
     </script>
     <script id="dtbook-to-zedai" href="http://example.org/ws/scripts/dtbook-to-zedai">
         <nicename>DTBook to ZedAI</nicename>
         <description>Transforms DTBook XML into ZedAI XML.</description>
+        <version>1.1.2</version>
     </script>
     <script id="daisy202-to-epub3" href="http://example.org/ws/scripts/daisy202-to-epub3">
         <nicename>DAISY 2.02 to EPUB3</nicename>
         <description>Transforms a DAISY 2.02-book into an EPUB3-book.</description>
+        <version>1.2.3</version>
     </script>
 </scripts>

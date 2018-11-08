@@ -38,7 +38,7 @@ public class XProcPipelineInfoParserTest {
 		StaxXProcPipelineInfoParser parser = new StaxXProcPipelineInfoParser();
 		parser.setFactory(XMLInputFactory.newInstance());
 		xproc = parser.parse(this.getClass().getClassLoader()
-				.getResource("script.xpl").toURI());
+				.getResource("script.xpl"));
 	}
 
 	/**

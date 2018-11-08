@@ -90,7 +90,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Import-Package>*, etc</Import-Package>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *,
+              etc
+            </Import-Package>
             <Service-Component>OSGI-INF/config-factory.xml, OSGI-INF/xproc-engine.xml</Service-Component>
           </instructions>
         </configuration>

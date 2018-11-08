@@ -43,6 +43,12 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 	public DynamicXProcConfiguration(XProcStepRegistry stepRegistry) {
 		super(saxonCfg);
 		this.stepRegistry = stepRegistry;
+		// FIXME: This is a hack to disable the Calabash hack that makes sure the Saxon processor
+		// uses our resolver for everything. The way Calabash does it does not work in OSGi. Also I
+		// don't understand why the call to net.sf.saxon.Configuration.setURIResolver() isn't
+		// enough. Which cases are not covered by this?
+		setSaxonProperties.add(net.sf.saxon.lib.FeatureKeys.ENTITY_RESOLVER_CLASS);
+		setSaxonProperties.add(net.sf.saxon.lib.FeatureKeys.URI_RESOLVER_CLASS);
 	}
 
 	/**
@@ -56,6 +62,8 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 		// FIXME: also use saxonCfg?
 		super(schemaAware);
 		this.stepRegistry = stepRegistry;
+		setSaxonProperties.add(net.sf.saxon.lib.FeatureKeys.ENTITY_RESOLVER_CLASS);
+		setSaxonProperties.add(net.sf.saxon.lib.FeatureKeys.URI_RESOLVER_CLASS);
 	}
 
 	/**
@@ -68,6 +76,8 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 			XProcStepRegistry stepRegistry) {
 		super(processor);
 		this.stepRegistry = stepRegistry;
+		setSaxonProperties.add(net.sf.saxon.lib.FeatureKeys.ENTITY_RESOLVER_CLASS);
+		setSaxonProperties.add(net.sf.saxon.lib.FeatureKeys.URI_RESOLVER_CLASS);
 	}
 
 

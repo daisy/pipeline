@@ -181,7 +181,7 @@ public class SerializationUtils {
 	 */
 	public static Serializer newSerializer(Serialization serialization,
 			XProcConfiguration config) {
-		Serializer serializer = new Serializer();
+		Serializer serializer = config.getProcessor().newSerializer();
 		for (SerializationOptions so : EnumSet
 				.allOf(SerializationOptions.class)) {
 			serializer.setOutputProperty(so.asSaxonProp(),

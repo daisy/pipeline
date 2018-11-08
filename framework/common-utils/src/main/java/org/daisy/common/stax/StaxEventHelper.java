@@ -1,5 +1,6 @@
 package org.daisy.common.stax;
 
+import java.util.function.Predicate;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -7,8 +8,6 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
-import com.google.common.base.Predicate;
 
 /**
  * The Class StaxEventHelper offers some stax utilities.
@@ -29,7 +28,7 @@ public final class StaxEventHelper {
 		public static Predicate<XMLEvent> isElement(final QName name) {
 			return new Predicate<XMLEvent>() {
 				@Override
-				public boolean apply(XMLEvent event) {
+				public boolean test(XMLEvent event) {
 					return event.isStartElement()
 							&& event.asStartElement().getName().equals(name);
 				}
@@ -45,7 +44,7 @@ public final class StaxEventHelper {
 		public static Predicate<XMLEvent> isStartOrStopElement(final QName name) {
 			return new Predicate<XMLEvent>() {
 				@Override
-				public boolean apply(XMLEvent event) {
+				public boolean test(XMLEvent event) {
 					return (event.isStartElement() && event.asStartElement()
 							.getName().equals(name))
 							|| (event.isEndElement() && event.asEndElement()
@@ -57,7 +56,7 @@ public final class StaxEventHelper {
 		/** The I s_ star t_ element. */
 		public static Predicate<XMLEvent> IS_START_ELEMENT = new Predicate<XMLEvent>() {
 			@Override
-			public boolean apply(XMLEvent event) {
+			public boolean test(XMLEvent event) {
 				return event.isStartElement();
 			}
 		};
@@ -65,7 +64,7 @@ public final class StaxEventHelper {
 		/** The I s_ en d_ element. */
 		public static Predicate<XMLEvent> IS_END_ELEMENT = new Predicate<XMLEvent>() {
 			@Override
-			public boolean apply(XMLEvent event) {
+			public boolean test(XMLEvent event) {
 				return event.isEndElement();
 			}
 		};
@@ -79,11 +78,8 @@ public final class StaxEventHelper {
 			/** The opened. */
 			private int opened = 1;
 
-			/* (non-Javadoc)
-			 * @see com.google.common.base.Predicate#apply(java.lang.Object)
-			 */
 			@Override
-			public boolean apply(XMLEvent event) {
+			public boolean test(XMLEvent event) {
 				switch (event.getEventType()) {
 				case XMLEvent.START_ELEMENT:
 					opened++;
@@ -115,11 +111,8 @@ public final class StaxEventHelper {
 			/** The opened. */
 			private int opened = 0;
 
-			/* (non-Javadoc)
-			 * @see com.google.common.base.Predicate#apply(java.lang.Object)
-			 */
 			@Override
-			public boolean apply(XMLEvent event) {
+			public boolean test(XMLEvent event) {
 
 				switch (event.getEventType()) {
 				case XMLEvent.START_ELEMENT:
@@ -205,8 +198,8 @@ public final class StaxEventHelper {
 			EventProcessor processor) throws XMLStreamException {
 		while (reader.hasNext()) {
 			XMLEvent event = reader.peek();
-			if (filter.apply(event)) {
-				if (!checker.apply(event)) {
+			if (filter.test(event)) {
+				if (!checker.test(event)) {
 					break;
 				}
 				processor.process(event);

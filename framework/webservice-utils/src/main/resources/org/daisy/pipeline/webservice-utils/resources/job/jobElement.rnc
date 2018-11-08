@@ -1,7 +1,7 @@
 default namespace = "http://www.daisy.org/ns/pipeline/data"
 
-include "scriptElement.rnc"
-include "priority.rnc"
+include "../script/scriptElement.rnc"
+include "../base/priority.rnc"
 
 job = 
 element job {

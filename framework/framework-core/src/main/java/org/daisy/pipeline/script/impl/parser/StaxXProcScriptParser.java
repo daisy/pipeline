@@ -3,6 +3,7 @@ package org.daisy.pipeline.script.impl.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.function.Predicate;
 import java.util.LinkedList;
 
 import javax.xml.namespace.QName;
@@ -12,9 +13,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
 
 import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
@@ -30,9 +28,6 @@ import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Values;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-
 // TODO: Auto-generated Javadoc
 /**
  * StaxXProcScriptParser parses the xpl file extracting the metadata and buiding
@@ -45,19 +40,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			.getLogger(StaxXProcScriptParser.class);
 	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
-
-	/** The uri resolver. */
-	private URIResolver mUriResolver;
-
-	/**
-	 * Sets the uri resolver.
-	 * 
-	 * @param uriResolver
-	 *            the new uri resolver
-	 */
-	public void setUriResolver(URIResolver uriResolver) {
-		mUriResolver = uriResolver;
-	}
 
 	/**
 	 * Sets the factory.
@@ -122,19 +104,10 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			scriptBuilder = scriptBuilder.withDescriptor(descriptor);
 			StaxXProcPipelineInfoParser infoParser = new StaxXProcPipelineInfoParser();
 			infoParser.setFactory(mFactory);
-			infoParser.setUriResolver(mUriResolver);
 			try {
 				// init the XMLStreamReader
-				// uRL descUrl = pipelineInfo.getURI().toURL();
-				scriptBuilder.withPipelineInfo(infoParser.parse(descriptor
-						.getURI()));
-				URL descUrl = descriptor.getURI().toURL();
-				// if we have a url resolver resolve the
-				if (mUriResolver != null) {
-					Source src = mUriResolver.resolve(descUrl.toString(), "");
-					descUrl = new URL(src.getSystemId());
-
-				}
+				scriptBuilder.withPipelineInfo(infoParser.parse(descriptor.getURL()));
+				URL descUrl = descriptor.getURL();
 				is = descUrl.openConnection().getInputStream();
 				reader = mFactory.createXMLEventReader(is);
 
@@ -156,9 +129,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 				throw new RuntimeException(
 						"Couldn't access package descriptor: " + e.getMessage(),
 						e);
-			} catch (TransformerException te) {
-				throw new RuntimeException("Error resolving url: "
-						+ te.getMessage(), te);
 			} finally {
 				try {
 					if (reader != null) {
@@ -369,8 +339,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			Attribute primary = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_PRIMARY);
 
-			Attribute datatype= optionElement
-					.getAttributeByName(XProcScriptConstants.Attributes.PX_DATATYPE);
 			if (mediaType != null) {
 				optionBuilder.withMediaType(mediaType.getValue());
 			}
@@ -391,9 +359,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 			}
 			if (separator != null) {
 				optionBuilder.withSeparator(separator.getValue());
-			}
-			if (datatype!= null) {
-				optionBuilder.withDataType(datatype.getValue());
 			}
                         if (primary !=null && primary.getValue().equals("false")){
                                 optionBuilder.withPrimary(false);
@@ -417,9 +382,9 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 				final XMLEventReader reader, final DocumentationHolder dHolder)
 				throws XMLStreamException {
 
-			Predicate<XMLEvent> pred = Predicates.or(
-					EventPredicates.IS_START_ELEMENT,
-					EventPredicates.IS_END_ELEMENT);
+			Predicate<XMLEvent> pred =
+				EventPredicates.IS_START_ELEMENT.or(
+				EventPredicates.IS_END_ELEMENT);
 
 			// the tricky thing here is that you have to ignore blocks of markup
 			// for px:role="author" and px:role="maintainer"

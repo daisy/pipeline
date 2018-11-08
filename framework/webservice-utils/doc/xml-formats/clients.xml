@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clients xmlns="http://www.daisy.org/ns/pipeline/data" href="http://example.org/ws/admin/clients">
+    <client id="clientid" href="http://example.org/ws/admin/clients/clientid" secret="thesecret" role="ADMIN" contact="me@example.org" priority="medium"/>
+    <client id="webapp123" href="http://example.org/ws/admin/clients/webapp123" secret="anothersecret" role="CLIENTAPP" contact="you@example.org" priority="medium"/>
+</clients>

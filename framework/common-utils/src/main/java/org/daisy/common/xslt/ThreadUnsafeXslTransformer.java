@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.xml.transform.URIResolver;
 
 import net.sf.saxon.s9api.Destination;
+import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
@@ -14,16 +15,20 @@ import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XsltTransformer;
 
+// FIXME: this class should be moved to org.daisy.common.saxon
+
 /**
  * Transform a given XML tree or sub-tree, with optional XSLT parameters. The
  * methods must not be called within multiple threads.
  */
 public class ThreadUnsafeXslTransformer {
 
-	private XsltTransformer transformer;
+	private final XsltTransformer transformer;
+	private final Processor processor;
 
-	public ThreadUnsafeXslTransformer(XsltTransformer transformer) {
+	ThreadUnsafeXslTransformer(XsltTransformer transformer, Processor processor) {
 		this.transformer = transformer;
+		this.processor = processor;
 	}
 
 	public XdmNode transform(XdmNode xml) throws SaxonApiException {
@@ -49,7 +54,7 @@ public class ThreadUnsafeXslTransformer {
 
 	public String transformToString(XdmNode xml, Map<String, Object> parameters)
 	        throws SaxonApiException {
-		Serializer dest = new Serializer();
+		Serializer dest = processor.newSerializer();
 		StringWriter sw = new StringWriter();
 		dest.setOutputWriter(sw);
 		genericTransform(xml, parameters, dest);

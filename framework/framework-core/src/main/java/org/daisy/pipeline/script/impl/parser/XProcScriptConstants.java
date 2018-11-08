@@ -138,8 +138,6 @@ public final class XProcScriptConstants {
 
 		public static final QName PX_PRIMARY = new QName(PX_NS, "primary");
 
-		public static final QName PX_DATATYPE= new QName(PX_NS, "data-type");
-
 		/**
 		 * Instantiates a new attributes.
 		 */

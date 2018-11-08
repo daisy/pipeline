@@ -61,7 +61,7 @@ public class PersistentJobContextTest  {
 	public void storeInput(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
 		Assert.assertEquals(jCtxt.getId(),id);
-		Assert.assertEquals(jCtxt.getScript().getURI().toString(),Mocks.scriptUri);
+		Assert.assertEquals(jCtxt.getScript().getDescriptor().getId(),Mocks.scriptId);
 		Assert.assertEquals(jCtxt.getLogFile(),this.logFile);
 	}
 	@Test

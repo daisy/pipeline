@@ -39,18 +39,19 @@ public class XmlValidator {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(XmlValidator.class.getName());
 	
-	public static final URL SCRIPT_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/script.rnc");
-	public static final URL SCRIPTS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/scripts.rnc");
-	public static final URL JOB_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/job.rnc");
-	public static final URL JOB_REQUEST_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/jobRequest.rnc");
-	public static final URL JOBS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/jobs.rnc");
-	public static final URL CLIENT_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/client.rnc");
-	public static final URL CLIENTS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/clients.rnc");
-	public static final URL ERROR_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/error.rnc");
-	public static final URL ALIVE_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/alive.rnc");;
-	public static final URL SIZES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/sizes.rnc");
-	public static final URL QUEUE_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/queue.rnc");
+	public static final URL SCRIPT_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/script/script.rnc");
+	public static final URL SCRIPTS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/script/scripts.rnc");
+	public static final URL JOB_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/job/job.rnc");
+	public static final URL JOB_REQUEST_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/request/jobRequest.rnc");
+	public static final URL JOBS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/job/jobs.rnc");
+	public static final URL CLIENT_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/client/client.rnc");
+	public static final URL CLIENTS_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/client/clients.rnc");
+	public static final URL ERROR_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/base/error.rnc");
+	public static final URL ALIVE_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/base/alive.rnc");;
+	public static final URL SIZES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/job/sizes.rnc");
+	public static final URL QUEUE_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/queue/queue.rnc");
 	public static final URL DATATYPES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/datatypes.rnc");
+	public static final URL PROPERTIES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice-utils/resources/properties/properties.rnc");
 	
 	public static boolean validate(Document document, URL schemaUrl) {
                 if (schemaUrl==null) {

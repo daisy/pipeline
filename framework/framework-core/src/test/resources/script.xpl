@@ -53,7 +53,7 @@
             <p:empty/>
     </p:output>
 
-    <p:option name="option1" select="." required="true" px:dir="output" px:type="anyDirURI" px:primary="true" px:data-type="dtbook:mydatatype">
+    <p:option name="option1" select="." required="true" px:dir="output" px:type="dtbook:mydatatype" px:primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">Option 1</p>
         </p:documentation>

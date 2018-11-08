@@ -210,7 +210,7 @@ public class Job implements RuntimeConfigurator.EventBusable{
                 changeStatus(Status.RUNNING);
                 XProcPipeline pipeline = null;
                 try{
-                        pipeline = engine.load(this.ctxt.getScript().getURI());
+                        pipeline = engine.load(this.ctxt.getScript().getXProcPipelineInfo().getURI());
                         Properties props=new Properties();
                         props.setProperty("JOB_ID", this.ctxt.getId().toString());
                         XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);

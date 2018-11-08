@@ -12,6 +12,8 @@ import net.sf.saxon.s9api.XsltCompiler;
 
 import com.xmlcalabash.core.XProcConfiguration;
 
+// FIXME: this class should be moved to org.daisy.common.saxon
+
 /**
  * Immutable XSLT compiler with an optional URIResolver.
  */

@@ -4,6 +4,7 @@
 	<script id="dtbook-to-zedai" href="http://example.org/ws/scripts/dtbook-to-zedai">
 		<nicename>DTBook to ZedAI</nicename>
 		<description>Transforms DTBook XML into ZedAI XML.</description>
+		<version>1.1.2</version>
 	</script>
 	<messages>
 		<message level="WARNING" sequence="22">Warning about this job</message>

@@ -8,5 +8,5 @@
   <property name="script.id" type="String" value="mock-script"/>
   <property name="script.name" type="String" value="Mock script"/>
   <property name="script.description" type="String" value="Does stuff."/>
-  <property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/mock/script.xpl"/>
+  <property name="script.url" type="String" value="/mock-module/script.xpl"/>
 </scr:component>

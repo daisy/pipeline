@@ -3,8 +3,6 @@
  */
 package org.daisy.pipeline.script.impl;
 
-import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -28,8 +26,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultScriptRegistry.class);
 
 	/** The descriptors. */
-	private final Map<URI, XProcScriptService> descriptors = Maps.newHashMap();
-	private final Map<String, URI> byNameDirectory = new HashMap<String, URI>();
+	private final Map<String, XProcScriptService> descriptors = Maps.newHashMap();
 
 	/** The parser. */
 	private XProcScriptParser parser;
@@ -52,8 +49,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 			script.setParser(parser);
 		}
 		// TODO check
-		descriptors.put(script.getURI(), script);
-		byNameDirectory.put(script.getId(), script.getURI());
+		descriptors.put(script.getId(), script);
 	}
 
 	/**
@@ -64,15 +60,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	public void unregister(XProcScriptService script) {
 		logger.debug("Unregistering script {}", script.getId());
 		// TODO check
-		descriptors.remove(script.getURI());
-	}
-
-	/* (non-Javadoc)
-	 * @see org.daisy.pipeline.script.ScriptRegistry#getScript(java.net.URI)
-	 */
-	@Override
-	public XProcScriptService getScript(URI uri) {
-		return descriptors.get(uri);
+		descriptors.remove(script.getId());
 	}
 
 	/* (non-Javadoc)
@@ -103,11 +91,10 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 
 	@Override
 	public XProcScriptService getScript(String name) {
-		URI uri = byNameDirectory.get(name);
-		if (uri==null){
+		XProcScriptService descriptor = descriptors.get(name);
+		if (descriptor==null){
 			logger.warn("Script {} does not exist",name);
-			return null;
 		}
-		return descriptors.get(uri);
+		return descriptor;
 	}
 }

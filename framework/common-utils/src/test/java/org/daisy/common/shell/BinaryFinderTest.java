@@ -2,6 +2,7 @@ package org.daisy.common.shell;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.Optional;
 
 import junit.framework.Assert;
 
@@ -11,8 +12,6 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import com.google.common.base.Optional;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({

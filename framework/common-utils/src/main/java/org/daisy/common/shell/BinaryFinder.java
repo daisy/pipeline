@@ -11,10 +11,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.AbstractIterator;
 import static com.google.common.collect.Iterables.concat;
 
@@ -68,7 +68,7 @@ public class BinaryFinder {
 				}
 			}
 		}
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	private static final String[] winExtensions = {

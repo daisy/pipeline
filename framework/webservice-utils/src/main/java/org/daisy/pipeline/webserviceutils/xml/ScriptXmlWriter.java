@@ -138,9 +138,6 @@ public class ScriptXmlWriter {
 			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
 				optionElm.setAttribute("mediaType", meta.getMediaType());
 			}
-                        if(!Strings.isNullOrEmpty(meta.getDatatype())){
-				optionElm.setAttribute("data-type", meta.getDatatype());
-                        }
 			optionElm.setAttribute("desc", meta.getDescription());
 			optionElm.setAttribute("ordered", Boolean.toString(meta.isOrdered()));
 			optionElm.setAttribute("sequence", Boolean.toString(meta.isSequence()));

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<jobSizes href="http://localhost:8181/ws/admin/sizes" total="8745197">
+<jobSizes xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/admin/sizes" total="8745197">
   <jobSize context="4096" id="9ff8f6a5-e3e5-46ca-9f2b-84df03e57150" log="19451" output="186265"/>
   <jobSize context="3439" id="a472200d-c913-45da-a0aa-62a26b68d570" log="202134" output="8329812"/>
 </jobSizes>

@@ -3,7 +3,6 @@
  */
 package org.daisy.pipeline.script;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -212,15 +211,6 @@ public final class XProcScript {
 	 */
 	public final XProcPipelineInfo getXProcPipelineInfo() {
 		return pipelineInfo;
-	}
-
-	/**
-	 * Gets the uRI.
-	 *
-	 * @return the uRI
-	 */
-	public final URI getURI(){
-		return pipelineInfo.getURI();
 	}
 
 	/**

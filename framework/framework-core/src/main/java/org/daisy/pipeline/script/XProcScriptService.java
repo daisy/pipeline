@@ -3,12 +3,13 @@
  */
 package org.daisy.pipeline.script;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Map;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+
+import org.osgi.service.component.ComponentContext;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -27,8 +28,8 @@ public class XProcScriptService {
 	/** The Constant SCRIPT_ID. */
 	public static final String SCRIPT_VERSION = "script.version";
 
-	/** The uri. */
-	private URI uri;
+	/** The url. */
+	private URL url;
 
 	/** The id. */
 	private String id;
@@ -53,7 +54,7 @@ public class XProcScriptService {
 	 *
 	 * @param properties the properties
 	 */
-	public void activate(Map<?, ?> properties) {
+	public void activate(ComponentContext context, Map<?, ?> properties) {
 		if (properties.get(SCRIPT_ID) == null
 				|| properties.get(SCRIPT_ID).toString().isEmpty()) {
 			throw new IllegalArgumentException(SCRIPT_ID
@@ -75,24 +76,22 @@ public class XProcScriptService {
 			throw new IllegalArgumentException(SCRIPT_VERSION
 					+ " property must not be empty");
 		}
-		try {
-			uri = new URI(properties.get(SCRIPT_URL).toString());
-		} catch (URISyntaxException e) {
-			throw new IllegalArgumentException(SCRIPT_URL
-					+ " property must not be a legal URI");
-		}
+		String path = properties.get(SCRIPT_URL).toString();
+		url = context.getBundleContext().getBundle().getEntry(path);
+		if (url == null)
+			throw new IllegalArgumentException("Resource at location " + path + " could not be found");
 		id = properties.get(SCRIPT_ID).toString();
 		description = properties.get(SCRIPT_DESCRIPTION).toString();
                 version= properties.get(SCRIPT_VERSION).toString();
 	}
 
 	/**
-	 * Gets the script URI.
+	 * Gets the script URL.
 	 *
-	 * @return the uRI
+	 * @return the url
 	 */
-	public URI getURI() {
-		return uri;
+	public URL getURL() {
+		return url;
 	}
 
 	/**
@@ -161,7 +160,7 @@ public class XProcScriptService {
 		StringBuffer buf = new StringBuffer();
 		buf.append("Id: " + id);
 		buf.append(", desc: " + description);
-		buf.append(", uri: " + uri.toString());
+		buf.append(", url: " + url.toString());
 		buf.append(", version: " + version.toString());
 		return buf.toString();
 	}

@@ -2,7 +2,7 @@ package org.daisy.pipeline.script.impl.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 
@@ -12,9 +12,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
 
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
@@ -32,22 +29,6 @@ public class StaxXProcPipelineInfoParser {
 	/** The xmlinputfactory. */
 	private XMLInputFactory mFactory;
 
-	/** The uri resolver. */
-	private URIResolver mUriResolver;
-
-
-
-
-	/**
-	 * Sets the uri resolver.
-	 *
-	 * @param uriResolver the new uri resolver
-	 */
-	public void setUriResolver(URIResolver uriResolver) {
-		mUriResolver = uriResolver;
-	}
-
-
 	/**
 	 * Sets the factory.
 	 *
@@ -63,8 +44,8 @@ public class StaxXProcPipelineInfoParser {
 	 * @param uri the uri
 	 * @return the x proc pipeline info
 	 */
-	public XProcPipelineInfo parse(URI uri) {
-		return new StatefulParser().parse(uri);
+	public XProcPipelineInfo parse(URL url) {
+		return new StatefulParser().parse(url);
 	}
 
 	/**
@@ -81,7 +62,7 @@ public class StaxXProcPipelineInfoParser {
 		 * @param uri the uri
 		 * @return the x proc pipeline info
 		 */
-		public XProcPipelineInfo parse(URI uri) {
+		public XProcPipelineInfo parse(URL url) {
 			if (mFactory == null) {
 				throw new IllegalStateException();
 			}
@@ -90,18 +71,14 @@ public class StaxXProcPipelineInfoParser {
 
 			try {
 				// init the XMLStreamReader
-				// uRL descUrl = pipelineInfo.getURI().toURL();
-				URL descUrl = uri.toURL();
-				// if we have a url resolver resolve the
-				if (mUriResolver != null) {
-					Source src = mUriResolver.resolve(descUrl.toString(), "");
-					descUrl = new URL(src.getSystemId());
-
-				}
-				is = descUrl.openConnection().getInputStream();
+				is = url.openConnection().getInputStream();
 				reader = mFactory.createXMLEventReader(is);
 				XProcPipelineInfo.Builder infoBuilder = new XProcPipelineInfo.Builder();
-				infoBuilder.withURI(uri);
+				try {
+					infoBuilder.withURI(url.toURI());
+				} catch (URISyntaxException e) {
+					throw new RuntimeException("Error converting URL to URI", e);
+				}
 				parseInfoElements(reader, infoBuilder);
 				return infoBuilder.build();
 			} catch (XMLStreamException e) {
@@ -110,9 +87,6 @@ public class StaxXProcPipelineInfoParser {
 			} catch (IOException e) {
 				throw new RuntimeException("io error while parsing"
 						+ e.getMessage(), e);
-			} catch (TransformerException te) {
-				throw new RuntimeException("Error resolving url: "
-						+ te.getMessage(), te);
 			} finally {
 				try {
 					if (reader != null) {
