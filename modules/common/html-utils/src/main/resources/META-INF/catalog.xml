@@ -6,8 +6,6 @@
           uri="../xml/xslt/html5-outliner.xsl"/>
      <uri name="http://www.daisy.org/pipeline/modules/html-utils/html5-upgrade.xsl"
           uri="../xml/xslt/html5-upgrade.xsl"/>
-     <uri name="http://www.daisy.org/pipeline/modules/html-utils/html-chunker.xsl"
-          uri="../xml/xslt/html-chunker.xsl"/>
      <uri name="http://www.daisy.org/pipeline/modules/html-utils/html-id-fixer.xsl"
           uri="../xml/xslt/html-id-fixer.xsl"/>
      <uri name="http://www.daisy.org/pipeline/modules/html-utils/html-fixer.xsl"

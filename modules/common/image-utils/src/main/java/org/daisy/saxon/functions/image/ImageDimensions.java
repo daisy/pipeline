@@ -38,7 +38,7 @@ public class ImageDimensions extends ExtensionFunctionDefinition {
 	}
 
 	public SequenceType getResultType(SequenceType[] arg0) {
-		return SequenceType.NUMERIC_SEQUENCE;
+		return SequenceType.ATOMIC_SEQUENCE; // NUMERIC_SEQUENCE
 	}
 
 	@Override

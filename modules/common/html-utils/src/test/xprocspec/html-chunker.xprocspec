@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               script="../../main/resources/xml/xproc/html-chunker.xpl">
+    
+    <x:scenario label="section based chunking">
+        <x:call step="px:html-chunker">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html>
+                        <body>
+                            <section epub:type="frontmatter">
+                                <section/>
+                                <section/>
+                            </section>
+                            <section epub:type="bodymatter">
+                                <section/>
+                                <p/>
+                                <p/>
+                                <section/>
+                            </section>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the chunks">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="frontmatter in one chunk, each bodymatter subsections in its own chunk" type="compare">
+            <x:document type="inline">
+                <html>
+                    <body epub:type="frontmatter">
+                        <section/>
+                        <section/>
+                    </body>
+                </html>
+            </x:document>
+            <x:document type="inline">
+                <html>
+                    <body epub:type="bodymatter">
+                        <section/>
+                    </body>
+                </html>
+            </x:document>
+            <x:document type="inline">
+                <html>
+                    <body epub:type="bodymatter">
+                        <p/>
+                        <p/>
+                    </body>
+                </html>
+            </x:document>
+            <x:document type="inline">
+                <html>
+                    <body epub:type="bodymatter">
+                        <section/>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="title">
+        <x:call step="px:html-chunker">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html>
+                        <head>
+                            <title>foo</title>
+                        </head>
+                        <body>
+                            <section>
+                                <h1>A</h1>
+                            </section>
+                            <section>
+                                <h1>B</h1>
+                            </section>
+                            <section/>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the chunks">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="each chunk gets its own title based on the body contents" type="compare">
+            <x:document type="inline">
+                <html>
+                    <head>
+                        <title>A</title>
+                    </head>
+                    <body>
+                        <h1>A</h1>
+                    </body>
+                </html>
+            </x:document>
+            <x:document type="inline">
+                <html>
+                    <head>
+                        <title>B</title>
+                    </head>
+                    <body>
+                        <h1>B</h1>
+                    </body>
+                </html>
+            </x:document>
+            <x:document type="inline">
+                <html>
+                    <head>
+                        <title>foo</title>
+                    </head>
+                    <body/>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="link correction">
+        <x:call step="px:html-chunker">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html>
+                        <body>
+                            <section>
+                                <h1>a</h1>
+                                <a href="#x"/>
+                            </section>
+                            <section>
+                                <h1>b</h1>
+                                <p id="x"/>
+                            </section>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the chunks">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the base uris of the chunks"
+                  type="xpath" test="collection()/replace(base-uri(.),'.*?([^/]+)$','$1')" equals="('html-chunker-1.xprocspec',
+                                                                                                    'html-chunker-2.xprocspec')"/>
+        <x:expect label="links between chunks are corrected" type="compare">
+            <x:document type="inline">
+                <html>
+                    <body>
+                        <h1>a</h1>
+                        <a href="html-chunker-2.xprocspec#x"/>
+                    </body>
+                </html>
+            </x:document>
+            <x:document type="inline">
+                <html>
+                    <body>
+                        <h1>b</h1>
+                        <p id="x"/>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

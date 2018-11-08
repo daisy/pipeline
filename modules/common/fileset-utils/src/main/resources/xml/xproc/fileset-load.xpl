@@ -53,34 +53,6 @@
     <p:http-request/>
   </p:declare-step>
 
-  <p:declare-step type="pxi:set-base-uri">
-    <p:input port="source"/>
-    <p:output port="result"/>
-    <p:option name="base-uri"/>
-    <p:xslt>
-      <p:with-option name="output-base-uri" select="$base-uri"/>
-      <p:with-param name="output-base-uri" select="$base-uri"/>
-      <p:input port="stylesheet">
-        <p:inline>
-          <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-            <xsl:param name="output-base-uri" required="yes"/>
-            <xsl:template match="/*">
-              <xsl:sequence select="."/>
-            </xsl:template>
-            <!-- if xml:base attribute is defined on document element, also adapt it -->
-            <xsl:template match="/*[@xml:base]" priority="1">
-              <xsl:copy>
-                <xsl:sequence select="@* except @xml:base"/>
-                <xsl:attribute name="xml:base" select="$output-base-uri"/>
-                <xsl:sequence select="node()"/>
-              </xsl:copy>
-            </xsl:template>
-          </xsl:stylesheet>
-        </p:inline>
-      </p:input>
-    </p:xslt>
-  </p:declare-step>
-
   <p:add-attribute match="/*" attribute-name="href">
     <p:with-option name="attribute-value" select="$href"/>
   </p:add-attribute>
@@ -210,9 +182,9 @@
                       <p:with-option name="file" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
                       <p:with-option name="content-type" select="$media-type"/>
                     </px:unzip>
-                    <pxi:set-base-uri>
+                    <px:set-base-uri>
                       <p:with-option name="base-uri" select="$target"/>
-                    </pxi:set-base-uri>
+                    </px:set-base-uri>
                   </p:when>
 
                   <!-- Force HTML -->
@@ -302,9 +274,9 @@
                 
                 <p:choose>
                   <p:when test="not($on-disk=$target)">
-                    <pxi:set-base-uri>
+                    <px:set-base-uri>
                       <p:with-option name="base-uri" select="$target"/>
-                    </pxi:set-base-uri>
+                    </px:set-base-uri>
                   </p:when>
                   <p:otherwise>
                     <p:identity/>
@@ -440,12 +412,12 @@
       -->
       <p:when test="/d:fileset/d:file/resolve-uri(@href, base-uri()) != $base-uri
                     or $base-uri-changed='true'">
-        <pxi:set-base-uri>
+        <px:set-base-uri>
           <p:input port="source">
             <p:pipe port="current" step="normalized"/>
           </p:input>
           <p:with-option name="base-uri" select="$base-uri"/>
-        </pxi:set-base-uri>
+        </px:set-base-uri>
       </p:when>
       <p:otherwise>
         <p:identity>

@@ -3,7 +3,7 @@
                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                stylesheet="../../main/resources/xml/library.xsl">
 
-    <x:scenario label="get the dimensions of an image">
+    <x:scenario label="get the dimensions of an image" pending="see https://github.com/daisy/xspec-maven-plugin/issues/21">
         <x:call function="pf:image-dimensions">
             <x:param select="resolve-uri('../../../../fileset-utils/src/test/xprocspec/samples/fileset2/b.jpg')"/>
         </x:call>

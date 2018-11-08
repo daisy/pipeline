@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/numeral-conversion.xsl" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+	<x:scenario label="testing pf:numeric-is-roman with valid roman numerals">
+		<x:call function="pf:numeric-is-roman">
+			<x:param name="roman" select="'MMDCLXXVIII'" as="xs:string"/>
+		</x:call>
+		<x:expect label="result should be true" select="true()"/>
+	</x:scenario>
+	
+	<x:scenario label="testing pf:numeric-is-roman with invalid roman numerals">
+		<x:call function="pf:numeric-is-roman">
+			<x:param name="roman" select="'MMDCuLXXVIII'" as="xs:string"/>
+		</x:call>
+		<x:expect label="result should be false" select="false()"/>
+	</x:scenario>
+	
+	<x:scenario label="testing pf:numeric-roman-to-decimal with valid roman numerals">
+		<x:call function="pf:numeric-roman-to-decimal">
+			<x:param name="roman" select="'MMDCLXXVIII'" as="xs:string"/>
+		</x:call>
+		<x:expect label="result should be 2678" select="2678"/>
+	</x:scenario>
+	
+	<!-- PENDING - IN PROGRESS, WAITING ON TODO -->
+	<x:scenario label="testing pf:numeric-roman-to-decimal with invalid roman numerals" pending="true">
+		<x:call function="pf:numeric-roman-to-decimal">
+			<x:param name="roman" select="'MMDCuLXXVIII'"/>
+		</x:call>
+		<x:expect label="should result in error" select=""/>
+	</x:scenario>
+	
+	<x:scenario label="testing pf:numeric-decimal-to-roman with valid decimal">
+		<x:call function="pf:numeric-decimal-to-roman">
+			<x:param name="roman" select="2678" as="xs:integer"/>
+		</x:call>
+		<x:expect label="result should be MMDCLXXVIII" select="'MMDCLXXVIII'"/>
+	</x:scenario>
+	
+	<!-- PENDING - IN PROGRESS, WAITING ON TODO -->
+	<x:scenario label="testing pf:numeric-decimal-to-roman with non-positive decimal" pending="true">
+		<x:call function="pf:numeric-roman-to-decimal">
+			<x:param name="roman" select="2678" as="xs:integer"/>
+		</x:call>
+		<x:expect label="should result in error" select=""/>
+	</x:scenario>
+	
+	<!-- PENDING - IN PROGRESS -->
+	<x:scenario label="testing of pf:numeric-alpha-to-decimal" pending="true">
+		<x:call function="pf:numeric-alpha-to-decimal">
+			<x:param name="alpha" select="'¥Î'" as="xs:string"/>
+		</x:call>
+		<x:expect label="result should be 165206" select="165206"/>
+	</x:scenario>
+</x:description>

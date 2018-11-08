@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>file-utils</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: File Utilities</name>
@@ -85,6 +85,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>
               OSGI-INF/file-exists.xml,
               OSGI-INF/file-expand83.xml,
@@ -95,6 +99,7 @@
               OSGI-INF/set-xml-declaration-step.xml,
               OSGI-INF/config-calabash.xml
             </Service-Component>
+            <Private-Package>org.daisy.common.xproc.calabash.steps</Private-Package>
           </instructions>
         </configuration>
         <executions>

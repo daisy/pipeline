@@ -1,7 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" exclude-result-prefixes="#all" version="2.0"
-    xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions">
-
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                exclude-result-prefixes="#all"
+                version="2.0">
+    
+    <!--
+        Use this as a replacement for base-uri() because base-uri() does not behave as expected in
+        Saxon 9.8 (+ Calabash 1.1.20)
+        
+        See https://www.w3.org/TR/xquery-operators/#func-base-uri
+    -->
+    <xsl:function name="pf:base-uri" as="xs:anyURI?">
+        <xsl:param name="arg" as="node()?"/>
+        <xsl:sequence select="if (exists($arg/ancestor-or-self::*/@xml:base))
+                              then base-uri($arg)
+                              else pf:document-uri($arg)"/>
+    </xsl:function>
+    
+    <!--
+        document-uri() does not work as expected
+        
+        See https://www.w3.org/TR/xquery-operators/#func-document-uri
+    -->
+    <xsl:function name="pf:document-uri" as="xs:anyURI?">
+        <xsl:param name="arg" as="node()?"/>
+        <xsl:sequence select="base-uri(pf:root($arg))"/>
+    </xsl:function>
+    
+    <!--
+        See https://www.w3.org/TR/xquery-operators/#func-root
+    -->
+    <xsl:function name="pf:root" as="node()?">
+        <xsl:param name="arg" as="node()?"/>
+        <xsl:variable name="root" as="node()?" select="root($arg)"/>
+        <!--
+            Note: This only works if the context node is a descendant of a document that was
+            provided as input. It does not work if the node was retrieved via doc(), or
+            created within the current XSLT transformation.
+        -->
+        <xsl:sequence select="collection()[. is $root]"/>
+    </xsl:function>
+    
+    <!--
+        resolve-uri() without second argument does not work as expected
+        
+        See https://www.w3.org/TR/xquery-operators/#func-resolve-uri
+    -->
+    <xsl:function name="pf:resolve-uri" as="xs:anyURI?">
+        <xsl:param name="relative" as="xs:string?"/>
+        <xsl:param name="arg"/>
+        <xsl:if test="exists($arg)">
+            <xsl:sequence select="resolve-uri(
+                                    $relative,
+                                    if ($arg instance of node())
+                                      then pf:base-uri($arg)
+                                      else $arg)"/>
+        </xsl:if>
+    </xsl:function>
+    
+    <!-- ====================================================== -->
+    
     <xsl:function name="pf:tokenize-uri" as="xs:string*">
         <xsl:param name="uri" as="xs:string?"/>
         <!--
