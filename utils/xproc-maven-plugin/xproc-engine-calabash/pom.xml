@@ -72,6 +72,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <!-- must match version from parent -->
+            <Import-Package>
+              net.sf.saxon.*;version="[9.8.0,9.8.1)",
+              *
+            </Import-Package>
             <_dsannotations>*</_dsannotations>
           </instructions>
         </configuration>
