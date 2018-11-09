@@ -17,6 +17,11 @@ fi
 
 for module in "$@"; do
     cd "$ROOT_DIR/$module"
+    if ! grep -Fxq 'apply plugin: "eclipse"' build.gradle; then
+        echo 'apply plugin: "eclipse"' > build.gradle.tmp
+        cat build.gradle >> build.gradle.tmp
+        mv build.gradle.tmp build.gradle
+    fi
     eval $GRADLE eclipse
     # import project with eclim if available
     if which eclim >/dev/null; then
