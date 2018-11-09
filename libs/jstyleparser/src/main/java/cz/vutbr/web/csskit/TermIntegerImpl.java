@@ -20,7 +20,10 @@ public class TermIntegerImpl extends TermLengthImpl implements TermInteger {
     @Override
     public String toString()
     {
-        return String.valueOf(getIntValue());
+        StringBuilder sb = new StringBuilder();
+        if(operator!=null) sb.append(operator.value());
+        sb.append(String.valueOf(getIntValue()));
+        return sb.toString();
     }
 
 }

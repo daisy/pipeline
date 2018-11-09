@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -384,6 +385,7 @@ public class SelectorImpl extends AbstractRule<Selector.SelectorPart> implements
 			LAST_OF_TYPE("last-of-type"),
 			ROOT("root"),
 			EMPTY("empty"),
+			BLANK("blank"),
 			LANG("lang", 1),
 			ENABLED("enabled"),
 			DISABLED("disabled"),
@@ -423,6 +425,8 @@ public class SelectorImpl extends AbstractRule<Selector.SelectorPart> implements
 		
 		//decoded element index for nth-XXXX properties -- values a and b in the an+b specification
 		private int[] elementIndex;
+		
+		static final Pattern WHITESPACE_RE = Pattern.compile("\\s*");
 		
 		protected PseudoClassImpl(String name, String... args) {
 			name = name.toLowerCase(); // Pseudo-class names are case-insensitive
@@ -545,14 +549,18 @@ public class SelectorImpl extends AbstractRule<Selector.SelectorPart> implements
                         return positionMatches(countSiblingsAfter(e, true) + 1, elementIndex);
                     case ROOT:
                         return e.getParentNode().getNodeType() == Node.DOCUMENT_NODE;
+                    case BLANK:
                     case EMPTY:
                         NodeList elist = e.getChildNodes();
                         for (int i = 0; i < elist.getLength(); i++)
                         {
-                            short t = elist.item(i).getNodeType();
-                            if (t == Node.ELEMENT_NODE || t == Node.TEXT_NODE 
-                                    ||t == Node.CDATA_SECTION_NODE || t == Node.ENTITY_REFERENCE_NODE)
+                            Node n = elist.item(i);
+                            short t = n.getNodeType();
+                            if (t == Node.ELEMENT_NODE || t == Node.CDATA_SECTION_NODE || t == Node.ENTITY_REFERENCE_NODE)
                                 return false;
+                            else if (t == Node.TEXT_NODE)
+                                if (def == PseudoClassDef.EMPTY || !WHITESPACE_RE.matcher(n.getNodeValue()).matches())
+                                    return false;
                         }
                         return true;
 					default:

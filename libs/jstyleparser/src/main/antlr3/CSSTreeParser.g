@@ -729,17 +729,15 @@ valuepart
  * Construction of selector
  */
 combined_selector returns [cz.vutbr.web.css.CombinedSelector combinedSelector]
-scope {
-    boolean invalid;
-}
 @init {
 	logEnter("combined_selector");	  
 	$combinedSelector = (cz.vutbr.web.css.CombinedSelector) rf.createCombinedSelector().unlock();
+    boolean invalid = false;
 }
 @after {  
     // entire ruleset is not valid when selector is not valid
     // there is no need to parse selector's when already marked as invalid
-    if($statement::invalid || $combined_selector::invalid) {        
+    if($statement::invalid || invalid) {
         $combinedSelector = null;
         if($statement::invalid) { 
 			debug("Ommiting combined selector, whole statement discarded");
@@ -756,11 +754,17 @@ scope {
     logLeave("combined_selector"); 
 }    
 	: s=selector {
-	     $combinedSelector.add(s);
+	     if (s != null)
+	         $combinedSelector.add(s);
+	     else
+	         invalid = true;
 	  }
 	 (c=combinator s=selector {
-	     s.setCombinator(c);
-	     $combinedSelector.add(s);	
+	     if (s != null) {
+	         s.setCombinator(c);
+	         $combinedSelector.add(s);
+	     } else
+	         invalid = true;
 	  }
 	 )*
 	;
@@ -781,7 +785,7 @@ scope {
 }
 @init {
 	logEnter("selector");
-	$selector::s=$sel=(cz.vutbr.web.css.Selector)rf.createSelector().unlock();
+	$sel = (cz.vutbr.web.css.Selector)rf.createSelector().unlock();
 	String name = null;
 	String ns = null;
 	String prf = null;
@@ -819,39 +823,44 @@ scope {
                  ns = namespaces.get(prf);
              } else {
                  error("No namespace declared for prefix {}", prf);
-                 $statement::invalid = true;
+                 $sel = null;
              }
-             if (!$statement::invalid) {
+             if ($sel != null) {
                  cz.vutbr.web.css.Selector.ElementName en = rf.createElement(ns, name, prf);
                  debug("Adding element name: {}.", en);
-                 $selector::s.add(en.lock());
+                 $sel.add(en.lock());
              }
          }
-         selpart*
+         (sp=selpart {
+             if (sp == null)
+                 $sel = null;
+             else if ($sel != null)
+                 $sel.add(sp);
+         })*
        )
-    | ^(SELECTOR 
-         selpart+
+    | ^(SELECTOR
+         (sp=selpart {
+             if (sp == null)
+                 $sel = null;
+             else if ($sel != null)
+                 $sel.add(sp);
+         })+
        )
-    | INVALID_SELECTOR { $statement::invalid = true; }	   
+    | INVALID_SELECTOR { $sel = null; }
   ;
 
-selpart
+selpart returns [cz.vutbr.web.css.Selector.SelectorPart part]
 @init {
 	logEnter("selpart");
 }
 @after {
     logLeave("selpart");
 }
-    :  h=HASH { $selector::s.add(rf.createID(extractText(h))); }
-    | c=CLASSKEYWORD { $selector::s.add(rf.createClass(extractText(c))); }
-	| ^(ATTRIBUTE ea=attribute { $selector::s.add(ea);} )
-    | p=pseudo {
-        if (p != null)
-          $selector::s.add(p);
-        else
-          $combined_selector::invalid = true;
-      }
-	| INVALID_SELPART { $combined_selector::invalid = true;}  
+    : h=HASH { $part = rf.createID(extractText(h)); }
+    | c=CLASSKEYWORD { $part = rf.createClass(extractText(c)); }
+    | ^(ATTRIBUTE ea=attribute { $part = ea;} )
+    | p=pseudo { $part = p; }
+    | INVALID_SELPART
     ;
  
 attribute returns [cz.vutbr.web.css.Selector.ElementAttribute elemAttr]
@@ -863,6 +872,7 @@ attribute returns [cz.vutbr.web.css.Selector.ElementAttribute elemAttr]
 	String value = null;
 	cz.vutbr.web.css.Selector.Operator op = cz.vutbr.web.css.Selector.Operator.NO_OPERATOR;
 	boolean isStringValue = false;
+	boolean invalid = false;
 }
 @after{
     if (prf == null || prf.equals(""))
@@ -873,9 +883,9 @@ attribute returns [cz.vutbr.web.css.Selector.ElementAttribute elemAttr]
         ns = namespaces.get(prf);
     else {
         error("No namespace declared for prefix {}", prf);
-        $combined_selector::invalid = true;
+        invalid = true;
     }
-    if (!$combined_selector::invalid) {
+    if (!invalid) {
         $elemAttr = rf.createAttribute(value, isStringValue, op, ns, name, prf);
     }
     logLeave("attribute");
@@ -906,9 +916,8 @@ attribute returns [cz.vutbr.web.css.Selector.ElementAttribute elemAttr]
 		 if(s!=null)  { 
 			value=s;
 			isStringValue=true;
-		 }	
-		 else {
-			$combined_selector::invalid=true;
+		 } else {
+		    invalid = true;
 		 }
 		}
 	   ))?

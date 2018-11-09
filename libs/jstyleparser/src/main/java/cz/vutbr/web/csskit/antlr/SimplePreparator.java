@@ -28,7 +28,7 @@ public class SimplePreparator implements Preparator {
 
 	protected RuleFactory rf = CSSFactory.getRuleFactory();
 
-	private Element elem;
+	public final Element elem;
 	private boolean inlinePriority;
 
 	public SimplePreparator(Element e, boolean inlinePriority) {
