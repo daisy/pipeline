@@ -1,17 +1,29 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: "signing"
-//custom plugins
-apply plugin: "org.dm.bundle"
+// For bnd
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.3.0'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'maven'
+	id 'signing'
+}
+
+apply plugin: 'biz.aQute.bnd.builder'
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 javadoc {
 	options.encoding = 'UTF-8'
-	options.links('http://docs.oracle.com/javase/7/docs/api/');
+	options.links('http://docs.oracle.com/javase/8/docs/api/');
 }
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 def repoRevision = System.getenv("REPO_REVISION")!=null?System.getenv("REPO_REVISION"):repositoryRevision
 
@@ -24,42 +36,44 @@ sourceSets {
 
 repositories {
 	mavenCentral()
-	mavenLocal()
+	//mavenLocal()
 	//maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-}
-
-configurations {
-	provided
-	compile { extendsFrom provided }
+	maven { url "https://oss.sonatype.org/content/groups/staging" }
 }
 
 dependencies {
-	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-	compile 'org.daisy.braille:braille-utils.api:3.0.0'
+	compileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+	compile 'org.daisy.dotify:dotify.api:4.4.0'
 	//compile group: 'com.thaiopensource', name: 'jing', version: '20091111'
-	testCompile group: 'junit', name: 'junit', version: '4.7'
-	testCompile 'org.daisy.braille:braille-utils.pef-tools:1.0.0'
+	testCompileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+	testCompile "org.mockito:mockito-core:1.10.19"
+	testCompile 'org.daisy.braille:braille-utils.pef-tools:5.0.0'
+	testCompile 'org.daisy.dotify:dotify.common:4.3.0'
 }
 
-buildscript {
-    repositories { mavenCentral() }
-    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.4" }
-}
-
-task updateBndVersion() << {
-	String contents = file('bnd.bnd').getText('UTF-8')
-	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
-}
-
-bundle {
-	instructions << [
-		"-include": file('bnd.bnd'),
-		'Built-By': System.getProperty("user.name"),
-		'Built-On': new Date().format('yyyy-MM-dd'),
-		'Implementation-Title': "$releaseName",
-		'Repository-Revision': "$repoRevision",
-		'Repository-URL': "$repositoryURL"
-	]
+jar {
+	manifest {
+			attributes(
+			'-sources': 'true',
+			'Import-Package': 'org.daisy.dotify.api.embosser; provide:=true,' +
+								'org.daisy.dotify.api.factory; provide:=true,'+
+								'org.daisy.dotify.api.paper; provide:=true,'+
+								'org.daisy.dotify.api.table; provide:=true, *',
+			// See https://github.com/bndtools/bnd/issues/2677
+			//'Private-Package': 'org.daisy.braille.utils.impl.*',
+			'Service-Component': '*',
+			'Automatic-Module-Name': "$moduleName",
+			'Bundle-Name': "$moduleName",
+			'Bundle-SymbolicName': "$moduleName",
+			'Built-By': System.getProperty("user.name"),
+			'Built-On': new Date().format('yyyy-MM-dd'),
+			'Implementation-Title': "$releaseName",
+			'Repository-Revision': "$repoRevision",
+			'Repository-URL': "$repositoryURL",
+			'Include-Resource': 'LICENSE, NOTICE'
+		)
+	}
 }
 
 task javadocJar(type: Jar) {
@@ -124,6 +138,6 @@ uploadArchives {
 	}
 }
 
-task wrapper(type: Wrapper) {
-	gradleVersion = '3.0'
+wrapper {
+	distributionType = Wrapper.DistributionType.ALL
 }

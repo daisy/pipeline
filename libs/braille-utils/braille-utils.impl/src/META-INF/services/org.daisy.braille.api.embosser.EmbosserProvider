@@ -1,7 +1,0 @@
-com_braillo.BrailloEmbosserProvider
-com_indexbraille.IndexEmbosserProvider
-es_once_cidat.CidatEmbosserProvider
-com_brailler.EnablingTechnologiesEmbosserProvider
-org_daisy.GenericEmbosserProvider
-com_viewplus.ViewPlusEmbosserProvider
-pl_com_harpo.HarpoEmbosserProvider

@@ -1,0 +1,5 @@
+org.daisy.braille.utils.impl.provider.ISO216PaperProvider
+org.daisy.braille.utils.impl.provider.NorthAmericaPaperProvider
+org.daisy.braille.utils.impl.provider.TractorPaperProvider
+org.daisy.braille.utils.impl.provider.RollPaperProvider
+org.daisy.braille.utils.impl.provider.FA44PaperProvider
