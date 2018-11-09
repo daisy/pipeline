@@ -1,5 +1,6 @@
 package org.daisy.braille.css;
 
+import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.PseudoClass;
@@ -18,6 +19,11 @@ public class BrailleCSSRuleFactory extends RuleFactoryImpl {
 	@Override
 	public Selector createSelector() {
 		return new SelectorImpl();
+	}
+	
+	@Override
+	public CombinedSelector createCombinedSelector() {
+		return new CombinedSelectorImpl();
 	}
 	
 	@Override

@@ -92,17 +92,15 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			return null; }
 	}
 	
-	public RuleList parseInlinedStyle(String style) {
+	public RuleList parseInlineStyle(String style) {
 		try {
 			CSSInputStream input = CSSInputStream.stringStream(style);
 			CommonTokenStream tokens = feedLexer(input);
-			BrailleCSSParser parser = new BrailleCSSParser(tokens);
-			parser.init();
-			CommonTree ast = (CommonTree)parser.inlinedstyle().getTree();
+			CommonTree ast = feedParser(tokens, SourceType.INLINE);
 			// OK to pass null for context element because it is only used in Analyzer.evaluateDOM()
 			Preparator preparator = new Preparator(null, true);
 			BrailleCSSTreeParser tparser = feedAST(tokens, ast, preparator, null);
-			return tparser.inlinedstyle(); }
+			return tparser.inlinestyle(); }
 		catch (IOException e) {
 			log.error("I/O error during inline style parsing: {}", e.getMessage());
 			return null; }

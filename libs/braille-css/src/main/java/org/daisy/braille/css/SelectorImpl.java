@@ -22,6 +22,22 @@ import org.w3c.dom.NodeList;
 
 public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 	
+	public boolean add(Selector selector) throws UnsupportedOperationException {
+		if (size() > 0) {
+			SelectorPart lastPart = get(size() - 1);
+			if (lastPart instanceof PseudoElement) {
+				if (!(lastPart instanceof PseudoElementImpl))
+					throw new RuntimeException(); // should not happen
+				// if this selector contains a custom pseudo class, we append any following selectors to the stack
+				if (((PseudoElementImpl)lastPart).containsCustomPseudoClass()) {
+					((PseudoElementImpl)lastPart).add(selector);
+					return true;
+				}
+			}
+		}
+		throw new UnsupportedOperationException("Selectors should be combined with CombinedSelector");
+	}
+	
 	@Override
 	public boolean add(SelectorPart part) {
 		if (part instanceof PseudoElement) {
@@ -31,7 +47,18 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				SelectorPart lastPart = get(size() - 1);
 				if (lastPart instanceof PseudoElement) {
 					if (!(lastPart instanceof PseudoElementImpl))
-						throw new RuntimeException();
+						throw new RuntimeException(); // should not happen
+					
+					// FIXME: hack!
+					// SASS may reverse the order of pseudo-elements and pseudo-classes (see
+					// https://github.com/sass/libsass/issues/1539). We recover from this bug by
+					// reversing the order again here. We can do this because it does not make sense
+					// for pseudo-elements to have a custom pseudo-class.
+					if (((PseudoElementImpl)part).specifiedAsClass && !((PseudoElementImpl)lastPart).specifiedAsClass) {
+						set(size() - 1, part);
+						part = lastPart;
+						lastPart = get(size() - 1);
+					}
 					return ((PseudoElementImpl)lastPart).add((PseudoElementImpl)part);
 				}
 			}
@@ -40,8 +67,32 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				SelectorPart lastPart = get(size() - 1);
 				if (lastPart instanceof PseudoElement) {
 					if (!(lastPart instanceof PseudoElementImpl))
-						throw new RuntimeException();
-					return ((PseudoElementImpl)lastPart).add((PseudoClass)part);
+						throw new RuntimeException(); // should not happen
+					PseudoElementImpl pseudoElem = ((PseudoElementImpl)lastPart);
+					while (pseudoElem.hasStackedPseudoElement())
+						pseudoElem = pseudoElem.getStackedPseudoElement();
+					
+					// FIXME: hack!
+					// SASS may reverse the order of pseudo-elements and pseudo-classes (see
+					// https://github.com/sass/libsass/issues/1539). We recover from this bug by
+					// trying to reverse the order again here. We can do this because it only makes
+					// sense in a few cases that pseudo-elements have a pseudo-class.
+					if (pseudoElem.getName().equals(PseudoElementImpl.PseudoElementDef.LIST_ITEM.name) ||
+					    pseudoElem.getName().equals(PseudoElementImpl.PseudoElementDef.LIST_HEADER.name)) {
+						PseudoClassImpl pseudoClass = null;
+						if (part instanceof PseudoClassImpl)
+							pseudoClass = (PseudoClassImpl)part;
+						else if (part instanceof NegationPseudoClassImpl) {
+							SelectorPart p = ((NegationPseudoClassImpl)part).negatedSelector.get(0).get(0);
+							if (p instanceof PseudoClassImpl)
+								pseudoClass = (PseudoClassImpl)p; }
+						// Trick to test whether it's :first-child, :last-child, :only-child,
+						// :nth-child(n) or :nth-last-child(n). Only in these cases it makes sense
+						// for ::list-item and ::list-header to have a pseudo-class.
+						if (pseudoClass != null && pseudoClass.matchesPosition(1, 1)) {
+							return pseudoElem.add((PseudoClass)part);
+						}
+					}
 				}
 			}
 		}
@@ -283,15 +334,25 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		private final String name;
 		private final List<String> args;
 		private final List<PseudoClass> pseudoClasses = new ArrayList<PseudoClass>();
+		private final List<Selector> combinedSelectors = new ArrayList<Selector>();
 		private PseudoElementImpl stackedPseudoElement = null;
+		private boolean specifiedAsClass = false;
 		
 		public PseudoElementImpl(String name, String... args) {
+			if (name.startsWith(":")) {
+				name = name.substring(1);
+				if (name.startsWith(":"))
+					name = name.substring(1);
+				else
+					specifiedAsClass = true;
+			}
 			this.name = name = name.toLowerCase(); // Pseudo-element names are case-insensitive
 			this.args = new ArrayList<String>();
 			if (name.startsWith("-"))
 				for (String a : args)
 					this.args.add(a);
 			else {
+				specifiedAsClass = false; // mistake
 				PseudoElementDef def;
 				if (PSEUDO_ELEMENT_DEFS.containsKey(name))
 					def = PSEUDO_ELEMENT_DEFS.get(name);
@@ -329,6 +390,8 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		}
 		
 		private boolean add(PseudoClass pseudoClass) {
+			if (!combinedSelectors.isEmpty())
+				throw new RuntimeException(); // should not happen
 			if (stackedPseudoElement != null)
 				return stackedPseudoElement.add(pseudoClass);
 			else
@@ -336,6 +399,8 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		}
 		
 		private boolean add(PseudoElementImpl pseudoElement) {
+			if (!combinedSelectors.isEmpty())
+				throw new RuntimeException(); // should not happen
 			if (stackedPseudoElement != null)
 				return stackedPseudoElement.add(pseudoElement);
 			else {
@@ -344,8 +409,22 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			 }
 		}
 		
+		private boolean add(Selector selector) {
+			if (stackedPseudoElement != null)
+				return stackedPseudoElement.add(selector);
+			else {
+				if (selector.getCombinator() == null)
+					throw new RuntimeException(); // should not happen
+				return combinedSelectors.add(selector);
+			}
+		}
+		
 		public List<PseudoClass> getPseudoClasses() {
 			return pseudoClasses;
+		}
+		
+		public List<Selector> getCombinedSelectors() {
+			return combinedSelectors;
 		}
 		
 		public boolean hasStackedPseudoElement() {
@@ -356,23 +435,36 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			return stackedPseudoElement;
 		}
 		
+		private boolean containsCustomPseudoClass() {
+			if (specifiedAsClass)
+				return true;
+			else if (stackedPseudoElement != null)
+				return stackedPseudoElement.containsCustomPseudoClass();
+			else
+				return false;
+		}
+		
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			sb
-				.append(OutputUtil.PAGE_OPENING)
-				.append(OutputUtil.PAGE_OPENING)
-				.append(name);
+			sb.append(OutputUtil.PAGE_OPENING);
+			if (!specifiedAsClass)
+				sb.append(OutputUtil.PAGE_OPENING);
+			sb.append(name);
 			if (args.size() > 0) {
 				sb.append(OutputUtil.FUNCTION_OPENING);
 				OutputUtil.appendList(sb, args, ", ");
 				sb.append(OutputUtil.FUNCTION_CLOSING);
 			}
-			if (!pseudoClasses.isEmpty())
-				for (PseudoClass p : pseudoClasses)
-					sb.append(p);
-			if (stackedPseudoElement != null)
-				sb.append(stackedPseudoElement);
+			if (!combinedSelectors.isEmpty())
+				sb = OutputUtil.appendList(sb, combinedSelectors, OutputUtil.EMPTY_DELIM);
+			else {
+				if (!pseudoClasses.isEmpty())
+					for (PseudoClass p : pseudoClasses)
+						sb.append(p);
+				if (stackedPseudoElement != null)
+					sb.append(stackedPseudoElement);
+			}
 			return sb.toString();
 		}
 		

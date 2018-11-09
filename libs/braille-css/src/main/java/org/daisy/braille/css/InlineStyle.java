@@ -23,7 +23,7 @@ import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
  * processors internally, and as such the resulting style attributes are not
  * valid in an input document.
  */
-public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
+public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	
 	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	private static final SelectorPart dummyElementSelectorPart;
@@ -34,35 +34,34 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	
 	private final static RuleMainBlock emptyBlock = new RuleMainBlock();
 
-	// FIXME: instead of splitting up beforehand and concatenating in
-	// iterator(), we could also split up on the fly in getMainStyle(),
-	// getPseudoStyles() etc.
 	private Optional<RuleMainBlock> mainStyle;
-	private List<RulePseudoElementBlock> pseudoStyles;
+	private List<RuleRelativeBlock> relativeRules;
 	private List<RuleTextTransform> textTransformDefs;
 	
-	public InlinedStyle(String style) {
-		pseudoStyles = new ArrayList<RulePseudoElementBlock>();
+	public InlineStyle(String style) {
+		relativeRules = new ArrayList<RuleRelativeBlock>();
 		textTransformDefs = new ArrayList<RuleTextTransform>();
 		List<Declaration> mainDeclarations = new ArrayList<Declaration>();
-		for (RuleBlock<?> block : parserFactory.parseInlinedStyle(style)) {
+		for (RuleBlock<?> block : parserFactory.parseInlineStyle(style)) {
 			if (block == null) {}
 			else if (block instanceof RuleSet) {
 				RuleSet set = (RuleSet)block;
 				List<CombinedSelector> selectors = set.getSelectors();
 				assertThat(selectors.size() == 1); // because no commas in selector
 				CombinedSelector combinedSelector = selectors.get(0);
-				assertThat(combinedSelector.size() == 1); // because no combinators in selector
 				Selector selector = combinedSelector.get(0);
 				assertThat(selector.size() >= 1); // because first part of selector is always the style attribute's parent element
-				assertThat(dummyElementSelectorPart.equals(selector.get(0))); // see BrailleCSSParserFactory.parseInlinedStyle()
-				assertThat(selector.size() <= 2); // because there can be at most one other selector part: a (stacked) pseudo-element
-				if (selector.size() == 2) {
-					SelectorPart part = selector.get(1);
-					assertThat(part instanceof PseudoElementImpl);
-					pseudoStyles.add(new RulePseudoElementBlock((PseudoElementImpl)part, set));
-				} else {
+				assertThat(dummyElementSelectorPart.equals(selector.get(0))); // see BrailleCSSParserFactory.parseInlineStyle()
+				if (selector.size() == 1 && combinedSelector.size() == 1) {
 					mainDeclarations.addAll(set);
+				} else {
+					List<Selector> relativeSelector = new ArrayList<Selector>();
+					selector.remove(0);
+					if (selector.size() > 0) {
+						relativeSelector.add(selector);
+					}
+					relativeSelector.addAll(combinedSelector.subList(1, combinedSelector.size()));
+					relativeRules.add(new RuleRelativeBlock(relativeSelector, set));
 				}
 			} else if (block instanceof RuleTextTransform) {
 				textTransformDefs.add((RuleTextTransform)block);
@@ -80,13 +79,9 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 			return emptyBlock;
 	}
 	
-	public Iterator<RulePseudoElementBlock> getPseudoStyles() {
-		return filterNonEmpty(pseudoStyles.listIterator());
-	}
-	
 	public Iterator<RuleBlock<?>> iterator() {
 		final Iterator<RuleMainBlock> mainStyleItr = filterNonEmpty(mainStyle.listIterator());
-		final Iterator<RulePseudoElementBlock> pseudoStylesItr = filterNonEmpty(pseudoStyles.listIterator());
+		final Iterator<RuleRelativeBlock> relativeRulesItr = filterNonEmpty(relativeRules.listIterator());
 		final Iterator<RuleTextTransform> textTransformDefsItr = filterNonEmpty(textTransformDefs.listIterator());
 		return new Iterator<RuleBlock<?>>() {
 			int cursor = 0;
@@ -96,7 +91,7 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 					if (mainStyleItr.hasNext())
 						return true;
 				case 1:
-					if (pseudoStylesItr.hasNext())
+					if (relativeRulesItr.hasNext())
 						return true;
 				case 2:
 				default:
@@ -110,8 +105,8 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 						return mainStyleItr.next();
 					cursor++;
 				case 1:
-					if (pseudoStylesItr.hasNext())
-						return pseudoStylesItr.next();
+					if (relativeRulesItr.hasNext())
+						return relativeRulesItr.next();
 					cursor++;
 				case 2:
 				default:
@@ -124,7 +119,7 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 					mainStyleItr.remove();
 					break;
 				case 1:
-					pseudoStylesItr.remove();
+					relativeRulesItr.remove();
 					break;
 				case 2:
 					textTransformDefsItr.remove();
@@ -139,16 +134,19 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	
 	@Override
 	public Object clone() {
-		InlinedStyle clone; {
+		InlineStyle clone; {
 			try {
-				clone = (InlinedStyle)super.clone(); }
+				clone = (InlineStyle)super.clone(); }
 			catch (CloneNotSupportedException e) {
 				throw new InternalError("coding error"); }}
 		if (mainStyle.isPresent())
 			clone.mainStyle = new Optional<RuleMainBlock>(mainStyle.get());
-		clone.pseudoStyles = new ArrayList<RulePseudoElementBlock>();
-		for (RulePseudoElementBlock b : pseudoStyles)
-			clone.pseudoStyles.add((RulePseudoElementBlock)b.clone());
+		clone.relativeRules = new ArrayList<RuleRelativeBlock>();
+		for (RuleRelativeBlock b : relativeRules)
+			clone.relativeRules.add((RuleRelativeBlock)b.clone());
+		clone.textTransformDefs = new ArrayList<RuleTextTransform>();
+		for (RuleTextTransform b : textTransformDefs)
+			clone.textTransformDefs.add((RuleTextTransform)b.clone());
 		return clone;
 	}
 	
@@ -164,22 +162,17 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 		}
 	}
 	
-	public static class RulePseudoElementBlock extends AbstractRuleBlock<Declaration> {
+	public static class RuleRelativeBlock extends AbstractRuleBlock<Declaration> {
 		
-		private final PseudoElementImpl pseudo;
+		private final List<Selector> selector;
 		
-		private RulePseudoElementBlock(PseudoElementImpl pseudo, List<Declaration> declarations) {
-			this.pseudo = pseudo;
+		public RuleRelativeBlock(List<Selector> selector, List<Declaration> declarations) {
+			this.selector = new ArrayList<Selector>(selector);
 			replaceAll(declarations);
 		}
 		
-		public PseudoElementImpl getPseudoElement() {
-			return pseudo;
-		}
-		
-		@Override
-		public boolean isEmpty() {
-			return false;
+		public List<Selector> getSelector() {
+			return selector;
 		}
 	}
 	

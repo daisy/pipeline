@@ -25,7 +25,7 @@ unknown_atrule
     ;
 
 volume
-    : VOLUME S* volume_pseudo? S* LCURLY S* declarations volume_area* RCURLY
+    : VOLUME S* (volume_pseudo S*)? LCURLY S* declarations volume_area* RCURLY
       -> ^(VOLUME volume_pseudo? declarations ^(SET volume_area*))
     ;
 
@@ -75,41 +75,35 @@ combinator_selector
     ;
 
 // @Override
-// Allow only single pseudo instead of comma-separated
-inlineset
-    : (pseudo+ S*)?
-      LCURLY S*
-        declarations
-      RCURLY S*
-      -> ^(RULE pseudo* declarations)
-    ;
-
-// @Override
 /*
  * The COLON recognized as the start of an invalid property (which is
  * used in some nasty CSS hacks) conflicts with the COLON in the
  * possible pseudo class selector of inlineset. jStyleParser favors
  * the hack recovery over the support for pseudo elements in inline
  * stylesheets.
+ *
+ * Also disable all the other characters that are a valid beginning of
+ * a relative selector (see relative_or_chained_selector).
  */
 noprop
     :
-    ( CLASSKEYWORD -> CLASSKEYWORD
-    | NUMBER -> NUMBER
+    (
+ //   CLASSKEYWORD -> CLASSKEYWORD |
+      NUMBER -> NUMBER
     | COMMA -> COMMA
-    | GREATER -> GREATER
+ // | GREATER -> GREATER
     | LESS -> LESS
     | QUESTION -> QUESTION
     | PERCENT -> PERCENT
     | EQUALS -> EQUALS
     | SLASH -> SLASH
     | EXCLAMATION -> EXCLAMATION
-    | PLUS -> PLUS
-    | ASTERISK -> ASTERISK
+ // | PLUS -> PLUS
+ // | ASTERISK -> ASTERISK
     | DASHMATCH -> DASHMATCH
     | INCLUDES -> INCLUDES
  // | COLON -> COLON
-    | STRING_CHAR -> STRING_CHAR
+ // | STRING_CHAR -> STRING_CHAR
     | CTRL -> CTRL
     | INVALID_TOKEN -> INVALID_TOKEN
     ) !S*
@@ -123,28 +117,31 @@ simple_inlinestyle
     ;
 
 /*
- * Format allowed in style attributes that are the result of
- * "inlining" a style sheet attached to a document. Inlining is an
- * operation intended to be done by CSS processors internally, and as
- * such the resulting style attributes are not valid in an input
- * document. See the "inlinestyle" rule for what is allowed in style
- * attributes of an input document.
+ * Syntax of style attributes according to http://braillespecs.github.io/braille-css/#style-attribute.
  */
-inlinedstyle
-    : simple_inlinestyle
-    | S* (inlineblock S*) + -> ^(INLINESTYLE inlineblock+)
+// @Override
+inlinestyle
+    : S* declarations (inlineset S*)* -> ^(INLINESTYLE ^(RULE declarations) inlineset*)
     ;
 
-inlineblock
-    : LCURLY S* declarations RCURLY -> ^(RULE declarations) // simple declaration list within braces
-    | pseudo+ S* LCURLY S* declarations RCURLY -> ^(RULE pseudo+ declarations) // pseudo-element or pseudo-class
-    | text_transform_def // text-transform at-rule
+// @Override
+inlineset
+    : relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(RULE relative_or_chained_selector declarations)
+    | text_transform_def
 
 // TODO: allowed as well but skip for now:
 //  | anonymous_page // page at-rule
 
 // TODO: need a slightly different format that allows @page inside @begin and @end:
 //  | volume // volume at-rule
+    ;
+
+// FIXME: Note that in the braille CSS specification the second AMPERSAND is optional. This
+// implementation requires it however. In theory, a semicolon could be used to avoid confusion
+// between a term and the start of a selector, however I can't find a way to implement this in
+// ANTLR, while keeping the semicolon optional.
+relative_or_chained_selector
+    : ( AMPERSAND selector | AMPERSAND! S!* combinator selector ) (combinator selector)*
     ;
 
 anonymous_page
