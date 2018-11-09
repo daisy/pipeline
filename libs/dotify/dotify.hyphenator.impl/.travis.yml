@@ -1,4 +1,7 @@
 language: java
-jdk: oraclejdk7
+jdk: oraclejdk11
 after_success:
-  - ./upload.sh
+- ./upload.sh
+
+before_install:
+- '[ "$TRAVIS_PULL_REQUEST" == "false" ] && openssl aes-256-cbc -K $encrypted_1f1c01a5855a_key -iv $encrypted_1f1c01a5855a_iv -in secring.gpg.enc -out secring.gpg -d || echo "no decryption for pull requests"'

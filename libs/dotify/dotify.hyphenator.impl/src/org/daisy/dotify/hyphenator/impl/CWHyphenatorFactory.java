@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.hyphenator.latex;
+package org.daisy.dotify.hyphenator.impl;
 
 import java.util.logging.Logger;
 
@@ -6,9 +6,19 @@ import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
 import org.daisy.dotify.api.hyphenator.HyphenatorFactory;
 import org.daisy.dotify.api.hyphenator.HyphenatorInterface;
 
+/**
+ * Provides a hyphenator factory for compound words.
+ * 
+ * @author Joel Håkansson
+ */
 public class CWHyphenatorFactory implements HyphenatorFactory {
 	private int accuracy = 5;
 
+	/**
+	 * Returns true if the specified locale is supported, false otherwise.
+	 * @param locale the locale to test
+	 * @return returns true if the locale is supported, false otherwise
+	 */
 	public boolean supportsLocale(String locale) {
 		return CWHyphenator.supportsLocale(locale);
 	}

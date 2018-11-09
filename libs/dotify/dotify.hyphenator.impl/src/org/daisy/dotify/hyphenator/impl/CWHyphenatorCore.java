@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.hyphenator.latex;
+package org.daisy.dotify.hyphenator.impl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
 
-public class CWHyphenatorCore {
+class CWHyphenatorCore {
 	private static CWHyphenatorCore instance;
 	private final Properties tables;
 	private final Map<String, CWHyphenatorAtom> map;
@@ -21,11 +21,11 @@ public class CWHyphenatorCore {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 	}
 	
-	public boolean supportsLocale(String locale) {
+	boolean supportsLocale(String locale) {
 		return tables.getProperty(locale) != null;
 	}
 	
-	public synchronized static CWHyphenatorCore getInstance() {
+	synchronized static CWHyphenatorCore getInstance() {
 		if (instance==null) {
 			instance = new CWHyphenatorCore();
 		}
@@ -47,7 +47,7 @@ public class CWHyphenatorCore {
 		return ret;
 	}
 	
-	public CWHyphenatorAtom getHyphenator(String locale) throws HyphenatorConfigurationException {
+	CWHyphenatorAtom getHyphenator(String locale) throws HyphenatorConfigurationException {
 		CWHyphenatorAtom hyph = map.get(locale);
 		if (hyph==null) {
 			String subPath = tables.getProperty(locale);

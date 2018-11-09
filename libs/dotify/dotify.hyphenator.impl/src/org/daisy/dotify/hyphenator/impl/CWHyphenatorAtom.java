@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.hyphenator.latex;
+package org.daisy.dotify.hyphenator.impl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,16 +10,16 @@ import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
 import org.daisy.dotify.common.text.SplitResult;
 import org.daisy.dotify.common.text.StringSplitter;
 
-public class CWHyphenatorAtom {
-	public final static String DICTIONARY_KEY = "dictionary";
-	public final static String EXCEPTIONS_FILE_KEY = "exceptions-file";
-	public final static String DECOMPOUND_LIMIT_KEY = "decompound-limit";
-	public final static String MINIMUM_WORD_LENGTH_KEY = "minimum-word-length";
-	public final static String PATTERN_PROPERTIES_KEY = "pattern-properties";
-	public final static String EVALUATE_THRESHOLD_KEY = "evaluate-threshold";
-	private final static int DEFAULT_DECOMPOUND_LIMIT = 6;
-	private final static int DEFAULT_MINIMUM_WORD_LENGTH = 2;
-	private final static double DEFAULT_EVALUATE_THRESHOLD = 0.5;
+class CWHyphenatorAtom {
+	static final String DICTIONARY_KEY = "dictionary";
+	static final String EXCEPTIONS_FILE_KEY = "exceptions-file";
+	static final String DECOMPOUND_LIMIT_KEY = "decompound-limit";
+	static final String MINIMUM_WORD_LENGTH_KEY = "minimum-word-length";
+	static final String PATTERN_PROPERTIES_KEY = "pattern-properties";
+	static final String EVALUATE_THRESHOLD_KEY = "evaluate-threshold";
+	private static final int DEFAULT_DECOMPOUND_LIMIT = 6;
+	private static final int DEFAULT_MINIMUM_WORD_LENGTH = 2;
+	private static final double DEFAULT_EVALUATE_THRESHOLD = 0.5;
 	
 	private final Logger logger;
 	private final HyphenationConfig base;
@@ -34,7 +34,7 @@ public class CWHyphenatorAtom {
 	
 	
 	
-	public CWHyphenatorAtom(String subPath, String locale) throws HyphenatorConfigurationException {
+	CWHyphenatorAtom(String subPath, String locale) throws HyphenatorConfigurationException {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 
         Properties imp;
@@ -101,15 +101,15 @@ public class CWHyphenatorAtom {
 		return ret;
 	}
 	
-	public int getDefaultBeginLimit() {
+	int getDefaultBeginLimit() {
 		return base.getDefaultBeginLimit();
 	}
 
-	public int getDefaultEndLimit() {
+	int getDefaultEndLimit() {
 		return base.getDefaultEndLimit();
 	}
 
-	public String hyphenate(String input, int beginLimit, int endLimit, int accuracy) {
+	String hyphenate(String input, int beginLimit, int endLimit, int accuracy) {
 		if (accuracy<5) {
 			return base.getHyphenator().hyphenate(input, beginLimit, endLimit);
 		} else {

@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.hyphenator.latex;
+package org.daisy.dotify.hyphenator.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,13 +11,13 @@ import net.davidashen.text.Utf8TexParser.TexParserException;
 
 class HyphenationConfig {
 	public enum Mode {BYTE, CHARACTER};
-	private final static String LEFT_HYPHEN_MIN_KEY = "beginLimit";
-	private final static String RIGHT_HYPHEN_MIN_KEY = "endLimit";
-	private final static String ENCODING_KEY = "encoding";
-	private final static String PATTERN_PATH_KEY = "patternPath";
-	private final static String MODE_KEY = "mode";
-	private final static String BYTE_MODE = "byte";
-	private final static String CHARACTER_MODE = "character";
+	private static final String LEFT_HYPHEN_MIN_KEY = "beginLimit";
+	private static final String RIGHT_HYPHEN_MIN_KEY = "endLimit";
+	private static final String ENCODING_KEY = "encoding";
+	private static final String PATTERN_PATH_KEY = "patternPath";
+	private static final String MODE_KEY = "mode";
+	private static final String BYTE_MODE = "byte";
+	private static final String CHARACTER_MODE = "character";
 	private final String encoding;
 	private final int beginLimit;
 	private final int endLimit;

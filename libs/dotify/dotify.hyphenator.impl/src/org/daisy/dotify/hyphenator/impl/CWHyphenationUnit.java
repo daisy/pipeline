@@ -1,11 +1,11 @@
-package org.daisy.dotify.impl.hyphenator.latex;
+package org.daisy.dotify.hyphenator.impl;
 
 
-public class CWHyphenationUnit {
+class CWHyphenationUnit {
 	private final int freq;
 	private final int[] hyphPos;
 	
-	public CWHyphenationUnit(int freq, String hyph) {
+	CWHyphenationUnit(int freq, String hyph) {
 		this.freq = freq;
 		int i = 0;
 		if (hyph==null) {
@@ -20,32 +20,32 @@ public class CWHyphenationUnit {
 		}
 	}
 
-	public CWHyphenationUnit(int freq) {
+	CWHyphenationUnit(int freq) {
 		this(freq, null);
 	}
 	
-	public int getFreq() {
+	int getFreq() {
 		return freq;
 	}
 	/*
-	public String getHyph() {
+	String getHyph() {
 		return hyph;
 	}*/
 	/*
-	public int[] getHyphPos() {
+	int[] getHyphPos() {
 		return hyphPos;
 	}*/
 	
-	public boolean hasHyphenation() {
+	boolean hasHyphenation() {
 		return hyphPos.length>0;
 	}
 	
 	/**
 	 * Hyphenates the supplied word, using the hyphenation points in this unit 
-	 * @param word
+	 * @param word the word to hyphenate
 	 * @return returns the hyphenated string
 	 */
-	public String hyphenate(String word) {
+	String hyphenate(String word) {
 		if (hasHyphenation()) {
 			StringBuilder hyph = new StringBuilder();
 			int i = 0;
