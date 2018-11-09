@@ -1,14 +1,16 @@
 package org.daisy.dotify.formatter.impl;
 
 import org.daisy.dotify.api.formatter.Formatter;
-import org.daisy.dotify.api.formatter.FormatterConfigurationException;
 import org.daisy.dotify.api.formatter.FormatterFactory;
+import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMaker;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
+import org.daisy.dotify.api.translator.MarkerProcessorFactoryMaker;
 import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
+import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
-
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
  * Provides a formatter proxy implementation. This class is intended to be instantiated
@@ -26,49 +28,62 @@ public class FormatterFactoryImpl implements FormatterFactory {
 		return new FormatterImpl(translatorFactory, borderFactory, markerProcessorFactory, locale, mode);
 	}
 
-	@Reference
-	public void setTranslator(BrailleTranslatorFactoryMakerService translatorFactory) {
-		this.translatorFactory = translatorFactory;
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
+	@Reference(cardinality=ReferenceCardinality.MANDATORY)
+	public void setTranslator(BrailleTranslatorFactoryMakerService service) {
+		this.translatorFactory = service;
 	}
 
-	public void unsetTranslator() {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetTranslator(BrailleTranslatorFactoryMakerService service) {
 		this.translatorFactory = null;
 	}
 	
-	@Reference
-	public void setTextBorderFactory(TextBorderFactoryMakerService borderFactory) {
-		this.borderFactory = borderFactory;
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
+	@Reference(cardinality=ReferenceCardinality.MANDATORY)
+	public void setTextBorderFactory(TextBorderFactoryMakerService service) {
+		this.borderFactory = service;
 	}
 	
-	public void unsetTextBorderFactory() {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetTextBorderFactory(TextBorderFactoryMakerService service) {
 		this.borderFactory = null;
 	}
 	
-	@Reference
-	public void setMarkerProcessorFactory(MarkerProcessorFactoryMakerService markerProcessorFactory) {
-		this.markerProcessorFactory = markerProcessorFactory;
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
+	@Reference(cardinality=ReferenceCardinality.MANDATORY)
+	public void setMarkerProcessorFactory(MarkerProcessorFactoryMakerService service) {
+		this.markerProcessorFactory = service;
 	}
 	
-	public void unsetMarkerProcessorFactory() {
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
+	public void unsetMarkerProcessorFactory(MarkerProcessorFactoryMakerService service) {
 		this.markerProcessorFactory = null;
-	}
-	
-	@Override
-	public <T> void setReference(Class<T> c, T reference)
-			throws FormatterConfigurationException {
-		if (c.equals(BrailleTranslatorFactoryMakerService.class)) {
-			setTranslator((BrailleTranslatorFactoryMakerService)reference);
-		} else {
-			throw new FormatterConfigurationException("Unrecognized reference: " + reference);
-		}
-		
 	}
 
 	@Override
 	public void setCreatedWithSPI() {
-		setTranslator(SPIHelper.getBrailleTranslatorFactoryMaker());
-		setTextBorderFactory(SPIHelper.getTextBorderFactoryMaker());
-		setMarkerProcessorFactory(SPIHelper.getMarkerProcessorFactoryMaker());
+		setTranslator(BrailleTranslatorFactoryMaker.newInstance());
+		setTextBorderFactory(TextBorderFactoryMaker.newInstance());
+		setMarkerProcessorFactory(MarkerProcessorFactoryMaker.newInstance());
 	}
 
 }

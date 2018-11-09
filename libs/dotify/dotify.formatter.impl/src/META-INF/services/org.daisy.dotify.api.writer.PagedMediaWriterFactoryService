@@ -1,2 +1,2 @@
-org.daisy.dotify.writer.impl.PEFMediaWriterFactoryService
-org.daisy.dotify.writer.impl.TextMediaWriterFactoryService
+org.daisy.dotify.formatter.impl.writer.PEFMediaWriterFactoryService
+org.daisy.dotify.formatter.impl.writer.TextMediaWriterFactoryService

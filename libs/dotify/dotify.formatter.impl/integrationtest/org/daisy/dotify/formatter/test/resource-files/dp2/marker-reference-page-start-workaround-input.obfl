@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-page-start-workaround</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests (hypothetical) marker-reference type that corresponds with 'page-start' in CSS. This type is not directly supported in OBFL. As a workaround I do a forward page search for the marker 'foo/prev' (rendered top left corner), and if that does not return a value, a backward sequence search for the marker 'foo' (top right corner). At any position in the OBFL the value of the preceding marker of class 'foo' matches the value of the following marker of class 'foo/prev'. In addition, tests marker-reference with scope page and direction backward, which corresponds more or less with 'page-last-except-start' in CSS (bottom left corner). Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="10" page-height="6" duplex="true" page-number-variable="page">
+      <default-template>
+         <header>
+            <field>
+               <marker-reference marker="foo/prev" direction="forward" scope="page-content"/>
+            </field>
+            <field/>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="sequence"/>
+            </field>
+         </header>
+         <footer>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="page"/>
+            </field>
+            <field/>
+            <field/>
+         </footer>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <!-- new page -->
+      <block><block><marker class="foo" value="1"/></block>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ​<!-- new page -->
+                ⠁⠁⠁⠁⠁
+                <marker class="foo/prev" value="1"/>
+         <marker class="foo" value="2"/>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                <marker class="foo/prev" value="3"/>
+         <marker class="foo" value="3"/>
+                ​<!-- new page -->
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                <br/><!-- new page --><marker class="foo/prev" value="3"/><marker class="foo" value="4"/>⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+              </block>
+      <!-- new page -->
+      <block><block><marker class="foo/prev" value="4"/><marker class="foo" value="5"/></block>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+              </block>
+      <!-- new page -->
+      <block break-before="page"><block><marker class="foo/prev" value="5"/><marker class="foo" value="6"/></block>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+              </block>
+   </sequence>
+</obfl>

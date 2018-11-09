@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">list-of-references-document-range</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests list-of-references with range="document" and on-volume-start.</dc:description>
+   </meta>
+   <layout-master name="main" page-width="10" page-height="8" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <volume-template sheets-in-volume-max="1000" use-when="(! (= $volume $volumes))"/>
+   <volume-template sheets-in-volume-max="1000" use-when="(= $volume $volumes)">
+      <post-content>
+         <dynamic-sequence master="main">
+            <list-of-references collection="endnotes" range="document">
+               <on-volume-start>
+                  <block border-bottom-style="solid" border-bottom-align="outer"><evaluate expression="(round $started-volume-number)"/>
+                  </block>
+               </on-volume-start>
+            </list-of-references>
+         </dynamic-sequence>
+      </post-content>
+   </volume-template>
+   <collection name="endnotes">
+      <item id="a">
+         <block><page-number ref-id="I" number-format="default"/>
+                ⠶
+              </block>
+      </item>
+      <item id="b">
+         <block><page-number ref-id="I" number-format="default"/>
+                ⠶⠶
+              </block>
+      </item>
+      <item id="c">
+         <block><page-number ref-id="III" number-format="default"/>
+                ⠶⠶⠶
+              </block>
+      </item>
+   </collection>
+   <sequence master="main">
+      <block id="I">⠿⠿⠿
+              <anchor item="a"/>
+              ⠿⠿⠿
+              <anchor item="b"/>
+      </block>
+      <block break-before="page">⠿⠿⠿
+            </block>
+   </sequence>
+   <sequence master="main" break-before="volume">
+      <block id="III">⠿⠿⠿
+              <anchor item="c"/>
+      </block>
+   </sequence>
+</obfl>

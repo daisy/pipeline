@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <layout-master name="a" page-width="10" page-height="1" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block>
+        ⠁⠁⠁  ⠁⠁⠁
+      </block>
+      <block>
+        ⠁⠁⠁ <!-- comment --> ⠁⠁⠁
+      </block>
+   </sequence>
+</obfl>

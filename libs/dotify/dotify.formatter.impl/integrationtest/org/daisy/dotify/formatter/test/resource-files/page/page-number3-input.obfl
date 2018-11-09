@@ -1,0 +1,47 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Page number counter with dynamic sequences</dc:title>
+		<dc:description>Tests that the page number counter works with pre/post content.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="10" page-height="6" duplex="false">
+		<default-template>
+			<header>
+				<field><current-page/></field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<table-of-contents name="toc">
+		<toc-entry ref-id="block-1">toc 1</toc-entry>
+	</table-of-contents>
+	<volume-template sheets-in-volume-max="5">
+		<pre-content>
+			<sequence master="body" page-number-counter="A"><block>pre content</block></sequence>
+			<dynamic-sequence master="body" page-number-counter="A">
+				<list-of-references range="volume" collection="refs"/>
+			</dynamic-sequence>
+			<toc-sequence master="body" page-number-counter="A" toc="toc" range="volume"/>
+		</pre-content>
+		<post-content>
+			<sequence master="body" page-number-counter="A"><block>post content</block></sequence>
+		</post-content>
+	</volume-template>
+	<collection name="refs">
+		<item id="n1">item 1</item>
+	</collection>
+	<sequence master="body" page-number-counter="A">
+		<block break-before="page" id="block-1">⠤⠤⠤</block>
+		<block break-before="page">⠤1A⠤⠤</block>
+		<block break-before="page">⠤1B⠤⠤</block>
+	</sequence>
+	<sequence master="body" page-number-counter="A">
+		<block break-before="page">⠤2C⠤⠤</block>
+		<block break-before="page">⠤2D⠤⠤<anchor item="n1"/></block>
+		<block break-before="page">⠤2E⠤⠤</block>
+	</sequence>
+	<sequence master="body" page-number-counter="A">
+		<block break-before="page">⠤3F⠤⠤</block>
+		<block break-before="page">⠤3G⠤⠤</block>
+		<block break-before="page">⠤3H⠤⠤</block>
+	</sequence>
+</obfl>

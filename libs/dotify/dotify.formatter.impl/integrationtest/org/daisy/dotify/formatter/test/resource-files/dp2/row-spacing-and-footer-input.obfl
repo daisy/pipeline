@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">row-spacing-and-footer</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests row spacing combined with footer. The last row of a page before the footer has no rowgap. If a gap is desired an empty footer line must be inserted.</dc:description>
+   </meta>
+   <layout-master name="a" duplex="true" page-width="10" page-height="10">
+      <default-template>
+         <header/>
+         <footer>
+            <field>
+               <current-page number-format="default"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <layout-master name="b" duplex="true" page-width="10" page-height="10">
+      <default-template>
+         <header/>
+         <footer>
+             <field>
+                 <string value=""/>
+             </field>
+         </footer>
+         <footer>
+            <field>
+               <current-page number-format="default"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block row-spacing="2.0">⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+              ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+              ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+            </block>
+   </sequence>
+   <sequence master="b" initial-page-number="1">
+      <block row-spacing="2.0">⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+              ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+              ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿ ⠿⠿⠿⠿
+            </block>
+   </sequence>
+</obfl>

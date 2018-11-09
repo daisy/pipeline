@@ -1,78 +1,75 @@
-apply plugin: 'java'
-apply plugin: "maven"
-apply plugin: "signing"
-//custom plugins
-apply plugin: "org.dm.bundle"
-apply plugin: "eclipse"
+// For bnd
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.3.0'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'maven'
+	id 'signing'
+	//id 'jacoco'
+}
+
+apply plugin: 'biz.aQute.bnd.builder'
 
 group = 'org.daisy.dotify'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 sourceSets {
 	main {	java { srcDir 'src' }	resources { srcDir 'src' } }
-	test {	java { srcDir 'test' }	resources { srcDir 'test' } }
+	test {	java { srcDir 'test' srcDir 'integrationtest'}	resources { srcDir 'test' srcDir 'integrationtest'} }
 }
 
-configurations {
-	provided
-	compile { extendsFrom provided }
-}
-
-/* Run gradle with JDK 1.7 or set bootstrap classpath, e.g.:
-	options.bootClasspath = "/usr/lib/jvm/java-7-openjdk/jre/lib/rt.jar" */
 compileJava {
     options.encoding = 'UTF-8'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
 }
 
 compileTestJava {
 	options.encoding = 'UTF-8'
-	sourceCompatibility = 1.7
-	targetCompatibility = 1.7
 }
 
 def repoRevision = System.getenv("REPO_REVISION")!=null?System.getenv("REPO_REVISION"):repositoryRevision
 
 javadoc {
 	options.encoding = 'UTF-8'
-	options.links('http://docs.oracle.com/javase/7/docs/api/')
+	options.links('http://docs.oracle.com/javase/8/docs/api/')
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    //mavenLocal()
+    maven { url "https://oss.sonatype.org/content/groups/staging" }
     //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
-    provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-    compile "org.daisy.dotify:dotify.api:2.9.0"
-    compile "org.daisy.dotify:dotify.common:2.1.0"
+    compileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+    compile "org.daisy.dotify:dotify.api:4.4.0"
+    compile "org.daisy.dotify:dotify.common:4.3.0"
+    compile 'org.daisy.streamline:streamline-api:1.2.0'
     compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
 	}
 
-    runtime 'com.fasterxml.woodstox:woodstox-core:5.0.2'
-    testCompile group: "junit", name: "junit", version: "4.7"
-    testCompile 'org.daisy.braille:braille-utils.api:2.0.0'
-    testCompile ('org.daisy.braille:braille-utils.pef-tools:1.0.1') {
+    runtime 'com.fasterxml.woodstox:woodstox-core:5.1.0'
+    
+    testCompileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+    testCompile group: "junit", name: "junit", version: "4.12"
+    testCompile ('org.daisy.braille:braille-utils.pef-tools:5.0.0') {
 		exclude module: 'Saxon-HE'
 	}
     testCompile "org.mockito:mockito-core:1.10.19"
     
-	testRuntime group: group, name:'dotify.hyphenator.impl', version:'2.0.1'
-	testRuntime group: group, name:'dotify.text.impl', version:'2.0.0'
-	testRuntime group: group, name:'dotify.translator.impl', version:'2.3.0'
-}
-
-buildscript {
-    repositories { mavenCentral() }
-    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.4" }
-}
-
-task updateBndVersion() << {
-	String contents = file('bnd.bnd').getText('UTF-8')
-	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
+	testRuntime group: group, name:'dotify.hyphenator.impl', version:'4.0.0'
+	testRuntime group: group, name:'dotify.text.impl', version:'4.0.0'
+	testRuntime group: group, name:'dotify.translator.impl', version:'4.0.0'
 }
 
 ext.writeTestsOverviewFile = { folderPath, fileName ->
@@ -96,47 +93,63 @@ ext.writeTestsOverviewFile = { folderPath, fileName ->
 
 javadoc.dependsOn('updateTestsOverviewFile')
 
-task updateTestsOverviewFile() << {
-	// There are more tests in this folder with another naming standard, but they
-	// don't suit the presentational format and are more of integration tests.
-	// Additional tests should be written based on these.
-	def r = writeTestsOverviewFile('test/org/daisy/dotify/engine/impl/resource-files', 'tests-overview.xml')
-	ant {
-		xslt (
-			basedir: "test",
-			destdir: (new File("${buildDir}/docs/tests")),
-			style: "build-resources/display.xslt",
-			includes: "**/tests-overview.xml",
-			filenameparameter: "filename"
-		) {
-			mapper (
-				type: "package",
-				from: "*.xml",
-				to: "*.html"
-			)
-			xmlcatalog {
-				dtd (
-					publicId: "-//W3C//DTD XHTML 1.0 Strict//EN",
-					location: "build-resources/xhtml10/xhtml1-strict.dtd"
+task updateTestsOverviewFile() {
+	doLast() {
+		// There are more tests in this folder with another naming standard, but they
+		// don't suit the presentational format and are more of integration tests.
+		// Additional tests should be written based on these.
+		def r = writeTestsOverviewFile('integrationtest/org/daisy/dotify/formatter/test/resource-files', 'tests-overview.xml')
+		ant {
+			xslt (
+				basedir: "integrationtest",
+				destdir: (new File("${buildDir}/docs/tests")),
+				style: "build-resources/display.xslt",
+				includes: "**/tests-overview.xml",
+				filenameparameter: "filename"
+			) {
+				mapper (
+					type: "package",
+					from: "*.xml",
+					to: "*.html"
+				)
+				xmlcatalog {
+					dtd (
+						publicId: "-//W3C//DTD XHTML 1.0 Strict//EN",
+						location: "build-resources/xhtml10/xhtml1-strict.dtd"
+					)
+				}
+				param (
+					name: 'timestamp', 
+					expression: new Date().format("yyyy-MM-dd'T'HH:mmXXX")
 				)
 			}
-			param (
-				name: 'timestamp', 
-				expression: new Date().format("yyyy-MM-dd'T'HH:mmXXX")
-			)
 		}
+		r.delete()
 	}
-	r.delete()
 }
 
-bundle {
-    instructions << [
-        "-include": file('bnd.bnd'),
-        'Built-By': System.getProperty("user.name"),
-        'Built-On': new Date().format('yyyy-MM-dd'),
-        'Repository-Revision': "$repoRevision",
-        'Repository-URL': "$repositoryURL"
-    ]
+jar {
+	manifest {
+		attributes(
+			'-sources': 'true',
+			'Import-Package': 'org.daisy.dotify.api.engine; provide:=true,'+
+								'org.daisy.dotify.api.formatter; provide:=true,'+
+								'org.daisy.dotify.api.obfl; provide:=true,'+
+								'org.daisy.dotify.api.writer; provide:=true,'+
+								'org.daisy.streamline.api.tasks; provide:=true,*',
+			////The split-package instruction is because a resource folder is included twice on the classpath
+			//'Private-Package': 'org.daisy.dotify.formatter.impl.*;-split-package:=merge-first,',
+			'Service-Component': '*',
+			'Automatic-Module-Name': "$moduleName",
+			'Bundle-Name': "$bundleName",
+			'Bundle-SymbolicName': "$bundleName",
+			'Built-By': System.getProperty("user.name"),
+			'Built-On': new Date().format('yyyy-MM-dd'),
+			'Repository-Revision': "$repoRevision",
+			'Repository-URL': "$repositoryURL",
+			'Include-Resource': 'LICENSE, NOTICE'
+		)
+	}
 }
 
 task javadocJar(type: Jar) {
@@ -201,6 +214,6 @@ uploadArchives {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
+wrapper {
+	distributionType = Wrapper.DistributionType.ALL
 }

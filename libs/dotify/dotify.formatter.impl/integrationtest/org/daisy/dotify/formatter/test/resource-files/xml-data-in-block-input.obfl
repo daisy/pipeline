@@ -1,0 +1,39 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>XML Data 1</dc:title>
+		<dc:description>[add description]</dc:description>
+	</meta>
+	<layout-master name="body" page-width="14" page-height="6" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<xml-processor name="identity-processor">
+		<xsl:stylesheet version="2.0"
+				xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+				xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+				xmlns:fn="http://www.w3.org/2005/xpath-functions">
+			<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no"/>
+			<!-- Makes a verbatim copy of the input, which is assumed to be in obfl namespace -->
+			<xsl:template match="/">
+				<xsl:copy-of select="*"/>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<renderer name="identity-renderer">
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+				qualifier="count(/obfl:block)=1"
+				processor="identity-processor" 
+				cost="(+ (- 30 $min-block-width) $total-height)"/>
+	</renderer>
+	<sequence master="body">
+		<block>
+		<xml-data renderer="identity-renderer">
+			<block margin-bottom="1">
+      			<block row-spacing="2.0">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿</block>
+    		</block>
+		</xml-data>
+		</block>
+	</sequence>
+</obfl>

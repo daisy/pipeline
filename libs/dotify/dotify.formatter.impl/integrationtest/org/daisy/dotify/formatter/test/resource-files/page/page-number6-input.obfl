@@ -1,0 +1,44 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Page number counter test</dc:title>
+		<dc:description>Tests the page number counter with duplex, pre/post content and a separate counter.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="10" page-height="6" duplex="true">
+		<default-template>
+			<header>
+				<field><current-page/></field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<layout-master name="insert" page-width="10" page-height="6" duplex="true">
+		<default-template>
+			<header>
+				<field><string value="I"/><current-page/></field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<volume-template sheets-in-volume-max="5">
+		<pre-content>
+			<sequence master="body" page-number-counter="A"><block>pre content</block></sequence>
+		</pre-content>
+		<post-content>
+			<sequence master="body" page-number-counter="A"><block>post content</block></sequence>
+		</post-content>
+	</volume-template>
+	<sequence master="body" page-number-counter="A">
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+	<sequence master="insert" page-number-counter="insert">
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+	<sequence master="body" page-number-counter="A">
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+</obfl>

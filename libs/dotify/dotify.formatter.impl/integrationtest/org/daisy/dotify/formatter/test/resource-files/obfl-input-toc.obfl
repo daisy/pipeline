@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl version="2011-1" xml:lang="en" xmlns="http://www.daisy.org/ns/2011/obfl">
+	<layout-master name="main" page-width="40" page-height="29" inner-margin="0" outer-margin="0" row-spacing="1" duplex="true">
+		<default-template>
+			<header>
+				<field>
+					<string value=""/>
+				</field>
+				<field>
+					<current-page number-format="default"/>
+				</field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<table-of-contents name="toc">
+		<toc-entry ref-id="block1">Entry 1</toc-entry>
+		<toc-entry ref-id="block2">Entry 2</toc-entry>
+		<toc-entry ref-id="block3">Entry 3</toc-entry>
+		<toc-entry ref-id="block4">Entry 4</toc-entry>
+		<toc-entry ref-id="block5">Entry 5</toc-entry>
+		<toc-entry ref-id="block6">Entry 6</toc-entry>
+	</table-of-contents>
+	<volume-template sheets-in-volume-max="50"  use-when="(= 1 1)">
+		<pre-content>
+		<toc-sequence toc="toc" range="document" master="main">
+			<on-toc-start>
+				<block>Toc Start</block>
+			</on-toc-start>
+			<on-volume-start>
+				<block>Volume Start</block>
+			</on-volume-start>
+			<on-volume-end>
+				<block>Volume End</block>
+			</on-volume-end>
+			<on-toc-end>
+				<block>Toc End</block>
+			</on-toc-end>
+		</toc-sequence>
+		</pre-content>
+		<post-content></post-content>
+	</volume-template>
+	<sequence master="main">
+		<block id="block1">Text text text</block>
+		<block id="block2">Text text text</block>
+		<block id="block3">Text text text</block>
+		<block id="block4">Text text text</block>
+		<block id="block5">Text text text</block>
+		<block id="block6">Text text text</block>
+	</sequence>
+</obfl>

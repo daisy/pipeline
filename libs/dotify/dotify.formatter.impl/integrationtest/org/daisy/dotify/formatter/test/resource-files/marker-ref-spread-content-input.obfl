@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl version="2011-1" xml:lang="en" xmlns="http://www.daisy.org/ns/2011/obfl">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Marker reference spread-content search test</dc:title>
+		<dc:description>Tests marker references within a spread. Note that fields are different on left/right hand sides
+		due to the fact that the scope does not effect the starting point of the search. The starting point is always the
+		current page.</dc:description>
+	</meta>
+	<layout-master name="main" page-width="20" page-height="6" inner-margin="0" outer-margin="0" row-spacing="1" duplex="true">
+		<template use-when="(= (% $page 2) 0)">
+			<header>
+				<field>
+					<marker-reference marker="pagenum" direction="forward" scope="spread-content"/>
+				</field>
+				<field>
+					<marker-reference marker="pagenum" direction="backward" scope="spread-content" start-offset="1"/>
+				</field>
+			</header>
+			<footer/>
+		</template>
+		<default-template>
+			<header>
+				<field>
+					<marker-reference marker="pagenum" direction="forward" scope="spread-content" start-offset="-1"/>
+				</field>
+				<field>
+					<marker-reference marker="pagenum" direction="backward" scope="spread-content"/>
+				</field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="main" initial-page-number="1">
+		<block break-before="page">
+			<block><marker class="pagenum" value="1"/></block>
+			⠤⠤<marker class="pagenum" value="2"/>⠤⠤<marker class="pagenum" value="3"/></block>
+		<block break-before="page">
+			<block><marker class="pagenum" value="4"/></block>
+			⠤⠤<marker class="pagenum" value="5"/>⠤⠤<marker class="pagenum" value="6"/></block>
+		<block break-before="page">
+			<block><marker class="pagenum" value="7"/></block>
+			⠤⠤<marker class="pagenum" value="8"/>⠤⠤<marker class="pagenum" value="9"/></block>
+		<block break-before="page">
+			<block><marker class="pagenum" value="10"/></block>
+			⠤⠤<marker class="pagenum" value="11"/>⠤⠤<marker class="pagenum" value="12"/></block>
+	</sequence>
+</obfl>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">margin-region-and-border</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests combination of a left aligned margin-region and a border.</dc:description>
+   </meta>
+   <layout-master name="master" duplex="true" page-width="19" page-height="5">
+      <default-template>
+         <header/>
+         <footer/>
+         <margin-region align="left" width="2">
+            <indicators/>
+         </margin-region>
+      </default-template>
+   </layout-master>
+   <sequence master="master">
+      <block border-left-style="solid" border-left-align="outer" border-right-style="solid" border-right-align="outer" border-top-style="solid" border-top-align="outer" border-bottom-style="solid" border-bottom-align="outer" align="center">⠿⠿⠿⠿⠿
+            </block>
+   </sequence>
+</obfl>

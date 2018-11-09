@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">collapsing-margins-empty-block</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests collapsing of margins of three adjacent sibling blocks, the middle one being empty.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="40" page-height="25" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block margin-bottom="1">⠿ </block>
+      <block margin-bottom="1"/>
+	  <block margin-bottom="1"><evaluate expression="&#34;&#34;"/></block>
+      <block margin-top="1">⠿ </block>
+   </sequence>
+</obfl>

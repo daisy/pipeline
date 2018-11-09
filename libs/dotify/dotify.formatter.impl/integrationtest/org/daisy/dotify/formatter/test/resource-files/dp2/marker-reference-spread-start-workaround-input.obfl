@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-spread-start-workaround</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests (hypothetical) marker-reference type that corresponds with 'spread-start' in CSS. This type is not directly supported in OBFL. As a workaround I do a forward spread search for the marker 'foo/prev' starting on the left page (rendered top left corner), and if that does not return a value, a backward sequence search for the marker 'foo' starting on the right page (top right corner). At any position in the OBFL the value of the preceding marker of class 'foo' matches the value of the following marker of class 'foo/prev'. In addition, tests marker-reference with scope spread and direction backward, starting on the right page, which corresponds more or less with 'spread-last-except-start' in CSS (bottom left corner). Everything tested on both left- and right-hand pages. Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="10" page-height="6" duplex="true" page-number-variable="page">
+      <template use-when="(= (% $page 2) 1)">
+         <header>
+            <field>
+               <marker-reference marker="foo/prev" direction="forward" scope="spread-content" start-offset="-1"/>
+            </field>
+            <field/>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="sequence"/>
+            </field>
+         </header>
+         <footer>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="spread"/>
+            </field>
+            <field/>
+            <field/>
+         </footer>
+      </template>
+      <template use-when="(= (% $page 2) 0)">
+         <header>
+            <field>
+               <marker-reference marker="foo/prev" direction="forward" scope="spread-content"/>
+            </field>
+            <field/>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="sequence" start-offset="1"/>
+            </field>
+         </header>
+         <footer>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="spread" start-offset="1"/>
+            </field>
+            <field/>
+            <field/>
+         </footer>
+      </template>
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <!-- right page -->
+      <block><block><marker class="foo" value="0"/></block>
+                ⠁⠁⠁⠁⠁
+                <marker class="foo/prev" value="0"/>
+         <marker class="foo" value="1"/>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ​<!-- left page -->
+                ⠁⠁⠁⠁⠁
+                <marker class="foo/prev" value="1"/>
+         <marker class="foo" value="2"/>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ​<!-- right page -->
+         <marker class="foo/prev" value="3"/>
+         <marker class="foo" value="3"/>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                <br/><!-- left page --><marker class="foo/prev" value="3"/><marker class="foo" value="4"/>⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+              </block>
+      <!-- right page -->
+      <block><block><marker class="foo/prev" value="4"/><marker class="foo" value="5"/></block>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+              </block>
+      <!-- left page -->
+      <block break-before="page"><block><marker class="foo/prev" value="5"/><marker class="foo" value="6"/></block>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+              </block>
+   </sequence>
+</obfl>

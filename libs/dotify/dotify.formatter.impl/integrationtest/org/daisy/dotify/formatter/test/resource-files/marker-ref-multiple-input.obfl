@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" hyphenate="true" xml:lang="sv">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Marker overflow test</dc:title>
+		<dc:description>Tests that overflowing markers are on the correct page.</dc:description>
+	</meta>
+	<layout-master name="main" page-width="10" page-height="6" row-spacing="1" duplex="true">
+		<default-template>
+			<header>
+				<field>
+					<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
+					<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
+				</field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="main" initial-page-number="1">
+		<block>
+			<marker class="pagenum" value="1"/>
+			<block>⠤⠤</block>
+			<block>⠤⠤</block>
+			<block>⠤⠤</block>
+			<block>⠤⠤</block>
+			<block>⠤⠤</block>
+			<marker class="pagenum" value="2"/>
+			<marker class="pagenum-turn" value="1–"/>
+			<marker class="pagenum" value="3"/>
+			<marker class="pagenum-turn" value="2–"/>
+			<marker class="pagenum" value="4"/>
+			<marker class="pagenum-turn" value="3–"/>
+		</block>
+		<block>
+			<marker class="pagenum" value="5"/>
+			<marker class="pagenum-turn" value="4–"/>
+			<block>⠿⠿</block>
+		</block>
+	</sequence>
+</obfl>

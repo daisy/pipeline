@@ -1,0 +1,48 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Avoid last line hyphenation</dc:title>
+		<dc:description>Tests avoid last line hyphenation (simplex)</dc:description>
+	</meta>
+	<layout-master name="a" duplex="false" page-width="9" page-height="6">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<volume-template sheets-in-volume-max="2">
+		<pre-content/>
+		<post-content/>
+	</volume-template>
+	<sequence master="a">
+		<block>
+		⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		⠸&#x00ad;⠸&#x00ad;⠸&#x00ad;⠸
+		</block>
+	</sequence>
+</obfl>

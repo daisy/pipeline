@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <layout-master name="a" duplex="false" page-width="10" page-height="5">
+      <default-template>
+         <header/>
+         <footer>
+            <field allow-text-flow="true"/>
+            <field>
+               <string value="   "/>
+               <current-page number-format="default"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block id="a">
+         ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁
+      </block>
+      <block id="b" border-bottom-style="solid">
+         ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁
+      </block>
+      <block id="c">
+         ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁
+         ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁
+         ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁
+         ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁ ⠁⠁⠁
+     </block>
+   </sequence>
+</obfl>

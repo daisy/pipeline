@@ -1,0 +1,22 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Ordered list test</dc:title>
+		<dc:description>Tests custom list symbol</dc:description>
+	</meta>
+	<layout-master name="body" page-width="10" page-height="6" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<block list-type="ul"  list-style="⠤" block-indent="3">
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+		</block>
+	</sequence>
+</obfl>

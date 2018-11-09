@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">list-of-references</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests list-of-references.</dc:description>
+   </meta>
+   <layout-master name="main" page-width="10" page-height="8" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <volume-template sheets-in-volume-max="1000">
+      <post-content>
+         <dynamic-sequence master="main">
+            <list-of-references collection="endnotes" range="volume"/>
+         </dynamic-sequence>
+      </post-content>
+   </volume-template>
+   <collection name="endnotes">
+      <item id="a">
+         <block><page-number ref-id="I" number-format="default"/>
+                ⠶
+              </block>
+      </item>
+      <item id="b">
+         <block><page-number ref-id="I" number-format="default"/>
+                ⠶⠶
+              </block>
+      </item>
+      <item id="c">
+         <block><page-number ref-id="III" number-format="default"/>
+                ⠶⠶⠶
+              </block>
+      </item>
+   </collection>
+   <sequence master="main">
+      <block id="I">⠿⠿⠿
+              <anchor item="a"/>
+              ⠿⠿⠿
+              <anchor item="b"/>
+      </block>
+      <block break-before="page">⠿⠿⠿
+            </block>
+      <block break-before="page" id="III">⠿⠿⠿
+              <anchor item="c"/>
+      </block>
+   </sequence>
+</obfl>

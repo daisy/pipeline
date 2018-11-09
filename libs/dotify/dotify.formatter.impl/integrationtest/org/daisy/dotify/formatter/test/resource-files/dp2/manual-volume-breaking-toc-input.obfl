@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">manual-volume-breaking-toc</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests manual volume breaking in combination with table of contents.</dc:description>
+   </meta>
+   <layout-master name="master" page-width="15" page-height="15">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <table-of-contents name="toc">
+      <toc-entry ref-id="a">
+         <page-number ref-id="a" number-format="default"/>
+      </toc-entry>
+      <toc-entry ref-id="b">
+         <page-number ref-id="b" number-format="default"/>
+      </toc-entry>
+   </table-of-contents>
+   <volume-template sheets-in-volume-max="10">
+      <pre-content>
+         <toc-sequence master="master" range="volume" toc="toc"/>
+      </pre-content>
+   	<post-content/>
+   </volume-template>
+   <sequence master="master">
+      <block id="a">⠿⠿⠿⠿⠿</block>
+   </sequence>
+   <sequence master="master" break-before="volume">
+      <block id="b">⠿⠿⠿⠿⠿</block>
+   </sequence>
+</obfl>

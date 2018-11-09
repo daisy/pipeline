@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl version="2011-1" xml:lang="en" xmlns="http://www.daisy.org/ns/2011/obfl">
+	<layout-master name="main" page-width="40" page-height="29" inner-margin="0" outer-margin="0" row-spacing="1" duplex="true">
+		<default-template>
+			<header>
+				<field>
+					<string value=""/>
+				</field>
+				<field>
+					<current-page number-format="default"/>
+				</field>
+			</header>	
+			<footer/>
+		</default-template>
+		<page-area align="bottom" max-height="10" collection="footnotes" fallback="endnotes">
+			<before>... Footnotes <leader position="100%" pattern="."/></before>
+			<after><leader position="50%" pattern=" " align="center"/>--- END ---</after>
+		</page-area>
+	</layout-master>
+	<volume-template sheets-in-volume-max="50">
+		<pre-content/>
+		<post-content>
+			<dynamic-sequence master="main">
+				<list-of-references collection="endnotes" range="volume">
+					<on-collection-start>
+						<block margin-top="3">Footnotes</block>
+					</on-collection-start>
+					<on-page-start>
+						<block margin-top="1"><evaluate expression="(format &quot;Page {0}&quot; $started-page-number)"/></block>
+					</on-page-start>
+					<on-collection-end>
+						<block>End of footnotes.</block>
+					</on-collection-end>
+				</list-of-references>
+			</dynamic-sequence>
+		</post-content>
+	</volume-template>
+	<collection name="footnotes">
+		<item id="note1" text-indent="4">1) This is a text from "THE HOUND OF THE BASKERVILLES" by A. Conan Doyle with meaningless footnotes added, to demonstrate this feature.</item>
+		<item id="note2" text-indent="4">2) This note belongs to the second paragraph.</item>
+		<item id="note3" text-indent="4">3) This is the third note.</item>
+		<item id="note4" text-indent="4">4) This note is at the end of a long paragraph.</item>
+		<item id="note5" text-indent="4">5) This note is further down the text, but the text is still fairly short.</item>
+		<item id="note6" text-indent="4">6) This note is on the last page.</item>
+		<item id="note7" text-indent="4">* This is a note that appears several times.</item>
+	</collection>
+	<sequence master="main">
+		<block>Mr. Sherlock Holmes, who was usually very late in the mornings, save upon those not infrequent occasions when he was up all night, was seated at the breakfast table. I stood upon the hearth-rug and picked up the stick which our visitor had left behind him the night before. It was a fine, thick piece of wood, bulbous-headed, of the sort which is known as a "Penang lawyer." Just under the head was a broad silver band nearly an inch across. "To James Mortimer, M.R.C.S., from his friends of the C.C.H.," was engraved upon it, with the date "1884." It was just such a stick as the old-fashioned family practitioner used to carry—dignified, solid, and reassuring.<style name="sup">1</style><anchor item="note1"/></block>
+		<block>"Well, Watson, what do you make of it?"<style name="sup">2</style><anchor item="note2"/></block>
+		<block>Holmes was sitting with his back to me, and I had given him no sign of my occupation.<style name="sup">3</style><anchor item="note3"/></block>
+		<block>"How did you know what I was doing? I believe you have eyes in the back of your head."</block>
+		<block>"I have, at least, a well-polished, silver-plated coffee-pot in front of me," said he. "But, tell me, Watson, what do you make of our visitor's stick? Since we have been so unfortunate as to miss him and have no notion of his errand, this accidental souvenir becomes of importance. Let me hear you reconstruct the man by an examination of it."</block>
+		<block>"I think," said I, following as far as I could the methods of my companion, "that Dr. Mortimer is a successful, elderly medical man, well-esteemed since those who know him give him this mark of their appreciation."<style name="sup">4</style><anchor item="note4"/></block>
+		<block>"Good!" said Holmes. "Excellent!"</block>
+		<block>"I think also that the probability is in favour of his being a country practitioner who does a great deal of his visiting on foot."</block>
+		<block>"Why so?"</block>
+		<block>"Because this stick, though originally a very handsome one has been so knocked about that I can hardly imagine a town practitioner carrying it. The thick-iron ferrule is worn down, so it is evident that he has done a great amount of walking with it."</block>
+		<block>"Perfectly sound!" said Holmes.<style name="sup">*</style><anchor item="note7"/></block>
+		<block>"And then again, there is the 'friends of the C.C.H.' I should guess that to be the Something Hunt, the local hunt to whose members he has possibly given some surgical assistance, and which has made him a small presentation in return."</block>
+		<block>"Really, Watson, you excel yourself," said Holmes, pushing back his chair and lighting a cigarette. "I am bound to say that in all the accounts which you have been so good as to give of my own small achievements you have habitually underrated your own abilities. It may be that you are not yourself luminous, but you are a conductor of light. Some people without possessing genius have a remarkable power of stimulating it. I confess, my dear fellow, that I am very much in your debt."</block>
+		<block>He had never said as much before, and I must admit that his words gave me keen pleasure, for I had often been piqued by his indifference to my admiration and to the attempts which I had made to give publicity to his methods.<style name="sup">5</style><anchor item="note5"/> I was proud, too, to think that I had so far mastered his system as to apply it in a way which earned his approval. He now took the stick from my hands and examined it for a few minutes with his naked eyes. Then with an expression of interest he laid down his cigarette, and carrying the cane to the window, he looked over it again with a convex lens.</block>
+		<block>"Interesting, though elementary," said he as he returned to his favourite corner of the settee. "There are certainly one or two indications upon the stick. It gives us the basis for several deductions."</block>
+		<block>"Has anything escaped me?" I asked with some self-importance. "I trust that there is nothing of consequence which I have overlooked?"</block>
+		<block>"I am afraid, my dear Watson, that most of your conclusions were erroneous. When I said that you stimulated me I meant, to be frank, that in noting your fallacies I was occasionally guided towards the truth. Not that you are entirely wrong in this instance. The man is certainly a country practitioner. And he walks a good deal."</block>
+		<block>"Then I was right."</block>
+		<block>"To that extent."<style name="sup">*</style><anchor item="note7"/></block>
+		<block>"But that was all."<style name="sup">*</style><anchor item="note7"/></block>
+		<block>"No, no, my dear Watson, not all—by no means all. I would suggest, for example, that a presentation to a doctor is more likely to come from a hospital than from a hunt, and that when the initials 'C.C.' are placed before that hospital the words 'Charing Cross' very naturally suggest themselves."</block>
+		<block>"You may be right."<style name="sup">6</style><anchor item="note6"/></block> 
+	</sequence>
+</obfl>

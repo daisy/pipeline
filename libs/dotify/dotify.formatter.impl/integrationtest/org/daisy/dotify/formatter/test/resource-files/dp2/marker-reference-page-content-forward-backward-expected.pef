@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+   <head>
+      <meta>
+         <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-page-content-forward-backward</dc:title>
+         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with scope page-content. Tested with both forward and backward direction. Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break.</dc:description>
+         <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
+      </meta>
+   </head>
+   <body>
+      <volume cols="10" rows="5" rowgap="0" duplex="true">
+         <section>
+            <page>
+               <!-- 1 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <row>⠼⠃⠀⠀⠀⠀⠀⠀⠼⠉</row> <!-- 2   3 -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <!-- 2 -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            <!-- 3 -->
+            </page>
+            <page>
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 4 -->
+               <row>⠼⠙⠀⠀⠀⠀⠀⠀⠼⠙</row> <!-- 4   4 --> <!-- should ideally be: (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 5 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 6 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 7 -->
+               <row>⠼⠛⠀⠀⠀⠀⠀⠀⠼⠛</row> <!-- 7   7 -->
+               <row/>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 8 -->
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- (empty) -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+            <page>
+               <!-- 9 -->
+               <row>⠼⠊⠀⠀⠀⠀⠀⠀⠼⠊</row> <!-- 9   9 -->
+               <row/>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+            </page>
+         </section>
+      </volume>
+   </body>
+</pef>

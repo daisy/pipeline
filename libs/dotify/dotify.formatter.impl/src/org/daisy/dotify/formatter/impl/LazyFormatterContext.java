@@ -4,15 +4,16 @@ import org.daisy.dotify.api.formatter.FormatterConfiguration;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
 import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
+import org.daisy.dotify.formatter.impl.core.FormatterContext;
 
-class LazyFormatterContext {
+public class LazyFormatterContext {
 	private final BrailleTranslatorFactoryMakerService translatorFactory;
 	private final TextBorderFactoryMakerService tbf;
 	private final MarkerProcessorFactoryMakerService mpf;
 	private FormatterContext context = null;
 	private FormatterConfiguration config = null;
 
-	LazyFormatterContext(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, MarkerProcessorFactoryMakerService mpf, FormatterConfiguration config) {
+	public LazyFormatterContext(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, MarkerProcessorFactoryMakerService mpf, FormatterConfiguration config) {
 		if (config==null) {
 			throw new IllegalArgumentException();
 		}
@@ -22,14 +23,14 @@ class LazyFormatterContext {
 		this.config = config;
 	}
 	
-	synchronized FormatterContext getFormatterContext() {
+	public synchronized FormatterContext getFormatterContext() {
 		if (context==null) {
 			context = new FormatterContext(translatorFactory, tbf, mpf, config);
 		}
 		return context;
 	}
 
-	void setConfiguration(FormatterConfiguration config) {
+	public void setConfiguration(FormatterConfiguration config) {
 		if (config==null) {
 			throw new IllegalArgumentException();
 		}
