@@ -1,8 +1,0 @@
--buildpath: biz.aQute.bnd.annotation
-Export-Package:  \
-	org.daisy.dotify.api.tasks
-Private-Package:  \
-	org.daisy.dotify.consumer.tasks
-Include-Resource: / = src/
--sources: false
-Service-Component: *

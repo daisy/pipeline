@@ -1,4 +1,0 @@
-Export-Package:  \
-	org.daisy.dotify.tasks.runner
-Include-Resource: / = src/
--sources: false

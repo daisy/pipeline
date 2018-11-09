@@ -1,5 +1,0 @@
-language: java
-jdk: oraclejdk7
-after_success:
-  - ./upload.sh
-  - ./publish-javadoc.sh
