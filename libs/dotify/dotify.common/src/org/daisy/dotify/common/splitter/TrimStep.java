@@ -1,4 +1,4 @@
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.splitter;
 
 import java.util.ArrayList;
 import java.util.HashSet;

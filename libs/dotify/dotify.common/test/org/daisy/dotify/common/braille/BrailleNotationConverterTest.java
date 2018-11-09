@@ -2,6 +2,7 @@ package org.daisy.dotify.common.braille;
 
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class BrailleNotationConverterTest {
 
 	@Test

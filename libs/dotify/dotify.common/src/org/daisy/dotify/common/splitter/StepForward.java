@@ -1,8 +1,8 @@
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.splitter;
 
 /**
  * Provides a package interface for iterating over a list of units
- * @author joha
+ * @author Joel Håkansson
  *
  * @param <T>
  */

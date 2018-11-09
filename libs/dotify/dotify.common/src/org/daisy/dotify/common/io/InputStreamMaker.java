@@ -15,7 +15,7 @@ public interface InputStreamMaker {
 	/**
 	 * Returns a new input stream for the source.
 	 * @return a new input stream
-	 * @throws IOException
+	 * @throws IOException if an IO-problem occurs
 	 */
 	public InputStream newInputStream() throws IOException;
 	

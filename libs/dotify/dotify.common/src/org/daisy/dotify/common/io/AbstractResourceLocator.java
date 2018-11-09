@@ -12,10 +12,20 @@ import java.net.URL;
 public abstract class AbstractResourceLocator implements ResourceLocator {
 	private final String basePath;
 
+	/**
+	 * Creates a new abstract resource locator. Resources are resolved relative
+	 * to the location of the concrete implementation.
+	 */
 	public AbstractResourceLocator() {
 		this(null);
 	}
 	
+	/**
+	 * Creates a new abstract resource locator with the specified sub-path prefix, in other
+	 * words a sub-path from where all resources are resolved. Resources are resolved relative
+	 * to the location of the concrete implementation.
+	 * @param basePath the sub-path prefix
+	 */
 	public AbstractResourceLocator(String basePath) {
 		if (basePath==null || basePath.equals("")) {
 			this.basePath = "";

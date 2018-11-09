@@ -27,25 +27,25 @@ import java.util.Set;
  * <p>
  * Usage example:
  * </p>
- * <pre><code>
+ * <pre>
  * SimpleCharReplacer ucr = new SimpleCharReplacer();
  * ucr.addSubstitutionTable(fileURL);
  * ucr.addSubstitutionTable(fileURL2);
  * String ret = ucr.replace(input);
- * </code></pre>
+ * </pre>
  * 
  * <p>
  * The translation table file is using the same xml format as that of
  * java.util.Properties [1][2], using the HEX representation (without the
- * characteristic 0x-prefix!) of a unicode character as the <tt>key</tt>
- * attribute and the replacement string as value of the <tt>entry</tt> element.
+ * characteristic 0x-prefix!) of a unicode character as the <code>key</code>
+ * attribute and the replacement string as value of the <code>entry</code> element.
  * </p>
  * 
  * <p>
- * If the <tt>key</tt> attribute contains exactly one unicode codepoint (one
+ * If the <code>key</code> attribute contains exactly one unicode codepoint (one
  * character) it will be treated literally. It will not be interpreted as a HEX
  * representation of another character, even if theoretically possible. E.g. if
- * the <tt>key</tt> is "a", it will be treated as 0x0061 rather than as 0x000a
+ * the <code>key</code> is "a", it will be treated as 0x0061 rather than as 0x000a
  * </p>
  * 
  * <p>
@@ -73,10 +73,19 @@ public class SimpleUCharReplacer extends HashMap<Integer, String> {
 	 */
 	private static final long serialVersionUID = -3238811228931823883L;
 
+	/**
+	 * Creates a new instance.
+	 */
 	public SimpleUCharReplacer() {
 		super();
 	}
 
+	/**
+	 * Adds a substitution table to this instance. See the class description for
+	 * the format.
+	 * @param table the url to the substitution table.
+	 * @throws IOException if the table could not be added
+	 */
 	public void addSubstitutionTable(URL table) throws IOException {
 		try {
 			loadTable(table);
@@ -85,6 +94,11 @@ public class SimpleUCharReplacer extends HashMap<Integer, String> {
 		}
 	}
 
+	/**
+	 * Replaces characters in the input according to this object's current configuration.
+	 * @param input the input
+	 * @return returns a modified string
+	 */
 	public CharSequence replace(String input) {
 		int codePoint;
 

@@ -1,4 +1,4 @@
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.splitter;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface SplitPointUnit {
 	
 	/**
 	 * Returns true if this unit can be excluded if an adjoining object 
-	 * <tt>collapsesWith</tt> this unit, but has a greater size.
+	 * <code>collapsesWith</code> this unit, but has a greater size.
 	 * 
 	 * @return true if the unit is collapsible, false otherwise
 	 */

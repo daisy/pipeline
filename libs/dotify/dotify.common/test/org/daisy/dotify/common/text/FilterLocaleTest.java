@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import org.daisy.dotify.common.text.FilterLocale;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class FilterLocaleTest {
 	
 	@Test

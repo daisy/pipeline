@@ -49,7 +49,7 @@ public class RegexFilter implements StringFilter {
      * replacement.
      * 
 	 * @param str The string to replace in
-	 * @return The resulting <tt>String</tt>
+	 * @return The resulting <code>String</code>
 	 */
 	@Override
 	public String filter(String str) {

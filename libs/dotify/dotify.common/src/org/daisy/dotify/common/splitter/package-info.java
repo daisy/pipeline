@@ -4,4 +4,4 @@
  * 
  * @author Joel Håkansson
  */
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.splitter;

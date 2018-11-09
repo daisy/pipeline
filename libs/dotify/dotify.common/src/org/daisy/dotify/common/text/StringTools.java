@@ -31,12 +31,9 @@ public class StringTools {
 	 * @return returns a String filled with character c 
 	 */
 	public static String fill(char c, int length) {
-		/*
-		StringBuilder sb = new StringBuilder();
-		for (int i=0; i<length; i++) {
-			sb.append(c);
+		if (length<1) {
+			return "";
 		}
-		return sb.toString();*/
 		char[] ca = new char[length];
 		Arrays.fill(ca, c);
 		return new String(ca);
@@ -57,10 +54,10 @@ public class StringTools {
 			throw new IllegalArgumentException("Cannot fill using an empty string.");
 		}
 		StringBuilder sb = new StringBuilder();
-		while (sb.codePointCount(0, sb.length())<length) {
+		while (sb.length()<length) {
 			sb.append(s);
 		}
-		return sb.subSequence(0, length).toString();
+		return sb.substring(0, length).toString();
 	}
 
 

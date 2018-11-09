@@ -1,13 +1,15 @@
 package org.daisy.dotify.common.text;
 
+import java.util.Collections;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 
 /**
  * Breaks a paragraph of text into rows. It is assumed that all 
- * preferred break points are supplied with the input String.
+ * preferred break points are supplied with the input string.
  * 
  * Soft hyphen (0x00ad) and zero width space (0x200b) characters
  * can also be used for non-standard hyphenation.
@@ -19,20 +21,46 @@ import java.util.regex.Pattern;
  *
  */
 public class BreakPointHandler {
-	private final static char SOFT_HYPHEN = '\u00ad';
-	private final static char ZERO_WIDTH_SPACE = '\u200b';
-	private final static char DASH = '-';
-	private final static char SPACE = ' ';
-	private final static Pattern LEADING_WHITESPACE = Pattern.compile("\\A[\\s\u200b]+");
-	private final static Pattern TRAILING_WHITESPACE = Pattern.compile("[\\s\u200b]+\\z");
-	private String charsStr;
-	private int offset;
-	private TreeMap<Integer, NonStandardHyphenationInfo> meta;
-	
+	private static final char SOFT_HYPHEN = '\u00ad';
+	private static final char ZERO_WIDTH_SPACE = '\u200b';
+	private static final char DASH = '-';
+	private static final char SPACE = ' ';
+	private static final Pattern LEADING_WHITESPACE = Pattern.compile("\\A[\\s\u200b]+");
+	private static final Pattern TRAILING_WHITESPACE = Pattern.compile("[\\s\u200b]+\\z");
+	private final NavigableMap<Integer, NonStandardHyphenationInfo> meta;
+	private static class State {
+		private String charsStr;
+		private int offset;
+		private State(String charsStr, int offset) {
+			this.charsStr = charsStr;
+			this.offset = offset;
+		}
+		private State(State template) {
+			this.charsStr = template.charsStr;
+			this.offset = template.offset;
+		}
+		State copy() {
+			return new State(this);
+		}
+	}
+	private State state;
+	private State mark;
+
+	/**
+	 * Provides a builder for break point handlers
+	 * @author Joel Håkansson
+	 *
+	 */
 	public static class Builder {
 		private final String str;
-		private final TreeMap<Integer, NonStandardHyphenationInfo> meta;
+		private final NavigableMap<Integer, NonStandardHyphenationInfo> meta;
 		
+		/**
+		 * Creates a new builder with the string to break.
+		 * All regular break points must be in supplied with the input string,
+		 * represented by hyphen 0x2d, soft hyphen 0xad or space 0x20.
+		 * @param str the string
+		 */
 		public Builder(String str) {
 			this.str = str;
 			this.meta = new TreeMap<>();
@@ -68,7 +96,7 @@ public class BreakPointHandler {
 			if (meta.isEmpty()) {
 				return new BreakPointHandler(str, null, 0);
 			} else {
-				return new BreakPointHandler(str, meta, 0);
+				return new BreakPointHandler(str, Collections.unmodifiableNavigableMap(new TreeMap<Integer, NonStandardHyphenationInfo>(meta)), 0);
 			}
 		}
 	}
@@ -82,57 +110,85 @@ public class BreakPointHandler {
 	public BreakPointHandler(String str) {
 		this(str, null, 0);
 	}
-/*
-	public BreakPointHandler(String str, TreeMap<Integer, NonStandardHyphenationInfo> meta) {
-		this(str, meta, 0);
-	}*/
-	
-	@SuppressWarnings("unchecked")
-	private BreakPointHandler(String str, TreeMap<Integer, NonStandardHyphenationInfo> meta, int offset) {
+
+	private BreakPointHandler(String str, NavigableMap<Integer, NonStandardHyphenationInfo> meta, int offset) {
 		if (str==null) {
 			throw new NullPointerException("Input string cannot be null.");
 		}
-		this.charsStr = str;
-		this.offset = offset;
+		this.state = new State(str, offset);
+		this.mark = state.copy();
 		if (meta!=null) {
-			this.meta = (TreeMap<Integer, NonStandardHyphenationInfo>)meta.clone();
+			this.meta = meta;
 		} else {
 			this.meta = null;
 		}
 	}
 	
+	private BreakPointHandler(BreakPointHandler template) {
+		this.state = template.state.copy();
+		this.mark = template.mark.copy();
+		this.meta = template.meta;
+	}
+
 	/**
 	 * Creates a new copy of this object in its current state.
 	 * @return returns a new instance
 	 */
 	public BreakPointHandler copy() {
-		return new BreakPointHandler(charsStr, meta, offset);
+		return new BreakPointHandler(this);
+	}
+
+	/**
+	 * Marks the current state for later use with {@link #reset()}.
+	 */
+	public void mark() {
+		this.mark = state.copy();
+	}
+
+	/**
+	 * Resets the state to the last call to {@link #mark()}, or the initial
+	 * state, if no call to mark has been made.
+	 */
+	public void reset() {
+		this.state = mark.copy();
 	}
 
 	/**
 	 * Gets the next row from this BreakPointHandler
 	 * @param breakPoint the desired breakpoint for this row
+	 * @param force if force is allowed if no breakpoint is found
 	 * @return returns the next BreakPoint
 	 */
 	public BreakPoint nextRow(int breakPoint, boolean force) {
-		if (charsStr.length()==0) {
+		return nextRow(breakPoint, force, false);
+	}
+
+	/**
+	 * Gets the next row from this BreakPointHandler
+	 * @param breakPoint the desired breakpoint for this row
+	 * @param force if force is allowed if no breakpoint is found
+	 * @param ignoreHyphens ignore hyphenation points inside words
+	 * @return returns the next break point
+	 */
+	public BreakPoint nextRow(int breakPoint, boolean force, boolean ignoreHyphens) {
+		if (state.charsStr.length()==0) {
 			// pretty simple...
 			return new BreakPoint("", "", false);
 		}
 
-		assert charsStr.length()==charsStr.codePointCount(0, charsStr.length());
-		if (charsStr.length()<=breakPoint) {
-			return finalizeBreakpointTrimTail(charsStr, "", false);
+		assert state.charsStr.length()==state.charsStr.codePointCount(0, state.charsStr.length());
+		if (state.charsStr.length()<=breakPoint) {
+			return finalizeBreakpointTrimTail(state.charsStr, "", false);
 		} else if (breakPoint<=0) {
-			return finalizeBreakpointTrimTail("", charsStr, false);
+			return finalizeBreakpointTrimTail("", state.charsStr, false);
 		} else {
-			return findBreakpoint(breakPoint, force);
+			return findBreakpoint(breakPoint, force, ignoreHyphens);
 		}
 	}
 	
-	private BreakPoint findBreakpoint(int breakPoint, boolean force) {
-		int strPos = findBreakpointPosition(charsStr, breakPoint);
-		assert strPos<charsStr.length();
+	private BreakPoint findBreakpoint(int breakPoint, boolean force, boolean ignoreHyphens) {
+		int strPos = findBreakpointPosition(state.charsStr, breakPoint);
+		assert strPos<state.charsStr.length();
 
 		/*if (strPos>=charsStr.length()-1) {
 			head = charsStr.substring(0, strPos);
@@ -140,49 +196,55 @@ public class BreakPointHandler {
 			tailStart = strPos;
 		} else */
 		// check next character to see if it can be removed.
-		if (strPos==charsStr.length()-1) {
-			String head = charsStr.substring(0, strPos+1);
+		if (strPos==state.charsStr.length()-1) {
+			String head = state.charsStr.substring(0, strPos+1);
 			int tailStart = strPos+1;
 			return finalizeBreakpointFull(head, tailStart, false);
-		} else if (charsStr.charAt(strPos + 1) == SPACE || charsStr.charAt(strPos + 1) == ZERO_WIDTH_SPACE) {
-			String head = charsStr.substring(0, strPos+2); // strPos+1
+		} else if (state.charsStr.charAt(strPos + 1) == SPACE || state.charsStr.charAt(strPos + 1) == ZERO_WIDTH_SPACE) {
+			String head = state.charsStr.substring(0, strPos+2); // strPos+1
 			int tailStart = strPos+2;
 			return finalizeBreakpointFull(head, tailStart, false);
 		} else {
-			return newBreakpointFromPosition(strPos, breakPoint, force);
+			return newBreakpointFromPosition(strPos, breakPoint, force, ignoreHyphens);
 		}
 	}
 	
-	private BreakPoint newBreakpointFromPosition(int strPos, int breakPoint, boolean force) {
+	private BreakPoint newBreakpointFromPosition(int strPos, int breakPoint, boolean force, boolean ignoreHyphens) {
 		// back up
-		int i=findBreakpointBefore(strPos);
+		int i=findBreakpointBefore(strPos, ignoreHyphens);
 		String head;
 		boolean hard = false;
 		int tailStart;
 		if (i<0) { // no breakpoint found, break hard 
 			if (force) {
+				if (ignoreHyphens) {
+					// Try again without ignoring hyphens
+					BreakPoint s = newBreakpointFromPosition(strPos, breakPoint, force, false);
+					// Even if the string was broken at a hyphenation point, it's a hard break in this case 
+					return new BreakPoint(s.getHead(), s.getTail(), true);
+				}
 				hard = true;
-				head = charsStr.substring(0, strPos+1);
+				head = state.charsStr.substring(0, strPos+1);
 				tailStart = strPos+1;
 			} else {
 				head = "";
 				tailStart = 0;
 			}
-		} else if (charsStr.charAt(i)==SPACE) { // don't ignore space at breakpoint
-			head = charsStr.substring(0, i+1); //i
+		} else if (state.charsStr.charAt(i)==SPACE) { // don't ignore space at breakpoint
+			head = state.charsStr.substring(0, i+1); //i
 			tailStart = i+1;
-		} else if (charsStr.charAt(i)==SOFT_HYPHEN) { // convert soft hyphen to hard hyphen 
-			head = charsStr.substring(0, i) + DASH;
+		} else if (state.charsStr.charAt(i)==SOFT_HYPHEN) { // convert soft hyphen to hard hyphen 
+			head = state.charsStr.substring(0, i) + DASH;
 			tailStart = i+1;
-		}  else if (charsStr.charAt(i)==ZERO_WIDTH_SPACE) { // ignore zero width space 
-			head = charsStr.substring(0, i);
+		}  else if (state.charsStr.charAt(i)==ZERO_WIDTH_SPACE) { // ignore zero width space 
+			head = state.charsStr.substring(0, i);
 			tailStart = i+1;
-		} else if (charsStr.charAt(i)==DASH && charsStr.length()>1 && charsStr.charAt(i-1)==SPACE) {
+		} else if (state.charsStr.charAt(i)==DASH && state.charsStr.length()>1 && state.charsStr.charAt(i-1)==SPACE) {
 			// if hyphen is preceded by space, back up one more
-			head = charsStr.substring(0, i);
+			head = state.charsStr.substring(0, i);
 			tailStart = i;
 		} else {
-			head = charsStr.substring(0, i+1);
+			head = state.charsStr.substring(0, i+1);
 			tailStart = i+1;
 		}
 		return finalizeBreakpointFull(head, tailStart, hard);
@@ -197,9 +259,9 @@ public class BreakPointHandler {
 	}
 	
 	private String getTail(int tailStart) {
-		if (charsStr.length()>tailStart) {
-			String tail = charsStr.substring(tailStart);
-			assert (tail.length()<=charsStr.length());
+		if (state.charsStr.length()>tailStart) {
+			String tail = state.charsStr.substring(tailStart);
+			assert (tail.length()<=state.charsStr.length());
 			return tail;
 		} else {
 			return "";
@@ -210,20 +272,28 @@ public class BreakPointHandler {
 		//trim leading whitespace in tail
 		tail = LEADING_WHITESPACE.matcher(tail).replaceAll("");
 		head = finalizeResult(head);
-		offset = charsStr.length() - tail.length();
-		charsStr = tail;
+		state.offset = state.charsStr.length() - tail.length();
+		state.charsStr = tail;
 		return new BreakPoint(head, tail, hard);
 	}
 
+	/**
+	 * Counts the remaining characters, excluding unused breakpoints.
+	 * @return returns the number of remaining characters
+	 */
 	public int countRemaining() {
-		if (charsStr==null) {
+		if (state.charsStr==null) {
 			return 0;
 		}
 		return getRemaining().length();
 	}
 	
+	/**
+	 * Gets the remaining characters, removing unused breakpoint characters.
+	 * @return returns the remaining characters
+	 */
 	public String getRemaining() {
-		return finalizeResult(charsStr);
+		return finalizeResult(state.charsStr);
 	}
 	
 	/**
@@ -258,22 +328,25 @@ public class BreakPointHandler {
 	 * @param strPos
 	 * @return returns the break point, or -1 if none is found
 	 */
-	private int findBreakpointBefore(int strPos) {
+	private int findBreakpointBefore(int strPos, boolean ignoreHyphens) {
 		int i = strPos;
 whileLoop: while (i>=0) {
-			switch (charsStr.charAt(i)) {
+			switch (state.charsStr.charAt(i)) {
 				case SOFT_HYPHEN: case ZERO_WIDTH_SPACE:
+					if (ignoreHyphens) {
+						break;
+					}
 					boolean done = true;
 					if (meta!=null) {
-						Entry<Integer, NonStandardHyphenationInfo> entry = meta.floorEntry(i+offset);
+						Entry<Integer, NonStandardHyphenationInfo> entry = meta.floorEntry(i+state.offset);
 						if (entry!=null) {
-							int head = NonStandardHyphenationInfo.getHeadLength(charsStr, entry.getKey()-offset);
-							if ((entry.getKey()+head)>i+offset) { // the closest entry is applicable
+							int head = NonStandardHyphenationInfo.getHeadLength(state.charsStr, entry.getKey()-state.offset);
+							if ((entry.getKey()+head)>i+state.offset) { // the closest entry is applicable
 								if (i+head<=strPos) { // the closest entry fits
 									NonStandardHyphenationInfo rule = entry.getValue();
 									//patch string
-									charsStr = rule.apply(charsStr, entry.getKey()-offset);
-									i = entry.getKey() - offset + head;
+									state.charsStr = rule.apply(state.charsStr, entry.getKey()-state.offset);
+									i = entry.getKey() - state.offset + head;
 								} else { //find another breakpoint
 									done = false;
 								}
@@ -284,7 +357,11 @@ whileLoop: while (i>=0) {
 						break whileLoop;
 					}
 					break;
-				case SPACE: case DASH:
+				case DASH:
+					if (ignoreHyphens) {
+						break;
+					}
+				case SPACE: 
 					//non-standard hyphenation does not apply
 					break whileLoop;
 			}
@@ -313,7 +390,7 @@ whileLoop: while (i>=0) {
 	 * @return returns true if this BreakPointHandler has any text left to break into rows
 	 */
 	public boolean hasNext() {
-		return (charsStr!=null && charsStr.length()>0);
+		return (state.charsStr!=null && state.charsStr.length()>0);
 	}
 
 }

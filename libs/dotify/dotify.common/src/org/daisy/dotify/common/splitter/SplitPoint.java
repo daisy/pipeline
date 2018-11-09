@@ -1,37 +1,39 @@
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.splitter;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Provides a data object to keep the information about a split point result.
- * 
+ * @param <T> the type of split point units 
+ * @param <U> the type of data source
  * @author Joel Håkansson
  */
-public class SplitPoint<T extends SplitPointUnit> {
+public class SplitPoint<T extends SplitPointUnit, U extends SplitPointDataSource<T, U>> {
 
 	private final List<T> head;
 	private final List<T> supplements;
-	private final List<T> tail;
+	private final U tail;
 	private final List<T> discarded;
 	private final boolean hardBreak;
 
 	/**
 	 * Create a new SplitPoint.
 	 * @param head the part of the original SplitPointUnit list that fits within the target breakpoint 
+	 * @param supplements a list of supplement units
 	 * @param tail the part of the original SplitPointUnit list that is left
+	 * @param discarded a list of discarded units
 	 * @param hardBreak set to true if a break point could not be achieved with respect for break point boundaries 
 	 */
-	public SplitPoint(List<T> head, List<T> supplements, List<T> tail, List<T> discarded, boolean hardBreak) {
+	public SplitPoint(List<T> head, List<T> supplements, U tail, List<T> discarded, boolean hardBreak) {
 		if (head == null) {
 			head = Collections.emptyList();
 		}
 		if (supplements == null) {
 			supplements = Collections.emptyList();
 		}
-		if (tail == null) {
-			tail = Collections.emptyList();
-		}
+		Objects.requireNonNull(tail);
 		if (discarded == null) {
 			discarded = Collections.emptyList();
 		}
@@ -62,7 +64,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 	 * Get the tail part of the SplitPointUnit list
 	 * @return returns the tail part of the SplitPointUnit list
 	 */
-	public List<T> getTail() {
+	public U getTail() {
 		return tail;
 	}
 	
@@ -106,7 +108,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		SplitPoint<?> other = (SplitPoint<?>) obj;
+		SplitPoint<?, ?> other = (SplitPoint<?, ?>) obj;
 		if (discarded == null) {
 			if (other.discarded != null) {
 				return false;

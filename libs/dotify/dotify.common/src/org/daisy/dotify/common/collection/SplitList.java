@@ -13,6 +13,11 @@ import java.util.List;
 public class SplitList<T> {
 	private final List<T> first, second;
 
+	/**
+	 * Creates a new split list
+	 * @param first the first part of the list
+	 * @param second the second part of the list
+	 */
 	public SplitList(List<T> first, List<T> second) {
 		this.first = first;
 		this.second = second;
@@ -40,6 +45,7 @@ public class SplitList<T> {
 	 * 
 	 * @param in the original list
 	 * @param pos the position to split (must be &gt;=0 &amp;&amp; &lt;=size())
+	 * @param <T> The type of list 
 	 * @return returns the split list
 	 */
 	public static <T> SplitList<T> split(List<T> in, int pos) {

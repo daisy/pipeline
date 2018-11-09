@@ -13,6 +13,10 @@ import java.util.NoSuchElementException;
 public class CompoundIterator<T> implements Iterator<T> {
 	ArrayList<Iterator<T>> iterators;
 	
+	/**
+	 * Creates a new compound iterator
+	 * @param iterables the iterables to use in this iterator
+	 */
 	public CompoundIterator(Iterable<? extends Iterable<T>> iterables) {
 		iterators = new ArrayList<>();
 		for (Iterable<T> e : iterables) {

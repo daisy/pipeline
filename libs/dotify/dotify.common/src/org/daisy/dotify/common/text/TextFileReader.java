@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -16,24 +17,38 @@ import java.util.regex.PatternSyntaxException;
  *
  */
 public class TextFileReader implements Closeable {
-	private final static Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
-	private final static String DEFAULT_EXPRESSION = ",\\s*";
-	private final static int DEFAULT_LIMIT = 0;
+	private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+	private static final String DEFAULT_EXPRESSION = ",\\s*";
+	private static final int DEFAULT_LIMIT = 0;
 	private LineNumberReader lnr;
 	private Pattern pattern;
 	private int limit;
 	private int currentLine;
 	
+	/**
+	 * Provides a builder for a text file reader
+	 * @author Joel Håkansson
+	 *
+	 */
 	public static class Builder {
 		private final InputStream is;
 		private Charset cs = DEFAULT_CHARSET;
 		private String regex = DEFAULT_EXPRESSION;
 		private int limit = DEFAULT_LIMIT;
 		
+		/**
+		 * Creates a new builder with the specified input stream 
+		 * @param value the input stream
+		 */
 		public Builder(InputStream value) {
 			this.is = value;
 		}
 		
+		/**
+		 * Sets the charset for this builder
+		 * @param value the charset
+		 * @return returns this builder
+		 */
 		public Builder charset(Charset value) {
 			this.cs = value;
 			return this;
@@ -52,11 +67,21 @@ public class TextFileReader implements Closeable {
 			return this;
 		}
 		
+		/**
+		 * Sets the maximum number of times that the specified regular expression is matched
+		 * on a single row 
+		 * @param value the limit
+		 * @return returns this builder
+		 */
 		public Builder limit(int value) {
 			this.limit = value;
 			return this;
 		}
 		
+		/**
+		 * Creates a new text file reader with the current configuration
+		 * @return returns a new text file reader
+		 */
 		public TextFileReader build() {
 			return new TextFileReader(this);
 		}
@@ -81,10 +106,10 @@ public class TextFileReader implements Closeable {
 	
 	/**
 	 * 
-	 * @param is
-	 * @param cs
-	 * @param regex
-	 * @param limit
+	 * @param is the input stream
+	 * @param cs the encoding
+	 * @param regex field delimiter expression
+	 * @param limit the maximum number of times the regex is matched
 	 */
 	public TextFileReader(InputStream is, Charset cs, String regex, int limit) {
 		if (is==null) {
@@ -103,7 +128,7 @@ public class TextFileReader implements Closeable {
 	/**
 	 * Gets the next line in the stream.
 	 * @return returns next line, or null if there are no more lines
-	 * @throws IOException
+	 * @throws IOException if an IO-problem occurs
 	 */
 	public LineData nextLine() throws IOException {
 		String line = lnr.readLine();
@@ -126,6 +151,11 @@ public class TextFileReader implements Closeable {
 		lnr.close();
 	}
 	
+	/**
+	 * Provides the data about a single line
+	 * @author Joel Håkansson
+	 *
+	 */
 	public class LineData {
 		private final String line;
 		private final String[] fields;

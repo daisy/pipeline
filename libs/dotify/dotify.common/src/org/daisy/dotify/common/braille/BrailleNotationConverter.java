@@ -10,12 +10,17 @@ public class BrailleNotationConverter {
 	
 	/**
 	 * Creates a new converter with the specified braille cell separator.
-	 * @param separator
+	 * @param separator the separator string
 	 */
 	public BrailleNotationConverter(String separator) {
 		this.separator = separator;
 	}
 	
+	/**
+	 * Parses a string for braille notation and converts it to Unicode braille patterns
+	 * @param p the string to parse
+	 * @return returns the parsed string
+	 */
 	public String parseBrailleNotation(String p) {
 		String[] s = p.split(separator);
 		if (s.length == 0) {

@@ -17,6 +17,12 @@ public class FilterLocale {
 		this.str = (lang + ("".equals(country) ? "" : "-" + country + ("".equals(variant) ? "" : "-" + variant))).intern();
 	}
 	
+	/**
+	 * Parses the string into a locale
+	 * @param locale the locale string
+	 * @return returns a new filter locale
+	 * @throws IllegalArgumentException if the locale is not valid as defined by IETF RFC 3066
+	 */
 	public static FilterLocale parse(String locale) {
 		if (!locale.matches("([a-zA-Z]{1,8}(\\-[0-9a-zA-Z]{1,8})*)?")) {
 			throw new IllegalArgumentException("Not a valid locale as defined by IETF RFC 3066: " + locale);
@@ -34,18 +40,34 @@ public class FilterLocale {
 		return new FilterLocale(lang, country, variant);
 	}
 	
+	/**
+	 * Returns this filter locale as a standard java Locale object
+	 * @return returns a standard Locale object
+	 */
 	public Locale toLocale() {
 		return new Locale(lang, country, variant);
 	}
 	
+	/**
+	 * Gets the language of this locale
+	 * @return returns the language
+	 */
 	public String getLanguage() {
 		return lang;
 	}
 	
+	/**
+	 * Gets the country of this locale
+	 * @return returns the locale
+	 */
 	public String getCountry() {
 		return country;
 	}
 	
+	/**
+	 * Gets the variant of this locale
+	 * @return returns the variant
+	 */
 	public String getVariant() {
 		return variant;
 	}
@@ -82,7 +104,7 @@ public class FilterLocale {
 
 	/**
 	 * This locale is a subtype of the other locale
-	 * @param other
+	 * @param other the other locale
 	 * @return returns true if this locale is a subtype of the supplied locale
 	 */
 	public boolean isA(FilterLocale other) {
