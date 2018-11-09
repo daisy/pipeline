@@ -1,5 +1,12 @@
 package org.daisy.dotify.api.text;
 
+/**
+ * Provides an exception to indicate problems when configuring an
+ * integer to text factory or instance.
+ *  
+ * @author Joel Håkansson
+ *
+ */
 public class Integer2TextConfigurationException extends Exception {
 
 	/**

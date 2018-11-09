@@ -19,7 +19,7 @@ public class ItemSequenceProperties {
 		/**
 		 * Defines the range to include entries within the volume
 		 */
-		VOLUME};
+		VOLUME}
 		
 	private final String collectionID;
 	private final Range range;
@@ -44,6 +44,10 @@ public class ItemSequenceProperties {
 			this.range = range;
 		}
 		
+		/**
+		 * Builds a new item sequence properties.
+		 * @return returns a new item sequence properties
+		 */
 		public ItemSequenceProperties build() {
 			return new ItemSequenceProperties(this);
 		}
@@ -62,6 +66,10 @@ public class ItemSequenceProperties {
 		return collectionID;
 	}
 
+	/**
+	 * Gets the range of this item sequence
+	 * @return returns the range
+	 */
 	public Range getRange() {
 		return range;
 	}

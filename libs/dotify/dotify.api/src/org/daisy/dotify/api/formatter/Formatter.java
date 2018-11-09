@@ -1,8 +1,5 @@
 package org.daisy.dotify.api.formatter;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 
 /**
@@ -10,15 +7,8 @@ import org.daisy.dotify.api.writer.PagedMediaWriter;
  * 
  * @author Joel Håkansson
  */
-public interface Formatter extends Closeable {
+public interface Formatter {
 
-	/**
-	 * Opens the Formatter for writing.
-	 * @deprecated future versions of the formatter interface will support editing, so opening is no-longer relevant
-	 */
-	@Deprecated
-	public void open();
-	
 	/**
 	 * Gets the formatter configuration
 	 * @return returns the formatter configuration
@@ -52,7 +42,14 @@ public interface Formatter extends Closeable {
 	 * @param props properties
 	 * @return returns a new volume template builder
 	 */
-	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props); 
+	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props);
+	
+	/**
+	 * <p>Gets the transition builder.</p>
+	 * 
+	 * @return returns the transition builder
+	 */
+	public TransitionBuilder getTransitionBuilder();
 
 	/**
 	 * Creates a new table of contents with the supplied name
@@ -74,12 +71,5 @@ public interface Formatter extends Closeable {
 	 * @param writer the paged media writer to use
 	 */
 	public void write(PagedMediaWriter writer);
-	
-	/**
-	 * @deprecated future versions of the formatter interface will support editing, so closing is no-longer relevant
-	 */
-	@Deprecated
-	//Note that when this method is removed, the interface Closeable should also be removed
-	public void close() throws IOException;
 
 }

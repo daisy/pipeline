@@ -2,9 +2,9 @@ package org.daisy.dotify.api.formatter;
 
 import static org.junit.Assert.assertEquals;
 
-import org.daisy.dotify.api.formatter.AlphaNumeral;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class AlphaNumeralTest {
 
 	@Test

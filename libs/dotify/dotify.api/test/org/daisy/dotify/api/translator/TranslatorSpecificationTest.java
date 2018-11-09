@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.daisy.dotify.api.translator.TranslatorSpecification;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TranslatorSpecificationTest {
 
 	public TranslatorSpecificationTest() {

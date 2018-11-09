@@ -11,20 +11,36 @@ public class FieldList {
 	private final List<Field> contents;
 	private final Float rowSpacing;
 	
+	/**
+	 * Provides a field list builder
+	 */
 	public static class Builder {
 		private final List<Field> contents;
 		//Optional
 		private Float rowSpacing = null;
 		
+		/**
+		 * Creates a new builder with the specified fields
+		 * @param contents the fields in this builder
+		 */
 		public Builder(List<Field> contents) {
 			this.contents = contents;
 		}
 		
+		/**
+		 * Sets the row spacing for this field list
+		 * @param rowSpacing the row spacing
+		 * @return returns this object
+		 */
 		public Builder rowSpacing(Float rowSpacing) {
 			this.rowSpacing = rowSpacing;
 			return this;
 		}
-		
+
+		/**
+		 * Builds a new field list with the current configuration
+		 * @return returns a new field list
+		 */
 		public FieldList build() {
 			return new FieldList(this);
 		}

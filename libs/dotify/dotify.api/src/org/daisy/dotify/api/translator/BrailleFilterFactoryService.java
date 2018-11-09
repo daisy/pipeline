@@ -36,11 +36,15 @@ public interface BrailleFilterFactoryService {
 	 */
 	public Collection<TranslatorSpecification> listSpecifications();
 
+	/**
+	 * Creates a new braille filter factory.
+	 * @return returns a new braille filter factory
+	 */
 	public BrailleFilterFactory newFactory();
 
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
-	 * information collected from a file within the <tt>META-INF/services</tt> directory.
+	 * information collected from a file within the <code>META-INF/services</code> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>
 	 * 
 	 * <p>This information, in turn, enables the implementation to use the same mechanism
@@ -55,6 +59,6 @@ public interface BrailleFilterFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

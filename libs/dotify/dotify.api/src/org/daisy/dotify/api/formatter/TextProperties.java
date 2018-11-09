@@ -2,7 +2,15 @@ package org.daisy.dotify.api.formatter;
 
 
 /**
- * <p>Defines properties specific for a span of text.</p>
+ * <p>Defines properties for a chunk of text.</p>
+ *  
+ *  <p>A note to developers of this API: These properties must 
+ *  not have any meaning or effect beyond rendering of the 
+ *  text to which the properties belong. In an XML-context, 
+ *  these properties are typically inherited from higher levels
+ *  down to all text nodes. Therefore, properties that cannot be
+ *  inherited or do not pertain to the text itself, should be
+ *  added elsewhere.</p>
  * 
  * @author Joel Håkansson
  */

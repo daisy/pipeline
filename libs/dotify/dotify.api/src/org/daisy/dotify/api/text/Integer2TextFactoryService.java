@@ -38,11 +38,15 @@ public interface Integer2TextFactoryService {
 	 */
 	public Collection<String> listLocales();
 
+	/**
+	 * Creates a new integer to text factory.
+	 * @return returns a new factory
+	 */
 	public Integer2TextFactory newFactory();
 
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
-	 * information collected from a file within the <tt>META-INF/services</tt> directory.
+	 * information collected from a file within the <code>META-INF/services</code> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>
 	 * 
 	 * <p>This information, in turn, enables the implementation to use the same mechanism
@@ -57,6 +61,6 @@ public interface Integer2TextFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

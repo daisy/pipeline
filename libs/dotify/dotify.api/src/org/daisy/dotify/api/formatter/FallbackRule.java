@@ -1,7 +1,8 @@
 package org.daisy.dotify.api.formatter;
 
 /**
- * Provides an interface for fallback rules.
+ * Provides a common interface for fallback rules. Note that the action of
+ * a fallback rule is defined by the implementing class.
  * @author Joel Håkansson
  *
  */

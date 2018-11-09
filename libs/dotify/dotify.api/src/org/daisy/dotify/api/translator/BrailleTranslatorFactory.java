@@ -9,11 +9,11 @@ public interface BrailleTranslatorFactory {
 	/**
 	 * Defines bypass mode
 	 */
-	public final static String MODE_BYPASS = "bypass";
+	public static final String MODE_BYPASS = "bypass";
 	/**
 	 * Defines uncontracted mode
 	 */
-	public final static String MODE_UNCONTRACTED = "uncontracted";
+	public static final String MODE_UNCONTRACTED = "uncontracted";
 	
 	/**
 	 * Creates a new translator with the given specification

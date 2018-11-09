@@ -1,9 +1,18 @@
 package org.daisy.dotify.api.writer;
 
+/**
+ * Provides internet media types for some types. 
+ */
 public interface MediaTypes {
 	
-	public final static String PEF_MEDIA_TYPE = "application/x-pef+xml";
+	/**
+	 * PEF (portable embosser format) media type
+	 */
+	public static final String PEF_MEDIA_TYPE = "application/x-pef+xml";
 	
-	public final static String TEXT_MEDIA_TYPE = "text/plain";
+	/**
+	 * Plain text media type.
+	 */
+	public static final String TEXT_MEDIA_TYPE = "text/plain";
 
 }

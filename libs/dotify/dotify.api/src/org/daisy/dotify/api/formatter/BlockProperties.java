@@ -15,7 +15,9 @@ public class BlockProperties implements Cloneable {
 	private final BlockSpacing margin;
 	private final BlockSpacing padding;
 	private final ListStyle listType;
-	private int listIterator;
+	private final NumeralStyle listNumberFormat;
+	private final String defaultListLabel;
+	private final String listItemLabel;
 	private final BreakBefore breakBefore;
 	private final Keep keep;
 	private final int orphans;
@@ -45,6 +47,9 @@ public class BlockProperties implements Cloneable {
 		private int topPadding = 0;
 		private int bottomPadding = 0;
 		private ListStyle listType = ListStyle.NONE;
+		private NumeralStyle listNumberFormat = NumeralStyle.DEFAULT;
+		private String defaultListLabel = null;
+		private String listItemLabel = null;
 		private BreakBefore breakBefore = BreakBefore.AUTO;
 		private Keep keep = Keep.AUTO;
 		private int orphans = 1;
@@ -185,6 +190,41 @@ public class BlockProperties implements Cloneable {
 		}
 		
 		/**
+		 * Sets the number format for the block. Note that the listType must
+		 * be of type 'ol'.
+		 * @param listFormat the numeral style
+		 * @return returns this object
+		 */
+		public Builder listNumberFormat(NumeralStyle listFormat) {
+			this.listNumberFormat = listFormat;
+			return this;
+		}
+		
+		/**
+		 * Sets the default label for list items in the block. Note that listType must
+		 * be of type 'ul'.
+		 * @param label the default list label
+		 * @return returns this object
+		 */
+		public Builder defaultListLabel(String label) {
+			this.defaultListLabel = label;
+			return this;
+		}
+		
+		/**
+		 * Sets the list item label for the block. Note that this block must be
+		 * a child of a block with a listType of 'ol' or 'ul'. If the list is
+		 * ordered, the label it must be an integer.
+		 * 
+		 * @param label the label
+		 * @return returns this object
+		 */
+		public Builder listItemLabel(String label) {
+			this.listItemLabel = label;
+			return this;
+		}
+		
+		/**
 		 * Set the break before property for the block.
 		 * @param breakBefore the break before type
 		 * @return returns "this" object
@@ -225,30 +265,57 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 		
+		/**
+		 * Sets the keep with previous sheets property for the block.
+		 * In other words, the number of previous sheets to keep in the
+		 * same volume as the end of this block.
+		 * @param keepWithPreviousSheets the number of sheets
+		 * @return returns this object
+		 */
 		public Builder keepWithPreviousSheets(int keepWithPreviousSheets) {
 			this.keepWithPreviousSheets = keepWithPreviousSheets;
 			return this;
 		}
 		
+		/**
+		 * Sets the keep with next sheets property for the block.
+		 * In other words, the number of following sheets to keep in
+		 * the same volume as the start of this block.
+		 * @param keepWithNextSheets the number of sheets
+		 * @return returns this object
+		 */
 		public Builder keepWithNextSheets(int keepWithNextSheets) {
 			this.keepWithNextSheets = keepWithNextSheets;
 			return this;
 		}
 		
+		/**
+		 * Sets the vertical position for this block. This behavior is similar to 
+		 * leader but in a vertical orientation. If the position has already been
+		 * passed when this block is rendered, it is ignored. 
+		 * @param position the position
+		 * @return returns this object
+		 */
 		public Builder verticalPosition(Position position) {
 			verticalPosition = position;
 			return this;
 		}
 
+		/**
+		 * Sets the vertical alignment for this block. This will only have have an
+		 * effect if vertical position is also set.
+		 * @param alignment the alignment
+		 * @return returns this object
+		 */
 		public Builder verticalAlignment(BlockPosition.VerticalAlignment alignment) {
 			verticalAlignment = alignment;
 			return this;
 		}
 		
 		/**
-		 * 
-		 * @param value
-		 * @return returns the row spacing
+		 * Sets the row spacing for the block
+		 * @param value the row spacing
+		 * @return returns this builder
 		 */
 		public Builder rowSpacing(float value) {
 			this.textBlockPropsBuilder.rowSpacing(value);
@@ -283,8 +350,8 @@ public class BlockProperties implements Cloneable {
 		}
 		
 		/**
-		 * 
-		 * @param identifier
+		 * Sets the identifier for the block
+		 * @param identifier the identifier
 		 * @return returns "this" object
 		 */
 		public Builder identifier(String identifier) {
@@ -292,6 +359,11 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 
+		/**
+		 * Sets the text border style for the block.
+		 * @param value the text border
+		 * @return returns this object
+		 */
 		public Builder textBorderStyle(TextBorderStyle value) {
 			this.textBorderStyle = value;
 			return this;
@@ -353,7 +425,9 @@ public class BlockProperties implements Cloneable {
 				bottomSpacing(builder.bottomPadding).build();
 		textBlockProps = builder.textBlockPropsBuilder.build();
 		listType = builder.listType;
-		listIterator = 0;
+		listNumberFormat = builder.listNumberFormat;
+		defaultListLabel = builder.defaultListLabel;
+		listItemLabel = builder.listItemLabel;
 		breakBefore = builder.breakBefore;
 		keep = builder.keep;
 		orphans = builder.orphans;
@@ -391,26 +465,6 @@ public class BlockProperties implements Cloneable {
 	}
 	
 	/**
-	 * Get text indent, in characters
-	 * @return returns the text indent
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public int getTextIndent() {
-		return textBlockProps.getTextIndent();
-	}
-	
-	/**
-	 * Get first line indent, in characters
-	 * @return returns the first line indent
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public int getFirstLineIndent() {
-		return textBlockProps.getFirstLineIndent();
-	}
-	
-	/**
 	 * Get block indent, in characters
 	 * @return returns the block indent
 	 */
@@ -435,24 +489,27 @@ public class BlockProperties implements Cloneable {
 	}
 	
 	/**
-	 * Increments the list iterator and returns the current list number
-	 * @return returns the current list number
-	 * @deprecated keep state outside of this object
+	 * Gets the number format for this list
+	 * @return returns the number format
 	 */
-	@Deprecated
-	public int nextListNumber() {
-		listIterator++;
-		return listIterator;
+	public NumeralStyle getListNumberFormat() {
+		return listNumberFormat;
 	}
 	
 	/**
-	 * Get current list number
-	 * @return returns the current list number
-	 * @deprecated keep state outside of this object
+	 * Gets the default list label for this list
+	 * @return returns the default list label, or null if not set.
 	 */
-	@Deprecated
-	public int getListNumber() {
-		return listIterator;
+	public String getDefaultListLabel() {
+		return defaultListLabel;
+	}
+	
+	/**
+	 * Gets the list item label
+	 * @return returns the list item label
+	 */
+	public String getListItemLabel() {
+		return listItemLabel;
 	}
 
 	/**
@@ -470,16 +527,6 @@ public class BlockProperties implements Cloneable {
 	public FormattingTypes.Keep getKeepType() {
 		return keep;
 	}
-	
-	/**
-	 * Gets the alignment
-	 * @return returns the alignment
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public FormattingTypes.Alignment getAlignment() {
-		return textBlockProps.getAlignment();
-	}
 
 	/**
 	 * Get the number of rows containing text in the next block that must be on the same page as this block
@@ -488,44 +535,43 @@ public class BlockProperties implements Cloneable {
 	public int getKeepWithNext() {
 		return keepWithNext;
 	}
-	
+
+	/**
+	 * Gets the number of previous sheets to keep in the same volume as this block
+	 * @return returns the number of sheets
+	 */
 	public int getKeepWithPreviousSheets() {
 		return keepWithPreviousSheets;
 	}
 	
+	/**
+	 * Gets the number of next sheets to keep in the same volume as this block
+	 * @return returns the number of sheets
+	 */
 	public int getKeepWithNextSheets() {
 		return keepWithNextSheets;
 	}
-	
-	/**
-	 * 
-	 * @return the identifier
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public String getIdentifier() {
-		return textBlockProps.getIdentifier();
-	}
 
+	/**
+	 * Gets the vertical position for this block
+	 * @return returns the vertical position
+	 */
 	public BlockPosition getVerticalPosition() {
 		return verticalPosition;
 	}
-	
-	/**
-	 * 
-	 * @return returns the row spacing
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public Float getRowSpacing() {
-		return textBlockProps.getRowSpacing();
-	}
 
-	
+	/**
+	 * Gets the text border style for this block
+	 * @return returns the text border style
+	 */
 	public TextBorderStyle getTextBorderStyle() {
 		return textBorderStyle;
 	}
 	
+	/**
+	 * Gets the underline pattern for this block
+	 * @return returns the underline pattern
+	 */
 	public String getUnderlineStyle() {
 		return underlineStyle;
 	}
@@ -548,6 +594,10 @@ public class BlockProperties implements Cloneable {
 		return widows;
 	}
 	
+	/**
+	 * Gets the text block properties for this block
+	 * @return returns the text block properties
+	 */
 	public TextBlockProperties getTextBlockProperties() {
 		return textBlockProps;
 	}
@@ -564,10 +614,13 @@ public class BlockProperties implements Cloneable {
 		int result = 1;
 		result = prime * result + blockIndent;
 		result = prime * result + ((breakBefore == null) ? 0 : breakBefore.hashCode());
+		result = prime * result + ((defaultListLabel == null) ? 0 : defaultListLabel.hashCode());
 		result = prime * result + ((keep == null) ? 0 : keep.hashCode());
 		result = prime * result + keepWithNext;
 		result = prime * result + keepWithNextSheets;
 		result = prime * result + keepWithPreviousSheets;
+		result = prime * result + ((listItemLabel == null) ? 0 : listItemLabel.hashCode());
+		result = prime * result + ((listNumberFormat == null) ? 0 : listNumberFormat.hashCode());
 		result = prime * result + ((listType == null) ? 0 : listType.hashCode());
 		result = prime * result + ((margin == null) ? 0 : margin.hashCode());
 		result = prime * result + orphans;
@@ -599,6 +652,13 @@ public class BlockProperties implements Cloneable {
 		if (breakBefore != other.breakBefore) {
 			return false;
 		}
+		if (defaultListLabel == null) {
+			if (other.defaultListLabel != null) {
+				return false;
+			}
+		} else if (!defaultListLabel.equals(other.defaultListLabel)) {
+			return false;
+		}
 		if (keep != other.keep) {
 			return false;
 		}
@@ -609,6 +669,16 @@ public class BlockProperties implements Cloneable {
 			return false;
 		}
 		if (keepWithPreviousSheets != other.keepWithPreviousSheets) {
+			return false;
+		}
+		if (listItemLabel == null) {
+			if (other.listItemLabel != null) {
+				return false;
+			}
+		} else if (!listItemLabel.equals(other.listItemLabel)) {
+			return false;
+		}
+		if (listNumberFormat != other.listNumberFormat) {
 			return false;
 		}
 		if (listType != other.listType) {

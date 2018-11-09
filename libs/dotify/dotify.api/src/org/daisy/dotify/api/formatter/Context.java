@@ -12,19 +12,25 @@ public interface Context {
 	 * Gets the current volume number (one based) or null if not known.
 	 * @return returns the current volume number
 	 */
-	public Integer getCurrentVolume();
+	public default Integer getCurrentVolume() {
+		return null;
+	}
 
 	/**
 	 * Gets the volume count or null if not known.
 	 * @return returns the volume count
 	 */
-	public Integer getVolumeCount();
+	public default Integer getVolumeCount() {
+		return null;
+	}
 
 	/**
 	 * Gets the current page number (one based) or null if not known.
 	 * @return returns the current page number
 	 */
-	public Integer getCurrentPage();
+	public default Integer getCurrentPage() {
+		return null;
+	}
 
 	/**
 	 * Gets the volume number (one based) of the context described in the current context,
@@ -35,7 +41,9 @@ public interface Context {
 	 * 
 	 * @return returns the meta volume number
 	 */
-	public Integer getMetaVolume();
+	public default Integer getMetaVolume() {
+		return null;
+	}
 
 	/**
 	 * Gets the page number (one based) of the context described the current context,
@@ -47,28 +55,42 @@ public interface Context {
 	 * 
 	 * @return returns the meta page number
 	 */
-	public Integer getMetaPage();
+	public default Integer getMetaPage() {
+		return null;
+	}
 	
 	/**
 	 * Gets the total number of pages contained in the current volume, or null if not
 	 * known. This should include the volume's pre- and post-content.
+	 * @return returns the number of pages in the current volume, or null if not known.
 	 */
-	public Integer getPagesInVolume();
+	public default Integer getPagesInVolume() {
+		return null;
+	}
 	
 	/**
 	 * Gets the total number of pages contained in the document, or null if not known.
+	 * @return returns the number of pages in the document, or null if not known.
 	 */
-	public Integer getPagesInDocument();
+	public default Integer getPagesInDocument() {
+		return null;
+	}
 	
 	/**
 	 * Gets the total number of sheets contained in the current volume, or null if not
 	 * known. This should include the volume's pre- and post-content.
+	 * @return returns the number of sheets in the current volume, or null if not known.
 	 */
-	public Integer getSheetsInVolume();
+	public default Integer getSheetsInVolume() {
+		return null;
+	}
 	
 	/**
 	 * Gets the total number of sheets contained in the document, or null if not known.
+	 * @return returns the number of sheets in the document, or null if not known.
 	 */
-	public Integer getSheetsInDocument();
+	public default Integer getSheetsInDocument() {
+		return null;
+	}
 	
 }

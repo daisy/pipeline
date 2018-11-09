@@ -37,11 +37,15 @@ public interface HyphenatorFactoryService {
 	 */
 	public Collection<String> listLocales();
 
+	/**
+	 * Creates a new hyphenator factory.
+	 * @return returns a new hyphenator factory
+	 */
 	public HyphenatorFactory newFactory();
 	
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
-	 * information collected from a file within the <tt>META-INF/services</tt> directory.
+	 * information collected from a file within the <code>META-INF/services</code> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>
 	 * 
 	 * <p>This information, in turn, enables the implementation to use the same mechanism
@@ -56,6 +60,6 @@ public interface HyphenatorFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

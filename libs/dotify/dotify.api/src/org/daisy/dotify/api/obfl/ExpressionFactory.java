@@ -1,20 +1,21 @@
 package org.daisy.dotify.api.obfl;
 
-import org.daisy.dotify.api.text.Integer2TextFactoryMakerService;
-
+/**
+ * Provides a factory for expressions.
+ * @author Joel Håkansson
+ *
+ */
 public interface ExpressionFactory {
 
+	/**
+	 * Creates a new expression implementation.
+	 * @return returns a new expression implementation
+	 */
 	public Expression newExpression();
 
 	/**
-	 * @param itf
-	 * @deprecated use setCreatedWithSPI
-	 */
-	@Deprecated
-	public void setInteger2TextFactory(Integer2TextFactoryMakerService itf);
-	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
-	 * information collected from a file within the <tt>META-INF/services</tt> directory.
+	 * information collected from a file within the <code>META-INF/services</code> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>
 	 * 
 	 * <p>This information, in turn, enables the implementation to use the same mechanism
@@ -29,6 +30,6 @@ public interface ExpressionFactory {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

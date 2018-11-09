@@ -1,5 +1,5 @@
 #!/bin/bash
-#version: 2016-05-27
+#version: 2016-11-17 (allows uploading of snapshots from branches)
 
 branch=$TRAVIS_BRANCH
 if [ -z "$branch" ]; then
@@ -37,8 +37,8 @@ if [ "$prop_change" = "false" ]; then
 fi
 
 if [ "$pullrequest" = "false" ]; then
-	if [ $branch = "master" ]; then
-		echo "On master branch."
+	if [ $branch = "master" -o "$is_release" = "false" ]; then
+		echo "On master branch or snapshot version."
 		if [ -n "$SONATYPE_USER" ]; then
 			if [ -n "$SONATYPE_PASSWORD" ]; then
 				echo "Starting upload..."

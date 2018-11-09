@@ -1,9 +1,9 @@
 package org.daisy.dotify.api.formatter;
 import static org.junit.Assert.assertEquals;
 
-import org.daisy.dotify.api.formatter.Position;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class PositionTest {
 
 	@Test

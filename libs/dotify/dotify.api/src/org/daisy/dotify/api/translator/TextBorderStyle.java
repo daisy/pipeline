@@ -13,7 +13,7 @@ public class TextBorderStyle {
 	/**
 	 * Loaded on first access
 	 */
-	public final static TextBorderStyle NONE = new Builder().build();
+	public static final TextBorderStyle NONE = new Builder().build();
 
 	/*
 	 * enum StylePreset {
@@ -23,13 +23,14 @@ public class TextBorderStyle {
 
 	/**
 	 * Provides a builder for text borders.
-	 * 
-	 * @author Joel Håkansson
 	 */
 	public static class Builder {
 		String topLeftCorner, topBorder, topRightCorner, leftBorder,
 				rightBorder, bottomLeftCorner, bottomBorder, bottomRightCorner;
 
+		/**
+		 * Creates a new text border style builder.
+		 */
 		public Builder() {
 			this.topLeftCorner = "";
 			this.topBorder = "";
@@ -137,6 +138,11 @@ public class TextBorderStyle {
 			return this;
 		}
 
+		/**
+		 * Creates a new text border style using the current state
+		 * of the builder.
+		 * @return returns a new text border style
+		 */
 		public TextBorderStyle build() {
 			return new TextBorderStyle(this);
 		}

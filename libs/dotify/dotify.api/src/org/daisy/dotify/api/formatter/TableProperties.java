@@ -26,6 +26,9 @@ public final class TableProperties {
 		private BlockSpacing padding = new BlockSpacing.Builder().build();
 		Border border = null;
 
+		/**
+		 * Creates a new builder
+		 */
 		public Builder() { }
 		
 		/**
@@ -83,6 +86,7 @@ public final class TableProperties {
 		
 		/**
 		 * Sets the margin
+		 * @param value the margin
 		 * @return returns this object
 		 */
 		public Builder margin(BlockSpacing value) {
@@ -92,6 +96,7 @@ public final class TableProperties {
 		
 		/**
 		 * Sets the padding
+		 * @param value the padding
 		 * @return returns this object
 		 */
 		public Builder padding(BlockSpacing value) {
@@ -109,6 +114,11 @@ public final class TableProperties {
 			return this;
 		}
 
+		/**
+		 * Creates new table properties based on the current
+		 * state of this builder
+		 * @return returns new table properties
+		 */
 		public TableProperties build() {
 			return new TableProperties(this);
 		}

@@ -32,17 +32,24 @@ public interface PagedMediaWriterFactoryService {
 	 */
 	public boolean supportsMediaType(String mediaType);
 	
+
 	/**
-	 * Returns a list of supported locales as defined by IETF RFC 3066.
-	 * @return returns a list of locales
+	 * Lists supported media types.
+	 * @return returns a list of supported media types
 	 */
 	public Collection<String> listMediaTypes();
 
+	/**
+	 * Creates a new paged media writer factory for the specified
+	 * media type.
+	 * @param mediaType the media type.
+	 * @return returns a new factory
+	 */
 	public PagedMediaWriterFactory newFactory(String mediaType);
 
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
-	 * information collected from a file within the <tt>META-INF/services</tt> directory.
+	 * information collected from a file within the <code>META-INF/services</code> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>
 	 * 
 	 * <p>This information, in turn, enables the implementation to use the same mechanism
@@ -57,6 +64,6 @@ public interface PagedMediaWriterFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

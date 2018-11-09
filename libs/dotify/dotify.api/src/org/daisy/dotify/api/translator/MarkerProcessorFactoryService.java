@@ -32,11 +32,15 @@ public interface MarkerProcessorFactoryService {
 	 */
 	public boolean supportsSpecification(String locale, String mode);
 
+	/**
+	 * Creates a new marker processor factory
+	 * @return returns a new marker processor factory
+	 */
 	public MarkerProcessorFactory newFactory();
 	
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
-	 * information collected from a file within the <tt>META-INF/services</tt> directory.
+	 * information collected from a file within the <code>META-INF/services</code> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>
 	 * 
 	 * <p>This information, in turn, enables the implementation to use the same mechanism
@@ -51,6 +55,6 @@ public interface MarkerProcessorFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }

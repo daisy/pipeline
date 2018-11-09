@@ -17,10 +17,14 @@ package org.daisy.dotify.api.translator;
  */
 public interface TextBorderFactoryService {
 
+	/**
+	 * Creates a new text border factory
+	 * @return returns a new text border factory
+	 */
 	public TextBorderFactory newFactory();
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
-	 * information collected from a file within the <tt>META-INF/services</tt> directory.
+	 * information collected from a file within the <code>META-INF/services</code> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>
 	 * 
 	 * <p>This information, in turn, enables the implementation to use the same mechanism
@@ -35,6 +39,6 @@ public interface TextBorderFactoryService {
 	 * <p>The class that created an instance with SPI must call this method before
 	 * putting it to use.</p>
 	 */
-	public void setCreatedWithSPI();
+	public default void setCreatedWithSPI(){}
 
 }
