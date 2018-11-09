@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/brailleapps/braille-utils.pef-tools
 	branch = master
-	commit = 024d1fa41d77a881846bf17415a68d77b0dd424a
-	parent = 1d1a2e872847b990c0438bcc2f30e458e7c38503
-	cmdver = 0.3.0
+	commit = aa3b54c5b96f90529d5f049caa7447736adf592a
+	parent = 4ab152bea42d8b653404c440777b66597f76034e
+	cmdver = 0.3.1
