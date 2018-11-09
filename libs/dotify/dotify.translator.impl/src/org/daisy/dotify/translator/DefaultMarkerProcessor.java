@@ -11,23 +11,42 @@ import java.util.logging.Logger;
 import org.daisy.dotify.api.translator.MarkerProcessor;
 import org.daisy.dotify.api.translator.TextAttribute;
 
-
-
+/**
+ * Provides a default marker processor implementation.
+ * @author Joel Håkansson
+ */
 public class DefaultMarkerProcessor implements MarkerProcessor {
 	private final Map<String, MarkerDictionary> specs;
 
+	/**
+	 * Provides a builder for the marker processor.
+	 */
 	public static class Builder {
 		private final Map<String, MarkerDictionary> specs;
 
+		/**
+		 * Creates a new builder.
+		 */
 		public Builder() {
 			specs = new HashMap<>();
 		}
 
+		/**
+		 * Adds a marker dictionary.
+		 * @param identifier the identifier
+		 * @param def the dictionary
+		 * @return returns this builder
+		 */
 		public Builder addDictionary(String identifier, MarkerDictionary def) {
 			specs.put(identifier, def);
 			return this;
 		}
 
+		/**
+		 * Creates a new default marker processor using the current
+		 * state of the builder.
+		 * @return returns a new marker processor
+		 */
 		public DefaultMarkerProcessor build() {
 			return new DefaultMarkerProcessor(this);
 		}

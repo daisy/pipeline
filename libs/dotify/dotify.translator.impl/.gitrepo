@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/brailleapps/dotify.translator.impl
 	branch = master
-	commit = 38292bf174f05646366e16614cab0c69cdeffc91
-	parent = 3569cab78ffc92d3185bd2a9dd8e3e0cabeb1454
-	cmdver = 0.3.0
+	commit = a8921900eeee45b185827aac4e1f95fa718545fa
+	parent = 87a21b44010e3bc257a89bea5a47c32b19dde928
+	cmdver = 0.3.1

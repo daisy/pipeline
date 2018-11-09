@@ -8,17 +8,23 @@ import org.daisy.dotify.common.text.BreakPointHandler;
 class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 	private final BreakPointHandler bph;
 	private final BrailleFinalizer finalizer;
-	private int forceCount = 0;
+	private int forceCount;
 
 	public DefaultBrailleTranslatorResult(BreakPointHandler bph, BrailleFinalizer finalizer) {
-		super();
-		this.finalizer = finalizer;
 		this.bph = bph;
+		this.finalizer = finalizer;
+		this.forceCount = 0;
+	}
+	
+	private DefaultBrailleTranslatorResult(DefaultBrailleTranslatorResult template) {
+		this.bph = template.bph.copy();
+		this.finalizer = template.finalizer;
+		this.forceCount = template.forceCount;
 	}
 
 	@Override
-	public String nextTranslatedRow(int limit, boolean force) {
-		BreakPoint bp = bph.nextRow(limit, force);
+	public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly) {
+		BreakPoint bp = bph.nextRow(limit, force, wholeWordsOnly);
 		if (bp.isHardBreak()) {
 			forceCount++;
 		}
@@ -60,6 +66,11 @@ class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 		} else {
 			throw new UnsupportedMetricException("Metric not supported: " + metric);
 		}
+	}
+
+	@Override
+	public BrailleTranslatorResult copy() {
+		return new DefaultBrailleTranslatorResult(this);
 	}
 
 }

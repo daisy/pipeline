@@ -12,6 +12,13 @@ import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.common.text.StringFilter;
 
+/**
+ * Provides a configurable braille filter, in cases where a full implementation
+ * is not needed. This implementation first translates the markers, then hyphenates
+ * the text, and then sends the result to the supplied string filter.
+ * @author Joel Håkansson
+ *
+ */
 public class DefaultBrailleFilter implements BrailleFilter {
 	private final String loc;
 	private final StringFilter filter;
@@ -19,10 +26,23 @@ public class DefaultBrailleFilter implements BrailleFilter {
 	private final HyphenatorFactoryMakerService hyphenatorFactoryMaker;
 	private final Map<String, HyphenatorInterface> hyphenators;
 	
+	/**
+	 * Creates a new default braille filter with the supplied parameters.
+	 * @param filter the braille filter to use
+	 * @param locale the locale of the implementation
+	 * @param hyphenatorFactoryMaker the hyphenator factory maker
+	 */
 	public DefaultBrailleFilter(StringFilter filter, String locale, HyphenatorFactoryMakerService hyphenatorFactoryMaker) {
 		this(filter, locale, null, hyphenatorFactoryMaker);
 	}
 	
+	/**
+	 * Creates a new default braille filter with the supplied parameters.
+	 * @param filter the braille filter to use
+	 * @param locale the locale of the implementation
+	 * @param tap the marker processor
+	 * @param hyphenatorFactoryMaker the hyphenator factory maker
+	 */
 	public DefaultBrailleFilter(StringFilter filter, String locale, MarkerProcessor tap, HyphenatorFactoryMakerService hyphenatorFactoryMaker) {
 		this.loc = locale;
 		this.filter = filter;

@@ -9,13 +9,25 @@ package org.daisy.dotify.translator;
  */
 public interface MarkerStyleConstants {
 
-	public final static String STRONG = "strong";
-	public final static String EM = "em";
-	public final static String SUB = "sub";
-	public final static String SUP = "sup";
 	/**
-	 * Definition description
+	 * Defines strong style.
 	 */
-	public final static String DD = "dd";
+	public static final String STRONG = "strong";
+	/**
+	 * Defines emphasis style.
+	 */
+	public static final String EM = "em";
+	/**
+	 * Defines subscript style.
+	 */
+	public static final String SUB = "sub";
+	/**
+	 * Defines superscript style.
+	 */
+	public static final String SUP = "sup";
+	/**
+	 * Defines a definition description style.
+	 */
+	public static final String DD = "dd";
 
 }

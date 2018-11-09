@@ -11,7 +11,7 @@
  * <p>To add a translator for another language:</p>
  * <ul>
  * <li>Implement BrailleTranslator for your locale and place it the 
- * org.daisy.dotify.impl.translator package or in a sub package thereof.</li>
+ * org.daisy.dotify.translator.impl package or in a sub package thereof.</li>
  * <li>Add the name of your implementation to the org.daisy.dotify.translator.BrailleFilter
  *  file in META-INF/services</li>
  *  <li>If your implementation uses a grade not defined in {@link org.daisy.dotify.api.translator.BrailleTranslatorFactory},

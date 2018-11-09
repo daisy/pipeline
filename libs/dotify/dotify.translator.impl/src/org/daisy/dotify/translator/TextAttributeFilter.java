@@ -3,6 +3,12 @@ package org.daisy.dotify.translator;
 import org.daisy.dotify.api.translator.TextAttribute;
 
 
+/**
+ * Provides a filter for text attributes. 
+ * @author Joel Håkansson
+ *
+ */
+@FunctionalInterface
 public interface TextAttributeFilter {
 
 	/**

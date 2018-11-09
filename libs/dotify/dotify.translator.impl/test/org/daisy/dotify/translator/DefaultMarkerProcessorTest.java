@@ -10,6 +10,7 @@ import org.daisy.dotify.translator.DefaultMarkerProcessor;
 import org.daisy.dotify.translator.RegexMarkerDictionary;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class DefaultMarkerProcessorTest {
 	private final DefaultMarkerProcessor sap;
 	

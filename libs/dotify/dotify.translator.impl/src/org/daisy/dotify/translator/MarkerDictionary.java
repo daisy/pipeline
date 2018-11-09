@@ -12,6 +12,7 @@ import org.daisy.dotify.api.translator.TextAttribute;
  * @author Joel Håkansson
  * 
  */
+@FunctionalInterface
 public interface MarkerDictionary {
 
 	/**

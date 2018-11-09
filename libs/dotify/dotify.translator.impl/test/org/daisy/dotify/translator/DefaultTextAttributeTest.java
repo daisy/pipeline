@@ -3,6 +3,7 @@ package org.daisy.dotify.translator;
 import org.daisy.dotify.api.translator.DefaultTextAttribute;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class DefaultTextAttributeTest {
 
 	@Test(expected = IllegalArgumentException.class)

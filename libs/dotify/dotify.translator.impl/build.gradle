@@ -1,75 +1,80 @@
-apply plugin: 'java'
-apply plugin: "maven"
-apply plugin: "signing"
-//custom plugins
-apply plugin: "org.dm.bundle"
+// For bnd
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.3.0'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'maven'
+	id 'signing'
+}
+
+apply plugin: 'biz.aQute.bnd.builder'
 
 group = 'org.daisy.dotify'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 sourceSets {
 	main {	java { srcDir 'src' }	resources { srcDir 'src' } }
 	test {	java { srcDir 'test' }	resources { srcDir 'test' } }
 }
 
-configurations {
-	provided
-	compile { extendsFrom provided }
-}
-
-/* Run gradle with JDK 1.7 or set bootstrap classpath, e.g.:
-	options.bootClasspath = "/usr/lib/jvm/java-7-openjdk/jre/lib/rt.jar" */
 compileJava {
     options.encoding = 'UTF-8'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
 }
 
 compileTestJava {
 	options.encoding = 'UTF-8'
-	sourceCompatibility = 1.7
-	targetCompatibility = 1.7
 }
 
 def repoRevision = System.getenv("REPO_REVISION")!=null?System.getenv("REPO_REVISION"):repositoryRevision
 
 javadoc {
 	options.encoding = 'UTF-8'
-	options.links('http://docs.oracle.com/javase/7/docs/api/')
+	options.links('http://docs.oracle.com/javase/8/docs/api/')
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    //mavenLocal()
     //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://oss.sonatype.org/content/groups/staging" }
 }
 
 dependencies {
-	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-    compile "org.daisy.dotify:dotify.api:2.5.0"
-    compile "org.daisy.dotify:dotify.common:2.0.1"
-    testCompile group: "junit", name: "junit", version: "4.7"
+	compileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+    compile "org.daisy.dotify:dotify.api:4.1.1"
+    compile "org.daisy.dotify:dotify.common:4.0.0"
+    testCompileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+    testCompile group: "junit", name: "junit", version: "4.12"
 }
 
-buildscript {
-    repositories {
-    	mavenCentral()
-    }
-    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.4" }
-}
-
-task updateBndVersion() << {
-	String contents = file('bnd.bnd').getText('UTF-8')
-	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
-}
-
-bundle {
-    instructions << [
-        "-include": file('bnd.bnd'),
-        'Built-By': System.getProperty("user.name"),
-        'Built-On': new Date().format('yyyy-MM-dd'),
-        'Repository-Revision': "$repoRevision",
-        'Repository-URL': "$repositoryURL"
-    ]
+jar {
+	manifest {
+		attributes(
+			'-sources': 'true',
+			'Import-Package': 'org.daisy.dotify.api.translator; provide:=true,*',
+			// See https://github.com/bndtools/bnd/issues/2677
+			// The split-package instruction is because resource files are included separately on the classpath
+			// 'Private-Package': 'org.daisy.dotify.translator.*;-split-package:=merge-first',
+			'Service-Component': '*',
+			'Automatic-Module-Name': "$moduleName",
+			'Bundle-Name': "$bundleName",
+			'Bundle-SymbolicName': "$bundleName",
+			'Built-By': System.getProperty("user.name"),
+			'Built-On': new Date().format('yyyy-MM-dd'),
+			'Repository-Revision': "$repoRevision",
+			'Repository-URL': "$repositoryURL",
+			'Include-Resource': 'LICENSE, NOTICE'
+		)
+	}
 }
 
 task javadocJar(type: Jar) {
@@ -95,7 +100,7 @@ signing {
 
 uploadArchives {
 	//Only upload if a git hash is supplied. On Travis only upload snapshots.
-	enabled = repoRevision.size()==40 && (System.getenv("TRAVIS_BUILD_ID")==null || version.endsWith("SNAPSHOT"))
+	enabled = repoRevision.size()==40 && System.getenv("TRAVIS_BUILD_ID")!=null
     repositories {
         mavenDeployer {
             if (isReleaseVersion) {
@@ -133,6 +138,6 @@ uploadArchives {
         }
     }
 }
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.0'
+wrapper {
+	distributionType = Wrapper.DistributionType.ALL
 }
