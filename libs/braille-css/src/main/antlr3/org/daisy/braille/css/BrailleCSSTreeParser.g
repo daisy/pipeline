@@ -17,6 +17,7 @@ import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.RuleMargin;
+import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.ElementName;
@@ -91,10 +92,18 @@ volume_areas returns [List<RuleVolumeArea> list]
     ;
 
 volume_area returns [RuleVolumeArea area]
+@init {
+    List<RulePage> pages = null;
+}
     : ^( a=VOLUME_AREA
-         decl=declarations )
+         decl=declarations
+         // nested anonymous page rules allowed in case of inline style
+         (p=page {
+             if (pages == null) pages = new ArrayList<RulePage>();
+             pages.add(p);
+         })*)
       {
-        $area = preparator.prepareRuleVolumeArea(a.getText().substring(1), decl);
+        $area = preparator.prepareRuleVolumeArea(a.getText().substring(1), decl, pages);
       }
     ;
 
@@ -228,7 +237,7 @@ relative_rule returns [RuleSet rs]
     boolean invalid = false;
 }
     : ^(RULE
-        ((AMPERSAND s=selector) {
+        ((s=selector) {
             attach = true;
             // may not start with a type selector
             if (s.size() > 0 && s.get(0) instanceof ElementName) {
@@ -293,18 +302,20 @@ inlineblock returns [RuleBlock<?> b]
     : ^(RULE decl=declarations) {
           $b = preparator.prepareInlineRuleSet(decl, null);
       }
-    | rr=relative_rule { $b = rr; }
     | tt=text_transform_def { $b = tt; }
-
-// TODO: allowed as well but skip for now:
-//  | p=page { $b = p; }
-
-// TODO: need a slightly different format that allows @page inside @begin and @end:
-//  | v=volume { $b = v; }
+    | p=page { $b = p; }
+    | v=volume { $b = v; }
+    | pm=margin { $b = pm; }
+    | va=volume_area { $b = va; }
+    | ^(AMPERSAND
+         (rr=relative_rule { $b = rr; }
+         |p=page { $b = new InlineStyle.RuleRelativePage(p); } // relative @page pseudo rule
+         |v=volume { $b = new InlineStyle.RuleRelativeVolume(v); } // relative @volume pseudo rule
+         ))
     ;
 
 // TODO: move to CSSTreeParser.g
-page returns [RuleBlock<?> stmnt]
+page returns [RulePage stmnt]
 @init {
     List<RuleSet> rules = null;
     List<RuleMargin> margins = null;
@@ -324,6 +335,6 @@ page returns [RuleBlock<?> stmnt]
               })*
           )
       ) {
-          $stmnt = preparator.prepareRulePage(decl, margins, null, pseudo);
+          $stmnt = (RulePage)preparator.prepareRulePage(decl, margins, null, pseudo);
       }
     ;

@@ -435,6 +435,10 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			return stackedPseudoElement;
 		}
 		
+		public boolean isSpecifiedAsClass() {
+			return specifiedAsClass;
+		}
+		
 		private boolean containsCustomPseudoClass() {
 			if (specifiedAsClass)
 				return true;

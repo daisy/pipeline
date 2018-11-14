@@ -4,6 +4,7 @@ import java.util.List;
 
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.RuleFactory;
+import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.csskit.antlr.SimplePreparator;
 
 import org.w3c.dom.Element;
@@ -36,12 +37,17 @@ public class Preparator extends SimplePreparator {
 		return rv;
 	}
 	
-	public RuleVolumeArea prepareRuleVolumeArea(String area, List<Declaration> declarations) {
+	public RuleVolumeArea prepareRuleVolumeArea(String area, List<Declaration> declarations, List<RulePage> pageRules) {
 		if ((declarations == null || declarations.isEmpty())) {
 			log.debug("Empty RuleVolumeArea was omited");
 			return null; }
 		RuleVolumeArea rva = new RuleVolumeArea(area);
-		rva.replaceAll(declarations);
+		if (declarations != null)
+			for (Declaration d : declarations)
+				rva.add(d);
+		if (pageRules != null)
+			for (RulePage p : pageRules)
+				rva.add(p);
 		log.info("Create @" + area + " with:\n{}", rva);
 		return rva;
 	}

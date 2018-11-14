@@ -1,11 +1,16 @@
 package org.daisy.braille.css;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.PrettyOutput;
+import cz.vutbr.web.css.Rule;
+import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.csskit.AbstractRuleBlock;
 import cz.vutbr.web.csskit.OutputUtil;
 
-public class RuleVolumeArea extends AbstractRuleBlock<Declaration> implements PrettyOutput {
+public class RuleVolumeArea extends AbstractRuleBlock<Rule<?>> implements PrettyOutput {
 	
 	public enum VolumeArea {
 		
@@ -27,6 +32,7 @@ public class RuleVolumeArea extends AbstractRuleBlock<Declaration> implements Pr
 				break; }}
 		if (volumeArea == null)
 			throw new IllegalArgumentException("Illegal value for volume area: " + area);
+		replaceAll(new ArrayList<Rule<?>>());
 	}
 	
 	private VolumeArea volumeArea;
@@ -35,6 +41,14 @@ public class RuleVolumeArea extends AbstractRuleBlock<Declaration> implements Pr
 		return volumeArea;
 	}
 
+	@Override
+	public boolean add(Rule<?> element) {
+		if (element instanceof Declaration || element instanceof RulePage)
+			return super.add(element);
+		else
+			throw new IllegalArgumentException("Element must be either a Declaration or a RulePage");
+	}
+	
 	@Override
 	public String toString() {
 		return this.toString(0);
@@ -45,7 +59,8 @@ public class RuleVolumeArea extends AbstractRuleBlock<Declaration> implements Pr
 		sb = OutputUtil.appendTimes(sb, OutputUtil.DEPTH_DELIM, depth);
 		sb.append('@').append(volumeArea.value);
 		sb.append(OutputUtil.RULE_OPENING);
-		sb = OutputUtil.appendList(sb, list, OutputUtil.RULE_DELIM, depth + 1);
+		List<PrettyOutput> rules = (List)list;
+		sb = OutputUtil.appendList(sb, rules, OutputUtil.RULE_DELIM, depth + 1);
 		sb.append(OutputUtil.RULE_CLOSING);
 		return sb.toString();
 	}

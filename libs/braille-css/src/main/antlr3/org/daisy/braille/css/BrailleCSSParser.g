@@ -124,16 +124,30 @@ inlinestyle
     : S* declarations (inlineset S*)* -> ^(INLINESTYLE ^(RULE declarations) inlineset*)
     ;
 
+inline_pagestyle
+    : S* declarations ( (margin_rule | relative_page_pseudo) S*)*
+      -> ^(INLINESTYLE
+            ^(RULE declarations)
+            margin_rule*
+            relative_page_pseudo*
+         )
+    ;
+
+inline_volumestyle
+    : S* declarations ( (inline_volume_area | relative_volume_pseudo) S*)*
+      -> ^(INLINESTYLE
+            ^(RULE declarations)
+            inline_volume_area*
+            relative_volume_pseudo*
+         )
+    ;
+
 // @Override
 inlineset
-    : relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(RULE relative_or_chained_selector declarations)
+    : relative_or_chained_selector LCURLY S* declarations RCURLY -> ^(AMPERSAND ^(RULE relative_or_chained_selector declarations))
     | text_transform_def
-
-// TODO: allowed as well but skip for now:
-//  | anonymous_page // page at-rule
-
-// TODO: need a slightly different format that allows @page inside @begin and @end:
-//  | volume // volume at-rule
+    | anonymous_page
+    | inline_volume
     ;
 
 // FIXME: Note that in the braille CSS specification the second AMPERSAND is optional. This
@@ -141,13 +155,30 @@ inlineset
 // between a term and the start of a selector, however I can't find a way to implement this in
 // ANTLR, while keeping the semicolon optional.
 relative_or_chained_selector
-    : ( AMPERSAND selector | AMPERSAND! S!* combinator selector ) (combinator selector)*
+    : ( AMPERSAND! selector | AMPERSAND! S!* combinator selector ) (combinator selector)*
     ;
 
 anonymous_page
-    : PAGE page_pseudo? S*
-        LCURLY S*
-        declarations margin_rule*
-        RCURLY
-        -> ^(PAGE page_pseudo? declarations ^(SET margin_rule*))
+    : PAGE page_pseudo? S* LCURLY S* declarations margin_rule* RCURLY
+      -> ^(PAGE page_pseudo? declarations ^(SET margin_rule*))
+    ;
+
+relative_page_pseudo
+    : AMPERSAND page_pseudo S* LCURLY S* declarations margin_rule* RCURLY
+      -> ^(AMPERSAND ^(PAGE page_pseudo declarations ^(SET margin_rule*)))
+    ;
+
+inline_volume
+    : VOLUME S* (volume_pseudo S*)? LCURLY S* declarations inline_volume_area* RCURLY
+      -> ^(VOLUME volume_pseudo? declarations ^(SET inline_volume_area*))
+    ;
+
+relative_volume_pseudo
+    : AMPERSAND volume_pseudo S* LCURLY S* declarations inline_volume_area* RCURLY
+      -> ^(AMPERSAND ^(VOLUME volume_pseudo declarations ^(SET inline_volume_area*)))
+    ;
+
+inline_volume_area
+    : VOLUME_AREA S* LCURLY S* declarations (anonymous_page S*)* RCURLY S*
+      -> ^(VOLUME_AREA declarations anonymous_page*)
     ;

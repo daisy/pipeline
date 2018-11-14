@@ -92,11 +92,17 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			return null; }
 	}
 	
-	public RuleList parseInlineStyle(String style) {
+	public enum Context {
+		ELEMENT,
+		PAGE,
+		VOLUME
+	}
+	
+	public RuleList parseInlineStyle(String style, Context context) {
 		try {
 			CSSInputStream input = CSSInputStream.stringStream(style);
 			CommonTokenStream tokens = feedLexer(input);
-			CommonTree ast = feedParser(tokens, SourceType.INLINE);
+			CommonTree ast = feedParser(tokens, SourceType.INLINE, context);
 			// OK to pass null for context element because it is only used in Analyzer.evaluateDOM()
 			Preparator preparator = new Preparator(null, true);
 			BrailleCSSTreeParser tparser = feedAST(tokens, ast, preparator, null);
@@ -110,6 +116,18 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 		catch (RecognitionException e) {
 			log.warn("Malformed inline style {}", style);
 			return null; }
+	}
+	
+	public RuleList parseInlineStyle(String style) {
+		return parseInlineStyle(style, Context.ELEMENT);
+	}
+	
+	public RuleList parseInlinePageStyle(String style) {
+		return parseInlineStyle(style, Context.PAGE);
+	}
+	
+	public RuleList parseInlineVolumeStyle(String style) {
+		return parseInlineStyle(style, Context.VOLUME);
 	}
 	
 	public List<Declaration> parseSimpleInlineStyle(String style) {
@@ -158,7 +176,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 		CSSInputStream input = getInput(source, network, encoding, type);
 		input.setBase(base);
 		CommonTokenStream tokens = feedLexer(input);
-		CommonTree ast = feedParser(tokens, type);
+		CommonTree ast = feedParser(tokens, type, Context.ELEMENT);
 		return feedAST(tokens, ast, preparator, media);
 	}
 	
@@ -175,10 +193,10 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 				throw re; }}
 	}
 	
-	private static CommonTree feedParser(CommonTokenStream source, SourceType type) throws CSSException {
+	private static CommonTree feedParser(CommonTokenStream source, SourceType type, Context context) throws CSSException {
 		BrailleCSSParser parser = new BrailleCSSParser(source);
 		parser.init();
-		return getAST(parser, type);
+		return getAST(parser, type, context);
 	}
 	
 	private static BrailleCSSTreeParser feedAST(CommonTokenStream source, CommonTree ast,
@@ -192,11 +210,17 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 		return parser;
 	}
 	
-	private static CommonTree getAST(BrailleCSSParser parser, SourceType type) throws CSSException {
+	private static CommonTree getAST(BrailleCSSParser parser, SourceType type, Context context) throws CSSException {
 		switch (type) {
 		case INLINE:
 			try {
-				return (CommonTree) parser.inlinestyle().getTree(); }
+				switch (context) {
+				case ELEMENT:
+					return (CommonTree) parser.inlinestyle().getTree();
+				case PAGE:
+					return (CommonTree) parser.inline_pagestyle().getTree();
+				case VOLUME:
+					return (CommonTree) parser.inline_volumestyle().getTree(); }}
 			catch (RecognitionException re) {
 				throw encapsulateException(re,
 						"Unable to parse inline CSS style"); }
