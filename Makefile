@@ -209,6 +209,15 @@ modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
 modules/braille/liblouis-utils/liblouis-native/.install-windows.jar: \
 	modules/braille/liblouis-utils/liblouis-native/.install
 
+.SECONDARY : \
+	modules/braille/libhyphen-utils/libhyphen-native/.install-mac.jar \
+	modules/braille/libhyphen-utils/libhyphen-native/.install-linux.jar \
+	modules/braille/libhyphen-utils/libhyphen-native/.install-windows.jar
+modules/braille/libhyphen-utils/libhyphen-native/.install-mac.jar \
+modules/braille/libhyphen-utils/libhyphen-native/.install-linux.jar \
+modules/braille/libhyphen-utils/libhyphen-native/.install-windows.jar: \
+	modules/braille/libhyphen-utils/libhyphen-native/.install
+
 # dotify dependencies
 
 gradle-get-dependency-version = $(shell cat $(1)/build.gradle | perl -ne 'print "$$1\n" if /["'"'"']$(subst .,\.,$(2)):(.+)["'"'"']/')
