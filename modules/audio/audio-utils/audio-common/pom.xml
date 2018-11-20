@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>audio-modules-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
@@ -16,13 +16,6 @@
 
   <name>DAISY Pipeline 2 module :: Audio API</name>
   <description>Common API for audio-related functionality</description>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-  </dependencies>
 
   <build>
     <plugins>

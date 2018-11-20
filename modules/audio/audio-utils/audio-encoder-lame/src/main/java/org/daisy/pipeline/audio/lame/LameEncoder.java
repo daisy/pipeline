@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -17,8 +18,6 @@ import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Optional;
 
 public class LameEncoder implements AudioEncoder {
 

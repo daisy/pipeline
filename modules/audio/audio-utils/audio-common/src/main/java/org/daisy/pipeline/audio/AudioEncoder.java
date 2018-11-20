@@ -2,10 +2,9 @@ package org.daisy.pipeline.audio;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sound.sampled.AudioFormat;
-
-import com.google.common.base.Optional;
 
 public interface AudioEncoder {
 	interface EncodingOptions {
