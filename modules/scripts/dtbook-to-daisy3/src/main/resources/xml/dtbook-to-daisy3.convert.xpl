@@ -49,6 +49,10 @@
     <p:pipe port="audio-map" step="tts"/>
   </p:output>
 
+  <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+    <p:pipe step="validation-status" port="result"/>
+  </p:output>
+
   <p:input port="fileset.in">
     <p:documentation>
       A fileset containing references to all the DTBook files and any
@@ -518,4 +522,11 @@
       </p:with-option>
     </px:create-daisy3-opf>
   </p:group>
+
+  <p:rename match="/*" new-name="d:validation-status" name="validation-status">
+    <p:input port="source">
+      <p:pipe step="tts" port="status"/>
+    </p:input>
+  </p:rename>
+
 </p:declare-step>

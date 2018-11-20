@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+               stylesheet="../../main/resources/xml/xslt/volume-breaking.xsl">
+	
+	<x:scenario label="wrap leaf sections and add classes">
+		<x:context>
+			<level1>
+				<h1>Headline 1</h1>
+				<p>Paragraph 1.</p>
+				<p>Paragraph 2.</p>
+				<img src="img1.jpg"/>
+				<p>Paragraph 3.</p>
+				<level2>
+					<h2>Headline 1.1</h2>
+					<p>Paragraph 4.</p>
+					<p>Paragraph 5.</p>
+					<img src="img2.jpg"/>
+					<p>Paragraph 6.</p>
+				</level2>
+				<level2>
+					<h2>Headline 1.2</h2>
+					<p>Paragraph 7.</p>
+					<p>Paragraph 8.</p>
+					<img src="img3.jpg"/>
+					<p>Paragraph 9.</p>
+					<level3>
+						<h2>Headline 1.2.1</h2>
+						<p>Paragraph 10.</p>
+						<p>Paragraph 11.</p>
+						<img src="img3.jpg"/>
+						<p>Paragraph 12.</p>
+					</level3>
+				</level2>
+				<p>Paragraph 13.</p>
+				<p>Paragraph 14.</p>
+				<level2>
+					<h2>Headline 1.3</h2>
+					<p>Paragraph 15.</p>
+					<p>Paragraph 16.</p>
+					<img src="img4.jpg"/>
+					<p>Paragraph 17.</p>
+				</level2>
+				<p>Paragraph 18.</p>
+				<p>Paragraph 19.</p>
+			</level1>
+		</x:context>
+		<x:expect>
+			<level1>
+				<div class="leaf-section keep-with-next-section">
+					<h1>Headline 1</h1>
+					<p>Paragraph 1.</p>
+					<p>Paragraph 2.</p>
+					<img src="img1.jpg"/>
+					<p>Paragraph 3.</p>
+				</div>
+				<level2>
+					<h2>Headline 1.1</h2>
+					<p>Paragraph 4.</p>
+					<p>Paragraph 5.</p>
+					<img src="img2.jpg"/>
+					<p>Paragraph 6.</p>
+				</level2>
+				<level2>
+					<div class="leaf-section keep-with-next-section">
+						<h2>Headline 1.2</h2>
+						<p>Paragraph 7.</p>
+						<p>Paragraph 8.</p>
+						<img src="img3.jpg"/>
+						<p>Paragraph 9.</p>
+					</div>
+					<level3>
+						<h2>Headline 1.2.1</h2>
+						<p>Paragraph 10.</p>
+						<p>Paragraph 11.</p>
+						<img src="img3.jpg"/>
+						<p>Paragraph 12.</p>
+					</level3>
+				</level2>
+				<div class="leaf-section keep-with-next-section">
+					<p>Paragraph 13.</p>
+					<p>Paragraph 14.</p>
+				</div>
+				<level2>
+					<h2>Headline 1.3</h2>
+					<p>Paragraph 15.</p>
+					<p>Paragraph 16.</p>
+					<img src="img4.jpg"/>
+					<p>Paragraph 17.</p>
+				</level2>
+				<div class="leaf-section">
+					<p>Paragraph 18.</p>
+					<p>Paragraph 19.</p>
+				</div>
+			</level1>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

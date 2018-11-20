@@ -15,6 +15,7 @@
     <p:option name="language" required="false" select="''"/>
     <p:option name="output-dir" required="true" px:output="result"/>
     <p:option name="assert-valid" required="false" select="'true'"/>
+    <p:option name="chunk-size" required="false" select="'-1'"/>
 
     <p:import
         href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/library.xpl"/>
@@ -57,6 +58,7 @@
                 <p:pipe port="in-memory.out" step="to-zedai"/>
             </p:input>
             <p:with-option name="output-dir" select="$output-dir"/>
+            <p:with-option name="chunk-size" select="$chunk-size"/>
         </px:zedai-to-html-convert>
 
     </p:group>

@@ -82,16 +82,16 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="mathml-version" required="false" px:type="string" select="'3.0'">
+    <p:option name="mathml-version" required="false" select="'3.0'">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <value>3.0</value>
                     <value>2.0</value>
                     <value>1.01</value>
                     <value>1.0</value>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">MathML version</h2>

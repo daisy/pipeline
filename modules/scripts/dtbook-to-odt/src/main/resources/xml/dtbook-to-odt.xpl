@@ -52,14 +52,14 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
         </p:documentation>
     </p:option>
     
-    <p:option name="asciimath" required="false" px:type="string" select="'ASCIIMATH'">
+    <p:option name="asciimath" required="false" select="'ASCIIMATH'">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <value>ASCIIMATH</value>
                     <value>MATHML</value>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
         <p:documentation>
             <h2 px:role="name">ASCIIMath handling</h2>
@@ -67,14 +67,14 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
         </p:documentation>
     </p:option>
     
-    <p:option name="images" required="false" px:type="string" select="'EMBED'">
+    <p:option name="images" required="false" select="'EMBED'">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <value>EMBED</value>
                     <value>LINK</value>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
         <p:documentation>
             <h2 px:role="name">Images handling</h2>

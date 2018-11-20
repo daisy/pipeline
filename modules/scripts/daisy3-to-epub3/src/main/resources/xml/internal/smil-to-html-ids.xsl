@@ -14,7 +14,8 @@
     <xsl:template name="create-id-map">
         <d:idmap>
             <xsl:for-each select="$smils">
-                <d:doc href="{base-uri(.)}">
+                <d:doc>
+                    <xsl:attribute name="xml:base" select="base-uri(.)"/>
                     <xsl:apply-templates/>
                 </d:doc>
             </xsl:for-each>

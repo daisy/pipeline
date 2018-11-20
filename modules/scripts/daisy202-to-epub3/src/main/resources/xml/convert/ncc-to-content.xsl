@@ -21,7 +21,8 @@
     <xsl:variable name="ids-seq" select="tokenize($ids,'\s+')"/>
 
     <xsl:template match="html">
-        <html xml:base="{$base}">
+        <html>
+            <xsl:attribute name="xml:base" select="$base"/>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
         </html>

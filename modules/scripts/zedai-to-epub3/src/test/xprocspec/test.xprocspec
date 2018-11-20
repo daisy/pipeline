@@ -3,6 +3,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="../../main/resources/xml/xproc/zedai-to-epub3.xpl">
 
 	<x:scenario label="alice">
@@ -13,6 +14,14 @@
 			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('alice/temp-dir/',$temp-dir)"/>
 		</x:call>
+		<x:context label="the status">
+			<x:document type="port" port="validation-status"/>
+		</x:context>
+		<x:expect label="the conversion should succeed" type="compare">
+			<x:document type="inline">
+				<d:validation-status result="ok"/>
+			</x:document>
+		</x:expect>
 		<x:context label="the output directory">
 			<x:document type="directory" base-uri="temp-dir" href="alice/output-dir/" recursive="true"/>
 		</x:context>
@@ -80,8 +89,16 @@
 			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
 		</x:call>
+		<x:context label="the status">
+			<x:document type="port" port="validation-status"/>
+		</x:context>
+		<x:expect label="the conversion should succeed" type="compare">
+			<x:document type="inline">
+				<d:validation-status result="ok"/>
+			</x:document>
+		</x:expect>
 		<x:context label="the content file">
-			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test.epub!/EPUB/test-1.xhtml" select="//html:h1[1]"/>
+			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test.epub!/EPUB/test.xhtml" select="//html:h1[1]"/>
 		</x:context>
 		<x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
 			<x:document type="inline">

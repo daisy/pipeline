@@ -32,7 +32,7 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="braille-translator" required="false" px:data-type="transform-query" select="'(translator:liblouis)'">
+    <p:option name="braille-translator" required="false" px:type="transform-query" select="'(translator:liblouis)'">
         <p:documentation>
             <h2 px:role="name">Braille translator query</h2>
         </p:documentation>
@@ -140,12 +140,12 @@ specific.
         <p:with-option name="href" select="$source"/>
         <p:with-option name="file" select="//ocf:rootfile[1]/@full-path"/>
     </px:unzip>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="resolve-uri(//ocf:rootfile[1]/@full-path,$target.base)">
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="resolve-uri(//ocf:rootfile[1]/@full-path,$target.base)">
             <p:pipe step="original-container" port="result"/>
         </p:with-option>
-    </p:add-attribute>
-    <p:delete match="/*/@xml:base" name="default-rendition.package-document"/>
+    </px:set-base-uri>
+    <p:identity name="default-rendition.package-document"/>
     
     <!--
         braille rendition file set
@@ -206,10 +206,9 @@ specific.
             <p:pipe step="braille-rendition.package-document" port="result"/>
         </p:input>
     </p:insert>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="resolve-uri('META-INF/metadata.xml',$target.base)"/>
-    </p:add-attribute>
-    <p:delete match="/*/@xml:base"/>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="resolve-uri('META-INF/metadata.xml',$target.base)"/>
+    </px:set-base-uri>
     <p:identity name="metadata"/>
     
     <!--
@@ -319,16 +318,16 @@ specific.
                     </p:identity>
                 </p:when>
                 <p:otherwise>
-                    <p:add-attribute match="/*" attribute-name="xml:base">
+                    <px:set-base-uri>
                         <!--
                             using "base-uri(parent::*)" because link has the base-uri of this XProc file
                         -->
-                        <p:with-option name="attribute-value"
+                        <p:with-option name="base-uri"
                                        select="//html:link[@rel='stylesheet' and @type='text/css' and @media='embossed']
                                                /resolve-uri(@href,base-uri(parent::*))">
                             <p:pipe step="extract-css.result" port="result"/>
                         </p:with-option>
-                    </p:add-attribute>
+                    </px:set-base-uri>
                 </p:otherwise>
             </p:choose>
             <p:identity name="css"/>
@@ -408,10 +407,10 @@ specific.
             <p:pipe step="braille-rendition.html" port="resource-map"/>
         </p:input>
     </p:insert>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="resolve-uri('EPUB/renditionMapping.html',$target.base)"/>
-    </p:add-attribute>
-    <p:delete match="/*/@xml:base" name="rendition-mapping"/>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="resolve-uri('EPUB/renditionMapping.html',$target.base)"/>
+    </px:set-base-uri>
+    <p:identity name="rendition-mapping"/>
     
     <!--
         braille rendition smil files
@@ -465,7 +464,7 @@ specific.
             <p:empty/>
         </p:input>
     </p:xslt>
-    <p:delete match="/*/@xml:base" name="braille-rendition.package-document-with-dc-language-and-css"/>
+    <p:identity name="braille-rendition.package-document-with-dc-language-and-css"/>
     
     <!--
         container.xml
@@ -501,10 +500,10 @@ specific.
             </p:inline>
         </p:input>
     </p:insert>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="resolve-uri('META-INF/container.xml',$target.base)"/>
-    </p:add-attribute>
-    <p:delete match="/*/@xml:base" name="container"/>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="resolve-uri('META-INF/container.xml',$target.base)"/>
+    </px:set-base-uri>
+    <p:identity name="container"/>
     
     <!-- ===== -->
     <!-- Store -->

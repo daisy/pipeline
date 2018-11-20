@@ -49,7 +49,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     
     <p:option name="stylesheet" px:sequence="true">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
                         <documentation xml:lang="en">File path relative to input DTBook.</documentation>
@@ -58,7 +58,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
     </p:option>
     

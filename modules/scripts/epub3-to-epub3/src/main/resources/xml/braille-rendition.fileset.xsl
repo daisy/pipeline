@@ -20,7 +20,7 @@
 	</xsl:template>
 	
 	<xsl:template match="opf:manifest/opf:item">
-		<xsl:variable name="original-href" select="pf:relativize-uri(resolve-uri(@href,base-uri(.)),$target.base)"/>
+		<xsl:variable name="original-href" select="pf:relativize-uri(resolve-uri(@href,pf:base-uri(.)),$target.base)"/>
 		<xsl:element name="d:file">
 			<xsl:choose>
 				<xsl:when test="@media-type='application/xhtml+xml'">

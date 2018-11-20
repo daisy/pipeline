@@ -21,6 +21,16 @@
         </p:documentation>
     </p:input>
 
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h2 px:role="name">Status</h2>
+        <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
+
+When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 publication even if the text-to-speech process has errors.</p>
+      </p:documentation>
+      <p:pipe step="convert" port="validation-status"/>
+    </p:output>
+
     <p:option name="language" required="false" px:type="string" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Language code</h2>
@@ -55,6 +65,16 @@
 	<p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
 
 [More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).</p>
+      </p:documentation>
+    </p:option>
+
+    <p:option name="chunk-size" required="false" px:type="integer" select="'-1'">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h2 px:role="name">Chunk size</h2>
+        <p px:role="desc" xml:space="preserve">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
       </p:documentation>
     </p:option>
 
@@ -98,7 +118,10 @@
     </p:xslt>
     <p:sink/>
 
-    <p:group>
+    <p:group name="convert">
+        <p:output port="validation-status">
+		  <p:pipe step="convert.zedai-to-epub3" port="validation-status"/>
+        </p:output>
         <p:variable name="output-name" select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')">
             <p:pipe port="matched" step="first-dtbook"/>
         </p:variable>
@@ -189,6 +212,7 @@
             </p:input>
             <p:with-option name="output-dir" select="$temp-dir"/>
             <p:with-option name="audio" select="$audio"/>
+            <p:with-option name="chunk-size" select="$chunk-size"/>
         </px:zedai-to-epub3-convert>
 
         <px:epub3-store name="store">

@@ -2,12 +2,14 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   
   <!-- scripts -->
-  <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl" uri="../xml/xproc/dtbook-to-pef.xpl" px:script="true" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl" uri="../xml/xproc/dtbook-to-pef.xpl" px:content-type="script" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
   
   <!-- other -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/reset.css" uri="../css/reset.css"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css" uri="../css/default.css"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/xsl/volume-breaking.xsl" uri="../xml/xslt/volume-breaking.xsl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/volume-breaking.scss" uri="../css/volume-breaking.scss"/>
   
   <!-- dependencies -->
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:xml-to-pef"/>

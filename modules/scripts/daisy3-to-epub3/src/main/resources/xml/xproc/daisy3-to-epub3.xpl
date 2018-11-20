@@ -58,6 +58,17 @@
             <p px:role="desc">Whether to stop processing and raise an error on validation issues.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="chunk-size" required="false" px:type="integer" select="'-1'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Chunk size</h2>
+            <p px:role="desc" xml:space="preserve">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+Top-level sections in the DAISY 3 become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+        </p:documentation>
+    </p:option>
+    
     <!--<p:option name="compatibility-mode" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Compatibility Mode</h2>
@@ -189,6 +200,7 @@
         </p:input>
         <p:with-option name="output-dir" select="$content-dir"/>
         <p:with-option name="assert-valid" select="$assert-valid"/>
+        <p:with-option name="chunk-size" select="$chunk-size"/>
     </pxi:dtbook-to-html>
     <p:sink/>
 

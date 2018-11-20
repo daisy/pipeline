@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/xslt/volume-breaking.xsl">
+	
+	<x:param name="duplex" select="false()"/>
+	<x:param name="maximum-number-of-sheets" select="5"/>
+	<x:param name="minimum-number-of-leaf-section-pages" select="1"/>
+
+	<x:scenario label="create multiple leaf-nodes if too big">
+		<x:context>
+			<body>
+				<!-- 632 characters -->
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				
+				<!-- 632 characters -->
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				
+				<!-- 632 characters -->
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+				<p>content content content content content content content content content content</p>
+			</body>
+		</x:context>
+		<x:expect>
+			<body>
+				<div class="leaf-section">
+					<!-- 632 characters -->
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					
+					<!-- 632 characters -->
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+				</div>
+				<div class="leaf-section">
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					
+					<!-- 632 characters -->
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+					<p>content content content content content content content content content content</p>
+				</div>
+			</body>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

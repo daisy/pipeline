@@ -30,7 +30,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
     
     <p:option name="stylesheet" px:sequence="true">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
                         <documentation xml:lang="en">File path relative to input EPUB 3.</documentation>
@@ -39,7 +39,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
     </p:option>
     

@@ -4,6 +4,8 @@
 			   xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="../../main/resources/xml/dtbook-to-epub3.xpl">
 
     <x:scenario label="minimal">
@@ -14,6 +16,14 @@
             <x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('minimal/temp-dir/',$temp-dir)"/>
         </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
 		<x:context label="the output directory">
             <x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/" recursive="true"/>
 		</x:context>
@@ -90,6 +100,14 @@
                 <x:option name="output-dir" select="resolve-uri('assert-valid-false/output-dir/',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('assert-valid-false/temp-dir/',$temp-dir)"/>
             </x:call>
+            <x:context label="the status">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the conversion should succeed" type="compare">
+                <x:document type="inline">
+                    <d:validation-status result="ok"/>
+                </x:document>
+            </x:expect>
             <x:context label="the output directory">
                 <x:document type="directory" base-uri="temp-dir" href="assert-valid-false/output-dir/" recursive="true"/>
             </x:context>
@@ -129,6 +147,14 @@
             <x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
         </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
         <x:context label="the content file">
             <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test.epub!/EPUB/test-2.xhtml" select="//html:h1[1]"/>
         </x:context>
@@ -150,6 +176,14 @@
             <x:option name="output-dir" select="resolve-uri('dtbook110/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('dtbook110/temp-dir/',$temp-dir)"/>
         </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
         <x:context label="the result HTML file">
             <x:document type="file" base-uri="temp-dir" href="dtbook110/output-dir/dtbook110.epub!/EPUB/dtbook110-1.xhtml"/>
         </x:context>
@@ -199,6 +233,14 @@
             <x:option name="output-dir" select="resolve-uri('dir-attribute/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('dir-attribute/temp-dir/',$temp-dir)"/>
         </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
         <x:context label="the output directory">
             <x:document type="directory" base-uri="temp-dir" href="dir-attribute/output-dir/" recursive="true"/>
         </x:context>
@@ -213,6 +255,60 @@
             <x:document type="file" base-uri="temp-dir" href="dir-attribute/temp-dir/epub/EPUB/test-1.xhtml"/>
         </x:context>
         <x:expect label="the result html document should have a 'dir' attribute" type="xpath" test="/*/@dir" equals="'rtl'"/>
+    </x:scenario>
+    
+    <x:scenario label="tts">
+        <x:call step="px:dtbook-to-epub3">
+            <x:input port="source">
+                <x:document type="file" href="../resources/minimal.xml"/>
+            </x:input>
+            <x:option name="tts-config" select="resolve-uri('tts-config.xml')"/>
+            <x:option name="audio" select="true()"/>
+            <x:option name="output-dir" select="resolve-uri('tts/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('tts/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the conversion should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the result EPUB">
+            <x:document type="zip" base-uri="temp-dir" href="tts/output-dir/minimal.epub" ordered="true"/>
+        </x:context>
+        <x:expect label="the result EPUB should contain mp3 files" type="compare">
+            <x:document type="inline">
+                <c:zipfile name="minimal.epub">
+                    <c:file name="EPUB/audio/part0000_00_000.mp3"/>
+                    <c:file name="EPUB/audio/part0000_01_000.mp3"/>
+                    <c:file name="EPUB/audio/part0000_02_000.mp3"/>
+                    <c:file name="EPUB/audio/part0000_03_000.mp3"/>
+                    <c:file name="EPUB/audio/part0000_04_000.mp3"/>
+                    <c:file name="EPUB/audio/part0001_00_000.mp3"/>
+                    <c:file name="EPUB/audio/part0001_01_000.mp3"/>
+                    <c:file name="EPUB/audio/part0002_00_000.mp3"/>
+                    <c:file name="EPUB/audio/part0002_01_000.mp3"/>
+                    <c:file name="EPUB/audio/part0003_00_000.mp3"/>
+                    <c:file name="EPUB/minimal-1.xhtml"/>
+                    <c:file name="EPUB/minimal-2.xhtml"/>
+                    <c:file name="EPUB/mo/minimal-1.smil"/>
+                    <c:file name="EPUB/mo/minimal-2.smil"/>
+                    <c:file name="EPUB/mo/toc.smil"/>
+                    <c:file name="EPUB/package.opf"/>
+                    <c:file name="EPUB/toc.xhtml"/>
+                    <c:file name="META-INF/container.xml"/>
+                    <c:file name="mimetype"/>
+                </c:zipfile>
+            </x:document>
+        </x:expect>
+        <x:context label="the OPF">
+            <x:document type="file" base-uri="temp-dir" href="tts/output-dir/minimal.epub!/EPUB/package.opf"/>
+        </x:context>
+        <x:expect label="the EPUB should define media overlays" type="xpath"
+                  test="every $item in /opf:package/opf:manifest/opf:item[@media-type='application/xhtml+xml']
+                        satisfies $item/@media-overlay"/>
     </x:scenario>
     
 </x:description>

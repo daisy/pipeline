@@ -10,7 +10,8 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("dtbook-utils"),
 			pipelineModule("fileset-utils"),
 			pipelineModule("file-utils"),
-			pipelineModule("zedai-to-html")
+			pipelineModule("zedai-to-html"),
+			pipelineModule("common-entities"),
 		};
 	}
 }

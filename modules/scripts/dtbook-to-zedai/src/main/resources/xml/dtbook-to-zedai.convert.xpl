@@ -343,7 +343,8 @@
                     <xsl:import href="generate-css.xsl"/>
                     <xsl:param name="css-file" required="yes"/>
                     <xsl:template match="/">
-                        <tmp:wrapper xml:base="{$css-file}">
+                        <tmp:wrapper>
+                            <xsl:attribute name="xml:base" select="$css-file"/>
                             <xsl:apply-imports/>
                         </tmp:wrapper>
                     </xsl:template>

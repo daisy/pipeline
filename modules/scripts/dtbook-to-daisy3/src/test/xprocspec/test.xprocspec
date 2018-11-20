@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="../../main/resources/xml/dtbook-to-daisy3.xpl">
 	
 	<x:scenario label="test_1">
@@ -16,6 +17,14 @@
 				<x:option name="audio" select="false()"/>
 				<x:option name="output-dir" select="resolve-uri('test_1/without-audio/output-dir/',$temp-dir)"/>
 			</x:call>
+			<x:context label="the status">
+				<x:document type="port" port="validation-status"/>
+			</x:context>
+			<x:expect label="the conversion should succeed" type="compare">
+				<x:document type="inline">
+					<d:validation-status result="ok"/>
+				</x:document>
+			</x:expect>
 			<x:context label="the output directory">
 				<x:document type="directory" base-uri="temp-dir" href="test_1/without-audio/output-dir/" recursive="true"/>
 			</x:context>
@@ -36,6 +45,14 @@
 				<x:option name="audio" select="true()"/>
 				<x:option name="output-dir" select="resolve-uri('test_1/with-audio/output-dir/',$temp-dir)"/>
 			</x:call>
+			<x:context label="the status">
+				<x:document type="port" port="validation-status"/>
+			</x:context>
+			<x:expect label="the tts should have 2% errors because of the DTBook elements tagged with lang='en'" type="compare">
+				<x:document type="inline">
+					<d:validation-status result="error" success-rate="98%"/>
+				</x:document>
+			</x:expect>
 			<x:context label="the output directory">
 				<x:document type="directory" base-uri="temp-dir" href="test_1/with-audio/output-dir/" recursive="true"/>
 			</x:context>
@@ -106,6 +123,7 @@
 						<c:file name="part0058_00_000.mp3"/>
 						<c:file name="resources.res"/>
 						<c:file name="shuffled_7019_xmldtbook_1.xml"/>
+						<c:file name="tts-log.xml"/>
 					</c:directory>
 				</x:document>
 			</x:expect>

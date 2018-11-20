@@ -31,9 +31,9 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="stylesheet" required="false" px:sequence="true" px:type="string" select="''" px:media-type="text/css application/xslt+xml">
+    <p:option name="stylesheet" required="false" px:sequence="true" select="''" px:media-type="text/css application/xslt+xml">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice>
                     <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
                         <documentation xml:lang="en">File path relative to input ZedAI.</documentation>
@@ -42,7 +42,7 @@
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
         <p:documentation>
             <h2 px:role="name">Style sheets</h2>
@@ -67,14 +67,14 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="transform" required="false" px:type="string" px:data-type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
+    <p:option name="transform" required="false" px:type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Transformer query</h2>
             <p px:role="desc">The transformer query.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="ascii-table" required="false" px:type="string" px:data-type="transform-query" select="''">
+    <p:option name="ascii-table" required="false" px:type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ASCII braille table</h2>
             <p px:role="desc">The ASCII braille table, used to render the PEF preview and the plain text version.

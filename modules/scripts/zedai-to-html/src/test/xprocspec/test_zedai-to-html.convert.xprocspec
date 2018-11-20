@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/zedai-to-html.convert.xpl">
+
+	<x:scenario label="alice">
+		<x:call step="px:zedai-to-html-convert">
+			<x:input port="fileset.in">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/resources/alice.xml" media-type="application/z3998-auth+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="in-memory.in">
+				<x:document type="file" href="../resources/resources/alice.xml"/>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:scenario label="without chunking">
+			<x:call>
+				<x:option name="chunk" select="false()"/>
+			</x:call>
+			<x:context label="the fileset.out port">
+				<x:document type="port" port="fileset.out"/>
+			</x:context>
+			<x:expect label="there should be one result file" type="xpath" test="count(//d:file)" equals="1"/>
+			<x:expect label="the base uri of the result file" type="xpath"
+			          test="//d:file/resolve-uri(@href,base-uri(.))"
+			          equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+			<x:context label="the in-memory.out port">
+				<x:document type="port" port="in-memory.out"/>
+			</x:context>
+			<x:expect label="there should be one document" type="count" min="1" max="1"/>
+			<x:expect label="the base uri" type="xpath"
+			          test="base-uri(/*)"
+			          equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+		</x:scenario>
+		<x:scenario label="with chunking">
+			<x:call>
+				<x:option name="chunk" select="true()"/>
+			</x:call>
+			<x:context label="the fileset.out port">
+				<x:document type="port" port="fileset.out"/>
+			</x:context>
+			<x:expect label="there should be one result file" type="xpath" test="count(//d:file)" equals="1"/>
+			<x:expect label="the base uri of the result file" type="xpath"
+			          test="//d:file/resolve-uri(@href,base-uri(.))"
+			          equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+			<x:context label="the in-memory.out port">
+				<x:document type="port" port="in-memory.out"/>
+			</x:context>
+			<x:expect label="there should be one document" type="count" min="1" max="1"/>
+			<x:expect label="the base uri" type="xpath"
+			          test="base-uri(/*)"
+			          equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+		</x:scenario>
+	</x:scenario>
+	
+</x:description>

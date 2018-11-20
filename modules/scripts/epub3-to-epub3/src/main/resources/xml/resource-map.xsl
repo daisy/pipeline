@@ -19,12 +19,12 @@
 	<xsl:variable name="braille-rendition.package-document" select="collection()[2]"/>
 	
 	<xsl:variable name="default-rendition.manifest-item" as="element()"
-	              select="$default-rendition.package-document//opf:manifest/opf:item[resolve-uri(@href,base-uri(.))=$default-rendition.html.base]"/>
+	              select="$default-rendition.package-document//opf:manifest/opf:item[resolve-uri(@href,pf:base-uri(.))=$default-rendition.html.base]"/>
 	<xsl:variable name="default-rendition.spine-itemref" as="element()?"
 	              select="$default-rendition.package-document//opf:spine/opf:itemref[@idref=$default-rendition.manifest-item/@id]"/>
 	
 	<xsl:variable name="braille-rendition.manifest-item" as="element()"
-	              select="$braille-rendition.package-document//opf:manifest/opf:item[resolve-uri(@href,base-uri(.))=$braille-rendition.html.base]"/>
+	              select="$braille-rendition.package-document//opf:manifest/opf:item[resolve-uri(@href,pf:base-uri(.))=$braille-rendition.html.base]"/>
 	<xsl:variable name="braille-rendition.spine-itemref" as="element()?"
 	              select="$braille-rendition.package-document//opf:spine/opf:itemref[@idref=$braille-rendition.manifest-item/@id]"/>
 	
@@ -38,7 +38,7 @@
 				<ul>
 					<li>
 						<a href="{string-join((
-						            pf:relativize-uri(base-uri($default-rendition.package-document/*),$rendition-mapping.base),
+						            pf:relativize-uri(base-uri($default-rendition.package-document),$rendition-mapping.base),
 						            '#epubcfi(',
 						            epub:cfipath($default-rendition.spine-itemref),
 						            for $id in $default-rendition.spine-itemref/@id return ('[',$id,']'),
@@ -46,7 +46,7 @@
 					</li>
 					<li>
 						<a href="{string-join((
-						            pf:relativize-uri(base-uri($braille-rendition.package-document/*),$rendition-mapping.base),
+						            pf:relativize-uri(base-uri($braille-rendition.package-document),$rendition-mapping.base),
 						            '#epubcfi(',
 						            epub:cfipath($braille-rendition.spine-itemref),
 						            for $id in $braille-rendition.spine-itemref/@id return ('[',$id,']'),

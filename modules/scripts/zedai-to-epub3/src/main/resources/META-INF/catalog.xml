@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/zedai-to-epub3/zedai-to-epub3.xpl" uri="../xml/xproc/zedai-to-epub3.xpl"  px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/zedai-to-epub3/zedai-to-epub3.xpl" uri="../xml/xproc/zedai-to-epub3.xpl"  px:content-type="script"/>
   <uri name="http://www.daisy.org/pipeline/modules/zedai-to-epub3/library.xpl" uri="../xml/xproc/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils" />

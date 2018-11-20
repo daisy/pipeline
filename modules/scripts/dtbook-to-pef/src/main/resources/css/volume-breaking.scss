@@ -1,0 +1,38 @@
+/**
+ * CSS module with default volume breaking rules.
+ *
+ * In order for this style sheet to work,
+ * http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/xsl/volume-breaking.xsl
+ * must be included before it in the list of style sheets.
+ */
+
+/*
+ * Don't split "leaf sections" across volumes.
+ *
+ * A leaf section is a block of adjacent content with the same sectioning depth.
+ * Which means:
+ * - either; a level element with no child levels
+ * - or; the content in a level (<h1>, <p>, etc.), which may have level element siblings
+ *
+ * If a level contains other levels, then volume-breaking.xsl wraps the normal content
+ * (<h1>, <p>, etc.) in the level in a <div class="leaf-section"> element.
+ */
+level1:not(:has(> level2, div.leaf-section)),
+level2:not(:has(> level3, div.leaf-section)),
+level3:not(:has(> level4, div.leaf-section)),
+level4:not(:has(> level5, div.leaf-section)),
+level5:not(:has(> level6, div.leaf-section)),
+level6:not(:has(div.leaf-section)),
+div.leaf-section {
+    volume-break-inside: -obfl-keep(5);
+}
+
+/*
+ * Avoid orphaned headlines.
+ *
+ * volume-breaking.xsl adds the "keep-with-next-section" class is added on small leaf
+ * sections.
+ */
+.keep-with-next-section {
+    -obfl-keep-with-next-sheets: 1;
+}

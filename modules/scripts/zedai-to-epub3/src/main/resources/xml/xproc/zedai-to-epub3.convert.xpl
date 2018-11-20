@@ -23,12 +23,19 @@
         <p:pipe port="result" step="in-memory.result"/>
     </p:output>
 
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:pipe step="validation-status" port="result"/>
+    </p:output>
+  
     <p:option name="output-dir" required="true"/>
+    <p:option name="chunk-size" required="false" select="'-1'"/>
     <p:option name="audio" required="false" select="'false'"/>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl" />
@@ -166,9 +173,9 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
-        <p:add-attribute attribute-name="xml:base" match="/*">
-            <p:with-option name="attribute-value" select="$result-basename"/>
-        </p:add-attribute>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$result-basename"/>
+        </px:set-base-uri>
         <p:xslt name="zedai-to-html.html-with-ids">
             <p:input port="stylesheet">
                 <p:document href="http://www.daisy.org/pipeline/modules/html-utils/html-id-fixer.xsl"/>
@@ -177,24 +184,14 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
-        <p:xslt name="zedai-to-html.html-chunks">
-            <!--TODO fix links while chunking (see links-to-chunks) -->
-            <p:input port="stylesheet">
-                <p:document href="http://www.daisy.org/pipeline/modules/html-utils/html-chunker.xsl"/>
-            </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-        </p:xslt>
-        <p:sink/>
+        <px:html-chunker name="zedai-to-html.html-chunks">
+            <p:with-option name="max-chunk-size" select="$chunk-size"/>
+        </px:html-chunker>
         <p:for-each name="zedai-to-html.iterate">
             <p:output port="fileset" primary="true"/>
             <p:output port="html-files" sequence="true">
                 <p:pipe port="result" step="zedai-to-html.iterate.html"/>
             </p:output>
-            <p:iteration-source>
-                <p:pipe port="secondary" step="zedai-to-html.html-chunks"/>
-            </p:iteration-source>
             <p:variable name="result-uri" select="base-uri(/*)"/>
             <p:identity name="zedai-to-html.iterate.html"/>
             <px:fileset-create>
@@ -253,13 +250,12 @@
             <px:fileset-add-entry media-type="application/xhtml+xml" name="navigation-doc.result.fileset">
                 <p:with-option name="href" select="$nav-base"/>
             </px:fileset-add-entry>
-            <p:add-attribute match="/*" attribute-name="xml:base">
+            <px:set-base-uri>
                 <p:input port="source">
                     <p:pipe port="result" step="navigation-doc.html-file"/>
                 </p:input>
-                <p:with-option name="attribute-value" select="$nav-base"/>
-            </p:add-attribute>
-            <p:delete match="/*/@xml:base"/>
+                <p:with-option name="base-uri" select="$nav-base"/>
+            </px:set-base-uri>
             <px:message message="Navigation Document Created." name="navigation-doc.result.html-file"/>
         </p:group>
     </p:group>
@@ -399,9 +395,9 @@
                 </p:xslt>
                 <p:identity/>
             </p:viewport>
-            <p:add-attribute match="/*" attribute-name="xml:base">
-                <p:with-option name="attribute-value" select="$content-dir"/>
-            </p:add-attribute>
+            <px:set-base-uri>
+                <p:with-option name="base-uri" select="$content-dir"/>
+            </px:set-base-uri>
             <!-- TODO: remove resources from fileset that are not referenced from any of the in-memory files -->
         </p:group>
 
@@ -543,5 +539,15 @@
             </p:otherwise>
         </p:choose>
     </p:for-each>
+
+    <!--=========================================================================-->
+    <!-- Status								 -->
+    <!--=========================================================================-->
+
+    <p:rename match="/*" new-name="d:validation-status" name="validation-status">
+        <p:input port="source">
+            <p:pipe step="tts" port="status"/>
+        </p:input>
+    </p:rename>
 
 </p:declare-step>

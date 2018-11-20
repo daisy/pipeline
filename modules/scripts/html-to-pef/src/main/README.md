@@ -8,10 +8,12 @@
 
 - <a href="resources/xml/xproc/html-to-pef.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl`</a>
 
-### CSS
+### Style sheets
 
 - [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css`](resources/css/default.css)
 - [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/reset.css`](resources/css/reset.css)
+- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/volume-breaking.scss`](resources/css/volume-breaking.scss)
+- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/xsl/volume-breaking.xsl`](resources/xml/xslt/volume-breaking.xsl)
 
 ## OSGi services
 
