@@ -87,7 +87,7 @@ public class ScriptField {
 		description = metadata.getDescription();
 		niceName = metadata.getNiceName();
 		isSequence = metadata.isSequence();
-		dataType = getDataType(metadata.getType(), metadata.getDatatype(), datatypeRegistry);
+		dataType = getDataType(metadata.getType(), datatypeRegistry);
 		mediaType = metadata.getMediaType();
 		fieldType = FieldType.OPTION;
 		isRequired = optionInfo.isRequired();
@@ -141,7 +141,7 @@ public class ScriptField {
 	public String getDefaultValue() {
 		return defaultValue;
 	}
-	private DataType getDataType(String simpleType, String dataType, DatatypeRegistry datatypeRegistry) {
+	private DataType getDataType(String dataType, DatatypeRegistry datatypeRegistry) {
 		if (dataTypeMap.containsKey(dataType)) {
 			return dataTypeMap.get(dataType);
 		} else if (dataType != null) {
@@ -155,9 +155,6 @@ public class ScriptField {
 					}
 				}
 			}
-		}
-		if (dataTypeMap.containsKey(simpleType)) {
-			return dataTypeMap.get(simpleType);
 		}
 		return DataType.STRING; // default to string
 	}
