@@ -1,12 +1,11 @@
 package org.daisy.pipeline.tts.espeak;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.TTSEngine;
-
-import com.google.common.base.Optional;
 
 public class ESpeakService extends AbstractTTSService {
 

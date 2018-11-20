@@ -50,6 +50,10 @@
     </p:documentation>
   </p:output>
 
+  <p:output port="status">
+    <p:pipe step="synthesize" port="status"/>
+  </p:output>
+
   <p:option name="audio" required="false" px:type="boolean" select="'true'">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">Enable Text-To-Speech</h2>
@@ -96,18 +100,24 @@
 
   <p:choose name="synthesize">
     <p:when test="$audio = 'false'">
-      <p:output port="audio-map"/>
-      <p:identity>
-	<p:input port="source">
-	  <p:inline>
-	    <d:audio-clips/>
-	  </p:inline>
-	</p:input>
-      </p:identity>
+      <p:output port="audio-map">
+	<p:inline>
+	  <d:audio-clips/>
+	</p:inline>
+      </p:output>
+      <p:output port="status">
+	<p:inline>
+	  <d:status result="ok"/>
+	</p:inline>
+      </p:output>
+      <p:sink/>
     </p:when>
     <p:otherwise>
       <p:output port="audio-map">
-	<p:pipe port="result" step="to-audio"/>
+	<p:pipe step="to-audio" port="result"/>
+      </p:output>
+      <p:output port="status">
+	<p:pipe step="to-audio" port="status"/>
       </p:output>
       <p:for-each name="for-each.content">
 	<p:iteration-source>

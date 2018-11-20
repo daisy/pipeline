@@ -10,7 +10,7 @@
     <relativePath>../parent</relativePath>
   </parent>
 
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.1.0-SNAPSHOT</version>
   <artifactId>ssml-to-audio</artifactId>
   <packaging>bundle</packaging>
 
@@ -19,12 +19,20 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-helpers</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-common</artifactId>
     </dependency>
     <!-- needed to use com.xmlcalabash.library.DefaultStep ... -->
     <dependency>
@@ -45,24 +53,67 @@
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
+    <!--
+        test dependencies
+    -->
     <dependency>
-     <groupId>junit</groupId>
-     <artifactId>junit</artifactId>
-     <scope>test</scope>
-   </dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-omnilang-lexer</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>maven-paxexam-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-depends-file</id>
+            <goals>
+              <goal>generate-depends-file</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/synthesize.xml</Service-Component>
-	    <Export-Package />
+            <Export-Package />
           </instructions>
         </configuration>
+        <executions>
+          <execution>
+            <id>bundle-before-test</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

@@ -25,6 +25,10 @@
       <artifactId>tts-common</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -125,6 +129,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
 	    <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
 	    <Export-Package/>
           </instructions>

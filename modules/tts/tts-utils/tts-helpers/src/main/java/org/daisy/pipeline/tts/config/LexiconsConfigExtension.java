@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
@@ -14,6 +15,11 @@ import org.slf4j.LoggerFactory;
 public class LexiconsConfigExtension implements ConfigReader.Extension {
 
 	private Logger Logger = LoggerFactory.getLogger(LexiconsConfigExtension.class);
+	private final Processor saxonproc;
+	
+	public LexiconsConfigExtension(Processor saxonproc) {
+		this.saxonproc = saxonproc;
+	}
 
 	@Override
 	public boolean parseNode(XdmNode node, URI documentURI) {
@@ -21,8 +27,7 @@ public class LexiconsConfigExtension implements ConfigReader.Extension {
 		if ("lexicon".equalsIgnoreCase(name)) {
 			String href = node.getAttributeValue(new QName(null, "href"));
 			if (href != null) {
-				XdmNode external = ConfigReader.readFromURIinsideConfig(href, node
-				        .getProcessor(), documentURI);
+				XdmNode external = ConfigReader.readFromURIinsideConfig(href, saxonproc, documentURI);
 				if (external != null) {
 					Logger.info("custom annotations read from " + external.getDocumentURI());
 					mLexicons.add(external);

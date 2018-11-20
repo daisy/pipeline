@@ -83,6 +83,7 @@ public class TextToPcmThread implements FormatSpecifications {
 	private Map<TTSService, CompiledStylesheet> mSSMLTransformers;
 	private VoiceManager mVoiceManager;
 	private TTSLog mTTSLog;
+	private int mErrorCounter;
 
 	void start(final ConcurrentLinkedQueue<ContiguousText> input,
 	        final BlockingQueue<ContiguousPCM> pcmOutput, TTSRegistry ttsregistry,
@@ -98,6 +99,7 @@ public class TextToPcmThread implements FormatSpecifications {
 		mAudioBufferTracker = AudioBufferTracker;
 		mVoiceManager = voiceManager;
 		mTTSLog = ttsLog;
+		mErrorCounter = 0;
 		flush(null, pcmOutput);
 
 		mThread = new Thread() {
@@ -114,23 +116,25 @@ public class TextToPcmThread implements FormatSpecifications {
 					mFileNrInSection = 0;
 					boolean breakloop = false;
 					for (Sentence sentence : section.sentences) {
+						if (breakloop) {
+							mErrorCounter++;
+							continue;
+						}
 						try {
-							speak(section, sentence, pcmOutput, timeout, maxQueueEltSize);
+							if (!speak(section, sentence, pcmOutput, timeout, maxQueueEltSize)) mErrorCounter++;
 						} catch (Throwable t) {
 							StringWriter sw = new StringWriter();
 							t.printStackTrace(new PrintWriter(sw));
+							mErrorCounter++;
 							mTTSLog.getWritableEntry(sentence.getID()).addError(
 							        new TTSLog.Error(TTSLog.ErrorCode.CRITICAL_ERROR,
 							                "the current thread is stopping because of error: "
 							                        + sw.toString()));
 							breakloop = true;
-							break;
 						}
 					}
 					flush(section, pcmOutput);
 					progressListener.notifyFinished(section);
-					if (breakloop)
-						break;
 				}
 
 				//release the TTS resources
@@ -169,6 +173,10 @@ public class TextToPcmThread implements FormatSpecifications {
 		return mSoundFileLinks;
 	}
 
+	int getErrorCount() {
+		return mErrorCounter;
+	}
+
 	private void releaseResource(TTSEngine tts, TTSResource r) {
 		if (r == null) {
 			return;
@@ -189,8 +197,7 @@ public class TextToPcmThread implements FormatSpecifications {
 	private void flush(ContiguousText section, BlockingQueue<ContiguousPCM> pcmOutput) {
 		if (section != null && mLinksOfCurrentFile.size() > 0) {
 			if (mLastFormat == null) {
-				mTTSLog.addGeneralError(ErrorCode.AUDIO_MISSING,
-				        "cannot flush the audio data because the audio format is null");
+				throw new RuntimeException("coding error"); // should not happen
 			} else {
 				String filePrefix = String.format("part%04d_%02d_%03d", section
 				        .getDocumentPosition(), section.getDocumentSplitPosition(),
@@ -440,7 +447,10 @@ public class TextToPcmThread implements FormatSpecifications {
 		return markNames;
 	}
 
-	private void speak(ContiguousText section, Sentence sentence,
+	/**
+	 * @return true when the sentence was successfully converted to speech, false when there was an error
+	 */
+	private boolean speak(ContiguousText section, Sentence sentence,
 	        BlockingQueue<ContiguousPCM> pcmOutput, TTSTimeout timeout, int maxQueueEltSize) {
 		
 		List<String> expectedMarks = getMarkNames(sentence.getText());
@@ -455,7 +465,7 @@ public class TextToPcmThread implements FormatSpecifications {
 		} catch (MemoryException e) {
 			flush(section, pcmOutput);
 			printMemError(sentence, e);
-			return;
+			return false;
 		}
 		if (pcm == null) {
 			//release the resource to make it more likely for the next try to succeed
@@ -469,7 +479,7 @@ public class TextToPcmThread implements FormatSpecifications {
 				        new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING,
 				                "  something went wrong but no fallback voice can be found for "
 				                        + originalVoice));
-				return;
+				return false;
 			}
 			tts = mVoiceManager.getTTS(newVoice); //cannot return null in this case
 
@@ -480,7 +490,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			} catch (MemoryException e) {
 				flush(section, pcmOutput);
 				printMemError(sentence, e);
-				return;
+				return false;
 			}
 			if (pcm == null) {
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
@@ -488,14 +498,14 @@ public class TextToPcmThread implements FormatSpecifications {
 				                " something went wrong with " + originalVoice
 				                        + " and fallback voice " + newVoice
 				                        + " didn't work either"));
-				return;
+				return false;
 			}
 
 			mPipelineLogger.printInfo(IPipelineLogger.UNEXPECTED_VOICE
 			        + ": something went wrong with " + originalVoice + ". Voice " + newVoice
 			        + " used instead to synthesize sentence");
 
-			if (!tts.getAudioOutputFormat().matches(mLastFormat))
+			if (mLastFormat != null && !tts.getAudioOutputFormat().matches(mLastFormat))
 				flush(section, pcmOutput);
 		}
 		mLastFormat = tts.getAudioOutputFormat();
@@ -566,6 +576,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			 */
 			flush(section, pcmOutput);
 		}
+		return true;
 	}
 
 	private void printMemError(Sentence sentence, MemoryException e) {

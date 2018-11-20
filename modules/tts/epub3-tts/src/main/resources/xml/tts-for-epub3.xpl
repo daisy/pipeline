@@ -64,6 +64,10 @@
     </p:documentation>
   </p:output>
 
+  <p:output port="status">
+    <p:pipe step="synthesize" port="status"/>
+  </p:output>
+
   <p:option name="audio" required="false" px:type="boolean" select="'true'">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">Enable Text-To-Speech</h2>
@@ -166,6 +170,11 @@
       <p:output port="sentence-ids" sequence="true">
 	<p:empty/>
       </p:output>
+      <p:output port="status">
+	<p:inline>
+	  <d:status result="ok"/>
+	</p:inline>
+      </p:output>
       <p:sink/>
     </p:when>
 
@@ -179,6 +188,9 @@
       </p:output>
       <p:output port="sentence-ids" sequence="true">
 	<p:pipe port="sentence-ids" step="loop"/>
+      </p:output>
+      <p:output port="status">
+	<p:pipe step="to-audio" port="status"/>
       </p:output>
       <p:for-each name="loop">
 	<p:output port="ssml.out" primary="true" sequence="true">

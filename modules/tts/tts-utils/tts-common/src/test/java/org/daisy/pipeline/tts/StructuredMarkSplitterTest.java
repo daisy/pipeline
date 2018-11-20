@@ -114,6 +114,7 @@ public class StructuredMarkSplitterTest {
 	
 		//expected chunks
 		TreeWriter chunk = newTreeWriter();
+		chunk.addEndElement();
 
 		Collection<Chunk> chunks = Splitter.split(getSentence(source));
 

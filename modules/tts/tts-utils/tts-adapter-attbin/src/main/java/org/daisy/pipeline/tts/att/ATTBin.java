@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.MatchResult;
@@ -32,8 +33,6 @@ import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
-
-import com.google.common.base.Optional;
 
 /**
  * This synthesizer uses directly the AT&T's client binary and intermediate WAV

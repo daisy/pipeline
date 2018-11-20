@@ -25,6 +25,10 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
     <!-- needed to use com.xmlcalabash.library.DefaultStep ... -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -58,6 +62,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/inline-css.xml</Service-Component>
 	    <Export-Package/>
           </instructions>

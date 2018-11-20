@@ -22,6 +22,9 @@ The following two properties must be set through
 
 `org.daisy.pipeline.tts.config`
 : File to load TTS configuration properties from at start-up
+: Defaults to the file "tts-default-config.xml" located in the "etc/"
+  directory in the base directory of the Pipeline installation, or
+  "/etc/opt/daisy-pipeline2/tts-default-config.xml" on Debian/Ubuntu.
 
 `org.daisy.pipeline.tts.host.protection`
 : Allow dynamic setting of properties

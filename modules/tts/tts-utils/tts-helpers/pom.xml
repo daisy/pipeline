@@ -90,6 +90,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/get-tts-annotations.xml,OSGI-INF/get-tts-lexicons.xml</Service-Component>
           </instructions>
         </configuration>

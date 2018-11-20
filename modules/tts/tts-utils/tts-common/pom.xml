@@ -24,6 +24,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/tts-registry.xml</Service-Component>
           </instructions>
         </configuration>

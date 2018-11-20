@@ -1,5 +1,6 @@
 package org.daisy.pipeline.tts.config.impl;
 
+import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -55,8 +56,9 @@ public class GetAnnotationsProvider implements XProcStepProvider {
 
 			public void run() throws SaxonApiException {
 
-				AnnotationsConfigExtension annoExt = new AnnotationsConfigExtension();
-				new ConfigReader(runtime.getProcessor(), mConfig.read(), annoExt);
+				Processor proc = runtime.getProcessor();
+				AnnotationsConfigExtension annoExt = new AnnotationsConfigExtension(proc);
+				new ConfigReader(proc, mConfig.read(), annoExt);
 
 				for (XdmNode annotations : annoExt.getAnnotations(mContentType)) {
 					mResult.write(annotations);

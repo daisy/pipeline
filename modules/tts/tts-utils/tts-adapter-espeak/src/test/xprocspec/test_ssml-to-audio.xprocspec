@@ -39,6 +39,14 @@
 			<x:document type="port" port="result"/>
 		</x:context>
 		<x:expect label="there should be 3 audio clips" type="xpath" test="count(/d:audio-clips/d:clip)" equals="3"/>
+		<x:context label="the status port">
+			<x:document type="port" port="status"/>
+		</x:context>
+		<x:expect label="the status should be ok" type="compare">
+			<x:document type="inline">
+				<d:status result="ok"/>
+			</x:document>
+		</x:expect>
 		<!--
 		    enable this to check that the config works, i.e. that the voice is Dutch and not the default (English)
 		    (requires mpg123 to be installed)

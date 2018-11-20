@@ -19,6 +19,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
     </dependency>
@@ -44,6 +48,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              *
+            </Import-Package>
             <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
 	    <Export-Package/>
           </instructions>

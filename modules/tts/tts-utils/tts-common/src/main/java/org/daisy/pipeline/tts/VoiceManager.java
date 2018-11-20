@@ -33,181 +33,16 @@ public class VoiceManager {
 	private Map<Locale, Voice> mVoiceLangOnly = new HashMap<Locale, Voice>(); //both gender and engine are missing
 	private Map<Voice, TTSEngine> mBestEngines = new HashMap<Voice, TTSEngine>();
 	private Map<Voice, Voice> mSecondVoices = new HashMap<Voice, Voice>();
-	private static List<VoiceInfo> BuiltinVoices;
 	
 	//For now, we are keeping only one 'multi-lang' voice, which will be selected no matter which
 	//gender or engine is requested. So we are not considering the best multilang voice given an
 	//engine or a gender, though that would make sense for future improvements.
 	private Voice mBestMultiLangVoice; 
 
-	static {
-		//the following engine names must be consistent with the ones provided by the TTSService
-		final String eSpeak = "espeak";
-		final String att = "att";
-		final String microsoft = "sapi";
-		final String acapela = "acapela";
-		final String osx = "osx-speech";
-		final int eSpeakPriority = 1;
-		final int ATT16Priority = 10;
-		final int ATT8Priority = 7;
-		final int AcapelaPriority = 12;
-		final int OSXSpeechPriority = 5;
-
-		//TODO: move this array to an external XML file (ideally a file editable by users).
-
-		try{
-			BuiltinVoices = Arrays
-		        .asList(
-		        //eSpeak:
-		        		new VoiceInfo(eSpeak, "french", "fr", Gender.MALE_ADULT, eSpeakPriority),
-		                new VoiceInfo(eSpeak, "danish", "da", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "german", "de", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "greek", "el", Gender.MALE_ADULT, eSpeakPriority),
-		                new VoiceInfo(eSpeak, "hindi", "hi", Gender.MALE_ADULT, eSpeakPriority),
-		                new VoiceInfo(eSpeak, "hungarian", "hu", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "finnish", "fi", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "italian", "it", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "latin", "la", Gender.MALE_ADULT, eSpeakPriority),
-		                new VoiceInfo(eSpeak, "norwegian", "no", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "polish", "pl", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "portugal", "pt", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "russian_test", "ru", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "swedish", "sv", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "mandarin", "zh", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "turkish", "tr", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "afrikaans", "af", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "spanish", "es", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "spanish-latin-american", "es-la",
-		                        Gender.MALE_ADULT, eSpeakPriority),
-		                new VoiceInfo(eSpeak, "english-us", "en", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "english-us", "en-us", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                new VoiceInfo(eSpeak, "english", "en-uk", Gender.MALE_ADULT,
-		                        eSpeakPriority),
-		                //AT&T:
-		                new VoiceInfo(att, "alain16", "fr", Gender.MALE_ADULT, ATT16Priority),
-		                new VoiceInfo(att, "alain8", "fr", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "juliette16", "fr", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "juliette8", "fr", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "arnaud16", "fr-ca", Gender.MALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "arnaud8", "fr-ca", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "klara16", "de", Gender.FEMALE_ADULT, ATT16Priority),
-		                new VoiceInfo(att, "klara8", "de", Gender.FEMALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "reiner16", "de", Gender.MALE_ADULT, ATT16Priority),
-		                new VoiceInfo(att, "reiner8", "de", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "anjali16", "en-uk", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "anjali8", "en-uk", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "audrey16", "en-uk", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "audrey8", "en-uk", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "charles16", "en-uk", Gender.MALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "charles8", "en-uk", Gender.MALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "mike16", "en-us", Gender.MALE_ADULT, ATT16Priority),
-		                new VoiceInfo(att, "mike8", "en-us", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "claire16", "en-us", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "claire8", "en-us", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "crystal16", "en-us", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "crystal8", "en-us", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "julia16", "en-us", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "julia8", "en-us", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "lauren16", "en-us", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "lauren8", "en-us", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "mel16", "en-us", Gender.MALE_ADULT, ATT16Priority),
-		                new VoiceInfo(att, "mel8", "en-us", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "ray16", "en-us", Gender.MALE_ADULT, ATT16Priority),
-		                new VoiceInfo(att, "ray8", "en-us", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "rich16", "en-us", Gender.MALE_ADULT, ATT16Priority),
-		                new VoiceInfo(att, "rich8", "en-us", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "alberto16", "es-us", Gender.MALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "alberto8", "es-us", Gender.MALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "rosa16", "es-us", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "rosa8", "es-us", Gender.FEMALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "francesca16", "it", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "francesca8", "it", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "giovanni16", "it", Gender.MALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "giovanni8", "it", Gender.MALE_ADULT, ATT8Priority),
-		                new VoiceInfo(att, "marina16", "pt-br", Gender.FEMALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "marina8", "pt-br", Gender.FEMALE_ADULT,
-		                        ATT8Priority),
-		                new VoiceInfo(att, "tiago16", "pt-br", Gender.MALE_ADULT,
-		                        ATT16Priority),
-		                new VoiceInfo(att, "tiago8", "pt-br", Gender.MALE_ADULT, ATT8Priority),
-		                //Microsoft:
-		                new VoiceInfo(microsoft, "Microsoft Anna", "en-us",
-		                        Gender.FEMALE_ADULT, 4), new VoiceInfo(microsoft,
-		                        "Microsoft David", "en-us", Gender.MALE_ADULT, 6),
-		                new VoiceInfo(microsoft, "Microsoft Zira", "en-us",
-		                        Gender.FEMALE_ADULT, 6), new VoiceInfo(microsoft,
-		                        "Microsoft Hazel", "en-uk", Gender.MALE_ADULT, 6),
-		                new VoiceInfo(microsoft, "Microsoft Mike", "en-us", Gender.MALE_ADULT,
-		                        2), new VoiceInfo(microsoft, "Microsoft Lili", "zh",
-		                        Gender.FEMALE_ADULT, 3),
-		                new VoiceInfo(microsoft, "Microsoft Simplified Chinese", "zh",
-		                        Gender.MALE_ADULT, 2),
-		                //Acapela (those are the speaker's names, not the voice names):
-		                new VoiceInfo(acapela, "heather", "en-us", Gender.FEMALE_ADULT,
-		                        AcapelaPriority), new VoiceInfo(acapela, "will", "en-us",
-		                        Gender.MALE_ADULT, AcapelaPriority), new VoiceInfo(acapela,
-		                        "tracy", "en-us", Gender.FEMALE_ADULT, AcapelaPriority),
-		                new VoiceInfo(acapela, "antoine", "fr", Gender.MALE_ADULT,
-		                        AcapelaPriority), new VoiceInfo(acapela, "claire", "fr",
-		                        Gender.FEMALE_ADULT, AcapelaPriority), new VoiceInfo(acapela,
-		                        "alice", "fr", Gender.FEMALE_ADULT, AcapelaPriority),
-		                new VoiceInfo(acapela, "bruno", "fr", Gender.MALE_ADULT,
-		                        AcapelaPriority),
-		                // OS X
-		                new VoiceInfo(osx, "Alex", "en-us", Gender.MALE_ADULT,
-		                        OSXSpeechPriority), new VoiceInfo(osx, "Thomas", "fr-fr",
-		                        Gender.MALE_ADULT, OSXSpeechPriority)
-
-		        );
-		} catch (UnknownLanguage e){
-			throw new RuntimeException(e);
-		}
-	}
-
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> extraVoices) {
 		//build the list of voices ordered by priority
 		final float priorityVariantPenalty = 0.1f;
-		Set<VoiceInfo> priorities = new LinkedHashSet<VoiceInfo>(BuiltinVoices);
+		Set<VoiceInfo> priorities = new LinkedHashSet<VoiceInfo>();
 		priorities.addAll(extraVoices);
 		mVoicePriorities = new ArrayList<VoiceInfo>(priorities);
 		for (VoiceInfo vinfo : priorities) {
@@ -234,9 +69,10 @@ public class VoiceManager {
 		//Create a map of the best services for each available voice, given that two different
 		//services can serve the same voice. 
 		TTSTimeout timeout = new TTSTimeout();
+		int timeoutSecs = 5;
 		for (TTSEngine tts : engines) { //no possible concurrent write
 			try {
-				timeout.enableForCurrentThread(3);
+				timeout.enableForCurrentThread(timeoutSecs);
 				Collection<Voice> voices = tts.getAvailableVoices();
 				if (voices != null)
 					for (Voice v : voices) {
@@ -253,7 +89,8 @@ public class VoiceManager {
 				        + " getAvailableVoices error: " + getStack(e));
 			} catch (InterruptedException e) {
 				ServerLogger.error("timeout while retrieving the voices of "
-				        + TTSServiceUtil.displayName(tts.getProvider()));
+				        + TTSServiceUtil.displayName(tts.getProvider())
+				        + " (exceeded " + timeoutSecs + " seconds)");
 			} finally {
 				timeout.disable();
 			}

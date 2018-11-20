@@ -54,7 +54,7 @@ public class GetLexiconsProvider implements XProcStepProvider {
 
 				Processor proc = runtime.getProcessor();
 				
-				LexiconsConfigExtension lexiconExt = new LexiconsConfigExtension();
+				LexiconsConfigExtension lexiconExt = new LexiconsConfigExtension(proc);
 				new ConfigReader(proc, mConfig.read(), lexiconExt);
 				
 				int i = 0;

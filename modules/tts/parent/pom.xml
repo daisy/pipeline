@@ -33,7 +33,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.1</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -43,28 +43,28 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-modules-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.11.1</version>
+        <version>1.11.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -74,10 +74,16 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <properties>
+   <!-- must match version from framework-bom -->
+    <saxon.versionRange>[9.8.0,9.8.1)</saxon.versionRange>
+    <java.version>1.8</java.version>
+  </properties>
 
   <build>
     <pluginManagement>
@@ -95,12 +101,18 @@
       </plugins>
     </pluginManagement>
   </build>
-
+  
   <repositories>
     <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

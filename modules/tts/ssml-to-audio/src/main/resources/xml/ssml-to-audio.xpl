@@ -6,11 +6,14 @@
   <p:input port="source" primary="true" sequence="true"/>
   <p:input port="config"/>
   <p:output port="result" primary="true" sequence="false"/>
+  <p:output port="status">
+    <p:pipe step="synthesize" port="status"/>
+  </p:output>
   <p:option name="output-dir" select="''"/>
 
   <p:import href="synthesize.xpl" />
 
-  <px:synthesize>
+  <px:synthesize name="synthesize">
     <p:input port="config">
       <p:pipe port="config" step="main"/>
     </p:input>
