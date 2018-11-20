@@ -89,10 +89,8 @@ public class XmlBreakRebuilder implements InlineSectionProcessor {
 
 					new InlineSectionFinder().find(root, mPreviousLevel, specs, this,
 					        unsplittable);
-
+					closeAllElementsUntil(root, 0);
 					break;
-					//Some elements remain opened but they will be closed automatically by the 
-					//serializer. There should be no node (PI, comments) after the root though.
 
 				} else {
 					mTreeWriter.addSubtree(n);

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>nlp-modules-parent</artifactId>
-    <version>1.11.1-SNAPSHOT</version>
+    <version>1.11.2-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
@@ -77,6 +77,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <!-- must match version from framework-bom -->
+            <Import-Package>
+              net.sf.saxon.*;version="[9.8.0,9.8.1)",
+              *
+            </Import-Package>
             <Export-Package />
             <Service-Component>OSGI-INF/break-detect.xml</Service-Component>
           </instructions>
