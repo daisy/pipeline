@@ -81,7 +81,7 @@ public abstract class PaxExamConfig {
 			wrappedBundle(
 				bundle(new File(BASEDIR, "target/clientlib-java-httpclient-"+MavenUtils.asInProject().getVersion("org.daisy.pipeline", "clientlib-java-httpclient")+".jar").toURL().toString()))
 				.bundleSymbolicName("org.daisy.pipeline.clientlib-java-httpclient")
-				.bundleVersion(MavenUtils.asInProject().getVersion("org.daisy.pipeline", "clientlib-java-httpclient").replaceAll("-",".")),
+				.bundleVersion(osgiVersion(MavenUtils.asInProject().getVersion("org.daisy.pipeline", "clientlib-java-httpclient"))),
 			wrappedBundle(
 				mavenBundle("org.daisy.pipeline:clientlib-java:?"))
 				.bundleSymbolicName("org.daisy.pipeline.clientlib-java")
@@ -89,5 +89,19 @@ public abstract class PaxExamConfig {
 			mavenBundle("org.apache.httpcomponents:httpcore-osgi:?"),
 			mavenBundle("org.apache.httpcomponents:httpclient-osgi:?")
 		);
+	}
+	
+	private static String osgiVersion(String mavenVersion) {
+		String osgiVersion = "";
+		int i = 0;
+		for (String segment : mavenVersion.split("[\\.-]")) {
+			if (i > 3)
+				osgiVersion += "-";
+			else if (i > 0)
+				osgiVersion += ".";
+			i++;
+			osgiVersion += segment;
+		}
+		return osgiVersion;
 	}
 }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/foo/script.xpl" uri="../xml/script.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/foo/choice.xml" uri="../xml/choice.xml" px:data-type="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/foo/regex.xml" uri="../xml/regex.xml" px:data-type="true"/>
-</catalog>

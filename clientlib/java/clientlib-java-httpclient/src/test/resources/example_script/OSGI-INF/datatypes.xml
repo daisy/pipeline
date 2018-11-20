@@ -5,17 +5,15 @@
         <scr:service>
             <scr:provide interface="org.daisy.pipeline.datatypes.DatatypeService"/>
         </scr:service>
-        <scr:reference bind="setUriResolver" cardinality="1..1" interface="javax.xml.transform.URIResolver" name="resolver" policy="static"/>
         <scr:property name="data-type.id" type="String" value="foo:choice"/>
-        <scr:property name="data-type.url" type="String" value="http://www.daisy.org/pipeline/modules/foo/choice.xml"/>
+        <scr:property name="data-type.url" type="String" value="/xml/choice.xml"/>
     </scr:component>
     <scr:component immediate="true" name="foo:regex">
         <scr:implementation class="org.daisy.pipeline.datatypes.UrlBasedDatatypeService"/>
         <scr:service>
             <scr:provide interface="org.daisy.pipeline.datatypes.DatatypeService"/>
         </scr:service>
-        <scr:reference bind="setUriResolver" cardinality="1..1" interface="javax.xml.transform.URIResolver" name="resolver" policy="static"/>
         <scr:property name="data-type.id" type="String" value="foo:regex"/>
-        <scr:property name="data-type.url" type="String" value="http://www.daisy.org/pipeline/modules/foo/regex.xml"/>
+        <scr:property name="data-type.url" type="String" value="/xml/regex.xml"/>
     </scr:component>
 </scr:components>

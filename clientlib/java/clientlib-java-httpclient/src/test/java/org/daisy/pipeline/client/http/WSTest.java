@@ -67,24 +67,22 @@ public class WSTest extends PaxExamConfig {
 		             "          required=\"true\"\n" +
 		             "          sequence=\"false\"\n" +
 		             "          type=\"anyFileURI\"/>\n" +
-		             "   <option data-type=\"foo:choice\"\n" +
-		             "           desc=\"Enum description.\"\n" +
+		             "   <option desc=\"Enum description.\"\n" +
 		             "           mediaType=\"\"\n" +
 		             "           name=\"option-1\"\n" +
 		             "           nicename=\"Enum\"\n" +
 		             "           ordered=\"true\"\n" +
 		             "           required=\"true\"\n" +
 		             "           sequence=\"false\"\n" +
-		             "           type=\"string\"/>\n" +
-		             "   <option data-type=\"foo:regex\"\n" +
-		             "           desc=\"Regex description.\"\n" +
+		             "           type=\"foo:choice\"/>\n" +
+		             "   <option desc=\"Regex description.\"\n" +
 		             "           mediaType=\"\"\n" +
 		             "           name=\"option-2\"\n" +
 		             "           nicename=\"Regex\"\n" +
 		             "           ordered=\"true\"\n" +
 		             "           required=\"false\"\n" +
 		             "           sequence=\"false\"\n" +
-		             "           type=\"string\"/>\n" +
+		             "           type=\"foo:regex\"/>\n" +
 		             "   <option desc=\"Input HTML.\"\n" +
 		             "           mediaType=\"application/xhtml+xml text/html\"\n" +
 		             "           name=\"href\"\n" +
@@ -107,7 +105,7 @@ public class WSTest extends PaxExamConfig {
 		assertEquals(5, script.getInputs().size());
 		Argument option1 = script.getArgument("option-1");
 		assertTrue(option1.getRequired());
-		assertEquals("foo:choice", option1.getDataType());
+		assertEquals("foo:choice", option1.getType());
 		EnumType choice = (EnumType)ws.getDataType("foo:choice");
 		assertEquals(3, choice.values.size());
 		assertEquals("one", choice.values.get(0).name);
@@ -116,7 +114,7 @@ public class WSTest extends PaxExamConfig {
 		Argument option2 = script.getArgument("option-2");
 		assertFalse(option2.getRequired());
 		assertEquals("one", option2.getDefaultValue());
-		assertEquals("foo:regex", option2.getDataType().toString());
+		assertEquals("foo:regex", option2.getType().toString());
 	}
 	
 	@Test

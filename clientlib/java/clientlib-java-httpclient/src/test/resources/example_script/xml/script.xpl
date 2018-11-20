@@ -28,14 +28,14 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="option-1" required="true" px:type="string" px:data-type="foo:choice">
+    <p:option name="option-1" required="true" px:type="foo:choice">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Enum</h2>
             <p px:role="desc">Enum description.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="option-2" required="false" px:type="string" px:data-type="foo:regex" select="'one'">
+    <p:option name="option-2" required="false" px:type="foo:regex" select="'one'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Regex</h2>
             <p px:role="desc">Regex description.</p>

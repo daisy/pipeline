@@ -7,6 +7,6 @@
 	<scr:property name="script.id" type="String" value="foo:script"/>
 	<scr:property name="script.name" type="String" value="Example script"/>
 	<scr:property name="script.description" type="String" value="Example script"/>
-	<scr:property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/foo/script.xpl"/>
+	<scr:property name="script.url" type="String" value="/xml/script.xpl"/>
 	<scr:property name="script.version" type="String" value="0.0.0-SNAPSHOT"/>
 </scr:component>

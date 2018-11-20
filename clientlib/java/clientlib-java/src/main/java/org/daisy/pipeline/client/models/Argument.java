@@ -50,15 +50,12 @@ public class Argument {
 	/** whether or not the ordering matters (only relevant if sequence==true) */
 	private Boolean ordered;
 
-	/** XSD type */
+	/** XSD type or custom data type */
 	private String type;
 	
 	/** The default value for this argument */
 	private String defaultValue;
 	
-	/** The datatype for this argument (useful if the UI wants to show nicer widgets like dropdowns or validate with regexes) */
-	private String dataType;
-
 	private Node argumentNode;
 	private boolean lazyLoaded = false;
 
@@ -135,7 +132,6 @@ public class Argument {
 				}
 
 				this.defaultValue = XPath.selectText("@default", argumentNode, XPath.dp2ns);
-				this.dataType = XPath.selectText("@data-type", argumentNode, XPath.dp2ns);
 
 				List<Node> valueNodes = XPath.selectNodes("d:item", argumentNode, XPath.dp2ns);
 				if (valueNodes.isEmpty()) {
@@ -886,7 +882,6 @@ public class Argument {
 	public Kind getKind() { lazyLoad(); return this.kind; }
 	public Boolean getOrdered() { lazyLoad(); return ordered; }
 	public String getType() { lazyLoad(); return type; }
-	public String getDataType() { lazyLoad(); return dataType; }
 	public void setName(String name) { lazyLoad(); this.name = name; }
 	public void setNicename(String nicename) { lazyLoad(); this.nicename = nicename; }
 	public void setDesc(String desc) { lazyLoad(); this.desc = desc; }
@@ -897,7 +892,6 @@ public class Argument {
 	public void setKind(Kind kind) { lazyLoad(); this.kind = kind; }
 	public void setOrdered(Boolean ordered) { lazyLoad(); this.ordered = ordered; }
 	public void setType(String type) { lazyLoad(); this.type = type; }
-	public void setDataType(String dataType) { lazyLoad(); this.dataType = dataType; }
 
 	public Document toXml() {
 		lazyLoad();
@@ -938,9 +932,6 @@ public class Argument {
 		}
 		if (type != null) {
 			argElem.setAttribute("type", type);
-		}
-		if (dataType != null) {
-			argElem.setAttribute("data-type", dataType);
 		}
 
 		if (values == null) {
