@@ -9,7 +9,7 @@
 		<div class="controls">
 			<input name="@{arg.getName()}" id="text-@scriptId-@{arg.getName()}" type="text" @if(arg.getDefaultValue() != null){ value="@arg.getDefaultValue().replaceAll("\"","'")" }
 				@if(Scripts.chooseWidget(arg)=="regex"){
-					pattern="@{Application.ws.getDataType(arg.getDataType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].regex.replaceAll("\"","&quot;")}"
+					pattern="@{Application.ws.getDataType(arg.getType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].regex.replaceAll("\"","&quot;")}"
 				}
 			/>
 			@Helpers.ArgumentDescription(arg, scriptId)
@@ -19,7 +19,7 @@
 	<script type="text/javascript">
 	$(function(){
 		@if(Scripts.chooseWidget(arg)=="regex"){
-			var regexMessage = '@Html(Application.ws.getDataType(arg.getDataType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].getDescription().replace("\\","\\\\").replace("\n","\\n").replace("\"","\\\"").replace("'","\\'").replace("/","\\/"))';
+			var regexMessage = '@Html(Application.ws.getDataType(arg.getType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].getDescription().replace("\\","\\\\").replace("\n","\\n").replace("\"","\\\"").replace("'","\\'").replace("/","\\/"))';
 			$("#text-@scriptId-@{arg.getName()}").attr("oninvalid", function(){ $("#text-@scriptId-@{arg.getName()}")[0].setCustomValidity(regexMessage); } );
 			$("#text-@scriptId-@{arg.getName()}").attr("oninput", function(){ $("#text-@scriptId-@{arg.getName()}")[0].setCustomValidity(regexMessage); } );
 		}

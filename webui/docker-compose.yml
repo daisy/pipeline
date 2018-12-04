@@ -3,7 +3,7 @@ services:
   pipeline:
     image: daisyorg/pipeline-assembly
     environment:
-      PIPELINE2_WS_HOST: "pipeline"
+      PIPELINE2_WS_HOST: "0.0.0.0"
       PIPELINE2_WS_AUTHENTICATION: "false"
     volumes:
       - "pipeline-data:/opt/daisy-pipeline2/data"
