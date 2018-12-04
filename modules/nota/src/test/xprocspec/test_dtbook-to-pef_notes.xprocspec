@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:nota="http://www.nota.dk"
+               script="http://www.nota.dk/pipeline/modules/braille/dtbook-to-pef.xpl">
+  
+  <x:scenario label="footnotes-and-endnotes">
+    <x:call step="nota:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="da-DK">
+            <book>
+              <p>
+                This is a reference to a footnote<noteref idref="foot_1">*</noteref>.
+              </p>
+              <p>
+                This is a reference to an endnote<noteref idref="end_1">1</noteref>.
+              </p>
+              <note id="foot_1" class="footnote">
+                <p>This is a footnote</p>
+              </note>
+              <note id="end_1" class="endnote">
+                <p>This is an endnote</p>
+              </note>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="page-width" select="40"/>
+      <x:option name="page-height" select="25"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="include-brf" select="true()"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/footnotes-and-endnotes/')"/>
+      <x:option name="brf-output-dir" select="concat($temp-dir,'output-dir/footnotes-and-endnotes/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/footnotes-and-endnotes/test_dtbook-to-pef_notes.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="da-DK">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠞⠓⠊⠎⠀⠊⠎⠀⠁⠀⠗⠑⠋⠑⠗⠑⠝⠉⠑⠀⠞⠕⠀⠁⠀⠋⠕⠕⠞⠝⠕⠞⠑⠦⠦⠝⠕⠞⠑⠀</row>
+                  <row>⠠⠔⠴⠴⠄</row>
+                  <row>⠀⠀⠞⠓⠊⠎⠀⠊⠎⠀⠁⠀⠗⠑⠋⠑⠗⠑⠝⠉⠑⠀⠞⠕⠀⠁⠝⠀⠑⠝⠙⠝⠕⠞⠑⠦⠦⠝⠕⠤</row>
+                  <row>⠞⠑⠀⠼⠁⠴⠴⠄</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠞⠓⠊⠎⠀⠊⠎⠀⠁⠀⠋⠕⠕⠞⠝⠕⠞⠑</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠞⠓⠊⠎⠀⠊⠎⠀⠁⠝⠀⠑⠝⠙⠝⠕⠞⠑</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

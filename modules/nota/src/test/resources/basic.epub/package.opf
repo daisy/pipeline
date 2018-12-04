@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-identifier" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/">
+    <metadata>
+        <dc:identifier id="pub-identifier">123456</dc:identifier>
+        <dc:title>title</dc:title>
+        <dc:language>da</dc:language>
+        <dc:creator>nota</dc:creator>
+        <dc:date>2016-03-01</dc:date>
+        <dc:publisher>nota</dc:publisher>
+    </metadata>
+    <manifest>
+        <item id="item_1" media-type="application/xhtml+xml" href="content.xhtml"/>
+        <item id="item_2" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+    </manifest>
+    <spine>
+        <itemref id="itemref_1" idref="item_1"/>
+    </spine>
+</package>

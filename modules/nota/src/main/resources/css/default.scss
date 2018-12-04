@@ -1,0 +1,396 @@
+@namespace xml "http://www.w3.org/XML/1998/namespace";
+@namespace epub "http://www.idpf.org/2007/ops";
+
+/* PAGES */
+
+@page {
+    @footnotes {
+        content: flow(footnotes);
+        -obfl-fallback-collection: endnotes;
+    }
+}
+
+@page:left {
+    margin-bottom: 0;
+}
+
+@page:right {
+    margin-bottom: 1;
+    @bottom-center {
+        content: string(print-range-start, spread-start) string(print-range-end, spread-last-except-start);
+    }
+}
+
+@if $show-braille-page-numbers {
+    @page:right {
+        @bottom-right {
+            content: counter(page);
+            text-align: right;
+        }
+    }
+}
+
+@page no-footer {
+    margin-bottom: 0;
+    @bottom-center {
+        content: none;
+    }
+    @bottom-left {
+        content: none;
+    }
+    @bottom-right {
+        content: none;
+    }
+}
+
+/* VOLUMES */
+
+@volume {
+    max-length: 40;
+    @begin {
+        page: no-footer;
+        content: flow(title-page) flow(colophon) flow(volume-toc);
+    }
+    @end {
+        page: no-footer;
+        content: flow(endnotes, volume);
+    }
+}
+
+@volume:first {
+    @begin {
+        content: flow(title-page) flow(colophon) flow(document-toc) flow(volume-toc);
+    }
+}
+
+/* LANGUAGE: avoid contraction of languages other than Danish */
+
+[lang]:not([lang|='da']), [xml|lang]:not([xml|lang|='da']) {
+    text-transform: uncontracted;
+}
+
+/* GENERATED CONTENT */
+
+/* Title page */
+.braille_title_page {
+    border-bottom: none;
+    flow: title-page;
+    page-break-before: always;
+    text-align: center;
+    text-transform: uncontracted;
+}
+
+.braille_title_page p {
+    text-indent: 0;
+}
+
+p.braille_author {
+    -obfl-vertical-position: 4;
+    margin-bottom: 1;
+}
+
+p.braille_grade {
+    -obfl-vertical-position: 16;
+    margin-bottom: 1;
+}
+
+p.braille_imprint {
+    -obfl-vertical-position: 23;
+}
+
+/* Colophon */
+.braille_colophon {
+    border-bottom: none;
+    flow: colophon;
+    page-break-before: always;
+}
+
+.braille_colophon p {
+    text-indent: 0;
+}
+
+p.braille_title_colophon {
+    margin-bottom: 1;
+}
+
+p.braille_isbn {
+    margin-bottom: 1;
+}
+
+p.braille_pid {
+    -obfl-vertical-position: 25;
+}
+
+/* TABLES OF CONTENTS */
+
+/* Book TOC */
+#generated-document-toc::before {
+    content: 'indhold';
+    display: block;
+    margin-bottom: 1;
+}
+
+#generated-document-toc::-obfl-on-volume-start{
+    display: none;
+}
+
+#generated-document-toc::-obfl-on-volume-end{
+    display: none;
+}
+
+/* Volume TOC */
+#generated-volume-toc::before {
+    content: 'indhold i dette bind';
+    display: block;
+    margin-bottom: 1;
+}
+
+/* TOC entries */
+#generated-document-toc li a::after, #generated-volume-toc li a::after {
+    content: ' ' leader('⠄') ' ' target-counter(attr(href), page);
+}
+
+/* SECTIONING ELEMENTS */
+
+bodymatter, rearmatter {
+    page-break-before: right;
+}
+
+level[depth="1"], level1, body {
+    border-bottom: ⠒;
+}
+
+/* BLOCK ELEMENTS */
+
+/* Paragraphs */
+p {
+    margin: 0;
+    text-indent: 0;
+}
+
+p + p {
+    text-indent: 2;
+}
+
+/* Headings */
+levelhd, h2, h3, h4, h5, h6 {
+    margin: 1 0 1 2;
+}
+
+levelhd[depth="1"], h1 {
+    margin: 1 0 1 4;
+}
+
+/* Blockquotes */
+div.blockquote, blockquote {
+    margin: 1 0 1 0;
+}
+
+/* Poems */
+div.poem, section.poem, section[epub|type~='z3998:verse'],
+section[epub|type~='z3998:poem'] {
+    display: block;
+    margin: 1 0 1 0;
+}
+
+div.stanza, div.linegroup {
+    margin-bottom: 1;
+}
+
+line, p.line {
+    margin-left: 2;
+    text-indent: -2;
+}
+
+/* Images */
+img::after {
+    content: '((billede))';
+}
+
+img[alt]::after {
+    content: '((billede: ' attr(alt) '))';
+}
+
+imggroup, figure {
+    display: block;
+    margin: 1 0 1 0;
+}
+
+prodnote.caption {
+    display: block;
+}
+
+prodnote.caption::before, figcaption::before {
+    display: block;
+    content: '((billedtekst start))';
+}
+
+prodnote.caption::after, figcaption::after {
+    display: block;
+    content: '((billedtekst slut))';
+}
+
+prodnote.imgprodnote::before, aside.desc::before {
+    display: block;
+    content: '((billedbeskrivelse start))';
+}
+
+prodnote.imgprodnote::after, aside.desc::after {
+    display: block;
+    content: '((billedbeskrivelse slut))';
+}
+
+/* Lists */
+li {
+    display: list-item;
+    margin-left: 2;
+    text-indent: -2;
+}
+
+list, ol, ul {
+    margin: 1 0 1 0;
+}
+
+list[type='ul'], ul {
+    list-style-type: '⠤⠤';
+}
+
+list[type='ol'], ol, ol[type='1'] {
+    list-style-type: decimal;
+}
+
+list[type='ol'][enum='a'], ol[type='a'] {
+    list-style-type: lower-alpha;
+}
+
+list[type='ol'][enum='A'], ol[type='A'] {
+    list-style-type: if($capital-letters, upper-alpha, lower-alpha);
+}
+
+list[type='ol'][enum='i'], ol[type='i'] {
+    list-style-type: lower-roman;
+}
+
+list[type='ol'][enum='I'], ol[type='I'] {
+    list-style-type: if($capital-letters, upper-roman, lower-roman);
+}
+
+list[type='pl'], list[type='ul'][bullet='none'], ol.list-style-type-none,
+ul.list-style-type-none {
+    list-style-type: none;
+}
+
+li list, li ol, li ul {
+    margin: 0;
+}
+
+/* Page breaks*/
+pagenum {
+    display: block;
+    page-break-before: auto;
+    string-set: print-range-start content(), print-range-end '-' content();
+    text-indent: 0;
+}
+
+*[epub|type~='pagebreak'] {
+    display: block;
+    page-break-before: auto;
+    string-set: print-range-start attr(title), print-range-end '-' attr(title);
+    text-indent: 0;
+}
+
+pagenum::before {
+    content: leader('⠒') 's';
+    text-transform: uncontracted;
+}
+
+*[epub|type~='pagebreak']::before {
+    content: leader('⠒') 's' attr(title);
+    text-transform: uncontracted;
+}
+
+frontmatter pagenum, *[epub|type~='frontmatter'] *[epub|type~='pagebreak'] {
+    display: none;
+}
+
+/* Tables */
+caption, div.table_caption {
+    display: block;
+    margin: 1 0 1 0;
+}
+
+table, table.render_by_row {
+    render-table-by: row;
+}
+
+table.render_by_column {
+    render-table-by: col;
+}
+
+table::table-by(row)::list-item,
+table::table-by(col)::list-item {
+    display: block;
+}
+
+td {
+    display: block;
+    margin-left: 1;
+}
+
+th {
+    display: block;
+}
+
+/* Misc */
+docauthor, doctitle {
+    display: none;
+}
+
+.uncontracted {
+    text-transform: uncontracted;
+}
+
+/* NOTES */
+
+note, aside.notebody {
+    display: block;
+    margin: 1 0 1 0;
+}
+
+note.endnote, note.footnote, li.notebody {
+    display: none;
+}
+
+a.footnote::before, a.rearnote::before, noteref.endnote::before,
+noteref.footnote::before {
+    content: '((note ';
+}
+
+a.footnote::after, a.rearnote::after, noteref.endnote::after,
+noteref.footnote::after {
+    content: '))';
+}
+
+noteref.endnote::alternate {
+    content: target-content(attr(idref));
+    display: block;
+    flow: endnotes;
+}
+
+a.rearnote::alternate {
+    content: target-content(attr(href));
+    display: block;
+    flow: endnotes;
+}
+
+noteref.footnote::alternate {
+    content: target-content(attr(idref));
+    display: block;
+    flow: footnotes;
+}
+
+a.footnote::alternate {
+    content: target-content(attr(href));
+    display: block;
+    flow: footnotes;
+}

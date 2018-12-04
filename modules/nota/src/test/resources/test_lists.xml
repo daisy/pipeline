@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="da">
+    <head>
+        <meta http-equiv="Content-Type" content="text/xml;charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="nota_braille.css"/>
+    </head>
+    <book>
+        <bodymatter>
+            <level1>
+                <h1>lists</h1>
+                <list type="ul">
+                    <li>test of hanging indentation in list items: first line not indented; subsequent lines indented by 2</li>
+                    <li>test of hanging indentation in list items: first line not indented; subsequent lines indented by 2</li>
+                    <li>test of hanging indentation in list items: first line not indented; subsequent lines indented by 2</li>
+                </list>
+                <list type="ul">
+                    <li>test of hanging indentation in list items: first line not indented; subsequent lines indented by 2</li>
+                    <li>
+                        test of hanging indentation in list items: first line not indented; subsequent lines indented by 2
+                        <list type="ul">
+                            <li>test of hanging indentation in list items: first line indented by 2; subsequent lines indented by 4</li>
+                            <li>test of hanging indentation in list items: first line indented by 2; subsequent lines indented by 4</li>
+                            <li>test of hanging indentation in list items: first line indented by 2; subsequent lines indented by 4</li>
+                        </list>
+                    </li>
+                    <li>test of hanging indentation in list items: first line not indented; subsequent lines indented by 2</li>
+                </list>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

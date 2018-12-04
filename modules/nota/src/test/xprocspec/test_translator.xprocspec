@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+  
+  <x:script>
+    <p:declare-step type="pxi:transform" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result"/>
+      <p:option name="grade" required="true"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
+      <px:transform>
+        <p:with-option name="query" select="concat('(input:css)(input:html)(output:css)(translator:nota)(locale:da)(grade:',$grade,')')"/>
+      </px:transform>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="Grade 0, 1 and 2">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="hyphens:auto">
+            <p style="display:block">foobar</p>
+          </div>
+        </x:document>
+      </x:input>
+    </x:call>
+    
+    <x:scenario label="grade 0">
+      <x:call>
+        <x:option name="grade" select="0"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <_ style="text-transform: none">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
+          </div>
+          </_>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="grade 1">
+      <x:call>
+        <x:option name="grade" select="1"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <_ style="text-transform: none">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
+          </div>
+          </_>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="grade 2">
+      <x:call>
+        <x:option name="grade" select="2"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <_ style="text-transform: none">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
+          </div>
+          </_>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="Text-level semantics">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p style="display:block">
+              <em>Sid ned!</em> råbte han.
+            </p>
+            <p style="display:block">
+              På skiltet stod <strong>STOP</strong> med store bogstaver.
+            </p>
+            <p style="display:block">
+              <abbr>NATO</abbr> har besluttet at gå imod <abbr>FN</abbr>'s
+              beslutning. <abbr>NATO</abbr>s styrker indsættes i april.
+            </p>
+            <p style="display:block">
+              Kejser Wilhelm <span class="roman">II</span> kender vi, men hvem var Wilhelm <span
+              class="roman">I</span>?
+            </p>
+            <p style="display:block">
+              Læs afsnit A nr. <span class="roman">iv</span>.
+            </p>
+          </div>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="0"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare" pending="not fully implemented yet">
+      <x:document type="inline">
+        <_ style="text-transform: none">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+          <p css:display="block">
+            <em>⠰⠎⠊⠙ ⠝⠑⠙⠖⠰</em> ⠗⠡⠃⠞⠑ ⠓⠁⠝⠄
+          </p>
+          <p css:display="block">
+            ⠏⠡ ⠎⠅⠊⠇⠞⠑⠞ ⠎⠞⠕⠙ <strong>⠰⠎⠞⠕⠏⠰</strong> ⠍⠑⠙ ⠎⠞⠕⠗⠑ ⠃⠕⠛⠎⠞⠁⠧⠑⠗⠄
+          </p>
+          <p css:display="block">
+            <abbr>⠸⠝⠁⠞⠕</abbr> ⠓⠁⠗ ⠃⠑⠎⠇⠥⠞⠞⠑⠞ ⠁⠞ ⠛⠡ ⠊⠍⠕⠙ <abbr>⠸⠋⠝</abbr>⠈⠎ ⠃⠑⠎⠇⠥⠞⠝⠊⠝⠛⠄
+            <abbr>⠸⠝⠁⠞⠕</abbr>⠠⠎ ⠎⠞⠽⠗⠅⠑⠗ ⠊⠝⠙⠎⠜⠞⠞⠑⠎ ⠊ ⠁⠏⠗⠊⠇⠄
+          </p>
+          <p css:display="block">
+            ⠅⠑⠚⠎⠑⠗ ⠺⠊⠇⠓⠑⠇⠍ <span class="roman">⠸⠊⠊</span> ⠅⠑⠝⠙⠑⠗ ⠧⠊⠂ ⠍⠑⠝ ⠓⠧⠑⠍ ⠧⠁⠗ ⠺⠊⠇⠓⠑⠇⠍ <span
+            class="roman">⠨⠊</span>⠢
+          </p>
+          <p css:display="block">
+            ⠇⠜⠎ ⠁⠋⠎⠝⠊⠞ ⠨⠁ ⠝⠗⠄ <span class="roman">⠠⠊⠧</span>⠄
+          </p>
+        </div>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="Text-level semantics with spaces">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="text-transform: lowercase">
+            <p style="display:block">
+              <em>Sid ned! </em>råbte han.
+            </p>
+            <p style="display:block">
+              På skiltet stod<strong> STOP </strong>med store bogstaver.
+            </p>
+          </div>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="0"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_ style="text-transform: none">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+          <p css:display="block">
+            <em>⠰⠎⠊⠙ ⠝⠑⠙⠖⠰ </em>⠗⠡⠃⠞⠑ ⠓⠁⠝⠄
+          </p>
+          <p css:display="block">
+            ⠏⠡ ⠎⠅⠊⠇⠞⠑⠞ ⠎⠞⠕⠙<strong> ⠰⠎⠞⠕⠏⠰ </strong>⠍⠑⠙ ⠎⠞⠕⠗⠑ ⠃⠕⠛⠎⠞⠁⠧⠑⠗⠄
+          </p>
+        </div>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="foreign language">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="da">
+            contracted <span xml:lang="nl">uncontracted</span>
+          </div>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="2"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_ style="text-transform: none">
+        <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="da">
+          ⠉⠕⠝⠞⠗⠁⠉⠳⠙
+          <span xml:lang="nl">⠥⠝⠉⠕⠝⠞⠗⠁⠉⠞⠑⠙</span>
+        </div>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="comments" pending="bug">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div>
+            <div>
+              <!-- a comment --> <span>foo</span>
+            </div>
+          </div>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="0"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

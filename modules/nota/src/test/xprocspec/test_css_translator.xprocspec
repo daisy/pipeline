@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+  
+  <x:script>
+    <p:declare-step type="pxi:transform" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result"/>
+      <p:option name="grade" required="true"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
+      <px:apply-stylesheets stylesheets="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css
+                                         http://www.nota.dk/pipeline/modules/braille/default.scss">
+        <p:with-param port="parameters" name="capital-letters" select="true()"/>
+        <p:with-param port="parameters" name="show-braille-page-numbers" select="false()"/>
+      </px:apply-stylesheets>
+      <px:transform>
+        <p:with-option name="query" select="concat('(input:css)(input:html)(output:css)(translator:nota)(locale:da)(grade:',$grade,')')"/>
+      </px:transform>
+      <p:delete match="@style|@css:*"/>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="class uncontracted">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="da">
+            contracted
+            <span class="uncontracted">uncontracted</span>
+          </div>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="2"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <_>
+        <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="da">
+          ⠉⠕⠝⠞⠗⠁⠉⠳⠙
+          <span class="uncontracted">⠥⠝⠉⠕⠝⠞⠗⠁⠉⠞⠑⠙</span>
+        </div>
+        </_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

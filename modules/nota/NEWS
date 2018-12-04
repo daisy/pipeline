@@ -1,0 +1,48 @@
+pipeline-mod-nota v1.3.0
+========================
+
+Includes
+--------
+- Improved support for EPUB (https://github.com/snaekobbi/pipeline-mod-nota/pull/14,
+  https://github.com/snaekobbi/pipeline-mod-nota/pull/13,
+  https://github.com/snaekobbi/pipeline-mod-nota/pull/12,
+  https://github.com/snaekobbi/pipeline-mod-nota/pull/11)
+- Improved default CSS style sheet (https://github.com/snaekobbi/pipeline-mod-nota/pull/11) with:
+  - print page ranges
+  - running footers
+  - print page break indicator lines
+  - handling of foreign languages (https://github.com/snaekobbi/pipeline-mod-nota/issues/7)
+  - layout of title pages, table of contents and colophon
+  - support for footnotes and endnotes
+  - support for lists (https://github.com/snaekobbi/pipeline-mod-nota/issues/9)
+  - support for images
+  - etc.
+
+pipeline-mod-nota v1.2.0
+========================
+
+Includes
+--------
+- Nota-specific DTBook to PEF and EPUB3 to PEF scripts with:
+  - Nota-specific default CSS style sheet
+  - automatic insertion of title pages and colophons
+  - special handling of tables with class `render_by_both` (duplicated)
+  - special handling of noterefs (get the same class as the
+    corresponding notes)
+  - special handling of foreign languages (translated with no
+    contractions)
+  - a default ASCII-table compatible with other braille tools used at Nota
+- Fixed handling of text-level semantics (`strong` and `em`)
+
+pipeline-mod-nota v1.1.0
+=======================
+Compatibility update
+
+pipeline-mod-nota v1.0.0
+========================
+
+Includes
+--------
+- Custom Liblouis based translator that handles `html:strong` and `html:em`
+  (https://github.com/snaekobbi/liblouis/issues/2, https://github.com/snaekobbi/issues/issues/13,
+  https://github.com/snaekobbi/issues/issues/14, https://github.com/snaekobbi/pipeline-mod-braille/issues/40)

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <!-- abstract script (common options and documentations) (todo: make internal) -->
+  <uri name="http://www.nota.dk/pipeline/modules/braille/xml-to-pef.xpl" uri="../xml/xml-to-pef.xpl"
+       px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
+  <!-- scripts -->
+  <uri name="http://www.nota.dk/pipeline/modules/braille/dtbook-to-pef.xpl" uri="../xml/dtbook-to-pef.xpl"
+       px:script="true" px:extends="http://www.nota.dk/pipeline/modules/braille/xml-to-pef.xpl"/>
+  <uri name="http://www.nota.dk/pipeline/modules/braille/epub3-to-pef.xpl" uri="../xml/epub3-to-pef.xpl"
+       px:script="true" px:extends="http://www.nota.dk/pipeline/modules/braille/xml-to-pef.xpl"/>
+  <!-- css -->
+  <uri name="http://www.nota.dk/pipeline/modules/braille/default.scss" uri="../css/default.scss"/>
+  <!-- internal resources added to the catalog for now until we find a proper solution for
+       https://github.com/daisy/pipeline-mod-braille/pull/79#discussion-diff-54276962 -->
+  <uri name="http://www.nota.dk/pipeline/modules/braille/internal/insert-titlepage.xsl" uri="../xml/insert-titlepage.xsl"/>
+  <uri name="http://www.nota.dk/pipeline/modules/braille/internal/duplicate-tables.xsl" uri="../xml/duplicate-tables.xsl"/>
+  <uri name="http://www.nota.dk/pipeline/modules/braille/internal/mark-noterefs.xsl" uri="../xml/mark-noterefs.xsl"/>
+  <!-- dependencies -->
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-tables"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:libhyphen-libreoffice-tables"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:dtbook-to-pef"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:epub3-to-pef"/>
+</catalog>
