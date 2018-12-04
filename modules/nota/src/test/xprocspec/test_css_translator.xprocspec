@@ -44,7 +44,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <_>
-        <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="da">
+        <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="da-Brai">
           ⠉⠕⠝⠞⠗⠁⠉⠳⠙
           <span class="uncontracted">⠥⠝⠉⠕⠝⠞⠗⠁⠉⠞⠑⠙</span>
         </div>

@@ -32,6 +32,7 @@
     <p:option name="stylesheet"/>
     <p:option name="contraction-grade"/>
     <p:option name="ascii-table"/>
+    <p:option name="ascii-file-format"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
     <p:option name="page-width"/>
@@ -68,11 +69,29 @@
     <!-- ======= -->
     <!-- Imports -->
     <!-- ======= -->
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl">
+        <p:documentation>
+            px:epub3-to-pef.load
+            px:epub3-to-pef.convert
+            px:epub3-to-pef.store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:tempdir
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            px:merge-parameters
+            px:delete-parameters
+        </p:documentation>
+    </p:import>
     
     <p:in-scope-names name="in-scope-names"/>
     <px:merge-parameters>
@@ -109,21 +128,6 @@
         </p:with-option>
     </px:epub3-to-pef.load>
     
-    <!-- Get the OPF so that we can use the metadata in options -->
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="fileset.out" step="load"/>
-        </p:input>
-    </p:identity>
-    <px:message message="Getting the OPF"/>
-    <px:fileset-load media-types="application/oebps-package+xml">
-        <p:input port="in-memory">
-            <p:pipe port="in-memory.out" step="load"/>
-        </p:input>
-    </px:fileset-load>
-    <p:identity name="opf"/>
-    <p:sink/>
-    
     <!-- ============= -->
     <!-- EPUB 3 TO PEF -->
     <!-- ============= -->
@@ -134,7 +138,10 @@
     </p:identity>
     <px:message message="Done loading EPUB, starting conversion to PEF"/>
     <px:epub3-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css"
-                             apply-document-specific-stylesheets="false" name="convert">
+                             apply-document-specific-stylesheets="false"
+                             include-obfl="false"
+                             name="convert">
+        <p:with-option name="epub" select="$epub"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
@@ -159,25 +166,26 @@
     <!-- ========= -->
     <p:identity>
         <p:input port="source">
-            <p:pipe port="in-memory.out" step="convert"/>
+            <p:pipe step="convert" port="in-memory.out"/>
         </p:input>
     </p:identity>
     <px:message message="Storing PEF"/>
     <p:delete match="/*/@xml:base"/>
-    <px:xml-to-pef.store>
+    <px:epub3-to-pef.store>
+        <p:with-option name="epub" select="$epub"/>
+        <p:input port="opf">
+            <p:pipe step="load" port="opf"/>
+        </p:input>
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
-        <p:with-option name="name" select="if (ends-with(lower-case($epub),'.epub')) then replace($epub,'^.*/([^/]*)\.[^/\.]*$','$1')
-                                           else (/opf:package/opf:metadata/dc:identifier[not(@refines)], 'unknown-identifier')[1]">
-            <p:pipe step="opf" port="result"/>
-        </p:with-option>
         <p:with-option name="include-brf" select="$include-brf"/>
         <p:with-option name="include-preview" select="$include-preview"/>
+        <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
         <p:with-option name="ascii-table" select="$ascii-table"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-    </px:xml-to-pef.store>
+    </px:epub3-to-pef.store>
     
 </p:declare-step>

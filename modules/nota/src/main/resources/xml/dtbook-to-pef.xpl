@@ -14,6 +14,9 @@
     </p:documentation>
     
     <p:input port="source"/>
+    <p:output port="validation-status">
+        <p:pipe step="convert" port="status"/>
+    </p:output>
     
     <!--
         Documentation and default values of options are defined in xml-to-pef.xpl.
@@ -60,9 +63,23 @@
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="minimum-number-of-sheets"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl">
+        <p:documentation>
+            px:dtbook-to-pef.convert
+            px:dtbook-to-pef.store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:tempdir
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            px:merge-parameters
+            px:delete-parameters
+        </p:documentation>
+    </p:import>
     
     <p:in-scope-names name="in-scope-names"/>
     <px:merge-parameters>
@@ -117,22 +134,21 @@
     <!-- ===== -->
     <!-- STORE -->
     <!-- ===== -->
-    <px:xml-to-pef.store>
+    <px:dtbook-to-pef.store name="dtbook-to-pef.store">
+        <p:input port="dtbook">
+            <p:pipe step="main" port="source"/>
+        </p:input>
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
-        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
-            <p:pipe step="main" port="source"/>
-        </p:with-option>
         <p:with-option name="include-brf" select="$include-brf"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
-        <p:with-option name="ascii-table" select="$ascii-table"/>
-        <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-    </px:xml-to-pef.store>
+        <p:with-option name="ascii-table" select="$ascii-table"/>
+        <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
+    </px:dtbook-to-pef.store>
     
 </p:declare-step>
 

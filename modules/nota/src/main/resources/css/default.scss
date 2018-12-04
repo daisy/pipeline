@@ -17,7 +17,7 @@
 @page:right {
     margin-bottom: 1;
     @bottom-center {
-        content: string(print-range-start, spread-start) string(print-range-end, spread-last-except-start);
+        content: string(print-range-start, spread-start-except-last) string(print-range-end, spread-last);
     }
 }
 
@@ -85,7 +85,10 @@
 }
 
 p.braille_author {
-    -obfl-vertical-position: 4;
+    // working around a bug in Dotify by using padding-top instead of vertical-position
+    padding-top: 4;
+    &:empty { padding-top: 3; }
+    // -obfl-vertical-position: 4;
     margin-bottom: 1;
 }
 
@@ -288,14 +291,14 @@ li list, li ol, li ul {
 pagenum {
     display: block;
     page-break-before: auto;
-    string-set: print-range-start content(), print-range-end '-' content();
+    string-set: print-range-start content() '-', print-range-end content();
     text-indent: 0;
 }
 
 *[epub|type~='pagebreak'] {
     display: block;
     page-break-before: auto;
-    string-set: print-range-start attr(title), print-range-end '-' attr(title);
+    string-set: print-range-start attr(title) '-', print-range-end attr(title);
     text-indent: 0;
 }
 
@@ -343,6 +346,10 @@ th {
 
 /* Misc */
 docauthor, doctitle {
+    display: none;
+}
+
+frontmatter:not(:has(> :not(docauthor, doctitle, .braille_title_page, .braille_colophon))) {
     display: none;
 }
 

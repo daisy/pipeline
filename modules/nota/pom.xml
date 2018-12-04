@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.9.15</version>
+    <version>1.11.1</version>
     <relativePath />
   </parent>
 
@@ -15,6 +15,18 @@
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: mod-nota</name>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>scripts-bom</artifactId>
+        <version>1.11.1</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   
   <dependencies>
     <dependency>
@@ -96,6 +108,12 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-native</artifactId>
+      <classifier>linux</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>dotify-formatter</artifactId>
       <scope>test</scope>
     </dependency>
@@ -105,29 +123,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xproc-engine-daisy-pipeline</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.xprocspec</groupId>
-      <artifactId>xprocspec</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xprocspec-runner</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>pax-exam-helper</artifactId>
+      <artifactId>logging-activator</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -152,8 +154,7 @@
         <configuration>
           <instructions>
             <_dsannotations>
-              nu.nota.pipeline.braille.impl.NotaTranslator$Provider,
-              nu.nota.pipeline.braille.impl.TablePath
+              nu.nota.pipeline.braille.impl.NotaTranslator$Provider
             </_dsannotations>
           </instructions>
         </configuration>

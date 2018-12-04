@@ -80,10 +80,11 @@
     </x:context>
     <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="da">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>da</dc:language>
             </meta>
           </head>
           <body>
@@ -130,10 +131,11 @@
     </x:context>
     <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="da">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>da</dc:language>
             </meta>
           </head>
           <body>
@@ -180,10 +182,11 @@
     </x:context>
     <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="da">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>da</dc:language>
             </meta>
           </head>
           <body>
@@ -229,10 +232,11 @@
       </x:context>
       <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
         <x:document type="inline">
-          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="da">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>da</dc:language>
               </meta>
             </head>
             <body>
@@ -262,10 +266,11 @@
       </x:context>
       <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
         <x:document type="inline">
-          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="da">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>da</dc:language>
               </meta>
             </head>
             <body>
@@ -336,12 +341,13 @@
     </x:context>
     <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="da">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head>
             <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
               <dc:format>application/x-pef+xml</dc:format>
               <dc:title>Whitmans bedste</dc:title>
               <dc:creator>Walt Whitman</dc:creator>
+              <dc:language>da</dc:language>
             </meta>
           </head>
           <body>
@@ -374,7 +380,7 @@
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠝⠕⠞⠁</row>
                   <row>⠀⠀⠀⠀⠀⠝⠁⠞⠊⠕⠝⠁⠇⠃⠊⠃⠇⠊⠕⠞⠑⠅⠀⠋⠕⠗</row>
                   <row>⠍⠑⠝⠝⠑⠎⠅⠑⠗⠀⠍⠑⠙⠀⠇⠜⠎⠑⠧⠁⠝⠎⠅⠑⠇⠊⠛⠓⠑⠙⠑⠗</row>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠅⠪⠃⠑⠝⠓⠁⠧⠝⠀⠼⠃⠚⠁⠋</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠅⠪⠃⠑⠝⠓⠁⠧⠝⠀⠼⠃⠚⠁⠓</row>
                 </page>
                 <page>
                   <row>⠺⠓⠊⠞⠍⠁⠝⠎⠀⠃⠑⠙⠎⠞⠑</row>
@@ -402,7 +408,7 @@
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠼⠁⠄⠀⠏⠥⠝⠅⠞⠃⠊⠝⠙⠒⠀⠤</row>
+                  <row>⠼⠁⠄⠀⠏⠥⠝⠅⠞⠃⠊⠝⠙⠒⠀⠤⠤</row>
                 </page>
               </section>
               <section>

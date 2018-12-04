@@ -73,8 +73,8 @@ public interface NotaTranslator {
 			href = asURI(context.getBundleContext().getBundle().getEntry("xml/block-translate.xpl"));
 		}
 		
-		private final static Query grade0Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/da-dk-g16.utb");
-		private final static Query grade1Table = mutableQuery().add("liblouis-table", "http://www.nota.nu/liblouis/da-dk-g26l.ctb");
+		private final static Query grade0Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/da-dk-g16.ctb");
+		private final static Query grade1Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/da-dk-g26l.ctb");
 		private final static Query grade2Table = mutableQuery().add("liblouis-table", "http://www.liblouis.org/tables/da-dk-g26.ctb");
 		private final static Query hyphenTable = mutableQuery().add("libhyphen-table",
 		                                                            "http://www.libreoffice.org/dictionaries/hyphen/hyph_da_DK.dic");
