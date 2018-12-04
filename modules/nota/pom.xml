@@ -169,35 +169,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.vafer</groupId>
-        <artifactId>jdeb</artifactId>
-        <version>1.0</version>
-        <executions>
-          <execution>
-            <id>package-deb</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jdeb</goal>
-            </goals>
-            <configuration>
-              <controlDir>src/main/deb/DEBIAN</controlDir>
-              <classifier>all</classifier>
-              <deb>target/${project.artifactId}_${project.version}_all.deb</deb>
-              <dataSet>
-                <data>
-                  <type>file</type>
-                  <src>target/${project.artifactId}-${project.version}.jar</src>
-                  <mapper>
-                    <type>perm</type>
-                    <prefix>/opt/daisy-pipeline2/modules</prefix>
-                  </mapper>
-                </data>
-              </dataSet>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
@@ -206,4 +177,44 @@
       </plugin>
     </plugins>
   </build>
+  
+  <profiles>
+    <profile>
+      <id>deb</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.vafer</groupId>
+            <artifactId>jdeb</artifactId>
+            <version>1.0</version>
+            <executions>
+              <execution>
+                <id>package-deb</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jdeb</goal>
+                </goals>
+                <configuration>
+                  <controlDir>src/main/deb/DEBIAN</controlDir>
+                  <classifier>all</classifier>
+                  <deb>target/${project.artifactId}_${project.version}_all.deb</deb>
+                  <dataSet>
+                    <data>
+                      <type>file</type>
+                      <src>target/${project.artifactId}-${project.version}.jar</src>
+                      <mapper>
+                        <type>perm</type>
+                        <prefix>/opt/daisy-pipeline2/modules</prefix>
+                      </mapper>
+                    </data>
+                  </dataSet>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  
 </project>
