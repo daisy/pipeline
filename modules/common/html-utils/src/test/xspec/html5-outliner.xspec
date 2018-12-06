@@ -1154,5 +1154,42 @@
 			</ol>
 		</x:expect>
 	</x:scenario>
+    
+    <x:scenario label="noteref in headline and two nested sections without headline">
+        <x:context>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xml:base="file:/tmp/content.xhtml">
+                <body>
+                    <h1 id="h1">
+                        <span class="normalized" id="span">sentence</span>
+                        <a class="noteref" id="a" href="speechgen0028.smil#text1828">1</a>
+                    </h1>
+                    <section id="a">
+                        <section id="b">
+                        </section>
+                    </section>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="outline">
+            <ol xmlns="http://www.w3.org/1999/xhtml">
+                <li>
+                    <a href="content.xhtml#h1">
+                        <span class="normalized" id="span">sentence</span>
+                        <span class="noteref">1</span>
+                    </a>
+                    <ol>
+                        <li data-generated="true">
+                            <a href="content.xhtml#a">Untitled section</a>
+                            <ol>
+                                <li data-generated="true">
+                                    <a href="content.xhtml#b">Untitled section</a>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </x:expect>
+    </x:scenario>
 	
 </x:description>
