@@ -47,9 +47,9 @@
     <!--  -->
     <xsl:template match="body|article|aside|nav|section">
         <xsl:param name="relative-path" tunnel="yes" as="xs:string" required="yes"/>
-        <xsl:variable name="id" select="@id"/>
         <xsl:variable name="heading" select="(h1|h2|h3|h4|h5|h6|hgroup)[1]" as="element()?"/>
         <xsl:variable name="heading-content" select="f:heading-content($heading,.)" as="item()*"/>
+        <xsl:variable name="id" select="(@id, $heading/@id)[1]"/>
         <xsl:variable name="children-doc">
             <xsl:copy-of select="* except $heading"/>
         </xsl:variable>
@@ -67,7 +67,8 @@
                     <a href="{$relative-path}#{$id}">
                         <!-- TODO: try to not "depend" on the TTS namespace here -->
                         <xsl:copy-of select="$heading/ancestor-or-self::*/@tts:*"/>
-                        <xsl:copy-of select="$heading-content"/>
+                        <xsl:copy-of select="$heading-content[count(.|../@*)=count(../@*)]"/>
+                        <xsl:copy-of select="$heading-content[self::* | self::text()]"/>
                     </a>
                 </li>
             </xsl:when>
@@ -89,7 +90,8 @@
                         <a href="{$relative-path}#{$id}">
                             <!-- TODO: try to not "depend" on the TTS namespace here -->
                             <xsl:copy-of select="$heading/ancestor-or-self::*/@tts:*"/>
-                            <xsl:copy-of select="$heading-content"/>
+                            <xsl:copy-of select="$heading-content[count(.|../@*)=count(../@*)]"/>
+                            <xsl:copy-of select="$heading-content[self::* | self::text()]"/>
                         </a>
                         <ol>
                             <xsl:call-template name="subsections">
@@ -212,7 +214,7 @@
     </xsl:function>
     
     <!-- -->
-    <xsl:function name="f:heading-content" as="item()*">
+    <xsl:function name="f:heading-content" as="node()*">
         <xsl:param name="node" as="element()?"/>
         <xsl:param name="parent" as="element()?"/>
         <xsl:choose>
@@ -225,19 +227,19 @@
                 <xsl:sequence select="f:heading-content($node/*[f:rank(.)=$rank][1],$parent)"/>
             </xsl:when>
             <xsl:when test="$parent[self::body]">
-                <xsl:sequence select="'Untitled document'"/>
+                <xsl:text>Untitled document</xsl:text>
             </xsl:when>
             <xsl:when test="$parent[self::article]">
-                <xsl:sequence select="'Article'"/>
+                <xsl:text>Article</xsl:text>
             </xsl:when>
             <xsl:when test="$parent[self::aside]">
-                <xsl:sequence select="'Sidebar'"/>
+                <xsl:text>Sidebar</xsl:text>
             </xsl:when>
             <xsl:when test="$parent[self::nav]">
-                <xsl:sequence select="'Navigation'"/>
+                <xsl:text>Navigation</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="'Untitled section'"/>
+                <xsl:text>Untitled section</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
