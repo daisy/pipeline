@@ -1,9 +1,7 @@
-MVN := mvn
 DOCKER := docker
 
 .PHONY : docker
 docker :
-	$(MVN) clean package -DskipTests
 	$(DOCKER) build -t notalib/pipeline-assembly .
 
 .PHONY : check
