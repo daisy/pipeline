@@ -85,7 +85,7 @@ dp2 : $(dp2)
 
 .PHONY : run
 run : $(dev_launcher)
-	$< shell
+	JAVA_HOME=`/usr/libexec/java_home -v 9` $< shell
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
