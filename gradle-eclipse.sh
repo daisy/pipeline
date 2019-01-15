@@ -18,9 +18,19 @@ fi
 for module in "$@"; do
     cd "$ROOT_DIR/$module"
     if ! grep -Fxq 'apply plugin: "eclipse"' build.gradle; then
-        echo 'apply plugin: "eclipse"' > build.gradle.tmp
-        cat build.gradle >> build.gradle.tmp
-        mv build.gradle.tmp build.gradle
+        if pcregrep -M "(?s)plugins {\n.*?\n}" build.gradle; then
+            if ! pcregrep -M "(?s)plugins {\n.*?\n}" build.gradle | grep "eclipse"; then
+                line=$(pcregrep -Mn "(?s)plugins {\n.*?\n}" build.gradle | head -1 | cut -d : -f1)
+                head -$line build.gradle > build.gradle.tmp
+                echo "	id 'eclipse'" >> build.gradle.tmp
+                tail -n+$line build.gradle | tail -n+2 >> build.gradle.tmp
+                mv build.gradle.tmp build.gradle
+            fi
+        else
+            echo 'apply plugin: "eclipse"' > build.gradle.tmp
+            cat build.gradle >> build.gradle.tmp
+            mv build.gradle.tmp build.gradle
+        fi
     fi
     eval $GRADLE eclipse
     # import project with eclim if available
