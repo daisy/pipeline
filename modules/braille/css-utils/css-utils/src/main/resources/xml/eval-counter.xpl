@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 type="css:eval-counter"
                 exclude-inline-prefixes="#all"
@@ -55,7 +56,7 @@
     
     <p:import href="parse-counter-set.xpl"/>
     
-    <p:for-each>
+    <p:for-each px:progress=".5">
         <css:parse-counter-set>
             <p:with-option name="counters" select="$counters"/>
             <p:with-option name="exclude-counters" select="$exclude-counters"/>
@@ -67,7 +68,7 @@
     <p:split-sequence test="/*[not(@css:flow[not(.='normal')])]"/>
     <p:wrap-sequence wrapper="_" name="context"/>
     
-    <p:for-each name="result">
+    <p:for-each name="result" px:progress=".5">
         <p:iteration-source>
             <p:pipe step="input" port="result"/>
         </p:iteration-source>

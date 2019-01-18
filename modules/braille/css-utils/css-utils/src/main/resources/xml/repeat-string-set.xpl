@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 type="css:repeat-string-set"
@@ -26,7 +27,7 @@
         </p:documentation>
     </p:output>
     
-    <p:for-each>
+    <p:for-each px:progress=".45">
         <p:xslt>
             <p:input port="stylesheet">
                 <p:inline>
@@ -52,7 +53,7 @@
     </p:for-each>
     
     <p:identity name="iteration-source"/>
-    <p:for-each>
+    <p:for-each px:progress=".10">
         <p:identity name="current-section"/>
         <p:split-sequence>
             <p:input port="source">
@@ -73,7 +74,7 @@
         </p:insert>
     </p:for-each>
     
-    <p:for-each>
+    <p:for-each px:progress=".45">
         <p:xslt>
             <p:input port="stylesheet">
                 <p:inline>

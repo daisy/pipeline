@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.xmlcalabash.core.XProcException;
+
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -104,8 +106,7 @@ public class HyphenateDefinition extends ExtensionFunctionDefinition {
 						throw new RuntimeException("Could not find a hyphenator for query: " + query); }
 					return arrayToSequence(hyphenator.asFullHyphenator().transform(text));}
 				catch (Exception e) {
-					logger.error("louis:hyphenate failed", e);
-					throw new XPathException("louis:hyphenate failed"); }
+					throw new XPathException("louis:hyphenate failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}

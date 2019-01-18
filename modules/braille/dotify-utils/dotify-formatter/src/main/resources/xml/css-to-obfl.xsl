@@ -14,14 +14,22 @@
     
     <xsl:namespace-alias stylesheet-prefix="_xsl" result-prefix="xsl"/>
     
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     
     <xsl:param name="braille-translator-query" as="xs:string" required="yes"/> <!-- unused -->
     <xsl:param name="page-counters" as="xs:string" required="yes"/>
+    <xsl:param name="volume-transition" as="xs:string" required="no" select="''"/>
     
     <xsl:variable name="sections" select="collection()[position() &lt; last()]"/>
     <xsl:variable name="page-and-volume-styles" select="collection()[position()=last()]/*/*"/>
     <xsl:variable name="page-counter-names" as="xs:string*" select="tokenize($page-counters,' ')"/>
+    
+    <xsl:variable name="volume-transition-rule" as="element()?">
+        <xsl:if test="not($volume-transition='')">
+            <xsl:sequence select="css:deep-parse-stylesheet(concat('@-obfl-volume-transition { ',$volume-transition,' }'))"/>
+        </xsl:if>
+    </xsl:variable>
     
     <!-- ====================== -->
     <!-- Page and volume styles -->
@@ -115,8 +123,7 @@
     <xsl:variable name="collection-flows" as="xs:string*">
         <xsl:for-each select="$page-stylesheets">
             <xsl:sequence select="css:parse-content-list(
-                                    (if (*[matches(@selector,'^&amp;:')]) then css:rule[not(@selector)] else .)
-                                    /css:rule[@selector='@footnotes'][1]
+                                    css:rule[@selector='@footnotes'][1]
                                     /css:property[@name='content'][1]/@value,())
                                   /self::css:flow[@from and (not(@scope) or @scope='page')]/@from"/>
         </xsl:for-each>
@@ -234,7 +241,22 @@
     <xsl:variable name="initial-hyphens" as="xs:string" select="'manual'"/>
     <xsl:variable name="initial-word-spacing" as="xs:integer" select="1"/>
     
+    <!-- count the total number of text nodes with braille content so that we get a good estimate of the progress -->
+    <xsl:variable name="progress-total" select="count(collection()//text()[matches(.,concat('[',
+                                                '⠀⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟',
+                                                '⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿',
+                                                '⡀⡁⡂⡃⡄⡅⡆⡇⡈⡉⡊⡋⡌⡍⡎⡏⡐⡑⡒⡓⡔⡕⡖⡗⡘⡙⡚⡛⡜⡝⡞⡟',
+                                                '⡠⡡⡢⡣⡤⡥⡦⡧⡨⡩⡪⡫⡬⡭⡮⡯⡰⡱⡲⡳⡴⡵⡶⡷⡸⡹⡺⡻⡼⡽⡾⡿',
+                                                '⢀⢁⢂⢃⢄⢅⢆⢇⢈⢉⢊⢋⢌⢍⢎⢏⢐⢑⢒⢓⢔⢕⢖⢗⢘⢙⢚⢛⢜⢝⢞⢟',
+                                                '⢠⢡⢢⢣⢤⢥⢦⢧⢨⢩⢪⢫⢬⢭⢮⢯⢰⢱⢲⢳⢴⢵⢶⢷⢸⢹⢺⢻⢼⢽⢾⢿',
+                                                '⣀⣁⣂⣃⣄⣅⣆⣇⣈⣉⣊⣋⣌⣍⣎⣏⣐⣑⣒⣓⣔⣕⣖⣗⣘⣙⣚⣛⣜⣝⣞⣟',
+                                                '⣠⣡⣢⣣⣤⣥⣦⣧⣨⣩⣪⣫⣬⣭⣮⣯⣰⣱⣲⣳⣴⣵⣶⣷⣸⣹⣺⣻⣼⣽⣾⣿',
+                                                ']'))])"/>
+    
     <xsl:template name="start">
+        <xsl:call-template name="pf:progress">
+            <xsl:with-param name="progress" select="concat('1/',$progress-total)"/>
+        </xsl:call-template>
         <obfl version="2011-1" xml:lang="und">
             <xsl:variable name="translate" as="xs:string" select="if ($initial-text-transform='none') then 'pre-translated-text-css' else ''"/>
             <xsl:variable name="hyphenate" as="xs:string" select="string($initial-hyphens='auto')"/>
@@ -253,10 +275,14 @@
     <xsl:template name="_start">
             <xsl:sequence select="$page-stylesheets"/>
             <xsl:if test="count($volume-stylesheets)&gt;1">
-                <xsl:message terminate="yes">Documents with more than one volume style are not supported.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Documents with more than one volume style are not supported.</xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="not(exists($volume-stylesheets))">
-                <xsl:message>Document does not have an associated volume style.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Document does not have an associated volume style.</xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="collection()//*/@css:_obfl-scenarios">
                 <xsl:call-template name="renderers"/>
@@ -502,8 +528,35 @@
                 Note that a volume-keep-priority attribute is not needed to prefer volume breaking
                 before a block over inside a block, but for now we have the conditional anyway.
             -->
-            <xsl:if test="$sections//@css:volume-break-inside">
-              <volume-transition range="sheet"/>
+            <xsl:if test="exists($volume-transition-rule) or $sections//@css:volume-break-inside">
+                <volume-transition range="sheet">
+                    <xsl:for-each select="$volume-transition-rule/css:rule[matches(@selector,'@sequence-(interrupted|resumed)')
+                                                                           and css:property[@name='content']]">
+                        <xsl:variable name="sequence-interrupted-resumed-content" as="xs:string" select="css:property[@name='content'][1]/@value"/>
+                        <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"> <!-- css:_* -->
+                            <xsl:apply-templates mode="css:eval-sequence-interrupted-resumed-content-list"
+                                                 select="css:parse-content-list($sequence-interrupted-resumed-content,())">
+                                <xsl:with-param name="white-space"
+                                                select="(css:property[@name='white-space']/@value,'normal')[1]"/>
+                                <xsl:with-param name="text-transform"
+                                                select="(css:property[@name='text-transform']/@value,'auto')[1]"/>
+                                <xsl:with-param name="hyphens"
+                                                select="(css:property[@name='hyphens']/@value,'manual')[1]"/>
+                                <xsl:with-param name="word-spacing"
+                                                select="(css:property[@name='word-spacing']/@value,1)[1]"/>
+                            </xsl:apply-templates>
+                        </xsl:variable>
+                        <xsl:apply-templates mode="assert-nil-attr" select="$sequence-interrupted-resumed-content/(@* except @css:flow)"/>
+                        <xsl:variable name="sequence" as="element()*"> <!-- css:box* -->
+                            <xsl:apply-templates mode="sequence-interrupted-resumed" select="$sequence-interrupted-resumed-content/*"/>
+                        </xsl:variable>
+                        <xsl:if test="$sequence">
+                            <xsl:element name="{substring-after(@selector,'@')}">
+                                <xsl:sequence select="$sequence"/>
+                            </xsl:element>
+                        </xsl:if>
+                    </xsl:for-each>
+                </volume-transition>
             </xsl:if>
             <xsl:apply-templates mode="assert-nil" select="$sections/*[not(self::css:_)]"/>
             <xsl:for-each select="$sections/css:_[@css:flow=$collection-flows]">
@@ -511,7 +564,9 @@
                 <collection name="{$flow}">
                     <xsl:for-each select="*">
                         <xsl:if test="@css:anchor='NULL'">
-                            <xsl:message terminate="yes">Flowed element does not have anchor in normal flow</xsl:message>
+                            <xsl:call-template name="pf:warn">
+                                <xsl:with-param name="msg">Flowed element does not have anchor in normal flow</xsl:with-param>
+                            </xsl:call-template>
                         </xsl:if>
                         <!--
                             We don't explicitly check that two items do not end up having the same
@@ -745,7 +800,8 @@
     <!-- Sequence -->
     <!-- ======== -->
     
-    <xsl:template mode="sequence"
+    <xsl:template mode="sequence
+                        sequence-interrupted-resumed"
                   match="/css:_/@css:string-entry">
         <block>
             <xsl:apply-templates mode="css:parse-string-entry" select="css:parse-string-set(.)"/>
@@ -776,7 +832,7 @@
     <!-- Block boxes -->
     <!-- =========== -->
     
-    <xsl:template mode="sequence item td"
+    <xsl:template mode="sequence item td sequence-interrupted-resumed"
                   match="css:box[@type='block']">
         <xsl:apply-templates mode="block" select="."/>
     </xsl:template>
@@ -859,11 +915,13 @@
                 </toc-entry>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message select="concat(
-                                       'An element with display: -obfl-toc must have at least one descendant ',
-                                       'target-counter(), target-string() or target-text() value (that references ',
-                                       'an element that does not participate in a named flow).')">
-                </xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">
+                        An element with display: -obfl-toc must have at least one descendant
+                        target-counter(), target-string() or target-text() value (that references an
+                        element that does not participate in a named flow).
+                    </xsl:with-param>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1089,7 +1147,12 @@
         <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:render-table-by|
                                                                   @css:text-transform|@css:hyphens)"/>
         <xsl:if test="@css:render-table-by and not(@css:render-table-by='column')">
-            <xsl:message>'render-table-by' property with a value other than 'column' is not supported on elements with 'display: table'.</xsl:message>
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">
+                    'render-table-by' property with a value other than 'column' is not supported on
+                    elements with 'display: table'.
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:if>
         <xsl:choose>
             <xsl:when test="@css:render-table-by='column'">
@@ -1200,7 +1263,9 @@
     
     <xsl:template mode="td"
                   match="css:box[@type='table']">
-        <xsl:message terminate="yes">Nested tables not supported.</xsl:message>
+        <xsl:call-template name="pf:error">
+            <xsl:with-param name="msg">Nested tables not supported.</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <!-- ============ -->
@@ -1515,7 +1580,11 @@
     -->
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:page-break-before[.='left']">
-        <xsl:message select="concat(local-name(),':',.,' not supported yet. Treating like &quot;always&quot;.')"/>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">{}:{} not supported yet. Treating like "always".</xsl:with-param>
+            <xsl:with-param name="args" select="(local-name(),
+                                                 .)"/>
+        </xsl:call-template>
         <xsl:attribute name="break-before" select="'page'"/>
     </xsl:template>
     
@@ -1611,7 +1680,10 @@
                          css:box[@type='block']/@css:page-break-inside|
                          css:box[@type='block']/@css:orphans|
                          css:box[@type='block']/@css:widows">
-        <xsl:message select="concat('Property ',replace(local-name(),'^_','-'),' not supported inside an element with display: -obfl-toc')"/>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">Property {} not supported inside an element with display: -obfl-toc</xsl:with-param>
+            <xsl:with-param name="args" select="replace(local-name(),'^_','-')"/>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template priority="1.1"
@@ -1623,7 +1695,10 @@
                          css:box[@type='table-cell']//css:box[@type='block']/@css:page-break-inside|
                          css:box[@type='table-cell']//css:box[@type='block']/@css:orphans|
                          css:box[@type='table-cell']//css:box[@type='block']/@css:widows">
-        <xsl:message select="concat('Property ',replace(local-name(),'^_','-'),' not supported inside table cell elements')"/>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">Property {} not supported inside table cell elements</xsl:with-param>
+            <xsl:with-param name="args" select="replace(local-name(),'^_','-')"/>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
@@ -1648,7 +1723,11 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message select="concat(local-name(),':',.,' not supported yet')"/>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">{}:{} not supported yet</xsl:with-param>
+                    <xsl:with-param name="args" select="(local-name(),
+                                                         .)"/>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1684,7 +1763,11 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message select="concat(replace(local-name(),'^_','-'),':',.,' not supported yet')"/>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">{}:{} not supported yet</xsl:with-param>
+                    <xsl:with-param name="args" select="(replace(local-name(),'^_','-'),
+                                                         .)"/>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1710,11 +1793,19 @@
     <xsl:template mode="block span toc-entry"
                   match="css:string[@name]">
         <xsl:if test="@scope">
-            <xsl:message select="concat('string(',@name,', ',@scope,'): second argument not supported')"/>
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">string({}, {}): second argument not supported</xsl:with-param>
+                <xsl:with-param name="args" select="(@name,
+                                                     @scope)"/>
+            </xsl:call-template>
         </xsl:if>
         <xsl:if test="@css:white-space">
-            <xsl:message select="concat('white-space:',@css:white-space,' could not be applied to ',
-                                        (if (@target) then 'target-string' else 'string'),'(',@name,')')"/>
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">white-space:{} could not be applied to {}({})</xsl:with-param>
+                <xsl:with-param name="args" select="(@css:white-space,
+                                                     if (@target) then 'target-string' else 'string',
+                                                     @name)"/>
+            </xsl:call-template>
         </xsl:if>
         <xsl:variable name="target" as="xs:string?" select="if (@target) then @target else ()"/>
         <xsl:variable name="target" as="element()?" select="if ($target)
@@ -1939,7 +2030,9 @@
     
     <xsl:template mode="block span"
                   match="css:custom-func[@name='-obfl-evaluate'][@arg2]">
-        <xsl:message>-obfl-evaluate() function requires exactly one string argument</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">-obfl-evaluate() function requires exactly one string argument</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <!--
@@ -2020,7 +2113,9 @@
             FIXME: what about css:string[@target] and css:box[@css:anchor] ?
         -->
         <xsl:if test="$sections//css:counter[@name=$page-counter-names][@target=$id]">
-            <xsl:message terminate="yes">target-counter(page) referencing inline elements not supported.</xsl:message>
+            <xsl:call-template name="pf:error">
+                <xsl:with-param name="msg">target-counter(page) referencing inline elements not supported.</xsl:with-param>
+            </xsl:call-template>
         </xsl:if>
     </xsl:template>
     
@@ -2110,6 +2205,11 @@
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="word-spacing" as="xs:integer" tunnel="yes"/>
+        
+        <xsl:call-template name="pf:progress">
+            <xsl:with-param name="progress" select="concat('1/',$progress-total)"/>
+        </xsl:call-template>
+        
         <xsl:variable name="text" as="xs:string" select="translate($text,'&#x2800;',' ')"/>
         <xsl:variable name="text" as="xs:string">
             <xsl:choose>
@@ -2215,13 +2315,18 @@
     <xsl:template priority="0.1"
                   mode="block-attr toc-entry-attr"
                   match="css:box[@type='block']/@css:_obfl-toc">
-        <xsl:message>display: -obfl-toc only allowed on elements that are flowed into @begin or @end area.</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">display: -obfl-toc only allowed on elements that are flowed into @begin or @end area.</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template mode="block-attr span-attr"
                   match="@css:_obfl-on-toc-start|
                          @css:_obfl-on-toc-end">
-        <xsl:message select="concat('::',replace(local-name(),'^_','-'),' pseudo-element only allowed on elements with display: -obfl-toc.')"/>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">::{} pseudo-element only allowed on elements with display: -obfl-toc.</xsl:with-param>
+            <xsl:with-param name="args" select="replace(local-name(),'^_','-')"/>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template mode="block-attr span-attr"
@@ -2236,27 +2341,29 @@
                   mode="#default sequence item table-of-contents block span table tr td toc-entry assert-nil
                         sequence-attr item-attr table-of-contents-attr block-attr span-attr
                         table-attr tr-attr td-attr toc-entry-attr assert-nil-attr
-                        marker"
+                        marker sequence-interrupted-resumed"
                   match="@*|node()">
         <xsl:call-template name="coding-error"/>
     </xsl:template>
     
     <xsl:template name="coding-error">
         <xsl:param name="context" select="."/> <!-- element()|text()|attribute() -->
-        <xsl:message terminate="yes">
-          <xsl:text>Coding error: unexpected </xsl:text>
-          <xsl:value-of select="pxi:get-path($context)"/>
-          <xsl:if test="$context/self::text()">
-              <xsl:text> ("</xsl:text>
-              <xsl:value-of select="replace(
-                                      if (string-length($context)&gt;10) then concat(substring($context,1,10),'...') else string($context),
-                                      '\n','\\n')"/>
-              <xsl:text>")</xsl:text>
-          </xsl:if>
-          <xsl:text> (mode was </xsl:text>
-          <xsl:apply-templates select="$pxi:print-mode" mode="#current"/>
-          <xsl:text>)</xsl:text>
-        </xsl:message>
+        <xsl:call-template name="pf:error">
+            <xsl:with-param name="msg">
+                <xsl:text>Coding error: unexpected </xsl:text>
+                <xsl:value-of select="pxi:get-path($context)"/>
+                <xsl:if test="$context/self::text()">
+                    <xsl:text> ("</xsl:text>
+                    <xsl:value-of select="replace(
+                                            if (string-length($context)&gt;10) then concat(substring($context,1,10),'...') else string($context),
+                                            '\n','\\n')"/>
+                    <xsl:text>")</xsl:text>
+                </xsl:if>
+                <xsl:text> (mode was </xsl:text>
+                <xsl:apply-templates select="$pxi:print-mode" mode="#current"/>
+                <xsl:text>)</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:function name="pxi:get-path" as="xs:string">
@@ -2298,16 +2405,21 @@
     <xsl:template match="pxi:print-mode" mode="assert-nil-attr">assert-nil-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="marker">marker</xsl:template>
     <xsl:template match="pxi:print-mode" mode="xml-data">xml-data</xsl:template>
+    <xsl:template match="pxi:print-mode" mode="sequence-interrupted-resumed">sequence-interrupted-resumed</xsl:template>
     <xsl:template match="pxi:print-mode" mode="#all" priority="-1">?</xsl:template>
     
     <!-- =========== -->
     <!-- Volume area -->
     <!-- =========== -->
     
-    <xsl:template mode="css:eval-volume-area-content-list"
+    <xsl:template mode="css:eval-volume-area-content-list
+                        css:eval-sequence-interrupted-resumed-content-list"
                   match="css:string[@value]">
         <css:_>
-            <css:box type="inline">
+            <!--
+                FIXME: treat strings as inline content and wrap adjacent strings in a single block
+            -->
+            <css:box type="block">
                 <xsl:value-of select="@value"/>
             </css:box>
         </css:_>
@@ -2316,7 +2428,8 @@
     <!--
         default scope within volume area is 'document'
     -->
-    <xsl:template mode="css:eval-volume-area-content-list"
+    <xsl:template mode="css:eval-volume-area-content-list
+                        css:eval-sequence-interrupted-resumed-content-list"
                   match="css:flow[@from and (not(@scope) or @scope='document')]">
         <xsl:variable name="flow" as="xs:string" select="@from"/>
         <xsl:sequence select="$sections/*[@css:flow=$flow]"/>
@@ -2327,7 +2440,8 @@
         <list-of-references collection="{@from}" range="volume"/>
     </xsl:template>
     
-    <xsl:template mode="css:eval-volume-area-content-list"
+    <xsl:template mode="css:eval-volume-area-content-list
+                        css:eval-sequence-interrupted-resumed-content-list"
                   match="css:attr|
                          css:content[@target]|
                          css:content[not(@target)]|
@@ -2337,20 +2451,31 @@
                          css:string[@name][@target]|
                          css:counter[@target]|
                          css:leader">
-        <xsl:message select="concat(
-                               if (@target) then 'target-' else '',
-                               local-name(),
-                               '() function not supported in volume area')"/>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">{}{}() function not supported in volume area or volume transition</xsl:with-param>
+            <xsl:with-param name="args" select="(if (@target) then 'target-' else '',
+                                                 local-name())"/>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template mode="css:eval-volume-area-content-list"
                   match="css:custom-func[@name='-obfl-evaluate']">
-        <xsl:message>-obfl-evaluate() function not supported in volume area</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">-obfl-evaluate() function not supported in volume area</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
-    <xsl:template mode="css:eval-volume-area-content-list"
+    <xsl:template mode="css:eval-sequence-interrupted-resumed-content-list"
+                  match="css:custom-func[@name='-obfl-evaluate']">
+        <xsl:message>FIXME</xsl:message>
+    </xsl:template>
+    
+    <xsl:template mode="css:eval-volume-area-content-list
+                        css:eval-sequence-interrupted-resumed-content-list"
                   match="*">
-        <xsl:message terminate="yes">Coding error</xsl:message>
+        <xsl:call-template name="pf:error">
+            <xsl:with-param name="msg">Coding error</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <!-- ======================== -->

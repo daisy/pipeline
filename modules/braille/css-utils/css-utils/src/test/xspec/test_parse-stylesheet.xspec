@@ -111,4 +111,22 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_06">
+    <x:context>
+      <doc style="@volume:nth(2) {{ max-length: auto; }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:volume="&amp;:nth(2) {{ max-length: auto; }}"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_07">
+    <x:context>
+      <doc style="@-obfl-volume-transition {{ @any-interrupted {{ content: flow(volume-end); }} }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:_obfl-volume-transition="@any-interrupted {{ content: flow(volume-end); }}"/>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

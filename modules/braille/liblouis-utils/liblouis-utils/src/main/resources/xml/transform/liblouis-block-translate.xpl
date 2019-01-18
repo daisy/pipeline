@@ -11,9 +11,16 @@
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
 	
-	<css:parse-properties properties="display"/>
+	<css:parse-properties px:progress=".05"
+	                      properties="display"/>
 	
-	<p:xslt>
+	<!--
+	    Suppress warning message "The source document is in namespace foo, but none of the template
+	    rules match elements in this namespace"
+	-->
+	<p:wrap wrapper="css:wrapper" match="/*"/>
+	
+	<p:xslt px:message="Translating with Liblouis" px:progress=".95">
 		<p:input port="stylesheet">
 			<p:document href="liblouis-block-translate.xsl"/>
 		</p:input>

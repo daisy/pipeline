@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 type="pxi:propagate-page-break"
@@ -63,7 +64,8 @@
                       attribute="css:end-volume"
                       label="@css:volume"/>
     
-    <p:xslt>
+    <p:identity px:progress=".10"/>
+    <p:xslt px:progress=".80">
         <p:input port="stylesheet">
             <p:document href="propagate-page-break.xsl"/>
         </p:input>

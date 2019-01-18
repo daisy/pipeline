@@ -1,6 +1,12 @@
 import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 
+import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
+
+import org.ops4j.pax.exam.Configuration;
+import static org.ops4j.pax.exam.CoreOptions.composite;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import org.ops4j.pax.exam.Option;
 
 public class LiblouisFormatterTest extends AbstractXSpecAndXProcSpecTest {
 	
@@ -17,8 +23,14 @@ public class LiblouisFormatterTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),
 			brailleModule("liblouis-tables"),
-			// FIXME: BrailleUtils needs older version of jing
-			"org.daisy.libs:jing:20120724.0.0",
 		};
+	}
+	
+	@Override @Configuration
+	public Option[] config() {
+		return options(
+			// FIXME: BrailleUtils needs older version of jing
+			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
+			composite(super.config()));
 	}
 }

@@ -149,8 +149,8 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 		}
 		
 		public static <T extends Transform> java.lang.Iterable<T> logSelect(final Query query,
-                                                                            final TransformProvider<T> provider,
-                                                                            final Logger context) {
+		                                                                    final TransformProvider<T> provider,
+		                                                                    final Logger context) {
 			return new Iterable<T>() {
 				public Iterator<T> iterator() {
 					return new AbstractIterator<T>() {
@@ -159,10 +159,10 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 						public T computeNext() {
 							if (!i.hasNext()) {
 								if (first)
-									context.debug("No match for query " + query);
+									context.trace("No match for query " + query);
 								return endOfData(); }
 							T t = i.next();
-							context.info("Selected " + t + " for query " + query);
+							context.debug("Selected " + t + " for query " + query);
 							first = false;
 							return t;
 						}

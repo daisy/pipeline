@@ -12,7 +12,7 @@
     
     <p:option name="assert-valid" select="'true'"/>
     
-    <p:try>
+    <p:try px:message="Validating braille" px:progress="1">
         <p:group>
             <p:xslt>
                 <p:input port="stylesheet">

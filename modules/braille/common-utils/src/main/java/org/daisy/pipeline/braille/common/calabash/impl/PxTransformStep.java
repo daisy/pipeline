@@ -20,8 +20,6 @@ import net.sf.saxon.s9api.QName;
 
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
-import org.daisy.pipeline.braille.common.calabash.JobContextImpl;
-import org.daisy.pipeline.braille.common.JobContext;
 import org.daisy.pipeline.braille.common.Transform;
 import org.daisy.pipeline.braille.common.Transform.XProc;
 import org.daisy.pipeline.braille.common.TransformProvider;
@@ -40,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 public class PxTransformStep extends Eval {
 	
-	private final JobContext context;
 	private final TransformProvider<Transform> provider;
 	private final ReadableDocument pipeline;
 	
@@ -53,7 +50,6 @@ public class PxTransformStep extends Eval {
 	
 	private PxTransformStep(XProcRuntime runtime, XAtomicStep step, TransformProvider<Transform> provider) {
 		super(runtime, step);
-		this.context = new JobContextImpl(runtime.getMessageListener());
 		this.provider = provider;
 		pipeline = new ReadableDocument(runtime);
 		setInput("pipeline", pipeline);
@@ -83,7 +79,7 @@ public class PxTransformStep extends Eval {
 			Query query = query(getOption(_query).getString());
 			XProc xproc = null;
 			try {
-				for (Transform t : logSelect(query, provider, context))
+				for (Transform t : logSelect(query, provider, logger))
 					try {
 						xproc = t.asXProc();
 						break; }

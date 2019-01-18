@@ -3,9 +3,11 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-result-prefixes="#all">
 	
 	<xsl:import href="../library.xsl"/>
+	<xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
 	
 	<!--
 		Don't wrap document with <"_" style="text-transform:none"/>. This is useful e.g. when the
@@ -20,11 +22,15 @@
 		<xsl:message terminate="yes">Coding error</xsl:message>
 	</xsl:template>
 	
+	<xsl:template match="/css:wrapper" priority="1">
+		<xsl:apply-templates select="*" mode="identify-blocks"/>
+	</xsl:template>
+	
 	<xsl:template match="/*">
 		<xsl:apply-templates select="." mode="identify-blocks"/>
 	</xsl:template>
 	
-	<xsl:template mode="identify-blocks" match="/*">
+	<xsl:template mode="identify-blocks" match="/css:wrapper/*|/*[not(self::css:wrapper)]">
 		<xsl:variable name="source-style" as="element()*">
 			<xsl:call-template name="css:computed-properties">
 				<xsl:with-param name="properties" select="$text-properties"/>
@@ -44,6 +50,7 @@
 					<xsl:next-match>
 						<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 						<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
+						<xsl:with-param name="portion" select="1.0"/>
 					</xsl:next-match>
 				</_>
 			</xsl:when>
@@ -51,6 +58,7 @@
 				<xsl:next-match>
 					<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 					<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
+					<xsl:with-param name="portion" select="1.0"/>
 				</xsl:next-match>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -66,6 +74,7 @@
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/> <!-- css:property* -->
 		<!-- computed text properties of the parent element in the result -->
 		<xsl:param name="result-style" as="element()*" tunnel="yes"/> <!-- css:property* -->
+		<xsl:param name="portion" required="yes"/>
 		<xsl:variable name="style" as="element()*"> <!-- css:rule* -->
 			<xsl:if test="@css:*">
 				<css:rule>
@@ -125,19 +134,25 @@
 			</xsl:variable>
 			<xsl:for-each-group select="*|text()"
 			                    group-adjacent="$is-block and boolean(descendant-or-self::*[@css:display[not(.='inline')]])">
+				<xsl:variable name="group-portion" select="$portion div last()"/>
 				<xsl:choose>
 					<xsl:when test="current-grouping-key()">
 						<xsl:for-each select="current-group()">
+							<xsl:variable name="group-portion" select="$group-portion div last()"/>
 							<xsl:apply-templates mode="#current" select=".">
 								<xsl:with-param name="is-block" select="$is-block" tunnel="yes"/>
 								<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 								<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
+								<xsl:with-param name="portion" select="$group-portion"/>
 							</xsl:apply-templates>
 						</xsl:for-each>
 					</xsl:when>
 					<!-- preserve indentation outside of blocks -->
 					<xsl:when test="every $n in current-group() satisfies
 					                $n/self::text() and matches(string($n),'^[ \t\n\r&#x2800;&#x00AD;&#x200B;]*$')">
+						<xsl:call-template name="pf:progress">
+							<xsl:with-param name="progress" select="string($group-portion)"/>
+						</xsl:call-template>
 						<xsl:value-of select="."/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -154,10 +169,14 @@
 								</xsl:for-each>
 							</xsl:element>
 						</xsl:variable>
+						<xsl:call-template name="pf:progress">
+							<xsl:with-param name="progress" select="string($group-portion)"/>
+						</xsl:call-template>
 						<xsl:apply-templates select="$block/css:block">
 							<xsl:with-param name="context" select="$context"/>
 							<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 							<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
+							<xsl:with-param name="portion" select="$group-portion"/>
 						</xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>

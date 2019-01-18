@@ -35,7 +35,9 @@
 	<!-- for debug info -->
 	<p:for-each><p:identity/></p:for-each>
 	
-	<px:transform>
+	<px:transform px:message="Translating document with {
+	                            replace($css-block-transform,'\((input|output):css\)','')}"
+	              px:progress=".27">
 		<p:with-option name="query" select="$css-block-transform"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 		<p:input port="parameters">
@@ -46,15 +48,15 @@
 	<!-- for debug info -->
 	<p:for-each><p:identity/></p:for-each>
 	
-	<pxi:css-to-obfl>
+	<pxi:css-to-obfl px:message="Transforming from CSS to OBFL" px:progress=".70">
 		<p:with-option name="text-transform" select="$text-transform"/>
 		<p:with-option name="duplex" select="$duplex"/>
 		<p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
 	</pxi:css-to-obfl>
 	
-	<pxi:obfl-normalize-space name="obfl"/>
+	<pxi:obfl-normalize-space name="obfl" px:progress=".01"/>
 	
-	<p:choose>
+	<p:choose px:progress=".02">
 		<p:when test="$output='pef'">
 			
 			<!-- for debug info -->
@@ -82,7 +84,8 @@
 					<p:pipe step="main" port="parameters"/>
 				</p:input>
 			</px:merge-parameters>
-			<dotify:obfl-to-pef locale="und">
+			<dotify:obfl-to-pef px:message="Transforming from OBFL to PEF" px:progress="1"
+			                    locale="und">
 				<p:input port="source">
 					<p:pipe step="obfl" port="result"/>
 				</p:input>

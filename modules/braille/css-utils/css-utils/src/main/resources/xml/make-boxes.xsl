@@ -2,11 +2,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
     <xsl:include href="library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
     
     <xsl:template match="css:_">
         <xsl:copy>
@@ -154,13 +156,19 @@
     
     <xsl:template match="*[not(descendant::*[@css:table-cell])]/@css:display" mode="display-table">
         <xsl:if test="not(.='none')">
-            <xsl:message select="concat('&quot;display&quot; property on &quot;',name(parent::*),'&quot; element within table must be &quot;none&quot;.')"/>
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">"display" property on "{}" element within table must be "none".</xsl:with-param>
+                <xsl:with-param name="args" select="name(parent::*)"/>
+            </xsl:call-template>
         </xsl:if>
     </xsl:template>
     
     <xsl:template match="@css:display" mode="display-table">
         <xsl:if test="not(.='inline')">
-            <xsl:message select="concat('&quot;display&quot; property on &quot;',name(parent::*),'&quot; element ignored.')"/>
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">"display" property on "{}" element ignored.</xsl:with-param>
+                <xsl:with-param name="args" select="name(parent::*)"/>
+            </xsl:call-template>
         </xsl:if>
     </xsl:template>
     

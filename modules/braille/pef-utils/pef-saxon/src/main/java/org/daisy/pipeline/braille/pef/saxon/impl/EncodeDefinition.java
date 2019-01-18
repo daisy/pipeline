@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.xmlcalabash.core.XProcException;
+
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -107,8 +109,7 @@ public class EncodeDefinition extends ExtensionFunctionDefinition {
 							throw new RuntimeException("Could not find a table for query: " + tableQuery); }}
 					return new StringValue(table.newBrailleConverter().toText(braille)); }
 				catch (Exception e) {
-					logger.error("pef:encode failed", e);
-					throw new XPathException("pef:encode failed"); }
+					throw new XPathException("pef:encode failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}

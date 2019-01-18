@@ -131,8 +131,9 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 					switch (level) {
 					case ALL: logger.trace(message); break;
 					case DEBUG: logger.debug(message); break;
-					case INFO: logger.info(message); break;
-					case WARN: logger.warn(message); break;
+					case INFO: logger.debug("INFO: " + message); break;
+					case WARN: logger.debug("WARN: " + message); break;
+					// FIXME: capture these and include them into CompilationException or TranslationException
 					case ERROR: logger.error(message); break;
 					case FATAL: logger.error(message); break; }}};
 			Louis.getLibrary().lou_registerLogCallback(_logger); }

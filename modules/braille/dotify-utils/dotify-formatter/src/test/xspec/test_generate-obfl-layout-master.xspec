@@ -467,4 +467,46 @@
     </x:expect>
   </x:scenario>
 
+  <x:scenario label="test_12">
+    <x:call function="obfl:generate-layout-master">
+      <x:param>
+        <css:rule>
+          <css:property name="size" value="15 15"/>
+        </css:rule>
+        <css:rule selector="@footnotes">
+          <css:property name="border-top-pattern" value="⠒"/>
+          <css:property name="max-height" value="10"/>
+          <css:property name="content" value="flow(footnote)"/>
+        </css:rule>
+        <css:rule selector="&amp;:left">
+          <css:rule>
+            <css:property name="size" value="15 15"/>
+          </css:rule>
+          <css:rule selector="@footnotes">
+            <css:property name="border-top-pattern" value="⠒"/>
+            <css:property name="max-height" value="10"/>
+            <css:property name="content" value="flow(footnote)"/>
+          </css:rule>
+        </css:rule>
+      </x:param>
+      <x:param select="'x'"/>
+      <x:param select="'page'"/>
+    </x:call>
+    <x:expect label="layout-master">
+      <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="15" duplex="true" page-number-variable="page">
+        <template use-when="(= (% $page 2) 0)">
+          <header/>
+          <footer/>
+        </template>
+        <default-template>
+          <header/>
+          <footer/>
+        </default-template>
+        <page-area align="bottom" max-height="10" collection="footnote">
+          <before><leader pattern="⠒" position="100%" align="right"/></before>
+        </page-area>
+      </layout-master>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

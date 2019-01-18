@@ -13,8 +13,8 @@
     
     <p:import href="select-by-position.xpl"/>
     
-    <p:for-each>
-        <px:select-by-position name="select">
+    <p:for-each px:progress="1">
+        <px:select-by-position name="select" px:progress=".5">
             <p:input port="source">
                 <p:pipe step="main" port="iteration-source"/>
             </p:input>
@@ -22,7 +22,7 @@
                 <p:empty/>
             </p:with-option>
         </px:select-by-position>
-        <p:xslt name="xslt">
+        <p:xslt name="xslt" px:progress=".5">
             <p:input port="source">
                 <p:pipe step="select" port="matched"/>
                 <p:pipe step="select" port="not-matched"/>

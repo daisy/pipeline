@@ -52,12 +52,13 @@
 		<p:output port="result"/>
 		<p:option name="stylesheets" required="true"/>
 		<p:input kind="parameter" port="parameters" primary="true"/>
-		<p:choose>
+		<p:choose px:progress="1">
 			<p:when test="exists(tokenize($stylesheets,'\s+')[not(.='')])">
+				<p:variable name="stylesheet" select="tokenize($stylesheets,'\s+')[not(.='')][1]"/>
 				<p:load name="stylesheet">
-					<p:with-option name="href" select="resolve-uri(tokenize($stylesheets,'\s+')[not(.='')][1],base-uri(/*))"/>
+					<p:with-option name="href" select="resolve-uri($stylesheet,base-uri(/*))"/>
 				</p:load>
-				<p:xslt>
+				<p:xslt px:message="Applying {$stylesheet}" px:progress="1/{count(tokenize($stylesheets,'\s+'))}">
 					<p:input port="source">
 						<p:pipe step="recursive-xslt" port="source"/>
 					</p:input>
@@ -65,7 +66,7 @@
 						<p:pipe step="stylesheet" port="result"/>
 					</p:input>
 				</p:xslt>
-				<pxi:recursive-xslt>
+				<pxi:recursive-xslt px:progress="{count(tokenize($stylesheets,'\s+')) - 1}/{count(tokenize($stylesheets,'\s+'))}">
 					<p:with-option name="stylesheets" select="string-join(tokenize($stylesheets,'\s+')[not(.='')][position()&gt;1],' ')"/>
 				</pxi:recursive-xslt>
 			</p:when>
@@ -93,9 +94,9 @@
 		</p:otherwise>
 	</p:choose>
 	
-	<px:parse-xml-stylesheet-instructions name="xml-stylesheet-instructions"/>
+	<px:parse-xml-stylesheet-instructions name="xml-stylesheet-instructions" px:progress=".05"/>
 	
-	<p:group>
+	<p:group px:progress=".95">
 		<p:variable name="all-xslt-stylesheets"
 		            select="string-join((
 		                      $xslt-stylesheets,
@@ -111,13 +112,16 @@
 				<p:pipe step="main" port="source"/>
 			</p:input>
 		</p:identity>
-		<pxi:recursive-xslt>
+		<pxi:recursive-xslt px:progress=".50">
 			<p:with-option name="stylesheets" select="$all-xslt-stylesheets"/>
 			<p:input port="parameters">
 				<p:pipe step="main" port="parameters"/>
 			</p:input>
 		</pxi:recursive-xslt>
-		<css:inline>
+		<css:inline px:message="Applying CSS{if (exists(tokenize($all-css-stylesheets,'\s+')[not(.='')]))
+		                                     then concat(':',string-join(('',tokenize($all-css-stylesheets,'\s+')[not(.='')]),'&#x0A;- '))
+		                                     else ''}"
+		            px:progress=".50">
 			<p:with-option name="default-stylesheet" select="$all-css-stylesheets"/>
 			<p:input port="sass-variables">
 				<p:pipe step="main" port="parameters"/>

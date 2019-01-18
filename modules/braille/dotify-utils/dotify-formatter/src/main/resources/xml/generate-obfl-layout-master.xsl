@@ -5,10 +5,12 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     
     <xsl:param name="duplex" as="xs:string" required="yes"/>
@@ -93,10 +95,7 @@
         <xsl:variable name="duplex" as="xs:boolean" select="$duplex='true'"/>
         <xsl:variable name="right-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:right']/*"/>
         <xsl:variable name="left-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:left']/*"/>
-        <xsl:variable name="default-page-stylesheet" as="element()*"
-                      select="if ($right-page-stylesheet or $left-page-stylesheet)
-                              then $page-stylesheet[not(@selector)]/*
-                              else $page-stylesheet"/>
+        <xsl:variable name="default-page-stylesheet" as="element()*" select="$page-stylesheet"/>
         <xsl:variable name="default-page-properties" as="element()*"
                       select="if ($default-page-stylesheet/self::css:property)
                               then $default-page-stylesheet/self::css:property
@@ -161,16 +160,23 @@
                 </xsl:call-template>
             </default-template>
             <xsl:if test="$footnotes-content[not(self::css:flow[@from])]">
-                <xsl:message>only flow() function supported in footnotes area</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">only flow() function supported in footnotes area</xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="count($footnotes-content[self::css:flow[@from]]) > 1">
-                <xsl:message>not more than one flow() function supported in footnotes area</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">not more than one flow() function supported in footnotes area</xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
              <!--
                  default scope within footnotes area is 'page'
              -->
             <xsl:if test="$footnotes-content[self::css:flow[@from]][1]/@scope[not(.='page')]">
-                <xsl:message select="concat($footnotes-content[self::css:flow[@from]][1]/@scope,' argument of flow() function not allowed within footnotes area')"/>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">{} argument of flow() function not allowed within footnotes area</xsl:with-param>
+                    <xsl:with-param name="args" select="$footnotes-content[self::css:flow[@from]][1]/@scope"/>
+                </xsl:call-template>
             </xsl:if>
             <xsl:for-each select="$footnotes-content[self::css:flow[@from]][1]">
                 <xsl:variable name="footnotes-border-top" as="xs:string"
@@ -184,7 +190,9 @@
                 <xsl:variable name="footnotes-fallback-collection" as="xs:string?"
                               select="$footnotes-properties[@name=('-obfl-fallback-collection','-obfl-fallback-flow')][1]/@value"/>
                 <xsl:if test="$footnotes-properties[@name='-obfl-fallback-flow']">
-                    <xsl:message>Correct spelling of '-obfl-fallback-flow' is '-obfl-fallback-collection'</xsl:message>
+                    <xsl:call-template name="pf:warn">
+                        <xsl:with-param name="msg">Correct spelling of '-obfl-fallback-flow' is '-obfl-fallback-collection'</xsl:with-param>
+                    </xsl:call-template>
                 </xsl:if>
                 <page-area align="bottom" max-height="{$footnotes-max-height}" collection="{@from}">
                     <xsl:if test="exists($footnotes-fallback-collection) and matches($footnotes-fallback-collection, re:exact($css:IDENT_RE))">
@@ -436,7 +444,11 @@
             </xsl:choose>
         </xsl:if>
         <xsl:if test="$white-space!='normal'">
-            <xsl:message select="concat('white-space:',$white-space,' could not be applied to target-counter(',@name,')')"/>
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">white-space:{} could not be applied to target-counter({})</xsl:with-param>
+                <xsl:with-param name="args" select="($white-space,
+                                                     @name)"/>
+            </xsl:call-template>
         </xsl:if>
         <current-page number-format="{if (@style=('roman', 'upper-roman', 'lower-roman', 'upper-alpha', 'lower-alpha'))
                                       then @style else 'default'}">
@@ -466,7 +478,11 @@
         <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
         <xsl:param name="page-side" as="xs:string" tunnel="yes" select="'both'"/>
         <xsl:if test="$white-space!='normal'">
-            <xsl:message select="concat('white-space:',$white-space,' could not be applied to target-string(',@name,')')"/>
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">white-space:{} could not be applied to target-string({})</xsl:with-param>
+                <xsl:with-param name="args" select="($white-space,
+                                                     @name)"/>
+            </xsl:call-template>
         </xsl:if>
         <xsl:variable name="scope" select="(@scope,'first')[1]"/>
         <xsl:if test="$page-side='both' and $scope=('spread-first','spread-start','spread-last','spread-last-except-start')">
@@ -474,8 +490,11 @@
                 FIXME: force creation of templates for left and right pages when margin
                 content contains "string(foo, spread-last)"
             -->
-            <xsl:message terminate="yes"
-                         select="concat('string(',@name,', ',$scope,') on both left and right side currently not supported')"/>
+            <xsl:call-template name="pf:error">
+                <xsl:with-param name="msg">string({}, {}) on both left and right side currently not supported</xsl:with-param>
+                <xsl:with-param name="args" select="(@name,
+                                                     $scope)"/>
+            </xsl:call-template>
         </xsl:if>
         <xsl:variable name="var-name" as="xs:string" select="concat('tmp_',generate-id(.))"/>
         <xsl:variable name="text-transform-decl" as="xs:string" select="if (not($text-transform=('none','auto')))
@@ -611,8 +630,11 @@
                              select="concat('string(',@name,', ',$scope,') currently not supported. If you want to use it in combination with string(start), please consider using the combination start-except-last/last instead.')"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message terminate="yes"
-                             select="concat('in function string(',@name,', ',$scope,'): unknown keyword &quot;',$scope,'&quot;')"/>
+                <xsl:call-template name="pf:error">
+                    <xsl:with-param name="msg">in function string({}, {}): unknown keyword "{}"</xsl:with-param>
+                    <xsl:with-param name="args" select="(@name,
+                                                        $scope)"/>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -623,59 +645,87 @@
     </xsl:template>
     
     <xsl:template match="css:custom-func[@name='-obfl-marker-indicator']" mode="eval-content-list-left-right">
-        <xsl:message>-obfl-marker-indicator() function requires exactly two arguments</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">-obfl-marker-indicator() function requires exactly two arguments</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:attr" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>attr() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">attr() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:content[not(@target)]" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>content() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">content() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:content[@target]" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>target-content() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">target-content() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:text[@target]" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>target-text() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">target-text() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:string[@value]" mode="eval-content-list-left-right">
-        <xsl:message>strings not supported in left and right page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">strings not supported in left and right page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:string[@name][not(@target)]" mode="eval-content-list-left-right">
-        <xsl:message>string() function not supported in left and right page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">string() function not supported in left and right page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:string[@name][@target]" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>target-string() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">target-string() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:counter[@target]" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>target-counter() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">target-counter() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:counter[not(@target)]" mode="eval-content-list-left-right">
-        <xsl:message>counter() function not supported in left and right page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">counter() function not supported in left and right page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:leader" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>leader() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">leader() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:flow[@from]" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message>flow() function not supported in page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">flow() function not supported in page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="css:custom-func[@name='-obfl-marker-indicator']" mode="eval-content-list-top-bottom">
-        <xsl:message>-obfl-marker-indicator() function not supported in top and bottom page margin</xsl:message>
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">-obfl-marker-indicator() function not supported in top and bottom page margin</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="*" mode="eval-content-list-top-bottom eval-content-list-left-right">
-        <xsl:message terminate="yes">Coding error</xsl:message>
+        <xsl:call-template name="pf:error">
+            <xsl:with-param name="msg">Coding error</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
 </xsl:stylesheet>

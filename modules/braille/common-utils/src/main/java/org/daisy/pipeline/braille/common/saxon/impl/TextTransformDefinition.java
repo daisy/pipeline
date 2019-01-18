@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.xmlcalabash.core.XProcException;
+
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -129,8 +131,7 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 						catch (UnsupportedOperationException e) {}
 					throw new RuntimeException("Could not find a BrailleTranslator for query: " + query); }
 				catch (Exception e) {
-					logger.error("pf:text-transform failed", e);
-					throw new XPathException("pf:text-transform failed"); }
+					throw new XPathException("pf:text-transform failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}

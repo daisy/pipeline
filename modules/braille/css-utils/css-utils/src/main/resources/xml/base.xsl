@@ -265,9 +265,13 @@
     <xsl:variable name="css:DECLARATION_LIST_RE" select="concat('\s*(', $css:DECLARATION_RE ,')?(;\s*(', $css:DECLARATION_RE ,')?)*')"/>
     <xsl:variable name="css:DECLARATION_LIST_RE_groups" select="1 + $css:DECLARATION_RE_groups + 2 + $css:DECLARATION_RE_groups"/>
     
-    <xsl:variable name="css:NESTED_NESTED_NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{',$css:DECLARATION_LIST_RE,'\}')"/>
-    <xsl:variable name="css:NESTED_NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_NESTED_RULE_RE,')*)\}')"/>
-    <xsl:variable name="css:NESTED_RULE_RE" select="concat('@',$css:IDENT_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:ATKEYWORD_RE" select="concat('@((',$css:IDENT_RE,')|(',$css:VENDOR_PRF_IDENT_RE,'))')"/>
+    <xsl:variable name="css:ATKEYWORD_RE_name" select="1"/>
+    <xsl:variable name="css:ATKEYWORD_RE_groups" select="$css:ATKEYWORD_RE_name + 1 + $css:IDENT_RE_groups + 1 + $css:VENDOR_PRF_IDENT_RE_groups"/>
+    
+    <xsl:variable name="css:NESTED_NESTED_NESTED_RULE_RE" select="concat($css:ATKEYWORD_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{',$css:DECLARATION_LIST_RE,'\}')"/>
+    <xsl:variable name="css:NESTED_NESTED_RULE_RE" select="concat($css:ATKEYWORD_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:NESTED_RULE_RE" select="concat($css:ATKEYWORD_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_RULE_RE,')*)\}')"/>
     
     <xsl:variable name="css:PSEUDOCLASS_RE" select="concat(':(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\([1-9][0-9]*\))?')"/>
     <xsl:variable name="css:PSEUDOCLASS_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
@@ -275,10 +279,10 @@
     <xsl:variable name="css:PSEUDOELEMENT_RE" select="concat('::(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\(',$css:IDENT_RE,'\))?')"/>
     <xsl:variable name="css:PSEUDOELEMENT_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1 + $css:IDENT_RE_groups"/>
     
-    <xsl:variable name="css:RULE_RE" select="concat('((@',$css:IDENT_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?\s*|([^\s\{;@][^\{;@&amp;]*))\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:RULE_RE" select="concat('((',$css:ATKEYWORD_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?\s*|([^\s\{;@][^\{;@&amp;]*))\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
     <xsl:variable name="css:RULE_RE_selector" select="1"/>
     <xsl:variable name="css:RULE_RE_selector_atrule" select="$css:RULE_RE_selector + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 2"/>
+    <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:ATKEYWORD_RE_groups + 2"/>
     <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule_name + $css:IDENT_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_selector_relative" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_relative + 1"/>

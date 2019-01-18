@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.xmlcalabash.core.XProcException;
+
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -109,8 +111,7 @@ public class DecodeDefinition extends ExtensionFunctionDefinition {
 				catch (IllegalArgumentException e) {
 					throw new XPathException("pef:decode failed: " + e.getMessage()); }
 				catch (Exception e) {
-					logger.error("pef:decode failed", e);
-					throw new XPathException("pef:decode failed"); }
+					throw new XPathException("pef:decode failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}

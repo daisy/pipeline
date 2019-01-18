@@ -47,6 +47,7 @@ import net.sf.saxon.value.SequenceType;
 
 import org.daisy.pipeline.braille.common.util.Strings;
 import static org.daisy.pipeline.braille.common.util.Functions.propagateException;
+import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
@@ -164,6 +165,9 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 							style.add(Style.of(((RuleRelativePage)rule).asRulePage()));
 						else if (rule instanceof RuleRelativeVolume)
 							style.add(Style.of(((RuleRelativeVolume)rule).asRuleVolume()));
+						else if (rule instanceof AnyAtRule)
+							style.add("@" + ((AnyAtRule)rule).getName(),
+							          Style.of((AnyAtRule)rule));
 						else
 							throw new RuntimeException("coding error");
 					}
@@ -347,6 +351,18 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 			return pseudo == null
 				? style
 				: new Style().add("&:" + pseudo, style);
+		}
+		
+		static Style of(AnyAtRule rule) {
+			Style style = new Style();
+			for (Rule<?> r : rule)
+				if (r instanceof Declaration)
+					style.add((Declaration)r);
+				else if (r instanceof AnyAtRule)
+					style.add("@" + ((AnyAtRule)r).getName(), Style.of((AnyAtRule)r));
+				else
+					throw new RuntimeException("coding error");
+			return style;
 		}
 	}
 	

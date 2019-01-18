@@ -31,6 +31,8 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 
+import com.xmlcalabash.core.XProcException;
+
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.Selector;
@@ -128,9 +130,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 					result = (XdmNode)result.axisIterator(Axis.CHILD).next(); // because result is document-node
 					return result.getUnderlyingNode(); }
 				catch (TransformerException e) {
-					logger.error("css:render-table-by failed", e);
-					e.printStackTrace();
-					throw new XPathException("css:render-table-by failed"); }
+					throw new XPathException("css:render-table-by failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 type="css:parse-properties"
                 exclude-inline-prefixes="#all"
@@ -35,7 +36,13 @@
         </p:documentation>
     </p:output>
     
-    <p:xslt>
+    <!--
+        Suppress warning message "The source document is in namespace foo, but none of the template
+        rules match elements in this namespace"
+    -->
+    <p:wrap wrapper="css:wrapper" match="/*"/>
+    
+    <p:xslt px:progress="1">
         <p:input port="stylesheet">
             <p:document href="parse-properties.xsl"/>
         </p:input>

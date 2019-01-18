@@ -53,6 +53,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>

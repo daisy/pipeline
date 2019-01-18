@@ -1228,12 +1228,12 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 									else
 										wsLost = true; }
 							if (wsLost) {
-								logger.warn("White space was not preserved: " + joinedText.replaceAll("\\s+"," "));
+								logger.warn("White space was not preserved (see detailed log for more info)");
 								logger.debug("White space was lost in the output.\n"
 								             + "Input: " + Arrays.toString(textWithWs) + "\n"
 								             + "Output: " + Arrays.toString(brailleWithWs)); }}
 						else {
-							logger.warn("Text segmentation was lost: " + joinedText.replaceAll("\\s+"," "));
+							logger.warn("Text segmentation was lost (see detailed log for more info)");
 							logger.debug("Text segmentation was lost in the output. Falling back to fuzzy mode.\n"
 							             + "=> input segments: " + Arrays.toString(textWithWs) + "\n"
 							             + "=> output segments: " + Arrays.toString(Arrays.copyOf(brailleWithWs, l)));

@@ -11,7 +11,7 @@
 	<p:option name="announcement" required="true"/>
 	<p:option name="deannouncement" required="true"/>
 	
-	<p:xslt name="stylesheet">
+	<p:xslt name="stylesheet" px:message="Marking transitions (compiling stylesheet)" px:progress=".5">
 		<p:input port="stylesheet">
 			<p:document href="mark-transitions.xsl"/>
 		</p:input>
@@ -23,7 +23,7 @@
 		</p:with-param>
 	</p:xslt>
 
-	<p:xslt>
+	<p:xslt px:message="Marking transitions (applying compiled stylesheet)" px:progress=".5">
 		<p:input port="source">
 			<p:pipe step="mark-transitions" port="source"/>
 		</p:input>

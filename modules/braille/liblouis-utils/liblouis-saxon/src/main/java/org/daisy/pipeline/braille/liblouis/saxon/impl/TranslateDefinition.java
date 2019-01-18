@@ -3,6 +3,8 @@ package org.daisy.pipeline.braille.liblouis.saxon.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.xmlcalabash.core.XProcException;
+
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -112,8 +114,7 @@ public class TranslateDefinition extends ExtensionFunctionDefinition {
 						catch (UnsupportedOperationException e) {}
 					throw new RuntimeException("Could not find a LiblouisTranslator for query: " + query); }
 				catch (Exception e) {
-					logger.error("louis:translate failed", e);
-					throw new XPathException("louis:translate failed"); }
+					throw new XPathException("louis:translate failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}

@@ -93,6 +93,7 @@ import net.sf.saxon.trans.XPathException;
 
 import org.apache.commons.io.input.BOMInputStream;
 
+import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSProperty;
@@ -533,6 +534,7 @@ public class CssInlineStep extends DefaultStep {
 						}
 					}
 					style.textTransformRules = filter(stylesheet, RuleTextTransform.class);
+					style.otherAtRules = filter(stylesheet, AnyAtRule.class);
 				} else if (medium.equals("print")) {
 					stylesheet = (StyleSheet)printRuleFactory.createStyleSheet().unlock();
 					if (defaultSheets != null)
@@ -569,6 +571,7 @@ public class CssInlineStep extends DefaultStep {
 			Map<String,Map<String,RulePage>> pageRules;
 			Map<String,Map<String,RuleVolume>> volumeRules;
 			Iterable<RuleTextTransform> textTransformRules;
+			Iterable<AnyAtRule> otherAtRules;
 		}
 		
 		private boolean isRoot = true;
@@ -607,7 +610,13 @@ public class CssInlineStep extends DefaultStep {
 								insertVolumeStyle(style, volumeRule, cs.pageRules); }
 						if (cs.textTransformRules != null)
 							for (RuleTextTransform r : cs.textTransformRules)
-								insertTextTransformDefinition(style, r); }}
+								insertTextTransformDefinition(style, r);
+						if (cs.otherAtRules != null)
+							for (AnyAtRule r : cs.otherAtRules) {
+								if (style.length() > 0 && !style.toString().endsWith("} ")) {
+									style.insert(0, "{ ");
+									style.append("} "); }
+								insertAtRule(style, r); }}}
 				if (normalizeSpace(style).length() > 0) {
 					writeAttribute(writer, attributeName, style.toString().trim()); }
 				isRoot = false;
@@ -873,6 +882,15 @@ public class CssInlineStep extends DefaultStep {
 		builder.append("@text-transform ").append(rule.getName()).append(" { ");
 		for (Declaration decl : rule)
 			insertDeclaration(builder, decl);
+		builder.append("} ");
+	}
+	
+	private static void insertAtRule(StringBuilder builder, AnyAtRule rule) {
+		builder.append("@").append(rule.getName()).append(" { ");
+		for (Declaration decl : filter(rule, Declaration.class))
+			insertDeclaration(builder, decl);
+		for (AnyAtRule r : filter(rule, AnyAtRule.class))
+			insertAtRule(builder, r);
 		builder.append("} ");
 	}
 	

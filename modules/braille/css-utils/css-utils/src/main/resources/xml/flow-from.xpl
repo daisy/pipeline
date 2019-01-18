@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 type="css:flow-from"
                 exclude-inline-prefixes="#all"
@@ -32,8 +33,8 @@
     
     <p:split-sequence test="/*[not(@css:flow)]" name="normal-flow"/>
     
-    <p:for-each name="for-each">
-        <p:xslt name="result">
+    <p:for-each name="for-each" px:progress="1">
+        <p:xslt name="result" px:progress="1">
             <p:input port="source">
                 <p:pipe step="for-each" port="current"/>
                 <p:pipe step="normal-flow" port="not-matched"/>

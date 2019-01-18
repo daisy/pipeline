@@ -41,13 +41,14 @@
 		</p:input>
 	</px:merge-parameters>
 	
-	<pxi:obfl-normalize-space>
+	<pxi:obfl-normalize-space px:progress=".10">
 		<p:input port="source">
 			<p:pipe step="main" port="source"/>
 		</p:input>
 	</pxi:obfl-normalize-space>
 	
-	<dotify:obfl-to-pef locale="und">
+	<dotify:obfl-to-pef px:progress=".90"
+	                    locale="und">
 		<p:with-option name="mode" select="$text-transform"/>
 		<p:input port="parameters">
 			<p:pipe step="parameters" port="result"/>

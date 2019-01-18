@@ -3,6 +3,8 @@ package org.daisy.pipeline.braille.dotify.saxon.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.xmlcalabash.core.XProcException;
+
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -107,8 +109,7 @@ public class TranslateDefinition extends ExtensionFunctionDefinition {
 						catch (UnsupportedOperationException e) {}
 					throw new RuntimeException("Could not find a DotifyTranslator for query: " + query); }
 				catch (Exception e) {
-					logger.error("dotify:translate failed", e);
-					throw new XPathException("dotify:translate failed"); }
+					throw new XPathException("dotify:translate failed", XProcException.javaError(e, 0)); }
 			}
 		};
 	}

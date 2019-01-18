@@ -30,7 +30,7 @@
     
     <p:wrap-sequence wrapper="_"/>
     
-    <p:xslt>
+    <p:xslt px:progress="1">
         <p:input port="stylesheet">
             <p:document href="label-targets.xsl"/>
         </p:input>

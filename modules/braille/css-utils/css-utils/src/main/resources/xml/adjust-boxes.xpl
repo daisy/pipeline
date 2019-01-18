@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 type="css:adjust-boxes"
                 exclude-inline-prefixes="#all"
@@ -39,7 +40,7 @@
         </p:documentation>
     </p:output>
     
-    <p:xslt>
+    <p:xslt px:progress="1">
         <p:input port="stylesheet">
             <p:document href="adjust-boxes.xsl"/>
         </p:input>

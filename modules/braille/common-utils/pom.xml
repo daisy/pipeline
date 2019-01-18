@@ -18,6 +18,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.dotify</groupId>
       <artifactId>dotify.api</artifactId>
     </dependency>
@@ -60,6 +64,11 @@
         test dependencies
     -->
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
@@ -89,7 +98,12 @@
               net.sf.saxon.*;version="${saxon.versionRange}",
               *
             </Import-Package>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
+              org.daisy.pipeline.braille.common.saxon.impl.MessageDefinition,
+              org.daisy.pipeline.braille.common.saxon.impl.ProgressDefinition,
+              org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider
+            </_dsannotations>
           </instructions>
         </configuration>
         <executions>

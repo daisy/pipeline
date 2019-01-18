@@ -9,9 +9,10 @@
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
 	
-	<css:parse-properties properties="display"/>
+	<css:parse-properties px:message="Parsing CSS properties" px:progress="1/2"
+	                      properties="display"/>
 	
-	<p:xslt>
+	<p:xslt px:message="Translating Dotify blocks" px:progress="1/2">
 		<p:input port="stylesheet">
 			<p:document href="dotify-block-translate.xsl"/>
 		</p:input>
