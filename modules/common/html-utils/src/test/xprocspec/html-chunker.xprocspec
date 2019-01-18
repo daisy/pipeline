@@ -64,6 +64,34 @@
         </x:expect>
     </x:scenario>
     
+    <x:scenario label="no break opportunities">
+        <x:call step="px:html-chunker">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html>
+                        <body>
+                            <section epub:type="frontmatter">
+                                <section/>
+                            </section>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the chunks">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="same as input (and 'finalized')" type="compare">
+            <x:document type="inline">
+                <html>
+                    <body epub:type="frontmatter">
+                        <section/>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
     <x:scenario label="title">
         <x:call step="px:html-chunker">
             <x:input port="source">
