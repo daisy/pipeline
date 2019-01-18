@@ -78,6 +78,7 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 			           || block instanceof RuleVolumeArea
 			           || block instanceof RuleRelativePage
 			           || block instanceof RuleRelativeVolume
+			           || block instanceof AnyAtRule
 			           ) {
 				nestedStyles.add(block);
 			} else {

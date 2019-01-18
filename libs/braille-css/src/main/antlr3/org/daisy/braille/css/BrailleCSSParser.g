@@ -17,10 +17,11 @@ import CSSParser;
 }
 
 // @Override
-// Added volume and text_transform_def
+// Added volume, text_transform_def and vendor_atrule
 unknown_atrule
     : volume
     | text_transform_def
+    | vendor_atrule
     | ATKEYWORD S* LCURLY any* RCURLY -> INVALID_ATSTATEMENT
     ;
 
@@ -41,6 +42,17 @@ volume_area
 text_transform_def
     : TEXT_TRANSFORM S+ IDENT S* LCURLY S* declarations RCURLY
         -> ^(TEXT_TRANSFORM IDENT declarations)
+    ;
+
+vendor_atrule
+    : VENDOR_ATRULE S* LCURLY S* declarations any_atrule* RCURLY
+      -> ^(VENDOR_ATRULE declarations ^(SET any_atrule*))
+    ;
+
+// not using atstatement because that does not include as much
+any_atrule
+    : ATKEYWORD S* LCURLY S* declarations any_atrule* RCURLY S*
+      -> ^(ATKEYWORD declarations ^(SET any_atrule*))
     ;
 
 // @Override
@@ -148,6 +160,7 @@ inlineset
     | text_transform_def
     | anonymous_page
     | inline_volume
+    | vendor_atrule
     ;
 
 // FIXME: Note that in the braille CSS specification the second AMPERSAND is optional. This

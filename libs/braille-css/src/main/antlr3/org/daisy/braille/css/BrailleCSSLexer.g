@@ -41,3 +41,5 @@ NOT : 'not(' ;
 HAS : 'has(' ;
 
 TEXT_TRANSFORM : '@text-transform' ;
+
+VENDOR_ATRULE : '@' MINUS IDENT_MACR ;

@@ -53,6 +53,7 @@ unknown_atrule returns [RuleBlock<?> stmnt]
 @init { $stmnt = null; }
     : (v=volume) { $stmnt = v; }
     | (tt=text_transform_def) { $stmnt = tt; }
+    | (aar=any_atrule) { $stmnt = aar; }
     | INVALID_ATSTATEMENT { gCSSTreeParser.debug("Skipping invalid at statement"); }
     ;
 
@@ -111,6 +112,27 @@ text_transform_def returns [RuleTextTransform def]
     : ^( TEXT_TRANSFORM n=IDENT decl=declarations ) {
           $def = preparator.prepareRuleTextTransform(n.getText(), decl);
       }
+    ;
+
+any_atrule returns [AnyAtRule stmnt]
+@init {
+    List<AnyAtRule> childrules = new ArrayList<AnyAtRule>();
+}
+    : ^(  at=(VENDOR_ATRULE|ATKEYWORD)
+          decl=declarations
+          ^( SET ( r=any_atrule { childrules.add(r); } )* )
+        ) {
+          String name = at.getText().substring(1);
+          AnyAtRule aar = new AnyAtRule(name);
+          if (decl != null) aar.addAll(decl);
+          if (childrules != null) aar.addAll(childrules);
+          if (aar.isEmpty())
+              gCSSTreeParser.debug("Empty AnyAtRule was omited");
+          else {
+              gCSSTreeParser.info("Create @" + name + " as with:\n{}", aar);
+              $stmnt = aar;
+          }
+        }
     ;
 
 // @Override
@@ -307,6 +329,7 @@ inlineblock returns [RuleBlock<?> b]
     | v=volume { $b = v; }
     | pm=margin { $b = pm; }
     | va=volume_area { $b = va; }
+    | aa=any_atrule { $b = aa; }
     | ^(AMPERSAND
          (rr=relative_rule { $b = rr; }
          |p=page { $b = new InlineStyle.RuleRelativePage(p); } // relative @page pseudo rule
