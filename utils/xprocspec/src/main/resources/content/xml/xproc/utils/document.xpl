@@ -336,12 +336,12 @@
                         <p:pipe port="current" step="select"/>
                     </p:iteration-source>
                     <p:xslt>
-                        <p:input port="parameters">
-                            <p:empty/>
-                        </p:input>
                         <p:input port="stylesheet">
                             <p:pipe port="result" step="select.xslt"/>
                         </p:input>
+                        <p:with-param name="test-base-uri" select="base-uri(/)">
+                            <p:pipe step="main" port="document"/>
+                        </p:with-param>
                     </p:xslt>
                     <p:add-attribute match="/*" attribute-name="type" attribute-value="inline"/>
                     <p:add-attribute match="/*" attribute-name="xml:space" attribute-value="preserve"/>
