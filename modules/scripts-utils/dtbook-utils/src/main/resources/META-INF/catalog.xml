@@ -11,4 +11,5 @@
    <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+   <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
 </catalog>

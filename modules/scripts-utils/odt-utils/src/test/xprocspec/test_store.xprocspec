@@ -99,6 +99,24 @@
         </c:directory>
       </x:document>
     </x:expect>
+    <x:context label="the ODT contents">
+      <x:document type="zip" href="store/zipped.odt" base-uri="temp-dir" ordered="true"/>
+    </x:context>
+    <x:expect label="the ODT contents" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="zipped.odt">
+          <c:file name="Configurations2/accelerator/current.xml"/>
+          <c:file name="META-INF/manifest.xml"/>
+          <c:file name="Thumbnails/thumbnail.png"/>
+          <c:file name="content.xml"/>
+          <c:file name="manifest.rdf"/>
+          <c:file name="meta.xml"/>
+          <c:file name="mimetype"/>
+          <c:file name="settings.xml"/>
+          <c:file name="styles.xml"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
     <x:context label="the manifest file">
       <x:document type="file" base-uri="temp-dir" href="store/zipped.odt!/META-INF/manifest.xml"/>
     </x:context>

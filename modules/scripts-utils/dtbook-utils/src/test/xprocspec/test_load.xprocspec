@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/dtbook-load.xpl">
+
+	<x:scenario label="load">
+		<x:call step="px:dtbook-load">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xml">
+					<dtbook version="1.1.0">
+						<head>
+							<title>Title</title>
+							<meta name="dc:Title" content="Title"/>
+							<link rel="stylesheet" type="text/css" href="style.css"/>
+						</head>
+						<book>
+							<bodymatter>
+								<level1>
+									<p>Blah</p>
+									<img src="image.png"/>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the fileset">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset xml:base="file:/tmp/">
+					<d:file href="style.css" media-type="text/css"/>
+					<d:file href="foo.xml" original-href="foo.xml" media-type="application/x-dtbook+xml"/>
+					<d:file href="image.png" original-href="image.png" media-type="image/png"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="if the base uri starts with file:///">
+		<x:call step="px:dtbook-load">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:///tmp/foo.xml">
+					<dtbook version="1.1.0">
+						<head>
+							<title>Title</title>
+							<meta name="dc:Title" content="Title"/>
+							<link rel="stylesheet" type="text/css" href="style.css"/>
+						</head>
+						<book>
+							<bodymatter>
+								<level1>
+									<p>Blah</p>
+									<img src="image.png"/>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the fileset">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="this results in a xml:base with only one slash after file:" type="compare"> <!-- not using x:fileset-compare -->
+			<x:document type="inline">
+				<d:fileset xml:base="file:/tmp/">
+					<d:file href="style.css" media-type="text/css"/>
+					<d:file href="foo.xml" original-href="file:/tmp/foo.xml" media-type="application/x-dtbook+xml"/>
+					<d:file href="image.png" original-href="file:/tmp/image.png" media-type="image/png"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri name="http://www.daisy.org/pipeline/modules/css-utils/xml-to-css-uris.xsl"
-        uri="../xml/xml-to-css-uris.xsl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/css-utils/library.xpl" uri="../xml/library.xpl"/>
 </catalog>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" type="px:daisy202-load" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                type="px:daisy202-load">
 
     <p:documentation>
         <p px:role="desc">Load a DAISY 2.02 fileset based on its NCC.</p>
@@ -30,29 +32,14 @@
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
-    <p:xslt>
-        <p:with-param name="href" select="$ncc"/>
-        <p:input port="source">
-            <p:inline>
-                <doc/>
-            </p:inline>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:inline>
-                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" version="2.0" exclude-result-prefixes="#all">
-                    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-                    <xsl:param name="href" required="yes"/>
-                    <xsl:template match="/*">
-                        <d:file href="{pf:normalize-uri($href)}"/>
-                    </xsl:template>
-                </xsl:stylesheet>
-            </p:inline>
-        </p:input>
-    </p:xslt>
+    <px:normalize-uri name="ncc">
+        <p:with-option name="href" select="$ncc"/>
+    </px:normalize-uri>
 
     <p:group name="wrapper">
         <p:output port="fileset.out" primary="true">
@@ -61,10 +48,13 @@
         <p:output port="in-memory.out" sequence="true">
             <p:pipe port="result" step="in-memory"/>
         </p:output>
-        <p:variable name="href" select="/*/@href"/>
+        <p:variable name="href" select="/c:result/string()">
+            <p:pipe step="ncc" port="normalized"/>
+        </p:variable>
         <px:message severity="DEBUG">
             <p:with-option name="message" select="concat('loading NCC: ',$href)"/>
         </px:message>
+        <p:sink/>
 
         <px:html-load name="in-memory.ncc">
             <p:with-option name="href" select="$href"/>
@@ -77,27 +67,26 @@
                 <p:empty/>
             </p:input>
             <p:input port="stylesheet">
-                <p:document href="ncc-to-flow-fileset.xsl"/>
+                <p:document href="ncc-to-smil-fileset.xsl"/>
             </p:input>
         </p:xslt>
 
         <px:message severity="DEBUG" message="Loading all SMIL files"/>
-        <p:for-each>
-            <p:iteration-source select="//d:file"/>
-            <px:message severity="DEBUG">
-                <p:with-option name="message" select="concat('loading ',/*/@href,'...')"/>
-            </px:message>
-            <p:load>
-                <p:with-option name="href" select="p:resolve-uri(/*/@href,base-uri(/*))"/>
-            </p:load>
-        </p:for-each>
+        <px:fileset-load>
+            <p:input port="in-memory">
+                <p:empty/>
+            </p:input>
+        </px:fileset-load>
         <p:identity name="in-memory.smil"/>
 
         <px:message severity="DEBUG" message="Listing all resources referenced from the SMIL files"/>
         <p:for-each>
-            <p:identity name="fileset.html-and-resources.in-memory.smil"/>
-
-            <p:xslt name="fileset.html-and-resources.audio">
+            <p:output port="result" sequence="true">
+                <p:pipe port="result" step="fileset.html-and-audio.audio"/>
+                <p:pipe port="result" step="fileset.html-and-audio.text"/>
+            </p:output>
+            <p:identity name="smil"/>
+            <p:xslt name="fileset.html-and-audio.audio">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -107,10 +96,10 @@
                     />
                 </p:input>
             </p:xslt>
-
-            <p:xslt name="fileset.html-and-resources.text">
+            <p:sink/>
+            <p:xslt name="fileset.html-and-audio.text">
                 <p:input port="source">
-                    <p:pipe port="result" step="fileset.html-and-resources.in-memory.smil"/>
+                    <p:pipe step="smil" port="result"/>
                 </p:input>
                 <p:input port="parameters">
                     <p:empty/>
@@ -121,13 +110,7 @@
                     />
                 </p:input>
             </p:xslt>
-
-            <px:fileset-join>
-                <p:input port="source">
-                    <p:pipe port="result" step="fileset.html-and-resources.audio"/>
-                    <p:pipe port="result" step="fileset.html-and-resources.text"/>
-                </p:input>
-            </px:fileset-join>
+            <p:sink/>
         </p:for-each>
         <px:fileset-join name="fileset.html-and-audio"/>
 
@@ -151,6 +134,8 @@
         <px:message severity="DEBUG" message="Listing all resources referenced from the HTML files"/>
         <p:for-each name="fileset.html-resources.for-each">
             <px:html-to-fileset/>
+            <!-- not using fileset-filter because we don't want to delete files references from iframes -->
+            <p:delete match="d:file[@media-type='application/xhtml+xml' and not(@kind='content')]"/>
             <px:message severity="DEBUG">
                 <p:with-option name="message"
                     select="concat('extracted list of resources from ',replace(base-uri(/*),'^.*/',''))">

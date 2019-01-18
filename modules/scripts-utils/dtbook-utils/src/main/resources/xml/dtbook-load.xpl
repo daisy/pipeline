@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step version="1.0" name="main" type="px:dtbook-load"
-    xmlns:m="http://www.w3.org/1998/Math/MathML"
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
 
     <p:documentation> Loads the DTBook XML fileset. </p:documentation>
 
@@ -16,7 +16,6 @@
             they reference (images etc.). The xml:base is also set with an absolute URI for each
             file, and is intended to represent the "original file", while the href can change during
             conversions to reflect the path and filename of the resource in the output fileset. </p:documentation>
-        <p:pipe port="result" step="fileset"/>
     </p:output>
 
     <p:output port="in-memory.out" sequence="true">
@@ -27,8 +26,10 @@
         <p:pipe port="result" step="dtbook"/>
     </p:output>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl"/>
 
     <p:identity name="dtbook"/>
     
@@ -87,7 +88,34 @@
             </p:add-attribute>
         </p:viewport>
     </p:group>
-    <p:identity name="fileset"/>
+    <p:identity name="dtbook-resources-mathml"/>
     <p:sink/>
-
+    
+    <!-- add any linked CSS stylesheets -->
+    <p:for-each>
+        <p:iteration-source>
+            <p:pipe step="main" port="source"/>
+        </p:iteration-source>
+        <p:try>
+            <p:group>
+                <px:xml-to-css-fileset include-links="true"/>
+            </p:group>
+            <p:catch>
+                <px:message message="CSS stylesheet URI(s) are malformed." severity="WARNING"/>
+                <p:identity>
+                    <p:input port="source">
+                        <p:empty/>
+                    </p:input>
+                </p:identity>
+            </p:catch>
+        </p:try>
+    </p:for-each>
+    <p:identity name="css"/>
+    <px:fileset-join>
+        <p:input port="source">
+            <p:pipe step="dtbook-resources-mathml" port="result"/>
+            <p:pipe step="css" port="result"/>
+        </p:input>
+    </px:fileset-join>
+    
 </p:declare-step>

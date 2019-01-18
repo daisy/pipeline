@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/load/load.xpl">
+
+	<x:scenario label="dontworrybehappy">
+		<x:call step="px:daisy202-load">
+			<x:option name="ncc" select="resolve-uri('../resources/dontworrybehappy/ncc.html')"/>
+		</x:call>
+		<x:context label="the fileset">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="../resources/dontworrybehappy/ncc.html" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/dontworrybehappy/content.html" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0001.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0002.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0003.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0004.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0005.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0006.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0007.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0001.mp3" media-type="audio/mpeg"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0002.mp3" media-type="audio/mpeg"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0003.mp3" media-type="audio/mpeg"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0004.mp3" media-type="audio/mpeg"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0005.mp3" media-type="audio/mpeg"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0006.mp3" media-type="audio/mpeg"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0007.mp3" media-type="audio/mpeg"/>
+					<d:file href="../resources/dontworrybehappy/default.css" media-type="text/css" kind="stylesheet"
+					        original-href="../resources/dontworrybehappy/default.css"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

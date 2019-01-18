@@ -1,0 +1,17 @@
+<?xml-stylesheet href="1.css"?>
+<?xml-stylesheet href="2.css" type="text/css"?>
+<?xml-stylesheet href=" 3.css " type="text/css"?>
+<?xml-stylesheet  href='4.css'  type="text/css"?>
+<?xml-stylesheet href='5.css' foo="bar" type="text/css"?>
+<?xml-stylesheet href=6.css type="text/css"?>
+<?some-other-instruction?>
+<html>
+	<head>
+		<link href="7.css"/>
+		<link href="8.css" rel="stylesheet"/>
+		<link href="9.css" rel="stylesheet" type="text/css"/>
+		<link href="10.css" rel="stylesheet" type="text/css" media="print"/>
+		<link href="11.css" rel="stylesheet" type="css"/>
+		<link href="12.css" type="text/css"/>
+	</head>
+</html>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    stylesheet="../../main/resources/xml/xml-to-css-uris.xsl">
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               stylesheet="../../main/resources/xml/xml-to-css-uris.xsl">
 
-    <x:param name="link-element" select="'false'"/>
+    <x:param name="include-links" select="'false'"/>
 
     <x:scenario label="link elements">
-        <x:scenario label="when link-element param is set to 'false'">
+        <x:scenario label="when include-links param is set to 'false'">
             <x:context>
                 <link href=" test.css " rel="stylesheet" type="text/css"/>
             </x:context>

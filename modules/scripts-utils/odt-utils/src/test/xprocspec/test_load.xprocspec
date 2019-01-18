@@ -12,12 +12,24 @@
     <x:context label="fileset.out">
       <x:document type="port" port="fileset.out"/>
     </x:context>
-    <!--
-        FIXME: <x:expect type="custom" href="fileset-compare.xpl" step="pxi:fileset-compare"> ...
-    -->
     <x:expect label="files" type="xpath"
               test="/*/d:file[resolve-uri(@href, base-uri(.))='file:/users/me/dir/'
                               and @media-type='application/vnd.oasis.opendocument.text']"/>
+    <x:expect label="the files"
+              type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+      <x:document type="inline">
+        <d:fileset>
+          <d:file href="file:/users/me/dir/" media-type="application/vnd.oasis.opendocument.text"/>
+          <d:file href="file:/users/me/dir/meta.xml" original-href="../resources/odt/test.odt!/meta.xml" media-type="text/xml"/>
+          <d:file href="file:/users/me/dir/settings.xml" original-href="../resources/odt/test.odt!/settings.xml" media-type="text/xml"/>
+          <d:file href="file:/users/me/dir/content.xml" original-href="../resources/odt/test.odt!/content.xml" media-type="text/xml"/>
+          <d:file href="file:/users/me/dir/Thumbnails/thumbnail.png" original-href="../resources/odt/test.odt!/Thumbnails/thumbnail.png" media-type="image/png"/>
+          <d:file href="file:/users/me/dir/manifest.rdf" original-href="../resources/odt/test.odt!/manifest.rdf" media-type="application/rdf+xml"/>
+          <d:file href="file:/users/me/dir/Configurations2/accelerator/current.xml" original-href="../resources/odt/test.odt!/Configurations2/accelerator/current.xml"/>
+          <d:file href="file:/users/me/dir/styles.xml" original-href="../resources/odt/test.odt!/styles.xml" media-type="text/xml"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
   </x:scenario>
   
 </x:description>

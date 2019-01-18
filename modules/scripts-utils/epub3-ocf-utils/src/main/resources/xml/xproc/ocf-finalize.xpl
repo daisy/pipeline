@@ -128,7 +128,7 @@
             <p:when test="$create-odf-manifest = 'true'">
                 <p:xslt>
                     <p:input port="stylesheet">
-                        <p:document href="http://www.daisy.org/pipeline/modules/fileset-utils/fileset-to-odf-manifest.xsl"/>
+                        <p:document href="../xslt/fileset-to-odf-manifest.xsl"/>
                     </p:input>
                     <p:input port="parameters">
                         <p:empty/>

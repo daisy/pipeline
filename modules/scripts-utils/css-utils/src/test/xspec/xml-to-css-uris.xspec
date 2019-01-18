@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    stylesheet="../../main/resources/xml/xml-to-css-uris.xsl">
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               stylesheet="../../main/resources/xml/xml-to-css-uris.xsl">
 
     <x:scenario label="xml-stylesheet processing instructions">
         <x:scenario label="with 'text/css' type">
@@ -9,7 +9,7 @@
                 <?xml-stylesheet href="test.css" type="text/css"?>
             </x:context>
             <x:expect label="are extracted">
-                <d:sheet href="test.css"/>
+                <d:file href="test.css" media-type="text/css"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="using single quotes">
@@ -17,7 +17,7 @@
                 <?xml-stylesheet href='test.css' type='text/css'?>
             </x:context>
             <x:expect label="are extracted">
-                <d:sheet href="test.css"/>
+                <d:file href="test.css" media-type="text/css"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with other type">
@@ -40,7 +40,7 @@
                 <link href=" test.css " rel="stylesheet" type="text/css"/>
             </x:context>
             <x:expect label="are extracted">
-                <d:sheet href="test.css"/>
+                <d:file href="test.css" media-type="text/css"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with implied type">
@@ -48,7 +48,7 @@
                 <link href="test.css" rel="stylesheet"/>
             </x:context>
             <x:expect label="are extracted">
-                <d:sheet href="test.css"/>
+                <d:file href="test.css" media-type="text/css"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with no-CSS type">

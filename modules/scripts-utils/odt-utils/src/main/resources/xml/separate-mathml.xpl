@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step version="1.0"
-	xmlns:p="http://www.w3.org/ns/xproc"
-	xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-	xmlns:d="http://www.daisy.org/ns/pipeline/data"
-	xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-	xmlns:math="http://www.w3.org/1998/Math/MathML"
-	xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
-	xmlns:xlink="http://www.w3.org/1999/xlink"
-	exclude-inline-prefixes="#all"
-	type="odt:separate-mathml"
-	name="separate-mathml">
+                xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
+                xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                exclude-inline-prefixes="#all"
+                type="odt:separate-mathml"
+                name="separate-mathml">
 	
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<p>Extract MathML formula's from the main content document and put each one in its
@@ -20,14 +20,13 @@
 	<p:input port="fileset.in"/>
 	<p:input port="in-memory.in" sequence="true"/>
 	<p:output port="fileset.out">
-		<p:pipe step="update" port="fileset.out"/>
+		<p:pipe step="update" port="result.fileset"/>
 	</p:output>
 	<p:output port="in-memory.out" sequence="true">
-		<p:pipe step="update" port="in-memory.out"/>
+		<p:pipe step="update" port="result.in-memory"/>
 	</p:output>
 	
 	<p:import href="get-file.xpl"/>
-	<p:import href="update-files.xpl"/>
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 	
@@ -100,17 +99,17 @@
 	</px:fileset-join>
 	<p:sink/>
 	
-	<odt:update-files name="update">
-		<p:input port="source">
+	<px:fileset-update name="update">
+		<p:input port="update">
 			<p:pipe step="content.new" port="result"/>
 		</p:input>
-		<p:input port="fileset.in">
+		<p:input port="source.fileset">
 			<p:pipe step="fileset.with-mathml" port="result"/>
 		</p:input>
-		<p:input port="in-memory.in">
+		<p:input port="source.in-memory">
 			<p:pipe step="separate-mathml" port="in-memory.in"/>
 			<p:pipe step="mathml" port="result"/>
 		</p:input>
-	</odt:update-files>
+	</px:fileset-update>
 	
 </p:declare-step>
