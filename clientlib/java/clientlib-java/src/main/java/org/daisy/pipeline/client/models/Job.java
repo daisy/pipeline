@@ -1,6 +1,7 @@
 package org.daisy.pipeline.client.models;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.Stack;
 import java.util.TreeMap;
 
 import org.daisy.pipeline.client.Pipeline2Exception;
@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
  */
 public class Job implements Comparable<Job> {
 
-	public enum Status { IDLE, RUNNING, DONE, ERROR, VALIDATION_FAIL };
+	public enum Status { IDLE, RUNNING, SUCCESS, ERROR, FAIL };
 	public enum Priority { high, medium, low };
 
 	private String id;
@@ -44,6 +44,7 @@ public class Job implements Comparable<Job> {
 	private List<Argument> argumentInputs; // used when there's no script given
 	private List<Argument> argumentOutputs; // used when there's no script given
 	private List<Callback> callback;
+	private BigDecimal progress;
 	private JobMessages messages;
 	private Node messagesNode;
 	private String logHref;
@@ -222,53 +223,69 @@ public class Job implements Comparable<Job> {
 		
 		if (messages == null && messagesNode != null) {
 			try {
-
-				messages = new JobMessages();
+				List<Message> messagesTree = new ArrayList<Message>();
 				List<Node> messageNodes = XPath.selectNodes("d:message", this.messagesNode, XPath.dp2ns);
-
 				for (Node messageNode : messageNodes) {
-					Message m = new Message();
-					m.text = XPath.selectText(".", messageNode, XPath.dp2ns);
-					if (XPath.selectText("@level", messageNode, XPath.dp2ns) != null) {
-						m.level = Message.Level.valueOf(XPath.selectText("@level", messageNode, XPath.dp2ns));
-						m.inferredLevel = m.level;
-					}
-					if (XPath.selectText("@sequence", messageNode, XPath.dp2ns) != null) {
-						m.sequence = Integer.valueOf(XPath.selectText("@sequence", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@line", messageNode, XPath.dp2ns) != null) {
-						m.line = Integer.valueOf(XPath.selectText("@line", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@column", messageNode, XPath.dp2ns) != null) {
-						m.column = Integer.valueOf(XPath.selectText("@column", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@timeStamp", messageNode, XPath.dp2ns) != null) {
-						m.setTimeStamp(XPath.selectText("@timeStamp", messageNode, XPath.dp2ns));
-					}
-					if (XPath.selectText("@file", messageNode, XPath.dp2ns) != null) {
-						m.file = XPath.selectText("@file", messageNode, XPath.dp2ns);
-					}
-					messages.add(m);
+					Message m = parseMessage(messageNode);
+					messagesTree.add(m);
 				}
-				Collections.sort(messages);
-
+				String msgSeq = XPath.selectText("@msgSeq", this.messagesNode, XPath.dp2ns);
+				messages = new JobMessages(messagesTree, msgSeq != null ? Integer.parseInt(msgSeq) : -1);
 			} catch (Exception e) {
 				Pipeline2Logger.logger().error("Unable to parse messages XML", e);
 			}
 		}
-		
 		if (maxDepth >= 0) {
 			ArrayList<Message> filteredMessages = new ArrayList<Message>();
 			for (Message m : messages) {
-				if (m.depth <= maxDepth) {
+				if (m.getDepth() <= maxDepth) {
 					filteredMessages.add(m);
 				}
 			}
 			return filteredMessages;
-			
 		} else {
 			return messages;
 		}
+	}
+
+	private static Message parseMessage(Node messageNode) throws Pipeline2Exception {
+		Message m = new Message();
+		m.text = XPath.selectText(".", messageNode, XPath.dp2ns);
+		if (XPath.selectText("@level", messageNode, XPath.dp2ns) != null) {
+			m.level = Message.Level.valueOf(XPath.selectText("@level", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@sequence", messageNode, XPath.dp2ns) != null) {
+			m.sequence = Integer.valueOf(XPath.selectText("@sequence", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@line", messageNode, XPath.dp2ns) != null) {
+			m.line = Integer.valueOf(XPath.selectText("@line", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@column", messageNode, XPath.dp2ns) != null) {
+			m.column = Integer.valueOf(XPath.selectText("@column", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@timeStamp", messageNode, XPath.dp2ns) != null) {
+			m.setTimeStamp(XPath.selectText("@timeStamp", messageNode, XPath.dp2ns));
+		}
+		if (XPath.selectText("@file", messageNode, XPath.dp2ns) != null) {
+			m.file = XPath.selectText("@file", messageNode, XPath.dp2ns);
+		}
+		String portion = XPath.selectText("@portion", messageNode, XPath.dp2ns);
+		if (portion != null) {
+			Message.ProgressInfo progressInfo = new Message.ProgressInfo();
+			progressInfo.portion = new BigDecimal(portion);
+			String progress = XPath.selectText("@progress", messageNode, XPath.dp2ns);
+			progressInfo.progress = progress != null ? new BigDecimal(progress) : BigDecimal.ZERO;
+			m.progressInfo = progressInfo;
+		}
+		List<Node> childNodes = XPath.selectNodes("d:message", messageNode, XPath.dp2ns);
+		m.children = new ArrayList<Message>();
+		for (Node n : childNodes) {
+			Message mm = parseMessage(n);
+			mm.parentSequence = m.sequence;
+			mm.parent = m;
+			m.children.add(mm);
+		}
+		return m;
 	}
 
 	private void lazyLoadResults() {
@@ -474,31 +491,37 @@ public class Job implements Comparable<Job> {
 	public void setScript(Script script) { lazyLoad(); this.script = script; }
 	public void setLogHref(String logHref) { lazyLoad(); this.logHref = logHref; }
 	
-	public void setMessages(List<Message> messages) {
+	/**
+	 * Update this job's messages with a list of new messages from a job update.
+	 */
+	public void joinMessages(Job jobUpdate) {
 		lazyLoad();
-		
-		if (this.messages == messages) {
-			return; // same instance
-		}
-		
-		if (messages == null) {
-			this.messages = null;
+		if (this == jobUpdate) {
 			return;
 		}
-		
+		if (jobUpdate.messages == null) {
+			return;
+		}
+		this.progress = jobUpdate.progress;
 		if (this.messages == null) {
-			this.messages = new JobMessages();
+			this.messages = jobUpdate.messages;
+		} else {
+			this.messages.join(jobUpdate.messages);
 		}
-		
-		Collections.sort(messages);
-		int startSequence = messages.get(0).sequence;
-		for (int m = this.messages.size()-1; m >= 0; m--) {
-			if (this.messages.get(m).sequence >= startSequence) {
-				this.messages.remove(m);
-			}
-		}
-		this.messages.addAll(messages);
 		Collections.sort(this.messages);
+	}
+	
+	// for testing only
+	void joinMessages(List<Message> messagesTree) {
+		lazyLoad();
+		JobMessages update = new JobMessages(messagesTree, -1);
+		if (this.messages == null) {
+			this.messages = update;
+		} else {
+			this.messages.join(update);
+		}
+		Collections.sort(this.messages);
+		this.progress = messages.getProgressFrom();
 	}
 	
 	public void setResults(Result result, SortedMap<Result, List<Result>> results) {
@@ -690,33 +713,15 @@ public class Job implements Comparable<Job> {
 		}
 		
 		if (messages != null) {
-			Element e = jobElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "messages");
-			for (Message m : messages) {
-				Element mElement = jobElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "message");
-				if (m.level != null) {
-					mElement.setAttribute("level", m.level.toString());
-				}
-				if (m.sequence != null) {
-					mElement.setAttribute("sequence", ""+m.sequence);
-				}
-				if (m.line != null) {
-					mElement.setAttribute("line", ""+m.sequence);
-				}
-				if (m.column != null) {
-					mElement.setAttribute("column", ""+m.sequence);
-				}
-				if (m.timeStamp != null) {
-					mElement.setAttribute("timeStamp", m.formatTimeStamp());
-				}
-				if (m.file != null) {
-					mElement.setAttribute("file", m.file);
-				}
-				if (m.text != null) {
-					mElement.setTextContent(m.text);
-				}
-				e.appendChild(mElement);
+			Element msgsElement = jobElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "messages");
+			if (progress != null)
+				msgsElement.setAttribute("progress", Float.toString(progress.floatValue()));
+			if (messages.msgSeq >= 0)
+				msgsElement.setAttribute("msgSeq", ""+messages.msgSeq);
+			for (Message m : messages.asTree()) {
+				XML.appendChildAcrossDocuments(msgsElement, m.toXml());
 			}
-			jobElement.appendChild(e);
+			jobElement.appendChild(msgsElement);
 		}
 
 		if (results != null) {
@@ -941,29 +946,40 @@ public class Job implements Comparable<Job> {
 		arguments.addAll(getOutputs());
 		return arguments;
 	}
-	
+
 	/**
-	 * Get the start of the current progress interval as a percentage.
-	 * 
-	 * The progress interval might be for instance `[20,30]` which
-	 * would mean that the last progress update we got indicated
-	 * we were 20% done with the job, and that the next progress update
-	 * are expected to come at 30%.
-	 * 
-	 * For the interval `[20,30]` this method would return `20`.
-	 * 
-	 * @return the start of the current progress interval.
+	 * Get the job progress as a percentage.
+	 *
+	 * This represents the most up to date progress information from the server.
 	 */
 	public double getProgressFrom() {
-		if (messages == null) {
+		lazyLoad();
+		if (progress == null && messagesNode != null) {
+			try {
+				String attr = XPath.selectText("@progress", this.messagesNode, XPath.dp2ns);
+				if (attr == null) {
+					// support this case for testing purposes
+					if (messages != null) {
+						progress = messages.getProgressFrom();
+					} else {
+						throw new RuntimeException("could not compute progress");
+					}
+				} else {
+					progress = new BigDecimal(attr).min(BigDecimal.ONE);
+				}
+			} catch (Pipeline2Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		if (progress == null) {
 			return 0.0;
 		} else {
-			return messages.getProgressFrom();
+			return toPercentage(progress);
 		}
 	}
-	
+
 	/**
-	 * Get the time of the start of the current progress interval.
+	 * Get the time when the most up to date progress information from the server was received.
 	 * 
 	 * @return the time as UNIX time.
 	 */
@@ -978,35 +994,48 @@ public class Job implements Comparable<Job> {
 	/**
 	 * Get the end of the current progress interval as a percentage.
 	 * 
-	 * For the interval `[20,30]` this method would return `30`.
-	 * 
 	 * @return the end of the current progress interval.
 	 */
 	public double getProgressTo() {
+		return getProgressTo(1000);
+	}
+	
+	/**
+	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
+	 */
+	public double getProgressTo(Integer timeUntilUpdateRequest) {
 		if (messages == null) {
 			return 100.0;
 		} else {
-			return messages.getProgressTo();
+			return Math.min(100.0, getProgressFrom() + getProgressInterval(timeUntilUpdateRequest));
 		}
 	}
-	
 
 	/**
-	 * Get an estimate of the job progress as a percentage. 
+	 * Get the estimated job progress in between server updates as a percentage.
 	 * 
-	 * This returns a percentage within the current progress
-	 * interval, interpolated based on the current progress
-	 * interval as well as the job duration. It follows this formula:
+	 * This value is always greater than or equal to the result of calling
+	 * getProgressFrom() which represents the most up to date progress information from
+	 * the server.
+	 * 
+	 * The estimate is an interpolation based on the current progress interval and the job
+	 * duration. The "current progress interval" is an interval that starts with the most
+	 * recent progress value received from the server and in which no updates from the
+	 * server are expected. It is chosen in such a way that the end is not expected to be
+	 * reached before the next update request to the server. Note that an update request
+	 * does not necessarily result in an actual progress update. (Details about how the
+	 * interval is determined are omitted here.) The estimate is calculated according to
+	 * this formula:
 	 * 
 	 * P(t) = P_{N+1} - P_{N} e^{-\frac{t-t_{N}}{T})}
 	 * 
 	 * where:
-	 * - `P` is the percentage
+	 * - `P` is the progress estimate
 	 * - `t` is the current time, in seconds
 	 * - `t_{0}` is the time when the job started (i.e. the first progress message arrived)
 	 * - `t_{N}` is the time when information about the current progress interval arrived, in seconds 
-	 * - `P_{N+1}` is the percentage at the end of the current progress interval
-	 * - `P_{N}` is the percentage at the beginning of the current progress interval
+	 * - `P_{N+1}` is the progress at the end of the current progress interval
+	 * - `P_{N}` is the progress at the beginning of the current progress interval
 	 * - `T` is the time constant which determines how slowly the estimated progress approaches P_{N+1}.
 	 *   20 is chosen as the initial value so that after 60 seconds the progress will be 95 % through the current
 	 *   progress interval. When `P_{N} &gt; 0` and `t_{N} - t_{0} &gt; 0` then T is dynamically calculated so that it
@@ -1018,7 +1047,14 @@ public class Job implements Comparable<Job> {
 	 * @return the estimated progress as a percentage.
 	 */
 	public double getProgressEstimate() {
-		return getProgressEstimate(new Date().getTime());
+		return getProgressEstimate(1000);
+	}
+	
+	/**
+	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
+	 */
+	public double getProgressEstimate(Integer timeUntilUpdateRequest) {
+		return getProgressEstimate(new Date().getTime(), timeUntilUpdateRequest);
 	}
 	
 	/**
@@ -1034,7 +1070,11 @@ public class Job implements Comparable<Job> {
 	 * @param now the UNIX time to use as "now".
 	 * @return the estimated progress as a percentage.
 	 */
-	public double getProgressEstimate(Long now) {
+	double getProgressEstimate(Long now) {
+		return getProgressEstimate(now, null);
+	}
+	
+	double getProgressEstimate(Long now, Integer timeUntilUpdateRequest) {
 		if (status == null || status == Status.IDLE) {
 			return 0.0;
 		} else if (status != Status.RUNNING) {
@@ -1042,15 +1082,69 @@ public class Job implements Comparable<Job> {
 		} else if (messages == null) {
 			return 0.0;
 		} else {
-			return messages.getProgressEstimate(now);
+			Long previousTime = messages.getProgressFromTime();
+			if (previousTime == null) previousTime = now;
+			Double previousPercentage = getProgressFrom();
+			Double nextPercentage = getProgressTo();
+			return nextPercentage
+			       - (nextPercentage - previousPercentage)
+			         * Math.exp(-(double)Math.max(0L, now - previousTime)
+			                    / getProgressTimeConstant(timeUntilUpdateRequest));
+			
 		}
 	}
 	
 	/**
-	 * The progress stack contains information about the progress at each progress "depth".
-	 * @return the progress stack
+	 * The interval is chosen in such a way that it is not expected to end before the next
+	 * update request to the server. Note that an update request does not necessarily
+	 * result in an actual progress update.
+	 *
+	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
 	 */
-	public Stack<JobMessages.Progress> getProgressStack() {
-		return messages.getProgressStack();
+	private double getProgressInterval(Integer timeUntilUpdateRequest) {
+		if (messages == null) {
+			return 0.0;
+		} else {
+			double interval = toPercentage(messages.getProgressInterval());
+			if (timeUntilUpdateRequest != null) {
+				double minInterval = getAverageProgress() / timeUntilUpdateRequest;
+				interval = Math.max(interval, minInterval);
+			}
+			return interval;
+		}
+	}
+	
+	/**
+	 * Get the average progress since the start of the job, in percentage per second
+	 */
+	private double getAverageProgress() {
+		Long now = new Date().getTime();
+		return getProgressFrom() / (now - messages.getJobStartTime());
+	}
+	
+	private double getProgressTimeConstant(Integer timeUntilUpdateRequest) {
+		if (messages != null) {
+			double progressFrom = getProgressFrom();
+			double progressInterval = getProgressInterval(timeUntilUpdateRequest);
+			Long progressFromTime = getProgressFromTime();
+			Long jobStartTime = messages.getJobStartTime();
+			if (progressFrom > 0.0
+			    && jobStartTime != null
+			    && progressFromTime != null
+			    && progressFromTime - jobStartTime > 0
+			    && progressInterval > 0.0) {
+				return - (progressFromTime - jobStartTime) * progressInterval / progressFrom / Math.log(0.05);
+			}
+		}
+		return 20000.0;
+	}
+	
+	private static double toPercentage(BigDecimal progress) {
+		return progress.multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).doubleValue();
+	}
+	
+	@Override
+	public String toString() {
+		return XML.toString(toXml());
 	}
 }

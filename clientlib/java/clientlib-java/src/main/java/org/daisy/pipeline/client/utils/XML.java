@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -101,9 +103,19 @@ public class XML {
      * @return The serialized XML node
      */
     public static String toString(Node xml) {
+        return toString(xml, defaultOutputProps);
+    }
+    
+    private final static Map<String,String> defaultOutputProps = new HashMap<String,String>(); static {
+        defaultOutputProps.put(OutputKeys.INDENT, "yes");
+    }
+    
+    public static String toString(Node xml, Map<String,String> outputProps) {
     	try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			for (String k : outputProps.keySet()) {
+				transformer.setOutputProperty(k, outputProps.get(k));
+			}
 			StreamResult result = new StreamResult(new StringWriter());
 			DOMSource source = new DOMSource(xml);
 			transformer.transform(source, result);

@@ -241,5 +241,13 @@
             <version>2.3.0</version>
             <scope>test</scope>
         </dependency>
+        <!--
+            FIXME: should be runtime dependency of webservice
+        -->
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>push-notifier</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FileUtils;
 
 import static org.daisy.pipeline.pax.exam.Options.domTraversalPackage;
@@ -32,7 +34,19 @@ import org.ops4j.pax.exam.util.PathUtils;
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
 public abstract class PaxExamConfig {
-	
+
+	// This is a trick to make sure a PipelineWebService is instantiated. We can't inject
+	// PipelineWebService directly because this would result in a "java.net.BindException: Address
+	// already in use" error because two instances would be created, so we inject its dependencies.
+	// Normally this is not needed but it can help with debugging.
+	@Inject org.daisy.pipeline.script.ScriptRegistry dep1;
+	@Inject org.daisy.pipeline.job.JobManagerFactory dep2;
+	@Inject org.daisy.pipeline.webserviceutils.storage.WebserviceStorage dep3;
+	@Inject org.daisy.pipeline.webserviceutils.callback.CallbackHandler dep4;
+	@Inject org.daisy.pipeline.datatypes.DatatypeRegistry dep5;
+	@Inject org.daisy.common.properties.PropertyPublisherFactory dep6;
+	// @Inject org.restlet.Application webserver;
+
 	static final File BASEDIR = new File(PathUtils.getBaseDir());
 	static final File PIPELINE_BASE = new File(BASEDIR, "target/tmp/server");
 	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
@@ -70,6 +84,8 @@ public abstract class PaxExamConfig {
 				mavenBundle("org.daisy.pipeline:framework-volatile:?"), // org.daisy.pipeline.job.JobStorage
 				mavenBundle("org.daisy.pipeline:woodstox-osgi-adapter:?"), // javax.xml.stream.XMLInputFactory
 				mavenBundle("org.daisy.pipeline:framework-core:?"), // org.daisy.pipeline.datatypes.DatatypeRegistry
+				// FIXME: this should be a runtime dependency of webservice
+				mavenBundle("org.daisy.pipeline:push-notifier:?"), // org.daisy.pipeline.webserviceutils.callback.CallbackHandler
 				// FIXME: these belong in the framework as runtime dependencies
 				mavenBundle("org.daisy.libs:jing:?")
 				),

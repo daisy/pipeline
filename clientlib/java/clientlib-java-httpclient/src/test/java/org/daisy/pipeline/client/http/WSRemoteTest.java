@@ -66,7 +66,7 @@ public class WSRemoteTest extends PaxExamConfig {
 		assertNotNull(job);
 		Thread.sleep(2000);
 		job = ws.getJob(job.getId(), 0);
-		assertEquals("The job is finished", Job.Status.DONE, job.getStatus());
+		assertEquals("The job is finished", Job.Status.SUCCESS, job.getStatus());
 		String result; {
 			StringWriter writer = new StringWriter();
 			IOUtils.copy(new URL(job.getResults().get(job.getResult("output-dir")).get(0).href).openStream(),

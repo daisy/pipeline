@@ -139,7 +139,7 @@ public class WSTest extends PaxExamConfig {
 		assertNotNull(job);
 		Thread.sleep(2000);
 		job = ws.getJob(job.getId(), 0);
-		assertEquals("The job is finished", Job.Status.DONE, job.getStatus());
+		assertEquals("The job is finished", Job.Status.SUCCESS, job.getStatus());
 		assertEquals("<result>" +
 		             "<source><hello object=\"world\"/></source>" +
 		             "<option name=\"href\" value=\""

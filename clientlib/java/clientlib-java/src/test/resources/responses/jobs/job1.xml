@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/job1" id="job1" status="DONE">
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/job1" id="job1" status="SUCCESS">
     <script href="http://localhost:8181/ws/scripts/dtbook-to-zedai" id="dtbook-to-zedai">
         <nicename>DTBook to ZedAI</nicename>
         <description>Transforms DTBook XML into ZedAI XML.</description>

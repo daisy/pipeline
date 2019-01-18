@@ -143,7 +143,7 @@ public class ParsingTest {
 		assertNotNull(job);
 		assertEquals("job1", job.getId());
 		assertEquals("http://localhost:8181/ws/jobs/job1", job.getHref());
-		assertEquals(Status.DONE, job.getStatus());
+		assertEquals(Status.SUCCESS, job.getStatus());
 		assertNotNull(job.getScript());
 		assertEquals("http://localhost:8181/ws/scripts/dtbook-to-zedai", job.getScript().getHref());
 		assertEquals("dtbook-to-zedai", job.getScript().getId());
