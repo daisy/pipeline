@@ -67,23 +67,38 @@ public class Scripts extends Controller {
 	}
 	
 	public static String chooseWidget(Argument arg) {
-		if (arg.getDataType() != null) {
-			DataType dataType = Application.ws.getDataType(arg.getDataType());
-			if (dataType instanceof EnumType) {
-				return "enum";
+		String type = arg.getType();
+		if (type != null) {
+			if ("anyDirURI".equals(type) ||
+			    "anyFileURI".equals(type) ||
+			    "anyURI".equals(type) ||
+			    "boolean".equals(type) ||
+			    "integer".equals(type) ||
+			    "string".equals(type) ||
+			    "xs:anyURI".equals(type) ||
+			    "xs:boolean".equals(type) ||
+			    "xs:integer".equals(type) ||
+			    "xs:string".equals(type)) {
+				return type;
 			}
-			if (dataType instanceof RegexType) {
-				return "regex";
+			DataType dataType = Application.ws.getDataType(type);
+			if (dataType != null) {
+				if (dataType instanceof EnumType) {
+					return "enum";
+				}
+				if (dataType instanceof RegexType) {
+					return "regex";
+				}
 			}
 		}
-		return arg.getType();
+		return type;
 	}
 	
 	public static JsonNode getDataTypeJson(Argument argument) {
 		Logger.debug("getDataTypeJson("+argument.getName()+")");
 		List<Map<String,String>> values = new ArrayList<Map<String,String>>();
-		Logger.debug("Getting datatype: "+argument.getDataType());
-		EnumType enumType = (org.daisy.pipeline.client.models.datatypes.EnumType)(Application.ws.getDataType(argument.getDataType()));
+		Logger.debug("Getting datatype: "+argument.getType());
+		EnumType enumType = (org.daisy.pipeline.client.models.datatypes.EnumType)(Application.ws.getDataType(argument.getType()));
 		if (enumType != null) {
 			for (Value enumValue : enumType.values) {
 				Map<String,String> value = new HashMap<String,String>();
