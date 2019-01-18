@@ -2,7 +2,6 @@ package org.daisy.common.xproc.calabash.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Properties;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
@@ -22,9 +21,6 @@ import com.xmlcalabash.core.XProcRunnable;
  */
 public class EventBusMessageListener implements XProcMessageListener {
 
-	private static boolean LOG_DEBUG = Boolean.parseBoolean(
-		org.daisy.pipeline.properties.Properties.getProperty("org.daisy.pipeline.calabash.logDebug","false"));
-	
 	/** The listener. */
 	EventBusProvider eventBus;
 	private final String jobId;
@@ -53,7 +49,6 @@ public class EventBusMessageListener implements XProcMessageListener {
 				.withLevel(Level.ERROR);
 		XprocMessageHelper.errorMessage(exception, builder);
 		post(builder).close();
-
 	}
 
 	/*
@@ -83,10 +78,8 @@ public class EventBusMessageListener implements XProcMessageListener {
 	public void fine(XProcRunnable step, XdmNode node, String message) {
 		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.DEBUG);
-                builder = XprocMessageHelper.message(step, node, message, builder);
-                if (LOG_DEBUG){
-                        post(builder).close();
-                }
+		builder = XprocMessageHelper.message(step, node, message, builder);
+		post(builder).close();
 	}
 
 	/*
@@ -101,10 +94,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-                if (LOG_DEBUG){
-                        post(builder).close();
-                }
-
+		post(builder).close();
 	}
 
 	/*
@@ -119,10 +109,7 @@ public class EventBusMessageListener implements XProcMessageListener {
 		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.TRACE);
 		builder = XprocMessageHelper.message(step, node, message, builder);
-                if (LOG_DEBUG){
-                        post(builder).close();
-                }
-
+		post(builder).close();
 	}
 
 	/*
@@ -133,13 +120,10 @@ public class EventBusMessageListener implements XProcMessageListener {
 	 */
 	@Override
 	public void info(XProcRunnable step, XdmNode node, String message) {
-          
 		ProgressMessageBuilder builder = createMessageBuilder()
 				.withLevel(Level.INFO);
 		builder = XprocMessageHelper.message(step, node, message, builder);
 		post(builder).close();
-                
-
 	}
 
 	/*
@@ -155,7 +139,6 @@ public class EventBusMessageListener implements XProcMessageListener {
 				.withLevel(Level.WARNING);
 		builder = XprocMessageHelper.message(step, node, message, builder);
 		post(builder).close();
-
 	}
 
 	/*
@@ -170,7 +153,6 @@ public class EventBusMessageListener implements XProcMessageListener {
 				.withLevel(Level.WARNING);
 		XprocMessageHelper.errorMessage(exception, builder);
 		post(builder).close();
-
 	}
 
 	@Override

@@ -12,13 +12,11 @@
     
     <p:output port="result" primary="true"/>
     
+    <p:import href="error.xpl"/>
+    
     <p:try>
         <p:group>
-            <p:error code="FOO">
-                <p:input port="source">
-                    <p:inline><message>foobar</message></p:inline>
-                </p:input>
-            </p:error>
+            <px:error/>
         </p:group>
         <p:catch name="catch">
             <p:identity>

@@ -184,7 +184,7 @@ public abstract class ProgressMessage extends Message implements MessageFilter, 
 	}
 
 	/** Get an immutable view of the message (read-only deep copy). */
-	ProgressMessage deepCopy() {
+	final ProgressMessage deepCopy() {
 		if (isImmutable())
 			return this;
 		final Iterable<ProgressMessage> children = ImmutableList.copyOf(

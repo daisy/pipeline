@@ -10,6 +10,7 @@ import java.util.stream.StreamSupport;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.pipeline.properties.Properties;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -76,7 +77,19 @@ abstract class AbstractMessageAccessor extends MessageAccessor {
 		return new MessageFilterImpl();
 	}
 
-	private static final Set<Level> allLevels = ImmutableSet.copyOf(Level.values());
+	private static final Set<Level> allLevels;
+	static {
+		Level threshold;
+		try {
+			threshold = Level.valueOf(Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+		} catch (IllegalArgumentException e) {
+			threshold = Level.INFO;
+		}
+		allLevels = new HashSet<>();
+		for (Level l : Level.values())
+			if (l.ordinal() <= threshold.ordinal())
+				allLevels.add(l);
+	}
 
 	private class MessageFilterImpl implements MessageFilter {
 
@@ -87,10 +100,7 @@ abstract class AbstractMessageAccessor extends MessageAccessor {
 
 		@Override
 		public MessageFilter filterLevels(final Set<Level> levels) {
-			if (this.levels.size() == allLevels.size())
-				this.levels = levels;
-			else
-				this.levels = Sets.intersection(this.levels, levels);
+			this.levels = Sets.intersection(this.levels, levels);
 			return this;
 		}
 
@@ -135,14 +145,14 @@ abstract class AbstractMessageAccessor extends MessageAccessor {
 											f = f.greaterThan(greaterThan);
 										if (rangeStart != null)
 											f = f.inRange(rangeStart, rangeEnd);
-										if (levels.size() < allLevels.size())
+										if (levels.size() < Level.values().length)
 											f = f.filterLevels(levels);
 										return f.getMessages();
 									} else {
 										int seq = m.getSequence();
 										if ((greaterThan == null || seq > greaterThan)
 										    && (rangeStart == null || (rangeStart >= seq && seq >= rangeEnd))
-										    && (levels.size() == allLevels.size() || levels.contains(m.getLevel())))
+										    && (levels.size() == Level.values().length || levels.contains(m.getLevel())))
 											return Collections.singleton(m);
 										else
 											return ImmutableSet.of(); }})));

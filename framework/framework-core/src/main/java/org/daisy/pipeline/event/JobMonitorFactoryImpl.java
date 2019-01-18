@@ -50,7 +50,15 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 				// event bus. It is assumed that the job has not started yet. The accessor is created
 				// immediately so that messages are buffered from the beginning and no data is lost.
 				if (live) {
-					this.accessor = new LiveMessageAccessor(id, messageEventListener);
+					this.accessor = new LiveMessageAccessor(id, messageEventListener) {
+							@Override
+							public void finalize() {
+								// store buffered messages to memory or database
+								store(JobMonitorFactoryImpl.this.messageStorage);
+								// free buffered messages and stop listening for new events
+								close();
+							}
+						};
 					// We need to cache the accessor because we wouldn't otherwise be able to create
 					// a new job monitor while the job is already running. Another reason for the
 					// caching is that the message storage is not guaranteed to be lossless. Notably
@@ -71,16 +79,6 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 		@Override
 		public MessageAccessor getMessageAccessor() {
 			return accessor;
-		}
-
-		@Override
-		public void finalize() {
-			if (accessor instanceof LiveMessageAccessor) {
-				// store buffered messages to memory or database
-				((LiveMessageAccessor)accessor).store(messageStorage);
-				// free buffered messages and stop listening for new events
-				((LiveMessageAccessor)accessor).close();
-			}
 		}
 	}
 }

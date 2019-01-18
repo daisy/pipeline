@@ -30,7 +30,13 @@ public class PersistentPortResult   {
 	String mediaType;
 
 	public PersistentPortResult(JobId jobId, JobResult result,String port) {
-		this.id=new PK(jobId,result.getIdx());
+		Index idx = null;
+		try {
+			idx = result.getIdx();
+		} catch (Exception e) {
+			throw new IllegalArgumentException("The result can not be persisted", e);
+		}
+		this.id = new PK(jobId, idx);
 		this.path=result.getPath().toString();
 		this.mediaType=result.getMediaType();
 		this.portName=port;

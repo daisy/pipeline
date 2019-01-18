@@ -37,7 +37,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
@@ -54,7 +53,6 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
-
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -108,16 +106,26 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
-			Assert.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
-			                    "<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
-			                      "<c:error name=\"!1.3.1.1\" type=\"p:error\" code=\"FOO\">" +
-			                        "<message xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\" " +
-			                                 "xmlns:d=\"http://www.daisy.org/ns/pipeline/data\">" +
-			                          "foobar" +
-			                        "</message>" +
-			                      "</c:error>" +
-			                    "</c:errors>",
-			                    CharStreams.toString(results.next()));
+			String errorXml = CharStreams.toString(results.next());
+			System.out.println(errorXml);
+			Assert.assertTrue(
+				Predicates.containsPattern(
+					"^\\Q" +
+					"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+					"<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
+					  "<c:error code=\"FOO\" href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\"" +
+					          " line=\"18\" column=\"18\">" +
+					    "foobar" +
+					    "<px:location xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\">" +
+					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/error.xpl\" line=\"10\"/>" +
+					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\" line=\"19\"/>" +
+					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\" line=\"18\"/>" +
+					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\" line=\"17\"/>" +
+					    "</px:location>" +
+					  "</c:error>" +
+					"</c:errors>" +
+					"\\E$"
+				).apply(errorXml));
 			Assert.assertFalse(results.hasNext());
 			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
 			MessageAccessor accessor = monitor.getMessageAccessor();
@@ -149,6 +157,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
+				seq++; // px:error
 				seq++; // p:error
 				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 				Assert.assertFalse(messages.hasNext());
@@ -161,8 +170,8 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "[FOO] foobar\n" +
-			                 "	at {http://www.w3.org/ns/xproc}error(xproc-error.xpl:10)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}xproc-error(xproc-error.xpl:4)");
+			                 "	at {http://www.w3.org/ns/xproc}error(error.xpl:10)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}error(xproc-error.xpl:10)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -183,6 +192,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			try {
 				int seq = 0;
 				seq++; // cx:eval
+				seq++; // px:error
 				seq++; // p:error
 				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
 				Assert.assertFalse(messages.hasNext());
@@ -195,10 +205,9 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "[FOO] foobar\n" +
-			                 "	at {http://www.w3.org/ns/xproc}error(xproc-error.xpl:10)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}xproc-error(xproc-error.xpl:4)\n" +
-			                 "	at {http://xmlcalabash.com/ns/extensions}eval(cx-eval-error.xpl:15)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}cx-eval-error(cx-eval-error.xpl:5)");
+			                 "	at {http://www.w3.org/ns/xproc}error(error.xpl:10)\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}error(xproc-error.xpl:10)\n" +
+			                 "	at {http://xmlcalabash.com/ns/extensions}eval(cx-eval-error.xpl:15)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -269,8 +278,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			                 "job finished with error state\n" +
 			                 "Runtime Error\n" +
 			                 "	at xsl:message(xslt-terminate-error.xpl:16)\n" +
-			                 "	at {http://www.w3.org/ns/xproc}xslt(xslt-terminate-error.xpl:8)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}xslt-terminate-error(xslt-terminate-error.xpl:4)");
+			                 "	at {http://www.w3.org/ns/xproc}xslt(xslt-terminate-error.xpl:8)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -304,8 +312,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
 			                 "	at JavaStep.run(JavaStep.java:56)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step-runtime-error(java-step-runtime-error.xpl:4)");
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -345,8 +352,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			                 "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +
 			                 "	at xsl:call-template name=\"b\"(java-function-runtime-error.xpl:20)\n" +
 			                 "	at xsl:call-template name=\"a\"(java-function-runtime-error.xpl:17)\n" +
-			                 "	at {http://www.w3.org/ns/xproc}xslt(java-function-runtime-error.xpl:9)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-function-runtime-error(java-function-runtime-error.xpl:5)");
+			                 "	at {http://www.w3.org/ns/xproc}xslt(java-function-runtime-error.xpl:9)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);
@@ -484,6 +490,10 @@ public class FrameworkCoreTest extends AbstractTest {
 				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:foo (2)");
 				                  Assert.assertFalse(msgs.hasNext()); });
 				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (3)");
+				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (4)",
+				              msgs -> {
+				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:progress-messages (4a)");
+				                  Assert.assertFalse(msgs.hasNext()); });
 				Assert.assertFalse(messages.hasNext());
 				Iterator<ILoggingEvent> log = collectLog.get();
 				Assert.assertFalse(log.hasNext());

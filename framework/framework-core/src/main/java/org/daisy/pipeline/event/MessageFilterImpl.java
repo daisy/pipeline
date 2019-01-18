@@ -102,7 +102,7 @@ class MessageFilterImpl implements MessageFilter {
 			}
 		}
 		List<Message> r;
-		synchronized(ProgressMessage.MUTEX) {
+		synchronized (ProgressMessage.MUTEX) {
 			if (filter != null)
 				r = Lists.<Message>newArrayList(
 					Iterators.transform(
@@ -224,7 +224,9 @@ class MessageFilterImpl implements MessageFilter {
 			? new ProgressMessage.UnmodifiableProgressMessage(m) {
 					@Override // messages without text already filtered out, only need to make copies
 					public Iterator<ProgressMessage> iterator() {
-						return Iterators.transform(_iterator(), mm -> mm.deepCopy());
+						synchronized (MUTEX) {
+							return Lists.<ProgressMessage>newArrayList(Iterators.transform(_iterator(), mm -> mm.deepCopy())).iterator();
+						}
 					}
 				}.selfIterate()
 			: promoteChildren.apply(m)

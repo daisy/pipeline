@@ -12,22 +12,27 @@
         <p:option name="milliseconds" required="true"/>
     </p:declare-step>
     
-    <p:group px:message="a" px:progress=".5">
+    <p:choose px:message="a" px:progress=".5">
+        <p:when test="1>0">
         
-        <!-- 0 -->
-        
-        <px:sleep milliseconds="1000" px:message="b" px:progress=".5"/>
-        <p:group px:message="c" px:progress=".5">
+            <!-- 0 -->
             
-            <!-- .25 -->
-            
-            <px:sleep milliseconds="1000" px:message="d" px:progress=".5"/>
-            
-            <!-- .375 -->
-            
-            <px:sleep milliseconds="1000" px:message="e" px:progress=".5"/>
-        </p:group>
-    </p:group>
+            <px:sleep milliseconds="1000" px:message="b" px:progress=".5"/>
+            <p:group px:message="c" px:progress=".5">
+                
+                <!-- .25 -->
+                
+                <px:sleep milliseconds="1000" px:message="d" px:progress=".5"/>
+                
+                <!-- .375 -->
+                
+                <px:sleep milliseconds="1000" px:message="e" px:progress=".5"/>
+            </p:group>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
     
     <!-- .5 -->
     

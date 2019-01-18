@@ -74,7 +74,6 @@ public abstract class Base extends AbstractTest {
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",
 			"org.restlet.osgi:org.restlet.ext.xml:?",
-			"org.restlet.osgi:org.restlet.ext.jetty:?",
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
@@ -84,13 +83,18 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:push-notifier:?",
 			// this bundle is not needed but may be included to prevent
 			// "com.sun.jersey.server.impl.provider.RuntimeDelegateImpl not found by com.sun.jersey.core"
-			// errors
+			// errors (not a fatal error)
 			// "com.sun.jersey:jersey-server:1.18.1",
 		};
 	}
 	
 	@Override @Configuration
 	public Option[] config() {
+		
+		// framework started once per class, so initialize only once per class
+		// calling this code from config() is the only way to achieve this (@BeforeClass does not
+		// work, nor does a static {} block)
+		setupClass();
 		SystemPropertyOption[] systemPropertyOptions; {
 			Properties systemProperties = systemProperties();
 			Set<String> keys = systemProperties.stringPropertyNames();
@@ -106,10 +110,21 @@ public abstract class Base extends AbstractTest {
 			// for webservice-jaxb
 			bootDelegationPackage("com.sun.xml.internal.bind"),
 			
-			// for org.eclipse.persistence:org.eclipse.persistence.moxy:2.5.0 (<-- glassfish <-- clientlib-java-jaxb)
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:2.5.0"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:2.5.0"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:2.5.0"),
+			// for persistence-derby
+			mavenBundle("org.eclipse:org.eclipse.gemini.jpa:?"),
+			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.derby:?"),
+			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.util:?"),
+			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.jpa:?"),
+			mavenBundle("org.eclipse.persistence:javax.persistence:?"),
+			mavenBundle("org.eclipse.gemini:org.apache.derby:?"),
+			// for persistence-derby (TestMessagesWithDerby)
+			// but also org.eclipse.persistence:org.eclipse.persistence.moxy (<-- glassfish <-- clientlib-java-jaxb)
+			// Note that the versions need to be 2.3.2 for derby to work, but this has the result
+			// that org.eclipse.persistence.moxy (2.5.0) can not be resolved. Luckily this is not a
+			// problem for clientlib-java-jaxb. It only results in more error messages.
+			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:?"),   // 2.3.2 (-> 2.5.0)
+			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:?"), // 2.3.2 (-> 2.5.0)
+			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:?"),  // 2.3.2 (-> 2.5.0)
 			
 			// for TestPushNotifications
 			systemPackage("com.sun.net.httpserver")
@@ -125,9 +140,9 @@ public abstract class Base extends AbstractTest {
 	}
 	
 	private static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
-	private static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
+	protected static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 	
-	static {
+	protected void setupClass() {
 		try {
 			FileUtils.deleteDirectory(PIPELINE_BASE);
 		} catch (IOException e) {
@@ -158,7 +173,7 @@ public abstract class Base extends AbstractTest {
 	private List<Client> clientsToDelete;
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setupTest() throws Exception {
 		jobsToDelete = Lists.newLinkedList();
 		clientsToDelete = Lists.newLinkedList();
 	}

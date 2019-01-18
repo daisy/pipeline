@@ -5,10 +5,8 @@
     
     <p:output port="result"/>
     
-    <p:error code="FOO">
-        <p:input port="source">
-            <p:inline><message>foobar</message></p:inline>
-        </p:input>
-    </p:error>
+    <p:import href="error.xpl"/>
+    
+    <px:error/>
     
 </p:declare-step>

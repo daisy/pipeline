@@ -162,6 +162,8 @@ public class JobsResource extends AuthenticatedResource {
                                 return badRequest(e);
                         }
                 }
+                if (logger.isDebugEnabled())
+                        logger.debug(XmlUtils.DOMToString(doc));
 
                 ValidationStatus status= Validator.validateJobRequest(doc, webservice());
 

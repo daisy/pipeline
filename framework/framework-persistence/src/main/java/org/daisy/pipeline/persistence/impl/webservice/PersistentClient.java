@@ -82,5 +82,32 @@ public class PersistentClient implements Client {
         public void setPriority(Priority priority) {
                 this.priority = priority;
         }
-
+        
+        @Override
+        public boolean equals(Object other) {
+                if (!(other instanceof Client))
+                        return false;
+                Client that = (Client)other;
+                if (this.getId() == null)
+                        return that.getId() == null;
+                else if (!this.getId().equals(that.getId()))
+                        return false;
+                if (this.getSecret() == null)
+                        return that.getSecret() == null;
+                else if (!this.getSecret().equals(that.getSecret()))
+                        return false;
+                if (this.getRole() == null)
+                        return that.getRole() == null;
+                else if (!this.getRole().equals(that.getRole()))
+                        return false;
+                if (this.getContactInfo() == null)
+                        return that.getContactInfo() == null;
+                else if (!this.getContactInfo().equals(that.getContactInfo()))
+                        return false;
+                if (this.getPriority() == null)
+                        return that.getPriority() == null;
+                else if (!this.getPriority().equals(that.getPriority()))
+                        return false;
+                return true;
+        }
 }
