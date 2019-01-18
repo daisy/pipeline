@@ -28,7 +28,7 @@ func parallelMap(js []pipeline.Job, fn jobFunc, pred jobPredicate) []string {
 }
 
 func isDone(j pipeline.Job) bool {
-	return j.Status == "DONE"
+	return j.Status == "SUCCESS"
 }
 func isError(j pipeline.Job) bool {
 	return j.Status == "ERROR"

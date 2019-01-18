@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"fmt"
 	"text/template"
 
 	"github.com/capitancambio/go-subcommand"
@@ -62,7 +63,12 @@ func (c *commandBuilder) buildAdmin(cli *Cli) (cmd *subcommand.Command) {
 }
 
 func (c commandBuilder) writeOutput(data interface{}, cli *Cli) error {
-	tmpl := template.Must(template.New("template").Parse(c.template))
+	funcs := template.FuncMap{
+		"printAsPercentage": func(val float64) string {
+			return fmt.Sprintf("%.1f%%", val * 100)
+		},
+	}
+	tmpl := template.Must(template.New("template").Funcs(funcs).Parse(c.template))
 	if data != nil {
 		err := tmpl.Execute(cli.Output, data)
 		if err != nil {

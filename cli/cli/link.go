@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"regexp"
 
 	"github.com/daisy/pipeline-clientlib-go"
 )
@@ -26,7 +27,7 @@ type PipelineApi interface {
 	ScriptUrl(id string) string
 	Job(string, int) (pipeline.Job, error)
 	DeleteJob(id string) (bool, error)
-	Results(id string, w io.Writer) error
+	Results(id string, w io.Writer) (bool, error)
 	Log(id string) ([]byte, error)
 	Jobs() (pipeline.Jobs, error)
 	Halt(key string) error
@@ -134,7 +135,7 @@ func (p PipelineLink) Delete(jobId string) (ok bool, err error) {
 }
 
 //Return the zipped results as a []byte
-func (p PipelineLink) Results(jobId string, w io.Writer) error {
+func (p PipelineLink) Results(jobId string, w io.Writer) (ok bool, err error) {
 	return p.pipeline.Results(jobId, w)
 }
 func (p PipelineLink) Log(jobId string) (data []byte, err error) {
@@ -191,16 +192,35 @@ func (p PipelineLink) MoveDown(id string) (queue []pipeline.QueueJob, err error)
 
 //Convience structure to handle message and errors from the communication with the pipelineApi
 type Message struct {
-	Message pipeline.Message
-	Status  string
-	Error   error
+	Message  string
+	Level    string
+	Depth    int
+	Status   string
+	Progress float64
+	Error    error
 }
 
 //Returns a simple string representation of the messages strucutre:
-//(index)[LEVEL]        Message content
+//[LEVEL]   Message content
 func (m Message) String() string {
-	if m.Message.Content != "" {
-		return fmt.Sprintf("(%v)[%v]\t%v", m.Message.Sequence, m.Message.Level, m.Message.Content)
+	if m.Message != "" {
+		indent := ""
+		for i := 1; i <= m.Depth; i++ {
+			indent += "  "
+		}
+		level := "[" + m.Level + "]"
+		for len(level) < 10 {
+			level += " "
+		}
+		str := ""
+		for i, line := range regexp.MustCompile("\r?\n|\r").Split(m.Message, -1) {
+			if (i == 0) {
+				str += fmt.Sprintf("%v %v%v", level, indent, line)
+			} else {
+				str += fmt.Sprintf("\n           %v%v", indent, line)
+			}
+		}
+		return str
 	} else {
 		return ""
 	}
@@ -229,7 +249,7 @@ func (p PipelineLink) Execute(jobReq JobRequest) (job pipeline.Job, messages cha
 
 //Feeds the channel with the messages describing the job's execution
 func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
-	msgNum := 0
+	msgNum := -1
 	for {
 		job, err := p.pipeline.Job(jobId, msgNum)
 		if err != nil {
@@ -237,12 +257,16 @@ func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
 			close(messages)
 			return
 		}
-		for _, msg := range job.Messages {
-			msgNum = msg.Sequence
-			messages <- Message{Message: msg, Status: job.Status}
-
+		n := msgNum
+		if len(job.Messages.Message) > 0 {
+			n = flattenMessages(job.Messages.Message, messages, job.Status, job.Messages.Progress, msgNum + 1, 0)
 		}
-		if job.Status == "DONE" || job.Status == "ERROR" || job.Status == "VALIDATION_FAIL" {
+		if (n > msgNum) {
+			msgNum = n
+		} else {
+			messages <- Message{Progress: job.Messages.Progress}
+		}
+		if job.Status == "SUCCESS" || job.Status == "ERROR" || job.Status == "FAIL" {
 			messages <- Message{Status: job.Status}
 			close(messages)
 			return
@@ -250,6 +274,21 @@ func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
 		time.Sleep(MSG_WAIT)
 	}
 
+}
+
+//Flatten message coming from the Pipeline job and feed them into the channel
+//Return the sequence number of the last inner message
+func flattenMessages(from []pipeline.Message, to chan Message, status string, progress float64, firstNum int, depth int) (lastNum int) {
+	for _, msg := range from {
+		lastNum = msg.Sequence
+		if lastNum >= firstNum {
+			to <- Message{Message: msg.Content, Level: msg.Level, Depth: depth, Status: status, Progress: progress}
+		}
+		if len(msg.Message) > 0 {
+			lastNum = flattenMessages(msg.Message, to, status, progress, firstNum, depth + 1)
+		}
+	}
+	return lastNum
 }
 
 func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequest, err error) {

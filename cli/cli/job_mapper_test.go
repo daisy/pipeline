@@ -8,7 +8,7 @@ import (
 
 func TestIsDone(t *testing.T) {
 	jobDone := pipeline.Job{
-		Status: "DONE",
+		Status: "SUCCESS",
 	}
 	jobOther := pipeline.Job{
 		Status: "ERROR",
@@ -22,7 +22,7 @@ func TestIsDone(t *testing.T) {
 }
 func TestIsError(t *testing.T) {
 	jobOther := pipeline.Job{
-		Status: "DONE",
+		Status: "SUCCESS",
 	}
 	jobError := pipeline.Job{
 		Status: "ERROR",
@@ -65,7 +65,7 @@ func TestMap(t *testing.T) {
 		},
 		pipeline.Job{
 			Id:     "2",
-			Status: "DONE",
+			Status: "SUCCESS",
 		},
 		pipeline.Job{
 			Id:     "3",

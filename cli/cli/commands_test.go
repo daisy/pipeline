@@ -242,8 +242,11 @@ func TestJobStatusCommand(t *testing.T) {
 	if status, ok := values["Status"]; !ok || status != JOB_1.Status {
 		t.Errorf("Status doesn't match %s!=%s", JOB_1.Status, status)
 	}
-	if status, ok := values["Priority"]; !ok || status != JOB_1.Priority {
-		t.Errorf("Status doesn't match %s!=%s", JOB_1.Status, status)
+	if priority, ok := values["Priority"]; !ok || priority != JOB_1.Priority {
+		t.Errorf("Priority doesn't match %s!=%s", JOB_1.Priority, priority)
+	}
+	if _, ok := values["Progress"]; !ok {
+		t.Errorf("No progress")
 	}
 	if _, ok := values["Messages"]; ok {
 		t.Errorf("I said to shut up! but I can see some msgs")
@@ -264,7 +267,7 @@ func TestVerboseJobStatusCommand(t *testing.T) {
 	if getCall(link) != JOB_CALL {
 		t.Errorf("status wasn't called")
 	}
-	exp := regexp.MustCompile("\\(\\d+\\)\\[\\w+\\]\\s+\\w+")
+	exp := regexp.MustCompile("\\[\\w+\\]\\t\\w+")
 	matches := exp.FindAll(r.Bytes(), -1)
 	if len(matches) != 2 {
 		t.Errorf("The messages weren't printed output:\n%s", string(string(r.Bytes())))

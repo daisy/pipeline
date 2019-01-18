@@ -82,16 +82,26 @@ func (j jobExecution) run(stdOut io.Writer) error {
 			return err
 		}
 	}
-	//get realtime messages and status from the webservice
+	//get realtime messages, status and progress from the webservice
 	status := job.Status
+	progress := 0.0
+	printProgressBar(stdOut, progress)
 	for msg := range messages {
 		if msg.Error != nil {
 			err = msg.Error
 			return err
 		}
-		//print messages
-		if j.verbose {
-			fmt.Fprintln(stdOut, msg.String())
+		if j.verbose && msg.Message != "" || msg.Progress > progress {
+			//erase previous line
+			//FIXME: don't do this when debug logging enabled
+			fmt.Fprint(stdOut, "\033[1A\033[K")
+			if j.verbose && msg.Message != "" {
+				fmt.Fprintln(stdOut, msg.String())
+			}
+			if (msg.Progress > progress) {
+				progress = msg.Progress
+			}
+			printProgressBar(stdOut, progress)
 		}
 		status = msg.Status
 	}
@@ -103,7 +113,8 @@ func (j jobExecution) run(stdOut io.Writer) error {
 			if err != nil {
 				return err
 			}
-			if err := j.link.Results(job.Id, wc); err != nil {
+			ok, err := j.link.Results(job.Id, wc)
+			if err != nil {
 				return err
 			}
 			if err := wc.Close(); err != nil {
@@ -118,10 +129,24 @@ func (j jobExecution) run(stdOut io.Writer) error {
 				fmt.Fprintf(stdOut, "The job has been deleted from the server\n")
 			}
 			fmt.Fprintf(stdOut, "Job finished with status: %v\n", status)
+			if (!ok && (status == "SUCCESS" || status == "FAIL")) {
+				fmt.Fprintf(stdOut, "No results available\n")
+			}
 		}
 
 	}
 	return nil
+}
+
+func printProgressBar(stdOut io.Writer, value float64) {
+	bar := ""
+	for i := 1; i <= int(value * 72); i++ {
+		bar += "#"
+	}
+	for len(bar) < 72 {
+		bar += " "
+	}
+	fmt.Fprintf(stdOut, "%v %.1f%%\n", bar, value * 100)
 }
 
 var commonFlags = []string{"--output", "--zip", "--nicename", "--priority", "--quiet", "--persistent", "--background"}
@@ -205,7 +230,7 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		jExec.verbose = false
 		return nil
 	})
-	command.AddSwitch("persistent", "p", "Delete the job after it is executed", func(string, string) error {
+	command.AddSwitch("persistent", "p", "Do not delete the job after it is executed", func(string, string) error {
 		jExec.persistent = true
 		return nil
 	})

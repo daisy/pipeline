@@ -207,15 +207,15 @@ func (p *PipelineTest) DeleteJob(id string) (ok bool, err error) {
 	return
 }
 
-func (p *PipelineTest) Results(id string, w io.Writer) error {
+func (p *PipelineTest) Results(id string, w io.Writer) (ok bool, err error) {
 	p.call = RESULTS_CALL
 	if p.val != nil {
 		w.Write(p.val.([]byte))
 	} else {
 		w.Write([]byte{})
 	}
-	_, err := p.mockCall()
-	return err
+	_, err = p.mockCall()
+	return (err == nil), err
 }
 func (p *PipelineTest) Log(id string) (data []byte, err error) {
 	p.call = LOG_CALL
