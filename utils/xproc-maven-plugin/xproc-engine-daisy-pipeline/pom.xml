@@ -34,7 +34,12 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline-logging</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -65,6 +70,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
       <scope>provided</scope>
@@ -75,11 +85,13 @@
       <scope>provided</scope>
     </dependency>
     <!--
-        runtime dependencies (for org.daisy.common.xproc.XProcEngine)
+        runtime dependencies
+        
+        disabled in order to force users of xproc-engine-daisy-pipeline to also explicitely include
+        (a specific version of) calabash-adapter and framework-volatile
     -->
     <!--
-        disabled in order to force users of xproc-engine-daisy-pipeline to also explicitely include
-        (a specific version of) calabash-adapter
+        for org.daisy.common.xproc.XProcEngine
     -->
     <!--
     <dependency>
@@ -88,8 +100,30 @@
       <scope>runtime</scope>
     </dependency>
     -->
+    <!--
+        for org.daisy.pipeline.job.JobMonitorFactory
+    -->
+    <!--
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    -->
   </dependencies>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>

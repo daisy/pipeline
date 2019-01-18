@@ -17,7 +17,7 @@
   <name>xproc-maven-plugin</name>
   
   <properties>
-    <it.xproc-engine-calabash.version>1.1.1-SNAPSHOT</it.xproc-engine-calabash.version>
+    <it.xproc-engine-calabash.version>1.1.1</it.xproc-engine-calabash.version>
   </properties>
   
   <dependencies>

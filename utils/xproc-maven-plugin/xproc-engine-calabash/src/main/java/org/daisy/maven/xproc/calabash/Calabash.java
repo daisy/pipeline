@@ -143,6 +143,16 @@ public class Calabash implements XProcEngine {
 	                Map<String,String> options,
 	                Map<String,Map<String,String>> parameters)
 			throws XProcExecutionException {
+		run(pipeline, inputs, outputs, options, parameters, null);
+	}
+	
+	public void run(String pipeline,
+	                Map<String,List<String>> inputs,
+	                Map<String,String> outputs,
+	                Map<String,String> options,
+	                Map<String,Map<String,String>> parameters,
+	                Map<String,?> context)
+			throws XProcExecutionException {
 		XProcRuntime runtime = runtime();
 		try {
 			XPipeline xpipeline = runtime.load(new Input(pipeline));

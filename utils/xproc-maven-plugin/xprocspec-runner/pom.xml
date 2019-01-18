@@ -17,14 +17,10 @@
   
   <dependencyManagement>
     <dependencies>
-      <!--
-          fixed framework dependency to avoid circular dependency
-      -->
-      <?fixed-dependency?>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -35,7 +31,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.xprocspec</groupId>
@@ -60,7 +56,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-calabash</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -119,9 +115,14 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <!-- must match version from framework-bom -->
+            <!-- Saxon version must match version from framework-bom -->
+            <!-- Remove upper version bound of org.daisy.common.xproc.calabash dependency and assume
+                 that XProcStepProvider, which is the only used class from that package, will not
+                 change in the future. We do this to avoid having to update xprocspec-runner too
+                 frequently (with sometimes circular dependencies as a result). -->
             <Import-Package>
               net.sf.saxon.*;version="[9.8.0,9.8.1)",
+              org.daisy.common.xproc.calabash;version="2.1",
               *
             </Import-Package>
             <_dsannotations>*</_dsannotations>

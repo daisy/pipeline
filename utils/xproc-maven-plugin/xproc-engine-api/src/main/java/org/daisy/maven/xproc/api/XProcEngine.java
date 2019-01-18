@@ -14,4 +14,11 @@ public interface XProcEngine {
 	                Map<String,String> options,
 	                Map<String,Map<String,String>> parameters)
 			throws XProcExecutionException;
+	public void run(String pipeline,
+	                Map<String,List<String>> inputs,
+	                Map<String,String> outputs,
+	                Map<String,String> options,
+	                Map<String,Map<String,String>> parameters,
+	                Map<String,?> context)
+			throws XProcExecutionException;
 }

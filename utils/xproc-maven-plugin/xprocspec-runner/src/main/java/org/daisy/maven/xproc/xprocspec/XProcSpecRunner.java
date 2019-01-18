@@ -206,7 +206,8 @@ public class XProcSpecRunner {
 			                                             "enable-log", "false");
 			reporter.running(testName, focusTests.contains(testName));
 			try {
-				engine.run(xprocspec.toASCIIString(), input, output, options, null);
+				engine.run(xprocspec.toASCIIString(), input, output, options, null,
+				           ImmutableMap.of("XPROCSPEC_TEST_ID", testName));
 				if (!surefireReport.exists()) {
 					totalRun += 1;
 					totalErrors += 1;
