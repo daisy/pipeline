@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="px:java-step">
+  <implementation class="JavaStep$Provider"/>
+  <service>
+    <provide interface="org.daisy.common.xproc.calabash.XProcStepProvider"/>
+  </service>
+  <property name="type" type="String" value="{http://www.daisy.org/ns/pipeline/xproc}java-step"/>
+</component>

@@ -6,6 +6,7 @@ import javax.xml.transform.URIResolver;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
+import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipeline;
@@ -84,7 +85,7 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 * @see org.daisy.common.xproc.XProcEngine#run(java.net.URI, org.daisy.common.xproc.XProcInput)
 	 */
 	@Override
-	public XProcResult run(URI uri, XProcInput data) {
+	public XProcResult run(URI uri, XProcInput data) throws XProcErrorException {
 		return load(uri).run(data);
 	}
 

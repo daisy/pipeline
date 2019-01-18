@@ -121,6 +121,8 @@ public class JobResult {
          * @return The idx.
          */
         public Index getIdx() {
+                if (path == null || path.toString().isEmpty())
+                        throw new RuntimeException("the document was not stored to disk");
                 return this.idx;
         }
 
@@ -130,7 +132,9 @@ public class JobResult {
          * @return The path.
          */
         public URI getPath() {
-                return this.path;
+                if (path == null || path.toString().isEmpty())
+                        throw new RuntimeException("the document was not stored to disk");
+                return path;
         }
 
         /**

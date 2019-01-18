@@ -405,7 +405,7 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,null).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		
@@ -450,7 +450,7 @@ public class XProcDecoratorTest   {
 		XProcScript script= new Mock.ScriptGenerator.Builder().withOutputPorts(1).build().generate();
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
-		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("")).build();
+		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,null).build();
 		XProcDecorator trans=XProcDecorator.from(script,mapper);
 		XProcOutput decorated=trans.decorate(outs);
 		

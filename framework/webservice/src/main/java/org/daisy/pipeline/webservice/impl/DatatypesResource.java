@@ -29,6 +29,7 @@ public class DatatypesResource extends AdminResource {
          */
         @Get("xml")
         public Representation getResource() {
+                logRequest();
                 if (!isAuthorized()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -46,6 +47,7 @@ public class DatatypesResource extends AdminResource {
                         setStatus(Status.SERVER_ERROR_INTERNAL);
                         return this.getErrorRepresentation(e.getMessage());       
                 }
+                logResponse(dom);
                 return dom;
         }
 

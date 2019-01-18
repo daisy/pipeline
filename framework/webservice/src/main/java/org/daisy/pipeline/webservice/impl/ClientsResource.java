@@ -44,6 +44,7 @@ public class ClientsResource extends AdminResource {
      */
     @Get("xml")
     public Representation getResource() {
+    	logRequest();
     	if (!isAuthorized()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
@@ -54,11 +55,13 @@ public class ClientsResource extends AdminResource {
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 
+		logResponse(dom);
 		return dom;
     }
 
     @Post
     public Representation createResource(Representation representation) {
+	logRequest();
 	    if (!isAuthorized()) {
 		    setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 		    return null;
@@ -116,6 +119,7 @@ public class ClientsResource extends AdminResource {
 	    setStatus(Status.SUCCESS_CREATED);
 	    ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(newClient.get());
 	    DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
+	    logResponse(dom);
 	    return dom;
     }
 }

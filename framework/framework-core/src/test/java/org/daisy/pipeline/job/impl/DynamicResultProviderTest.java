@@ -1,6 +1,11 @@
 package org.daisy.pipeline.job.impl;
 
+import java.io.File;
+import java.net.URI;
+
 import org.daisy.pipeline.job.impl.DynamicResultProvider;
+import org.daisy.pipeline.job.URIMapper;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +14,9 @@ import javax.xml.transform.Result;
 
 public class DynamicResultProviderTest {
 	DynamicResultProvider provider;
-	String pref1="/tmp/file";
-	String suf1=".xml";
 	@Before
 	public void setUp(){
-		provider = new DynamicResultProvider(pref1,suf1);
+		provider = new DynamicResultProvider(Mock.getResultProvider("/tmp/file.xml"), "irrelevant", "irrelevant", new URIMapper(null, URI.create("")));
 	}
 
 	@Test

@@ -33,12 +33,28 @@ public class XProcOutput {
 		 * With output.
 		 *
 		 * @param port the port
-		 * @param result the result
+		 * @param result the result, as a supplier of Result objects
+		 *
+		 *        - If the supplier returns an object of type StreamResult the output
+		 *          document is written directly to it.
+		 *        - Otherwise, if the supplier returns a Result with a systemId ending
+		 *          with '/', it is seen as a directory where all the output documents are
+		 *          to be written to. It is an error if the supplier does not always
+		 *          return the same Result.
+		 *        - Otherwise, if the supplier always returns the same Result with a
+		 *          non-empty systemId (not ending with '/'), all output document as of
+		 *          the second one are written to paths derived from the systemId.
+		 *        - In all other cases the document is written to the path determined by
+		 *          the systemId. It is an error if the systemId is empty or null, or if
+		 *          the same systemId is supplied more than once.
+		 *        - If no result supplier, or null, is provided, output documents are
+		 *          written to automatically generated paths.
 		 * @return the builder
 		 */
 		public Builder withOutput(String port, Supplier<Result> result) {
 			// TODO check if compatible with info
-			outputs.put(port, result);
+			if (result != null)
+				outputs.put(port, result);
 			return this;
 		}
 

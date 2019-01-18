@@ -54,5 +54,6 @@ public class ClientXmlWriter {
 		element.setAttribute("secret", client.getSecret());
 		element.setAttribute("role", client.getRole().toString());
 		element.setAttribute("contact", client.getContactInfo());
+		element.setAttribute("priority", client.getPriority().name().toLowerCase());
 	}
 }

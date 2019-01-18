@@ -1,5 +1,7 @@
 import java.util.Properties;
 
+import javax.ws.rs.NotAuthorizedException;
+
 import org.daisy.pipeline.client.PipelineClient;
 
 import org.junit.Assert;
@@ -29,7 +31,7 @@ public class TestAuthenticationErrors extends Base {
 		try {
 			bogus.scripts();
 			Assert.fail();
-		} catch(Exception e) {
+		} catch (NotAuthorizedException e) {
 		}
 	}
 }

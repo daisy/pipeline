@@ -1,6 +1,7 @@
 package org.daisy.pipeline.job.impl;
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
@@ -21,7 +22,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Optional;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultJobManagerTest{
-        @Mock JobStorage storage; 
+        @Mock JobStorage storage;
+        @Mock MessageStorage messageStorage;
         @Mock JobExecutionService service; 
         @Mock JobContextFactory factory;
         @Mock Client client;
@@ -34,7 +36,7 @@ public class DefaultJobManagerTest{
         DefaultJobManager jobManager;
         @Before
         public void setUp(){
-                jobManager=Mockito.spy(new DefaultJobManager(storage,service,factory));
+                jobManager=Mockito.spy(new DefaultJobManager(storage,messageStorage,service,factory));
         }
 
         @Test

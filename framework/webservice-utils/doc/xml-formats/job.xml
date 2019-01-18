@@ -1,4 +1,4 @@
-<job xmlns="http://www.daisy.org/ns/pipeline/data" id="job-id-01" href="http://example.org/ws/jobs/job-id-01" status="DONE" priority="low">
+<job xmlns="http://www.daisy.org/ns/pipeline/data" id="job-id-01" href="http://example.org/ws/jobs/job-id-01" status="SUCCESS" priority="low">
 	<!-- nicename is optional -->
 	<nicename>simple-dtbook-1</nicename>
 	<script id="dtbook-to-zedai" href="http://example.org/ws/scripts/dtbook-to-zedai">
@@ -6,8 +6,8 @@
 		<description>Transforms DTBook XML into ZedAI XML.</description>
 		<version>1.1.2</version>
 	</script>
-	<messages>
-		<message level="WARNING" sequence="22">Warning about this job</message>
+	<messages progress="1">
+		<message level="WARNING" sequence="22" content="Warning about this job"/>
 	</messages>
 	<log href="http://example.org/ws/jobs/job-id-01/log"/>
 	<results href="http://example.org/ws/jobs/job-id-01/result" mime-type="zip">

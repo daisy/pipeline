@@ -53,6 +53,7 @@ public class ScriptsResource extends AuthenticatedResource {
 	 */
 	@Get("xml")
 	public Representation getResource() {
+		logRequest();
 		if (!isAuthenticated()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
@@ -62,6 +63,7 @@ public class ScriptsResource extends AuthenticatedResource {
 		ScriptsXmlWriter writer = XmlWriterFactory.createXmlWriterForScripts(scripts);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
+		logResponse(dom);
 		return dom;
 
 	}

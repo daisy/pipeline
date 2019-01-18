@@ -63,10 +63,10 @@ public class PersistentJobTest   {
         public void changeStatusTest(){
                 PersistentJob pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
                 pjob.setDatabase(db);
-                pjob.setStatus(Job.Status.DONE);
-                pjob.onStatusChanged(Job.Status.DONE);
+                pjob.setStatus(Job.Status.SUCCESS);
+                pjob.onStatusChanged(Job.Status.SUCCESS);
                 pjob= db.getEntityManager().find(PersistentJob.class,id.toString());
-                Assert.assertEquals(Job.Status.DONE,pjob.getStatus());
+                Assert.assertEquals(Job.Status.SUCCESS,pjob.getStatus());
 
         }
 	@Test 

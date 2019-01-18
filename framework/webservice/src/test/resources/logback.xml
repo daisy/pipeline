@@ -14,7 +14,7 @@
     </encoder>
   </appender>
   
-  <root level="TRACE">
+  <root level="DEBUG">
     <appender-ref ref="TEST_LOG"/>
   </root>
 

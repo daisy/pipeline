@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="persistent-monitor">
-   <implementation class="org.daisy.pipeline.persistence.impl.job.PersistentJobMonitorFactory"/>
-   <service>
-      <provide interface="org.daisy.pipeline.job.JobMonitorFactory"/>
-   </service>
-   <reference bind="setEntityManagerFactory" cardinality="1..1" interface="javax.persistence.EntityManagerFactory" name="entity-manager-factory" policy="static" target="(osgi.unit.name=pipeline-pu)"/>
-</scr:component>

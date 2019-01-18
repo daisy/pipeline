@@ -6,5 +6,5 @@
    </service>
    <reference  name="execution-service" interface="org.daisy.pipeline.job.JobExecutionService" bind="setExecutionService" cardinality="1..1" policy="static"/> 
    <reference  name="job-storage" interface="org.daisy.pipeline.job.JobStorage" bind="setJobStorage" cardinality="1..1" policy="static"/> 
-   <reference  name="runtime-configurator" interface="org.daisy.pipeline.job.RuntimeConfigurator" bind="setRuntimeConfigurator" cardinality="1..1" policy="static"/> 
+   <reference  name="message-storage" interface="org.daisy.pipeline.event.MessageStorage" bind="setMessageStorage" cardinality="1..1" policy="static"/> 
 </scr:component>

@@ -104,21 +104,13 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
         Runnable getRunnable(final Job job) {
                 return new ThreadWrapper(new Runnable() {
-
                         @Override
                         public void run() {
-
-                                try {
-                                        logger.info("Starting to log to job's log file too:"
-                                                        + job.getId().toString());
-                                        MDC.put("jobid", job.getId().toString());
-                                        job.run(xprocEngine);
-                                        logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
-                                        MDC.remove("jobid");
-                                } catch (Exception e) {
-                                        throw new RuntimeException(e.getCause());
-                                }
-
+                                logger.info("Starting to log to job's log file too:" + job.getId().toString());
+                                MDC.put("jobid", job.getId().toString());
+                                job.run(xprocEngine);
+                                logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
+                                MDC.remove("jobid");
                         }
                 });
         }

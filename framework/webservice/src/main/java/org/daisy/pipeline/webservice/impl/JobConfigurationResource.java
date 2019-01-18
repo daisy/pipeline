@@ -63,6 +63,7 @@ public class JobConfigurationResource extends AuthenticatedResource{
 	 */
 	@Get
 	public Representation getResource() {
+		logRequest();
 		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
@@ -97,6 +98,7 @@ public class JobConfigurationResource extends AuthenticatedResource{
 
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
 		setStatus(Status.SUCCESS_OK);
+		logResponse(dom);
 		return dom;
 	}
 }

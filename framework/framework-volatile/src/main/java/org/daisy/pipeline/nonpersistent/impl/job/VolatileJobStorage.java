@@ -14,6 +14,7 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
+import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
-import com.google.common.eventbus.EventBus;
 
 public final class VolatileJobStorage implements JobStorage {
         private static final Logger logger = LoggerFactory
@@ -30,27 +30,24 @@ public final class VolatileJobStorage implements JobStorage {
 
         private Map<JobId, Job> jobs = Collections
                         .synchronizedMap(new HashMap<JobId, Job>());
-        private EventBus bus;
+        private RuntimeConfigurator configurator;
 
         private Predicate<Job> filter = Predicates.alwaysTrue();
 
         public VolatileJobStorage(){}
 
-
-
         /**
          * @param bus
          * @param filter
          */
-        public VolatileJobStorage(Map<JobId, Job> jobs,EventBus bus,
-                        Predicate<Job> filter) {
+        public VolatileJobStorage(Map<JobId, Job> jobs, RuntimeConfigurator configurator, Predicate<Job> filter) {
                 this.jobs=jobs;
-                this.bus = bus;
+                this.configurator = configurator;
                 this.filter = filter;
         }
 
-        public void setEventBusProvider(EventBusProvider busProvider) {
-                this.bus = busProvider.get();
+        public void setConfigurator(RuntimeConfigurator configurator) {
+                this.configurator = configurator;
         }
 
         @Override
@@ -63,10 +60,11 @@ public final class VolatileJobStorage implements JobStorage {
 
                 if (!this.jobs.containsKey(ctxt.getId())) {
                         //Store the job before its status gets broadcasted
-                        Job job = new Job.JobBuilder().withEventBus(this.bus).withPriority(priority)
+                        Job job = new Job.JobBuilder().withPriority(priority)
                                         .withContext(ctxt).build(new Function<Job, Job>() {
                                                 @Override
                                                 public Job apply(Job job) {
+                                                        VolatileJobStorage.this.configurator.configure(job);
                                                         VolatileJobStorage.this.jobs.put(ctxt.getId(), job);
                                                         return job;
                                                 }
@@ -100,7 +98,7 @@ public final class VolatileJobStorage implements JobStorage {
 
         @Override
         public JobStorage filterBy(final JobBatchId batchId) {
-                return new VolatileJobStorage(this.jobs,this.bus,Predicates.and(this.filter, new Predicate<Job>(){
+                return new VolatileJobStorage(this.jobs,this.configurator,Predicates.and(this.filter, new Predicate<Job>(){
 
                         @Override
                         public boolean apply(Job job) {
@@ -115,7 +113,7 @@ public final class VolatileJobStorage implements JobStorage {
                 if (client.getRole().equals(Role.ADMIN)){
                         return this;
                 }else{
-                        return new VolatileJobStorage(this.jobs,this.bus,Predicates.and(this.filter, new Predicate<Job>(){
+                        return new VolatileJobStorage(this.jobs,this.configurator,Predicates.and(this.filter, new Predicate<Job>(){
 
                                 @Override
                                 public boolean apply(Job job) {

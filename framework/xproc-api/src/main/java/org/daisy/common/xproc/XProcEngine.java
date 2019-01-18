@@ -33,6 +33,6 @@ public interface XProcEngine {
 	 * @param data the data
 	 * @return the x proc result
 	 */
-	XProcResult run(URI uri, XProcInput data);
+	XProcResult run(URI uri, XProcInput data) throws XProcErrorException;
 
 }

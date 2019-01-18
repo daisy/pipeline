@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -127,6 +128,8 @@ class Mock   {
                         int optionOther;
                         int optionOutputsNA;
                         int outputPorts;
+                        Set<XProcPortInfo> fixedOutputPorts = new LinkedHashSet<XProcPortInfo>();
+                        Map<String,String> fixedOutputPortMediaTypes = new HashMap<String,String>();
                         private int optionTemp;
 
                         /**
@@ -191,7 +194,7 @@ class Mock   {
 
 
                         public ScriptGenerator build(){
-                                return new ScriptGenerator( inputs, optionOutputsFile, optionOutputsDir, optionInputs, optionOther,optionOutputsNA,outputPorts,optionTemp);
+                                return new ScriptGenerator( inputs, optionOutputsFile, optionOutputsDir, optionInputs, optionOther,optionOutputsNA,outputPorts, fixedOutputPorts, fixedOutputPortMediaTypes, optionTemp);
                         }
 
                         /**
@@ -209,6 +212,11 @@ class Mock   {
                                 return this;
                         }
 
+                        public Builder withOutputPort(String portName, String mediaType, boolean isSequence, boolean isPrimary) {
+                                fixedOutputPorts.add(XProcPortInfo.newOutputPort(portName, isSequence, isPrimary));
+                                fixedOutputPortMediaTypes.put(portName, mediaType);
+                                return this;
+                        }
                 }
 
                 int inputs;
@@ -218,6 +226,8 @@ class Mock   {
                 int optionOther;
                 int optionOutputsNA;
                 int outputPorts;
+                Set<XProcPortInfo> fixedOutputPorts;
+                Map<String,String> fixedOutputPortMediaTypes;
                 int optionTemp;
 
                 /**
@@ -232,7 +242,9 @@ class Mock   {
                  */
                 public ScriptGenerator(int inputs, int optionOutputsFile,
                                 int optionOutputsDir, int optionInputs,
-                                 int optionOther,int optionsOutputNA,int outputPorts,int optionTemp) {
+                                int optionOther,int optionsOutputNA,int outputPorts,
+                                Set<XProcPortInfo> fixedOutputPorts,
+                                Map<String,String> fixedOutputPortMediaTypes, int optionTemp) {
                         this.inputs = inputs;
                         this.optionOutputsFile = optionOutputsFile;
                         this.optionOutputsDir = optionOutputsDir;
@@ -240,6 +252,8 @@ class Mock   {
                         this.optionOther = optionOther;
                         this.optionOutputsNA= optionsOutputNA;
                         this.outputPorts=outputPorts;
+                        this.fixedOutputPorts = fixedOutputPorts;
+                        this.fixedOutputPortMediaTypes = fixedOutputPortMediaTypes;
                         this.optionTemp=optionTemp;
                 }
 
@@ -254,7 +268,10 @@ class Mock   {
                         for (int i=0;i<this.inputs;i++){
                                 inputSet.add(XProcPortInfo.newInputPort(getInputName(i),false, true));
                         }
-
+                        //outputs
+                        if (fixedOutputPorts != null) {
+                                outputSet.addAll(fixedOutputPorts);
+                        }
                         for (int i=0;i<this.outputPorts;i++){
                                 outputSet.add(XProcPortInfo.newOutputPort(getOutputName(i),false, true));
                         }
@@ -322,8 +339,11 @@ class Mock   {
                         }
                         for (XProcPortInfo port : outputSet) {
                                 pipelineBuilder.withPort(port);
-                                portMetadatas.put(port.getName(),
-                                                new XProcPortMetadata.Builder().build());
+                                XProcPortMetadata.Builder meta = new XProcPortMetadata.Builder();
+                                if (fixedOutputPortMediaTypes != null) {
+                                        meta.withMediaType(fixedOutputPortMediaTypes.get(port.getName()));
+                                }
+                                portMetadatas.put(port.getName(), meta.build());
                         }
                         List<String> inputMedias = Collections.emptyList();
                         return new XProcScript(pipelineBuilder.build(), null, null, null,

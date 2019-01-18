@@ -4,6 +4,8 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import javax.xml.bind.JAXBElement;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
@@ -11,8 +13,10 @@ import com.google.common.io.Files;
 import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.webservice.jaxb.base.Alive;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.job.Result;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
+import org.daisy.pipeline.webservice.jaxb.request.Priority;
 import org.daisy.pipeline.webservice.jaxb.script.Scripts;
 
 import org.junit.Assert;
@@ -53,7 +57,8 @@ public class TestLocalJobs extends Base {
 	private void checkJobInfo(Job in) throws Exception {
 		Job job = client().job(in.getId());
 		Assert.assertEquals("Ids are not equal", in.getId(), job.getId());
-		Assert.assertEquals("Nice name is set", "NICE_NAME", job.getNicenameOrScriptOrMessages().get(0));
+		Assert.assertEquals("Nice name is set", "NICE_NAME",
+		                    ((JAXBElement)job.getNicenameOrBatchIdOrScript().get(0)).getValue().toString());
 		Assert.assertTrue("Status is set", job.getStatus().value().length() > 0);
 		Assert.assertEquals("The priority is low", "low", job.getPriority().toString().toLowerCase());
 	}
@@ -67,10 +72,10 @@ public class TestLocalJobs extends Base {
 		Job job = client().sendJob(req.get());
 		deleteAfterTest(job);
 		Assert.assertEquals("The job status is IDLE", "IDLE", job.getStatus().value());
-		job = waitForStatus("RUNNING", job, 10000);
+		job = waitForStatus(JobStatus.RUNNING, job, 10000);
 		Assert.assertEquals("The job status is RUNNING", "RUNNING", job.getStatus().value());
-		job = waitForStatus("DONE", job, 10000);
-		Assert.assertEquals("The job status is DONE", "DONE", job.getStatus().value());
+		job = waitForStatus(JobStatus.SUCCESS, job, 10000);
+		Assert.assertEquals("The job status is SUCCESS", "SUCCESS", job.getStatus().value());
 		logger.info("{} testJobStatusCycle OUT", TestLocalJobs.class);
 	}
 	
@@ -79,11 +84,20 @@ public class TestLocalJobs extends Base {
 		logger.info("{} testAfterJob IN", TestLocalJobs.class);
 		Optional<JobRequest> req = newJobRequest();
 		Job job = client().sendJob(req.get());
-		job = waitForStatus("DONE", job, 10000);
+		job = waitForStatus(JobStatus.SUCCESS, job, 10000);
 		checkResults(job);
 		checkLog(job);
 		checkDelete(job);
 		logger.info("{} testAfterJob OUT", TestLocalJobs.class);
+	}
+	
+	@Test
+	public void testErrorInJob() throws Exception {
+		Optional<JobRequest> req = newJobRequest(client(), Priority.LOW, "mock-error-script", getResource("hello.xml").toURI().toString());
+		Assert.assertTrue("The request is present", req.isPresent());
+		Job job = client().sendJob(req.get());
+		deleteAfterTest(job);
+		job = waitForStatus(JobStatus.ERROR, job, 10000);
 	}
 	
 	private void checkDelete(Job in) throws Exception {

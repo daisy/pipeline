@@ -7,7 +7,6 @@ import junit.framework.Assert;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobContextFactory;
-import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.junit.After;
@@ -19,7 +18,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class JobContextFactoryTest   {
-        @Mock RuntimeConfigurator runtimeConfigurator;
         @Mock Client client;
         @Mock JobContext mCtxt;
 
@@ -43,7 +41,7 @@ public class JobContextFactoryTest   {
         public void mappingContext(){
                 String name="nice name";
                 
-                JobContextFactory factory=Mockito.spy(new JobContextFactory(runtimeConfigurator,client));
+                JobContextFactory factory=Mockito.spy(new JobContextFactory(client));
                 Mockito.doReturn(mCtxt).when(factory).newJobContext(true,name,null,boundScript,null);
                 
                 JobContext ctxt = factory.newMappingJobContext(name,null,boundScript,null);
@@ -56,7 +54,7 @@ public class JobContextFactoryTest   {
         @Test
         public void nonMappingContext(){
                 String name="nice name";
-                JobContextFactory factory=Mockito.spy(new JobContextFactory(runtimeConfigurator,client));
+                JobContextFactory factory=Mockito.spy(new JobContextFactory(client));
                 Mockito.doReturn(mCtxt).when(factory).newJobContext(false,name,null,boundScript,null);
 
                 JobContext ctxt=factory.newJobContext(name,null,boundScript);

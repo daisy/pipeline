@@ -97,9 +97,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>push-notifier</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.3-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -123,7 +128,7 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>webservice-jaxb</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -185,6 +190,7 @@
           <systemPropertyVariables>
             <pax.exam.logging>none</pax.exam.logging>
           </systemPropertyVariables>
+          <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>
     </plugins>

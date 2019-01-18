@@ -3,8 +3,6 @@ package org.daisy.pipeline.webservice.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -22,7 +20,7 @@ import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
-import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
+import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -38,8 +36,6 @@ import org.restlet.routing.Variable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -61,7 +57,7 @@ public class PipelineWebService extends Application {
         private ScriptRegistry scriptRegistry;
 
         private WebserviceStorage webserviceStorage;
-        private CallbackRegistry callbackRegistry;
+        private CallbackHandler callbackHandler = null;
 
         private PropertyPublisher propertyPublisher;
         private long shutDownKey=0L;
@@ -299,8 +295,8 @@ public class PipelineWebService extends Application {
                 this.scriptRegistry = scriptRegistry;
         }
 
-        public void setCallbackRegistry(CallbackRegistry callbackRegistry) {
-                this.callbackRegistry = callbackRegistry;
+        public void setCallbackHandler(CallbackHandler callbackHandler) {
+                this.callbackHandler = callbackHandler;
         }
 
 
@@ -329,8 +325,8 @@ public class PipelineWebService extends Application {
                 return this.executionQueue;
         }
 
-        public CallbackRegistry getCallbackRegistry() {
-                return callbackRegistry;
+        public CallbackHandler getCallbackHandler() {
+                return callbackHandler;
         }
 
         public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){

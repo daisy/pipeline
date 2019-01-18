@@ -132,9 +132,11 @@ public class JobResultSetBuilderTest {
                 
         }
 
-        @Test
+        @Test(expected=IllegalArgumentException.class)
         public void nonDynamicProviderResults() throws Exception{
                 String outName = Mock.ScriptGenerator.getOutputName(0);
+                // undecorated output
+                XProcOutput output = new XProcOutput.Builder().withOutput(outName, Mock.getResultProvider(sysId)).build();
                 Supplier<Result> res= output.getResultProvider(outName);
                 List<JobResult> jobs=JobResultSetBuilder.buildJobResult(res,mapper,"xml");
                 Assert.assertEquals(mapper.mapOutput(URI.create(sysId)),jobs.get(0).getPath());

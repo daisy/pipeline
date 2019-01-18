@@ -21,12 +21,13 @@ public class AliveResource extends AuthenticatedResource{
      */
     @Get("xml")
     public Representation getResource() {
-    	
+    	logRequest();
 
     	setStatus(Status.SUCCESS_OK);
     	AliveXmlWriter writer = XmlWriterFactory.createXmlWriter(); 
     	DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
+		logResponse(dom);
 		return dom;
     }
 

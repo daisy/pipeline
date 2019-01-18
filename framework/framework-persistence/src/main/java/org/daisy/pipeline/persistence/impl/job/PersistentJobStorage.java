@@ -1,6 +1,5 @@
 package org.daisy.pipeline.persistence.impl.job;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import javax.persistence.CacheStoreMode;
@@ -75,6 +74,7 @@ public class PersistentJobStorage implements JobStorage {
                                 new Function<Job, Job>() {
                                         @Override
                                         public Job apply(Job job) {
+                                                // set event bus and monitor
                                                 PersistentJobStorage.this.configurator.configure(job);
                                                 return job;
                                         }
@@ -86,11 +86,11 @@ public class PersistentJobStorage implements JobStorage {
         public Optional<Job> add(Priority priority,JobContext ctxt) {
                 checkDatabase();
                 logger.debug("Adding job to db:" + ctxt.getId());
-                logger.debug("Adding eventbus:" + this.configurator.getEventBus());
                 JobBuilder builder = new PersistentJob.PersistentJobBuilder(db).withPriority(priority)
-                                .withContext(ctxt).withEventBus(this.configurator.getEventBus());
+                                .withContext(ctxt);
                 Job pjob = builder.build();
-                this.configurator.configure( pjob.getContext());
+                // set event bus and monitor
+                this.configurator.configure(pjob);
                 return Optional.of(pjob);
         }
 
@@ -120,9 +120,8 @@ public class PersistentJobStorage implements JobStorage {
 
                 if (job != null) {
                         job.setDatabase(db);
-                        job.setEventBus(this.configurator.getEventBus());
+                        // set event bus and monitor
                         this.configurator.configure(job);
-                        this.configurator.configure( job.getContext());
                 }
                 return Optional.fromNullable((Job)job);
         }
@@ -143,7 +142,6 @@ public class PersistentJobStorage implements JobStorage {
          */
         public void setConfigurator(RuntimeConfigurator configurator) {
                 this.configurator = configurator;
-                PersistentJobContext.setConfigurator(configurator);
         }
 
         @Override

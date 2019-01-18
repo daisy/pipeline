@@ -15,11 +15,9 @@ import org.daisy.pipeline.script.BoundXProcScript;
 public class JobContextFactory {
 
         private Client client;
-        private RuntimeConfigurator configurator;
 
 
-        public JobContextFactory(RuntimeConfigurator configurator,Client client) {
-                this.configurator=configurator;
+        public JobContextFactory(Client client) {
                 this.client=client;
         }
 
@@ -30,7 +28,6 @@ public class JobContextFactory {
         		AbstractJobContext ctxt = (mapping)?
         			new MappingJobContext(client,id,batchId,niceName,boundScript,collection):
         			new SimpleJobContext(client,id,batchId,niceName,boundScript);
-        		this.configurator.configure(ctxt);
         		return ctxt;
         	}catch (IOException e){
         		throw new RuntimeException("Error while creating job context",e);

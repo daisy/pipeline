@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
+import javax.xml.transform.SourceLocator;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 
@@ -13,6 +14,8 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.xproc.XProcError;
+import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -30,6 +33,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.xmlcalabash.core.XProcConfiguration;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.model.DeclareStep;
 import com.xmlcalabash.model.Input;
@@ -181,7 +185,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	}
 
 	@Override
-	public XProcResult run(XProcInput data) {
+	public XProcResult run(XProcInput data) throws XProcErrorException {
 		return run(data, null,null);
 	}
 
@@ -193,11 +197,16 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 * )
 	 */
 	@Override
-	public XProcResult run(XProcInput data, XProcMonitor monitor,Properties props) {
+	public XProcResult run(XProcInput data, XProcMonitor monitor,Properties props) throws XProcErrorException {
 		PipelineInstance pipeline = pipelineSupplier.get();
 		// monitor.setMessageAccessor(pipeline.messageAccessor);
-		((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
-				.getMessageListener()).add(new EventBusMessageListener(eventBusProvider,props));
+		if (props != null) {
+			String jobId = props.getProperty("JOB_ID");
+			if (jobId != null) {
+				((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
+						.getMessageListener()).add(new EventBusMessageListener(eventBusProvider, jobId));
+			}
+		}
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
 			for (Supplier<Source> sourceProvider : data.getInputs(name)) {
@@ -241,6 +250,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		try {
 			pipeline.xpipe.run();
                 //propagate possible errors
+			
+		} catch (XProcException e) {
+			throw new XProcErrorException(new CalabashXProcError(e), e);
 		} catch (Exception e) {
                         throw new RuntimeException(e);
 
@@ -251,6 +263,38 @@ public class CalabashXProcPipeline implements XProcPipeline {
                 }
 		return CalabashXProcResult.newInstance( pipeline.xpipe ,
 				pipeline.config);
+	}
+
+	private class CalabashXProcError extends XProcError {
+		
+		final XProcException e;
+		
+		CalabashXProcError(XProcException e) {
+			this.e = e;
+		}
+		
+		public String getCode() {
+			if (e.getErrorCode() != null)
+				return e.getErrorCode().toString();
+			else
+				return null;
+		}
+		
+		public String getMessage() {
+			return e.getMessage();
+		}
+		
+		public XProcError getCause() {
+			Throwable cause = e.getCause();
+			if (cause != null && cause instanceof XProcException)
+				return new CalabashXProcError((XProcException)cause);
+			else
+				return null;
+		}
+		
+		public SourceLocator[] getLocation() {
+			return e.getLocator();
+		}
 	}
 
 	/**

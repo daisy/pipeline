@@ -19,6 +19,7 @@ public class PipelineStatusService extends StatusService {
 	@Override
 	public Representation getRepresentation(Status status, Request request,
 			Response response) {
+		logger.debug(status.toString());
 		ErrorWriterBuilder builder=new ErrorWriterBuilder().withUri(status.getUri());
 		if (status.getThrowable()!=null) {
 			logger.info("Overriding error representation: "

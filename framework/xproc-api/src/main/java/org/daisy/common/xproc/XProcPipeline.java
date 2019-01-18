@@ -20,7 +20,7 @@ public interface XProcPipeline {
 	 * @param data the data
 	 * @return the x proc result
 	 */
-	XProcResult run(XProcInput data);
+	XProcResult run(XProcInput data) throws XProcErrorException;
 
 
 	/**
@@ -30,7 +30,7 @@ public interface XProcPipeline {
 	 * @param monitor observer object to monitorise the execution
 	 * @return the x proc result
 	 */
-	XProcResult run(XProcInput data,XProcMonitor monitor,Properties props);
+	XProcResult run(XProcInput data,XProcMonitor monitor,Properties props) throws XProcErrorException;
 
 
 

@@ -1,66 +1,56 @@
 package org.daisy.pipeline.push.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.BiConsumer;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.daisy.common.messaging.Message;
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
-import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
-import org.daisy.pipeline.job.JobUUIDGenerator;
 import org.daisy.pipeline.job.StatusMessage;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
-import org.daisy.pipeline.webserviceutils.callback.CallbackRegistry;
+import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 
 // notify clients whenever there are new messages or a change in status
 // this class could evolve into a general notification utility
 // e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
-public class PushNotifier {
+public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor,Integer> {
 
-
-        private CallbackRegistry callbackRegistry;
-        private EventBusProvider eventBusProvider;
         private JobManagerFactory jobManagerFactory;
         private ClientStorage clientStorage;
+        private JobManager jobManager;
+        private Map<Job,List<Callback>> callbacks;
+        private Map<MessageAccessor,Job> jobForAccessor;
 
-        private Supplier<JobManager> jobManager= new Supplier<JobManager>() {
-
-                @Override
-                public JobManager get() {
-                        return jobManagerFactory.createFor(clientStorage.defaultClient());
-                }
-
-        };
         /** The logger. */
         private static Logger logger = LoggerFactory.getLogger(PushNotifier.class); 
         // for now: push notifications every second. TODO: support different frequencies.
         final int PUSH_INTERVAL = 1000;
 
         // track the starting point in the message sequence for every timed push
-        private MessageList messages = new MessageList();
+        private Map<MessageAccessor,Integer> newMessages = Collections.synchronizedMap(new HashMap<MessageAccessor,Integer>());
         private List<StatusHolder> statusList= Collections.synchronizedList(new LinkedList<StatusHolder>());
 
         Timer timer = null;
@@ -70,8 +60,11 @@ public class PushNotifier {
 
         public void init(BundleContext context) {
                 logger = LoggerFactory.getLogger(Poster.class.getName());
+                logger.debug("Activating push notifier");
+                jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
+                callbacks = new HashMap<Job,List<Callback>>();
+                jobForAccessor = new HashMap<MessageAccessor,Job>();
                 this.startTimer();
-
         }
 
         public void close() {
@@ -90,8 +83,7 @@ public class PushNotifier {
         }
 
         public void setEventBusProvider(EventBusProvider eventBusProvider) {
-                this.eventBusProvider = eventBusProvider;
-                this.eventBusProvider.get().register(this);
+                eventBusProvider.get().register(this);
         }
 
         /**
@@ -102,20 +94,66 @@ public class PushNotifier {
                 
         }
 
-        public void setCallbackRegistry(CallbackRegistry callbackRegistry) {
-                this.callbackRegistry = callbackRegistry;
-        }
-
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.jobManagerFactory = jobManagerFactory;
         }
 
-        @Subscribe
-        public synchronized void handleMessage(Message msg) {
-                JobUUIDGenerator gen = new JobUUIDGenerator();
-                JobId jobId = gen.generateIdFromString(msg.getJobId());
-                synchronized(this.messages){
-                        messages.addMessage(jobId, msg);
+        @Override
+        public void addCallback(Callback callback) {
+                Job job = callback.getJob();
+                List<Callback> list = callbacks.get(job);
+                if (list == null) {
+                        list = new ArrayList<Callback>();
+                        callbacks.put(job, list);
+                }
+                if (callback.getType() == CallbackType.MESSAGES) {
+                        boolean alreadyListening = false;
+                        for (Callback c : list)
+                                if (c.getType() == CallbackType.MESSAGES) {
+                                        alreadyListening = true;
+                                        break; }
+                        if (!alreadyListening) {
+                                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                                jobForAccessor.put(accessor, job);
+                                accessor.listen(this);
+                        }
+                }
+                list.add(callback);
+        }
+
+        // this method is currently never called
+        @Override
+        public void removeCallback(Callback callback) {
+                Job job = callback.getJob();
+                List<Callback> list = callbacks.get(job);
+                if (list == null)
+                        return;
+                list.remove(callback);
+                if (callback.getType() == CallbackType.MESSAGES) {
+                        boolean keepListening = false;
+                        for (Callback c : list)
+                                if (c.getType() == CallbackType.MESSAGES) {
+                                        keepListening = true;
+                                        break; }
+                        if (!keepListening) {
+                                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                                jobForAccessor.remove(accessor);
+                                accessor.unlisten(this);
+                        }
+                }
+                if (list.isEmpty())
+                        callbacks.remove(job);
+        }
+
+        @Override
+        public void accept(MessageAccessor accessor, Integer sequence) {
+                Job job = jobForAccessor.get(accessor);
+                logger.trace("handling message update: [job: " + job.getId() + ", event: " + sequence + "]");
+                synchronized (newMessages) {
+                        Integer seq = newMessages.get(accessor);
+                        if (seq == null) {
+                                newMessages.put(accessor, sequence);
+                        }
                 }
         }
 
@@ -124,7 +162,7 @@ public class PushNotifier {
                 logger.debug(String.format("Status changed %s->%s",message.getJobId(),message.getStatus()));
                 StatusHolder holder= new StatusHolder();
                 holder.status=message.getStatus();
-                Optional<Job> job=jobManager.get().getJob(message.getJobId());
+                Optional<Job> job=jobManager.getJob(message.getJobId());
                 if(job.isPresent()){
                         holder.job=job.get();
                 }
@@ -151,31 +189,57 @@ public class PushNotifier {
                                 PushNotifier.this.statusList.clear();
                         }
                         for (StatusHolder holder: toPost) {
-                                logger.debug("Posting status for "+holder.job.getId());
+                                logger.debug("Posting status '" + holder.status + "' for job " + holder.job.getId());
                                 Job job = holder.job;
-
-                                for (Callback callback :callbackRegistry.getCallbacks(job.getContext().getId())) {
-                                        if (callback.getType() == CallbackType.STATUS) {
-                                                Poster.postStatusUpdate(job, holder.status, callback);
+                                Iterable<Callback> callbacks = PushNotifier.this.callbacks.get(job);
+                                if (callbacks != null) {
+                                        for (Callback callback : callbacks) {
+                                                if (callback.getType() == CallbackType.STATUS) {
+                                                        Poster.postStatusUpdate(job, holder.status, callback);
+                                                }
                                         }
                                 }
                         }
 
                 }
                 private synchronized void postMessages() {
-                        synchronized(PushNotifier.this.messages){
-                                for (JobId jobId : messages.getJobs()) {
-                                        Optional<Job> job = jobManager.get().getJob(jobId);
-                                        if(!job.isPresent()){
-                                                break;
+                        Map<MessageAccessor,Integer> newMessages; {
+                                synchronized (PushNotifier.this.newMessages) {
+                                        newMessages = new HashMap<MessageAccessor,Integer>(PushNotifier.this.newMessages);
+                                        PushNotifier.this.newMessages.clear();
+                                }
+                        }
+                        for (MessageAccessor accessor : newMessages.keySet()) {
+                                Job job = jobForAccessor.get(accessor);
+                                // check if the job still exists, otherwise stop listening for messages
+                                if(!jobManager.getJob(job.getId()).isPresent()){
+                                        accessor.unlisten(PushNotifier.this);
+                                        continue;
+                                }
+                                Integer seq = newMessages.get(accessor);
+                                int newerThan;
+                                BigDecimal progress;
+                                List<Message> messages;
+                                {
+                                        progress = accessor.getProgress();
+                                        if (seq != null) {
+                                                newerThan = seq - 1;
+                                                logger.debug("Posting messages starting from " + (newerThan + 1) + " for job " + job.getId());
+                                                messages = accessor.createFilter().greaterThan(newerThan).getMessages();
+                                        } else {
+                                                newerThan = -1;
+                                                messages = Collections.<Message>emptyList();
                                         }
-                                        for (Callback callback : callbackRegistry.getCallbacks(jobId)) {
-                                                if (callback.getType() == CallbackType.MESSAGES) {
-                                                        Poster.postMessage(job.get(), new LinkedList<Message>(messages.getMessages(jobId)), callback);
-                                                }
+                                }
+                                Iterable<Callback> callbacks = PushNotifier.this.callbacks.get(job);
+                                if (callbacks == null) {
+                                        // should not happen
+                                        continue;
+                                }
+                                for (Callback callback : callbacks) {
+                                        if (callback.getType() == CallbackType.MESSAGES) {
+                                                Poster.postMessages(job, messages, newerThan, progress, callback);
                                         }
-                                        //I don't mind noone listening for the messages they will be discarded anyway...
-                                        messages.removeJob(jobId);
                                 }
                         }
 
@@ -185,58 +249,6 @@ public class PushNotifier {
                           System.out.println("Cancelling timer");
                           cancelTimer();
                           }*/
-                }
-        }
-
-        private class MessageList {
-                HashMap<JobId, List<Message>> messages;
-
-                public MessageList() {
-                        messages = new HashMap<JobId, List<Message>>();
-                }
-                public synchronized List<Message> getMessages(JobId jobId) {
-                        return messages.get(jobId);
-                }
-                public synchronized MessageList copy(){
-                        MessageList copy=new MessageList();     
-                        for (Map.Entry<JobId,List<Message>> entry:this.messages.entrySet()){
-                                copy.messages.put(entry.getKey(),new LinkedList<Message>(entry.getValue()));    
-                        }
-                        return copy;
-                }
-
-                public synchronized void addMessage(JobId jobId, Message msg) {
-                        List<Message> list;
-                        if (containsJob(jobId)) {
-                                list = messages.get(jobId);
-                        }
-                        else {
-                                list = new ArrayList<Message>();
-                                messages.put(jobId, list);
-                        }
-                        list.add(msg);
-                }
-                public synchronized Set<JobId> getJobs() {
-                        return Sets.newHashSet(messages.keySet());
-                }
-
-                public synchronized void removeJob(JobId jobId) {
-                        messages.remove(jobId);
-                }
-
-                public synchronized boolean containsJob(JobId jobId) {
-                        return messages.containsKey(jobId);
-                }
-
-                public synchronized boolean isEmpty() {
-                        return messages.isEmpty();
-                }
-
-                // for debugging
-                public synchronized void printList(JobId jobId) {
-                        for (Message msg : messages.get(jobId)) {
-                                System.out.println("#" + msg.getSequence() + ", job #" + msg.getJobId());
-                        }
                 }
         }
         

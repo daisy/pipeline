@@ -15,7 +15,7 @@ public class JobWrapper {
 	}
 	
 	public Results getResults(){
-		List<Object> elements = job.getNicenameOrScriptOrMessages();
+		List<Object> elements = job.getNicenameOrBatchIdOrScript();
 		return (Results)elements.get(elements.size() - 1);
 	}
 }

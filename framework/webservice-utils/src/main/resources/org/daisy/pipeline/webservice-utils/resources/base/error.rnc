@@ -3,6 +3,6 @@ default namespace = "http://www.daisy.org/ns/pipeline/data"
 start =
     element error {  
         attribute query { xsd:anyURI }
-        & element description {text}
-        & element trace {text}
+        & element description {text} ?
+        & element trace {text} ?
     }

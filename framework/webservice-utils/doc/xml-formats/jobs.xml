@@ -1,5 +1,5 @@
 <jobs xmlns="http://www.daisy.org/ns/pipeline/data" href="http://example.org/ws/jobs">
-    <job id="job-id-01" href="http://example.org/ws/jobs/job-id-01" status="DONE" priority="medium">
+    <job id="job-id-01" href="http://example.org/ws/jobs/job-id-01" status="SUCCESS" priority="medium">
         <nicename>job1</nicename>
     </job>
     <job id="job-id-02" href="http://example.org/ws/jobs/job-id-02" status="ERROR" priority="medium"/>

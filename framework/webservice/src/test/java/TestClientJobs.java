@@ -4,6 +4,7 @@ import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
 import org.daisy.pipeline.webservice.jaxb.clients.Priority;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.queue.Queue;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 
@@ -83,8 +84,8 @@ public class TestClientJobs extends Base {
 		}
 		Job fromServer = client().job(other.getId());
 		Assert.assertNotNull("Admin accessed the client app job", fromServer);
-		waitForStatus("DONE", admin, 10000);
-		waitForStatus("DONE", other, 10000);
+		waitForStatus(JobStatus.SUCCESS, admin, 10000);
+		waitForStatus(JobStatus.SUCCESS, other, 10000);
 		logger.info("job access OUT");
 	}
 	
@@ -108,7 +109,7 @@ public class TestClientJobs extends Base {
 			Assert.fail("Other shouldn't be able to move other client jobs around");
 		} catch(Exception e){
 		}
-		waitForStatus("DONE", last, 10000);
+		waitForStatus(JobStatus.SUCCESS, last, 10000);
 		logger.info("queue access OUT");
 	}
 }

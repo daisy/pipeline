@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -18,6 +19,7 @@ import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.request.Input;
 import org.daisy.pipeline.webservice.jaxb.request.Item;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
@@ -33,6 +35,7 @@ import org.ops4j.pax.exam.Configuration;
 import static org.ops4j.pax.exam.CoreOptions.bootDelegationPackage;
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.options.SystemPropertyOption;
@@ -45,17 +48,29 @@ import org.slf4j.LoggerFactory;
 
 public abstract class Base extends AbstractTest {
 	
+	// This is a trick to make sure a PipelineWebService is instantiated. We can't inject
+	// PipelineWebService directly because this would result in a "java.net.BindException: Address
+	// already in use" error because two instances would be created, so we inject its dependencies.
+	// Normally this is not needed but it can help with debugging.
+	@Inject org.daisy.pipeline.script.ScriptRegistry dep1;
+	@Inject org.daisy.pipeline.job.JobManagerFactory dep2;
+	@Inject org.daisy.pipeline.webserviceutils.storage.WebserviceStorage dep3;
+	@Inject org.daisy.pipeline.webserviceutils.callback.CallbackHandler dep4;
+	@Inject org.daisy.pipeline.datatypes.DatatypeRegistry dep5;
+	@Inject org.daisy.common.properties.PropertyPublisherFactory dep6;
+	// @Inject org.restlet.Application webserver;
+	
 	@Override
 	protected String[] testDependencies() {
 		return new String[]{
 			"org.daisy.pipeline:clientlib-java-jaxb:?",
 			"org.daisy.pipeline:webservice-jaxb:?",
-			// for some reason logging-activator needs to start before restlet but after jersey (clientlib-java-jaxb)
-			"org.daisy.pipeline:logging-activator:?",
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
 			"org.daisy.libs:servlet-api:?",
+			// for some reason logging-activator needs to start before restlet but after jersey-client (clientlib-java-jaxb)
+			"org.daisy.pipeline:logging-activator:?",
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",
 			"org.restlet.osgi:org.restlet.ext.xml:?",
@@ -66,6 +81,11 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:webservice-utils:?",
 			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
+			"org.daisy.pipeline:push-notifier:?",
+			// this bundle is not needed but may be included to prevent
+			// "com.sun.jersey.server.impl.provider.RuntimeDelegateImpl not found by com.sun.jersey.core"
+			// errors
+			// "com.sun.jersey:jersey-server:1.18.1",
 		};
 	}
 	
@@ -89,7 +109,10 @@ public abstract class Base extends AbstractTest {
 			// for org.eclipse.persistence:org.eclipse.persistence.moxy:2.5.0 (<-- glassfish <-- clientlib-java-jaxb)
 			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:2.5.0"),
 			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:2.5.0"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:2.5.0")
+			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:2.5.0"),
+			
+			// for TestPushNotifications
+			systemPackage("com.sun.net.httpserver")
 		);
 	}
 	
@@ -180,30 +203,9 @@ public abstract class Base extends AbstractTest {
 		return new PipelineClient(DEFAULT_WS_URL, id, secret);
 	}
 	
-	
-	protected Job waitForStatus(String status, Job in, long timeout) throws Exception {
-		return waitForStatus(client(), status, in, timeout);
-	}
-	
-	private static Job waitForStatus(PipelineClient client, String status, Job in, long timeout) throws Exception {
-		long waited = 0L;
-		Job job = in;
+	protected Job waitForStatus(JobStatus status, Job job, long timeout) throws Exception {
 		logger.info("Waiting for status {}", status);
-		while (job.getStatus().value() != status) {
-			if (job.getStatus().value() == "ERROR") {
-				throw new RuntimeException("Job errored while waiting for another status");
-			}
-			job = client.job(job.getId());
-			try {
-				Thread.sleep(500);
-				waited += 500;
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-			if (waited > timeout) {
-				throw new RuntimeException("waitForStatus " + status + " timed out (last status was " + job.getStatus().value() + ")");
-			}
-		}
+		job = new JobPoller(client(), job.getId(), status, 500, timeout).call();
 		logger.info("After status {}", job.getStatus().value());
 		return job;
 	}
@@ -221,18 +223,18 @@ public abstract class Base extends AbstractTest {
 	}
 	
 	protected static Optional<JobRequest> newJobRequest(PipelineClient client, Priority priority) {
-		return newJobRequest(client, priority, getResource("hello.xml").toURI().toString());
+		return newJobRequest(client, priority, DEFAULT_SCRIPT, getResource("hello.xml").toURI().toString());
 	}
 	
 	protected Optional<JobRequest> newJobRequest(Priority priority, String sourcePath) {
-		return newJobRequest(client(), priority, sourcePath);
+		return newJobRequest(client(), priority, DEFAULT_SCRIPT, sourcePath);
 	}
 	
-	protected static Optional<JobRequest> newJobRequest(PipelineClient client, Priority priority, String sourcePath) {
+	protected static Optional<JobRequest> newJobRequest(PipelineClient client, Priority priority, String scriptId, String sourcePath) {
 		ObjectFactory reqFactory = new ObjectFactory();
 		JobRequest req = reqFactory.createJobRequest();
 		Script script = reqFactory.createScript();
-		Optional<String> href = getScriptHref(client, DEFAULT_SCRIPT);
+		Optional<String> href = getScriptHref(client, scriptId);
 		if (!href.isPresent()) {
 			return Optional.absent();
 		}
@@ -243,9 +245,9 @@ public abstract class Base extends AbstractTest {
 		input.getItem().add(source);
 		input.setName("source");
 		req.getScriptOrNicenameOrPriority().add(script);
-		req.getScriptOrNicenameOrPriority().add("NICE_NAME");
+		req.getScriptOrNicenameOrPriority().add(reqFactory.createNicename("NICE_NAME"));
 		req.getScriptOrNicenameOrPriority().add(input);
-		req.getScriptOrNicenameOrPriority().add(priority);
+		req.getScriptOrNicenameOrPriority().add(reqFactory.createPriority(priority));
 		return Optional.of(req);
 	}
 	
@@ -271,11 +273,50 @@ public abstract class Base extends AbstractTest {
 		return new File(new File(new File(PIPELINE_DATA, "jobs"), jobId), jobId + ".log");
 	}
 	
-	private static File getResource(String path) {
+	protected static File getResource(String path) {
 		return new File(new File(PathUtils.getBaseDir(), "src/test/resources"), path);
 	}
 	
 	protected static InputStream getResourceAsStream(String path) throws IOException {
 		return new File(new File(PathUtils.getBaseDir(), "src/test/resources"), path).toURI().toURL().openStream();
+	}
+	
+	static class JobPoller implements Callable<Job> {
+		final PipelineClient client;
+		final String jobId;
+		final JobStatus expectedStatus;
+		final long interval;
+		final long timeout;
+		JobPoller(PipelineClient client, String jobId, JobStatus expectedStatus, long interval, long timeout) {
+			this.client = client;
+			this.jobId = jobId;
+			this.expectedStatus = expectedStatus;
+			this.interval = interval;
+			this.timeout = timeout;
+		}
+		void performAction(Job job) {}
+		public Job call() throws Exception {
+			long waited = 0L;
+			while (true) {
+				Job job = client.job(jobId);
+				JobStatus status = job.getStatus();
+				if (status == expectedStatus) {
+					performAction(job);
+					return job;
+				} else if (status == JobStatus.ERROR) {
+					throw new RuntimeException("Job errored while waiting for another status");
+				}
+				try {
+					performAction(job);
+					Thread.sleep(interval);
+					waited += interval;
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
+				}
+				if (waited > timeout) {
+					throw new RuntimeException("waitForStatus " + expectedStatus + " timed out (last status was " + status + ")");
+				}
+			}
+		}
 	}
 }

@@ -23,6 +23,7 @@ public class HaltResource extends AdminResource {
 	}
 	@Get
 	public void getResource() {
+		logRequest();
 		if (!isAuthorized()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return;

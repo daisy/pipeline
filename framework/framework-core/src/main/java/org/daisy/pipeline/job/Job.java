@@ -2,13 +2,14 @@ package org.daisy.pipeline.job;
 
 import java.util.Properties;
 
-import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.common.messaging.Message.MessageBuilder;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.job.impl.JobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,8 @@ import com.google.common.eventbus.EventBus;
 /**
  * The Class Job defines the execution unit.
  */
-public class Job implements RuntimeConfigurator.EventBusable{
+public class Job implements RuntimeConfigurator.EventBusable, RuntimeConfigurator.Monitorable {
+
 
         private static final Logger logger = LoggerFactory
                         .getLogger(Job.class);
@@ -27,7 +29,6 @@ public class Job implements RuntimeConfigurator.EventBusable{
 
         public static class  JobBuilder{
                 protected JobContext ctxt;
-                protected EventBus bus;
                 protected Priority priority=Priority.MEDIUM;
                 private Job job;
 
@@ -41,13 +42,9 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         return this;
                 }
 
-                public JobBuilder withEventBus(EventBus bus){
-                        this.bus=bus;
-                        return this;
-                }
                 //available for subclasses to override
                 protected Job initJob(){
-                        Job job = new Job(this.ctxt,this.bus,this.priority);
+                        Job job = new Job(this.ctxt,this.priority);
                         return job;
                 }
                 public final Job build(){
@@ -78,17 +75,11 @@ public class Job implements RuntimeConfigurator.EventBusable{
 
 
         public static enum Status {
-
-                /** The IDLE. */
                 IDLE,
-                /** The RUNNING. */
                 RUNNING,
-                /** The DONE. */
-                DONE,
-                /** The ERROR. */
+                SUCCESS,
                 ERROR,
-                /** The VALIDATION_FAIL */
-                VALIDATION_FAIL
+                FAIL
         }
 
 
@@ -98,9 +89,8 @@ public class Job implements RuntimeConfigurator.EventBusable{
         protected JobContext ctxt;
         private EventBus eventBus;
 
-        protected Job(JobContext ctxt,EventBus eventBus,Priority priority) {
+        protected Job(JobContext ctxt,Priority priority) {
                 this.ctxt=ctxt;
-                this.eventBus=eventBus;
                 this.priority=priority;
         }
 
@@ -147,8 +137,14 @@ public class Job implements RuntimeConfigurator.EventBusable{
         /**
          * @param eventBus the eventBus to set
          */
+        @Override
         public void setEventBus(EventBus eventBus) {
                 this.eventBus = eventBus;
+        }
+
+        @Override
+        public void setJobMonitor(JobMonitorFactory factory) {
+                this.ctxt.setMonitor(factory.newJobMonitor(this.getId(), getStatus() == Status.IDLE));
         }
 
         /**
@@ -182,19 +178,25 @@ public class Job implements RuntimeConfigurator.EventBusable{
                 logger.info(String.format("Changing job status to: %s",to));
                 this.status=to;
                 this.onStatusChanged(to);
-                System.out.println("CHANGING STATUS IN THE DB BEFORE POSTING IT!");
+                //System.out.println("CHANGING STATUS IN THE DB BEFORE POSTING IT!");
                 if (this.eventBus!=null)
                         this.eventBus.post(new StatusMessage.Builder().withJobId(this.getId()).withStatus(this.status).build());
                 else
                         logger.warn("I couldnt broadcast my change of status because"+((this.ctxt==null)? " the context ": " event bus ") + "is null");
         }
+
         private final void broadcastError(String text){
-                Message msg= new MessageBuilder()
+                
+                // first close any open message blocks (in this thread)
+                ProgressMessage m;
+                while ((m = ProgressMessage.getActiveBlock()) != null)
+                        m.close();
+                ProgressMessage msg = new ProgressMessageBuilder()
                         .withJobId(this.getId().toString())
                         .withLevel(Level.ERROR)
                         .withText(text)
-                        .withSequence(1)
                         .build();
+                msg.close();
                 if (this.eventBus!=null)
                         this.eventBus.post(msg);
                 else
@@ -216,15 +218,19 @@ public class Job implements RuntimeConfigurator.EventBusable{
                         XProcResult results = pipeline.run(this.ctxt.getInputs(),this.ctxt.getMonitor(),props);
                         this.ctxt.writeResult(results);
                         //if the validation fails set the job status
-                        if (!this.checkValid()){
-                                changeStatus(Status.VALIDATION_FAIL);
+                        if (!this.checkStatus()){
+                                changeStatus(Status.FAIL);
                         }else{
-                                changeStatus( Status.DONE );
+                                changeStatus(Status.SUCCESS);
                         }
                 }catch(Exception e){
                         changeStatus( Status.ERROR);
-                        broadcastError(e.getMessage());
-                        logger.error("job finished with error state",e);
+                        broadcastError(e.getMessage() + " (Please see detailed log for more info.)");
+                        if (e instanceof XProcErrorException) {
+                                logger.error("job finished with error state\n" + e.toString());
+                                logger.debug("job finished with error state", e);
+                        } else
+                                logger.error("job finished with error state", e);
 		} catch (OutOfMemoryError e) {//this one needs it's own catch!
                         changeStatus( Status.ERROR);
                         broadcastError(e.getMessage());
@@ -236,9 +242,9 @@ public class Job implements RuntimeConfigurator.EventBusable{
         protected void onStatusChanged(Status newStatus){
                 //for subclasses
         }
-        //checks if the internal validations are ok
-        private boolean checkValid(){
-                return JobUtils.checkValidPort(this.getContext().getResults());
+        //checks the status returned by the script
+        private boolean checkStatus(){
+                return JobUtils.checkStatusPort(this.getContext().getScript(), this.getContext().getOutputs());
         }
 
         @Override

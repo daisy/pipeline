@@ -30,6 +30,7 @@ public class SizesResource extends AdminResource {
 	 */
 	@Get("xml")
 	public Representation getResource() {
+		logRequest();
 		if (!isAuthorized()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
@@ -40,6 +41,7 @@ public class SizesResource extends AdminResource {
 		JobsSizeXmlWriter writer = XmlWriterFactory.createXmlWriterForJobSizes(JobSize.getSizes(webservice().getJobManager(this.getClient()).getJobs()));
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
+		logResponse(dom);
 		return dom;
 	}
 

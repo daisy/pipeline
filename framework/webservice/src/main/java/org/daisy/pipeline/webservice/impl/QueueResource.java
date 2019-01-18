@@ -33,6 +33,7 @@ public class QueueResource extends AuthenticatedResource {
 	 */
 	@Get("xml")
 	public Representation getResource() {
+		logRequest();
 		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
@@ -43,6 +44,7 @@ public class QueueResource extends AuthenticatedResource {
 		QueueXmlWriter writer = XmlWriterFactory.createXmlWriterForQueue(jobs);
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
+		logResponse(dom);
 		return dom;
 	}
 

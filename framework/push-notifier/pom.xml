@@ -33,10 +33,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>webservice</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
       <artifactId>webservice-utils</artifactId>
     </dependency>
     <dependency>

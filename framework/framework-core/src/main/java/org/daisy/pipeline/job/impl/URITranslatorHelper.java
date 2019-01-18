@@ -93,19 +93,19 @@ public final class URITranslatorHelper   {
 	 * TODO: At some point it would be nice to generate the names based on the mime-type, ask jostein where 
 	 * he got the list of mime-types for the webui
 	 */
-	public static final String[] getDynamicResultProviderParts(String name,Supplier<Result> result,String mimetype){
+	public static final String[] getDynamicResultProviderParts(String name, String systemId, String mimetype){
 		String parts[]=null;
 		//on the result/result.xml way
-		if (result==null || result.get().getSystemId().isEmpty()){
+		if (systemId==null || systemId.isEmpty()){
 			parts= new String[]{String.format("%s/%s",name,name),".xml"};
 		//directory-> dir/name, .xml
 		//the first part is the last char of the sysId
-		}else if(result.get().getSystemId().charAt(result.get().getSystemId().length()-1)=='/'){
-			parts= new String[]{String.format("%s%s",result.get().getSystemId(),name),".xml"};
+		}else if(systemId.charAt(systemId.length()-1)=='/'){
+			parts= new String[]{String.format("%s%s",systemId,name),".xml"};
 		//file name/name, (".???"|"")
 		}else{
 			String ext="";
-			String path=result.get().getSystemId();
+			String path=systemId;
 			int idx;
 
 			//get the extension if there is one

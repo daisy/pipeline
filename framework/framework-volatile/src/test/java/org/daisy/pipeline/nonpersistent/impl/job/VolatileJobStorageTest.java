@@ -13,6 +13,7 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.nonpersistent.impl.webservice.VolatileClient;
 import org.junit.After;
 import org.junit.Assert;
@@ -41,6 +42,7 @@ public class VolatileJobStorageTest {
                 System.setProperty("org.daisy.pipeline.iobase",
                                 System.getProperty("java.io.tmpdir"));
                 storage = new VolatileJobStorage();
+                storage.setConfigurator(new RuntimeConfigurator());
                 ctxt1 = Mock.newJobContext(cl,batchId1);
                 ctxt2 = Mock.newJobContext(cl,batchId2);
                 ctxt1OtherCli = Mock.newJobContext(clOther,batchId1);

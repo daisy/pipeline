@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="mock-script" immediate="true">
-  <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
-  <service>
-    <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
-  </service>
-  <property name="script.version" type="String" value="1.0.0"/>
-  <property name="script.id" type="String" value="mock-script"/>
-  <property name="script.name" type="String" value="Mock script"/>
-  <property name="script.description" type="String" value="Does stuff."/>
-  <property name="script.url" type="String" value="/mock-module/script.xpl"/>
-</scr:component>
+<components xmlns="http://www.osgi.org/xmlns/scr/v1.1.0">
+  <component name="mock-script" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="mock-script"/>
+    <property name="script.name" type="String" value="Mock script"/>
+    <property name="script.description" type="String" value="Does stuff."/>
+    <property name="script.url" type="String" value="/mock-module/script.xpl"/>
+  </component>
+  <component name="mock-error-script" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="mock-error-script"/>
+    <property name="script.name" type="String" value="_"/>
+    <property name="script.description" type="String" value="_"/>
+    <property name="script.url" type="String" value="/mock-module/error-script.xpl"/>
+  </component>
+  <component name="mock-messages-script" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="mock-messages-script"/>
+    <property name="script.name" type="String" value="_"/>
+    <property name="script.description" type="String" value="_"/>
+    <property name="script.url" type="String" value="/mock-module/messages-script.xpl"/>
+  </component>
+</components>

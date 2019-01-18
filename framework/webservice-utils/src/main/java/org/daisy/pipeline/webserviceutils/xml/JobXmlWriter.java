@@ -1,12 +1,15 @@
 package org.daisy.pipeline.webserviceutils.xml;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.namespace.QName;
 
 import org.daisy.common.messaging.Message;
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.script.XProcOptionMetadata;
@@ -21,6 +24,8 @@ public class JobXmlWriter {
         
         private Job job = null;
         private List<Message> messages = null;
+        private long messagesNewerThan = -1;
+        private BigDecimal progress = null;
         private boolean scriptDetails = false;
         private boolean fullResult=false;
         private boolean localPaths=false; 
@@ -67,34 +72,35 @@ public class JobXmlWriter {
                 localPaths= true;
                 return this;
         }
-        public JobXmlWriter withAllMessages() {
-                if (job.getContext().getMonitor().getMessageAccessor() != null) {
-                        messages = job.getContext().getMonitor().getMessageAccessor()
-                                        .createFilter().filterLevels(MSG_LEVELS).getMessages();
-                }
-                return this;
-        }
 
-        public JobXmlWriter withMessageRange(int start, int end) {
-                if (job.getContext().getMonitor().getMessageAccessor() != null) {
-                        messages = job.getContext().getMonitor().getMessageAccessor()
-                                        .createFilter().filterLevels(MSG_LEVELS)
-                                        .inRange(start, end).getMessages();
+        public JobXmlWriter withAllMessages() {
+                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                if (accessor != null) {
+                        progress = accessor.getProgress();
+                        messages = accessor.createFilter().filterLevels(MSG_LEVELS).getMessages();
                 }
                 return this;
         }
 
         public JobXmlWriter withNewMessages(int newerThan) {
-                if (job.getContext().getMonitor().getMessageAccessor() != null) {
-                        messages = job.getContext().getMonitor().getMessageAccessor()
-                                        .createFilter().filterLevels(MSG_LEVELS)
-                                        .greaterThan(newerThan).getMessages();
+                MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+                if (accessor != null) {
+                        withProgress(accessor.getProgress());
+                        withMessages(accessor.createFilter().filterLevels(MSG_LEVELS)
+                                             .greaterThan(newerThan).getMessages(),
+                                     newerThan);
                 }
                 return this;
         }
 
-        public JobXmlWriter withMessages(List<Message> messages) {
+        public JobXmlWriter withMessages(List<Message> messages, int newerThan) {
                 this.messages = messages;
+                messagesNewerThan = newerThan;
+                return this;
+        }
+
+        public JobXmlWriter withProgress(BigDecimal progress) {
+                this.progress = progress;
                 return this;
         }
 
@@ -155,20 +161,22 @@ public class JobXmlWriter {
                         }
                 }
                 
-                if (messages != null && messages.size() > 0) {
-                    Element messagesElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "messages");
-                    element.appendChild(messagesElm);
-                    
-                    for (Message message : messages) {
-                        Element messageElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "message");
-                        messageElm.setAttribute("level", message.getLevel().toString());
-                        messageElm.setAttribute("sequence", Integer.toString(message.getSequence()));
-                        messageElm.setTextContent(message.getText());
-                        messagesElm.appendChild(messageElm);
-                    }
+                if (progress != null && status == Job.Status.RUNNING || messages != null && messages.size() > 0) {
+                        Element messagesElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "messages");
+                        element.appendChild(messagesElm);
+                        if (progress != null) {
+                                messagesElm.setAttribute("progress", Float.toString(progress.floatValue()));
+                        }
+                        if (messages != null && messages.size() > 0) {
+                                if (messagesNewerThan >= 0)
+                                        messagesElm.setAttribute("msgSeq", ""+messagesNewerThan);
+                                for (Message message : messages) {
+                                        addMessage(message, true, messagesElm);
+                                }
+                        }
                 }
                 
-                if (job.getStatus() == Job.Status.DONE || job.getStatus() == Job.Status.VALIDATION_FAIL) {
+                if (job.getStatus() == Job.Status.SUCCESS || job.getStatus() == Job.Status.FAIL) {
                         Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
                         String logHref = baseUri + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
                         logElm.setAttribute("href", logHref);
@@ -176,11 +184,35 @@ public class JobXmlWriter {
                         if(this.fullResult)
                                 addResults(element);
                 }
-        }       
+        }
+
+        private static void addMessage(Message message, boolean progress, Element parentElem) {
+                Document doc = parentElem.getOwnerDocument();
+                Element messageElem = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "message");
+                messageElem.setAttribute("level", message.getLevel().toString());
+                messageElem.setAttribute("sequence", Integer.toString(message.getSequence()));
+                messageElem.setAttribute("content", message.getText());
+                if (message instanceof ProgressMessage) {
+                        ProgressMessage jm = (ProgressMessage)message;
+                        if (progress) {
+                                BigDecimal portion = jm.getPortion();
+                                if (portion.compareTo(BigDecimal.ZERO) > 0) {
+                                        messageElem.setAttribute("portion", Float.toString(portion.floatValue()));
+                                        messageElem.setAttribute("progress", Float.toString(jm.getProgress().floatValue()));
+                                } else {
+                                        progress = false;
+                                }
+                        }
+                        for (Message m : jm) {
+                                addMessage(m, progress, messageElem);
+                        }
+                }
+                parentElem.appendChild(messageElem);
+        }
 
         private void addResults(Element jobElem) {
                 //check if there are actual results
-                if (this.job.getContext().getResults()==null){
+                if (this.job.getContext().getResults()==null || this.job.getContext().getResults().getResults().size() == 0){
                         return;
                 }
                 Document doc = jobElem.getOwnerDocument();

@@ -37,6 +37,7 @@ import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 import org.daisy.pipeline.webserviceutils.callback.Callback;
 import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
+import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.JobsXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
@@ -84,6 +85,7 @@ public class JobsResource extends AuthenticatedResource {
          */
         @Get("xml")
         public Representation getResource() {
+                logRequest();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -96,6 +98,7 @@ public class JobsResource extends AuthenticatedResource {
                 Document doc = writer.getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
                 setStatus(Status.SUCCESS_OK);
+                logResponse(dom);
                 return dom;
         }
 
@@ -109,6 +112,7 @@ public class JobsResource extends AuthenticatedResource {
          */
         @Post
         public Representation createResource(Representation representation) {
+                logRequest();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -188,6 +192,7 @@ public class JobsResource extends AuthenticatedResource {
                 Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
+                logResponse(dom);
                 return dom;
 
         }
@@ -401,13 +406,17 @@ public class JobsResource extends AuthenticatedResource {
                         }
 
                         try {
-                                callback = new Callback(newJob.get().getId(), this.getClient(), new URI(href), type, freq);
+                                callback = new Callback(newJob.get(), this.getClient(), new URI(href), type, freq);
                         } catch (URISyntaxException e) {
                                 logger.warn("Cannot create callback: " + e.getMessage());
                         }
 
                         if (callback != null) {
-                                webservice().getCallbackRegistry().addCallback(callback);
+                                CallbackHandler pushNotifier = webservice().getCallbackHandler();
+                                if (pushNotifier == null) {
+                                        throw new RuntimeException("No push notifier");
+                                }
+                                pushNotifier.addCallback(callback);
                         }
                 }
                 return newJob;

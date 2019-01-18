@@ -10,7 +10,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 
-import org.daisy.common.messaging.Message.MessageBuilder;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRunnable;
@@ -108,7 +108,7 @@ public class XprocMessageHelper {
 
 		if (exception instanceof XProcException) {
 			XProcException err = (XProcException) exception;
-			loc = err.getLocator();
+			loc = err.getLocator()[0];
 			if (err.getErrorCode() != null) {
 				QName n = err.getErrorCode();
 				qCode = new StructuredQName(n.getPrefix(), n.getNamespaceURI(),
@@ -147,8 +147,8 @@ public class XprocMessageHelper {
 	 * @param code the code
 	 * @return the string
 	 */
-	public static MessageBuilder message(XProcRunnable step, XdmNode node,
-			String message, QName code,MessageBuilder builder) {
+	public static ProgressMessageBuilder message(XProcRunnable step, XdmNode node,
+			String message, QName code, ProgressMessageBuilder builder) {
 
 		if (node != null) {
 			builder.withFile(node.getBaseURI().toASCIIString());
@@ -160,12 +160,12 @@ public class XprocMessageHelper {
 		return builder;
 	}
 
-	public static MessageBuilder message(XProcRunnable step, XdmNode node,
-			String message,MessageBuilder builder) {
+	public static ProgressMessageBuilder message(XProcRunnable step, XdmNode node,
+			String message, ProgressMessageBuilder builder) {
 		return message(step, node, message, null,builder);
 	}
 
-	public static MessageBuilder errorMessage(Throwable exception,MessageBuilder builder) {
+	public static ProgressMessageBuilder errorMessage(Throwable exception, ProgressMessageBuilder builder) {
 		StructuredQName qCode = null;
 		SourceLocator loc = null;
 		String message = "";
@@ -200,7 +200,7 @@ public class XprocMessageHelper {
 
 		if (exception instanceof XProcException) {
 			XProcException err = (XProcException) exception;
-			loc = err.getLocator();
+			loc = err.getLocator()[0];
 			if (err.getErrorCode() != null) {
 				QName n = err.getErrorCode();
 				qCode = new StructuredQName(n.getPrefix(), n.getNamespaceURI(),

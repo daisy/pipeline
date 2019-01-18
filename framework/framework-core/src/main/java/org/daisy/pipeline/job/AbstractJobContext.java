@@ -186,7 +186,6 @@ public abstract class AbstractJobContext implements JobContext{
         public void cleanUp(){
                 logger.info(String.format( "Deleting context for job %s" ,this.id));
                 JobURIUtils.cleanJobBase(this.id);
-                this.monitor.getMessageAccessor().delete();
         }
 
 
@@ -210,9 +209,8 @@ public abstract class AbstractJobContext implements JobContext{
         }
 
         @Override
-        public void setJobMonitorFactory(JobMonitorFactory factory) {
-                this.monitor=factory.newJobMonitor(this.getId());
-
+        public void setMonitor(XProcMonitor monitor) {
+                this.monitor=monitor;
         }
 
         @Override

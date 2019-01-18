@@ -1,5 +1,6 @@
 package org.daisy.common.xproc.calabash.impl;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -121,9 +122,22 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 	@Override
 	public void warning(Throwable throwable) {
 		for(XProcMessageListener l:mListeners){
-			l.error(throwable);
+			l.warning(throwable);
 		}
 
 	}
 
+	@Override
+	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
+		for (XProcMessageListener l : mListeners){
+			l.openStep(step, node, message, level, portion);
+		}
+	}
+
+	@Override
+	public void closeStep() {
+		for (XProcMessageListener l : mListeners){
+			l.closeStep();
+		}
+	}
 }

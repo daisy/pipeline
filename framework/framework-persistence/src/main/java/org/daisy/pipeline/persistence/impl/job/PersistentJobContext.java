@@ -24,7 +24,6 @@ import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResultSet;
-import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -133,11 +132,6 @@ public final class PersistentJobContext extends AbstractJobContext {
                 ContextHydrator.hydrateResultPorts(rBuilder,portResults);
                 ContextHydrator.hydrateResultOptions(rBuilder,optionResults);
                 this.setResults(rBuilder.build());
-
-                //so the context is configured once it leaves to the real world.
-                if (configurator!=null)
-                        configurator.configure(this);
-                
         }
 
         private void updateResults(){
@@ -262,15 +256,9 @@ public final class PersistentJobContext extends AbstractJobContext {
                                 
         }
 
-        //Configuration for adding runtime inforamtion  
         @Transient
         static ScriptRegistry registry;
         public static void setScriptRegistry(ScriptRegistry sregistry){
                 registry=sregistry;
-        }
-        @Transient
-        private static RuntimeConfigurator configurator;
-        public static void setConfigurator(RuntimeConfigurator configurator){
-                PersistentJobContext.configurator=configurator;
         }
 }

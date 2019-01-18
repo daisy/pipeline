@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.osgi.org/xmlns/scr/v1.1.0">
+  <component name="catch-xproc-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="catch-xproc-error"/>
+    <property name="script.name" type="String" value="catch-xproc-error"/>
+    <property name="script.description" type="String" value="Always fails and outputs the c:error document created by a p:error"/>
+    <property name="script.url" type="String" value="/module/catch-xproc-error.xpl"/>
+  </component>
+  <component name="xproc-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="xproc-error"/>
+    <property name="script.name" type="String" value="xproc-error"/>
+    <property name="script.description" type="String" value="Always errors because of a p:error"/>
+    <property name="script.url" type="String" value="/module/xproc-error.xpl"/>
+  </component>
+  <component name="catch-xslt-terminate-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="catch-xslt-terminate-error"/>
+    <property name="script.name" type="String" value="catch-xslt-terminate-error"/>
+    <property name="script.description" type="String" value="Always fails and outputs the c:error document created by a xsl:message with terminate='yes'"/>
+    <property name="script.url" type="String" value="/module/catch-xslt-terminate-error.xpl"/>
+  </component>
+  <component name="xslt-terminate-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="xslt-terminate-error"/>
+    <property name="script.name" type="String" value="xslt-terminate-error"/>
+    <property name="script.description" type="String" value="Always errors because of a xsl:message with terminate='yes'"/>
+    <property name="script.url" type="String" value="/module/xslt-terminate-error.xpl"/>
+  </component>
+  <component name="java-step-runtime-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="java-step-runtime-error"/>
+    <property name="script.name" type="String" value="java-step-runtime-error"/>
+    <property name="script.description" type="String" value="Always errors because of a RuntimeException in a custom Java step"/>
+    <property name="script.url" type="String" value="/module/java-step-runtime-error.xpl"/>
+  </component>
+  <component name="java-function-runtime-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="java-function-runtime-error"/>
+    <property name="script.name" type="String" value="java-function-runtime-error"/>
+    <property name="script.description" type="String" value="Always errors because of a RuntimeException in a custom Java function"/>
+    <property name="script.url" type="String" value="/module/java-function-runtime-error.xpl"/>
+  </component>
+  <component name="xslt-warning" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="xslt-warning"/>
+    <property name="script.name" type="String" value="xslt-warning"/>
+    <property name="script.description" type="String" value="Succeeds but shows a error message about an ambiguous rule match"/>
+    <property name="script.url" type="String" value="/module/xslt-warning.xpl"/>
+  </component>
+  <component name="xproc-warning" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="xproc-warning"/>
+    <property name="script.name" type="String" value="xproc-warning"/>
+    <property name="script.description" type="String" value="Shows a warning message created in XProc"/>
+    <property name="script.url" type="String" value="/module/xproc-warning.xpl"/>
+  </component>
+  <component name="cx-eval-error" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="cx-eval-error"/>
+    <property name="script.name" type="String" value="cx-eval-error"/>
+    <property name="script.description" type="String" value="Always errors because of a p:error inside a cx:eval"/>
+    <property name="script.url" type="String" value="/module/cx-eval-error.xpl"/>
+  </component>
+  <component name="progress-messages" immediate="true">
+    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+    </service>
+    <property name="script.version" type="String" value="1.0.0"/>
+    <property name="script.id" type="String" value="progress-messages"/>
+    <property name="script.name" type="String" value="progress-messages"/>
+    <property name="script.description" type="String" value="Shows progress messages created in XProc and Java"/>
+    <property name="script.url" type="String" value="/module/progress-messages.xpl"/>
+  </component>
+</components>

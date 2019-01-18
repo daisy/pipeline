@@ -3,6 +3,33 @@ default namespace = "http://www.daisy.org/ns/pipeline/data"
 include "../script/scriptElement.rnc"
 include "../base/priority.rnc"
 
+messageAttrs =
+	attribute sequence { xsd:int }
+	& attribute level { message.level }
+	& attribute content { text }
+
+# FIXME: The fact that these two elements have the same name is not so great. It can cause problems
+# in webservice-jaxb. For some reason though if the common.rnc include is present (in
+# scriptElement.rnc), it works fine. This is probably a bug in the xjc software, and it is very
+# brittle (e.g. it doesn't work if common.rnc is renamed to nicename.rnc).
+message =
+element message {
+	messageAttrs
+	& message*
+}
+
+progressMessage =
+element message {
+	messageAttrs
+	& attribute portion {
+		xsd:decimal # between 0 and 1
+	}
+	& attribute progress {
+		xsd:decimal # between 0 and 1
+	}
+	& (progressMessage | message)*
+}
+
 job = 
 element job {
 	attribute id { text }
@@ -15,18 +42,19 @@ element job {
 
 	& attribute queue-position { xsd:int }?
 
-    &element nicename{ text }?
-    &element batchId{ text }?
+	& nicename ?
+
+	& element batchId { text }?
 
 	& script?
 
-		& element messages {
-			element message { 
-				attribute level { message.level }
-				& attribute sequence { text }
-				& text
-			}*
-		}?
+	& element messages {
+		attribute progress {
+			xsd:decimal # between 0 and 1
+		}
+		& attribute msgSeq { xsd:int }?
+		& (progressMessage | message)*
+	} ?
 
 	& element log {
 		attribute href { xsd:anyURI }
@@ -53,7 +81,7 @@ element result{
 		& result*
 }
 
-job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "VALIDATION_FAIL"
+job.status = "IDLE" | "RUNNING" | "SUCCESS" | "ERROR" | "FAIL"
 
 
 message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"

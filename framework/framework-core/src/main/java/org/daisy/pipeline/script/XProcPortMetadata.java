@@ -10,6 +10,13 @@ package org.daisy.pipeline.script;
 public class XProcPortMetadata {
 
 	/**
+	 * The media type to annotate status ports with.
+	 *
+	 * See https://github.com/daisy/pipeline/wiki/StatusXML.
+	 */
+	public static final String MEDIA_TYPE_STATUS_XML = "application/vnd.pipeline.status+xml";
+
+	/**
 	 * Builds the {@link XProcPortMetadata} object
 	 */
 	public static final class Builder {

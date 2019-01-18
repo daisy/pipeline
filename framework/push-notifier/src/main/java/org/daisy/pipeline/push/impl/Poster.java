@@ -1,12 +1,16 @@
 package org.daisy.pipeline.push.impl;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.clients.Client;
@@ -26,17 +30,18 @@ public class Poster {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Poster.class.getName());
 
-	public static void postMessage(Job job, List<Message> messages, Callback callback) {
-		logger.debug("Posting message");
+	public static void postMessages(Job job, List<Message> messages, int newerThan, BigDecimal progress, Callback callback) {
+		logger.debug("Posting messages to " + callback.getHref());
 		URI url = callback.getHref();
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
-		//writer.withMessageRange(msgStart, msgEnd);
-		writer.withMessages(messages);
+		writer.withMessages(messages, newerThan);
+		writer.withProgress(progress);
 		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
 	}
 
 	public static void postStatusUpdate(Job job, Status status,Callback callback) {
+		logger.debug("Posting status '" + status + "' to " + callback.getHref());
 		URI url = callback.getHref();
 		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
 		writer.overwriteStatus(status);
@@ -80,7 +85,6 @@ public class Poster {
         }
 
         DataOutputStream output = null;
-        DataInputStream input = null;
 
         try {
             output = new DataOutputStream(connection.getOutputStream());
@@ -102,12 +106,18 @@ public class Poster {
 
         // Get response data. We're not doing anything with it but if we don't retrieve it, the callback doesn't appear to work.
         try {
-            input = new DataInputStream (connection.getInputStream());
-            input.close ();
+            logger.debug("Got response: " + connection.getResponseMessage() + " (" + connection.getResponseCode() + ")");
+            try {
+                DataInputStream input = new DataInputStream(connection.getInputStream());
+                try {
+                    logger.debug((new BufferedReader(new InputStreamReader(input))).lines().collect(Collectors.joining("\n")));
+                } finally { input.close(); }
+            } catch (Exception e) {
+            }
         } catch (IOException e) {
-        	logger.warn(e.getMessage());
+            logger.warn("No response");
+            logger.debug("No response", e);
         }
-	}
-
+    }
 
 }

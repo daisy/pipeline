@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" activate="init" deactivate="close" name="push-notifier">
    <implementation class="org.daisy.pipeline.push.impl.PushNotifier"/>
+   <service>
+      <provide interface="org.daisy.pipeline.webserviceutils.callback.CallbackHandler"/>
+   </service>
    <reference name="event-bus-provider" interface="org.daisy.pipeline.event.EventBusProvider"  bind="setEventBusProvider" cardinality="1..1" policy="static"/>
-   <reference name="callback-registry" interface="org.daisy.pipeline.webserviceutils.callback.CallbackRegistry" cardinality="1..1" policy="static" bind="setCallbackRegistry"/>
    <reference name="job-manager-factory" interface="org.daisy.pipeline.job.JobManagerFactory" cardinality="1..1" policy="static" bind="setJobManagerFactory"/>
    <reference name="webservice-storage" interface="org.daisy.pipeline.webserviceutils.storage.WebserviceStorage" cardinality="1..1" policy="static" bind="setWebserviceStorage"/>
 </scr:component>

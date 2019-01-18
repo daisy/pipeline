@@ -32,7 +32,6 @@ public abstract class AuthenticatedResource extends GenericResource {
                                 .getMaxRequestTime();
                 String authid = getQuery().getFirstValue("authid");
                 Optional<Client> optionalClient= webservice().getStorage().getClientStorage().get(authid);
-                System.out.println(webservice().getStorage().getClientStorage());
                 // make sure the client exists
                 if (!optionalClient.isPresent()) {
                         logger.error(String.format("Client with auth ID '%s' not found", authid));

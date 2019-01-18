@@ -61,6 +61,7 @@ public class ResultResource extends AuthenticatedResource {
          */
         @Get
         public Representation getResource() {
+                logRequest();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -71,9 +72,9 @@ public class ResultResource extends AuthenticatedResource {
                         return this.getErrorRepresentation("Job not found");
                 }
 
-                if (!(job.get().getStatus().equals(Job.Status.DONE) || job.get().getStatus().equals(Job.Status.VALIDATION_FAIL))) {
+                if (!(job.get().getStatus().equals(Job.Status.SUCCESS) || job.get().getStatus().equals(Job.Status.FAIL))) {
                         setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-                        return this.getErrorRepresentation("Job status differnt to DONE");
+                        return this.getErrorRepresentation("Job status different to SUCCESS");
                 }
 
                 Collection<JobResult> results = job.get().getContext().getResults()

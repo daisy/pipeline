@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import org.daisy.pipeline.webservice.jaxb.request.Priority;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.Jobs;
+import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 
 import org.junit.Assert;
@@ -14,23 +15,23 @@ public class TestMultipleJobs extends Base {
 
 	@Test
 	public void testMultipleJobs() throws Exception {
-		logger.info("{} testMultipleJobs IN", TestLocalJobs.class);
+		logger.info("{} testMultipleJobs IN", TestMultipleJobs.class);
 		Optional<JobRequest> req = newJobRequest();
 		Job job1 = client().sendJob(req.get());
 		Job job2 = client().sendJob(req.get());
 		Job job3 = client().sendJob(req.get());
 		Jobs jobs = client().jobs();
 		Assert.assertEquals("we have 3 jobs", 3, jobs.getJob().size());
-		waitForStatus("DONE", job1, 10000);
+		waitForStatus(JobStatus.SUCCESS, job1, 10000);
 		client().delete(job1.getId());
 		client().delete(job2.getId());
 		client().delete(job3.getId());
-		logger.info("{} testMultipleJobs OUT", TestLocalJobs.class);
+		logger.info("{} testMultipleJobs OUT", TestMultipleJobs.class);
 	}
 	
 	@Test
-	public void testPriorites() throws Exception {
-		logger.info("{} testQueue IN", TestLocalJobs.class);
+	public void testPriorities() throws Exception {
+		logger.info("{} testPriorities IN", TestMultipleJobs.class);
 		Priority[] prios = new Priority[]{Priority.HIGH,
 		                                  Priority.HIGH,
 		                                  Priority.HIGH,
@@ -63,7 +64,7 @@ public class TestMultipleJobs extends Base {
 		Assert.assertEquals("The last job has been moved up", last.getId(), queue.get(queue.size() - 2).getId());
 		queue = client().moveDown(last.getId()).getJob();
 		Assert.assertEquals("The last job has been moved down", last.getId(), queue.get(queue.size() - 1).getId());
-		waitForStatus("DONE", lastJob, 10000);
-		logger.info("{} testQueue OUT", TestLocalJobs.class);
+		waitForStatus(JobStatus.SUCCESS, lastJob, 10000);
+		logger.info("{} testPriorities OUT", TestMultipleJobs.class);
 	}
 }

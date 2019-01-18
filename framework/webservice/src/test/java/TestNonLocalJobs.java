@@ -15,6 +15,7 @@ import com.google.common.io.CharStreams;
 import org.daisy.pipeline.client.PipelineClient;
 import org.daisy.pipeline.webservice.jaxb.base.Alive;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.job.Result;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 import org.daisy.pipeline.webservice.jaxb.request.Priority;
@@ -51,7 +52,7 @@ public class TestNonLocalJobs extends Base {
 		Job job = client().sendJob(req.get(), is);
 		deleteAfterTest(job);
 		Assert.assertTrue("Job has been sent", job.getId() != null && job.getId().length() > 0);
-		waitForStatus("DONE", job, 10000);
+		waitForStatus(JobStatus.SUCCESS, job, 10000);
 	}
 	
 	@Test
@@ -61,7 +62,7 @@ public class TestNonLocalJobs extends Base {
 		Assert.assertTrue("The request is present", req.isPresent());
 		Job job = client().sendJob(req.get(), is);
 		deleteAfterTest(job);
-		job = waitForStatus("DONE", job, 10000);
+		job = waitForStatus(JobStatus.SUCCESS, job, 10000);
 		List<Result> results = new JobWrapper(job).getResults().getResult();
 		for (Result firstLevelResult : results) {
 			checkZippedResult(firstLevelResult);
@@ -89,6 +90,7 @@ public class TestNonLocalJobs extends Base {
 		ris.close();
 	}
 	
+	// This test actually belongs to framework-core but calabash-adapter is needed to execute it
 	@Test
 	public void testSpacesInZip() throws Exception {
 		Optional<JobRequest> req = newJobRequest(Priority.LOW, "hello.xml");
@@ -96,6 +98,6 @@ public class TestNonLocalJobs extends Base {
 		Job job = client().sendJob(req.get(), getResourceAsStream("data2.zip"));
 		deleteAfterTest(job);
 		Assert.assertTrue("Job has been sent", job.getId() != null && job.getId().length() > 0);
-		waitForStatus("DONE", job, 10000);
+		waitForStatus(JobStatus.SUCCESS, job, 10000);
 	}
 }

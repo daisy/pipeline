@@ -26,8 +26,6 @@ import org.daisy.pipeline.persistence.impl.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
-
 @Entity
 @Table(name="jobs")
 @NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
@@ -47,7 +45,7 @@ public class PersistentJob  extends Job implements Serializable {
 
 		@Override
 		protected Job initJob(){
-			Job pjob=new PersistentJob(this.ctxt,this.bus,this.priority,this.db);
+			Job pjob=new PersistentJob(this.ctxt,this.priority,this.db);
 			this.db.addObject(pjob);	
 			return pjob;
 		}
@@ -72,8 +70,8 @@ public class PersistentJob  extends Job implements Serializable {
 	Database db=null;
 
 
-	private PersistentJob(JobContext ctxt,EventBus bus,Priority priority,Database db) {
-		super(new PersistentJobContext((AbstractJobContext)ctxt),bus,priority);
+	private PersistentJob(JobContext ctxt,Priority priority,Database db) {
+		super(new PersistentJobContext((AbstractJobContext)ctxt),priority);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
 	}
@@ -83,7 +81,7 @@ public class PersistentJob  extends Job implements Serializable {
 	 * Constructs a new instance.
 	 */
 	private PersistentJob() {
-		super(null,null,null);
+		super(null,null);
 	}
 
 	/**

@@ -3,6 +3,7 @@ package org.daisy.pipeline.job.impl;
 import java.util.List;
 
 import org.daisy.common.priority.Priority;
+import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
@@ -31,6 +32,7 @@ public class DefaultJobManager implements JobManager {
                         .getLogger(DefaultJobManager.class);
 
         private JobStorage storage;
+        private MessageStorage messageStorage;
         private JobExecutionService executionService;
         private JobContextFactory jobContextFactory;
 
@@ -39,10 +41,12 @@ public class DefaultJobManager implements JobManager {
          * @param executionService
          */
         public DefaultJobManager(JobStorage storage,
+                        MessageStorage messageStorage,
                         JobExecutionService executionService,
                         JobContextFactory jobContextFactory) {
                 //check nullities
                 this.storage = storage;
+                this.messageStorage = messageStorage;
                 this.executionService = executionService;
                 this.jobContextFactory= jobContextFactory;
         }
@@ -88,6 +92,7 @@ public class DefaultJobManager implements JobManager {
                         //clean the context
                         ((AbstractJobContext) job.get().getContext()).cleanUp();
                 }
+                messageStorage.remove(id.toString());
                 return job;
         }
 

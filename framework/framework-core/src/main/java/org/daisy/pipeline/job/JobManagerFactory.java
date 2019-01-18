@@ -3,23 +3,26 @@ package org.daisy.pipeline.job;
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.job.impl.DefaultJobManager;
 import org.daisy.pipeline.properties.Properties;
 
 public class JobManagerFactory {
         private JobStorage storage;
+        private MessageStorage messageStorage;
         private JobExecutionService executionService;
-        private RuntimeConfigurator runtimeConfigurator;
         
         public JobManager createFor(Client client){
                 return new DefaultJobManager(this.storage.filterBy(client),
+                                messageStorage,
                                 this.executionService.filterBy(client),
-                                new JobContextFactory(this.runtimeConfigurator,client));
+                                new JobContextFactory(client));
         }
         public JobManager createFor(Client client,JobBatchId batchId){
                 return new DefaultJobManager(this.storage.filterBy(client).filterBy(batchId),
+                                messageStorage,
                                 this.executionService.filterBy(client),
-                                new JobContextFactory(this.runtimeConfigurator,client));
+                                new JobContextFactory(client));
         }
 
         /**
@@ -30,18 +33,16 @@ public class JobManagerFactory {
                 this.storage = storage;
         }
 
+        public void setMessageStorage(MessageStorage storage) {
+                this.messageStorage = storage;
+        }
+
         /**
          * @param executionService the executionService to set
          */
         public void setExecutionService(JobExecutionService executionService) {
                 //TODO:check null
                 this.executionService = executionService;
-        }
-
-        public void setRuntimeConfigurator(RuntimeConfigurator configurator){
-                //TODO: check null
-                //              logger.debug("setting monitor factory");
-                this.runtimeConfigurator=configurator;
         }
 
         //FIXME: probably move these two methods somewhere else, maybe a dummy class for the framework just tu publish this.

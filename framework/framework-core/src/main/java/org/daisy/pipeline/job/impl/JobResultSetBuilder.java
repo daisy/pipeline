@@ -16,6 +16,7 @@ import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.XProcPortMetadata;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Collections2;
@@ -48,28 +49,22 @@ public class JobResultSetBuilder {
 			if(prov==null)
 				continue;
 			String mediaType=script.getPortMetadata(info.getName()).getMediaType();
-			List<JobResult> results=null;
-			if(prov instanceof DynamicResultProvider){
-				results=buildJobResult((DynamicResultProvider) prov,mapper,mediaType);
-			}else{
-				results=buildJobResult(prov,mapper,mediaType);
+			if (!XProcPortMetadata.MEDIA_TYPE_STATUS_XML.equals(mediaType)) {
+				List<JobResult> results = buildJobResult(prov,mapper,mediaType);
+				builder.addResults(info.getName(),results);
 			}
-			builder.addResults(info.getName(),results);
 		}
 
 	}
 
-	//Non dymamic just one result will be returned in fact
-	static List<JobResult> buildJobResult(Supplier<Result> provider,URIMapper mapper,String mediaType){
-		List<JobResult> jobs= Lists.newLinkedList();
-		URI path=URI.create(provider.get().getSystemId());
-		jobs.add(singleResult(path,mapper,mediaType));
-		return jobs;
-	}
-	static List<JobResult> buildJobResult(DynamicResultProvider provider,URIMapper mapper,String mediaType){
+	static List<JobResult> buildJobResult(Supplier<Result> supplier,URIMapper mapper,String mediaType){
+		if (!(supplier instanceof DynamicResultProvider))
+			throw new IllegalArgumentException("Result supplier is expected to be a DynamicResultProvider but got: " + supplier);
+		DynamicResultProvider provider = (DynamicResultProvider)supplier;
 		List<JobResult> jobs= Lists.newLinkedList();
 		for( Result res: provider.providedResults()){
-			URI path=URI.create(res.getSystemId());
+			String sysId = res.getSystemId();
+			URI path = sysId == null ? null : URI.create(sysId);
 			jobs.add(singleResult(path,mapper,mediaType));
 		}
 		return jobs;
@@ -78,7 +73,7 @@ public class JobResultSetBuilder {
 
 	static JobResult singleResult(URI path, URIMapper mapper,String mediaType){
 		return new JobResult.Builder().withPath(path)
-			.withIdx(new Index(mapper.unmapOutput(path).toString()))
+			.withIdx(path == null ? null : new Index(mapper.unmapOutput(path).toString()))
 			.withMediaType(mediaType).build();
 	};
 
