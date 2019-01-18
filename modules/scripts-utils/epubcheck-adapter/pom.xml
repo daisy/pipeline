@@ -29,6 +29,14 @@
       <groupId>org.idpf</groupId>
       <artifactId>epubcheck</artifactId>
     </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
