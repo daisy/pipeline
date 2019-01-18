@@ -159,7 +159,8 @@
         <!--
             assuming catalog.xml is placed in META-INF
         -->
-        <xsl:variable name="path" select="pf:normalize-path(concat('/META-INF/',@uri))"/>
+        <xsl:variable name="uri" select="if (@px:extends) then f:generated-href(@uri) else @uri"/>
+        <xsl:variable name="path" select="pf:normalize-path(concat('/META-INF/',$uri))"/>
         <xsl:result-document href="{$outputDir}/OSGI-INF/{replace($id,'^.*:','')}.xml" method="xml">
             <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="{$id}">
                 <scr:implementation class="org.daisy.pipeline.script.XProcScriptService"/>
