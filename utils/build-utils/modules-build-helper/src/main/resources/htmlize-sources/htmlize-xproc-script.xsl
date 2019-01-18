@@ -35,16 +35,6 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	<xsl:template mode="serialize" match="/*/@type">
-		<xsl:call-template name="set-property">
-			<xsl:with-param name="property" select="'id'"/>
-			<xsl:with-param name="content"
-			                select="if (namespace-uri-for-prefix(substring-before(.,':'),/*)='http://www.daisy.org/ns/pipeline/xproc')
-			                        then substring-after(.,':')
-			                        else ."/>
-		</xsl:call-template>
-	</xsl:template>
-	
 	<xsl:template mode="serialize"
 	              match="/*/p:documentation[not(preceding-sibling::p:*)]/*[@pxd:role='name']">
 		<xsl:call-template name="set-property">

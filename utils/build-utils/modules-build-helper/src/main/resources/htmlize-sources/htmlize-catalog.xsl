@@ -3,6 +3,7 @@
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog"
                 xmlns:px="http://www.daisy.org/ns/pipeline"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-result-prefixes="#all"
                 version="2.0">
 	
@@ -43,6 +44,21 @@
 				<xsl:choose>
 					<xsl:when test="@px:content-type='script'">
 						<xsl:attribute name="typeof" select="'script'"/>
+						<xsl:variable name="id" as="xs:string">
+							<xsl:choose>
+								<xsl:when test="@px:id">
+									<xsl:sequence select="@px:id"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:variable name="type" select="string(document(@uri,.)/*/@type)"/>
+									<xsl:sequence select="if (namespace-uri-for-prefix(substring-before($type,':'),document(@uri,.)/*)
+									                          ='http://www.daisy.org/ns/pipeline/xproc')
+									                      then substring-after($type,':')
+									                      else $type"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
+						<meta property="id" content="{$id}"/>
 					</xsl:when>
 					<xsl:when test="@px:content-type='data-type'">
 						<xsl:attribute name="typeof" select="'data-type'"/>

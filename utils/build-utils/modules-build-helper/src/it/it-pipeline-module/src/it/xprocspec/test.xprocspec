@@ -28,7 +28,7 @@
 					<c:file name="META-INF/catalog.xml"/>
 					<c:file name="OSGI-INF/choice.xml"/>
 					<c:file name="OSGI-INF/liblouis-tables.xml"/>
-					<c:file name="OSGI-INF/script.xml"/>
+					<c:file name="OSGI-INF/my-script.xml"/>
 					<c:file name="css/foo.css"/>
 					<c:file name="data-types/type.xml"/>
 					<c:file name="impl/JavaStep$1.class"/>
@@ -54,17 +54,17 @@
 				</catalog>
 			</x:document>
 		</x:expect>
-		<x:context label="The OSGI-INF/script.xml file">
-			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/script.xml"/>
+		<x:context label="The OSGI-INF/my-script.xml file">
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/my-script.xml"/>
 		</x:context>
-		<x:expect label="The OSGI-INF/script.xml file" type="compare">
+		<x:expect label="The OSGI-INF/my-script.xml file" type="compare">
 			<x:document type="inline">
-				<scr:component immediate="true" name="script">
+				<scr:component immediate="true" name="my-script">
 					<scr:implementation class="org.daisy.pipeline.script.XProcScriptService"/>
 					<scr:service>
 						<scr:provide interface="org.daisy.pipeline.script.XProcScriptService"/>
 					</scr:service>
-					<scr:property name="script.id" type="String" value="script"/>
+					<scr:property name="script.id" type="String" value="my-script"/>
 					<scr:property name="script.name" type="String" value="Example script"/>
 					<scr:property name="script.description" type="String" value="Does stuff."/>
 					<scr:property name="script.url" type="String" value="/xml/script.xpl"/>

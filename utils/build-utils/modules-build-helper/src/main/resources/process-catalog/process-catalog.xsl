@@ -55,7 +55,7 @@
         <xsl:result-document href="{$outputDir}/bnd.bnd" method="text" xml:space="preserve"><c:data>
 <xsl:if test="//cat:nextCatalog">Require-Bundle: <xsl:value-of select="string-join(//cat:nextCatalog/translate(@catalog,':','.'),',')"/></xsl:if>
 <xsl:variable name="service-components" as="xs:string*"
-              select="(//cat:uri[@px:content-type='script']/concat('OSGI-INF/',replace(document(@uri,..)/*/@type,'^.*:',''),'.xml'),
+              select="(//cat:uri[@px:content-type='script']/concat('OSGI-INF/',replace(@px:id,'^.*:',''),'.xml'),
                        //cat:uri[@px:content-type='data-type']/concat('OSGI-INF/',replace(@px:id,'^.*:',''),'.xml'),
                        for $n in count(//cat:uri[@px:content-type='liblouis-tables']) return
                          if ($n eq 1) then 'OSGI-INF/liblouis-tables.xml'
@@ -152,8 +152,20 @@
                          cat:uri[@px:content-type='data-type']/@px:id"/>
     
     <xsl:template match="cat:uri[@px:content-type='script']" mode="ds">
-        <xsl:variable name="type" select="string(document(@uri,.)/*/@type)"/>
-        <xsl:variable name="id" select="if (namespace-uri-for-prefix(substring-before($type,':'),document(@uri,.)/*)='http://www.daisy.org/ns/pipeline/xproc') then substring-after($type,':') else $type"/>
+        <xsl:variable name="id" as="xs:string">
+            <xsl:choose>
+                <xsl:when test="@px:id">
+                    <xsl:sequence select="@px:id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="type" select="string(document(@uri,.)/*/@type)"/>
+                    <xsl:sequence select="if (namespace-uri-for-prefix(substring-before($type,':'),document(@uri,.)/*)
+                                              ='http://www.daisy.org/ns/pipeline/xproc')
+                                          then substring-after($type,':')
+                                          else $type"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="name" select="(document(@uri,.)//*[tokenize(@pxd:role,'\s+')='name'])[1]"/>
         <xsl:variable name="descr" select="(document(@uri,.)//*[tokenize(@pxd:role,'\s+')='desc'])[1]"/>
         <!--
