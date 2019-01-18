@@ -207,7 +207,7 @@ public class AppMenu extends MenuBar {
                 }
                 else {
                         Status status = job.getJob().getStatus();
-                        if (status == Status.DONE || status == Status.ERROR || status == Status.VALIDATION_FAIL) {
+                        if (status == Status.SUCCESS || status == Status.ERROR || status == Status.FAIL) {
                                 deleteJob.setDisable(false);
                         }
                         runJobAgain.setDisable(false);

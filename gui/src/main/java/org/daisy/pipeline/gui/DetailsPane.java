@@ -133,7 +133,7 @@ public class DetailsPane extends VBox {
 		resultsGrid.clearControls();
 		
 		Status status = job.getJob().getStatus();
-		if (status == Status.DONE || status == Status.ERROR || status == Status.VALIDATION_FAIL) {
+		if (status == Status.SUCCESS || status == Status.ERROR || status == Status.FAIL) {
 			Text resultsLabel = new Text("Results");
 			resultsLabel.getStyleClass().add("subtitle");
 	    	resultsGrid.addRow(resultsLabel);

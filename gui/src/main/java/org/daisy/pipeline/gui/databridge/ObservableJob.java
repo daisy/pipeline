@@ -1,5 +1,8 @@
 package org.daisy.pipeline.gui.databridge;
 
+import java.util.function.BiConsumer;
+import java.util.Iterator;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -8,11 +11,13 @@ import javafx.collections.ObservableList;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 
 // translate the Pipeline2 Job object into GUI-friendly Strings and StringProperty objects
-public class ObservableJob implements Comparable<ObservableJob> { //extends SimpleObjectProperty {
+public class ObservableJob implements Comparable<ObservableJob>, BiConsumer<MessageAccessor,Integer> {
 
 	private final int sequenceNumber;
 	private final StringProperty status;
@@ -30,6 +35,7 @@ public class ObservableJob implements Comparable<ObservableJob> { //extends Simp
 		setStatus(job.getStatus());
 		messages = FXCollections.observableArrayList();
 		addInitialMessages();
+		job.getContext().getMonitor().getMessageAccessor().listen(this);
 	}
 	
 	public String getStatus() {
@@ -60,13 +66,10 @@ public class ObservableJob implements Comparable<ObservableJob> { //extends Simp
 		return boundScript;
 	}
 	private void addInitialMessages() {
-		Iterable<Message> messages = job.getContext().getMonitor().getMessageAccessor().getAll();
-		for (Message message : messages) {
-			addMessage(message.getText(), message.getLevel());
-		}
+		flattenMessages(job.getContext().getMonitor().getMessageAccessor().getAll().iterator(), 0);
 	}
 	private static String statusToString(Status status) {
-		if (status == Status.DONE) {
+		if (status == Status.SUCCESS) {
 			return "Done";
 		}
 		if (status == Status.ERROR) {
@@ -78,13 +81,30 @@ public class ObservableJob implements Comparable<ObservableJob> { //extends Simp
 		if (status == Status.RUNNING) {
 			return "Running";
 		}
-		if (status == Status.VALIDATION_FAIL) {
-			return "Validation fail";
+		if (status == Status.FAIL) {
+			return "Fail";
 		}
 		return "";
 	}
 	private static String formatMessage(String message, Level level) {
 		return level.toString() + ": " + message;
+	}
+	
+	private void flattenMessages(Iterator<? extends Message> messages, int firstSeq) {
+		while (messages.hasNext()) {
+			Message m = messages.next();
+			if (m.getSequence() >= firstSeq && m.getText() != null)
+				addMessage(m.getText(), m.getLevel());
+			if (m instanceof ProgressMessage)
+				flattenMessages(((ProgressMessage)m).iterator(), firstSeq);
+		}
+	}
+	
+	@Override
+	public void accept(MessageAccessor accessor, Integer sequence) {
+		if (sequence != null) {
+			flattenMessages(accessor.createFilter().greaterThan(sequence - 1).getMessages().iterator(), sequence);
+		}
 	}
 	
 	@Override
