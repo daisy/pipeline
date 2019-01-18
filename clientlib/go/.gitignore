@@ -25,3 +25,6 @@ _testmain.go
 *.dat
 *.html
 *.test
+
+# build and test artifacts
+build/

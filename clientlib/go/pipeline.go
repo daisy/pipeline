@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 
 	"github.com/capitancambio/restclient"
 )
@@ -228,14 +229,26 @@ func resultClientMaker(p Pipeline) func() doer {
 }
 
 //Returns the results of the job as an array of bytes
-func (p Pipeline) Results(id string, w io.Writer) (err error) {
-	//override the client maker
-	p.clientMaker = resultClientMaker(p)
-	req := p.newResquest(API_RESULT, w, nil, id)
+func (p Pipeline) Results(id string, w io.Writer) (ok bool, err error) {
+	//check whether results are available
+	job := Job{}
+	req := p.newResquest(API_JOB, &job, nil, id, math.MaxInt32)
 	_, err = p.do(req, errorHandler(map[int]string{
 		404: "Job " + id + " not found",
 	}))
-	return err
+	if err == nil {
+		if job.Results.Href == "" {
+			return false, err
+		} else {
+			//override the client maker
+			p.clientMaker = resultClientMaker(p)
+			req = p.newResquest(API_RESULT, w, nil, id)
+			_, err = p.do(req, errorHandler(map[int]string{
+				404: "Job " + id + " not found",
+			}))
+		}
+	}
+	return (err == nil), err
 }
 
 //Overrides the xml decoder to get raw data

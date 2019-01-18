@@ -95,14 +95,14 @@ type Job struct {
 	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data job"`
 	Nicename string   `xml:"http://www.daisy.org/ns/pipeline/data nicename"`
 	BatchId  string   `xml:"http://www.daisy.org/ns/pipeline/data batchId"`
-	Script   `xml:"http://www.daisy.org/ns/pipeline/data script"`
-	Messages []Message `xml:"http://www.daisy.org/ns/pipeline/data messages>message"`
-	Log      Log       `xml:"http://www.daisy.org/ns/pipeline/data log"`
-	Results  Results   `xml:"http://www.daisy.org/ns/pipeline/data results"`
-	Priority string    `xml:"priority,attr"`
-	Status   string    `xml:"status,attr"`
-	Href     string    `xml:"href,attr"`
-	Id       string    `xml:"id,attr"`
+	Script            `xml:"http://www.daisy.org/ns/pipeline/data script"`
+	Messages Messages `xml:"http://www.daisy.org/ns/pipeline/data messages"`
+	Log      Log      `xml:"http://www.daisy.org/ns/pipeline/data log"`
+	Results  Results  `xml:"http://www.daisy.org/ns/pipeline/data results"`
+	Priority string   `xml:"priority,attr"`
+	Status   string   `xml:"status,attr"`
+	Href     string   `xml:"href,attr"`
+	Id       string   `xml:"id,attr"`
 }
 type Result struct {
 	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data result"`
@@ -111,18 +111,20 @@ type Result struct {
 	Result   []Result `xml:"http://www.daisy.org/ns/pipeline/data result"`
 }
 type Message struct {
-	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data message"`
-	Level    string   `xml:"level,attr"`
-	Sequence int      `xml:"sequence,attr"`
-	Content  string   `xml:",chardata"`
+	XMLName  xml.Name  `xml:"http://www.daisy.org/ns/pipeline/data message"`
+	Level    string    `xml:"level,attr"`
+	Sequence int       `xml:"sequence,attr"`
+	Content  string    `xml:"content,attr"`
+	Message  []Message `xml:"http://www.daisy.org/ns/pipeline/data message"`
 }
 type Log struct {
 	XMLName xml.Name `xml:"http://www.daisy.org/ns/pipeline/data log"`
 	Href    string   `xml:"href,attr"`
 }
 type Messages struct {
-	XMLName xml.Name `xml:"http://www.daisy.org/ns/pipeline/data messages"`
-	Message `xml:"http://www.daisy.org/ns/pipeline/data message"`
+	XMLName  xml.Name  `xml:"http://www.daisy.org/ns/pipeline/data messages"`
+	Progress float64   `xml:"progress,attr"`
+	Message  []Message `xml:"http://www.daisy.org/ns/pipeline/data message"`
 }
 type Results struct {
 	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data results"`
