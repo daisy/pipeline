@@ -18,5 +18,6 @@
         </p:documentation>
     </p:output>
     <p:option name="output-dir"/>
+    <p:option name="temp-dir"/>
 
 </p:declare-step>

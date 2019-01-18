@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
+               script="../../main/resources/xml/inline-css-speech.xpl">
+  
+  <x:scenario label="config">
+    <x:call step="px:inline-css-speech">
+      <x:input port="source">
+        <x:document type="inline" xml:base="file:/tmp/dtbook.xml">
+          <dtbook>
+            <book>
+              <div>
+                <p/>
+              </div>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:input port="fileset.in">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="file:/tmp/dtbook.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="config">
+        <x:document type="inline">
+          <config>
+            <css href="../resources/test.css"/>
+          </config>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <div>
+            <p tts:speech-rate="10"/>
+          </div>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="config inline">
+    <x:call step="px:inline-css-speech">
+      <x:input port="source">
+        <x:document type="inline" xml:base="file:/tmp/dtbook.xml">
+          <dtbook>
+            <book>
+              <div>
+                <p/>
+              </div>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:input port="fileset.in">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="file:/tmp/dtbook.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="config">
+        <x:document type="inline">
+          <config>
+            <css>
+              p {
+                voice-family: female;
+              }
+            </css>
+          </config>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <div>
+            <p tts:voice-family="female"/>
+          </div>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="link">
+    <x:call step="px:inline-css-speech">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook>
+            <head>
+              <link rel="stylesheet" type="text/css" href="../resources/test.css"/>
+            </head>
+            <book>
+              <div>
+                <p tts:speech-rate="10"/>
+              </div>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:input port="fileset.in">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="test_inline-css-speech.xprocspec" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="config">
+        <x:document type="inline">
+          <config/>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <div>
+            <p tts:speech-rate="10"/>
+          </div>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -23,7 +23,9 @@
   <p:import href="inline-css.xpl"/>
   <p:import href="clean-up-namespaces.xpl"/>
 
-  <p:variable name="style-ns" select="'http://www.daisy.org/ns/pipeline/tts'"/>
+  <p:variable name="style-ns" select="'http://www.daisy.org/ns/pipeline/tts'">
+	<p:empty/>
+  </p:variable>
 
   <p:for-each name="loop">
     <p:output port="result" sequence="true"/>

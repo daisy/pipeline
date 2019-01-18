@@ -53,6 +53,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	private AudioBufferTracker mAudioBufferTracker;
 	private URIResolver mURIresolver;
 	private String mOutputDirOpt;
+	private String mTempDirOpt;
 	private int mSentenceCounter = 0;
 	private int mErrorCounter = 0;
 
@@ -117,6 +118,8 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	public void setOption(QName name, RuntimeValue value) {
 		if ("output-dir".equals(name.getLocalName())) {
 			mOutputDirOpt = value.getString();
+		} else if ("temp-dir".equals(name.getLocalName())) {
+			mTempDirOpt = value.getString();
 		} else
 			super.setOption(name, value);
 	}
@@ -165,18 +168,28 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			log = new TTSLogImpl();
 		} else
 			log = new TTSLogEmpty();
-
-		String tmpDir = cr.getAllProperties().get("org.daisy.pipeline.tts.audio.tmpdir");
-		if (tmpDir == null)
-			tmpDir = System.getProperty("java.io.tmpdir");
-		File audioOutputDir = null;
-		do {
-			String audioDir = tmpDir + "/";
-			for (int k = 0; k < 2; ++k)
-				audioDir += Long.toString(mRandGenerator.nextLong(), 32);
-			audioOutputDir = new File(audioDir);
-		} while (audioOutputDir.exists());
-		audioOutputDir.mkdir();
+		File audioOutputDir; {
+			if (mTempDirOpt != null && !mTempDirOpt.isEmpty()) {
+				try {
+					audioOutputDir = new File(new URI(mTempDirOpt));
+				} catch (URISyntaxException e) {
+					throw new RuntimeException("temp-dir option invalid: " + mTempDirOpt);
+				}
+				if (audioOutputDir.exists())
+					throw new RuntimeException("temp-dir option must be a non-existing directory: "+mTempDirOpt);
+			} else {
+				String tmpDir = cr.getAllProperties().get("org.daisy.pipeline.tts.audio.tmpdir");
+				if (tmpDir == null)
+					tmpDir = System.getProperty("java.io.tmpdir");
+				do {
+					String audioDir = tmpDir + "/";
+					for (int k = 0; k < 2; ++k)
+						audioDir += Long.toString(mRandGenerator.nextLong(), 32);
+					audioOutputDir = new File(audioDir);
+				} while (audioOutputDir.exists());
+			}
+		}
+		audioOutputDir.mkdirs();
 		audioOutputDir.deleteOnExit();
 
 		SSMLtoAudio ssmltoaudio = new SSMLtoAudio(audioOutputDir, mTTSRegistry, this,
