@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:err="http://www.w3.org/ns/xproc-error"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:c="http://www.w3.org/ns/xproc-step"
-    type="px:fileset-store" name="main" exclude-inline-prefixes="#all" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:err="http://www.w3.org/ns/xproc-error"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                type="px:fileset-store" name="main"
+                exclude-inline-prefixes="#all">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -17,24 +21,17 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
+    <p:import href="fileset-filter-in-memory.xpl"/>
 
     <p:variable name="fileset-base" select="base-uri(/*)">
         <p:pipe port="fileset.in" step="main"/>
     </p:variable>
 
-    <px:fileset-create name="fileset.in-memory-base" base="/"/>
-    <p:for-each>
-        <p:iteration-source>
-            <p:pipe port="in-memory.in" step="main"/>
-        </p:iteration-source>
-        <px:fileset-add-entry>
-            <p:with-option name="href" select="resolve-uri(base-uri(/*))"/>
-            <p:input port="source">
-                <p:pipe port="result" step="fileset.in-memory-base"/>
-            </p:input>
-        </px:fileset-add-entry>
-    </p:for-each>
-    <px:fileset-join name="fileset.in-memory.in"/>
+    <pxi:fileset-filter-in-memory name="fileset.in-memory.in">
+        <p:input port="source.in-memory">
+            <p:pipe step="main" port="in-memory.in"/>
+        </p:input>
+    </pxi:fileset-filter-in-memory>
     <p:sink/>
 
     <p:documentation>Load zipped files into memory.</p:documentation>

@@ -10,4 +10,5 @@
           uri="../xml/xslt/html-id-fixer.xsl"/>
      <uri name="http://www.daisy.org/pipeline/modules/html-utils/html-fixer.xsl"
           uri="../xml/xslt/html-fixer.xsl"/>
+     <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
 </catalog>

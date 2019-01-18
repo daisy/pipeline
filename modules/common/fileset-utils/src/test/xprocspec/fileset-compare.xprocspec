@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../../src/main/resources/xml/xproc/fileset-compare.xpl">
+    
+    <x:scenario label="equal filesets" >
+        <x:call step="px:fileset-compare">
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/tmp/foo/">
+                        <d:file href="hello.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="alternate">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/tmp/">
+                        <d:file href="foo/hello.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the filesets should be equal" type="xpath" test="string(/*)" equals="'true'"/>
+    </x:scenario>
+    
+</x:description>

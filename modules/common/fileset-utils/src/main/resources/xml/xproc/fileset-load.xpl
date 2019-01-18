@@ -107,10 +107,8 @@
 
           <!-- from memory -->
           <p:when test="$target = //d:file/resolve-uri(@href,base-uri(.))">
-            <px:message severity="DEBUG">
-              <p:with-option name="message" select="concat('processing file from memory: ',$target)"/>
-            </px:message>
-            <p:for-each name="for-each-in-memory">
+            <p:for-each name="for-each-in-memory"
+                        px:message="processing file from memory: {$target}" px:message-severity="DEBUG">
               <p:iteration-source>
                 <p:pipe port="in-memory" step="normalized"/>
               </p:iteration-source>
@@ -391,10 +389,12 @@
     </p:iteration-source>
 
     <!--
-        The base URI is computed based on the xml:base attribute if present. If it is a relative
-        URI, it is resolved against the original base URI.
+        - The base URI is computed based on the xml:base attribute if present. If it is a relative
+          URI, it is resolved against the original base URI.
+        - Normalize file:/// to file:/
+          FIXME: use pf:normalize-uri from http://www.daisy.org/pipeline/modules/file-utils/library.xsl
     -->
-    <p:variable name="base-uri" select="resolve-uri(base-uri(/*))"/>
+    <p:variable name="base-uri" select="replace(resolve-uri(base-uri(/*)),'^file:///','file:/')"/>
     <p:variable name="base-uri-changed" select="not($base-uri=base-uri(/))"/>
 
     <px:fileset-add-entry name="normalized.fileset">

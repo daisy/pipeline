@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/html-to-fileset.xpl">
+
+	<x:scenario label="html-to-fileset">
+		<x:call step="px:html-to-fileset">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<head>
+							<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"/>
+							<title>This is a test basic html file</title>
+						</head>
+						<body>
+							<img src="img.png"/>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the fileset">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the fileset" type="compare">
+			<x:document type="inline">
+				<d:fileset xml:base="file:/tmp/">
+					<d:file href="foo.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="img.png" original-href="file:/tmp/img.png" media-type="image/png" kind="image"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

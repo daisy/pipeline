@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="../../main/resources/xml/xproc/html-load.xpl">
+
+	<x:scenario label="load">
+		<x:call step="px:html-load">
+			<x:option name="href" select="resolve-uri('../resources/a.html')"/>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<head>
+						<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"/>
+						<title>This is a test basic html file</title>
+					</head>
+					<body/>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

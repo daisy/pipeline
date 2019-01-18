@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns="http://www.w3.org/1999/xhtml" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:x="http://www.jenitennison.com/xslt/xspec"
-    stylesheet="../../main/resources/xml/xslt/html-to-fileset.xsl">
+<x:description xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               stylesheet="../../main/resources/xml/xslt/html-to-fileset.xsl">
 
     <x:param name="doc-base" select="'file:/example/doc.html'"/>
+    <x:param name="include-input-doc" select="false()"/>
 
     <!--TODO add more tests, for other HTML elements-->
 

@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-load.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:opf="http://www.idpf.org/2007/opf">
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               script="../../main/resources/xml/xproc/fileset-load.xpl">
 
     <x:scenario label="test-empty">
         <x:call step="px:fileset-load">
@@ -321,4 +327,25 @@
         <x:expect type="count" label="a file should be read from memory" min="1"/>
     </x:scenario>
 
+    <x:scenario label="test-load-from-memory-with-unnormalized-uri">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline" xml:base="file:/samples/fileset2/xml/">
+                    <d:fileset>
+                        <d:file href="not-on-disk-only-in-memory.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory">
+                <x:document type="inline">
+                    <doc xml:base="file:///samples/fileset2/xml/not-on-disk-only-in-memory.xml"/>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="a file should be read from memory" min="1"/>
+    </x:scenario>
+    
 </x:description>

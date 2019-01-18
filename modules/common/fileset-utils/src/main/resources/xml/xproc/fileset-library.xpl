@@ -15,7 +15,7 @@
     <p:import href="fileset-rebase.xpl"/>
     <p:import href="fileset-move.xpl"/>
     <p:import href="fileset-unzip.xpl"/>
-    <p:import href="html-to-fileset.xpl"/>
+    <p:import href="fileset-update.xpl"/>
 
     <p:declare-step type="px:zip-manifest-from-fileset">
         <p:input port="source"/>
@@ -29,5 +29,7 @@
             </p:input>
         </p:xslt>
     </p:declare-step>
+
+    <p:import href="xprocspec-fileset-compare.xpl"/>
 
 </p:library>

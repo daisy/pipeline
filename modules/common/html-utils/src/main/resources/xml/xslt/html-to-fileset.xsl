@@ -17,6 +17,7 @@
 
     <xsl:variable name="doc-base"
         select="if (/html/head/base[@href][1]) then resolve-uri(normalize-space(/html/head/base[@href][1]/@href),base-uri(/*)) else base-uri(/*)"/>
+    <xsl:variable name="include-input-doc" select="true()" as="xs:boolean"/>
 
     <xsl:template match="/*">
         <!--
@@ -37,6 +38,9 @@
         -->
         <d:fileset>
             <xsl:attribute name="xml:base" select="replace($doc-base,'^(.+/)[^/]*','$1')"/>
+            <xsl:if test="$include-input-doc">
+                <d:file href="{replace($doc-base,'.*/([^/]+)$','$1')}" media-type="application/xhtml+xml"/>
+            </xsl:if>
             <xsl:apply-templates/>
         </d:fileset>
     </xsl:template>

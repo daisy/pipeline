@@ -94,9 +94,9 @@
                 <p:variable name="new-href" select="(/*/d:file[@href-before-move=$base-uri])[1]/resolve-uri(@href,base-uri(.))">
                     <p:pipe port="result" step="fileset.with-annotations"/>
                 </p:variable>
-                <p:add-attribute match="/*" attribute-name="xml:base">
-                    <p:with-option name="attribute-value" select="$new-href"/>
-                </p:add-attribute>
+                <px:set-base-uri>
+                    <p:with-option name="base-uri" select="$new-href"/>
+                </px:set-base-uri>
             </p:when>
             <p:otherwise>
                 <p:identity/>
