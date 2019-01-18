@@ -1,5 +1,8 @@
 package com.xmlcalabash.runtime;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcData;
@@ -11,6 +14,7 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.model.Variable;
 import com.xmlcalabash.model.Option;
 import com.xmlcalabash.util.MessageFormatter;
+import com.xmlcalabash.util.XProcMessageListenerHelper;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.QName;
@@ -88,7 +92,21 @@ public class XForEach extends XCompoundStep {
         runtime.start(this);
 
         try {
+            try {
+                XProcMessageListenerHelper.openStep(runtime, this);
+            } catch (Throwable e) {
+                throw handleException(e);
+            }
+            try {
+            BigDecimal numberOfNodes = new BigDecimal(nodes.size());
             for (XdmNode is_doc : nodes) {
+                try {
+                    runtime.getMessageListener().openStep(this, getNode(), null, null, BigDecimal.ONE.divide(numberOfNodes, MathContext.DECIMAL128));
+                } catch (Throwable e) {
+                    throw handleException(e);
+                }
+                try {
+
                 // Setup the current port before we compute variables!
                 current.resetWriter();
                 current.write(is_doc);
@@ -114,7 +132,11 @@ public class XForEach extends XCompoundStep {
                 }
 
                 for (XStep step : subpipeline) {
-                    step.run();
+                    try {
+                        step.run();
+                    } catch (Throwable e) {
+                        throw handleException(e);
+                    }
                 }
 
                 for (String port : inputs.keySet()) {
@@ -148,8 +170,14 @@ public class XForEach extends XCompoundStep {
                 for (XStep step : subpipeline) {
                     step.reset();
                 }
-            }
 
+                } finally {
+                    runtime.getMessageListener().closeStep();
+                }
+            }
+            } finally {
+                runtime.getMessageListener().closeStep();
+            }
         } finally {
             for (String port : inputs.keySet()) {
                 if (port.startsWith("|")) {

@@ -103,7 +103,11 @@ public class Error extends DefaultStep {
 
         cpfx = errorCode.getPrefix();
         cns = errorCode.getNamespaceURI();
-
+        
+        XProcException e = (doc == null) ?
+            new XProcException(step.getStep(), errorCode) :
+            new XProcException(step.getStep(), errorCode, doc, doc.getStringValue());
+        
         TreeWriter treeWriter = new TreeWriter(runtime);
         treeWriter.startDocument(step.getNode().getBaseURI());
         treeWriter.addStartElement(c_error);
@@ -121,11 +125,7 @@ public class Error extends DefaultStep {
 
         step.reportError(treeWriter.getResult());
 
-        if (doc == null) {
-            throw new XProcException(errorCode);
-        } else {
-            throw new XProcException(errorCode, doc, doc.getStringValue());
-        }
+        throw e;
     }
 }
 

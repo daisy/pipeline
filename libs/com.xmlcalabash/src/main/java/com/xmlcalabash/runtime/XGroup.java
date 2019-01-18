@@ -2,6 +2,9 @@ package com.xmlcalabash.runtime;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.model.Step;
+import com.xmlcalabash.util.XProcMessageListenerHelper;
+
+import net.sf.saxon.s9api.SaxonApiException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,5 +16,22 @@ import com.xmlcalabash.model.Step;
 public class XGroup extends XCompoundStep {
     public XGroup(XProcRuntime runtime, Step step, XCompoundStep parent) {
           super(runtime, step, parent);
+    }
+  
+    @Override
+    public void run() throws SaxonApiException {
+        if (!(parent instanceof XTry)) {
+            try {
+                XProcMessageListenerHelper.openStep(runtime, this);
+            } catch (Throwable e) {
+                throw handleException(e);
+            }
+            try {
+                super.run();
+            } finally {
+                runtime.getMessageListener().closeStep();
+            }
+        } else
+            super.run();
     }
 }

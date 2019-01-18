@@ -80,7 +80,7 @@ public class BaseStatus extends StatusService {
 
         if (exception instanceof XProcException) {
             XProcException err = (XProcException) exception;
-            loc = err.getLocator();
+            loc = err.getLocator()[0];
             if (err.getErrorCode() != null) {
                 QName n = err.getErrorCode();
                 qCode = new StructuredQName(n.getPrefix(),n.getNamespaceURI(),n.getLocalName());

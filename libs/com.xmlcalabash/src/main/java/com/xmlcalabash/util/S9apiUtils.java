@@ -27,6 +27,7 @@ import net.sf.saxon.Configuration;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.TreeReceiver;
+import net.sf.saxon.expr.parser.Location;
 import net.sf.saxon.om.FingerprintedQName;
 import net.sf.saxon.om.InscopeNamespaceResolver;
 import net.sf.saxon.om.Item;
@@ -110,9 +111,18 @@ public class S9apiUtils {
             tree.open();
             tree.startDocument(0);
             for (XdmValue value : values) {
+                Location locationId; {
+                    if (baseURI != null && config.isLineNumbering()) {
+                        int lineNumber = value instanceof XdmNode ? ((XdmNode)value).getLineNumber() : -1;
+                        if (lineNumber > 0)
+                            locationId = new LineNumberLocation(baseURI.toASCIIString(), lineNumber);
+                        else
+                            locationId = VoidLocation.instance();
+                    } else
+                        locationId = VoidLocation.instance();
+                }
                 for (XdmItem item : (Iterable<XdmItem>) value) {
-                    tree.append((Item) item.getUnderlyingValue(), VoidLocation.instance(),
-                            NodeInfo.ALL_NAMESPACES);
+                    tree.append((Item) item.getUnderlyingValue(), locationId, NodeInfo.ALL_NAMESPACES);
                 }
             }
             tree.endDocument();
@@ -136,8 +146,17 @@ public class S9apiUtils {
             }
             tree.open();
             tree.startDocument(0);
-            tree.append((Item) node.getUnderlyingValue(), VoidLocation.instance(),
-                    NodeInfo.ALL_NAMESPACES);
+            Location locationId; {
+                if (baseURI != null && config.isLineNumbering()) {
+                    int lineNumber = node instanceof XdmNode ? ((XdmNode)node).getLineNumber() : -1;
+                    if (lineNumber > 0)
+                        locationId = new LineNumberLocation(baseURI.toASCIIString(), lineNumber);
+                    else
+                        locationId = VoidLocation.instance();
+                } else
+                    locationId = VoidLocation.instance();
+            }
+            tree.append((Item) node.getUnderlyingValue(), locationId, NodeInfo.ALL_NAMESPACES);
             tree.endDocument();
             tree.close();
         } catch (XPathException err) {
@@ -365,7 +384,7 @@ public class S9apiUtils {
                 }
             }
 
-            tree.addStartElement(newName, inode.getSchemaType(), newNS);
+            tree.addStartElement(newName, inode.getSchemaType(), newNS, node.getLineNumber());
 
             if (!preserveUsed) {
                 // In this case, we may need to change some attributes too

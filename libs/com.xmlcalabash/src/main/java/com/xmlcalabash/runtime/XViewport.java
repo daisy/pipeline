@@ -1,5 +1,8 @@
 package com.xmlcalabash.runtime;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+
 import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -10,6 +13,7 @@ import com.xmlcalabash.util.MessageFormatter;
 import com.xmlcalabash.util.ProcessMatchingNodes;
 import com.xmlcalabash.util.ProcessMatch;
 import com.xmlcalabash.util.TreeWriter;
+import com.xmlcalabash.util.XProcMessageListenerHelper;
 import com.xmlcalabash.model.*;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -86,7 +90,16 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
         runtime.getXProcData().setIterationSize(sequenceLength);
 
         runtime.start(this);
-        matcher.match(doc, match);
+        try {
+            XProcMessageListenerHelper.openStep(runtime, this);
+        } catch (Throwable e) {
+            throw handleException(e);
+        }
+        try {
+            matcher.match(doc, match);
+        } finally {
+            runtime.getMessageListener().closeStep();
+        }
         runtime.finish(this);
 
         for (String port : inputs.keySet()) {
@@ -109,6 +122,12 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
     }
 
     public boolean processStartElement(XdmNode node) {
+        try {
+            runtime.getMessageListener().openStep(this, getNode(), null, null, BigDecimal.ONE.divide(new BigDecimal(sequenceLength), MathContext.DECIMAL128));
+        } catch (Throwable e) {
+            throw handleException(e);
+        }
+
         // Use a TreeWriter to make the matching node into a proper document
         TreeWriter treeWriter = new TreeWriter(runtime);
         treeWriter.startDocument(node.getBaseURI());
@@ -130,13 +149,13 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
             inScopeOptions.put(var.getName(), value);
         }
 
-        try {
-            for (XStep step : subpipeline) {
-                step.reset();
+        for (XStep step : subpipeline) {
+            step.reset();
+            try {
                 step.run();
+            } catch (Throwable e) {
+                throw handleException(e);
             }
-        } catch (SaxonApiException sae) {
-            throw new XProcException(sae);
         }
 
 
@@ -170,7 +189,7 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
     }
 
     public void processEndElement(XdmNode node) {
-        // nop
+        runtime.getMessageListener().closeStep();
     }
 
     public void processText(XdmNode node) {

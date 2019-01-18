@@ -135,7 +135,6 @@ public class XPipeline extends XCompoundStep {
         try {
             doRun();
         } catch (XProcException ex) {
-            runtime.error(ex);
             throw ex;
         } catch (SaxonApiException ex) {
             runtime.error(ex);
@@ -233,7 +232,11 @@ public class XPipeline extends XCompoundStep {
         }
 
         for (XStep step : subpipeline) {
-            step.run();
+            try {
+                step.run();
+            } catch (Throwable e) {
+                throw handleException(e);
+            }
         }
 
         for (String port : inputs.keySet()) {

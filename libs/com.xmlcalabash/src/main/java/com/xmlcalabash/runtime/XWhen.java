@@ -7,6 +7,7 @@ import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.*;
 import com.xmlcalabash.util.MessageFormatter;
+import com.xmlcalabash.util.XProcMessageListenerHelper;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.XPathException;
 
@@ -65,5 +66,19 @@ public class XWhen extends XCompoundStep {
                 }
             }
         }
-    }    
+    }
+
+    @Override
+    public void run() throws SaxonApiException {
+        try {
+            XProcMessageListenerHelper.openStep(runtime, parent, BigDecimal.ONE);
+        } catch (Throwable e) {
+            throw handleException(e);
+        }
+        try {
+            super.run();
+        } finally {
+            runtime.getMessageListener().closeStep();
+        }
+    }
 }

@@ -8,6 +8,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 
+import java.math.BigDecimal;
 import javax.xml.transform.SourceLocator;
 import javax.xml.transform.TransformerException;
 import java.net.URI;
@@ -76,7 +77,7 @@ public class DefaultXProcMessageListener implements XProcMessageListener {
 
         if (exception instanceof XProcException) {
             XProcException err = (XProcException) exception;
-            loc = err.getLocator();
+            loc = err.getLocator()[0];
             if (err.getErrorCode() != null) {
                 QName n = err.getErrorCode();
                 qCode = new StructuredQName(n.getPrefix(),n.getNamespaceURI(),n.getLocalName());
@@ -179,4 +180,9 @@ public class DefaultXProcMessageListener implements XProcMessageListener {
 
         return prefix + message;
     }
+
+    public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {}
+
+    public void closeStep() {}
+
 }

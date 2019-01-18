@@ -3,6 +3,7 @@ package com.xmlcalabash.runtime;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcData;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.io.ReadableEmpty;
@@ -259,7 +260,11 @@ public class XCompoundStep extends XAtomicStep {
 
         try {
             for (XStep step : subpipeline) {
-                step.run();
+                try {
+                    step.run();
+                } catch (Throwable e) {
+                    throw handleException(e);
+                }
             }
 
             for (String port : inputs.keySet()) {

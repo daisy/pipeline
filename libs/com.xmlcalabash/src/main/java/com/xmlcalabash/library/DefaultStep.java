@@ -7,9 +7,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.model.RuntimeValue;
-import com.xmlcalabash.runtime.XStep;
 import net.sf.saxon.s9api.*;
-import net.sf.saxon.Configuration;
 import net.sf.saxon.trans.XPathException;
 
 import java.net.URI;
@@ -30,6 +28,7 @@ import com.xmlcalabash.util.S9apiUtils;
  * To change this template use File | Settings | File Templates.
  */
 public class DefaultStep implements XProcStep {
+    
     public static final QName _byte_order_mark = new QName("", "byte-order-mark");
     public static final QName _cdata_section_elements = new QName("", "cdata-section-elements");
     public static final QName _doctype_public = new QName("", "doctype-public");
@@ -266,8 +265,6 @@ public class DefaultStep implements XProcStep {
 
     public Vector<XdmItem> evaluateXPath(XdmNode doc, Hashtable<String,String> nsBindings, String xpath, Hashtable<QName,RuntimeValue> globals) {
         Vector<XdmItem> results = new Vector<XdmItem> ();
-
-        Configuration config = runtime.getProcessor().getUnderlyingConfiguration();
 
         try {
             XPathCompiler xcomp = runtime.getProcessor().newXPathCompiler();

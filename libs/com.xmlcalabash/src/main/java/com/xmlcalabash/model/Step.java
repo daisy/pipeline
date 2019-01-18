@@ -149,6 +149,10 @@ public class Step extends SourceArtifact {
     public Step getStep() {
         return this;
     }
+    
+    public Step getParent() {
+        return parent;
+    }
 
     protected void setVersion(Double version) {
         this.version = version;

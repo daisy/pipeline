@@ -34,6 +34,7 @@ import com.xmlcalabash.util.XProcCollectionFinder;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
+import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.expr.parser.Location;
 import net.sf.saxon.lib.CollectionFinder;
 import net.sf.saxon.lib.OutputURIResolver;
@@ -59,6 +60,7 @@ import org.xml.sax.InputSource;
 
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Result;
+import javax.xml.transform.SourceLocator;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -229,7 +231,8 @@ public class XSLT extends DefaultStep {
             if (document != null) {
                 transformer.setInitialContextNode(document);
             }
-            transformer.setMessageListener(new CatchMessages());
+            CatchMessages catchMessages = new CatchMessages();
+            transformer.setMessageListener(catchMessages);
             result = new XdmDestination();
             transformer.setDestination(result);
 
@@ -253,7 +256,35 @@ public class XSLT extends DefaultStep {
 
             transformer.setSchemaValidationMode(ValidationMode.DEFAULT);
             transformer.getUnderlyingController().setUnparsedTextURIResolver(unparsedTextURIResolver);
-            transformer.transform();
+            try {
+                transformer.transform();
+            } catch (SaxonApiException sae) {
+                final Throwable e = sae.getCause();
+                if (e instanceof TransformerException) {
+                    String message = e.getMessage();
+                    if (e instanceof TerminationException) {
+                        message = catchMessages.getTerminatingMessage().toString();
+                    }
+                    final SourceLocator[] frames = XProcException.getLocator((TransformerException)e);
+                    Throwable cause = e.getCause();
+                    if (cause != null) {
+                        if (cause instanceof XProcException)
+                            throw ((XProcException)cause).rebaseOnto(frames);
+                        else
+                            throw new XProcException(message, XProcException.javaError(cause, 0)) {
+                                @Override
+                                public SourceLocator[] getLocator() {
+                                    return frames; }};
+                    } else
+                        // passing e in order to provide some more details
+                        // (but not wrapping it in an XProcException so that it doesn't appear in locator)
+                        throw new XProcException(message, e) {
+                            @Override
+                            public SourceLocator[] getLocator() {
+                                return frames; }};
+                } else
+                    throw XProcException.javaError(sae, 0);
+            }
         } finally {
             config.setOutputURIResolver(uriResolver);
             config.setCollectionFinder(collectionFinder);
@@ -410,10 +441,10 @@ public class XSLT extends DefaultStep {
     }
 
     class CatchMessages implements MessageListener {
-        public CatchMessages() {
-        }
+        
+        XdmNode terminatingMessage = null;
 
-        public void message(XdmNode content, boolean terminate, javax.xml.transform.SourceLocator locator) {
+        public void message(XdmNode content, boolean terminate, SourceLocator locator) {
             if (runtime.getShowMessages()) {
                 System.err.println(content.toString());
             }
@@ -422,14 +453,21 @@ public class XSLT extends DefaultStep {
             treeWriter.startDocument(content.getBaseURI());
             treeWriter.addStartElement(XProcConstants.c_error);
             treeWriter.startContent();
-
             treeWriter.addSubtree(content);
-
             treeWriter.addEndElement();
             treeWriter.endDocument();
 
             step.reportError(treeWriter.getResult());
-            step.info(step.getNode(), content.toString());
+
+            if (!terminate)
+                step.info(step.getNode(), content.toString());
+
+            if (terminate)
+                terminatingMessage = content;
+        }
+
+        public XdmNode getTerminatingMessage() {
+            return terminatingMessage;
         }
     }
 

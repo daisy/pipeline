@@ -238,7 +238,7 @@ public class TreeWriter {
         }
 
         FingerprintedQName newNameOfNode = new FingerprintedQName(newName.getPrefix(),newName.getNamespaceURI(),newName.getLocalName());
-        addStartElement(newNameOfNode, inode.getSchemaType(), inscopeNS);
+        addStartElement(newNameOfNode, inode.getSchemaType(), inscopeNS, node.getLineNumber());
     }
 
     public void addStartElement(QName newName) {
@@ -249,12 +249,18 @@ public class TreeWriter {
     }
 
     public void addStartElement(NodeName elemName, SchemaType typeCode, NamespaceBinding nscodes[]) {
+        addStartElement(elemName, typeCode, nscodes, -1);
+    }
+    
+    public void addStartElement(NodeName elemName, SchemaType typeCode, NamespaceBinding nscodes[], int lineNumber) {
         Location loc;
         String sysId = receiver.getSystemId();
         if (sysId == null) {
             loc = VoidLocation.instance();
-        } else {
+        } else if (lineNumber == -1) {
             loc = new SysIdLocation(sysId);
+        } else {
+            loc = new LineNumberLocation(sysId, lineNumber);
         }
 
         try {

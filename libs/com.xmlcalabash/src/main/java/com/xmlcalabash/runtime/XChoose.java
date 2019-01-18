@@ -8,6 +8,7 @@ import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.model.*;
 
 import com.xmlcalabash.util.MessageFormatter;
+import com.xmlcalabash.util.XProcMessageListenerHelper;
 import net.sf.saxon.s9api.SaxonApiException;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
@@ -132,7 +133,16 @@ public class XChoose extends XCompoundStep {
         }
 
         try {
-            xstep.run();
+            try {
+                XProcMessageListenerHelper.openStep(runtime, this);
+            } catch (Throwable e) {
+                throw handleException(e);
+            }
+            try {
+                xstep.run();
+            } finally {
+                runtime.getMessageListener().closeStep();
+            }
         } finally {
             runtime.finish(this);
             data.closeFrame();

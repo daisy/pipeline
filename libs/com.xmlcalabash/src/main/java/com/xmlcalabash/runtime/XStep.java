@@ -304,4 +304,13 @@ public abstract class XStep implements XProcRunnable {
     public void info(XdmNode node, String message) {
         runtime.info(this, node, message);
     }
+
+    protected XProcException handleException(Throwable e) {
+        XProcException xe = (e instanceof XProcException) ?
+            (XProcException)e :
+            XProcException.javaError(e, 1, new RuntimeException().getStackTrace(), 1);
+        if (xe.getStep() == null)
+            xe = xe.rebaseOnto(getStep());
+        return xe;
+    }
 }

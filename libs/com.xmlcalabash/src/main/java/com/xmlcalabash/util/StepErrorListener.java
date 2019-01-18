@@ -10,6 +10,7 @@ import javax.xml.transform.ErrorListener;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
+import com.xmlcalabash.core.XProcMessageListener;
 import net.sf.saxon.trans.XPathException;
 
 import java.net.URI;
@@ -32,24 +33,25 @@ public class StepErrorListener implements ErrorListener {
     private static QName _code = new QName("", "code");
 
     private XProcRuntime runtime = null;
+    private XProcMessageListener msgListener = null;
     private URI baseURI = null;
 
     public StepErrorListener(XProcRuntime runtime) {
         super();
         this.runtime = runtime;
+        this.msgListener = runtime.getMessageListener();
         baseURI = runtime.getStaticBaseURI();
     }
 
     public void error(TransformerException exception) throws TransformerException {
         if (!report("error", exception)) {
-            runtime.error(exception);
+            // error message would be confusing because error is normally understood as fatal
+            runtime.warning(exception);
         }
     }
 
     public void fatalError(TransformerException exception) throws TransformerException {
-        if (!report("fatal-error", exception)) {
-            runtime.error(exception);
-        }
+        // this info should already be in the thrown XProcException
     }
 
     public void warning(TransformerException exception) throws TransformerException {

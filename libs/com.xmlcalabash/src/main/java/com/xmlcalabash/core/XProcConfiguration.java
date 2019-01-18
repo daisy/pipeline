@@ -391,10 +391,8 @@ public class XProcConfiguration {
 
         String cfg = System.getProperty("com.xmlcalabash.config.global");
         try {
-            InputStream instream = null;
-
             if (cfg == null) {
-                instream = getClass().getResourceAsStream("/etc/configuration.xml");
+                InputStream instream = getClass().getResourceAsStream("/etc/configuration.xml");
                 if (instream == null) {
                     // This may happen in OSGi.
                     // Because /etc/configuration.xml is empty anyway, we ignore this error.

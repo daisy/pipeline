@@ -28,6 +28,7 @@ import com.xmlcalabash.model.ComputableValue;
 import com.xmlcalabash.model.NamespaceBinding;
 import com.xmlcalabash.model.DeclareStep;
 import com.xmlcalabash.model.Option;
+import com.xmlcalabash.util.XProcMessageListenerHelper;
 import net.sf.saxon.om.InscopeNamespaceResolver;
 import net.sf.saxon.om.NamePool;
 import net.sf.saxon.om.NodeInfo;
@@ -386,7 +387,18 @@ public class XAtomicStep extends XStep {
 
         runtime.start(this);
         try {
-            xstep.run();
+            try {
+                XProcMessageListenerHelper.openStep(runtime, this);
+            } catch (Throwable e) {
+                throw handleException(e);
+            }
+            try {
+                xstep.run();
+            } catch (Throwable e) {
+                throw handleException(e);
+            } finally {
+                runtime.getMessageListener().closeStep();
+            }
 
             // FIXME: Is it sufficient to only do this for atomic steps?
             String cache = getInheritedExtensionAttribute(XProcConstants.cx_cache);
@@ -407,14 +419,11 @@ public class XAtomicStep extends XStep {
             } else if (!"false".equals(cache) && cache != null) {
                 throw XProcException.dynamicError(19);
             }
-
-            
         } finally {
             for (String port : outputs.keySet()) {
                 WritablePipe wpipe = outputs.get(port);
                 wpipe.close(); // Indicate we're done
             }
-            
             runtime.finish(this);
             data.closeFrame();
         }

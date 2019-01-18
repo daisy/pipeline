@@ -3,6 +3,7 @@ package com.xmlcalabash.runtime;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.model.*;
+import com.xmlcalabash.util.XProcMessageListenerHelper;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.QName;
 
@@ -91,7 +92,16 @@ public class XPipelineCall extends XAtomicStep {
         }
 
         runtime.start(this);
-        newstep.run();
+        try {
+            XProcMessageListenerHelper.openStep(runtime, this);
+        } catch (Throwable e) {
+            throw handleException(e);
+        }
+        try {
+            newstep.run();
+        } finally {
+            runtime.getMessageListener().closeStep();
+        }
         runtime.finish(this);
 
     }
