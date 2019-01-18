@@ -30,8 +30,9 @@
         So for now we unzip the entire EPUB before continuing.
         See: https://github.com/daisy/pipeline-modules-common/pull/73
     -->
-    <p:choose name="result">
-        <p:when test="ends-with(lower-case($epub),'.epub')">
+    <p:choose name="result" px:progress="1">
+        <p:when test="ends-with(lower-case($epub),'.epub')"
+                px:message="EPUB is in a ZIP container; unzipping">
             <p:output port="fileset.out" primary="true">
                 <p:pipe step="mediatype" port="result"/>
             </p:output>
@@ -39,7 +40,6 @@
                 <p:pipe step="load" port="result"/>
             </p:output>
             
-            <px:message severity="DEBUG" message="EPUB is in a ZIP container; unzipping"/>
             <px:fileset-unzip store-to-disk="true" name="unzip">
                 <p:with-option name="href" select="$epub"/>
                 <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
@@ -56,15 +56,13 @@
                 </p:input>
             </px:fileset-load>
         </p:when>
-        <p:otherwise>
+        <p:otherwise px:message="EPUB is not in a container">
             <p:output port="fileset.out" primary="true">
                 <p:pipe port="result" step="load.fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
                 <p:pipe port="result" step="load.in-memory"/>
             </p:output>
-            
-            <px:message message="EPUB is not in a container"/>
             <px:fileset-create>
                 <p:with-option name="base" select="replace($epub,'(.*/)([^/]*)','$1')"/>
             </px:fileset-create>
@@ -74,7 +72,6 @@
             </px:fileset-add-entry>
             <px:mediatype-detect/>
             <p:identity name="load.fileset"/>
-            
             <px:fileset-load>
                 <p:input port="in-memory">
                     <p:empty/>

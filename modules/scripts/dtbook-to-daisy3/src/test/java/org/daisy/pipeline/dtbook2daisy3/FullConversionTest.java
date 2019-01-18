@@ -46,6 +46,7 @@ import org.custommonkey.xmlunit.Difference;
 import org.custommonkey.xmlunit.DifferenceConstants;
 import org.custommonkey.xmlunit.DifferenceListener;
 import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcInput.Builder;
 import org.daisy.common.xproc.XProcPipeline;
@@ -272,7 +273,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			boolean testContentUnchanged) throws IOException,
 			URISyntaxException, ZedContextException,
 			ZedFileInitializationException, SAXException,
-			ParserConfigurationException {
+			ParserConfigurationException, XProcErrorException {
 		runTestsOnFile(filename, audio, testContentUnchanged,
 				new NoErrorFiltered(), true);
 	}
@@ -281,7 +282,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			boolean testContentUnchanged, final ErrorFilter errorFilter)
 			throws IOException, URISyntaxException, ZedContextException,
 			ZedFileInitializationException, SAXException,
-			ParserConfigurationException {
+			ParserConfigurationException, XProcErrorException {
 		runTestsOnFile(filename, audio, testContentUnchanged, errorFilter, true);
 	}
 
@@ -303,7 +304,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			boolean testStructureUnchanged, final ErrorFilter errorFilter,
 			boolean testTextUnchanged) throws IOException, URISyntaxException,
 			ZedContextException, ZedFileInitializationException, SAXException,
-			ParserConfigurationException {
+			ParserConfigurationException, XProcErrorException {
 
 
 		//copy the MP3 file that will be referenced in the SMIL files

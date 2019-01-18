@@ -101,6 +101,11 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-activator</artifactId>
       <scope>test</scope>
     </dependency>

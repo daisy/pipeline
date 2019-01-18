@@ -42,7 +42,7 @@
     <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
-    <px:merge-parameters name="parameters">
+    <px:merge-parameters name="parameters" px:progress=".01">
         <p:input port="source">
             <p:pipe step="main" port="parameters"/>
         </p:input>
@@ -53,8 +53,7 @@
             <p:pipe port="source" step="main"/>
         </p:input>
     </p:identity>
-    <px:message message="Generating table of contents"/>
-    <p:xslt>
+    <p:xslt px:message="Generating table of contents" px:progress=".01">
         <p:input port="stylesheet">
             <p:document href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl"/>
         </p:input>
@@ -63,18 +62,15 @@
         </p:with-param>
     </p:xslt>
     
-    <px:message message="Inlining CSS"/>
-    <p:group>
+    <p:group px:message="Inlining CSS" px:progress=".10">
         <p:variable name="stylesheets-to-be-inlined" select="string-join((
                                                                $default-stylesheet,
                                                                resolve-uri('../../css/default.scss'),
                                                                $stylesheet),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
-        <px:message severity="DEBUG">
-            <p:with-option name="message" select="concat('stylesheets: ',$stylesheets-to-be-inlined)"/>
-        </px:message>
-        <px:apply-stylesheets>
+        <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
+        <px:apply-stylesheets px:progress="1">
             <p:with-option name="stylesheets" select="$stylesheets-to-be-inlined"/>
             <p:input port="parameters">
                 <p:pipe port="result" step="parameters"/>
@@ -82,9 +78,9 @@
         </px:apply-stylesheets>
     </p:group>
     
-    <px:message message="Transforming MathML"/>
-    <p:viewport match="math:math">
-        <px:transform>
+    <p:viewport px:message="Transforming MathML" px:progress=".10"
+                match="math:math">
+        <px:transform px:progress="1">
             <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
             <p:with-option name="temp-dir" select="$temp-dir"/>
             <p:input port="parameters">
@@ -94,21 +90,20 @@
         </px:transform>
     </p:viewport>
     
-    <p:choose name="transform">
+    <p:choose name="transform" px:message="" px:progress=".76">
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true"/>
             <p:output port="obfl">
                 <p:pipe step="obfl" port="result"/>
             </p:output>
-            <px:transform name="obfl">
+            <px:transform name="obfl" px:message="Transforming from XML with CSS to OBFL" px:progress=".5">
                 <p:with-option name="query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
                 <p:with-option name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
                     <p:pipe port="result" step="parameters"/>
                 </p:input>
             </px:transform>
-            <px:message message="Transforming from OBFL to PEF"/>
-            <px:transform>
+            <px:transform px:message="Transforming from OBFL to PEF" px:progress=".5">
                 <p:with-option name="query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
                 <p:with-option name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
@@ -121,8 +116,7 @@
             <p:output port="obfl">
                 <p:empty/>
             </p:output>
-            <px:message message="Transforming from XML with inline CSS to PEF"/>
-            <px:transform>
+            <px:transform px:message="Transforming from XML with inline CSS to PEF" px:progress="1">
                 <p:with-option name="query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
                 <p:with-option name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
@@ -139,8 +133,7 @@
             <p:pipe step="main" port="source"/>
         </p:input>
     </p:identity>
-    <px:message message="Adding metadata from HTML to PEF"/>
-    <p:xslt name="metadata">
+    <p:xslt name="metadata" px:message="Extracting metadata from HTML" px:progress=".01">
         <p:input port="stylesheet">
             <p:document href="../xslt/html-to-opf-metadata.xsl"/>
         </p:input>
@@ -148,7 +141,7 @@
             <p:empty/>
         </p:input>
     </p:xslt>
-    <pef:add-metadata>
+    <pef:add-metadata px:message="Adding metadata to PEF" px:progress=".01">
         <p:input port="source">
             <p:pipe step="pef" port="result"/>
         </p:input>

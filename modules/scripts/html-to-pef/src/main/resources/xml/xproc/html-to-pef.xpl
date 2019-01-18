@@ -102,7 +102,7 @@
     <!-- pass all the variables all the time.              -->
     <!-- ================================================= -->
     <p:in-scope-names name="in-scope-names"/>
-    <px:delete-parameters name="input-options"
+    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:progress=".01"
                           parameter-names="stylesheet
                                            transform
                                            ascii-file-format
@@ -118,29 +118,26 @@
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
-    <p:sink/>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
     <!-- =============== -->
-    <px:tempdir name="temp-dir">
+    <px:tempdir name="temp-dir" px:message="Creating temporary directory" px:progress=".01">
         <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
     </px:tempdir>
     
     <!-- ========= -->
     <!-- LOAD HTML -->
     <!-- ========= -->
-    <px:message message="Loading HTML"/>
-    <px:html-load name="html">
+    <px:html-load name="html" px:message="Loading HTML" px:progress=".03">
         <p:with-option name="href" select="$html"/>
     </px:html-load>
     
     <!-- ============ -->
     <!-- HTML TO PEF -->
     <!-- ============ -->
-    <px:message message="Done loading HTML, starting conversion to PEF"/>
-    <px:html-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css"
-                            name="convert">
+    <px:html-to-pef.convert name="convert" px:message="Converting from HTML to PEF" px:progress=".90"
+                            default-stylesheet="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css">
         <p:with-option name="temp-dir" select="concat(string(/c:result),'convert/')">
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>
@@ -155,8 +152,7 @@
     <!-- ========= -->
     <!-- STORE PEF -->
     <!-- ========= -->
-    <px:message message="Storing PEF"/>
-    <px:xml-to-pef.store>
+    <px:xml-to-pef.store px:message="Storing PEF" px:progress=".05">
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>

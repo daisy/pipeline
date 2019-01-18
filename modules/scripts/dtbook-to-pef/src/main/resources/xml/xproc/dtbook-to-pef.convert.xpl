@@ -13,7 +13,7 @@
     <p:input port="source">
         <p:documentation>DTBook</p:documentation>
     </p:input>
-    <p:output port="result" primary="true" sequence="true"> <!-- sequence=false when d:validation-status result="ok" -->
+    <p:output port="result" primary="true" sequence="true"> <!-- sequence=false when d:status result="ok" -->
         <p:documentation>PEF</p:documentation>
     </p:output>
     <p:output port="obfl" sequence="true"> <!-- sequence=false when include-obfl=true -->
@@ -51,14 +51,14 @@
     <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
-    <px:merge-parameters name="parameters">
+    <px:merge-parameters name="parameters" px:progress=".01">
         <p:input port="source">
             <p:pipe step="main" port="parameters"/>
         </p:input>
     </px:merge-parameters>
     <p:sink/>
     
-    <px:dtbook-load name="load">
+    <px:dtbook-load name="load" px:message="Loading DTBook" px:progress=".01">
         <p:input port="source">
             <p:pipe step="main" port="source"/>
         </p:input>
@@ -70,8 +70,7 @@
             <p:pipe step="load" port="in-memory.out"/>
         </p:input>
     </p:identity>
-    <px:message message="Generating table of contents"/>
-    <p:xslt>
+    <p:xslt px:message="Generating table of contents" px:progress=".01">
         <p:input port="stylesheet">
             <p:document href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl"/>
         </p:input>
@@ -80,8 +79,7 @@
         </p:with-param>
     </p:xslt>
     
-    <px:message message="Inlining CSS"/>
-    <p:group>
+    <p:group px:message="Applying style sheets" px:progress=".06">
         <p:variable name="first-css-stylesheet"
                     select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
@@ -94,10 +92,8 @@
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
-        <px:message severity="DEBUG">
-            <p:with-option name="message" select="concat('stylesheets: ',$stylesheets-to-be-inlined)"/>
-        </px:message>
-        <px:apply-stylesheets>
+        <p:identity px:message="{$stylesheets-to-be-inlined}" px:message-severity="DEBUG"/>
+        <px:apply-stylesheets px:progress="1">
             <p:with-option name="stylesheets" select="$stylesheets-to-be-inlined"/>
             <p:input port="parameters">
                 <p:pipe port="result" step="parameters"/>
@@ -105,15 +101,22 @@
         </px:apply-stylesheets>
     </p:group>
     
-    <px:message message="Transforming MathML"/>
-    <p:viewport match="math:math">
-        <px:transform>
-            <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
-            <p:with-option name="temp-dir" select="$temp-dir"/>
-        </px:transform>
-    </p:viewport>
+    <p:choose px:progress=".04">
+        <p:when test="//math:math">
+            <p:viewport px:message="Transforming MathML"
+                        match="math:math">
+                <px:transform px:progress="1">
+                    <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
+                    <p:with-option name="temp-dir" select="$temp-dir"/>
+                </px:transform>
+            </p:viewport>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
     
-    <p:choose name="transform">
+    <p:choose name="transform" px:progress=".84">
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>
             <p:output port="obfl">
@@ -122,14 +125,11 @@
             <p:output port="status">
                 <p:pipe step="try-pef" port="status"/>
             </p:output>
-            <px:message message="Transforming from XML with inline CSS to OBFL"/>
-            <p:group name="obfl">
+            <p:group name="obfl" px:message="Transforming from DTBook XML with inline CSS to OBFL" px:progress=".34">
                 <p:output port="result"/>
                 <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
-                <px:message severity="DEBUG">
-                    <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
-                </px:message>
-                <px:transform>
+                <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
+                <px:transform px:progress="1">
                     <p:with-option name="query" select="$transform-query"/>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
                     <p:input port="parameters">
@@ -137,20 +137,17 @@
                     </p:input>
                 </px:transform>
             </p:group>
-            <p:try name="try-pef">
+            <p:try name="try-pef" px:message="Transforming from OBFL to PEF" px:progress=".66">
                 <p:group>
                     <p:output port="pef" primary="true"/>
                     <p:output port="status">
                         <p:inline>
-                            <d:validation-status result="ok"/>
+                            <d:status result="ok"/>
                         </p:inline>
                     </p:output>
                     <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
-                    <px:message message="Transforming from OBFL to PEF"/>
-                    <px:message severity="DEBUG">
-                        <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
-                    </px:message>
-                    <px:transform>
+                    <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
+                    <px:transform px:progress="1">
                         <p:with-option name="query" select="$transform-query"/>
                         <p:with-option name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
@@ -164,46 +161,41 @@
                     </p:output>
                     <p:output port="status">
                         <p:inline>
-                            <d:validation-status result="error"/>
+                            <d:status result="error"/>
                         </p:inline>
                     </p:output>
                     <p:sink/>
                 </p:catch>
             </p:try>
         </p:when>
-        <p:otherwise>
+        <p:otherwise px:message="Transforming from XML with inline CSS to PEF">
             <p:output port="pef" primary="true"/>
             <p:output port="obfl">
                 <p:empty/>
             </p:output>
             <p:output port="status">
                 <p:inline>
-                    <d:validation-status result="ok"/>
+                    <d:status result="ok"/>
                 </p:inline>
             </p:output>
-            <px:message message="Transforming from XML with inline CSS to PEF"/>
-            <p:group>
-                <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
-                <px:message severity="DEBUG">
-                    <p:with-option name="message" select="concat('px:transform query=',$transform-query)"/>
-                </px:message>
-                <px:transform>
-                    <p:with-option name="query" select="$transform-query"/>
-                    <p:with-option name="temp-dir" select="$temp-dir"/>
-                    <p:input port="parameters">
-                        <p:pipe port="result" step="parameters"/>
-                    </p:input>
-                </px:transform>
-            </p:group>
+            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+            <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
+            <px:transform px:progress="1">
+                <p:with-option name="query" select="$transform-query"/>
+                <p:with-option name="temp-dir" select="$temp-dir"/>
+                <p:input port="parameters">
+                    <p:pipe port="result" step="parameters"/>
+                </p:input>
+            </px:transform>
         </p:otherwise>
     </p:choose>
     
-    <p:choose name="add-metadata">
+    <p:choose name="add-metadata" px:progress=".03">
         <p:xpath-context>
             <p:pipe step="transform" port="status"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
-            <p:xslt name="metadata">
+            <p:xslt name="metadata" px:message="Extracting metadata from DTBook" px:progress="1/2">
                 <p:input port="source">
                     <p:pipe step="main" port="source"/>
                 </p:input>
@@ -214,7 +206,7 @@
                     <p:empty/>
                 </p:input>
             </p:xslt>
-            <pef:add-metadata>
+            <pef:add-metadata px:message="Adding metadata to PEF" px:progress="1/2">
                 <p:input port="source">
                     <p:pipe step="transform" port="pef"/>
                 </p:input>

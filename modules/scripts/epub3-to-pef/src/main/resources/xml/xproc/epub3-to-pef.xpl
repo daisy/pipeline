@@ -115,7 +115,7 @@ even though the provided CSS is more specific.
     <!-- pass all the variables all the time.              -->
     <!-- ================================================= -->
     <p:in-scope-names name="in-scope-names"/>
-    <px:delete-parameters name="input-options"
+    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:progress=".01"
                           parameter-names="stylesheet
                                            apply-document-specific-stylesheets
                                            transform
@@ -132,20 +132,18 @@ even though the provided CSS is more specific.
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
-    <p:sink/>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
     <!-- =============== -->
-    <px:tempdir name="temp-dir">
+    <px:tempdir name="temp-dir" px:message="Creating temporary directory" px:progress=".01">
         <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
     </px:tempdir>
     
     <!-- =========== -->
     <!-- LOAD EPUB 3 -->
     <!-- =========== -->
-    <px:message message="Loading EPUB"/>
-    <px:epub3-to-pef.load name="load">
+    <px:epub3-to-pef.load name="load" px:message="Loading EPUB" px:progress=".03">
         <p:with-option name="epub" select="$epub"/>
         <p:with-option name="temp-dir" select="concat(string(/c:result),'load/')">
             <p:pipe step="temp-dir" port="result"/>
@@ -160,8 +158,8 @@ even though the provided CSS is more specific.
             <p:pipe port="fileset.out" step="load"/>
         </p:input>
     </p:identity>
-    <px:message message="Done loading EPUB, starting conversion to PEF"/>
-    <px:epub3-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css" name="convert">
+    <px:epub3-to-pef.convert name="convert" px:message="Converting from EPUB to PEF" px:progress=".90"
+                             default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
@@ -187,9 +185,8 @@ even though the provided CSS is more specific.
             <p:pipe step="convert" port="in-memory.out"/>
         </p:input>
     </p:identity>
-    <px:message message="Storing PEF"/>
     <p:delete match="/*/@xml:base"/>
-    <px:epub3-to-pef.store>
+    <px:epub3-to-pef.store px:message="Storing PEF" px:progress=".05">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="opf">
             <p:pipe step="load" port="opf"/>
