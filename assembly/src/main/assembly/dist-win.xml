@@ -13,5 +13,6 @@
       <componentDescriptor>src/main/assembly/components/cli-win.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/modules-win.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/updater-win.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/javafx-linux.xml</componentDescriptor>
   </componentDescriptors>
 </assembly>

@@ -4,6 +4,14 @@
     <fileSet>
       <directory>target/bundles/bootstrap</directory>
       <outputDirectory>/system/bootstrap</outputDirectory>
+      <excludes>
+        <exclude>linux</exclude>
+        <exclude>linux/*</exclude>
+        <exclude>mac</exclude>
+        <exclude>mac/*</exclude>
+        <exclude>win</exclude>
+        <exclude>win/*</exclude>
+      </excludes>
     </fileSet>
     <fileSet>
       <directory>target/bundles/felix</directory>
@@ -24,12 +32,12 @@
       <outputDirectory>/system/framework</outputDirectory>
     </fileSet>
     <fileSet>
-            <directory>target/bundles/libs/gui</directory>
-            <outputDirectory>/system/framework/gui</outputDirectory>
+      <directory>target/bundles/libs/gui</directory>
+      <outputDirectory>/system/framework/gui</outputDirectory>
     </fileSet>
     <fileSet>
-            <directory>target/bundles/libs/persistence</directory>
-            <outputDirectory>/system/framework/persistence</outputDirectory>
+      <directory>target/bundles/libs/persistence</directory>
+      <outputDirectory>/system/framework/persistence</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/bundles/pipeline</directory>

@@ -20,7 +20,7 @@ if not [%1]==[] (
 setlocal enabledelayedexpansion
 
 set PROGNAME=%~nx0
-set REQUIRED_JAVA_VER=9
+set REQUIRED_JAVA_VER=11
 
 goto BEGIN
 
@@ -98,6 +98,7 @@ goto :EOF
     set JAVA_HOME=%RETURN%
     exit /b 0
     :javaHome_try_jdk
+        rem some versions use the "Java Development Kit"
         call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK"" /v CurrentVersion"
         if errorLevel 1 goto :EOF
         set JAVA_VER=%RETURN%

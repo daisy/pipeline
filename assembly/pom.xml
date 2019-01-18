@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>2</version>
+    <version>5-SNAPSHOT</version>
     <relativePath />
   </parent>
   <groupId>org.daisy.pipeline</groupId>
@@ -20,7 +20,8 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.0</cli.version>
+    <cli.version>2.1.1-SNAPSHOT</cli.version>
+    <javafx.version>11.0.1</javafx.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -52,58 +53,83 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-modules-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-web</artifactId>
+        <version>${javafx.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>${javafx.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -222,7 +248,7 @@
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.scr</artifactId>
-                  <version>2.0.14</version>
+                  <version>2.0.14</version> <!-- does not work with 2.1.0 -->
                 </artifactItem>
                 <!-- From managed dependencies -->
                 <artifactItem>
@@ -252,6 +278,26 @@
             <configuration>
               <outputDirectory>${project.build.directory}/bundles/libs/persistence</outputDirectory>
               <artifactItems>
+                <artifactItem>
+                  <groupId>javax.el</groupId>
+                  <artifactId>javax.el-api</artifactId>
+                  <version>3.0.0</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>javax.enterprise</groupId>
+                  <artifactId>cdi-api</artifactId>
+                  <version>2.0.SP1</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>javax.interceptor</groupId>
+                  <artifactId>javax.interceptor-api</artifactId>
+                  <version>1.2.2</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>javax.transaction</groupId>
+                  <artifactId>javax.transaction-api</artifactId>
+                  <version>1.3</version>
+                </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse</groupId>
                   <artifactId>org.eclipse.gemini.jpa</artifactId>
@@ -575,39 +621,6 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-logging-bundles</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
-              <!--
-                  logging-appender and dependencies. These are framework bundles that can not be
-                  reloaded dynamically without breaking things. These bundles also have dependencies
-                  in copy-framework-libs-bundles which therefore need to be installed in
-                  bundles/felix as well.
-              -->
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>common-utils</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>framework-core</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>logging-appender</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>xproc-api</artifactId>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
             <id>copy-framework-pipeline-bundles</id>
             <goals>
               <goal>copy</goal>
@@ -617,7 +630,19 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>common-utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
                   <artifactId>calabash-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>framework-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>logging-appender</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -638,6 +663,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>xpath-registry</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>xproc-api</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -719,6 +748,114 @@
                 <artifactItem>
                   <groupId>org.parboiled</groupId>
                   <artifactId>parboiled-core</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-javafx-linux</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/bootstrap/linux</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-base</artifactId>
+                  <classifier>linux</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-graphics</artifactId>
+                  <classifier>linux</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-controls</artifactId>
+                  <classifier>linux</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-web</artifactId>
+                  <classifier>linux</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-fxml</artifactId>
+                  <classifier>linux</classifier>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-javafx-mac</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/bootstrap/mac</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-base</artifactId>
+                  <classifier>mac</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-graphics</artifactId>
+                  <classifier>mac</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-controls</artifactId>
+                  <classifier>mac</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-web</artifactId>
+                  <classifier>mac</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-fxml</artifactId>
+                  <classifier>mac</classifier>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-javafx-win</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/bootstrap/win</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-base</artifactId>
+                  <classifier>win</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-graphics</artifactId>
+                  <classifier>win</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-controls</artifactId>
+                  <classifier>win</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-web</artifactId>
+                  <classifier>win</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.openjfx</groupId>
+                  <artifactId>javafx-fxml</artifactId>
+                  <classifier>win</classifier>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -1263,6 +1400,27 @@
               </dependency>
             </dependencies>
           </plugin>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <id>xspecTest</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xspec-runner</artifactId>
+            <version>1.0.2</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -1840,10 +1998,9 @@
             <executions>
               <execution>
                 <!--
-                    Note that this will include JRE 8. In order to include JRE 9 we probably have to
-                    build with JDK 9, but we don't support this yet at the moment. However the
-                    reason we depend on Java 9 is to avoid JAWS crashes, in other words it is only
-                    required for Windows.
+                    Note that this will include JRE 8. In order to include JRE 9 we have to set
+                    j2se="9.0+". Note however that the reason we depend on Java 9 is to avoid JAWS
+                    crashes, so it is only really required for Windows.
                 -->
                 <id>javapackager</id>
                 <phase>package</phase>

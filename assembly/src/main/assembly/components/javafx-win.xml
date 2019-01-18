@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/bundles/bootstrap/win</directory>
+      <outputDirectory>/system/bootstrap</outputDirectory>
+    </fileSet>
+  </fileSets>
+</component>

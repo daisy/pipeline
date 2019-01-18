@@ -1527,7 +1527,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-logging-bundles</id>
+                        <id>copy-framework-pipeline-bundles</id>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -1546,13 +1546,6 @@
                                     <groupId>org.daisy.pipeline</groupId>
                                     <artifactId>xproc-api</artifactId>
                                 </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-framework-pipeline-bundles</id>
-                        <configuration>
-                            <artifactItems>
                                 <artifactItem>
                                     <groupId>org.daisy.pipeline</groupId>
                                     <artifactId>calabash-adapter</artifactId>

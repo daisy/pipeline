@@ -24,9 +24,6 @@
                                                 <xsl:when test="pom:id = 'copy-felix-bundles'">
                                                         <xsl:value-of select="'system/felix'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-logging-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
-                                                </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-framework-libs-bundles'">
                                                         <xsl:value-of select="'system/felix'"/>
                                                 </xsl:when>
@@ -62,6 +59,15 @@
                                                 </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-gui-bundles'">
                                                         <xsl:value-of select="'system/felix'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-javafx-linux'">
+                                                        <xsl:value-of select="'system/bootstrap'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-javafx-mac'">
+                                                        <xsl:value-of select="'system/bootstrap'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-javafx-win'">
+                                                        <xsl:value-of select="'system/bootstrap'"/>
                                                 </xsl:when>
                                                 <xsl:otherwise>
                                                         <xsl:message terminate="yes" select="concat('the build plugin maven-dependency-plugin has an an execution without an associated deployPath in ',replace(base-uri(),'^.*/',''),': ',pom:id/text())"/>
