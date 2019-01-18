@@ -149,6 +149,9 @@ check : check-docker
 check-docker :
 	bash src/test/resources/test-docker-image.sh
 
+.PHONY : --without-persistence
+--without-persistence : -Pwithout-persistence
+
 #                          generate-resources      process-resources      prepare-package       package
 #                          ---------------         -----------------      ---------------       -------
 # unpack-cli-mac           unpack-cli-mac
@@ -196,12 +199,13 @@ PROFILES :=                 \
 	unpack-updater-mac      \
 	unpack-updater-win      \
 	unpack-updater-gui-win  \
+	without-persistence     \
 	dev-launcher
 
 .PHONY : mvn
 mvn :
 ifndef DUMP_PROFILES
-	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true $(MAKECMDGOALS)) | $(MVN_LOG)
+	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS)) | $(MVN_LOG)
 endif
 
 .PHONY : $(addprefix -P,$(PROFILES))
