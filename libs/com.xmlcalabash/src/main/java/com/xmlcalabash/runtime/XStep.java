@@ -309,8 +309,15 @@ public abstract class XStep implements XProcRunnable {
         XProcException xe = (e instanceof XProcException) ?
             (XProcException)e :
             XProcException.javaError(e, 1, new RuntimeException().getStackTrace(), 1);
-        if (xe.getStep() == null)
+        if (getRootStep(xe.getStep()) != getRootStep(getStep()))
             xe = xe.rebaseOnto(getStep());
         return xe;
+    }
+    
+    private static Step getRootStep(Step s) {
+        if (s != null)
+            while (s.getParent() != null)
+                s = s.getParent();
+        return s;
     }
 }

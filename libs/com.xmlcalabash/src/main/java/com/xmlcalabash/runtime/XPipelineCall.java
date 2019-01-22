@@ -99,6 +99,8 @@ public class XPipelineCall extends XAtomicStep {
         }
         try {
             newstep.run();
+        } catch (Throwable e) {
+            throw handleException(e);
         } finally {
             runtime.getMessageListener().closeStep();
         }

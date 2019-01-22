@@ -71,7 +71,7 @@ public class XWhen extends XCompoundStep {
     @Override
     public void run() throws SaxonApiException {
         try {
-            XProcMessageListenerHelper.openStep(runtime, parent, BigDecimal.ONE);
+            XProcMessageListenerHelper.openStep(runtime, this, BigDecimal.ONE);
         } catch (Throwable e) {
             throw handleException(e);
         }

@@ -390,13 +390,13 @@ public class XProcException extends RuntimeException {
                     parents.add(s);
             }
         }
-        SourceLocator[] location = new SourceLocator[1 + parents.size()]; {
+        SourceLocator[] location = new SourceLocator[1 + (parents.size() == 0 ? 0 : (parents.size() - 1))]; {
             if (node == null) {
                 if (step != null)
                     node = step.getNode();
             }
             location[0] = new XMLLocation(step, node);
-            for (int i = 0; i < parents.size(); i++)
+            for (int i = 0; i < parents.size() - 1; i++) // don't include root step
                 location[i + 1] = new XMLLocation(parents.get(i).getStep());
         }
         return location;

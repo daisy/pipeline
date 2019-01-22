@@ -245,16 +245,7 @@ public class Eval extends DefaultStep {
                 }
             }
 
-            try {
-                pipeline.run();
-            } catch (XProcException e) {
-                if (e.getStep() != null) {
-                    // error will not be rebased in XAtomicStep so do it here
-                    throw e.rebaseOnto(step.getStep());
-                } else {
-                    throw e;
-                }
-            }
+            pipeline.run();
 
             portiter = outputports.iterator();
             while (portiter.hasNext()) {
