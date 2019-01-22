@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/epub3-to-epub3.load.xpl">
+	
+	<x:scenario label="zipped">
+		<x:call step="px:epub3-to-epub3.load">
+			<x:option name="epub" select="resolve-uri('../resources/valentin.epub',base-uri(.))"/>
+		</x:call>
+		<x:context label="fileset">
+			<x:document type="port"  port="fileset"/>
+		</x:context>
+		<x:expect label="fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="../resources/valentin.epub!/mimetype"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/css/accessibility.css" media-type="text/css"/>
+					<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
+					<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin.epub!/EPUB/images/valentin.jpg" media-type="image/jpeg"/>
+					<d:file href="../resources/valentin.epub!/META-INF/container.xml" media-type="application/xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="in-memory">
+			<x:document type="port"  port="in-memory"/>
+		</x:context>
+		<x:expect label="the package document" type="compare">
+			<x:document type="file" href="../resources/valentin/EPUB/package.opf"/>
+		</x:expect>
+		<x:expect label="the base uri" type="xpath"
+		          test="base-uri(/*)" equals="resolve-uri('../resources/valentin.epub!/EPUB/package.opf',$test-base-uri)"/>
+	</x:scenario>
+	
+	<x:scenario label="unzipped">
+		<x:call step="px:epub3-to-epub3.load">
+			<x:option name="epub" select="resolve-uri('../resources/valentin/mimetype',base-uri(.))"/>
+		</x:call>
+		<x:context label="fileset">
+			<x:document type="port"  port="fileset"/>
+		</x:context>
+		<x:expect label="fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<!--
+			    note that the files are sorted differently
+			-->
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="../resources/valentin/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/css/accessibility.css" media-type="text/css"/>
+					<d:file href="../resources/valentin/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
+					<d:file href="../resources/valentin/EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin/EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin/EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin/EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin/EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
+					<d:file href="../resources/valentin/EPUB/images/valentin.jpg" media-type="image/jpeg"/>
+					<d:file href="../resources/valentin/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
+					<d:file href="../resources/valentin/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="../resources/valentin/META-INF/container.xml" media-type="application/xml"/>
+					<d:file href="../resources/valentin/mimetype"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

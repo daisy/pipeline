@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/html-to-epub3.convert.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:html-to-epub3">
+			<x:input port="input.fileset">
+				<x:document type="inline" xml:base="file:/tmp/">
+					<d:fileset>
+						<d:file href="foo.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="input.in-memory">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>Minimal HTML</title>
+						</head>
+						<body>
+							<section>
+								<h1>Chapter</h1>
+								<p>Paragraph</p>
+								<p>Another paragraph</p>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('output-dir/')"/>
+		</x:call>
+		<x:context label="the fileset.out port">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the result.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="output-dir/epub/EPUB/foo.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="output-dir/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="output-dir/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="output-dir/epub/META-INF/container.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the result XHTML document">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('output-dir/epub/EPUB/foo.xhtml')]"/>
+		</x:context>
+		<x:expect label="the result XHTML document"
+		          type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+					<head>
+						<meta charset="UTF-8"/>
+						<title>Minimal HTML</title>
+					</head>
+					<body id="a">
+						<section id="b">
+							<h1 id="c">Chapter</h1>
+							<p>Paragraph</p>
+							<p>Another paragraph</p>
+						</section>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

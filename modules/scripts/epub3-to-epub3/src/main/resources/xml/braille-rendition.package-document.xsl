@@ -15,7 +15,9 @@
 	
 	<xsl:template match="/*">
 		<xsl:copy>
-			<xsl:attribute name="xml:base" select="$braille-rendition.package-document.base"/>
+			<xsl:if test="@xml:base">
+				<xsl:attribute name="xml:base" select="$braille-rendition.package-document.base"/>
+			</xsl:if>
 			<xsl:apply-templates select="(@* except @xml:base)|node()"/>
 		</xsl:copy>
 	</xsl:template>
@@ -27,11 +29,11 @@
 	</xsl:template>
 	
 	<xsl:template match="opf:manifest/opf:item">
-		<xsl:variable name="original-href" select="resolve-uri(@href,base-uri(.))"/>
+		<xsl:variable name="default-href" select="resolve-uri(@href,base-uri(.))"/>
 		<xsl:copy>
 			<xsl:attribute name="href"
 			               select="pf:relativize-uri(
-			                         $braille-rendition.fileset//d:file[resolve-uri(@original-href,base-uri(.))=$original-href]
+			                         $braille-rendition.fileset//d:file[resolve-uri((@default-href,@href)[1],base-uri(.))=$default-href]
 			                                                    /resolve-uri(@href,base-uri(.)),
 			                         $braille-rendition.package-document.base)"/>
 			<xsl:sequence select="@* except @href"/>

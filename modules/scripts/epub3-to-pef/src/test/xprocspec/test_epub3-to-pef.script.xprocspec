@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl">
+
+  <x:scenario label="test C00000.epub with default.css">
+    <x:call step="px:epub3-to-pef.script">
+      <x:option name="epub" select="resolve-uri('../resources/C00000.epub')"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'C00000/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'C00000/temp-dir/')"/>
+    </x:call>
+    <x:context label="the output directory contents">
+      <x:document type="directory" base-uri="temp-dir" href="C00000/output-dir/"/>
+    </x:context>
+    <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+  </x:scenario>
+  
+  <x:scenario label="test default.css + reset.css + style.css">
+    <x:call step="px:epub3-to-pef.script">
+      <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
+      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'C00000_reset/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'C00000_reset/temp-dir/')"/>
+      <x:option name="stylesheet" select="string-join((resolve-uri('../resources/reset.css'), resolve-uri('../resources/style.css')), ' ')"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+    </x:call>
+    
+    <x:context label="the output directory contents">
+      <x:document type="directory" base-uri="temp-dir" href="C00000_reset/output-dir/"/>
+    </x:context>
+    <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+    <x:expect label="The PEF should have the name 'test.pef'" type="xpath" test="/*/*[ends-with(@name,'.pef')]/@name" equals="'test.pef'"/>
+    
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="C00000_reset/output-dir/test.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:title>Test</dc:title>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume rows="25" cols="40" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠋⠕⠕⠀⠃⠜</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="stylesheet-relative">
+    <x:documentation>
+      Tests stylesheet option with path relative to the EPUB.
+    </x:documentation>
+    <x:call step="px:epub3-to-pef.script">
+      <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="stylesheet" select="'../test-option_apply-document-specific-stylesheets.override.css'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'stylesheet-relative/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'stylesheet-relative/temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="stylesheet-relative/output-dir/test.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:title>Test</dc:title>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠋⠕⠕</row>
+                  <row>⠃⠜</row>
+                  <row>⠃⠜</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠃⠜</row>
+                  <row>⠃⠜</row>
+                  <row>⠃⠜</row>
+                  <row>⠇⠃⠜</row>
+                  <row>⠃⠜</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="option: apply-document-specific-stylesheets (enabled)">
+      <x:call step="px:epub3-to-pef.script">
+          <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+          <x:option name="transform" select="'(grade:2)'"/>
+          <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/output-dir/')"/>
+          <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/temp-dir/')"/>
+          <x:option name="apply-document-specific-stylesheets" select="true()"/>
+          <x:option name="show-braille-page-numbers" select="false()"/>
+      </x:call>
+      
+      <x:context label="the output directory contents">
+          <x:document type="directory" base-uri="temp-dir" href="apply-document-specific-stylesheets-enabled/output-dir/"/>
+      </x:context>
+      <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+      <x:expect label="The PEF should have the name 'test.pef'" type="xpath" test="/*/*[ends-with(@name,'.pef')]/@name" equals="'test.pef'"/>
+      
+      <x:context label="the output pef">
+          <x:document type="file" base-uri="temp-dir" href="apply-document-specific-stylesheets-enabled/output-dir/test.pef"/>
+      </x:context>
+      <x:expect label="The result should be that the styles with explicit media=embossed have been applied" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+          <x:document type="inline">
+              <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                  <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+                      <meta>
+                          <dc:format>application/x-pef+xml</dc:format>
+                          <dc:title>Test</dc:title>
+                          <dc:language>en-US</dc:language>
+                      </meta>
+                  </head>
+                  <body>
+                      <volume rows="25" cols="40" rowgap="0" duplex="true">
+                          <section>
+                              <page>
+                                  <row>⠋⠕⠕</row>
+                                  <row>⠀⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠀⠀⠀⠃⠜</row>
+                                  <row>⠀⠀⠀⠀⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠀⠀⠀⠀⠀⠀⠃⠜</row>
+                                  <row>⠀⠀⠀⠀⠀⠀⠀⠃⠜</row>
+                              </page>
+                          </section>
+                      </volume>
+                  </body>
+              </pef>
+          </x:document>
+      </x:expect>
+  </x:scenario>
+
+  <x:scenario label="option: apply-document-specific-stylesheets (disabled)">
+      <x:call step="px:epub3-to-pef.script">
+          <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+          <x:option name="transform" select="'(grade:2)'"/>
+          <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/output-dir/')"/>
+          <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/temp-dir/')"/>
+          <x:option name="apply-document-specific-stylesheets" select="false()"/>
+          <x:option name="show-braille-page-numbers" select="false()"/>
+      </x:call>
+      
+      <x:context label="the output directory contents">
+          <x:document type="directory" base-uri="temp-dir" href="apply-document-specific-stylesheets-disabled/output-dir/"/>
+      </x:context>
+      <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+      <x:expect label="The PEF should have the name 'test.pef'" type="xpath" test="/*/*[ends-with(@name,'.pef')]/@name" equals="'test.pef'"/>
+      
+      <x:context label="the output pef">
+          <x:document type="file" base-uri="temp-dir" href="apply-document-specific-stylesheets-disabled/output-dir/test.pef"/>
+      </x:context>
+      <x:expect label="The result should be that no styles have been applied, not even those with explicit media=embossed" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+          <x:document type="inline">
+              <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                  <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+                      <meta>
+                          <dc:format>application/x-pef+xml</dc:format>
+                          <dc:title>Test</dc:title>
+                          <dc:language>en-US</dc:language>
+                      </meta>
+                  </head>
+                  <body>
+                      <volume rows="25" cols="40" rowgap="0" duplex="true">
+                          <section>
+                              <page>
+                                  <row>⠋⠕⠕</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠃⠜</row>
+                              </page>
+                          </section>
+                      </volume>
+                  </body>
+              </pef>
+          </x:document>
+      </x:expect>
+  </x:scenario>
+
+  <x:scenario label="option: apply-document-specific-stylesheets (enabled, with global override)">
+      <x:call step="px:epub3-to-pef.script">
+          <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+          <x:option name="transform" select="'(grade:2)'"/>
+          <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/output-dir/')"/>
+          <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/temp-dir/')"/>
+          <x:option name="apply-document-specific-stylesheets" select="true()"/>
+          <x:option name="stylesheet" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets.override.css')"/>
+          <x:option name="show-braille-page-numbers" select="false()"/>
+      </x:call>
+      
+      <x:context label="the output directory contents">
+          <x:document type="directory" base-uri="temp-dir" href="apply-document-specific-stylesheets-override/output-dir/"/>
+      </x:context>
+      <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+      <x:expect label="The PEF should have the name 'test.pef'" type="xpath" test="/*/*[ends-with(@name,'.pef')]/@name" equals="'test.pef'"/>
+      
+      <x:context label="the output pef">
+          <x:document type="file" base-uri="temp-dir" href="apply-document-specific-stylesheets-override/output-dir/test.pef"/>
+      </x:context>
+      <x:expect label="The result should be that when properties are defined by both the document-specific and global css; then the document-specific css is used" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+          <x:document type="inline">
+              <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+                  <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+                      <meta>
+                          <dc:format>application/x-pef+xml</dc:format>
+                          <dc:title>Test</dc:title>
+                          <dc:language>en-US</dc:language>
+                      </meta>
+                  </head>
+                  <body>
+                      <volume rows="25" cols="40" rowgap="0" duplex="true">
+                          <section>
+                              <page>
+                                  <row>⠋⠕⠕</row>
+                                  <row>⠀⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠀⠀⠀⠃⠜</row>
+                                  <row>⠀⠀⠀⠀⠃⠜</row>
+                                  <row>⠃⠜</row>
+                                  <row>⠇⠀⠀⠀⠀⠀⠀⠃⠜</row>
+                                  <row>⠀⠀⠀⠀⠀⠀⠀⠃⠜</row>
+                              </page>
+                          </section>
+                      </volume>
+                  </body>
+              </pef>
+          </x:document>
+      </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="include-obfl">
+    <x:call step="px:epub3-to-pef.script">
+      <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
+      <x:option name="include-obfl" select="'true'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'include-obfl/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'include-obfl/temp-dir/')"/>
+    </x:call>
+    <x:context label="the output directory contents">
+      <x:document type="directory" base-uri="temp-dir" href="include-obfl/output-dir/"/>
+    </x:context>
+    <x:expect label="PEF present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+    <x:expect label="OBFL present in the output directory'" type="xpath" test="count(/*/*[ends-with(@name,'.obfl')])" equals="1"/>
+  </x:scenario>
+  
+  <x:scenario label="ascii-file-format">
+    <x:call step="px:epub3-to-pef.script">
+      <x:option name="include-brf" select="'true'"/>
+    </x:call>
+   <x:scenario label="ascii-file-format has priority over dc:language">
+     <x:call>
+       <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_1/package.opf')"/>
+       <x:option name="transform" select="'(grade:2)'"/>
+       <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+                                                   (line-breaks:DOS)
+                                                   (page-breaks:&quot;---&quot;)
+                                                   (pad:BOTH)'"/>
+       <x:option name="pef-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+       <x:option name="brf-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+       <x:option name="temp-dir" select="resolve-uri('ascii-table/temp-dir',$temp-dir)"/>
+     </x:call>
+     <x:context label="brf">
+       <x:document type="file" method="text" base-uri="temp-dir" href="ascii-table/output-dir/test_vol-1.brf"/>
+     </x:context>
+     <x:expect label="brf" type="compare" normalize-space="false">
+       <x:document type="file" method="text" href="../resources/test_ascii-table_1.brf"/>
+     </x:expect>
+   </x:scenario>
+
+   <x:scenario label="Table can be found by locale">
+     <x:call>
+       <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_2/package.opf')"/>
+       <x:option name="ascii-file-format" select="'(line-breaks:DOS)
+                                                   (page-breaks:&quot;---&quot;)
+                                                   (pad:BOTH)'"/>
+       <x:option name="pef-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+       <x:option name="brf-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+       <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>
+     </x:call>
+     <x:context label="brf">
+       <x:document type="file" method="text" base-uri="temp-dir" href="default-ascii-table/output-dir/test_vol-1.brf"/>
+     </x:context>
+     <x:expect label="brf" type="compare" normalize-space="false">
+       <x:document type="file" method="text" href="../resources/test_ascii-table_2.brf"/>
+     </x:expect>
+   </x:scenario>
+  </x:scenario>
+
+</x:description>

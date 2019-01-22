@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-    xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
-    exclude-inline-prefixes="#all"
-    px:input-filesets="dtbook"
-    px:output-filesets="odt"
-    type="px:dtbook-to-odt" name="dtbook-to-odt" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
+                exclude-inline-prefixes="#all"
+                px:input-filesets="dtbook"
+                px:output-filesets="odt"
+                type="px:dtbook-to-odt.script" name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ODT</h1>
@@ -124,7 +123,7 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
         
         <px:dtbook-load name="dtbook">
             <p:input port="source">
-                <p:pipe step="dtbook-to-odt" port="source"/>
+                <p:pipe step="main" port="source"/>
             </p:input>
         </px:dtbook-load>
         
@@ -132,7 +131,7 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
         <!-- CONVERT DTBOOK TO ODT -->
         <!-- ===================== -->
         
-        <px:dtbook-to-odt.convert name="odt">
+        <px:dtbook-to-odt name="odt">
             <p:input port="content.xsl">
                 <p:document href="content.xsl"/>
             </p:input>
@@ -161,7 +160,7 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
             <p:with-param port="parameters" name="image_dpi" select="$image-dpi"/>
             <p:with-param port="parameters" name="page_numbers" select="$page-numbers"/>
             <p:with-param port="parameters" name="page_numbers_float" select="$page-numbers-float"/>
-        </px:dtbook-to-odt.convert>
+        </px:dtbook-to-odt>
         
         <!-- ========= -->
         <!-- STORE ODT -->
@@ -175,7 +174,7 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
                 <p:pipe step="odt" port="in-memory.out"/>
             </p:input>
             <p:with-option name="href" select="concat($output-dir, '/', replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1'), '.odt')">
-                <p:pipe step="dtbook-to-odt" port="source"/>
+                <p:pipe step="main" port="source"/>
             </p:with-option>
         </odt:store>
     </p:group>

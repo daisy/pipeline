@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               script="../../main/resources/xml/xproc/zedai-to-html.xpl">
+
+	<x:scenario label="alice">
+		<x:call step="px:zedai-to-html.script">
+			<x:input port="source">
+				<x:document type="file" href="../resources/resources/alice.xml"/>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output directory">
+			<x:document type="directory" base-uri="temp-dir" href="alice/output-dir/" recursive="true"/>
+		</x:context>
+		<x:expect label="the output directory should contain the XHTML" type="compare" >
+			<x:document type="inline">
+				<c:directory name="output-dir">
+					<c:file name="alice.xhtml"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="preserve significant white space (issue #94)">
+		<x:call step="px:zedai-to-html.script">
+			<x:input port="source">
+				<x:document type="inline">
+					<document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en">
+						<body>
+							<bodymatter>
+								<section>
+									<h xml:id="chapter_1">
+										<emph>CHAPTER 1</emph> <emph>THE LAST JUDGEMENT (MICHAEL ANGELO)</emph>
+									</h>
+								</section>
+							</bodymatter>
+						</body>
+					</document>
+				</x:document>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the html file">
+			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_zedai-to-html.script.xhtml" select="//html:h1[1]"/>
+		</x:context>
+		<x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
+			<x:document type="inline">
+				<h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
+										<em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em>
+									</h1>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

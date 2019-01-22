@@ -1,14 +1,21 @@
-<p:declare-step version="1.0" name="main" type="px:daisy202-validator.validate" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy202-validator"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:html="http://www.w3.org/1999/xhtml" exclude-inline-prefixes="#all" xmlns:l="http://xproc.org/library">
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy202-validator"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:l="http://xproc.org/library"
+                exclude-inline-prefixes="#all"
+                type="px:daisy202-validator"
+                name="main">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
-    <p:input port="report.in" sequence="true">
-        <p:empty/>
-    </p:input>
 
     <p:option name="timeToleranceMs" select="500" px:type="xs:integer"/>
+    <p:option name="ncc" required="true"/>
 
     <p:output port="fileset.out" primary="true">
         <p:pipe port="fileset.in" step="main"/>
@@ -16,11 +23,16 @@
     <p:output port="in-memory.out" sequence="true">
         <p:pipe port="in-memory.in" step="main"/>
     </p:output>
-    <p:output port="report.out" sequence="true">
-        <p:pipe step="main" port="report.in"/>
-        <p:pipe step="report" port="result"/>
+    <p:output port="xml-report">
+        <p:pipe step="xml-report" port="result"/>
     </p:output>
-
+    <p:output port="html-report">
+        <p:pipe step="html-report" port="result"/>
+    </p:output>
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:pipe step="validation-status" port="result"/>
+    </p:output>
+    
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -469,4 +481,29 @@
     </p:group>
     <p:identity name="report"/>
 
+    <!-- ***************************************************** -->
+    <!-- REPORT(S) TO HTML -->
+    <!-- ***************************************************** -->
+    
+    <px:combine-validation-reports>
+        <p:with-option name="document-name" select="replace($ncc,'.*/','')">
+            <p:empty/>
+        </p:with-option>
+        <p:with-option name="document-type" select="'DAISY 2.02'">
+            <p:empty/>
+        </p:with-option>
+        <p:with-option name="document-path" select="$ncc">
+            <p:empty/>
+        </p:with-option>
+    </px:combine-validation-reports>
+    <p:identity name="xml-report"/>
+    <px:validation-report-to-html toc="false" name="html-report"/>
+    <p:sink/>
+    <px:validation-status name="validation-status">
+        <p:input port="source">
+            <p:pipe step="xml-report" port="result"/>
+        </p:input>
+    </px:validation-status>
+    <p:sink/>
+    
 </p:declare-step>

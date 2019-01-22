@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               script="../../main/resources/xml/xproc/dtbook-to-pef.convert.xpl">
+  
+  <x:scenario label="simple">
+    <x:call step="px:dtbook-to-pef">
+      <x:input port="source.fileset">
+        <x:document type="inline" xml:base="file:/tmp/">
+          <d:fileset>
+            <d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="file:/tmp/dtbook.xml">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <h1>simple test</h1>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:param port="parameters" name="page-width" select="35"/>
+      <x:param port="parameters" name="page-height" select="20"/>
+      <!--
+      <x:param port="parameters" name="page-height" select="20"/>
+      <x:param port="parameters" name="include-line-groups" select="true()"/>
+      <x:param port="parameters" name="include-captions" select="true()"/>
+      <x:param port="parameters" name="accented-letters" select="true()"/>
+      <x:param port="parameters" name="tab-width" select="4"/>
+      <x:param port="parameters" name="line-spacing" select="'single'"/>
+      <x:param port="parameters" name="left-margin" select="0"/>
+      <x:param port="parameters" name="footnotes-placement" select="''"/>
+      <x:param port="parameters" name="toc-depth" select="0"/>
+      <x:param port="parameters" name="maximum-number-of-sheets" select="70"/>
+      <x:param port="parameters" name="rear-cover-placement" select="''"/>
+      <x:param port="parameters" name="duplex" select="true()"/>
+      <x:param port="parameters" name="include-note-references" select="true()"/>
+      <x:param port="parameters" name="number-of-sheets" select="50"/>
+      <x:param port="parameters" name="main-document-language" select="''"/>
+      <x:param port="parameters" name="minimum-number-of-sheets" select="30"/>
+      <x:param port="parameters" name="page-width" select="35"/>
+      <x:param port="parameters" name="show-print-page-numbers" select="true()"/>
+      <x:param port="parameters" name="colophon-metadata-placement" select="''"/>
+      <x:param port="parameters" name="force-braille-page-break" select="false()"/>
+      <x:param port="parameters" name="levels-in-footer" select="6"/>
+      <x:param port="parameters" name="include-image-groups" select="true()"/>
+      <x:param port="parameters" name="downshift-ordinal-numbers" select="false()"/>
+      <x:param port="parameters" name="polite-forms" select="false()"/>
+      <x:param port="parameters" name="include-production-notes" select="false()"/>
+      <x:param port="parameters" name="show-braille-page-numbers" select="true()"/>
+      <x:param port="parameters" name="hyphenation" select="true()"/>
+      <x:param port="parameters" name="text-level-formatting" select="true()"/>
+      <x:param port="parameters" name="capital-letters" select="true()"/>
+      <x:param port="parameters" name="include-images" select="true()"/>
+      -->
+      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="include-obfl" select="true()"/>
+      <x:option name="temp-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="the status port">
+      <x:document type="port" port="status"/>
+    </x:context>
+    <x:expect label="the status port" type="compare">
+      <x:document type="inline">
+        <d:status result="ok"/>
+      </x:document>
+    </x:expect>
+    <x:context label="the result port">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="the result port"
+              type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="35" rows="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+    <x:context label="the obfl port">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="there is one document on the obfl port" type="count" min="1" max="1"/>
+    <x:expect label="and it is an OBFL document" type="xpath" test="/obfl:obfl"/>
+  </x:scenario>
+  
+</x:description>

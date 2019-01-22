@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/dtbook-validator.validate.xpl">
+
+    <x:scenario label="dtbook_valid_2005-3">
+        <x:call step="px:dtbook-validator">
+            <x:input port="source.fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="../resources/dtbook_valid_2005-3.xml" media-type="application/x-dtbook+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="source.in-memory">
+                <x:document type="file" href="../resources/dtbook_valid_2005-3.xml"/>
+            </x:input>
+            <x:option name="base-uri" select="resolve-uri('../resources/dtbook_valid_2005-3.xml')"/>
+            <x:option name="mathml-version" select="'3.0'"/>
+            <x:option name="check-images" select="false()"/>
+            <x:option name="nimas" select="false()"/>
+        </x:call>
+        <x:context label="the validation-status port">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="should be a copy of the input" type="compare">
+            <x:document type="file" href="../resources/dtbook_valid_2005-3.xml"/>
+        </x:expect>
+        <x:context label="the xml-report port">
+            <x:document type="port" port="xml-report"/>
+        </x:context>
+        <x:expect label="the xml-report document should be a combination of
+                         a 'relaxng' report, a 'schematron' report and a 'filecheck' report"
+                  type="xpath" test="/d:document-validation-report/d:reports/d:report/@type"
+                  equals="('relaxng','schematron','filecheck')"/>
+    </x:scenario>
+    
+    <x:scenario label="not well-formed">
+        <x:call step="px:dtbook-validator">
+            <x:input port="source.fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="../resources/dtbook_not_well_formed.xml" media-type="application/x-dtbook+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="source.in-memory"/>
+            <x:option name="base-uri" select="resolve-uri('../resources/dtbook_not_well_formed.xml')"/>
+            <x:option name="mathml-version" select="'3.0'"/>
+            <x:option name="check-images" select="false()"/>
+            <x:option name="nimas" select="false()"/>
+        </x:call>
+        <x:context label="the validation-status port">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should fail" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the result port" type="compare">
+            <x:document type="inline">
+                <tmp:error xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the xml-report port">
+            <x:document type="port" port="xml-report"/>
+        </x:context>
+        <x:expect label="the report should indicate that the file in not well-formed XML" type="xpath"
+                  test="/d:document-validation-report/d:reports/d:report/d:errors/d:error[@type='file-not-wellformed']"/>
+    </x:scenario>
+    
+</x:description>

@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE package PUBLIC "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN" "http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd">
+<package
+	unique-identifier="uid" xmlns="http://openebook.org/namespaces/oeb-package/1.0/">
+	<metadata>
+		<dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/">
+			<dc:Identifier
+				id="uid">ghBOOK1211212736</dc:Identifier>
+			<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+			<dc:Title>Chimpanzees</dc:Title>
+			<dc:Creator>Julie Murray</dc:Creator>
+			<dc:Date>2004-04-13</dc:Date>
+			<dc:Description>Introduces the habitat and characteristics of chimpanzees, and briefly describes Jane Goodall's work with them.</dc:Description>
+			<dc:Language>EN-US</dc:Language>
+			<dc:Publisher>gh LLC.</dc:Publisher>
+			<dc:Subject>Chimpanzee</dc:Subject>
+		</dc-metadata>
+		<x-metadata>
+			<meta
+				name="dtb:totalTime"
+				content="00:14:49.7939004" />
+			<meta
+				name="dtb:multimediaType"
+				content="audioNCX" />
+			<meta
+				name="dtb:multimediaContent"
+				content="audio" />
+			<meta
+				name="dtb:producedDate"
+				content="2004-04-13" />
+			<meta
+				name="dtb:producer"
+				content="gh, LLC." />
+			<meta
+				name="dtb:sourceDate"
+				content="2002-01-01" />
+			<meta
+				name="dtb:sourcePublisher"
+				content="ABDO Publishing Company" />
+			<meta
+				name="dtb:sourceTitle"
+				content="Chimpanzees" />
+			<meta
+				name="ghIndex"
+				content="Chimpanzees.idx" />
+			<meta
+				name="ghVerify"
+				content="3A8C9349E334EDBB09166599DF2FBA9B" />
+			<meta
+				name="gh:generator"
+				content="gh DTB Maker 4.0" />
+			<meta
+				name="dtb:narrator"
+				content="Rachana Singh" />
+			<meta
+				name="generator"
+				content="Obi v3.6.0.22940 with toolkit: UrakawaSDK.core v2.0.0.0 (http://urakawa.sf.net/obi)" />
+			<meta
+				name="obi:xukversion"
+				content="xuk/obi;2.0" />
+			<meta
+				name="dtb:revision"
+				content="1" />
+			<meta
+				name="dtb:revisionDate"
+				content="2015-01-23" />
+		</x-metadata>
+	</metadata>
+	<manifest>
+		<item
+			href="navigation.ncx"
+			id="ncx"
+			media-type="application/x-dtbncx+xml" />
+		<item
+			href="package.opf"
+			id="opf_1"
+			media-type="text/xml" />
+		<item
+			href="0001.smil"
+			id="opf_16"
+			media-type="application/smil" />
+		<item
+			href="0002.smil"
+			id="opf_17"
+			media-type="application/smil" />
+		<item
+			href="0003.smil"
+			id="opf_18"
+			media-type="application/smil" />
+		<item
+			href="0004.smil"
+			id="opf_19"
+			media-type="application/smil" />
+		<item
+			href="0005.smil"
+			id="opf_20"
+			media-type="application/smil" />
+		<item
+			href="0006.smil"
+			id="opf_21"
+			media-type="application/smil" />
+		<item
+			href="0007.smil"
+			id="opf_22"
+			media-type="application/smil" />
+		<item
+			href="0008.smil"
+			id="opf_23"
+			media-type="application/smil" />
+		<item
+			href="0009.smil"
+			id="opf_24"
+			media-type="application/smil" />
+		<item
+			href="0010.smil"
+			id="opf_25"
+			media-type="application/smil" />
+		<item
+			href="0011.smil"
+			id="opf_26"
+			media-type="application/smil" />
+		<item
+			href="0012.smil"
+			id="opf_27"
+			media-type="application/smil" />
+		<item
+			href="0013.smil"
+			id="opf_28"
+			media-type="application/smil" />
+		<item
+			href="0014.smil"
+			id="opf_29"
+			media-type="application/smil" />
+		<item
+			href="0015.smil"
+			id="opf_30"
+			media-type="application/smil" />
+		<item
+			href="0016.smil"
+			id="opf_31"
+			media-type="application/smil" />
+		<item
+			href="0017.smil"
+			id="opf_32"
+			media-type="application/smil" />
+		<item
+			href="0018.smil"
+			id="opf_33"
+			media-type="application/smil" />
+		<item
+			href="0019.smil"
+			id="opf_34"
+			media-type="application/smil" />
+		<item
+			href="0020.smil"
+			id="opf_35"
+			media-type="application/smil" />
+		<item
+			href="aud001.mp3"
+			id="opf_36"
+			media-type="audio/mpeg" />
+		<item
+			href="aud002.mp3"
+			id="opf_37"
+			media-type="audio/mpeg" />
+		<item
+			href="aud003.mp3"
+			id="opf_38"
+			media-type="audio/mpeg" />
+		<item
+			href="aud004.mp3"
+			id="opf_39"
+			media-type="audio/mpeg" />
+		<item
+			href="aud005.mp3"
+			id="opf_40"
+			media-type="audio/mpeg" />
+		<item
+			href="aud006.mp3"
+			id="opf_41"
+			media-type="audio/mpeg" />
+		<item
+			href="aud007.mp3"
+			id="opf_42"
+			media-type="audio/mpeg" />
+		<item
+			href="aud008.mp3"
+			id="opf_43"
+			media-type="audio/mpeg" />
+		<item
+			href="aud009.mp3"
+			id="opf_44"
+			media-type="audio/mpeg" />
+		<item
+			href="aud010.mp3"
+			id="opf_45"
+			media-type="audio/mpeg" />
+		<item
+			href="aud011.mp3"
+			id="opf_46"
+			media-type="audio/mpeg" />
+		<item
+			href="aud012.mp3"
+			id="opf_47"
+			media-type="audio/mpeg" />
+		<item
+			href="aud013.mp3"
+			id="opf_48"
+			media-type="audio/mpeg" />
+		<item
+			href="aud014.mp3"
+			id="opf_49"
+			media-type="audio/mpeg" />
+		<item
+			href="aud015.mp3"
+			id="opf_50"
+			media-type="audio/mpeg" />
+		<item
+			href="aud016.mp3"
+			id="opf_51"
+			media-type="audio/mpeg" />
+		<item
+			href="aud017.mp3"
+			id="opf_52"
+			media-type="audio/mpeg" />
+		<item
+			href="aud018.mp3"
+			id="opf_53"
+			media-type="audio/mpeg" />
+		<item
+			href="aud019.mp3"
+			id="opf_54"
+			media-type="audio/mpeg" />
+		<item
+			href="aud020.mp3"
+			id="opf_55"
+			media-type="audio/mpeg" />
+		<item
+			href="tpbnarrator.res"
+			id="resource"
+			media-type="application/x-dtbresource+xml" />
+		<item
+			href="tpbnarrator_res.mp3"
+			id="opf_56"
+			media-type="audio/mpeg" />
+	</manifest>
+	<spine>
+		<itemref
+			idref="opf_16" />
+		<itemref
+			idref="opf_17" />
+		<itemref
+			idref="opf_18" />
+		<itemref
+			idref="opf_19" />
+		<itemref
+			idref="opf_20" />
+		<itemref
+			idref="opf_21" />
+		<itemref
+			idref="opf_22" />
+		<itemref
+			idref="opf_23" />
+		<itemref
+			idref="opf_24" />
+		<itemref
+			idref="opf_25" />
+		<itemref
+			idref="opf_26" />
+		<itemref
+			idref="opf_27" />
+		<itemref
+			idref="opf_28" />
+		<itemref
+			idref="opf_29" />
+		<itemref
+			idref="opf_30" />
+		<itemref
+			idref="opf_31" />
+		<itemref
+			idref="opf_32" />
+		<itemref
+			idref="opf_33" />
+		<itemref
+			idref="opf_34" />
+		<itemref
+			idref="opf_35" />
+	</spine>
+</package>

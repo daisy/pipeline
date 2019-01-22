@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
-    type="px:daisy3-to-daisy202-convert" version="1.0" name="main">
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
+                type="px:daisy3-to-daisy202" version="1.0" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DAISY 3 to DAISY 2.02</h1>
@@ -41,24 +41,32 @@
     <p:import href="convert-smils.xpl"/>
 
     <!--=========================================================================-->
-    <!-- GLOBAL VARIABLES                                                        -->
-    <!--=========================================================================-->
-    <p:variable name="input-base" select="base-uri(/*)"/>
-
-    <!--=========================================================================-->
     <!-- LOAD THE DAISY 3 FILESET                                                -->
     <!--=========================================================================-->
     <px:fileset-load media-types="application/oebps-package+xml" name="opf">
-        <p:input port="fileset">
-            <p:pipe port="fileset.in" step="main"/>
-        </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </px:fileset-load>
+
+    <!--
+        Make sure that the base uri of the fileset is the directory containing the OPF. This should
+        normally eliminate any relative hrefs starting with "..", which is required for this step
+        to work.
+    -->
+    <px:fileset-rebase>
+        <p:input port="source">
+            <p:pipe step="main" port="fileset.in"/>
+        </p:input>
+        <p:with-option name="new-base" select="resolve-uri('.',base-uri(/*))">
+            <p:pipe step="opf" port="result"/>
+        </p:with-option>
+    </px:fileset-rebase>
+    <p:identity name="fileset.in"/>
+
     <px:fileset-load media-types="application/x-dtbncx+xml" name="ncx">
         <p:input port="fileset">
-            <p:pipe port="fileset.in" step="main"/>
+            <p:pipe step="fileset.in" port="result"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
@@ -66,13 +74,12 @@
     </px:fileset-load>
     <px:fileset-load media-types="application/smil" name="input-smils">
         <p:input port="fileset">
-            <p:pipe port="fileset.in" step="main"/>
+            <p:pipe step="fileset.in" port="result"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </px:fileset-load>
-
 
     <!--=========================================================================-->
     <!-- CONVERT METADATA                                                        -->
@@ -148,7 +155,9 @@
         <p:input port="ncx">
             <p:pipe port="result" step="ncx"/>
         </p:input>
-        <p:with-option name="input-dir" select="$input-base"/>
+        <p:with-option name="input-dir" select="base-uri(/*)">
+            <p:pipe step="fileset.in" port="result"/>
+        </p:with-option>
         <p:with-option name="output-dir" select="$output-dir"/>
     </pxi:daisy3-to-daisy202-smils>
 

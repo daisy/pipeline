@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
    <uri name="http://www.daisy.org/pipeline/modules/daisy202-to-epub3/daisy202-to-epub3.xpl"
-        uri="../xml/daisy202-to-epub3.xpl" px:content-type="script"/>
+        uri="../xml/daisy202-to-epub3.xpl" px:content-type="script" px:id="daisy202-to-epub3"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-pub-utils"/>

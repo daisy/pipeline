@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:rendition="http://www.idpf.org/2013/rendition"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               script="../../main/resources/xml/epub3-to-epub3.xpl">
+	
+	<x:scenario label="valentin">
+		<x:call step="px:epub3-to-epub3.script">
+			<x:option name="source" select="resolve-uri('../resources/valentin.epub',base-uri(.))"/>
+			<x:option name="braille-translator" select="'(translator:liblouis)'"/>
+			<x:option name="output-dir" select="concat($temp-dir,'valentin/')"/>
+		</x:call>
+		<x:context label="The output directory">
+			<x:document type="directory" base-uri="temp-dir" href="valentin/" recursive="true"/>
+		</x:context>
+		<x:expect label="The output directory contains the EPUB file" type="compare">
+			<x:document type="inline">
+				<c:directory name="valentin">
+					<c:file name="valentin.epub"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+		<x:context label="The EPUB content">
+			<x:document type="zip" base-uri="temp-dir" href="valentin/valentin.epub" />
+		</x:context>
+		<x:expect label="The EPUB content" type="compare">
+			<x:document type="inline">
+				<c:zipfile name="valentin.epub">
+					<c:file name="mimetype"/>
+					<c:file name="EPUB/C00000-1-cover.xhtml"/>
+					<c:file name="EPUB/package.opf"/>
+					<c:file name="EPUB/nav.xhtml"/>
+					<c:file name="EPUB/nav.ncx"/>
+					<c:file name="EPUB/C00000-9-footnotes.xhtml"/>
+					<c:file name="EPUB/C00000-5-chapter.xhtml"/>
+					<c:file name="EPUB/C00000-6-rearnotes.xhtml"/>
+					<c:file name="EPUB/C00000-7-chapter.xhtml"/>
+					<c:file name="EPUB/C00000-8-conclusion.xhtml"/>
+					<c:file name="EPUB/C00000-4-chapter.xhtml"/>
+					<c:file name="EPUB/C00000-2-frontmatter.xhtml"/>
+					<c:file name="EPUB/C00000-3-chapter.xhtml"/>
+					<c:file name="EPUB/css/accessibility.css"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/LICENSE.txt"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
+					<c:file name="EPUB/images/valentin.jpg"/>
+					<c:file name="META-INF/container.xml"/>
+					<c:file name="EPUB/C00000-1-cover_braille.xhtml"/>
+					<c:file name="EPUB/C00000-2-frontmatter_braille.xhtml"/>
+					<c:file name="EPUB/C00000-3-chapter_braille.xhtml"/>
+					<c:file name="EPUB/C00000-4-chapter_braille.xhtml"/>
+					<c:file name="EPUB/C00000-5-chapter_braille.xhtml"/>
+					<c:file name="EPUB/C00000-6-rearnotes_braille.xhtml"/>
+					<c:file name="EPUB/C00000-7-chapter_braille.xhtml"/>
+					<c:file name="EPUB/C00000-8-conclusion_braille.xhtml"/>
+					<c:file name="EPUB/C00000-9-footnotes_braille.xhtml"/>
+					<c:file name="EPUB/nav_braille.xhtml"/>
+					<c:file name="EPUB/C00000-1-cover_braille.css"/>
+					<c:file name="EPUB/C00000-2-frontmatter_braille.css"/>
+					<c:file name="EPUB/C00000-3-chapter_braille.css"/>
+					<c:file name="EPUB/C00000-4-chapter_braille.css"/>
+					<c:file name="EPUB/C00000-5-chapter_braille.css"/>
+					<c:file name="EPUB/C00000-6-rearnotes_braille.css"/>
+					<c:file name="EPUB/C00000-7-chapter_braille.css"/>
+					<c:file name="EPUB/C00000-8-conclusion_braille.css"/>
+					<c:file name="EPUB/C00000-9-footnotes_braille.css"/>
+					<c:file name="EPUB/nav_braille.css"/>
+					<c:file name="META-INF/metadata.xml"/>
+					<c:file name="EPUB/package-braille.opf"/>
+					<c:file name="EPUB/renditionMapping.html"/>
+				</c:zipfile>
+			</x:document>
+		</x:expect>
+		
+		<x:context label="The container document">
+			<x:document type="file" base-uri="temp-dir" href="valentin/valentin.epub!/META-INF/container.xml"/>
+		</x:context>
+		<x:expect label="The container document" type="compare">
+			<x:document type="inline">
+				<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+					<rootfiles>
+						<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+						<rootfile full-path="EPUB/package-braille.opf" media-type="application/oebps-package+xml"
+								  rendition:accessMode="tactile" rendition:label="Pre-translated to braille"
+								  rendition:language="en-Brai" rendition:layout="reflowable"/>
+					</rootfiles>
+					<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+				</container>
+			</x:document>
+		</x:expect>
+		
+		<x:context label="The package document of the braille rendition">
+			<x:document type="file" base-uri="temp-dir" href="valentin/valentin.epub!/EPUB/package-braille.opf"/>
+		</x:context>
+		<x:expect label="dc:language should be 'en-Brai'" type="xpath" test="/opf:package/opf:metadata/dc:language/string()"
+		          equals="'en-Brai'"/>
+		
+		<x:context label="The braille version of the XHTML cover document">
+			<x:document type="file" base-uri="temp-dir" href="valentin/valentin.epub!/EPUB/C00000-1-cover_braille.xhtml"/>
+		</x:context>
+		<x:expect label="The name of the root element should be html" type="xpath" test="/*/local-name()" equals="'html'"/>
+		<x:expect label="The namespace of the root element should be http://www.w3.org/1999/xhtml" type="xpath" test="/*/namespace-uri()" equals="'http://www.w3.org/1999/xhtml'"/>
+		<x:expect label="The translated title" type="xpath" test="/html:html/html:head/html:title/string(.)"
+		          equals="'⠠⠧⠁⠇⠢⠞⠔ ⠠⠓⠁⠘⠒⠥⠽ ⠤ ⠮ ⠐⠋ ⠷ ⠮ ⠫⠥⠉⠁⠰⠝ ⠿ ⠮ ⠃⠇'"/>
+	</x:scenario>
+	
+</x:description>

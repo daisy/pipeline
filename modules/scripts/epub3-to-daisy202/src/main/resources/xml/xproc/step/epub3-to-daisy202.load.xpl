@@ -6,15 +6,11 @@
                 exclude-inline-prefixes="#all"
                 name="main">
     
-    <!--
-        This step should be moved to pipeline-scripts-utils (as px:epub3-load)
-    -->
-    
     <p:output port="fileset.out" primary="true">
-        <p:pipe step="validate" port="fileset.out"/>
+        <p:pipe step="fileset" port="result"/>
     </p:output>
     <p:output port="in-memory.out" sequence="true">
-        <p:pipe step="validate" port="in-memory.out"/>
+        <p:pipe step="load" port="result.in-memory"/>
     </p:output>
     <p:output port="validation-report" sequence="true" px:media-type="application/vnd.pipeline.report+xml">
         <p:pipe step="validate" port="report"/>
@@ -27,81 +23,38 @@
     <p:option name="temp-dir" required="true"/>
     <p:option name="validation" required="true"/> <!-- off | report | abort -->
     
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-validator/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl">
+        <p:documentation>
+            px:epub3-load
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-validator/library.xpl">
+        <p:documentation>
+            px:epub3-validator
+        </p:documentation>
+    </p:import>
     
-    <p:choose name="load">
-        <p:when test="ends-with(lower-case($epub),'.epub')">
-            <p:output port="fileset.out" primary="true">
-                <p:pipe step="mediatype" port="result"/>
-            </p:output>
-            <p:output port="in-memory.out" sequence="true">
-                <p:pipe step="load.fileset" port="result"/>
-            </p:output>
-            <px:fileset-unzip store-to-disk="true" name="unzip">
-                <p:with-option name="href" select="$epub"/>
-                <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
-            </px:fileset-unzip>
-            <p:sink/>
-            <px:mediatype-detect name="mediatype">
-                <p:input port="source">
-                    <p:pipe step="unzip" port="fileset"/>
-                </p:input>
-            </px:mediatype-detect>
-            <px:fileset-load name="load.fileset">
-                <p:input port="in-memory">
-                    <p:empty/>
-                </p:input>
-            </px:fileset-load>
-        </p:when>
-        <p:otherwise>
-            <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="load.fileset"/>
-            </p:output>
-            <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="result" step="opf"/>
-            </p:output>
-            <px:fileset-create>
-                <p:with-option name="base" select="replace($epub,'(.*/)([^/]*)','$1')"/>
-            </px:fileset-create>
-            <px:fileset-add-entry media-type="application/oebps-package+xml">
-                <p:with-option name="href" select="replace($epub,'(.*/)([^/]*)','$2')"/>
-                <p:with-option name="original-href" select="$epub"/>
-            </px:fileset-add-entry>
-            <px:mediatype-detect/>
-            <px:fileset-load>
-                <p:input port="in-memory">
-                    <p:empty/>
-                </p:input>
-            </px:fileset-load>
-            <p:identity name="opf"/>
-            <p:xslt>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/opf-manifest-to-fileset.xsl"/>
-                </p:input>
-            </p:xslt>
-            <!--
-                FIXME: px:fileset-move should take care of this, but doesn't seem to work
-            -->
-            <p:label-elements match="d:file" attribute="original-href" label="@href"/>
-            <p:identity name="load.fileset"/>
-        </p:otherwise>
-    </p:choose>
+    <!--
+        setting store-to-disk="true" is currently more memory efficient
+    -->
+    <px:epub3-load name="load" store-to-disk="true">
+        <p:with-option name="href" select="$epub"/>
+        <p:with-option name="temp-dir" select="$temp-dir"/>
+    </px:epub3-load>
+    
+    <!--
+        FIXME: px:fileset-move, which we use later in this conversion, for some reason doesn't add
+        original-href attributes, so we do it here already.
+    -->
+    <p:label-elements match="d:file" attribute="original-href" label="resolve-uri(@href,base-uri(.))" name="fileset"/>
     
     <p:choose name="validate">
         <p:when test="$validation='off'">
-            <p:output port="fileset.out">
-                <p:pipe step="load" port="fileset.out"/>
-            </p:output>
-            <p:output port="in-memory.out" sequence="true">
-                <p:pipe step="load" port="in-memory.out"/>
-            </p:output>
             <p:output port="report" sequence="true">
                 <p:empty/>
             </p:output>
@@ -117,12 +70,6 @@
             </p:sink>
         </p:when>
         <p:otherwise>
-            <p:output port="fileset.out">
-                <p:pipe step="load" port="fileset.out"/>
-            </p:output>
-            <p:output port="in-memory.out" sequence="true">
-                <p:pipe step="load" port="in-memory.out"/>
-            </p:output>
             <p:output port="report" sequence="true">
                 <p:pipe step="status-and-report" port="report"/>
             </p:output>
@@ -130,9 +77,11 @@
                 <p:pipe step="status-and-report" port="status"/>
             </p:output>
             <px:epub3-validator name="epub3-validator">
-                <p:with-option name="epub" select="/d:fileset/d:file[@media-type='application/oebps-package+xml']
-                                                   /resolve-uri((@original-href,@href)[1], base-uri(.))">
-                    <p:pipe step="load" port="fileset.out"/>
+                <!--
+                    epub option must point to a file that exists on disk (and may not be a file inside a ZIP)
+                -->
+                <p:with-option name="epub" select="$epub">
+                    <p:pipe step="load" port="result.fileset"/>
                 </p:with-option>
             </px:epub3-validator>
             <p:identity>

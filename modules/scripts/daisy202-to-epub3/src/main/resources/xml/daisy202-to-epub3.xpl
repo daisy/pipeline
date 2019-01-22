@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml"
-    px:input-filesets="daisy202"
-    px:output-filesets="epub3"
-    type="px:daisy202-to-epub3" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                px:input-filesets="daisy202"
+                px:output-filesets="epub3"
+                type="px:daisy202-to-epub3.script">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DAISY 2.02 to EPUB 3</h1>
@@ -99,14 +103,14 @@
     </px:daisy202-load>
 
     <!-- convert -->
-    <px:daisy202-to-epub3-convert name="convert">
+    <px:daisy202-to-epub3 name="convert">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
         <p:with-option name="output-dir" select="$tempDir"/>
         <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
         <p:with-option name="mediaoverlay" select="$mediaoverlay"/>
-    </px:daisy202-to-epub3-convert>
+    </px:daisy202-to-epub3>
     
     <!-- decide filename -->
     <px:fileset-load media-types="application/oebps-package+xml">

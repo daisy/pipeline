@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               script="../../main/resources/xml/convert.xpl">
+
+	<x:scenario label="tts">
+		<x:call step="px:dtbook-to-epub3">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/minimal.xml" media-type="application/x-dtbook+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+			<x:input port="tts-config">
+				<x:document type="inline">
+					<config>
+						<css>
+							h1 {
+								voice-family: female;
+							}
+							p {
+								voice-family: male;
+							}
+						</css>
+						<voice engine="mock-tts" name="alex" lang="en" gender="male-adult"/>
+						<voice engine="mock-tts" name="vicki" lang="en" gender="female-adult"/>
+						<!-- <property key="log" value="true"/> -->
+					</config>
+				</x:document>
+			</x:input>
+			<x:option name="language" select="''"/>
+			<x:option name="assert-valid" select="true()"/>
+			<x:option name="audio" select="true()"/>
+			<x:option name="output-name" select="'minimal'"/>
+			<x:option name="output-dir" select="resolve-uri('result/')"/>
+			<x:option name="temp-dir" select="$temp-dir"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline" base-uri="temp-dir">
+				<d:fileset>
+					<d:file href="epub3/out/epub/EPUB/minimal-1.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/minimal-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0000_00_000.mp3" original-href="epub3/temp/audio/part0000_00_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0000_01_000.mp3" original-href="epub3/temp/audio/part0000_01_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0000_02_000.mp3" original-href="epub3/temp/audio/part0000_02_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0000_03_000.mp3" original-href="epub3/temp/audio/part0000_03_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0000_04_000.mp3" original-href="epub3/temp/audio/part0000_04_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0001_00_000.mp3" original-href="epub3/temp/audio/part0001_00_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0001_01_000.mp3" original-href="epub3/temp/audio/part0001_01_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0002_00_000.mp3" original-href="epub3/temp/audio/part0002_00_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0002_01_000.mp3" original-href="epub3/temp/audio/part0002_01_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0003_00_000.mp3" original-href="epub3/temp/audio/part0003_00_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml"/>
+					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml"/>
+					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml"/>
+					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="epub3/out/epub/META-INF/container.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<!--
+		    enable this to check that the config works, i.e. that the voice is Dutch and not the default (English)
+		    (requires mpg123 to be installed)
+		-->
+		<x:expect pending="true"
+		          label="both male and female voices should have be used" type="custom" href="play-audio.xpl" step="x:play-audio"/>
+		<x:context label="the package document">
+			<x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(),'package.opf')]"/>
+		</x:context>
+		<x:expect label="the base uri of the package document" type="xpath" test="base-uri(/)"
+		          equals="resolve-uri('epub3/out/epub/EPUB/package.opf',$temp-dir)"/>
+		<x:expect label="the title of the package document" type="xpath"
+		          test="/opf:package/opf:metadata/dc:title/string(.)" equals="'Minimal DTBook'"/>
+	</x:scenario>
+	
+</x:description>

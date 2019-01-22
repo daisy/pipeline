@@ -2,7 +2,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   
   <!-- scripts -->
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl" uri="../xml/xproc/html-to-pef.xpl" px:content-type="script" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl" uri="../xml/xproc/html-to-pef.xpl" px:content-type="script" px:id="html-to-pef" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
   
   <!-- other -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>

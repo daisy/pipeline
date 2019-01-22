@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
-    type="px:daisy3-to-daisy202" version="1.0" name="main">
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
+                type="px:daisy3-to-daisy202.script" version="1.0" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DAISY 3 to DAISY 2.02</h1>
@@ -69,12 +70,12 @@
     <!--=========================================================================-->
     <!-- RUN THE MAIN CONVERSION STEP                                            -->
     <!--=========================================================================-->
-    <px:daisy3-to-daisy202-convert name="convert">
+    <px:daisy3-to-daisy202 name="convert">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
         <p:with-option name="output-dir" select="$output-dir-checked"/>
-    </px:daisy3-to-daisy202-convert>
+    </px:daisy3-to-daisy202>
 
     <!--=========================================================================-->
     <!-- FINALIZE AND STORE THE CONTAINER                                        -->

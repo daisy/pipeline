@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    exclude-inline-prefixes="#all"
-    type="px:dtbook-to-odt.convert" name="main" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                exclude-inline-prefixes="#all"
+                type="px:dtbook-to-odt" name="main">
     
     <!-- WARNING! This converter doesn't produce valid OpenDocument Text as such.
        It relies on LibreOffice to do some fixing. Opening the ODT file in MS Word
@@ -15,7 +14,7 @@
        post-step, opening the ODT file in LibreOffice and saving it again as ODT.
     -->
     <p:input port="fileset.in" primary="true"/>
-    <p:input port="in-memory.in" sequence="false"/>
+    <p:input port="in-memory.in" sequence="true"/>
     <p:input port="meta" sequence="true"/>
     <p:input port="parameters" kind="parameter"/>
     
@@ -50,27 +49,48 @@
     <p:option name="temp-dir" required="true"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/odt-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/asciimath-utils/library.xpl"/>
+    
+    <!-- =========== -->
+    <!-- LOAD DTBOOK -->
+    <!-- =========== -->
+    
+    <px:fileset-load media-types="application/x-dtbook+xml" name="dtbook">
+        <p:input port="in-memory">
+            <p:pipe step="main" port="in-memory.in"/>
+        </p:input>
+    </px:fileset-load>
     
     <!-- ============= -->
     <!-- LOAD TEMPLATE -->
     <!-- ============= -->
     
-    <p:variable name="save-dir" select="resolve-uri(concat(replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1'), '.odt/'), $temp-dir)">
-        <p:pipe step="main" port="in-memory.in"/>
-    </p:variable>
-    <p:variable name="template-copy" select="resolve-uri(replace($template, '^.*/([^/]+)$','$1'), $temp-dir)"/>
-    
-    <px:copy-resource>
-        <p:with-option name="href" select="$template"/>
-        <p:with-option name="target" select="$template-copy"/>
-    </px:copy-resource>
-    
-    <odt:load name="template">
-        <p:with-option name="href" select="string(/c:result)"/>
-        <p:with-option name="target" select="$save-dir"/>
-    </odt:load>
+    <p:identity>
+        <p:input port="source">
+            <p:pipe step="main" port="fileset.in"/>
+        </p:input>
+    </p:identity>
+    <p:group name="template">
+        <p:output port="fileset.out" primary="true"/>
+        <p:output port="in-memory.out" sequence="true">
+            <p:pipe step="load-template" port="in-memory.out"/>
+        </p:output>
+        <p:variable name="save-dir"
+                    select="resolve-uri(concat(replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1'), '.odt/'), $temp-dir)">
+            <p:pipe step="dtbook" port="result"/>
+        </p:variable>
+        <p:variable name="template-copy" select="resolve-uri(replace($template, '^.*/([^/]+)$','$1'), $temp-dir)"/>
+        <px:copy-resource>
+            <p:with-option name="href" select="$template"/>
+            <p:with-option name="target" select="$template-copy"/>
+        </px:copy-resource>
+        <odt:load name="load-template">
+            <p:with-option name="href" select="string(/c:result)"/>
+            <p:with-option name="target" select="$save-dir"/>
+        </odt:load>
+    </p:group>
     <p:sink/>
     
     <odt:get-file href="content.xml" name="template-content">
@@ -109,7 +129,7 @@
     
     <p:identity>
         <p:input port="source">
-            <p:pipe step="main" port="in-memory.in"/>
+            <p:pipe step="dtbook" port="result"/>
         </p:input>
     </p:identity>
     <p:choose>
@@ -158,7 +178,7 @@
         <p:input port="source">
             <p:pipe step="template-styles" port="result"/>
             <p:pipe step="content.temp" port="result"/>
-            <p:pipe step="main" port="in-memory.in"/>
+            <p:pipe step="dtbook" port="result"/>
         </p:input>
         <p:input port="stylesheet">
             <p:document href="styles.xsl"/>
@@ -181,7 +201,7 @@
     <p:xslt name="meta">
         <p:input port="source">
             <p:pipe step="meta.temp" port="result"/>
-            <p:pipe step="main" port="in-memory.in"/>
+            <p:pipe step="dtbook" port="result"/>
         </p:input>
         <p:input port="stylesheet">
             <p:document href="meta.xsl"/>
@@ -191,19 +211,19 @@
         </p:input>
     </p:xslt>
     
-    <odt:update-files name="update-files">
-        <p:input port="source">
+    <px:fileset-update name="update-files">
+        <p:input port="update">
             <p:pipe step="content" port="result"/>
             <p:pipe step="styles" port="result"/>
             <p:pipe step="meta" port="result"/>
         </p:input>
-        <p:input port="fileset.in">
+        <p:input port="source.fileset">
             <p:pipe step="template" port="fileset.out"/>
         </p:input>
-        <p:input port="in-memory.in">
+        <p:input port="source.in-memory">
             <p:pipe step="template" port="in-memory.out"/>
         </p:input>
-    </odt:update-files>
+    </px:fileset-update>
     
     <!-- ============ -->
     <!-- EMBED IMAGES -->
@@ -219,10 +239,10 @@
             </p:output>
             <odt:embed-images name="embed-images">
                 <p:input port="fileset.in">
-                    <p:pipe step="update-files" port="fileset.out"/>
+                    <p:pipe step="update-files" port="result.fileset"/>
                 </p:input>
                 <p:input port="in-memory.in">
-                    <p:pipe step="update-files" port="in-memory.out"/>
+                    <p:pipe step="update-files" port="result.in-memory"/>
                 </p:input>
                 <p:input port="original-fileset">
                     <p:pipe step="main" port="fileset.in"/>
@@ -231,10 +251,10 @@
         </p:when>
         <p:otherwise>
             <p:output port="fileset.out">
-                <p:pipe step="update-files" port="fileset.out"/>
+                <p:pipe step="update-files" port="result.fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe step="update-files" port="in-memory.out"/>
+                <p:pipe step="update-files" port="result.in-memory"/>
             </p:output>
             <p:sink>
                 <p:input port="source">

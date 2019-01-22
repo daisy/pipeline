@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-to-daisy3" type="px:dtbook-to-daisy3"
-    px:input-filesets="dtbook"
-    px:output-filesets="daisy3 mp3"
-		xmlns:p="http://www.w3.org/ns/xproc"
-		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-		xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:cx="http://xmlcalabash.com/ns/extensions"
-		exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                type="px:dtbook-to-daisy3.script" name="main"
+                px:input-filesets="dtbook"
+                px:output-filesets="daisy3 mp3"
+                exclude-inline-prefixes="#all">
 
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
     <h1 px:role="name">DTBook to DAISY 3</h1>
@@ -17,11 +18,10 @@
     </a>
   </p:documentation>
 
-  <p:input port="source" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">
+  <p:input port="source" primary="true" px:media-type="application/x-dtbook+xml">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">DTBook file(s)</h2>
-      <p px:role="desc">One or more 2005-3 DTBook files to be transformed. In
-      the case of multiple files, the first one will be taken.</p>
+      <h2 px:role="name">DTBook file</h2>
+      <p px:role="desc">The 2005-3 DTBook file to be transformed.</p>
     </p:documentation>
   </p:input>
 
@@ -78,106 +78,26 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
 
   <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl"/>
   <p:import href="dtbook-to-daisy3.convert.xpl"/>
 
-  <p:split-sequence name="first-dtbook" test="position()=1" initial-only="true"/>
-  <p:sink/>
-  <p:xslt name="output-dir-uri">
-    <p:with-param name="href" select="concat($output-dir,'/')"/>
-    <p:input port="source">
-      <p:inline>
-	<d:file/>
-      </p:inline>
-    </p:input>
-    <p:input port="stylesheet">
-      <p:inline>
-	<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" version="2.0">
-	  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-	  <xsl:param name="href" required="yes"/>
-	  <xsl:template match="/*">
-	    <xsl:copy>
-	      <xsl:attribute name="href" select="pf:normalize-uri($href)"/>
-	    </xsl:copy>
-	  </xsl:template>
-	</xsl:stylesheet>
-      </p:inline>
-    </p:input>
-  </p:xslt>
-  <p:sink/>
+  <px:normalize-uri name="output-dir-uri">
+    <p:with-option name="href" select="concat($output-dir,'/')"/>
+  </px:normalize-uri>
+  
+  <px:dtbook-load name="load"/>
 
-  <px:dtbook-load name="load">
-    <p:input port="source">
-      <p:pipe port="source" step="dtbook-to-daisy3"/>
-    </p:input>
-  </px:dtbook-load>
-
-  <!-- Add the CSS stylesheets to the fileset -->
-  <px:fileset-create name="empty-fileset">
-    <p:with-option name="base" select="base-uri(/*)">
-      <p:pipe port="fileset.out" step="load"/>
-    </p:with-option>
-  </px:fileset-create>
-  <p:try>
-    <p:group>
-      <p:output port="result"/>
-      <p:variable name="fileset-base" select="base-uri(/*)">
-	<p:pipe port="fileset.out" step="load"/>
-      </p:variable>
-      <p:xslt name="get-css">
-	<p:with-param name="xhtml-link" select="'true'"/>
-	<p:input port="source">
-	  <p:pipe port="matched" step="first-dtbook"/>
-	</p:input>
-	<p:input port="stylesheet">
-	  <p:document href="http://www.daisy.org/pipeline/modules/css-utils/xml-to-css-uris.xsl"/>
-	</p:input>
-      </p:xslt>
-      <p:viewport match="//*[@href]">
-	<p:add-attribute attribute-name="original-href" match="/*">
-	  <p:with-option name="attribute-value" select="resolve-uri(/*/@href, $fileset-base)"/>
-	</p:add-attribute>
-      </p:viewport>
-    </p:group>
-    <p:catch>
-      <p:output port="result"/>
-      <px:message message="CSS stylesheet URI(s) are malformed." severity="WARNING"/>
-      <p:identity>
-	<p:input port="source">
-	  <p:empty/>
-	</p:input>
-      </p:identity>
-    </p:catch>
-  </p:try>
-  <p:for-each name="css-entries">
-    <p:output port="result"/>
-    <p:iteration-source select="//*[@original-href]"/>
-    <px:fileset-add-entry media-type="text/css">
-      <p:input port="source">
-	<p:pipe port="result" step="empty-fileset"/>
-      </p:input>
-      <p:with-option name="original-href" select="/*/@original-href"/>
-      <p:with-option name="href" select="/*/@original-href"/>
-    </px:fileset-add-entry>
-  </p:for-each>
-  <px:fileset-join name="fileset.with-css">
-    <p:input port="source">
-      <p:pipe port="result" step="css-entries"/>
-      <p:pipe port="fileset.out" step="load"/>
-    </p:input>
-  </px:fileset-join>
-
-  <p:choose name="loaded-tts-config">
+  <p:choose name="tts-config">
     <p:when test="$tts-config != ''">
-      <p:output port="result" primary="true"/>
+      <p:output port="result"/>
       <p:load>
 	<p:with-option name="href" select="$tts-config"/>
       </p:load>
     </p:when>
     <p:otherwise>
-      <p:output port="result" primary="true">
+      <p:output port="result">
 	<p:inline>
 	  <d:config/>
 	</p:inline>
@@ -186,52 +106,23 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
     </p:otherwise>
   </p:choose>
 
-  <p:choose name="css-inlining">
-    <p:xpath-context>
-      <p:empty/>
-    </p:xpath-context>
-    <p:when test="$audio = 'true'">
-      <p:output port="result" primary="true"/>
-      <px:inline-css-speech>
-	<p:input port="source">
-	  <p:pipe port="matched" step="first-dtbook"/>
-	</p:input>
-	<p:input port="fileset.in">
-	  <p:pipe port="fileset.out" step="load"/>
-	</p:input>
-	<p:input port="config">
-	  <p:pipe port="result" step="loaded-tts-config"/>
-	</p:input>
-	<p:with-option name="content-type" select="'application/x-dtbook+xml'"/>
-      </px:inline-css-speech>
-    </p:when>
-    <p:otherwise>
-      <p:output port="result" primary="true"/>
-      <p:identity>
-	<p:input port="source">
-	  <p:pipe port="matched" step="first-dtbook"/>
-	</p:input>
-      </p:identity>
-    </p:otherwise>
-  </p:choose>
-
-  <px:dtbook-to-daisy3-convert name="convert">
-    <p:input port="in-memory.in">
-      <p:pipe port="result" step="css-inlining"/>
-    </p:input>
+  <px:dtbook-to-daisy3 name="convert">
     <p:input port="fileset.in">
-      <p:pipe port="result" step="fileset.with-css"/>
+      <p:pipe step="load" port="fileset.out"/>
     </p:input>
-    <p:input port="config">
-      <p:pipe port="result" step="loaded-tts-config"/>
+    <p:input port="in-memory.in">
+      <p:pipe step="load" port="in-memory.out"/>
+    </p:input>
+    <p:input port="tts-config">
+      <p:pipe step="tts-config" port="result"/>
     </p:input>
     <p:with-option name="publisher" select="$publisher"/>
-    <p:with-option name="output-fileset-base" select="/*/@href">
-      <p:pipe port="result" step="output-dir-uri"/>
+    <p:with-option name="output-fileset-base" select="/c:result/string()">
+      <p:pipe step="output-dir-uri" port="normalized"/>
     </p:with-option>
     <p:with-option name="audio" select="$audio"/>
     <p:with-option name="audio-only" select="$with-text = 'false'"/>
-  </px:dtbook-to-daisy3-convert>
+  </px:dtbook-to-daisy3>
 
   <px:fileset-store name="store">
     <p:input port="fileset.in">
@@ -241,9 +132,11 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
       <p:pipe port="in-memory.out" step="convert"/>
     </p:input>
   </px:fileset-store>
+
   <px:rm-audio-files cx:depends-on="store">
     <p:input port="source">
       <p:pipe port="audio-map" step="convert"/>
     </p:input>
   </px:rm-audio-files>
+
 </p:declare-step>

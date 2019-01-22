@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    px:input-filesets="zedai"
-    px:output-filesets="html"
-    type="px:zedai-to-html" name="main" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                px:input-filesets="zedai"
+                px:output-filesets="html"
+                type="px:zedai-to-html.script" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">ZedAI to HTML</h1>
@@ -28,37 +30,20 @@
     </p:option>
 
     <p:import href="zedai-to-html.convert.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     
     <p:variable name="input-uri" select="base-uri(/)"/>
     
-    <p:xslt name="output-dir-uri">
-        <p:with-param name="href" select="concat($output-dir,'/')"/>
-        <p:input port="source">
-            <p:inline>
-                <d:file/>
-            </p:inline>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:inline>
-                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" version="2.0">
-                    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-                    <xsl:param name="href" required="yes"/>
-                    <xsl:template match="/*">
-                        <xsl:copy>
-                            <xsl:attribute name="href" select="pf:normalize-uri($href)"/>
-                        </xsl:copy>
-                    </xsl:template>
-                </xsl:stylesheet>
-            </p:inline>
-        </p:input>
-    </p:xslt>
+    <px:normalize-uri name="output-dir-uri">
+        <p:with-option name="href" select="concat($output-dir,'/')"/>
+    </px:normalize-uri>
     <p:sink/>
 
     <p:group>
-        <p:variable name="output-dir-uri" select="/*/@href">
-            <p:pipe port="result" step="output-dir-uri"/>
+        <p:variable name="output-dir-uri" select="/c:result/string()">
+            <p:pipe step="output-dir-uri" port="normalized"/>
         </p:variable>
 
         <px:zedai-load name="load">
@@ -67,12 +52,12 @@
             </p:input>
         </px:zedai-load>
 
-        <px:zedai-to-html-convert name="convert">
+        <px:zedai-to-html name="convert">
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory.out" step="load"/>
             </p:input>
             <p:with-option name="output-dir" select="$output-dir-uri"/>
-        </px:zedai-to-html-convert>
+        </px:zedai-to-html>
 
         <px:fileset-store name="store">
             <p:input port="in-memory.in">

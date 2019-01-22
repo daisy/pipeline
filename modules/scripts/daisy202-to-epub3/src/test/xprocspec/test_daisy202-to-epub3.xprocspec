@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/convert/convert.xpl">
+
+    <x:scenario label="Running with media overlays and compatibility mode enabled">
+        <x:call step="px:daisy202-to-epub3">
+            <x:input port="fileset.in">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="../resources/input/book1/ncc.html" media-type="application/xhtml+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0001.smil" media-type="application/smil+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0002.smil" media-type="application/smil+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0003.smil" media-type="application/smil+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0004.smil" media-type="application/smil+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0005.smil" media-type="application/smil+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0006.smil" media-type="application/smil+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0007.smil" media-type="application/smil+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0001.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../resources/input/book1/content.html" media-type="application/xhtml+xml"/>
+                        <d:file href="../resources/input/book1/speechgen0002.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../resources/input/book1/speechgen0007.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../resources/input/book1/speechgen0003.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../resources/input/book1/speechgen0004.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../resources/input/book1/speechgen0005.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../resources/input/book1/speechgen0006.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../resources/input/book1/default.css" media-type="text/css"  kind="stylesheet"
+                                original-href="../resources/input/book1/default.css"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in"/>
+            <x:option name="compatibility-mode" select="true()"/>
+            <x:option name="mediaoverlay" select="true()"/>
+            <x:option name="output-dir" select="resolve-uri('result/')"/>
+        </x:call>
+        <x:context label="the output fileset">
+            <x:document type="port" port="fileset.out"/>
+        </x:context>
+        <x:expect label="the output fileset"
+                  type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="result/epub/EPUB/Content/default.css" kind="stylesheet" original-href="../resources/input/book1/default.css" media-type="text/css"/>
+                    <d:file href="result/epub/EPUB/Content/speechgen0001.mp3" original-href="../resources/input/book1/speechgen0001.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/epub/EPUB/Content/speechgen0002.mp3" original-href="../resources/input/book1/speechgen0002.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/epub/EPUB/Content/speechgen0007.mp3" original-href="../resources/input/book1/speechgen0007.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/epub/EPUB/Content/speechgen0003.mp3" original-href="../resources/input/book1/speechgen0003.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/epub/EPUB/Content/speechgen0004.mp3" original-href="../resources/input/book1/speechgen0004.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/epub/EPUB/Content/speechgen0005.mp3" original-href="../resources/input/book1/speechgen0005.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/epub/EPUB/Content/speechgen0006.mp3" original-href="../resources/input/book1/speechgen0006.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/epub/EPUB/Content/ncc.xhtml" original-href="../resources/input/book1/ncc.html" media-type="application/xhtml+xml"/>
+                    <d:file href="result/epub/EPUB/Content/ncx.xml" media-type="application/x-dtbncx+xml"/>
+                    <d:file href="result/epub/EPUB/Content/.xhtml" original-href="../resources/input/book1/content.html" media-type="application/xhtml+xml"/>
+                    <d:file href="result/epub/EPUB/Content/.smil" original-href="result/epub/EPUB/Content/.smil" media-type="application/smil+xml"/>
+                    <d:file href="result/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                    <d:file href="result/epub/META-INF/container.xml"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+        <x:context label="the package.opf file">
+            <x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/epub/EPUB/package.opf')]"/>
+        </x:context>
+        <x:expect label="the OPF 2.0 meta elements should be present"
+                  type="xpath"
+                  test="count(/*/*[local-name()='metadata']/*[namespace-uri()='http://www.idpf.org/2007/opf'
+                                                              and local-name()='meta'
+                                                              and (@name or @content)]) &gt; 0"/>
+        <x:context label="the container file">
+            <x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/epub/META-INF/container.xml')]"/>
+        </x:context>
+        <x:expect label="the container file" type="compare">
+            <x:document type="inline">
+                <container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+                    <rootfiles>
+                        <rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                    </rootfiles>
+                </container>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

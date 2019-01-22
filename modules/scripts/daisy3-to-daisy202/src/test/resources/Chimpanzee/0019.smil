@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	<head>
+		<meta
+			name="dtb:uid"
+			content="ghBOOK1211212736" />
+		<meta
+			name="dtb:generator"
+			content="Obi and the Urakawa SDK: the open-source DAISY multimedia authoring toolkit" />
+		<meta
+			name="dtb:totalElapsedTime"
+			content="00:10:54.1858958" />
+	</head>
+	<body>
+		<seq
+			id="sm_209"
+			dur="00:01:21.3030159"
+			fill="remove">
+			<par
+				id="sm_210">
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.0690023"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_211">
+				<audio
+					clipBegin="00:00:02.0690023"
+					clipEnd="00:00:06.6110204"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_212">
+				<audio
+					clipBegin="00:00:06.6110204"
+					clipEnd="00:00:10.9460091"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_213">
+				<audio
+					clipBegin="00:00:10.9460091"
+					clipEnd="00:00:15.0090023"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_214">
+				<audio
+					clipBegin="00:00:15.0090023"
+					clipEnd="00:00:18.2730159"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_215">
+				<audio
+					clipBegin="00:00:18.2730159"
+					clipEnd="00:00:21.3700000"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_216">
+				<audio
+					clipBegin="00:00:21.3700000"
+					clipEnd="00:00:24.9120181"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_217">
+				<audio
+					clipBegin="00:00:24.9120181"
+					clipEnd="00:00:29.7280045"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_218">
+				<audio
+					clipBegin="00:00:29.7280045"
+					clipEnd="00:00:34.4420181"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_219">
+				<audio
+					clipBegin="00:00:34.4420181"
+					clipEnd="00:00:37.5730159"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_220">
+				<audio
+					clipBegin="00:00:37.5730159"
+					clipEnd="00:00:40.8870068"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_221">
+				<audio
+					clipBegin="00:00:40.8870068"
+					clipEnd="00:00:45.6160091"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_222">
+				<audio
+					clipBegin="00:00:45.6160091"
+					clipEnd="00:00:48.8980045"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_223">
+				<audio
+					clipBegin="00:00:48.8980045"
+					clipEnd="00:00:51.8680045"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_224">
+				<audio
+					clipBegin="00:00:51.8680045"
+					clipEnd="00:00:55.1140136"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_225">
+				<audio
+					clipBegin="00:00:55.1140136"
+					clipEnd="00:00:58.2060091"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_226">
+				<audio
+					clipBegin="00:00:58.2060091"
+					clipEnd="00:01:01.4830159"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_227">
+				<audio
+					clipBegin="00:01:01.4830159"
+					clipEnd="00:01:06.2330159"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_228">
+				<audio
+					clipBegin="00:01:06.2330159"
+					clipEnd="00:01:09.5730159"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_229">
+				<audio
+					clipBegin="00:01:09.5730159"
+					clipEnd="00:01:13.4380045"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_230">
+				<audio
+					clipBegin="00:01:13.4380045"
+					clipEnd="00:01:18.4210204"
+					src="aud019.mp3" />
+			</par>
+			<par
+				id="sm_231">
+				<audio
+					clipBegin="00:01:18.4210204"
+					clipEnd="00:01:21.3030159"
+					src="aud019.mp3" />
+			</par>
+		</seq>
+	</body>
+</smil>

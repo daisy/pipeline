@@ -29,7 +29,8 @@ import org.osgi.service.component.ComponentContext;
 
 public class MockTTS implements TTSService {
 	
-	final static File waveOut = new File(PathUtils.getBaseDir(), "src/test/resources/mock-tts/mock.wav");
+	final static File alexWaveOut = new File(PathUtils.getBaseDir(), "src/test/resources/mock-tts/alex.wav");
+	final static File vickiWaveOut = new File(PathUtils.getBaseDir(), "src/test/resources/mock-tts/vicki.wav");
 	URL ssmlTransformer;
 	
 	protected void activate(ComponentContext context) {
@@ -49,7 +50,9 @@ public class MockTTS implements TTSService {
 					throws SynthesisException, InterruptedException, MemoryException {
 				try {
 					Collection<AudioBuffer> result = new ArrayList<AudioBuffer>();
-					BufferedInputStream in = new BufferedInputStream(new FileInputStream(MockTTS.waveOut));
+					BufferedInputStream in = new BufferedInputStream(
+						new FileInputStream(
+							voice.name.equals("alex") ? MockTTS.alexWaveOut : MockTTS.vickiWaveOut));
 					AudioInputStream fi = AudioSystem.getAudioInputStream(in);
 					if (audioFormat == null)
 						audioFormat = fi.getFormat();
@@ -75,7 +78,8 @@ public class MockTTS implements TTSService {
 			@Override
 			public Collection<Voice> getAvailableVoices() throws SynthesisException, InterruptedException {
 				List<Voice> voices = new ArrayList<Voice>();
-				voices.add(new Voice(getProvider().getName(), "mock"));
+				voices.add(new Voice(getProvider().getName(), "alex"));
+				voices.add(new Voice(getProvider().getName(), "vicki"));
 				return voices;
 			}
 			

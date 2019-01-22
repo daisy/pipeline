@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl">
+  
+  <x:scenario label="alice.xhtml with default.css">
+    <x:call step="px:html-to-pef.script">
+      <x:option name="html" select="resolve-uri('../resources/alice.xhtml')"/>
+      <x:option name="include-preview" select="'true'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'alice/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'alice/temp-dir/')"/>
+    </x:call>
+    <x:context label="the output directory contents">
+      <x:document type="directory" base-uri="temp-dir" href="alice/output-dir/"/>
+    </x:context>
+    <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath"
+              test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+  </x:scenario>
+  
+  <x:scenario label="reset.css">
+    <x:call step="px:html-to-pef.script">
+      <x:option name="html" select="resolve-uri('../resources/reset-test.html')"/>
+      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'alice_reset/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'alice_reset/temp-dir/')"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="alice_reset/output-dir/reset-test.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:title>foobar</dc:title>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume rows="25" cols="40" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠋⠕⠕⠃⠜⠀⠋⠕⠕⠀⠃⠜</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="ascii-file-format">
+    <x:call step="px:html-to-pef.script">
+      <x:option name="include-brf" select="'true'"/>
+    </x:call>
+    <x:scenario label="ascii-file-format has priority over dc:language / xml:lang">
+      <x:call step="px:html-to-pef.script">
+        <x:option name="html" select="resolve-uri('../resources/test_ascii-table_1.xhtml')"/>
+        <x:option name="transform" select="'(grade:2)'"/>
+        <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+                                                    (line-breaks:DOS)
+                                                    (page-breaks:&quot;---&quot;)
+                                                    (pad:BOTH)'"/>
+        <x:option name="pef-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="brf-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('ascii-table/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="brf">
+        <x:document type="file" method="text" base-uri="temp-dir" href="ascii-table/output-dir/test_ascii-table_1_vol-1.brf"/>
+      </x:context>
+      <x:expect label="brf" type="compare" normalize-space="false">
+        <x:document type="file" method="text" href="../resources/test_ascii-table_1.brf"/>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="Table can be found by locale">
+      <x:call step="px:html-to-pef.script">
+        <x:option name="html" select="resolve-uri('../resources/test_ascii-table_2.xhtml')"/>
+        <x:option name="include-brf" select="'true'"/>
+        <x:option name="ascii-file-format" select="'(line-breaks:DOS)
+                                                    (page-breaks:&quot;---&quot;)
+                                                    (pad:BOTH)'"/>
+        <x:option name="pef-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="brf-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="brf">
+        <x:document type="file" method="text" base-uri="temp-dir" href="default-ascii-table/output-dir/test_ascii-table_2_vol-1.brf"/>
+      </x:context>
+      <x:expect label="brf" type="compare" normalize-space="false">
+        <x:document type="file" method="text" href="../resources/test_ascii-table_2.brf"/>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	<head>
+		<meta
+			name="dtb:uid"
+			content="ghBOOK1211212736" />
+		<meta
+			name="dtb:generator"
+			content="Obi and the Urakawa SDK: the open-source DAISY multimedia authoring toolkit" />
+		<meta
+			name="dtb:totalElapsedTime"
+			content="00:04:36.5779592" />
+		<customAttributes>
+			<customTest
+				defaultState="false"
+				id="pagenum"
+				override="visible" />
+		</customAttributes>
+	</head>
+	<body>
+		<seq
+			id="sm_91"
+			dur="00:00:17.4419955"
+			fill="remove">
+			<par
+				id="sm_92">
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.2109977"
+					src="aud007.mp3" />
+			</par>
+			<par
+				id="sm_93">
+				<audio
+					clipBegin="00:00:02.2109977"
+					clipEnd="00:00:06.3329932"
+					src="aud007.mp3" />
+			</par>
+			<par
+				id="sm_94">
+				<audio
+					clipBegin="00:00:06.3329932"
+					clipEnd="00:00:10.4690023"
+					src="aud007.mp3" />
+			</par>
+			<par
+				id="sm_95">
+				<audio
+					clipBegin="00:00:10.4690023"
+					clipEnd="00:00:15.2550113"
+					src="aud007.mp3" />
+			</par>
+			<seq
+				id="sm_96"
+				class="pagenum"
+				customTest="pagenum">
+				<par
+					id="sm_97">
+					<audio
+						clipBegin="00:00:15.2550113"
+						clipEnd="00:00:17.4419955"
+						src="aud007.mp3" />
+				</par>
+			</seq>
+		</seq>
+	</body>
+</smil>

@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	<head>
+		<meta
+			name="dtb:uid"
+			content="ghBOOK1211212736" />
+		<meta
+			name="dtb:generator"
+			content="Obi and the Urakawa SDK: the open-source DAISY multimedia authoring toolkit" />
+		<meta
+			name="dtb:totalElapsedTime"
+			content="00:09:05.1099095" />
+		<customAttributes>
+			<customTest
+				defaultState="false"
+				id="pagenum"
+				override="visible" />
+		</customAttributes>
+	</head>
+	<body>
+		<seq
+			id="sm_182"
+			dur="00:00:45.1609977"
+			fill="remove">
+			<par
+				id="sm_183">
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.2539909"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_184">
+				<audio
+					clipBegin="00:00:02.2539909"
+					clipEnd="00:00:07.0939909"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_185">
+				<audio
+					clipBegin="00:00:07.0939909"
+					clipEnd="00:00:12.7939909"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_186">
+				<audio
+					clipBegin="00:00:12.7939909"
+					clipEnd="00:00:17.6159864"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_187">
+				<audio
+					clipBegin="00:00:17.6159864"
+					clipEnd="00:00:21.1190023"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_188">
+				<audio
+					clipBegin="00:00:21.1190023"
+					clipEnd="00:00:26.1890023"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_189">
+				<audio
+					clipBegin="00:00:26.1890023"
+					clipEnd="00:00:30.1790023"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_190">
+				<audio
+					clipBegin="00:00:30.1790023"
+					clipEnd="00:00:35.8059864"
+					src="aud014.mp3" />
+			</par>
+			<par
+				id="sm_191">
+				<audio
+					clipBegin="00:00:35.8059864"
+					clipEnd="00:00:42.4200000"
+					src="aud014.mp3" />
+			</par>
+			<seq
+				id="sm_192"
+				class="pagenum"
+				customTest="pagenum">
+				<par
+					id="sm_193">
+					<audio
+						clipBegin="00:00:42.4200000"
+						clipEnd="00:00:45.1609977"
+						src="aud014.mp3" />
+				</par>
+			</seq>
+		</seq>
+	</body>
+</smil>

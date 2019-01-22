@@ -3,7 +3,7 @@
    <uri name="http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl"
       uri="../xml/xslt/zedai-to-html.xsl"/>
    <uri name="http://www.daisy.org/pipeline/modules/zedai-to-html/zedai-to-html.xpl"
-      uri="../xml/xproc/zedai-to-html.xpl" px:content-type="script"/>
+      uri="../xml/xproc/zedai-to-html.xpl" px:content-type="script" px:id="zedai-to-html"/>
    <uri name="http://www.daisy.org/pipeline/modules/zedai-to-html/library.xpl"
       uri="../xml/xproc/library.xpl"/>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
 
-   <uri name="http://www.daisy.org/pipeline/modules/epub3-validator/epub3-validator.xpl" uri="../xml/xproc/epub3-validator.xpl" px:content-type="script"/>
+   <uri name="http://www.daisy.org/pipeline/modules/epub3-validator/epub3-validator.xpl" uri="../xml/xproc/epub3-validator.xpl" px:content-type="script" px:id="epub3-validator"/>
    <uri name="http://www.daisy.org/pipeline/modules/epub3-validator/library.xpl" uri="../xml/xproc/library.xpl"/>
    
    <nextCatalog catalog="org:daisy:pipeline:modules:epubcheck-adapter"/>

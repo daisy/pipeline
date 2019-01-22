@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/convert.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:daisy3-to-epub3">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/input/mo0.smil" media-type="application/smil+xml"/>
+						<d:file href="../resources/input/minimal.xml" media-type="application/x-dtbook+xml"/>
+						<d:file href="../resources/input/navigation.ncx" media-type="application/x-dtbncx+xml"/>
+						<d:file href="../resources/input/30sec.mp3" media-type="audio/mpeg"/>
+						<d:file href="../resources/input/resources.res" media-type="application/x-dtbresource+xml"/>
+						<d:file href="../resources/input/book.opf" media-type="application/oebps-package+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+			<x:option name="mediaoverlays" select="true()"/>
+			<x:option name="assert-valid" select="false()"/>
+			<x:option name="temp-dir" select="resolve-uri('result/')"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/epub/EPUB/audio/30sec.mp3" media-type="audio/mpeg" original-href="../resources/input/30sec.mp3"/>
+					<d:file href="result/epub/EPUB/book-1.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/epub/EPUB/book-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/epub/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/epub/EPUB/mo/book-1.smil" media-type="application/smil+xml"/>
+					<d:file href="result/epub/EPUB/mo/book-2.smil" media-type="application/smil+xml"/>
+					<d:file href="result/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="result/epub/META-INF/container.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<!--
+		<x:context label="the result.in-memory port">
+			<x:document type="port" port="result.in-memory"/>
+		</x:context>
+		-->
+	</x:scenario>
+	
+</x:description>

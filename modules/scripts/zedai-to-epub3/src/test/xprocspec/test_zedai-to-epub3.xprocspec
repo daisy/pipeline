@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               script="../../main/resources/xml/xproc/zedai-to-epub3.convert.xpl">
+
+	<x:scenario label="alice">
+		<x:call step="px:zedai-to-epub3">
+			<x:input port="fileset.in">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/resources/images/alice01a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice02a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice03a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice04a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice05a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice06a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice07a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice08a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice10a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/images/alice09a.png" media-type="image/png"/>
+						<d:file href="../resources/resources/alice.xml" media-type="application/z3998-auth+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="in-memory.in">
+				<x:document type="file" href="../resources/resources/alice.xml"/>
+			</x:input>
+			<x:input port="tts-config">
+				<x:document type="inline">
+					<d:config/>
+				</x:document>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('temp-dir/')"/>
+		</x:call>
+		<x:context label="the fileset.out port">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the result.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="temp-dir/epub/EPUB/alice-1.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="temp-dir/epub/EPUB/alice-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="temp-dir/epub/EPUB/alice-3.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="temp-dir/epub/EPUB/alice-4.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="temp-dir/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="temp-dir/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="temp-dir/epub/META-INF/container.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the package document">
+			<x:document type="port" port="in-memory.out"
+			            select="/*[base-uri()=resolve-uri('temp-dir/epub/EPUB/package.opf',$test-base-uri)]"/>
+		</x:context>
+		<x:expect label="the package document" type="xpath"
+		          test="/opf:package/opf:metadata/dc:title/string(.)" equals='"Alice&apos;s Adventures In Wonderland"'/>
+	</x:scenario>
+	
+</x:description>

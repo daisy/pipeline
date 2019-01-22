@@ -26,6 +26,7 @@
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
     <p:for-each name="content-resources">
@@ -38,6 +39,8 @@
             <p:with-option name="attribute-value" select="$original-href"/>
         </p:add-attribute>
         <px:html-to-fileset/>
+        <!-- not using fileset-filter because we don't want to delete files references from iframes -->
+        <p:delete match="d:file[@media-type='application/xhtml+xml' and not(@kind='content')]"/>
         <px:message message="extracted list of resources from $1">
             <p:with-option name="param1" select="$original-href"/>
         </px:message>

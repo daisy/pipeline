@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:epub3-to-pef" version="1.0"
+<p:declare-step type="px:epub3-to-pef.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -107,6 +107,7 @@ even though the provided CSS is more specific.
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -149,6 +150,12 @@ even though the provided CSS is more specific.
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>
     </px:epub3-to-pef.load>
+    <px:fileset-load name="opf" media-types="application/oebps-package+xml">
+        <p:input port="in-memory">
+            <p:pipe step="load" port="in-memory.out"/>
+        </p:input>
+    </px:fileset-load>
+    <p:sink/>
     
     <!-- ============= -->
     <!-- EPUB 3 TO PEF -->
@@ -158,8 +165,8 @@ even though the provided CSS is more specific.
             <p:pipe port="fileset.out" step="load"/>
         </p:input>
     </p:identity>
-    <px:epub3-to-pef.convert name="convert" px:message="Converting from EPUB to PEF" px:progress=".90"
-                             default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css">
+    <px:epub3-to-pef name="convert" px:message="Converting from EPUB to PEF" px:progress=".90"
+                     default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
@@ -174,7 +181,7 @@ even though the provided CSS is more specific.
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
         </p:input>
-    </px:epub3-to-pef.convert>
+    </px:epub3-to-pef>
     <p:sink/>
     
     <!-- ========= -->
@@ -189,7 +196,7 @@ even though the provided CSS is more specific.
     <px:epub3-to-pef.store px:message="Storing PEF" px:progress=".05">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="opf">
-            <p:pipe step="load" port="opf"/>
+            <p:pipe step="opf" port="result"/>
         </p:input>
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>

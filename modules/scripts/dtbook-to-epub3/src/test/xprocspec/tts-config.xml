@@ -1,4 +1,4 @@
 <config>
-  <voice engine="mock-tts" name="mock" lang="en" gender="male-adult"/>
+  <voice engine="mock-tts" name="alex" lang="en" gender="male-adult"/>
   <!-- <property key="log" value="true"/> -->
 </config>

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" type="px:zedai-to-html-convert"
-    name="main" exclude-inline-prefixes="#all" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="px:zedai-to-html"
+                name="main"
+                exclude-inline-prefixes="#all">
 
     <p:documentation>
         Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3 publication.
@@ -32,82 +35,17 @@
 
     <p:documentation>Retreive the ZedAI document from the input fileset.</p:documentation>
     <p:group name="zedai-input">
-        <p:output port="result" primary="true">
-            <p:pipe port="result" step="zedai-input.for-each"/>
-        </p:output>
-        <p:variable name="fileset-base" select="base-uri(/*)"/>
-        <p:for-each name="zedai-input.for-each">
-            <p:iteration-source select="/*/*"/>
-            <p:output port="result" sequence="true"/>
-            <p:choose>
-                <p:when test="/*/@media-type = 'application/z3998-auth+xml'">
-                    <p:variable name="zedai-base" select="resolve-uri(/*/@href,$fileset-base)"/>
-                    <p:split-sequence name="zedai-input.for-each.split">
-                        <p:input port="source">
-                            <p:pipe port="in-memory.in" step="main"/>
-                        </p:input>
-                        <p:with-option name="test" select="concat('base-uri(/*) = &quot;',$zedai-base,'&quot;')"/>
-                    </p:split-sequence>
-                    <p:count/>
-                    <p:choose>
-                        <p:when test=". &gt; 0">
-                            <p:identity>
-                                <p:input port="source">
-                                    <p:pipe port="matched" step="zedai-input.for-each.split"/>
-                                </p:input>
-                            </p:identity>
-                        </p:when>
-                        <p:otherwise>
-                            <p:error xmlns:err="http://www.w3.org/ns/xproc-error" code="PEZE00">
-                                <!-- TODO: describe the error on the wiki and insert correct error code -->
-                                <p:input port="source">
-                                    <p:inline>
-                                        <message>Found ZedAI document in fileset but not in memory. Please load the ZedAI document into memory before converting it.</message>
-                                    </p:inline>
-                                </p:input>
-                            </p:error>
-                        </p:otherwise>
-                    </p:choose>
-                    <p:delete match="/*/@xml:base"/>
-                </p:when>
-                <p:otherwise>
-                    <p:identity>
-                        <p:input port="source">
-                            <p:empty/>
-                        </p:input>
-                    </p:identity>
-                </p:otherwise>
-            </p:choose>
-        </p:for-each>
-        <p:count/>
-        <p:choose>
-            <p:when test=". = 0">
-                <p:error xmlns:err="http://www.w3.org/ns/xproc-error" code="PEZE00">
-                    <!-- TODO: describe the error on the wiki and insert correct error code -->
-                    <p:input port="source">
-                        <p:inline>
-                            <message>No XML documents with the ZedAI media type ('application/z3998-auth+xml') found in the fileset.</message>
-                        </p:inline>
-                    </p:input>
-                </p:error>
-                <p:sink/>
-            </p:when>
-            <p:when test=". &gt; 1">
-                <p:error xmlns:err="http://www.w3.org/ns/xproc-error" code="PEZE00">
-                    <!-- TODO: describe the error on the wiki and insert correct error code -->
-                    <p:input port="source">
-                        <p:inline>
-                            <message>More than one XML document with the ZedAI media type ('application/z3998-auth+xml') found in the fileset; there can only
-                                be one ZedAI document.</message>
-                        </p:inline>
-                    </p:input>
-                </p:error>
-                <p:sink/>
-            </p:when>
-            <p:otherwise>
-                <p:sink/>
-            </p:otherwise>
-        </p:choose>
+        <p:output port="result"/>
+        <px:fileset-load media-types="application/z3998-auth+xml">
+            <p:input port="in-memory">
+                <p:pipe step="main" port="in-memory.in"/>
+            </p:input>
+        </px:fileset-load>
+        <!-- TODO: describe the error on the wiki and insert correct error code -->
+        <px:assert message="No XML documents with the ZedAI media type ('application/z3998-auth+xml') found in the fileset."
+                   test-count-min="1" error-code="PEZE00"/>
+        <px:assert message="More than one XML document with the ZedAI media type ('application/z3998-auth+xml') found in the fileset; there can only be one ZedAI document."
+                   test-count-max="1" error-code="PEZE00"/>
     </p:group>
 
     <!--=========================================================================-->

@@ -112,11 +112,11 @@
               <p:empty/>
             </p:input>
           </p:xslt>
-          <px:dtbook-to-odt>
+          <px:dtbook-to-odt.script>
             <p:with-option name="page-numbers" select="$page-numbers"/>
             <p:with-option name="page-numbers-float" select="$page-numbers-float"/>
             <p:with-option name="output-dir" select="$temp-dir"/>
-          </px:dtbook-to-odt>
+          </px:dtbook-to-odt.script>
         </p:when>
         <p:otherwise>
           <p:identity>

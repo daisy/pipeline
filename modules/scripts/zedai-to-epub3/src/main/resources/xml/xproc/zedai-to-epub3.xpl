@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    px:input-filesets="zedai"
-    px:output-filesets="epub3 mp3"
-    type="px:zedai-to-epub3" name="zedai-to-epub3" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                px:input-filesets="zedai"
+                px:output-filesets="epub3 mp3"
+                type="px:zedai-to-epub3.script" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">ZedAI to EPUB 3</h1>
@@ -74,60 +77,42 @@ split up if they exceed the given maximum size.</p>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
 
     <p:variable name="input-uri" select="base-uri(/)"/>
 
-    <p:xslt name="output-dir-uri">
-        <p:with-param name="href" select="concat($output-dir,'/')"/>
-        <p:input port="source">
-            <p:inline>
-                <d:file/>
-            </p:inline>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:inline>
-                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" version="2.0">
-                    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-                    <xsl:param name="href" required="yes"/>
-                    <xsl:template match="/*">
-                        <xsl:copy>
-                            <xsl:attribute name="href" select="pf:normalize-uri($href)"/>
-                        </xsl:copy>
-                    </xsl:template>
-                </xsl:stylesheet>
-            </p:inline>
-        </p:input>
-    </p:xslt>
+    <px:normalize-uri name="output-dir-uri">
+      <p:with-option name="href" select="concat($output-dir,'/')"/>
+    </px:normalize-uri>
     <p:sink/>
 
     <p:group name="load-convert-store">
         <p:output port="validation-status">
           <p:pipe step="convert" port="validation-status"/>
         </p:output>
-        <p:variable name="output-dir-uri" select="/*/@href">
-            <p:pipe port="result" step="output-dir-uri"/>
+        <p:variable name="output-dir-uri" select="/c:result/string()">
+          <p:pipe step="output-dir-uri" port="normalized"/>
         </p:variable>
         <p:variable name="epub-file-uri" select="concat($output-dir-uri,replace($input-uri,'^.*/([^/]*?)(\.[^/\.]*)?$','$1'),'.epub')"/>
 
         <px:zedai-load name="load">
             <p:input port="source">
-                <p:pipe port="source" step="zedai-to-epub3"/>
+                <p:pipe port="source" step="main"/>
             </p:input>
         </px:zedai-load>
 
-	<p:choose name="load-tts-config">
+	<p:choose name="tts-config">
 	  <p:when test="$tts-config != ''">
-	    <p:output port="result" primary="true"/>
+	    <p:output port="result"/>
 	    <p:load>
 	      <p:with-option name="href" select="$tts-config"/>
 	    </p:load>
 	  </p:when>
 	  <p:otherwise>
-	    <p:output port="result" primary="true">
+	    <p:output port="result">
 	      <p:inline>
 		<d:config/>
 	      </p:inline>
@@ -135,46 +120,20 @@ split up if they exceed the given maximum size.</p>
 	    <p:sink/>
 	  </p:otherwise>
 	</p:choose>
-
-	<p:choose name="css-inlining">
-	  <p:when test="$audio = 'true'">
-	    <p:output port="result" primary="true"/>
-	    <px:inline-css-speech>
-	      <p:input port="source">
-		<p:pipe port="in-memory.out" step="load"/>
-	      </p:input>
-	      <p:input port="fileset.in">
-		<p:pipe port="fileset.out" step="load"/>
-	      </p:input>
-	      <p:input port="config">
-		<p:pipe port="result" step="load-tts-config"/>
-	      </p:input>
-	      <p:with-option name="content-type" select="'application/z3998-auth+xml'"/>
-	    </px:inline-css-speech>
-	  </p:when>
-	  <p:otherwise>
-	    <p:output port="result" primary="true"/>
-	    <p:identity>
-	      <p:input port="source">
-		<p:pipe port="in-memory.out" step="load"/>
-	      </p:input>
-	    </p:identity>
-	  </p:otherwise>
-	</p:choose>
-
-        <px:zedai-to-epub3-convert name="convert">
+	
+        <px:zedai-to-epub3 name="convert">
 	    <p:input port="fileset.in">
-	        <p:pipe port="fileset.out" step="load"/>
+	        <p:pipe step="load" port="fileset.out"/>
 	    </p:input>
             <p:input port="in-memory.in">
-                <p:pipe port="result" step="css-inlining"/>
+                <p:pipe step="load" port="in-memory.out"/>
             </p:input>
 	    <p:input port="tts-config">
-	      <p:pipe port="result" step="load-tts-config"/>
+	      <p:pipe step="tts-config" port="result"/>
 	    </p:input>
             <p:with-option name="output-dir" select="$temp-dir"/>
 	    <p:with-option name="audio" select="$audio"/>
-        </px:zedai-to-epub3-convert>
+        </px:zedai-to-epub3>
 
         <px:epub3-store>
             <p:with-option name="href" select="$epub-file-uri"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:dtbook-to-pef" version="1.0"
+<p:declare-step type="px:dtbook-to-pef.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -113,6 +113,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -147,12 +148,21 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:sink/>
     
     <!-- ======= -->
-    <!-- CONVERT -->
+    <!-- LOAD -->
     <!-- ======= -->
-    <px:dtbook-to-pef.convert name="convert" px:message="Transforming from DTBook to PEF" px:progress=".92"
-                              default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css">
+    <px:dtbook-load name="load">
         <p:input port="source">
             <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:dtbook-load>
+    
+    <!-- ======= -->
+    <!-- CONVERT -->
+    <!-- ======= -->
+    <px:dtbook-to-pef name="convert" px:message="Transforming from DTBook to PEF" px:progress=".92"
+                      default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css">
+        <p:input port="source.in-memory">
+            <p:pipe step="load" port="in-memory.out"/>
         </p:input>
         <p:with-option name="temp-dir" select="string(/c:result)">
             <p:pipe step="temp-dir" port="result"/>
@@ -163,7 +173,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
         </p:input>
-    </px:dtbook-to-pef.convert>
+    </px:dtbook-to-pef>
     
     <!-- ===== -->
     <!-- STORE -->

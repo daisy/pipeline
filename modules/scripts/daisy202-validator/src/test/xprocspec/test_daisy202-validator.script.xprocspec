@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               script="../../main/resources/xml/xproc/daisy202-validator.xpl">
+
+    <x:scenario label="simple validation">
+        <x:call step="px:daisy202-validator.script">
+            <!--
+                reusing test data from daisy202-to-epub3
+            -->
+            <x:option name="ncc" select="resolve-uri('../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html')"/>
+        </x:call>
+        <x:context label="the validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should pass" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the validation report">
+            <x:document type="port" port="html-report"/>
+        </x:context>
+        <x:expect label="the validation report should say '0 issues found'"
+                  type="xpath" test="string(html:html/html:body/html:div[2]/html:div[1]/html:p[3])='0 issues found.'"/>
+    </x:scenario>
+    
+</x:description>

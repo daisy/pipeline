@@ -25,6 +25,8 @@ public class ZedaiToPefTest extends AbstractXSpecAndXProcSpecTest {
 			"org.daisy.pipeline.modules.braille:liblouis-native:jar:" + thisPlatform() + ":?",
 			pipelineModule("file-utils"),
 			pipelineModule("metadata-utils"),
+			pipelineModule("fileset-utils"),
+			pipelineModule("zedai-utils"),
 			"org.daisy.pipeline:logging-activator:?",
 		};
 	}

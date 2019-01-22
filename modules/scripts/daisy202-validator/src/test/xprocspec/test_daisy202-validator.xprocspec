@@ -3,28 +3,46 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../main/resources/xml/xproc/daisy202-validator.xpl">
+               script="../../main/resources/xml/xproc/steps/validate.xpl">
 
     <x:scenario label="simple validation">
         <x:call step="px:daisy202-validator">
-            <!--
-                reusing test data from daisy202-to-epub3
-            -->
+            <x:input port="fileset.in">
+                <x:document type="inline">
+                    <d:fileset>
+                        <!--
+                            reusing test data from daisy202-to-epub3
+                        -->
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html" media-type="application/xhtml+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0001.smil" media-type="application/smil+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0002.smil" media-type="application/smil+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0003.smil" media-type="application/smil+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0004.smil" media-type="application/smil+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0005.smil" media-type="application/smil+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0006.smil" media-type="application/smil+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0007.smil" media-type="application/smil+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0001.mp3" media-type="audio/mpeg" />
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/content.html" media-type="application/xhtml+xml"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0002.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0007.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0003.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0004.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0005.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/speechgen0006.mp3" media-type="audio/mpeg"/>
+                        <d:file href="../../../../daisy202-to-epub3/src/test/resources/input/book1/default.css" media-type="text/css" kind="stylesheet"
+                                original-href="../../../../daisy202-to-epub3/src/test/resources/input/book1/default.css"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in"/>
             <x:option name="ncc" select="resolve-uri('../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html')"/>
         </x:call>
-        <x:context label="the validation status">
-            <x:document type="port" port="validation-status"/>
+        <x:context label="the xml report">
+            <x:document type="port" port="xml-report"/>
         </x:context>
-        <x:expect label="the validation should pass" type="compare">
-            <x:document type="inline">
-                <d:validation-status result="ok"/>
-            </x:document>
-        </x:expect>
-        <x:context label="the validation report">
-            <x:document type="port" port="html-report"/>
-        </x:context>
-        <x:expect label="the validation report should say '0 issues found'"
-                  type="xpath" test="string(html:html/html:body/html:div[2]/html:div[1]/html:p[3])='0 issues found.'"/>
+        <x:expect label="the messages" type="xpath"
+                  test="every $x in /d:document-validation-report/d:reports/d:report/* satisfies $x/self::d:message"/>
+        <x:expect label="there should be 15 of them" type="xpath" test="count(//d:message)" equals="15"/>
     </x:scenario>
     
 </x:description>

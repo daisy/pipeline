@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	<head>
+		<meta
+			name="dtb:uid"
+			content="ghBOOK1211212736" />
+		<meta
+			name="dtb:generator"
+			content="Obi and the Urakawa SDK: the open-source DAISY multimedia authoring toolkit" />
+		<meta
+			name="dtb:totalElapsedTime"
+			content="00:02:35.8349660" />
+		<customAttributes>
+			<customTest
+				defaultState="false"
+				id="pagenum"
+				override="visible" />
+		</customAttributes>
+	</head>
+	<body>
+		<seq
+			id="sm_35"
+			dur="00:00:43.1020181"
+			fill="remove">
+			<par
+				id="sm_36">
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:01.4890023"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_37">
+				<audio
+					clipBegin="00:00:01.4890023"
+					clipEnd="00:00:02.8530159"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_38">
+				<audio
+					clipBegin="00:00:02.8530159"
+					clipEnd="00:00:03.7509977"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_39">
+				<audio
+					clipBegin="00:00:03.7509977"
+					clipEnd="00:00:06.4370068"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_40">
+				<audio
+					clipBegin="00:00:06.4370068"
+					clipEnd="00:00:07.8680045"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_41">
+				<audio
+					clipBegin="00:00:07.8680045"
+					clipEnd="00:00:10.0490023"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_42">
+				<audio
+					clipBegin="00:00:10.0490023"
+					clipEnd="00:00:11.0190023"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_43">
+				<audio
+					clipBegin="00:00:11.0190023"
+					clipEnd="00:00:13.6820181"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_44">
+				<audio
+					clipBegin="00:00:13.6820181"
+					clipEnd="00:00:14.8480045"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_45">
+				<audio
+					clipBegin="00:00:14.8480045"
+					clipEnd="00:00:17.3490023"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_46">
+				<audio
+					clipBegin="00:00:17.3490023"
+					clipEnd="00:00:18.6820181"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_47">
+				<audio
+					clipBegin="00:00:18.6820181"
+					clipEnd="00:00:21.3590023"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_48">
+				<audio
+					clipBegin="00:00:21.3590023"
+					clipEnd="00:00:22.7070068"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_49">
+				<audio
+					clipBegin="00:00:22.7070068"
+					clipEnd="00:00:25.0340136"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_50">
+				<audio
+					clipBegin="00:00:25.0340136"
+					clipEnd="00:00:26.6340136"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_51">
+				<audio
+					clipBegin="00:00:26.6340136"
+					clipEnd="00:00:28.5340136"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_52">
+				<audio
+					clipBegin="00:00:28.5340136"
+					clipEnd="00:00:29.9090023"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_53">
+				<audio
+					clipBegin="00:00:29.9090023"
+					clipEnd="00:00:32.2740136"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_54">
+				<audio
+					clipBegin="00:00:32.2740136"
+					clipEnd="00:00:33.7490023"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_55">
+				<audio
+					clipBegin="00:00:33.7490023"
+					clipEnd="00:00:35.9409977"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_56">
+				<audio
+					clipBegin="00:00:35.9409977"
+					clipEnd="00:00:37.4630159"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_57">
+				<audio
+					clipBegin="00:00:37.4630159"
+					clipEnd="00:00:39.2460091"
+					src="aud004.mp3" />
+			</par>
+			<par
+				id="sm_58">
+				<audio
+					clipBegin="00:00:39.2460091"
+					clipEnd="00:00:40.8020181"
+					src="aud004.mp3" />
+			</par>
+			<seq
+				id="sm_59"
+				class="pagenum"
+				customTest="pagenum">
+				<par
+					id="sm_60">
+					<audio
+						clipBegin="00:00:40.8020181"
+						clipEnd="00:00:43.1020181"
+						src="aud004.mp3" />
+				</par>
+			</seq>
+		</seq>
+	</body>
+</smil>

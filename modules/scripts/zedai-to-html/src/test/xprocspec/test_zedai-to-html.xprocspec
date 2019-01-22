@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
-               xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../main/resources/xml/xproc/zedai-to-html.xpl">
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/zedai-to-html.convert.xpl">
 
 	<x:scenario label="alice">
 		<x:call step="px:zedai-to-html">
-			<x:input port="source">
+			<x:input port="fileset.in">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/resources/alice.xml" media-type="application/z3998-auth+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="in-memory.in">
 				<x:document type="file" href="../resources/resources/alice.xml"/>
 			</x:input>
 			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
 		</x:call>
-		<x:context label="the output directory">
-			<x:document type="directory" base-uri="temp-dir" href="alice/output-dir/" recursive="true"/>
-		</x:context>
-		<x:expect label="the output directory should contain the XHTML" type="compare" >
-			<x:document type="inline">
-				<c:directory name="output-dir">
-					<c:file name="alice.xhtml"/>
-				</c:directory>
-			</x:document>
-		</x:expect>
+		<x:scenario label="without chunking">
+			<x:call>
+				<x:option name="chunk" select="false()"/>
+			</x:call>
+			<x:context label="the fileset.out port">
+				<x:document type="port" port="fileset.out"/>
+			</x:context>
+			<x:expect label="the fileset.out port"
+			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+				<x:document type="inline" base-uri="temp-dir">
+					<d:fileset>
+						<d:file href="alice/output-dir/alice.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+			<x:context label="the in-memory.out port">
+				<x:document type="port" port="in-memory.out"/>
+			</x:context>
+			<x:expect label="there should be one document" type="count" min="1" max="1"/>
+			<x:expect label="the base uri" type="xpath"
+			          test="base-uri(/*)" equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+		</x:scenario>
+		<x:scenario label="with chunking">
+			<x:call>
+				<x:option name="chunk" select="true()"/>
+			</x:call>
+			<x:context label="the fileset.out port">
+				<x:document type="port" port="fileset.out"/>
+			</x:context>
+			<x:expect label="the fileset.out port"
+			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+				<x:document type="inline" base-uri="temp-dir">
+					<d:fileset>
+						<d:file href="alice/output-dir/alice.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+			<x:context label="the in-memory.out port">
+				<x:document type="port" port="in-memory.out"/>
+			</x:context>
+			<x:expect label="there should be one document" type="count" min="1" max="1"/>
+			<x:expect label="the base uri" type="xpath"
+			          test="base-uri(/*)" equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+		</x:scenario>
 	</x:scenario>
 	
-	<x:scenario label="preserve significant white space (issue #94)">
-		<x:call step="px:zedai-to-html">
-			<x:input port="source">
-				<x:document type="inline">
-					<document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en">
-						<body>
-							<bodymatter>
-								<section>
-									<h xml:id="chapter_1">
-										<emph>CHAPTER 1</emph> <emph>THE LAST JUDGEMENT (MICHAEL ANGELO)</emph>
-									</h>
-								</section>
-							</bodymatter>
-						</body>
-					</document>
-				</x:document>
-			</x:input>
-			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
-		</x:call>
-		<x:context label="the html file">
-			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_zedai-to-html.xhtml" select="//html:h1[1]"/>
-		</x:context>
-		<x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
-			<x:document type="inline">
-				<h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
-										<em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em>
-									</h1>
-			</x:document>
-		</x:expect>
-	</x:scenario>
-
 </x:description>

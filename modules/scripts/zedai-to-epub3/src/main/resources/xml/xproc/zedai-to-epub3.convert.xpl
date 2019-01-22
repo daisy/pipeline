@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" type="px:zedai-to-epub3-convert"
-    name="zedai-to-epub3.convert" exclude-inline-prefixes="#all" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="px:zedai-to-epub3" name="main"
+                exclude-inline-prefixes="#all">
 
     <p:documentation> Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3 publication. </p:documentation>
 
@@ -27,9 +30,18 @@
         <p:pipe step="validation-status" port="result"/>
     </p:output>
   
-    <p:option name="output-dir" required="true"/>
+    <p:option name="output-dir" required="true">
+        <p:documentation>Empty directory dedicated to this conversion.</p:documentation>
+    </p:option>
+    <p:option name="temp-dir" select="''">
+        <p:documentation>Empty directory dedicated to this conversion. May be left empty in which
+        case a temporary directory will be automaticall created.</p:documentation>
+    </p:option>
     <p:option name="chunk-size" required="false" select="'-1'"/>
     <p:option name="audio" required="false" select="'false'"/>
+    <p:option name="process-css" required="false" select="'true'">
+        <p:documentation>Set to false to bypass aural CSS processing.</p:documentation>
+    </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
@@ -41,6 +53,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl" />
     <p:import href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/library.xpl" />
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-tts/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
 
     <p:variable name="epub-dir" select="concat($output-dir,'epub/')"/>
     <p:variable name="content-dir" select="concat($epub-dir,'EPUB/')"/>
@@ -49,84 +62,51 @@
     <!-- GET ZEDAI FROM FILESET                                                  -->
     <!--=========================================================================-->
 
-    <p:documentation>Retreive the ZedAI docuent from the input fileset.</p:documentation>
-    <p:group name="zedai-input">
-        <p:output port="result" primary="true">
-            <p:pipe port="result" step="zedai-input.for-each"/>
-        </p:output>
-        <p:variable name="fileset-base" select="base-uri(/*)"/>
-        <p:for-each name="zedai-input.for-each">
-            <p:iteration-source select="/*/*"/>
-            <p:output port="result" sequence="true"/>
-            <p:choose>
-                <p:when test="/*/@media-type = 'application/z3998-auth+xml'">
-                    <p:variable name="zedai-base" select="/*/resolve-uri(@href,base-uri(.))"/>
-                    <p:split-sequence name="zedai-input.for-each.split">
-                        <p:input port="source">
-                            <p:pipe port="in-memory.in" step="zedai-to-epub3.convert"/>
-                        </p:input>
-                        <p:with-option name="test" select="concat('base-uri(/*) = &quot;',$zedai-base,'&quot;')"/>
-                    </p:split-sequence>
-                    <p:count/>
-                    <p:choose>
-                        <p:when test=". &gt; 0">
-                            <p:identity>
-                                <p:input port="source">
-                                    <p:pipe port="matched" step="zedai-input.for-each.split"/>
-                                </p:input>
-                            </p:identity>
-                        </p:when>
-                        <p:otherwise>
-                            <p:error xmlns:err="http://www.w3.org/ns/xproc-error" code="PEZE00">
-                                <!-- TODO: describe the error on the wiki and insert correct error code -->
-                                <p:input port="source">
-                                    <p:inline>
-                                        <message>Found ZedAI document in fileset but not in memory. Please load the ZedAI document into memory before converting it.</message>
-                                    </p:inline>
-                                </p:input>
-                            </p:error>
-                        </p:otherwise>
-                    </p:choose>
-                </p:when>
-                <p:otherwise>
-                    <p:identity>
-                        <p:input port="source">
-                            <p:empty/>
-                        </p:input>
-                    </p:identity>
-                </p:otherwise>
-            </p:choose>
-        </p:for-each>
-        <p:count/>
-        <p:choose>
-            <p:when test=". = 0">
-                <p:error xmlns:err="http://www.w3.org/ns/xproc-error" code="PEZE00">
-                    <!-- TODO: describe the error on the wiki and insert correct error code -->
-                    <p:input port="source">
-                        <p:inline>
-                            <message>No XML documents with the ZedAI media type ('application/z3998-auth+xml') found in the fileset.</message>
-                        </p:inline>
-                    </p:input>
-                </p:error>
-                <p:sink/>
-            </p:when>
-            <p:when test=". &gt; 1">
-                <p:error xmlns:err="http://www.w3.org/ns/xproc-error" code="PEZE00">
-                    <!-- TODO: describe the error on the wiki and insert correct error code -->
-                    <p:input port="source">
-                        <p:inline>
-                            <message>More than one XML document with the ZedAI media type ('application/z3998-auth+xml') found in the fileset; there can only be one ZedAI document.</message>
-                        </p:inline>
-                    </p:input>
-                </p:error>
-                <p:sink/>
-            </p:when>
-            <p:otherwise>
-                <p:sink/>
-            </p:otherwise>
-        </p:choose>
+    <p:documentation>Retreive the ZedAI document from the input fileset.</p:documentation>
+    <p:group>
+        <px:fileset-load media-types="application/z3998-auth+xml">
+            <p:input port="in-memory">
+                <p:pipe step="main" port="in-memory.in"/>
+            </p:input>
+        </px:fileset-load>
+        <!-- TODO: describe the error on the wiki and insert correct error code -->
+        <px:assert message="No XML documents with the ZedAI media type ('application/z3998-auth+xml') found in the fileset."
+                   test-count-min="1" error-code="PEZE00"/>
+        <px:assert message="More than one XML document with the ZedAI media type ('application/z3998-auth+xml') found in the fileset; there can only be one ZedAI document."
+                   test-count-max="1" error-code="PEZE00"/>
     </p:group>
+    <p:identity name="first-zedai"/>
 
+    <!--=========================================================================-->
+    <!-- CSS INLINING                                                            -->
+    <!--=========================================================================-->
+    <p:choose>
+        <p:xpath-context>
+            <p:empty/>
+        </p:xpath-context>
+        <p:when test="$audio='true' and $process-css='true'">
+            <px:inline-css-speech content-type="application/z3998-auth+xml">
+                <p:input port="source">
+                    <p:pipe step="first-zedai" port="result"/>
+                </p:input>
+                <p:input port="fileset.in">
+                    <p:pipe step="main" port="fileset.in"/>
+                </p:input>
+                <p:input port="config">
+                    <p:pipe step="main" port="tts-config"/>
+                </p:input>
+            </px:inline-css-speech>
+        </p:when>
+        <p:otherwise>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="first-zedai" port="result"/>
+                </p:input>
+            </p:identity>
+        </p:otherwise>
+    </p:choose>
+    <p:identity name="zedai-with-css"/>
+    
     <!--=========================================================================-->
     <!-- METADATA                                                                -->
     <!--=========================================================================-->
@@ -135,9 +115,6 @@
     <p:group name="metadata">
         <p:output port="result"/>
         <p:xslt>
-            <p:input port="source">
-                <p:pipe port="result" step="zedai-input"/>
-            </p:input>
             <p:input port="parameters">
                 <p:empty/>
             </p:input>
@@ -159,12 +136,12 @@
             <p:pipe port="html-files" step="zedai-to-html.iterate"/>
         </p:output>
         <p:variable name="zedai-basename" select="replace(replace(//*[@media-type='application/z3998-auth+xml']/@href,'^.+/([^/]+)$','$1'),'^(.+)\.[^\.]+$','$1')">
-            <p:pipe port="fileset.in" step="zedai-to-epub3.convert"/>
+            <p:pipe port="fileset.in" step="main"/>
         </p:variable>
         <p:variable name="result-basename" select="concat($content-dir,$zedai-basename,'.xhtml')"/>
         <p:xslt name="zedai-to-html.html-single">
             <p:input port="source">
-                <p:pipe port="result" step="zedai-input"/>
+                <p:pipe step="zedai-with-css" port="result"/>
             </p:input>
             <p:input port="stylesheet">
                 <p:document href="http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl"/>
@@ -280,10 +257,11 @@
 	<p:pipe port="result" step="fileset-for-tts"/>
       </p:input>
       <p:input port="config">
-	<p:pipe port="tts-config" step="zedai-to-epub3.convert"/>
+	<p:pipe port="tts-config" step="main"/>
       </p:input>
       <p:with-option name="audio" select="$audio"/>
       <p:with-option name="output-dir" select="$output-dir"/>
+      <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:tts-for-epub3>
 
     <!--=========================================================================-->
@@ -365,7 +343,7 @@
 
         <p:identity>
             <p:input port="source">
-                <p:pipe port="fileset.in" step="zedai-to-epub3.convert"/>
+                <p:pipe port="fileset.in" step="main"/>
             </p:input>
         </p:identity>
         <p:group name="resources">

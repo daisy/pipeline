@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" type="px:html-to-epub3-convert" name="main"
-    exclude-inline-prefixes="#all" version="1.0">
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="px:html-to-epub3" name="main"
+                exclude-inline-prefixes="#all" version="1.0">
 
     <p:documentation>Transforms XHTML into an EPUB 3 publication.</p:documentation>
 
-    <p:input port="input" primary="true" sequence="true"/>
+    <p:input port="input.fileset" primary="true"/>
+    <p:input port="input.in-memory" sequence="true"/>
     <p:input port="metadata" sequence="true">
         <p:empty/>
     </p:input>
@@ -25,7 +27,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="html-to-epub3.content.xpl"/>
 
@@ -37,28 +38,23 @@
     </p:variable>
 
     <!--=========================================================================-->
-    <!-- COMPUTE THE RESOURCES FILESET                                           -->
+    <!-- LOAD XHTML                                                              -->
     <!--=========================================================================-->
 
-    <p:group name="html-resources">
-        <p:output port="fileset">
-            <p:pipe port="result" step="fileset"/>
-        </p:output>
-        <p:for-each>
-            <p:xslt>
-                <p:input port="stylesheet">
-                    <p:document
-                        href="http://www.daisy.org/pipeline/modules/fileset-utils/html-to-fileset.xsl"
-                    />
-                </p:input>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-            </p:xslt>
-        </p:for-each>
-        <px:fileset-join/>
-        <px:mediatype-detect name="fileset"/>
-    </p:group>
+    <px:fileset-load media-types="application/xhtml+xml">
+        <p:input port="in-memory">
+            <p:pipe step="main" port="input.in-memory"/>
+        </p:input>
+    </px:fileset-load>
+    <px:assert message="No XHTML documents found." test-count-min="1" error-code="PEZE00"/>
+    <p:identity name="html"/>
+    <p:sink/>
+
+    <px:fileset-filter not-media-types="application/xhtml+xml" name="resources">
+        <p:input port="source">
+            <p:pipe step="main" port="input.fileset"/>
+        </p:input>
+    </px:fileset-filter>
 
     <!--=========================================================================-->
     <!-- CLEAN THE XHTML Content Documents                                       -->
@@ -73,10 +69,10 @@
             <p:empty/>
         </p:with-option>
         <p:input port="html">
-            <p:pipe port="input" step="main"/>
+            <p:pipe step="html" port="result"/>
         </p:input>
         <p:input port="fileset.in.resources">
-            <p:pipe port="fileset" step="html-resources"/>
+            <p:pipe step="resources" port="result"/>
         </p:input>
     </pxi:html-to-epub3-content>
 

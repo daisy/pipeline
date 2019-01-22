@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	<head>
+		<meta
+			name="dtb:uid"
+			content="ghBOOK1211212736" />
+		<meta
+			name="dtb:generator"
+			content="Obi and the Urakawa SDK: the open-source DAISY multimedia authoring toolkit" />
+		<meta
+			name="dtb:totalElapsedTime"
+			content="00:12:15.4889117" />
+	</head>
+	<body>
+		<seq
+			id="sm_232"
+			dur="00:02:34.3049887"
+			fill="remove">
+			<par
+				id="sm_233">
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:01.0680045"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_234">
+				<audio
+					clipBegin="00:00:01.0680045"
+					clipEnd="00:00:05.7429932"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_235">
+				<audio
+					clipBegin="00:00:05.7429932"
+					clipEnd="00:00:09.0249887"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_236">
+				<audio
+					clipBegin="00:00:09.0249887"
+					clipEnd="00:00:12.4770068"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_237">
+				<audio
+					clipBegin="00:00:12.4770068"
+					clipEnd="00:00:15.7680045"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_238">
+				<audio
+					clipBegin="00:00:15.7680045"
+					clipEnd="00:00:20.7680045"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_239">
+				<audio
+					clipBegin="00:00:20.7680045"
+					clipEnd="00:00:23.7680045"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_240">
+				<audio
+					clipBegin="00:00:23.7680045"
+					clipEnd="00:00:26.9990023"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_241">
+				<audio
+					clipBegin="00:00:26.9990023"
+					clipEnd="00:00:30.2880045"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_242">
+				<audio
+					clipBegin="00:00:30.2880045"
+					clipEnd="00:00:35.7029932"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_243">
+				<audio
+					clipBegin="00:00:35.7029932"
+					clipEnd="00:00:38.7949887"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_244">
+				<audio
+					clipBegin="00:00:38.7949887"
+					clipEnd="00:00:42.0580045"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_245">
+				<audio
+					clipBegin="00:00:42.0580045"
+					clipEnd="00:00:45.3880045"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_246">
+				<audio
+					clipBegin="00:00:45.3880045"
+					clipEnd="00:00:51.6029932"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_247">
+				<audio
+					clipBegin="00:00:51.6029932"
+					clipEnd="00:00:54.5439909"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_248">
+				<audio
+					clipBegin="00:00:54.5439909"
+					clipEnd="00:00:57.7039909"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_249">
+				<audio
+					clipBegin="00:00:57.7039909"
+					clipEnd="00:01:00.6900000"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_250">
+				<audio
+					clipBegin="00:01:00.6900000"
+					clipEnd="00:01:05.9839909"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_251">
+				<audio
+					clipBegin="00:01:05.9839909"
+					clipEnd="00:01:09.1239909"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_252">
+				<audio
+					clipBegin="00:01:09.1239909"
+					clipEnd="00:01:12.2049887"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_253">
+				<audio
+					clipBegin="00:01:12.2049887"
+					clipEnd="00:01:15.7900000"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_254">
+				<audio
+					clipBegin="00:01:15.7900000"
+					clipEnd="00:01:21.1519955"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_255">
+				<audio
+					clipBegin="00:01:21.1519955"
+					clipEnd="00:01:24.2690023"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_256">
+				<audio
+					clipBegin="00:01:24.2690023"
+					clipEnd="00:01:27.6929932"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_257">
+				<audio
+					clipBegin="00:01:27.6929932"
+					clipEnd="00:01:31.0690023"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_258">
+				<audio
+					clipBegin="00:01:31.0690023"
+					clipEnd="00:01:36.1719955"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_259">
+				<audio
+					clipBegin="00:01:36.1719955"
+					clipEnd="00:01:39.6029932"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_260">
+				<audio
+					clipBegin="00:01:39.6029932"
+					clipEnd="00:01:42.8090023"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_261">
+				<audio
+					clipBegin="00:01:42.8090023"
+					clipEnd="00:01:46.2300000"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_262">
+				<audio
+					clipBegin="00:01:46.2300000"
+					clipEnd="00:01:51.4469841"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_263">
+				<audio
+					clipBegin="00:01:51.4469841"
+					clipEnd="00:01:55.1490023"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_264">
+				<audio
+					clipBegin="00:01:55.1490023"
+					clipEnd="00:01:58.7100000"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_265">
+				<audio
+					clipBegin="00:01:58.7100000"
+					clipEnd="00:02:02.8869841"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_266">
+				<audio
+					clipBegin="00:02:02.8869841"
+					clipEnd="00:02:08.6639683"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_267">
+				<audio
+					clipBegin="00:02:08.6639683"
+					clipEnd="00:02:11.6179819"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_268">
+				<audio
+					clipBegin="00:02:11.6179819"
+					clipEnd="00:02:15.1459864"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_269">
+				<audio
+					clipBegin="00:02:15.1459864"
+					clipEnd="00:02:18.5659864"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_270">
+				<audio
+					clipBegin="00:02:18.5659864"
+					clipEnd="00:02:24.1059864"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_271">
+				<audio
+					clipBegin="00:02:24.1059864"
+					clipEnd="00:02:27.0999773"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_272">
+				<audio
+					clipBegin="00:02:27.0999773"
+					clipEnd="00:02:30.7949887"
+					src="aud020.mp3" />
+			</par>
+			<par
+				id="sm_273">
+				<audio
+					clipBegin="00:02:30.7949887"
+					clipEnd="00:02:34.3049887"
+					src="aud020.mp3" />
+			</par>
+		</seq>
+	</body>
+</smil>

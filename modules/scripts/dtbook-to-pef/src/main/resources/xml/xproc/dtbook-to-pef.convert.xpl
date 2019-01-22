@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:dtbook-to-pef.convert" version="1.0"
+<p:declare-step type="px:dtbook-to-pef" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
@@ -10,8 +10,11 @@
                 exclude-inline-prefixes="#all"
                 name="main">
     
-    <p:input port="source">
-        <p:documentation>DTBook</p:documentation>
+    <p:input port="source.fileset" primary="true">
+        <p:documentation>DTBook fileset</p:documentation>
+    </p:input>
+    <p:input port="source.in-memory" sequence="true">
+        <p:documentation>DTBook files</p:documentation>
     </p:input>
     <p:output port="result" primary="true" sequence="true"> <!-- sequence=false when d:status result="ok" -->
         <p:documentation>PEF</p:documentation>
@@ -44,11 +47,8 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    
-    <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
     <px:merge-parameters name="parameters" px:progress=".01">
@@ -58,18 +58,21 @@
     </px:merge-parameters>
     <p:sink/>
     
-    <px:dtbook-load name="load" px:message="Loading DTBook" px:progress=".01">
-        <p:input port="source">
-            <p:pipe step="main" port="source"/>
-        </p:input>
-    </px:dtbook-load>
-    <p:sink/>
+    <!-- Find the first and only DTBook file -->
+    <p:group name="dtbook" px:message="Loading DTBook" px:progress=".01">
+        <p:output port="result"/>
+        <px:fileset-load media-types="application/x-dtbook+xml">
+            <p:input port="fileset">
+                <p:pipe step="main" port="source.fileset"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe step="main" port="source.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <px:assert message="No DTBook document found." test-count-min="1" error-code="PEZE00"/>
+        <px:assert message="More than one DTBook found in fileset." test-count-max="1" error-code="PEZE00"/>
+    </p:group>
     
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="load" port="in-memory.out"/>
-        </p:input>
-    </p:identity>
     <p:xslt px:message="Generating table of contents" px:progress=".01">
         <p:input port="stylesheet">
             <p:document href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl"/>
@@ -106,7 +109,9 @@
             <p:viewport px:message="Transforming MathML"
                         match="math:math">
                 <px:transform px:progress="1">
-                    <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
+                    <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,'und')[1],')')">
+                        <p:pipe step="dtbook" port="result"/>
+                    </p:with-option>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
                 </px:transform>
             </p:viewport>
@@ -117,6 +122,7 @@
     </p:choose>
     
     <p:choose name="transform" px:progress=".84">
+        <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>
             <p:output port="obfl">
@@ -197,7 +203,7 @@
         <p:when test="/*/@result='ok'">
             <p:xslt name="metadata" px:message="Extracting metadata from DTBook" px:progress="1/2">
                 <p:input port="source">
-                    <p:pipe step="main" port="source"/>
+                    <p:pipe step="dtbook" port="result"/>
                 </p:input>
                 <p:input port="stylesheet">
                     <p:document href="../xslt/dtbook-to-metadata.xsl"/>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-rtf/dtbook-to-rtf.xpl"
-       uri="../xml/dtbook-to-rtf.xpl" px:content-type="script"/>
+       uri="../xml/dtbook-to-rtf.xpl" px:content-type="script" px:id="dtbook-to-rtf"/>
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-rtf/library.xpl" uri="../xml/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils" />
 </catalog>

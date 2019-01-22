@@ -1,0 +1,683 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx
+	version="2005-1"
+	xml:lang="en-US" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+	<head>
+		<meta
+			name="dtb:uid"
+			content="ghBOOK1211212736" />
+		<meta
+			name="dtb:generator"
+			content="Obi and the Urakawa SDK: the open-source DAISY multimedia authoring toolkit" />
+		<meta
+			name="dtb:depth"
+			content="2" />
+		<meta
+			name="dtb:totalPageCount"
+			content="24" />
+		<meta
+			name="dtb:maxPageNumber"
+			content="24" />
+		<smilCustomTest
+			bookStruct="PAGE_NUMBER"
+			defaultState="false"
+			id="pagenum"
+			override="visible" />
+	</head>
+	<docTitle>
+		<text>Chimpanzees</text>
+		<audio
+			clipBegin="00:00:00"
+			clipEnd="00:00:02.4829932"
+			src="aud001.mp3" />
+	</docTitle>
+	<navMap>
+		<navPoint
+			id="ncx_2"
+			playOrder="1">
+			<navLabel>
+				<text>Chimpanzees</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.4829932"
+					src="aud001.mp3" />
+			</navLabel>
+			<content
+				src="0001.smil#sm_3" />
+		</navPoint>
+		<navPoint
+			id="ncx_3"
+			playOrder="2">
+			<navLabel>
+				<text>Chimpanzees</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.3460091"
+					src="aud002.mp3" />
+			</navLabel>
+			<content
+				src="0002.smil#sm_5" />
+		</navPoint>
+		<navPoint
+			id="ncx_5"
+			playOrder="4">
+			<navLabel>
+				<text>Library of Congress Cataloging-in-Publication Data</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:05.1500000"
+					src="aud003.mp3" />
+			</navLabel>
+			<content
+				src="0003.smil#sm_21" />
+		</navPoint>
+		<navPoint
+			id="ncx_7"
+			playOrder="6">
+			<navLabel>
+				<text>Contents</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:01.4890023"
+					src="aud004.mp3" />
+			</navLabel>
+			<content
+				src="0004.smil#sm_36" />
+		</navPoint>
+		<navPoint
+			id="ncx_9"
+			playOrder="8">
+			<navLabel>
+				<text>Great Apes</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.2180045"
+					src="aud005.mp3" />
+			</navLabel>
+			<content
+				src="0005.smil#sm_62" />
+		</navPoint>
+		<navPoint
+			id="ncx_12"
+			playOrder="11">
+			<navLabel>
+				<text>Chimpanzees And People</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.5580045"
+					src="aud006.mp3" />
+			</navLabel>
+			<content
+				src="0006.smil#sm_74" />
+		</navPoint>
+		<navPoint
+			id="ncx_15"
+			playOrder="14">
+			<navLabel>
+				<text>Talking To Chimps</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.2109977"
+					src="aud007.mp3" />
+			</navLabel>
+			<content
+				src="0007.smil#sm_92" />
+		</navPoint>
+		<navPoint
+			id="ncx_17"
+			playOrder="16">
+			<navLabel>
+				<text>What They Look Like</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.0600000"
+					src="aud008.mp3" />
+			</navLabel>
+			<content
+				src="0008.smil#sm_99" />
+		</navPoint>
+		<navPoint
+			id="ncx_20"
+			playOrder="19">
+			<navLabel>
+				<text>The Chimpanzee's Home</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.5749887"
+					src="aud009.mp3" />
+			</navLabel>
+			<content
+				src="0009.smil#sm_113" />
+		</navPoint>
+		<navPoint
+			id="ncx_24"
+			playOrder="23">
+			<navLabel>
+				<text>Everyday Life</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.1790023"
+					src="aud010.mp3" />
+			</navLabel>
+			<content
+				src="0010.smil#sm_130" />
+		</navPoint>
+		<navPoint
+			id="ncx_27"
+			playOrder="26">
+			<navLabel>
+				<text>Chimp Communities</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.3059864"
+					src="aud011.mp3" />
+			</navLabel>
+			<content
+				src="0011.smil#sm_147" />
+		</navPoint>
+		<navPoint
+			id="ncx_30"
+			playOrder="29">
+			<navLabel>
+				<text>Baby Chimps</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:01.9590023"
+					src="aud012.mp3" />
+			</navLabel>
+			<content
+				src="0012.smil#sm_159" />
+		</navPoint>
+		<navPoint
+			id="ncx_33"
+			playOrder="32">
+			<navLabel>
+				<text>Jane Goodall</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:01.8320181"
+					src="aud013.mp3" />
+			</navLabel>
+			<content
+				src="0013.smil#sm_171" />
+		</navPoint>
+		<navPoint
+			id="ncx_36"
+			playOrder="35">
+			<navLabel>
+				<text>Important Words</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.2539909"
+					src="aud014.mp3" />
+			</navLabel>
+			<content
+				src="0014.smil#sm_183" />
+		</navPoint>
+		<navPoint
+			id="ncx_38"
+			playOrder="37">
+			<navLabel>
+				<text>Web Sites</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.5009977"
+					src="aud015.mp3" />
+			</navLabel>
+			<content
+				src="0015.smil#sm_195" />
+			<navPoint
+				id="ncx_39"
+				playOrder="38">
+				<navLabel>
+					<text>All about Chimpanzees</text>
+					<audio
+						clipBegin="00:00:00"
+						clipEnd="00:00:02.4739909"
+						src="aud016.mp3" />
+				</navLabel>
+				<content
+					src="0016.smil#sm_197" />
+			</navPoint>
+			<navPoint
+				id="ncx_40"
+				playOrder="39">
+				<navLabel>
+					<text>African Primates at Home</text>
+					<audio
+						clipBegin="00:00:00"
+						clipEnd="00:00:02.5560091"
+						src="aud017.mp3" />
+				</navLabel>
+				<content
+					src="0017.smil#sm_201" />
+			</navPoint>
+			<navPoint
+				id="ncx_41"
+				playOrder="40">
+				<navLabel>
+					<text>Animal Bytes: Chimpanzee</text>
+					<audio
+						clipBegin="00:00:00"
+						clipEnd="00:00:03.6919955"
+						src="aud018.mp3" />
+				</navLabel>
+				<content
+					src="0018.smil#sm_205" />
+			</navPoint>
+		</navPoint>
+		<navPoint
+			id="ncx_43"
+			playOrder="42">
+			<navLabel>
+				<text>Index</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.0690023"
+					src="aud019.mp3" />
+			</navLabel>
+			<content
+				src="0019.smil#sm_210" />
+		</navPoint>
+		<navPoint
+			id="ncx_44"
+			playOrder="43">
+			<navLabel>
+				<text>Questions</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:01.0680045"
+					src="aud020.mp3" />
+			</navLabel>
+			<content
+				src="0020.smil#sm_233" />
+		</navPoint>
+	</navMap>
+	<pageList>
+		<pageTarget
+			id="ncx_1"
+			class="pagenum"
+			playOrder="1"
+			type="normal"
+			value="1">
+			<navLabel>
+				<text>1</text>
+				<audio
+					clipBegin="00:00:00"
+					clipEnd="00:00:02.4829932"
+					src="aud001.mp3" />
+			</navLabel>
+			<content
+				src="0001.smil#sm_3" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_4"
+			class="pagenum"
+			playOrder="3"
+			type="normal"
+			value="2">
+			<navLabel>
+				<text>2</text>
+				<audio
+					clipBegin="00:00:08.5849887"
+					clipEnd="00:00:11.1179819"
+					src="aud002.mp3" />
+			</navLabel>
+			<content
+				src="0002.smil#sm_9" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_6"
+			class="pagenum"
+			playOrder="5"
+			type="normal"
+			value="3">
+			<navLabel>
+				<text>3</text>
+				<audio
+					clipBegin="00:01:14.1009977"
+					clipEnd="00:01:16.5669841"
+					src="aud003.mp3" />
+			</navLabel>
+			<content
+				src="0003.smil#sm_34" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_8"
+			class="pagenum"
+			playOrder="7"
+			type="normal"
+			value="4">
+			<navLabel>
+				<text>4</text>
+				<audio
+					clipBegin="00:00:40.8020181"
+					clipEnd="00:00:43.1020181"
+					src="aud004.mp3" />
+			</navLabel>
+			<content
+				src="0004.smil#sm_60" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_10"
+			class="pagenum"
+			playOrder="9"
+			type="normal"
+			value="5">
+			<navLabel>
+				<text>5</text>
+				<audio
+					clipBegin="00:00:26"
+					clipEnd="00:00:28.2469841"
+					src="aud005.mp3" />
+			</navLabel>
+			<content
+				src="0005.smil#sm_70" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_11"
+			class="pagenum"
+			playOrder="10"
+			type="normal"
+			value="6">
+			<navLabel>
+				<text>6</text>
+				<audio
+					clipBegin="00:00:28.2469841"
+					clipEnd="00:00:30.6889796"
+					src="aud005.mp3" />
+			</navLabel>
+			<content
+				src="0005.smil#sm_72" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_13"
+			class="pagenum"
+			playOrder="12"
+			type="normal"
+			value="7">
+			<navLabel>
+				<text>7</text>
+				<audio
+					clipBegin="00:00:30.9470068"
+					clipEnd="00:00:33.3190023"
+					src="aud006.mp3" />
+			</navLabel>
+			<content
+				src="0006.smil#sm_85" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_14"
+			class="pagenum"
+			playOrder="13"
+			type="normal"
+			value="8">
+			<navLabel>
+				<text>8</text>
+				<audio
+					clipBegin="00:00:44.6580045"
+					clipEnd="00:00:46.9519955"
+					src="aud006.mp3" />
+			</navLabel>
+			<content
+				src="0006.smil#sm_90" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_16"
+			class="pagenum"
+			playOrder="15"
+			type="normal"
+			value="9">
+			<navLabel>
+				<text>9</text>
+				<audio
+					clipBegin="00:00:15.2550113"
+					clipEnd="00:00:17.4419955"
+					src="aud007.mp3" />
+			</navLabel>
+			<content
+				src="0007.smil#sm_97" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_18"
+			class="pagenum"
+			playOrder="17"
+			type="normal"
+			value="10">
+			<navLabel>
+				<text>10</text>
+				<audio
+					clipBegin="00:00:13.9140136"
+					clipEnd="00:00:16.3170068"
+					src="aud008.mp3" />
+			</navLabel>
+			<content
+				src="0008.smil#sm_104" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_19"
+			class="pagenum"
+			playOrder="18"
+			type="normal"
+			value="11">
+			<navLabel>
+				<text>11</text>
+				<audio
+					clipBegin="00:00:38.4820181"
+					clipEnd="00:00:40.7400227"
+					src="aud008.mp3" />
+			</navLabel>
+			<content
+				src="0008.smil#sm_111" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_21"
+			class="pagenum"
+			playOrder="20"
+			type="normal"
+			value="12">
+			<navLabel>
+				<text>12</text>
+				<audio
+					clipBegin="00:00:11.7359864"
+					clipEnd="00:00:14.0969841"
+					src="aud009.mp3" />
+			</navLabel>
+			<content
+				src="0009.smil#sm_117" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_22"
+			class="pagenum"
+			playOrder="21"
+			type="normal"
+			value="13">
+			<navLabel>
+				<text>13</text>
+				<audio
+					clipBegin="00:00:30.2279819"
+					clipEnd="00:00:32.7239683"
+					src="aud009.mp3" />
+			</navLabel>
+			<content
+				src="0009.smil#sm_123" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_23"
+			class="pagenum"
+			playOrder="22"
+			type="normal"
+			value="14">
+			<navLabel>
+				<text>14</text>
+				<audio
+					clipBegin="00:00:44.9989796"
+					clipEnd="00:00:47.5809751"
+					src="aud009.mp3" />
+			</navLabel>
+			<content
+				src="0009.smil#sm_128" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_25"
+			class="pagenum"
+			playOrder="24"
+			type="normal"
+			value="15">
+			<navLabel>
+				<text>15</text>
+				<audio
+					clipBegin="00:00:22.9860091"
+					clipEnd="00:00:25.4819955"
+					src="aud010.mp3" />
+			</navLabel>
+			<content
+				src="0010.smil#sm_138" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_26"
+			class="pagenum"
+			playOrder="25"
+			type="normal"
+			value="16">
+			<navLabel>
+				<text>16</text>
+				<audio
+					clipBegin="00:00:48.4360091"
+					clipEnd="00:00:50.9360091"
+					src="aud010.mp3" />
+			</navLabel>
+			<content
+				src="0010.smil#sm_145" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_28"
+			class="pagenum"
+			playOrder="27"
+			type="normal"
+			value="17">
+			<navLabel>
+				<text>17</text>
+				<audio
+					clipBegin="00:00:19.4880045"
+					clipEnd="00:00:22.1649887"
+					src="aud011.mp3" />
+			</navLabel>
+			<content
+				src="0011.smil#sm_152" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_29"
+			class="pagenum"
+			playOrder="28"
+			type="normal"
+			value="18">
+			<navLabel>
+				<text>18</text>
+				<audio
+					clipBegin="00:00:41.1819728"
+					clipEnd="00:00:43.5839683"
+					src="aud011.mp3" />
+			</navLabel>
+			<content
+				src="0011.smil#sm_157" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_31"
+			class="pagenum"
+			playOrder="30"
+			type="normal"
+			value="19">
+			<navLabel>
+				<text>19</text>
+				<audio
+					clipBegin="00:00:26.1049887"
+					clipEnd="00:00:28.5049887"
+					src="aud012.mp3" />
+			</navLabel>
+			<content
+				src="0012.smil#sm_167" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_32"
+			class="pagenum"
+			playOrder="31"
+			type="normal"
+			value="20">
+			<navLabel>
+				<text>20</text>
+				<audio
+					clipBegin="00:00:28.5049887"
+					clipEnd="00:00:30.7819728"
+					src="aud012.mp3" />
+			</navLabel>
+			<content
+				src="0012.smil#sm_169" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_34"
+			class="pagenum"
+			playOrder="33"
+			type="normal"
+			value="21">
+			<navLabel>
+				<text>21</text>
+				<audio
+					clipBegin="00:00:32.1850113"
+					clipEnd="00:00:34.7870068"
+					src="aud013.mp3" />
+			</navLabel>
+			<content
+				src="0013.smil#sm_179" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_35"
+			class="pagenum"
+			playOrder="34"
+			type="normal"
+			value="22">
+			<navLabel>
+				<text>22</text>
+				<audio
+					clipBegin="00:00:34.7870068"
+					clipEnd="00:00:37.4670068"
+					src="aud013.mp3" />
+			</navLabel>
+			<content
+				src="0013.smil#sm_181" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_37"
+			class="pagenum"
+			playOrder="36"
+			type="normal"
+			value="23">
+			<navLabel>
+				<text>23</text>
+				<audio
+					clipBegin="00:00:42.4200000"
+					clipEnd="00:00:45.1609977"
+					src="aud014.mp3" />
+			</navLabel>
+			<content
+				src="0014.smil#sm_193" />
+		</pageTarget>
+		<pageTarget
+			id="ncx_42"
+			class="pagenum"
+			playOrder="41"
+			type="normal"
+			value="24">
+			<navLabel>
+				<text>24</text>
+				<audio
+					clipBegin="00:00:16.5280045"
+					clipEnd="00:00:19.0549887"
+					src="aud018.mp3" />
+			</navLabel>
+			<content
+				src="0018.smil#sm_208" />
+		</pageTarget>
+	</pageList>
+</ncx>

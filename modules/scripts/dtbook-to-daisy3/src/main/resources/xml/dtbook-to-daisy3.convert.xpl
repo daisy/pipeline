@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="main" type="px:dtbook-to-daisy3-convert"
-		xmlns:p="http://www.w3.org/ns/xproc"
-		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-		xmlns:dc="http://purl.org/dc/elements/1.1/"
-		xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:m="http://www.w3.org/1998/Math/MathML"
-		xmlns:cx="http://xmlcalabash.com/ns/extensions"
-		exclude-inline-prefixes="#all">
+<p:declare-step version="1.0"
+                xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                name="main" type="px:dtbook-to-daisy3"
+                exclude-inline-prefixes="#all">
 
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
     <h1 px:role="name">DTBook to DAISY 3</h1>
@@ -22,7 +23,7 @@
     </p:documentation>
   </p:input>
 
-  <p:input port="config">
+  <p:input port="tts-config">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">Text-To-Speech configuration file</h2>
       <p px:role="desc">Configuration file that contains Text-To-Speech
@@ -116,52 +117,47 @@
   <p:import href="http://www.daisy.org/pipeline/modules/dtbook-tts/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
 
-  <!-- Find the first DTBook file within the input documents. -->
-  <p:variable name="dtbook-uri"
-	      select="resolve-uri(//*[@media-type='application/x-dtbook+xml'][1]/@href, base-uri(/*))">
-    <p:pipe port="fileset.in" step="main"/>
-  </p:variable>
 
-  <p:split-sequence name="split">
-    <p:input port="source">
-      <p:pipe port="in-memory.in" step="main"/>
-    </p:input>
-    <!-- TODO: do the URI normalization somewhere else -->
-    <p:with-option name="test" select="concat('replace(&quot;file:/&quot;, replace(base-uri(/*), &quot;///&quot;, &quot;/&quot;), &quot;&quot;)=&quot;',
-				       replace('file:/', replace($dtbook-uri, '///', '/'), ''), '&quot;')"/>
-  </p:split-sequence>
-  <p:count/>
-  <p:choose name="first-dtbook">
-    <p:when test=". = 0">
-      <p:output port="result"/>
-      <p:error xmlns:err="http://www.w3.org/ns/xproc-error" code="PEZE00">
-	<p:input port="source">
-	  <p:inline>
-	    <message>No DTBook document found.</message>
-	  </p:inline>
-	</p:input>
-      </p:error>
+  <!-- Find the first and only DTBook file within the input documents. -->
+  <p:group name="first-dtbook">
+    <p:output port="result"/>
+    <px:fileset-load media-types="application/x-dtbook+xml">
+      <p:input port="fileset">
+        <p:pipe step="main" port="fileset.in"/>
+      </p:input>
+      <p:input port="in-memory">
+        <p:pipe step="main" port="in-memory.in"/>
+      </p:input>
+    </px:fileset-load>
+    <px:assert message="No DTBook document found." test-count-min="1" error-code="PEZE00"/>
+    <px:assert message="More than one DTBook found in fileset." test-count-max="1" error-code="PEZE00"/>
+  </p:group>
+
+  <!-- CSS inlining -->
+  <p:choose>
+    <p:when test="$audio = 'true'">
+      <px:inline-css-speech content-type="application/x-dtbook+xml">
+        <p:input port="fileset.in">
+          <p:pipe step="main" port="fileset.in"/>
+        </p:input>
+        <p:input port="config">
+          <p:pipe step="main" port="tts-config"/>
+        </p:input>
+      </px:inline-css-speech>
     </p:when>
     <p:otherwise>
-      <p:output port="result"/>
-      <p:identity>
-	<p:input port="source">
-	  <p:pipe port="matched" step="split"/>
-	</p:input>
-      </p:identity>
+      <p:identity/>
     </p:otherwise>
   </p:choose>
 
   <px:tts-for-dtbook name="tts">
-    <p:input port="content.in">
-      <p:pipe port="result" step="first-dtbook"/>
-    </p:input>
     <p:input port="fileset.in">
       <p:pipe port="fileset.in" step="main"/>
     </p:input>
     <p:input port="config">
-      <p:pipe port="config" step="main"/>
+      <p:pipe step="main" port="tts-config"/>
     </p:input>
     <p:with-option name="audio" select="$audio"/>
     <p:with-option name="output-dir" select="$output-fileset-base"/>

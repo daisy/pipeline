@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:opf="http://www.idpf.org/2007/opf"
-    px:input-filesets="epub3"
-    px:output-filesets="daisy202"
-    type="px:epub3-to-daisy202" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xpath-version="2.0">
-
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="px:epub3-to-daisy202.script" name="main"
+                px:input-filesets="epub3"
+                px:output-filesets="daisy202"
+                xpath-version="2.0">
+    
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 to DAISY 2.02</h1>
         <p px:role="desc">Transforms an EPUB 3 publication into DAISY 2.02.</p>
@@ -106,14 +110,14 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
                         <p:pipe step="load" port="status"/>
                     </p:output>
                     
-                    <px:epub3-to-daisy202-convert name="convert">
+                    <px:epub3-to-daisy202 name="convert">
                         <p:input port="fileset.in">
                             <p:pipe port="fileset.out" step="load"/>
                         </p:input>
                         <p:input port="in-memory.in">
                             <p:pipe port="in-memory.out" step="load"/>
                         </p:input>
-                    </px:epub3-to-daisy202-convert>
+                    </px:epub3-to-daisy202>
         
                     <px:epub3-to-daisy202.store name="store">
                         <p:input port="fileset.in">

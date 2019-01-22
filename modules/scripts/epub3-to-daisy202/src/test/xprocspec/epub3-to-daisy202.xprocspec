@@ -1,170 +1,412 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:p="http://www.w3.org/ns/xproc"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               xmlns:epub="http://www.idpf.org/2007/ops"
-               xmlns:html="http://www.w3.org/1999/xhtml"
-               xmlns:opf="http://www.idpf.org/2007/opf"
-               xmlns:xs="http://www.w3.org/2001/XMLSchema"
-               script="../../main/resources/xml/xproc/epub3-to-daisy202.xpl">
-    
-    <x:scenario label="moby-dick">
+               script="../../main/resources/xml/xproc/step/epub3-to-daisy202.convert.xpl">
+
+    <x:scenario label="hefty-water">
         <x:call step="px:epub3-to-daisy202">
-            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.epub')"/>
-            <x:option name="output-dir" select="resolve-uri('moby-dick/output-dir/',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('moby-dick/temp-dir/',$temp-dir)"/>
+            <x:input port="fileset.in">
+                <x:document type="inline" xml:base="hefty-water/">
+                    <d:fileset>
+                        <d:file href="mimetype" media-type="text/plain"/>
+                        <d:file href="META-INF/container.xml" media-type="application/xml"/>
+                        <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/heftywater.xhtml" media-type="application/xhtml+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in"/>
         </x:call>
-        <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="moby-dick/output-dir/" recursive="true"/>
+        <x:context label="The DAISY 2.02 fileset">
+            <x:document type="port" port="fileset.out"/>
         </x:context>
-        <x:expect label="the output directory should contain the DAISY 2.02" type="compare" >
+        <x:expect label="The DAISY 2.02 fileset"
+                  type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
             <x:document type="inline">
-                <c:directory name="output-dir">
-                    <c:directory name="urn_isbn_9780316000000">
-                        <c:directory name="audio">
-                            <c:file name="mobydick_001_002_melville.mp4"/>
-                        </c:directory>
-                        <c:file name="chapter_001.html"/>
-                        <c:file name="chapter_001_overlay.smil"/>
-                        <c:file name="chapter_002.html"/>
-                        <c:file name="chapter_002_overlay.smil"/>
-                        <c:file name="chapter_003.html"/>
-                        <c:directory name="css">
-                            <c:file name="stylesheet.css"/>
-                        </c:directory>
-                        <c:directory name="fonts">
-                            <c:file name="STIXGeneral.otf"/>
-                            <c:file name="STIXGeneralBol.otf"/>
-                            <c:file name="STIXGeneralBolIta.otf"/>
-                            <c:file name="STIXGeneralItalic.otf"/>
-                        </c:directory>
-                        <c:directory name="images">
-                            <c:file name="9780316000000.jpg"/>
-                            <c:file name="Moby-Dick_FE_title_page.jpg"/>
-                        </c:directory>
-                        <c:file name="ncc.html"/>
-                    </c:directory>
-                </c:directory>
+                <d:fileset>
+                    <d:file href="hefty-water/EPUB/heftywater.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="hefty-water/EPUB/ncc.html"  media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                </d:fileset>
             </x:document>
         </x:expect>
+        <!--<x:context label="result HTML head">
+            <x:document type="port" port="in-memory.out" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
+        </x:context>
+        <x:expect label="The head of the resulting HTML-file should be as expected" type="compare">
+            <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
+        </x:expect>-->
+        <!--<x:context label="result HTML body">
+            <x:document type="port" port="in-memory.out" select="/html:html/html:body"/>
+        </x:context>
+        <x:expect label="The body of the resulting HTML-file should be as expected" type="compare">
+            <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:body"/>
+        </x:expect>-->
+        <!--<x:context label="result HTML document" pending="validation not implemented in xprocspec yet?">
+            <x:document type="port" port="in-memory.out"/>
+        </x:context>
+        <x:expect label="The result should be valid according to the Nordic EPUB3 HTML content model" type="validate" grammar="relax-ng">
+            <x:document type="file" href="../../main/resources/xml/schema/nordic-html5.rng"/>
+        </x:expect>
+        <x:expect label="The result should be valid according to the Nordic EPUB3 HTML markup rules" type="validate" grammar="schematron">
+            <x:document type="file" href="../../main/resources/xml/schema/nordic2015-1.sch"/>
+        </x:expect>-->
     </x:scenario>
-    
-    <x:scenario label="issue-529">
-        <x:documentation>
-            Regression test for https://github.com/daisy/pipeline/issues/529
-        </x:documentation>
+
+    <x:scenario label="moby-dick-mo-20120214">
         <x:call step="px:epub3-to-daisy202">
-            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.2/OPS/package.opf')"/>
-            <x:option name="validation" select="'report'"/>
-            <x:option name="output-dir" select="resolve-uri('issue-529/output-dir/',$temp-dir)"/>
-            <x:option name="temp-dir" select="resolve-uri('issue-529/temp-dir/',$temp-dir)"/>
+            <x:input port="fileset.in">
+                <x:document type="inline" xml:base="moby-dick-mo-20120214/">
+                    <d:fileset>
+                        <d:file href="mimetype" media-type="text/plain"/>
+                        <d:file href="META-INF/container.xml" media-type="application/xml"/>
+                        <d:file href="OPS/package.opf" media-type="application/oebps-package+xml"/>
+                        <d:file href="OPS/fonts/STIXGeneral.otf" media-type="application/vnd.ms-opentype"/>
+                        <d:file href="OPS/fonts/STIXGeneralItalic.otf" media-type="application/vnd.ms-opentype"/>
+                        <d:file href="OPS/fonts/STIXGeneralBol.otf" media-type="application/vnd.ms-opentype"/>
+                        <d:file href="OPS/fonts/STIXGeneralBolIta.otf" media-type="application/vnd.ms-opentype"/>
+                        <d:file href="OPS/toc.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/copyright.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/titlepage.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/cover.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/images/9780316000000.jpg" media-type="image/jpeg"/>
+                        <d:file href="OPS/css/stylesheet.css" media-type="text/css"/>
+                        <d:file href="OPS/images/Moby-Dick_FE_title_page.jpg" media-type="image/jpeg"/>
+                        <d:file href="OPS/preface_001.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/introduction_001.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/epigraph_001.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_001.xhtml" media-type="application/xhtml+xml" media-overlay="chapter_001_overlay"/>
+                        <d:file href="OPS/chapter_001_overlay.smil" media-type="application/smil+xml"/>
+                        <d:file href="OPS/chapter_002.xhtml" media-type="application/xhtml+xml" media-overlay="chapter_002_overlay"/>
+                        <d:file href="OPS/chapter_002_overlay.smil" media-type="application/smil+xml"/>
+                        <d:file href="OPS/chapter_003.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/audio/mobydick_001_002_melville.mp4" media-type="audio/mp4"/>
+                        <d:file href="OPS/chapter_004.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_005.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_006.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_007.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_008.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_009.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_010.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_011.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_012.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_013.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_014.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_015.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_016.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_017.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_018.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_019.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_020.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_021.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_022.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_023.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_024.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_025.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_026.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_027.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_028.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_029.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_030.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_031.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_032.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_033.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_034.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_035.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_036.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_037.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_038.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_039.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_040.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_041.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_042.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_043.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_044.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_045.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_046.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_047.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_048.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_049.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_050.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_051.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_052.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_053.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_054.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_055.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_056.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_057.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_058.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_059.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_060.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_061.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_062.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_063.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_064.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_065.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_066.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_067.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_068.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_069.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_070.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_071.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_072.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_073.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_074.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_075.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_076.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_077.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_078.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_079.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_080.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_081.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_082.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_083.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_084.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_085.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_086.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_087.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_088.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_089.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_090.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_091.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_092.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_093.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_094.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_095.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_096.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_097.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_098.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_099.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_100.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_101.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_102.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_103.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_104.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_105.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_106.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_107.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_108.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_109.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_110.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_111.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_112.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_113.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_114.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_115.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_116.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_117.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_118.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_119.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_120.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_121.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_122.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_123.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_124.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_125.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_126.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_127.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_128.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_129.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_130.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_131.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_132.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_133.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_134.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_135.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/chapter_136.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="OPS/toc-short.xhtml" media-type="application/xhtml+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in"/>
         </x:call>
-        <x:context label="the validation-status port">
-            <x:document type="port" port="validation-status"/>
+        <x:context label="The DAISY 2.02 fileset">
+            <x:document type="port" port="fileset.out"/>
         </x:context>
-        <x:expect label="the job should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
-        <x:context label="the validation-report port">
-            <x:document type="port" port="validation-report"/>
-        </x:context>
-        <x:expect label="the input should be valid EPUB" type="count" max="0"/>
-        <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="issue-529/output-dir/" recursive="true"/>
-        </x:context>
-        <x:expect label="the output directory should contain the DAISY 2.02" type="compare" >
+        <x:expect label="The DAISY 2.02 fileset"
+                  type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
             <x:document type="inline">
-                <c:directory name="output-dir">
-                    <c:directory name="urn_isbn_9780316000000">
-                        <c:directory name="audio">
-                            <c:file name="mobydick_001_002_melville.mp4"/>
-                        </c:directory>
-                        <c:directory name="css">
-                            <c:file name="stylesheet.css"/>
-                        </c:directory>
-                        <c:directory name="fonts">
-                            <c:file name="STIXGeneral.otf"/>
-                            <c:file name="STIXGeneralBol.otf"/>
-                            <c:file name="STIXGeneralBolIta.otf"/>
-                            <c:file name="STIXGeneralItalic.otf"/>
-                        </c:directory>
-                        <c:file name="ncc.html"/>
-                        <c:directory name="smil">
-                            <c:file name="chapter_001_overlay.smil"/>
-                            <c:file name="chapter_002_overlay.smil"/>
-                        </c:directory>
-                        <c:directory name="text">
-                            <c:file name="chapter_001.html"/>
-                            <c:file name="chapter_002.html"/>
-                            <c:file name="chapter_003.html"/>
-                        </c:directory>
-                    </c:directory>
-                </c:directory>
+                <d:fileset>
+                    <d:file href="moby-dick-mo-20120214/OPS/fonts/STIXGeneral.otf" media-type="application/vnd.ms-opentype"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/fonts/STIXGeneralItalic.otf" media-type="application/vnd.ms-opentype"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/fonts/STIXGeneralBol.otf" media-type="application/vnd.ms-opentype"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/fonts/STIXGeneralBolIta.otf" media-type="application/vnd.ms-opentype"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/copyright.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/titlepage.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/cover.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/images/9780316000000.jpg" media-type="image/jpeg"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/css/stylesheet.css" media-type="text/css"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/images/Moby-Dick_FE_title_page.jpg" media-type="image/jpeg"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/preface_001.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/introduction_001.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/epigraph_001.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_001.html" media-overlay="chapter_001_overlay" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_001_overlay.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_002.html" media-overlay="chapter_002_overlay" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_002_overlay.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_003.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/audio/mobydick_001_002_melville.mp4" media-type="audio/mp4"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_004.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_005.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_006.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_007.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_008.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_009.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_010.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_011.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_012.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_013.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_014.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_015.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_016.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_017.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_018.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_019.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_020.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_021.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_022.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_023.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_024.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_025.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_026.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_027.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_028.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_029.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_030.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_031.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_032.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_033.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_034.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_035.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_036.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_037.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_038.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_039.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_040.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_041.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_042.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_043.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_044.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_045.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_046.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_047.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_048.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_049.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_050.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_051.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_052.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_053.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_054.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_055.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_056.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_057.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_058.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_059.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_060.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_061.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_062.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_063.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_064.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_065.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_066.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_067.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_068.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_069.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_070.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_071.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_072.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_073.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_074.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_075.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_076.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_077.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_078.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_079.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_080.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_081.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_082.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_083.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_084.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_085.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_086.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_087.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_088.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_089.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_090.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_091.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_092.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_093.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_094.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_095.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_096.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_097.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_098.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_099.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_100.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_101.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_102.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_103.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_104.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_105.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_106.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_107.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_108.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_109.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_110.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_111.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_112.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_113.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_114.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_115.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_116.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_117.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_118.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_119.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_120.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_121.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_122.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_123.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_124.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_125.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_126.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_127.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_128.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_129.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_130.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_131.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_132.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_133.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_134.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_135.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_136.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/toc-short.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/ncc.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                </d:fileset>
             </x:document>
         </x:expect>
+        <!--<x:context label="result HTML head">
+            <x:document type="port" port="in-memory.out" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
+        </x:context>
+        <x:expect label="The head of the resulting HTML-file should be as expected" type="compare">
+            <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
+        </x:expect>-->
+        <!--<x:context label="result HTML body">
+            <x:document type="port" port="in-memory.out" select="/html:html/html:body"/>
+        </x:context>
+        <x:expect label="The body of the resulting HTML-file should be as expected" type="compare">
+            <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:body"/>
+        </x:expect>-->
+        <!--<x:context label="result HTML document" pending="validation not implemented in xprocspec yet?">
+            <x:document type="port" port="in-memory.out"/>
+        </x:context>
+        <x:expect label="The result should be valid according to the Nordic EPUB3 HTML content model" type="validate" grammar="relax-ng">
+            <x:document type="file" href="../../main/resources/xml/schema/nordic-html5.rng"/>
+        </x:expect>
+        <x:expect label="The result should be valid according to the Nordic EPUB3 HTML markup rules" type="validate" grammar="schematron">
+            <x:document type="file" href="../../main/resources/xml/schema/nordic2015-1.sch"/>
+        </x:expect>-->
     </x:scenario>
-    
-    <x:scenario label="validation">
-        <x:call step="px:epub3-to-daisy202">
-            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.invalid/OPS/package.opf')"/>
-        </x:call>
-        <x:scenario label="validation = off">
-            <x:call>
-                <x:option name="validation" select="'off'"/>
-                <x:option name="output-dir" select="resolve-uri('validation/off/output-dir/',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('validation/off/temp-dir/',$temp-dir)"/>
-            </x:call>
-            <x:context label="the validation-status port">
-                <x:document type="port" port="validation-status"/>
-            </x:context>
-            <x:expect label="the job should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
-            <x:context label="the validation-report port">
-                <x:document type="port" port="validation-report"/>
-            </x:context>
-            <x:expect label="there should be no report" type="count" max="0"/>
-            <x:context label="the output directory">
-                <x:document type="directory" base-uri="temp-dir" href="validation/off/output-dir/" recursive="true"/>
-            </x:context>
-            <x:expect label="the script should produce an output" type="xpath" test="/*/c:directory[@name='urn_isbn_9780316000000']"/>
-        </x:scenario>
-        <x:scenario label="validation = report">
-            <x:call>
-                <x:option name="validation" select="'report'"/>
-                <x:option name="output-dir" select="resolve-uri('validation/report/output-dir/',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('validation/report/temp-dir/',$temp-dir)"/>
-            </x:call>
-            <x:context label="the validation-status port">
-                <x:document type="port" port="validation-status"/>
-            </x:context>
-            <x:expect label="the job should not fail" type="xpath" test="/d:validation-status[@result='ok']"/>
-            <x:context label="the validation-report port">
-                <x:document type="port" port="validation-report"/>
-            </x:context>
-            <x:expect label="the input should be reported as invalid" type="count" min="1"/>
-            <x:context label="the output directory">
-                <x:document type="directory" base-uri="temp-dir" href="validation/report/output-dir/" recursive="true"/>
-            </x:context>
-            <x:expect label="the script should produce an output" type="xpath" test="/*/c:directory[@name='urn_isbn_9780316000000']"/>
-        </x:scenario>
-        <x:scenario label="validation = abort">
-            <x:call>
-                <x:option name="validation" select="'abort'"/>
-                <x:option name="output-dir" select="resolve-uri('validation/abort/output-dir/',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('validation/abort/temp-dir/',$temp-dir)"/>
-            </x:call>
-            <x:context label="the validation-status port">
-                <x:document type="port" port="validation-status"/>
-            </x:context>
-            <x:expect label="the job should fail" type="xpath" test="/d:validation-status[@result='error']"/>
-            <x:context label="the validation-report port">
-                <x:document type="port" port="validation-report"/>
-            </x:context>
-            <x:expect label="the input should be reported as invalid" type="count" min="1"/>
-            <x:context label="the output directory">
-                <x:document type="directory" base-uri="temp-dir" href="validation/" recursive="true"/>
-            </x:context>
-            <x:expect label="the script should produce no output" type="xpath" test="not(/*/c:directory[@name='abort'])"/>
-        </x:scenario>
-    </x:scenario>
-    
+
 </x:description>

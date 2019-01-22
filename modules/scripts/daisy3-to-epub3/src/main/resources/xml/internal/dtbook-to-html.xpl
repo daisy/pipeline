@@ -9,11 +9,14 @@
 
     <p:output port="fileset.out" primary="true"/>
     <p:output port="in-memory.out" sequence="true">
-        <p:pipe port="in-memory.out" step="convert"/>
+        <p:pipe port="in-memory.out" step="to-html"/>
     </p:output>
 
     <p:option name="language" required="false" select="''"/>
     <p:option name="output-dir" required="true" px:output="result"/>
+    <p:option name="filename" required="true">
+        <!-- filename without extension -->
+    </p:option>
     <p:option name="assert-valid" required="false" select="'true'"/>
     <p:option name="chunk-size" required="false" select="'-1'"/>
 
@@ -22,44 +25,24 @@
     <p:import href="http://www.daisy.org/pipeline/modules/zedai-to-html/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
+    <px:message message="Converting to ZedAI..."/>
+    <px:dtbook-to-zedai name="to-zedai">
+        <p:input port="in-memory.in">
+            <p:pipe port="in-memory.in" step="main"/>
+        </p:input>
+        <p:with-option name="opt-output-dir" select="concat($output-dir,'zedai/')"/>
+        <p:with-option name="opt-zedai-filename" select="concat($filename,'.xml')"/>
+        <p:with-option name="opt-lang" select="$language"/>
+        <p:with-option name="opt-assert-valid" select="$assert-valid"/>
+    </px:dtbook-to-zedai>
 
-    <p:split-sequence name="first-dtbook" test="position()=1" initial-only="true"/>
-    <p:sink/>
+    <px:message message="Converting to XHTML5..."/>
+    <px:zedai-to-html name="to-html" chunk="true">
+        <p:input port="in-memory.in">
+            <p:pipe port="in-memory.out" step="to-zedai"/>
+        </p:input>
+        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="chunk-size" select="$chunk-size"/>
+    </px:zedai-to-html>
 
-    <p:group name="convert">
-        <p:output port="fileset.out" primary="true" sequence="false"/>
-        <p:output port="in-memory.out" sequence="true">
-            <p:pipe port="in-memory.out" step="to-html"/>
-        </p:output>
-        <p:variable name="encoded-title"
-            select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')">
-            <p:pipe port="matched" step="first-dtbook"/>
-        </p:variable>
-        <p:identity>
-            <p:input port="source">
-                <p:pipe port="fileset.in" step="main"/>
-            </p:input>
-        </p:identity>
-
-        <px:message message="Converting to ZedAI..."/>
-        <px:dtbook-to-zedai-convert name="to-zedai">
-            <p:input port="in-memory.in">
-                <p:pipe port="in-memory.in" step="main"/>
-            </p:input>
-            <p:with-option name="opt-output-dir" select="concat($output-dir,'zedai/')"/>
-            <p:with-option name="opt-zedai-filename" select="concat($encoded-title,'.xml')"/>
-            <p:with-option name="opt-lang" select="$language"/>
-            <p:with-option name="opt-assert-valid" select="$assert-valid"/>
-        </px:dtbook-to-zedai-convert>
-
-        <px:message message="Converting to XHTML5..."/>
-        <px:zedai-to-html-convert name="to-html" chunk="true">
-            <p:input port="in-memory.in">
-                <p:pipe port="in-memory.out" step="to-zedai"/>
-            </p:input>
-            <p:with-option name="output-dir" select="$output-dir"/>
-            <p:with-option name="chunk-size" select="$chunk-size"/>
-        </px:zedai-to-html-convert>
-
-    </p:group>
 </p:declare-step>

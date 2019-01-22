@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/epub3-to-epub3.convert.xpl">
+	
+	<x:scenario label="valentin">
+		<x:call step="px:epub3-to-epub3">
+			<x:input port="epub.in.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/valentin.epub!/mimetype"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="../resources/valentin.epub!/EPUB/css/accessibility.css" media-type="text/css"/>
+						<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
+						<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
+						<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
+						<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
+						<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
+						<d:file href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
+						<d:file href="../resources/valentin.epub!/EPUB/images/valentin.jpg" media-type="image/jpeg"/>
+						<d:file href="../resources/valentin.epub!/META-INF/container.xml" media-type="application/xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="epub.in.in-memory"/>
+			<x:option name="result-base" select="resolve-uri('result/')"/>
+			<x:option name="braille-translator" select="'(translator:liblouis)'"/>
+			<x:option name="stylesheet" select="''"/>
+			<x:option name="apply-document-specific-stylesheets" select="false()"/>
+			<x:option name="set-default-rendition-to-braille" select="false()"/>
+		</x:call>
+		<x:context label="epub.out.fileset port">
+			<x:document type="port" port="epub.out.fileset"/>
+		</x:context>
+		<x:expect label="epub.out.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/mimetype" original-href="../resources/valentin.epub!/mimetype"/>
+					<d:file href="result/EPUB/C00000-1-cover.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/package.opf" original-href="../resources/valentin.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="result/EPUB/nav.xhtml" original-href="../resources/valentin.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/nav.ncx" original-href="../resources/valentin.epub!/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
+					<d:file href="result/EPUB/C00000-9-footnotes.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-5-chapter.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-6-rearnotes.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-7-chapter.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-8-conclusion.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-4-chapter.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-2-frontmatter.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-3-chapter.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/css/accessibility.css" original-href="../resources/valentin.epub!/EPUB/css/accessibility.css" media-type="text/css"/>
+					<d:file href="result/EPUB/css/fonts/opendyslexic/LICENSE.txt" original-href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
+					<d:file href="result/EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" original-href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
+					<d:file href="result/EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" original-href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
+					<d:file href="result/EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" original-href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
+					<d:file href="result/EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" original-href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
+					<d:file href="result/EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" original-href="../resources/valentin.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
+					<d:file href="result/EPUB/images/valentin.jpg" original-href="../resources/valentin.epub!/EPUB/images/valentin.jpg" media-type="image/jpeg"/>
+					<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
+					<d:file href="result/EPUB/C00000-1-cover_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-2-frontmatter_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-3-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-4-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-5-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-6-rearnotes_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-7-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-8-conclusion_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-9-footnotes_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/nav_braille.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/EPUB/C00000-1-cover_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-2-frontmatter_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-3-chapter_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-4-chapter_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-5-chapter_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-6-rearnotes_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-7-chapter_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-8-conclusion_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/C00000-9-footnotes_braille.css" media-type="text/plain"/>
+					<d:file href="result/EPUB/nav_braille.css" media-type="text/plain"/>
+					<d:file href="result/META-INF/metadata.xml"/>
+					<d:file href="result/EPUB/package-braille.opf"/>
+					<d:file href="result/EPUB/renditionMapping.html" indent="true"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the container document">
+			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/META-INF/container.xml')]"/>
+		</x:context>
+		<x:expect label="the in-memory output port contains the container document" type="compare">
+			<x:document type="inline">
+				<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0"
+				           xmlns:rendition="http://www.idpf.org/2013/rendition">
+					<rootfiles>
+						<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+						<rootfile full-path="EPUB/package-braille.opf" media-type="application/oebps-package+xml"
+								  rendition:accessMode="tactile" rendition:label="Pre-translated to braille"
+								  rendition:language="en-Brai" rendition:layout="reflowable"/>
+					</rootfiles>
+					<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
+				</container>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

@@ -2,7 +2,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
    xmlns:px="http://www.daisy.org/ns/pipeline">
    <uri name="http://www.daisy.org/pipeline/modules/daisy3-to-daisy202/daisy3-to-daisy202.xpl"
-      uri="../xml/daisy3-to-daisy202.xpl" px:content-type="script"/>
+      uri="../xml/daisy3-to-daisy202.xpl" px:content-type="script" px:id="daisy3-to-daisy202"/>
    <uri name="http://www.daisy.org/pipeline/modules/daisy3-to-daisy202/library.xpl"
       uri="../xml/library.xpl"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>

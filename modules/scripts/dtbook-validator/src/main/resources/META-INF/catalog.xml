@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl" uri="../xml/dtbook-validator.xpl" px:content-type="script"/>
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl" uri="../xml/dtbook-validator.xpl" px:content-type="script" px:id="dtbook-validator"/>
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-validator/library.xpl" uri="../xml/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>

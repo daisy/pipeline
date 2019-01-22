@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               script="../../main/resources/xml/xproc/epub3-to-pef.convert.xpl">
+  
+  <x:scenario label="simple">
+    <x:call step="px:epub3-to-pef">
+      <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
+      <x:input port="fileset.in">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="../resources/simple-epub/package.opf" media-type="application/oebps-package+xml"/>
+            <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml"/>
+            <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml"/>
+            <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="in-memory.in"/>
+      <x:param port="parameters" name="page-width" select="35"/>
+      <x:param port="parameters" name="page-height" select="20"/>
+      <!--
+      <x:param port="parameters" name="page-height" select="20"/>
+      <x:param port="parameters" name="include-line-groups" select="true()"/>
+      <x:param port="parameters" name="include-captions" select="true()"/>
+      <x:param port="parameters" name="accented-letters" select="true()"/>
+      <x:param port="parameters" name="tab-width" select="4"/>
+      <x:param port="parameters" name="line-spacing" select="'single'"/>
+      <x:param port="parameters" name="left-margin" select="0"/>
+      <x:param port="parameters" name="footnotes-placement" select="''"/>
+      <x:param port="parameters" name="toc-depth" select="0"/>
+      <x:param port="parameters" name="maximum-number-of-sheets" select="70"/>
+      <x:param port="parameters" name="rear-cover-placement" select="''"/>
+      <x:param port="parameters" name="duplex" select="true()"/>
+      <x:param port="parameters" name="include-note-references" select="true()"/>
+      <x:param port="parameters" name="number-of-sheets" select="50"/>
+      <x:param port="parameters" name="main-document-language" select="''"/>
+      <x:param port="parameters" name="minimum-number-of-sheets" select="30"/>
+      <x:param port="parameters" name="page-width" select="35"/>
+      <x:param port="parameters" name="show-print-page-numbers" select="true()"/>
+      <x:param port="parameters" name="colophon-metadata-placement" select="''"/>
+      <x:param port="parameters" name="force-braille-page-break" select="false()"/>
+      <x:param port="parameters" name="levels-in-footer" select="6"/>
+      <x:param port="parameters" name="include-image-groups" select="true()"/>
+      <x:param port="parameters" name="downshift-ordinal-numbers" select="false()"/>
+      <x:param port="parameters" name="polite-forms" select="false()"/>
+      <x:param port="parameters" name="include-production-notes" select="false()"/>
+      <x:param port="parameters" name="show-braille-page-numbers" select="true()"/>
+      <x:param port="parameters" name="hyphenation" select="true()"/>
+      <x:param port="parameters" name="text-level-formatting" select="true()"/>
+      <x:param port="parameters" name="capital-letters" select="true()"/>
+      <x:param port="parameters" name="include-images" select="true()"/>
+      -->
+      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="include-obfl" select="true()"/>
+      <x:option name="temp-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="the fileset.out port">
+      <x:document type="port" port="fileset.out"/>
+    </x:context>
+    <x:expect label="the result.fileset port"
+              type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+      <x:document type="inline">
+        <d:fileset>
+          <d:file href="../resources/simple-epub/test.pef" media-type="application/x-pef+xml"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="the result PEF">
+      <x:document type="port" port="in-memory.out"
+                  select="/*[base-uri()=resolve-uri('../resources/simple-epub/test.pef',$test-base-uri)]"/>
+    </x:context>
+    <x:expect label="the result PEF"
+              type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:identifier>identifier?</dc:identifier>
+              <dc:title>Test</dc:title>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="35" rows="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠋⠕⠕</row>
+                  <row>⠃⠜</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+    <x:context label="the obfl port">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="there is one document on the obfl port" type="count" min="1" max="1"/>
+    <x:expect label="and it is an OBFL document" type="xpath" test="/obfl:obfl"/>
+  </x:scenario>
+  
+</x:description>

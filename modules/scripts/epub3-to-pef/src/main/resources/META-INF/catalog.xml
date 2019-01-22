@@ -2,7 +2,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   
   <!-- scripts -->
-  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl" uri="../xml/xproc/epub3-to-pef.xpl" px:content-type="script" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl" uri="../xml/xproc/epub3-to-pef.xpl" px:content-type="script" px:id="epub3-to-pef" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
   
   <!-- other -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
@@ -18,5 +18,6 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>
   
 </catalog>

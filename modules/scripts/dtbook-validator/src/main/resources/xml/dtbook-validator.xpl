@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-validator" type="px:dtbook-validator"
-    px:input-filesets="dtbook"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:l="http://xproc.org/library" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:m="http://www.w3.org/1998/Math/MathML" exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="px:dtbook-validator.script"
+                px:input-filesets="dtbook"
+                exclude-inline-prefixes="#all">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook Validator</h1>
@@ -34,7 +32,7 @@
             <h1 px:role="name">result</h1>
             <p px:role="desc">A copy of the input document; may include PSVI annotations.</p>
         </p:documentation>
-        <p:pipe port="result" step="if-dtbook-wellformed"/>
+        <p:pipe step="validate-dtbook" port="result"/>
      </p:output>-->
 
     <p:output port="report" sequence="true">
@@ -44,14 +42,14 @@
 
 [More details on the file format](http://daisy.github.io/pipeline/ValidationReportXML).</p>
         </p:documentation>
-        <p:pipe port="xml-report" step="if-dtbook-wellformed"/>
+        <p:pipe step="validate-dtbook" port="xml-report"/>
     </p:output>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation report</h1>
         </p:documentation>
-        <p:pipe port="html-report" step="if-dtbook-wellformed"/>
+        <p:pipe step="validate-dtbook" port="html-report" />
     </p:output>
 
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
@@ -61,7 +59,7 @@
 
 [More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="validation-status" step="if-dtbook-wellformed"/>
+        <p:pipe step="validate-dtbook" port="validation-status"/>
     </p:output>
 
     <!-- we are using a string option instead of an XML input source because
@@ -115,19 +113,13 @@
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <p:import
-        href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation> Collection of utilities for validation and reporting. </p:documentation>
-    </p:import>
-
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>Utilities for representing a fileset.</p:documentation>
     </p:import>
 
     <p:import href="dtbook-validator.validate.xpl"/>
     <p:import href="dtbook-validator.store.xpl"/>
-    <p:variable name="dtbook-filename" select="tokenize($input-dtbook, '/')[last()]"/>
-
+    
     <px:message>
         <p:with-option name="message" select="concat('DTBook validator: ', $input-dtbook)"/>
         <p:input port="source">
@@ -136,126 +128,30 @@
     </px:message>
     <p:sink/>
     
-    <px:fileset-create>
-        <p:with-option name="base" select="replace($input-dtbook,'[^/]+$','')"/>
-    </px:fileset-create>
-    <px:fileset-add-entry>
+    <px:fileset-add-entry media-type="application/x-dtbook+xml">
         <p:with-option name="href" select="$input-dtbook"/>
+        <p:input port="source">
+            <p:inline>
+                <d:fileset/>
+            </p:inline>
+        </p:input>
     </px:fileset-add-entry>
-    <p:identity name="create-fileset-for-dtbook-doc"/>
-    <p:sink/>
     
-    <!--check that the package document is well-formed XML -->
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="result" step="create-fileset-for-dtbook-doc"/>
+    <px:dtbook-validator name="validate-dtbook">
+        <p:with-option name="mathml-version" select="$mathml-version"/>
+        <p:with-option name="check-images" select="$check-images"/>
+        <p:with-option name="base-uri" select="$input-dtbook"/>
+        <p:with-option name="nimas" select="$nimas"/>
+    </px:dtbook-validator>
+    
+    <pxi:dtbook-validator.store>
+        <p:input port="xml-report">
+            <p:pipe step="validate-dtbook" port="xml-report"/>
         </p:input>
-    </p:identity>
-    <px:message message="DTBook validator: Checking that DTBook document exists and is well-formed"/>
-    <px:check-files-wellformed name="check-dtbook-wellformed"/>
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="validation-status" step="check-dtbook-wellformed"/>
+        <p:input port="html-report">
+            <p:pipe step="validate-dtbook" port="html-report"/>
         </p:input>
-    </p:identity>
-    <px:message message="DTBook validator: Done checking that DTBook document exists and is well-formed"/>
-
-    <p:choose name="if-dtbook-wellformed">
-        
-        <!-- if the dtbook file was well-formed -->
-        <p:when test="d:validation-status/@result = 'ok'">
-
-            <p:output port="result">
-                <p:pipe port="result" step="validate-dtbook"/>
-            </p:output>
-            <p:output port="xml-report">
-                <p:pipe port="xml-report" step="validate-dtbook"/>
-            </p:output>
-            <p:output port="html-report">
-                <p:pipe port="html-report" step="validate-dtbook"/>
-            </p:output>
-            <p:output port="validation-status">
-                <p:pipe port="validation-status" step="validate-dtbook"/>
-            </p:output>
-
-            <p:load name="load-dtbook-doc">
-                <p:with-option name="href" select="$input-dtbook"/>
-            </p:load>
-
-            <pxi:dtbook-validator.validate name="validate-dtbook">
-                <p:input port="source">
-                    <p:pipe port="result" step="load-dtbook-doc"/>
-                </p:input>
-                <p:with-option name="output-dir" select="$output-dir"/>
-                <p:with-option name="mathml-version" select="$mathml-version"/>
-                <p:with-option name="check-images" select="$check-images"/>
-                <p:with-option name="base-uri" select="$input-dtbook"/>
-                <p:with-option name="nimas" select="$nimas"/>
-            </pxi:dtbook-validator.validate>
-
-            <pxi:dtbook-validator.store name="store-dtbook-validation-results">
-                <p:input port="xml-report">
-                    <p:pipe port="xml-report" step="validate-dtbook"/>
-                </p:input>
-                <p:input port="html-report">
-                    <p:pipe port="html-report" step="validate-dtbook"/>
-                </p:input>
-                <p:with-option name="output-dir" select="$output-dir"/>
-            </pxi:dtbook-validator.store>
-        </p:when>
-
-        <!-- otherwise, just store a report from the wellformedness check -->
-        <p:otherwise>
-            <p:output port="result">
-                <!-- we have to put something on this port... -->
-                <p:inline>
-                    <tmp:error/>
-                </p:inline>
-            </p:output>
-            <p:output port="xml-report">
-                <p:pipe port="result" step="wrap-report"/>
-            </p:output>
-            <p:output port="html-report">
-                <p:pipe port="result" step="format-as-html"/>
-            </p:output>
-            <p:output port="validation-status">
-                <p:pipe port="validation-status" step="check-dtbook-wellformed"/>
-            </p:output>
-
-            <px:message message="DTBook Validator: DTBook document is missing or not well-formed">
-                <p:input port="source">
-                    <p:inline>
-                        <p:empty/>
-                    </p:inline>
-                </p:input>
-            </px:message>
-            <p:sink/>
-
-            <px:combine-validation-reports name="wrap-report">
-                <p:with-option name="document-name" select="$dtbook-filename"/>
-                <p:with-option name="document-type" select="'N/A'"/>
-                <p:with-option name="document-path" select="$input-dtbook"/>
-                <p:input port="source">
-                    <p:pipe port="report" step="check-dtbook-wellformed"/>
-                </p:input>
-            </px:combine-validation-reports>
-
-            <px:validation-report-to-html name="format-as-html">
-                <p:input port="source">
-                    <p:pipe port="result" step="wrap-report"/>
-                </p:input>
-                <p:with-option name="toc" select="'false'"/>
-            </px:validation-report-to-html>
-
-            <pxi:dtbook-validator.store>
-                <p:input port="xml-report">
-                    <p:pipe port="result" step="wrap-report"/>
-                </p:input>
-                <p:input port="html-report">
-                    <p:pipe port="result" step="format-as-html"/>
-                </p:input>
-                <p:with-option name="output-dir" select="$output-dir"/>
-            </pxi:dtbook-validator.store>
-        </p:otherwise>
-    </p:choose>
+        <p:with-option name="output-dir" select="$output-dir"/>
+    </pxi:dtbook-validator.store>
+    
 </p:declare-step>

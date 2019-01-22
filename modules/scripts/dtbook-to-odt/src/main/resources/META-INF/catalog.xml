@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/dtbook-to-odt.xpl" uri="../xml/dtbook-to-odt.xpl" px:content-type="script"/>
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/dtbook-to-odt.xpl" uri="../xml/dtbook-to-odt.xpl" px:content-type="script" px:id="dtbook-to-odt"/>
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/library.xpl" uri="../xml/library.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/content.xsl" uri="../xml/content.xsl"/>
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/templates/default.ott" uri="../templates/default.ott"/>

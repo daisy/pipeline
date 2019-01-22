@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-to-zedai" type="px:dtbook-to-zedai"
-    px:input-filesets="dtbook"
-    px:output-filesets="zedai"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                type="px:dtbook-to-zedai.script"
+                px:input-filesets="dtbook"
+                px:output-filesets="zedai"
+                exclude-inline-prefixes="#all">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ZedAI</h1>
@@ -74,7 +75,7 @@
     
     <px:dtbook-load name="load"/>
 
-    <px:dtbook-to-zedai-convert name="convert">
+    <px:dtbook-to-zedai name="convert">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
@@ -85,7 +86,7 @@
         <p:with-option name="opt-lang" select="$lang"/>
         <p:with-option name="opt-assert-valid" select="$assert-valid"/>
         <p:with-option name="opt-copy-external-resources" select="$copy-external-resources"/>
-    </px:dtbook-to-zedai-convert>
+    </px:dtbook-to-zedai>
     
     <px:fileset-store name="fileset-store">
         <p:input port="in-memory.in">

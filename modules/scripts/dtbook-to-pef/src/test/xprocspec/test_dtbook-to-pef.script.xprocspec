@@ -1,0 +1,979 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl">
+  
+  <x:scenario label="test hauy_valid.xml with default.css">
+    <x:call step="px:dtbook-to-pef.script">
+      <x:input port="source">
+        <x:document type="file" href="../resources/hauy_valid.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('hauy/output-dir',$temp-dir)"/>
+      <x:option name="brf-output-dir" select="resolve-uri('hauy/output-dir',$temp-dir)"/>
+      <x:option name="preview-output-dir" select="resolve-uri('hauy/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('hauy/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="the output directory contents">
+      <x:document type="directory" base-uri="temp-dir" href="hauy/output-dir/"/>
+    </x:context>
+    <x:expect label="Exactly one PEF file should be present in the output directory" type="xpath"
+              test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+  </x:scenario>
+  
+  <x:scenario label="test default.css + reset.css + style.css">
+    <x:call step="px:dtbook-to-pef.script">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook version="2005-2" xml:lang="en-US" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <head>
+              <meta>foobar</meta>
+            </head>
+            <book>
+              <level1>
+                <h1>foo</h1>
+                <p>bar</p>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
+      <x:option name="brf-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
+      <x:option name="preview-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('hauy_reset/temp-dir',$temp-dir)"/>
+      <x:option name="stylesheet" select="'../resources/reset.css ../resources/style.css'"/>
+      <x:option name="show-braille-page-numbers" select="'false'"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="hauy_reset/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume rows="25" cols="40" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠋⠕⠕⠀⠃⠜</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="various options">
+  <x:call step="px:dtbook-to-pef.script">
+    <x:option name="transform" select="'(grade:2)'"/>
+  </x:call>
+    
+  <x:scenario label="page-size">
+    <x:documentation>
+      Tests page-width and page-height options.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <h1>simple test</h1>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="page-width" select="'35'"/>
+      <x:option name="page-height" select="'20'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'page-size/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'page-size/temp-dir/')"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="page-size/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="35" rows="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="duplex">
+    <x:documentation>
+      Tests duplex option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <h1>simple test</h1>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="duplex" select="'false'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'duplex/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'duplex/temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="duplex/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="levels-in-footer" pending="liblouis translation bug">
+    <x:documentation>
+      Tests levels-in-footer option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <head>
+              <style type="text/css">
+                @page {
+                  size: 15 5;
+                  @bottom-left {
+                    content: string(footer);
+                  }
+                }
+                h1, h2 {
+                  page-break-before: always;
+                }
+              </style>
+            </head>
+            <book>
+              <level1>
+                <h1>first h1</h1>
+                <p>p</p>
+                <h2>h2</h2>
+                <p>p</p>
+                <h1>second h1</h1>
+                <p>p</p>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="levels-in-footer" select="'1'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'levels-in-footer/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'levels-in-footer/temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="levels-in-footer/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠋⠌⠀⠰⠓⠼⠁</row>
+                  <row>⠰⠏</row>
+                  <row/>
+                  <row/>
+                  <row>⠋⠌⠀⠰⠓⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+                <page>
+                  <row>⠰⠓⠼⠃</row>
+                  <row>⠰⠏</row>
+                  <row/>
+                  <row/>
+                  <row>⠋⠌⠀⠰⠓⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+                <page>
+                  <row>⠎⠑⠉⠕⠝⠙⠀⠰⠓⠼⠁</row>
+                  <row>⠰⠏</row>
+                  <row/>
+                  <row/>
+                  <row>⠎⠑⠉⠕⠝⠙⠀⠰⠓⠼⠁⠀⠀⠀⠀</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+    
+  <x:scenario label="hyphenation">
+    <x:documentation>
+      Tests hyphenation option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <head>
+              <style type="text/css">
+                @page {
+                  size: 18 5;
+                }
+              </style>
+            </head>
+            <book>
+              <level1>
+                <h1>simpletest simpletest simpletest</h1>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:scenario label="enabled">
+      <x:call>
+        <x:option name="hyphenation" select="'true'"/>
+        <x:option name="pef-output-dir" select="concat($temp-dir,'hyphenation/enabled/output-dir/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'hyphenation/enabled/temp-dir/')"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="hyphenation/enabled/output-dir/test_dtbook-to-pef.script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>en-US</dc:language>
+              </meta>
+            </head>
+            <body>
+              <volume cols="18" rows="5" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠎⠊⠍⠏⠇⠑⠞⠑⠌⠀⠎⠊⠍⠤</row>
+                    <row>⠏⠇⠑⠞⠑⠌⠀⠎⠊⠍⠏⠇⠑⠞⠑⠌</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="disabled">
+      <x:call>
+        <x:option name="hyphenation" select="'false'"/>
+        <x:option name="pef-output-dir" select="concat($temp-dir,'hyphenation/disabled/output-dir/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'hyphenation/disabled/temp-dir/')"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="hyphenation/disabled/output-dir/test_dtbook-to-pef.script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>en-US</dc:language>
+              </meta>
+            </head>
+            <body>
+              <volume cols="18" rows="5" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠎⠊⠍⠏⠇⠑⠞⠑⠌</row>
+                    <row>⠎⠊⠍⠏⠇⠑⠞⠑⠌</row>
+                    <row>⠎⠊⠍⠏⠇⠑⠞⠑⠌</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+    
+  <x:scenario label="line-spacing">
+    <x:documentation>
+      Tests line-spacing option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <head>
+              <style type="text/css">
+                @page {
+                  size: 10 5;
+                }
+              </style>
+            </head>
+            <book>
+              <level1>
+                <h1>simpletest simpletest simpletest</h1>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="line-spacing" select="'double'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'line-spacing/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'line-spacing/temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="line-spacing/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row rowgap="4">⠎⠊⠍⠏⠇⠑⠞⠑⠌</row>
+                  <row rowgap="4">⠎⠊⠍⠏⠇⠑⠞⠑⠌</row>
+                  <row>⠎⠊⠍⠏⠇⠑⠞⠑⠌</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="capital-letters">
+    <x:documentation>
+      Tests capital-letters option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <h1>Simple test</h1>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="capital-letters" select="'false'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'capital-letters/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'capital-letters/temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="capital-letters/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="include-captions">
+    <x:documentation>
+      Tests include-captions option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <imggroup>
+                  <img id="i_1" src="..." alt="Image description"/>
+                  <caption imgref="i_1">Image caption</caption>
+                </imggroup>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="include-captions" select="'false'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'include-captions/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'include-captions/temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="include-captions/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠠⠊⠍⠁⠛⠑⠀⠙⠑⠎⠉⠗⠊⠏⠰⠝</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="include-images">
+    <x:documentation>
+      Tests include-images option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <imggroup>
+                  <img id="i_1" src="..." alt="Image description"/>
+                  <caption imgref="i_1">Image caption</caption>
+                </imggroup>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="include-images" select="'false'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'include-images/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'include-images/temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="include-images/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠠⠊⠍⠁⠛⠑⠀⠉⠁⠏⠰⠝</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="include-line-groups">
+    <x:documentation>
+      Tests include-line-groups option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <linegroup>
+                  <line>With Annie gone,</line>
+                  <line>With eyes to compare</line>
+                  <line>With the morning sun?</line>
+                </linegroup>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:scenario label="enabled">
+      <x:call>
+        <x:option name="include-line-groups" select="'true'"/>
+        <x:option name="pef-output-dir" select="concat($temp-dir,'include-line-groups/enabled/output-dir/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'include-line-groups/enabled/temp-dir/')"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="include-line-groups/enabled/output-dir/test_dtbook-to-pef.script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>en-US</dc:language>
+              </meta>
+            </head>
+            <body>
+              <volume cols="40" rows="25" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠠⠾⠀⠠⠁⠝⠝⠊⠑⠀⠛⠐⠕⠂</row>
+                    <row>⠠⠾⠀⠑⠽⠑⠎⠀⠖⠤⠏⠜⠑</row>
+                    <row>⠠⠾⠮⠀⠍⠕⠗⠝⠬⠀⠎⠥⠝⠦</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="enabled">
+      <x:call>
+        <x:option name="include-line-groups" select="'false'"/>
+        <x:option name="pef-output-dir" select="concat($temp-dir,'include-line-groups/disabled/output-dir/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'include-line-groups/disabled/temp-dir/')"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="include-line-groups/disabled/output-dir/test_dtbook-to-pef.script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>en-US</dc:language>
+              </meta>
+            </head>
+            <body>
+              <volume cols="40" rows="25" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠠⠾⠀⠠⠁⠝⠝⠊⠑⠀⠛⠐⠕⠂⠀⠠⠾⠀⠑⠽⠑⠎⠀⠖⠤⠏⠜⠑⠀⠠⠾⠮⠀⠍⠕⠗⠝⠬⠀</row>
+                    <row>⠎⠥⠝⠦</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="print-page-numbers">
+    <x:call>
+        <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <head>
+              <style type="text/css">
+                @page {
+                  size: 15 10;
+                  @bottom-left {
+                    content: counter(page);
+                  }
+                  @bottom-right {
+                    content: string(print-page);
+                  }
+                }
+                pagenum {
+                  display: block;
+                }
+                pagenum::before {
+                  content: leader('⠒') ' ';
+                }
+              </style>
+            </head>
+            <book>
+              <level1>
+                <pagenum id="page_1">1</pagenum>
+                <h1>simple test</h1>
+                <p>paragraph</p>
+                <pagenum id="page_2">2</pagenum>
+                <p>another paragraph</p>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:scenario label="show-print-page-numbers">
+      <x:documentation>
+        Tests show-print-page-numbers option.
+      </x:documentation>
+      <x:call>
+        <x:option name="show-print-page-numbers" select="'false'"/>
+        <x:option name="pef-output-dir" select="concat($temp-dir,'show-print-page-numbers/output-dir/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'show-print-page-numbers/temp-dir/')"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="show-print-page-numbers/output-dir/test_dtbook-to-pef.script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>en-US</dc:language>
+              </meta>
+            </head>
+            <body>
+              <volume cols="15" rows="10" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠀⠼⠁</row>
+                    <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>
+                    <row>⠏⠜⠁⠛⠗⠁⠏⠓</row>
+                    <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠀⠼⠃</row>
+                    <row>⠁⠝⠕⠮⠗⠀⠏⠜⠁⠛⠗⠁⠏⠓</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠼⠁</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="force-braille-page-break">
+      <x:documentation>
+        Tests force-braille-page-break option.
+      </x:documentation>
+      <x:call>
+        <x:option name="force-braille-page-break" select="'true'"/>
+        <x:option name="pef-output-dir" select="concat($temp-dir,'force-braille-page-break/output-dir/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'force-braille-page-break/temp-dir/')"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="force-braille-page-break/output-dir/test_dtbook-to-pef.script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>en-US</dc:language>
+              </meta>
+            </head>
+            <body>
+              <volume cols="15" rows="10" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠀⠼⠁</row>
+                    <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>
+                    <row>⠏⠜⠁⠛⠗⠁⠏⠓</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                  </page>
+                  <page>
+                    <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠀⠼⠃</row>
+                    <row>⠁⠝⠕⠮⠗⠀⠏⠜⠁⠛⠗⠁⠏⠓</row>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row/>
+                    <row>⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="maximum-number-of-sheets">
+    <x:documentation>
+      Tests maximum-number-of-sheets option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <book>
+              <level1>
+                <h1>simple test</h1>
+                <p>
+                  blabla blabla blabla blabla blabla blabla blabla blabla
+                  blabla blabla blabla blabla blabla blabla blabla blabla
+                </p>
+                <p>
+                  blabla blabla blabla blabla blabla blabla blabla blabla
+                  blabla blabla blabla blabla blabla blabla blabla blabla
+                </p>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="page-width" select="'10'"/>
+      <x:option name="page-height" select="'5'"/>
+      <x:option name="maximum-number-of-sheets" select="'2'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'maximum-number-of-sheets/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'maximum-number-of-sheets/temp-dir/')"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="maximum-number-of-sheets/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠎⠊⠍⠏⠇⠑⠀⠞⠑⠌</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                </page>
+                <page>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                </page>
+                <page>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                </page>
+                <page>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                </page>
+                <page>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                </page>
+                <page>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                  <row>⠃⠇⠁⠃⠇⠁</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="include-obfl">
+    <x:documentation>
+      Tests include-obfl option.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+            <book>
+              <level1>
+                <h1>simple test</h1>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="include-obfl" select="'true'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'include-obfl/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'include-obfl/temp-dir/')"/>
+    </x:call>
+    <x:context label="the output directory contents">
+      <x:document type="directory" base-uri="temp-dir" href="include-obfl/output-dir/"/>
+    </x:context>
+    <x:expect label="PEF present in the output directory" type="xpath" test="count(/*/*[ends-with(@name,'.pef')])" equals="1"/>
+    <x:expect label="OBFL present in the output directory'" type="xpath" test="count(/*/*[ends-with(@name,'.obfl')])" equals="1"/>
+  </x:scenario>
+  
+  <x:scenario label="ascii-file-format">
+    <x:call>
+      <x:option name="include-brf" select="'true'"/>
+    </x:call>
+    <x:scenario label="ascii-table has priority over dc:language / xml:lang">
+      <x:call>
+        <x:input port="source">
+          <x:document type="inline">
+            <dtbook version="2005-2" xml:lang="en-US" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+              <head>
+                <meta>foobar</meta>
+              </head>
+              <book>
+                <level1>
+                  <h1>Foo</h1>
+                  <p>bar</p>
+                  <p>123</p>
+                </level1>
+              </book>
+            </dtbook>
+          </x:document>
+        </x:input>
+        <x:option name="pef-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="brf-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="preview-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('ascii-table/temp-dir',$temp-dir)"/>
+        <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+                                                    (line-breaks:DOS)
+                                                    (page-breaks:&quot;---&quot;)
+                                                    (pad:BOTH)'"/>
+      </x:call>
+      <x:context label="brf">
+        <x:document type="file" method="text" base-uri="temp-dir" href="ascii-table/output-dir/test_dtbook-to-pef.script_vol-1.brf"/>
+      </x:context>
+      <x:expect label="brf" type="compare" normalize-space="false">
+        <x:document type="file" method="text" href="../resources/test_ascii-table_1.brf"/>
+      </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="ascii-table can be found by locale">
+      <x:call step="px:dtbook-to-pef.script">
+        <x:input port="source">
+          <x:document type="inline">
+            <dtbook version="2005-2" xml:lang="nl" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+              <head>
+                <meta>foobar</meta>
+              </head>
+              <book>
+                <level1>
+                  <h1>Foo</h1>
+                  <p>bar</p>
+                  <p>123</p>
+                </level1>
+              </book>
+            </dtbook>
+          </x:document>
+        </x:input>
+        <x:option name="transform" select="''"/>
+        <x:option name="pef-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="brf-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="preview-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>
+        <x:option name="ascii-file-format" select="'(line-breaks:DOS)
+                                                    (page-breaks:&quot;---&quot;)
+                                                    (pad:BOTH)'"/>
+      </x:call>
+      <x:context label="brf">
+        <x:document type="file" method="text" base-uri="temp-dir" href="default-ascii-table/output-dir/test_dtbook-to-pef.script_vol-1.brf"/>
+      </x:context>
+      <x:expect label="brf" type="compare" normalize-space="false">
+        <x:document type="file" method="text" href="../resources/test_ascii-table_2.brf"/>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  </x:scenario>
+  
+</x:description>
