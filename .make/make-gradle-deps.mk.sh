@@ -60,9 +60,9 @@ if [[ $v == *-SNAPSHOT ]]; then
 	echo "clean-eclipse : $module/.clean-eclipse"
 	echo ".PHONY : $module/.clean-eclipse"
 	echo "$module/.clean-eclipse :"
-	if ! git ls-files --error-unmatch $module/.project >/dev/null 2>/dev/null; then
-		echo "	rm -rf \$(addprefix $module/,.project .classpath)"
-	else
-		echo "	git checkout HEAD -- \$(addprefix $module/,.project .classpath)"
-	fi
+		echo "	if ! git ls-files --error-unmatch $module/.project >/dev/null 2>/dev/null; then \\"
+		echo "		rm -rf \$(addprefix $module/,.project .classpath); \\"
+		echo "	else \\"
+		echo "		git checkout HEAD -- \$(addprefix $module/,.project .classpath); \\"
+		echo "	fi"
 fi

@@ -367,6 +367,7 @@ go-offline :
 checked :
 	touch $(addsuffix /.last-tested,$(MODULES))
 
+poms : website/target/maven/pom.xml
 website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
 	$(MAKE) -C website target/maven/pom.xml
 
