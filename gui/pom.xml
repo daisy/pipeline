@@ -21,14 +21,16 @@
   <url>https://github.com/daisy-consortium/pipeline-gui</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
+    <java.source.version>1.8</java.source.version> <!-- if we change this to 9 we also have to change target to 9 -->
+    <java.target.version>1.8</java.target.version>
+    <javafx.version>11.0.1</javafx.version>
   </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -85,15 +87,16 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>${java.source.version}</source>
+          <target>${java.target.version}</target>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.4.0</version>
+        <version>4.1.0</version>
         <configuration>
           <instructions>
             <_dsannotations>
@@ -105,5 +108,32 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-base</artifactId>
+          <version>${javafx.version}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics</artifactId>
+          <version>${javafx.version}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-controls</artifactId>
+          <version>${javafx.version}</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
   <repositories> </repositories>
 </project>
