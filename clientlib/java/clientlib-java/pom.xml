@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.daisy</groupId>
         <artifactId>daisy</artifactId>
-        <version>4</version>
+        <version>5-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -44,14 +44,18 @@
         <system>GitHub Issue Tracker</system>
         <url>https://github.com/daisy/pipeline-clientlib-java/issues</url>
     </issueManagement>
+    <properties>
+        <java.source.version>1.8</java.source.version> <!-- if we change this to 9 we also have to change target to 9 -->
+        <java.target.version>1.8</java.target.version>
+    </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
                 </configuration>
                 <executions>
                     <execution>
@@ -66,8 +70,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -84,8 +88,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
                 </configuration>
                 <executions>
                     <execution>
