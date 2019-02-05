@@ -4,9 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
     <meta http-equiv="content-language" content="en">
-    <title>Validationstatusxml</title>
+    <title>Statusxml</title>
     
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Validationstatusxml">
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Statusxml">
 
 
     <link rel="stylesheet" href="/pipeline/css/default.css">
@@ -750,27 +750,27 @@ if (window.addEventListener) {
 
 
       <div class="edit-button">
-  <a href="https://github.com/daisy/pipeline/wiki/ValidationStatusXML/_edit" class="external-link" target="_blank">
+  <a href="https://github.com/daisy/pipeline/wiki/StatusXML/_edit" class="external-link" target="_blank">
     Edit this page on Github
   </a>
 </div>
 
       <!--
-summary validation status XML format description
+summary status XML format description
 -->
 
-<h1 id="validation-status-xml">Validation Status XML</h1>
+<h1 id="status-xml">Status XML</h1>
 
-<p>Every validator has a port named <code>validation-status</code> which provides a succinct summary of the validation results.</p>
+<p>Scripts may have a port annotated with media type <code>application/vnd.pipeline.status+xml</code> which provides a succinct summary of the job status. It may be compared with the exit value of a process.</p>
 
 <p>There are two use cases that come to mind.</p>
 
 <ol>
   <li>
-    <p>A validation job may be “successful” even when the document is invalid. It would be helpful for the UI to be able to give more details about the job results. By using the <code>validation-status</code> port, the UI can quickly determine that a. this was a validation script and b. validation passed/failed.</p>
+    <p>A job may return documents even if the conversion can not be considered “successful”. An example is a validation job which needs to return a validation report when the input document is invalid. With a status port the UI can quickly determine whether the validation passed or failed.</p>
   </li>
   <li>
-    <p>Other scripts that incorporate a validator may want to know if the validation was successful or not.</p>
+    <p>When a step is used in other steps, a status port can convey status information to the calling step.</p>
   </li>
 </ol>
 
@@ -780,12 +780,12 @@ summary validation status XML format description
 
 <div class="language-xml highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre><span class="tag">&lt;d:validation-status</span> <span class="attribute-name">xmlns:d</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">"</span></span> <span class="attribute-name">result</span>=<span class="string"><span class="delimiter">"</span><span class="content">error</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  <div class="code"><pre><span class="tag">&lt;d:status</span> <span class="attribute-name">xmlns:d</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">"</span></span> <span class="attribute-name">result</span>=<span class="string"><span class="delimiter">"</span><span class="content">error</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
 </pre></div>
 </div>
 </div>
 
-<h3 id="dvalidation-status"><code>d:validation-status</code></h3>
+<h3 id="dstatus"><code>d:status</code></h3>
 <p>The document root element</p>
 
 <h4 id="result-attribute">
@@ -804,7 +804,7 @@ summary validation status XML format description
 
 <h2 id="notes">Notes</h2>
 
-<p>At this moment, the validators have only errors to report, not warnings. Therefore there is no mention of warnings here. However, this format will evolve if required to accommodate future developments.</p>
+<p>At this moment, validators have only errors to report, not warnings. Therefore there is no mention of warnings here. However, this format will evolve if required to accommodate future developments.</p>
 
 <p>One thing to consider is whether it would be useful to report the number of errors.</p>
 

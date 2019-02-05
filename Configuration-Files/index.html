@@ -887,6 +887,10 @@ arguments</dd>
 <strong>Required</strong>: No</dd>
   <dd>
 <strong>Default</strong>: “${java.io.tmpdir}” or “/tmp”</dd>
+  <dt><code>org.daisy.pipeline.log.level</code></dt>
+  <dd>Disable job messages below this level</dd>
+  <dd>
+<strong>Default</strong>: “INFO”</dd>
   <dt><code>org.daisy.pipeline.updater.updateSite</code></dt>
   <dd>URL of the update service</dd>
   <dd>
@@ -974,10 +978,6 @@ The following should not be edited
 `org.daisy.pipeline.messaging.cache`
 : Time in seconds that messages are kept in the volatile memory
 : **Default**: "60"
-
-`org.daisy.pipeline.calabash.logDebug`
-: Enable job message of level DEBUG and below
-: **Default**: "false"
 
 -->
 
