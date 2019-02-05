@@ -107,6 +107,10 @@ precedence over settings in the `system.properties` file.
 : **Required**: No
 : **Default**: "${java.io.tmpdir}" or "/tmp"
 
+`org.daisy.pipeline.log.level`
+: Disable job messages below this level
+: **Default**: "INFO"
+
 `org.daisy.pipeline.updater.updateSite`
 : URL of the update service
 : **Required**: No
@@ -189,9 +193,5 @@ The following should not be edited
 `org.daisy.pipeline.messaging.cache`
 : Time in seconds that messages are kept in the volatile memory
 : **Default**: "60"
-
-`org.daisy.pipeline.calabash.logDebug`
-: Enable job message of level DEBUG and below
-: **Default**: "false"
 
 -->
