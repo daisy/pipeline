@@ -159,9 +159,6 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	
 	private static final QName CSS_TABLE_HEADER_POLICY = new QName(XMLNS_CSS, "table-header-policy");
 	
-	private static final QName HTML_ = new QName(XMLNS_HTML, "_");
-	private static final QName DTB_ = new QName(XMLNS_DTB, "_");
-	
 	private static final Splitter HEADERS_SPLITTER = Splitter.on(' ').trimResults().omitEmptyStrings();
 	private static final Splitter AXIS_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 	
@@ -180,7 +177,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		List<WriterEvent> writeActionsAfter;
 		List<TableCell> cells;
 		Set<CellCoordinates> coveredCoordinates;
-		QName anon;
+		String ns;
 		
 		public void transform(Iterator<BaseURIAwareXMLStreamReader> input, Supplier<BaseURIAwareXMLStreamWriter> output) {
 			XMLStreamReader reader = Iterators.getOnlyElement(input);
@@ -210,9 +207,9 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							if (!isHTMLorDTBookElement(TABLE, name))
 								throw new RuntimeException("Expected table element (html|dtb).");
 							if (XMLNS_HTML.equals(name.getNamespaceURI()))
-								anon = HTML_;
+								ns = XMLNS_HTML;
 							else if (XMLNS_DTB.equals(name.getNamespaceURI()))
-								anon = DTB_; }
+								ns = XMLNS_DTB; }
 						else if (isHTMLorDTBookElement(THEAD, name)) {
 							rowType = TableCell.RowType.THEAD;
 							// TODO: if style != default, warning that style on thead element is ignored
@@ -777,17 +774,17 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 								if (!cc.newlyPromotedHeaders().isEmpty()) {
 									if (promotedHeaders == null) {
 										if (i == 0 && j == 0) {
-											writeStartElement(writer, anon);
+											writeStartElement(writer, new QName(ns, "_"));
 											writeStyleAttribute(writer,
 											                    groupingAxis != null ? getTableByStyle(groupingAxis).getListHeaderStyle()
 											                                         : getListHeaderStyle());
-											writeStartElement(writer, anon);
+											writeStartElement(writer, new QName(ns, "_"));
 											writeStyleAttribute(writer, getTableByStyle(g.groupingAxis));
 											promotedHeaders = new ArrayList<List<TableCell>>(); }
 										else
 											throw new RuntimeException("Some headers of children promoted but not all children have a promoted header."); }
 									if (i == 0) {
-										writeStartElement(writer, anon);
+										writeStartElement(writer, new QName(ns, "_"));
 										Predicate<PseudoClass> matcher = matchesPosition(j + 1, g.children.size());
 										writeStyleAttribute(writer, getTableByStyle(g.groupingAxis).getListItemStyle(matcher));
 										for (TableCell h : cc.newlyPromotedHeaders())
@@ -809,7 +806,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 						writer.writeEndElement(); }
 					i = 0;
 					for (TableCellCollection c : children) {
-						writeStartElement(writer, anon);
+						writeStartElement(writer, new QName(ns, "_"));
 						Predicate<PseudoClass> matcher = matchesPosition(i + 1, children.size());
 						writeStyleAttribute(writer,
 						                    groupingAxis != null ? getTableByStyle(groupingAxis).getListItemStyle(matcher)
@@ -818,7 +815,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							h.write(writer);
 						if (c instanceof TableCellGroup) {
 							TableCellGroup g = (TableCellGroup)c;
-							writeStartElement(writer, anon);
+							writeStartElement(writer, new QName(ns, "_"));
 							writeStyleAttribute(writer, getTableByStyle(g.groupingAxis)); }
 						c.write(writer);
 						if (c instanceof TableCellGroup)

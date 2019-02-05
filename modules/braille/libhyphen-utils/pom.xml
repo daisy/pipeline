@@ -12,7 +12,7 @@
   
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>libhyphen-utils-aggregator</artifactId>
-  <version>1.11.2-SNAPSHOT</version>
+  <version>1.11.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>DP2 Braille Modules :: libhyphen-utils</name>

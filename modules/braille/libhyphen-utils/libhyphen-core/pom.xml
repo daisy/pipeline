@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.11.3-SNAPSHOT</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>libhyphen-core</artifactId>
-  <version>4.1.3-SNAPSHOT</version>
+  <version>4.1.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: libhyphen-utils :: libhyphen-core</name>
@@ -142,8 +142,6 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <source>1.8</source>
-              <target>1.8</target>
               <offlineLinks>
                 <offlineLink>
                   <url>http://daisy.github.io/pipeline/api/</url>

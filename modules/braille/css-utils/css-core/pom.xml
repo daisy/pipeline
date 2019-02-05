@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.11.3-SNAPSHOT</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
@@ -72,8 +72,6 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <source>1.8</source>
-              <target>1.8</target>
               <offlineLinks>
                 <offlineLink>
                   <url>http://daisy.github.io/pipeline/api/</url>
