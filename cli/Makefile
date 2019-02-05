@@ -35,8 +35,16 @@ build-setup:
 	@echo "Getting dependencies..."
 	@mkdir -p "${GOPATH}/src/github.com/daisy"
 	@test -d "${GOPATH}/src/github.com/daisy/pipeline-cli-go" || ln -s "${CURDIR}" "${GOPATH}/src/github.com/daisy/pipeline-cli-go"
-	@${GO} get github.com/capitancambio/go-subcommand
-	@${GO} get github.com/capitancambio/blackterm
+	# @${GO} get github.com/capitancambio/go-subcommand
+	@rm -rf "${GOPATH}/src/github.com/capitancambio/go-subcommand" && \
+	mkdir -p "${GOPATH}/src/github.com/capitancambio" && \
+	ln -s "$(CURDIR)/libs/go-subcommand" "${GOPATH}/src/github.com/capitancambio/"
+	# @${GO} get github.com/capitancambio/blackterm
+	@rm -rf "${GOPATH}/src/github.com/capitancambio/blackterm" && \
+	mkdir -p "${GOPATH}/src/github.com/capitancambio" && \
+	ln -s "$(CURDIR)/libs/blackterm" "${GOPATH}/src/github.com/capitancambio/"
+	@${GO} get github.com/capitancambio/chalk
+	@${GO} get github.com/russross/blackfriday
 	@${GO} get launchpad.net/goyaml
 	@if [ -d "$${PIPELINE_CLIENTLIB_PATH}" ]; then \
 		rm -rf "${GOPATH}/src/github.com/daisy/pipeline-clientlib-go" && \

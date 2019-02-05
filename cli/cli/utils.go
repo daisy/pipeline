@@ -186,7 +186,7 @@ func getLastIdPath(currentOs string) string {
 	return path
 }
 
-func AssertJava(minJavaVersion float64) error {
+func AssertJava(minJavaVersion int) error {
 	//get the output
 	output, err := javaVersionService()
 	if err != nil {
@@ -232,16 +232,18 @@ var javaVersionService = func() (string, error) {
 }
 
 //parses the vesion from
-func parseVersion(javaOut string) (ver float64, err error) {
+func parseVersion(javaOut string) (ver int, err error) {
 	strVer := ""
-	// under Ubuntu 15.4 openjdk `java -version` prints "openjdk version "1.8.0_45-internal""
-	reg := re.MustCompile(`(?:java|openjdk) version "(\d\.\d)?.*"`)
+	// The first line of `java -version` contains the version string inside quotes.
+	// Ignore "1." from the start of the version string. We regard version "1.6" as version 6, "1.7" as 7 etc.
+	reg := re.MustCompile(`.*"(1\.)?(\d+).*?".*`)
 	res := reg.FindStringSubmatch(javaOut)
 	if len(res) > 0 {
 		strVer = res[len(res)-1]
 	} else {
 		return ver, fmt.Errorf("Couldn't find version in %s", javaOut)
 	}
-	return strconv.ParseFloat(strVer, 64)
+	productVersion, err := strconv.ParseInt(strVer, 10, 64)
+	return int(productVersion), err
 
 }

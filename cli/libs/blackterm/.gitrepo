@@ -4,8 +4,8 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:daisy/pipeline-cli-go.git
+	remote = https://github.com/capitancambio/blackterm.git
 	branch = master
-	commit = 397f07d64abaa81d868ef7a5306ef81d8df66580
-	parent = 4c078940428e4981df3640b0bb09b13052fedaad
+	commit = 8446c9dfde022a8fe07dc6e5c56f12799f39e8cc
+	parent = 452de887964a3f6ab91d2d03605106e29638604f
 	cmdver = 0.3.1

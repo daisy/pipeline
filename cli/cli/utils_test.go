@@ -132,7 +132,7 @@ func TestLoadKeyOpenError(t *testing.T) {
 	keyFile = "thiskeyfiledoensntexist"
 	_, err := loadKey()
 	if err == nil {
-		t.Errorf("Expected error loading key didn't occur", err)
+		t.Errorf("Expected error loading key didn't occur")
 	}
 }
 
@@ -209,53 +209,60 @@ func TestHomePath(t *testing.T) {
 }
 
 const (
-	OracleJdkVersion = `java version "%s"
+	OracleJdkVersion = `java version %s
 Java(TM) SE Runtime Environment (build 1.7.0_67-b01)
 Java HotSpot(TM) Client VM (build 24.65-b04, mixed mode, sharing)`
-	OpenJdkVersion = `java version "%s"
+	OpenJdkVersion = `java version %s
 OpenJDK Runtime Environment (IcedTea 2.5.2) (7u65-2.5.2-3~14.04)
 OpenJDK 64-Bit Server VM (build 24.65-b04, mixed mode)`
-	OpenJdkVersionUbuntu = `openjdk version "%s"
+	OpenJdkVersionUbuntu = `openjdk version %s
 OpenJDK Runtime Environment (build 1.8.0_45-internal-b14)
 OpenJDK 64-Bit Server VM (build 25.45-b02, mixed mode)`
 )
 
 func TestParseVersion(t *testing.T) {
-	v, err := parseVersion(fmt.Sprintf(OracleJdkVersion, "1.7_u12"))
+	v, err := parseVersion(fmt.Sprintf(OracleJdkVersion, "\"1.7_u12\""))
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 	}
-	if v != 1.7 {
-		t.Errorf("version was expected to be 1.7")
+	if v != 7 {
+		t.Errorf("version was expected to be 7")
 	}
-	v, err = parseVersion(fmt.Sprintf(OpenJdkVersion, "1.7_12"))
+	v, err = parseVersion(fmt.Sprintf(OpenJdkVersion, "\"1.7_12\""))
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 	}
-	if v != 1.7 {
-		t.Errorf("version was expected to be 1.7")
+	if v != 7 {
+		t.Errorf("version was expected to be 7")
 	}
 
-	v, err = parseVersion(fmt.Sprintf(OracleJdkVersion, "1.6.12"))
+	v, err = parseVersion(fmt.Sprintf(OracleJdkVersion, "\"1.6.12\""))
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 	}
-	if v != 1.6 {
-		t.Errorf("version was expected to be 1.6")
+	if v != 6 {
+		t.Errorf("version was expected to be 6")
 	}
-	v, err = parseVersion(fmt.Sprintf(OpenJdkVersion, "1.8"))
+	v, err = parseVersion(fmt.Sprintf(OpenJdkVersion, "\"1.8\""))
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 	}
-	if v != 1.8 {
-		t.Errorf("version was expected to be 1.8")
+	if v != 8 {
+		t.Errorf("version was expected to be 8")
 	}
-	v, err = parseVersion(fmt.Sprintf(OpenJdkVersionUbuntu, "1.8.0_45-internal"))
+	v, err = parseVersion(fmt.Sprintf(OpenJdkVersionUbuntu, "\"1.8.0_45-internal\""))
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 	}
-	if v != 1.8 {
-		t.Errorf("version was expected to be 1.8")
+	if v != 8 {
+		t.Errorf("version was expected to be 8")
+	}
+	v, err = parseVersion(fmt.Sprintf(OpenJdkVersionUbuntu, "\"10.0.2\" 2018-07-17"))
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
+	if v != 10 {
+		t.Errorf("version was expected to be 10")
 	}
 
 
@@ -283,27 +290,33 @@ func TestAssertJava(t *testing.T) {
 		javaVersionService = back
 	}()
 	javaVersionService = func() (string, error) {
-		return fmt.Sprintf(OracleJdkVersion, "1.7_u89"), nil
+		return fmt.Sprintf(OracleJdkVersion, "\"1.7_u89\""), nil
 	}
-	if err := AssertJava(1.7); err != nil {
+	if err := AssertJava(7); err != nil {
 		t.Errorf("Unexpected error %v", err.Error())
 	}
 	javaVersionService = func() (string, error) {
-		return fmt.Sprintf(OracleJdkVersion, "1.6_u89"), nil
+		return fmt.Sprintf(OracleJdkVersion, "\"1.6_u89\""), nil
 	}
-	if err := AssertJava(1.7); err == nil {
+	if err := AssertJava(7); err == nil {
 		t.Errorf("Expected error not returned")
 	}
 	javaVersionService = func() (string, error) {
 		return "", fmt.Errorf("error!")
 	}
-	if err := AssertJava(1.7); err == nil {
+	if err := AssertJava(7); err == nil {
 		t.Errorf("Expected error not returned")
 	}
 	javaVersionService = func() (string, error) {
-		return fmt.Sprintf(OpenJdkVersionUbuntu, "1.8.0_45-internal"), nil
+		return fmt.Sprintf(OpenJdkVersionUbuntu, "\"1.8.0_45-internal\""), nil
 	}
-	if err := AssertJava(1.8); err != nil {
+	if err := AssertJava(8); err != nil {
+		t.Errorf("Unexpected error %v", err.Error())
+	}
+	javaVersionService = func() (string, error) {
+		return fmt.Sprintf(OpenJdkVersionUbuntu, "\"10.0.2\" 2018-07-17"), nil
+	}
+	if err := AssertJava(10); err != nil {
 		t.Errorf("Unexpected error %v", err.Error())
 	}
 

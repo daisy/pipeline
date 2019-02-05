@@ -48,7 +48,7 @@ func (c *Cli) AddNewClientCommand(link PipelineLink) {
 	cmd := newCommandBuilder("create", "Creates a new client").
 		withCall(fn).withTemplate(TmplClient).buildAdmin(c)
 
-	cmd.AddOption("id", "i", "Client id (must be unique)", func(string, value string) error {
+	cmd.AddOption("id", "i", "Client id (must be unique)", "", "", func(string, value string) error {
 		client.Id = value
 		return nil
 	}).Must(true)
@@ -106,11 +106,11 @@ func (c *Cli) AddModifyClientCommand(link PipelineLink) {
 
 //Adds the client options a part from the id
 func addClientOptions(cmd *subcommand.Command, client *pipeline.Client, must bool) {
-	cmd.AddOption("secret", "s", "Client secret", func(string, value string) error {
+	cmd.AddOption("secret", "s", "Client secret", "", "", func(string, value string) error {
 		client.Secret = value
 		return nil
 	}).Must(must)
-	cmd.AddOption("role", "r", "Client role  (ADMIN,CLIENTAPP)",
+	cmd.AddOption("role", "r", "Client role  (ADMIN,CLIENTAPP)", "", "",
 		func(string, value string) error {
 			if value != "ADMIN" && value != "CLIENTAPP" {
 				return fmt.Errorf("%v is not a valid role", value)
@@ -118,12 +118,12 @@ func addClientOptions(cmd *subcommand.Command, client *pipeline.Client, must boo
 			client.Role = value
 			return nil
 		}).Must(must)
-	cmd.AddOption("contact", "c", "Client e-mail address ",
+	cmd.AddOption("contact", "c", "Client e-mail address", "", "",
 		func(string, value string) error {
 			client.Contact = value
 			return nil
 		})
-	cmd.AddOption("priority", "p", "Set the client priority (low|medium|high)",
+	cmd.AddOption("priority", "p", "Set the client priority", "", "low|medium|high",
 		func(string, priority string) error {
 			if checkPriority(priority) {
 				client.Priority = priority

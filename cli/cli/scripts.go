@@ -11,8 +11,11 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"regexp"
+	"strconv"
 
 	"github.com/capitancambio/blackterm"
+	"github.com/capitancambio/chalk"
 	"github.com/capitancambio/go-subcommand"
 	"github.com/daisy/pipeline-clientlib-go"
 )
@@ -192,18 +195,50 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		}
 		return nil
 	}, jobRequest)
+	command.SetArity(0, "")
 
 	for _, input := range script.Inputs {
 		name := getFlagName(input.Name, "i-", command.Flags())
-		command.AddOption(name, "", blackterm.MarkdownString(input.Desc), inputFunc(jobRequest, link)).Must(true)
+		shortDesc := input.ShortDesc
+		longDesc := input.LongDesc
+		if (shortDesc == "") {
+			shortDesc = input.NiceName
+		} else if len(longDesc) > len(shortDesc) {
+			shortDesc += " [...]"
+		}
+		shortDesc = blackterm.MarkdownString(shortDesc)
+		// FIXME: assumes markdown without html
+		longDesc = blackterm.MarkdownString(longDesc)
+		command.AddOption(name, "", shortDesc, longDesc, italic("FILE"), inputFunc(jobRequest, link)).Must(true)
 	}
 
 	for _, option := range script.Options {
 		//desc:=option.Desc+
 		name := getFlagName(option.Name, "x-", command.Flags())
-		command.AddOption(name, "", blackterm.MarkdownString(option.Desc), optionFunc(jobRequest, link, option.Type)).Must(option.Required)
+		shortDesc := option.ShortDesc
+		longDesc := option.LongDesc
+		if (shortDesc == "") {
+			shortDesc = option.NiceName
+		} else if len(longDesc) > len(shortDesc) {
+			shortDesc += " [...]"
+		}
+		shortDesc = blackterm.MarkdownString(shortDesc)
+		longDesc += ("\n\nPossible values: " + optionTypeToDetailedHelp(option.Type))
+		if ! option.Required {
+			longDesc += "\n\nDefault value: "
+			if option.Default == "" {
+				longDesc += "(empty)"
+			} else {
+				longDesc += "`" + option.Default + "`"
+			}
+		}
+		// FIXME: assumes markdown without html
+		longDesc = blackterm.MarkdownString(longDesc)
+		command.AddOption(
+			name, "", shortDesc, longDesc, optionTypeToString(option.Type, name, option.Default),
+			optionFunc(jobRequest, link, option.Type, option.Sequence)).Must(option.Required)
 	}
-	command.AddOption("output", "o", "Path where to store the results. This option is mandatory when the job is not executed in the background", func(name, folder string) error {
+	command.AddOption("output", "o", "Path where to store the results. This option is mandatory when the job is not executed in the background", "", italic("DIRECTORY"), func(name, folder string) error {
 		jExec.output = folder
 		return nil
 	})
@@ -212,12 +247,12 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		return nil
 	})
 
-	command.AddOption("nicename", "n", "Set job's nice name", func(name, nice string) error {
+	command.AddOption("nicename", "n", "Set job's nice name", "", italic("NICENAME"), func(name, nice string) error {
 		jExec.req.Nicename = nice
 
 		return nil
 	})
-	command.AddOption("priority", "r", "Set job's priority (high|medium|low)", func(name, priority string) error {
+	command.AddOption("priority", "r", "Set job's priority", "", "(high|" + underline("medium") + "|low)", func(name, priority string) error {
 		if checkPriority(priority) {
 			jExec.req.Priority = priority
 			return nil
@@ -243,8 +278,126 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 	return jobRequest, nil
 }
 
+func optionTypeToString(optionType pipeline.DataType, optionName string, defaultValue string) string {
+	switch t := optionType.(type) {
+	case pipeline.AnyFileURI:
+		return italic("FILE")
+	case pipeline.AnyDirURI:
+		return italic("DIRECTORY")
+	case pipeline.XsBoolean:
+		if defaultValue == "true" {
+			return "(" + underline("true") + "|false)"
+		} else if defaultValue == "false" {
+			return "(true|" + underline("false") + ")"
+		} else {
+			return "(true|false)"
+		}
+	case pipeline.XsInteger:
+		return italic("INTEGER")
+	case pipeline.Choice:
+		var choices []string
+		for _, value := range t.Values {
+			choices = append(choices, optionTypeToString(value, "", defaultValue))
+		}
+		return "(" + strings.Join(choices, "|") + ")"
+	case pipeline.Value:
+		if t.Value == defaultValue {
+			return underline(t.Value)
+		} else {
+			return t.Value
+		}
+	case pipeline.Pattern:
+		if optionName == "" {
+			return italic("PATTERN")
+		}
+	case pipeline.XsAnyURI:
+		if optionName == "" {
+			return italic("URI")
+		}
+	case pipeline.XsString:
+		if optionName == "" {
+			return italic("STRING")
+		}
+	default:
+		if optionName == "" {
+			return italic("STRING")
+		}
+	}
+	return italic(strings.ToUpper(optionName))
+}
+
+func italic(s string) string {
+	return chalk.Italic.TextStyle(s)
+}
+
+func underline(s string) string {
+	return chalk.Underline.TextStyle(s)
+}
+
+func optionTypeToDetailedHelp(optionType pipeline.DataType) string {
+	help := ""
+	switch t := optionType.(type) {
+	case pipeline.AnyFileURI:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += "A _FILE_"
+		}
+	case pipeline.AnyDirURI:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += "A _DIRECTORY_"
+		}
+	case pipeline.XsBoolean:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += "`true` or `false`"
+		}
+	case pipeline.XsInteger:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += "An _INTEGER_"
+		}
+	case pipeline.Choice:
+		help += "One of the following:\n"
+		for _, value := range t.Values {
+			help += "\n- "
+			help += indent(optionTypeToDetailedHelp(value), "  ")
+		}
+	case pipeline.Value:
+		help += ("`" + t.Value + "`")
+		if t.Documentation != "" {
+			help += (": " + t.Documentation)
+		}
+	case pipeline.Pattern:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += ("A string that matches the pattern:\n" + t.Pattern)
+		}
+	case pipeline.XsAnyURI:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += "A _URI_"
+		}
+	case pipeline.XsString:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += "A _STRING_"
+		}
+	default:
+		help += "A _STRING_"
+	}
+	return help
+}
+
 func (c *ScriptCommand) addDataOption() {
-	c.AddOption("data", "d", "Zip file containing the files to convert", func(name, path string) error {
+	c.AddOption("data", "d", "Zip file containing the files to convert", "", "", func(name, path string) error {
 		file, err := os.Open(path)
 		defer func() {
 			err := file.Close()
@@ -268,39 +421,114 @@ func (c *ScriptCommand) addDataOption() {
 //Returns a function that fills the request info with the subcommand option name
 //and value
 func inputFunc(req *JobRequest, link *PipelineLink) func(string, string) error {
-	return func(name, value string) error {
-		var err error
+	return func(name, value string) (err error) {
 		//control prefix
+		basePath := getBasePath(link.IsLocal())
 		if strings.HasPrefix("i-", name) {
-			req.Inputs[name[2:]], err = pathToUri(value, ",", getBasePath(link.IsLocal()))
-		} else {
-			req.Inputs[name], err = pathToUri(value, ",", getBasePath(link.IsLocal()))
+			name = name[2:]
 		}
-		return err
+		// FIXME: check if input is a sequence
+		for _, path := range strings.Split(value, ",") {
+			var u *url.URL
+			u, err = pathToUri(path, basePath)
+			if err != nil {
+				return
+			}
+			req.Inputs[name] = append(req.Inputs[name], *u)
+		}
+		return
 	}
 }
 
 //Returns a function that fills the request option with the subcommand option name
 //and value
-func optionFunc(req *JobRequest, link *PipelineLink, optionType string) func(string, string) error {
+func optionFunc(req *JobRequest, link *PipelineLink, optionType pipeline.DataType, sequence bool) func(string, string) error {
 	return func(name, value string) error {
-		//control prefix
 		if strings.HasPrefix("x-", name) {
 			name = name[2:]
 		}
-		if optionType == "anyFileURI" || optionType == "anyDirURI" {
-			urls, err := pathToUri(value, ",", getBasePath(link.IsLocal()))
-			if err != nil {
-				return err
-			}
-			for _, url := range urls {
-				req.Options[name] = append(req.Options[name], url.String())
+		var err error
+		if sequence {
+			for _, v := range strings.Split(value, ",") {
+				v, err = validateOption(v, optionType, link)
+				if err != nil {
+					return validationError(name, v, err)
+				}
+				req.Options[name] = append(req.Options[name], v)
 			}
 		} else {
-			req.Options[name] = []string{value}
+			value, err = validateOption(value, optionType, link)
+			if err != nil {
+				return validationError(name, value, err)
+			}
+			req.Options[name] = append(req.Options[name], value)
 		}
 		return nil
 	}
+}
+
+func validationError(optionName, value string, cause error) error {
+	msg := "'" + value + "' is not allowed as the value for option --" + optionName
+	if cause != nil {
+		msg += (": " + cause.Error())
+	}
+	return errors.New(msg)
+}
+
+func validateOption(value string, optionType pipeline.DataType, link *PipelineLink) (result string, err error) {
+	result = value
+	switch t := optionType.(type) {
+	case pipeline.XsBoolean:
+		var b bool
+		b, err = strconv.ParseBool(value)
+		if err == nil {
+			result = strconv.FormatBool(b)
+		}
+	case pipeline.XsInteger:
+		_, err = strconv.ParseInt(value, 0, 0)
+	case pipeline.XsAnyURI:
+		// _, err = url.Parse(value)
+	case pipeline.AnyFileURI:
+		var u *url.URL
+		u, err = pathToUri(value, getBasePath(link.IsLocal()))
+		if err == nil {
+			result = u.String()
+		}
+	case pipeline.AnyDirURI:
+		var u *url.URL
+		u, err = pathToUri(value, getBasePath(link.IsLocal()))
+		if err == nil {
+			result = u.String()
+		}
+	case pipeline.Pattern:
+		var match bool
+		match, err = regexp.MatchString("^(?:" + t.Pattern + ")$", value)
+		if err == nil && ! match {
+			err = errors.New("does not match /" + t.Pattern + "/")
+			return
+		}
+	case pipeline.Choice:
+		for _, v := range t.Values {
+			result, err = validateOption(value, v, link)
+			if err == nil {
+				break
+			}
+		}
+		if err != nil {
+			err = errors.New("does not match " + uncolor(optionTypeToString(t, "", "")))
+			return
+		}
+	case pipeline.Value:
+		if t.Value != value {
+			err = errors.New("does not match '" + t.Value + "'")
+			return
+		}
+	default:
+	}
+	if err != nil {
+		err = errors.New("does not match " + uncolor(optionTypeToString(optionType, "", ""))+ ": " + err.Error())
+	}
+	return
 }
 
 //Gets the basepath. If the fwk accepts local uri's (file:///)
@@ -319,37 +547,44 @@ func getBasePath(isLocal bool) string {
 
 //Accepts several paths separated by separator and constructs the URLs
 //relative to base path
-func pathToUri(paths string, separator string, basePath string) (urls []url.URL, err error) {
-	var urlBase *url.URL
-
+func pathToUri(path string, basePath string) (u *url.URL, err error) {
 	if basePath != "" {
-		if string(basePath[0]) != "/" {
-			//for windows path to build a proper url
-			basePath = "/" + basePath
-		}
-		urlBase, err = url.Parse("file:" + basePath)
-	}
-	if err != nil {
-		return nil, err
-	}
-	inputs := strings.Split(paths, ",")
-	for _, input := range inputs {
-		var urlInput *url.URL
+		// localfs
+		var baseUrl *url.URL
 		if basePath != "" {
-			urlInput, err = url.Parse(filepath.ToSlash(input))
-			if err != nil {
-				return nil, err
+			if string(basePath[0]) != "/" {
+				//for windows path to build a proper url
+				basePath = "/" + basePath
 			}
-			urlInput = urlBase.ResolveReference(urlInput)
-		} else {
-			//TODO is opaque really apropriate?
-			urlInput = &url.URL{
-				Opaque: filepath.ToSlash(input),
-			}
+			baseUrl, err = url.Parse("file:" + basePath)
 		}
-		urls = append(urls, *urlInput)
+		if err != nil {
+			return
+		}
+		u, err = url.Parse(filepath.ToSlash(path))
+		if err != nil {
+			return
+		}
+		u = baseUrl.ResolveReference(u)
+		// check that file exists (do it at the end so that the url resolving part can be tested)
+		// FIXME: use basePath instead of implicit pwd
+		// FIXME: does this also work for directories?
+		_, err = os.Stat(path)
+		if os.IsNotExist(err) {
+			return
+		} else {
+			err = nil
+		}
+		if u.Scheme != "file" || ! u.IsAbs() {
+			err = errors.New("unexpected error")
+		}
+	} else {
+		// FIXME: check if file present in zip
+		//TODO is opaque really apropriate?
+		u = &url.URL{
+			Opaque: filepath.ToSlash(path),
+		}
 	}
-	//clean
 	return
 }
 
