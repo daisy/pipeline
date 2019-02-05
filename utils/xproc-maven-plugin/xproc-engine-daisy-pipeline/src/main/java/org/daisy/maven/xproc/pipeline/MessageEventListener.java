@@ -2,10 +2,13 @@ package org.daisy.maven.xproc.pipeline;
 
 import java.math.BigDecimal;
 import java.util.function.BiConsumer;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.Message.Level;
 import org.daisy.maven.xproc.pipeline.logging.FlattenedProgressMessage;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.JobId;
@@ -34,7 +37,10 @@ class MessageEventListener implements BiConsumer<MessageAccessor,Integer> {
 	
 	public void accept(MessageAccessor messages, Integer sequenceNumber) {
 		if (sequenceNumber != null) {
-			flattenMessages(messages.createFilter().inRange(sequenceNumber,sequenceNumber).getMessages().iterator(),
+			flattenMessages(messages.createFilter()
+			                        .filterLevels(levels)
+			                        .inRange(sequenceNumber,sequenceNumber)
+			                        .getMessages().iterator(),
 			                sequenceNumber,
 			                0,
 			                null,
@@ -74,5 +80,18 @@ class MessageEventListener implements BiConsumer<MessageAccessor,Integer> {
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(MessageEventListener.class);
+	private static final Set<Level> levels = new HashSet<>();
 	
+	static {
+		if (logger.isErrorEnabled())
+			levels.add(Level.ERROR);
+		if (logger.isWarnEnabled())
+			levels.add(Level.WARNING);
+		if (logger.isInfoEnabled())
+			levels.add(Level.INFO);
+		if (logger.isDebugEnabled())
+			levels.add(Level.DEBUG);
+		if (logger.isTraceEnabled())
+			levels.add(Level.TRACE);
+	}
 }
