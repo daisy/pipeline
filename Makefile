@@ -90,7 +90,7 @@ run : $(dev_launcher)
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
-	JAVA_HOME=`/usr/libexec/java_home -v 11` $< gui
+	JAVA_HOME=`/usr/libexec/java_home -v 11` $< gui shell
 
 .PHONY : run-cli
 run-cli :
