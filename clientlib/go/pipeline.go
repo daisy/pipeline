@@ -5,6 +5,9 @@ import (
 	"io"
 	"log"
 	"math"
+	"encoding/xml"
+	"strings"
+	"errors"
 
 	"github.com/capitancambio/restclient"
 )
@@ -14,6 +17,7 @@ const (
 	API_ALIVE        = "alive"
 	API_SCRIPT       = "script"
 	API_SCRIPTS      = "scripts"
+	API_DATATYPE     = "datatype"
 	API_JOBREQUEST   = "jobRequest"
 	API_JOB          = "job"
 	API_JOBS         = "jobs"
@@ -47,6 +51,7 @@ var apiEntries = map[string]apiEntry{
 	API_ALIVE:        apiEntry{"alive", "GET", 200},
 	API_SCRIPTS:      apiEntry{"scripts", "GET", 200},
 	API_SCRIPT:       apiEntry{"scripts/%v", "GET", 200},
+	API_DATATYPE:     apiEntry{"datatypes/%v", "GET", 200},
 	API_JOBREQUEST:   apiEntry{"jobs", "POST", 201},
 	API_JOB:          apiEntry{"jobs/%v?msgSeq=%v", "GET", 200},
 	API_DEL_JOB:      apiEntry{"jobs/%v", "DELETE", 204},
@@ -106,19 +111,85 @@ func (p Pipeline) Alive() (alive Alive, err error) {
 	return
 }
 
-//List of scripts
-
 //Returns the list of available scripts
 func (p Pipeline) Scripts() (scripts Scripts, err error) {
 	req := p.newResquest(API_SCRIPTS, &scripts, nil)
 	_, err = p.do(req, defaultErrorHandler())
+	if err != nil {
+		return
+	}
+	for _, script := range scripts.Scripts {
+		err = processInputsAndOptions(p, &script)
+		if err != nil {
+			return
+		}
+	}
 	return
 }
 
-//Returns the list of available scripts
+//Returns the script for a given script id
 func (p Pipeline) Script(id string) (script Script, err error) {
 	req := p.newResquest(API_SCRIPT, &script, nil, id)
 	_, err = p.do(req, errorHandler(map[int]string{404: "Script " + id + " not found"}))
+	if err != nil {
+		return
+	}
+	err = processInputsAndOptions(p, &script)
+	return
+}
+
+func processInputsAndOptions(p Pipeline, script *Script) (err error) {
+	for i, input := range script.Inputs {
+		desc := strings.Split(input.LongDesc, "\n")
+		script.Inputs[i].ShortDesc = desc[0]
+		// insert empty line after first line
+		if len(desc) > 1 {
+			if desc[1] != "" {
+				desc = append(desc[:1], append([]string{""}, desc[1:]...)...)
+			}
+			script.Inputs[i].LongDesc = strings.Join(desc, "\n")
+		}
+	}
+	for i, option := range script.Options {
+		desc := strings.Split(option.LongDesc, "\n")
+		script.Options[i].ShortDesc = desc[0]
+		// insert empty line after first line
+		if len(desc) > 1 {
+			if desc[1] != "" {
+				desc = append(desc[:1], append([]string{""}, desc[1:]...)...)
+			}
+			script.Options[i].LongDesc = strings.Join(desc, "\n")
+		}
+		// get data type definition
+		var optionType DataType
+		if option.DataTypeAttr != "" {
+			optionType, err = p.dataType(option.DataTypeAttr)
+		} else if option.TypeAttr != "" {
+			if option.TypeAttr == "integer" || option.TypeAttr == "xs:integer" {
+				optionType = XsInteger{
+					XmlDefinition: "<data type=\"integer\"/>"}
+			} else if option.TypeAttr == "boolean" || option.TypeAttr == "xs:boolean" {
+				optionType = XsBoolean{
+					XmlDefinition: "<data type=\"boolean\"/>"}
+			} else if option.TypeAttr == "anyURI" || option.TypeAttr == "xs:anyURI" {
+				optionType = XsAnyURI{
+					XmlDefinition: "<data type=\"anyURI\"/>"}
+			} else if option.TypeAttr == "anyFileURI" {
+				optionType = AnyFileURI{
+					XmlDefinition: "<data type=\"anyFileURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>"}
+			} else if option.TypeAttr == "anyDirURI" {
+				optionType = AnyDirURI{
+					XmlDefinition: "<data type=\"anyDirURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>"}
+			} else {
+				optionType = XsString{
+					XmlDefinition: "<data type=\"string\"/>"}
+			}
+		} else {
+			optionType = XsString{
+				XmlDefinition: "<data type=\"string\"/>"}
+		}
+		script.Options[i].Type = optionType
+	}
 	return
 }
 
@@ -128,6 +199,191 @@ func (p Pipeline) ScriptUrl(id string) string {
 	//so it's computed here
 	req := p.newResquest(API_SCRIPT, nil, nil, id)
 	return req.Url
+}
+
+// the datatype (relaxng) xml
+// text nodes that have sibling elements are ignored, except inside a documentation element,
+// where the content is treated as text content (markdown)
+type datatypeXmlElement struct {
+	XMLName      xml.Name
+	Attrs        []xml.Attr            `xml:",any,attr"`
+	ChildNodes   []datatypeXmlElement  `xml:",any"`
+	TextContent  string                `xml:",innerxml"`
+}
+
+func (e *datatypeXmlElement) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+	type elem datatypeXmlElement
+	err = d.DecodeElement((*elem)(e), &start)
+	if err != nil {
+		return
+	}
+	e.Attrs = nil
+	for _, a := range start.Attr {
+		if (a.Name.Space != "xmlns" && !(a.Name.Space == "" && a.Name.Local == "xmlns")) {
+			e.Attrs = append(e.Attrs, a)
+		}
+	}
+	if e.XMLName.Local == "documentation" {
+		e.ChildNodes = nil
+	} else if len(e.ChildNodes) > 0 {
+		e.TextContent = ""
+	}
+	return
+}
+
+func (p Pipeline) dataType(id string) (datatype DataType, err error) {
+	xmlDefinition := new(datatypeXmlElement)
+	req := p.newResquest(API_DATATYPE, &xmlDefinition, nil, id)
+	_, err = p.do(req, errorHandler(map[int]string{404: "Data type " + id + " not found"}))
+	if err != nil {
+		return
+	}
+	datatype, err = parseDatatypeXmlDefinition(xmlDefinition, "")
+	return
+}
+
+func parseDatatypeXmlDefinition(definition *datatypeXmlElement, documentation string) (result DataType, err error) {
+	var bytes []byte
+	bytes, err = xml.Marshal(definition)
+	if err != nil {
+		return
+	}
+	serialized := string(bytes)
+	switch definition.XMLName.Local {
+	case "data":
+		var documentation string
+		var pattern string
+		for _, child := range definition.ChildNodes {
+			switch child.XMLName.Local {
+			case "documentation":
+				if documentation != "" {
+					goto parseError
+				}
+				if pattern != "" {
+					// documentation must come before param
+					goto parseError
+				}
+				documentation = child.TextContent
+			case "param":
+				if !child.hasAttr("name", "pattern") {
+					goto parseError
+				}
+				if pattern != "" {
+					goto parseError
+				}
+				if !definition.hasAttr("type", "string") {
+					goto parseError
+				}
+				pattern = child.TextContent
+			default:
+				goto parseError
+			}
+		}
+		if pattern != "" {
+			result = Pattern{
+				XmlDefinition: serialized,
+				Pattern: pattern,
+				Documentation: documentation}
+			return
+		}
+		typeAttr, ok := definition.getAttr("type")
+		if !ok {
+			goto parseError
+		}
+		switch typeAttr {
+		case "string":
+			result = XsString{
+				XmlDefinition: serialized,
+				Documentation: documentation}
+			return
+		case "integer":
+			result = XsInteger{
+				XmlDefinition: serialized,
+				Documentation: documentation}
+			return
+		case "boolean":
+			result = XsBoolean{
+				XmlDefinition: serialized,
+				Documentation: documentation}
+			return
+		case "anyURI":
+			result = XsAnyURI{
+				XmlDefinition: serialized,
+				Documentation: documentation}
+			return
+		case "anyFileURI":
+			result = AnyFileURI{
+				XmlDefinition: serialized,
+				Documentation: documentation}
+			return
+		case "anyDirURI":
+			result = AnyDirURI{
+				XmlDefinition: serialized,
+				Documentation: documentation}
+			return
+		default:
+			goto parseError
+		}
+	case "choice":
+		var choices []DataType
+		if documentation != "" {
+			goto parseError
+		}
+		for i, child := range definition.ChildNodes {
+			if child.XMLName.Local == "documentation" {
+				if i == 0 || definition.ChildNodes[i-1].XMLName.Local == "documentation" {
+					goto parseError
+				}
+			} else {
+				if len(definition.ChildNodes) > i + 1 && definition.ChildNodes[i+1].XMLName.Local == "documentation" {
+					documentation = definition.ChildNodes[i+1].TextContent
+				} else {
+					documentation = ""
+				}
+				var choice DataType
+				switch child.XMLName.Local {
+				case "value":
+					choice = Value{
+						XmlDefinition: serialized,
+						Documentation: documentation,
+						Value: child.TextContent}
+				default:
+					choice, err = parseDatatypeXmlDefinition(&child, documentation)
+					if err != nil {
+						return
+					}
+				}
+				choices = append(choices, choice)
+			}
+		}
+		result = Choice{
+			XmlDefinition: serialized,
+			Values: choices}
+		return
+	default:
+		goto parseError
+	}
+parseError:
+	err = errors.New("invalid datatype xml: " + serialized)
+	return
+}
+
+func (elem *datatypeXmlElement) getAttr(name string) (value string, present bool) {
+	for _, attr := range elem.Attrs {
+		if attr.Name.Local == name {
+			return attr.Value, true
+		}
+	}
+	return "", false
+}
+
+func (elem *datatypeXmlElement) hasAttr(name string, value string) bool {
+	for _, attr := range elem.Attrs {
+		if attr.Name.Local == name {
+			return attr.Value == value
+		}
+	}
+	return false
 }
 
 //Overrides the xml decoder to get raw data

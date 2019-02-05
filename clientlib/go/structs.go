@@ -50,20 +50,77 @@ type Option struct {
 	Required   bool     `xml:"required,attr,omitempty"`
 	Sequence   bool     `xml:"sequence,attr,omitempty"`
 	Name       string   `xml:"name,attr,omitempty"`
+	NiceName   string   `xml:"nicename,attr,omitempty"`
 	Ordered    bool     `xml:"ordered,attr,omitempty"`
 	Mediatype  string   `xml:"mediaType,attr,omitempty"`
-	Desc       string   `xml:"desc,attr,omitempty"`
-	Type       string   `xml:"type,attr,omitempty"`
+	ShortDesc  string   `xml:"-"`
+	LongDesc   string   `xml:"desc,attr,omitempty"`
+	TypeAttr   string   `xml:"type,attr,omitempty"`
+	DataTypeAttr string `xml:"data-type,attr,omitempty"`
+	Type       DataType `xml:"-"`
+	Default    string   `xml:"default,attr,omitempty"`
 	OutputType string   `xml:"optionType,attr,omitempty"`
 	Separator  string   `xml:"separator,attr,omitempty"`
 	Value      string   `xml:",chardata"`
 	Items      []Item
 }
+
+type DataType interface{}
+
+type Choice struct {
+	XmlDefinition string
+	Values        []DataType
+}
+
+type Value struct {
+	XmlDefinition string
+	Documentation string
+	Value         string
+}
+
+type Pattern struct {
+	XmlDefinition string
+	Pattern       string
+	Documentation string
+}
+
+type AnyFileURI struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type AnyDirURI struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsAnyURI struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsBoolean struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsInteger struct {
+	XmlDefinition string
+	Documentation string
+}
+
+type XsString struct {
+	XmlDefinition string
+	Documentation string
+}
+
 type Input struct {
 	XMLName   xml.Name `xml:"http://www.daisy.org/ns/pipeline/data input"`
-	Desc      string   `xml:"desc,attr,omitempty"`
+	ShortDesc string   `xml:"-"`
+	LongDesc  string   `xml:"desc,attr,omitempty"`
 	Mediatype string   `xml:"mediaType,attr,omitempty"`
-	Name      string   `xml:"name,attr"`
+	Name      string   `xml:"name,attr,omitempty"`
+	NiceName  string   `xml:"nicename,attr,omitempty"`
 	Sequence  bool     `xml:"sequence,attr,omitempty"`
 	Items     []Item
 }

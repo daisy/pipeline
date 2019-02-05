@@ -74,7 +74,7 @@ var expected = map[string]interface{}{
 		Homepage:    "http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI",
 		Inputs: []Input{
 			Input{
-				Desc:      "One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.",
+				LongDesc:  "One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.",
 				Mediatype: "application/x-dtbook+xml",
 				Name:      "source",
 				Sequence:  true,
@@ -82,7 +82,7 @@ var expected = map[string]interface{}{
 		},
 		Options: []Option{
 			Option{
-				Desc:       "The directory to store the generated files in.",
+				LongDesc:   "The directory to store the generated files in.",
 				Mediatype:  "application/x-dtbook+xml",
 				Name:       "output-dir",
 				Required:   true,
