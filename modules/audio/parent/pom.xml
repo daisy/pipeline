@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>audio-modules-parent</artifactId>
-  <version>1.11.2-SNAPSHOT</version>
+  <version>1.11.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Audio Modules Parent POM</name>
@@ -22,14 +22,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-modules-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.2-SNAPSHOT</version>
+        <version>1.11.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -50,5 +50,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
 </project>

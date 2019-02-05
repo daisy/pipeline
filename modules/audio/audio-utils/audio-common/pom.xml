@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>audio-modules-parent</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.11.3-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.2-SNAPSHOT</version>
   <artifactId>audio-common</artifactId>
   <packaging>bundle</packaging>
 
