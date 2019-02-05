@@ -10,7 +10,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>nlp-modules-bom</artifactId>
-  <version>1.11.2-SNAPSHOT</version>
+  <version>1.11.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: NLP Modules BoM</name>
@@ -31,7 +31,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-break-detection</artifactId>
-        <version>2.0.2-SNAPSHOT</version>
+        <version>2.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -46,7 +46,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-common</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
