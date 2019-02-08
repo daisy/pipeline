@@ -127,6 +127,7 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
         } catch (Throwable e) {
             throw handleException(e);
         }
+        try {
 
         // Use a TreeWriter to make the matching node into a proper document
         TreeWriter treeWriter = new TreeWriter(runtime);
@@ -185,11 +186,14 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
             throw new XProcException(sae);
         }
 
+        } finally {
+            runtime.getMessageListener().closeStep();
+        }
+
         return false;
     }
 
     public void processEndElement(XdmNode node) {
-        runtime.getMessageListener().closeStep();
     }
 
     public void processText(XdmNode node) {
