@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:daisy/maven-parents.git
+	branch = master
+	commit = 1aae8e5741695772ecf769ed51841612e86348a2
+	parent = 1ffb4e9b04c7fcbfc54b7b56a3dec46500aab6c8
+	cmdver = 0.3.1

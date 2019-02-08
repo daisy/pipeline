@@ -1,0 +1,20 @@
+language: java
+
+# main task, run the verify goal
+script: sh -c 'cd daisy-parent; mvn verify'
+
+# if the build succeeds, deploy the artifact (tests are skipped)
+after_success:
+  - cd daisy-parent
+  - git clone -b travis https://github.com/daisy-consortium/maven-parents.git target/travis
+  - ./target/travis/maven_deploy.sh
+
+# whitelist; only deploy master branch
+branches:
+  only:
+  - master
+
+env:
+  global:
+  - secure: "pq1pHAqPSXlGr2MRS/Zg4476/7RVb3RRaQuM+kGBE3c9YNuXM8hWbvKlVKoz3G2eX7h30HHmnWrB2Ui/sihnSf7FByBR7BrG/YHEppB7OwvzmipGWR6ITQDImtjmgPSIZP+GDgfSG03IZUkBMUpzbg5vzCmt9jyA5csgR2ZLU/w="
+  - secure: "rPu1NQI6cUoxRL763JgvRJuyJC40vpXMUF4H2W/UStIYKaz4bWMfVc+ebYTp9kXlavp63zztbtGMoFVtzLLy5TPnllwSfDzZZPsV4dDleFlah68Yz4NhpJeuwUnnZc1Vq6cL3rSV+dE2z+pDQYIIJaNCVNJI9+XOeYOFv/l4Qkw="
