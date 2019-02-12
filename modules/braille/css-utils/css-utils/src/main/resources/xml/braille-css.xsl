@@ -132,7 +132,7 @@
                  re:exact(re:or(('normal','bold','100','200','300','400','500','600','700','800','900'))),
                  re:exact(re:or(('none','underline','overline','line-through','blink'))),
                  re:exact($css:COLOR_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
+                 re:exact(re:or(($css:POSITIVE_NUMBER_RE,$css:POSITIVE_PERCENTAGE_RE))),
                  re:exact($css:NON_NEGATIVE_INTEGER_RE),
                  re:exact($css:NON_NEGATIVE_INTEGER_RE),
                  re:exact(re:or(('auto',re:comma-separated($css:IDENT_RE)))),
@@ -498,6 +498,34 @@
     
     <xsl:function name="css:custom-counter-style" as="element()?">
         <xsl:param name="name" as="xs:string"/>
+    </xsl:function>
+    
+    <!--
+        round to next .25
+    -->
+    <xsl:function name="css:round-line-height" as="xs:string">
+        <xsl:param name="line-height" as="xs:string"/>
+        <xsl:analyze-string select="$line-height"
+                            regex="^(({$css:POSITIVE_NUMBER_RE})|({$css:POSITIVE_PERCENTAGE_RE}))$">
+            <xsl:matching-substring>
+                <xsl:variable name="value" as="xs:double">
+                    <xsl:choose>
+                        <xsl:when test="regex-group(2)!=''">
+                            <xsl:sequence select="number(regex-group(2))"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="number(regex-group(2 + $css:POSITIVE_NUMBER_RE_groups + 1 + $css:POSITIVE_PERCENTAGE_RE_number))
+                                                  div 100"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:variable name="value" as="xs:double" select="round($value * 4) div 4"/>
+                <xsl:sequence select="format-number($value, '0.##')"/>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring>
+                <xsl:message terminate="yes" select="concat('Not a valid line-height: ',$line-height)"/>
+            </xsl:non-matching-substring>
+        </xsl:analyze-string>
     </xsl:function>
     
 </xsl:stylesheet>

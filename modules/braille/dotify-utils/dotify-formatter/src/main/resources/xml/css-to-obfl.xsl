@@ -1486,7 +1486,16 @@
     
     <xsl:template mode="block-attr table-attr toc-entry-attr"
                   match="css:box[@type=('block','table')]/@css:line-height">
-        <xsl:attribute name="row-spacing" select="format-number(xs:integer(number(.)), '0.0')"/>
+        <xsl:variable name="rounded" as="xs:double" select="number(css:round-line-height(.))"/>
+        <xsl:choose>
+            <xsl:when test="$rounded=1"/>
+            <xsl:when test="$rounded &lt; 1">
+                <xsl:message select="concat('line-height smaller than 1 not supported: ', .)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="row-spacing" select="format-number($rounded, '0.00')"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!--

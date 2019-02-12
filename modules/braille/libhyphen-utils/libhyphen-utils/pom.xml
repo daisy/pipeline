@@ -37,7 +37,7 @@
         <configuration>
           <instructions>
             <_dsannotations>*</_dsannotations>
-            <Require-Capability>xpath.function:="(name={http://hunspell.sourceforge.net/Hyphen}hyphenate)"</Require-Capability>
+            <Require-Capability>xpath.function;filter:="(name={http://hunspell.sourceforge.net/Hyphen}hyphenate)"</Require-Capability>
           </instructions>
         </configuration>
       </plugin>

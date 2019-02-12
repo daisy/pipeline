@@ -627,6 +627,12 @@ See the CSS specification for more info:
             <p px:role="desc">An HTML preview of the PEF.</p>
         </p:documentation>
     </p:option>
+    <p:option name="obfl-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">OBFL</h2>
+            <p px:role="desc">The intermediary OBFL-file (for debugging).</p>
+        </p:documentation>
+    </p:option>
     <p:option name="temp-dir" required="false" px:output="temp" px:type="anyDirURI" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Temporary directory</h2>

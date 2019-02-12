@@ -19,6 +19,7 @@
     <p:option name="pef-output-dir" select="''"/>
     <p:option name="brf-output-dir" select="''"/>
     <p:option name="preview-output-dir" select="''"/>
+    <p:option name="obfl-output-dir" select="''"/>
     
     <p:option name="name" required="true"/>
     <p:option name="include-preview" select="'false'"/>
@@ -71,12 +72,12 @@
     </p:count>
     <p:choose px:progress=".50">
         <p:when px:message="Storing OBFL"
-                test="number(string(/*)) &gt; 0"> <!-- must be 0 or 1 -->
+                test="$obfl-output-dir!='' and number(string(/*)) &gt; 0"> <!-- must be 0 or 1 -->
             <p:store encoding="utf-8" omit-xml-declaration="false">
                 <p:input port="source">
                     <p:pipe step="main" port="obfl"/>
                 </p:input>
-                <p:with-option name="href" select="concat($pef-output-dir,'/',$name,'.obfl')"/>
+                <p:with-option name="href" select="concat($obfl-output-dir,'/',$name,'.obfl')"/>
             </p:store>
         </p:when>
         <p:otherwise>

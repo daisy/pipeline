@@ -8,7 +8,7 @@
       <doc>
         <h css:display="block" style="string-set: running-footer content()">foobar</h>
         <p css:display="block" style="&amp;::after {{ content: 'bar' }}">foo</p>
-        <pagenum style="display: none; string-set: print-page content()">ii</pagenum>
+        <pagenum style="display: none; string-set: print-page content(), foo 'bar'">ii</pagenum>
       </doc>
     </x:context>
     <x:expect label="result">
@@ -16,7 +16,7 @@
         <doc>
           <h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
           <p style="display: block &amp;::after {{ content: &quot;BAR&quot;; text-transform: auto }}">FOO</p>
-          <pagenum style="display: none; string-set: print-page &quot;ii&quot;">II</pagenum>
+          <pagenum style="display: none; string-set: print-page &quot;ii&quot;, foo &quot;bar&quot;">II</pagenum>
         </doc>
       </_>
     </x:expect>

@@ -68,8 +68,10 @@ import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
+import cz.vutbr.web.css.TermNumber;
 import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermString;
+import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
 import cz.vutbr.web.csskit.DefaultNetworkProcessor;
@@ -663,6 +665,20 @@ public class CssInlineStep extends DefaultStep {
 			if (term instanceof TermInteger) {
 				TermInteger integer = (TermInteger)term;
 				return "" + integer.getIntValue(); }
+			else if (term instanceof TermNumber) {
+				TermNumber number = (TermNumber)term;
+				Double value = number.getValue().doubleValue();
+				if (value == Math.floor(value))
+					return "" + value.intValue();
+				else
+					return "" + value; }
+			else if (term instanceof TermPercent) {
+				TermPercent percent = (TermPercent)term;
+				Double value = percent.getValue().doubleValue();
+				if (value == Math.floor(value))
+					return "" + value.intValue() + "%";
+				else
+					return "" + value + "%"; }
 			else if (term instanceof TermList && !(term instanceof TermFunction)) {
 				TermList list = (TermList)term;
 				String s = "";

@@ -1,7 +1,53 @@
+v1.11.3
+=======
+
+Changes
+-------
+- Support for fractional `line-height`
+- Bugfixes
+
+v1.11.2
+=======
+
 Changes
 -------
 - Syntax of style attributes has changed:
   http://braillespecs.github.io/braille-css/20181031/#style-attribute
+- Support for `:-obfl-alternate-scenario` pseudo-class and `-obfl-scenario-cost` property
+  (https://github.com/nlbdev/pipeline/issues/207)
+- Support for `@-obfl-volume-transition` rules (https://github.com/braillespecs/obfl/issues/70,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/68)
+- CSS/XSL module for basic volume breaking
+  (https://github.com/daisy/pipeline-mod-braille/issues/182,
+  https://github.com/daisy/pipeline-mod-braille/pull/186)
+- Various invisible changes (https://github.com/daisy/pipeline-mod-braille/issues/99,
+  https://github.com/daisy/pipeline-mod-braille/pull/171,
+  https://github.com/daisy/pipeline-mod-braille/pull/180, ...)
+- Various bugfixes
+
+Components
+----------
+- liblouis ([3.6.0](https://github.com/liblouis/liblouis/releases/tag/v3.6.0)), liblouisutdml
+  ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v)), liblouis-java
+  ([3.1.0](https://github.com/liblouis/liblouis-java/releases/tag/3.1.0))
+- **dotify** (**api** [**4.4.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv4.4.0), **common**
+  [**4.3.0**](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv4.3.0), hyphenator.impl
+  [4.0.0](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv4.0.0), translator.impl
+  [4.0.0](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv4.0.0), **formatter.impl**
+  [**4.4.0**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv4.4.0), text.impl
+  [4.0.0](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv4.0.0), **streamline-api**
+  [**1.3.0**](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.3.0), **streamline-engine**
+  [**1.2.0**](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.2.0), **task.impl**
+  [**4.5.0**](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv4.5.0))
+- brailleutils (api
+  [3.0.1](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.1), impl
+  [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
+  [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
+- **braille-css** ([**1.14.0**](https://github.com/daisy/braille-css/releases/tag/1.14.0))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/)), jhyphen
+  ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
 v1.11.1
 =======

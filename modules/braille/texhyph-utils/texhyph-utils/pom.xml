@@ -36,7 +36,7 @@
         <configuration>
           <instructions>
             <_dsannotations>*</_dsannotations>
-            <Require-Capability>xpath.function:="(name={http://code.google.com/p/texhyphj/}hyphenate)"</Require-Capability>
+            <Require-Capability>xpath.function;filter:="(name={http://code.google.com/p/texhyphj/}hyphenate)"</Require-Capability>
           </instructions>
         </configuration>
       </plugin>

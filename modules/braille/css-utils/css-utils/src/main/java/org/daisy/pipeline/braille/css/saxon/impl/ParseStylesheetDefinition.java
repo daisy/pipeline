@@ -26,7 +26,9 @@ import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
+import cz.vutbr.web.css.TermNumber;
 import cz.vutbr.web.css.TermPair;
+import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermString;
 
 import net.sf.saxon.expr.XPathContext;
@@ -140,6 +142,7 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 					Style style = new Style();
 					for (RuleBlock<?> rule : new InlineStyle(arg.getStringValue(), styleCtxt)) {
 						if (rule instanceof RuleMainBlock)
+							// Note that the declarations have not been transformed by BrailleCSSDeclarationTransformer yet
 							style.add((List<Declaration>)rule);
 						else if (rule instanceof RuleRelativeBlock) {
 							String[] selector = serializeSelector((RuleRelativeBlock)rule);
@@ -289,7 +292,11 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 					for (Declaration d : declarations) {
 						writeStartElement(w, CSS_PROPERTY);
 						writeAttribute(w, NAME, d.getProperty());
-						writeAttribute(w, VALUE, Strings.join(d, " ", serializeTerm));
+						if (d.getProperty().equals("string-set")) {
+							// FIXME: special handling of string-set because serializeTerm omits the commas
+							writeAttribute(w, VALUE, Strings.join(d, "", Object::toString));
+						} else
+							writeAttribute(w, VALUE, Strings.join(d, " ", serializeTerm));
 						w.writeEndElement();
 					}
 				}
@@ -486,6 +493,20 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 			if (term instanceof TermInteger) {
 				TermInteger integer = (TermInteger)term;
 				return "" + integer.getIntValue(); }
+			else if (term instanceof TermNumber) {
+				TermNumber number = (TermNumber)term;
+				Double value = number.getValue().doubleValue();
+				if (value == Math.floor(value))
+					return "" + value.intValue();
+				else
+					return "" + value; }
+			else if (term instanceof TermPercent) {
+				TermPercent percent = (TermPercent)term;
+				Double value = percent.getValue().doubleValue();
+				if (value == Math.floor(value))
+					return "" + value.intValue() + "%";
+				else
+					return "" + value + "%"; }
 			else if (term instanceof TermList && !(term instanceof TermFunction)) {
 				TermList list = (TermList)term;
 				String s = "";
