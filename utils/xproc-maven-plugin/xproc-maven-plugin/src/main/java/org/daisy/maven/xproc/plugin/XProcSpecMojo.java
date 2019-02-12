@@ -144,7 +144,9 @@ public class XProcSpecMojo extends AbstractMojo {
 		                surefireReportsDirectory,
 		                tempDir,
 		                reporter))
-			throw new MojoFailureException("There are test failures.");
+			throw new MojoFailureException("There are test failures.\n"
+			                               + "Please refer to " + reportsDirectory.getPath()
+			                               + " for the individual test results.");
 		
 		} catch (Throwable e) {
 			e.printStackTrace();

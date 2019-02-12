@@ -13,6 +13,7 @@ import org.daisy.maven.xproc.pipeline.logging.FlattenedProgressMessage;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
+import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,5 +94,20 @@ class MessageEventListener implements BiConsumer<MessageAccessor,Integer> {
 			levels.add(Level.DEBUG);
 		if (logger.isTraceEnabled())
 			levels.add(Level.TRACE);
+		
+		// If the org.daisy.pipeline.log.level property was not set explicitly, set it to the same
+		// value as the SLF4J level of org.daisy.maven.xproc.pipeline.MessageEventListener
+		if (Properties.getProperty("org.daisy.pipeline.log.level") == null) {
+			if (logger.isTraceEnabled())
+				System.getProperties().setProperty("org.daisy.pipeline.log.level", "TRACE");
+			else if (logger.isDebugEnabled())
+				System.getProperties().setProperty("org.daisy.pipeline.log.level", "DEBUG");
+			else if (logger.isInfoEnabled())
+				System.getProperties().setProperty("org.daisy.pipeline.log.level", "INFO");
+			else if (logger.isWarnEnabled())
+				System.getProperties().setProperty("org.daisy.pipeline.log.level", "WARN");
+			else if (logger.isErrorEnabled())
+				System.getProperties().setProperty("org.daisy.pipeline.log.level", "ERROR");
+		}
 	}
 }

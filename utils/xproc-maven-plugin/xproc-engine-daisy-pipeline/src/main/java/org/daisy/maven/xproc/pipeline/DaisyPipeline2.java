@@ -35,6 +35,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import org.slf4j.MDC;
+
 @Component(
 	name = "org.daisy.maven.xproc.pipeline.DaisyPipeline2",
 	service = { org.daisy.maven.xproc.api.XProcEngine.class }
@@ -115,8 +117,10 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 					MessageEventListener listener = new MessageEventListener(jobId, jobMonitorFactory);
 					try {
 						Properties props = new Properties();
-						props.setProperty("JOB_ID", jobId);
+						props.setProperty("JOB_ID", jobId); // this is used in EventBusMessageListener
+						MDC.put("jobid", jobId); // this is used in EventBusAppender
 						results = xprocPipeline.run(inputBuilder.build(), null, props);
+						MDC.remove("jobid");
 					} finally {
 						listener.close();
 					}

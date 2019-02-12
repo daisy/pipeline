@@ -1,11 +1,5 @@
 package org.daisy.maven.xproc.xprocspec;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableMap;
-import static com.google.common.io.Files.asByteSink;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -26,6 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.ServiceLoader;
 import java.util.Set;
 
@@ -33,6 +29,12 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
+import static com.google.common.io.Files.asByteSink;
 
 import net.sf.saxon.xpath.XPathFactoryImpl;
 
@@ -218,11 +220,17 @@ public class XProcSpecRunner {
 					Integer errors = (Integer)evaluateXPath(surefireReport, "number(/testsuites/@errors)", null, Integer.class);
 					Integer skipped = (Integer)evaluateXPath(surefireReport, "sum(/testsuites/*/number(@skipped))", null, Integer.class);
 					Long time = (Long)evaluateXPath(surefireReport, "number(/testsuites/@time)", null, Long.class);
+					String shortDesc = (String)evaluateXPath(surefireReport,
+					                                         "string-join("
+					                                         + "/testsuites/testsuite[testcase[@status='FAILED']]"
+					                                         + "/(string(@name),testcase[@status='FAILED']/@name/concat(' - ',.))"
+					                                         + ",'\n')",
+					                                         null, String.class);
 					totalRun += run;
 					totalFailures += failures;
 					totalErrors += errors;
 					totalSkipped += skipped;
-					reporter.result(run, failures, errors, skipped, time, null, null); }}
+					reporter.result(run, failures, errors, skipped, time, shortDesc, null); }}
 			catch (XProcExecutionException e) {
 				totalRun += 1;
 				totalErrors += 1;
@@ -332,9 +340,13 @@ public class XProcSpecRunner {
 				        (failures > 0 || errors > 0) ? " <<< FAILURE!" : "");
 				List<String> summary = errors > 0 ? testsInError : failures > 0 ? failedTests : null;
 				if (summary != null) {
-					if (shortDesc != null)
-						summary.add(currentTest + ": " + shortDesc);
-					else
+					if (shortDesc != null) {
+						String formatted = "";
+						for (String s : shortDesc.split("\\r?\\n"))
+							for (String ss : fillParagraph(s, 86).split("\\r?\\n"))
+								formatted += "\n    " + ss;
+						summary.add(currentTest + formatted);
+					} else
 						summary.add(currentTest); }
 				if (longDesc != null)
 					println(longDesc);
@@ -430,5 +442,34 @@ public class XProcSpecRunner {
 				throw new RuntimeException("Cannot evaluate to a " + type.getName()); }
 		catch (Exception e) {
 			throw new RuntimeException("Exception occured during XPath evaluation.", e); }
+	}
+	
+	private static String fillParagraph(String string, int maxColumns) {
+		String prefix = "";
+		Matcher m = Pattern.compile("^( *-? *)[^ -].*$").matcher(string);
+		if (m.matches())
+			prefix = m.group(1).replace('-',' ');
+		StringBuilder b = new StringBuilder();
+		int col = 0;
+		boolean first = true;
+		for (String word : string.split("\\s+")) {
+			while (true) {
+				if (col == 0) {
+					if (!first)
+						b.append(prefix);
+					col += prefix.length();
+				}
+				if (col + word.length() <= maxColumns) {
+					b.append(word).append(" ");
+					col += (word.length() + 1);
+					break;
+				} else {
+					b.append("\n");
+					col = 0;
+				}
+			}
+			first = false;
+		}
+		return b.toString();
 	}
 }

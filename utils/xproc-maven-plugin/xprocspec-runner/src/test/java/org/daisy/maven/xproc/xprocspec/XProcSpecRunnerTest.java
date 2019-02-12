@@ -99,6 +99,8 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Failed tests:"                                                                          + "\n" +
 "  test_identity_broken"                                                                 + "\n" +
+"    Identity "                                                                          + "\n" +
+"     - theOptionOptionRequiredShouldHaveTheValueOptionRequiredvalue "                   + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 3, Failures: 1, Errors: 0, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_identity_broken.html").exists());
@@ -129,7 +131,9 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_non_existing"                                                                    + "\n" +
-"  non_existing_test: Calabash failed to execute XProc"                                  + "\n" +
+"     "                                                                                  + "\n" +
+"  non_existing_test"                                                                    + "\n" +
+"    Calabash failed to execute XProc "                                                  + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 2, Failures: 0, Errors: 2, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_non_existing.html").exists());
@@ -175,6 +179,7 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_foo_catalog"                                                                     + "\n" +
+"     "                                                                                  + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0"                                       + "\n"));
 		File catalog = new File(testsDir, "foo_catalog.xml");
@@ -211,6 +216,7 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_foo_java"                                                                        + "\n" +
+"     "                                                                                  + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0"                                       + "\n"));
 		stream.reset();
