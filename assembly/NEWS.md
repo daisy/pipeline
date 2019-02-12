@@ -1,9 +1,31 @@
-Changes in release ???
-======================
+Changes in release v1.12.0
+==========================
 
 ### Distribution/Installation
 
 - **FIX** Installation issues on Windows
+- Minimum Java requirement is changed to Java 11
+
+### Command Line Interface
+
+- **NEW** Progress indication of jobs
+- **NEW** Improved help for script options, incl. possible values and default values
+- **NEW** Validation of script options
+- **NEW** Configurable verbosity of help command
+
+### Framework
+
+- Refactoring of messaging system, incl. support for progress indication
+- Calabash (XProc engine) updated to version 1.1.20
+- Saxon (XSLT/XPath engine) updated to version 9.8.0.8
+
+### Modules
+
+- **NEW** Improved HTML chunking, incl. new option "chunk-size" for daisy3-to-epub3, dtbook-to-epub3, dtbook-to-html, zedai-to-epub3 and zedai-to-html scripts
+- **NEW** Configuration file for well-known TTS voices
+- Scripts with TTS now fail when audio is missing
+- Various changes to braille production scripts, see [release notes of Braille modules v1.11.2](https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1112)
+- XProc code cleanup
 
 
 Changes in release v1.11.1
@@ -19,7 +41,7 @@ Changes in release v1.11.1
 - **FIX** Support "dir" attribute on dtbook element in **dtbook-to-epub3**
 - **FIX** Support validating unzipped EPUBs
 - **FIX** Issue with adapter for Qfrency speech engine
-- various changes to braille scripts, see [release notes of Braille modules v1.11.1](https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1111)
+- Various changes to braille scripts, see [release notes of Braille modules v1.11.1](https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1111)
 
 ### Details
 

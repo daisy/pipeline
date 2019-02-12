@@ -28,7 +28,7 @@ This product includes the following third-party software:
   
   The Saxon XSLT and XQuery Processor
     by Saxonica Limited (http://www.saxonica.com/)
-    under the Mozilla Public License (version 1.0)
+    under the Mozilla Public License (version 2.0)
   
   Apache Commons libraries, Apache XML Resolver, Apache XML Serializer, Apache Xalan, Apache Xerces
     by The Apache Software Foundation (http://commons.apache.org/)

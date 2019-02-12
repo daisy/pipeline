@@ -6,6 +6,11 @@ before_install:
 script:
   - make docker &&
     make check-docker
+before_cache:
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_cache)
+cache:
+  directories:
+    - $HOME/.m2/cached-repository
 branches:
   except:
     - /^rd-/

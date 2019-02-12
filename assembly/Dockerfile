@@ -11,7 +11,7 @@ RUN mvn clean package
 RUN cd target && unzip assembly-*-linux.zip
 
 # then use the build artifacts to create an image where the pipeline is installed
-FROM openjdk:9-jre
+FROM openjdk:11-jre
 LABEL maintainer="DAISY Consortium (http://www.daisy.org/)"
 COPY --from=builder /usr/src/daisy-pipeline2/target/daisy-pipeline /opt/daisy-pipeline2
 ENV PIPELINE2_WS_LOCALFS=false \

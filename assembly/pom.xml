@@ -60,7 +60,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.11.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -74,14 +74,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.11.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.11.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1001,11 +1001,6 @@
                 <artifactItem>
                   <groupId>org.idpf</groupId>
                   <artifactId>epubcheck</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>com.google.guava</groupId>
-                  <artifactId>guava</artifactId>
-                  <version>14.0.1</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.commons</groupId>
@@ -2821,34 +2816,70 @@
       <id>central</id>
       <name>Maven Central</name>
       <url>http://repo.maven.apache.org/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <!-- Restlet maven repository - They don't publish their stuff on maven central -->
     <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
       <url>http://maven.restlet.org</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <repository>
       <id>eclipselink</id>
       <name>EclipseLink Releases</name>
       <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <repository>
       <id>eclipse-gemini-dbaccess</id>
       <name>Eclipse Gemini DBAccess Milestones</name>
       <url>http://download.eclipse.org/gemini/dbaccess/mvn/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <!-- gemini related bundles and derby -->
     <repository>
       <id>eclipse-gemini-repo</id>
       <name>Eclipse Gemini Maven repository</name>
       <url>http://download.eclipse.org/gemini/mvn/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <!-- springsource used for osgi version of mysql -->
     <repository>
       <id>com.springsource.repository.bundles.external</id>
       <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
       <url>http://repository.springsource.com/maven/bundles/external</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

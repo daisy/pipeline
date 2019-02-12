@@ -1,4 +1,4 @@
-FROM openjdk:9-jre
+FROM openjdk:11-jre
 LABEL maintainer="DAISY Consortium (http://www.daisy.org/)"
 ADD daisy-pipeline /opt/daisy-pipeline2
 ENV PIPELINE2_WS_LOCALFS=false \
