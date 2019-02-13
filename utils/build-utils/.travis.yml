@@ -17,6 +17,13 @@ after_success:
 after_failure:
   - find . -type f -path '*/target/it/*/build.log' -execdir bash -c 'if ! cat build.log | grep -qFx "[INFO] BUILD SUCCESS"; then tail -250 build.log; fi' \;
 
+before_cache:
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_cache)
+
+cache:
+  directories:
+    - $HOME/.m2/cached-repository
+
 # whitelist; only deploy master branch
 branches:
   only:

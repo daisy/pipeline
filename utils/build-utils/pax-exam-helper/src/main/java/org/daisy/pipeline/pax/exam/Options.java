@@ -53,6 +53,7 @@ import org.sonatype.aether.connector.wagon.WagonProvider;
 import org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
 import org.sonatype.aether.graph.Dependency;
 import org.sonatype.aether.graph.DependencyNode;
+import org.sonatype.aether.graph.Exclusion;
 import org.sonatype.aether.repository.LocalRepository;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.repository.RepositoryPolicy;
@@ -121,6 +122,13 @@ public abstract class Options {
 		return mavenBundle("org.daisy.maven:xspec-runner:?");
 	}
 	
+	// Note that thisBundle() may point to "target/classes" without really knowing whether it
+	// contains all the resources (it only checks for the OSGI-INF files listed in
+	// Service-Component). Therefore if resources are added it is important that this is done in
+	// such a way that they end up in target/classes. For instance, only resources that exist in
+	// the "generate-resources" phase are automatically copied to target/classes. If they are
+	// generated in the "process-resources" phase you are responsible for copying them to
+	// target/classes yourself.
 	public static UrlProvisionOption thisBundle() {
 		File classes = new File(PathUtils.getBaseDir() + "/target/classes");
 		Manifest manifest;
@@ -248,6 +256,7 @@ public abstract class Options {
 		private String type = "jar";
 		private String classifier = "";
 		private String version = null;
+		private Set<Exclusion> exclusions = new HashSet<Exclusion>();
 		
 		public MavenBundle groupId(String groupId) {
 			checkURLResolved();
@@ -294,6 +303,11 @@ public abstract class Options {
 				throw new IllegalArgumentException("start level must be > 0");
 			}
 			this.startLevel = level;
+			return this;
+		}
+		
+		public MavenBundle exclusion(String groupId, String artifactId) {
+			exclusions.add(new Exclusion(groupId, artifactId, null, "jar"));
 			return this;
 		}
 		
@@ -493,8 +507,8 @@ public abstract class Options {
 				if (!centralRedefined)
 					repositories.add(new RemoteRepository("central", "default", "http://repo1.maven.org/maven2/")); }
 			CollectRequest request = new CollectRequest();
-			for (MavenBundle bundle : fromBundles) {
-				request.addDependency(new Dependency(bundle.asArtifact(), "runtime")); }
+			for (MavenBundle bundle : fromBundles)
+				request.addDependency(new Dependency(bundle.asArtifact(), "runtime", false, bundle.exclusions));
 			for (RemoteRepository r : repositories)
 				request.addRepository(r);
 			request.setRequestContext("runtime");
