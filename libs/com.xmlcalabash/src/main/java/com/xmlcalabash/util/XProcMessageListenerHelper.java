@@ -59,17 +59,17 @@ public class XProcMessageListenerHelper {
 	private static final Logger logger = LoggerFactory.getLogger(XProcMessageListenerHelper.class);
 
 	public static void openStep(XProcRuntime runtime, XStep step) {
-		openStep(runtime, step, null);
+		openStep(runtime, step, null, step.getInScopeOptions());
 	}
 	
-	public static void openStep(XProcRuntime runtime, XStep step, BigDecimal fixedPortion) {
-		String msg = evaluateExtensionAttribute(px_message, runtime, step);
+	public static void openStep(XProcRuntime runtime, XStep step, BigDecimal fixedPortion, Hashtable<QName,RuntimeValue> globals) {
+		String msg = evaluateExtensionAttribute(px_message, runtime, step, globals);
 		if (msg == null) {
 			// FIXME: also handled in DefaultStep
-			msg = evaluateExtensionAttribute(cx_message, runtime, step);
+			msg = evaluateExtensionAttribute(cx_message, runtime, step, globals);
 		}
 		BigDecimal portion; {
-			String s = evaluateExtensionAttribute(px_progress, runtime, step);
+			String s = evaluateExtensionAttribute(px_progress, runtime, step, globals);
 			if (fixedPortion != null) {
 				portion = fixedPortion;
 				if (s != null) {
@@ -97,14 +97,14 @@ public class XProcMessageListenerHelper {
 		XProcMessageListener listener = runtime.getMessageListener();
 		listener.openStep(step, step.getNode(), msg, severity, portion);
 	}
-
-	public static String evaluateExtensionAttribute(QName attName, XProcRuntime runtime, XStep step) {
+	
+	public static String evaluateExtensionAttribute(QName attName, XProcRuntime runtime, XStep step, Hashtable<QName,RuntimeValue> globals) {
 		String val = step.getExtensionAttribute(attName);
 		if (val != null) {
 			if (val.contains("{")) {
 				// may be an attribute value template
 				try {
-					val = evaluateAVT(val, runtime, step);
+					val = evaluateAVT(val, runtime, globals);
 				} catch (Exception e) {
 					final SourceLocator[] location
 						= new SourceLocator[]{XProcException.prettyLocator(null, -1, "@"+attName.toString())};
@@ -119,9 +119,7 @@ public class XProcMessageListenerHelper {
 		return val;
 	}
 
-	public static String evaluateAVT(String avt, final XProcRuntime runtime, XStep step) throws XPathException {
-		
-		final Hashtable<QName,RuntimeValue> globals = step.getInScopeOptions();
+	public static String evaluateAVT(String avt, final XProcRuntime runtime, final Hashtable<QName,RuntimeValue> globals) throws XPathException {
 		final XPathEvaluator evaluator = new XPathEvaluator(); {
 			((IndependentContext)evaluator.getStaticContext()).setAllowUndeclaredVariables(true);
 		}

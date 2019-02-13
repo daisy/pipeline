@@ -23,7 +23,7 @@ public class XOtherwise extends XCompoundStep {
     @Override
     public void run() throws SaxonApiException {
         try {
-            XProcMessageListenerHelper.openStep(runtime, this, BigDecimal.ONE);
+            XProcMessageListenerHelper.openStep(runtime, this, BigDecimal.ONE, parent.getInScopeOptions());
         } catch (Throwable e) {
             throw handleException(e);
         }
