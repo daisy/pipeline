@@ -272,5 +272,28 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <!-- gemini related bundles and derby -->
+    <repository>
+      <id>eclipse-gemini-repo</id>
+      <name>Eclipse Gemini Maven repository</name>
+      <url>http://download.eclipse.org/gemini/mvn/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>eclipse-gemini-dbaccess</id>
+      <name>Eclipse Gemini DBAccess Milestones</name>
+      <url>http://download.eclipse.org/gemini/dbaccess/mvn/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 </project>

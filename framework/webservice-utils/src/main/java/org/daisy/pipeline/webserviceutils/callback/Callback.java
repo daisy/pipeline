@@ -40,4 +40,9 @@ public class Callback {
 	public Client getClient() {
 		return client;
 	}
+
+	@Override
+	public String toString() {
+		return "Callback [href='" + href+ "'; client=" + client + "]";
+	}
 }

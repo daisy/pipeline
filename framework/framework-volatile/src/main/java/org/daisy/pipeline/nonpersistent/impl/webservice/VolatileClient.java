@@ -95,4 +95,8 @@ public final class VolatileClient implements Client {
         this.role = role;
     }
 
+    @Override
+    public String toString() {
+        return "Client [id=" + getId() + "; role=" + getRole() + "]";
+    }
 }

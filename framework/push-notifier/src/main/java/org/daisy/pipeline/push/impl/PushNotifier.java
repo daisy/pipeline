@@ -100,6 +100,7 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
 
         @Override
         public void addCallback(Callback callback) {
+                logger.debug("Adding callback: " + callback);
                 Job job = callback.getJob();
                 List<Callback> list = callbacks.get(job);
                 if (list == null) {
