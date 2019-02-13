@@ -1,13 +1,8 @@
-package org.daisy.pipeline.asciimathml.calabash;
+package org.daisy.pipeline.asciimathml.calabash.impl;
 
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.stream.StreamResult;
@@ -27,6 +22,8 @@ import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
+import org.daisy.pipeline.asciimathml.ASCIIMathML;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,45 +33,18 @@ public class ASCIIMathMLProvider implements XProcStepProvider {
 	
 	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-		return new ASCIIMathML(runtime, step);
+		return new ASCIIMathMLStep(runtime, step);
 	}
 	
-	private static class ASCIIMathML extends DefaultStep {
+	private static class ASCIIMathMLStep extends DefaultStep {
 		
-		private static final Logger logger = LoggerFactory.getLogger(ASCIIMathML.class);
+		private static final Logger logger = LoggerFactory.getLogger(ASCIIMathMLStep.class);
 		
 		private static final QName _asciimath = new QName("asciimath");
 	
-		private static Invocable engine;
-	
-		static {
-			
-			try {
-				ScriptEngine javascriptEngine = new ScriptEngineManager().getEngineByName("javascript");
-				javascriptEngine.put("document",
-				                     DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument());
-				javascriptEngine.eval(new InputStreamReader(
-					                      ASCIIMathML.class.getResource("/javascript/ASCIIMathML.js").openStream()));
-				javascriptEngine.eval(
-					"initSymbols();                                                                      \n" +
-					"main = function(ascii) {                                                            \n" +
-					"    var content = AMparseExpr(ascii, false)[0];                                     \n" +
-					"    content = content.length == 1 ? content : createMmlNode(\"mrow\", content);     \n" +
-					"    var semantics = createMmlNode(\"semantics\", content);                          \n" +
-					"    var annotation = createMmlNode(\"annotation\", document.createTextNode(ascii)); \n" +
-					"    annotation.setAttribute(\"encoding\", \"ASCIIMath\");                           \n" +
-					"    semantics.appendChild(annotation);                                              \n" +
-					"    return createMmlNode(\"math\", semantics);                                      \n" +
-					"}");
-				engine = (Invocable)javascriptEngine; }
-			catch (Exception e) {
-				logger.error("Failed loading ASCIIMathML.js", e);
-				throw new RuntimeException(e); }
-		}
-		
 		private WritablePipe result;
 		
-		private ASCIIMathML(XProcRuntime runtime, XAtomicStep step) {
+		private ASCIIMathMLStep(XProcRuntime runtime, XAtomicStep step) {
 			super(runtime, step);
 		}
 		
@@ -95,8 +65,7 @@ public class ASCIIMathMLProvider implements XProcStepProvider {
 				String ascii = getOption(_asciimath).getString().replaceAll("^`", "").replaceAll("`$", "");
 				logger.info("Translating `" + ascii + "` to MathML ...");
 				result.write(runtime.getProcessor().newDocumentBuilder().build(
-					new StreamSource(new StringReader(Serializer.serialize(
-						(Element)engine.invokeFunction("main", ascii)))))); }
+					new StreamSource(new StringReader(Serializer.serialize(ASCIIMathML.convert(ascii)))))); }
 			catch (Exception e) {
 				logger.error("px:asciimathml failed", e);
 				throw new XProcException(step.getNode(), e); }

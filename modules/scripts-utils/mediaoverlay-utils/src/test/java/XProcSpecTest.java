@@ -9,6 +9,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 		return new String[] {
 		  pipelineModule("common-utils"),
 		  pipelineModule("file-utils"),
+		  "org.daisy.pipeline:logging-appender:?",
 		};
 	}
 	

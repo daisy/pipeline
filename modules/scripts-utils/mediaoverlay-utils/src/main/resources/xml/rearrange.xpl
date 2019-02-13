@@ -7,8 +7,6 @@
     <p:input port="content" sequence="true"/>
     <p:output port="result" sequence="true" primary="true"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
     <p:group name="rearrange.mediaoverlay-map">
         <p:output port="result"/>
         <!--TODO shouldn't need to rely on @xml:base -->
@@ -57,7 +55,7 @@
                 <p:document href="rearrange.prepare.xsl"/>
             </p:input>
         </p:xslt>
-        <px:message severity="DEBUG" message="created annotated mediaoverlay"/>
+        <p:identity px:message="created annotated mediaoverlay" px:message-severity="DEBUG"/>
     </p:group>
     <p:sink/>
 
@@ -115,9 +113,7 @@
             </p:input>
         </p:xslt>
 
-        <px:message severity="DEBUG">
-            <p:with-option name="message" select="concat('created media overlay for ',$content-base)"/>
-        </px:message>
+        <p:identity px:message="created media overlay for {$content-base}" px:message-severity="DEBUG"/>
     </p:for-each>
 
 </p:declare-step>

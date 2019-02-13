@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="px:asciimathml">
-   <implementation class="org.daisy.pipeline.asciimathml.calabash.ASCIIMathMLProvider"/>
+   <implementation class="org.daisy.pipeline.asciimathml.calabash.impl.ASCIIMathMLProvider"/>
    <service>
       <provide interface="org.daisy.common.xproc.calabash.XProcStepProvider"/>
    </service>

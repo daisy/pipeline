@@ -12,6 +12,11 @@
         <!-- The EPUB version to validate against. Default is "3". Values allowed are: "2" and "3". -->
         <p:option name="version" required="false"/>
 
+        <!-- In "expanded" mode, this directory will be used to store the zipped EPUB. The directory
+             must not exist yet. If this option is not provided, a default temporary directory will
+             be used. -->
+        <p:option name="temp-dir" required="false" select="''"/>
+
         <!-- The epubcheck XML report. See Java implementation for more details about the grammar: https://github.com/IDPF/epubcheck/blob/master/src/main/java/com/adobe/epubcheck/util/XmlReportImpl.java#L176 -->
         <p:output port="result" sequence="true"/>
 
@@ -21,6 +26,7 @@
             <p:option name="mode" required="false"/>
             <p:option name="version" required="false"/>
             <p:output port="result" sequence="true"/>
+            <p:option name="temp-dir" required="false"/>
         </p:declare-step>
 
         <p:declare-step type="pxi:epubcheck-locate-mimetype-dir">
@@ -70,6 +76,7 @@
                             <p:with-option name="epub" select="if (/*/@xml:base) then /*/@xml:base else replace($epub,'[^/]+$','')"/>
                             <p:with-option name="mode" select="$_mode"/>
                             <p:with-option name="version" select="$_version"/>
+                            <p:with-option name="temp-dir" select="$temp-dir"/>
                         </pxi:epubcheck>
                     </p:when>
                     <p:otherwise>
