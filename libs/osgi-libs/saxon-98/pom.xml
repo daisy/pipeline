@@ -24,8 +24,8 @@
   </organization>
   <licenses>
     <license>
-      <name>Mozilla Public License Version 1.0</name>
-      <url>http://www.mozilla.org/MPL/1.0/</url>
+      <name>Mozilla Public License Version 2.0</name>
+      <url>http://www.mozilla.org/MPL/2.0/</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
