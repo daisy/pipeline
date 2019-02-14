@@ -115,26 +115,27 @@ The things the script does not cover are listed in the following checklist:
 - Merge the branches after having verified that the Travis checks
   pass.
 - Close the milestones (should be 100% complete).
-- Release the staged artifacts on the oss.sonatype.org website.
-- Push the generated git tags (`git push --tags`).
-- Edit the Github releases of
+- Release the staged artifacts on the [oss.sonatype.org](https://oss.sonatype.org) website.
+- Push the generated git tags (run `git push --tags` in each of the sub repos).
+- Edit the Github release pages of
   [pipeline-mod-braille](https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.10.0)
-  and
-  [pipeline-assembly](https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0). The
-  pipeline-mod-braille release contains only a link to the NEWS file: 
+  and [pipeline-assembly](https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0).
+  The pipeline-mod-braille release should contain only a link to the NEWS file:
   
   > [Release notes](https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1100)
 
-  The pipeline-assembly release contains the full release notes from
-  the NEWS file (see below).
-- Build and upload the distribution packages to the release page of
-  pipeline-assembly (if not a updater-only release).
+  The pipeline-assembly release should contain the full release notes
+  from the NEWS file (see below). Save the pipeline-assembly release page as a draft.
+- Build and upload the distribution packages to the release draft page
+  of pipeline-assembly (if not a updater-only release).
   - To build the EXE: `make dist-exe`
   - To build the DMG: `make dist-dmg`
   - To build the ZIP: `make dist-zip-linux`
   - To build the DEB: `make dist-deb`
   - To build the RPM: `make dist-rpm` (must be built on a Red Hat machine)
-- Publish the Github release.
+- Test the release binaries (see
+  [checklist](#checklist-for-testing-release-binaries) below).
+- Publish the Github release of pipeline-assembly.
 - Publish a new version of the website after having updated
   `src/_data/versions.yml` and `src/_data/downloads.yml`.
 - Send the email announcements (see below).
@@ -228,6 +229,10 @@ The announcement can be based on the following template:
 pipeline-webui and other components that are not included in
 pipeline-assembly are released separately.
 
+### Checklist for testing release binaries
 
+For each release of the Pipeline 2, the steps below should be followed to test the release binaries:
+
+TBD
 
 [semver]: http://semver.org

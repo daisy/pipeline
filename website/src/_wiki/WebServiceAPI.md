@@ -55,7 +55,7 @@ respond with HTTP 405 "Method Not Allowed".
  * URI: `/alive`
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/alive.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/alive.xml).
 
 ### Scripts
 
@@ -67,7 +67,7 @@ respond with HTTP 405 "Method Not Allowed".
    * See [Authentication](#authentication)
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/scripts.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/scripts.xml).
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
 
 #### Get a single script
@@ -79,7 +79,7 @@ respond with HTTP 405 "Method Not Allowed".
    * See [Authentication](#authentication)
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/script.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/script.xml).
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
    * `HTTP 404 Not Found`: Resource not found	
  
@@ -93,13 +93,13 @@ respond with HTTP 405 "Method Not Allowed".
    * See [Authentication](#authentication)
  * Request body:
    * jobRequest XML. See two different sample documents
-     [inline](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/jobRequest2.xml)
+     [inline](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/jobRequest2.xml)
      and
-     [multipart](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/jobRequest1.xml).
+     [multipart](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/jobRequest1.xml).
  * Response(s):
    * `HTTP 201 Created`: Response body contains XML data about the new
      resource. See a
-     [sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/job.xml).
+     [sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/job.xml).
    * `HTTP 400 Bad Request`: The request was invalid
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
 
@@ -113,7 +113,7 @@ respond with HTTP 405 "Method Not Allowed".
    * See [Authentication](#authentication)
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/jobs.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/jobs.xml).
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
  
 #### Get a single job
@@ -130,7 +130,7 @@ respond with HTTP 405 "Method Not Allowed".
    * See [Authentication](#authentication)
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/job.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/job.xml).
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
    * `HTTP 404 Not Found`: Resource not found	
 
@@ -154,7 +154,7 @@ respond with HTTP 405 "Method Not Allowed".
    * $TYPE is whether port or option
    * $NAME is the port or option name
    * $IDX is the index of a single output within the port/option. 
-   * An [example](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/job.xml) of a result description in the job xml format.
+   * An [example](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/job.xml) of a result description in the job xml format.
  * Query parameters:
    * See [Authentication](#authentication)
  * Response(s):
@@ -228,7 +228,7 @@ to use by authorized clients; i.e. those with `ADMIN` permissions.
    * See [Authentication](#authentication)
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/clients.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/clients.xml).
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
    * `HTTP 404 Not Found`: Resource not found	
 
@@ -240,11 +240,11 @@ to use by authorized clients; i.e. those with `ADMIN` permissions.
    * See [Authentication](#authentication)
  * Request body:
    * Client XML. See a
-     [sample](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/client.xml)
+     [sample](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/client.xml)
  * Response(s): 
    * `HTTP 201 Created`: Response body contains XML data about the new
      resource. See a
-     [sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/client.xml).
+     [sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/client.xml).
    * `HTTP 400 Bad Request`: The request was invalid
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
  
@@ -257,7 +257,7 @@ to use by authorized clients; i.e. those with `ADMIN` permissions.
    * See [Authentication](#authentication)
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/client.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/client.xml).
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
    * `HTTP 404 Not Found`: Resource not found
 
@@ -283,7 +283,7 @@ to use by authorized clients; i.e. those with `ADMIN` permissions.
  * Response(s):
    * `HTTP 200 OK`: Response body contains XML data about the modified
      resource. See a
-     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/client.xml).
+     [sample response document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/client.xml).
    * `HTTP 400 Bad Request`: The request was invalid
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
    * `HTTP 404 Not Found`: Resource not found
@@ -325,7 +325,7 @@ archive or inline request can be referred to by their local file path
 instead. Output options are enabled and output is written to disk
 instead of being zipped up for download.
 
-See [a sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/jobRequest1.localmode.xml).
+See [a sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/jobRequest1.localmode.xml).
 
 ## Web Service internal errors
 
@@ -333,4 +333,4 @@ In the unlikely but not impossible case that the Pipeline WS suffered
 from an internal error, a descriptive xml is returned along with the
 HTTP 500 header.
 
-See the [xml sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice/samples/xml-formats/error.xml). 
+See the [xml sample document](https://raw.githubusercontent.com/daisy/pipeline-framework/master/webservice-utils/doc/xml-formats/error.xml). 
