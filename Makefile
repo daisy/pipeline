@@ -55,19 +55,19 @@ dist-deb : pipeline2-$(assembly/VERSION)_debian.deb
 dist-rpm : pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
-dist-docker-image : assembly/.dependencies
+dist-docker-image : assembly/.compile-dependencies
 	unset MAKECMDGOALS && \
 	$(MAKE) -C assembly docker
 
 .PHONY : dist-webui-deb
-dist-webui-deb : assembly/.dependencies
+dist-webui-deb : assembly/.compile-dependencies
 	# see webui README for instructions on how to make a signed package for distribution
 	cd webui && \
 	./activator -Dmvn.settings.localRepository="file:$(CURDIR)/$(MVN_WORKSPACE)" clean debian:packageBin | $(MVN_LOG)
 	mv webui/target/*deb .
 
 .PHONY : dist-webui-rpm
-dist-webui-rpm : assembly/.dependencies
+dist-webui-rpm : assembly/.compile-dependencies
 	# see webui README for instructions on how to make a signed package for distribution
 	cd webui && \
 	./activator -Dmvn.settings.localRepository="file:$(CURDIR)/$(MVN_WORKSPACE)" clean rpm:packageBin
@@ -101,7 +101,7 @@ run-cli :
 	echo '# eval $$(make $@)'
 
 .PHONY : run-webui
-run-webui : webui/.dependencies
+run-webui : webui/.compile-dependencies
 	if [ ! -d webui/dp2webui ]; then cp -r webui/dp2webui-cleandb webui/dp2webui ; fi
 	cd webui && \
 	./activator -Dmvn.settings.localRepository="file:$(CURDIR)/$(MVN_WORKSPACE)" run
@@ -165,39 +165,39 @@ pipeline2-$(assembly/VERSION)_redhat.rpm \
 	| .group-eval
 	+$(EVAL) cp $< $@
 
-$(dev_launcher) : assembly/.dependencies | .maven-init .group-eval
+$(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher)
 
 .SECONDARY : assembly/.install.deb
-assembly/.install.deb : assembly/.dependencies | .maven-init .group-eval
+assembly/.install.deb : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,deb)
 
 .SECONDARY : assembly/.install.rpm
-assembly/.install.rpm : assembly/.dependencies | .maven-init .group-eval
+assembly/.install.rpm : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,rpm)
 
 .SECONDARY : assembly/.install-linux.zip
-assembly/.install-linux.zip : assembly/.dependencies | .maven-init .group-eval
+assembly/.install-linux.zip : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-linux)
 
 .SECONDARY : assembly/.install-minimal.zip
-assembly/.install-minimal.zip : assembly/.dependencies | .maven-init .group-eval
+assembly/.install-minimal.zip : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-minimal)
 
 .SECONDARY : assembly/.install-mac.zip
-assembly/.install-mac.zip : assembly/.dependencies | .maven-init .group-eval
+assembly/.install-mac.zip : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-mac)
 
 .SECONDARY : assembly/.install-win.zip
-assembly/.install-win.zip : assembly/.dependencies | .maven-init .group-eval
+assembly/.install-win.zip : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-win)
 
 .SECONDARY : assembly/.install.dmg
-assembly/.install.dmg : assembly/.dependencies | .maven-init .group-eval
+assembly/.install.dmg : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,dmg)
 
 .SECONDARY : assembly/.install.exe
-assembly/.install.exe : assembly/.dependencies | .maven-init .group-eval
+assembly/.install.exe : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,exe)
 
 webui/.deps.mk : webui/build.sbt
@@ -211,7 +211,7 @@ clean-webui-deps :
 	rm -f webui/.deps.mk
 
 # FIXME: hard code dependency because unpack-cli-{mac,win,linux} are inside profiles
-assembly/.dependencies : \
+assembly/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-darwin_386.zip \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-linux_386.zip \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-windows_386.zip
@@ -258,11 +258,11 @@ modules/braille/libhyphen-utils/libhyphen-native/.install-windows.jar: \
 gradle-get-dependency-version = $(shell cat $(1)/build.gradle | perl -ne 'print "$$1\n" if /["'"'"']$(subst .,\.,$(2)):(.+)["'"'"']/')
 
 ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.api), $(libs/dotify/dotify.api/VERSION))
-libs/dotify/dotify.formatter.impl/.dependencies : \
+libs/dotify/dotify.formatter.impl/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/dotify/dotify.api/$(libs/dotify/dotify.api/VERSION)/dotify.api-$(libs/dotify/dotify.api/VERSION).jar
 endif
 ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.common), $(libs/dotify/dotify.common/VERSION))
-libs/dotify/dotify.formatter.impl/.dependencies : \
+libs/dotify/dotify.formatter.impl/.compile-dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar
 endif
 
@@ -385,7 +385,7 @@ serve-website publish-website clean-website :
 # this dependency is also defined in website/Makefile, but we need to repeat it here to enable the transitive dependency below
 website serve-website publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 
-$(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.dependencies
+$(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.compile-dependencies
 	rm -rf $@
 	target=$@ && \
 	$(MAKE) -C website $${target#website/}

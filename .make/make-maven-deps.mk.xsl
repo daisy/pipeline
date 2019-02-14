@@ -49,7 +49,10 @@
 					<xsl:copy-of select="pom:version"/>
 					<pom:dependencies>
 						<xsl:for-each select="pom:dependencies/pom:dependency">
-							<xsl:if test="not(pom:scope='test') and not(pom:scope='provided')">
+							<!--
+							    provided and test scope dependencies are not transitive
+							-->
+							<xsl:if test="string(pom:scope)=('','compile','runtime')">
 								<xsl:if test="$effective-pom/pom:project[pom:groupId=current()/pom:groupId and
 								                                         pom:artifactId=current()/pom:artifactId]
 								              or $gradle-pom/pom:project[pom:groupId=current()/pom:groupId and
@@ -98,7 +101,7 @@
 		<xsl:variable name="is-release-dir" as="xs:boolean" select="not($release-dir) and $module=$release-dirs"/>
 		<xsl:variable name="artifacts-and-dependencies" as="element()*"> <!-- (artifactItem | dependency)* -->
 			<xsl:choose>
-				<xsl:when test="$module-pom/pom:project/pom:modules/pom:module">
+				<xsl:when test="$is-aggregator">
 					<xsl:for-each select="$module-pom/pom:project/pom:modules/pom:module">
 						<xsl:variable name="submodule" select="concat($dirname,.)"/>
 						<xsl:variable name="submodule-pom" select="document(concat($ROOT_DIR,'/',$submodule,'/pom.xml'))"/>
@@ -129,8 +132,10 @@
 					<xsl:for-each select="$module-pom/pom:project/pom:dependencyManagement/pom:dependencies/pom:dependency">
 						<xsl:if test="ends-with(pom:version, '-SNAPSHOT')">
 							<dependency fromDependencyManagement="true">
-								<xsl:if test="pom:scope='import'">
-									<xsl:attribute name="scope" select="'import'"/>
+								<xsl:if test="pom:scope='import'"> <!-- otherwise dependency in dependencyManagement should have no scope -->
+									<scope>
+										<xsl:value-of select="pom:scope"/>
+									</scope>
 								</xsl:if>
 								<groupId>
 									<xsl:value-of select="pom:groupId"/>
@@ -169,6 +174,7 @@
 													<xsl:copy-of select="pom:artifactId"/>
 													<xsl:copy-of select="pom:type"/>
 													<xsl:copy-of select="pom:classifier"/>
+													<xsl:copy-of select="pom:scope"/>
 													<xsl:variable name="managed-version"
 													              select="$dependencyManagement
 													                      /pom:dependencies
@@ -291,7 +297,7 @@
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:value-of select="concat($dirname,'.test : %/.test : %/pom.xml')"/>
-					<xsl:text> %/.dependencies</xsl:text>
+					<xsl:text> %/.compile-dependencies %/.test-dependencies</xsl:text>
 					<xsl:for-each select="$src-dirs">
 						<xsl:if test="starts-with(.,$dirname)">
 							<!-- %/src/**/* does not work -->
@@ -337,7 +343,7 @@
 						<xsl:value-of select="concat($dirname,'.install.pom')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install.pom')"/>
-						<xsl:text> : %/.install.pom : %/pom.xml %/.dependencies | .maven-init .group-eval</xsl:text>
+						<xsl:text> : %/.install.pom : %/pom.xml %/.compile-dependencies | %/.test-dependencies .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(call eval-for-host-platform,</xsl:text>
@@ -429,23 +435,49 @@
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install')"/>
 						<xsl:text> : %/.install : %/pom.xml</xsl:text>
-						<xsl:text> %/.dependencies</xsl:text>
 						<xsl:for-each select="$main-dirs">
 							<xsl:if test="starts-with(.,$dirname)">
 								<!-- %/src/**/* does not work -->
 								<xsl:value-of select="concat(' $(call rwildcard,',.,'/,*)')"/>
 							</xsl:if>
 						</xsl:for-each>
+						<xsl:text> %/.compile-dependencies | %/.test-dependencies</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 					</xsl:if>
 					<xsl:text>&#x0A;</xsl:text>
-					<xsl:value-of select="concat('.SECONDARY : ',$dirname,'.dependencies')"/>
+					<xsl:value-of select="concat('.SECONDARY : ',$dirname,'.compile-dependencies ',$dirname,'.test-dependencies')"/>
 					<xsl:text>&#x0A;</xsl:text>
-					<xsl:value-of select="concat($dirname,'.dependencies :')"/>
+					<xsl:value-of select="concat($dirname,'.compile-dependencies :')"/>
 					<xsl:if test="ends-with($version,'-SNAPSHOT')">
 						<xsl:variable name="dependencies" as="xs:string*">
-							<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency[not(@fromDependencyManagement)
-							                                                                       or @scope='import']">
+							<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency[
+							                        (not(@fromDependencyManagement) and string(pom:scope)=('compile','provided'))
+							                        or string(pom:scope)='import']">
+								<xsl:call-template name="location-in-repo">
+									<xsl:with-param name="groupId" select="pom:groupId"/>
+									<xsl:with-param name="artifactId" select="pom:artifactId"/>
+									<xsl:with-param name="version" select="pom:version"/>
+									<xsl:with-param name="type" select="pom:type"/>
+									<xsl:with-param name="classifier" select="pom:classifier"/>
+								</xsl:call-template>
+							</xsl:for-each>
+						</xsl:variable>
+						<xsl:variable name="dependencies" as="xs:string*" select="distinct-values($dependencies)"/>
+						<xsl:if test="count($dependencies) &gt; 0">
+							<xsl:text> </xsl:text>
+							<xsl:if test="count($dependencies) &gt; 1">
+								<xsl:text>\&#x0A;&#x09;</xsl:text>
+							</xsl:if>
+							<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
+						</xsl:if>
+					</xsl:if>
+					<xsl:text>&#x0A;</xsl:text>
+					<xsl:value-of select="concat($dirname,'.test-dependencies :')"/>
+					<xsl:if test="ends-with($version,'-SNAPSHOT')">
+						<xsl:variable name="dependencies" as="xs:string*">
+							<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency[
+							                        (not(@fromDependencyManagement) and string(pom:scope)=('runtime','test'))
+							                        or string(pom:scope)='import']">
 								<xsl:call-template name="location-in-repo">
 									<xsl:with-param name="groupId" select="pom:groupId"/>
 									<xsl:with-param name="artifactId" select="pom:artifactId"/>
@@ -545,7 +577,7 @@
 							<xsl:for-each select="if ($is-release-dir or not($is-aggregator or $release-dir))
 							                      then $artifacts-and-dependencies/self::pom:dependency
 							                      else $artifacts-and-dependencies/self::pom:dependency
-							                        [not(@fromDependencyManagement and not(@scope='import'))]">
+							                        [not(@fromDependencyManagement and not(string(pom:scope)='import'))]">
 								<xsl:choose>
 									<xsl:when test="$internal-runtime-dependencies/pom:project[
 									                  string(pom:groupId)=string(current()/pom:groupId) and
@@ -588,20 +620,20 @@
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:value-of select="concat($dirname,'.project',' : ',$dirname,'pom.xml')"/>
 				<!--
-				    all dependencies need to be installed in order to be able to run the
+				    All dependencies need to be installed in order to be able to run the
 				    eclipse:eclipse goal and all non-Maven and non-snapshot dependencies need to be
-				    installed in order to make the projects build in Eclipse
+				    installed in order to make the projects build in Eclipse.
 				    
-				    FIXME: the correct working of the Makefile relies on Make putting this whole
-				    "install" part before the "eclipse" part in the execution order, if this is not
-				    satisfied the Eclipse projects are not linked up correctly
+				    FIXME: The correct working of the Makefile relies on Make putting this whole
+				    "install" part before the "eclipse" part in the execution order. If this is not
+				    satisfied the Eclipse projects are not linked up correctly.
 				-->
-				<xsl:value-of select="concat(' ',$dirname,'.dependencies')"/>
+				<xsl:value-of select="concat(' ',$dirname,'.compile-dependencies ',$dirname,'.test-dependencies')"/>
 				<xsl:text> \&#x0A;&#x09;</xsl:text>
 				<xsl:text>| </xsl:text>
 				<xsl:variable name="dependencies" as="xs:string*">
 					<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency[not(@fromDependencyManagement)
-					                                                                       or @scope='import']">
+					                                                                       or string(pom:scope)='import']">
 						<!-- if it is a Maven dependency -->
 						<xsl:if test="$effective-pom/pom:project[
 						                string(pom:groupId)=string(current()/pom:groupId) and
@@ -661,120 +693,150 @@
 	
 	<xsl:template match="pom:project" as="element()*">
 		<xsl:param name="managed-internal-runtime-dependencies"/>
-		<xsl:variable name="project" select="."/>
 		<!--
-		    only automatically selected profiles supported
+		    dependency scope of this project if this template is used to compute transitive dependencies
 		-->
-		<xsl:for-each select="pom:parent|
-		                      pom:dependencies/pom:dependency|
-		                      pom:build/pom:plugins/pom:plugin|
-		                      pom:build/pom:plugins/pom:plugin/pom:dependencies/pom:dependency|
-		                      pom:build/pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
-		                                                       and pom:artifactId='maven-dependency-plugin']
-		                                                      /pom:executions/pom:execution[pom:goals[pom:goal='copy' or
-		                                                                                              pom:goal='unpack']]
-		                                                      /pom:configuration/pom:artifactItems/pom:artifactItem">
-			<xsl:variable name="groupId" select="pom:groupId"/>
-			<xsl:variable name="artifactId" select="pom:artifactId"/>
-			<xsl:variable name="version">
-				<xsl:choose>
-					<xsl:when test="pom:version">
-						<xsl:value-of select="pom:version"/>
-					</xsl:when>
-					<xsl:when test="self::pom:artifactItem">
+		<xsl:param name="scope" as="xs:string?" select="()"/>
+		<xsl:if test="not(exists($scope)) or $scope=('compile','provided','runtime','test')">
+			<xsl:variable name="project" select="."/>
+			<!--
+			    only automatically selected profiles supported
+			-->
+			<xsl:for-each select="pom:parent|
+			                      pom:dependencies/pom:dependency|
+			                      pom:build/pom:plugins/pom:plugin|
+			                      pom:build/pom:plugins/pom:plugin/pom:dependencies/pom:dependency|
+			                      pom:build/pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
+			                                                       and pom:artifactId='maven-dependency-plugin']
+			                                                      /pom:executions/pom:execution[pom:goals[pom:goal='copy' or
+			                                                                                              pom:goal='unpack']]
+			                                                      /pom:configuration/pom:artifactItems/pom:artifactItem">
+				<xsl:variable name="scope" select="if (not(exists($scope))) then
+				                                     (pom:scope/string(.),'compile')[1]
+				                                   else if ((pom:scope/string(.),'compile')[1]='compile') then
+				                                     $scope
+				                                   else if (string(pom:scope)='runtime') then (
+				                                     if ($scope='compile') then
+				                                       'runtime'
+				                                     else
+				                                       $scope)
+				                                   else ''"/>
+				<xsl:if test="not($scope='')">
+					<xsl:variable name="groupId" select="pom:groupId"/>
+					<xsl:variable name="artifactId" select="pom:artifactId"/>
+					<xsl:variable name="version">
 						<xsl:choose>
-							<xsl:when test="$project/pom:dependencies/pom:dependency
-							                [string(pom:groupId)=string(current()/pom:groupId) and
-							                 string(pom:artifactId)=string(current()/pom:artifactId) and
-							                 (pom:type/string(),'jar')[1]=(current()/pom:type/string(),'jar')[1] and
-							                 string(pom:classifier)=string(current()/pom:classifier)]">
-								<!-- already handled -->
+							<xsl:when test="pom:version">
+								<xsl:value-of select="pom:version"/>
 							</xsl:when>
-							<xsl:when test="$project/pom:dependencies/pom:dependency
-							                [string(pom:groupId)=string(current()/pom:groupId) and
-							                 string(pom:artifactId)=string(current()/pom:artifactId)]">
-								<xsl:value-of select="$project/pom:dependencies/pom:dependency
-								                      [string(pom:groupId)=string(current()/pom:groupId) and
-								                       string(pom:artifactId)=string(current()/pom:artifactId)]
-								                      /pom:version"/>
+							<xsl:when test="self::pom:artifactItem">
+								<xsl:choose>
+									<xsl:when test="$project/pom:dependencies/pom:dependency
+									                [string(pom:groupId)=string(current()/pom:groupId) and
+									                 string(pom:artifactId)=string(current()/pom:artifactId) and
+									                 (pom:type/string(),'jar')[1]=(current()/pom:type/string(),'jar')[1] and
+									                 string(pom:classifier)=string(current()/pom:classifier)]">
+										<!-- already handled -->
+									</xsl:when>
+									<xsl:when test="$project/pom:dependencies/pom:dependency
+									                [string(pom:groupId)=string(current()/pom:groupId) and
+									                 string(pom:artifactId)=string(current()/pom:artifactId)]">
+										<xsl:value-of select="$project/pom:dependencies/pom:dependency
+										                      [string(pom:groupId)=string(current()/pom:groupId) and
+										                       string(pom:artifactId)=string(current()/pom:artifactId)]
+										                      /pom:version"/>
+									</xsl:when>
+									<xsl:when test="$project/pom:dependencyManagement/pom:dependencies/pom:dependency
+									                [string(pom:groupId)=string(current()/pom:groupId) and
+									                 string(pom:artifactId)=string(current()/pom:artifactId)]">
+										<xsl:value-of select="($project/pom:dependencyManagement/pom:dependencies/pom:dependency
+										                       [string(pom:groupId)=string(current()/pom:groupId) and
+										                        string(pom:artifactId)=string(current()/pom:artifactId)]
+										                       /(.[string(pom:classifier)=string(current()/pom:classifier)],.)
+										                       /pom:version)[1]"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<!-- might be transitive dependency, but not supported here -->
+										<xsl:message terminate="yes"
+										             select="concat('error: artifact not found: ',
+										                            string(pom:groupId),':',string(pom:artifactId))"/>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:when>
-							<xsl:when test="$project/pom:dependencyManagement/pom:dependencies/pom:dependency
-							                [string(pom:groupId)=string(current()/pom:groupId) and
-							                 string(pom:artifactId)=string(current()/pom:artifactId)]">
-								<xsl:value-of select="($project/pom:dependencyManagement/pom:dependencies/pom:dependency
-								                       [string(pom:groupId)=string(current()/pom:groupId) and
-								                        string(pom:artifactId)=string(current()/pom:artifactId)]
-								                       /(.[string(pom:classifier)=string(current()/pom:classifier)],.)
-								                       /pom:version)[1]"/>
+							<xsl:when test="self::pom:plugin">
+								<!-- a plugin may have no version defined -->
 							</xsl:when>
 							<xsl:otherwise>
-								<!-- might be transitive dependency, but not supported here -->
-								<xsl:message terminate="yes"
-								             select="concat('error: artifact not found: ',
-								                            string(pom:groupId),':',string(pom:artifactId))"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-					<xsl:when test="self::pom:plugin">
-						<!-- a plugin may have no version defined -->
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:message terminate="yes">coding error</xsl:message>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:choose>
-				<xsl:when test="ends-with($version, '-SNAPSHOT')">
-					<xsl:variable name="type">
-						<xsl:choose>
-							<xsl:when test="self::pom:parent">
-								<xsl:value-of select="'pom'"/>
-							</xsl:when>
-							<xsl:when test="pom:type">
-								<xsl:value-of select="pom:type"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="'jar'"/>
+								<xsl:message terminate="yes">coding error</xsl:message>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
-					<dependency>
-						<groupId>
-							<xsl:value-of select="pom:groupId"/>
-						</groupId>
-						<artifactId>
-							<xsl:value-of select="pom:artifactId"/>
-						</artifactId>
-						<version>
-							<xsl:value-of select="$version"/>
-						</version>
-						<type>
-							<xsl:value-of select="$type"/>
-						</type>
-						<xsl:if test="pom:classifier">
-							<classifier>
-								<xsl:value-of select="pom:classifier"/>
-							</classifier>
-						</xsl:if>
-					</dependency>
-				</xsl:when>
-				<!--
-				    A non-snapshot dependency B of A may have a transitive dependency C who's
-				    version is overwritten by Maven to a snapshot based on the
-				    dependencyManagement of A.
-				    
-				    We try to support this use case here. We are making the assumption that that the
-				    transitive dependencies of B as defined in the module (the snapshot) and the
-				    transitive dependencies of the non-snapshot version of B are the same.
-				-->
-				<xsl:when test="self::pom:dependency and not(pom:scope='test') and not(pom:scope='provided')">
-					<xsl:apply-templates select="$managed-internal-runtime-dependencies/pom:project[pom:groupId=$groupId and
-					                                                                                pom:artifactId=$artifactId]">
-						<xsl:with-param name="managed-internal-runtime-dependencies" select="$managed-internal-runtime-dependencies"/>
-					</xsl:apply-templates>
-				</xsl:when>
-			</xsl:choose>
-		</xsl:for-each>
+					<xsl:if test="ends-with($version, '-SNAPSHOT')">
+						<xsl:variable name="type">
+							<xsl:choose>
+								<xsl:when test="self::pom:parent">
+									<xsl:value-of select="'pom'"/>
+								</xsl:when>
+								<xsl:when test="pom:type">
+									<xsl:value-of select="pom:type"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="'jar'"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
+						<dependency>
+							<groupId>
+								<xsl:value-of select="pom:groupId"/>
+							</groupId>
+							<artifactId>
+								<xsl:value-of select="pom:artifactId"/>
+							</artifactId>
+							<version>
+								<xsl:value-of select="$version"/>
+							</version>
+							<type>
+								<xsl:value-of select="$type"/>
+							</type>
+							<scope>
+								<xsl:value-of select="$scope"/>
+							</scope>
+							<xsl:if test="pom:classifier">
+								<classifier>
+									<xsl:value-of select="pom:classifier"/>
+								</classifier>
+							</xsl:if>
+						</dependency>
+					</xsl:if>
+					<!--
+					    Compute transitive dependencies
+					    
+					    This is done for two reasons:
+					    
+					    1. A dependency B of A may have a transitive dependency C who's version is
+					       overwritten by Maven to a different version based on the dependencyManagement of
+					       A. We try to support this case here. We are making the assumption that if B is a
+					       non-snapshot, its transitive dependencies are the same as defined in the module (the
+					       snapshot).
+					       
+					    2. In order to differentiate between compile and test dependencies we need to get
+					       the transitive test dependencies without depending directly on compile dependencies.
+					    
+					    Note that this adds a lot of redundant information because the Makefiles already
+					    take care of most transitive dependencies in compile scope, and could in theory also
+					    take care of transitive dependencies in test/runtime scope. However this method
+					    would not allow us to overwrite versions.
+					-->
+					<xsl:if test="self::pom:dependency">
+						<xsl:apply-templates select="$managed-internal-runtime-dependencies/pom:project[pom:groupId=$groupId and
+						                                                                                pom:artifactId=$artifactId]">
+							<xsl:with-param name="managed-internal-runtime-dependencies" select="$managed-internal-runtime-dependencies"/>
+							<xsl:with-param name="scope" select="$scope"/>
+						</xsl:apply-templates>
+					</xsl:if>
+				</xsl:if>
+			</xsl:for-each>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="location-in-repo">
