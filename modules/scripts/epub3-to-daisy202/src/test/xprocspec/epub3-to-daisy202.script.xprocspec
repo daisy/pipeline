@@ -161,9 +161,9 @@
             </x:context>
             <x:expect label="the input should be reported as invalid" type="count" min="1"/>
             <x:context label="the output directory">
-                <x:document type="directory" base-uri="temp-dir" href="validation/" recursive="true"/>
+                <x:document type="directory" base-uri="temp-dir" href="validation/abort" recursive="true"/>
             </x:context>
-            <x:expect label="the script should produce no output" type="xpath" test="not(/*/c:directory[@name='abort'])"/>
+            <x:expect label="the script should produce no output" type="xpath" test="not(/*/c:directory[not(@name='temp-dir')])"/>
         </x:scenario>
     </x:scenario>
     

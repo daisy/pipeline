@@ -16,6 +16,13 @@ script: mvn verify
 after_success: 
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/after_success)
 
+before_cache:
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_cache)
+
+cache:
+  directories:
+    - $HOME/.m2/cached-repository
+
 # whitelist; only deploy master branch
 branches:
   only:

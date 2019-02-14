@@ -25,9 +25,9 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         </p:documentation>
     </p:option>
 
-    <p:option name="validation" required="false" px:type="string" select="'off'">
+    <p:option name="validation" required="false" select="'off'">
         <p:pipeinfo>
-            <px:data-type>
+            <px:type>
                 <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
                     <value>off</value>
                     <a:documentation xml:lang="en">No validation</a:documentation>
@@ -36,7 +36,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
                     <value>abort</value>
                     <a:documentation xml:lang="en">Abort on validation issues</a:documentation>
                 </choice>
-            </px:data-type>
+            </px:type>
         </p:pipeinfo>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Validation</h2>

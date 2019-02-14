@@ -10,6 +10,7 @@
                 reusing test data from epub3-to-daisy202
             -->
             <x:option name="epub" select="resolve-uri('../../../../epub3-to-daisy202/src/test/xprocspec/moby-dick-mo-20120214.epub')"/>
+            <x:option name="temp-dir" select="resolve-uri('moby-dick',$temp-dir)"/>
         </x:call>
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>
@@ -27,6 +28,7 @@
                 reusing test data from epub3-to-daisy202
             -->
             <x:option name="epub" select="resolve-uri('../../../../epub3-to-daisy202/src/test/xprocspec/moby-dick-mo-20120214/OPS/package.opf')"/>
+            <x:option name="temp-dir" select="resolve-uri('moby-dick-unzipped',$temp-dir)"/>
         </x:call>
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>

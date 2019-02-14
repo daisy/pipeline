@@ -16,6 +16,7 @@
     <p:option name="pef-output-dir" select="''"/>
     <p:option name="brf-output-dir" select="''"/>
     <p:option name="preview-output-dir" select="''"/>
+    <p:option name="obfl-output-dir" select="''"/>
     
     <p:option name="include-preview" select="'false'"/>
     <p:option name="include-brf" select="'false'"/>
@@ -38,6 +39,7 @@
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:xml-to-pef.store>
     
 </p:declare-step>

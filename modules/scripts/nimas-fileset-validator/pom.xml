@@ -44,6 +44,11 @@
         test dependencies
     -->
     <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-entities</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-volatile</artifactId>
       <scope>test</scope>

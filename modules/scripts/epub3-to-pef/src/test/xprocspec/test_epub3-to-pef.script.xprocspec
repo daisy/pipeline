@@ -261,6 +261,7 @@
       <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
       <x:option name="include-obfl" select="'true'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'include-obfl/output-dir/')"/>
+      <x:option name="obfl-output-dir" select="concat($temp-dir,'include-obfl/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'include-obfl/temp-dir/')"/>
     </x:call>
     <x:context label="the output directory contents">

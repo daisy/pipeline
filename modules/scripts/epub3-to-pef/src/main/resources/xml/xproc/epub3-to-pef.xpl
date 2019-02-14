@@ -28,6 +28,17 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         </p:documentation>
     </p:option>
     
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Status</h2>
+            <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
+
+When `include-obfl` is set to true, the conversion may fail but still output a document on the
+"obfl" port.</p>
+        </p:documentation>
+        <p:pipe step="convert" port="status"/>
+    </p:output>
+
     <p:option name="stylesheet" px:sequence="true">
         <p:pipeinfo>
             <px:type>
@@ -98,6 +109,7 @@ even though the provided CSS is more specific.
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
+    <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
     
     <!-- ======= -->
@@ -128,6 +140,7 @@ even though the provided CSS is more specific.
                                            pef-output-dir
                                            brf-output-dir
                                            preview-output-dir
+                                           obfl-output-dir
                                            temp-dir">
         <p:input port="source">
             <p:pipe port="result" step="in-scope-names"/>
@@ -208,6 +221,7 @@ even though the provided CSS is more specific.
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:epub3-to-pef.store>
     
 </p:declare-step>

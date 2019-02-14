@@ -27,6 +27,11 @@
     <p:output port="obfl" sequence="true"> <!-- sequence=false when include-obfl=true -->
         <p:pipe step="transform" port="obfl"/>
     </p:output>
+    <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:documentation>Whether or not the conversion was successful. When include-obfl is true,
+        the conversion may fail but still output a document on the "obfl" port.</p:documentation>
+        <p:pipe step="transform" port="status"/>
+    </p:output>
     
     <p:input kind="parameter" port="parameters" sequence="true">
         <p:inline>
@@ -200,9 +205,12 @@
             <p:pipe port="result" step="opf"/>
         </p:variable>
         <p:when test="$include-obfl='true'">
-            <p:output port="pef" primary="true"/>
+            <p:output port="pef" primary="true" sequence="true"/>
             <p:output port="obfl">
                 <p:pipe step="obfl" port="result"/>
+            </p:output>
+            <p:output port="status">
+                <p:pipe step="try-pef" port="status"/>
             </p:output>
             <p:group name="obfl" px:message="Transforming from XML with inline CSS to OBFL" px:progress=".40">
                 <p:output port="result"/>
@@ -216,22 +224,46 @@
                     </p:input>
                 </px:transform>
             </p:group>
-            <p:group px:message="Transforming from OBFL to PEF" px:progress=".60">
-                <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
-                <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
-                <px:transform px:progress="1">
-                    <p:with-option name="query" select="$transform-query"/>
-                    <p:with-option name="temp-dir" select="$temp-dir"/>
-                    <p:input port="parameters">
-                        <p:pipe port="result" step="parameters"/>
-                    </p:input>
-                </px:transform>
-            </p:group>
+            <p:try name="try-pef">
+                <p:group px:message="Transforming from OBFL to PEF" px:progress=".60">
+                   <p:output port="pef" primary="true"/>
+                    <p:output port="status">
+                        <p:inline>
+                            <d:validation-status result="ok"/>
+                        </p:inline>
+                    </p:output>
+                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+                    <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
+                    <px:transform px:progress="1">
+                        <p:with-option name="query" select="$transform-query"/>
+                        <p:with-option name="temp-dir" select="$temp-dir"/>
+                        <p:input port="parameters">
+                            <p:pipe port="result" step="parameters"/>
+                        </p:input>
+                    </px:transform>
+                </p:group>
+                <p:catch>
+                    <p:output port="pef" primary="true">
+                        <p:empty/>
+                    </p:output>
+                    <p:output port="status">
+                        <p:inline>
+                            <d:validation-status result="error"/>
+                        </p:inline>
+                    </p:output>
+                    <p:sink/>
+                </p:catch>
+            </p:try>
         </p:when>
         <p:otherwise px:message="Transforming from XML with inline CSS to PEF" >
             <p:output port="pef" primary="true"/>
             <p:output port="obfl">
                 <p:empty/>
+            </p:output>
+            <p:output port="status">
+                <p:inline>
+                    <d:validation-status result="ok"/>
+                </p:inline>
             </p:output>
             <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
             <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
@@ -245,39 +277,55 @@
         </p:otherwise>
     </p:choose>
     
-    <p:identity name="pef"/>
-
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="pef" port="result"/>
-            <p:pipe step="opf" port="result"/>
-        </p:input>
-    </p:identity>
-    <p:xslt px:message="Adding metadata to PEF based on EPUB 3 package document metadata" px:progress=".01">
-        <p:input port="stylesheet">
-            <p:document href="http://www.daisy.org/pipeline/modules/braille/pef-utils/add-opf-metadata-to-pef.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
-    
-    <px:set-base-uri>
-        <p:with-option name="base-uri" select="replace(base-uri(/*),'[^/]+$',concat(((/*/opf:metadata/dc:identifier[not(@refines)]/text()), 'pef')[1],'.pef'))">
-            <p:pipe port="result" step="opf"/>
-        </p:with-option>
-    </px:set-base-uri>
+    <p:choose>
+        <p:xpath-context>
+            <p:pipe step="transform" port="status"/>
+        </p:xpath-context>
+        <p:when test="/*/@result='ok'">
+            <p:identity name="pef"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="pef" port="result"/>
+                    <p:pipe step="opf" port="result"/>
+                </p:input>
+            </p:identity>
+            <p:xslt px:message="Adding metadata to PEF based on EPUB 3 package document metadata" px:progress=".01">
+                <p:input port="stylesheet">
+                    <p:document href="http://www.daisy.org/pipeline/modules/braille/pef-utils/add-opf-metadata-to-pef.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <px:set-base-uri>
+                <p:with-option name="base-uri" select="replace(base-uri(/*),'[^/]+$',concat(((/*/opf:metadata/dc:identifier[not(@refines)]/text()), 'pef')[1],'.pef'))">
+                    <p:pipe port="result" step="opf"/>
+                </p:with-option>
+            </px:set-base-uri>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
     <p:identity name="in-memory.out"/>
+    <p:count/>
     
-    <px:fileset-create>
-        <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')"/>
-    </px:fileset-create>
-    <px:fileset-add-entry px:progress=".01"
-                          media-type="application/x-pef+xml">
-        <p:with-option name="href" select="base-uri(/*)">
-            <p:pipe port="result" step="in-memory.out"/>
-        </p:with-option>
-    </px:fileset-add-entry>
+    <p:choose>
+        <p:when test="number(/*)=0">
+            <px:fileset-create/>
+        </p:when>
+        <p:otherwise>
+            <px:fileset-create>
+                <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')"/>
+            </px:fileset-create>
+            <px:fileset-add-entry px:progress=".01"
+                                  media-type="application/x-pef+xml">
+                <p:with-option name="href" select="base-uri(/*)">
+                    <p:pipe port="result" step="in-memory.out"/>
+                </p:with-option>
+            </px:fileset-add-entry>
+        </p:otherwise>
+    </p:choose>
     <p:identity name="fileset.out"/>
     
 </p:declare-step>

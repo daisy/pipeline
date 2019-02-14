@@ -85,6 +85,7 @@
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
+    <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -113,6 +114,7 @@
                                            pef-output-dir
                                            brf-output-dir
                                            preview-output-dir
+                                           obfl-dir
                                            temp-dir">
         <p:input port="source">
             <p:pipe port="result" step="in-scope-names"/>
@@ -170,6 +172,7 @@
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:xml-to-pef.store>
     
 </p:declare-step>

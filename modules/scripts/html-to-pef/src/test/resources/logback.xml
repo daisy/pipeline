@@ -20,6 +20,7 @@
       <loggerLevels>
         org.daisy.common.xproc.calabash.steps.Message=OFF
         com.xmlcalabash=OFF
+        org.daisy.xprocspec=WARN
       </loggerLevels>
     </filter>
   </appender>

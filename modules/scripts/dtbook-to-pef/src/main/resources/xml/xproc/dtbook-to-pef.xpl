@@ -101,6 +101,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
+    <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
     
     <!-- ======= -->
@@ -133,6 +134,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
                                            pef-output-dir
                                            brf-output-dir
                                            preview-output-dir
+                                           obfl-output-dir
                                            temp-dir">
         <p:input port="source">
             <p:pipe port="result" step="in-scope-names"/>
@@ -192,6 +194,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:dtbook-to-pef.store>
     
 </p:declare-step>

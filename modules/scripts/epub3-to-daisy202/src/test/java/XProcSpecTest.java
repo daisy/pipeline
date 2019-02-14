@@ -26,10 +26,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	@Override @Configuration
 	public Option[] config() {
 		return options(
-			// FIXME: epubcheck needs older version of guava
-			mavenBundle("com.google.guava:guava:14.0.1"),
-			// FIXME: epubcheck needs older version of saxon
-			mavenBundle("org.daisy.libs:saxon-he:9.5.1.5"),
 			// FIXME: epubcheck needs older version of jing
 			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
 			composite(super.config()));

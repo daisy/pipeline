@@ -76,31 +76,6 @@
     </p:identity>
     
     <!--
-        px:fileset-move should add original-href attributes for files that exist on disk. However
-        this doesn't seem to work (and this is not only because they are files inside a ZIP). As a
-        workaround we add the attributes ourselves. We assume that all the files that do not exist
-        in memory exist on disk.
-    -->
-    <p:viewport match="d:file[not(@original-href)]">
-        <p:variable name="href" select="/*/resolve-uri(@href,base-uri(.))"/>
-        <p:choose>
-            <p:xpath-context>
-                <p:pipe step="epub.in.in-memory.fileset" port="result"/>
-            </p:xpath-context>
-            <p:when test="//d:file[resolve-uri(@href,base-uri(.))=$href]">
-                <p:identity/>
-            </p:when>
-            <p:otherwise>
-                <p:add-attribute match="/*" attribute-name="original-href">
-                    <p:with-option name="attribute-value" select="$href">
-                        <p:empty/>
-                    </p:with-option>
-                </p:add-attribute>
-            </p:otherwise>
-        </p:choose>
-    </p:viewport>
-    
-    <!--
         Make sure that the base uri of the fileset is the directory containing the mimetype
         file. This will normally also eliminate any relative hrefs starting with "..", which is
         needed because px:fileset-move doesn't handle these correctly.

@@ -28,6 +28,7 @@
 		xmlns:f="functions"
 		exclude-result-prefixes="#all">
 	
+	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	<xsl:import href="http://www.daisy.org/pipeline/modules/image-utils/library.xsl"/>
 	<xsl:include href="utilities.xsl"/>
 	
@@ -474,7 +475,7 @@
 		</xsl:call-template>
 	</xsl:template>
 	
-	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem" mode="office:text office:annotation text:section">
+	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem" mode="office:text office:annotation text:section text:list-item">
 		<xsl:apply-templates mode="#current"/>
 	</xsl:template>
 	
@@ -514,30 +515,49 @@
 	
 	<xsl:template match="dtb:img" mode="office:text office:annotation text:section table:table-cell text:list-item">
 		<xsl:variable name="src" select="resolve-uri(@src, base-uri(collection()[2]/*))"/>
-		<xsl:variable name="image_dimensions" as="xs:integer*" select="pf:image-dimensions($src)"/>
-		<xsl:call-template name="text:p">
-			<xsl:with-param name="sequence">
-				<xsl:element name="draw:frame">
-					<xsl:attribute name="draw:name" select="concat('dtb:img#', count(preceding::dtb:img) + 1)"/>
-					<xsl:attribute name="draw:style-name" select="dtb:style-name(.)"/>
-					<xsl:attribute name="text:anchor-type" select="'as-char'"/>
-					<xsl:attribute name="draw:z-index" select="'0'"/>
-					<xsl:attribute name="svg:width" select="format-number($image_dimensions[1] div number($image_dpi), '0.0000in')"/>
-					<xsl:attribute name="svg:height" select="format-number($image_dimensions[2] div number($image_dpi), '0.0000in')"/>
-					<xsl:element name="draw:image">
-						<xsl:attribute name="xlink:href" select="$src"/>
-						<xsl:attribute name="xlink:type" select="'simple'"/>
-						<xsl:attribute name="xlink:show" select="'embed'"/>
-						<xsl:attribute name="xlink:actuate" select="'onLoad'"/>
-					</xsl:element>
-					<xsl:if test="@alt">
-						<xsl:element name="svg:title">
-							<xsl:sequence select="string(@alt)"/>
+		<xsl:choose>
+			<xsl:when test="matches($src,'^https?://')
+			                or (matches($src,'^file:') and pf:file-exists(substring($src,6)))">
+				<xsl:variable name="image_dimensions" as="xs:integer*" select="pf:image-dimensions($src)"/>
+				<xsl:call-template name="text:p">
+					<xsl:with-param name="sequence">
+						<xsl:element name="draw:frame">
+							<xsl:attribute name="draw:name" select="concat('dtb:img#', count(preceding::dtb:img) + 1)"/>
+							<xsl:attribute name="draw:style-name" select="dtb:style-name(.)"/>
+							<xsl:attribute name="text:anchor-type" select="'as-char'"/>
+							<xsl:attribute name="draw:z-index" select="'0'"/>
+							<xsl:attribute name="svg:width" select="format-number($image_dimensions[1] div number($image_dpi), '0.0000in')"/>
+							<xsl:attribute name="svg:height" select="format-number($image_dimensions[2] div number($image_dpi), '0.0000in')"/>
+							<xsl:element name="draw:image">
+								<xsl:attribute name="xlink:href" select="$src"/>
+								<xsl:attribute name="xlink:type" select="'simple'"/>
+								<xsl:attribute name="xlink:show" select="'embed'"/>
+								<xsl:attribute name="xlink:actuate" select="'onLoad'"/>
+							</xsl:element>
+							<xsl:if test="@alt">
+								<xsl:element name="svg:title">
+									<xsl:sequence select="string(@alt)"/>
+								</xsl:element>
+							</xsl:if>
 						</xsl:element>
-					</xsl:if>
-				</xsl:element>
-			</xsl:with-param>
-		</xsl:call-template>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="text:p">
+					<xsl:with-param name="sequence">
+						<xsl:call-template name="office:annotation">
+							<xsl:with-param name="apply-templates">
+								<dtb:span xml:lang="en">
+									<xsl:text>Missing image: </xsl:text>
+									<dtb:strong><xsl:value-of select="@src"/></dtb:strong>
+								</dtb:span>
+							</xsl:with-param>
+						</xsl:call-template>
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="dtb:imggroup/dtb:caption" mode="office:text office:annotation text:section table:table-cell text:list-item">
@@ -681,7 +701,7 @@
 				</xsl:analyze-string>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:sequence select="$text"/>
+				<xsl:value-of select="$text"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -689,7 +709,7 @@
 	<xsl:template match="text()" mode="#all" priority="-1.4">
 		<xsl:choose>
 			<xsl:when test="normalize-space(.)=''">
-				<xsl:sequence select="."/>
+				<xsl:value-of select="."/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="TERMINATE"/>
@@ -867,7 +887,9 @@
 							<xsl:sequence select="$sequence"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:apply-templates select="$apply-templates" mode="text:span"/>
+							<xsl:apply-templates select="$apply-templates" mode="text:span">
+								<xsl:with-param name="cur_text_lang" select="$lang" tunnel="yes"/>
+							</xsl:apply-templates>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:element>
@@ -1081,9 +1103,36 @@
 	
 	<xsl:template name="TERMINATE">
 		<xsl:message terminate="yes">
-			<xsl:text>ERROR!! </xsl:text>
+			<xsl:text>Coding error: unexpected </xsl:text>
 			<xsl:sequence select="f:node-trace(.)"/>
+			<xsl:text> (mode: </xsl:text>
+			<xsl:apply-templates select="$f:print-mode" mode="#current"/>
+			<xsl:text>)</xsl:text>
 		</xsl:message>
 	</xsl:template>
+	
+	<xsl:variable name="f:print-mode"><f:print-mode/></xsl:variable>
+	<xsl:template match="f:print-mode">#default</xsl:template>
+	<xsl:template match="f:print-mode" mode="insert-covered-table-cells">insert-covered-table-cells</xsl:template>
+	<xsl:template match="f:print-mode" mode="is-block-element">is-block-element</xsl:template>
+	<xsl:template match="f:print-mode" mode="list-style">list-style</xsl:template>
+	<xsl:template match="f:print-mode" mode="office:annotation">office:annotation</xsl:template>
+	<xsl:template match="f:print-mode" mode="office:text">office:text</xsl:template>
+	<xsl:template match="f:print-mode" mode="paragraph-style">paragraph-style</xsl:template>
+	<xsl:template match="f:print-mode" mode="table:table">table:table</xsl:template>
+	<xsl:template match="f:print-mode" mode="table:table-cell">table:table-cell</xsl:template>
+	<xsl:template match="f:print-mode" mode="table:table-header-rows">table:table-header-rows</xsl:template>
+	<xsl:template match="f:print-mode" mode="table:table-row">table:table-row</xsl:template>
+	<xsl:template match="f:print-mode" mode="template">template</xsl:template>
+	<xsl:template match="f:print-mode" mode="text-style">text-style</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:a">text:a</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:h">text:h</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:list">text:list</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:list-item">text:list-item</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:note-body">text:note-body</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:p">text:p</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:section">text:section</xsl:template>
+	<xsl:template match="f:print-mode" mode="text:span">text:span</xsl:template>
+	<xsl:template match="f:print-mode" mode="#all" priority="-1">?</xsl:template>
 	
 </xsl:stylesheet>

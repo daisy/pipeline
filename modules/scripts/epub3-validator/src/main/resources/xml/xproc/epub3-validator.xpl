@@ -39,6 +39,12 @@
         <p:pipe port="result" step="status"/>
     </p:output>
 
+    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Temporary directory</h2>
+        </p:documentation>
+    </p:option>
+    
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
 
@@ -46,6 +52,7 @@
         <p:with-option name="epub" select="$epub"/>
         <p:with-option name="mode" select="if (ends-with(lower-case($epub),'.epub')) then 'epub' else 'expanded'"/>
         <p:with-option name="version" select="'3'"/>
+        <p:with-option name="temp-dir" select="concat($temp-dir,'/epubcheck')"/>
     </px:epubcheck>
     
     <p:xslt name="xml-report.not-wrapped">

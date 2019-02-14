@@ -8,7 +8,8 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("common-utils"),
 			pipelineModule("dtbook-validator"),
 			pipelineModule("fileset-utils"),
-			pipelineModule("validation-utils")
+			pipelineModule("validation-utils"),
+			pipelineModule("common-entities"),
 		};
 	}
 }
