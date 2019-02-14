@@ -248,6 +248,22 @@ tts-adapter-attbin:
   if this one has a higher priority.
 : Defaults to "7"
 
+### Qfrency
+
+`org.daisy.pipeline.tts.qfrency.path`
+: Path to "synth" executable
+: If not specified, will automatically look for "synth" in the
+  directories specified by the environment variable "PATH".
+
+`org.daisy.pipeline.tts.qfrency.address`
+: Address of the Qfrency server
+: Defaults to "localhost"
+
+`org.daisy.pipeline.tts.qfrency.priority`
+: This engine is chosen over another engine that serves the same voice
+  if this one has a higher priority.
+: Defaults to "2"
+
 ### LAME encoder
 
 `org.daisy.pipeline.tts.lame.path`

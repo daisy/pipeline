@@ -26,7 +26,7 @@ public class ConfigReader implements ConfigProperties {
 
 	private static Logger Logger = LoggerFactory.getLogger(ConfigReader.class);
 
-	public static String HostProtectionProperty = "org.daisy.pipeline.tts.host.protection";
+	public static final String HostProtectionProperty = "org.daisy.pipeline.tts.host.protection";
 	private static final String ttsConfigProperty = "org.daisy.pipeline.tts.config";
 
 	public interface Extension {
@@ -49,7 +49,7 @@ public class ConfigReader implements ConfigProperties {
 		if (staticConfigPath != null) {
 			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, null);
 			if (content != null)
-				readConfig(mStaticProps, content, extensions);
+				readConfig(null, content, extensions);
 		}
 		if (doc != null) {
 			readConfig(mDynamicProps, doc, extensions);
@@ -135,11 +135,15 @@ public class ConfigReader implements ConfigProperties {
 					if (key == null || value == null) {
 						Logger.warn("Missing key or value for config's property "
 						        + node.toString());
-					} else {
+					} else if (props != null) {
 						if (!key.startsWith("org.daisy.pipeline.tts."))
 							// for backwards compatibility
 							key = "org.daisy.pipeline.tts." + key;
 						props.put(key, value);
+					} else {
+						Logger.warn("Ignoring property " + node.toString()
+						        + " inside static TTS config file.\nPlease use a"
+						        + " system property or environment variable instead.");
 					}
 				} else {
 					boolean parsed = false;
