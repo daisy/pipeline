@@ -10,10 +10,17 @@
 	
 	<p:input port="source.fileset" primary="true"/>
 	<p:input port="source.in-memory" sequence="true"/>
-	<p:output port="result">
+	<p:output port="result" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The pruned fileset manifest.</p>
 		</p:documentation>
+		<p:pipe step="intersect" port="result"/>
+	</p:output>
+	<p:output port="diff">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Fileset with only the entries that are not loaded into memory.</p>
+		</p:documentation>
+		<p:pipe step="diff" port="result"/>
 	</p:output>
 	
 	<p:import href="fileset-create.xpl"/>
@@ -35,12 +42,24 @@
 		</px:fileset-add-entry>
 	</p:for-each>
 	<px:fileset-join name="fileset-from-in-memory"/>
+	<p:sink/>
 	
-	<px:fileset-intersect>
+	<px:fileset-intersect name="intersect">
 		<p:input port="source">
 			<p:pipe step="main" port="source.fileset"/>
 			<p:pipe step="fileset-from-in-memory" port="result"/>
 		</p:input>
 	</px:fileset-intersect>
+	<p:sink/>
+	
+	<px:fileset-diff name="diff">
+		<p:input port="source">
+			<p:pipe step="fileset-from-in-memory" port="result"/>
+		</p:input>
+		<p:input port="secondary">
+			<p:pipe step="main" port="source.fileset"/>
+		</p:input>
+	</px:fileset-diff>
+	<p:sink/>
 	
 </p:declare-step>

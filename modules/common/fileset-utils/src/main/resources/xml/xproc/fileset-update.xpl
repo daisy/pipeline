@@ -38,16 +38,11 @@
 	</p:output>
 	
 	<p:import href="fileset-filter-in-memory.xpl"/>
+	<p:import href="fileset-diff.xpl"/>
+	<p:import href="fileset-load.xpl"/>
 	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 	
-	<p:count name="count-update">
-		<p:input port="source">
-			<p:pipe step="main" port="update"/>
-		</p:input>
-	</p:count>
-	<p:sink/>
-	
-	<pxi:fileset-filter-in-memory>
+	<pxi:fileset-filter-in-memory name="filter-in-memory">
 		<p:input port="source.fileset">
 			<p:pipe step="main" port="source.fileset"/>
 		</p:input>
@@ -56,11 +51,12 @@
 		</p:input>
 	</pxi:fileset-filter-in-memory>
 	<p:group>
-		<p:variable name="count-update" select=".">
-			<p:pipe step="count-update" port="result"/>
+		<p:variable name="document-not-in-manifest" select="/*/d:file[1]/@href">
+			<p:pipe step="filter-in-memory" port="diff"/>
 		</p:variable>
-		<px:assert message="Trying to update a fileset with a document that is not in the manifest" error-code="XXXXX">
-			<p:with-option name="test" select="$count-update=count(//d:file)"/>
+		<px:assert message="Trying to update a fileset with a document that is not in the manifest: $1" error-code="XXXXX">
+			<p:with-option name="test" select="$document-not-in-manifest=''"/>
+			<p:with-option name="param1" select="$document-not-in-manifest"/>
 		</px:assert>
 	</p:group>
 	<p:identity name="update.fileset"/>
