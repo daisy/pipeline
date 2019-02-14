@@ -888,24 +888,23 @@ them to the “v1.10.0” milestone.</li>
   <li>Merge the branches after having verified that the Travis checks
 pass.</li>
   <li>Close the milestones (should be 100% complete).</li>
-  <li>Release the staged artifacts on the oss.sonatype.org website.</li>
-  <li>Push the generated git tags (<code>git push --tags</code>).</li>
+  <li>Release the staged artifacts on the <a href="https://oss.sonatype.org" class="external-link" target="_blank">oss.sonatype.org</a> website.</li>
+  <li>Push the generated git tags (run <code>git push --tags</code> in each of the sub repos).</li>
   <li>
-    <p>Edit the Github releases of
+    <p>Edit the Github release pages of
 <a href="https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.10.0" class="external-link" target="_blank">pipeline-mod-braille</a>
-and
-<a href="https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0" class="external-link" target="_blank">pipeline-assembly</a>. The
-pipeline-mod-braille release contains only a link to the NEWS file:</p>
+and <a href="https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0" class="external-link" target="_blank">pipeline-assembly</a>.
+The pipeline-mod-braille release should contain only a link to the NEWS file:</p>
 
     <blockquote>
       <p><a href="https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1100" class="external-link" target="_blank">Release notes</a></p>
     </blockquote>
 
-    <p>The pipeline-assembly release contains the full release notes from
-the NEWS file (see below).</p>
+    <p>The pipeline-assembly release should contain the full release notes
+from the NEWS file (see below). Save the pipeline-assembly release page as a draft.</p>
   </li>
-  <li>Build and upload the distribution packages to the release page of
-pipeline-assembly (if not a updater-only release).
+  <li>Build and upload the distribution packages to the release draft page
+of pipeline-assembly (if not a updater-only release).
     <ul>
       <li>To build the EXE: <code>make dist-exe</code>
 </li>
@@ -918,7 +917,9 @@ pipeline-assembly (if not a updater-only release).
       <li>To build the RPM: <code>make dist-rpm</code> (must be built on a Red Hat machine)</li>
     </ul>
   </li>
-  <li>Publish the Github release.</li>
+  <li>Test the release binaries (see
+<a href="#checklist-for-testing-release-binaries">checklist</a> below).</li>
+  <li>Publish the Github release of pipeline-assembly.</li>
   <li>Publish a new version of the website after having updated
 <code>src/_data/versions.yml</code> and <code>src/_data/downloads.yml</code>.</li>
   <li>Send the email announcements (see below).</li>
@@ -1028,6 +1029,12 @@ https://github.com/daisy/pipeline/issues</p>
 
 <p>pipeline-webui and other components that are not included in
 pipeline-assembly are released separately.</p>
+
+<h3 id="checklist-for-testing-release-binaries">Checklist for testing release binaries</h3>
+
+<p>For each release of the Pipeline 2, the steps below should be followed to test the release binaries:</p>
+
+<p>TBD</p>
 
 
     </div>
