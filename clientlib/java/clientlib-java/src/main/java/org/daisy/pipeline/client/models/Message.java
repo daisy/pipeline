@@ -122,7 +122,7 @@ public class Message implements Comparable<Message>, Iterable<Message>, Cloneabl
 	 * Merge with a previous version of this message
 	 */
 	void join(Message oldMessage) {
-		if (oldMessage.sequence != sequence) {
+		if (oldMessage.sequence != null && sequence != null && oldMessage.sequence.intValue() != sequence.intValue()) {
 			throw new IllegalArgumentException();
 		}
 		Message.ProgressInfo progressInfo = getProgressInfo();

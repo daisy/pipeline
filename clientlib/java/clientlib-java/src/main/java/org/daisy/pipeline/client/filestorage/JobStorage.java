@@ -227,9 +227,13 @@ public class JobStorage {
 	 * @return The job
 	 */
 	public static synchronized Job loadJob(String storageId, File jobStorageDir) {
-		Job job = new Job();
-		new JobStorage(job, jobStorageDir, storageId);
-		return job;
+		File directory = new File(jobStorageDir, storageId);
+		if (directory.isDirectory()) {
+			Job job = new Job();
+			new JobStorage(job, jobStorageDir, storageId);
+			return job;
+		}
+		return null;
 	}
 	
 	/**

@@ -44,6 +44,17 @@ public class Script implements Comparable<Script> {
 		scriptNode = scriptXml;
 	}
 	
+	/**
+	 * Create a script element with only a href attribute.
+	 * 
+	 * @param href the script URL 
+	 * @throws Pipeline2Exception thrown when an error occurs
+	 */
+	public Script(String href) throws Pipeline2Exception {
+		this(XML.getXml("<script xmlns=\"http://www.daisy.org/ns/pipeline/data\"/>"));
+		setHref(href);
+	}
+	
 	private void lazyLoad() {
 		if (lazyLoaded || scriptNode == null) {
 			return;
@@ -78,14 +89,16 @@ public class Script implements Comparable<Script> {
 			
 			if ((inputFilesetsString == null || "".equals(inputFilesetsString)) && (outputFilesetsString == null || "".equals(outputFilesetsString))) {
 				// try to infer input/output filesets from script id
-				if (this.id.matches("^[a-zA-Z0-9]+-to-[a-zA-Z0-9]+$")) {
-					String[] split = this.id.split("-");
-					inputFilesets.add(split[0]);
-					outputFilesets.add(split[2]);
-				}
-				else if (this.id.matches("^[a-zA-Z0-9]+-validator$")) {
-					String[] split = this.id.split("-");
-					inputFilesets.add(split[0]);
+				if (this.id != null) {
+					if (this.id.matches("^[a-zA-Z0-9]+-to-[a-zA-Z0-9]+$")) {
+						String[] split = this.id.split("-");
+						inputFilesets.add(split[0]);
+						outputFilesets.add(split[2]);
+					}
+					else if (this.id.matches("^[a-zA-Z0-9]+-validator$")) {
+						String[] split = this.id.split("-");
+						inputFilesets.add(split[0]);
+					}
 				}
 			}
 			

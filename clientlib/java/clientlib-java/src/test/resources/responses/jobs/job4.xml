@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/cb34a1c5-7a93-411f-afaf-4d554a7645d9" id="cb34a1c5-7a93-411f-afaf-4d554a7645d9" priority="medium" status="ERROR">
+<script href="http://localhost:8181/ws/scripts/dtbook-to-zedai" id="dtbook-to-zedai" input-filesets="dtbook" output-filesets="zedai">
+<nicename>DTBook to ZedAI</nicename>
+<description>Transforms DTBook XML into ZedAI XML.</description>
+<version>2.0.0</version>
+<homepage>http://daisy.github.io/pipeline/modules/dtbook-to-zedai</homepage>
+<input desc="One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed." mediaType="application/x-dtbook+xml" name="source" nicename="DTBook file(s)" ordered="true" required="true" sequence="true" type="anyFileURI">
+<item value="550283.xml"/>
+</input>
+<option desc="Filename for the generated ZedAI file" mediaType="" name="zedai-filename" nicename="ZedAI filename" ordered="true" required="false" sequence="false" type="string">
+<item value=""/>
+</option>
+<option desc="Whether to stop processing and raise an error on validation issues." mediaType="" name="assert-valid" nicename="Assert validity" ordered="true" required="false" sequence="false" type="boolean">true</option>
+<option desc="Filename for the generated MODS file" mediaType="" name="mods-filename" nicename="MODS filename" ordered="true" required="false" sequence="false" type="string">
+<item value=""/>
+</option>
+<option desc="Filename for the generated CSS file" mediaType="" name="css-filename" nicename="CSS filename" ordered="true" required="false" sequence="false" type="string">
+<item value=""/>
+</option>
+<option desc="Language code of the input document." mediaType="" name="lang" nicename="Language code" ordered="true" required="false" sequence="false" type="string">
+<item value=""/>
+</option>
+<option desc="Include any referenced external resources like images and CSS-files to the output." mediaType="" name="copy-external-resources" nicename="Copy external resources" ordered="true" required="false" sequence="false" type="boolean">true</option>
+</script>
+</job>

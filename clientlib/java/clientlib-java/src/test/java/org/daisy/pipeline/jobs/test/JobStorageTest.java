@@ -82,7 +82,9 @@ public class JobStorageTest {
 		assertEquals(2, jobs.size());
 		assertEquals("job1", jobs.get(0));
 		assertEquals("job2", jobs.get(1));
-
+		
+		assertNull(JobStorage.loadJob("does-not-exist", jobStorageDir));
+		
 		Job job = JobStorage.loadJob(jobs.get(0), jobStorageDir);
 
 		assertEquals("job1", job.getId());
@@ -162,7 +164,6 @@ public class JobStorageTest {
 		List<String> jobsBefore = JobStorage.listJobs(jobStorageDir);
 
 		Path textFilePath = null;
-		jobStorageDir = testFolder.newFolder("jobs");
 		try {
 			textFilePath = Files.createTempFile("test", "test");
 			String text = "this is a test";

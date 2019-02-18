@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/d488e035-383c-4231-a157-66c3cd7ee189" id="d488e035-383c-4231-a157-66c3cd7ee189" priority="medium" status="ERROR">
+<script href="http://localhost:8181/ws/scripts/dtbook-to-zedai" id="dtbook-to-zedai" input-filesets="dtbook" output-filesets="zedai">
+<nicename>DTBook to ZedAI</nicename>
+<description>Transforms DTBook XML into ZedAI XML.</description>
+<version>2.0.0</version>
+</script>
+<messages progress="1.0">
+<message content="ZedAI file name: &#10;&#10;" level="INFO" sequence="70"/>
+<message content="MODS file name: &#10;&#10;" level="INFO" sequence="79"/>
+<message content="CSS file name: &#10;&#10;" level="INFO" sequence="88"/>
+<message content="Renaming certain elements to span with @role" level="INFO" sequence="253"/>
+<message content="Renaming code and kbd elements to reflect block or phrase variants." level="INFO" sequence="255"/>
+<message content="Renaming annotation elements to identify block or phrase variants." level="INFO" sequence="257"/>
+<message content="Convert br to lines" level="INFO" sequence="259"/>
+<message content="Grouping contents of a definition list into items" level="INFO" sequence="261"/>
+<message content="Move out inlined image groups" level="INFO" sequence="263"/>
+<message content="Move out inlined lists" level="INFO" sequence="265"/>
+<message content="Move out inlined definition lists" level="INFO" sequence="267"/>
+<message content="Move out inlined prodnotes" level="INFO" sequence="269"/>
+<message content="Move out inlined divs" level="INFO" sequence="271"/>
+<message content="Move out inlined poems" level="INFO" sequence="273"/>
+<message content="Move out inlined linegroups" level="INFO" sequence="275"/>
+<message content="Move out inlined tables" level="INFO" sequence="277"/>
+<message content="Move out inlined sidebars" level="INFO" sequence="279"/>
+<message content="Move out inlined notes" level="INFO" sequence="281"/>
+<message content="Move out inlined epigraphs" level="INFO" sequence="283"/>
+<message content="Move out inlined annotation blocks" level="INFO" sequence="285"/>
+<message content="Move out inlined code blocks" level="INFO" sequence="287"/>
+<message content="Normalize mixed block/inline content" level="INFO" sequence="289"/>
+<message content="Normalize mixed section/block content" level="INFO" sequence="291"/>
+<message content="Normalize mixed section and block content model for level1" level="INFO" sequence="292"/>
+<message content="Normalize mixed section and block content model for level1" level="INFO" sequence="293"/>
+<message content="Translate to ZedAI" level="INFO" sequence="295"/>
+<message content="Generating CSS" level="INFO" sequence="313"/>
+<message content="baseURI (Please see detailed log for more info.)" level="ERROR" portion="1.0" progress="1.0" sequence="314"/>
+</messages>
+</job>

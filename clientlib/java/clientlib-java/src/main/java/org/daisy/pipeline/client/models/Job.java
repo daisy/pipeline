@@ -1,6 +1,7 @@
 package org.daisy.pipeline.client.models;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import org.daisy.pipeline.client.Pipeline2Exception;
 import org.daisy.pipeline.client.Pipeline2Logger;
 import org.daisy.pipeline.client.filestorage.JobStorage;
 import org.daisy.pipeline.client.filestorage.JobValidator;
+import org.daisy.pipeline.client.utils.Files;
 import org.daisy.pipeline.client.utils.XML;
 import org.daisy.pipeline.client.utils.XPath;
 import org.w3c.dom.Document;
@@ -32,26 +34,32 @@ public class Job implements Comparable<Job> {
 	public enum Status { IDLE, RUNNING, SUCCESS, ERROR, FAIL };
 	public enum Priority { high, medium, low };
 
-	private String id;
-	private String href; // xs:anyURI
-	private Status status;
-	private Priority priority;
-	private String scriptHref; // for job request xml documents
-	private Script script;
-	private String nicename;
-	private String description;
-	private String batchId;
-	private List<Argument> argumentInputs; // used when there's no script given
-	private List<Argument> argumentOutputs; // used when there's no script given
-	private List<Callback> callback;
-	private BigDecimal progress;
-	private JobMessages messages;
-	private Node messagesNode;
-	private String logHref;
-	private Result result; // "all results"-zip
-	private SortedMap<Result,List<Result>> results; // "individual results"-zips as keys, individual files as values
+	private String id; // @id, text, required in job, not present in jobRequest
+	private String href; // @href, xsd:anyURI, required in job, not present in jobRequest
+	private Status status; // @status, required in job, not present in jobRequest
+	private Priority priority; // @priority, required in job, optional in jobRequest
+	private Integer queuePosition; // @queue-position, xsd:int, optional in job, not present in jobRequest
+	private String nicename; // nicename/text(), text, optional in both job and jobRequest
+	private String description; // text, not used in job or jobRequest, but can be useful when storing jobs, for instance as templates
+	private String batchId; // batchId/text(), text, optional in both job and jobRequest
+	
+	// script element optional for job, required (with only href) for jobRequest
+	private Script script; // <script>…</script>
+	
+	private List<Argument> argumentInputs; // in jobRequest: <input> | <option>, in job: script/input | script/option
+	private List<Argument> argumentOutputs; // in jobRequest: <output>, in job: script/output
+	
+	private List<Callback> callback; // <callback>, optional in jobRequest, not used in job
+	
+	private JobMessages messages; // optional in job, not used in jobRequest
+	private Node messagesNode; // for lazy loading of messages
+	private String logHref; // log/@href, xsd:anyURI, optional in job, not used in jobRequest
+	private Result result; // <results>, optional in job, not used in jobRequest, "all results"-zip
+	private SortedMap<Result,List<Result>> results; // results/result, optional in job, not used in jobRequest, "individual results"-zips as keys, individual files as values
 	private Node resultsNode;
 
+	private BigDecimal progress;
+	
 	private boolean lazyLoaded = false;
 	private Node jobNode = null;
 
@@ -76,6 +84,57 @@ public class Job implements Comparable<Job> {
 	public Job(Node jobXml) throws Pipeline2Exception {
 		this();
 		setJobXml(jobXml);
+	}
+	
+	/**
+	 * Creates a new job based on an old job.
+	 * 
+	 * This effectively creates a new job in the same state as the old job
+	 * was before being submitted to the engine. The status, messages,
+	 * results, log, batchId, callback and progress will be reset.
+	 * 
+	 * A new job storage can be provided, in which case all the files
+	 * from the job storage in the old job will be copied over to the job
+	 * storage in the new job. If the new job storage is the same object
+	 * as the one used by the old job, points to the same path as the
+	 * old job storage, or if the new job storage is null,
+	 * then the old job storage will be reused.
+	 * 
+	 * @param oldJob The old job where arguments will be copied from
+	 * @param newStorage The new job storage where files will be stored
+	 * @throws Pipeline2Exception
+	 */
+	public Job(Job oldJob, JobStorage newStorage) throws Pipeline2Exception {
+		this(oldJob.toXml());
+		
+		JobStorage oldStorage = oldJob.getJobStorage();
+		if (newStorage == null || newStorage == oldStorage || newStorage.getContextDir().equals(oldStorage.getContextDir())) {
+			// Reuse old storage
+			storage = oldStorage;
+			
+		} else {
+			// Copy files from old storage to new storage
+			File oldContextDir = oldStorage.getContextDir();
+			Map<String, File> oldFiles = null;
+			try {
+				oldFiles = Files.listFilesRecursively(oldContextDir, false);
+				if (oldFiles.size() > 0) {
+					for (String href : oldFiles.keySet()) {
+						newStorage.addContextFile(oldFiles.get(href), href);
+					}
+				}
+			} catch (IOException e) {
+				Pipeline2Logger.logger().error("Could not list files in old job context", e);
+			}
+			storage = newStorage;
+		}
+
+		setId(oldJob.getId());
+		setHref(oldJob.getHref());
+		setPriority(oldJob.getPriority());
+		setNicename(oldJob.getNicename());
+		setDescription(oldJob.getDescription());
+		setScript(oldJob.getScript());
 	}
 
 	/**
@@ -125,8 +184,9 @@ public class Job implements Comparable<Job> {
 
 		try {
 			// select root element if the node is a document node
-			if (jobNode instanceof Document)
+			if (jobNode instanceof Document) {
 				jobNode = XPath.selectNode("/*", jobNode, XPath.dp2ns);
+			}
 
 			String id = XPath.selectText("@id", jobNode, XPath.dp2ns);
 			if (id != null) {
@@ -149,7 +209,7 @@ public class Job implements Comparable<Job> {
 			}
 			if (this.priority == null) {
 				// in the job XML, the priority is a attribute, but in the job request xml, it is an element
-				priority = XPath.selectText("priority", jobNode, XPath.dp2ns);
+				priority = XPath.selectText("d:priority", jobNode, XPath.dp2ns);
 				for (Priority p : Priority.values()) {
 					if (p.toString().equals(priority)) {
 						this.priority = p;
@@ -157,25 +217,37 @@ public class Job implements Comparable<Job> {
 					}
 				}
 			}
-
-			if (XPath.selectNode("d:script/*", jobNode, XPath.dp2ns) == null) {
-				scriptHref = XPath.selectText("d:script/@href", jobNode, XPath.dp2ns);
-
-			} else {
-				Node scriptNode = XPath.selectNode("d:script", jobNode, XPath.dp2ns);
-				if (scriptNode != null) {
-					this.script = new Script(scriptNode);
+			String queuePosition = XPath.selectText("@queue-position", jobNode, XPath.dp2ns);
+			if (queuePosition != null) {
+				try {
+					this.queuePosition = Integer.parseInt(queuePosition);
+				} catch (NumberFormatException e) {
+					Pipeline2Logger.logger().debug("Could not parse the queue position as an integer.", e);
 				}
 			}
 			this.nicename = XPath.selectText("d:nicename", jobNode, XPath.dp2ns);
 			this.description = XPath.selectText("d:description", jobNode, XPath.dp2ns);
 			this.batchId = XPath.selectText("d:batchId", jobNode, XPath.dp2ns);
+			
+			Node scriptNode = XPath.selectNode("d:script", jobNode, XPath.dp2ns);
+			if (scriptNode != null) {
+				this.script = new Script(scriptNode);
+			}
+			
 			this.logHref = XPath.selectText("d:log/@href", jobNode, XPath.dp2ns);
 			this.callback = new ArrayList<Callback>();
 			for (Node callbackNode : XPath.selectNodes("d:callback", jobNode, XPath.dp2ns)) {
 				this.callback.add(new Callback(callbackNode));
 			}
 			this.messagesNode = XPath.selectNode("d:messages", jobNode, XPath.dp2ns);
+			String progressString = XPath.selectText("d:messages/@progress", jobNode, XPath.dp2ns);
+			if (progressString != null) {
+				try {
+					this.progress = new BigDecimal(Double.parseDouble(progressString));
+				} catch (NumberFormatException e) {
+					Pipeline2Logger.logger().debug("Could not parse the progress as a decimal number.", e);
+				}
+			}
 			this.resultsNode = XPath.selectNode("d:results", jobNode, XPath.dp2ns);
 
 			// Arguments are both part of the script XML and the jobRequest XML.
@@ -250,7 +322,7 @@ public class Job implements Comparable<Job> {
 
 	private static Message parseMessage(Node messageNode) throws Pipeline2Exception {
 		Message m = new Message();
-		m.text = XPath.selectText(".", messageNode, XPath.dp2ns);
+		m.text = XPath.selectText("@content", messageNode, XPath.dp2ns);
 		if (XPath.selectText("@level", messageNode, XPath.dp2ns) != null) {
 			m.level = Message.Level.valueOf(XPath.selectText("@level", messageNode, XPath.dp2ns));
 		}
@@ -468,28 +540,43 @@ public class Job implements Comparable<Job> {
 	// simple getters and setters (to ensure lazy loading is performed)
 	public String getId() { lazyLoad(); return id; }
 	public String getHref() { lazyLoad(); return href; }
-	public String getScriptHref() { lazyLoad(); if (script != null) return script.getHref(); else return scriptHref; }
-	public Script getScript() { lazyLoad(); return script; }
 	public Status getStatus() { lazyLoad(); return status; }
-	public String getLogHref() { lazyLoad(); return logHref; }
+	public Priority getPriority() { lazyLoad(); return priority; }
+	public Integer getQueuePosition() { lazyLoad(); return queuePosition; }
 	public String getNicename() { lazyLoad(); return nicename; }
 	public String getDescription() { lazyLoad(); return description; }
 	public String getBatchId() { lazyLoad(); return batchId; }
-	public Priority getPriority() { lazyLoad(); return priority; }
+	public Script getScript() { lazyLoad(); return script; }
+	public String getScriptHref() { lazyLoad(); if (script != null) return script.getHref(); else return null; }
 	public List<Callback> getCallback() { lazyLoad(); return callback; }
+	public BigDecimal getProgress() { lazyLoad(); return progress; }
+	public String getLogHref() { lazyLoad(); return logHref; }
 	public JobStorage getJobStorage() { lazyLoad(); return storage; }
 	public void setId(String id) { lazyLoad(); this.id = id; }
+	public void setHref(String href) { lazyLoad(); this.href = href; }
+	public void setStatus(Status status) { lazyLoad(); this.status = status; }
+	public void setPriority(Priority priority) { lazyLoad(); this.priority = priority; }
+	public void setQueuePosition(Integer queuePosition) { lazyLoad(); this.queuePosition = queuePosition; }
 	public void setNicename(String nicename) { lazyLoad(); this.nicename = nicename; }
 	public void setDescription(String description) { lazyLoad(); this.description = description; }
 	public void setBatchId(String batchId) { lazyLoad(); this.batchId = batchId; }
-	public void setPriority(Priority priority) { lazyLoad(); this.priority = priority; }
-	public void setCallback(List<Callback> callback) { lazyLoad(); this.callback = callback; }
-	public void setJobStorage(JobStorage storage) { lazyLoad(); this.storage = storage; }
-	public void setHref(String href) { lazyLoad(); this.href = href; }
-	public void setStatus(Status status) { lazyLoad(); this.status = status; }
-	public void setScriptHref(String scriptHref) { lazyLoad(); this.scriptHref = scriptHref; }
 	public void setScript(Script script) { lazyLoad(); this.script = script; }
+	public void setScriptHref(String scriptHref) {
+		lazyLoad();
+		if (this.script == null) {
+			try {
+				this.script = new Script(scriptHref);
+			} catch (Pipeline2Exception e) {
+				Pipeline2Logger.logger().error("Could not create script element with href='" + scriptHref + "'", e);
+			}
+		} else {
+			this.script.setHref(scriptHref);
+		}
+	}
+	public void setCallback(List<Callback> callback) { lazyLoad(); this.callback = callback; }
+	public void setProgress(BigDecimal progress) { lazyLoad(); this.progress = progress; }
 	public void setLogHref(String logHref) { lazyLoad(); this.logHref = logHref; }
+	public void setJobStorage(JobStorage storage) { lazyLoad(); this.storage = storage; this.lazyLoaded = false; }
 	
 	/**
 	 * Update this job's messages with a list of new messages from a job update.
@@ -557,12 +644,11 @@ public class Job implements Comparable<Job> {
 
 	public List<Argument> getInputs() {
 		lazyLoad();
-		if (script == null && argumentInputs == null) {
-			return new ArrayList<Argument>();
-			
-		} else if (script == null) {
+		if (script == null) {
+			if (argumentInputs == null) {
+				argumentInputs = new ArrayList<Argument>();
+			}
 			return argumentInputs;
-			
 		} else {
 			return script.getInputs();
 		}
@@ -570,7 +656,14 @@ public class Job implements Comparable<Job> {
 
 	public List<Argument> getOutputs() {
 		lazyLoad();
-		return script == null ? argumentOutputs : script.getOutputs();
+		if (script == null) {
+			if (argumentOutputs == null) {
+				argumentOutputs = new ArrayList<Argument>();
+			}
+			return argumentOutputs;
+		} else {
+			return script.getOutputs();
+		}
 	}
 	
 	public void setInputs(List<Argument> argumentInputs) {
@@ -775,29 +868,32 @@ public class Job implements Comparable<Job> {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "script");
 			e.setAttribute("href", script.getHref());
 			jobRequestElement.appendChild(e);
-
-		} else if (scriptHref != null) {
-			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "script");
-			e.setAttribute("href", scriptHref);
-			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().warn("script/@href is required in jobRequest.");
 		}
 
 		if (nicename != null) {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "nicename");
 			e.setTextContent(nicename);
 			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().debug("nicename for job is not provided.");
 		}
 
 		if (priority != null) {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "priority");
 			e.setTextContent(priority.toString());
 			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().debug("priority for job is not provided.");
 		}
 
 		if (batchId != null) {
 			Element e = jobRequestElement.getOwnerDocument().createElementNS(XPath.dp2ns.get("d"), "batchId");
 			e.setTextContent(batchId);
 			jobRequestElement.appendChild(e);
+		} else {
+			Pipeline2Logger.logger().debug("batchId for job is not provided.");
 		}
 
 		List<Argument> options = new ArrayList<Argument>();
@@ -928,6 +1024,8 @@ public class Job implements Comparable<Job> {
 			for (Callback c : callback) {
 				XML.appendChildAcrossDocuments(jobRequestElement, c.toXml());
 			}
+		} else {
+			Pipeline2Logger.logger().debug("callback for job is not provided.");
 		}
 
 		return jobRequestDocument;
@@ -1119,7 +1217,11 @@ public class Job implements Comparable<Job> {
 	 */
 	private double getAverageProgress() {
 		Long now = new Date().getTime();
-		return getProgressFrom() / (now - messages.getJobStartTime());
+		Long startTime = messages.getJobStartTime();
+		if (startTime == null) {
+			return 0.0;
+		}
+		return getProgressFrom() / (now - startTime);
 	}
 	
 	private double getProgressTimeConstant(Integer timeUntilUpdateRequest) {
