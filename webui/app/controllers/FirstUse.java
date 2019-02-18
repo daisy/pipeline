@@ -146,7 +146,7 @@ public class FirstUse extends Controller {
 			}
 			
 			// if no admin user; display "create admin" form
-			if (User.find.where().eq("admin", true).findRowCount() == 0) {
+			if (User.find().where().eq("admin", true).findRowCount() == 0) {
 				return ok(views.html.FirstUse.createAdmin.render(play.data.Form.form(Administrator.CreateAdminForm.class)));
 			}
 			

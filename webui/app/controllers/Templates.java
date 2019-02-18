@@ -25,7 +25,7 @@ public class Templates extends Controller {
 	public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public static ExpressionList<Job> findWhere() {
-		return Job.find.where().eq("status", "TEMPLATE");
+		return Job.find().where().eq("status", "TEMPLATE");
 	}
 	
 	public static Result getTemplates() {

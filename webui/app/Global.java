@@ -33,41 +33,50 @@ public class Global extends GlobalSettings {
 		
 		NotificationConnection.notificationConnections = new ConcurrentHashMap<Long,List<NotificationConnection>>();
 		
-		if (Setting.get("appearance.title") == null)
-			Setting.set("appearance.title", "DAISY Pipeline 2");
-		
-		if (Setting.get("appearance.titleLink") == null)
-			Setting.set("appearance.titleLink", "scripts");
-		
-		if (Setting.get("appearance.titleLink.newWindow") == null)
-			Setting.set("appearance.titleLink.newWindow", "false");
-		
-		if (Setting.get("appearance.landingPage") == null)
-			Setting.set("appearance.landingPage", "welcome");
-		
-		if (Setting.get("appearance.theme") == null)
-			Setting.set("appearance.theme", "");
-		
-		if (Setting.get("jobs.hideAdvancedOptions") == null)
-			Setting.set("jobs.hideAdvancedOptions", "true");
-		
-		if (Setting.get("jobs.deleteAfterDuration") == null)
-			Setting.set("jobs.deleteAfterDuration", "0");
-		
-		String userTracking = Play.application().configuration().getString("userTracking");
-		if ("true".equals(userTracking) || Play.application().isDev()) {
-			Setting.set("userTracking", "true");
-		} else {
-			Setting.set("userTracking", "false");
-		}
-		
-		String endpoint = Setting.get("dp2ws.endpoint");
-		if (endpoint == null) {
-			controllers.Application.ws.setEndpoint(controllers.Application.DEFAULT_DP2_ENDPOINT);
-		} else {
-			controllers.Application.ws.setEndpoint(Setting.get("dp2ws.endpoint"));
-			controllers.Application.ws.setCredentials(Setting.get("dp2ws.authid"), Setting.get("dp2ws.secret"));
-		}
+		Akka.system().scheduler().scheduleOnce(
+				Duration.create(0, TimeUnit.SECONDS),
+				new Runnable() {
+					public void run() {
+						
+						if (Setting.get("appearance.title") == null)
+							Setting.set("appearance.title", "DAISY Pipeline 2");
+						
+						if (Setting.get("appearance.titleLink") == null)
+							Setting.set("appearance.titleLink", "scripts");
+						
+						if (Setting.get("appearance.titleLink.newWindow") == null)
+							Setting.set("appearance.titleLink.newWindow", "false");
+						
+						if (Setting.get("appearance.landingPage") == null)
+							Setting.set("appearance.landingPage", "welcome");
+						
+						if (Setting.get("appearance.theme") == null)
+							Setting.set("appearance.theme", "");
+						
+						if (Setting.get("jobs.hideAdvancedOptions") == null)
+							Setting.set("jobs.hideAdvancedOptions", "true");
+						
+						if (Setting.get("jobs.deleteAfterDuration") == null)
+							Setting.set("jobs.deleteAfterDuration", "0");
+						
+						String userTracking = Play.application().configuration().getString("userTracking");
+						if ("true".equals(userTracking) || Play.application().isDev()) {
+							Setting.set("userTracking", "true");
+						} else {
+							Setting.set("userTracking", "false");
+						}
+						
+						String endpoint = Setting.get("dp2ws.endpoint");
+						if (endpoint == null) {
+							controllers.Application.ws.setEndpoint(controllers.Application.DEFAULT_DP2_ENDPOINT);
+						} else {
+							controllers.Application.ws.setEndpoint(Setting.get("dp2ws.endpoint"));
+							controllers.Application.ws.setCredentials(Setting.get("dp2ws.authid"), Setting.get("dp2ws.secret"));
+						}
+						
+					}
+				},
+				Akka.system().dispatcher());
 		
 		Akka.system().scheduler().schedule(
 				Duration.create(0, TimeUnit.SECONDS),
@@ -146,7 +155,7 @@ public class Global extends GlobalSettings {
 							
 							Date timeoutDate = new Date(new Date().getTime() - Long.parseLong(Setting.get("jobs.deleteAfterDuration")));
 							
-							List<Job> jobs = Job.find.all();
+							List<Job> jobs = Job.find().all();
 							for (Job job : jobs) {
 								if (job.getCreated() == null) {
 									// if for some reason 'created' is null, set it to the current time
@@ -185,7 +194,7 @@ public class Global extends GlobalSettings {
 							}
 							
 							Logger.debug("checking for jobs in webui that is not in engine...");
-							List<Job> webUiJobs = Job.find.all();
+							List<Job> webUiJobs = Job.find().all();
 							for (Job webUiJob : webUiJobs) {
 								// new jobs should be deleted after a while if they're not run
 								if ("NEW".equals(webUiJob.getStatus())) {

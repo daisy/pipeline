@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-webui.git
 	branch = master
 	commit = b26dbc6f47378ea52690adc0bcac25a6402ec9ae
-	parent = f85405b566b90a03fbfc0430066f1a7dc1babce0
+	parent = e4a8df5c8fab3f0af81469f92ec5630605517497
 	cmdver = 0.3.1

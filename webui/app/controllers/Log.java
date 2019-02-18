@@ -52,7 +52,7 @@ public class Log extends Controller {
 		{
 			List<String> settings = new ArrayList<String>();
 			settings.add("Database:");
-			for (Setting s : Setting.find.all()) {
+			for (Setting s : Setting.find().all()) {
 				if (Setting.getObfuscatedsettings().contains(s.getName()))
 					settings.add("  "+s.getName()+": [hidden]");
 				else

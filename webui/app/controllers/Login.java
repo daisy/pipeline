@@ -26,7 +26,7 @@ public class Login extends Controller {
      */
     public static Result login() {
     	if (FirstUse.isFirstUse()) {
-    		if (User.find.where().eq("admin", true).findRowCount() > 0);
+    		if (User.find().where().eq("admin", true).findRowCount() > 0);
     			// Server mode and admin exists; require login
     		else
     			return redirect(routes.FirstUse.getFirstUse());

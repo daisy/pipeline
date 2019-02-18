@@ -11,10 +11,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.daisy.pipeline.client.Pipeline2Exception;
 import org.daisy.pipeline.client.Pipeline2Logger;
@@ -22,10 +19,13 @@ import org.daisy.pipeline.client.filestorage.JobStorage;
 import org.daisy.pipeline.client.models.Job.Status;
 import org.daisy.pipeline.client.models.Message;
 import org.daisy.pipeline.client.models.Result;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import play.Logger;
 import play.libs.Akka;
 import scala.concurrent.duration.Duration;
+import utils.XML;
 import akka.actor.Cancellable;
 
 import com.avaje.ebean.Model;
@@ -35,10 +35,10 @@ import controllers.Application;
 @Entity
 public class Job extends Model implements Comparable<Job> {
 	/** Key is the job ID; value is the sequence number of the last message read from the Pipeline 2 Web API. */ 
-	public static Map<String,Integer> lastMessageSequence = Collections.synchronizedMap(new HashMap<String,Integer>());
-	public static Map<String,String> lastStatus = Collections.synchronizedMap(new HashMap<String,String>());
+	public static Map<Long,Integer> lastMessageSequence = Collections.synchronizedMap(new HashMap<Long,Integer>());
+	public static Map<Long,String> lastStatus = Collections.synchronizedMap(new HashMap<Long,String>());
 	public static Map<Long,Date> lastAccessed = Collections.synchronizedMap(new HashMap<Long,Date>());
-	public static Map<Long,List<Message>> runningMessages = Collections.synchronizedMap(new HashMap<Long,List<Message>>());
+	public static Map<Long, org.daisy.pipeline.client.models.Job> runningJobs = Collections.synchronizedMap(new HashMap<Long,org.daisy.pipeline.client.models.Job>());
 	
 	@Id
 	private Long id;
@@ -94,11 +94,19 @@ public class Job extends Model implements Comparable<Job> {
 
 	// -- Queries
 
-	public static Model.Finder<Long,Job> find = new Model.Finder<Long, Job>(Job.class);
+    @Transient
+	public static Model.Finder<String,Job> _find = null;
+    
+    public static Model.Finder<String,Job> find() {
+        if (Job._find == null) {
+            Job._find = new Model.Finder<String, Job>(Setting.ebeanServer(), Job.class);
+        }
+        return Job._find;
+    }
 	
 	/** Retrieve a Job by its id. */
 	public static Job findById(Long id) {
-		Job job = find.where().eq("id", id).ne("status", "TEMPLATE").findUnique();
+		Job job = find().where().eq("id", id).ne("status", "TEMPLATE").findUnique();
 		if (job != null) {
 			lastAccessed.put(id, new Date());
 			User user = User.findById(job.getUser());
@@ -114,7 +122,7 @@ public class Job extends Model implements Comparable<Job> {
 
 	/** Retrieve a Job by its engine id. */
 	public static Job findByEngineId(String id) {
-		Job job = find.where().eq("engine_id", id).ne("status", "TEMPLATE").findUnique();
+		Job job = find().where().eq("engine_id", id).ne("status", "TEMPLATE").findUnique();
 		if (job != null) {
 			User user = User.findById(job.getUser());
 			if (user != null)
@@ -144,8 +152,8 @@ public class Job extends Model implements Comparable<Job> {
 			pushNotifier.cancel();
 			pushNotifier = null;
 		}
-		if (runningMessages.containsKey(id)) {
-			runningMessages.remove(id);
+		if (runningJobs.containsKey(id)) {
+			runningJobs.remove(id);
 		}
 	}
 	
@@ -193,9 +201,9 @@ public class Job extends Model implements Comparable<Job> {
 								}
 							}
 							
-							if (job.getStatus() != null && !job.getStatus().toString().equals(lastStatus.get(job.getId()))) {
+							if (job.getStatus() != null && !job.getStatus().toString().equals(lastStatus.get(id))) {
 								Logger.debug("    status has changed to "+job.getStatus());
-								lastStatus.put(job.getId(), job.getStatus().toString());
+								lastStatus.put(id, job.getStatus().toString());
 								Logger.debug("    notifying job-status-"+webUiJob.id);
 								NotificationConnection.pushJobNotification(webUiJob.getUser(), new Notification("job-status-"+webUiJob.getId(), job.getStatus()));
 								
@@ -218,7 +226,6 @@ public class Job extends Model implements Comparable<Job> {
 							}
 							
 							List<org.daisy.pipeline.client.models.Message> messages = job.getMessages();
-							estimateMissingTimestamps(messages, webUiJob);
 							if (messages != null) {
 								for (org.daisy.pipeline.client.models.Message message : messages) {
 									Notification notification = new Notification("job-message-"+webUiJob.getId(), message);
@@ -226,37 +233,26 @@ public class Job extends Model implements Comparable<Job> {
 								}
 								
 								if (messages.size() > 0) {
-									Job.lastMessageSequence.put(job.getId(), messages.get(messages.size()-1).sequence);
+									Job.lastMessageSequence.put(id, messages.get(messages.size()-1).sequence);
 								}
 							}
 							
-							if (messages != null) {
-								// update cached messages and add cached messages to job object so that progress can be calculated 
-								if (!runningMessages.containsKey(id)) {
-									runningMessages.put(id, new ArrayList<Message>());
-								}
-								Integer lastSeq = runningMessages.get(id).isEmpty() ? -1 : runningMessages.get(id).get(runningMessages.get(id).size()-1).sequence;
-								for (Message m : messages) {
-									if (m.sequence > lastSeq) {
-										if (m.timeStamp == null) {
-											m.timeStamp = new Date().getTime();
-										}
-										runningMessages.get(id).add(m);
-									}
-								}
-								job.setMessages(runningMessages.get(id));
-								
-								Map<String,String> progressMap = new HashMap<String,String>();
-								progressMap.put("from", job.getProgressFrom()+"");
-								progressMap.put("to", job.getProgressTo()+"");
-								double estimate = job.getProgressEstimate();
-								if (estimate < job.getProgressFrom() || estimate >= job.getProgressTo()) {
-									estimate = job.getProgressFrom(); // for some reason there's an error in the calculation (probably due to timestamps or similar); use "from" as estimate instead
-								}
-								progressMap.put("estimate", estimate+"");
-								Notification notification = new Notification("job-progress-"+webUiJob.getId(), progressMap);
-								NotificationConnection.pushJobNotification(webUiJob.getUser(), notification);
+							if (!runningJobs.containsKey(id)) {
+								runningJobs.put(id, job);
 							}
+							runningJobs.get(id).joinMessages(job);
+							job = runningJobs.get(id);
+							
+							Map<String,String> progressMap = new HashMap<String,String>();
+							progressMap.put("from", job.getProgressFrom()+"");
+							progressMap.put("to", job.getProgressTo()+"");
+							double estimate = job.getProgressEstimate();
+							if (estimate < job.getProgressFrom() || estimate >= job.getProgressTo()) {
+								estimate = job.getProgressFrom(); // for some reason there can be an error in the calculation (probably due to timestamps or similar); use "from" as estimate instead
+							}
+							progressMap.put("estimate", estimate+"");
+							Notification notification = new Notification("job-progress-"+webUiJob.getId(), progressMap);
+							NotificationConnection.pushJobNotification(webUiJob.getUser(), notification);
 							
 						} catch (javax.persistence.PersistenceException e) {
 							// Ignores this exception that happens on shutdown:
@@ -335,7 +331,7 @@ public class Job extends Model implements Comparable<Job> {
 		}
 		asJob().getJobStorage().delete();
 		lastAccessed.remove(id);
-		super.delete();
+		db(Setting.ebeanServer()).delete(this);
 		return true;
 	}
 	
@@ -351,26 +347,44 @@ public class Job extends Model implements Comparable<Job> {
 	 */
 	@Override
 	public void save() {
+		save(true);
+	}
+	public void save(boolean saveToJobStorage) {
 		synchronized (this) {
-			super.save();
+			db(Setting.ebeanServer()).save(this);
 			
 			if (id == null) {
-				id = (Long) Job.find.orderBy("id desc").findIds().get(0);
-				if (nicename == null) {
-					nicename = "Job #"+id;
-				}
-				super.save();
+				id = (Long) Job.find().orderBy("id desc").findIds().get(0);
 			}
+			if (nicename == null) {
+				nicename = "Job #"+id;
+			}
+			db(Setting.ebeanServer()).save(this);
 			refresh();
 			
 			// save to job storage as well
-			if (asJob() != null) {
+			if (saveToJobStorage && asJob() != null) {
 				Logger.debug("save to job storage");
 				asJob().getJobStorage().save();
 				jobUpdateHelper();
 			}
 		}
 	}
+	
+	@Override
+    public void update() {
+    	db(Setting.ebeanServer()).update(this);
+    }
+    
+	@Override
+    public void insert() {
+    	db(Setting.ebeanServer()).insert(this);
+    }
+    
+	@Override
+    public void refresh() {
+    	db(Setting.ebeanServer()).refresh(this);
+    }
 
 	private void jobUpdateHelper() {
 		engineId = clientlibJob.getId();
@@ -400,8 +414,8 @@ public class Job extends Model implements Comparable<Job> {
 	}
 	
 	public org.daisy.pipeline.client.models.Job asJob(boolean parseMessages) {
-		if (clientlibJob == null) {
-			Logger.debug("getting client job (not cached from earlier, instance:"+this+")");
+		if (clientlibJob == null || clientlibJob.getId() == null) {
+			Logger.debug("getting client job (" + (clientlibJob == null ? "not cached from earlier" : "no id") + ", instance:"+this+")");
 			File jobStorageDir = new File(Setting.get("jobs"));
 			clientlibJob = JobStorage.loadJob(""+id, jobStorageDir);
 			if (clientlibJob == null) {
@@ -423,8 +437,10 @@ public class Job extends Model implements Comparable<Job> {
 				clientlibJob.setNicename(nicename);
 				new JobStorage(clientlibJob, jobStorageDir, ""+id);
 			}
-			setJob(clientlibJob, parseMessages);
-		}
+			if (clientlibJob.getId() != null) {
+				setJob(clientlibJob, parseMessages);
+			}
+		} else Logger.debug("clientlibJob != null");
 		return clientlibJob;
 	}
 	
@@ -433,10 +449,10 @@ public class Job extends Model implements Comparable<Job> {
 	}
 	
 	public void setJob(org.daisy.pipeline.client.models.Job job, boolean parseMessages) {
-		if (clientlibJob == null) {
+		if (clientlibJob == null || clientlibJob.getId() == null) {
 			clientlibJob = asJob(parseMessages);
 		}
-
+		
 		if (job.getId() != null) {
 			clientlibJob.setId(job.getId());
 		}
@@ -453,7 +469,7 @@ public class Job extends Model implements Comparable<Job> {
 			clientlibJob.setLogHref(job.getLogHref());
 		}
 		if (parseMessages && job.getMessages() != null) {
-			clientlibJob.setMessages(job.getMessages());
+			clientlibJob.joinMessages(job);
 		}
 		if (job.getResult() != null && job.getResults() != null) {
 			clientlibJob.setResults(job.getResult(), job.getResults());
@@ -468,19 +484,10 @@ public class Job extends Model implements Comparable<Job> {
 		if (clientlibJob.getNicename() == null && job.getNicename() != null) {
 			clientlibJob.setNicename(job.getNicename());
 		}
-		if (clientlibJob.getInputs() == null && job.getInputs() != null) {
-			clientlibJob.setInputs(job.getInputs());
-		}
-		if (clientlibJob.getOutputs() == null && job.getOutputs() != null) {
-			clientlibJob.setOutputs(job.getOutputs());
-		}
-		if (clientlibJob.getScriptHref() == null && job.getScriptHref() != null) {
-			clientlibJob.setScriptHref(job.getScriptHref());
-		}
 		if (clientlibJob.getScript() == null && job.getScript() != null) {
 			clientlibJob.setScript(job.getScript());
 		}
-		if (clientlibJob.getScript() == null || job.getScript() != null && !clientlibJob.getScript().getId().equals(job.getScript().getId())) {
+		if (clientlibJob.getScript() == null || job.getScript() != null && job.getScript().getId() != null && !clientlibJob.getScript().getId().equals(job.getScript().getId())) {
 			if (job.getScript() != null) {
 				clientlibJob.setScript(Application.ws.getScript(job.getScript().getId()));
 				clientlibJob.setInputs(clientlibJob.getInputs());
@@ -619,16 +626,14 @@ public class Job extends Model implements Comparable<Job> {
 		setStatus("NEW");
 		setNotifiedComplete(false);
 		asJob();
-		clientlibJob.setStatus(org.daisy.pipeline.client.models.Job.Status.IDLE);
-		clientlibJob.setMessages(null);
-		clientlibJob.setResults(null, null);
 		JobStorage jobStorage = clientlibJob.getJobStorage();
+		
 		try {
-			clientlibJob = new org.daisy.pipeline.client.models.Job(clientlibJob.toXml());
+			clientlibJob = new org.daisy.pipeline.client.models.Job(clientlibJob, jobStorage);
 		} catch (Pipeline2Exception e) {
 			Logger.error("An error occured when trying to reset the job", e);
 		}
-		clientlibJob.setJobStorage(jobStorage);
+		
 		setStatus("IDLE");
 		setStarted(null);
 		setFinished(null);

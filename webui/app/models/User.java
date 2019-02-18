@@ -139,16 +139,24 @@ public class User extends Model {
 	
 	// -- Queries
 
-	public static Model.Finder<String, User> find = new Model.Finder<>(User.class);
+	@Transient
+	public static Model.Finder<String,User> _find = null;
+    
+    public static Model.Finder<String,User> find() {
+        if (User._find == null) {
+            User._find = new Model.Finder<String, User>(Setting.ebeanServer(), User.class);
+        }
+        return User._find;
+    }
 
 	/** Retrieve all users. */
 	public static List<User> findAll() {
-		return find.all();
+		return find().all();
 	}
 
 	/** Retrieve a User from email. */
 	public static User findByEmail(String email) {
-		List<User> users = find.where().eq("email", email.toLowerCase()).findList();
+		List<User> users = find().where().eq("email", email.toLowerCase()).findList();
 		for (int u = users.size()-1; u > 0; u--)
 			users.get(u).delete();
 		if (users.size() == 0)
@@ -159,7 +167,7 @@ public class User extends Model {
 
 	/** Retrieve a User from id. */
 	public static User findById(long id) {
-		List<User> users = find.where().eq("id", id).findList();
+		List<User> users = find().where().eq("id", id).findList();
 		for (int u = users.size()-1; u > 0; u--)
 			users.get(u).delete();
 		if (users.size() == 0)
@@ -189,7 +197,7 @@ public class User extends Model {
 			
 		} else if (id >= 0) { // normal or admin user
 			try {
-				user = find.where()
+				user = find().where()
 						.eq("id", id)
 						.eq("email", session.get("email"))
 						.eq("password", session.get("password"))
@@ -241,7 +249,7 @@ public class User extends Model {
 	/** Authenticate a user with an unencrypted password */
 	public static User authenticateUnencrypted(String email, String password, Session session) {
 		try {
-			User user = find.where()
+			User user = find().where()
 					.eq("email", email.toLowerCase())
 					.eq("password", play.Play.application().injector().instanceOf(Crypto.class).sign(password))
 					.findUnique();
@@ -341,7 +349,7 @@ public class User extends Model {
 	}
 	
 	public List<Job> getJobs() {
-		return Job.find.where().eq("user", id).findList();
+		return Job.find().where().eq("user", id).findList();
 	}
 	
 	@Override
@@ -350,7 +358,7 @@ public class User extends Model {
 			List<Job> jobs = getJobs();
 			for (Job job : jobs)
 				job.deleteFromEngineAndWebUi();
-			super.delete();
+			db(Setting.ebeanServer()).delete(this);
 		} catch (javax.persistence.OptimisticLockException e) {
 			Logger.warn("Could not delete user "+this.id+" ("+this.name+" / "+this.email+")", e);
 		}
@@ -358,7 +366,7 @@ public class User extends Model {
 	
 	@Override
 	public void save() {
-		super.save();
+		db(Setting.ebeanServer()).save(this);
 		
 		// refresh id after save
 		if (this.id == null) {
@@ -368,6 +376,21 @@ public class User extends Model {
 			}
 		}
 	}
+	
+	@Override
+    public void update() {
+    	db(Setting.ebeanServer()).update(this);
+    }
+    
+	@Override
+    public void insert() {
+    	db(Setting.ebeanServer()).insert(this);
+    }
+    
+	@Override
+    public void refresh() {
+    	db(Setting.ebeanServer()).refresh(this);
+    }
 	
 	/**
 	 * Parses the userid from the session. Useful to avoid having to handle cases (especially in templates) where session("userid") is neither null nor a string representation of a Long.

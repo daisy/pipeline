@@ -52,7 +52,7 @@ public class Jobs extends Controller {
 	public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public static ExpressionList<Job> findWhere() {
-		return Job.find.where().ne("status", "TEMPLATE");
+		return Job.find().where().ne("status", "TEMPLATE");
 	}
 	
 	public static Result newJob() {
@@ -64,7 +64,7 @@ public class Jobs extends Controller {
 			return redirect(routes.Login.login());
 		
 		Job newJob = new Job(user);
-		newJob.save();
+		newJob.save(false);
 		newJob.refresh();
 		Logger.debug("created new job: '"+newJob.getId()+"'");
 		
@@ -80,7 +80,7 @@ public class Jobs extends Controller {
 			return redirect(routes.Login.login());
 		
 		Job newJob = new Job(user);
-		newJob.save();
+		newJob.save(false);
 		newJob.refresh();
 		
 		Template template;
@@ -152,7 +152,7 @@ public class Jobs extends Controller {
 		}
 		
 		Job newJob = new Job(user);
-		newJob.save();
+		newJob.save(false);
 		
 		org.daisy.pipeline.client.models.Job oldClientlibJob = webuiJob.asJob();
 		
@@ -164,7 +164,7 @@ public class Jobs extends Controller {
 		org.daisy.pipeline.client.models.Job newClientlibJob = newJob.asJob();
 		JobStorage newJobStorage = newClientlibJob.getJobStorage();
 		
-		// copy files from template to this job
+		// copy files from old job to new job
 		File oldContextDir = oldClientlibJob.getJobStorage().getContextDir();
 		Map<String, File> oldFiles = null;
 		try {
@@ -484,19 +484,11 @@ public class Jobs extends Controller {
 				clientlibJobMap.put("href", clientlibJob.getHref());
 				clientlibJobMap.put("status", clientlibJob.getStatus());
 				clientlibJobMap.put("priority", clientlibJob.getPriority());
-				clientlibJobMap.put("scriptHref", clientlibJob.getScriptHref());
+				clientlibJobMap.put("queue-position", clientlibJob.getQueuePosition());
 				clientlibJobMap.put("nicename", clientlibJob.getNicename());
 				clientlibJobMap.put("description", clientlibJob.getDescription());
 				clientlibJobMap.put("batchId", clientlibJob.getBatchId());
-				clientlibJobMap.put("callback", clientlibJob.getCallback());
-				clientlibJobMap.put("logHref", clientlibJob.getLogHref());
-				clientlibJobMap.put("result", clientlibJob.getResult());
-				clientlibJobMap.put("results", clientlibJob.getResults());
-				clientlibJobMap.put("arguments", clientlibJob.getArguments());
-				clientlibJobMap.put("progressEstimate", clientlibJob.getProgressEstimate());
-				clientlibJobMap.put("progressFrom", clientlibJob.getProgressFrom());
-				clientlibJobMap.put("progressFromTime", clientlibJob.getProgressFromTime());
-				clientlibJobMap.put("progressTo", clientlibJob.getProgressTo());
+				
 				if (clientlibJob.getScript() != null) {
 					clientlibScriptMap.put("id", clientlibJob.getScript().getId());
 					clientlibScriptMap.put("href", clientlibJob.getScript().getHref());
@@ -508,6 +500,19 @@ public class Jobs extends Controller {
 					clientlibScriptMap.put("outputFilesets", clientlibJob.getScript().getOutputFilesets());
 				}
 				clientlibJobMap.put("script", clientlibScriptMap);
+				
+				clientlibJobMap.put("arguments", clientlibJob.getArguments());
+				clientlibJobMap.put("callback", clientlibJob.getCallback());
+				
+				clientlibJobMap.put("logHref", clientlibJob.getLogHref());
+				clientlibJobMap.put("result", clientlibJob.getResult());
+				clientlibJobMap.put("results", clientlibJob.getResults());
+				
+				clientlibJobMap.put("progressEstimate", clientlibJob.getProgressEstimate());
+				clientlibJobMap.put("progressFrom", clientlibJob.getProgressFrom());
+				clientlibJobMap.put("progressFromTime", clientlibJob.getProgressFromTime());
+				clientlibJobMap.put("progressTo", clientlibJob.getProgressTo());
+				
 				output.put("engineJob", clientlibJobMap);
 				output.put("results", Job.jsonifiableResults(clientlibJob));
 			}

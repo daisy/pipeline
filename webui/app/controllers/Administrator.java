@@ -549,7 +549,7 @@ public class Administrator extends Controller {
 		if (user == null || !user.isAdmin())
 			return redirect(routes.Login.login());
 
-		List<User> users = User.find.orderBy("admin, name, email").findList();
+		List<User> users = User.find().orderBy("admin, name, email").findList();
 		AdminForms forms = new AdminForms();
 		ConfigureAppearanceForm.refreshList();
 		
@@ -593,7 +593,7 @@ public class Administrator extends Controller {
 			
 			} else if (filledForm.hasErrors()) {
 				forms.globalForm = filledForm;
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 
 			} else {
@@ -637,7 +637,7 @@ public class Administrator extends Controller {
 			
 			} else if (filledForm.hasErrors()) {
 				forms.guestForm = filledForm;
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 
 			} else {
@@ -656,7 +656,7 @@ public class Administrator extends Controller {
 			
 			} else if (filledForm.hasErrors()) {
 				forms.scriptsForm = filledForm;
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 
 			} else {
@@ -693,7 +693,7 @@ public class Administrator extends Controller {
 				return ok(FormHelper.asJson(filledForm,new String[]{"password"}));
 			
 			} else if (filledForm.hasErrors()) {
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				forms.userForm = filledForm;
 				flash("error", "Could not edit user, please review the form and make sure it is filled out properly.");
 				return badRequest(views.html.Administrator.settings.render(forms, users));
@@ -803,7 +803,7 @@ public class Administrator extends Controller {
 			
 			} else if (filledForm.hasErrors()) {
 				flash("settings.usertab", "adduser");
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				forms.userForm = filledForm;
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 
@@ -845,7 +845,7 @@ public class Administrator extends Controller {
 				}
 			
 			} else if (filledForm.hasErrors()) {
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				forms.setWSForm = filledForm;
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 
@@ -864,7 +864,7 @@ public class Administrator extends Controller {
 				return ok(FormHelper.asJson(filledForm));
 			
 			} else if (filledForm.hasErrors()) {
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				forms.setStorageDirsForm = filledForm;
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 
@@ -895,7 +895,7 @@ public class Administrator extends Controller {
 					return ok(FormHelper.asJson(filledForm));
 					
 				} else if (filledForm.hasErrors()) {
-					List<User> users = User.find.orderBy("admin, name, email").findList();
+					List<User> users = User.find().orderBy("admin, name, email").findList();
 					forms.configureEmailForm = filledForm;
 					return badRequest(views.html.Administrator.settings.render(forms, users));
 
@@ -915,7 +915,7 @@ public class Administrator extends Controller {
 				return ok(FormHelper.asJson(filledForm));
 			
 			} else if (filledForm.hasErrors()) {
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				forms.setMaintenanceForm  = filledForm;
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 
@@ -940,7 +940,7 @@ public class Administrator extends Controller {
 					}
 				}
 
-				List<User> users = User.find.orderBy("admin, name, email").findList();
+				List<User> users = User.find().orderBy("admin, name, email").findList();
 				forms.configureAppearanceForm  = filledForm;
 				return badRequest(views.html.Administrator.settings.render(forms, users));
 

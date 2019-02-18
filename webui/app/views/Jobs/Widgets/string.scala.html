@@ -9,7 +9,7 @@
 		<div class="controls">
 			<input name="@{arg.getName()}" id="text-@scriptId-@{arg.getName()}" type="text" @if(arg.getDefaultValue() != null){ value="@arg.getDefaultValue().replaceAll("\"","'")" }
 				@if(Scripts.chooseWidget(arg)=="regex"){
-					pattern="@{Application.ws.getDataType(arg.getType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].regex.replaceAll("\"","&quot;")}"
+					pattern="@{Application.ws.getDataType(arg.getType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].regex}"
 				}
 			/>
 			@Helpers.ArgumentDescription(arg, scriptId)
@@ -20,8 +20,16 @@
 	$(function(){
 		@if(Scripts.chooseWidget(arg)=="regex"){
 			var regexMessage = '@Html(Application.ws.getDataType(arg.getType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].getDescription().replace("\\","\\\\").replace("\n","\\n").replace("\"","\\\"").replace("'","\\'").replace("/","\\/"))';
-			$("#text-@scriptId-@{arg.getName()}").attr("oninvalid", function(){ $("#text-@scriptId-@{arg.getName()}")[0].setCustomValidity(regexMessage); } );
-			$("#text-@scriptId-@{arg.getName()}").attr("oninput", function(){ $("#text-@scriptId-@{arg.getName()}")[0].setCustomValidity(regexMessage); } );
+			var inputElem = $("#text-@scriptId-@{arg.getName()}");
+			var regex = new RegExp(inputElem.attr("pattern"));
+			inputElem.on("input", function() {
+				inputElem[0].setCustomValidity(regex.test(inputElem[0].value) ? "" : regexMessage);
+			});
+			inputElem.on("invalid", function() {
+				// called on form submission
+				// this should have been covered already by oninput:
+				inputElem[0].setCustomValidity(regexMessage);
+			});
 		}
 		Job.setFromTemplateHandlers.push(function(arg, uploads) {
 			if (arg.name === "@arg.getName()") {
