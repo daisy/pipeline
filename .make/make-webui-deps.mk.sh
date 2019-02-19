@@ -7,7 +7,7 @@ for a in clientlib-java clientlib-java-httpclient; do
         cat webui/build.sbt | grep "\"org.daisy.pipeline\" % \"$a\"" | sed "s/^.*\"$a\" % \"\(..*\)\".*/\1/"
     )
     if [[ $v == *-SNAPSHOT ]]; then
-        printf " \\\\\n\t\$(MVN_WORKSPACE)/org/daisy/pipeline/$a/$v/$a-$v.jar"
+        printf " \\\\\n\t\$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/$a/$v/$a-$v.jar"
     fi
 done
 echo ""
