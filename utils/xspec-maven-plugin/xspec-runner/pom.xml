@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
@@ -10,7 +11,7 @@
   
   <groupId>org.daisy.maven</groupId>
   <artifactId>xspec-runner</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <properties>
@@ -26,7 +27,7 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <version>9.8.0.8-SNAPSHOT</version>
+      <version>9.8.0.8</version>
     </dependency>
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
