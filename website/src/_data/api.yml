@@ -2,10 +2,10 @@ javadoc:
 
 - group: org.daisy.pipeline
   artifact: clientlib-java
-  version: 4.8.2-SNAPSHOT
+  version: 5.0.0-SNAPSHOT
 - group: org.daisy.pipeline
   artifact: clientlib-java-httpclient
-  version: 2.0.3-SNAPSHOT
+  version: 2.1.0-SNAPSHOT
 - group: org.daisy.pipeline
   artifact: common-utils
 - group: org.daisy.pipeline
@@ -83,7 +83,6 @@ xprocdoc:
   artifact: common-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: css-utils
-  version: 3.4.1-SNAPSHOT
 - group: org.daisy.pipeline.modules.braille
   artifact: dotify-utils
 - group: org.daisy.pipeline.modules.braille

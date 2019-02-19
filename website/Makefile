@@ -186,6 +186,10 @@ ws :
 publish : all
 	make/publish.sh $(JEKYLL_DIR)/_site$(baseurl)
 
+.PHONY : publish-wiki
+publish-wiki :
+	make/publish-wiki.sh
+
 .PHONY : clean
 clean :
 	rm -rf target
