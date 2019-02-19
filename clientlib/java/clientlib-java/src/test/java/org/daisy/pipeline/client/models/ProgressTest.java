@@ -1,4 +1,4 @@
-package org.daisy.pipeline.jobs.test;
+package org.daisy.pipeline.client.models;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,11 +10,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 
 import org.daisy.pipeline.client.Pipeline2Exception;
-import org.daisy.pipeline.client.models.Job;
-import org.daisy.pipeline.client.models.Message;
-import org.daisy.pipeline.client.models.Message.Level;
 import org.daisy.pipeline.client.utils.XML;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -136,4 +134,31 @@ public class ProgressTest {
 		}
 	}
 	
+	// Note that the progress is not monotonically increasing, but this is not a bug. It is the
+	// progress information in this specific job XML that is unreliable.
+	@Test
+	public void testProgressEstimate() throws Pipeline2Exception {
+		Job job = null;
+		long now = new Date().getTime();
+		int[] expected = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 14,
+		                           17, 19, 20, 21, 22, 22, 23, 23, 24, 24, 24, 26, 28, 28, 29, 28, 29, 28, 29, 28, 29, 28,
+		                           29, 28, 29, 35, 36, 37, 38, 39, 40, 41, 41, 42, 43, 44, 44, 45, 45, 46, 46, 47, 47, 48,
+		                           48, 49, 49, 50, 50, 50, 51, 51, 51, 52, 52, 52, 53, 53, 53, 53, 54, 54, 54, 54, 55, 55,
+		                           55, 55, 55, 56, 56, 36, 36, 37, 37, 38, 38, 39, 39, 39, 40, 36, 37, 39, 40, 41, 42, 42,
+		                           43, 43, 44, 45, 45, 46, 46, 46, 47, 47, 48, 48, 48, 49, 49, 50, 50, 50, 51, 51, 51, 52,
+		                           52, 53, 53, 53, 54, 54, 54, 55, 55, 55, 55, 90, 90, 91, 91, 100, 100};
+		int k = 0;
+		for (int i = 1; i <= 78; i++) {
+			Job j = new Job(loadResourceXml("responses/jobs/job7/"+i+".xml"));
+			j.getMessages(-1, now);
+			if (job == null)
+				job = j;
+			else
+				job.joinMessages(j);
+			assertEquals(expected[k++], (int)Math.round(job.getProgressEstimate(now)));
+			now += 500;
+			assertEquals(expected[k++], (int)Math.round(job.getProgressEstimate(now)));
+			now += 500;
+		}
+	}
 }

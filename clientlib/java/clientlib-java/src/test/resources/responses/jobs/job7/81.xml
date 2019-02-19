@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><job href="http://localhost:8181/ws/jobs/394db28a-decd-47a6-bec1-ae90c35450cc" id="394db28a-decd-47a6-bec1-ae90c35450cc" priority="medium" status="SUCCESS" xmlns="http://www.daisy.org/ns/pipeline/data">
+<nicename>Job #6</nicename>
+<log href="http://localhost:8181/ws/jobs/394db28a-decd-47a6-bec1-ae90c35450cc/log"/>
+<results href="http://localhost:8181/ws/jobs/394db28a-decd-47a6-bec1-ae90c35450cc/result" mime-type="application/zip">
+<result from="option" href="http://localhost:8181/ws/jobs/394db28a-decd-47a6-bec1-ae90c35450cc/result/option/pef-output-dir" mime-type="application/zip" name="pef-output-dir" nicename="PEF">
+<result file="file:/Users/bert/src/pipeline/src/pipeline/assembly/target/assembly-1.11.2-SNAPSHOT-mac/daisy-pipeline/data/jobs/394db28a-decd-47a6-bec1-ae90c35450cc/output/pef-output-dir/hauy_valid.pef" href="http://localhost:8181/ws/jobs/394db28a-decd-47a6-bec1-ae90c35450cc/result/option/pef-output-dir/idx/pef-output-dir/hauy_valid.pef" mime-type="application/x-pef+xml" size="295129"/>
+</result>
+</results>
+</job>
+

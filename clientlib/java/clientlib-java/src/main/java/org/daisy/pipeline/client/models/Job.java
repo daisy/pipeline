@@ -291,6 +291,10 @@ public class Job implements Comparable<Job> {
 	 * @return The list of messages
 	 */
 	public List<Message> getMessages(int maxDepth) {
+		return getMessages(maxDepth, new Date().getTime());
+	}
+	
+	List<Message> getMessages(int maxDepth, long now) {
 		lazyLoad();
 		
 		if (messages == null && messagesNode != null) {
@@ -298,7 +302,7 @@ public class Job implements Comparable<Job> {
 				List<Message> messagesTree = new ArrayList<Message>();
 				List<Node> messageNodes = XPath.selectNodes("d:message", this.messagesNode, XPath.dp2ns);
 				for (Node messageNode : messageNodes) {
-					Message m = parseMessage(messageNode);
+					Message m = parseMessage(messageNode, now);
 					messagesTree.add(m);
 				}
 				String msgSeq = XPath.selectText("@msgSeq", this.messagesNode, XPath.dp2ns);
@@ -320,8 +324,8 @@ public class Job implements Comparable<Job> {
 		}
 	}
 
-	private static Message parseMessage(Node messageNode) throws Pipeline2Exception {
-		Message m = new Message();
+	private static Message parseMessage(Node messageNode, long now) throws Pipeline2Exception {
+		Message m = new Message(now);
 		m.text = XPath.selectText("@content", messageNode, XPath.dp2ns);
 		if (XPath.selectText("@level", messageNode, XPath.dp2ns) != null) {
 			m.level = Message.Level.valueOf(XPath.selectText("@level", messageNode, XPath.dp2ns));
@@ -352,7 +356,7 @@ public class Job implements Comparable<Job> {
 		List<Node> childNodes = XPath.selectNodes("d:message", messageNode, XPath.dp2ns);
 		m.children = new ArrayList<Message>();
 		for (Node n : childNodes) {
-			Message mm = parseMessage(n);
+			Message mm = parseMessage(n, now);
 			mm.parentSequence = m.sequence;
 			mm.parent = m;
 			m.children.add(mm);
@@ -1102,10 +1106,14 @@ public class Job implements Comparable<Job> {
 	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
 	 */
 	public double getProgressTo(Integer timeUntilUpdateRequest) {
+		return getProgressTo(new Date().getTime(), timeUntilUpdateRequest);
+	}
+	
+	private double getProgressTo(long now, Integer timeUntilUpdateRequest) {
 		if (messages == null) {
 			return 100.0;
 		} else {
-			return Math.min(100.0, getProgressFrom() + getProgressInterval(timeUntilUpdateRequest));
+			return Math.min(100.0, getProgressFrom() + getProgressInterval(now, timeUntilUpdateRequest));
 		}
 	}
 
@@ -1173,6 +1181,8 @@ public class Job implements Comparable<Job> {
 	}
 	
 	double getProgressEstimate(Long now, Integer timeUntilUpdateRequest) {
+		getMessages(); // lazy load messages
+		
 		if (status == null || status == Status.IDLE) {
 			return 0.0;
 		} else if (status != Status.RUNNING) {
@@ -1184,10 +1194,17 @@ public class Job implements Comparable<Job> {
 			if (previousTime == null) previousTime = now;
 			Double previousPercentage = getProgressFrom();
 			Double nextPercentage = getProgressTo();
-			return nextPercentage
-			       - (nextPercentage - previousPercentage)
-			         * Math.exp(-(double)Math.max(0L, now - previousTime)
-			                    / getProgressTimeConstant(timeUntilUpdateRequest));
+			Double inverseExponential = nextPercentage
+                                        - (nextPercentage - previousPercentage)
+                                          * Math.exp(-(double)Math.max(0L, now - previousTime)
+                                                     / getProgressTimeConstant(now, timeUntilUpdateRequest));
+			Double linear = previousPercentage + (now - previousTime) * getAverageProgress(now);
+			
+			// Linear progress will be lower than inverse exponential progress
+			// for the first 95% of the progress interval. After that, the progress
+			// follows an inverse exponential curve so that the progress is always
+			// moving forward, while never exceeding the progress interval.
+			return Math.min(linear, inverseExponential);
 			
 		}
 	}
@@ -1199,13 +1216,13 @@ public class Job implements Comparable<Job> {
 	 *
 	 * @param timeUntilUpdateRequest The time until the next update request is expected, in nanoseconds.
 	 */
-	private double getProgressInterval(Integer timeUntilUpdateRequest) {
+	private double getProgressInterval(long now, Integer timeUntilUpdateRequest) {
 		if (messages == null) {
 			return 0.0;
 		} else {
 			double interval = toPercentage(messages.getProgressInterval());
 			if (timeUntilUpdateRequest != null) {
-				double minInterval = getAverageProgress() / timeUntilUpdateRequest;
+				double minInterval = getAverageProgress(now) * timeUntilUpdateRequest;
 				interval = Math.max(interval, minInterval);
 			}
 			return interval;
@@ -1213,21 +1230,23 @@ public class Job implements Comparable<Job> {
 	}
 	
 	/**
-	 * Get the average progress since the start of the job, in percentage per second
+	 * Get the average progress since the start of the job, in percentage per millisecond
 	 */
-	private double getAverageProgress() {
-		Long now = new Date().getTime();
+	private double getAverageProgress(Long now) {
 		Long startTime = messages.getJobStartTime();
 		if (startTime == null) {
+			return 0.0;
+		}
+		if (now.equals(startTime)) {
 			return 0.0;
 		}
 		return getProgressFrom() / (now - startTime);
 	}
 	
-	private double getProgressTimeConstant(Integer timeUntilUpdateRequest) {
+	private double getProgressTimeConstant(long now, Integer timeUntilUpdateRequest) {
 		if (messages != null) {
 			double progressFrom = getProgressFrom();
-			double progressInterval = getProgressInterval(timeUntilUpdateRequest);
+			double progressInterval = getProgressInterval(now, timeUntilUpdateRequest);
 			Long progressFromTime = getProgressFromTime();
 			Long jobStartTime = messages.getJobStartTime();
 			if (progressFrom > 0.0

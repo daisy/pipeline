@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/5f619be5-1227-40cc-8cf9-a2d64f74ca29" id="5f619be5-1227-40cc-8cf9-a2d64f74ca29" priority="medium" status="RUNNING">
+<nicename>Job #9</nicename>
+<script href="http://localhost:8181/ws/scripts/dtbook-to-pef" id="dtbook-to-pef">
+<nicename>DTBook to PEF</nicename>
+<description>Transforms a DTBook (DAISY 3 XML) document into a PEF.</description>
+<version>6.1.0-SNAPSHOT</version>
+</script>
+<messages msgSeq="1399" progress="0.459829">
+<message content="Transforming from DTBook to PEF" level="INFO" portion="0.92" progress="0.478075" sequence="124">
+<message content="Transforming from XML with inline CSS to PEF" level="INFO" portion="0.84" progress="0.414375" sequence="269">
+<message content="Transforming from CSS to OBFL" level="INFO" portion="0.7" progress="0.20625" sequence="1399">
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1491"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1492"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1493"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1494"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1495"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1496"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1497"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1498"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1499"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1500"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1501"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1502"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1503"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1504"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1505"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1506"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1507"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1508"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1509"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1510"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1511"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1512"/>
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1513"/>
+</message>
+</message>
+</message>
+</messages>
+</job>
+

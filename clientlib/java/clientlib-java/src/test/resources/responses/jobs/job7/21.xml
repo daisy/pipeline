@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/5f619be5-1227-40cc-8cf9-a2d64f74ca29" id="5f619be5-1227-40cc-8cf9-a2d64f74ca29" priority="medium" status="RUNNING">
+<nicename>Job #9</nicename>
+<script href="http://localhost:8181/ws/scripts/dtbook-to-pef" id="dtbook-to-pef">
+<nicename>DTBook to PEF</nicename>
+<description>Transforms a DTBook (DAISY 3 XML) document into a PEF.</description>
+<version>6.1.0-SNAPSHOT</version>
+</script>
+<messages msgSeq="275" progress="0.264943">
+<message content="Transforming from DTBook to PEF" level="INFO" portion="0.92" progress="0.26624238" sequence="124">
+<message content="Transforming from XML with inline CSS to PEF" level="INFO" portion="0.84" progress="0.16219331" sequence="269">
+<message content="Translating document with (translator:liblouis)(locale:en)" level="INFO" portion="0.27" progress="0.600716" sequence="275">
+<message content="Translating with Liblouis" level="INFO" portion="0.95" progress="0.579701" sequence="280"/>
+</message>
+</message>
+</message>
+</messages>
+</job>
+

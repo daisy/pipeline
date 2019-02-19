@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -29,24 +28,32 @@ public class Message implements Comparable<Message>, Iterable<Message>, Cloneabl
     ProgressInfo progressInfo;
     public Integer line;
     public Integer column;
-    public Long timeStamp = new Date().getTime(); // NOTE: the timeStamp is currently not exposed through the web api so we just set it here to the time the object is instantiated instead.
+    public Long timeStamp;
     public String file;
     
     List<Message> children;
     Message parent;
-    
-    @Override
+
+	Message(long timeStamp) {
+		// the timeStamp is currently not exposed through the web api so we just set it here
+		// to the time the object is instantiated instead.
+		this.timeStamp = timeStamp;
+	}
+
+	@Override
 	public int compareTo(Message other) {
 		return this.sequence - other.sequence;
 	}
 
 	public void setTimeStamp(String timeStampString) {
-		// TODO timeStamp not exposed through the web api yet. Assume UNIX time for now. See: https://github.com/daisy/pipeline-framework/issues/109
+		// TODO timeStamp not exposed through the web api yet. Assume UNIX time for
+		// now. See: https://github.com/daisy/pipeline-framework/issues/109
 		timeStamp = Long.parseLong(timeStampString);
 	}
 
 	public String formatTimeStamp() {
-		// TODO timeStamp not exposed through the web api yet. Assume UNIX time for now. See: https://github.com/daisy/pipeline-framework/issues/109
+		// TODO timeStamp not exposed through the web api yet. Assume UNIX time for
+		// now. See: https://github.com/daisy/pipeline-framework/issues/109
 		return ""+timeStamp;
 	}
 	

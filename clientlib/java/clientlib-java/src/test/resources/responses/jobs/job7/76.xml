@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/5f619be5-1227-40cc-8cf9-a2d64f74ca29" id="5f619be5-1227-40cc-8cf9-a2d64f74ca29" priority="medium" status="RUNNING">
+<nicename>Job #9</nicename>
+<script href="http://localhost:8181/ws/scripts/dtbook-to-pef" id="dtbook-to-pef">
+<nicename>DTBook to PEF</nicename>
+<description>Transforms a DTBook (DAISY 3 XML) document into a PEF.</description>
+<version>6.1.0-SNAPSHOT</version>
+</script>
+<messages msgSeq="1513" progress="0.896944">
+<message content="Transforming from DTBook to PEF" level="INFO" portion="0.92" progress="0.9532" sequence="124">
+<message content="Transforming from XML with inline CSS to PEF" level="INFO" portion="0.84" progress="0.98" sequence="269">
+<message content="Transforming from CSS to OBFL" level="INFO" portion="0.7" progress="1.0" sequence="1399">
+<message content="&quot;display&quot; property on &quot;tr&quot; element ignored." level="WARNING" sequence="1513"/>
+<message content="A variable with no following sibling instructions has no effect" level="WARNING" sequence="4280"/>
+</message>
+<message content="Transforming from OBFL to PEF" level="INFO" portion="0.02" progress="0.0" sequence="4304"/>
+</message>
+</message>
+</messages>
+</job>
+

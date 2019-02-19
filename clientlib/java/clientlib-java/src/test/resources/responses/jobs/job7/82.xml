@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><job href="http://localhost:8181/ws/jobs/e524acc3-751b-493a-8a7a-fad12d41b28f" id="e524acc3-751b-493a-8a7a-fad12d41b28f" priority="medium" status="SUCCESS" xmlns="http://www.daisy.org/ns/pipeline/data">
+<nicename>Job #7</nicename>
+<log href="http://localhost:8181/ws/jobs/e524acc3-751b-493a-8a7a-fad12d41b28f/log"/>
+</job>
+
