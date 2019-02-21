@@ -7,6 +7,7 @@ messageAttrs =
 	attribute sequence { xsd:int }
 	& attribute level { message.level }
 	& attribute content { text }
+	& attribute timeStamp { xsd:long }
 
 # FIXME: The fact that these two elements have the same name is not so great. It can cause problems
 # in webservice-jaxb. For some reason though if the common.rnc include is present (in

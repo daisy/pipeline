@@ -7,11 +7,16 @@ import java.util.List;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class receives message events for a particular job, buffers them, makes them accessible
  * through a MessageFilte.
  */
 public class LiveMessageAccessor extends AbstractMessageAccessor {
+
+	private static Logger logger = LoggerFactory.getLogger(LiveMessageAccessor.class);
 
 	private final MessageEventListener eventListener;
 	private final List<BiConsumer<MessageAccessor,Integer>> callbacks;
@@ -23,6 +28,7 @@ public class LiveMessageAccessor extends AbstractMessageAccessor {
 		this.callbacks = new LinkedList<>();
 		this.messages = new LinkedList<>();
 		eventListener.listen(this);
+		logger.trace("Created LiveMessageAccessor for job " + id);
 	}
 
 	@Override
@@ -65,6 +71,7 @@ public class LiveMessageAccessor extends AbstractMessageAccessor {
 	 * @param storage Store the buffered messages
 	 */
 	void store(MessageStorage storage) {
+		logger.trace("Persisting messages to " + storage);
 		synchronized (messages) {
 			for (Message m : messages)
 				storage.add(m);

@@ -11,6 +11,8 @@ import com.google.common.base.Optional;
 
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
+import org.daisy.pipeline.webservice.jaxb.job.Messages;
+import org.daisy.pipeline.webservice.jaxb.job.Messages.Message;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 import org.daisy.pipeline.webservice.jaxb.request.Priority;
 
@@ -28,7 +30,7 @@ public class TestMessagesWithDerby extends Base {
 		deleteAfterTest(job);
 		Callable<Job> poller = new JobPoller(client(), job.getId(), JobStatus.SUCCESS, 500, 10000) {
 			BigDecimal lastProgress = BigDecimal.ZERO;
-			Iterator<BigDecimal> mustSee = TestMessages.stream(".25", ".375", ".5", ".55", ".675", ".8", ".9")
+			Iterator<BigDecimal> mustSee = TestMessages.stream(".25", ".375", ".5", ".55", ".675", ".8", "1")
 			                                           .map(d -> new BigDecimal(d)).iterator();
 			BigDecimal mustSeeNext = mustSee.next();
 			List<BigDecimal> seen = new ArrayList<BigDecimal>();
@@ -56,6 +58,39 @@ public class TestMessagesWithDerby extends Base {
 		FutureTask<Job> t = new FutureTask<Job>(poller);
 		t.run();
 		job = t.get();
+		// test that messages are nested
+		Iterator<Message> messages = TestMessages.getMessage(
+			TestMessages.assertPresent("messages element must exist", TestMessages.getMessages(job))).iterator();
+		Message m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		TestMessages.assertPresent("message does not have children", TestMessages.next(TestMessages.getMessage(m).iterator()));
+		// test that after cache has expired, messages are still available but flattened
+		for (int i = 0; i < 6; i++) {
+			Thread.sleep(1000);
+			System.err.print(".");
+			System.err.flush(); }
+		System.err.println();
+		job = client().job(job.getId());
+		Messages messagesElem = TestMessages.assertPresent("messages element must exist", TestMessages.getMessages(job));
+		TestMessages.assertEquals("total progress does not match", new BigDecimal("1"), messagesElem.getProgress());
+		messages = TestMessages.getMessage(messagesElem).iterator();
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "a", m.getContent());
+		Assert.assertFalse("message should not have children", TestMessages.next(TestMessages.getMessage(m).iterator()).isPresent());
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "b", m.getContent());
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "c", m.getContent());
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "d", m.getContent());
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "e", m.getContent());
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "f", m.getContent());
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "g", m.getContent());
+		m = TestMessages.assertPresent("message does not exist", TestMessages.next(messages));
+		Assert.assertEquals("message text does not match", "h", m.getContent());
+		Assert.assertFalse(TestMessages.next(messages).isPresent());
 	}
 	
 	@Override
@@ -69,6 +104,7 @@ public class TestMessagesWithDerby extends Base {
 		Properties p = super.systemProperties();
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("derby.stream.error.file", new File(PIPELINE_DATA, "log/derby.log").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.messaging.cache.buffer", "5");
 		return p;
 	}
 	

@@ -165,6 +165,8 @@ public class JobXmlWriter {
                         Element messagesElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "messages");
                         element.appendChild(messagesElm);
                         if (progress != null) {
+                                if (status == Job.Status.SUCCESS || job.getStatus() == Job.Status.FAIL)
+                                        progress = BigDecimal.ONE;
                                 messagesElm.setAttribute("progress", Float.toString(progress.floatValue()));
                         }
                         if (messages != null && messages.size() > 0) {
@@ -186,13 +188,14 @@ public class JobXmlWriter {
                 }
         }
 
-        private static void addMessage(Message message, boolean progress, Element parentElem) {
+        public static void addMessage(Message message, boolean progress, Element parentElem) {
                 Document doc = parentElem.getOwnerDocument();
                 Element messageElem = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "message");
                 messageElem.setAttribute("level", message.getLevel().toString());
                 messageElem.setAttribute("sequence", Integer.toString(message.getSequence()));
                 messageElem.setAttribute("content", message.getText());
-                if (message instanceof ProgressMessage) {
+                messageElem.setAttribute("timeStamp", Long.toString(message.getTimeStamp().getTime()));
+                      if (message instanceof ProgressMessage) {
                         ProgressMessage jm = (ProgressMessage)message;
                         if (progress) {
                                 BigDecimal portion = jm.getPortion();

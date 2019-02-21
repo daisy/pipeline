@@ -46,6 +46,16 @@ import org.ops4j.pax.exam.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// FIXME: The combination of Surefire forking the process and Pax Exam forking it again can
+// apparently lead to "The forked VM terminated without properly saying goodbye" errors. Note that
+// the process keeps logging to the test.log file. The problem can not be pinpointed to a specific
+// test. I have not been able to make it work with pax-exam-container-native yet, nor with a
+// different Surefire configuration. The webservice tests were already disabled on Travis before for
+// a different reason.
+
+// FIXME: If a server is already running (e.g. a remnent of a previous test) there is an error in
+// the test.log file ("Shutting down the framework because of:Address already in use") but this is
+// not visible in the maven log.
 public abstract class Base extends AbstractTest {
 	
 	// This is a trick to make sure a PipelineWebService is instantiated. We can't inject

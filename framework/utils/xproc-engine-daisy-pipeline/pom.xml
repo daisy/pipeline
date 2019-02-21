@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.daisy.pipeline</groupId>
+    <artifactId>framework-parent</artifactId>
+    <version>1.11.3-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
+  </parent>
+
+  <groupId>org.daisy.maven</groupId>
+  <artifactId>xproc-engine-daisy-pipeline</artifactId>
+  <version>1.11.3-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  <name>xproc-engine-daisy-pipeline</name>
+  
+  <!--
+      Implementation of xproc-engine-api defined in the xproc-maven-plugin project and used in xprocspec-runner.
+  -->
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-api</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xproc-api</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>webservice-utils</artifactId>
+      <!--
+          optional dependency (but also dependency of framework-volatile)
+      -->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+        runtime dependencies
+        
+        disabled in order to force users of xproc-engine-daisy-pipeline to also explicitely include
+        (a specific version of) calabash-adapter and framework-volatile
+    -->
+    <!--
+        for org.daisy.common.xproc.XProcEngine
+    -->
+    <!--
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    -->
+    <!--
+        for org.daisy.pipeline.job.JobMonitorFactory
+    -->
+    <!--
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    -->
+  </dependencies>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <_dsannotations>*</_dsannotations>
+            <Import-Package>
+              org.daisy.pipeline.webserviceutils.xml;resolution:=optional,*
+            </Import-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

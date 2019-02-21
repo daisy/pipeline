@@ -114,6 +114,27 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- Build/test utilities -->
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>webservice-jaxb</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>clientlib-java-jaxb</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xproc-engine-daisy-pipeline</artifactId>
+        <version>1.11.3-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xproc-engine-daisy-pipeline-logging</artifactId>
+        <version>1.0.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

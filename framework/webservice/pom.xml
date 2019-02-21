@@ -110,7 +110,7 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4-SNAPSHOT</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -128,13 +128,11 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>clientlib-java-jaxb</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>webservice-jaxb</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>

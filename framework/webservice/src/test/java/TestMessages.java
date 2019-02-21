@@ -32,7 +32,7 @@ public class TestMessages extends Base {
 		deleteAfterTest(job);
 		Callable<Job> poller = new JobPoller(client(), job.getId(), JobStatus.SUCCESS, 500, 10000) {
 			BigDecimal lastProgress = BigDecimal.ZERO;
-			Iterator<BigDecimal> mustSee = stream(".25", ".375", ".5", ".55", ".675", ".8", ".9").map(d -> new BigDecimal(d)).iterator();
+			Iterator<BigDecimal> mustSee = stream(".25", ".375", ".5", ".55", ".675", ".8", "1").map(d -> new BigDecimal(d)).iterator();
 			BigDecimal mustSeeNext = mustSee.next();
 			List<BigDecimal> seen = new ArrayList<BigDecimal>();
 			@Override
@@ -60,7 +60,7 @@ public class TestMessages extends Base {
 		t.run();
 		job = t.get();
 		Messages messagesElem = assertPresent("messages element must exist", getMessages(job));
-		assertEquals("total progress does not match", new BigDecimal(".9"), messagesElem.getProgress());
+		assertEquals("total progress does not match", new BigDecimal("1"), messagesElem.getProgress());
 		Iterator<Message> messages = getMessage(messagesElem).iterator();
 		assertMessage(next(messages), 0, MessageLevel.INFO, "a", new BigDecimal(".5"), BigDecimal.ONE,
 			msgs -> {

@@ -10,9 +10,11 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.event.ProgressMessageBuilder;
+import org.daisy.pipeline.properties.Properties;
 
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
+import com.xmlcalabash.runtime.XStep;
 
 
 /**
@@ -21,6 +23,11 @@ import com.xmlcalabash.core.XProcRunnable;
  */
 public class EventBusMessageListener implements XProcMessageListener {
 
+	// use this property to automatically add a message to all steps with progress information but
+	// no message (only for debugging)
+	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
+		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
+	
 	/** The listener. */
 	EventBusProvider eventBus;
 	private final String jobId;
@@ -158,6 +165,16 @@ public class EventBusMessageListener implements XProcMessageListener {
 	@Override
 	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
 		ProgressMessageBuilder builder = createMessageBuilder().withProgress(portion);
+		if (message == null && AUTO_NAME_STEPS && portion != null && portion.compareTo(BigDecimal.ZERO) > 0) {
+			// FIXME: not if there is a an ancestor block with portion 0!
+			// how to test this?
+			// -> activeBlock.getPortion() returns portion as defined in XPL and no access to parents
+			// -> only check parent and change portion to 0 if parent has portion 0 because irrelevant anyway
+			if (step instanceof XStep)
+				message = ((XStep)step).getStep().getName();
+			if (level == null)
+				level = "DEBUG";
+		}
 		if (level == null || level.equals("INFO")) {
 			builder.withLevel(Level.INFO);
 		} else if (level.equals("ERROR")) {

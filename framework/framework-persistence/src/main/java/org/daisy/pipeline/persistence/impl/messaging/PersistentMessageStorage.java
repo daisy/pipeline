@@ -27,17 +27,23 @@ public class PersistentMessageStorage implements MessageStorage {
 	@Override
 	public synchronized boolean add(Message msg) {
 		if (database != null) {
-			database.addObject(new PersistentMessage(msg));
+			boolean added = false;
+			// text-less messages are filtered out from ProgressMessage.asMessageFilter() but
+			// because the results of selecting from this database are not ProgressMessage instances
+			// we have to filter out the empty messages here
+			if (!(msg instanceof ProgressMessage && msg.getText() == null)) {
+				database.addObject(new PersistentMessage(msg));
+				added = true;
+			}
 			if (msg instanceof ProgressMessage) {
 				// Just flatten the messages for now because it is too complicated to store the tree.
 				// This assumes that the message is only added when it will no longer change.
 				for (ProgressMessage child : (ProgressMessage)msg)
-					add(child);
+					added = add(child) || added;
 			}
-			return true;
-		} else {
-			return false;
+			return added;
 		}
+		return false;
 	}
 
 	@Override

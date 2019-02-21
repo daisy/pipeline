@@ -7,7 +7,7 @@
 		<version>1.1.2</version>
 	</script>
 	<messages progress="1">
-		<message level="WARNING" sequence="22" content="Warning about this job"/>
+		<message level="WARNING" sequence="22" content="Warning about this job" timeStamp="1551192178107"/>
 	</messages>
 	<log href="http://example.org/ws/jobs/job-id-01/log"/>
 	<results href="http://example.org/ws/jobs/job-id-01/result" mime-type="zip">

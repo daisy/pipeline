@@ -9,6 +9,7 @@ import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
 
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalNotification;
 
 public class JobMonitorFactoryImpl implements JobMonitorFactory {
 
@@ -32,8 +33,19 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 	private final Map<String,MessageAccessor> liveAccessors;
 
 	public JobMonitorFactoryImpl() {
+		// use this property to configure how long messages are cached before storing them in a MessageStorage (volatile of persistent)
+		// use only for testing!
+		// to configure how long messages are cached in the volatile storage, use org.daisy.pipeline.messaging.cache
+		int timeout = Integer.valueOf(System.getProperty("org.daisy.pipeline.messaging.cache.buffer", "60"));
 		liveAccessors = CacheBuilder.newBuilder()
-			.expireAfterAccess(60, TimeUnit.SECONDS)
+			.expireAfterAccess(timeout, TimeUnit.SECONDS)
+			.removalListener(
+				notification -> {
+					LiveMessageAccessor a = (LiveMessageAccessor)notification.getValue();
+					// store buffered messages to memory or database
+					a.store(JobMonitorFactoryImpl.this.messageStorage);
+					// free buffered messages and stop listening for new events
+					a.close(); })
 			.<String,MessageAccessor>build()
 			.asMap();
 	}
@@ -46,19 +58,12 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 			if (liveAccessors.containsKey(id))
 				this.accessor = liveAccessors.get(id);
 			else {
+				liveAccessors.remove(id); // this is needed to trigger removal listener (why?)
 				// If the job needs to be monitorable while it runs, the messages are coming from the
 				// event bus. It is assumed that the job has not started yet. The accessor is created
 				// immediately so that messages are buffered from the beginning and no data is lost.
 				if (live) {
-					this.accessor = new LiveMessageAccessor(id, messageEventListener) {
-							@Override
-							public void finalize() {
-								// store buffered messages to memory or database
-								store(JobMonitorFactoryImpl.this.messageStorage);
-								// free buffered messages and stop listening for new events
-								close();
-							}
-						};
+					this.accessor = new LiveMessageAccessor(id, messageEventListener);
 					// We need to cache the accessor because we wouldn't otherwise be able to create
 					// a new job monitor while the job is already running. Another reason for the
 					// caching is that the message storage is not guaranteed to be lossless. Notably
