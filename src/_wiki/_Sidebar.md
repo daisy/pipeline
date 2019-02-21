@@ -25,6 +25,8 @@
   * [[Developer Guide|Developer-Guide]]
     * [[Source Code|Sources]]
     * [[Build System|Building]]
+    * [[XProc|XProc]]
+      * [[XProc Extensions|XProcExtensions]]
     * [[Testing|Testing]]
     * [[Debugging|Debugging]]
     * [[Release Management|Releasing]]
