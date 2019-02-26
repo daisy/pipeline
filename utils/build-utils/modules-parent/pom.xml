@@ -482,7 +482,8 @@
                     src/main/resources/**/*.xml,
                     src/main/resources/**/*.rng,
                     src/main/resources/**/*.sch,
-                    src/main/resources/**/*.css
+                    src/main/resources/**/*.css,
+                    src/main/resources/**/*.scss
                   </includes>
                 </configuration>
               </execution>

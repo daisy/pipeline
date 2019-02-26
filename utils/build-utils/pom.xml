@@ -25,8 +25,6 @@
     <module>modules-test-helper</module>
     <module>saxon-adapter</module>
     <module>pax-exam-helper</module>
-    <module>webservice-jaxb</module>
-    <module>clientlib-java-jaxb</module>
     <module>archetypes</module>
   </modules>
 
