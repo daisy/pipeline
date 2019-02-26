@@ -101,19 +101,20 @@ public void setScriptRegistry(ScriptRegistry registry) {
 FIXME: add short description for every package
 -->
 
+- [`org.daisy.common.calabash`](http://daisy.github.io/pipeline/api/org/daisy/common/calabash/package-summary.html)
 - [`org.daisy.common.fuzzy`](http://daisy.github.io/pipeline/api/org/daisy/common/fuzzy/package-summary.html)
 - [`org.daisy.common.messaging`](http://daisy.github.io/pipeline/api/org/daisy/common/messaging/package-summary.html)
 - [`org.daisy.common.priority`](http://daisy.github.io/pipeline/api/org/daisy/common/priority/package-summary.html)
 - [`org.daisy.common.properties`](http://daisy.github.io/pipeline/api/org/daisy/common/properties/package-summary.html)
+- [`org.daisy.common.saxon`](http://daisy.github.io/pipeline/api/org/daisy/common/saxon/package-summary.html)
 - [`org.daisy.common.shell`](http://daisy.github.io/pipeline/api/org/daisy/common/shell/package-summary.html)
+- [`org.daisy.common.slf4j`](http://daisy.github.io/pipeline/api/org/daisy/common/slf4j/package-summary.html)
 - [`org.daisy.common.stax`](http://daisy.github.io/pipeline/api/org/daisy/common/stax/package-summary.html)
 - [`org.daisy.common.transform`](http://daisy.github.io/pipeline/api/org/daisy/common/transform/package-summary.html)
 - [`org.daisy.common.xproc`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/package-summary.html)
 - [`org.daisy.common.xslt`](http://daisy.github.io/pipeline/api/org/daisy/common/xslt/package-summary.html)
 - [`org.daisy.common.zip`](http://daisy.github.io/pipeline/api/org/daisy/common/zip/package-summary.html)
 - [`org.daisy.pipeline.braille.common`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/package-summary.html)
-- [`org.daisy.pipeline.braille.common.calabash`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/calabash/package-summary.html)
-- [`org.daisy.pipeline.braille.common.saxon`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/saxon/package-summary.html)
 - [`org.daisy.pipeline.client.filestorage`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/client/filestorage/package-summary.html)
 - [`org.daisy.pipeline.client.http`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/client/http/package-summary.html)
 - [`org.daisy.pipeline.client.models`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/client/models/package-summary.html)
