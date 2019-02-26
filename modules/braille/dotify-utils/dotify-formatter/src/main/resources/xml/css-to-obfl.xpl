@@ -114,7 +114,7 @@
         </p:input>
     </p:xslt>
     
-    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements px:progress=".02">
+    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements px:progress=".04">
         <p:documentation>
             Make css:page and css:volume and css:_obfl-volume-transition attributes, css:after,
             css:before, css:duplicate, css:alternate, css:footnote-call, css:_obfl-on-toc-start,
@@ -123,7 +123,7 @@
         </p:documentation>
     </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
     
-    <css:parse-properties px:progress=".01"
+    <css:parse-properties px:progress=".02"
                           properties="display render-table-by table-header-policy">
         <p:documentation>
             Make css:display, css:render-table-by and css:table-header-policy attributes.
@@ -145,7 +145,7 @@
         </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
     </p:viewport>
     
-    <p:group px:progress=".01"
+    <p:group px:progress=".02"
              name="extract-page-and-volume-styles">
         <p:output port="result" primary="true">
             <p:pipe step="_1" port="result"/>
@@ -163,14 +163,14 @@
             Delete @css:_obfl-volume-transition attributes.
         </p:documentation>
     </p:delete>
-    <pxi:extract-obfl-pseudo-elements px:progress=".01">
+    <pxi:extract-obfl-pseudo-elements px:progress=".02">
         <p:documentation>
             Extract css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end
             and css:_obfl-on-toc-end pseudo-elements into their own documents.
         </p:documentation>
     </pxi:extract-obfl-pseudo-elements>
     
-    <p:for-each px:progress=".02">
+    <p:for-each px:progress=".04">
         <css:parse-properties px:progress=".50"
                               properties="content string-set counter-reset counter-set counter-increment -obfl-marker">
             <p:documentation>
@@ -186,7 +186,7 @@
     </p:for-each>
     
     <p:wrap-sequence wrapper="_"/>
-    <css:parse-content px:progress=".02">
+    <css:parse-content px:progress=".015">
         <p:documentation>
             Make css:string, css:text, css:content, css:counter and css:custom-func elements from
             css:content attributes. <!-- depends on make-pseudo-element -->
@@ -194,7 +194,7 @@
     </css:parse-content>
     <p:filter select="/_/*"/>
     
-    <p:group px:progress=".02">
+    <p:group px:progress=".04">
         <p:documentation>
             Split into a sequence of flows.
         </p:documentation>
@@ -224,20 +224,20 @@
         </p:identity>
     </p:group>
     
-    <css:label-targets name="label-targets" px:progress=".01">
+    <css:label-targets name="label-targets" px:progress=".005">
         <p:documentation>
             Make css:id attributes. <!-- depends on parse-content -->
         </p:documentation>
     </css:label-targets>
     
-    <css:eval-target-content px:progress=".01">
+    <css:eval-target-content px:progress=".005">
         <p:documentation>
             Evaluate css:content elements. <!-- depends on parse-content and label-targets -->
         </p:documentation>
     </css:eval-target-content>
     
-    <p:for-each px:progress=".05">
-        <css:parse-properties px:progress=".10"
+    <p:for-each px:progress=".20">
+        <css:parse-properties px:progress=".20"
                               properties="white-space display list-style-type">
             <p:documentation>
                 Make css:white-space, css:display and css:list-style-type attributes.
@@ -248,7 +248,7 @@
                 Make css:white-space elements from css:white-space attributes.
             </p:documentation>
         </css:preserve-white-space>
-        <p:add-attribute px:progress=".05"
+        <p:add-attribute px:progress=".01"
                          match="css:_[@css:_obfl-scenario and not(css:inline[not(.=('block','table'))])]"
                          attribute-name="css:display"
                          attribute-value="block">
@@ -256,21 +256,21 @@
                 Force "obfl-scenario" elements to be blocks.
             </p:documentation>
         </p:add-attribute>
-        <p:add-attribute px:progress=".05"
+        <p:add-attribute px:progress=".01"
                          match="*[@css:display=('-obfl-toc','-obfl-table-of-contents')]"
                          attribute-name="css:_obfl-toc" attribute-value="_">
             <p:documentation>
                 Mark display:-obfl-toc elements.
             </p:documentation>
         </p:add-attribute>
-        <p:add-attribute px:progress=".05"
+        <p:add-attribute px:progress=".01"
                          match="css:alternate[@css:display='-obfl-list-of-references']"
                          attribute-name="css:_obfl-list-of-references" attribute-value="_">
             <p:documentation>
                 Mark display:-obfl-list-of-references elements.
             </p:documentation>
         </p:add-attribute>
-        <p:add-attribute px:progress=".05"
+        <p:add-attribute px:progress=".01"
                          match="*[@css:display=('-obfl-toc','-obfl-table-of-contents','-obfl-list-of-references')]"
                          attribute-name="css:display" attribute-value="block">
             <p:documentation>
@@ -288,9 +288,9 @@
                 depends on flow-into, label-targets and make-table-grid -->
             </p:documentation>
         </css:make-boxes>
-        <p:add-attribute px:progress=".05"
+        <p:add-attribute px:progress=".01"
                          match="css:box[not(@type)]" attribute-name="type" attribute-value="inline"/>
-        <p:group px:progress=".15">
+        <p:group px:progress=".25">
             <p:documentation>
                 Move css:render-table-by, css:_obfl-table-col-spacing, css:_obfl-table-row-spacing
                 and css:_obfl-preferred-empty-space attributes to 'table' css:box elements.
@@ -321,7 +321,7 @@
         </p:group>
     </p:for-each>
     
-    <p:group>
+    <p:group px:progress=".55">
     <p:variable name="page-counters"
                 select="string-join(distinct-values((
                           if (not(/*/*[@selector='@page']))
@@ -357,7 +357,7 @@
         <p:pipe step="extract-page-and-volume-styles" port="styles"/>
     </p:variable>
     
-    <css:eval-counter px:progress=".05">
+    <css:eval-counter px:progress=".17">
         <p:documentation>
             Evaluate css:counter elements. All css:counter-set, css:counter-increment and
             css:counter-reset attributes in the output will be manipulating page counters. <!--
@@ -368,7 +368,7 @@
         </p:with-option>
     </css:eval-counter>
     
-    <css:flow-from px:progress=".01">
+    <css:flow-from px:progress=".03">
         <p:documentation>
             Evaluate css:flow elements. <!-- depends on parse-content and eval-counter -->
         </p:documentation>
@@ -380,8 +380,8 @@
         </p:documentation>
     </css:eval-target-text>
     
-    <p:for-each px:progress=".04">
-        <css:make-anonymous-inline-boxes px:progress=".40">
+    <p:for-each px:progress=".13">
+        <css:make-anonymous-inline-boxes px:progress=".50">
             <p:documentation>
                 Wrap/unwrap with inline css:box elements.
             </p:documentation>
@@ -428,13 +428,13 @@
                               label="(ancestor::*[@css:volume])[last()]/@css:volume"/>
             <p:delete match="css:_/@css:volume"/>
         </p:group>
-        <css:shift-string-set px:progress=".20">
+        <css:shift-string-set px:progress=".15">
             <p:documentation>
                 Move css:string-set attributes to inline css:box elements. <!-- depends on
                 make-anonymous-inline-boxes -->
             </p:documentation>
         </css:shift-string-set>
-        <pxi:shift-obfl-marker px:progress=".20">
+        <pxi:shift-obfl-marker px:progress=".15">
             <p:documentation>
                 Move css:_obfl-marker attributes. <!-- depends on make-anonymous-inline-boxes -->
             </p:documentation>
@@ -447,7 +447,7 @@
         </p:documentation>
     </css:shift-id>
     
-    <p:for-each px:progress=".06">
+    <p:for-each px:progress=".27">
         <p:unwrap name="unwrap-css-_"
                   match="css:_[not(@css:*) and parent::*]">
             <p:documentation>
@@ -457,13 +457,13 @@
                 on shift-id and shift-string-set -->
             </p:documentation>
         </p:unwrap>
-        <css:make-anonymous-block-boxes px:progress=".35">
+        <css:make-anonymous-block-boxes px:progress=".05">
             <p:documentation>
                 Wrap inline css:box elements in block css:box elements where necessary. <!-- depends
                 on unwrap css:_ -->
             </p:documentation>
         </css:make-anonymous-block-boxes>
-        <css:parse-properties px:progress=".10"
+        <css:parse-properties px:progress=".25"
                               properties="margin-left margin-right margin-top margin-bottom
                                           padding-left padding-right padding-top padding-bottom
                                           border-left-pattern border-right-pattern border-top-pattern
@@ -477,12 +477,12 @@
                 css:border-top-style, css:border-bottom-style and css:text-indent attributes.
             </p:documentation>
         </css:parse-properties>
-        <css:adjust-boxes px:progress=".20">
+        <css:adjust-boxes px:progress=".25">
             <p:documentation>
                 <!-- depends on make-anonymous-block-boxes -->
             </p:documentation>
         </css:adjust-boxes>
-        <css:new-definition px:progress=".20">
+        <css:new-definition px:progress=".40">
             <p:documentation>
                 Convert CSS properties to corresponding OBFL attributes.
             </p:documentation>
@@ -490,7 +490,7 @@
                 <p:document href="obfl-css-definition.xsl"/>
             </p:input>
         </css:new-definition>
-        <p:xslt px:progress=".10">
+        <p:xslt px:progress=".03">
             <p:input port="parameters">
                 <p:empty/>
             </p:input>
@@ -501,7 +501,7 @@
                 Remove text nodes from block boxes with no line boxes.
             </p:documentation>
         </p:xslt>
-        <p:delete px:progrss=".05"
+        <p:delete px:progrss=".02"
                   match="//css:box[@type='table']//*/@css:page-break-before|
                          //css:box[@type='table']//*/@css:page-break-after|
                          //*[@css:_obfl-toc]//*/@css:page-break-before|
@@ -513,12 +513,12 @@
         </p:delete>
     </p:for-each>
     
-    <p:group px:progress=".18">
+    <p:group px:progress=".27">
         <p:documentation>
             Split flows into sections.
         </p:documentation>
-        <p:for-each px:progress=".50">
-          <pxi:propagate-page-break px:progress=".40">
+        <p:for-each px:progress=".40">
+            <pxi:propagate-page-break px:progress=".80">
                 <p:documentation>
                     Insert forced page breaks to satisfy the 'page' and 'volume' properties. <!--
                     depends on make-anonymous-block-boxes -->
@@ -539,7 +539,7 @@
                 <p:delete match="css:box[@type='block'][following-sibling::*]/@css:page-break-after[.='auto-right']"/>
                 <p:delete match="css:box[@type='block'][following-sibling::*]/@css:volume-break-after[.='always']"/>
             </p:group>
-            <css:split px:progress=".50"
+            <css:split px:progress=".10"
                        split-before="css:box[preceding::css:box]
                                             [@css:counter-set or
                                              @css:page-break-before='auto-right' or
@@ -552,7 +552,7 @@
                 </p:documentation>
             </css:split>
         </p:for-each>
-        <p:for-each px:progress=".20">
+        <p:for-each px:progress=".45">
             <p:group px:progress=".10">
                 <p:documentation>
                     Move css:page, css:counter-set and css:volume attributes to css:_ root element.
@@ -637,7 +637,7 @@
                 </p:group>
             </p:group>
         </p:for-each>
-        <p:group px:progress=".30">
+        <p:group px:progress=".15">
             <p:documentation>
                 Repeat css:string-set attributes at the beginning of sections as css:string-entry.
             </p:documentation>
@@ -652,7 +652,7 @@
         </p:group>
     </p:group>
     
-    <p:for-each px:progress=".08">
+    <p:for-each px:progress=".01">
         <p:choose px:progress="1">
             <p:documentation>
                 Delete css:margin-top from first block and move css:margin-top of other blocks to
@@ -697,7 +697,7 @@
     
     <p:identity name="sections"/>
     
-    <p:xslt px:progress=".30"
+    <p:xslt px:progress=".06"
             template-name="start">
         <p:input port="source">
             <p:pipe step="sections" port="result"/>
@@ -723,7 +723,7 @@
     <!--
         generate layout-masters
     -->
-    <p:xslt px:progress=".02">
+    <p:xslt px:progress=".04">
         <p:input port="stylesheet">
             <p:document href="generate-obfl-layout-master.xsl"/>
         </p:input>
@@ -737,7 +737,7 @@
     <!--
         fill in <marker class="foo/prev"/> values
     -->
-    <p:label-elements px:progress=".01"
+    <p:label-elements px:progress=".005"
                       match="obfl:marker[not(@value)]
                                         [some $class in @class satisfies preceding::obfl:marker[concat(@class,'/prev')=$class]]"
                       attribute="value"
@@ -747,13 +747,13 @@
     <!--
         because empty marker values would be regarded as absent in BrailleFilterImpl
     -->
-    <p:add-attribute px:progress=".01"
+    <p:add-attribute px:progress=".005"
                      match="obfl:marker[@value='']" attribute-name="value" attribute-value="&#x200B;"/>
     
     <!--
         move table-of-contents elements to the right place
     -->
-    <p:group px:progress=".01">
+    <p:group px:progress=".005">
         <p:identity name="_1"/>
         <p:insert match="/obfl:obfl/obfl:volume-template[not(preceding-sibling::obfl:volume-template)]" position="before">
             <p:input port="insertion" select="//obfl:toc-sequence/obfl:table-of-contents">
