@@ -51,7 +51,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
-    <px:merge-parameters name="parameters" px:progress=".01">
+    <px:merge-parameters name="parameters">
         <p:input port="source">
             <p:pipe step="main" port="parameters"/>
         </p:input>
@@ -59,7 +59,7 @@
     <p:sink/>
     
     <!-- Find the first and only DTBook file -->
-    <p:group name="dtbook" px:message="Loading DTBook" px:progress=".01">
+    <p:group name="dtbook" px:message="Loading DTBook" px:progress=".04">
         <p:output port="result"/>
         <px:fileset-load media-types="application/x-dtbook+xml">
             <p:input port="fileset">
@@ -82,7 +82,7 @@
         </p:with-param>
     </p:xslt>
     
-    <p:group px:message="Applying style sheets" px:progress=".06">
+    <p:group px:message="Applying style sheets" px:progress=".07">
         <p:variable name="first-css-stylesheet"
                     select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
@@ -121,7 +121,7 @@
         </p:otherwise>
     </p:choose>
     
-    <p:choose name="transform" px:progress=".84">
+    <p:choose name="transform" px:progress=".83">
         <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>
@@ -131,7 +131,7 @@
             <p:output port="status">
                 <p:pipe step="try-pef" port="status"/>
             </p:output>
-            <p:group name="obfl" px:message="Transforming from DTBook XML with inline CSS to OBFL" px:progress=".34">
+            <p:group name="obfl" px:message="Transforming from DTBook XML with inline CSS to OBFL" px:progress=".95">
                 <p:output port="result"/>
                 <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
                 <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
@@ -143,7 +143,7 @@
                     </p:input>
                 </px:transform>
             </p:group>
-            <p:try name="try-pef" px:message="Transforming from OBFL to PEF" px:progress=".66">
+            <p:try name="try-pef" px:message="Transforming from OBFL to PEF" px:progress=".05">
                 <p:group>
                     <p:output port="pef" primary="true"/>
                     <p:output port="status">
@@ -196,7 +196,7 @@
         </p:otherwise>
     </p:choose>
     
-    <p:choose name="add-metadata" px:progress=".03">
+    <p:choose name="add-metadata" px:progress=".01">
         <p:xpath-context>
             <p:pipe step="transform" port="status"/>
         </p:xpath-context>
