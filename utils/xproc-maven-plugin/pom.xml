@@ -26,8 +26,6 @@
     <module>parent</module>
     <module>xproc-engine-api</module>
     <module>xproc-engine-calabash</module>
-    <module>xproc-engine-daisy-pipeline-logging</module>
-    <module>xproc-engine-daisy-pipeline</module>
     <module>xprocspec-runner</module>
     <module>xproc-maven-plugin</module>
   </modules>
