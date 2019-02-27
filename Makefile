@@ -110,10 +110,9 @@ run-webui : webui/.compile-dependencies
 
 .PHONY : run-docker
 run-docker : dist-docker-image
-	cd assembly && \
 	docker run --name pipeline --detach \
 	       -e PIPELINE2_WS_HOST=0.0.0.0 \
-	       -p 8181:8181 daisyorg/pipeline2
+	       -p 8181:8181 daisyorg/pipeline-assembly
 
 .PHONY : check
 
