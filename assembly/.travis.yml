@@ -11,6 +11,7 @@ before_cache:
 cache:
   directories:
     - $HOME/.m2/cached-repository
+    - src/main/docker
 branches:
   except:
     - /^rd-/

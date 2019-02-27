@@ -52,17 +52,21 @@ while ! curl localhost:8181/ws/alive >/dev/null 2>/dev/null; do
 done
 
 # run the cli
-docker run --name cli --rm -it --link pipeline \
-       --entrypoint /opt/daisy-pipeline2/cli/dp2 \
-       --volume="$(pwd):$MOUNT_POINT:rw" \
-       daisyorg/pipeline-assembly \
-       --host http://pipeline \
-       --starting false \
-       --client_key $CLIENTKEY \
-       --client_secret $CLIENTSECRET \
-       dtbook-to-epub3 --source $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA --persistent
-#       help dtbook-to-epub3
-#       dtbook-validator --input-dtbook $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA
+if ! docker run --name cli --rm -it --link pipeline \
+            --entrypoint /opt/daisy-pipeline2/cli/dp2 \
+            --volume="$(pwd):$MOUNT_POINT:rw" \
+            daisyorg/pipeline-assembly \
+            --host http://pipeline \
+            --starting false \
+            --client_key $CLIENTKEY \
+            --client_secret $CLIENTSECRET \
+            dtbook-to-epub3 --source $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA --persistent;
+then
+    docker logs pipeline
+    docker stop pipeline
+    docker rm pipeline
+    exit 1
+fi
 
 docker stop pipeline
 docker rm pipeline
