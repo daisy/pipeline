@@ -20,20 +20,29 @@ installed correctly.
 
 Windows 10: Open the search box (press **Win&#8862; + S**, type
 **About Java**, and hit **Enter**. If nothing comes up, please
-[install the latest Java version](https://java.com/en/).
+[install the latest Java version from
+OpenJDK](https://adoptopenjdk.net/).
 
 Alternatively, open a command prompt window (press **Win&#8862; + R**,
-type **cmd**, and hit **Enter**) and enter the command: `java -version`.
-This will output the version of Java installed on your
-computer. If the command is not recognized, please
-[install the latest Java version](https://java.com/en/).
+type **cmd**, and hit **Enter**) and enter the command: `java
+-version`.  This will output the version of Java installed on your
+computer. If the command is not recognized, please [install the latest
+Java version from
+OpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot):
+choose the version "OpenJDK 11 (LTS)", choose the VM "HotSpot", choose
+your platform ("Windows x32" or "Windows x64"), click "Download JRE"
+and unzip the downloaded file somewhere.
 
 ### Java Installation Path
 
 You will need the path to your Java installation folder for the next
 steps, which can be found through File Explorer or Command Prompt.
 
-Your Java installation path will likely resemble: **C:\Program Files\Java\jre1.8.X\_XXX**.
+If you got Java from http://adoptopenjdk.net, the installation path is
+where you unzipped it.
+
+If you got Java from http://java.com, your Java installation path will
+likely resemble: **C:\Program Files\Java\jre1.8.X\_XXX**.
 
 - If you have a Java Development Kit installed, replace
   **jre1.8.X\_XXX** with **jdk1.8.X\_XXX**.

@@ -71,10 +71,10 @@ for `PIPELINE2_DATA`, can be specified in this file in the format
 A number of environment variables will influence the program:
 
 `JAVA`
-: Location of the "java" executable. Must be Java 8 or higher.
+: Location of the "java" executable. Must be Java 11 or higher.
 
 `JAVA_HOME`
-: Location where the Java JRE or JDK is installed. Must be Java 8 or higher.
+: Location where the Java JRE or JDK is installed. Must be Java 11 or higher.
 
 `JAVA_MIN_MEM`
 : Sets the initial size of the heap. See Java's
