@@ -22,17 +22,17 @@ javadoc:
 - group: org.daisy.pipeline.modules.braille
   artifact: common-utils
 - group: org.daisy.pipeline.modules.braille
-  artifact: css-core
+  artifact: css-utils
 - group: org.daisy.pipeline.modules.braille
-  artifact: dotify-core
+  artifact: dotify-utils
 - group: org.daisy.pipeline.modules.braille
-  artifact: libhyphen-core
+  artifact: libhyphen-utils
 - group: org.daisy.pipeline.modules.braille
-  artifact: liblouis-core
+  artifact: liblouis-utils
 - group: org.daisy.pipeline.modules.braille
-  artifact: pef-core
+  artifact: pef-utils
 - group: org.daisy.pipeline.modules.braille
-  artifact: texhyph-core
+  artifact: texhyph-utils
 
 xprocdoc:
 
