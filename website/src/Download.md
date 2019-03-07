@@ -6,6 +6,10 @@ layout: default
 For installation instructions see
 [Installation]({{site.baseurl}}/Get-Help/User-Guide/Installation/).
 
+Some packages do not include the command line tool. You can download
+it from
+[https://github.com/daisy/pipeline-cli-go/releases](https://github.com/daisy/pipeline-cli-go/releases).
+
 {% assign all = site.data.downloads | where:'group','main' | sort:'sort' %}
 
 {% assign stable = all | where:'state','stable' %}

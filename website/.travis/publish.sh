@@ -17,4 +17,5 @@ else
     git config --global user.name "travis-ci" && \
     git config --global user.email "noreply@travis-ci.org" && \
     make publish
+    make publish-wiki
 fi

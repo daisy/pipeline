@@ -1,6 +1,37 @@
-## For file names and sizes, see:
-## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases
-## | jq '.[] | select(.tag_name == "v1.11.1") |.assets'
+## Generate with:
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.12.0 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.12.0"
+  sort: "1.12.0"
+  state: stable
+  github_tab: "v1.12.0"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.12.0"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Mac OS (a DMG disk image containing a
+    standard Mac OS application) and Linux (ZIP and DEB files).
+  files:
+    - platform: debian
+      package: deb
+      content: [gui, server]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.12.0/pipeline2-1.12.0_debian.deb"
+      size: 82181964
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.12.0/pipeline2-1.12.0_linux.zip"
+      size: 87372690
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.12.0/pipeline2-1.12.0_mac.dmg"
+      size: 144996109
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.12.0/pipeline2-1.12.0_windows.exe"
+      size: 109200914
 
 - group: main
   version: "1.11.1"

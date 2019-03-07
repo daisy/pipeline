@@ -209,26 +209,5 @@ you have unpacked the ZIP file to.
 The server and the desktop application require a Java runtime
 environment. Windows and Mac users do not have to worry about Java
 because it is included in the DAISY Pipeline installation. Linux users
-however are on their own. The minimum required version of Java is 9.
-
-### JavaFX
-
-<!-- (linked to from pipeline2 start script if no JavaFX is detected) -->
-
-The
-[desktop application](https://github.com/daisy/pipeline-gui/wiki/DAISY-Pipeline-2-User-Guide/)
-requires [JavaFX][]. If you are on Windows or Mac, a version of Java
-that includes JavaFX, namely Oracle's Java SE implementation, is
-automatically installed for you. If you are on another platform and
-can not use Oracle's Java, have a look at the following alternatives
-for acquiring JavaFX:
-
-- for Debian/Ubuntu:
-  [https://packages.qa.debian.org/o/openjfx.html](https://packages.qa.debian.org/o/openjfx.html)
-- for modile and embedded:
-  [http://gluonhq.com/labs/javafxports/](http://gluonhq.com/labs/javafxports/)
-- JavaFX can be built from source:
-  [https://wiki.openjdk.java.net/display/OpenJFX/Main](https://wiki.openjdk.java.net/display/OpenJFX/Main)
-
-
-[JavaFX]: https://docs.oracle.com/javafx/2/overview/jfxpub-overview.htm
+however are on their own. The minimum required version of Java
+is 11. We recommend installing Java from https://adoptopenjdk.net.
