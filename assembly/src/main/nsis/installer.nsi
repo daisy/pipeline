@@ -16,7 +16,7 @@
 !define PRODUCT_REG_VALUENAME_STARTMENU "StartMenuGroup"
 !define PRODUCT_REG_KEY_UNINST "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 !define UNINSTALLER_NAME "Uninstall ${APPNAME}"
-!define REQUIRED_JAVA_VER "9.0.0" ; this must also be set in checkJavaVersion.bat
+!define REQUIRED_JAVA_VER "11" ; this must also be set in checkJavaVersion.bat
 
 RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on)
 
@@ -69,11 +69,16 @@ var SMGROUP
 ;JRECheck
 !include MultiDetailPrint.nsh
 ;other
+!addplugindir .
+!addplugindir /x86-ansi ./x86-ansi
+!addplugindir /x86-unicode ./x86-unicode
+!addplugindir /amd64-unicode ./amd64-unicode
 !include LogicLib.nsh
 !include "Sections.nsh"
 !include "winmessages.nsh"
 !include EnvVarUpdate.nsh
-
+!include "x64.nsh"
+!include "zipdll.nsh"
 
 ;----------------------------------------------------------
 ;   Installer Pages
@@ -233,14 +238,35 @@ Section -JRECheck SEC00-1
 
     InstallJava:
           ClearErrors
-          messageBox mb_yesno "Java was not found, or your version doesn't meet our requirements. $\n$\nDAISY Pipeline 2 needs at least Java ${REQUIRED_JAVA_VER}, would you like to install the latest version of Java?" IDNO NoJava
-          MessageBox MB_OK "You will now be redirected to the Java 10 downloads page. $\n$\nPlease accept the license agreement, download the Java 10 installer for Windows, and run it."
-          ExecShell "open" "http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html"
-          MessageBox MB_YESNO "Please accept the license agreement, download the Java 10 installer for Windows, and run it. $\n$\nWould you like additional instructions for installing Java? " IDNO Wait
-          ExecShell "open" "https://docs.oracle.com/javase/10/install/installation-jdk-and-jre-microsoft-windows-platforms.htm#JSJIG-GUID-371F38CC-248F-49EC-BB9C-C37FC89E52A0"
-          Wait:
-            MessageBox MB_OK "Once Java 10 has been installed, click OK to resume DAISY Pipeline 2 installation. " IDOK TryAgain
 
+          Var /GLOBAL BITS
+          ${If} ${RunningX64}
+          StrCpy $BITS "64"
+          ${Else}
+          StrCpy $BITS "32"
+          ${EndIf}
+
+          messageBox MB_YESNO "Java was not found, or the versions found are outdated. $\n$\nDAISY Pipeline 2 needs at least Java ${REQUIRED_JAVA_VER}. Would you like DAISY Pipeline 2 to install the latest version of Java?" IDNO NoAutoInstall
+          messageBox MB_OKCANCEL "DAISY Pipeline 2 will now download and install Java ${REQUIRED_JAVA_VER}." IDCANCEL NoAutoInstall
+          ${If} ${RunningX64}
+          inetc::get "http://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.2%2B9/OpenJDK11U-jre_x64_windows_hotspot_11.0.2_9.zip" "$INSTDIR\jdk-11.0.2+9-jre.zip"
+          ${Else}
+          inetc::get "http://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.2%2B9/OpenJDK11U-jre_x86-32_windows_hotspot_11.0.2_9.zip" "$INSTDIR\jdk-11.0.2+9-jre.zip"
+          ${EndIf}
+          !insertmacro ZIPDLL_EXTRACT "$INSTDIR\jdk-11.0.2+9-jre.zip" "$INSTDIR\daisy-pipeline" "<ALL>"
+          rename $INSTDIR\daisy-pipeline\jdk-11.0.2+9-jre $INSTDIR\daisy-pipeline\jre
+          delete "$INSTDIR\jdk-11.0.2+9-jre.zip"
+          goto TryAgain
+
+      NoAutoInstall:
+          messageBox MB_YESNO "Would you like to get instructions on how to install Java manually?" IDNO NoJava
+          MessageBox MB_OK "You will now be redirected to the Java ${REQUIRED_JAVA_VER} downloads page. $\n$\nPlease choose the version $\"OpenJDK 11 (LTS)$\", choose the VM $\"HotSpot$\", choose the platform $\"Windows x$BITS$\", and click $\"Download JRE$\". Then extract the downloaded ZIP file to a directory that will not move or be deleted. Finally make sure your system can find this version of Java by modifying your $\"PATH$\" or $\"JAVA_HOME$\" environment variable."
+          ExecShell "open" "https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot#x$BITS_win"
+          MessageBox MB_YESNO "Please choose the version $\"OpenJDK 11 (LTS)$\", choose the VM $\"HotSpot$\", choose the platform $\"Windows x$BITS$\", and click $\"Download JRE$\". Then extract the downloaded ZIP file to a directory that will not move or be deleted. Finally make sure your system can find this version of Java by modifying your $\"PATH$\" or $\"JAVA_HOME$\" environment variable. $\n$\nWould you like additional instructions? " IDNO Wait
+          ExecShell "open" "https://adoptopenjdk.net/installation.html?variant=openjdk11&jvmVariant=hotspot#x$BITS_win-jre"
+
+      Wait:
+          MessageBox MB_OK "Once Java ${REQUIRED_JAVA_VER} has been installed, click OK to resume DAISY Pipeline 2 installation. " IDOK TryAgain
           IfErrors 0 Exit
           messageBox mb_iconstop "Java installation returned an error. Please contact the DAISY Pipeline 2 developing team."
           setErrorLevel 740 ;ERROR_ELEVATION_REQUIRED

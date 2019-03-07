@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-assembly.git
 	branch = master
 	commit = 2807e3a5f6a15732404c63a19fdce9e14f97b26e
-	parent = ac22f51fb4ad57799fbb1a0cf45f01e0c9d0accb
+	parent = 3e5a1f52422ca6f2aa5cd66137e0cdb598a18e55
 	cmdver = 0.3.1

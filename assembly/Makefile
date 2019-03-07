@@ -1,6 +1,7 @@
 MVN ?= mvn
 MVN_LOG ?= cat
 DOCKER := docker
+SHELL  := /bin/bash
 
 .PHONY : default
 ifeq ($(shell uname), Darwin)
@@ -39,7 +40,7 @@ help :
 	echo "	Tests the Docker image"                                             >&2
 
 # FIXME: don't hard-code
-assembly/VERSION     := 1.12.0-SNAPSHOT
+assembly/VERSION     := 1.12.1-SNAPSHOT
 assembly/BASEDIR     := .
 MVN_LOCAL_REPOSITORY ?= $(HOME)/.m2/repository
 
@@ -210,6 +211,7 @@ PROFILES :=                 \
 .PHONY : mvn
 mvn :
 ifndef DUMP_PROFILES
+	set -o pipefail; \
 	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS)) | $(MVN_LOG)
 endif
 

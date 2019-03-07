@@ -19,6 +19,7 @@ if not [%1]==[] (
 
 setlocal enabledelayedexpansion
 
+set DIRNAME=%~dp0
 set PROGNAME=%~nx0
 set REQUIRED_JAVA_VER=11
 
@@ -138,6 +139,19 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 :BEGIN
     call:warn Checking Java version, at least Java "%REQUIRED_JAVA_VER%" is required...
+
+:CheckRelative
+    call:parse_java_version "%DIRNAME%..\jre\bin\java.exe"
+    if errorLevel 1 goto CheckCurrentVersion
+    call:check_version
+    if errorLevel 3 goto END
+    if errorLevel 1 (
+        call:warn DAISY Pipeline 2 folder contains incompatible JVM: "%JAVA_VER%", trying JAVA variable...
+        goto CheckJava
+    )
+    call:warn Found compatible JVM in DAISY Pipeline 2 installation folder: "%JAVA_VER%"
+    set JAVA=%DIRNAME%..\jre\bin\java.exe
+goto END
 
 :CheckJAVA
     if not defined JAVA goto CheckJAVA_HOME

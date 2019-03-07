@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>5-SNAPSHOT</version>
+    <version>5</version>
     <relativePath />
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.12.0-SNAPSHOT</version>
+  <version>1.12.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -20,7 +20,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.1-SNAPSHOT</cli.version>
+    <cli.version>2.1.1</cli.version>
     <javafx.version>11.0.1</javafx.version>
   </properties>
   <dependencyManagement>
@@ -33,7 +33,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -53,49 +53,49 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.3-SNAPSHOT</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.11.3-SNAPSHOT</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.11.3-SNAPSHOT</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.11.3-SNAPSHOT</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.11.3-SNAPSHOT</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.11.3-SNAPSHOT</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1449,7 +1449,7 @@
         <plugin>
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.3</version>
+          <version>1.7.5</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -1969,8 +1969,8 @@
                   <goal>install-node-and-yarn</goal>
                 </goals>
                 <configuration>
-                  <nodeVersion>v6.9.1</nodeVersion>
-                  <yarnVersion>v0.17.8</yarnVersion>
+                  <nodeVersion>v11.10.0</nodeVersion>
+                  <yarnVersion>v1.13.0</yarnVersion>
                 </configuration>
               </execution>
               <execution>
@@ -2178,8 +2178,6 @@
         <pipeline.ws.authenticate>false</pipeline.ws.authenticate>
         <pipeline.ws.clientkey>clientid</pipeline.ws.clientkey>
         <pipeline.ws.clientsecret>supersecret</pipeline.ws.clientsecret>
-        <pipeline.cli.exec_line>/dev/null</pipeline.cli.exec_line>
-        <pipeline.cli.starting>false</pipeline.cli.starting>
         <pipeline.log.jobappender>org.daisy.pipeline.logging.IgnoreSiftAppender</pipeline.log.jobappender>
       </properties>
       <build>
@@ -2212,14 +2210,11 @@
                       <directory>src/main/deb</directory>
                       <targetPath>deb</targetPath>
                       <filtering>true</filtering>
-                    </resource>
-                    <resource>
-                      <directory>src/main/resources/cli</directory>
-                      <targetPath>cli</targetPath>
                       <includes>
-                        <include>config.yml</include>
+                        <include>DEBIAN/</include>
+                        <include>etc/</include>
+                        <include>opt/</include>
                       </includes>
-                      <filtering>true</filtering>
                     </resource>
                   </resources>
                 </configuration>
@@ -2315,6 +2310,12 @@
                       <linkTarget>${pipeline.home}/etc/system.properties</linkTarget>
                     </data>
                     <data>
+                      <type>link</type>
+                      <symlink>true</symlink>
+                      <linkName>${pipeline.config}/tts-default-config.xml</linkName>
+                      <linkTarget>${pipeline.home}/etc/tts-default-config.xml</linkTarget>
+                    </data>
+                    <data>
                       <type>file</type>
                       <src>src/main/deb/etc/default/daisy-pipeline2</src>
                       <dst>/etc/default/daisy-pipeline2</dst>
@@ -2325,6 +2326,19 @@
                     <data>
                       <type>directory</type>
                       <src>${project.build.directory}/bundles/bootstrap</src>
+                      <excludes>
+                        linux, linux/*,
+                        win,   win/*,
+                        mac,   mac/*
+                      </excludes>
+                      <mapper>
+                        <prefix>${pipeline.home}/${bundles.bootstrap}</prefix>
+                        <type>perm</type>
+                      </mapper>
+                    </data>
+                    <data>
+                      <type>directory</type>
+                      <src>${project.build.directory}/bundles/bootstrap/linux</src>
                       <mapper>
                         <prefix>${pipeline.home}/${bundles.bootstrap}</prefix>
                         <type>perm</type>
@@ -2422,9 +2436,44 @@
       <properties>
         <pipeline.cli.home>/opt/daisy-pipeline2-cli</pipeline.cli.home>
         <pipeline.cli.config>/etc/opt/daisy-pipeline2-cli</pipeline.cli.config>
+        <pipeline.cli.exec_line>/dev/null</pipeline.cli.exec_line>
+        <pipeline.cli.starting>false</pipeline.cli.starting>
       </properties>
       <build>
         <plugins>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>filter-deb-cli-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/filtered-resources</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>src/main/deb</directory>
+                      <targetPath>deb</targetPath>
+                      <filtering>true</filtering>
+                      <includes>
+                        <include>DEBIAN.cli/</include>
+                      </includes>
+                    </resource>
+                    <resource>
+                      <directory>src/main/resources/cli</directory>
+                      <targetPath>cli</targetPath>
+                      <includes>
+                        <include>config.yml</include>
+                      </includes>
+                      <filtering>true</filtering>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>org.vafer</groupId>
             <artifactId>jdeb</artifactId>
