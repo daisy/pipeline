@@ -5,7 +5,7 @@
 
   <groupId>org.daisy</groupId>
   <artifactId>daisy</artifactId>
-  <version>5-SNAPSHOT</version>
+  <version>6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>The DAISY Consortium</name>
