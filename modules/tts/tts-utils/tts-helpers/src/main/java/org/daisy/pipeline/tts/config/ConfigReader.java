@@ -117,7 +117,7 @@ public class ConfigReader implements ConfigProperties {
 			ext.setParentReader(this);
 		}
 
-		URI docURI = doc.getDocumentURI();
+		URI docURI = doc.getBaseURI();
 
 		XdmSequenceIterator it = doc.axisIterator(Axis.CHILD);
 		XdmNode root = doc;

@@ -112,7 +112,7 @@ public class InlineCSSStep extends DefaultStep implements TreeWriterFactory {
 			}
 		}
 		if (!u.isAbsolute()) {
-			u = doc.getDocumentURI().resolve(u);
+			u = doc.getBaseURI().resolve(u);
 		}
 
 		return u;
@@ -182,7 +182,7 @@ public class InlineCSSStep extends DefaultStep implements TreeWriterFactory {
 		CSSInliner inliner = new CSSInliner();
 		SpeechSheetAnalyser analyzer = new SpeechSheetAnalyser();
 		try {
-			analyzer.analyse(alluris, cssExt.getEmbeddedCSS(), config.getDocumentURI(), mNetwork);
+			analyzer.analyse(alluris, cssExt.getEmbeddedCSS(), config.getBaseURI(), mNetwork);
 		} catch (Throwable t) {
 			Logger.debug("error while analyzing CSS speech: " + t.getMessage());
 			mResult.write(doc);
@@ -190,7 +190,7 @@ public class InlineCSSStep extends DefaultStep implements TreeWriterFactory {
 		}
 
 		// rebuild the document with the additional style info
-		XdmNode rebuilt = inliner.inline(this, doc.getDocumentURI(), doc, analyzer,
+		XdmNode rebuilt = inliner.inline(this, doc.getBaseURI(), doc, analyzer,
 		        mStyleNsOption);
 
 		for (URI uri : alluris) {

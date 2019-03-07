@@ -61,7 +61,7 @@ public class GetLexiconsProvider implements XProcStepProvider {
 				for (XdmNode lexicon : lexiconExt.getLexicons()) {
 					TreeWriter tw = new TreeWriter(proc);
 					try {
-						tw.startDocument(new URI(lexicon.getDocumentURI().toString().replace(".xml", ""+i++ +".xml")));
+						tw.startDocument(new URI(lexicon.getBaseURI().toString().replace(".xml", ""+i++ +".xml")));
 						tw.addSubtree(lexicon);
 						tw.endDocument();
 						mResult.write(tw.getResult());

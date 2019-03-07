@@ -29,7 +29,7 @@ public class LexiconsConfigExtension implements ConfigReader.Extension {
 			if (href != null) {
 				XdmNode external = ConfigReader.readFromURIinsideConfig(href, saxonproc, documentURI);
 				if (external != null) {
-					Logger.info("custom annotations read from " + external.getDocumentURI());
+					Logger.info("custom annotations read from " + external.getBaseURI());
 					mLexicons.add(external);
 				}
 			} else {

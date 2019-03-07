@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-    <version>1.11.3-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.4-SNAPSHOT</version>
   <artifactId>tts-adapter-acapela</artifactId>
   <packaging>bundle</packaging>
 
@@ -53,7 +53,7 @@
               *
             </Import-Package>
             <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package/>
+	    <Export-Package />
           </instructions>
         </configuration>
       </plugin>
