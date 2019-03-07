@@ -15,7 +15,7 @@
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>gui</artifactId>
   <packaging>bundle</packaging>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>1.2.2-SNAPSHOT</version>
   <name>gui</name>
   <description>A lightweight cross-platform GUI for the Pipeline2</description>
   <url>https://github.com/daisy-consortium/pipeline-gui</url>
@@ -30,7 +30,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
