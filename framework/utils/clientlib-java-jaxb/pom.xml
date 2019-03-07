@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.11.3-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>clientlib-java-jaxb</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <properties>
     <jersey.version>2.9</jersey.version>

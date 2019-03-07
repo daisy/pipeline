@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-aggregator</artifactId>
-  <version>1.11.3-SNAPSHOT</version>
+  <version>1.12.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Aggregator</name>
@@ -27,6 +27,10 @@
   <modules>
     <module>bom</module>
     <module>parent</module>
+    <module>utils/webservice-jaxb</module>
+    <module>utils/clientlib-java-jaxb</module>
+    <module>utils/xproc-engine-daisy-pipeline</module>
+    <module>utils/xproc-engine-daisy-pipeline-logging</module>
     <module>xmlcatalog</module>
     <module>calabash-adapter</module>
     <module>common-utils</module>
@@ -46,10 +50,6 @@
     <module>xpath-registry</module>
     <module>xproc-api</module>
     <module>launcher</module>
-    <module>utils/webservice-jaxb</module>
-    <module>utils/clientlib-java-jaxb</module>
-    <module>utils/xproc-engine-daisy-pipeline</module>
-    <module>utils/xproc-engine-daisy-pipeline-logging</module>
   </modules>
   
   <build>

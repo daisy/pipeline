@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.11.3-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>updater-wrapper</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Updater</name>
   <dependencies>
