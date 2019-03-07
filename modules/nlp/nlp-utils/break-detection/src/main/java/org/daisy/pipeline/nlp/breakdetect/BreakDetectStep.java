@@ -175,7 +175,7 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory,
 				mRuntime.error(e);
 			}
 			for (String error : parsingErrors) {
-				mRuntime.info(null, null, doc.getDocumentURI() + ": " + error);
+				mRuntime.info(null, null, doc.getBaseURI() + ": " + error);
 			}
 		}
 

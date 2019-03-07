@@ -75,7 +75,7 @@ public class XmlBreakRebuilder implements InlineSectionProcessor {
 		do {
 			mDuplicationManager.onNewDocument();
 			mTreeWriter = treeWriterFactory.newInstance();
-			mTreeWriter.startDocument(doc.getDocumentURI());
+			mTreeWriter.startDocument(doc.getBaseURI());
 			XdmSequenceIterator iter = doc.axisIterator(Axis.CHILD);
 			while (iter.hasNext()) {
 				XdmNode n = (XdmNode) iter.next();
