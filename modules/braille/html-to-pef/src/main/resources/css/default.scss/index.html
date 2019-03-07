@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>default.scss</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../default.scss">
+
+<div class="language-sass highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">
+ * Parameters injected by html-to-pef.convert
+ */</span></span>
+
+<span class="variable">$page-width</span>: <span class="float">40</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$page-height</span>: <span class="float">25</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$maximum-number-of-sheets</span>: <span class="float">70</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$levels-in-footer</span>: <span class="float">6</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$hyphenation</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$line-spacing</span>: <span class="value">single</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$capital-letters</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$include-captions</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$include-images</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$include-line-groups</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$include-production-notes</span>: <span class="value">false</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$show-braille-page-numbers</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$show-print-page-numbers</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$force-braille-page-break</span>: <span class="value">false</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@page</span> {
+        <span class="key">size</span>: <span class="variable">$page-width</span> <span class="variable">$page-height</span>;
+}
+
+<span class="directive">@volume</span> {
+        <span class="key">max-length</span>: <span class="variable">$maximum-number-of-sheets</span>;
+}
+
+<span class="id">#generated-document-toc</span> {
+        <span class="key">flow</span>: <span class="value">document-toc</span>;
+        <span class="key">display</span>: <span class="value">-obfl-toc</span>;
+        <span class="key">-obfl-toc-range</span>: <span class="value">document</span>;
+}
+
+<span class="id">#generated-volume-toc</span> {
+        <span class="key">flow</span>: <span class="value">volume-toc</span>;
+        <span class="key">display</span>: <span class="value">-obfl-toc</span>;
+        <span class="key">-obfl-toc-range</span>: <span class="value">volume</span>;
+}
+
+<span class="directive">@for</span> <span class="variable">$level</span> <span class="value">from</span> <span class="float">1</span> <span class="value">through</span> <span class="float">6</span> {
+        <span class="directive">@if</span> <span class="variable">$levels-in-footer</span> &gt;= <span class="variable">$level</span> {
+                <span class="key">h</span><span class="inline"><span class="inline-delimiter">#{</span><span class="variable">$level</span><span class="inline-delimiter">}</span></span> {
+                        <span class="key">string-set</span>: <span class="value">footer</span> <span class="predefined">content</span>();
+                }
+        }
+}
+
+<span class="directive">@if</span> <span class="variable">$hyphenation</span> {
+        :<span class="value">root</span> {
+                <span class="key">hyphens</span>: <span class="value">auto</span>;
+        }
+}
+
+<span class="directive">@if</span> <span class="variable">$line-spacing</span> == <span class="value">double</span> {
+        :<span class="value">root</span> {
+                <span class="key">line-height</span>: <span class="float">2</span>;
+        }
+}
+
+<span class="directive">@if</span> <span class="variable">$capital-letters</span> != <span class="value">true</span> {
+        :<span class="value">root</span> {
+                <span class="key">text-transform</span>: <span class="value">lowercase</span>;
+        }
+}
+
+<span class="tag">caption</span> {
+        <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-captions</span>, <span class="value">block</span>, <span class="value">none</span>);
+}
+
+<span class="directive">@if</span> <span class="variable">$include-images</span> {
+        <span class="key">img</span>::<span class="value">after</span> {
+                <span class="key">content</span>: <span class="function"><span class="delimiter">attr(</span><span class="content">alt</span><span class="delimiter">)</span></span>;
+        }
+}
+
+<span class="class">.linegroup</span> <span class="class">.line</span> {
+        <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-line-groups</span>, <span class="value">block</span>, <span class="value">inline</span>);
+}
+
+<span class="class">.prodnote</span> {
+        <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-production-notes</span>, <span class="value">block</span>, <span class="value">none</span>);
+}
+
+<span class="class">.page-front</span>,
+<span class="class">.page-normal</span>,
+<span class="class">.page-special</span> {
+        <span class="directive">@if</span> <span class="variable">$show-print-page-numbers</span> {
+                <span class="key">string-set</span>: <span class="value">print-page</span> <span class="function"><span class="delimiter">attr(</span><span class="content">title</span><span class="delimiter">)</span></span>;
+        }
+        <span class="directive">@if</span> <span class="variable">$force-braille-page-break</span> {
+                <span class="key">page-break-before</span>: <span class="value">always</span>;
+        }
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

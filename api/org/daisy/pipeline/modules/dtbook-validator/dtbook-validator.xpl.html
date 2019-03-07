@@ -2,7 +2,7 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">dtbook-validator {http://www.daisy.org/ns/pipeline/xproc}</title>
+<title property="dc:title">dtbook-validator.script {http://www.daisy.org/ns/pipeline/xproc}</title>
 <link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl">
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
@@ -21,13 +21,13 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">dtbook-validator</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">dtbook-validator.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">DTBook Validator</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Validates DTBook documents. Supports inclusion of MathML.</p>
-<a xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="homepage" href="/pipeline/modules/dtbook-validator">
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">DTBook Validator</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Validates DTBook documents. Supports inclusion of MathML.</p>
+<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/modules/dtbook-validator">
             Online documentation
-        </a><div xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author maintainer">
+        </a><div xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>
             <a px:role="contact" href="mailto:marisa.demeglio@gmail.com" class="external-link" target="_blank">marisa.demeglio@gmail.com</a>
             <p px:role="organization">DAISY Consortium</p>
@@ -47,8 +47,8 @@
 <span class="">report</span><span class="details"> sequence</span>
 </td>
 <td>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Raw validation report</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Raw validation report</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
 
 [More details on the file format](http://daisy.github.io/pipeline/ValidationReportXML).</p>
 </td>
@@ -57,15 +57,15 @@
 <td width="150px" class="nowrap name">
 <span class="">html-report</span><span class="details"></span>
 </td>
-<td><h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Validation report</h1></td>
+<td><h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Validation report</h1></td>
 </tr>
 <tr>
 <td width="150px" class="nowrap name">
 <span class="">validation-status</span><span class="details"></span>
 </td>
 <td>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Validation status</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Validation status</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
 
 [More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
 </td>
@@ -88,8 +88,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">DTBook</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The input DTBook document.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">DTBook</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The input DTBook document.</p>
 </td>
 </tr>
 <tr>
@@ -99,8 +99,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Validation report in XML and HTML</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Validation report in two formats: the raw XML-formatted report, which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom), and the HTML-formatted version.
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Validation report in XML and HTML</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Validation report in two formats: the raw XML-formatted report, which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom), and the HTML-formatted version.
 
 [More details on the XML format](http://daisy.github.io/pipeline/ValidationReportXML).</p>
 </td>
@@ -120,8 +120,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Check that images exist</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Check to see that referenced images exist on disk.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Check that images exist</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Check to see that referenced images exist on disk.</p>
 </td>
 </tr>
 <tr>
@@ -131,8 +131,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Validate against NIMAS 1.1</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Validate using NIMAS 1.1 rules for DTBook.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Validate against NIMAS 1.1</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Validate using NIMAS 1.1 rules for DTBook.</p>
 </td>
 </tr>
 </tbody>

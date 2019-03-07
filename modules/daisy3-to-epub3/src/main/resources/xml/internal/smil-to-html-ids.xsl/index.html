@@ -19,7 +19,8 @@
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"create-id-map"</span>&gt;
         &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">idmap</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$smils"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">doc</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{base-uri(.)}"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">doc</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(.)"</span>/&gt;
                     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>/&gt;
                 &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">doc</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;

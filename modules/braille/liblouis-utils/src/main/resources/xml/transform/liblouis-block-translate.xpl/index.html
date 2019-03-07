@@ -16,9 +16,12 @@
 	
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/css-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl</a>"</span>/&gt;
 	
-	&lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"display"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"display"</span>/&gt;
 	
-	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"css:wrapper"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span>/&gt;
+	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Translating with Liblouis"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".95"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
 			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/liblouis-utils/src/main/resources/xml/transform/liblouis-block-translate.xsl" class="source">liblouis-block-translate.xsl</a>"</span>/&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;

@@ -2,7 +2,7 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">daisy3-to-epub3 {http://www.daisy.org/ns/pipeline/xproc}</title>
+<title property="dc:title">daisy3-to-epub3.script {http://www.daisy.org/ns/pipeline/xproc}</title>
 <link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/daisy3-to-epub3/daisy3-to-epub3.xpl">
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
@@ -21,11 +21,11 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">daisy3-to-epub3</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">daisy3-to-epub3.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">DAISY 3 to EPUB 3</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Transforms a DAISY 3 publication into an EPUB 3 publication.</p>
-<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author maintainer">
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">DAISY 3 to EPUB 3</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms a DAISY 3 publication into an EPUB 3 publication.</p>
+<dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author maintainer">
             <dt>Name:</dt>
             <dd px:role="name">Romain Deltour</dd>
             <dt>E-mail:</dt>
@@ -48,8 +48,8 @@
 <span class="primary">source</span><span class="details"> primary</span>
 </td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">OPF</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The package file of the input DTB.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">OPF</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The package file of the input DTB.</p>
 </td>
 </tr></tbody>
 </table>
@@ -69,8 +69,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">EPUB</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The produced EPUB.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">EPUB</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The produced EPUB.</p>
 </td>
 </tr>
 <tr>
@@ -80,8 +80,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Temporary directory</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Directory used for temporary files.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Temporary directory</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Directory used for temporary files.</p>
 </td>
 </tr>
 <tr>
@@ -91,8 +91,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'true'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Include Media Overlays</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Whether or not to include media overlays and associated audio files
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Include Media Overlays</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether or not to include media overlays and associated audio files
                 (true or false).</p>
 </td>
 </tr>
@@ -103,8 +103,22 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Assert validity</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Whether to stop processing and raise an error on validation issues.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Assert validity</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether to stop processing and raise an error on validation issues.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">chunk-size</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'-1'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Chunk size</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+Top-level sections in the DAISY 3 become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
 </td>
 </tr>
 </tbody>

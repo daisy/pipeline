@@ -10,340 +10,326 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.braille.css.calabash.impl;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.ArrayList;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.HashMap;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.Hashtable;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.function.Consumer;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.function.Supplier;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.util.Iterator;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> java.util.NoSuchElementException;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> java.util.Stack;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> java.util.Vector;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.QName;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> javax.xml.namespace.QName;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.START_ELEMENT;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamException;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamReader;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamException;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamReader;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> javax.xml.stream.XMLStreamWriter;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcException;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcStep;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcRuntime;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.ReadablePipe;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.model.RuntimeValue;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.Configuration;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.om.NamespaceResolver;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.Axis;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.XdmNode;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.XdmNodeKind;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.XdmSequenceIterator;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.sxpath.XPathDynamicContext;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.sxpath.XPathEvaluator;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.Iterators;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcException;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcStep;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcRuntime;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.ReadablePipe;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.model.RuntimeValue;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.Configuration;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.Axis;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.XdmNode;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.XdmNodeKind;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.XdmSequenceIterator;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.sxpath.XPathExpression;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.trans.XPathException;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.saxon.StreamToStreamTransform;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.TransformationException;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Component(
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		name = <span class="jxr_string">"css:split"</span>,
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}css-split"</span> }
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	)
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		@Override
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitStep</a>(runtime, step);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		}
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> ReadablePipe sourcePipe = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> WritablePipe resultPipe = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _SPLIT_BEFORE = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"split-before"</span>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _SPLIT_AFTER = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"split-after"</span>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String XMLNS_CSS = <span class="jxr_string">"http://www.daisy.org/ns/pipeline/braille-css"</span>;
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName CSS_BOX = <strong class="jxr_keyword">new</strong> QName(XMLNS_CSS, <span class="jxr_string">"box"</span>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _PART = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"part"</span>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.calabash.XMLCalabashHelper;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.saxon.SaxonHelper;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.saxon.NodeToXMLStreamTransformer;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.getAttributes;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.writeElement;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.writeEvent;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.TransformerException;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Component(
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		name = <span class="jxr_string">"css:split"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}css-split"</span> }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	)
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssInlineStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		@Override
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitStep</a>(runtime, step);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitStep</a>(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">super</strong>(runtime, step);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Override
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setInput(String port, ReadablePipe pipe) {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		sourcePipe = pipe;
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> ReadablePipe sourcePipe = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> WritablePipe resultPipe = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _SPLIT_BEFORE = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"split-before"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> net.sf.saxon.s9api.QName _SPLIT_AFTER = <strong class="jxr_keyword">new</strong> net.sf.saxon.s9api.QName(<span class="jxr_string">"split-after"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String XMLNS_CSS = <span class="jxr_string">"http://www.daisy.org/ns/pipeline/braille-css"</span>;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName CSS_BOX = <strong class="jxr_keyword">new</strong> QName(XMLNS_CSS, <span class="jxr_string">"box"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _PART = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"part"</span>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Override
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setOutput(String port, WritablePipe pipe) {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		resultPipe = pipe;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@Override
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		sourcePipe.resetReader();
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		resultPipe.resetWriter();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Override
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> SaxonApiException {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">super</strong>.run();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			XdmNode source = sourcePipe.read();
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			Configuration configuration = runtime.getConfiguration().getProcessor().getUnderlyingConfiguration();
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			resultPipe.write(
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitTransform</a>(configuration,
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				                      getSplitPoints(configuration, source,
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 				                                     getOption(_SPLIT_BEFORE),
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				                                     getOption(_SPLIT_AFTER)))
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				.transform(source.getUnderlyingNode())); }
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			logger.error(<span class="jxr_string">"css:split"</span>, e);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), e); }
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a> {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		enum <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Position</a> { BEFORE, AFTER }
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">final</strong> List&lt;Integer&gt; path;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Position</a> position;
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		SplitPoint(List&lt;Integer&gt; path, <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Position</a> position) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">this</strong>.path = path;
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">this</strong>.position = position;
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		}
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;SplitPoint&gt; getSplitPoints(Configuration configuration, XdmNode source,
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	                                               RuntimeValue splitBefore, RuntimeValue splitAfter) <strong class="jxr_keyword">throws</strong> XPathException {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		XPathEvaluator xpathEvaluator = <strong class="jxr_keyword">new</strong> XPathEvaluator(configuration);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		xpathEvaluator.getStaticContext().setNamespaceResolver(<strong class="jxr_keyword">new</strong> MatchingNamespaceResolver(splitBefore.getNamespaceBindings()));
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">final</strong> XPathExpression splitBeforeMatcher = xpathEvaluator.createPattern(splitBefore.getString());
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		xpathEvaluator.getStaticContext().setNamespaceResolver(<strong class="jxr_keyword">new</strong> MatchingNamespaceResolver(splitAfter.getNamespaceBindings()));
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">final</strong> XPathExpression splitAfterMatcher = xpathEvaluator.createPattern(splitAfter.getString());
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">final</strong> List&lt;SplitPoint&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;SplitPoint&gt;();
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Traversal</a>() {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			List&lt;Integer&gt; currentPath = <strong class="jxr_keyword">new</strong> ArrayList&lt;Integer&gt;();
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">int</strong> childCount = 0;
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> traverse(XdmNode node) {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 				<strong class="jxr_keyword">if</strong> (node.getNodeKind() == XdmNodeKind.DOCUMENT) {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 					XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 					<strong class="jxr_keyword">while</strong> (iter.hasNext()) {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 						XdmNode child = (XdmNode)iter.next();
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 						traverse(child); }}
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeKind() == XdmNodeKind.ELEMENT) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 					currentPath.add(++childCount);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 					<strong class="jxr_keyword">if</strong> (matches(splitBeforeMatcher, node))
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 						<strong class="jxr_keyword">if</strong> (currentPath.size() &gt; 1)
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 							result.add(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a>(ImmutableList.copyOf(currentPath), SplitPoint.Position.BEFORE));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 					XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 					childCount = 0;
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 					<strong class="jxr_keyword">while</strong> (iter.hasNext()) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 						XdmNode child = (XdmNode)iter.next();
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 						traverse(child); }
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 					<strong class="jxr_keyword">if</strong> (matches(splitAfterMatcher, node))
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 						<strong class="jxr_keyword">if</strong> (currentPath.size() &gt; 1)
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 							result.add(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a>(ImmutableList.copyOf(currentPath), SplitPoint.Position.AFTER));
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 					childCount = currentPath.remove(currentPath.size() - 1); }
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			}
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		}.traverse(source);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">interface</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Traversal</a> {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">void</strong> traverse(XdmNode node);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> matches(XPathExpression matcher, XdmNode node) {
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			XPathDynamicContext context = matcher.createDynamicContext(node.getUnderlyingNode());
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">return</strong> matcher.effectiveBooleanValue(context);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		} <strong class="jxr_keyword">catch</strong> (XPathException e) {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitTransform</a> <strong class="jxr_keyword">extends</strong> StreamToStreamTransform {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">final</strong> Iterable&lt;SplitPoint&gt; splitPoints;
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		CssSplitTransform(Configuration configuration, Iterable&lt;SplitPoint&gt; splitPoints) {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">super</strong>(configuration);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">this</strong>.splitPoints = splitPoints;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitStep</a>(XProcRuntime runtime, XAtomicStep step) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">super</strong>(runtime, step);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Override
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setInput(String port, ReadablePipe pipe) {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		sourcePipe = pipe;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Override
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setOutput(String port, WritablePipe pipe) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		resultPipe = pipe;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Override
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		sourcePipe.resetReader();
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		resultPipe.resetWriter();
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Override
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> SaxonApiException {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">super</strong>.run();
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			XMLCalabashHelper.transform(
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitTransformer</a>(getOption(_SPLIT_BEFORE), getOption(_SPLIT_AFTER), runtime),
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				sourcePipe,
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				resultPipe,
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				runtime); }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			logger.error(<span class="jxr_string">"css:split"</span>, e);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), e); }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a> {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		enum <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Position</a> { BEFORE, AFTER }
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">final</strong> List&lt;Integer&gt; path;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Position</a> position;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		SplitPoint(List&lt;Integer&gt; path, <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">Position</a> position) {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">this</strong>.path = path;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">this</strong>.position = position;
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;SplitPoint&gt; getSplitPoints(Configuration configuration, XdmNode source,
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	                                               RuntimeValue splitBefore, RuntimeValue splitAfter) <strong class="jxr_keyword">throws</strong> XPathException {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">final</strong> XPathExpression splitBeforeMatcher = splitBefore.getString().isEmpty()
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			? <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			: SaxonHelper.compileExpression(splitBefore.getString(), splitBefore.getNamespaceBindings(), configuration);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">final</strong> XPathExpression splitAfterMatcher = splitAfter.getString().isEmpty()
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			? <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			: SaxonHelper.compileExpression(splitAfter.getString(), splitAfter.getNamespaceBindings(), configuration);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">final</strong> List&lt;SplitPoint&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;SplitPoint&gt;();
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">new</strong> Consumer&lt;XdmNode&gt;() {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			List&lt;Integer&gt; currentPath = <strong class="jxr_keyword">new</strong> ArrayList&lt;Integer&gt;();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">int</strong> childCount = 0;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> accept(XdmNode node) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">if</strong> (node.getNodeKind() == XdmNodeKind.DOCUMENT) {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 					XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 					<strong class="jxr_keyword">while</strong> (iter.hasNext()) {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 						XdmNode child = (XdmNode)iter.next();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 						accept(child); }}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeKind() == XdmNodeKind.ELEMENT) {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 					currentPath.add(++childCount);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 					<strong class="jxr_keyword">if</strong> (splitBeforeMatcher != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 						<strong class="jxr_keyword">if</strong> (SaxonHelper.evaluateBoolean(splitBeforeMatcher, node))
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 							<strong class="jxr_keyword">if</strong> (currentPath.size() &gt; 1)
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 								result.add(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a>(ImmutableList.copyOf(currentPath), SplitPoint.Position.BEFORE));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 					XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 					childCount = 0;
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					<strong class="jxr_keyword">while</strong> (iter.hasNext()) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 						XdmNode child = (XdmNode)iter.next();
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 						accept(child); }
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 					<strong class="jxr_keyword">if</strong> (splitAfterMatcher != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 						<strong class="jxr_keyword">if</strong> (SaxonHelper.evaluateBoolean(splitAfterMatcher, node))
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 							<strong class="jxr_keyword">if</strong> (currentPath.size() &gt; 1)
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 								result.add(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a>(ImmutableList.copyOf(currentPath), SplitPoint.Position.AFTER));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 					childCount = currentPath.remove(currentPath.size() - 1); }
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}.accept(source);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">CssSplitTransformer</a> <strong class="jxr_keyword">implements</strong> NodeToXMLStreamTransformer {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">final</strong> Configuration config;
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">final</strong> RuntimeValue splitBefore;
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">final</strong> RuntimeValue splitAfter;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		CssSplitTransformer(RuntimeValue splitBefore, RuntimeValue splitAfter, XProcRuntime runtime) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">this</strong>.config = runtime.getProcessor().getUnderlyingConfiguration();
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">this</strong>.splitBefore = splitBefore;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">this</strong>.splitAfter = splitAfter;
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		}
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		Stack&lt;QName&gt; parents;
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		Stack&lt;Map&lt;QName,String&gt;&gt; parentAttrs;
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		List&lt;Integer&gt; currentPath;
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		Iterator&lt;SplitPoint&gt; splitPointsIterator;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		Iterator&lt;SplitPoint&gt; splitPoints;
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		SplitPoint nextSplitPoint;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> _transform(XMLStreamReader reader, BufferedWriter writer) <strong class="jxr_keyword">throws</strong> TransformationException {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			splitPointsIterator = <strong class="jxr_keyword">this</strong>.splitPoints.iterator();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			nextSplitPoint = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">if</strong> (splitPointsIterator.hasNext())
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				nextSplitPoint = splitPointsIterator.next();
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			parents = <strong class="jxr_keyword">new</strong> Stack&lt;QName&gt;();
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			parentAttrs = <strong class="jxr_keyword">new</strong> Stack&lt;Map&lt;QName,String&gt;&gt;();
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			currentPath = <strong class="jxr_keyword">new</strong> ArrayList&lt;Integer&gt;();
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">int</strong> childCount = 0;
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 				writer.writeStartElement(<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"_"</span>));
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 				<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 						<strong class="jxr_keyword">int</strong> event = reader.next();
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 						<strong class="jxr_keyword">switch</strong> (event) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 						<strong class="jxr_keyword">case</strong> START_ELEMENT: {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 							<strong class="jxr_keyword">if</strong> (nextSplitPoint == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 								writer.copyElement(reader);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 								<strong class="jxr_keyword">continue</strong>; }
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 							currentPath.add(++childCount);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 							<strong class="jxr_keyword">if</strong> (isSplitPoint(currentPath, nextSplitPoint) &amp;&amp; nextSplitPoint.position == SplitPoint.Position.BEFORE)
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 								split(writer);
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 							<strong class="jxr_keyword">if</strong> (containsSplitPoint(currentPath, nextSplitPoint)) {
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 								writer.copyEvent(event, reader);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 								<strong class="jxr_keyword">if</strong> (CSS_BOX.equals(reader.getName())) {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 									<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; reader.getAttributeCount(); i++) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 										QName name = reader.getAttributeName(i);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 										String value = reader.getAttributeValue(i);
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 										<strong class="jxr_keyword">if</strong> (_PART.equals(name))
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 											<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"input may not have part attributes"</span>);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 										<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 											writer.writeAttribute(name, value); }
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 									writer.writeAttribute(_PART, <span class="jxr_string">"first"</span>); }
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 								<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 									writer.copyAttributes(reader);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 								parents.push(reader.getName());
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 								parentAttrs.push(getAttributeMap(reader));
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 								childCount = 0; }
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 							<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 								writer.copyElement(reader);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 								<strong class="jxr_keyword">if</strong> (isSplitPoint(currentPath, nextSplitPoint) &amp;&amp; nextSplitPoint.position == SplitPoint.Position.AFTER)
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 									split(writer);
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 								childCount = currentPath.remove(currentPath.size() - 1); }
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 							<strong class="jxr_keyword">break</strong>; }
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 						<strong class="jxr_keyword">case</strong> END_ELEMENT: {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 							writer.copyEvent(event, reader);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 							parents.pop();
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 							parentAttrs.pop();
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 							<strong class="jxr_keyword">if</strong> (isSplitPoint(currentPath, nextSplitPoint)) {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 								<strong class="jxr_keyword">if</strong> (nextSplitPoint.position != SplitPoint.Position.AFTER)
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 									<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"coding error"</span>);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 								split(writer); }
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 							childCount = currentPath.remove(currentPath.size() - 1);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 							<strong class="jxr_keyword">break</strong>; }
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 						<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 							writer.copyEvent(event, reader); }}
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 					<strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 						<strong class="jxr_keyword">break</strong>; }
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				<em class="jxr_comment">// writer.writeEndElement(); // why does this need to be commented out???</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 				}
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">catch</strong> (XMLStreamException e) {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformationException(e); }
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		}
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">void</strong> split(Writer writer) <strong class="jxr_keyword">throws</strong> XMLStreamException {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			nextSplitPoint = splitPointsIterator.hasNext() ? splitPointsIterator.next() : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parents.size(); i &gt; 0; i--)
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				writer.writeEndElement();
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parents.size(); i++) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				writer.writeStartElement(parents.get(i));
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				<strong class="jxr_keyword">if</strong> (CSS_BOX.equals(parents.get(i))) {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 					<strong class="jxr_keyword">for</strong> (Map.Entry&lt;QName,String&gt; attr : parentAttrs.get(i).entrySet()) {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 						QName name = attr.getKey();
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 						String value = attr.getValue();
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 						<strong class="jxr_keyword">if</strong> (_PART.equals(name))
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"input may not have part attributes"</span>);
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (XMLNS_CSS.equals(name.getNamespaceURI())) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 							String localPart = name.getLocalPart();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 							<strong class="jxr_keyword">if</strong> (localPart.equalsIgnoreCase(<span class="jxr_string">"id"</span>) ||
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"string-set"</span>) ||
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"string-entry"</span>) ||
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"counter-increment"</span>) ||
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"counter-set"</span>) ||
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"counter-reset"</span>) ||
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 							    localPart.toLowerCase().startsWith(<span class="jxr_string">"counter-increment-"</span>) ||
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 							    localPart.toLowerCase().startsWith(<span class="jxr_string">"counter-set-"</span>) ||
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 							    localPart.toLowerCase().startsWith(<span class="jxr_string">"counter-reset-"</span>));
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 							<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 								writer.writeAttribute(name, value); }
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 							writer.writeAttribute(name, value); }
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 					<strong class="jxr_keyword">if</strong> (containsSplitPoint(currentPath.subList(0, i + 1), nextSplitPoint))
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 						writer.writeAttribute(_PART, <span class="jxr_string">"middle"</span>);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 						writer.writeAttribute(_PART, <span class="jxr_string">"last"</span>); }
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 					<strong class="jxr_keyword">for</strong> (Map.Entry&lt;QName,String&gt; attr : parentAttrs.get(i).entrySet())
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 						writer.writeAttribute(attr.getKey(), attr.getValue()); }
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSplitPoint(List&lt;Integer&gt; elementPath, <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a> splitPoint) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">if</strong> (splitPoint == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">return</strong> elementPath.equals(splitPoint.path);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		}
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> containsSplitPoint(List&lt;Integer&gt; elementPath, <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a> splitPoint) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<strong class="jxr_keyword">if</strong> (splitPoint == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">if</strong> (elementPath.size() &gt;= splitPoint.path.size())
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">return</strong> splitPoint.path.subList(0, elementPath.size()).equals(elementPath);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		}
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">static</strong> Map&lt;QName,String&gt; getAttributeMap(XMLStreamReader reader) {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			Map&lt;QName,String&gt; map = <strong class="jxr_keyword">new</strong> HashMap&lt;QName,String&gt;();
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; reader.getAttributeCount(); i++)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				map.put(reader.getAttributeName(i), reader.getAttributeValue(i));
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			<strong class="jxr_keyword">return</strong> map;
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		}
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	}
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<em class="jxr_comment">// copied from com.xmlcalabash.util.ProcessMatch</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">MatchingNamespaceResolver</a> <strong class="jxr_keyword">implements</strong> NamespaceResolver {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">private</strong> Hashtable&lt;String,String&gt; ns = <strong class="jxr_keyword">new</strong> Hashtable&lt;String,String&gt;();
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">MatchingNamespaceResolver</a>(Hashtable&lt;String,String&gt; bindings) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			ns = bindings;
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		}
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">public</strong> String getURIForPrefix(String prefix, <strong class="jxr_keyword">boolean</strong> useDefault) {
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">""</span>.equals(prefix) &amp;&amp; !useDefault) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			}
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">return</strong> ns.get(prefix);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		}
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">public</strong> Iterator&lt;String&gt; iteratePrefixes() {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			Vector&lt;String&gt; p = <strong class="jxr_keyword">new</strong> Vector&lt;String&gt; ();
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">for</strong> (String pfx : ns.keySet()) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 				p.add(pfx);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			}
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">return</strong> p.iterator();
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		}
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(CssSplitStep.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		@Override
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(Iterator&lt;XdmNode&gt; input, Supplier&lt;BaseURIAwareXMLStreamWriter&gt; output) <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			XdmNode doc = Iterators.getOnlyElement(input);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			XMLStreamReader reader;
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				reader = SaxonHelper.nodeReader(doc, config);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 				splitPoints = getSplitPoints(config, doc, splitBefore, splitAfter).iterator();
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			} <strong class="jxr_keyword">catch</strong> (XPathException e) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			transform(reader, output);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		}
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">void</strong> transform(XMLStreamReader reader, Supplier&lt;BaseURIAwareXMLStreamWriter&gt; output) <strong class="jxr_keyword">throws</strong> TransformerException {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			XMLStreamWriter writer = output.get();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			nextSplitPoint = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">if</strong> (splitPoints.hasNext())
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				nextSplitPoint = splitPoints.next();
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			parents = <strong class="jxr_keyword">new</strong> Stack&lt;QName&gt;();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			parentAttrs = <strong class="jxr_keyword">new</strong> Stack&lt;Map&lt;QName,String&gt;&gt;();
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			currentPath = <strong class="jxr_keyword">new</strong> ArrayList&lt;Integer&gt;();
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">int</strong> childCount = 0;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				writer.writeStartDocument();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				writeStartElement(writer, <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"_"</span>));
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			  loop: <strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 						<strong class="jxr_keyword">int</strong> event = reader.next();
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 						<strong class="jxr_keyword">switch</strong> (event) {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 						<strong class="jxr_keyword">case</strong> START_ELEMENT: {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 							<strong class="jxr_keyword">if</strong> (nextSplitPoint == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 								writeElement(writer, reader);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 								<strong class="jxr_keyword">continue</strong>; }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 							currentPath.add(++childCount);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 							<strong class="jxr_keyword">if</strong> (isSplitPoint(currentPath, nextSplitPoint) &amp;&amp; nextSplitPoint.position == SplitPoint.Position.BEFORE)
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 								split(writer);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 							<strong class="jxr_keyword">if</strong> (containsSplitPoint(currentPath, nextSplitPoint)) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 								writeEvent(writer, event, reader);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 								<strong class="jxr_keyword">if</strong> (CSS_BOX.equals(reader.getName())) {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 									<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; reader.getAttributeCount(); i++) {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 										QName name = reader.getAttributeName(i);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 										String value = reader.getAttributeValue(i);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 										<strong class="jxr_keyword">if</strong> (_PART.equals(name))
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 											<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"input may not have part attributes"</span>);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 										<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 											writeAttribute(writer, name, value); }
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 									writeAttribute(writer, _PART, <span class="jxr_string">"first"</span>); }
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 								<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 									writeAttributes(writer, reader);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 								parents.push(reader.getName());
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 								parentAttrs.push(getAttributes(reader));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 								childCount = 0; }
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 							<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 								writeElement(writer, reader);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 								<strong class="jxr_keyword">if</strong> (isSplitPoint(currentPath, nextSplitPoint) &amp;&amp; nextSplitPoint.position == SplitPoint.Position.AFTER)
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 									split(writer);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 								childCount = currentPath.remove(currentPath.size() - 1); }
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 							<strong class="jxr_keyword">break</strong>; }
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 						<strong class="jxr_keyword">case</strong> END_ELEMENT: {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 							writeEvent(writer, event, reader);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 							parents.pop();
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 							parentAttrs.pop();
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 							<strong class="jxr_keyword">if</strong> (isSplitPoint(currentPath, nextSplitPoint)) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 								<strong class="jxr_keyword">if</strong> (nextSplitPoint.position != SplitPoint.Position.AFTER)
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 									<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"coding error"</span>);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 								split(writer); }
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 							childCount = currentPath.remove(currentPath.size() - 1);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 							<strong class="jxr_keyword">break</strong>; }
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 						<strong class="jxr_keyword">case</strong> START_DOCUMENT:
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 							<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 						<strong class="jxr_keyword">case</strong> END_DOCUMENT:
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 							<strong class="jxr_keyword">break</strong> loop;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 						<strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 							writeEvent(writer, event, reader); }}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 					<strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 						<strong class="jxr_keyword">break</strong>; }
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 				writer.writeEndElement();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 				writer.writeEndDocument();
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			} <strong class="jxr_keyword">catch</strong> (XMLStreamException e) {
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e); }
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">void</strong> split(XMLStreamWriter writer) <strong class="jxr_keyword">throws</strong> XMLStreamException {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			nextSplitPoint = splitPoints.hasNext() ? splitPoints.next() : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parents.size(); i &gt; 0; i--)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				writer.writeEndElement();
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parents.size(); i++) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				writeStartElement(writer, parents.get(i));
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				<strong class="jxr_keyword">if</strong> (CSS_BOX.equals(parents.get(i))) {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 					<strong class="jxr_keyword">for</strong> (Map.Entry&lt;QName,String&gt; attr : parentAttrs.get(i).entrySet()) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 						QName name = attr.getKey();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 						String value = attr.getValue();
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 						<strong class="jxr_keyword">if</strong> (_PART.equals(name))
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"input may not have part attributes"</span>);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (XMLNS_CSS.equals(name.getNamespaceURI())) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 							String localPart = name.getLocalPart();
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 							<strong class="jxr_keyword">if</strong> (localPart.equalsIgnoreCase(<span class="jxr_string">"id"</span>) ||
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"string-set"</span>) ||
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"string-entry"</span>) ||
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"counter-increment"</span>) ||
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"counter-set"</span>) ||
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 							    localPart.equalsIgnoreCase(<span class="jxr_string">"counter-reset"</span>) ||
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 							    localPart.toLowerCase().startsWith(<span class="jxr_string">"counter-increment-"</span>) ||
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 							    localPart.toLowerCase().startsWith(<span class="jxr_string">"counter-set-"</span>) ||
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 							    localPart.toLowerCase().startsWith(<span class="jxr_string">"counter-reset-"</span>));
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 							<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 								writeAttribute(writer, name, value); }
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 						<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 							writeAttribute(writer, name, value); }
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 					<strong class="jxr_keyword">if</strong> (containsSplitPoint(currentPath.subList(0, i + 1), nextSplitPoint))
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 						writeAttribute(writer, _PART, <span class="jxr_string">"middle"</span>);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 					<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 						writeAttribute(writer, _PART, <span class="jxr_string">"last"</span>); }
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 				<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 					<strong class="jxr_keyword">for</strong> (Map.Entry&lt;QName,String&gt; attr : parentAttrs.get(i).entrySet())
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 						writeAttribute(writer, attr.getKey(), attr.getValue()); }
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSplitPoint(List&lt;Integer&gt; elementPath, <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a> splitPoint) {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">if</strong> (splitPoint == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">return</strong> elementPath.equals(splitPoint.path);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		}
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> containsSplitPoint(List&lt;Integer&gt; elementPath, <a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssSplitStep.html">SplitPoint</a> splitPoint) {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">if</strong> (splitPoint == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">if</strong> (elementPath.size() &gt;= splitPoint.path.size())
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">return</strong> splitPoint.path.subList(0, elementPath.size()).equals(elementPath);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		}
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(CssSplitStep.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

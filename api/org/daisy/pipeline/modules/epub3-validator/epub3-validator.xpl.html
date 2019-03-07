@@ -23,9 +23,9 @@
 <h2>
             Step <span class="name">epub3-validator</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">EPUB 3 Validator</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Validates a EPUB.</p>
-<address xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author maintainer">
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">EPUB 3 Validator</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Validates a EPUB.</p>
+<address xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author maintainer">
             <p>Script wrapper for epubcheck maintained by <span px:role="name">Jostein Austvik Jacobsen</span>
                 (organization: <span px:role="organization">NLB</span>,
                 e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com" class="external-link" target="_blank">josteinaj@gmail.com</a>).</p>
@@ -45,15 +45,15 @@
 <td width="150px" class="nowrap name">
 <span class="">html-report</span><span class="details"></span>
 </td>
-<td><h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Validation report</h1></td>
+<td><h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Validation report</h1></td>
 </tr>
 <tr>
 <td width="150px" class="nowrap name">
 <span class="">validation-status</span><span class="details"></span>
 </td>
 <td>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Validation status</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Validation status</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
 
 [More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
 </td>
@@ -68,17 +68,27 @@
 <td class="nowrap">Default</td>
 <td>Description</td>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td width="150px;" class="nowrap name">
 <span class="required">epub</span><span class="details"> required</span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">EPUB</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Either a *.epub file or a *.opf file.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">EPUB</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Either a *.epub file or a *.opf file.</p>
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">temp-dir</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Temporary directory</h2></td>
+</tr>
+</tbody>
 </table>
 </body>
 </html>

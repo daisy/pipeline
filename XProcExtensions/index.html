@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>XProc Extensions</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="XProc Extensions">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/wiki.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-odt" tabindex="26">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="27">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-rtf" tabindex="28">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="29">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-epub3" tabindex="30">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="31">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="32">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="33">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="34">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="35">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="36">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="37">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="38">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="39">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="40">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="41">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="42">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="43">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="44">
+      
+      Troubleshooting on Windows
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="45">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="46">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="47">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="48">
+      Developer Guide
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="49">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="50">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="51">
+      XProc
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      
+        <a href="/pipeline/XProcExtensions" tabindex="52">
+      
+      XProc Extensions
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="53">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="54">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="55">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="56">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline/wiki/XProcExtensions/_edit" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
+
+      <h1 id="xproc-extensions">XProc Extensions</h1>
+
+<p>DAISY Pipeline 2 supports a number of extensions to XProc, in the form of <a href="https://www.w3.org/TR/xproc/#extension-attributes" class="external-link" target="_blank">extension attributes</a>. They have the namespace <code>http://www.daisy.org/ns/pipeline/xproc</code>. Some are applicable only to scripts and are meant to provide metadata about the script, such as data types for option. Some other, like <code>px:message</code>, are applicable everywhere.</p>
+
+<p>We also list some standard XProc elements and attributes that are treated specially by DAISY Pipeline.</p>
+
+<h2 id="pxsequence-attribute">
+<code>px:sequence</code> attribute</h2>
+
+<h2 id="pxmedia-type-attribute">
+<code>px:media-type</code> attribute</h2>
+
+<h2 id="pxtype-attribute">
+<code>px:type</code> attribute</h2>
+
+<h2 id="pxmessage-and-pxmessage-severity-attributes">
+<code>px:message</code> and <code>px:message-severity</code> attributes</h2>
+
+<h2 id="pxprogress-attribute">
+<code>px:progress</code> attribute</h2>
+
+<p>This attribute is used to annotate an XProc pipeline with information about how different steps in that pipeline relate to each other in terms of time it takes to complete them. This information is used to provide progress indication of jobs. For each step, the fraction relative to its current <a href="https://www.w3.org/TR/xproc/#dt-subpipeline" class="external-link" target="_blank">subpipeline</a> can be expressed with a decimal number between 0 and 1 (<code>.666</code>), a percentage (<code>66%</code>), or a fraction (<code>2/3</code>).</p>
+
+<p>The <code>px:progress</code> attribute is supported on the following elements:</p>
+
+<ul>
+  <li>
+<a href="https://www.w3.org/TR/xproc/#p.group" class="external-link" target="_blank"><code>p:group</code></a> (except within a <code>p:try</code>)</li>
+  <li><a href="https://www.w3.org/TR/xproc/#p.choose" class="external-link" target="_blank"><code>p:choose</code></a></li>
+  <li><a href="https://www.w3.org/TR/xproc/#p.when" class="external-link" target="_blank"><code>p:when</code></a></li>
+  <li><a href="https://www.w3.org/TR/xproc/#p.otherwise" class="external-link" target="_blank"><code>p:otherwise</code></a></li>
+  <li><a href="https://www.w3.org/TR/xproc/#p.try" class="external-link" target="_blank"><code>p:try</code></a></li>
+  <li><a href="https://www.w3.org/TR/xproc/#p.for-each" class="external-link" target="_blank"><code>p:for-each</code></a></li>
+  <li><a href="https://www.w3.org/TR/xproc/#p.viewport" class="external-link" target="_blank"><code>p:viewport</code></a></li>
+  <li>a standard step (<a href="https://www.w3.org/TR/xproc/#std-components" class="external-link" target="_blank"><code>p:foo</code></a>)</li>
+  <li>a user defined step</li>
+</ul>
+
+<p>The <code>px:progress</code> attribute supports variable substitution via the curly brackets syntax from <a href="https://www.w3.org/TR/xslt20/#attribute-value-templates" class="external-link" target="_blank">attribute value templates</a> in XSLT, e.g. <code>px:progress="{$some-var}"</code>. This way progress information can even be determined dynamically during step execution.</p>
+
+<p>A simple example:</p>
+
+<div class="language-xml highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;p:label-elements</span> <span class="attribute-name">match</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span> <span class="attribute-name">attribute</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span> <span class="attribute-name">label</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span> <span class="attribute-name">px:progress</span>=<span class="string"><span class="delimiter">"</span><span class="content">1/3</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+<span class="tag">&lt;p:for-each</span> <span class="attribute-name">px:progress</span>=<span class="string"><span class="delimiter">"</span><span class="content">2/3</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+   <span class="tag">&lt;p:xslt</span> <span class="attribute-name">px:progress</span>=<span class="string"><span class="delimiter">"</span><span class="content">1/2</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+      ...
+   <span class="tag">&lt;/p:xslt&gt;</span>
+   <span class="tag">&lt;p:choose</span> <span class="attribute-name">px:progress</span>=<span class="string"><span class="delimiter">"</span><span class="content">1/2</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+      <span class="tag">&lt;p:when</span> <span class="attribute-name">test</span>=<span class="string"><span class="delimiter">"</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+         <span class="tag">&lt;p:add-attribute</span> <span class="attribute-name">match</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span> <span class="attribute-name">attribute-name</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span> <span class="attribute-name">attribute-value</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span> <span class="attribute-name">px:progress</span>=<span class="string"><span class="delimiter">"</span><span class="content">1/4</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+         <span class="tag">&lt;p:delete</span> <span class="attribute-name">match</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span> <span class="attribute-name">px:progress</span>=<span class="string"><span class="delimiter">"</span><span class="content">3/4</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+      <span class="tag">&lt;/p:when&gt;</span>
+      <span class="tag">&lt;p:otherwise&gt;</span>
+         <span class="tag">&lt;p:identity</span><span class="tag">/&gt;</span>
+      <span class="tag">&lt;/p:otherwise&gt;</span>
+   <span class="tag">&lt;/p:choose&gt;</span>
+<span class="tag">&lt;/p:for-each&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<h2 id="pdocumentation-element">
+<code>p:documentation</code> element</h2>
+
+<h2 id="poptionselect-attribute">
+<code>p:option/@select</code> attribute</h2>
+
+<h2 id="poptionppipeinfopxtype-element">
+<code>p:option/p:pipeinfo/px:type</code> element</h2>
+
+    </div>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">zedai-to-pef {http://www.daisy.org/ns/pipeline/xproc}</title>
+<title property="dc:title">zedai-to-pef.script {http://www.daisy.org/ns/pipeline/xproc}</title>
 <link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/zedai-to-pef.xpl">
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
@@ -21,13 +21,13 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">zedai-to-pef</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">zedai-to-pef.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">ZedAI to PEF</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into a PEF.</p>
-<a xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="homepage" href="/pipeline/modules/braille/zedai-to-pef">
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">ZedAI to PEF</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into a PEF.</p>
+<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/modules/braille/zedai-to-pef">
             Online documentation
-        </a><dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author">
+        </a><dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Bert Frees</dd>
             <dt>Organization:</dt>
@@ -49,8 +49,8 @@
 <span class="primary">source</span><span class="details"> primary</span>
 </td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Input ZedAI</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The ZedAI you want to convert to braille.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input ZedAI</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The ZedAI you want to convert to braille.</p>
 </td>
 </tr></tbody>
 </table>
@@ -78,8 +78,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'(translator:liblouis)(formatter:dotify)'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Transformer query</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The transformer query.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Transformer query</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The transformer query.</p>
 </td>
 </tr>
 <tr>
@@ -89,8 +89,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">ASCII braille table</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The ASCII braille table, used to render the PEF preview and the plain text version.
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">ASCII braille table</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The ASCII braille table, used to render the PEF preview and the plain text version.
 
 If left blank, the locale information in the input document will be used to select a suitable table.</p>
 </td>
@@ -102,8 +102,8 @@ If left blank, the locale information in the input document will be used to sele
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Include preview</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Whether or not to include a preview of the PEF in HTML.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Include preview</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether or not to include a preview of the PEF in HTML.</p>
 </td>
 </tr>
 <tr>
@@ -113,8 +113,8 @@ If left blank, the locale information in the input document will be used to sele
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Include plain text file (BRF)</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Whether or not to include a plain text ASCII version of the PEF.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Include plain text file (BRF)</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether or not to include a plain text ASCII version of the PEF.</p>
 </td>
 </tr>
 <tr>
@@ -124,8 +124,8 @@ If left blank, the locale information in the input document will be used to sele
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">PEF</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The PEF.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">PEF</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The PEF.</p>
 </td>
 </tr>
 <tr>
@@ -135,8 +135,8 @@ If left blank, the locale information in the input document will be used to sele
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">BRF</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">A plain text ASCII version of the PEF.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">BRF</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">A plain text ASCII version of the PEF.</p>
 </td>
 </tr>
 <tr>
@@ -146,8 +146,8 @@ If left blank, the locale information in the input document will be used to sele
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Preview</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">An HTML preview of the PEF.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Preview</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">An HTML preview of the PEF.</p>
 </td>
 </tr>
 <tr>
@@ -157,8 +157,8 @@ If left blank, the locale information in the input document will be used to sele
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Temporary directory</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Directory for storing temporary files.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Temporary directory</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Directory for storing temporary files.</p>
 </td>
 </tr>
 </tbody>

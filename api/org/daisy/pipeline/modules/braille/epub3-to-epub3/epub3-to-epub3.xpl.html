@@ -2,7 +2,7 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">epub3-to-epub3 {http://www.daisy.org/ns/pipeline/xproc}</title>
+<title property="dc:title">epub3-to-epub3.script {http://www.daisy.org/ns/pipeline/xproc}</title>
 <link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/braille/epub3-to-epub3/epub3-to-epub3.xpl">
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
@@ -21,11 +21,11 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">epub3-to-epub3</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">epub3-to-epub3.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">EPUB 3 Enhancer</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with a braille rendition.</p>
-<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author">
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Braille in EPUB 3</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with a braille rendition.</p>
+<dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Bert Frees</dd>
             <dt>E-mail:</dt>
@@ -49,7 +49,10 @@
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
-<td><h2 xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Input EPUB 3</h2></td>
+<td>
+<h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input EPUB 3</h2>
+<p xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">The EPUB you want to convert. You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.</p>
+</td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
@@ -57,7 +60,7 @@
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'(translator:liblouis)'</td>
-<td><h2 xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Braille translator query</h2></td>
+<td><h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Braille translator query</h2></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
@@ -66,8 +69,8 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Style sheets</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Style sheets</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
 
 All CSS style sheets are applied at once, but the order in which they are specified has an influence
 on the cascading order.
@@ -84,8 +87,8 @@ applied before the ones specified through this option (see below).
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Apply document-specific CSS</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">If this option is enabled, any pre-existing CSS in the EPUB for medium "embossed" will be taken into account for the translation, or preserved in the result EPUB.
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Apply document-specific CSS</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">If this option is enabled, any pre-existing CSS in the EPUB for medium "embossed" will be taken into account for the translation, or preserved in the result EPUB.
 
 The HTML files inside the source EPUB may already contain CSS that applies to embossed media. Style
 sheets can be associated with an HTML file in several ways: linked (using an 'xml-stylesheet'
@@ -107,8 +110,8 @@ specific.
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Set default rendition to braille.</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Make the generated braille rendition the default rendition.</p>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Set default rendition to braille.</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Make the generated braille rendition the default rendition.</p>
 </td>
 </tr>
 <tr>
@@ -117,7 +120,7 @@ specific.
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
-<td><h2 xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Output EPUB 3</h2></td>
+<td><h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Output EPUB 3</h2></td>
 </tr>
 </tbody>
 </table>

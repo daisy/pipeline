@@ -633,8 +633,35 @@
       
         <li class="spine-item">
       
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="51">
+      XProc
+      </a>
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="51">
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/XProcExtensions" tabindex="52">
+      
+      XProc Extensions
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="53">
       
       Testing
       </a>
@@ -646,7 +673,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="52">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="54">
       
       Debugging
       </a>
@@ -658,7 +685,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="53">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="55">
       
       Release Management
       </a>
@@ -675,7 +702,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="54">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="56">
       
       Easy Hacks
       </a>
@@ -777,20 +804,29 @@ installed correctly.</p>
 
 <p>Windows 10: Open the search box (press <strong>Win⊞ + S</strong>, type
 <strong>About Java</strong>, and hit <strong>Enter</strong>. If nothing comes up, please
-<a href="https://java.com/en/" class="external-link" target="_blank">install the latest Java version</a>.</p>
+<a href="https://adoptopenjdk.net/" class="external-link" target="_blank">install the latest Java version from
+OpenJDK</a>.</p>
 
 <p>Alternatively, open a command prompt window (press <strong>Win⊞ + R</strong>,
-type <strong>cmd</strong>, and hit <strong>Enter</strong>) and enter the command: <code>java -version</code>.
-This will output the version of Java installed on your
-computer. If the command is not recognized, please
-<a href="https://java.com/en/" class="external-link" target="_blank">install the latest Java version</a>.</p>
+type <strong>cmd</strong>, and hit <strong>Enter</strong>) and enter the command: <code>java
+-version</code>.  This will output the version of Java installed on your
+computer. If the command is not recognized, please <a href="https://adoptopenjdk.net/releases.html?variant=openjdk11&amp;jvmVariant=hotspot" class="external-link" target="_blank">install the latest
+Java version from
+OpenJDK</a>:
+choose the version “OpenJDK 11 (LTS)”, choose the VM “HotSpot”, choose
+your platform (“Windows x32” or “Windows x64”), click “Download JRE”
+and unzip the downloaded file somewhere.</p>
 
 <h3 id="java-installation-path">Java Installation Path</h3>
 
 <p>You will need the path to your Java installation folder for the next
 steps, which can be found through File Explorer or Command Prompt.</p>
 
-<p>Your Java installation path will likely resemble: <strong>C:\Program Files\Java\jre1.8.X_XXX</strong>.</p>
+<p>If you got Java from http://adoptopenjdk.net, the installation path is
+where you unzipped it.</p>
+
+<p>If you got Java from http://java.com, your Java installation path will
+likely resemble: <strong>C:\Program Files\Java\jre1.8.X_XXX</strong>.</p>
 
 <ul>
   <li>If you have a Java Development Kit installed, replace

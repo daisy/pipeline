@@ -14,8 +14,8 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.net.URI;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> com.google.common.base.Objects;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> com.google.common.base.Objects.ToStringHelper;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> com.google.common.base.MoreObjects;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> com.google.common.base.MoreObjects.ToStringHelper;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableMap;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  
@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		@Override
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">return</strong> Objects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisCSSBlockTransform$Provider"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisCSSBlockTransform$Provider"</span>);
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		}
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.html">TransformImpl</a> <strong class="jxr_keyword">extends</strong> AbstractBrailleTranslator {
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			@Override
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				<strong class="jxr_keyword">return</strong> Objects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisCSSBlockTransform$Provider$TransformImpl"</span>)
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisCSSBlockTransform$Provider$TransformImpl"</span>)
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 					.add(<span class="jxr_string">"translator"</span>, translator);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		}
@@ -170,6 +170,6 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

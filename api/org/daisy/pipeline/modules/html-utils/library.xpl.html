@@ -29,14 +29,28 @@
 <td>Namespace URI</td>
 <td>Description</td>
 </tr></thead>
-<tbody><tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d90e11.html" target="detail">html-load</a></td>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d230e26.html" target="detail">html-chunker</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Break a HTML document into smaller parts based on
+			its structure.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d230e15.html" target="detail">html-load</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Tries first to p:load the HTML-file. An exception will be thrown if the file is
         not well formed XML, in which case the file will be loaded using p:http-request and
         p:unescape-markup. As the xproc-step ('c:') namespace is still attached to the elements
         after unwrapping, an [...]</td>
-</tr></tbody>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d230e42.html" target="detail">html-to-fileset</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Creates a fileset document for an XHTML document.
+		The fileset entries are ordered as the resources appear in the input document</td>
+</tr>
+</tbody>
 </table>
 </body>
 </html>

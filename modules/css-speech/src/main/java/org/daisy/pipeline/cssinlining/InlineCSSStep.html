@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		}
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">if</strong> (!u.isAbsolute()) {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			u = doc.getDocumentURI().resolve(u);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			u = doc.getBaseURI().resolve(u);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">return</strong> u;
@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		CSSInliner inliner = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-speech/src/main/java/org/daisy/pipeline/cssinlining/CSSInliner.html">CSSInliner</a>();
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		SpeechSheetAnalyser analyzer = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-speech/src/main/java/org/daisy/pipeline/cssinlining/SpeechSheetAnalyser.html">SpeechSheetAnalyser</a>();
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			analyzer.analyse(alluris, cssExt.getEmbeddedCSS(), config.getDocumentURI(), mNetwork);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			analyzer.analyse(alluris, cssExt.getEmbeddedCSS(), config.getBaseURI(), mNetwork);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			Logger.debug(<span class="jxr_string">"error while analyzing CSS speech: "</span> + t.getMessage());
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			mResult.write(doc);
@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		}
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<em class="jxr_comment">// rebuild the document with the additional style info</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		XdmNode rebuilt = inliner.inline(<strong class="jxr_keyword">this</strong>, doc.getDocumentURI(), doc, analyzer,
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		XdmNode rebuilt = inliner.inline(<strong class="jxr_keyword">this</strong>, doc.getBaseURI(), doc, analyzer,
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		        mStyleNsOption);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">for</strong> (URI uri : alluris) {
@@ -216,6 +216,6 @@
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

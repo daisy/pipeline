@@ -633,8 +633,35 @@
       
         <li class="spine-item">
       
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="51">
+      XProc
+      </a>
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="51">
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/XProcExtensions" tabindex="52">
+      
+      XProc Extensions
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="53">
       
       Testing
       </a>
@@ -646,7 +673,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="52">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="54">
       
       Debugging
       </a>
@@ -658,7 +685,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="53">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="55">
       
       Release Management
       </a>
@@ -675,7 +702,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="54">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="56">
       
       Easy Hacks
       </a>
@@ -778,6 +805,9 @@ PLS lexicons.</p>
 <dl>
   <dt><code>org.daisy.pipeline.tts.config</code></dt>
   <dd>File to load TTS configuration properties from at start-up</dd>
+  <dd>Defaults to the file “tts-default-config.xml” located in the “etc/”
+directory in the base directory of the Pipeline installation, or
+“/etc/opt/daisy-pipeline2/tts-default-config.xml” on Debian/Ubuntu.</dd>
   <dt><code>org.daisy.pipeline.tts.host.protection</code></dt>
   <dd>Allow dynamic setting of properties</dd>
   <dd>Defaults to “true”</dd>
@@ -1006,6 +1036,22 @@ change this property.</dd>
   <dd>This engine is chosen over another engine that serves the same voice
 if this one has a higher priority.</dd>
   <dd>Defaults to “7”</dd>
+</dl>
+
+<h3 id="qfrency">Qfrency</h3>
+
+<dl>
+  <dt><code>org.daisy.pipeline.tts.qfrency.path</code></dt>
+  <dd>Path to “synth” executable</dd>
+  <dd>If not specified, will automatically look for “synth” in the
+directories specified by the environment variable “PATH”.</dd>
+  <dt><code>org.daisy.pipeline.tts.qfrency.address</code></dt>
+  <dd>Address of the Qfrency server</dd>
+  <dd>Defaults to “localhost”</dd>
+  <dt><code>org.daisy.pipeline.tts.qfrency.priority</code></dt>
+  <dd>This engine is chosen over another engine that serves the same voice
+if this one has a higher priority.</dd>
+  <dd>Defaults to “2”</dd>
 </dl>
 
 <h3 id="lame-encoder">LAME encoder</h3>

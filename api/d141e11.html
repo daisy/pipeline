@@ -2,8 +2,8 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">zedai-to-ssml {http://www.daisy.org/ns/pipeline/xproc}</title>
-<link rev="dp2:doc" href="../../src/main/resources/xml/zedai-to-ssml.xpl">
+<title property="dc:title">ssml-to-audio {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="../../src/main/resources/xml/ssml-to-audio.xpl">
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
         
@@ -21,11 +21,10 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">zedai-to-ssml</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">ssml-to-audio</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<p xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Specialization of the SSML generation for Zedai</p>
 <div>Defined in:
-          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/zedai-to-ssml/library.xpl.html" target="detail">http://www.daisy.org/pipeline/modules/zedai-to-ssml/library.xpl</a></span>
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/ssml-to-audio/library.xpl.html" target="detail">http://www.daisy.org/pipeline/modules/ssml-to-audio/library.xpl</a></span>
 </div>
 <h3>Input Ports</h3>
 <table border="1">
@@ -36,13 +35,13 @@
 <tbody>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="">fileset.in</span><span class="details"></span>
+<span class="primary">source</span><span class="details"> primary sequence</span>
 </td>
 <td></td>
 </tr>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="primary">content.in</span><span class="details"> primary</span>
+<span class="">config</span><span class="details"></span>
 </td>
 <td></td>
 </tr>
@@ -57,13 +56,13 @@
 <tbody>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="">content.out</span><span class="details"></span>
+<span class="primary">result</span><span class="details"> primary</span>
 </td>
 <td></td>
 </tr>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="primary">ssml.out</span><span class="details"> primary sequence</span>
+<span class="">status</span><span class="details"></span>
 </td>
 <td></td>
 </tr>
@@ -80,7 +79,7 @@
 <tbody>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">css-sheet-uri</span><span class="details"></span>
+<span class="">output-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
@@ -88,11 +87,12 @@
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">ssml-of-lexicons-uris</span><span class="details"></span>
+<span class="">temp-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
-<td></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If not empty, this directory will be used to store audio files. The directory must not
+      exist yet. Overrides the global <code>org.daisy.pipeline.tts.audio.tmpdir</code> setting.</p></td>
 </tr>
 </tbody>
 </table>

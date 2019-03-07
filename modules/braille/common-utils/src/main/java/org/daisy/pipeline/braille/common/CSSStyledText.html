@@ -12,8 +12,8 @@
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.HashMap;
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.daisy.braille.css.InlinedStyle;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.braille.css.InlinedStyle.RuleMainBlock;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.daisy.braille.css.InlineStyle;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.braille.css.InlineStyle.RuleMainBlock;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.daisy.braille.css.RuleTextTransform;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.daisy.braille.css.SimpleInlineStyle;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  
@@ -105,10 +105,10 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<em class="jxr_comment">// distinct styles due to things like "-dotify-def: tmp_d52242e3"</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Memoizing&lt;String,Style&gt; parseCSS = <strong class="jxr_keyword">new</strong> Memoizing.util.CloningMemoizing&lt;String,Style&gt;() {
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">protected</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/CSSStyledText.html">Style</a> _apply(String style) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			InlinedStyle inlinedStyle = <strong class="jxr_keyword">new</strong> InlinedStyle(style);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			InlineStyle inlineStyle = <strong class="jxr_keyword">new</strong> InlineStyle(style);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			Style s = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/CSSStyledText.html">Style</a>();
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			s.properties = <strong class="jxr_keyword">new</strong> SimpleInlineStyle(inlinedStyle.getMainStyle());
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">for</strong> (RuleBlock&lt;?&gt; b : inlinedStyle)
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			s.properties = <strong class="jxr_keyword">new</strong> SimpleInlineStyle(inlineStyle.getMainStyle());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">for</strong> (RuleBlock&lt;?&gt; b : inlineStyle)
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 				<strong class="jxr_keyword">if</strong> (b instanceof RuleMainBlock) {} <em class="jxr_comment">// already handled</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (b instanceof RuleTextTransform) {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 					<strong class="jxr_keyword">if</strong> (s.textTransformDefs == <strong class="jxr_keyword">null</strong>)
@@ -141,6 +141,6 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

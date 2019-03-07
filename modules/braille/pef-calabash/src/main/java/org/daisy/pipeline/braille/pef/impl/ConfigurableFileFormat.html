@@ -17,8 +17,8 @@
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.util.Collections;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> java.util.Locale;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Objects;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Objects.ToStringHelper;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.MoreObjects;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.MoreObjects.ToStringHelper;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Optional;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.daisy.braille.api.embosser.EmbosserWriter;
@@ -251,7 +251,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	@Override
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		ToStringHelper h = Objects.toStringHelper(<span class="jxr_string">"o.d.p.b.pef.impl.ConfigurableFileFormat"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		ToStringHelper h = MoreObjects.toStringHelper(<span class="jxr_string">"o.d.p.b.pef.impl.ConfigurableFileFormat"</span>);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">for</strong> (String k : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"table"</span>,<span class="jxr_string">"locale"</span>,<span class="jxr_string">"line-breaks"</span>,<span class="jxr_string">"page-breaks"</span>,<span class="jxr_string">"pad"</span>,<span class="jxr_string">"file-extension"</span>})
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			h.add(k, getFeature(k));
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">return</strong> h.toString();
@@ -294,7 +294,7 @@
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			ConfigurableFileFormat format = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/pef-calabash/src/main/java/org/daisy/pipeline/braille/pef/impl/ConfigurableFileFormat.html">ConfigurableFileFormat</a>(tableProvider);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">for</strong> (Feature f : q)
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 					format.setFeature(f.getKey(), f.getValue().or(f.getKey())); }
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 					format.setFeature(f.getKey(), f.getValue().orElse(f.getKey())); }
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 				<strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 					<strong class="jxr_keyword">return</strong> empty; }
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">try</strong> {
@@ -330,6 +330,6 @@
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

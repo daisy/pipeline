@@ -26,7 +26,8 @@
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ids-seq"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"tokenize($ids,'\s+')"</span>/&gt;
 
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"html"</span>&gt;
-        &lt;<span class="code-xml-element-local-name">html</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">base</span>=<span class="code-xml-attribute-value">"{$base}"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">html</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$base"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>/&gt;
         &lt;/<span class="code-xml-element-local-name">html</span>&gt;

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>volume breaking.scss</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../volume-breaking.scss">
+
+<div class="language-sass highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * CSS module with default volume breaking rules.
+ *
+ * In order for this style sheet to work,
+ * http://www.daisy.org/pipeline/modules/braille/html-to-pef/xsl/volume-breaking.xsl
+ * must be included before it in the list of style sheets.
+ */</span></span>
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">
+ * Don't split "leaf sections" across volumes.
+ *
+ * A leaf section is a block of adjacent content with the same sectioning depth.
+ * Which means:
+ * - either; a section element with no child sections
+ * - or; the content in a section (&lt;h1&gt;, &lt;p&gt;, etc.), which may have section element siblings
+ *
+ * If a section contains other sections, then volume-breaking.xsl wraps the normal content
+ * (&lt;h1&gt;, &lt;p&gt;, etc.) in the section in a &lt;div class="leaf-section"&gt; element.
+ */</span></span>
+<span class="tag">section</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">section</span>, &gt; <span class="tag">div</span><span class="class">.leaf-section</span>)),
+<span class="tag">div</span><span class="class">.leaf-section</span> {
+    <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">5</span>);
+}
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">
+ * Avoid orphaned headlines.
+ *
+ * volume-breaking.xsl adds the "keep-with-next-section" class is added on small leaf
+ * sections.
+ */</span></span>
+<span class="class">.keep-with-next-section</span> {
+    <span class="key">-obfl-keep-with-next-sheets</span>: <span class="float">1</span>;
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

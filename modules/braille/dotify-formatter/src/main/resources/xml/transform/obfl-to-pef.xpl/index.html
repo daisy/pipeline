@@ -36,13 +36,13 @@
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">merge-parameters</span>&gt;
 	
-	&lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">obfl-normalize-space</span>&gt;
+	&lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">obfl-normalize-space</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".10"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
 			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>/&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">obfl-normalize-space</span>&gt;
 	
-	&lt;<span class="code-xml-element-prefix">dotify:</span><span class="code-xml-element-local-name">obfl-to-pef</span> <span class="code-xml-attribute-local-name">locale</span>=<span class="code-xml-attribute-value">"und"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">dotify:</span><span class="code-xml-element-local-name">obfl-to-pef</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".90"</span> <span class="code-xml-attribute-local-name">locale</span>=<span class="code-xml-attribute-value">"und"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mode"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$text-transform"</span>/&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
 			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"parameters"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;

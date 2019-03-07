@@ -2,7 +2,7 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">dtbook-to-pef {http://www.daisy.org/ns/pipeline/xproc}</title>
+<title property="dc:title">dtbook-to-pef.script {http://www.daisy.org/ns/pipeline/xproc}</title>
 <link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl">
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
@@ -21,13 +21,13 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">dtbook-to-pef</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">dtbook-to-pef.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">DTBook to PEF</h1>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Transforms a DTBook (DAISY 3 XML) document into a PEF.</p>
-<a xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="homepage" href="/pipeline/modules/braille/dtbook-to-pef">
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">DTBook to PEF</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Transforms a DTBook (DAISY 3 XML) document into a PEF.</p>
+<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/modules/braille/dtbook-to-pef">
             Online documentation
-        </a><dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author">
+        </a><dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Bert Frees</dd>
             <dt>Organization:</dt>
@@ -35,7 +35,7 @@
             <dt>E-mail:</dt>
             <dd><a px:role="contact" href="mailto:bertfrees@gmail.com" class="external-link" target="_blank">bertfrees@gmail.com</a></dd>
         </dl>
-<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author">
+<dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Jostein Austvik Jacobsen</dd>
             <dt>Organization:</dt>
@@ -56,7 +56,7 @@
 <td width="150px" class="nowrap name">
 <span class="primary">source</span><span class="details"> primary</span>
 </td>
-<td><h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Input DTBook</h2></td>
+<td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input DTBook</h2></td>
 </tr></tbody>
 </table>
 <h3>Output Ports</h3>
@@ -67,11 +67,11 @@
 </tr></thead>
 <tbody><tr>
 <td width="150px" class="nowrap name">
-<span class="primary">validation-status</span><span class="details"> primary</span>
+<span class="primary">status</span><span class="details"> primary</span>
 </td>
 <td>
-<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Status</h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Status</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
 
 When `include-obfl` is set to true, the conversion may fail but still output a document on the
 "obfl" port.</p>
@@ -402,6 +402,14 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
 <tr>
 <td width="150px;" class="nowrap name">
 <span class="">preview-output-dir</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">obfl-output-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>

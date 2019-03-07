@@ -17,8 +17,8 @@
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Matcher;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Objects;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Objects.ToStringHelper;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.MoreObjects;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.MoreObjects.ToStringHelper;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Splitter;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.google.common.collect.Iterables.size;
@@ -266,7 +266,7 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 	@Override
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 	<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">return</strong> Objects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider"</span>);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider"</span>);
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	}
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 	
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/liblouis-core/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTranslatorJnaImplProvider.html">LiblouisTranslatorImpl</a> <strong class="jxr_keyword">extends</strong> AbstractBrailleTranslator <strong class="jxr_keyword">implements</strong> <a href="/pipeline/modules/braille/liblouis-core/src/main/java/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">LiblouisTranslator</a> {
@@ -628,7 +628,7 @@
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 							<strong class="jxr_keyword">if</strong> (hyphenate[textWithWsMapping[curSegment]] || segmentInBraille.length() &gt; available)
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 								logger.warn(<span class="jxr_string">"hyphens:auto not supported"</span>);
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 							
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[curSegment]);
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 							next += segmentInBraille;
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 							available -= segmentInBraille.length();
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 							curPos = curSegmentEnd;
@@ -639,7 +639,7 @@
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> 						<strong class="jxr_keyword">if</strong> (fullHyphenator != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L631" href="#L631">631</a> 							<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> 								
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, letterSpacing[curSegment]);
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 								next += segmentInBraille;
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 								available -= segmentInBraille.length();
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 								curPos = curSegmentEnd;
@@ -670,7 +670,7 @@
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 										<em class="jxr_comment">// try standard hyphenation of the whole word</em>
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 										<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 											
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, letterSpacing[curSegment]);
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 											next += wordInBraille;
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 											available -= wordInBraille.length();
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 											curPos = wordEnd;
@@ -704,7 +704,7 @@
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 												<strong class="jxr_keyword">int</strong> lineEnd = curPos + line.length();
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 												<strong class="jxr_keyword">int</strong> lineEndInBraille = positionInBraille(lineEnd);
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 												String lineInBraille = joinedBraille.substring(curPosInBraille, lineEndInBraille);
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 												lineInBraille = addLetterSpacing(line, lineInBraille, letterSpacing[curSegment]);
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 												lineInBraille = addLetterSpacing(line, lineInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 												<strong class="jxr_keyword">int</strong> lineInBrailleLength = lineInBraille.length();
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 												<strong class="jxr_keyword">if</strong> (lines.lineHasHyphen()) {
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 													lineInBraille += <span class="jxr_string">"\u00ad"</span>;
@@ -1237,12 +1237,12 @@
 <a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 									<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 										wsLost = <strong class="jxr_keyword">true</strong>; }
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 							<strong class="jxr_keyword">if</strong> (wsLost) {
-<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 								logger.warn(<span class="jxr_string">"White space was not preserved: "</span> + joinedText.replaceAll(<span class="jxr_string">"\\s+"</span>,<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 								logger.warn(<span class="jxr_string">"White space was not preserved (see detailed log for more info)"</span>);
 <a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 								logger.debug(<span class="jxr_string">"White space was lost in the output.\n"</span>
 <a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 								             + <span class="jxr_string">"Input: "</span> + Arrays.toString(textWithWs) + <span class="jxr_string">"\n"</span>
 <a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 								             + <span class="jxr_string">"Output: "</span> + Arrays.toString(brailleWithWs)); }}
 <a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 						<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 							logger.warn(<span class="jxr_string">"Text segmentation was lost: "</span> + joinedText.replaceAll(<span class="jxr_string">"\\s+"</span>,<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 							logger.warn(<span class="jxr_string">"Text segmentation was lost (see detailed log for more info)"</span>);
 <a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 							logger.debug(<span class="jxr_string">"Text segmentation was lost in the output. Falling back to fuzzy mode.\n"</span>
 <a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 							             + <span class="jxr_string">"=&gt; input segments: "</span> + Arrays.toString(textWithWs) + <span class="jxr_string">"\n"</span>
 <a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 							             + <span class="jxr_string">"=&gt; output segments: "</span> + Arrays.toString(Arrays.copyOf(brailleWithWs, l)));
@@ -1356,7 +1356,7 @@
 <a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> 		
 <a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> 		@Override
 <a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> 		<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> 			<strong class="jxr_keyword">return</strong> Objects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl"</span>)
+<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> 			<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl"</span>)
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> 				.add(<span class="jxr_string">"translator"</span>, translator)
 <a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 				.add(<span class="jxr_string">"hyphenator"</span>, hyphenator);
 <a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 		}
@@ -1401,7 +1401,7 @@
 <a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 		
 <a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 		@Override
 <a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 		<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 			<strong class="jxr_keyword">return</strong> Objects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl"</span>)
+<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 			<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl"</span>)
 <a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> 				.add(<span class="jxr_string">"translator"</span>, translator)
 <a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 				.add(<span class="jxr_string">"hyphenator"</span>, <span class="jxr_string">"self"</span>);
 <a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> 		}
@@ -1553,6 +1553,6 @@
 <a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

@@ -158,8 +158,8 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Transform&gt; java.lang.Iterable&lt;T&gt; logSelect(<strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Query.html">Query</a> query,
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>                                                                             <strong class="jxr_keyword">final</strong> TransformProvider&lt;T&gt; provider,
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>                                                                             <strong class="jxr_keyword">final</strong> Logger context) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		                                                                    <strong class="jxr_keyword">final</strong> TransformProvider&lt;T&gt; provider,
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		                                                                    <strong class="jxr_keyword">final</strong> Logger context) {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterable&lt;T&gt;() {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<strong class="jxr_keyword">public</strong> Iterator&lt;T&gt; iterator() {
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractIterator&lt;T&gt;() {
@@ -168,10 +168,10 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 						<strong class="jxr_keyword">public</strong> T computeNext() {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 							<strong class="jxr_keyword">if</strong> (!i.hasNext()) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 								<strong class="jxr_keyword">if</strong> (first)
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 									context.debug(<span class="jxr_string">"No match for query "</span> + query);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 									context.trace(<span class="jxr_string">"No match for query "</span> + query);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 								<strong class="jxr_keyword">return</strong> endOfData(); }
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 							T t = i.next();
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 							context.info(<span class="jxr_string">"Selected "</span> + t + <span class="jxr_string">" for query "</span> + query);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 							context.debug(<span class="jxr_string">"Selected "</span> + t + <span class="jxr_string">" for query "</span> + query);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 							first = false;
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 							<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 						}
@@ -231,6 +231,6 @@
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

@@ -13,10 +13,10 @@
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.Iterator;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.util.ListIterator;
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Matcher;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> com.google.common.base.Optional;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.util.Optional;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Matcher;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ForwardingList;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.google.common.collect.ImmutableList;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  							value = integer;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  						<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Coding error"</span>); }
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					mq.add(key, Optional.fromNullable(value)); }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					mq.add(key, Optional.ofNullable(value)); }
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">return</strong> mq.asImmutable(); }
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Could not parse query: "</span> + query);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		}
@@ -155,12 +155,12 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			}
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Query.html">MutableQuery</a> add(String key) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 				add(key, Optional.&lt;String&gt;absent());
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 				add(key, Optional.&lt;String&gt;empty());
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Query.html">MutableQuery</a> add(String key, String value) {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				add(key, Optional.&lt;String&gt;fromNullable(value));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				add(key, Optional.&lt;String&gt;ofNullable(value));
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			}
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			
@@ -241,7 +241,7 @@
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 			}
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">public</strong> String getValueOrNull() {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">return</strong> getValue().orNull();
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">return</strong> getValue().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 			}
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">public</strong> Optional&lt;String&gt; getValue() {
@@ -318,6 +318,6 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

@@ -20,7 +20,8 @@
 
     
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*:smil"</span>&gt;
-        &lt;<span class="code-xml-element-local-name">smil</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">base</span>=<span class="code-xml-attribute-value">"{base-uri(.)}"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">smil</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(.)"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"meta-duration"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"head/meta[@name='ncc:timeInThisSmil']/string(@content)"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"meta-duration"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"if ($meta-duration) then pf:mediaoverlay-clock-value-to-seconds($meta-duration) else 0"</span>/&gt;
             
