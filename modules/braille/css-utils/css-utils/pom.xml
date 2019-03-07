@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.11.3-SNAPSHOT</version>
+    <version>1.12.1-SNAPSHOT</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>css-utils</artifactId>
-  <version>3.7.0-SNAPSHOT</version>
+  <version>3.7.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: css-utils :: css-utils</name>
