@@ -9,5 +9,11 @@ before_install:
 script:
   - make RUBY=ruby dist-docker-image
   - make RUBY=ruby -C assembly check-docker
+before_cache:
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_cache)
+cache:
+  directories:
+    - $HOME/.m2/cached-repository
+    - assembly/src/main/docker
 after_failure:
  - cat maven.log
