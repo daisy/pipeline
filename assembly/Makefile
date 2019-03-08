@@ -121,6 +121,7 @@ docker : target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 
 	$(DOCKER) build -t daisyorg/pipeline-assembly .
 
 src/main/docker/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz :
+	mkdir -p $(dir $@)
 	curl -L -o $@ "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/$(notdir $@)"
 
 .PHONY : dev-launcher
