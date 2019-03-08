@@ -7,11 +7,6 @@ before_install:
   # see https://github.com/travis-ci/travis-cookbooks/issues/964
   - rm -f /opt/jdk_switcher/jdk_switcher.sh
 script:
-  # skip webservice test for now because it uses pax-exam-container-forked which sometimes causes problems
-  - make RUBY=ruby framework/webservice/.dependencies
-  - touch framework/webservice/.last-tested
-  # skip because it takes too much time to run all tests
-  # - make check
   - make RUBY=ruby dist-docker-image
   - make RUBY=ruby -C assembly check-docker
 after_failure:
