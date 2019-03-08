@@ -212,10 +212,10 @@ clean-webui-deps :
 	rm -f webui/.deps.mk
 
 # FIXME: hard code dependency because unpack-cli-{mac,win,linux} are inside profiles
-assembly/.compile-dependencies : \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-darwin_386.zip \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-linux_386.zip \
-	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-windows_386.zip
+# assembly/.compile-dependencies : \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.2-SNAPSHOT/cli-2.1.2-SNAPSHOT-darwin_386.zip \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.2-SNAPSHOT/cli-2.1.2-SNAPSHOT-linux_386.zip \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.2-SNAPSHOT/cli-2.1.2-SNAPSHOT-windows_386.zip
 
 export PIPELINE_CLIENTLIB_PATH = $(CURDIR)/clientlib/go
 
