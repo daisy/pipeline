@@ -6,20 +6,17 @@ import static org.daisy.pipeline.pax.exam.Options.spiflyBundles;
 
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.propagateSystemProperty;
-import static org.ops4j.pax.exam.CoreOptions.streamBundle;
 import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
-import static org.ops4j.pax.tinybundles.core.TinyBundles.bundle;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,13 +35,14 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.Difference;
 import org.custommonkey.xmlunit.DifferenceConstants;
 import org.custommonkey.xmlunit.DifferenceListener;
+
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcInput;
@@ -58,26 +56,23 @@ import org.daisy.zedval.engine.ZedFileInitializationException;
 import org.daisy.zedval.engine.ZedMessage;
 import org.daisy.zedval.engine.ZedReporter;
 import org.daisy.zedval.engine.ZedReporterException;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.Option;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-
-/**
- * TODO: take into account the current modification of dtbook-to-daisy3, instead of
- * the version already installed.
- */
 
 public class FullConversionTest extends AbstractTest implements DifferenceListener {
 
@@ -88,7 +83,6 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			pipelineModule("css-speech"),
 			pipelineModule("css-utils"),
 			pipelineModule("daisy3-utils"),
-			pipelineModule("dtbook-tts"),
 			pipelineModule("dtbook-utils"),
 			pipelineModule("fileset-utils"),
 			pipelineModule("file-utils"),
@@ -101,45 +95,17 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 		};
 	}
 	
+	@Override
+	public Properties systemProperties() {
+		Properties props = calabashConfiguration();
+		props.setProperty("res.on.disk", getClass().getResource("/").toString());
+		props.setProperty("target.dir", System.getProperty("target.dir"));
+		return props;
+	}
+	
 	@Override @Configuration
 	public Option[] config() {
-		try {
-		Option resourcesOnDisk = systemProperty("res.on.disk").value(
-				getClass().getResource("/").toString());
 		
-		Option targetDirprop = propagateSystemProperty("target.dir");
-
-		// ************* dtbook-tts MOCK ************ .
-		// TODO: make it possible to resolve the mp3 file in bundle://, http://
-		// (via the catalog) or tmp://
-		// so to avoid the current trick
-
-		// copy the mp3 file to the temporary directory
-		URL mp3Src = getClass().getResource("/dtbook-tts/30sec.mp3");
-		File destOnTmp = new File(System.getProperty("java.io.tmpdir"), "30sec.mp3");
-		Option mp3SrcProp = systemProperty("mp3.src").value(mp3Src.toString());
-		Option mp3DestProp = systemProperty("mp3.dest").value(destOnTmp.getAbsolutePath());
-
-		// modify the XSLT so it refers to the mp3 in the tmp directory
-		InputStream algo = getClass().getResourceAsStream(
-				"/dtbook-tts/generate-audio-map.xsl");
-		String algostr = IOUtils.toString(algo).replace("%MP3_PATH%",
-				destOnTmp.getAbsolutePath());
-		InputStream modifiedAlgo = new ByteArrayInputStream(algostr.getBytes());
-
-		// create the stream bundle
-		URL library = getClass().getResource("/dtbook-tts/library.xpl");
-		URL catalog = getClass().getResource("/dtbook-tts/catalog.xml");
-		Option dtbookTTSmock = streamBundle(bundle()
-				.add("library.xpl", library)
-				.add("generate-audio-map.xsl", modifiedAlgo)
-				.add("META-INF/catalog.xml", catalog)
-				.set(Constants.BUNDLE_SYMBOLICNAME,
-						"org.daisy.pipeline.modules.dtbook-tts")
-				.set("Bundle-Name", "DTBook TTS MOCK").build());
-		
-		// ******************************************
-
 		// ZedVal and dependencies
 		Option zedval = composite(
 				// Notes:
@@ -160,7 +126,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 				// mavenBundle("org.daisy.libs:jing:?"),
 				mavenBundle("commons-cli:commons-cli:?"),
 				wrappedBundle(mavenBundle("org.w3c.css:sac:?")),
-				// wrappedBundle(mavenBundle("javazoom:jlayer:?")),
+				wrappedBundle(mavenBundle("javazoom:jlayer:?")),
 				// wrappedBundle(mavenBundle("batik:batik-css:?")),
 				// wrappedBundle(mavenBundle("batik:batik-util:?")),
 				// wrappedBundle(mavenBundle("net.sourceforge.jchardet:jchardet:?")),
@@ -177,30 +143,23 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 		Option testDeps = wrappedBundle(mavenBundle("xmlunit:xmlunit:?"));
 
 		return options(
-			dtbookTTSmock,
 			zedval,
 			testDeps,
-			resourcesOnDisk,
-			targetDirprop,
-			mp3SrcProp,
-			mp3DestProp,
 			composite(super.config()));
-		
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+		probe.setHeader("Bundle-Name", "DTBook TTS MOCK");
+		probe.setHeader("Service-Component", "OSGI-INF/module.xml");
 		probe.setHeader("SPI-Consumer", "javax.xml.parsers.SAXParserFactory#newInstance");
 		return probe;
 	}
 
 	@Inject
-	private XProcEngine xprocEngine;
+	public XProcEngine xprocEngine;
 
-	@Inject
+	// @Inject
 	private BundleContext bundleContext;
 
 	//@Test
@@ -306,13 +265,6 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			ZedContextException, ZedFileInitializationException, SAXException,
 			ParserConfigurationException, XProcErrorException {
 
-
-		//copy the MP3 file that will be referenced in the SMIL files
-		//it has to be done for every test because it is deleted when the job is done
-		//TODO: change its name so we can run the tests in parallel
-		FileUtils.copyURLToFile(new URL(System.getProperty("mp3.src")),
-								new File(System.getProperty("mp3.dest")));
-		
 		final AtomicInteger numErrors = new AtomicInteger(0);
 
 		ZedReporter reporter = new ZedReporter() {
@@ -372,11 +324,9 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 
 		pipeline.run(xprocInput.build(), null, new Properties());
 
-		// FIXME: I added this to make the tests work, but we should
-		// find out why the scripts doesn't create the file. -- bert
 		if (audio) {
-			FileUtils.copyURLToFile(new URL(System.getProperty("mp3.src")),
-			                        new File(outputDir, "30sec.mp3"));
+			Assert.assertTrue("No audio was generated",
+			                  new File(outputDir, "30sec.mp3").exists());
 		}
 
 		ZedVal zv = new ZedVal();

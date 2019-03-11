@@ -22,9 +22,7 @@
         <p:documentation> The main XSLT </p:documentation>
     </p:input>
     
-    <p:output port="fileset.out" primary="true">
-        <p:pipe step="separate-mathml" port="fileset.out"/>
-    </p:output>
+    <p:output port="fileset.out" primary="true"/>
     <p:output port="in-memory.out" sequence="true">
         <p:pipe step="separate-mathml" port="in-memory.out"/>
     </p:output>
@@ -231,16 +229,12 @@
     
     <p:choose name="maybe-embed-images">
         <p:when test="$images='EMBED'">
-            <p:output port="fileset.out">
-                <p:pipe step="embed-images" port="fileset.out"/>
-            </p:output>
+            <p:output port="fileset.out" primary="true"/>
             <p:output port="in-memory.out" sequence="true">
                 <p:pipe step="embed-images" port="in-memory.out"/>
             </p:output>
             <odt:embed-images name="embed-images">
-                <p:input port="fileset.in">
-                    <p:pipe step="update-files" port="result.fileset"/>
-                </p:input>
+                <p:input port="fileset.in"/>
                 <p:input port="in-memory.in">
                     <p:pipe step="update-files" port="result.in-memory"/>
                 </p:input>
@@ -250,7 +244,7 @@
             </odt:embed-images>
         </p:when>
         <p:otherwise>
-            <p:output port="fileset.out">
+            <p:output port="fileset.out" primary="true">
                 <p:pipe step="update-files" port="result.fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
@@ -269,9 +263,7 @@
     <!-- =============== -->
     
     <odt:separate-mathml name="separate-mathml">
-        <p:input port="fileset.in">
-            <p:pipe step="maybe-embed-images" port="fileset.out"/>
-        </p:input>
+        <p:input port="fileset.in"/>
         <p:input port="in-memory.in">
             <p:pipe step="maybe-embed-images" port="in-memory.out"/>
         </p:input>

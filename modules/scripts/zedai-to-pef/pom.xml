@@ -18,6 +18,28 @@
   <name>DAISY Pipeline 2 module :: ZedAI to PEF</name>
   
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies
     -->
@@ -71,12 +93,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>liblouis-native</artifactId>
-      <classifier>linux</classifier>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>dotify-utils</artifactId>
       <scope>test</scope>
     </dependency>
@@ -112,6 +128,13 @@
     </dependency>
   </dependencies>
   
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_zedai_to_pef,
+      org.daisy.pipeline.script.impl.XProcScript_zedai_to_pef
+    </expose-services>
+  </properties>
+  
   <build>
     <plugins>
       <plugin>
@@ -126,5 +149,56 @@
       </plugin>
     </plugins>
   </build>
+  
+  <profiles>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-native</artifactId>
+          <classifier>mac</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <name>linux</name>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-native</artifactId>
+          <classifier>linux</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>win</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-native</artifactId>
+          <classifier>windows</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
   
 </project>

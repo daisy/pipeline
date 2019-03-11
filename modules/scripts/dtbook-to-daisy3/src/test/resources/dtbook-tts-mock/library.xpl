@@ -21,9 +21,16 @@
       <p:empty/> <!-- not used anywhere so far -->
     </p:output>
 
+    <p:output port="status" sequence="false">
+      <p:inline>
+        <d:validation-status result="ok"/>
+      </p:inline>
+    </p:output>
+	
     <p:option name="audio" required="false" px:type="boolean" select="'true'"/>
     <p:option name="output-dir" required="false" select="''"/>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>
 
@@ -44,6 +51,15 @@
 	<p:output port="content">
 	  <p:pipe port="result" step="isolate"/>
 	</p:output>
+	<px:copy-resource name="copy-mp3">
+	  <p:with-option name="href" select="resolve-uri('30sec.mp3')">
+	    <p:inline>
+	      <irrelevant/>
+	    </p:inline>
+	  </p:with-option>
+	  <p:with-option name="target" select="'file:${java.io.tmpdir}/30sec.mp3'"/>
+	</px:copy-resource>
+	<p:sink/>
 	<!-- It is necessary to apply NLP and daisy3-utils to split the content around the
 	     skippable elements (pagenums and noterefs) so they can be attached to a
 	     smilref attribute that won't be the descendant of any audio clip. Otherwise
@@ -61,9 +77,9 @@
 	  </p:input>
 	</px:isolate-daisy3-skippable>
 	<p:xslt name="audio-map">
-	  <p:input port="parameters">
-	    <p:empty/>
-	  </p:input>
+	  <p:with-param port="parameters" name="mp3-path" select="string(.)">
+	    <p:pipe step="copy-mp3" port="result"/>
+	  </p:with-param>
 	  <p:input port="stylesheet">
 	    <p:document href="generate-audio-map.xsl"/>
 	  </p:input>

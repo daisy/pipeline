@@ -12,7 +12,8 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("css-speech"),
 			pipelineModule("css-utils"),
 			pipelineModule("daisy3-utils"),
-			pipelineModule("dtbook-tts"),
+			// pipelineModule("dtbook-tts"),
+			pipelineModule("dtbook-break-detection"),
 			pipelineModule("dtbook-utils"),
 			pipelineModule("fileset-utils"),
 			pipelineModule("file-utils"),
@@ -26,7 +27,9 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Service-Component", "OSGI-INF/mock-tts.xml");
+		probe.setHeader("Bundle-Name", "test-module");
+		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
+		probe.setHeader("Service-Component", "OSGI-INF/module.xml,OSGI-INF/mock-tts.xml");
 		return probe;
 	}
 }

@@ -17,6 +17,28 @@
   <name>DAISY Pipeline 2 module :: ZedAI to HTML</name>
   
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies
     -->
@@ -59,5 +81,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_zedai_to_html,
+      org.daisy.pipeline.script.impl.XProcScript_zedai_to_html
+    </expose-services>
+  </properties>
 
 </project>

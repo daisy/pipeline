@@ -13,6 +13,7 @@ import javax.sound.sampled.AudioSystem;
 
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
 import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
@@ -25,15 +26,21 @@ import org.daisy.pipeline.tts.Voice;
 
 import org.ops4j.pax.exam.util.PathUtils;
 
-import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 
+@Component(
+	name = "mock-tts",
+	service = { TTSService.class }
+)
 public class MockTTS implements TTSService {
 	
 	final static File waveOut = new File(PathUtils.getBaseDir(), "src/test/resources/mock-tts/mock.wav");
 	URL ssmlTransformer;
 	
-	protected void activate(ComponentContext context) {
-		ssmlTransformer = context.getBundleContext().getBundle().getEntry("/mock-tts/transform-ssml.xsl");
+	@Activate
+	protected void activate() {
+		ssmlTransformer = URLs.getResourceFromJAR("/mock-tts/transform-ssml.xsl", MockTTS.class);
 	}
 	
 	@Override

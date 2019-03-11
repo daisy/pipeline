@@ -48,20 +48,32 @@
 			<x:context label="the status">
 				<x:document type="port" port="validation-status"/>
 			</x:context>
-			<x:expect label="the tts should have 2% errors because of the DTBook elements tagged with lang='en'" type="compare">
+			<x:expect label="the status" type="compare">
+				<x:document type="inline">
+					<d:validation-status result="ok"/>
+				</x:document>
+			</x:expect>
+			<!--
+			<x:expect label="when tested with the real dtbook-tts (not mocked),
+			                 the tts should have 2% errors because of the DTBook elements tagged with lang='en'" type="compare">
 				<x:document type="inline">
 					<d:validation-status result="error" success-rate="98%"/>
 				</x:document>
 			</x:expect>
+			-->
 			<x:context label="the output directory">
 				<x:document type="directory" base-uri="temp-dir" href="test_1/with-audio/output-dir/" recursive="true"/>
 			</x:context>
 			<x:expect label="the output directory should contain the DAISY 3 with mp3 files" type="compare" >
 				<x:document type="inline">
 					<c:directory name="output-dir">
+						<c:file name="30sec.mp3"/>
 						<c:file name="book.opf"/>
 						<c:file name="mo0.smil"/>
 						<c:file name="navigation.ncx"/>
+						<c:file name="resources.res"/>
+						<c:file name="shuffled_7019_xmldtbook_1.xml"/>
+						<!--
 						<c:file name="part0000_00_000.mp3"/>
 						<c:file name="part0001_00_000.mp3"/>
 						<c:file name="part0002_00_000.mp3"/>
@@ -121,9 +133,8 @@
 						<c:file name="part0056_00_000.mp3"/>
 						<c:file name="part0057_00_000.mp3"/>
 						<c:file name="part0058_00_000.mp3"/>
-						<c:file name="resources.res"/>
-						<c:file name="shuffled_7019_xmldtbook_1.xml"/>
 						<c:file name="tts-log.xml"/>
+						-->
 					</c:directory>
 				</x:document>
 			</x:expect>

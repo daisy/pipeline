@@ -17,6 +17,28 @@
   <name>DAISY Pipeline 2 module :: DTBook to DAISY 3</name>
   
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies
     -->
@@ -40,11 +62,16 @@
       <artifactId>daisy3-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        removed dependency in order to be able to mock it in the tests
+    -->
+    <!--
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>dtbook-tts</artifactId>
       <scope>runtime</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>dtbook-utils</artifactId>
@@ -68,11 +95,6 @@
     <!--
         test dependencies
     -->
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
@@ -98,11 +120,6 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>daisy3-utils</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -219,8 +236,63 @@
     -->
   </dependencies>
   
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_dtbook_to_daisy3,
+      org.daisy.pipeline.script.impl.XProcScript_dtbook_to_daisy3
+    </expose-services>
+  </properties>
+  
   <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>dtbook-tts-mock/library.xpl</include>
+        </includes>
+        <filtering>true</filtering>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <excludes>
+          <exclude>dtbook-tts-mock/library.xpl</exclude>
+        </excludes>
+        <filtering>false</filtering>
+      </testResource>
+    </testResources>
     <plugins>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>process-test-catalog</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>process-test-catalog</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.modules.impl.Module_test_module,
+                MockTTS
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -229,6 +301,32 @@
             <target.dir>${project.build.directory}</target.dir>
           </systemPropertyVariables>
         </configuration>
+        <!--
+            for some reason XProcSpecTest fails with OSGi if FullConversionTest is also present,
+            therefore run them in separate phases
+        -->
+        <executions>
+          <execution>
+            <id>default-test</id>
+            <configuration>
+              <excludes>
+                <exclude>**/FullConversionTest.java</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>FullConversionTest</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>**/FullConversionTest.java</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

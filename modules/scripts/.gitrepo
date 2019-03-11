@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-scripts.git
 	branch = master
 	commit = 7b9c1ab0098ab4994b9b462320f3af48ebd81c6f
-	parent = c6f79dff502a6fc9f8c2e6b080644cfe4b8f8e78
+	parent = 8fdb3a9a370439025f13881615c5bd837f85f97f
 	cmdver = 0.3.1

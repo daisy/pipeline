@@ -1,5 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0">
 
+  <xsl:param name="mp3-path" required="yes"/>
+
   <xsl:variable name="all-clips">
     <d:audio-clips>
       <xsl:apply-templates select="/*"/>
@@ -26,8 +28,7 @@
 	  <xsl:copy-of select="@*"/>
 	  <xsl:attribute name="clipBegin"><xsl:value-of select="d:format-time($start)"/></xsl:attribute>
 	  <xsl:attribute name="clipEnd"><xsl:value-of select="d:format-time($end)"/></xsl:attribute>
-	  <!-- MP3_PATH must be replaced with an actual path -->
-	  <xsl:attribute name="src"><xsl:value-of select="'file://%MP3_PATH%'"/></xsl:attribute>
+	  <xsl:attribute name="src"><xsl:value-of select="$mp3-path"/></xsl:attribute>
 	</xsl:copy>
       </xsl:for-each>
     </d:audio-clips>

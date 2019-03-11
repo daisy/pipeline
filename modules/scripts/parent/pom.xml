@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.9</version>
+    <version>1.10-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
@@ -35,7 +35,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -45,7 +45,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -55,35 +55,35 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-modules-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.12.0-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -93,12 +93,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>1.0.4</version>
+        <version>1.1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>obfl-utils</artifactId>
-        <version>1.1.3</version>
+        <version>1.1.4-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -118,8 +118,34 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>${expose-services}</includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <_dsannotations>${expose-services}</_dsannotations>
+            <Import-Package>!org.daisy.common.spi,*</Import-Package>
+            <Private-Package>
+              org.daisy.pipeline.modules.impl;-split-package:=first,
+              org.daisy.pipeline.script.impl;-split-package:=first
+            </Private-Package>
+          </instructions>
+        </configuration>
         <executions>
           <execution>
             <id>bundle-before-test</id>
@@ -137,6 +163,18 @@
           <groupId>org.ops4j.pax.exam</groupId>
           <artifactId>maven-paxexam-plugin</artifactId>
           <version>1.2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <systemPropertyVariables>
+              <!--
+                  set this to "OSGiLessRunner" to test without OSGi, or to "PaxExam,OSGiLessRunner" to test both
+              -->
+              <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
+            </systemPropertyVariables>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
