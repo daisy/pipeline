@@ -2,7 +2,9 @@ package org.daisy.pipeline.maven.plugin;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -35,7 +37,12 @@ public class ProcessCatalogMojo extends AbstractMojo {
 	@Parameter(
 		defaultValue = "${project.build.directory}/generated-resources/process-catalog/"
 	)
-	private File outputDirectory;
+	private File generatedResourcesDirectory;
+	
+	@Parameter(
+		defaultValue = "${project.build.directory}/generated-sources/process-catalog/"
+	)
+	private File generatedSourcesDirectory;
 	
 	@Parameter(
 		defaultValue = "true"
@@ -43,10 +50,24 @@ public class ProcessCatalogMojo extends AbstractMojo {
 	private boolean addResources;
 	
 	@Parameter(
-		readonly = true,
+		defaultValue = "true"
+	)
+	private boolean addSources;
+	
+	@Parameter(
+		defaultValue = "${project.artifactId}"
+	)
+	private String moduleName;
+	
+	@Parameter(
 		defaultValue = "${project.version}"
 	)
-	private String projectVersion;
+	private String moduleVersion;
+	
+	@Parameter(
+		defaultValue = "${project.name}"
+	)
+	private String moduleTitle;
 	
 	@Parameter(
 		readonly = true,
@@ -56,23 +77,31 @@ public class ProcessCatalogMojo extends AbstractMojo {
 	
 	public void execute() throws MojoFailureException {
 		try {
-			@SuppressWarnings("unchecked")
 			XProcEngine engine = new CalabashWithPipelineModules(mavenProject.getCompileClasspathElements());
+			Map<String,String> options = new HashMap<String,String>(); {
+				options.put("generatedResourcesDirectory", asURI(generatedResourcesDirectory).toASCIIString());
+				options.put("generatedSourcesDirectory", asURI(generatedSourcesDirectory).toASCIIString());
+				options.put("moduleName", moduleName);
+				options.put("moduleVersion", moduleVersion);
+				options.put("moduleTitle", moduleTitle);
+			}
 			engine.run(asURI(this.getClass().getResource("/process-catalog/process-catalog.xpl")).toASCIIString(),
 			           ImmutableMap.of("source", (List<String>)ImmutableList.of(asURI(catalogFile).toASCIIString())),
 			           null,
-			           ImmutableMap.of("outputDir", asURI(outputDirectory).toASCIIString(),
-			                           "version", projectVersion),
+			           options,
 			           null);
 			if (addResources) {
 				Resource generatedResources = new Resource(); {
-					generatedResources.setDirectory(outputDirectory.getAbsolutePath());
+					generatedResources.setDirectory(generatedResourcesDirectory.getAbsolutePath());
 					List<String> excludes = new ArrayList<String>(); {
 						excludes.add("bnd.bnd");
 					}
 					generatedResources.setExcludes(excludes);
 				}
 				mavenProject.addResource(generatedResources);
+			}
+			if (addSources) {
+				mavenProject.addCompileSourceRoot(generatedSourcesDirectory.getAbsolutePath());
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();

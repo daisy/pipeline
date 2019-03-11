@@ -77,7 +77,6 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 	
 	public void execute() throws MojoFailureException {
 		try {
-			@SuppressWarnings("unchecked")
 			final List<String> compileClassPath = mavenProject.getCompileClasspathElements();
 			final XProcEngine engine = new CalabashWithPipelineModules(compileClassPath);
 			List<File> sources = new ArrayList<File>();
@@ -224,14 +223,11 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 									}
 								}
 								if (xslt != null) {
-									ModuleUriResolver uriResolver = new ModuleUriResolver(); {
-										uriResolver.setModuleRegistry(new CalabashWithPipelineModules.OSGilessModuleRegistry(compileClassPath));
-									}
 									transform(f,
 									          outputFile,
 									          asURI(xslt),
 									          null,
-									          uriResolver);
+									          CalabashWithPipelineModules.getModuleUriResolver(compileClassPath));
 								} else {
 									List<String> sourceAsURI = new ArrayList<String>();
 									engine.run(asURI(HtmlizeSourcesMojo.class.getResource("/htmlize-sources/htmlize-xml.xpl")).toASCIIString(),

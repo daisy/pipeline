@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
 
 import org.ops4j.pax.exam.Configuration;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
@@ -36,6 +37,8 @@ public class XSpecTest {
 		return options(
 			logbackConfigFile(),
 			felixDeclarativeServices(),
+			systemPackage("com.sun.org.apache.xml.internal.resolver"),
+			systemPackage("com.sun.org.apache.xml.internal.resolver.tools"),
 			mavenBundlesWithDependencies(
 				logbackClassic(),
 				// xspec

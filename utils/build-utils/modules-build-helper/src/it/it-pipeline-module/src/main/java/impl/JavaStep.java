@@ -10,6 +10,8 @@ import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.library.Identity;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.osgi.service.component.annotations.Component;
+
 public class JavaStep extends Identity {
 	
 	private JavaStep(XProcRuntime runtime, XAtomicStep step) {
@@ -20,6 +22,12 @@ public class JavaStep extends Identity {
 	public void run() throws SaxonApiException {
 	}
 	
+	@Component(
+		name = "java-step",
+		service = { XProcStepProvider.class },
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}java-step" }
+		
+	)
 	public static class Provider implements XProcStepProvider {
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 			return new JavaStep(runtime, step);

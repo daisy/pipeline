@@ -12,14 +12,14 @@
   
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>pax-exam-helper</artifactId>
-  <version>2.4.1-SNAPSHOT</version>
+  <version>2.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 :: Pax Exam Helper</name>
   
   <properties>
     <felix.version>5.6.10</felix.version>
-    <felix.scr.version>2.1.12</felix.scr.version> <!-- not used in pom.xml but hard coded in Options.java -->
+    <felix.scr.version>2.1.12</felix.scr.version>
     <pax-exam.version>4.12.0</pax-exam.version>
     <pax-url.version>2.5.4</pax-url.version>
     <junit.version>4.11</junit.version>
@@ -28,12 +28,25 @@
     <aether.version>1.13.1</aether.version>
     <maven.version>3.0.4</maven.version>
     <wagon.version>2.2</wagon.version>
-    <xspec-runner.version>1.0.2</xspec-runner.version>
+    <saxon-adapter.version>1.4-SNAPSHOT</saxon-adapter.version>
+    <xspec-runner.version>1.0.4-SNAPSHOT</xspec-runner.version>
     <xprocspec.version>1.2.0</xprocspec.version>
-    <xprocspec-runner.version>1.1.0</xprocspec-runner.version>
-    <xproc-engine-daisy-pipeline.version>1.10.2</xproc-engine-daisy-pipeline.version>
-    <framework.version>1.10.4</framework.version>
+    <xprocspec-runner.version>1.2.3-SNAPSHOT</xprocspec-runner.version>
+    <xproc-engine-daisy-pipeline.version>1.12.1-SNAPSHOT</xproc-engine-daisy-pipeline.version>
+    <framework.version>1.12.1-SNAPSHOT</framework.version>
   </properties>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-bom</artifactId>
+        <version>${framework.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   
   <dependencies>
     <dependency>
@@ -101,6 +114,12 @@
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.main</artifactId>
       <version>${felix.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.scr</artifactId>
+      <version>${felix.scr.version}</version>
       <scope>runtime</scope>
     </dependency>
     <!--
@@ -174,6 +193,12 @@
         test dependencies for integration tests
     -->
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+      <version>${saxon-adapter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xspec-runner</artifactId>
       <version>${xspec-runner.version}</version>
@@ -184,31 +209,6 @@
       <artifactId>xproc-engine-daisy-pipeline</artifactId>
       <version>${xproc-engine-daisy-pipeline.version}</version>
       <scope>test</scope>
-      <!--
-          xproc-engine-daisy-pipeline 1.10 depends on various log libraries which may mess up the test log
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-jdk14</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>jcl-over-slf4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>log4j-over-slf4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-core</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.daisy.xprocspec</groupId>
@@ -220,6 +220,21 @@
       <groupId>org.daisy.maven</groupId>
       <artifactId>xprocspec-runner</artifactId>
       <version>${xprocspec-runner.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -292,6 +307,7 @@
               <postBuildHookScript>verify</postBuildHookScript>
               <properties>
                 <pax-exam-helper.version>${project.version}</pax-exam-helper.version>
+                <saxon-adapter.version>${saxon-adapter.version}</saxon-adapter.version>
                 <xspec-runner.version>${xspec-runner.version}</xspec-runner.version>
                 <xprocspec.version>${xprocspec.version}</xprocspec.version>
                 <xprocspec-runner.version>${xprocspec-runner.version}</xprocspec-runner.version>
@@ -300,6 +316,13 @@
                 <org.ops4j.pax.url.mvn.localRepository>${project.build.directory}/local-repo</org.ops4j.pax.url.mvn.localRepository>
                 <org.daisy.org.ops4j.pax.url.mvn.settings>${basedir}/src/it/settings.xml</org.daisy.org.ops4j.pax.url.mvn.settings>
               </properties>
+              <extraArtifacts>
+                <!-- test dependencies are not automatically installed -->
+                <extraArtifact>org.daisy.pipeline:saxon-adapter:${saxon-adapter.version}</extraArtifact>
+                <extraArtifact>org.daisy.maven:xspec-runner:${xspec-runner.version}</extraArtifact>
+                <extraArtifact>org.daisy.maven:xprocspec-runner:${xprocspec-runner.version}</extraArtifact>
+                <extraArtifact>org.daisy.maven:xproc-engine-daisy-pipeline:${xproc-engine-daisy-pipeline.version}</extraArtifact>
+              </extraArtifacts>
               <goals>
                 <goal>clean</goal>
                 <goal>test</goal>

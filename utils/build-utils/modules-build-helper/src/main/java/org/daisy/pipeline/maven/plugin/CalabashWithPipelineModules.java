@@ -1,42 +1,32 @@
 package org.daisy.pipeline.maven.plugin;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.net.URLClassLoader;
+import java.util.Collection;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 
-import com.ctc.wstx.stax.WstxInputFactory;
+import org.daisy.common.spi.ServiceLoader;
 
 import org.daisy.maven.xproc.calabash.Calabash;
 
-import org.daisy.pipeline.modules.AbstractModuleBuilder;
-import org.daisy.pipeline.modules.Component;
-import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver;
-import org.daisy.pipeline.modules.Module;
-import org.daisy.pipeline.modules.ModuleRegistry;
-import org.daisy.pipeline.modules.ResourceLoader;
-import org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser;
-import org.daisy.pipeline.xmlcatalog.XmlCatalog;
 
 import static org.daisy.pipeline.maven.plugin.utils.URIs.asURI;
-import static org.daisy.pipeline.maven.plugin.utils.URLs.resolve;
 
 import org.xml.sax.InputSource;
 
 class CalabashWithPipelineModules extends Calabash {
 	
-	CalabashWithPipelineModules(Iterable<String> classPath) {
+	CalabashWithPipelineModules(Collection<String> classPath) {
 		super();
-		final ModuleUriResolver resolver = new ModuleUriResolver();
-		resolver.setModuleRegistry(new OSGilessModuleRegistry(classPath));
+		final URIResolver resolver = getModuleUriResolver(classPath);
 		setURIResolver(new URIResolver() {
 			public Source resolve(String href, String base) throws TransformerException {
 				Source source = resolver.resolve(href, base);
@@ -53,70 +43,26 @@ class CalabashWithPipelineModules extends Calabash {
 		});
 	}
 	
-	/*
-	 * Alternative ModuleRegistry that does not make use of OSGi's
-	 * BundleTracker, but instead just looks for all /META-INF/catalog.xml
-	 * files on the class path.
-	 *
-	 * TODO: can be deleted when merged with "osgi-less" branch
-	 */
-	static class OSGilessModuleRegistry implements ModuleRegistry {
-		
-		private final HashMap<URI,Module> components = new HashMap<URI,Module>();
-		private final HashMap<String,Module> entities = new HashMap<String,Module>();
-		
-		public OSGilessModuleRegistry(Iterable<String> classPath) {
-			StaxXmlCatalogParser catalogParser = new StaxXmlCatalogParser();
-			catalogParser.setFactory(new WstxInputFactory());
-			catalogParser.activate();
-			for (String p : classPath) {
-				File f = new File(p);
-				final URI uri = f.isDirectory() ?
-					asURI(new File(f, "META-INF/catalog.xml")) :
-					asURI("jar:" + asURI(f).toASCIIString() + "!/META-INF/catalog.xml");
-				try {
-					uri.toURL().openConnection().connect();
-				} catch (IOException e) {
-					continue;
+	static URIResolver getModuleUriResolver(Collection<String> classPath) {
+		ClassLoader restoreClassLoader = Thread.currentThread().getContextClassLoader();
+		try {
+			URLClassLoader classLoader; {
+				URL[] classPathURLs = new URL[classPath.size()]; {
+					int i = 0;
+					for (String path : classPath)
+						classPathURLs[i++] = new File(path).toURI().toURL();
 				}
-				XmlCatalog catalog = catalogParser.parse(uri);
-				ResourceLoader resourceLoader = new ResourceLoader() {
-					public URL loadResource(String path) {
-						return resolve(uri, path);
-					}
-					public Iterable<URL> loadResources(String path) {
-						throw new UnsupportedOperationException("not implemented");
-					}
-				};
-				Module module = new ModuleBuilder().withLoader(resourceLoader).withCatalog(catalog).build();
-				for (Component component : module.getComponents())
-					components.put(component.getURI(), module);
-				for (Entity entity: module.getEntities())
-					entities.put(entity.getPublicId(), module);
+				classLoader = new URLClassLoader(classPathURLs, Thread.currentThread().getContextClassLoader());
 			}
+			Thread.currentThread().setContextClassLoader(classLoader);
+			for (URIResolver r : ServiceLoader.load(URIResolver.class))
+				if (r instanceof ModuleUriResolver)
+					return r;
+			throw new RuntimeException("No ModuleUriResolver found");
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("No ModuleUriResolver found", e);
+		} finally {
+			Thread.currentThread().setContextClassLoader(restoreClassLoader);
 		}
-		
-		public Module getModuleByComponent(URI uri) {
-			return components.get(uri);
-		}
-		
-		public Module getModuleByEntity(String publicId) {
-			return entities.get(publicId);
-		}
-		
-		public Iterator<Module> iterator() {
-			throw new UnsupportedOperationException("not implemented"); }
-		public void addModule(Module module) {
-			throw new UnsupportedOperationException("not implemented"); }
-		public Module resolveDependency(URI component, Module source) {
-			throw new UnsupportedOperationException("not implemented"); }
-		public Iterable<URI> getComponents() {
-			throw new UnsupportedOperationException("not implemented"); }
-		public Iterable<String> getEntities() {
-			throw new UnsupportedOperationException("not implemented"); }
-	}
-	
-	private static class ModuleBuilder extends AbstractModuleBuilder<ModuleBuilder> {
-		public ModuleBuilder self() { return this; }
 	}
 }

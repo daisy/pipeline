@@ -22,23 +22,30 @@
   
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>pax-exam-helper</artifactId>
+      <version>${pax-exam-helper.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-daisy-pipeline</artifactId>
       <version>${xproc-engine-daisy-pipeline.version}</version>
       <scope>test</scope>
-      <!--
-          osgi.core 4.3.1 is dependency of xproc-engine-daisy-pipeline 1.10 but is not compatible with Felix 4.4.1
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.core</artifactId>
-        </exclusion>
-      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -51,18 +58,6 @@
       <groupId>org.daisy.maven</groupId>
       <artifactId>xprocspec-runner</artifactId>
       <version>${xprocspec-runner.version}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>pax-exam-helper</artifactId>
-      <version>${pax-exam-helper.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

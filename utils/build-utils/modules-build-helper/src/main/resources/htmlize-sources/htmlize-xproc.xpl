@@ -29,7 +29,7 @@
             <p:xpath-context>
                 <p:pipe step="catalog-xml" port="result"/>
             </p:xpath-context>
-            <p:when test="exists(//cat:uri[@px:script='true' and resolve-uri(@uri,base-uri(.))=$input-uri])">
+            <p:when test="exists(//cat:uri[@px:content-type='script' and resolve-uri(@uri,base-uri(.))=$input-uri])">
                 <p:output port="result" primary="true">
                     <p:pipe step="xslt" port="secondary"/>
                 </p:output>

@@ -96,7 +96,7 @@ public abstract class Options {
 	}
 	
 	public static MavenBundle felixDeclarativeServices() {
-		return mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.scr").version("2.1.12");
+		return mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.scr").versionAsInProject();
 	}
 	
 	public static Option spiflyBundles() {
@@ -108,6 +108,8 @@ public abstract class Options {
 	}
 	
 	public static MavenBundle logbackClassic() {
+		// fixed version that is compatible with slf4j version used by Pipeline
+		// can not be put on the class path because Pax Exam itself depends on version 0.9.30
 		return mavenBundle("ch.qos.logback:logback-classic:1.0.11");
 	}
 	
@@ -155,6 +157,15 @@ public abstract class Options {
 					// assuming JAR is named ${artifactId}-${version}.jar
 					return bundle("reference:" + new File(PathUtils.getBaseDir() + "/target/" + artifactId + "-" + version + ".jar").toURI()); }
 		return bundle("reference:" + classes.toURI());
+	}
+	
+	public static Option systemProperties(Properties properties) {
+		Set<String> keys = properties.stringPropertyNames();
+		SystemPropertyOption[] options = new SystemPropertyOption[keys.size()];
+		int i = 0;
+		for (String key : keys)
+			options[i++] = systemProperty(key).value(properties.getProperty(key));
+		return composite(options);
 	}
 	
 	public static MavenBundle pipelineModule(String artifactId) {

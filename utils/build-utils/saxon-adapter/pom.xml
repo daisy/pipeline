@@ -22,7 +22,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.11.2</version>
+        <version>1.12.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -37,6 +37,17 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <!--
         runtime dependencies (for javax.xml.transform.URIResolver)
@@ -97,19 +108,41 @@
             <!-- must match version from framework-bom -->
             <Import-Package>
               net.sf.saxon.*;version="[9.8.0,9.8.1)",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>
-              OSGI-INF/saxon-processor.xml,
-              OSGI-INF/saxon-transformer-factory.xml,
-              OSGI-INF/saxon-xpath-factory.xml
-            </Service-Component>
+            <_dsannotations>
+              org.daisy.common.saxon.ProcessorImpl,
+              org.daisy.common.transform.saxon.TransformerFactoryImpl,
+              org.daisy.common.xpath.saxon.XPathFactoryImpl
+            </_dsannotations>
             <SPI-Provider>
               javax.xml.transform.TransformerFactory,
               javax.xml.xpath.XPathFactory
             </SPI-Provider>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.common.saxon.ProcessorImpl,
+                org.daisy.common.transform.saxon.TransformerFactoryImpl,
+                org.daisy.common.xpath.saxon.XPathFactoryImpl
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

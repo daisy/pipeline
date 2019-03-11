@@ -22,12 +22,19 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-bom</artifactId>
-      <version>${framework.version}</version>
-      <type>pom</type>
-      <scope>import</scope>
-    </dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-bom</artifactId>
+        <version>${framework.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules.braille</groupId>
+        <artifactId>braille-modules-bom</artifactId>
+        <version>${braille-modules.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -35,7 +42,59 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <version>${ds-to-spi-runtime.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <version>4.3.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
+      <version>${modules-test-helper.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+  <properties>
+    <expose-services>
+      org.daisy.impl.FooImpl,
+      impl.JavaStep$Provider,
+      org.daisy.pipeline.script.impl.XProcScript_my_script,
+      org.daisy.pipeline.datatypes.impl.Datatype_foo_choice,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_script_option_1,
+      org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath,
+      org.daisy.pipeline.modules.impl.Module_it_pipeline_module,
+      org.daisy.common.xproc.calabash.impl.ConfigurationFileProvider_it_pipeline_module
+    </expose-services>
+  </properties>
   <build>
     <pluginManagement>
       <plugins>
@@ -55,6 +114,60 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>process-catalog</id>
+            <phase>generate-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <_dsannotations>${expose-services}</_dsannotations>
+            <Import-Package>!org.daisy.common.spi,*</Import-Package>
+            <Private-Package>
+              org.daisy.impl,
+              org.daisy.pipeline.modules.impl;-split-package:=first,
+              org.daisy.pipeline.script.impl;-split-package:=first,
+              org.daisy.pipeline.datatypes.impl;-split-package:=first,
+              org.daisy.pipeline.braille.liblouis.impl;-split-package:=first,
+              org.daisy.common.xproc.calabash.impl;-split-package:=first
+            </Private-Package>
+          </instructions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bundle-before-test</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <version>${ds-to-spi-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>${expose-services}</includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
@@ -147,6 +260,19 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>maven-paxexam-plugin</artifactId>
+        <version>1.2.4</version>
+        <executions>
+          <execution>
+            <id>generate-depends-file</id>
+            <goals>
+              <goal>generate-depends-file</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-maven-plugin</artifactId>
         <version>1.0.0</version>
@@ -173,6 +299,11 @@
             <artifactId>xprocspec</artifactId>
             <version>${xprocspec.version}</version>
           </dependency>
+          <dependency>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xprocspec-runner</artifactId>
+            <version>1.1.0</version>
+          </dependency>
         </dependencies>
       </plugin>
       <plugin>
@@ -191,6 +322,7 @@
                   <location>${project.build.directory}/dependencies-package-list/</location>
                 </offlineLink>
               </offlineLinks>
+              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>

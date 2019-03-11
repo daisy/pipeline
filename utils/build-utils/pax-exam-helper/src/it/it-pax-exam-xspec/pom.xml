@@ -11,35 +11,20 @@
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>saxon-adapter</artifactId>
-      <version>1.1</version>
+      <artifactId>pax-exam-helper</artifactId>
+      <version>${pax-exam-helper.version}</version>
       <scope>test</scope>
-      <!--
-          osgi.core 4.3.1 is dependency of saxon-adapter 1.1 but is not compatible with Felix 4.4.1
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.core</artifactId>
-        </exclusion>
-      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+      <version>${saxon-adapter.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xspec-runner</artifactId>
       <version>${xspec-runner.version}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>pax-exam-helper</artifactId>
-      <version>${pax-exam-helper.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
