@@ -440,6 +440,8 @@ help :
 	echo "	Incrementally compile code and run the GUI locally"                                                     >&2
 	echo "make run-webui:"                                                                                          >&2
 	echo "	Compile and run web UI locally"                                                                         >&2
+	echo "make run-cli:"                                                                                            >&2
+	echo "	Get the command for compiling and running CLI locally"                                                  >&2
 	echo "make run-docker:"                                                                                         >&2
 	echo "	Incrementally compile code and run a server inside a Docker container"                                  >&2
 	echo "make website:"                                                                                            >&2
