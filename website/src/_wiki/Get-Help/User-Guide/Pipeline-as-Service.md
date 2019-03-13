@@ -110,7 +110,7 @@ A number of environment variables will influence the program:
 -->
 
 In addition to the environment variable listed above, all available
-[system properties]({{site.baseurl}}/Configuration-Files/#system-properties)
+[system properties](Configuration-Files/#system-properties)
 that start with `org.daisy.pipeline` can be set through environment
 variables as well. For example, the system property
 `org.daisy.pipeline.ws.host` can be set with the environment variable
@@ -140,6 +140,6 @@ The following command line arguments are available. Combinations are possible.
   `help` for a list of commands, `help COMMAND` for more info about a
   specific command.
   
-<!--
-- `gui`: Launch the graphical user interface instead of the web service.
--->
+- `gui`
+: Launch the graphical user interface instead of the web service. See
+  also [Desktop Application](http://daisy.github.io/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/).

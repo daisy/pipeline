@@ -1,12 +1,21 @@
-# DAISY Pipeline 2
+# DAISY Pipeline 2 Desktop Application
 
-The DAISY Pipeline 2 is a piece of software that allows you to convert, upgrade, validate, generate audio for, and produce Braille from your e-books. It has built-in support for formats like EPUB and DAISY. 
+## Starting the Application
 
-The Pipeline comes with a considerable number of scripts for the actions described above. They are indexed at the bottom of this page.
+### Windows
+
+Start the application via the "DAISY Pipeline 2" icon on your desktop or in the start menu.
+
+### MacOS
+
+Select the "DAISY Pipeline 2" application in your "Applications" folder.
+
+### Linux
+
+On Linux, launch the graphical user interface by running the command `pipeline2 gui`. If you have installed the Debian package, the `pipeline2` executable is located in `/opt/daisy-pipeline2/bin/`. If you have installed the ZIP, it is located in the `bin` directory.
+
 
 ## Quick Start
-
-Start the Pipeline 2 user interface by selecting the "DAISY Pipeline 2" icon on your desktop. 
 
 A window should come up:
 
@@ -81,30 +90,3 @@ Launch the Pipeline updater.
 **User guide**
 
 This document.
-
-
-## Included Scripts
-
-* [DAISY 2.02 Validator](http://daisy.github.io/pipeline/modules/daisy202-validator)
-* [DAISY 2.02 to EPUB 3](http://daisy.github.io/pipeline/modules/daisy202-to-epub3)
-* [DAISY 3 to DAISY 2.02](http://daisy.github.io/pipeline/modules/daisy3-to-daisy202)
-* [DAISY 3 to EPUB 3](http://daisy.github.io/pipeline/modules/daisy3-to-epub3)
-* [DTBook Validator](http://daisy.github.io/pipeline/modules/dtbook-validator)
-* [DTBook to DAISY 3](http://daisy.github.io/pipeline/modules/dtbook-to-daisy3)
-* [DTBook to EPUB3](http://daisy.github.io/pipeline/modules/dtbook-to-epub3)
-* [DTBook to HTML](http://daisy.github.io/pipeline/modules/dtbook-to-html)
-* [DTBook to PEF](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef)
-* [DTBook to ZedAI](http://daisy.github.io/pipeline/modules/dtbook-to-zedai)
-* [EPUB 3 Validator](http://daisy.github.io/pipeline/modules/epub3-validator)
-* [EPUB 3 to DAISY 2.02](http://daisy.github.io/pipeline/modules/epub3-to-daisy202)
-* [EPUB 3 to PEF](http://daisy.github.io/pipeline/modules/braille/epub3-to-pef)
-* [HTML to EPUB3](http://daisy.github.io/pipeline/modules/html-to-epub3)
-* [HTML to PEF](http://daisy.github.io/pipeline/modules/braille/html-to-pef)
-* [NIMAS Fileset Validator](http://daisy.github.io/pipeline/modules/nimas-fileset-validator)
-* [ZedAI to EPUB 3](http://daisy.github.io/pipeline/modules/zedai-to-epub3)
-* [ZedAI to HTML](http://daisy.github.io/pipeline/modules/zedai-to-html)
-* [ZedAI to PEF](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef)
-
-## Troubleshooting
-
-If you need assistance, please use the [forums](http://www.daisy.org/forums/pipeline-2).
