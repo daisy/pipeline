@@ -1,3 +1,6 @@
+.PHONY : default
+default : help
+
 .PHONY : all
 all : check dist
 
@@ -14,6 +17,7 @@ MVN_PROPERTIES          := -Dworkspace="$(CURDIR)/$(MVN_WORKSPACE)" \
 MVN_RELEASE_CACHE_REPO  := $(MVN_CACHE)
 GRADLE                  := $(CURDIR)/libs/dotify/dotify.api/gradlew
 
+ifneq ($(MAKECMDGOALS),)
 ifneq ($(MAKECMDGOALS), help)
 ifneq ($(MAKECMDGOALS), dump-maven-cmd)
 ifneq ($(MAKECMDGOALS), dump-gradle-cmd)
@@ -22,6 +26,7 @@ include .make/main.mk
 assembly/BASEDIR := assembly
 include assembly/deps.mk
 -include webui/.deps.mk
+endif
 endif
 endif
 endif
