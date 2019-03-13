@@ -29,7 +29,17 @@ baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(JEKYLL_FILES)
+ifeq ($(RUBY),bundle exec)
+.SECONDARY : gems
+gems : .bundle/config
+.bundle/config :
+	bundle install --path gems
+else
+.PHONY : gems
+gems :
+endif
+
+$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(JEKYLL_FILES) | gems
 	mkdir -p $(dir $@)
 	cd $(dir $@) && $(JEKYLL) build --destination $(CURDIR)/$@$(baseurl)/
 	if ! $(RUBY) make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
@@ -43,7 +53,7 @@ $(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	eval "$$(echo 'newline="'; echo '"')"; \
 	echo "---$${newline}---" | cat - $< >$@
 
-$(JEKYLL_FILES_MUSTACHE) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(JEKYLL_DIR)/$(meta_file)
+$(JEKYLL_FILES_MUSTACHE) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(JEKYLL_DIR)/$(meta_file) | gems
 	mkdir -p $(dir $@)
 	cp $< $@
 	if ! $(RUBY) make/mustache.rb $@ $(word 2,$^) $(JEKYLL_DIR) $(CONFIG_FILE); then \
@@ -80,14 +90,14 @@ $(JEKYLL_DIR)/api : $(MAVEN_DIR)/javadoc $(MAVEN_DIR)/xprocdoc
 	cp -r $</* $@/
 	cp -r $(word 2,$^)/* $@/
 
-$(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
+$(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site | gems
 	mkdir -p $(dir $@)
 	if ! $(RUBY) make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@; then \
 		rm -f $@; \
 		exit 1; \
 	fi
 
-$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(META_JEKYLL_FILES)
+$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(META_JEKYLL_FILES) | gems
 	cd $(dir $@) && $(JEKYLL) build --destination $(CURDIR)/$@$(baseurl)
 	touch $@
 
@@ -96,7 +106,7 @@ $(META_JEKYLL_FILES_CONTENT) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	eval "$$(echo 'newline="'; echo '"')"; \
 	echo "---$${newline}---" | cat - $< >$@
 
-$(META_JEKYLL_FILES_MUSTACHE) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(META_JEKYLL_DIR)/$(meta_file)
+$(META_JEKYLL_FILES_MUSTACHE) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(META_JEKYLL_DIR)/$(meta_file) | gems
 	mkdir -p $(dir $@)
 	cp $< $@
 	if ! $(RUBY) make/mustache.rb $@ $(word 2,$^) $(META_JEKYLL_DIR) $(CONFIG_FILE); then \
@@ -136,7 +146,7 @@ $(META_JEKYLL_DIR)/$(meta_file) :
 	mkdir -p $(dir $@)
 	touch $@
 
-$(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file)
+$(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file) | gems
 	mkdir -p $(dir $@)
 	rm -rf $@
 	cp -r $</org/daisy/pipeline/modules $@
@@ -164,7 +174,7 @@ $(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
 	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$(MAVEN_DIR)/sources/{}) && \
 	                    mv {} $(CURDIR)/$(MAVEN_DIR)/sources/{}" \;
 
-$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml $(JEKYLL_SRC_DIR)/_data/api.yml
+$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml $(JEKYLL_SRC_DIR)/_data/api.yml | gems
 	mkdir -p $(dir $@)
 	if ! $(RUBY) make/make_pom.rb $^ > $@; then \
 		rm -f $@ && \
