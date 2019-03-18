@@ -3,7 +3,7 @@
   <fileSets>
     <fileSet>
       <directory>target/bundles/bootstrap</directory>
-      <outputDirectory>/system/bootstrap</outputDirectory>
+      <outputDirectory>system/bootstrap</outputDirectory>
       <excludes>
         <exclude>linux</exclude>
         <exclude>linux/*</exclude>
@@ -15,41 +15,41 @@
     </fileSet>
     <fileSet>
       <directory>target/bundles/felix</directory>
-      <outputDirectory>/system/felix</outputDirectory>
+      <outputDirectory>system/felix</outputDirectory>
       <excludes>
         <exclude>org.apache.felix.org.apache.felix.gogo*</exclude>
       </excludes>
     </fileSet>
     <fileSet>
       <directory>target/bundles/felix</directory>
-      <outputDirectory>/system/felix/gogo</outputDirectory>
+      <outputDirectory>system/felix/gogo</outputDirectory>
       <includes>
         <include>org.apache.felix.org.apache.felix.gogo*</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>target/bundles/libs</directory>
-      <outputDirectory>/system/framework</outputDirectory>
+      <outputDirectory>system/framework</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/bundles/libs/gui</directory>
-      <outputDirectory>/system/framework/gui</outputDirectory>
+      <outputDirectory>system/framework/gui</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/bundles/libs/persistence</directory>
-      <outputDirectory>/system/framework/persistence</outputDirectory>
+      <outputDirectory>system/framework/persistence</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/bundles/pipeline</directory>
-      <outputDirectory>/system/framework</outputDirectory>
+      <outputDirectory>system/framework</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/bundles/frontend</directory>
-      <outputDirectory>/system/frontend</outputDirectory>
+      <outputDirectory>system/frontend</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/bundles/gui</directory>
-      <outputDirectory>/system/gui</outputDirectory>
+      <outputDirectory>system/gui</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/bundles/modules</directory>
@@ -61,7 +61,7 @@
         <exclude>win</exclude>
         <exclude>win/*</exclude>
       </excludes>
-      <outputDirectory>/modules</outputDirectory>
+      <outputDirectory>modules</outputDirectory>
     </fileSet>
   </fileSets>
 </component>

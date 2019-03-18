@@ -14,7 +14,7 @@
         <exclude>etc/config-logback.xml</exclude>
         <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
       </excludes>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
     </fileSet>
     <fileSet>
       <directory>src/main/resources</directory>
@@ -25,7 +25,7 @@
         <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
       </includes>
       <filtered>true</filtered>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
     </fileSet>
   </fileSets>
 </component>

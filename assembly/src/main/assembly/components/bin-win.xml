@@ -7,16 +7,9 @@
         <include>bin/pipeline2.bat</include>
         <include>bin/checkJavaVersion.bat</include>
       </includes>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>
       <filtered>true</filtered>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/nsis</directory>
-      <includes>
-        <include>msgbox-guinostart.vbs</include>
-      </includes>
-      <outputDirectory>/bin</outputDirectory>
     </fileSet>
   </fileSets>
 </component>
