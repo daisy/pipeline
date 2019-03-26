@@ -108,17 +108,21 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     rem Support for loading native libraries
     set PATH=%PATH%;%PIPELINE2_BASE%\lib;%PIPELINE2_HOME%\lib
     rem Setup the Java Virtual Machine
-    call "%~dp0\checkJavaVersion.bat"
+    call "%~dp0\checkJavaVersion.bat" 11
     if errorLevel 1 (
-        call:warn Compatible JVM not found
-        if errorLevel 2 (
-            rem fatal
-            set exitCode=3
-        ) else (
-            rem user-fixable
-            set exitCode=2
+        rem Fall back to Java 8 (or 9 or 10) because web server does not work with Java 11
+        call:warn Java 11 not found; Trying Java 8
+        call "%~dp0\checkJavaVersion.bat" 1.8
+        if errorLevel 1 (
+            if errorLevel 2 (
+                rem fatal
+                set exitCode=3
+            ) else (
+                rem user-fixable
+                set exitCode=2
+            )
+            goto END
         )
-        goto END
     )
 
 :Check_JAVA_END
@@ -211,24 +215,46 @@ goto :RUN_LOOP
     rem Execute the Java Virtual Machine
     cd "%PIPELINE2_BASE%"
 
-    SET COMMAND="%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" ^
-        --add-opens java.base/java.security=ALL-UNNAMED ^
-        --add-opens java.base/java.net=ALL-UNNAMED ^
-        --add-opens java.base/java.lang=ALL-UNNAMED ^
-        --add-opens java.base/java.util=ALL-UNNAMED ^
-        --add-opens java.naming/javax.naming.spi=ALL-UNNAMED ^
-        --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED ^
-        --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED ^
-        --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED ^
-        --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED ^
-        --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED ^
-        --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED ^
-        -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" ^
-        -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" ^
-        -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" ^
-        -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" ^
-        -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" ^
-        %FELIX_OPTS% %MODE% %PIPELINE2_OPTS% %MAIN% %ARGS%
+    call "%~dp0\checkJavaVersion.bat" _ :compare_versions %JAVA_VER% 9
+    if %ERRORLEVEL% geq 0 (
+        if errorLevel 3 (
+            rem unexpected error
+            call:warn Failed to compare versions: "%JAVA_VER%" with "9"
+            set exitCode=3
+            goto END
+        )
+        rem at least version 9
+        SET COMMAND="%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" ^
+            --add-opens java.base/java.security=ALL-UNNAMED ^
+            --add-opens java.base/java.net=ALL-UNNAMED ^
+            --add-opens java.base/java.lang=ALL-UNNAMED ^
+            --add-opens java.base/java.util=ALL-UNNAMED ^
+            --add-opens java.naming/javax.naming.spi=ALL-UNNAMED ^
+            --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED ^
+            --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED ^
+            --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED ^
+            --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED ^
+            --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED ^
+            --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED ^
+            -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" ^
+            -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" ^
+            -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" ^
+            -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" ^
+            -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" ^
+            %FELIX_OPTS% %MODE% %PIPELINE2_OPTS% %MAIN% %ARGS%
+    ) else (
+        rem version 8
+        SET COMMAND="%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" ^
+            -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" ^
+            -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" ^
+            -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" ^
+            -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" ^
+            -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" ^
+            %FELIX_OPTS% %MODE% %PIPELINE2_OPTS% %MAIN% %ARGS%
+            rem skipping java.endorsed.dirs and java.ext.dirs because this requires JAVA_HOME which is not always available
+            rem -Djava.endorsed.dirs="%JAVA_HOME%\jre\lib\endorsed;%JAVA_HOME%\lib\endorsed;%PIPELINE2_HOME%\lib\endorsed" ^
+            rem -Djava.ext.dirs="%JAVA_HOME%\jre\lib\ext;%JAVA_HOME%\lib\ext;%PIPELINE2_HOME%\lib\ext" ^
+    )
     call:warn Starting java: %COMMAND%
 
     if not "%GOGO_BUNDLES%" == "" (

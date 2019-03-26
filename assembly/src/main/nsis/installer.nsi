@@ -227,7 +227,7 @@ Section -JRECheck SEC00-1
         goto Exit
     ${endIf}
 
-    nsExec::ExecToStack "$INSTDIR\daisy-pipeline\bin\checkJavaVersion.bat"
+    nsExec::ExecToStack '"$INSTDIR\daisy-pipeline\bin\checkJavaVersion.bat" ${REQUIRED_JAVA_VER}'
     pop $0 ;exitCode
     pop $1 ;output
     ;print output

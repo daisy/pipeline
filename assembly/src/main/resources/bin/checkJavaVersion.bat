@@ -11,17 +11,19 @@ rem   0 check passed and JAVA set
 rem   1 check failed
 rem   3 check failed fatally (something wrong with code)
 
-rem For unit testing
-if not [%1]==[] (
-    call %*
-    goto :EOF
-)
-
 setlocal enabledelayedexpansion
 
 set DIRNAME=%~dp0
 set PROGNAME=%~nx0
-set REQUIRED_JAVA_VER=11
+set REQUIRED_JAVA_VER=%1
+
+shift
+
+if not [%1]==[] (
+    rem %* not affected by shift
+    call %1 %2 %3 %4 %5 %6 %7 %8 %9
+    goto :EOF
+)
 
 goto BEGIN
 
@@ -89,26 +91,46 @@ goto :EOF
 goto :EOF
 
 :search_registry_with_cmd reg_query_cmd
+  :javaHome_try_jre1
     call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JRE"" /v CurrentVersion"
-    if errorLevel 1 goto javaHome_try_jdk
+    if errorLevel 1 goto javaHome_try_jre2
     set JAVA_VER=%RETURN%
     call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
-    if errorLevel 1 goto javaHome_try_jdk
+    if errorLevel 1 goto javaHome_try_jre2
     call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JRE\%JAVA_VER%"" /v JavaHome"
-    if errorLevel 1 goto javaHome_try_jdk
+    if errorLevel 1 goto javaHome_try_jre2
     set JAVA_HOME=%RETURN%
     exit /b 0
-    :javaHome_try_jdk
-        rem some versions use the "Java Development Kit"
-        call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK"" /v CurrentVersion"
-        if errorLevel 1 goto :EOF
-        set JAVA_VER=%RETURN%
-        call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
-        if errorLevel 1 goto :EOF
-        call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK\%JAVA_VER%"" /v JavaHome"
-        if errorLevel 1 goto :EOF
-        set JAVA_HOME=%RETURN%
-        exit /b 0
+  :javaHome_try_jre2
+    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Runtime Environment"" /v CurrentVersion"
+    if errorLevel 1 goto javaHome_try_jdk1
+    set JAVA_VER=%RETURN%
+    call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
+    if errorLevel 1 goto javaHome_try_jdk1
+    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Runtime Environment\%JAVA_VER%"" /v JavaHome"
+    if errorLevel 1 goto javaHome_try_jdk1
+    set JAVA_HOME=%RETURN%
+    exit /b 0
+  :javaHome_try_jdk1
+    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK"" /v CurrentVersion"
+    if errorLevel 1 goto javaHome_try_jdk2
+    set JAVA_VER=%RETURN%
+    call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
+    if errorLevel 1 goto javaHome_try_jdk2
+    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK\%JAVA_VER%"" /v JavaHome"
+    if errorLevel 1 goto javaHome_try_jdk2
+    set JAVA_HOME=%RETURN%
+    exit /b 0
+  :javaHome_try_jdk2
+    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Development Kit"" /v CurrentVersion"
+    if errorLevel 1 goto :EOF
+    set JAVA_VER=%RETURN%
+    call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
+    if errorLevel 1 goto :EOF
+    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Development Kit\%JAVA_VER%"" /v JavaHome"
+    if errorLevel 1 goto :EOF
+    set JAVA_HOME=%RETURN%
+    exit /b 0
 goto :EOF
 
 :parse_regKey_value cmd
@@ -142,7 +164,7 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 :CheckRelative
     call:parse_java_version "%DIRNAME%..\jre\bin\java.exe"
-    if errorLevel 1 goto CheckCurrentVersion
+    if errorLevel 1 goto CheckJAVA
     call:check_version
     if errorLevel 3 goto END
     if errorLevel 1 (
@@ -239,5 +261,5 @@ goto END
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 :END
-    endlocal & set JAVA=%JAVA%
+    endlocal & set JAVA=%JAVA% & set JAVA_VER=%JAVA_VER%
     exit /b %ERRORLEVEL%

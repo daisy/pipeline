@@ -75,7 +75,7 @@ set failures=0
     set test=1a
     set JAVA_VER=1.1.1
     call:info "%JAVA_VER%"
-    call %checkJavaVersion% :%testing% "" >nul
+    call %checkJavaVersion% 11 :%testing% "" >nul
     if %ERRORLEVEL% == 0 (
         call:pass
     ) else if %ERRORLEVEL% == 1 (
@@ -89,7 +89,7 @@ set failures=0
     set test=1b
     set JAVA_VER=1.1
     call:info "%JAVA_VER%"
-    call %checkJavaVersion% :%testing% "" >nul
+    call %checkJavaVersion% 11 :%testing% "" >nul
     if %ERRORLEVEL% == 0 (
         call:fail "incorrectly processed "%JAVA_VER%" as valid"
         goto TEST2
@@ -106,7 +106,7 @@ set failures=0
     set ver1=1
     set ver2=1
     call:info "%ver1% vs. %ver2%"
-    call %checkJavaVersion% :%testing% %ver1% %ver2%
+    call %checkJavaVersion% 11 :%testing% %ver1% %ver2%
     if %ERRORLEVEL% == 0 (
         call:pass
     ) else if %ERRORLEVEL% == -1 (
@@ -124,7 +124,7 @@ set failures=0
     set ver1=1.0.1
     set ver2=1.0.0
     call:info "%ver1% vs. %ver2%"
-    call %checkJavaVersion% :%testing% %ver1% %ver2%
+    call %checkJavaVersion% 11 :%testing% %ver1% %ver2%
     if %ERRORLEVEL% == 0 (
         call:fail "incorrectly compared %ver1% as == %ver2%"
         goto TEST3
@@ -142,7 +142,7 @@ set failures=0
     set ver1=1.0.0
     set ver2=1.0.1
     call:info "%ver1% vs. %ver2%"
-    call %checkJavaVersion% :%testing% %ver1% %ver2%
+    call %checkJavaVersion% 11 :%testing% %ver1% %ver2%
     if %ERRORLEVEL% == 0 (
         call:fail "incorrectly compared %ver1% as == %ver2%"
         goto TEST3
@@ -160,7 +160,7 @@ set failures=0
     set ver1=1.0
     set ver2=1.0.0
     call:info "%ver1% vs. %ver2%"
-    call %checkJavaVersion% :%testing% %ver1% %ver2%
+    call %checkJavaVersion% 11 :%testing% %ver1% %ver2%
     if %ERRORLEVEL% == 0 (
         call:pass
     ) else if %ERRORLEVEL% == -1 (
@@ -178,7 +178,7 @@ set failures=0
     set ver1=1.0
     set ver2=1.0.1
     call:info "%ver1% vs. %ver2%"
-    call %checkJavaVersion% :%testing% %ver1% %ver2%
+    call %checkJavaVersion% 11 :%testing% %ver1% %ver2%
     if %ERRORLEVEL% == 0 (
         call:fail "incorrectly compared %ver1% as == %ver2%"
         goto TEST3
@@ -197,7 +197,7 @@ set failures=0
     set test=3
     set "cmd=:mock-java-version-1"
     call:info "%cmd%"
-    call %checkJavaVersion% :%testing% "call %~dpnx0 %cmd%"
+    call %checkJavaVersion% 11 :%testing% "call %~dpnx0 %cmd%"
     if errorLevel 1 (
         call:fail "failed with errorLevel %ERRORLEVEL%"
         goto TEST4
@@ -213,7 +213,7 @@ set failures=0
     set test=4a
     set "cmd=:mock-reg-query-1 HKLM\SOFTWARE\JavaSoft\JRE /v CurrentVersion"
     call:info "%cmd%"
-    call %checkJavaVersion% :%testing% "call %~dpnx0 %cmd%"
+    call %checkJavaVersion% 11 :%testing% "call %~dpnx0 %cmd%"
     if errorLevel 1 (
         call:fail "failed with errorLevel %ERRORLEVEL%"
         goto TEST5
@@ -227,7 +227,7 @@ set failures=0
     set test=4b
     set "cmd=:mock-reg-query-1 HKLM\SOFTWARE\JavaSoft\JRE\10.0.1 /v JavaHome"
     call:info "%cmd%"
-    call %checkJavaVersion% :%testing% "call %~dpnx0 %cmd%"
+    call %checkJavaVersion% 11 :%testing% "call %~dpnx0 %cmd%"
     if errorLevel 1 (
         call:fail "failed with errorLevel %ERRORLEVEL%"
         goto TEST5
@@ -243,7 +243,7 @@ set failures=0
     set test=5
     set "cmd=:mock-reg-query-1"
     call:info "%cmd%"
-    call %checkJavaVersion% :%testing% "call %~dpnx0 %cmd%"
+    call %checkJavaVersion% 11 :%testing% "call %~dpnx0 %cmd%"
     if errorLevel 1 (
         call:fail "failed with errorLevel %ERRORLEVEL%"
         goto TEST6
@@ -259,7 +259,7 @@ set failures=0
     set test=6a
     set cmd=foo.exe
     call:info "%cmd%"
-    call %checkJavaVersion% :%testing% "%cmd%"
+    call %checkJavaVersion% 11 :%testing% "%cmd%"
     if errorLevel 1 (
         call:pass
     ) else (
@@ -270,7 +270,7 @@ set failures=0
     set test=6b
     set cmd=java.exe
     call:info "%cmd%"
-    call %checkJavaVersion% :%testing% "%cmd%"
+    call %checkJavaVersion% 11 :%testing% "%cmd%"
     if errorLevel 1 (
         call:fail "failed to parse output from java.exe -version"
         goto TEST7
@@ -282,11 +282,10 @@ set failures=0
     set testing=CheckJAVA_HOME
     set test=7
     call:info
-    set REQUIRED_JAVA_VER=1.8
     set PATH=
     rem Either this points to an unexisting file, or it exists in which case the returned version should be 1.8.0_102
     set "JAVA_HOME=C:\Program Files (x86)\Java\jre1.8.0_102"
-    call %checkJavaVersion% :%testing%
+    call %checkJavaVersion% 1.8 :%testing%
     if exist "%JAVA_HOME%" (
         if errorLevel 1 (
             call:fail "failed with errorLevel %ERRORLEVEL%"
