@@ -20,6 +20,9 @@ echo "$module/.test : %/.test : %/build.gradle %/gradle.properties \$(call rwild
 if [ -e $module/test ]; then
 	echo "$module/.test : \$(call rwildcard,$module/test/,*)"
 fi
+if [ -e $module/integrationtest ]; then
+	echo "$module/.test : \$(call rwildcard,$module/integrationtest/,*)"
+fi
 if [[ $v == *-SNAPSHOT ]]; then
 	echo ""
 	echo "\$(MVN_LOCAL_REPOSITORY)/$(echo $g |tr . /)/$a/$v/$a-$v.jar : $module/.install-jar"
