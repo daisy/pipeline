@@ -667,7 +667,8 @@ public class XProcConfiguration {
         }
 
 		try {
-			Constructor<? extends XProcStep> constructor = Class.forName(className).asSubclass(XProcStep.class).getConstructor(XProcRuntime.class, XAtomicStep.class);
+			Constructor<? extends XProcStep> constructor = Class.forName(className, true, Thread.currentThread().getContextClassLoader())
+			                                                    .asSubclass(XProcStep.class).getConstructor(XProcRuntime.class, XAtomicStep.class);
 			return constructor.newInstance(runtime,step);
 		} catch (NoSuchMethodException nsme) {
 			throw new UnsupportedOperationException("No such method: " + className, nsme);
@@ -1093,7 +1094,7 @@ public class XProcConfiguration {
         for (String tname : nameStr.split("\\s+")) {
             QName name = new QName(tname,node);
             try {
-                Class<?> klass = Class.forName(value);
+                Class<?> klass = Class.forName(value, true, Thread.currentThread().getContextClassLoader());
                 implementations.put(name, klass);
             } catch (ClassNotFoundException e) {
                 logger.debug("Class not found: " + value);
