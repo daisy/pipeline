@@ -19,6 +19,14 @@
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
     <dependency>
@@ -29,6 +37,16 @@
       <groupId>org.idpf</groupId>
       <artifactId>epubcheck</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         test dependencies
     -->
@@ -38,20 +56,34 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_epubcheck_adapter,
+      org.daisy.pipeline.epub.EpubCheckProvider,
+      org.idpf.epubcheck.util.saxon95.ColumnNumberFunction,
+      org.idpf.epubcheck.util.saxon95.LineNumberFunction,
+      org.idpf.epubcheck.util.saxon95.SystemIdFunction
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
         <configuration>
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/epubcheck.xml,OSGI-INF/column-number.xml,OSGI-INF/line-number.xml,OSGI-INF/system-id.xml</Service-Component>
+            <Private-Package>
+              org.daisy.pipeline.epub,
+              org.idpf.epubcheck.util.saxon95,
+              org.daisy.pipeline.modules.impl;-split-package:=first
+            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

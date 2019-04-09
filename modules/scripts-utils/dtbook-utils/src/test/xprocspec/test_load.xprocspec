@@ -7,7 +7,7 @@
 	<x:scenario label="load">
 		<x:call step="px:dtbook-load">
 			<x:input port="source">
-				<x:document type="inline" xml:base="file:/tmp/foo.xml">
+				<x:document type="inline" xml:base="file:/foo.xml">
 					<dtbook version="1.1.0">
 						<head>
 							<title>Title</title>
@@ -32,7 +32,7 @@
 		<x:expect label="the fileset"
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
-				<d:fileset xml:base="file:/tmp/">
+				<d:fileset xml:base="file:/">
 					<d:file href="style.css" media-type="text/css"/>
 					<d:file href="foo.xml" original-href="foo.xml" media-type="application/x-dtbook+xml"/>
 					<d:file href="image.png" original-href="image.png" media-type="image/png"/>
@@ -44,7 +44,7 @@
 	<x:scenario label="if the base uri starts with file:///">
 		<x:call step="px:dtbook-load">
 			<x:input port="source">
-				<x:document type="inline" xml:base="file:///tmp/foo.xml">
+				<x:document type="inline" xml:base="file:///foo.xml">
 					<dtbook version="1.1.0">
 						<head>
 							<title>Title</title>
@@ -68,10 +68,10 @@
 		</x:context>
 		<x:expect label="this results in a xml:base with only one slash after file:" type="compare"> <!-- not using x:fileset-compare -->
 			<x:document type="inline">
-				<d:fileset xml:base="file:/tmp/">
+				<d:fileset xml:base="file:/">
 					<d:file href="style.css" media-type="text/css"/>
-					<d:file href="foo.xml" original-href="file:/tmp/foo.xml" media-type="application/x-dtbook+xml"/>
-					<d:file href="image.png" original-href="file:/tmp/image.png" media-type="image/png"/>
+					<d:file href="foo.xml" original-href="file:/foo.xml" media-type="application/x-dtbook+xml"/>
+					<d:file href="image.png" original-href="file:/image.png" media-type="image/png"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>

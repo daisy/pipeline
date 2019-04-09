@@ -14,10 +14,10 @@
 		<p>Embed externally linked images inside the ODT package.</p>
 	</p:documentation>
 	
-	<p:input port="fileset.in"/>
+	<p:input port="fileset.in" primary="true"/>
 	<p:input port="in-memory.in" sequence="true"/>
 	<p:input port="original-fileset"/>
-	<p:output port="fileset.out">
+	<p:output port="fileset.out" primary="true">
 		<p:pipe step="update" port="result.fileset"/>
 	</p:output>
 	<p:output port="in-memory.out" sequence="true">
@@ -113,5 +113,6 @@
 			<p:pipe step="embed-images" port="in-memory.in"/>
 		</p:input>
 	</px:fileset-update>
+	<p:sink/>
 	
 </p:declare-step>

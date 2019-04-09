@@ -36,6 +36,13 @@ import com.adobe.epubcheck.ops.OPSCheckerFactory;
 import com.adobe.epubcheck.overlay.OverlayCheckerFactory;
 import com.adobe.epubcheck.util.*;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "pxi:epubcheck",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}epubcheck" }
+)
 public class EpubCheckProvider implements XProcStepProvider {
 
 	private static HashMap<OPSType, String> modeMimeTypeMap;

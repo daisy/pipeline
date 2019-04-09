@@ -10,6 +10,12 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.SequenceType;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "saxon:column-number",
+	service = { ExtensionFunctionDefinition.class }
+)
 public class ColumnNumberFunction extends ExtensionFunctionDefinition {
 
 	private static final long serialVersionUID = -4202710868367933385L;

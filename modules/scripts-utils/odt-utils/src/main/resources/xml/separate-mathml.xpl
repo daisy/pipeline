@@ -17,9 +17,9 @@
 		the settings files of the sub documents.</p>
 	</p:documentation>
 	
-	<p:input port="fileset.in"/>
+	<p:input port="fileset.in" primary="true"/>
 	<p:input port="in-memory.in" sequence="true"/>
-	<p:output port="fileset.out">
+	<p:output port="fileset.out" primary="true">
 		<p:pipe step="update" port="result.fileset"/>
 	</p:output>
 	<p:output port="in-memory.out" sequence="true">
@@ -111,5 +111,6 @@
 			<p:pipe step="mathml" port="result"/>
 		</p:input>
 	</px:fileset-update>
+	<p:sink/>
 	
 </p:declare-step>

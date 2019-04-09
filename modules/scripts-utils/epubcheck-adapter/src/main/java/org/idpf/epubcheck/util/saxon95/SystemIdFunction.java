@@ -10,6 +10,12 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.SequenceType;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "saxon:system-id",
+	service = { ExtensionFunctionDefinition.class }
+)
 public class SystemIdFunction extends ExtensionFunctionDefinition {
 
 	private static final long serialVersionUID = -4202710868367933385L;

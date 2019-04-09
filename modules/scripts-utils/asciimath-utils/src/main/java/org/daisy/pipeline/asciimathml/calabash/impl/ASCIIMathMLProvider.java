@@ -21,14 +21,20 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
 import org.daisy.pipeline.asciimathml.ASCIIMathML;
+
+import org.osgi.service.component.annotations.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Element;
 
+@Component(
+	name = "px:asciimathml",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}asciimathml" }
+)
 public class ASCIIMathMLProvider implements XProcStepProvider {
 	
 	@Override

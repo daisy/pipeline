@@ -10,6 +10,12 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.SequenceType;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "saxon:line-number",
+	service = { ExtensionFunctionDefinition.class }
+)
 public class LineNumberFunction extends ExtensionFunctionDefinition {
 
 	private static final long serialVersionUID = -4202710868367933385L;
