@@ -7,9 +7,22 @@ import javax.sound.sampled.AudioFormat;
 import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.RoundRobinLoadBalancer;
 import org.daisy.pipeline.tts.TTSEngine;
+import org.daisy.pipeline.tts.TTSService;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.ComponentContext;
 
+@Component(
+	name = "nativeatt-tts-service",
+	service = { TTSService.class }
+)
 public class ATTService extends AbstractTTSService {
+	
+	@Activate
+	protected void loadSSMLadapter() {
+		super.loadSSMLadapter("/transform-ssml.xsl", ATTService.class);
+	}
 
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {

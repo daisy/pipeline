@@ -27,12 +27,28 @@
       <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.osx.OSXSpeechService
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -43,10 +59,10 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package />
+            <Private-Package>org.daisy.pipeline.tts.osx</Private-Package>
           </instructions>
         </configuration>
       </plugin>

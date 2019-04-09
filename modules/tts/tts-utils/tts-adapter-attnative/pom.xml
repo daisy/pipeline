@@ -29,6 +29,16 @@
       <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -40,6 +50,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.attnative.ATTService
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -131,10 +147,10 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-	    <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package/>
+            <Private-Package>org.daisy.pipeline.tts.attnative</Private-Package>
           </instructions>
         </configuration>
         <executions>
@@ -157,7 +173,6 @@
 		</Bundle-NativeCode>
                 <Include-Resource>
 		  {maven-resources},
-                  OSGI-INF/tts-service.xml=src/main/resources/OSGI-INF/tts-service.xml,
                   lib32/libatt.so=target/generated-resources/native/lib/i386-Linux-gpp/jni/libatt-nar-1.0.0-SNAPSHOT.so,
 		  lib64/libatt.so=target/generated-resources/native/lib/amd64-Linux-gpp/jni/libatt-nar-1.0.0-SNAPSHOT.so
                 </Include-Resource>

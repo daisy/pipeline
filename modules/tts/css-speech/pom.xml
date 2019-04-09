@@ -18,6 +18,14 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>jstyleparser</artifactId>
     </dependency>
@@ -66,8 +74,25 @@
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
     </dependency>
+   <dependency>
+     <groupId>org.osgi</groupId>
+     <artifactId>org.osgi.compendium</artifactId>
+     <scope>provided</scope>
+   </dependency>
+   <dependency>
+     <groupId>org.daisy.pipeline</groupId>
+     <artifactId>ds-to-spi-runtime</artifactId>
+     <scope>provided</scope>
+   </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.cssinlining.InlineCSSProvider,
+      org.daisy.pipeline.modules.impl.Module_css_speech
+    </expose-services>
+  </properties>
+  
   <build>
     <plugins>
       <plugin>
@@ -89,10 +114,13 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/inline-css.xml</Service-Component>
-            <Export-Package />
+            <Private-Package>
+              org.daisy.pipeline.cssinlining,
+              org.daisy.pipeline.modules.impl;-split-package:=first
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>

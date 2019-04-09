@@ -16,6 +16,13 @@ import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "get-tts-annotations",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}get-tts-annotations" }
+)
 public class GetAnnotationsProvider implements XProcStepProvider {
 
 	@Override

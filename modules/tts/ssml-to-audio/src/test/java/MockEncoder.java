@@ -13,6 +13,12 @@ import org.daisy.pipeline.audio.AudioEncoder;
 
 import org.ops4j.pax.exam.util.PathUtils;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "mock-encoder",
+	service = { AudioEncoder.class }
+)
 public class MockEncoder implements AudioEncoder {
 	
 	private final static File mp3Out = new File(PathUtils.getBaseDir(), "src/test/resources/mock-encoder/mock_short.mp3");

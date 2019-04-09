@@ -20,6 +20,13 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.TreeWriter;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "get-tts-lexicons",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}get-tts-lexicons" }
+)
 public class GetLexiconsProvider implements XProcStepProvider {
 
 	@Override

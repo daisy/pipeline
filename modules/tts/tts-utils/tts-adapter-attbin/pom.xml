@@ -31,7 +31,23 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.att.ATTBin
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -42,10 +58,10 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package />
+            <Private-Package>org.daisy.pipeline.tts.att</Private-Package>
           </instructions>
         </configuration>
       </plugin>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>w
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="nativeatt-tts-service" activate="loadSSMLadapter">
-   <implementation class="org.daisy.pipeline.tts.attnative.ATTService"/>
-   <service>
-      <provide interface="org.daisy.pipeline.tts.TTSService"/>
-   </service>
-</scr:component>

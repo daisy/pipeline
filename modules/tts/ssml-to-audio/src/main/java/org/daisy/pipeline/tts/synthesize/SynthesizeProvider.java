@@ -13,6 +13,16 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "ssml-to-audio",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}synthesize" }
+)
 public class SynthesizeProvider implements XProcStepProvider {
 	private TTSRegistry mRegistry;
 	private AudioServices mAudioServices;
@@ -23,6 +33,13 @@ public class SynthesizeProvider implements XProcStepProvider {
 	/**
 	 * Service component callback
 	 */
+	@Reference(
+		name = "uri-resolver",
+		unbind = "-",
+		service = URIResolver.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setURIResolver(URIResolver uriResolver) {
 		mURIResolver = uriResolver;
 	}
@@ -65,6 +82,13 @@ public class SynthesizeProvider implements XProcStepProvider {
 		        mAudioBufferTracker, mURIResolver);
 	}
 
+	@Reference(
+		name = "TTSRegistry",
+		unbind = "unsetTTSRegistry",
+		service = TTSRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	protected void setTTSRegistry(TTSRegistry registry) {
 		mRegistry = registry;
 	}
@@ -73,6 +97,13 @@ public class SynthesizeProvider implements XProcStepProvider {
 		mRegistry = null;
 	}
 
+	@Reference(
+		name = "AudioServices",
+		unbind = "unsetAudioServices",
+		service = AudioServices.class,
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	protected void setAudioServices(AudioServices audioServices) {
 		mAudioServices = audioServices;
 	}

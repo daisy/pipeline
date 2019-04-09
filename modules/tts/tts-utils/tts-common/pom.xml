@@ -26,9 +26,9 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-registry.xml</Service-Component>
           </instructions>
         </configuration>
       </plugin>
@@ -60,6 +60,11 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
     <!-- For its TreeWriter -->
@@ -97,5 +102,11 @@
       <artifactId>tts-helpers</artifactId>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.TTSRegistry
+    </expose-services>
+  </properties>
 
 </project>

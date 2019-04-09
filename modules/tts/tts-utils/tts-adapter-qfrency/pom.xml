@@ -47,6 +47,7 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
             <Service-Component>OSGI-INF/tts-service.xml</Service-Component>

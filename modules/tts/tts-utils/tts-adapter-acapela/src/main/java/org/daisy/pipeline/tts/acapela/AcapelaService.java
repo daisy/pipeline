@@ -7,11 +7,25 @@ import javax.sound.sampled.AudioFormat;
 import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.RoundRobinLoadBalancer;
 import org.daisy.pipeline.tts.TTSEngine;
+import org.daisy.pipeline.tts.TTSService;
 
 import com.sun.jna.Native;
 
-public class AcapelaService extends AbstractTTSService {
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.ComponentContext;
 
+@Component(
+	name = "acapela-tts-service",
+	service = { TTSService.class }
+)
+public class AcapelaService extends AbstractTTSService {
+	
+	@Activate
+	protected void loadSSMLadapter() {
+		super.loadSSMLadapter("/transform-ssml.xsl", AcapelaService.class);
+	}
+	
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
 

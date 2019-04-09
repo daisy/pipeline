@@ -16,6 +16,15 @@ import org.daisy.pipeline.tts.config.ConfigReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "tts-registry",
+	service = { TTSRegistry.class }
+)
 public class TTSRegistry {
 
 	public static class TTSResource {
@@ -31,6 +40,13 @@ public class TTSRegistry {
 	/**
 	 * Service component callback
 	 */
+	@Reference(
+		name = "uri-resolver",
+		unbind = "-",
+		service = URIResolver.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setURIResolver(URIResolver uriResolver) {
 		mURIResolver = uriResolver;
 	}
@@ -45,6 +61,13 @@ public class TTSRegistry {
 	/**
 	 * Service component callback
 	 */
+	@Reference(
+		name = "TTSService",
+		unbind = "removeTTS",
+		service = TTSService.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void addTTS(TTSService tts) {
 		ServerLogger.info("Adding TTSService " + TTSServiceUtil.displayName(tts));
 		mServices.add(tts);

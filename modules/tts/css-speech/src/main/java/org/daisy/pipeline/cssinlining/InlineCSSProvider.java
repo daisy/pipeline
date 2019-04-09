@@ -10,6 +10,16 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import cz.vutbr.web.css.CSSFactory;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "css-speech-inliner",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}inline-css" }
+)
 public class InlineCSSProvider implements XProcStepProvider {
 
 	private URIResolver resolver;
@@ -19,6 +29,13 @@ public class InlineCSSProvider implements XProcStepProvider {
 		return new InlineCSSStep(runtime, step, resolver);
 	}
 
+	@Reference(
+		name = "URIResolver",
+		unbind = "-",
+		service = URIResolver.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setUriResolver(URIResolver resolver) {
 		this.resolver = resolver;
 	}

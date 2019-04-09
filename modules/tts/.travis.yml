@@ -19,6 +19,10 @@ cache:
   directories:
     - $HOME/.m2/cached-repository
 
+# if the build fails because of an integration test, print the logs
+after_failure:
+  - find . -type f -path '*/target/it/*/build.log' -execdir bash -c 'if ! cat build.log | grep -qFx "[INFO] BUILD SUCCESS"; then tail -250 build.log; fi' \;
+
 # whitelist; only deploy master branch
 branches:
   only:

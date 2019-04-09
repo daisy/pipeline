@@ -31,8 +31,12 @@ import org.daisy.pipeline.tts.SSMLUtil;
 import org.daisy.pipeline.tts.SoundUtil;
 import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
+import org.daisy.pipeline.tts.TTSService;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.ComponentContext;
 
 /**
  * This synthesizer uses directly the AT&T's client binary and intermediate WAV
@@ -41,6 +45,10 @@ import org.daisy.pipeline.tts.VoiceInfo;
  * Before any conversion, run ATT/bin/TTSServer -m 40 -c {mPort} -config
  * your-tts-conf.cfg
  */
+@Component(
+	name = "attbin-tts-service",
+	service = { TTSService.class }
+)
 public class ATTBin extends AbstractTTSService {
 	private AudioFormat mAudioFormat;
 	private String mATTPath;

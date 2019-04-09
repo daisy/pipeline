@@ -38,6 +38,24 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
           runtime dependencies
     -->
@@ -75,6 +93,14 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.config.impl.GetAnnotationsProvider,
+      org.daisy.pipeline.tts.config.impl.GetLexiconsProvider,
+      org.daisy.pipeline.modules.impl.Module_tts_helpers
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -97,9 +123,13 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/get-tts-annotations.xml,OSGI-INF/get-tts-lexicons.xml</Service-Component>
+            <Private-Package>
+              org.daisy.pipeline.tts.config.impl,
+              org.daisy.pipeline.modules.impl;-split-package:=first
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>
