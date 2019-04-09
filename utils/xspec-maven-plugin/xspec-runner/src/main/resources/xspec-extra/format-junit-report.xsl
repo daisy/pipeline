@@ -33,7 +33,7 @@
 
     <xsl:template match="/">
         <testsuite name="{$classname}" errors="0" failures="{count(//x:test[@successful='false'])}"
-            skipped="count(//x:test[@pending='true'])" time="{$time}">
+            skipped="{count(//x:test[@pending='true'])}" time="{$time}">
             <xsl:apply-templates/>
         </testsuite>
     </xsl:template>
