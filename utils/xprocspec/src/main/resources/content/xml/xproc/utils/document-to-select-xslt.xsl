@@ -15,10 +15,6 @@
 
             <xsl:copy-of select="//namespace::*"/>
 
-            <xsl:element name="{$xsl-prefix}:param" namespace="http://www.w3.org/1999/XSL/Transform">
-                <xsl:attribute name="name" select="'test-base-uri'"/>
-                <xsl:attribute name="required" select="'yes'"/>
-            </xsl:element>
             <xsl:element name="{$xsl-prefix}:output" namespace="http://www.w3.org/1999/XSL/Transform">
                 <xsl:attribute name="indent" select="'yes'"/>
             </xsl:element>

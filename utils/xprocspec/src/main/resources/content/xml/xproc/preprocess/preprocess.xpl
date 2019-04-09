@@ -736,13 +736,6 @@
                             <p:input port="stylesheet">
                                 <p:document href="infer-scenarios.xsl"/>
                             </p:input>
-                            <!--
-                                This was added to fix an issue where some documents in the output of
-                                pxi:test-preprocess would have a wrong base uri in certain
-                                cases. I'm unsure whether this is a bug in the XSLT, in other
-                                XProcSpec code, in Saxon or in Calabash.
-                            -->
-                            <p:with-option name="output-base-uri" select="base-uri(/*)"/>
                         </p:xslt>
                         <p:for-each>
                             <p:iteration-source select="/*/*"/>
