@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>audio-modules-parent</artifactId>
-    <version>1.11.3-SNAPSHOT</version>
+    <version>1.12.0-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
@@ -32,12 +32,28 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
       <version>4.12</version>
     </dependency>
   </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.audio.lame.LameEncoder
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -46,7 +62,9 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>OSGI-INF/encoder.xml</Service-Component>
+            <Private-Package>
+              org.daisy.pipeline.audio.lame
+            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

@@ -19,6 +19,13 @@ import org.daisy.pipeline.audio.AudioEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "audio-encoder-lame",
+	immediate = true,
+	service = { AudioEncoder.class }
+)
 public class LameEncoder implements AudioEncoder {
 
 	static private class LameEncodingOptions implements EncodingOptions {
