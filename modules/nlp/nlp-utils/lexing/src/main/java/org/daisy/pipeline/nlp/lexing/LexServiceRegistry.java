@@ -10,12 +10,28 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.daisy.pipeline.nlp.lexing.LexService.LexerInitException;
 import org.daisy.pipeline.nlp.lexing.LexService.LexerToken;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "lexer-registry",
+	service = { LexServiceRegistry.class }
+)
 public class LexServiceRegistry {
 	private Map<LexService, List<LexerToken>> mLexerToTokens = new ConcurrentHashMap<LexService, List<LexerToken>>();
 
 	/**
 	 * Component callback
 	 */
+	@Reference(
+		name = "LexService",
+		unbind = "removeLexService",
+		service = LexService.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void addLexService(LexService lexer) {
 		mLexerToTokens.put(lexer, new CopyOnWriteArrayList<LexService.LexerToken>());
 	}

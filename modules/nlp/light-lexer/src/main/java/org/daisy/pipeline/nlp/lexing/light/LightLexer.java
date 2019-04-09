@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 import org.daisy.pipeline.nlp.lexing.LexService;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * This is a multi-language lexer that does not support the following features:
  * 
@@ -16,6 +18,10 @@ import org.daisy.pipeline.nlp.lexing.LexService;
  * 
  * - Period-based sentence segmentation (periods can be ambiguous).
  */
+@Component(
+	name = "light-lex-service",
+	service = { LexService.class }
+)
 public class LightLexer implements LexService {
 
 	private static class LightLexerToken extends LexerToken {

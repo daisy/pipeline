@@ -23,20 +23,27 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-common</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Service-Component>OSGI-INF/lexer-registry.xml</Service-Component>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.nlp.lexing.LexServiceRegistry
+    </expose-services>
+  </properties>
 
 </project>

@@ -21,6 +21,8 @@ import org.daisy.pipeline.nlp.lexing.LexService;
 import org.daisy.pipeline.nlp.ruledcategorizers.RuledFrenchCategorizer;
 import org.daisy.pipeline.nlp.ruledcategorizers.RuledMultilangCategorizer;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * RuleLexerToken uses RuledBasedTextCategorizer in PREFIX_MODE for splitting
  * the input stream into words. Then it calls a SentenceDectector to group them
@@ -28,6 +30,10 @@ import org.daisy.pipeline.nlp.ruledcategorizers.RuledMultilangCategorizer;
  * other pipeline jobs when they are thread-safe, since they may load big
  * dictionaries.
  */
+@Component(
+	name = "ruled-lex-service",
+	service = { LexService.class }
+)
 public class RuleBasedLexer implements LexService {
 
 	class RuleLexerToken extends LexService.LexerToken {

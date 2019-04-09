@@ -18,6 +18,14 @@
   <description>Break Detection Xproc Step based on any Lexer implementation</description>
 
  <dependencies>
+   <dependency>
+     <groupId>org.daisy.pipeline</groupId>
+     <artifactId>modules-registry</artifactId>
+   </dependency>
+   <dependency>
+     <groupId>org.daisy.pipeline</groupId>
+     <artifactId>xmlcatalog</artifactId>
+   </dependency>
 
    <dependency>
      <groupId>junit</groupId>
@@ -60,6 +68,17 @@
      <artifactId>nlp-lexing</artifactId>
    </dependency>
 
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!--
         runtime dependencies
     -->
@@ -69,6 +88,13 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_nlp_break_detection,
+      org.daisy.pipeline.nlp.breakdetect.BreakDetectProvider
+    </expose-services>
+  </properties>
 
    <build>
     <plugins>
@@ -80,10 +106,13 @@
             <!-- must match version from framework-bom -->
             <Import-Package>
               net.sf.saxon.*;version="[9.8.0,9.8.1)",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package />
-            <Service-Component>OSGI-INF/break-detect.xml</Service-Component>
+            <Private-Package>
+              org.daisy.pipeline.nlp.breakdetect,
+              org.daisy.pipeline.modules.impl;-split-package:=first
+            </Private-Package>
           </instructions>
         </configuration>
       </plugin>
