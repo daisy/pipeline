@@ -41,7 +41,6 @@ import net.sf.saxon.xpath.XPathFactoryImpl;
 import org.daisy.maven.xproc.api.XProcExecutionException;
 import org.daisy.maven.xproc.api.XProcEngine;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -66,20 +65,6 @@ public class XProcSpecRunner {
 	)
 	public void setXProcEngine(XProcEngine engine) {
 		this.engine = engine;
-	}
-	
-	@Activate
-	protected void activate() {
-		if (engine == null) {
-			
-			// We are not in an OSGi environment, try with ServiceLoader
-			ServiceLoader<XProcEngine> xprocEngines = ServiceLoader.load(XProcEngine.class);
-			try {
-				engine = xprocEngines.iterator().next();
-			} catch (NoSuchElementException e) {
-				throw new RuntimeException("Could not find any XProc engines on the classpath.");
-			}
-		}
 	}
 	
 	private static final Map<String,String> XPROCSPEC_NS = new HashMap<String,String>(); {
@@ -115,17 +100,16 @@ public class XProcSpecRunner {
 	                   File surefireReportsDir,
 	                   File tempDir,
 	                   File catalogFile,
+	                   File configFile,
 	                   Reporter reporter) {
 		
-		if (engine == null)
-			activate();
 		URL catalog = null;
 		if (catalogFile != null)
 			try {
 				catalog = catalogFile.toURL(); }
 			catch (MalformedURLException e) {
 				throw new RuntimeException(e); }
-			
+		
 		// register catalog file that contains http://www.daisy.org/xprocspec/custom-assertion-steps.xpl
 		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
 			
@@ -144,6 +128,8 @@ public class XProcSpecRunner {
 		if (catalog != null)
 			engine.setCatalog(catalog);
 		
+		engine.setConfiguration(configFile);
+		
 		// register Java implementation of px:message
 		// FIXME: make a generic step that can be used by all XProc engines
 		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
@@ -161,8 +147,8 @@ public class XProcSpecRunner {
 			}
 		} else if (engine.getClass().getName().equals("org.daisy.maven.xproc.pipeline.DaisyPipeline2")) {
 			
-			// assumes we are running inside OSGi
-			// org.daisy.maven.xproc.xprocspec.logging.pipeline.impl.MessageStepProvider registered through declarative services
+			// org.daisy.maven.xproc.xprocspec.logging.pipeline.impl.MessageStepProvider registered
+			// through declarative services or SPI
 		}
 		
 		URI xprocspec = asURI(XProcSpecRunner.class.getResource("/content/xml/xproc/xprocspec.xpl"));
@@ -276,10 +262,20 @@ public class XProcSpecRunner {
 		return totalErrors == 0 && totalFailures == 0;
 	}
 	
+	public boolean run(Map<String,File> tests,
+	                   File reportsDir,
+	                   File surefireReportsDir,
+	                   File tempDir,
+	                   File catalogFile,
+	                   Reporter reporter) {
+		return run(tests, reportsDir, surefireReportsDir, tempDir, catalogFile, null, reporter);
+	}
+	
 	public boolean run(File testsDir,
 	                   File reportsDir,
 	                   File surefireReportsDir,
 	                   File tempDir,
+	                   File configFile,
 	                   Reporter reporter) {
 		
 		Map<String,File> tests = new HashMap<String,File>();
@@ -289,9 +285,17 @@ public class XProcSpecRunner {
 					.replaceAll("\\.xprocspec$", "")
 					.replaceAll("[\\./\\\\]", "_"),
 				file);
-		File catalog = new File(testsDir, "catalog.xml");
-		if (!catalog.exists()) catalog = null;
-		return run(tests, reportsDir, surefireReportsDir, tempDir, catalog, reporter);
+		File catalogFile = new File(testsDir, "catalog.xml");
+		if (!catalogFile.exists()) catalogFile = null;
+		return run(tests, reportsDir, surefireReportsDir, tempDir, catalogFile, configFile, reporter);
+	}
+	
+	public boolean run(File testsDir,
+	                   File reportsDir,
+	                   File surefireReportsDir,
+	                   File tempDir,
+	                   Reporter reporter) {
+		return run(testsDir, reportsDir, surefireReportsDir, tempDir, null, reporter);
 	}
 	
 	public static interface Reporter {
@@ -318,7 +322,10 @@ public class XProcSpecRunner {
 			}
 			
 			private void println(String format, Object... args) {
-				stream.format(format + "\n", args);
+				if (args.length > 0)
+					stream.format(format + "\n", args);
+				else
+					stream.print(format + "\n");
 			}
 			
 			public void init() {

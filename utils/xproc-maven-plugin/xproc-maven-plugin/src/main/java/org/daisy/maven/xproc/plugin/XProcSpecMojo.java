@@ -1,7 +1,11 @@
 package org.daisy.maven.xproc.plugin;
 
 import java.io.File;
-
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
 
 import org.apache.maven.artifact.Artifact;
@@ -9,9 +13,6 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-import org.codehaus.plexus.classworlds.realm.ClassRealm;
-
-import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.xprocspec.XProcSpecRunner;
 import org.daisy.maven.xproc.xprocspec.XProcSpecRunner.Reporter;
 
@@ -121,33 +122,48 @@ public class XProcSpecMojo extends AbstractMojo {
 		SLF4JBridgeHandler.install();
 		java.util.logging.Logger.getLogger("").setLevel(java.util.logging.Level.FINEST);
 		
-		XProcSpecRunner runner = new XProcSpecRunner();
+		ClassLoader restoreClassLoader = Thread.currentThread().getContextClassLoader();
 		
-		File calabashXml = new File(new File(project.getBuild().getTestOutputDirectory()), "calabash.xml");
-		if (calabashXml.exists()) {
-			ClassRealm realm = (ClassRealm)Thread.currentThread().getContextClassLoader();
-			for (String path : project.getTestClasspathElements())
-				realm.addURL(new File(path).toURI().toURL());
-			for (Artifact artifact : project.getArtifacts())
-				realm.addURL(artifact.getFile().toURI().toURL());
-				
-			// assumes that this is the same engine as is used by the runner
-			XProcEngine engine = ServiceLoader.load(XProcEngine.class).iterator().next();
-			engine.getClass().getMethod("setConfiguration", File.class).invoke(engine, calabashXml);
-			runner.setXProcEngine(engine);
+		try {
+		
+		URLClassLoader classLoader; {
+			List<URL> classPathURLs = new ArrayList<URL>(); {
+				for (String path : project.getTestClasspathElements())
+					classPathURLs.add(new File(path).toURI().toURL());
+				for (Artifact artifact : project.getArtifacts())
+					classPathURLs.add(artifact.getFile().toURI().toURL());
+			}
+			classLoader = new URLClassLoader(classPathURLs.toArray(new URL[classPathURLs.size()]),
+			                                 Thread.currentThread().getContextClassLoader());
 		}
-		
+		Thread.currentThread().setContextClassLoader(classLoader);
+		XProcSpecRunner runner; {
+			try {
+				runner = ServiceLoader.load(XProcSpecRunner.class).iterator().next();
+			} catch (NoSuchElementException e) {
+				throw new RuntimeException("No XProcSpecRunner found", e);
+			}
+		}
+		File calabashXml = new File(new File(project.getBuild().getTestOutputDirectory()), "calabash.xml");
+		if (!calabashXml.exists()) calabashXml = null;
 		Reporter.DefaultReporter reporter = new Reporter.DefaultReporter(System.out);
 		
 		if (!runner.run(xprocspecDirectory,
 		                reportsDirectory,
 		                surefireReportsDirectory,
 		                tempDir,
+		                calabashXml,
 		                reporter))
 			throw new MojoFailureException("There are test failures.\n"
 			                               + "Please refer to " + reportsDirectory.getPath()
 			                               + " for the individual test results.");
 		
+		} finally {
+			Thread.currentThread().setContextClassLoader(restoreClassLoader);
+		}
+		
+		} catch (MojoFailureException e) {
+			throw e;
 		} catch (Throwable e) {
 			e.printStackTrace();
 			throw new MojoFailureException(e.getMessage(), e);

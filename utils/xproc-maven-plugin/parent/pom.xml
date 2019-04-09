@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
-        <version>1.1.20-p1-98</version>
+        <version>1.1.20-p3-98-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>com.thaiopensource</groupId>

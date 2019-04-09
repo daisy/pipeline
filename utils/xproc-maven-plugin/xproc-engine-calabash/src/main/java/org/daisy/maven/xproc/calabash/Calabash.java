@@ -31,6 +31,7 @@ import com.xmlcalabash.util.Input;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.XdmNode;
 
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -53,8 +54,8 @@ public class Calabash implements XProcEngine {
 	
 	private URIResolver nextURIResolver = null;
 	private String nextCatalogFile = null;
-	private Reader nextConfig = null;
-	private Reader nextDefaultConfig = null;
+	private XdmNode nextConfig = null;
+	private XdmNode nextDefaultConfig = null;
 	
 	@Reference(
 		name = "URIResolver",
@@ -87,37 +88,49 @@ public class Calabash implements XProcEngine {
 			nextConfig = null;
 		else
 			try {
-				nextConfig = new FileReader(configFile); }
+				XProcConfiguration config = new XProcConfiguration("he", false);
+				nextConfig = config.getProcessor().newDocumentBuilder()
+					.build(new SAXSource(new InputSource(new FileReader(configFile)))); }
 			catch (FileNotFoundException e) {
 				throw new IllegalArgumentException("Config file does not exist", e); }
+			catch (SaxonApiException e) {
+					throw new RuntimeException(e); }
 	}
 	
 	// Settings to be always applied
 	public void setDefaultConfiguration(Reader defaultConfig) {
-		nextDefaultConfig = defaultConfig;
+		XProcConfiguration config = new XProcConfiguration("he", false);
+		try {
+			nextDefaultConfig = config.getProcessor().newDocumentBuilder()
+				.build(new SAXSource(new InputSource(defaultConfig))); }
+		catch (SaxonApiException e) {
+			throw new RuntimeException(e); }
 	}
 	
 	private XProcRuntime currentRuntime = null;
 	private URIResolver currentURIResolver = null;
 	private String currentCatalogFile = null;
-	private Reader currentConfig = null;
-	private Reader currentDefaultConfig = null;
+	private XdmNode currentConfig = null;
+	private XdmNode currentDefaultConfig = null;
 	
 	private XProcRuntime runtime() {
+		
+		// A new runtime needs to be created for every run because of
+		// a bug in XMLCalabash with p:iteration-position().
+		currentRuntime = null;
+		currentURIResolver = null;
+		currentCatalogFile = null;
+		currentConfig = null;
+		currentDefaultConfig = null;
+		
 		System.setProperty("com.xmlcalabash.config.user", "false");
 		System.setProperty("com.xmlcalabash.config.local", "false");
 		if (currentRuntime == null || !equal(nextConfig, currentConfig) || !equal(nextDefaultConfig, currentDefaultConfig)) {
 			XProcConfiguration config = new XProcConfiguration("he", false);
-			if (nextDefaultConfig != null) {
-				try {
-					config.parse(config.getProcessor().newDocumentBuilder().build(new SAXSource(new InputSource(nextDefaultConfig)))); }
-				catch (SaxonApiException e) {
-					throw new RuntimeException(e); }}
-			if (nextConfig != null) {
-				try {
-					config.parse(config.getProcessor().newDocumentBuilder().build(new SAXSource(new InputSource(nextConfig)))); }
-				catch (SaxonApiException e) {
-					throw new RuntimeException(e); }}
+			if (nextDefaultConfig != null)
+				config.parse(nextDefaultConfig);
+			if (nextConfig != null)
+				config.parse(nextConfig);
 			currentRuntime = new XProcRuntime(config); }
 		if (nextURIResolver == null)
 			nextURIResolver = simpleURIResolver();

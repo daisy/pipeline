@@ -9,8 +9,6 @@ import java.util.ServiceLoader;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 
-import org.daisy.maven.xproc.api.XProcEngine;
-import org.daisy.maven.xproc.calabash.Calabash;
 import org.daisy.maven.xproc.xprocspec.XProcSpecRunner.Reporter;
 
 import org.hamcrest.BaseMatcher;
@@ -52,7 +50,7 @@ public class XProcSpecRunnerTest {
 	
 	@Before
 	public void setup() {
-		xprocspecRunner = new XProcSpecRunner();
+		xprocspecRunner = ServiceLoader.load(XProcSpecRunner.class).iterator().next();
 		reportsDir = Files.createTempDir();
 		surefireReportsDir = Files.createTempDir();
 		tempDir = Files.createTempDir();
@@ -221,10 +219,8 @@ public class XProcSpecRunnerTest {
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0"                                       + "\n"));
 		stream.reset();
 		setup();
-		Calabash engine = (Calabash)ServiceLoader.load(XProcEngine.class).iterator().next();
-		engine.setConfiguration(new File(testsDir, "foo_implementation_java.xml"));
-		xprocspecRunner.setXProcEngine(engine);
 		xprocspecRunner.run(tests, reportsDir, surefireReportsDir, tempDir, null,
+		                    new File(testsDir, "foo_implementation_java.xml"),
 		                    new Reporter.DefaultReporter(new PrintStream(stream, true)));
 		assertThat(stream.toString(), matchesPattern(
 "-------------------------------------------------------"                                + "\n" +
