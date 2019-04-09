@@ -162,12 +162,15 @@
 					                                                 pom:version=$version]">
 						<xsl:variable name="managed-internal-runtime-dependencies" as="element()">
 							<xsl:variable name="dependencyManagement" select="pom:dependencyManagement"/>
+							<xsl:variable name="dependencies" select="pom:dependencies"/>
 							<pom:projects>
+								<!-- for all other projects -->
 								<xsl:for-each select="$internal-runtime-dependencies/pom:project">
 									<xsl:copy>
 										<xsl:copy-of select="pom:groupId"/>
 										<xsl:copy-of select="pom:artifactId"/>
 										<pom:dependencies>
+											<!-- for all runtime dependencies of that project -->
 											<xsl:for-each select="pom:dependencies/pom:dependency">
 												<xsl:copy>
 													<xsl:copy-of select="pom:groupId"/>
@@ -189,10 +192,16 @@
 																<xsl:value-of select="$managed-version"/>
 															</xsl:when>
 															<xsl:otherwise>
-																<xsl:text>DUMMY</xsl:text>
+																<xsl:text>DUMMY</xsl:text> <!-- not managed -->
 															</xsl:otherwise>
 														</xsl:choose>
 													</pom:version>
+													<xsl:copy-of select="$dependencies
+													                     /pom:dependency[string(pom:groupId)=string(current()/pom:groupId) and
+													                                     string(pom:artifactId)=string(current()/pom:artifactId) and
+													                                     string(pom:type)=string(current()/pom:type) and
+													                                     string(pom:classifier)=string(current()/pom:classifier)]
+													                     /pom:exclusions"/>
 												</xsl:copy>
 											</xsl:for-each>
 										</pom:dependencies>
@@ -697,6 +706,7 @@
 		    dependency scope of this project if this template is used to compute transitive dependencies
 		-->
 		<xsl:param name="scope" as="xs:string?" select="()"/>
+		<xsl:param name="exclusions" select="()"/>
 		<xsl:if test="not(exists($scope)) or $scope=('compile','provided','runtime','test')">
 			<xsl:variable name="project" select="."/>
 			<!--
@@ -721,7 +731,10 @@
 				                                     else
 				                                       $scope)
 				                                   else ''"/>
-				<xsl:if test="not($scope='')">
+				<xsl:if test="not($scope='')
+				              and not(self::pom:dependency
+				                      and $exclusions[string(pom:artifactId)=string(current()/pom:artifactId) and
+				                                      string(pom:groupId)=string(current()/pom:groupId)])">
 					<xsl:variable name="groupId" select="pom:groupId"/>
 					<xsl:variable name="artifactId" select="pom:artifactId"/>
 					<xsl:variable name="version">
@@ -832,6 +845,7 @@
 						                                                                                pom:artifactId=$artifactId]">
 							<xsl:with-param name="managed-internal-runtime-dependencies" select="$managed-internal-runtime-dependencies"/>
 							<xsl:with-param name="scope" select="$scope"/>
+							<xsl:with-param name="exclusions" select="pom:exclusions/pom:exclusion"/>
 						</xsl:apply-templates>
 					</xsl:if>
 				</xsl:if>
