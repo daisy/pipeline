@@ -18,6 +18,19 @@
       <artifactId>webservice-utils</artifactId>
       <scope>provided</scope>
     </dependency>
+    <!--
+        add transitive dependencies to help Maven to correctly determine the build order
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build>
     <pluginManagement>

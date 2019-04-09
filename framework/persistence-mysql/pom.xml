@@ -22,6 +22,11 @@
       <artifactId>org.osgi.enterprise</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -37,9 +42,9 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>OSGI-INF/daisy-mysql-emf.xml</Service-Component>
             <!--require mysql dependency -->
 	    <Require-Bundle>com.springsource.com.mysql.jdbc</Require-Bundle>
+            <_dsannotations>*</_dsannotations>
           </instructions>
         </configuration>
       </plugin>

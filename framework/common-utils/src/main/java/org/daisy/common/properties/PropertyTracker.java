@@ -10,12 +10,21 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+
 /*
  * This class is not intended to provide configuration values, 
  * It's a mechanism to control which properties are set in different 
  * bundles along the framework
  * 
  */
+@Component(
+	name = "property-tracker",
+	immediate = true,
+	service = { PropertyTracker.class }
+)
 public class PropertyTracker {
 	//Properties are indexed using propery name and bundle name, there shouldnt be clashes 
 	// but just in case
@@ -24,10 +33,12 @@ public class PropertyTracker {
 	private LinkedList<Property> properties= new LinkedList<Property>();
 	private static Logger logger = LoggerFactory.getLogger(PropertyTracker.class.getName());
 
+	@Activate
 	public void activate(){
 		logger.debug("Property tracker up");
 	}
 
+	@Deactivate
 	public void deactivate(){
 		logger.debug("Property tracker down");
 	}

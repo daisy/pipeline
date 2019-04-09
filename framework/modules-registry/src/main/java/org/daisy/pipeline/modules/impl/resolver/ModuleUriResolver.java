@@ -1,6 +1,8 @@
 package org.daisy.pipeline.modules.impl.resolver;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URI;
 
 import javax.xml.transform.Source;
@@ -15,10 +17,23 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 /**
  * ModuleUriResolver resolves uris taking into account the components from the
  * modules loaded.
  */
+@Component(
+	name = "module-uri-resolver",
+	service = {
+		URIResolver.class,
+		EntityResolver.class
+	}
+)
 public class ModuleUriResolver implements URIResolver, EntityResolver {
 
 	/** The m logger. */
@@ -31,6 +46,7 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 	/**
 	 * Activate.
 	 */
+	@Activate
 	public void activate() {
 		mLogger.trace("Activating module URI resolver");
 	}
@@ -41,6 +57,13 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 	 * @param reg
 	 *            the new module registry
 	 */
+	@Reference(
+		name = "module-registry",
+		unbind = "-",
+		service = ModuleRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setModuleRegistry(ModuleRegistry reg) {
 		mRegistry = reg;
 	}
@@ -51,20 +74,35 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 	 * @see javax.xml.transform.URIResolver#resolve(java.lang.String,
 	 * java.lang.String)
 	 */
+	@SuppressWarnings(
+		"deprecation" // URLDecode.decode is deprecated
+	)
 	@Override
 	public Source resolve(String href, String base) {
-		// System.out.println("Resolving:"+href);
 		URI uhref = URI.create(href);
-		Module mod = mRegistry.getModuleByComponent(uhref);
-
+		if (uhref.isAbsolute()) {
+			return resolveFromModules(uhref);
+		} else if (base != null && base.startsWith("jar:file:")) {
+			// handle this case also because it is not handled correctly in XMLCalabash
+			try {
+				return new SAXSource(new InputSource(new URL(new URL(base), href).toString()));
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(e); // should not happen
+			}
+		}
+		// otherwise let it be handled further down
+		return null;
+	}
+	
+	private Source resolveFromModules(URI href) {
+		Module mod = mRegistry.getModuleByComponent(href);
 		if (mod == null) {
 			mLogger.trace("No module found for uri:" + href);
 			return null;
 		}
-		URI resource = mod.getComponent(uhref).getResource();
+		URI resource = mod.getComponent(href).getResource();
 		if (resource == null) {
-			mLogger.trace("No resource found in module " + mod.getName()
-					+ " for uri :" + href);
+			mLogger.trace("No resource found in module " + mod.getName() + " for uri :" + href);
 			return null;
 		}
 		SAXSource source = new SAXSource(new InputSource(resource.toString()));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://www.osgi.org/xmlns/scr/v1.1.0">
   <component name="catch-xproc-error" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_catch_xproc_error"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -12,7 +12,7 @@
     <property name="script.url" type="String" value="/module/catch-xproc-error.xpl"/>
   </component>
   <component name="xproc-error" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_xproc_error"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -23,7 +23,7 @@
     <property name="script.url" type="String" value="/module/xproc-error.xpl"/>
   </component>
   <component name="catch-xslt-terminate-error" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_catch_xslt_terminate_error"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -34,7 +34,7 @@
     <property name="script.url" type="String" value="/module/catch-xslt-terminate-error.xpl"/>
   </component>
   <component name="xslt-terminate-error" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_xslt_terminate_error"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -45,7 +45,7 @@
     <property name="script.url" type="String" value="/module/xslt-terminate-error.xpl"/>
   </component>
   <component name="java-step-runtime-error" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_java_step_runtime_error"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -56,7 +56,7 @@
     <property name="script.url" type="String" value="/module/java-step-runtime-error.xpl"/>
   </component>
   <component name="java-function-runtime-error" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_java_function_runtime_error"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -67,7 +67,7 @@
     <property name="script.url" type="String" value="/module/java-function-runtime-error.xpl"/>
   </component>
   <component name="xslt-warning" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_xslt_warning"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -78,7 +78,7 @@
     <property name="script.url" type="String" value="/module/xslt-warning.xpl"/>
   </component>
   <component name="xproc-warning" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_xproc_warning"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -89,7 +89,7 @@
     <property name="script.url" type="String" value="/module/xproc-warning.xpl"/>
   </component>
   <component name="cx-eval-error" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_cx_eval_error"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -100,7 +100,7 @@
     <property name="script.url" type="String" value="/module/cx-eval-error.xpl"/>
   </component>
   <component name="progress-messages" immediate="true">
-    <implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_progress_messages"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>

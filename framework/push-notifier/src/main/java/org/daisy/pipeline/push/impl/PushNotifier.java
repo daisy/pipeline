@@ -32,10 +32,22 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 // notify clients whenever there are new messages or a change in status
 // this class could evolve into a general notification utility
 // e.g. it could also trigger email notifications
 // TODO: be sure to only do this N times per second
+@Component(
+    name = "push-notifier",
+    immediate = true,
+    service = { CallbackHandler.class }
+)
 public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor,Integer> {
 
         private JobManagerFactory jobManagerFactory;
@@ -58,6 +70,7 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
         public PushNotifier() {
         }
 
+        @Activate
         public void init(BundleContext context) {
                 logger = LoggerFactory.getLogger(Poster.class.getName());
                 logger.debug("Activating push notifier");
@@ -67,6 +80,7 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                 this.startTimer();
         }
 
+        @Deactivate
         public void close() {
                 cancelTimer();
         }
@@ -82,6 +96,13 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
                 }
         }
 
+        @Reference(
+           name = "event-bus-provider",
+           unbind = "-",
+           service = EventBusProvider.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setEventBusProvider(EventBusProvider eventBusProvider) {
                 eventBusProvider.get().register(this);
         }
@@ -89,11 +110,25 @@ public class PushNotifier implements CallbackHandler, BiConsumer<MessageAccessor
         /**
          * @param clientStorage the clientStorage to set
          */
+        @Reference(
+           name = "webservice-storage",
+           unbind = "-",
+           service = WebserviceStorage.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setWebserviceStorage(WebserviceStorage storage) {
                 this.clientStorage = storage.getClientStorage();
                 
         }
 
+        @Reference(
+           name = "job-manager-factory",
+           unbind = "-",
+           service = JobManagerFactory.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.jobManagerFactory = jobManagerFactory;
         }

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="close" name="xpath-registry">
-   <implementation class="org.daisy.pipeline.xpath.XPathFunctionRegistry"/>
-   <reference bind="addFunction" cardinality="0..n" interface="net.sf.saxon.lib.ExtensionFunctionDefinition" name="ExtensionFunctionDefinition" policy="dynamic" unbind="removeFunction"/>
-   <service>
-      <provide interface="org.daisy.pipeline.xpath.XPathFunctionRegistry"/>
-   </service>
-</scr:component>

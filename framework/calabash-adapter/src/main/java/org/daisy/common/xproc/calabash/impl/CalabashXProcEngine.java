@@ -20,11 +20,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 //TODO check thread safety
 /**
  * Calabash xproc engine wrapper
  */
-public final class CalabashXProcEngine implements XProcEngine {
+@Component(
+	name = "calabash-xproc-engine",
+	service = { XProcEngine.class }
+)
+public class CalabashXProcEngine implements XProcEngine {
 
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
@@ -56,6 +66,7 @@ public final class CalabashXProcEngine implements XProcEngine {
 	/**
 	 * Activate (to be used by OSGI)
 	 */
+	@Activate
 	public void activate(){
 		logger.trace("Activating XProc Engine");
 	}
@@ -94,6 +105,13 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 *
 	 * @param configFactory the new configuration factory
 	 */
+	@Reference(
+		name = "calabash-config-factory",
+		unbind = "-",
+		service = XProcConfigurationFactory.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setConfigurationFactory(XProcConfigurationFactory configFactory) {
 		this.configFactory = configFactory;
 	}
@@ -103,6 +121,13 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 *
 	 * @param entityResolver the new entity resolver
 	 */
+	@Reference(
+		name = "entity-resolver",
+		unbind = "-",
+		service = EntityResolver.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setEntityResolver(EntityResolver entityResolver) {
 		this.entityResolver = entityResolver;
 	}
@@ -112,6 +137,13 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 *
 	 * @param uriResolver the new uri resolver
 	 */
+	@Reference(
+		name = "uri-resolver",
+		unbind = "-",
+		service = URIResolver.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setUriResolver(URIResolver uriResolver) {
 		this.uriResolver = uriResolver;
 	}
@@ -121,9 +153,24 @@ public final class CalabashXProcEngine implements XProcEngine {
 	 *
 	 * @param factory the new message listener factory
 	 */
+	@Reference(
+		name = "event-bus-provider",
+		unbind = "-",
+		service = EventBusProvider.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setEventBusProvider(EventBusProvider eventBusProvider){
 		this.eventBusProvider=eventBusProvider;
 	}
+
+	@Reference(
+		name = "PropertyPublisherFactory",
+		unbind = "unsetPropertyPublisherFactory",
+		service = PropertyPublisherFactory.class,
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
 		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
 		//the property publishing step goes here

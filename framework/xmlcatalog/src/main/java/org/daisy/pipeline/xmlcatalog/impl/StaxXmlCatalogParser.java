@@ -23,9 +23,19 @@ import org.daisy.pipeline.xmlcatalog.impl.XmlCatalogConstants.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 /**
  * Stax based XmlCatalog parser implementation
  */
+@Component(
+	name = "catalog-parser",
+	service = { XmlCatalogParser.class }
+)
 public class StaxXmlCatalogParser implements XmlCatalogParser {
 
 	private static final String HTTP_WWW_OASIS_OPEN_ORG_COMMITTEES_ENTITY_RELEASE_1_0_CATALOG_DTD = "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd";
@@ -68,6 +78,13 @@ public class StaxXmlCatalogParser implements XmlCatalogParser {
 	 * @param factory
 	 *            the new factory
 	 */
+	@Reference(
+		name = "stax-input-factory",
+		unbind = "-",
+		service = XMLInputFactory.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setFactory(XMLInputFactory factory) {
 		mFactory = factory;
 		mFactory.setXMLResolver(mResolver);
@@ -76,6 +93,7 @@ public class StaxXmlCatalogParser implements XmlCatalogParser {
 	/**
 	 * Activate (OSGI).
 	 */
+	@Activate
 	public void activate() {
 		logger.trace("Activating XmlCatalogParser");
 	}

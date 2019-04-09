@@ -13,6 +13,17 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+    name = "datatype-registry",
+    immediate = true,
+    service = { DatatypeRegistry.class }
+)
 public class DefaultDatatypeRegistry implements DatatypeRegistry {
 
         private static final Logger logger = LoggerFactory.getLogger(DefaultScriptRegistry.class);
@@ -22,6 +33,7 @@ public class DefaultDatatypeRegistry implements DatatypeRegistry {
         /**
          * Activate (OSGI).
          */
+        @Activate
         public void activate(){
                 logger.debug("Activating datatype registry");
         }
@@ -36,6 +48,13 @@ public class DefaultDatatypeRegistry implements DatatypeRegistry {
                 return this.registry.values();
         }
 
+        @Reference(
+            name = "datatype-services",
+            unbind = "unregister",
+            service = DatatypeService.class,
+            cardinality = ReferenceCardinality.MULTIPLE,
+            policy = ReferencePolicy.DYNAMIC
+        )
         @Override
         public void register(DatatypeService service) {
                 logger.debug("Registering "+service.toString());

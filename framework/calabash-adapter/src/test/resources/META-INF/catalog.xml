@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri uri="../module/catch-xproc-error.xpl" px:content-type="script" px:id="catch-xproc-error"/>
+  <uri uri="../module/xproc-error.xpl" px:content-type="script" px:id="xproc-error"/>
+  <uri uri="../module/catch-xslt-terminate-error.xpl" px:content-type="script" px:id="catch-xslt-terminate-error"/>
+  <uri uri="../module/xslt-terminate-error.xpl" px:content-type="script" px:id="xslt-terminate-error"/>
+  <uri uri="../module/java-step-runtime-error.xpl" px:content-type="script" px:id="java-step-runtime-error"/>
+  <uri uri="../module/java-function-runtime-error.xpl" px:content-type="script" px:id="java-function-runtime-error"/>
+  <uri uri="../module/xslt-warning.xpl" px:content-type="script" px:id="xslt-warning"/>
+  <uri uri="../module/xproc-warning.xpl" px:content-type="script" px:id="xproc-warning"/>
+  <uri uri="../module/cx-eval-error.xpl" px:content-type="script" px:id="cx-eval-error"/>
+  <uri uri="../module/progress-messages.xpl" px:content-type="script" px:id="progress-messages"/>
+</catalog>

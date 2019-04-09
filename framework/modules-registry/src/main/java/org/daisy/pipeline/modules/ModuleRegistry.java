@@ -10,16 +10,6 @@ import java.net.URI;
  */
 public interface ModuleRegistry extends Iterable<Module> {
 
-
-	/**
-	 * Adds the module.
-	 *
-	 * @param module the module
-	 */
-	public void addModule(Module module);
-
-
-
 	/**
 	 * Gets the module which has a component identified by the unique systemId.
 	 *

@@ -26,6 +26,16 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+    name = "persistent-job-storage",
+    immediate = true,
+    service = { JobStorage.class }
+)
 public class PersistentJobStorage implements JobStorage {
         private final static String STORE_MODE="javax.persistence.cache.storeMode";
         private static final Logger logger = LoggerFactory
@@ -46,11 +56,26 @@ public class PersistentJobStorage implements JobStorage {
                 this.configurator=configurator;
         }
 
+        @Reference(
+           name = "entity-manager-factory",
+           unbind = "-",
+           service = EntityManagerFactory.class,
+           target = "(osgi.unit.name=pipeline-pu)",
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setEntityManagerFactory(EntityManagerFactory emf) {
                 this.db = new Database(emf);
                 this.filter=QueryDecorator.empty(db.getEntityManager());
         }
 
+        @Reference(
+           name = "script-registry",
+           unbind = "-",
+           service = ScriptRegistry.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setRegistry(ScriptRegistry scriptRegistry) {
                 PersistentJobContext.setScriptRegistry(scriptRegistry);
         }
@@ -140,6 +165,13 @@ public class PersistentJobStorage implements JobStorage {
         /**
          * @param configurator the configurator to set
          */
+        @Reference(
+           name = "runtime-configurator",
+           unbind = "-",
+           service = RuntimeConfigurator.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setConfigurator(RuntimeConfigurator configurator) {
                 this.configurator = configurator;
         }

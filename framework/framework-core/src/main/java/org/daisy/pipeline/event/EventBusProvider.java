@@ -9,6 +9,12 @@ import org.daisy.common.slf4j.AbstractLogger;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "event-bus-provider",
+	service = { EventBusProvider.class }
+)
 public class EventBusProvider implements Supplier<EventBus>{
 
 	private final EventBus mEventBus=new EventBus();//AsyncEventBus(Executors.newFixedThreadPool(10));

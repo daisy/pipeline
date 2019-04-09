@@ -64,7 +64,7 @@ public abstract class OSGiTestBase extends AbstractTest {
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Bundle-Name", "Test module");
+		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
 		probe.setHeader("Service-Component", "OSGI-INF/script.xml");
 		return probe;
 	}

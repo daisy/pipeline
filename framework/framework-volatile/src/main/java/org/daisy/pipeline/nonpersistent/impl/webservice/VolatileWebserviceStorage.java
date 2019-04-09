@@ -8,6 +8,14 @@ import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "volatile-webservice-storage",
+	immediate = true,
+	service = { WebserviceStorage.class }
+)
 public class VolatileWebserviceStorage   implements WebserviceStorage{
 	
 	private static final Logger logger = LoggerFactory
@@ -23,6 +31,7 @@ public class VolatileWebserviceStorage   implements WebserviceStorage{
 		jobCnfStorage= new VolatileJobConfigurationStorage();
 	}
 
+	@Activate
 	public void activate() {
 		logger.debug("Bringing VolatileWebserviceStorage up");
 	}

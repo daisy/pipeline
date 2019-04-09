@@ -15,11 +15,20 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 //TODO check thread safety
 /**
  *  Default implementation for the ScriptRegistry interface.
  */
+@Component(
+	name = "script-registry",
+	service = { ScriptRegistry.class }
+)
 public class DefaultScriptRegistry implements ScriptRegistry {
 
 	/** The Constant logger. */
@@ -34,6 +43,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	/**
 	 * Activate (OSGI).
 	 */
+	@Activate
 	public void activate(){
 		logger.debug("Activating script registry");
 	}
@@ -43,6 +53,13 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	 *
 	 * @param script the script
 	 */
+	@Reference(
+		name = "script-service",
+		unbind = "unregister",
+		service = XProcScriptService.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void register(final XProcScriptService script) {
 		logger.debug("Registering script {}", script.getId());
 		if (!script.hasParser()){
@@ -76,6 +93,13 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	 *
 	 * @param parser the new parser
 	 */
+	@Reference(
+		name = "script-parser",
+		unbind = "unsetParser",
+		service = XProcScriptParser.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setParser(XProcScriptParser parser) {
 		// TODO check
 		this.parser = parser;

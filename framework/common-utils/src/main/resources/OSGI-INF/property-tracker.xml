@@ -1,6 +1,0 @@
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="property-tracker">
-   <implementation class="org.daisy.common.properties.PropertyTracker"/>
-   <service>
-      <provide interface="org.daisy.common.properties.PropertyTracker"/>
-   </service>   
-</scr:component>

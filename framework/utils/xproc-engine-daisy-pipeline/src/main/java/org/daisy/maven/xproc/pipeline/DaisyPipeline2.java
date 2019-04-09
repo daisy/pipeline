@@ -30,7 +30,6 @@ import org.daisy.maven.xproc.api.XProcExecutionException;
 
 import org.daisy.pipeline.job.JobMonitorFactory;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -69,9 +68,6 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 		this.jobMonitorFactory = jobMonitorFactory;
 	}
 	
-	@Activate
-	protected void activate() {}
-	
 	public void setCatalog(URL catalog) {
 		if (catalog != null)
 			throw new UnsupportedOperationException("Setting catalog not supported.");
@@ -80,6 +76,11 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	public void setCatalog(File catalog) {
 		if (catalog != null)
 			throw new UnsupportedOperationException("Setting catalog file not supported.");
+	}
+	
+	public void setConfiguration(File config) {
+		if (config != null)
+			throw new UnsupportedOperationException("Can not be configured with a file.");
 	}
 	
 	public void run(String pipeline,

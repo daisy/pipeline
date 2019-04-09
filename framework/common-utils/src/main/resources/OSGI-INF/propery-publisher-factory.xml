@@ -1,8 +1,0 @@
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="property-publisher-factory">
-   <implementation class="org.daisy.common.properties.PropertyPublisherFactory"/>
-   <service>
-      <provide interface="org.daisy.common.properties.PropertyPublisherFactory"/>
-   </service>   
-   <reference name="property-tracker" interface="org.daisy.common.properties.PropertyTracker"  bind="setTracker" cardinality="1..1" policy="static"/> 
-
-</scr:component>

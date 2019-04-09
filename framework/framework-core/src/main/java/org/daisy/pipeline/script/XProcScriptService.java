@@ -6,10 +6,10 @@ package org.daisy.pipeline.script;
 import java.net.URL;
 import java.util.Map;
 
+import org.daisy.common.file.URLs;
+
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-
-import org.osgi.service.component.ComponentContext;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -54,7 +54,7 @@ public class XProcScriptService {
 	 *
 	 * @param properties the properties
 	 */
-	public void activate(ComponentContext context, Map<?, ?> properties) {
+	public void activate(Map<?, ?> properties, Class<?> context) {
 		if (properties.get(SCRIPT_ID) == null
 				|| properties.get(SCRIPT_ID).toString().isEmpty()) {
 			throw new IllegalArgumentException(SCRIPT_ID
@@ -77,7 +77,7 @@ public class XProcScriptService {
 					+ " property must not be empty");
 		}
 		String path = properties.get(SCRIPT_URL).toString();
-		url = context.getBundleContext().getBundle().getEntry(path);
+		url = URLs.getResourceFromJAR(path, context);
 		if (url == null)
 			throw new IllegalArgumentException("Resource at location " + path + " could not be found");
 		id = properties.get(SCRIPT_ID).toString();

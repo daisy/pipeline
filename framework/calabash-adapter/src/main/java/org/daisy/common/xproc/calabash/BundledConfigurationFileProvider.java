@@ -6,7 +6,7 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Map;
 
-import org.osgi.service.component.ComponentContext;
+import org.daisy.common.file.URLs;
 
 public class BundledConfigurationFileProvider implements ConfigurationFileProvider {
 	
@@ -15,12 +15,12 @@ public class BundledConfigurationFileProvider implements ConfigurationFileProvid
 	private URL configFile = null;
 	private String name = null;
 	
-	protected void activate(ComponentContext context, Map<?,?> properties) throws Exception {
+	protected void activate(Map<?,?> properties, Class<?> context) {
 		name = properties.get("component.name").toString();
 		String path = properties.get(PATH).toString();
 		if (path == null)
 			path = "/config-calabash.xml";
-		configFile = context.getBundleContext().getBundle().getEntry(path);
+		configFile = URLs.getResourceFromJAR(path, context);
 		if (configFile == null)
 			throw new IllegalArgumentException("Calabash configuration file at location " + path + " could not be found");
 	}

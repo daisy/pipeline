@@ -20,6 +20,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
+import org.daisy.common.file.URLs;
+
 import com.google.common.collect.ImmutableList;
 
 import com.thaiopensource.resolver.Identifier;
@@ -44,8 +46,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import org.osgi.service.component.ComponentContext;
-
 public class UrlBasedDatatypeService implements DatatypeService{
         
         private static final Logger logger = LoggerFactory.getLogger(UrlBasedDatatypeService.class);
@@ -65,7 +65,7 @@ public class UrlBasedDatatypeService implements DatatypeService{
         private boolean typeDeclValid;
         private List<String> enumerationValues = null;
 
-        public void activate(ComponentContext context, Map<?, ?> properties) {
+        public void activate(Map<?, ?> properties, Class<?> context) {
                 if (properties.get(DATATYPE_ID) == null
                                 || properties.get(DATATYPE_ID).toString().isEmpty()) {
                         throw new IllegalArgumentException(DATATYPE_ID
@@ -78,7 +78,7 @@ public class UrlBasedDatatypeService implements DatatypeService{
                                         + " property must not be empty");
                 }
                 String path = properties.get(DATATYPE_URL).toString();
-                url = context.getBundleContext().getBundle().getEntry(path);
+                url = URLs.getResourceFromJAR(path, context);
                 if (url == null)
                         throw new IllegalArgumentException("Resource at location " + path + " could not be found");
                 id = properties.get(DATATYPE_ID).toString();

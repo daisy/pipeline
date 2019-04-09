@@ -143,7 +143,7 @@ public abstract class Base extends AbstractTest {
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Bundle-Name", "webservice test");
+		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
 		probe.setHeader("Service-Component", "OSGI-INF/mock-script.xml,"
 		                                   + "OSGI-INF/sleep-step.xml");
 		return probe;

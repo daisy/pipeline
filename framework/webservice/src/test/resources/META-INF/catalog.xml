@@ -1,0 +1,5 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri uri="../mock-module/script.xpl" px:content-type="script" px:id="px:mock-script"/>
+  <uri uri="../mock-module/error-script.xpl" px:content-type="script" px:id="px:mock-error-script"/>
+  <uri uri="../mock-module/messages-script.xpl" px:content-type="script" px:id="px:mock-progress-messages"/>
+</catalog>

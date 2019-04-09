@@ -11,6 +11,16 @@ import org.daisy.pipeline.job.JobMonitorFactory;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalNotification;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "job-monitor",
+	immediate = true,
+	service = { JobMonitorFactory.class }
+)
 public class JobMonitorFactoryImpl implements JobMonitorFactory {
 
 	@Override
@@ -20,12 +30,26 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 
 	private MessageEventListener messageEventListener;
 
+	@Reference(
+		name = "event-listener",
+		unbind = "-",
+		service = MessageEventListener.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setMessageEventListener(MessageEventListener listener) {
 		this.messageEventListener = listener;
 	}
 
 	private MessageStorage messageStorage;
 	
+	@Reference(
+		name = "message-storage",
+		unbind = "-",
+		service = MessageStorage.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setMessageStorage(MessageStorage storage) {
 		this.messageStorage = storage;
 	}

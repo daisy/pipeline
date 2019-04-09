@@ -23,7 +23,7 @@
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
+      <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -35,7 +35,7 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Bundle-Activator>org.daisy.common.stax.woodstox.osgi.impl.Activator</Bundle-Activator>
+            <_dsannotations>*</_dsannotations>
           </instructions>
         </configuration>
       </plugin>

@@ -22,9 +22,18 @@ import org.slf4j.MDC;
 
 import com.google.common.base.Predicate;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
+@Component(
+    name = "job-execution-service",
+    service = { JobExecutionService.class }
+)
 public class DefaultJobExecutionService implements JobExecutionService {
 
         static final String NUM_PROCS="org.daisy.pipeline.procs";
@@ -78,6 +87,13 @@ public class DefaultJobExecutionService implements JobExecutionService {
          * @param xprocEngine
          *            the new x proc engine
          */
+        @Reference(
+           name = "xproc-engine",
+           unbind = "-",
+           service = XProcEngine.class,
+           cardinality = ReferenceCardinality.MANDATORY,
+           policy = ReferencePolicy.STATIC
+        )
         public void setXProcEngine(XProcEngine xprocEngine) {
                 this.xprocEngine = xprocEngine;
         }

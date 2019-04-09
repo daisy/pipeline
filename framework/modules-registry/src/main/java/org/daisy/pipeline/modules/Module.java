@@ -10,7 +10,7 @@ import java.util.Map;
  * Daisy pipeline module holds a set of components accesible via their uri, its
  * name, version and dependencies.
  */
-public class Module {
+public class Module implements ModuleRef {
 
 	/** The name. */
 	private final String name;
@@ -135,5 +135,9 @@ public class Module {
 	@Override
 	public String toString() {
 		return getName() + " [" + getVersion() + "]";
+	}
+
+	public Module get() {
+		return this;
 	}
 }

@@ -8,7 +8,7 @@
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>framework-core</artifactId>
-  <version>4.1.1-SNAPSHOT</version>
+  <version>4.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Framework Core</name>
   <dependencies>
@@ -35,6 +35,11 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
     <!--
@@ -71,23 +76,53 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>
-              OSGI-INF/event-provider.xml,
-              OSGI-INF/job-execution-service.xml,
-              OSGI-INF/runtime-configurator.xml,
-              OSGI-INF/job-manager-factory.xml,
-              OSGI-INF/parser.xml,
-              OSGI-INF/registry.xml,
-              OSGI-INF/datatype-registry.xml,
-              OSGI-INF/monitor.xml,
-              OSGI-INF/event-listener.xml
-            </Service-Component>
+            <_dsannotations>
+              org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+              org.daisy.pipeline.event.EventBusProvider,
+              org.daisy.pipeline.event.JobMonitorFactoryImpl,
+              org.daisy.pipeline.event.MessageEventListener,
+              org.daisy.pipeline.job.impl.DefaultJobExecutionService,
+              org.daisy.pipeline.job.JobManagerFactory,
+              org.daisy.pipeline.job.RuntimeConfigurator,
+              org.daisy.pipeline.script.impl.DefaultScriptRegistry,
+              org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+            </_dsannotations>
             <!--
                 compatible with versions >= 20120724
             -->
-            <Import-Package>com.thaiopensource.*;version="[20120724.0,20151127]",*</Import-Package>
+            <Import-Package>
+              !org.daisy.common.spi,
+              com.thaiopensource.*;version="[20120724.0,20151127]",
+              *
+            </Import-Package>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+                org.daisy.pipeline.event.EventBusProvider,
+                org.daisy.pipeline.event.JobMonitorFactoryImpl,
+                org.daisy.pipeline.event.MessageEventListener,
+                org.daisy.pipeline.job.impl.DefaultJobExecutionService,
+                org.daisy.pipeline.job.JobManagerFactory,
+                org.daisy.pipeline.job.RuntimeConfigurator,
+                org.daisy.pipeline.script.impl.DefaultScriptRegistry,
+                org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>

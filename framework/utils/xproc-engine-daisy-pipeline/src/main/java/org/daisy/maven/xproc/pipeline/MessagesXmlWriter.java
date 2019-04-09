@@ -14,12 +14,11 @@ import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XsltTransformer;
 
+import org.daisy.common.file.URLs;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
 import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
-
-import org.osgi.framework.FrameworkUtil;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,8 +40,8 @@ class MessagesXmlWriter {
 			XsltTransformer correctPortions = proc.newXsltCompiler()
 				.compile(
 					new StreamSource(
-						FrameworkUtil.getBundle(MessagesXmlWriter.class)
-						.getEntry("org/daisy/maven/xproc/pipeline/resource-files/analyze-portions.xsl")
+						URLs.getResourceFromJAR(
+							"/org/daisy/maven/xproc/pipeline/resource-files/analyze-portions.xsl", MessagesXmlWriter.class)
 						.openStream()))
 				.load();
 			correctPortions.setSource(new DOMSource(messagesElem.getOwnerDocument()));

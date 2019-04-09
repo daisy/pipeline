@@ -25,6 +25,16 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -36,12 +46,33 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/xpath-registry.xml</Service-Component>
+            <_dsannotations>
+              org.daisy.pipeline.xpath.XPathFunctionRegistry
+            </_dsannotations>
           </instructions>
         </configuration>
       </plugin>
+       <plugin>
+         <groupId>org.daisy.pipeline.build</groupId>
+         <artifactId>ds-to-spi-maven-plugin</artifactId>
+         <executions>
+           <execution>
+             <id>generate-spi-classes</id>
+             <phase>generate-sources</phase>
+             <goals>
+               <goal>generate-spi-classes</goal>
+             </goals>
+             <configuration>
+              <includes>
+                org.daisy.pipeline.xpath.XPathFunctionRegistry
+              </includes>
+             </configuration>
+           </execution>
+         </executions>
+       </plugin>
     </plugins>
   </build>
 

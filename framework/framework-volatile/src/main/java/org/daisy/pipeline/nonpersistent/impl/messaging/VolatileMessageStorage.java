@@ -18,10 +18,17 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.Lists;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * Singleton
  */
-public final class VolatileMessageStorage implements MessageStorage {
+@Component(
+    name = "volatile-message-storage",
+    immediate = true,
+    service = { MessageStorage.class }
+)
+public class VolatileMessageStorage implements MessageStorage {
 
 	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();
 	private static final  String CACHE_TIMEOUT_PROPERTY="org.daisy.pipeline.messaging.cache";

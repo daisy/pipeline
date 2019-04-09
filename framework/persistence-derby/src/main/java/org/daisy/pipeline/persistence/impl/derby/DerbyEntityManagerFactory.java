@@ -2,6 +2,7 @@ package org.daisy.pipeline.persistence.impl.derby;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.EntityManagerFactory;
 
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
@@ -12,6 +13,18 @@ import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "daisy-derby-emf",
+	immediate = true,
+	service = { EntityManagerFactory.class },
+	property = { "osgi.unit.name:String=pipeline-pu" }
+)
 public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 
 	private static final String DERBY_JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -30,9 +43,24 @@ public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 		logger.debug(DERBY_DB_URL);
 	}
 	
+	@Reference(
+		name = "EntityManagerFactoryBuilder",
+		unbind = "-",
+		service = EntityManagerFactoryBuilder.class,
+		target = "(osgi.unit.name=pipeline-pu)",
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	public void setBuilder(EntityManagerFactoryBuilder builder){
 		setEntityManagerFactory(builder.createEntityManagerFactory(props));
 	}
+	@Reference(
+		name = "PropertyPublisherFactory",
+		unbind = "unsetPropertyPublisherFactory",
+		service = PropertyPublisherFactory.class,
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
 		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
 		//the property publishing step goes here
@@ -48,6 +76,7 @@ public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 		propertyPublisher.unpublish(JAVAX_PERSISTENCE_JDBC_URL    ,  this.getClass());
 
 	}
+	@Activate
 	public void init() {
 		logger.debug("initialize the EMF");
 		createEntityManager();

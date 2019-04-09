@@ -12,6 +12,17 @@ import net.sf.saxon.trans.XPathException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+@Component(
+	name = "xpath-registry",
+	service = { XPathFunctionRegistry.class }
+)
 public class XPathFunctionRegistry  {
 
 
@@ -20,12 +31,20 @@ public class XPathFunctionRegistry  {
 
 	HashMap<QName,ExtensionFunctionDefinition> mFunctions = new HashMap<QName, ExtensionFunctionDefinition>();
 
+	@Activate
 	public void init(){
 
 	}
 
 
 
+	@Reference(
+		name = "ExtensionFunctionDefinition",
+		unbind = "removeFunction",
+		service = ExtensionFunctionDefinition.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC
+	)
 	public void addFunction(ExtensionFunctionDefinition functionDefinition) throws XPathException{
 		mLogger.info("Adding extension function definition to registry {}",functionDefinition.getFunctionQName().toString());
 		mFunctions.put(functionDefinition.getFunctionQName().toJaxpQName(), functionDefinition);
@@ -38,6 +57,7 @@ public class XPathFunctionRegistry  {
 	}
 
 
+	@Deactivate
 	public void close(){
 
 	}

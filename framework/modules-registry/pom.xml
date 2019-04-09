@@ -11,13 +11,14 @@
   </parent>
 
   <artifactId>modules-registry</artifactId>
-  <version>2.1.1-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Module Registry</name>
 
   <dependencies>
       <dependency>
+        <!-- for OSGIModuleBuilder -->
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.core</artifactId>
         <scope>provided</scope>
@@ -33,7 +34,16 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
+        <artifactId>common-utils</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
         <artifactId>xmlcatalog</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>ds-to-spi-runtime</artifactId>
+        <scope>provided</scope>
       </dependency>
   </dependencies>
 
@@ -44,9 +54,32 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Service-Component>OSGI-INF/registry.xml, OSGI-INF/resolver.xml</Service-Component>
+            <_dsannotations>
+              org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
+              org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry
+            </_dsannotations>
+            <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
+                org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
