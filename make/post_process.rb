@@ -170,6 +170,9 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         if rel_path =~ /^(.+)\.md$/o
           rel_path = $1 + '.html'
         end
+        if rel_path =~ /\/$/o
+          rel_path.sub!(/\/$/, '')
+        end
         collection_files.each do |name, files|
           if src_path.start_with?(name)
             if files.key?(rel_path)
