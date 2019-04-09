@@ -24,7 +24,7 @@
 			<x:document type="port" port="fileset.out"/>
 		</x:context>
 		<x:expect label="the fileset"
-		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+		          type="custom" href="../../../../fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset xml:base="file:/tmp/">
 					<d:file href="foo.xhtml" media-type="application/xhtml+xml"/>

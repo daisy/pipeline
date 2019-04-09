@@ -25,10 +25,16 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.TreeWriter;
 
+import org.osgi.service.component.annotations.Component;
 
 /**
  * This steps allows to copy any resource from a URI to a file in the file system usign a file scheme URI 
  */
+@Component(
+	name = "pxi:copy-resource",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}copy-resource" }
+)
 public class CopyResourceProvider implements XProcStepProvider {
 
 	/** The logger. */

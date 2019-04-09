@@ -17,7 +17,14 @@
   <name>DAISY Pipeline 2 module :: Common Utilities</name>
   
   <dependencies>
-    <!-- common-utils has no dependencies on other Pipeline 2 modules -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
@@ -29,6 +36,16 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
     </dependency>
     <!--
         test dependencies
@@ -45,6 +62,13 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_common_utils,
+      org.daisy.common.xproc.calabash.steps.Message
+    </expose-services>
+  </properties>
+  
   <build>
     <plugins>
       <plugin>
@@ -66,10 +90,13 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/message.xml</Service-Component>
-            <Private-Package>org.daisy.common.xproc.calabash.steps</Private-Package>
+            <Private-Package>
+              org.daisy.pipeline.modules.impl;-split-package:=first,
+              org.daisy.common.xproc.calabash.steps;-split-package:=first
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>

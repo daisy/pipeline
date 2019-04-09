@@ -47,7 +47,11 @@
     <p:with-option name="attribute-value" select="$media-type"/>
   </p:add-attribute>
   <p:add-attribute match="/*" attribute-name="href">
-    <p:with-option name="attribute-value" select="if (starts-with($href, $fileset-base) and ends-with($fileset-base,'/')) then substring-after($href, $fileset-base) else $href"/>
+    <p:with-option name="attribute-value" select="if ($fileset-base='file:/' and starts-with($href, 'file:///'))
+                                                  then substring-after($href, 'file:///')
+                                                  else if (starts-with($href, $fileset-base) and ends-with($fileset-base,'/'))
+                                                  then substring-after($href, $fileset-base)
+                                                  else $href"/>
   </p:add-attribute>
   <p:add-attribute match="/*" attribute-name="original-href">
     <p:with-option name="attribute-value" select="if ($original-href) then resolve-uri($original-href, $fileset-base) else ''"/>
@@ -56,12 +60,26 @@
   <p:delete match="@original-href[not(normalize-space())]"/>
   <p:choose>
     <p:when
-      test="starts-with(/*/@href,'/') or contains(substring-before(/*/@href,'/'),':') or contains(/*/@href,'/.') or contains(/*/@href,'//') or string-length(translate(/*/@href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0 or contains(/*/@href,'%') and count(tokenize(/*/@href,'%')[not(starts-with(.,'20'))]) = 0
-      or starts-with(/*/@original-href,'/') or contains(substring-before(/*/@original-href,'/'),':') or contains(/*/@original-href,'/.') or contains(/*/@original-href,'//') or string-length(translate(/*/@original-href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0 or contains(/*/@original-href,'%') and count(tokenize(/*/@original-href,'%')[not(starts-with(.,'20'))]) = 0">
+      test="   starts-with(/*/@href,'/')
+            or contains(substring-before(/*/@href,'/'),':')
+            or contains(/*/@href,'/.')
+            or contains(/*/@href,'//')
+            or string-length(translate(/*/@href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0
+            or contains(/*/@href,'%') and count(tokenize(/*/@href,'%')[not(starts-with(.,'20'))]) = 0
+            or starts-with(/*/@original-href,'/')
+            or contains(substring-before(/*/@original-href,'/'),':')
+            or contains(/*/@original-href,'/.')
+            or contains(/*/@original-href,'//')
+            or string-length(translate(/*/@original-href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0
+            or contains(/*/@original-href,'%') and count(tokenize(/*/@original-href,'%')[not(starts-with(.,'20'))]) = 0">
       <!-- URI probably needs normalization -->
       <px:message severity="DEBUG" message="URI normalization: $1">
         <p:with-option name="param1"
-          select="string-join((concat('href=&quot;',/*/@href,'&quot;'),if (/*/@original-href) then concat('original-href=&quot;',/*/@original-href,'&quot;') else (),if (/*/@original-href!=$original-href or /*/@href!=$href) then concat('xml:base=&quot;',$fileset-base,'&quot;') else ()),' ')"
+          select="string-join((
+                    concat('href=&quot;',/*/@href,'&quot;'),
+                    if (/*/@original-href) then concat('original-href=&quot;',/*/@original-href,'&quot;') else (),
+                    if (/*/@original-href!=$original-href or /*/@href!=$href) then concat('xml:base=&quot;',$fileset-base,'&quot;') else ()
+                  ),' ')"
         />
       </px:message>
       <p:xslt>

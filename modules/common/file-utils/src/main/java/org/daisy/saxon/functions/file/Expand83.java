@@ -16,6 +16,12 @@ import net.sf.saxon.type.BuiltInAtomicType;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "pf:file-expand83",
+	service = { ExtensionFunctionDefinition.class }
+)
 @SuppressWarnings("serial")
 public class Expand83 extends ExtensionFunctionDefinition {
 
@@ -63,16 +69,20 @@ public class Expand83 extends ExtensionFunctionDefinition {
 		}
 
 		try {
-			File file = new File(new URI(uri));
-			String expandedUri = expand83(file);
+			URI u = new URI(uri);
+			File file = new File(new URI(u.getScheme(), u.getSchemeSpecificPart(), null));
+			if (!file.exists()) {
+				return uri;
+			}
+			URI expandedUri = expand83(file);
 			if (expandedUri == null) {
 				return uri;
 			} else {
-				return expandedUri;
+				return new URI(expandedUri.getScheme(), expandedUri.getSchemeSpecificPart(), u.getFragment()).toString();
 			}
 
 		} catch (Exception e) {
-			throw new XPathException("pf:file-expand83 failed", e);
+			throw new XPathException("pf:file-expand83("+uri+") failed", e);
 		}
 	}
 
@@ -80,15 +90,15 @@ public class Expand83 extends ExtensionFunctionDefinition {
 	 * this is extracted out of `expand83(String)` because it can be unit tested
 	 * with a custom File implementation.
 	 */
-	public static String expand83(File file) throws XPathException {
+	public static URI expand83(File file) throws XPathException {
 		try {
 			if (file.exists()) {
-				return file.getCanonicalFile().toURI().toString();
+				return file.getCanonicalFile().toURI();
 			} else {
-				return file.toURI().toString();
+				return file.toURI();
 			}
 		} catch (Exception e) {
-			throw new XPathException("pf:file-expand83 failed", e);
+			throw new XPathException("pf:file-expand83("+file+") failed", e);
 		}
 	}
 

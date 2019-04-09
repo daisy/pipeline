@@ -22,6 +22,14 @@
       <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -43,7 +51,24 @@
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_image_utils,
+      org.daisy.saxon.functions.image.ImageDimensions
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -76,11 +101,13 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>
-              OSGI-INF/image-dimensions.xml
-            </Service-Component>
+            <Private-Package>
+              org.daisy.pipeline.modules.impl;-split-package:=first,
+              org.daisy.saxon.functions.image
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>

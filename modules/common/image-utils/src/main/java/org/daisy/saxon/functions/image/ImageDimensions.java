@@ -19,9 +19,15 @@ import net.sf.saxon.value.IntegerValue;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
+import org.osgi.service.component.annotations.Component;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(
+	name = "pf:image-dimensions",
+	service = { ExtensionFunctionDefinition.class }
+)
 @SuppressWarnings("serial")
 public class ImageDimensions extends ExtensionFunctionDefinition {
 

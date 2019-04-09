@@ -47,8 +47,21 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
     <!--
@@ -64,19 +77,22 @@
       <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- FIXME: circular dependency -->
+    <!--
+        for x:fileset-compare
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>fileset-utils</artifactId>
+      <artifactId>zip-utils</artifactId>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.daisy.pipeline.modules</groupId>
-          <artifactId>html-utils</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_html_utils,
+      org.daisy.common.xproc.calabash.steps.ChunkerStep$Provider
+    </expose-services>
+  </properties>
   
   <build>
     <plugins>
@@ -107,10 +123,14 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <_dsannotations>
-              org.daisy.common.xproc.calabash.steps.ChunkerStep$Provider
-            </_dsannotations>
-            <Private-Package>org.daisy.common.xproc.calabash.steps</Private-Package>
+            <Import-Package>
+              !org.daisy.common.spi,
+              *
+            </Import-Package>
+            <Private-Package>
+              org.daisy.pipeline.modules.impl;-split-package:=first,
+              org.daisy.common.xproc.calabash.steps;-split-package:=first
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>

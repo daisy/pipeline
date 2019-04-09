@@ -8,6 +8,13 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "px:log-message",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}log-message" }
+)
 public class Message implements XProcStepProvider {
 
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {

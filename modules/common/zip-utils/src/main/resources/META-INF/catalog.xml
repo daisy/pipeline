@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-   <uri name="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"
-        uri="../xml/xproc/zip-library.xpl"/>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+   <uri name="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl" uri="../xml/xproc/zip-library.xpl"/>
+   <uri uri="../config-calabash.xml" px:content-type="calabash-config"/>
 </catalog>

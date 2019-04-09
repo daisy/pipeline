@@ -20,6 +20,13 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.Base64;
 import com.xmlcalabash.util.TreeWriter;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "pxi:file-peek",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}file-peek" }
+)
 @SuppressWarnings("serial")
 public class PeekProvider implements XProcStepProvider {
 

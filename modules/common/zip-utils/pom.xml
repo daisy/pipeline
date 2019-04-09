@@ -18,6 +18,14 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
     </dependency>
@@ -32,6 +40,16 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
     </dependency>
     <!--
         test dependencies
@@ -48,6 +66,14 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_zip_utils,
+      org.daisy.common.xproc.calabash.impl.ConfigurationFileProvider_zip_utils,
+      org.daisy.common.xproc.calabash.steps.UnZipProvider
+    </expose-services>
+  </properties>
+  
   <build>
     <plugins>
       <plugin>
@@ -69,12 +95,14 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>
-              OSGI-INF/letex-unzip.xml,
-              OSGI-INF/config-calabash.xml
-            </Service-Component>
+            <Private-Package>
+              org.daisy.pipeline.modules.impl;-split-package:=first,
+              org.daisy.common.xproc.calabash.steps;-split-package:=first,
+              org.daisy.common.xproc.calabash.impl;-split-package:=first
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>

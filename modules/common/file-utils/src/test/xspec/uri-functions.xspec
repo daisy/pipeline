@@ -662,7 +662,7 @@
             <x:expect label="two absolute uris that normalize to the same uri" select="'http://www.example.com/'"/>
         </x:scenario>
         <x:scenario label="longest common uri">
-            <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1', 'file://tmp/home/user/dir2')"/></x:call>
+            <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1', 'file:/tmp/home/user/dir2')"/></x:call>
             <x:expect label="two absolute uris #3" select="'file:/tmp/home/user/'"/>
         </x:scenario>
         <x:scenario label="longest common uri">

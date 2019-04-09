@@ -13,6 +13,12 @@ import net.sf.saxon.type.BuiltInAtomicType;
 import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.SequenceType;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "pf:file-exists",
+	service = { ExtensionFunctionDefinition.class }
+)
 @SuppressWarnings("serial")
 public class FileExists extends ExtensionFunctionDefinition {
 

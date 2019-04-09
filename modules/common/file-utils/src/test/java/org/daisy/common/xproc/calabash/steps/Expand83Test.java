@@ -24,14 +24,14 @@ public class Expand83Test {
 		}
 		
 		try {
-			String uri = Expand83.expand83(file);
+			String uri = Expand83.expand83(file).toString();
 			assertEquals("URIs should be 8.3-decoded'", "file:///C:/Documents%20and%20Settings/file.xml", uri);
 		} catch (XPathException e) {
 			fail("An error occured while calling expand83: "+e.getMessage());
 		}
 		
 		try {
-			String uri = Expand83.expand83("http://www.daisy.org/DOCUME~1/file.xml");
+			String uri = Expand83.expand83("http://www.daisy.org/DOCUME~1/file.xml").toString();
 			assertEquals("Only file: URIs should be 8.3-decoded'", "http://www.daisy.org/DOCUME~1/file.xml", uri);
 		} catch (XPathException e) {
 			fail("An error occured while calling expand83: "+e.getMessage());

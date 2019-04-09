@@ -61,6 +61,13 @@ import java.io.*;
 import java.net.URI;
 import java.util.zip.*;
 
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "letex:unzip",
+	service = { XProcStepProvider.class },
+	property = { "type:String={http://www.le-tex.de/namespace}unzip" }
+)
 public class UnZipProvider implements XProcStepProvider {
 
     /** The logger. */
