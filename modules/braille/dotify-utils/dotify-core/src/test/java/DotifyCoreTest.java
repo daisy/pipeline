@@ -19,10 +19,10 @@ import static org.junit.Assert.assertEquals;
 public class DotifyCoreTest extends AbstractTest {
 	
 	@Inject
-	DotifyTranslator.Provider provider;
+	public DotifyTranslator.Provider provider;
 	
 	@Inject
-	DotifyHyphenator.Provider hyphenatorProvider;
+	public DotifyHyphenator.Provider hyphenatorProvider;
 	
 	@Override
 	protected String[] testDependencies() {

@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.liblouis.impl;
 
 import java.io.File;
 import java.net.URI;
+import static java.nio.file.Files.createTempDirectory;
 import java.util.NoSuchElementException;
 
 import com.google.common.base.Function;
@@ -11,6 +12,8 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 
+import static org.daisy.common.file.URIs.asURI;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
@@ -26,9 +29,7 @@ import static org.daisy.pipeline.braille.common.TransformProvider.util.varyLocal
 import static org.daisy.pipeline.braille.common.util.Files.unpack;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
 import org.daisy.pipeline.braille.common.WithSideEffect;
-
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
 
@@ -49,7 +50,6 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.ComponentContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,8 +85,6 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		}
 	}
 	
-	private final static boolean LIBLOUIS_EXTERNAL = Boolean.getBoolean("org.daisy.pipeline.braille.liblouis.external");
-	
 	private LiblouisTableRegistry tableRegistry;
 	
 	// Hold a reference to avoid garbage collection
@@ -96,8 +94,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	private File unicodeDisFile;
 	private File spacesFile;
 	
+	// WARNING: only one instance of LiblouisTableJnaImplProvider should be created because
+	// setLibraryPath, lou_indexTables, lou_registerTableResolver and lou_registerLogCallback are global functions
 	@Activate
-	protected void activate(ComponentContext context) {
+	protected void activate() {
 		logger.debug("Loading liblouis service");
 		logger.debug("liblouis version: {}", Louis.getLibrary().lou_version());
 		try {
@@ -118,13 +118,13 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 						logger.error("Table could not be resolved");
 					return resolved; }};
 			Louis.getLibrary().lou_registerTableResolver(_tableResolver);
-			unicodeDisFile = new File(makeUnpackDir(context), "unicode.dis");
+			unicodeDisFile = new File(makeUnpackDir(), "unicode.dis");
 			unpack(
-				context.getBundleContext().getBundle().getEntry("/tables/unicode.dis"),
+				URLs.getResourceFromJAR("/tables/unicode.dis", LiblouisTableJnaImplProvider.class),
 				unicodeDisFile);
-			spacesFile = new File(makeUnpackDir(context), "spaces.cti");
+			spacesFile = new File(makeUnpackDir(), "spaces.cti");
 			unpack(
-				context.getBundleContext().getBundle().getEntry("/tables/spaces.cti"),
+				URLs.getResourceFromJAR("/tables/spaces.cti", LiblouisTableJnaImplProvider.class),
 				spacesFile);
 			_logger = new org.liblouis.Logger() {
 				public void invoke(int level, String message) {
@@ -142,13 +142,15 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 			throw e; }
 	}
 	
-	private static File makeUnpackDir(ComponentContext context) {
-		File directory;
-		for (int i = 0; true; i++) {
-			directory = context.getBundleContext().getDataFile("resources" + i);
-			if (!directory.exists()) break; }
-		directory.mkdirs();
-		return directory;
+	private static File makeUnpackDir() {
+		File tmpDirectory; {
+			try {
+				tmpDirectory = createTempDirectory("pipeline-").toFile(); }
+			catch (Exception e) {
+				throw new RuntimeException("Could not create temporary directory", e); }
+			tmpDirectory.deleteOnExit();
+		}
+		return tmpDirectory;
 	}
 	
 	private boolean indexed = false;
@@ -180,7 +182,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		policy = ReferencePolicy.STATIC
 	)
 	protected void bindLibrary(NativePath path) {
-		if (LIBLOUIS_EXTERNAL)
+		if (LiblouisExternalNativePath.LIBLOUIS_EXTERNAL)
 			logger.info("Using external liblouis");
 		else {
 			URI libraryPath = path.get("liblouis").iterator().next();

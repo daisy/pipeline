@@ -31,6 +31,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -48,6 +53,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.braille.tex.saxon.impl.HyphenateDefinition
+    </expose-services>
+  </properties>
   
   <build>
     <plugins>
@@ -70,9 +81,12 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>*</_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.braille.tex.saxon.impl
+            </Private-Package>
             <Provide-Capability>xpath.function;name="{http://code.google.com/p/texhyphj/}hyphenate"</Provide-Capability>
           </instructions>
         </configuration>

@@ -11,6 +11,9 @@ import java.util.Properties;
 
 import net.davidashen.text.Utf8TexParser.TexParserException;
 
+import static org.daisy.common.file.URIs.asURI;
+import static org.daisy.common.file.URIs.resolve;
+import static org.daisy.common.file.URLs.asURL;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Function;
@@ -23,9 +26,6 @@ import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.util.Files.isAbsoluteFile;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
-import static org.daisy.pipeline.braille.common.util.URIs.resolve;
-import static org.daisy.pipeline.braille.common.util.URLs.asURL;
 import org.daisy.pipeline.braille.tex.TexHyphenator;
 
 import org.osgi.service.component.annotations.Activate;

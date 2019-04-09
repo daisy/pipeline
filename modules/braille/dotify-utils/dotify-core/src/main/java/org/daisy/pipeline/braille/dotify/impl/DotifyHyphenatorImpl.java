@@ -23,6 +23,8 @@ import static org.daisy.pipeline.braille.common.TransformProvider.util.varyLocal
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.daisy.pipeline.braille.dotify.DotifyHyphenator;
 
+import org.osgi.framework.FrameworkUtil;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -135,6 +137,8 @@ public class DotifyHyphenatorImpl extends AbstractHyphenator implements DotifyHy
 			policy = ReferencePolicy.DYNAMIC
 		)
 		protected void bindHyphenatorFactoryService(HyphenatorFactoryService service) {
+			if (!OSGiHelper.inOSGiContext())
+				service.setCreatedWithSPI();
 			factoryServices.add(service);
 			invalidateCache();
 		}
@@ -146,5 +150,14 @@ public class DotifyHyphenatorImpl extends AbstractHyphenator implements DotifyHy
 		
 		private static final Logger logger = LoggerFactory.getLogger(Provider.class);
 		
+		private static abstract class OSGiHelper {
+			static boolean inOSGiContext() {
+				try {
+					return FrameworkUtil.getBundle(OSGiHelper.class) != null;
+				} catch (NoClassDefFoundError e) {
+					return false;
+				}
+			}
+		}
 	}
 }

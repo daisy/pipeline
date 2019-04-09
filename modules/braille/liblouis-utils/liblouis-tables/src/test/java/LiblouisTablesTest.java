@@ -18,7 +18,7 @@ import org.ops4j.pax.exam.util.PathUtils;
 public class LiblouisTablesTest extends AbstractXSpecAndXProcSpecTest {
 	
 	@Inject
-	LiblouisTranslator.Provider provider;
+	public LiblouisTranslator.Provider provider;
 	
 	@Test
 	public void testCompileAllTables() throws IOException {

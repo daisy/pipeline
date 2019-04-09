@@ -95,6 +95,18 @@
     </p:declare-step>
     
     <p:add-xml-base/>
+    <!--
+        Force the obfl and css namespaces on the root element so that they do not end up on every
+        single element that uses these namespaces.
+        
+        document('') refers to the document node of the containing stylesheet module (see
+        https://www.w3.org/TR/xslt20/#document).
+        
+        FIXME: Had to be disabled because it fails when run from the dtbook-to-pef tests without
+        OSGi. It does work with OSGi, and also when run from the dotify-formatter tests. Possibly it
+        has to do with the base URI of this file being a jar:file: URI in this case.
+    -->
+    <!--
     <p:xslt>
         <p:input port="stylesheet">
             <p:inline>
@@ -113,6 +125,7 @@
             <p:empty/>
         </p:input>
     </p:xslt>
+    -->
     
     <pxi:recursive-parse-stylesheet-and-make-pseudo-elements px:progress=".04">
         <p:documentation>

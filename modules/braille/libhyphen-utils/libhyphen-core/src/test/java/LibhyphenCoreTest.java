@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class LibhyphenCoreTest extends AbstractTest {
 	
 	@Inject
-	LibhyphenHyphenator.Provider provider;
+	public LibhyphenHyphenator.Provider provider;
 	
 	private static final Logger messageBus = LoggerFactory.getLogger("JOB_MESSAGES");
 	
@@ -102,8 +102,7 @@ public class LibhyphenCoreTest extends AbstractTest {
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Import-Package", "org.daisy.pipeline.braille.libhyphen");
-		probe.setHeader("Service-Component", "OSGI-INF/table_paths.xml");
+		probe.setHeader("Service-Component", "OSGI-INF/table-path.xml");
 		return probe;
 	}
 }

@@ -6,8 +6,8 @@ import com.google.common.base.Splitter;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 
+import org.daisy.common.file.URIs;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
 
 public class LiblouisTable {
 	
@@ -34,7 +34,7 @@ public class LiblouisTable {
 		return toArray(
 			transform(
 				Splitter.on(',').split(table),
-				asURI),
+				URIs::asURI),
 			URI.class);
 	}
 	

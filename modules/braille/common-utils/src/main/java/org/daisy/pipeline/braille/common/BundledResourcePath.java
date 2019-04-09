@@ -3,6 +3,7 @@ package org.daisy.pipeline.braille.common;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
+import static java.nio.file.Files.createTempDirectory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -15,17 +16,14 @@ import com.google.common.base.Predicates;
 import static com.google.common.base.Predicates.alwaysTrue;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 
+import static org.daisy.common.file.URIs.asURI;
+import static org.daisy.common.file.URIs.relativize;
+import org.daisy.common.file.URLs;
 import static org.daisy.pipeline.braille.common.util.Iterators.partition;
 import static org.daisy.pipeline.braille.common.util.Predicates.matchesGlobPattern;
 import static org.daisy.pipeline.braille.common.util.Tuple2;
 import static org.daisy.pipeline.braille.common.util.Files.normalize;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
-import static org.daisy.pipeline.braille.common.util.URLs.decode;
-
-import org.osgi.framework.Bundle;
-import org.osgi.service.component.ComponentContext;
 
 public class BundledResourcePath extends AbstractResourcePath {
 	
@@ -40,12 +38,11 @@ public class BundledResourcePath extends AbstractResourcePath {
 	private File unpackDir = null;
 	private boolean unpacking = false;
 	private boolean executables = false;
-	private ComponentContext context = null;
 	
 	/* The included resources as relative paths */
 	private Collection<URI> resources = null;
 	
-	protected void activate(ComponentContext context, final Map<?,?> properties) throws Exception {
+	protected void activate(final Map<?,?> properties, Class<?> context) throws IllegalArgumentException {
 		if (properties.get(IDENTIFIER) == null || properties.get(IDENTIFIER).toString().isEmpty()) {
 			throw new IllegalArgumentException(IDENTIFIER + " property must not be empty"); }
 		String identifierAsString = properties.get(IDENTIFIER).toString();
@@ -57,10 +54,8 @@ public class BundledResourcePath extends AbstractResourcePath {
 			throw new IllegalArgumentException(IDENTIFIER + " must be an absolute URI");
 		if (properties.get(PATH) == null || properties.get(PATH).toString().isEmpty()) {
 			throw new IllegalArgumentException(PATH + " property must not be empty"); }
-		final Bundle bundle = context.getBundleContext().getBundle();
 		String pathAsRelativeFilePath = properties.get(PATH).toString();
-		if (!pathAsRelativeFilePath.endsWith("/")) pathAsRelativeFilePath += "/";
-		path = bundle.getEntry(pathAsRelativeFilePath);
+		path = URLs.getResourceFromJAR(pathAsRelativeFilePath, context);
 		if (path == null)
 			throw new IllegalArgumentException("Resource path at location " + pathAsRelativeFilePath + " could not be found");
 		final Predicate<Object> includes =
@@ -69,13 +64,13 @@ public class BundledResourcePath extends AbstractResourcePath {
 			 && !properties.get(INCLUDES).toString().equals("*")) ?
 				Predicates.compose(
 					matchesGlobPattern(properties.get(INCLUDES).toString()),
-					Functions.compose(decode, toStringFunction())) :
+					Functions.compose(URLs::decode, toStringFunction())) :
 				alwaysTrue();
 		Function<String,Collection<String>> getFilePaths = new Function<String,Collection<String>>() {
 			public Collection<String> apply(String path) {
 				Tuple2<Collection<String>,Collection<String>> entries = partition(
-					Iterators.<String>forEnumeration(bundle.getEntryPaths(path)),
-					new Predicate<String>() { public boolean apply(String s) { return s.endsWith("/"); }});
+					URLs.listResourcesFromJAR(path, context),
+					s -> s.endsWith("/"));
 				Collection<String> files = new ArrayList<String>();
 				files.addAll(entries._2);
 				for (String folder : entries._1) files.addAll(apply(folder));
@@ -85,16 +80,13 @@ public class BundledResourcePath extends AbstractResourcePath {
 				Collections2.<URI>filter(
 					Collections2.<String,URI>transform(
 						getFilePaths.apply(pathAsRelativeFilePath),
-						new Function<String,URI>() {
-							public URI apply(String s) {
-								return asURI(path).relativize(asURI(bundle.getEntry(s))); }}),
+						s -> relativize(path, URLs.getResourceFromJAR(s, context))),
 					includes))
 			.build();
 		if (properties.get(UNPACK) != null && (Boolean)properties.get(UNPACK))
 			unpacking = true;
 		if (properties.get(EXECUTABLES) != null && (Boolean)properties.get(EXECUTABLES))
 			executables = true;
-		this.context = context;
 	}
 	
 	public URI getIdentifier() {
@@ -122,12 +114,14 @@ public class BundledResourcePath extends AbstractResourcePath {
 		if (!unpacking)
 			return null;
 		if (unpackDir == null) {
-			File directory;
-			for (int i = 0; true; i++) {
-				directory = context.getBundleContext().getDataFile("resources" + i);
-				if (!directory.exists()) break; }
-			directory.mkdirs();
-			unpackDir = normalize(directory); }
+			File tmpDirectory; {
+				try {
+					tmpDirectory = createTempDirectory("pipeline-").toFile(); }
+				catch (Exception e) {
+					throw new RuntimeException("Could not create temporary directory", e); }
+				tmpDirectory.deleteOnExit();
+			}
+			unpackDir = normalize(tmpDirectory); }
 		return unpackDir;
 	}
 	

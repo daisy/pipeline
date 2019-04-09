@@ -1,44 +1,38 @@
 package org.daisy.pipeline.braille.liblouis.impl;
 
 import java.io.File;
-import java.net.URL;
 import java.net.URISyntaxException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.csskit.TermIdentImpl;
 import cz.vutbr.web.csskit.TermListImpl;
 
-import static com.google.common.io.Files.createTempDir;
-
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
-import org.daisy.pipeline.braille.common.AbstractResourcePath;
 import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.NativePath;
-import org.daisy.pipeline.braille.common.ResourcePath;
-import org.daisy.pipeline.braille.common.StandardNativePath;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
-import static org.daisy.pipeline.braille.common.util.URLs.asURL;
-import org.daisy.pipeline.braille.liblouis.impl.LiblouisNativePathForLinux;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTranslatorJnaImplProvider.LiblouisTranslatorImpl;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator.Typeform;
+import org.daisy.pipeline.junit.OSGiLessRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
+import org.junit.runner.RunWith;
 import org.junit.Test;
 
 import org.liblouis.CompilationException;
 import org.liblouis.Louis;
 import org.liblouis.Translator;
 
+@RunWith(OSGiLessRunner.class)
 public class LiblouisTranslatorJnaImplTest {
 	
 	private static short typeformFromInlineCSS(String style) {
@@ -105,9 +99,8 @@ public class LiblouisTranslatorJnaImplTest {
 		assertEquals("volleyballederen", lines.nextLine(26, false));
 		assertFalse(lines.hasNext());
 		
-		NativePath liblouisNativePath = new LiblouisNativePath();
 		Louis.setLibraryPath(asFile(liblouisNativePath.resolve(liblouisNativePath.get("liblouis").iterator().next())));
-		File table = new File(LiblouisTranslatorJnaImplTest.class.getResource("/table_paths/table_path_1/foobar.ctb").toURI());
+		File table = new File(LiblouisTranslatorJnaImplTest.class.getResource("/tables/foobar.ctb").toURI());
 		Translator liblouisTranslator = new Translator(table.getAbsolutePath());
 		LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl stream
 		= new LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl(
@@ -120,6 +113,9 @@ public class LiblouisTranslatorJnaImplTest {
 		assertFalse(stream.hasNext());
 	}
 	
+	@Inject
+	public NativePath liblouisNativePath;
+	
 	private static class MockHyphenator extends AbstractHyphenator.util.DefaultLineBreaker {
 		protected Break breakWord(String word, int limit, boolean force) {
 			if (limit >= 10 && word.equals("volleyballederen"))
@@ -130,36 +126,6 @@ public class LiblouisTranslatorJnaImplTest {
 				return new Break(word, limit, false);
 			else
 				return new Break(word, 0, false);
-		}
-	}
-	
-	private static class LiblouisNativePath extends StandardNativePath {
-		ResourcePath delegate = new AbstractResourcePath() {
-			URI identifier = asURI("http://www.liblouis.org/native/");
-			URL basePath = asURL("jar:"
-			                     + LiblouisNativePathForLinux.class.getProtectionDomain().getCodeSource().getLocation()
-			                     + "!/native/");
-			public URI getIdentifier() {
-				return identifier;
-			}
-			protected URL getBasePath() {
-				return basePath;
-			}
-			protected boolean isUnpacking() {
-				return true;
-			}
-			protected File makeUnpackDir() {
-				return createTempDir();
-			}
-			protected boolean isExecutable(URI resource) {
-				return true;
-			}
-			protected boolean containsResource(URI resource) {
-				return (LiblouisNativePathForLinux.class.getResource("/native/" + resource) != null);
-			}
-		};
-		protected ResourcePath delegate() {
-			return delegate;
 		}
 	}
 	

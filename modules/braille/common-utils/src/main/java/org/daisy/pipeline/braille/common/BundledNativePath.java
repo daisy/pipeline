@@ -7,8 +7,6 @@ import java.util.Map;
 
 import static org.daisy.pipeline.braille.common.util.OS;
 
-import org.osgi.service.component.ComponentContext;
-
 public class BundledNativePath extends StandardNativePath {
 	
 	private static final String OS_FAMILY = "os.family";
@@ -19,12 +17,15 @@ public class BundledNativePath extends StandardNativePath {
 		return resourcePath;
 	}
 	
-	protected void activate(ComponentContext context, Map<?,?> properties) throws Exception {
+	/**
+	 * @throws RuntimeException if the binaries don't work on the current OS
+	 */
+	protected void activate(Map<?,?> properties, Class<?> context) throws RuntimeException {
 		if (properties.get(OS_FAMILY) == null
 				|| properties.get(OS_FAMILY).toString().isEmpty()) {
 			throw new IllegalArgumentException(OS_FAMILY + " property must not be empty"); }
 		if (OS.Family.valueOf(properties.get(OS_FAMILY).toString().toUpperCase()) != OS.getFamily())
-			throw new Exception(toString() + " does not work on " + OS.getFamily());
+			throw new RuntimeException(toString() + " does not work on " + OS.getFamily());
 		if (properties.get(BundledResourcePath.UNPACK) != null)
 			throw new IllegalArgumentException(BundledResourcePath.UNPACK + " property not supported");
 		Map<Object,Object> props = new HashMap<Object,Object>(properties);
@@ -32,7 +33,7 @@ public class BundledNativePath extends StandardNativePath {
 		props.put(BundledResourcePath.UNPACK, true);
 		props.put(BundledResourcePath.EXECUTABLES, true);
 		resourcePath = new BundledResourcePath();
-		resourcePath.activate(context, props);
+		resourcePath.activate(props, context);
 	}
 	
 	private boolean unpacked = false;
@@ -55,6 +56,6 @@ public class BundledNativePath extends StandardNativePath {
 			return false;
 		if (getClass() != object.getClass())
 			return false;
-		return super.equals((BundledResourcePath)object);
+		return super.equals((BundledNativePath)object);
 	}
 }

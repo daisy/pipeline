@@ -7,12 +7,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.common.file.URIs;
+import static org.daisy.common.file.URIs.asURI;
+import static org.daisy.common.file.URLs.asURL;
 import static org.daisy.pipeline.braille.common.util.Files;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import static org.daisy.pipeline.braille.common.util.OS;
-import static org.daisy.pipeline.braille.common.util.URIs;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
-import static org.daisy.pipeline.braille.common.util.URLs.asURL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

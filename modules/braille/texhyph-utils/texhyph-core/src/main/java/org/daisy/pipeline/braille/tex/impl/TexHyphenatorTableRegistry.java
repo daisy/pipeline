@@ -31,12 +31,12 @@ public class TexHyphenatorTableRegistry extends ResourceRegistry<TexHyphenatorTa
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC
 	)
-	private void _register(TexHyphenatorTablePath path) {
+	protected void _register(TexHyphenatorTablePath path) {
 		register(path);
 		provider.invalidateCache();
 	}
 	
-	private void _unregister (TexHyphenatorTablePath path) {
+	protected void _unregister (TexHyphenatorTablePath path) {
 		unregister(path);
 		provider.invalidateCache();
 	}

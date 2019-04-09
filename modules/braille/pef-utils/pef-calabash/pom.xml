@@ -58,6 +58,11 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies
     -->
@@ -86,6 +91,15 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
+      org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,
+      org.daisy.pipeline.braille.pef.calabash.impl.Text2PEFStep$Provider,
+      org.daisy.pipeline.braille.pef.calabash.impl.ValidateStep$Provider
+    </expose-services>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -107,14 +121,13 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>
-              org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
-              org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,
-              org.daisy.pipeline.braille.pef.calabash.impl.Text2PEFStep$Provider,
-              org.daisy.pipeline.braille.pef.calabash.impl.ValidateStep$Provider
-            </_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.braille.pef.impl;-split-package:=first,
+              org.daisy.pipeline.braille.pef.calabash.impl
+            </Private-Package>
             <Provide-Capability>
               xproc.step;name="{http://www.daisy.org/ns/2008/pef}pef2text",
               xproc.step;name="{http://www.daisy.org/ns/2008/pef}text2pef",

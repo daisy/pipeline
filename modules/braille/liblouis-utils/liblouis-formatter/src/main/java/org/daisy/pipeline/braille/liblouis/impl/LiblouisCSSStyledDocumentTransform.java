@@ -10,6 +10,8 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import static org.daisy.common.file.URIs.asURI;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Function;
@@ -27,14 +29,12 @@ import org.daisy.pipeline.braille.common.Transform;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.ComponentContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +52,8 @@ public interface LiblouisCSSStyledDocumentTransform {
 		private URI href;
 			
 		@Activate
-		private void activate(ComponentContext context, final Map<?,?> properties) {
-			href = asURI(context.getBundleContext().getBundle().getEntry("xml/transform/liblouis-transform.xpl"));
+		protected void activate(final Map<?,?> properties) {
+			href = asURI(URLs.getResourceFromJAR("xml/transform/liblouis-transform.xpl", LiblouisCSSStyledDocumentTransform.class));
 		}
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();

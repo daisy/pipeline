@@ -1,20 +1,15 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
 
-import com.google.common.base.Optional;
-
 import org.daisy.braille.api.table.BrailleConverter;
 import org.daisy.braille.api.table.Table;
 import org.daisy.braille.api.table.TableCatalogService;
 
-import org.daisy.pipeline.braille.common.AbstractHyphenator;
-import org.daisy.pipeline.braille.common.AbstractHyphenator.util.DefaultLineBreaker;
-import org.daisy.pipeline.braille.common.AbstractTransformProvider;
+import static org.daisy.common.file.URIs.asURI;
 import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineIterator;
@@ -24,17 +19,14 @@ import org.daisy.pipeline.braille.common.HyphenatorProvider;
 import org.daisy.pipeline.braille.common.Provider;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
-import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
 
 import org.daisy.pipeline.braille.liblouis.LiblouisHyphenator;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator.Typeform;
-import org.daisy.pipeline.braille.pef.TableProvider;
 
 import org.daisy.pipeline.junit.AbstractTest;
 
@@ -48,26 +40,22 @@ import org.junit.Test;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LiblouisCoreTest extends AbstractTest {
 	
 	@Inject
-	LiblouisTranslator.Provider provider;
+	public LiblouisTranslator.Provider provider;
 	
 	@Inject
-	LiblouisHyphenator.Provider hyphenatorProvider;
+	public LiblouisHyphenator.Provider hyphenatorProvider;
 	
 	@Inject
-	LiblouisTableResolver resolver;
+	public LiblouisTableResolver resolver;
 	
 	@Inject
-	private TableCatalogService tableCatalog;
+	public TableCatalogService tableCatalog;
 	
 	private static final Logger messageBus = LoggerFactory.getLogger("JOB_MESSAGES");
 	
@@ -85,8 +73,11 @@ public class LiblouisCoreTest extends AbstractTest {
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Import-Package", "org.daisy.pipeline.braille.liblouis");
-		probe.setHeader("Service-Component", "OSGI-INF/table_paths.xml");
+		probe.setHeader("Bundle-Name", "test-module");
+		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
+		probe.setHeader("Service-Component", "OSGI-INF/mock-hyphenator-provider.xml,"
+		                                   + "OSGI-INF/dispatching-table-provider.xml,"
+		                                   + "OSGI-INF/table-path.xml");
 		return probe;
 	}
 	
@@ -191,43 +182,8 @@ public class LiblouisCoreTest extends AbstractTest {
 		                 .transform("foo-bar"));
 	}
 	
-	private static class MockHyphenator extends AbstractHyphenator {
-		private static final LineBreaker lineBreaker = new DefaultLineBreaker() {
-			protected Break breakWord(String word, int limit, boolean force) {
-				if (limit >= 3 && word.equals("foobarz"))
-					return new Break("fubbarz", 3, true);
-				else if (limit >= word.length())
-					return new Break(word, word.length(), false);
-				else if (force)
-					return new Break(word, limit, false);
-				else
-					return new Break(word, 0, false);
-			}
-		};
-		@Override
-		public LineBreaker asLineBreaker() {
-			return lineBreaker;
-		}
-		private static final MockHyphenator instance = new MockHyphenator() {
-			@Override
-			public String getIdentifier() {
-				return "mock";
-			}
-		};
-		public static class Provider extends AbstractTransformProvider<MockHyphenator>
-		                             implements HyphenatorProvider<MockHyphenator> {
-			{
-				get(query("")); // in order to save instance in id-based cache
-			}
-			public Iterable<MockHyphenator> _get(Query query) {
-				return AbstractTransformProvider.util.Iterables.<MockHyphenator>of(instance);
-			}
-		}
-	}
-	
 	@Test
 	public void testTranslateAndHyphenateNonStandard() {
-		registerService(new MockHyphenator.Provider(), HyphenatorProvider.class);
 		LineBreakingFromStyledText translator = provider.withContext(messageBus)
 		                                                .get(query("(table:'foobar.ctb')(hyphenator:mock)(output:ascii)")).iterator().next()
 		                                                .lineBreakingFromStyledText();
@@ -495,10 +451,11 @@ public class LiblouisCoreTest extends AbstractTest {
 			fillLines(translator.transform(styledText("norf quux foobar xyzzy", "word-spacing:2")), 20)); // words are split up using U+2028
 	}
 	
+	@Inject
+	public DispatchingTableProvider tableProvider;
+	
 	@Test
 	public void testDisplayTableProvider() {
-		Iterable<TableProvider> tableProviders = getServices(TableProvider.class);
-		Provider<Query,Table> tableProvider = dispatch(tableProviders);
 		
 		// (liblouis-table: ...)
 		Table table = tableProvider.get(query("(liblouis-table:'foobar.dis')")).iterator().next();
@@ -563,23 +520,5 @@ public class LiblouisCoreTest extends AbstractTest {
 			if (lines.hasNext())
 				sb.append('\n'); }
 		return sb.toString();
-	}
-	
-	@Inject
-	private BundleContext context;
-	
-	private <S> Iterable<S> getServices(Class<S> serviceClass) {
-		List<S> services = new ArrayList<S>();
-		try {
-			for (ServiceReference<? extends S> ref : context.getServiceReferences(serviceClass, null))
-				services.add(context.getService(ref)); }
-		catch (InvalidSyntaxException e) {
-			throw new RuntimeException(e); }
-		return services;
-	}
-	
-	private <S> void registerService(S service, Class<S> serviceClass) {
-		Hashtable<String,Object> properties = new Hashtable<String,Object>();
-		context.registerService(serviceClass.getName(), service, properties);
 	}
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef">
+  
+  <x:script>
+    <p:declare-step type="pef:padding" version="1.0">
+      <p:input port="source" primary="true"/>
+      <p:output port="result" primary="true"/>
+      <p:xslt>
+        <p:input port="stylesheet">
+          <p:document href="../../main/resources/xml/pef-padding.xsl"/>
+        </p:input>
+        <p:input port="parameters">
+          <p:empty/>
+        </p:input>
+      </p:xslt>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="test">
+    <x:call step="pef:padding">
+      <x:input port="source">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef">
+            <body>
+              <volume rows="5" cols="5" rowgap="0" duplex="true">
+                <section>
+                  <page rowgap="1">
+                    <row>⠿⠿⠿</row>
+                    <row rowgap="0">⠿⠿⠿</row>
+                    <row>⠿⠿⠿</row>
+                  </page>
+                  <page rowgap="1">
+                    <row>⠿⠿⠿</row>
+                    <row rowgap="2">⠿⠿⠿</row>
+                    <row>⠿⠿⠿</row>
+                  </page>
+                  <page rowgap="1">
+                    <row>⠿⠿⠿</row>
+                    <row rowgap="3">⠿⠿⠿</row>
+                    <row>⠿⠿⠿</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef">
+          <body>
+            <volume rows="5" cols="5" rowgap="0" duplex="true">
+              <section>
+                <page rowgap="1">
+                  <row rowgap="1">⠿⠿⠿⠀⠀</row>
+                  <row rowgap="0">⠿⠿⠿⠀⠀</row>
+                  <row rowgap="1">⠿⠿⠿⠀⠀</row>
+                  <row rowgap="2">⠀⠀⠀⠀⠀</row>
+                </page>
+                <page rowgap="1">
+                  <row rowgap="1">⠿⠿⠿⠀⠀</row>
+                  <row rowgap="2">⠿⠿⠿⠀⠀</row>
+                  <row rowgap="5">⠿⠿⠿⠀⠀</row>
+                </page>
+                <page rowgap="1">
+                  <row rowgap="1">⠿⠿⠿⠀⠀</row>
+                  <row rowgap="3">⠿⠿⠿⠀⠀</row>
+                  <row rowgap="4">⠿⠿⠿⠀⠀</row>
+                </page>
+                <page>
+                  <row rowgap="0">⠀⠀⠀⠀⠀</row>
+                  <row rowgap="0">⠀⠀⠀⠀⠀</row>
+                  <row rowgap="0">⠀⠀⠀⠀⠀</row>
+                  <row rowgap="0">⠀⠀⠀⠀⠀</row>
+                  <row rowgap="0">⠀⠀⠀⠀⠀</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

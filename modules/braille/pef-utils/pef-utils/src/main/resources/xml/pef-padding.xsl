@@ -6,33 +6,105 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
     
+    <!--
+        Add empty pages so that every section contains an even number of pages.
+        Add empty rows so that the sum of the heights of the rows on a page is equal to the available height of the page.
+        Add space characters (U+2800) so that every row is exactly as wide as the page allows.
+    -->
+    
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="pef:volume|
+                         pef:section[@duplex]">
+        <xsl:next-match>
+            <xsl:with-param name="duplex" tunnel="yes" select="xs:boolean(@duplex)"/>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <xsl:template match="pef:volume|
+                         pef:section[@rows]">
+        <xsl:next-match>
+            <xsl:with-param name="rows" tunnel="yes" select="xs:integer(number(@rows))"/>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <xsl:template match="pef:volume|
+                         pef:section[@cols]">
+        <xsl:next-match>
+            <xsl:with-param name="cols" tunnel="yes" select="xs:integer(number(@cols))"/>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <xsl:template match="pef:volume|
+                         pef:section[@rowgap]|
+                         pef:page[@rowgap]|
+                         pef:row[@rowgap]">
+        <xsl:next-match>
+            <xsl:with-param name="rowgap" tunnel="yes" select="xs:integer(number(@rowgap))"/>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <xsl:template match="pef:section">
+        <xsl:param name="duplex" tunnel="yes" as="xs:boolean"/>
+        <xsl:param name="rows" tunnel="yes" as="xs:integer"/>
+        <xsl:param name="cols" tunnel="yes" as="xs:integer"/>
+        <xsl:choose>
+            <xsl:when test="$duplex and (count(pef:page) mod 2) != 0">
+                <xsl:copy>
+                    <xsl:apply-templates select="@*|node()"/>
+                    <xsl:apply-templates select="$empty-page"/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:next-match/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:variable name="empty-page" as="element()">
+        <page xmlns="http://www.daisy.org/ns/2008/pef"/>
+    </xsl:variable>
+    
     <xsl:template match="pef:page">
-        <xsl:variable name="rows" as="xs:integer" select="xs:integer(number(ancestor::*[@rows][1]/@rows))"/>
-        <xsl:variable name="cols" as="xs:integer" select="xs:integer(number(ancestor::*[@cols][1]/@cols))"/>
+        <xsl:param name="rows" tunnel="yes" as="xs:integer"/>
+        <xsl:param name="cols" tunnel="yes" as="xs:integer"/>
+        <xsl:param name="rowgap" tunnel="yes" as="xs:integer"/>
         <xsl:copy>
             <xsl:sequence select="@*"/>
-            <xsl:for-each select="pef:row">
-                <xsl:variable name="rowgap" as="xs:integer" select="xs:integer(number(ancestor-or-self::*[@rowgap][1]/@rowgap))"/>
-                <xsl:copy>
-                    <xsl:sequence select="@*"/>
-                    <xsl:attribute name="rowgap" select="format-number($rowgap,'0')"/>
-                    <xsl:sequence select="string-join((string(.), for $x in string-length(string(.)) + 1 to $cols return '⠀'), '')"/>
-                </xsl:copy>
+            <xsl:apply-templates select="pef:row[following-sibling::pef:row]"/>
+            <xsl:variable name="gap" as="xs:integer"
+                          select="4 * $rows
+                                  - sum(for $row in pef:row[following-sibling::pef:row]
+                                        return 4 + ($row/@rowgap/xs:integer(number(.)),$rowgap)[1])"/>
+            <xsl:for-each select="(pef:row[not(following-sibling::pef:row)],
+                                   for $x in 1 + count(pef:row[not(following-sibling::pef:row)]) to $gap idiv (4 + $rowgap)
+                                     return $empty-row)">
+                <xsl:apply-templates select=".">
+                    <xsl:with-param name="force-rowgap" tunnel="yes" select="if (position()=last())
+                                                                             then $rowgap + ($gap mod (4 + $rowgap))
+                                                                             else $rowgap"/>
+                </xsl:apply-templates>
             </xsl:for-each>
-            <xsl:for-each select="1 to (($rows * 4
-                                         - sum(for $row in pef:row
-                                               return 4 + xs:integer(number($row/ancestor-or-self::*[@rowgap][1]/@rowgap))))
-                                         idiv 4)">
-                <xsl:element name="row" namespace="http://www.daisy.org/ns/2008/pef">
-                    <xsl:sequence select="string-join(for $x in 1 to $cols return '⠀', '')"/>
-                </xsl:element>
-            </xsl:for-each>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:variable name="empty-row" as="element()">
+        <row xmlns="http://www.daisy.org/ns/2008/pef"/>
+    </xsl:variable>
+    
+    <xsl:template match="pef:row">
+        <xsl:param name="rows" tunnel="yes" as="xs:integer"/>
+        <xsl:param name="cols" tunnel="yes" as="xs:integer"/>
+        <xsl:param name="rowgap" tunnel="yes" as="xs:integer"/>
+        <xsl:param name="force-rowgap" tunnel="yes" as="xs:integer?" select="()"/>
+        <xsl:copy>
+            <xsl:sequence select="@* except @rowgap"/>
+            <xsl:attribute name="rowgap" select="format-number(($force-rowgap,$rowgap)[1],'0')"/>
+            <xsl:sequence select="string-join((string(.), for $x in string-length(string(.)) + 1 to $cols return '⠀'), '')"/>
         </xsl:copy>
     </xsl:template>
     

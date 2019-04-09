@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="number-braille-translator-provider">
+  <implementation class="NumberBrailleTranslator$Provider"/>
+  <service>
+    <provide interface="org.daisy.pipeline.braille.common.BrailleTranslatorProvider"/>
+    <provide interface="org.daisy.pipeline.braille.common.TransformProvider"/>
+  </service>
+</component>

@@ -8,6 +8,8 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
 
+import static org.daisy.common.file.URIs.asURI;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
@@ -18,11 +20,9 @@ import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.Transform;
 import org.daisy.pipeline.braille.common.TransformProvider;
-import static org.daisy.pipeline.braille.common.util.URIs.asURI;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.ComponentContext;
 
 public interface DotifyOBFLTransform {
 	
@@ -37,8 +37,8 @@ public interface DotifyOBFLTransform {
 		private URI href;
 		
 		@Activate
-		private void activate(ComponentContext context, final Map<?,?> properties) {
-			href = asURI(context.getBundleContext().getBundle().getEntry("xml/transform/obfl-to-pef.xpl"));
+		protected void activate(final Map<?,?> properties) {
+			href = asURI(URLs.getResourceFromJAR("xml/transform/obfl-to-pef.xpl", DotifyOBFLTransform.class));
 		}
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();

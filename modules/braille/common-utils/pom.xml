@@ -11,12 +11,24 @@
   </parent>
 
   <artifactId>common-utils</artifactId>
-  <version>6.0.1-SNAPSHOT</version>
+  <version>7.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: common-utils</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xmlcatalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
@@ -47,12 +59,12 @@
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
+      <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -73,6 +85,17 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_braille_common_utils,
+      org.daisy.pipeline.datatypes.impl.Datatype_transform_query,
+      org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
+      org.daisy.pipeline.braille.common.saxon.impl.MessageDefinition,
+      org.daisy.pipeline.braille.common.saxon.impl.ProgressDefinition,
+      org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider
+    </expose-services>
+  </properties>
   
   <build>
     <plugins>
@@ -95,14 +118,15 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>
-              org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
-              org.daisy.pipeline.braille.common.saxon.impl.MessageDefinition,
-              org.daisy.pipeline.braille.common.saxon.impl.ProgressDefinition,
-              org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider
-            </_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.modules.impl;-split-package:=first,
+              org.daisy.pipeline.datatypes.impl;-split-package:=first,
+              org.daisy.pipeline.braille.common.calabash.impl,
+              org.daisy.pipeline.braille.common.saxon.impl
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>
@@ -117,8 +141,35 @@
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                UppercaseTransform$Provider
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
         <executions>
+          <execution>
+            <id>process-catalog</id>
+            <configuration>
+              <!--
+                  avoid name collision
+              -->
+              <moduleName>braille-${project.artifactId}</moduleName>
+            </configuration>
+          </execution>
           <execution>
             <id>package-list</id>
             <phase>prepare-package</phase>

@@ -17,7 +17,7 @@ import org.ops4j.pax.exam.Option;
 public class DotifyCalabashTest extends AbstractXSpecAndXProcSpecTest {
 	
 	@Inject
-	private Integer2TextFactoryMakerService int2textFactory;
+	public Integer2TextFactoryMakerService int2textFactory;
 	
 	@Test
 	public void testInt2textFactory() throws Exception {

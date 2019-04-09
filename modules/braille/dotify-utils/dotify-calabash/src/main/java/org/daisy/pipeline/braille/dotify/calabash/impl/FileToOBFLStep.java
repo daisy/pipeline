@@ -19,12 +19,12 @@ import org.daisy.streamline.api.identity.IdentityProviderService;
 import org.daisy.streamline.api.media.AnnotatedFile;
 import org.daisy.streamline.api.media.DefaultAnnotatedFile;
 import org.daisy.streamline.api.tasks.InternalTask;
-import org.daisy.streamline.api.tasks.TaskGroupFactoryMakerService;
+import org.daisy.streamline.api.tasks.TaskGroupFactory;
 import org.daisy.streamline.api.tasks.TaskGroupInformation;
 import org.daisy.streamline.api.tasks.TaskSystem;
 import org.daisy.streamline.api.tasks.TaskSystemException;
 import org.daisy.streamline.api.tasks.TaskSystemFactoryException;
-import org.daisy.streamline.api.tasks.TaskSystemFactoryMakerService;
+import org.daisy.streamline.api.tasks.TaskSystemFactory;
 import org.daisy.streamline.engine.TaskRunner;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
@@ -32,6 +32,8 @@ import org.daisy.dotify.common.xml.XMLToolsException;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
+
+import org.osgi.framework.FrameworkUtil;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -74,19 +76,19 @@ public class FileToOBFLStep extends DefaultStep {
 	private WritablePipe result = null;
 	private final Map<String,String> parameters = new HashMap<>();
 	
-	private final TaskSystemFactoryMakerService taskSystemFactoryService;
-	private final TaskGroupFactoryMakerService taskGroupFactoryService;
-	private final IdentityProviderService identityService;
+	private final TaskSystemFactory taskSystemFactory;
+	private final TaskGroupFactory taskGroupFactory;
+	private final IdentityProviderService identifyProvider;
 
 	public FileToOBFLStep(XProcRuntime runtime,
 	                      XAtomicStep step,
-	                      TaskSystemFactoryMakerService taskSystemFactoryService,
-	                      TaskGroupFactoryMakerService taskGroupFactoryService,
-	                      IdentityProviderService identityService) {
+	                      TaskSystemFactory taskSystemFactory,
+	                      TaskGroupFactory taskGroupFactory,
+	                      IdentityProviderService identifyProvider) {
 		super(runtime, step);
-		this.taskSystemFactoryService = taskSystemFactoryService;
-		this.taskGroupFactoryService = taskGroupFactoryService;
-		this.identityService = identityService;
+		this.taskSystemFactory = taskSystemFactory;
+		this.taskGroupFactory = taskGroupFactory;
+		this.identifyProvider = identifyProvider;
 	}
 	
 	@Override
@@ -176,10 +178,10 @@ public class FileToOBFLStep extends DefaultStep {
 	private InputStream convert(File input, String outputFormat, String locale, Map<String, Object> params) throws TaskSystemFactoryException, TaskSystemException, IOException {
 		
 		// FIXME: see https://github.com/joeha480/dotify/issues/205
-		AnnotatedFile ai = identityService.identify(input);
+		AnnotatedFile ai = identifyProvider.identify(input);
 
 		String inputFormat = getFormatString(ai);
-		if (!supportsInputFormat(inputFormat, taskGroupFactoryService.listAll())) {
+		if (!supportsInputFormat(inputFormat, taskGroupFactory.listAll())) {
 			logger.debug("No input factory for " + inputFormat);
 			logger.info("Note, the following detection code has been deprected. In future versions, an exception will be thrown if this point is reached."
 						+ " To avoid this, use the IdentifierFactory interface to implement a detector for the file type.");
@@ -237,7 +239,7 @@ public class FileToOBFLStep extends DefaultStep {
 	}
 
 	private TaskSystem newTaskSystem(String inputFormat, String outputFormat, String locale) throws TaskSystemFactoryException {
-		return taskSystemFactoryService.newTaskSystem(inputFormat, outputFormat, locale);
+		return taskSystemFactory.newTaskSystem(inputFormat, outputFormat, locale);
 	}
 	
 	@Component(
@@ -249,31 +251,35 @@ public class FileToOBFLStep extends DefaultStep {
 		
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-			return new FileToOBFLStep(runtime, step, taskSystemFactoryService, taskGroupFactoryService, identityService);
+			return new FileToOBFLStep(runtime, step, taskSystemFactory, taskGroupFactory, identifyProvider);
 		}
 		
-		private TaskSystemFactoryMakerService taskSystemFactoryService = null;
-		private TaskGroupFactoryMakerService taskGroupFactoryService = null;
-		private IdentityProviderService identityService = null;
+		private TaskSystemFactory taskSystemFactory = null;
+		private TaskGroupFactory taskGroupFactory = null;
+		private IdentityProviderService identifyProvider = null;
 		
 		@Reference(
-			name = "TaskSystemFactoryMakerService",
-			service = TaskSystemFactoryMakerService.class,
+			name = "TaskSystemFactory",
+			service = TaskSystemFactory.class,
 			cardinality = ReferenceCardinality.MANDATORY,
 			policy = ReferencePolicy.STATIC
 		)
-		protected void bindTaskSystemFactoryMakerService(TaskSystemFactoryMakerService service) {
-			taskSystemFactoryService = service;
+		protected void bindTaskSystemFactory(TaskSystemFactory service) {
+			if (!OSGiHelper.inOSGiContext())
+				service.setCreatedWithSPI();
+			taskSystemFactory = service;
 		}
 		
 		@Reference(
-			name = "TaskGroupFactoryMakerService",
-			service = TaskGroupFactoryMakerService.class,
+			name = "TaskGroupFactory",
+			service = TaskGroupFactory.class,
 			cardinality = ReferenceCardinality.MANDATORY,
 			policy = ReferencePolicy.STATIC
 		)
-		protected void bindTaskGroupFactoryMakerService(TaskGroupFactoryMakerService service) {
-			taskGroupFactoryService = service;
+		protected void bindTaskGroupFactory(TaskGroupFactory service) {
+			if (!OSGiHelper.inOSGiContext())
+				service.setCreatedWithSPI();
+			taskGroupFactory = service;
 		}
 		
 		@Reference(
@@ -283,8 +289,17 @@ public class FileToOBFLStep extends DefaultStep {
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindIdentityProviderService(IdentityProviderService service) {
-			identityService = service;
+			identifyProvider = service;
 		}
 	}
 	
+	private static abstract class OSGiHelper {
+		static boolean inOSGiContext() {
+			try {
+				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
+			} catch (NoClassDefFoundError e) {
+				return false;
+			}
+		}
+	}
 }

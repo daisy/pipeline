@@ -38,6 +38,22 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+        for processing org.daisy.pipeline.braille.pef.impl.TableCatalog_SPI in generate-spi-classes
+        FIXME: in generate-spi-classes, skip compilation of excluded classes completely (currently
+        only the processing of annotations is skipped)
+    -->
+    <dependency>
+      <groupId>biz.aQute.bnd</groupId>
+      <artifactId>annotation</artifactId>
+      <version>2.3.0</version>
+      <scope>provided</scope>
+    </dependency>
     <!--
         runtime dependencies
     -->
@@ -56,6 +72,14 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.braille.pef.impl.BrailleUtilsFileFormatCatalog,
+      org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog,
+      org.daisy.pipeline.braille.pef.impl.LocaleBasedTableProvider
+    </expose-services>
+  </properties>
   
   <build>
     <plugins>
@@ -76,7 +100,14 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <_dsannotations>*</_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.braille.pef.impl
+            </Private-Package>
+            <Import-Package>
+              !org.daisy.common.spi,
+              !org.daisy.braille.consumer.table,
+              *
+            </Import-Package>
           </instructions>
         </configuration>
         <executions>
@@ -86,6 +117,25 @@
             <goals>
               <goal>bundle</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                DispatchingFileFormatProvider,
+                DispatchingTableProvider
+              </includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>

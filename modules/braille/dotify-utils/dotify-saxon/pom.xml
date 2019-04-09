@@ -38,6 +38,11 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!--
         test dependencies
     -->
@@ -57,6 +62,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.braille.dotify.saxon.impl.TranslateDefinition
+    </expose-services>
+  </properties>
   
   <build>
     <plugins>
@@ -79,9 +90,12 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>*</_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.braille.dotify.saxon.impl
+            </Private-Package>
             <Provide-Capability>xpath.function;name="{http://code.google.com/p/dotify/}translate"</Provide-Capability>
           </instructions>
         </configuration>

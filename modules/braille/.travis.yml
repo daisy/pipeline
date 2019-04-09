@@ -10,7 +10,7 @@ before_install:
 install: mvn install -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=true -B -V
 
 # main task, run the verify goal
-script: mvn verify
+script: mvn -B verify
 
 # if the build succeeds, deploy the artifact (tests are skipped)
 after_success: 

@@ -43,10 +43,21 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.braille.liblouis.calabash.impl.TranslateFileStep$Provider
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -57,9 +68,12 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>*</_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.braille.liblouis.calabash.impl
+            </Private-Package>
             <Provide-Capability>xproc.step;name="{http://liblouis.org/liblouis}translate-file"</Provide-Capability>
           </instructions>
         </configuration>

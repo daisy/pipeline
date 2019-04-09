@@ -36,6 +36,9 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.primitives.Bytes;
 
+import org.daisy.common.file.URIs;
+import org.daisy.common.file.URLs;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -514,97 +517,6 @@ public abstract class util {
 				}
 			};
 		}
-	}
-	
-	public static abstract class URIs {
-		
-		/* If object is a String, it is assumed to represent a URI */
-		public static URI asURI(Object o) {
-			if (o == null)
-				return null;
-			try {
-				if (o instanceof String)
-					return new URI((String)o);
-				if (o instanceof File)
-					return ((File)o).toURI();
-				if (o instanceof URL) {
-					URL url = (URL)o;
-					if (url.getProtocol().equals("jar"))
-						return new URI("jar:" + new URI(null, url.getAuthority(), url.getPath(), url.getQuery(), url.getRef()).toASCIIString());
-					String authority = (url.getPort() != -1) ?
-						url.getHost() + ":" + url.getPort() :
-						url.getHost();
-					return new URI(url.getProtocol(), authority, url.getPath(), url.getQuery(), url.getRef()); }
-				if (o instanceof URI)
-					return (URI)o; }
-			catch (Exception e) {}
-			throw new RuntimeException("Object can not be converted to URI: " + o);
-		}
-		
-		public static Function<Object,URI> asURI = new Function<Object,URI>() {
-			public URI apply(Object o) {
-				return asURI(o);
-			}
-		};
-		
-		public static URI resolve(Object base, Object uri) {
-			URI baseURI = asURI(base);
-			if (baseURI.toString().startsWith("jar:"))
-				return asURI("jar:" + asURI(baseURI.toString().substring(4)).resolve(asURI(uri)).toASCIIString());
-			else
-				return baseURI.resolve(asURI(uri));
-		}
-		
-		public static URI relativize(Object base, Object uri) {
-			return asURI(base).relativize(asURI(uri));
-		}
-	}
-	
-	public static abstract class URLs {
-		
-		/* If object is a String, it is assumed to represent a URI */
-		public static URL asURL(Object o) {
-			if (o == null)
-				return null;
-			try {
-				if (o instanceof String)
-					return asURL(URIs.asURI(o));
-				if (o instanceof File)
-					return asURL(URIs.asURI(o));
-				if (o instanceof URL)
-					return (URL)o;
-				if (o instanceof URI)
-					return new URL(decode(o.toString())); }
-			catch (Exception e) {}
-			throw new RuntimeException("Object can not be converted to URL: " + o);
-		}
-		
-		public static URL resolve(Object base, Object url) {
-			if (url instanceof URI)
-				return asURL(URIs.asURI(base).resolve((URI)url));
-			if (url instanceof String) {
-				try { return new URL(asURL(base), url.toString()); }
-				catch (MalformedURLException e) { throw new RuntimeException(e); }}
-			return asURL(url);
-		}
-		
-		public static String relativize(Object base, Object url) {
-			return decode(URIs.asURI(base).relativize(URIs.asURI(url)).toString());
-		}
-		
-		@SuppressWarnings(
-			"deprecation" // URLDecode.decode is deprecated
-		)
-		public static String decode(String uri) {
-			// URIs treat the + symbol as is, but URLDecoder will decode both + and %20 into a space
-			return URLDecoder.decode(uri.replace("+", "%2B"));
-		}
-		
-		public static Function<String,String> decode = new Function<String,String>() {
-			public String apply(String uri) {
-				return decode(uri);
-			}
-		};
 	}
 	
 	public static abstract class Files {

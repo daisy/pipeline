@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="org.daisy.pipeline.modules.impl.Module_test_module" immediate="true">
+  <implementation class="org.daisy.pipeline.modules.impl.Module_test_module"/>
+  <service>
+    <provide interface="org.daisy.pipeline.modules.ModuleRef"/>
+  </service>
+  <reference name="XmlCatalogParser" cardinality="1..1" policy="static" interface="org.daisy.pipeline.xmlcatalog.XmlCatalogParser" bind="setParser"/>
+</component>

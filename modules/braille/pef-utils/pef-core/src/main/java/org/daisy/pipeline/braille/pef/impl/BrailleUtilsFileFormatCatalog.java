@@ -31,6 +31,8 @@ import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.pef.FileFormatProvider;
 import org.daisy.pipeline.braille.pef.TableProvider;
 
+import org.osgi.framework.FrameworkUtil;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -126,6 +128,8 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 		policy = ReferencePolicy.DYNAMIC
 	)
 	public void addFileFormatProvider(org.daisy.braille.api.embosser.FileFormatProvider provider) {
+		if (!OSGiHelper.inOSGiContext())
+			provider.setCreatedWithSPI();
 		providers.add(provider);
 	}
 	
@@ -143,6 +147,8 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 		policy = ReferencePolicy.DYNAMIC
 	)
 	public void addEmbosserProvider(EmbosserProvider provider) {
+		if (!OSGiHelper.inOSGiContext())
+			provider.setCreatedWithSPI();
 		embosserProviders.add(provider);
 	}
 	
@@ -224,6 +230,16 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 
 		public EmbosserWriter newEmbosserWriter(OutputStream os) {
 			return embosser.newEmbosserWriter(os);
+		}
+	}
+	
+	private static abstract class OSGiHelper {
+		static boolean inOSGiContext() {
+			try {
+				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
+			} catch (NoClassDefFoundError e) {
+				return false;
+			}
 		}
 	}
 }

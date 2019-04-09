@@ -38,7 +38,19 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.braille.pef.saxon.impl.DecodeDefinition,
+      org.daisy.pipeline.braille.pef.saxon.impl.EncodeDefinition
+    </expose-services>
+  </properties>
 
   <build>
     <plugins>
@@ -49,9 +61,12 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>*</_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.braille.pef.saxon.impl
+            </Private-Package>
             <Provide-Capability>
               xpath.function;name="{http://www.daisy.org/ns/2008/pef}encode",
               xpath.function;name="{http://www.daisy.org/ns/2008/pef}decode"

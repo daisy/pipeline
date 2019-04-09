@@ -18,6 +18,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.googlecode.texhyphj</groupId>
       <artifactId>texhyphj</artifactId>
     </dependency>
@@ -36,12 +40,12 @@
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
+      <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -57,6 +61,14 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.braille.tex.impl.TexHyphenatorDotifyImpl,
+      org.daisy.pipeline.braille.tex.impl.TexHyphenatorSimpleImpl,
+      org.daisy.pipeline.braille.tex.impl.TexHyphenatorTableRegistry
+    </expose-services>
+  </properties>
   
   <build>
     <plugins>
@@ -77,7 +89,9 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <_dsannotations>*</_dsannotations>
+            <Private-Package>
+              org.daisy.pipeline.braille.tex.impl
+            </Private-Package>
           </instructions>
         </configuration>
         <executions>
@@ -87,6 +101,25 @@
             <goals>
               <goal>bundle</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                TablePath,
+                DispatchingTexHyphenatorProvider
+              </includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>

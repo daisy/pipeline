@@ -24,6 +24,10 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 	
 	protected abstract Iterable<T> _get(Query query);
 	
+	// WARNING: using "(id:<ID>)" in a query where <ID> is the result of a
+	// call to AbstractTransform#getIdentifier() will only work when that
+	// transformer came from the exact same provider and its cache is not
+	// cleared in the meantime.
 	private final java.lang.Iterable<T> get(Query query, Logger context) {
 		MutableQuery q = mutableQuery(query);
 		if (q.containsKey("id")) {

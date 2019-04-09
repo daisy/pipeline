@@ -1,6 +1,7 @@
 package org.daisy.pipeline.braille.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -13,8 +14,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import static org.daisy.pipeline.braille.common.util.Iterables.combinations;
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 
 public class UtilsTest {
+	
+	@Test
+	public void testExtractHyphens() {
+		assertEquals("[0, 0, 1, 0, 0]", Arrays.toString(extractHyphens("foo\u00ADbar", '\u00AD')._2));
+		assertEquals("[0, 0, 0, 2, 0, 0]", Arrays.toString(extractHyphens("foo-\u200Bbar", null, '\u200B')._2));
+	}
 	
 	@Test
 	public void testCombinations() {

@@ -16,10 +16,9 @@ import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
+import static org.daisy.common.file.URLs.decode;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
-import static org.daisy.pipeline.braille.common.util.URLs.decode;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.Liblouisutdml;
 
