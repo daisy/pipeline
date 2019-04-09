@@ -188,6 +188,7 @@ $(TARGET_DIR)/.gradle-settings/conf/settings.xml : $(MVN_SETTINGS)
 	          RELEASE_DIRS="$$(for x in $(GITREPOS); do [ -e $$x/bom/pom.xml ] || [ -e $$x/maven/bom/pom.xml ] && echo $$x; done )" \
 	          OUTPUT_BASEDIR="$(TARGET_DIR)/mk" \
 	          OUTPUT_FILENAME=".deps.mk" \
+	          VERBOSE="$$([[ -n $${VERBOSE+x} ]] && echo true || echo false)" \
 	          >/dev/null \
 	; then \
 		rm -f $$(for m in $$MAVEN_MODULES; do echo "$(TARGET_DIR)/mk/$$m/.deps.mk"; done) && \
