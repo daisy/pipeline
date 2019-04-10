@@ -164,9 +164,10 @@ $(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
 	rm -rf $(MAVEN_DIR)/xprocdoc
 	rm -rf $(MAVEN_DIR)/sources
 	cd $(MAVEN_DIR) && \
-	if ! $(MVN) "process-sources" >/dev/null ; then \
+	if ! $(MVN) "process-sources" >../maven.log ; then \
 		rm -rf $(MAVEN_DIR)/doc; \
 		rm -rf $(MAVEN_DIR)/javadoc; \
+		cat ../maven.log; \
 		exit 1; \
 	fi
 	cd $(MAVEN_DIR)/doc && \
