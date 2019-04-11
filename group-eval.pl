@@ -2,6 +2,7 @@
 use Term::ANSIColor;
 
 my $MY_DIR = $ENV{'MY_DIR'};
+my $VERBOSE = $ENV{'VERBOSE'};
 
 sub group_commands {
 	my @commands;
