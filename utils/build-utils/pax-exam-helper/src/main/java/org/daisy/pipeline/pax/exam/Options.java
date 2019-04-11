@@ -626,7 +626,7 @@ public abstract class Options {
 				jar = new JarFile(bundle, false);
 				Manifest manifest = jar.getManifest();
 				if (manifest == null)
-					throw new RuntimeException("[" + bundle + "] is not a valid bundle: manifest is missing");
+					throw new InvalidBundleException("[" + bundle + "] is not a valid bundle: manifest is missing");
 				Attributes mainAttrs = manifest.getMainAttributes();
 				String bundleSymbolicName = mainAttrs.getValue("Bundle-SymbolicName");
 				String bundleName = mainAttrs.getValue("Bundle-Name");
@@ -634,7 +634,7 @@ public abstract class Options {
 					throw new InvalidBundleException("[" + bundle + "] is not a valid bundle: Bundle-SymbolicName and Bundle-Name are missing");
 				return (mainAttrs.getValue("Fragment-Host") != null); }
 			catch (IOException e) {
-				throw new RuntimeException("[" + bundle + "] is not a valid bundle: failed reading jar", e); }
+				throw new InvalidBundleException("[" + bundle + "] is not a valid bundle: failed reading jar", e); }
 			finally {
 				if (jar != null)
 					try {
@@ -656,6 +656,9 @@ public abstract class Options {
 		private static class InvalidBundleException extends Exception {
 			InvalidBundleException(String message) {
 				super(message);
+			}
+			InvalidBundleException(String message, Throwable cause) {
+				super(message, cause);
 			}
 		}
 	}

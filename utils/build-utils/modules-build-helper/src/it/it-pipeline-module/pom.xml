@@ -29,9 +29,9 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>braille-modules-bom</artifactId>
-        <version>${braille-modules.version}</version>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>modules-bom</artifactId>
+        <version>${modules.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

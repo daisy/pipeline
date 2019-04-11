@@ -20,7 +20,6 @@
 
   <!-- List of the modules to build all-at-once -->
   <modules>
-    <module>modules-parent</module>
     <module>modules-build-helper</module>
     <module>modules-test-helper</module>
     <module>ds-to-spi-annotations-processor</module>
