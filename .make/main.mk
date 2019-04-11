@@ -300,5 +300,13 @@ else
 endif
 endif
 
+ifdef SKIP_GROUP_EVAL_TARGET
+.SILENT:
+else
+ifndef VERBOSE
+.SILENT:
+endif
+endif
+
 # put at the end because quotes mess up syntax highlighting of following lines in Emacs
 quote = '$(subst ','"'"',$(1))'

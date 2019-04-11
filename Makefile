@@ -448,7 +448,3 @@ help :
 	echo "	Build the website"                                                                                      >&2
 	echo "make dump-maven-cmd:"                                                                                     >&2
 	echo '	Get the Maven command used. To configure your shell: eval $$(make dump-maven-cmd)'                      >&2
-
-ifndef VERBOSE
-.SILENT:
-endif
