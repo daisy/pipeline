@@ -4,8 +4,8 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:daisy/pipeline-mod-tts.git
+	remote = git@github.com:daisy/pipeline-modules.git
 	branch = master
-	commit = af8501cd59c342132617e2189487f2df64210e2e
-	parent = 79ef7a78b5186b17625fa9eb11abc508e71fa140
+	commit = f3ea4754d9691ee867f8c4485ff30a5f67b453df
+	parent = 1c0f9fef71083a3908917702c4ad07ad4eea60d5
 	cmdver = 0.3.1

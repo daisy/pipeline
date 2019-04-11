@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>nlp-modules-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <relativePath>../../parent</relativePath>
   </parent>
 
   <artifactId>nlp-omnilang-lexer</artifactId>
@@ -36,16 +36,6 @@
       <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
   
   <properties>
@@ -61,8 +51,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Export-Package/>
             <Private-Package>
-              org.daisy.pipeline.nlp.lexing.omni
+              org.daisy.pipeline.nlp.lexing.omni,
+              ${generated-packages}
+              {local-packages}
             </Private-Package>
           </instructions>
         </configuration>

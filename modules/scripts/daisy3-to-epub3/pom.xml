@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>scripts-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>daisy3-to-epub3</artifactId>
@@ -17,27 +17,10 @@
   <name>DAISY Pipeline 2 module :: DAISY 3 to EPUB 3</name>
   
   <dependencies>
+    <!-- for XProcScriptService -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
     </dependency>
     <!--
         runtime dependencies
@@ -93,16 +76,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-entities</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

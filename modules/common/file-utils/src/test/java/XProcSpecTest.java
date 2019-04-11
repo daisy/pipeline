@@ -5,7 +5,8 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			pipelineModule("common-utils")
+			"org.daisy.pipeline:common-utils:?",
+			pipelineModule("common-utils"),
 		};
 	}
 }

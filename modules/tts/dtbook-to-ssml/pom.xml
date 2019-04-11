@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <relativePath>../../parent</relativePath>
   </parent>
 
   <version>3.0.2-SNAPSHOT</version>
@@ -18,24 +18,6 @@
   <description>Generates SSML fragments to prepare the TTS narration of a DTBook document.</description>
   
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!--
         runtime dependencies
     -->
@@ -65,20 +47,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Private-Package>
-              org.daisy.pipeline.modules.impl;-split-package:=first
-            </Private-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-maven-plugin</artifactId>
-        <version>1.0.0</version>
         <executions>
           <execution>
             <phase>test</phase>
@@ -87,18 +57,6 @@
             </goals>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.daisy.maven</groupId>
-            <artifactId>xproc-engine-calabash</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-          <dependency>
-            <groupId>org.daisy.xprocspec</groupId>
-            <artifactId>xprocspec</artifactId>
-            <version>1.2.0</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>

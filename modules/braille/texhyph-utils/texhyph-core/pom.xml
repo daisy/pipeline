@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>texhyph-core</artifactId>
   <version>4.1.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -39,26 +40,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   
@@ -72,38 +55,6 @@
   
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Private-Package>
-              org.daisy.pipeline.braille.tex.impl
-            </Private-Package>
-          </instructions>
-        </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>ds-to-spi-maven-plugin</artifactId>
@@ -162,7 +113,6 @@
               <links>
                 <link>https://google.github.io/guava/releases/15.0/api/docs</link>
               </links>
-              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>

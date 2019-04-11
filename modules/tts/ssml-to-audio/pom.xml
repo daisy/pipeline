@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <relativePath>../../parent</relativePath>
   </parent>
 
   <version>3.1.1-SNAPSHOT</version>
@@ -23,14 +23,6 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
     </dependency>
@@ -42,17 +34,17 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>audio-common</artifactId>
     </dependency>
-    <!-- needed to use com.xmlcalabash.library.DefaultStep ... -->
+    <!-- for DefaultStep ... -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
     </dependency>
-    <!-- needed to use org.daisy.common.xproc.calabash.XProcStepProvider -->
+    <!-- for XProcStepProvider -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
-     <!-- needed for its XslTransformCompiler -->
+     <!-- for XslTransformCompiler -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
@@ -60,16 +52,6 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
     </dependency>
     <!--
         test dependencies
@@ -80,18 +62,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-omnilang-lexer</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -106,18 +78,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
@@ -127,26 +87,18 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
+            <Export-Package/>
             <Private-Package>
               org.daisy.pipeline.tts.synthesize,
-              org.daisy.pipeline.modules.impl;-split-package:=first
+              ${generated-packages}
+              {local-packages}
             </Private-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
         <executions>
           <execution>
             <id>generate-spi-test-classes</id>

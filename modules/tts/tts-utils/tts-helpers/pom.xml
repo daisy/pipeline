@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
   <version>1.0.4-SNAPSHOT</version>
@@ -38,24 +38,6 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!--
           runtime dependencies
     -->
@@ -82,16 +64,6 @@
       <artifactId>logback-classic</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   
   <properties>
@@ -105,18 +77,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
@@ -128,19 +88,11 @@
             </Import-Package>
             <Private-Package>
               org.daisy.pipeline.tts.config.impl,
-              org.daisy.pipeline.modules.impl;-split-package:=first
+              ${generated-packages}
+              {local-packages}
             </Private-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

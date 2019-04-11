@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>common-utils-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>file-utils</artifactId>
@@ -19,11 +19,7 @@
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
+      <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -45,16 +41,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!--
         runtime dependencies
     -->
@@ -62,19 +48,6 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -105,18 +78,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
@@ -126,23 +87,15 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
+            <Export-Package/>
             <Private-Package>
-              org.daisy.pipeline.modules.impl;-split-package:=first,
               org.daisy.common.xproc.calabash.steps;-split-package:=first,
-              org.daisy.common.xproc.calabash.impl;-split-package:=first,
-              org.daisy.saxon.functions.file
+              org.daisy.saxon.functions.file,
+              ${generated-packages}
+              {local-packages}
             </Private-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

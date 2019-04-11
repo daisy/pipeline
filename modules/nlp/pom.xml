@@ -19,8 +19,6 @@
   <description>Aggregator POM for modules related to Natural Language Processing</description>
 
   <modules>
-    <module>bom</module>
-    <module>parent</module>
     <module>nlp-utils/nlp-common</module>
     <module>nlp-utils/lexing</module>
     <module>nlp-utils/break-detection</module>

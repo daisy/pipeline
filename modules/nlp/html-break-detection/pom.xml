@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>nlp-modules-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
+    <relativePath>../../parent</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
@@ -19,24 +19,6 @@
   <description>Performs sentence and word detection on a HTML document</description>
 
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!--
         runtime dependencies
     -->
@@ -52,21 +34,5 @@
       org.daisy.pipeline.modules.impl.Module_html_break_detection
     </expose-services>
   </properties>
-  
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Private-Package>
-              org.daisy.pipeline.modules.impl;-split-package:=first
-            </Private-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
   
 </project>

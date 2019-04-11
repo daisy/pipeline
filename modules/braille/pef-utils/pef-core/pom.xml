@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-core</artifactId>
   <version>2.1.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -33,16 +34,6 @@
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>css-core</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!--
         for processing org.daisy.pipeline.braille.pef.impl.TableCatalog_SPI in generate-spi-classes
         FIXME: in generate-spi-classes, skip compilation of excluded classes completely (currently
@@ -63,14 +54,6 @@
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   
   <properties>
@@ -84,25 +67,10 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Private-Package>
-              org.daisy.pipeline.braille.pef.impl
-            </Private-Package>
             <Import-Package>
               !org.daisy.common.spi,
               !org.daisy.braille.consumer.table,
@@ -110,15 +78,6 @@
             </Import-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
@@ -179,7 +138,6 @@
                 <link>https://google.github.io/guava/releases/15.0/api/docs</link>
                 <link>http://brailleapps.github.io/braille-utils.api/3.0.1/javadoc</link>
               </links>
-              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>

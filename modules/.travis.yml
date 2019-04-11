@@ -1,0 +1,67 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+# configure the Maven environment
+before_install:
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
+  # see https://github.com/travis-ci/travis-cookbooks/issues/964
+  - rm -f /opt/jdk_switcher/jdk_switcher.sh
+  - sudo apt-get install -y lame espeak
+
+install: mvn install -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=true -B -V
+                     -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
+                     -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+matrix:
+  include:
+    - env: SUBDIRS="common scripts-utils"
+    - env: SUBDIRS="nlp audio tts"
+    - env: SUBDIRS=braille
+    - env: SUBDIRS=scripts
+
+# main task, run the verify goal
+script:
+  - for d in $SUBDIRS; do
+      mvn -f $d -B verify
+          -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
+          -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
+    done
+
+# if the build succeeds, deploy the artifact (tests are skipped)
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ] || [[ "$TRAVIS_BRANCH" == super/* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      for d in $SUBDIRS; do
+        mvn -f $d deploy -B -DskipTests -Dinvoker.skip=true
+            -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
+            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
+      done;
+    else
+      echo "Skipping Maven deploy.";
+    fi
+
+# if the build fails because of an integration test, print the logs
+after_failure:
+  - find . -type f -path '*/target/it/*/build.log' -execdir bash -c 'if ! cat build.log | grep -qFx "[INFO] BUILD SUCCESS"; then tail -250 build.log; fi' \;
+
+before_cache:
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_cache)
+
+cache:
+  directories:
+    - $HOME/.m2/cached-repository
+
+# whitelist
+branches:
+  only:
+  - master
+  - develop
+  - /^super\/.+$/
+
+env:
+  global:
+  # CI_DEPLOY_USERNAME
+  - secure: "di0aFWtFjisVKnba80XltWoQNhMToEcYZRWqoSoyp/+zYaNHDClGO6P+4QFE3SDzVC1hUucCtVrcE+legRU4oo+IIwCue1wvSZGxbyU/Dy/b34cqNSepRoTV3j6NUgTwDfXtDeNcjj2PH/ChP86rutXL5+hLFnfPKrdJvab3tMWFCCVjUsSD4/XrfBCL+2uJSWCp/AFd0hYm0EMlPBLxtTja/nenWzAsdBMWl/R+8P+3sBA/1bcIYmBZAZHUeNBKaTu+oOwdQUbTA8LIqYJF8knINU1d+rDXGMMDcYmff38cKlp6h6cIH2cYNeoYo4Pkjd+PKxUICmodHUIMFBscHG0I9k0ymMJFTo0FriSyO9ZHSRfMVGhMiUXg+fgq3yGXfPx1aamEy54bfYrB+K0n2BPYqEjcH50gewvvYNdYMEPGBaPk4RBMHz3ZJs6eGht8BOVUAh7iA2Efn6Rvtp4NmCm16lNy/J/L1QRXWb/bWdASYG2zpXggPsPAM780/IeLq+Tu7iuMWdI/Mw1VYOQQxf+flD57uQHa4WtOJyIIHoT9LxwuBx6+LtjIz5prHzHltQktRpMsbyy5SQ6XtqzQpJf3q4OIWYAFUEY6u6SCwsDMksgNhVsq3pPaCbEDYTBQnVaP7DL8iYzt5IkVGcoJcwYwYPy/L1zibkgAW97jBzg="
+  # CI_DEPLOY_PASSWORD
+  - secure: "dOSQdMw6wmgiZzJarEzGxnJCxRxUthcL7u3jSkyghYLdOiZ6jV/9bwWRfjN4EmYblOhnwtf1Mjc+o+SXw89CEEYcjqONEfy9awTDP4lukj0juRF54UMkv4H4Mx2JOvkDF6bPmTEKYM+RfwEYf2fRUu6y9V0P7yBATOI8radEA7J8xD+pjwP3TRSZ75eU1xeIN0MzNg6fFOpCBfeT8oiHQE8dvvhKZJ+PWLQE1AOHJUw7TlewgsZXgKWfIc6WMpw4D2zifkrQNaEUJJXF1YIip1/8lGPEeZO+CHZ1QqnJcO9Oe+pn6bLpSWMuaHnt5N+pnLgbRAa/fj1001ZuQwRALd3F1HLq+X7w+QOW6J63nVas6U0bUuMxKE+Q9cYBlKQFwjJA0uxT4wZEB/Of9iBES+rQ0rMAEHe5U1ssb9tSPl2Ztav0tHZQcOweNm2LNwVklq5GB4o6vB7slNpZcDkgs3iiaoTB9C+BC1xBacxnLVmoKl4fjaVkZExX+rwXN0mBAWrTu2XHp2z/q/7tVb9Cnf8qvi2+mxbyQiqwYV882lSmJbvPOeekYWnzVKkcEtYfeIzGZaSGiqTGT6Ak8KwO6BJpEfm6lEWIiIYqw2iAPtLjyQVhE1BGcBTMIVYR6oOhlWeA36eHLOqvZTsCVdv6B+0ip4orc9U5g577YpG4/cE="

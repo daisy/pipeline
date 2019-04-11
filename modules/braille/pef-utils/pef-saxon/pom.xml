@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-saxon</artifactId>
   <version>2.1.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -33,16 +34,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
   
   <properties>
@@ -64,9 +55,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Private-Package>
-              org.daisy.pipeline.braille.pef.saxon.impl
-            </Private-Package>
             <Provide-Capability>
               xpath.function;name="{http://www.daisy.org/ns/2008/pef}encode",
               xpath.function;name="{http://www.daisy.org/ns/2008/pef}decode"

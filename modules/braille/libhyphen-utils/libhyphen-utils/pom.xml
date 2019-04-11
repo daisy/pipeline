@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -18,24 +18,6 @@
   <name>DP2 Braille Modules :: libhyphen-utils :: libhyphen-utils</name>
 
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!--
         optional runtime dependencies (but keep mandatory as long as there is only one implementation)
     -->
@@ -60,9 +42,6 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Private-Package>
-              org.daisy.pipeline.modules.impl;-split-package:=first
-            </Private-Package>
             <Require-Capability>xpath.function;filter:="(name={http://hunspell.sourceforge.net/Hyphen}hyphenate)"</Require-Capability>
           </instructions>
         </configuration>

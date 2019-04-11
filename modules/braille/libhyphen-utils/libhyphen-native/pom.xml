@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>libhyphen-native</artifactId>
   <version>1.2.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -15,16 +16,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>common-utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
   <dependencyManagement>
@@ -100,13 +91,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Private-Package>
-              org.daisy.pipeline.braille.libhyphen.impl
-            </Private-Package>
-          </instructions>
-        </configuration>
         <executions>
           <execution>
             <id>default-bundle</id>

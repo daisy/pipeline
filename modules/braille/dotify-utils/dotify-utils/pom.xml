@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-utils</artifactId>
   <version>2.1.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -17,14 +18,6 @@
   <name>DP2 Braille Modules :: dotify-utils :: dotify-utils</name>
 
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
@@ -44,16 +37,6 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
     </dependency>
     <!--
         runtime dependencies
@@ -106,8 +89,9 @@
         <configuration>
           <instructions>
             <Private-Package>
-              org.daisy.pipeline.modules.impl;-split-package:=first,
-              org.daisy.pipeline.braille.dotify.impl;-split-package:=first
+              org.daisy.pipeline.braille.dotify.impl;-split-package:=first,
+              ${generated-packages}
+              {local-packages}
             </Private-Package>
             <Require-Capability>
               xproc.step;filter:="(name={http://code.google.com/p/dotify/}obfl-to-pef)",

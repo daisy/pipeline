@@ -20,8 +20,6 @@
 
   <!-- List of the modules to build all-at-once -->
   <modules>
-    <module>bom</module>
-    <module>parent</module>
     <module>daisy202-to-epub3</module>
     <module>daisy202-validator</module>
     <module>daisy3-to-daisy202</module>

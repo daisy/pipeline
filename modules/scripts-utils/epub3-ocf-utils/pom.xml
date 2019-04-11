@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>scripts-utils-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>epub3-ocf-utils</artifactId>
@@ -17,24 +17,6 @@
   <name>DAISY Pipeline 2 module :: EPUB 3 Container Format Utilities</name>
   
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!--
         runtime dependencies
     -->
@@ -52,14 +34,6 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>zip-utils</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   
@@ -80,21 +54,6 @@
             <phase>none</phase>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Import-Package>
-              !org.daisy.common.spi,
-              *
-            </Import-Package>
-            <Private-Package>
-              org.daisy.pipeline.modules.impl;-split-package:=first
-            </Private-Package>
-          </instructions>
-        </configuration>
       </plugin>
     </plugins>
   </build>

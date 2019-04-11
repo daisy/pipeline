@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
   <version>1.0.3-SNAPSHOT</version>

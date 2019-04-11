@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>tts-modules-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../parent</relativePath>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
   <version>3.0.4-SNAPSHOT</version>
@@ -22,7 +22,7 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
     </dependency>
-    <!-- For the binary finder: -->
+    <!-- for the binary finder -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
@@ -50,26 +50,6 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
   
   <properties>
@@ -81,18 +61,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
@@ -102,18 +70,14 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Private-Package>org.daisy.pipeline.tts.espeak</Private-Package>
+            <Export-Package/>
+            <Private-Package>
+              org.daisy.pipeline.tts.espeak,
+              ${generated-packages}
+              {local-packages}
+            </Private-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

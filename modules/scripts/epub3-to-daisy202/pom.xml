@@ -5,9 +5,9 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>scripts-parent</artifactId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>epub3-to-daisy202</artifactId>
@@ -17,27 +17,10 @@
   <name>DAISY Pipeline 2 module :: EPUB 3 to DAISY 2.02</name>
   
   <dependencies>
+    <!-- for XProcScriptService and UrlBasedDatatypeService -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
     </dependency>
     <!--
         runtime dependencies
@@ -82,25 +65,13 @@
       <artifactId>epub3-ocf-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_epub3_to_daisy202,
-      org.daisy.pipeline.script.impl.XProcScript_epub3_to_daisy202
+      org.daisy.pipeline.script.impl.XProcScript_epub3_to_daisy202,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_daisy202_script_validation
     </expose-services>
   </properties>
   

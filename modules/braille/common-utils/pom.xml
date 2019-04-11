@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../maven/parent/</relativePath>
+    <relativePath>../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>common-utils</artifactId>
   <version>7.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -17,14 +18,6 @@
   <name>DP2 Braille Modules :: common-utils</name>
 
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xmlcatalog</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
@@ -58,31 +51,13 @@
       <artifactId>calabash-adapter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <!--
-        test dependencies
-    -->
+    <!-- for UrlBasedDatatypeService -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
+      <artifactId>framework-core</artifactId>
     </dependency>
   </dependencies>
   
@@ -100,14 +75,12 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
+            <id>xspecTest</id>
+            <phase>none</phase>
           </execution>
         </executions>
       </plugin>
@@ -121,23 +94,8 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Private-Package>
-              org.daisy.pipeline.modules.impl;-split-package:=first,
-              org.daisy.pipeline.datatypes.impl;-split-package:=first,
-              org.daisy.pipeline.braille.common.calabash.impl,
-              org.daisy.pipeline.braille.common.saxon.impl
-            </Private-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
@@ -213,7 +171,6 @@
                 <link>https://osgi.org/javadoc/r5/core</link>
                 <link>https://osgi.org/javadoc/r5/cmpn</link>
               </links>
-              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>

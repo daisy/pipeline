@@ -20,8 +20,6 @@
 
   <!-- List of the modules to build all-at-once -->
   <modules>
-    <module>bom</module>
-    <module>parent</module>
     <module>asciimath-utils</module>
     <module>common-entities</module>
     <module>css-utils</module>

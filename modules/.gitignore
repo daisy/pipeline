@@ -6,6 +6,8 @@ dependency-reduced-pom.xml
 .classpath
 .project
 .settings/
+.externalToolBuilders
+maven-eclipse.xml
 
 # OS Files
 .DS_Store
@@ -28,4 +30,4 @@ Thumbs.db
 **/temp/
 
 # misc
-dtbook-validator/src/test/dtbook_has_errors_maybe_dont_share.xml
+scripts/dtbook-validator/src/test/dtbook_has_errors_maybe_dont_share.xml

@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>liblouis-calabash</artifactId>
   <version>2.0.7-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -38,16 +39,6 @@
       <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -71,9 +62,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Private-Package>
-              org.daisy.pipeline.braille.liblouis.calabash.impl
-            </Private-Package>
             <Provide-Capability>xproc.step;name="{http://liblouis.org/liblouis}translate-file"</Provide-Capability>
           </instructions>
         </configuration>

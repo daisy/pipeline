@@ -19,8 +19,6 @@
   <description>Aggregator POM for modules related to TTS-based production</description>
 
   <modules>
-    <module>bom</module>
-    <module>parent</module>
     <!-- The modules att-nar and sapi-nar are excluded from the main built -->
     <!-- because they are platform-specific. The module tts-adapter-attnative -->
     <!-- too, because it depends on att-nar which cannot be publicly deployed -->

@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>liblouis-native</artifactId>
   <version>1.5.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -308,13 +309,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Private-Package>
-              org.daisy.pipeline.braille.liblouis.impl
-            </Private-Package>
-          </instructions>
-        </configuration>
         <executions>
           <execution>
             <id>default-bundle</id>
@@ -330,9 +324,6 @@
               <classifier>linux</classifier>
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.LiblouisNativePathForLinux</_dsannotations>
-                <Private-Package>
-                  org.daisy.pipeline.braille.liblouis.impl
-                </Private-Package>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-native-linux</Bundle-SymbolicName>
                 <Include-Resource>
                   META-INF/services=target/generated-resources/spi-linux/META-INF/services,
@@ -354,9 +345,6 @@
               <classifier>mac</classifier>
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.LiblouisNativePathForMacOS</_dsannotations>
-                <Private-Package>
-                  org.daisy.pipeline.braille.liblouis.impl
-                </Private-Package>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-native-mac</Bundle-SymbolicName>
                 <Include-Resource>
                   META-INF/services=target/generated-resources/spi-mac/META-INF/services,
@@ -378,9 +366,6 @@
               <classifier>windows</classifier>
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.LiblouisNativePathForWindows</_dsannotations>
-                <Private-Package>
-                  org.daisy.pipeline.braille.liblouis.impl
-                </Private-Package>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-native-windows</Bundle-SymbolicName>
                 <Include-Resource>
                   META-INF/services=target/generated-resources/spi-win/META-INF/services,

@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
 
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>css-core</artifactId>
   <version>3.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -81,7 +82,6 @@
               <links>
                 <link>https://google.github.io/guava/releases/15.0/api/docs</link>
               </links>
-              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>

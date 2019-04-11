@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>org.daisy.pipeline.modules.braille</groupId>
-    <artifactId>braille-modules-parent</artifactId>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../../maven/parent/</relativePath>
+    <relativePath>../../../parent/</relativePath>
   </parent>
   
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-formatter</artifactId>
   <version>1.14.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
@@ -48,16 +49,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
     </dependency>
     <!--
         runtime dependencies
@@ -110,16 +101,6 @@
       <artifactId>logging-appender</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.build</groupId>
-      <artifactId>modules-test-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
     <!--
         because of bug in lou_indexTables we need to include liblouis-tables even though we're not using it
     -->
@@ -144,14 +125,12 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
+            <id>xspecTest</id>
+            <phase>none</phase>
           </execution>
         </executions>
       </plugin>
@@ -170,19 +149,12 @@
             -->
             <Private-Package>
               org.daisy.pipeline.braille.dotify.impl;-split-package:=first,
-              org.daisy.pipeline.braille.dotify.calabash.impl;-split-package:=first
+              org.daisy.pipeline.braille.dotify.calabash.impl;-split-package:=first,
+              ${generated-packages}
+              {local-packages}
             </Private-Package>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>

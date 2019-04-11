@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/xproc/copy-resource.xpl" focus="">
+    
+    <x:scenario label="absolute path">
+        <x:call step="px:copy-resource">
+            <x:option name="href" select="resolve-uri('../resources/logback.xml')"/>
+            <x:option name="target" select="resolve-uri('1.xml',$temp-dir)"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the absolute target path" type="xpath" test="string(/c:result)" equals="resolve-uri('1.xml',$temp-dir)"/>
+        <x:context label="the target directory">
+            <x:document type="directory" base-uri="temp-dir" href="."/>
+        </x:context>
+        <x:expect label="the target file should be present" type="xpath" test="exists(/*/c:file[@name='1.xml'])"/>
+    </x:scenario>
+    
+    <x:scenario label="relative path">
+        <x:documentation>
+            Relative paths are not supported
+        </x:documentation>
+        <x:call step="px:copy-resource">
+            <x:option name="href" select="'../resources/logback.xml'"/>
+            <x:option name="target" select="resolve-uri('2.xml',$temp-dir)"/>
+        </x:call>
+        <x:context label="the errors">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="the step should execute successfully without throwing any errors" type="count" min="1"/>
+    </x:scenario>
+    
+    <x:scenario label="resource from catalog">
+        <x:documentation>
+            URIs from catalogs are currently not resolved
+        </x:documentation>
+        <x:call step="px:copy-resource">
+            <x:option name="href" select="'http://www.daisy.org/pipeline/modules/file-utils/library.xpl'"/>
+            <x:option name="target" select="resolve-uri('3.xml',$temp-dir)"/>
+        </x:call>
+        <x:context label="the errors">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="the step should execute successfully without throwing any errors" type="count" max="0" xfail="true"/>
+        <!--
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the absolute target path" type="xpath" test="string(/c:result)" equals="resolve-uri('3.xml',$temp-dir)"/>
+        <x:context label="the target directory">
+            <x:document type="directory" base-uri="temp-dir" href="."/>
+        </x:context>
+        <x:expect label="the target file should be present" type="xpath" test="exists(/*/c:file[@name='3.xml'])"/>
+        -->
+    </x:scenario>
+    
+    <x:scenario label="resource from jar">
+        <x:call step="px:copy-resource">
+            <x:option name="href"
+                      select="resolve-uri('message.xpl',
+                                          base-uri(doc('http://www.daisy.org/pipeline/modules/common-utils/library.xpl')/*))"/>
+            <x:option name="target" select="resolve-uri('4.xml',$temp-dir)"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the absolute target path" type="xpath" test="string(/c:result)" equals="resolve-uri('4.xml',$temp-dir)"/>
+        <x:context label="the target directory">
+            <x:document type="directory" base-uri="temp-dir" href="."/>
+        </x:context>
+        <x:expect label="the target file should be present" type="xpath" test="exists(/*/c:file[@name='4.xml'])"/>
+    </x:scenario>
+    
+</x:description>
