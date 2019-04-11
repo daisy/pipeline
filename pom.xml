@@ -25,13 +25,7 @@
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
     <module>framework</module>
-    <module>modules/braille</module>
-    <module>modules/common</module>
-    <module>modules/scripts-utils</module>
-    <module>modules/scripts</module>
-    <module>modules/tts</module>
-    <module>modules/audio</module>
-    <module>modules/nlp</module>
+    <module>modules</module>
     <module>cli</module>
     <module>gui</module>
     <module>updater/cli</module>
