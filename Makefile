@@ -63,8 +63,7 @@ dist-rpm : pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
 dist-docker-image : assembly/.compile-dependencies
-	unset MAKECMDGOALS && \
-	$(MAKE) -C assembly docker
+	+$(EVAL) 'bash -c "unset MAKECMDGOALS && $(MAKE) -C assembly docker"'
 
 .PHONY : dist-webui-deb
 dist-webui-deb : assembly/.compile-dependencies
