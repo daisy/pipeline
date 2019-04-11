@@ -6,6 +6,10 @@ before_install:
 script:
   - make docker &&
     make check-docker
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "develop" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      mvn deploy:deploy;
+    fi
 before_cache:
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_cache)
 cache:
