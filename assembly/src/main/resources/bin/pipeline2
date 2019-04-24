@@ -316,9 +316,9 @@ init() {
     # Unlimit the number of file descriptors if possible
     unlimitFD
 
-    # On Debian, read predefined settings from file  
-    if [ -e $DIRNAME/debian.cfg ]; then
-        . $DIRNAME/debian.cfg
+    # On Debian, read predefined settings from file
+    if [ -e "$DIRNAME/debian.cfg" ]; then
+        . "$DIRNAME/debian.cfg"
     else
         # Locate the Karaf home directory
         locateHome

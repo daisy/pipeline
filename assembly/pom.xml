@@ -612,15 +612,15 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>saxon-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
                   <artifactId>woodstox-osgi-adapter</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>xmlcatalog</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>xpath-registry</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -957,8 +957,9 @@
                   <artifactId>epubcheck-adapter</artifactId>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.idpf</groupId>
+                  <groupId>org.w3c</groupId>
                   <artifactId>epubcheck</artifactId>
+                  <version>4.2.0</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.commons</groupId>
@@ -1138,10 +1139,6 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>dotify-formatter</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules.braille</groupId>
-                  <artifactId>dotify-saxon</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
