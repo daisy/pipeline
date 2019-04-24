@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>css-utils</artifactId>
-  <version>3.7.1-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: css-utils :: css-utils</name>
@@ -88,6 +88,7 @@
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_braille_css_utils,
       org.daisy.pipeline.braille.css.calabash.impl.CssInlineStep$Provider,
+      org.daisy.pipeline.braille.css.calabash.impl.CssShiftIdStep$Provider,
       org.daisy.pipeline.braille.css.calabash.impl.CssShiftStringSetStep$Provider,
       org.daisy.pipeline.braille.css.calabash.impl.CssSplitStep$Provider,
       org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition,

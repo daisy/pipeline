@@ -524,12 +524,14 @@ public class CssInlineStep extends DefaultStep {
 						for (RuleVolume r : filter(stylesheet, RuleVolume.class)) {
 							String name = "auto";
 							String pseudo = firstNonNull(r.getPseudo(), "");
+							if (pseudo.equals("nth(1)")) pseudo = "first";
+							else if (pseudo.equals("nth-last(1)")) pseudo = "last";
 							Map<String,RuleVolume> volumeRule = style.volumeRules.get(name);
 							if (volumeRule == null) {
 								volumeRule = new HashMap<String,RuleVolume>();
 								style.volumeRules.put(name, volumeRule); }
 							if (volumeRule.containsKey(pseudo))
-								volumeRule.put(pseudo, makeVolumeRule(name, "".equals(pseudo) ? null : pseudo,
+								volumeRule.put(pseudo, makeVolumeRule("".equals(pseudo) ? null : pseudo,
 								                                      ImmutableList.of(r, volumeRule.get(pseudo))));
 							else
 								volumeRule.put(pseudo, r);
@@ -679,7 +681,7 @@ public class CssInlineStep extends DefaultStep {
 					return "" + value.intValue() + "%";
 				else
 					return "" + value + "%"; }
-			else if (term instanceof TermList && !(term instanceof TermFunction)) {
+			else if (term instanceof TermList) {
 				TermList list = (TermList)term;
 				String s = "";
 				for (Term<?> t : list) {
@@ -691,6 +693,9 @@ public class CssInlineStep extends DefaultStep {
 								s += ","; }
 						s += " "; }
 					s += termToString.apply(t); }
+				if (list instanceof TermFunction) {
+					TermFunction function = (TermFunction)term;
+					s = function.getFunctionName() + "(" + s + ")"; }
 				return s; }
 			else if (term instanceof TermPair) {
 				TermPair<?,?> pair = (TermPair<?,?>)term;
@@ -698,7 +703,7 @@ public class CssInlineStep extends DefaultStep {
 				return "" + pair.getKey() + " " + (val instanceof Term ? termToString.apply((Term)val) : val.toString()); }
 			else if (term instanceof TermString) {
 				TermString string = (TermString)term;
-				return "'" + string.getValue().replaceAll("\n", "\\\\A") + "'"; }
+				return "'" + string.getValue().replaceAll("\n", "\\\\A ").replaceAll("'", "\\\\27 ") + "'"; }
 			else
 				return term.toString().replaceAll("^[,/ ]+", "");
 		}
@@ -863,19 +868,19 @@ public class CssInlineStep extends DefaultStep {
 	}
 	
 	private static void insertVolumeStyle(StringBuilder builder, Map<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
-		for (RuleVolume r : volumeRule.values())
+		for (Map.Entry<String,RuleVolume> r : volumeRule.entrySet())
 			insertVolumeStyle(builder, r, pageRules);
 	}
 	
-	private static void insertVolumeStyle(StringBuilder builder, RuleVolume volumeRule, Map<String,Map<String,RulePage>> pageRules) {
+	private static void insertVolumeStyle(StringBuilder builder, Map.Entry<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
 		builder.append("@volume");
-		String pseudo = volumeRule.getPseudo();
+		String pseudo = volumeRule.getKey();
 		if (pseudo != null && !"".equals(pseudo))
 			builder.append(":").append(pseudo);
 		builder.append(" { ");
-		for (Declaration decl : filter(volumeRule, Declaration.class))
+		for (Declaration decl : filter(volumeRule.getValue(), Declaration.class))
 			insertDeclaration(builder, decl);
-		for (RuleVolumeArea volumeArea : filter(volumeRule, RuleVolumeArea.class))
+		for (RuleVolumeArea volumeArea : filter(volumeRule.getValue(), RuleVolumeArea.class))
 			insertVolumeAreaStyle(builder, volumeArea, pageRules);
 		builder.append("} ");
 	}
@@ -910,7 +915,6 @@ public class CssInlineStep extends DefaultStep {
 		builder.append("} ");
 	}
 	
-	// TODO: what about volumes that match both :first and :last?
 	private static Map<String,RuleVolume> getVolumeRule(String name, Map<String,Map<String,RuleVolume>> volumeRules) {
 		Map<String,RuleVolume> auto = volumeRules.get("auto");
 		Map<String,RuleVolume> named = null;
@@ -924,28 +928,50 @@ public class CssInlineStep extends DefaultStep {
 			pseudos.addAll(named.keySet());
 		if (auto != null)
 			pseudos.addAll(auto.keySet());
+		// Create a special rule for volumes that match both :first and :last (i.e. for the case
+		// there is only a single volume)
+		// FIXME: The order in which rules are defined currently does not affect the
+		// precedence. ':first' rules always override ':last' rules.
+		if (pseudos.contains("first") && pseudos.contains("last"))
+			pseudos.add("only");
 		for (String pseudo : pseudos) {
-			boolean noPseudo = "".equals(pseudo);
 			from = new ArrayList<RuleVolume>();
 			if (named != null) {
 				r = named.get(pseudo);
 				if (r != null) from.add(r);
-				if (!noPseudo) {
+				if ("only".equals(pseudo)) {
+					r = named.get("first");
+					if (r != null) from.add(r);
+					r = named.get("last");
+					if (r != null) from.add(r); }
+				if (!"".equals(pseudo)) {
 					r = named.get("");
 					if (r != null) from.add(r); }}
 			if (auto != null) {
 				r = auto.get(pseudo);
 				if (r != null) from.add(r);
-				if (!noPseudo) {
+				if ("only".equals(pseudo)) {
+					r = auto.get("first");
+					if (r != null) from.add(r);
+					r = auto.get("last");
+					if (r != null) from.add(r); }
+				if (!"".equals(pseudo)) {
 					r = auto.get("");
 					if (r != null) from.add(r); }}
-			result.put(pseudo, makeVolumeRule(name, noPseudo ? null : pseudo, from)); }
+			result.put(pseudo,
+			           makeVolumeRule(
+			               // "only" is not a valid pseudo name so we drop it. The value we pass to
+			               // makeVolumeRule() does not matter anyway as long as we use the
+			               // corresponding key of the map where we store the volume rule to
+			               // serialize the rule.
+			               ("".equals(pseudo) || "only".equals(pseudo)) ? null : pseudo,
+			               from)); }
 		return result;
 	}
 	
 	private static final Pattern FUNCTION = Pattern.compile("(nth|nth-last)\\(([1-9][0-9]*)\\)");
 	
-	private static RuleVolume makeVolumeRule(String name, String pseudo, List<RuleVolume> from) {
+	private static RuleVolume makeVolumeRule(String pseudo, List<RuleVolume> from) {
 		String arg = null;
 		if (pseudo != null) {
 			Matcher m = FUNCTION.matcher(pseudo);

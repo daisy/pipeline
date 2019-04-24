@@ -129,7 +129,7 @@
             <head>
               <style media="embossed" type="text/css">
                 body { counter-set: page 99 }
-                pagenum { string-set: print-page content(), first-print-page content() }
+                pagenum { string-set: print-page content(), foo "'bar'" }
               </style>
             </head>
             <body>
@@ -145,7 +145,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body style="counter-set: page 0 page 99;">
-          <pagenum style="string-set: print-page content(), first-print-page content();">1</pagenum>
+          <pagenum style="string-set: print-page content(), foo '\27 bar\27 ';">1</pagenum>
         </body>
       </x:document>
     </x:expect>

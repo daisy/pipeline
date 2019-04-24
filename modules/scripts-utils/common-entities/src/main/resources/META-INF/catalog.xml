@@ -19,6 +19,9 @@
 	<public publicId='-//W3C//DTD SMIL 1.0//EN' uri='../xml/SMIL10.dtd'/>
 	<system systemId='http://www.w3.org/TR/REC-smil/SMIL10.dtd' uri='../xml/SMIL10.dtd'/>
 
+	<public publicId='-//NISO//DTD dtbsmil 2005-2//EN' uri='../xml/dtbsmil-2005-2.dtd'/>
+	<system systemId='http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd' uri='../xml/dtbsmil-2005-2.dtd'/>
+
 	<public publicId='-//W3C//DTD XHTML 1.0 Frameset//EN' uri='../xml/xhtml1-frameset.dtd'/>
 	<system systemId='http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd' uri='../xml/xhtml1-frameset.dtd'/>
 

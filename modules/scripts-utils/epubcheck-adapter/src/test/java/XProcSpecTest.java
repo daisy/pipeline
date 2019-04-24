@@ -12,7 +12,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			"org.daisy.pipeline:calabash-adapter:?",
-			"org.idpf:epubcheck:?"
+			"org.w3c:epubcheck:?"
 		};
 	}
 	

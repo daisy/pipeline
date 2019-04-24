@@ -19,7 +19,7 @@
     </xsl:template>
     
     <xsl:template match="*[not(namespace-uri()='http://www.w3.org/ns/SMIL')]"/>
-    <xsl:template match="@*[not(namespace-uri()='http://www.w3.org/ns/SMIL')]"/>
+    <xsl:template match="@*[not(namespace-uri()=('','http://www.w3.org/ns/SMIL'))]"/>
     
     <xsl:template match="@clipEnd">
         <xsl:attribute name="clip-end" select="."/>

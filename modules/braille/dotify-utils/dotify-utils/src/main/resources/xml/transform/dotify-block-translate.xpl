@@ -5,7 +5,9 @@
             xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
             exclude-inline-prefixes="#all">
 	
-	<p:option name="query" select="''"/>
+	<p:option name="text-transform" select="''"/>
+	<p:option name="no-wrap" select="'false'"/>
+	<p:option name="main-locale" select="''"/>
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
 	
@@ -14,9 +16,11 @@
 	
 	<p:xslt px:message="Translating Dotify blocks" px:progress="1/2">
 		<p:input port="stylesheet">
-			<p:document href="dotify-block-translate.xsl"/>
+			<p:document href="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl"/>
 		</p:input>
-		<p:with-param name="query" select="$query"/>
+		<p:with-param name="text-transform" select="concat('(translator:dotify)',$text-transform"/>
+		<p:with-param name="no-wrap" select="$no-wrap"/>
+		<p:with-param name="main-locale" select="$main-locale"/>
 	</p:xslt>
 	
 </p:pipeline>

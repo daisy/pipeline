@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns="http://www.w3.org/1999/xhtml"
-    xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xpath-default-namespace="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="#all">
 
     <!--
         When semantic elements are converted to generic ones; add a class mirroring the original name of the element.
@@ -90,7 +94,7 @@
     </xsl:template>
 
     <xsl:template match="html:html">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.html"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -101,7 +105,7 @@
     </xsl:template>
 
     <xsl:template match="html:head">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.head"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -115,7 +119,7 @@
     </xsl:template>
 
     <xsl:template match="html:title">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.title"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -127,7 +131,7 @@
 
     <xsl:template match="html:link[@rel='profile' and @href]"/>
     <xsl:template match="html:link">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.link"/>
         </xsl:copy>
     </xsl:template>
@@ -139,7 +143,7 @@
     </xsl:template>
 
     <xsl:template match="html:meta">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.meta"/>
         </xsl:copy>
     </xsl:template>
@@ -154,7 +158,7 @@
     </xsl:template>
 
     <xsl:template match="html:body">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.body"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -191,7 +195,7 @@
     </xsl:template>
 
     <xsl:template match="html:br">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.br"/>
         </xsl:copy>
     </xsl:template>
@@ -214,7 +218,7 @@
     </xsl:template>
 
     <xsl:template match="html:div">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.div"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -225,7 +229,7 @@
     </xsl:template>
 
     <xsl:template match="html:a">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.a"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -238,7 +242,7 @@
     </xsl:template>
 
     <xsl:template match="html:em">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.em"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -249,7 +253,7 @@
     </xsl:template>
 
     <xsl:template match="html:strong">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.strong"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -260,7 +264,7 @@
     </xsl:template>
 
     <xsl:template match="html:dfn">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.dfn"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -271,7 +275,7 @@
     </xsl:template>
 
     <xsl:template match="html:kbd">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.kbd"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -282,7 +286,7 @@
     </xsl:template>
 
     <xsl:template match="html:code">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.code"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -293,7 +297,7 @@
     </xsl:template>
 
     <xsl:template match="html:samp">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.samp"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -304,7 +308,7 @@
     </xsl:template>
 
     <xsl:template match="html:cite">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.cite"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -315,7 +319,7 @@
     </xsl:template>
 
     <xsl:template match="html:abbr">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.abbr"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -326,7 +330,7 @@
     </xsl:template>
 
     <xsl:template match="html:sub">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.sub"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -337,7 +341,7 @@
     </xsl:template>
 
     <xsl:template match="html:sup">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.sup"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -348,7 +352,7 @@
     </xsl:template>
 
     <xsl:template match="html:span">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.span"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -359,7 +363,7 @@
     </xsl:template>
 
     <xsl:template match="html:bdo">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.bdo"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -370,7 +374,7 @@
     </xsl:template>
 
     <xsl:template match="html:q">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.q"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -382,7 +386,7 @@
     </xsl:template>
 
     <xsl:template match="html:img">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.img"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -407,7 +411,7 @@
     </xsl:template>
 
     <xsl:template match="html:p">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.p"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -418,7 +422,7 @@
     </xsl:template>
 
     <xsl:template match="html:hr">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.hr"/>
         </xsl:copy>
     </xsl:template>
@@ -439,7 +443,7 @@
     </xsl:template>
 
     <xsl:template match="html:blockquote">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.blockquote"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -451,7 +455,7 @@
     </xsl:template>
 
     <xsl:template match="html:dl">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.dl"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -462,7 +466,7 @@
     </xsl:template>
 
     <xsl:template match="html:dt">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.dt"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -473,7 +477,7 @@
     </xsl:template>
 
     <xsl:template match="html:dd">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.dd"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -484,7 +488,7 @@
     </xsl:template>
 
     <xsl:template match="html:ol">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.ol"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -496,7 +500,7 @@
     </xsl:template>
 
     <xsl:template match="html:ul">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.ul"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -507,7 +511,7 @@
     </xsl:template>
 
     <xsl:template match="html:li">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.li"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -519,7 +523,7 @@
     </xsl:template>
 
     <xsl:template match="html:table">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.table"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -531,7 +535,7 @@
     </xsl:template>
 
     <xsl:template match="html:caption">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.caption"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -555,7 +559,7 @@
     </xsl:template>
 
     <xsl:template match="html:thead">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.thead"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -566,7 +570,7 @@
     </xsl:template>
 
     <xsl:template match="html:tfoot">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.tfoot"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -577,7 +581,7 @@
     </xsl:template>
 
     <xsl:template match="html:tbody">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.tbody"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -588,7 +592,7 @@
     </xsl:template>
 
     <xsl:template match="html:colgroup">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.colgroup"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -600,7 +604,7 @@
     </xsl:template>
 
     <xsl:template match="html:col">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.col"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -612,7 +616,7 @@
     </xsl:template>
 
     <xsl:template match="html:tr">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.tr"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -623,7 +627,7 @@
     </xsl:template>
 
     <xsl:template match="html:th">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.th"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -635,7 +639,7 @@
     </xsl:template>
 
     <xsl:template match="html:td">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.td"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -647,7 +651,7 @@
     </xsl:template>
 
     <xsl:template match="html:area">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.area"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -696,7 +700,7 @@
     </xsl:template>
 
     <xsl:template match="html:b">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.b"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -707,7 +711,7 @@
     </xsl:template>
 
     <xsl:template match="html:base">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.base"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -731,7 +735,7 @@
     </xsl:template>
 
     <xsl:template match="html:button">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.button"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -891,7 +895,7 @@
     </xsl:template>
 
     <xsl:template match="html:form">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.form"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -917,7 +921,7 @@
     </xsl:template>
 
     <xsl:template match="html:i">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.i"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -928,7 +932,7 @@
     </xsl:template>
 
     <xsl:template match="html:iframe">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.iframe"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -941,7 +945,7 @@
     </xsl:template>
 
     <xsl:template match="html:input">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.input"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -986,7 +990,7 @@
     </xsl:template>
 
     <xsl:template match="html:label">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.label"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1002,7 +1006,7 @@
     </xsl:template>
 
     <xsl:template match="html:legend">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.legend"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1026,7 +1030,7 @@
     </xsl:template>
 
     <xsl:template match="html:map">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.map"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1108,7 +1112,7 @@
     <xsl:template match="html:noscript">
         <xsl:choose>
             <xsl:when test="ancestor::html:body">
-                <xsl:copy>
+                <xsl:copy copy-namespaces="no">
                     <xsl:call-template name="attlist.noscript"/>
                     <xsl:apply-templates select="node()"/>
                 </xsl:copy>
@@ -1126,7 +1130,7 @@
     </xsl:template>
 
     <xsl:template match="html:object">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.object"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1139,7 +1143,7 @@
     </xsl:template>
 
     <xsl:template match="html:optgroup">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.optgroup"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1151,7 +1155,7 @@
     </xsl:template>
 
     <xsl:template match="html:option">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.option"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1180,7 +1184,7 @@
     </xsl:template>
 
     <xsl:template match="html:param">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.param"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1192,7 +1196,7 @@
     </xsl:template>
 
     <xsl:template match="html:pre">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.pre"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1282,7 +1286,7 @@
     </xsl:template>
 
     <xsl:template match="html:s">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.s"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1293,7 +1297,7 @@
     </xsl:template>
 
     <xsl:template match="html:script">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.script"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1306,7 +1310,7 @@
     </xsl:template>
 
     <xsl:template match="html:select">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.select"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1322,7 +1326,7 @@
     </xsl:template>
 
     <xsl:template match="html:small">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.small"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1374,7 +1378,7 @@
     </xsl:template>
 
     <xsl:template match="html:textarea">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.textarea"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1416,7 +1420,7 @@
     </xsl:template>
 
     <xsl:template match="html:u">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.u"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
@@ -1427,7 +1431,7 @@
     </xsl:template>
 
     <xsl:template match="html:var">
-        <xsl:copy>
+        <xsl:copy copy-namespaces="no">
             <xsl:call-template name="attlist.var"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>

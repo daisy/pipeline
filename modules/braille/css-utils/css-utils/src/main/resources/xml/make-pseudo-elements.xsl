@@ -12,14 +12,29 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="*[@css:before or @css:after or @css:duplicate or @css:alternate or @css:footnote-call]">
+    <xsl:template match="*[@css:before or
+                           @css:after or
+                           @css:duplicate or
+                           @css:footnote-call or
+                           @css:alternate or
+                           @css:*[matches(local-name(),'^alternate-[1-9][0-9]*$')]]">
+        <xsl:variable name="this" as="element()" select="."/>
         <xsl:if test="@css:anchor and @css:id">
             <xsl:message terminate="yes">coding error</xsl:message>
         </xsl:if>
         <xsl:variable name="id" select="if (@css:id) then string(@css:id) else if (@css:anchor) then @css:anchor else generate-id(.)"/>
         <xsl:copy>
-            <xsl:sequence select="@* except (@css:before|@css:after|@css:duplicate|@css:alternate|@css:footnote-call)"/>
-            <xsl:if test="not(@css:id|@css:anchor) and (@css:duplicate or @css:alternate or (@css:footnote-call and @css:flow='footnotes'))">
+            <xsl:sequence select="@* except (@css:before|
+                                             @css:after|
+                                             @css:duplicate|
+                                             @css:footnote-call|
+                                             @css:alternate|
+                                             @css:*[matches(local-name(),'^alternate-[1-9][0-9]*$')])"/>
+            <xsl:if test="not(@css:id|@css:anchor)
+                          and (@css:duplicate or
+                               @css:alternate or
+                               @css:*[matches(local-name(),'^alternate-[1-9][0-9]*$')] or
+                               (@css:footnote-call and @css:flow='footnotes'))">
                 <xsl:attribute name="css:id" select="$id"/>
             </xsl:if>
             <xsl:if test="@css:before">
@@ -42,6 +57,12 @@
         <xsl:if test="@css:alternate">
             <css:alternate css:anchor="{$id}" style="{@css:alternate}" name="{concat(f:name(.),'::alternate')}"/>
         </xsl:if>
+        <xsl:for-each select="@css:*[matches(local-name(),'^alternate-[1-9][0-9]*$')]">
+            <xsl:variable name="i" as="xs:integer" select="xs:integer(number(replace(local-name(.),'^alternate-([1-9][0-9]*)$','$1')))"/>
+            <xsl:if test="not($i=1 and @css:alternate)">
+                <css:alternate css:anchor="{$id}" style="{.}" name="{concat(f:name($this),'::alternate(',$i,')')}"/>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:template>
     
     <xsl:function name="f:name" as="xs:string">

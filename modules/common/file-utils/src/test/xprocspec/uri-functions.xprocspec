@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
@@ -14,7 +15,13 @@
 			</p:output>
 			<p:import href="../../main/resources/xml/xproc/library.xpl"/>
 			<p:split-sequence test="position()=1"/>
-			<px:set-base-uri base-uri="file:/tmp/foo-3.xml"/>
+			<px:set-base-uri>
+				<p:with-option name="base-uri" select="resolve-uri('foo-3.xml',base-uri(/*))">
+					<p:inline>
+						<this/>
+					</p:inline>
+				</p:with-option>
+			</px:set-base-uri>
 			<p:identity name="set-base-uri"/>
 			<p:identity>
 				<p:input port="source">
@@ -27,8 +34,9 @@
 					<p:inline>
 						<xsl:stylesheet version="2.0">
 							<xsl:import href="../../main/resources/xml/xslt/library.xsl"/>
+							<xsl:param name="test-base-uri"/>
 							<xsl:template match="/">
-								<xsl:variable name="doc" xml:base="file:/tmp/foo-4.xml">
+								<xsl:variable name="doc" xml:base="foo-4.xml">
 									<foo>
 										<bar>
 											<quux/>
@@ -38,22 +46,22 @@
 								<xsl:for-each select="collection(),root($doc)">
 									<xsl:result-document href="#{position()}">
 										<_>
-											<test expression="   document-uri(.)"       value="{   document-uri(.)}"/>
-											<test expression="pf:document-uri(.)"       value="{pf:document-uri(.)}"/>
-											<test expression="   document-uri(/*)"      value="{   document-uri(/*)}"/>
-											<test expression="pf:document-uri(/*)"      value="{pf:document-uri(/*)}"/>
-											<test expression="   document-uri(/*/*[1])" value="{   document-uri(/*/*[1])}"/>
-											<test expression="pf:document-uri(/*/*[1])" value="{pf:document-uri(/*/*[1])}"/>
-											<test expression="   base-uri(.)"           value="{   base-uri(.)}"/>
-											<test expression="pf:base-uri(.)"           value="{pf:base-uri(.)}"/>
-											<test expression="   base-uri(/*)"          value="{   base-uri(/*)}"/>
-											<test expression="pf:base-uri(/*)"          value="{pf:base-uri(/*)}"/>
-											<test expression="   base-uri(/*/*[1])"     value="{   base-uri(/*/*[1])}"/>
-											<test expression="pf:base-uri(/*/*[1])"     value="{pf:base-uri(/*/*[1])}"/>
-											<test expression="   base-uri((/*/*)[1])"   value="{   base-uri((/*/*)[1])}"/>
-											<test expression="pf:base-uri((/*/*)[1])"   value="{pf:base-uri((/*/*)[1])}"/>
-											<test expression="   base-uri((//*)[1])"    value="{   base-uri((//*)[1])}"/>
-											<test expression="pf:base-uri((//*)[1])"    value="{pf:base-uri((//*)[1])}"/>
+											<test expression="   document-uri(.)"       value="{pf:relativize-uri(    document-uri(.)       )}"/>
+											<test expression="pf:document-uri(.)"       value="{pf:relativize-uri( pf:document-uri(.)       )}"/>
+											<test expression="   document-uri(/*)"      value="{pf:relativize-uri(    document-uri(/*)      )}"/>
+											<test expression="pf:document-uri(/*)"      value="{pf:relativize-uri( pf:document-uri(/*)      )}"/>
+											<test expression="   document-uri(/*/*[1])" value="{pf:relativize-uri(    document-uri(/*/*[1]) )}"/>
+											<test expression="pf:document-uri(/*/*[1])" value="{pf:relativize-uri( pf:document-uri(/*/*[1]) )}"/>
+											<test expression="   base-uri(.)"           value="{pf:relativize-uri(    base-uri(.)           )}"/>
+											<test expression="pf:base-uri(.)"           value="{pf:relativize-uri( pf:base-uri(.)           )}"/>
+											<test expression="   base-uri(/*)"          value="{pf:relativize-uri(    base-uri(/*)          )}"/>
+											<test expression="pf:base-uri(/*)"          value="{pf:relativize-uri( pf:base-uri(/*)          )}"/>
+											<test expression="   base-uri(/*/*[1])"     value="{pf:relativize-uri(    base-uri(/*/*[1])     )}"/>
+											<test expression="pf:base-uri(/*/*[1])"     value="{pf:relativize-uri( pf:base-uri(/*/*[1])     )}"/>
+											<test expression="   base-uri((/*/*)[1])"   value="{pf:relativize-uri(    base-uri((/*/*)[1])   )}"/>
+											<test expression="pf:base-uri((/*/*)[1])"   value="{pf:relativize-uri( pf:base-uri((/*/*)[1])   )}"/>
+											<test expression="   base-uri((//*)[1])"    value="{pf:relativize-uri(    base-uri((//*)[1])    )}"/>
+											<test expression="pf:base-uri((//*)[1])"    value="{pf:relativize-uri( pf:base-uri((//*)[1])    )}"/>
 											<xsl:apply-templates select="foo"/>
 											<xsl:apply-templates select="//bar"/>
 										</_>
@@ -62,10 +70,10 @@
 							</xsl:template>
 							<xsl:template match="/foo/bar">
 								<xsl:copy>
-									<test expression="   base-uri(root())" value="{   base-uri(root())}"/>
-									<test expression="pf:base-uri(root())" value="{pf:base-uri(root())}"/>
-									<test expression="   base-uri(.)"      value="{   base-uri(.)}"/>
-									<test expression="pf:base-uri(.)"      value="{pf:base-uri(.)}"/>
+									<test expression="   base-uri(root())" value="{pf:relativize-uri(    base-uri(root()) )}"/>
+									<test expression="pf:base-uri(root())" value="{pf:relativize-uri( pf:base-uri(root()) )}"/>
+									<test expression="   base-uri(.)"      value="{pf:relativize-uri(    base-uri(.)      )}"/>
+									<test expression="pf:base-uri(.)"      value="{pf:relativize-uri( pf:base-uri(.)      )}"/>
 									<xsl:apply-templates select="@*|node()"/>
 								</xsl:copy>
 							</xsl:template>
@@ -74,12 +82,18 @@
 									<xsl:apply-templates select="@*|node()"/>
 								</xsl:copy>
 							</xsl:template>
+							<xsl:function name="pf:relativize-uri" as="xs:string">
+								<xsl:param name="uri" as="xs:string?"/>
+								<xsl:sequence select="pf:relativize-uri($uri,$test-base-uri)"/>
+							</xsl:function>
 						</xsl:stylesheet>
 					</p:inline>
 				</p:input>
-				<p:input port="parameters">
-					<p:empty/>
-				</p:input>
+				<p:with-param port="parameters" name="test-base-uri" select="base-uri(/*)">
+					<p:inline>
+						<this/>
+					</p:inline>
+				</p:with-param>
 			</p:xslt>
 			<p:sink/>
 		</p:declare-step>
@@ -88,20 +102,14 @@
 	<x:scenario label="test">
 		<x:call step="pxi:test">
 			<x:input port="source">
-				<x:document type="inline" xml:base="file:/tmp/foo-1.xml">
+				<x:document type="inline" xml:base="foo-1.xml">
 					<foo>
 						<bar>
 							<quux/>
 						</bar>
 					</foo>
 				</x:document>
-				<x:document type="inline" xml:base="file:/tmp/foo-2.xml">
-					<foo>
-						<bar>
-							<quux/>
-						</bar>
-					</foo>
-				</x:document>
+				<x:document type="file" href="foo-2.xml"/>
 			</x:input>
 		</x:call>
 		<x:context label="the result">
@@ -109,93 +117,93 @@
 		</x:context>
 		<x:expect label="the result" type="compare">
 			<!--
-			    ================================
-			    file:/tmp/foo-1.xml: normal case
-			    ================================
+			    ==========================
+			    foo-1.xml: inline document
+			    ==========================
 			    * document-uri() on an element does not work
 			-->
 			<x:document type="inline">
 				<_>
-					<test expression="   document-uri(.)"       value="file:/tmp/foo-1.xml"/>
-					<test expression="pf:document-uri(.)"       value="file:/tmp/foo-1.xml"/>
+					<test expression="   document-uri(.)"       value="foo-1.xml"/>
+					<test expression="pf:document-uri(.)"       value="foo-1.xml"/>
 					<test expression="   document-uri(/*)"      value=""/>
-					<test expression="pf:document-uri(/*)"      value="file:/tmp/foo-1.xml"/>
+					<test expression="pf:document-uri(/*)"      value="foo-1.xml"/>
 					<test expression="   document-uri(/*/*[1])" value=""/>
-					<test expression="pf:document-uri(/*/*[1])" value="file:/tmp/foo-1.xml"/>
-					<test expression="   base-uri(.)"           value="file:/tmp/foo-1.xml"/>
-					<test expression="pf:base-uri(.)"           value="file:/tmp/foo-1.xml"/>
-					<test expression="   base-uri(/*)"          value="file:/tmp/foo-1.xml"/>
-					<test expression="pf:base-uri(/*)"          value="file:/tmp/foo-1.xml"/>
-					<test expression="   base-uri(/*/*[1])"     value="file:/tmp/foo-1.xml"/>
-					<test expression="pf:base-uri(/*/*[1])"     value="file:/tmp/foo-1.xml"/>
-					<test expression="   base-uri((/*/*)[1])"   value="file:/tmp/foo-1.xml"/>
-					<test expression="pf:base-uri((/*/*)[1])"   value="file:/tmp/foo-1.xml"/>
-					<test expression="   base-uri((//*)[1])"    value="file:/tmp/foo-1.xml"/>
-					<test expression="pf:base-uri((//*)[1])"    value="file:/tmp/foo-1.xml"/>
+					<test expression="pf:document-uri(/*/*[1])" value="foo-1.xml"/>
+					<test expression="   base-uri(.)"           value="foo-1.xml"/>
+					<test expression="pf:base-uri(.)"           value="foo-1.xml"/>
+					<test expression="   base-uri(/*)"          value="foo-1.xml"/>
+					<test expression="pf:base-uri(/*)"          value="foo-1.xml"/>
+					<test expression="   base-uri(/*/*[1])"     value="foo-1.xml"/>
+					<test expression="pf:base-uri(/*/*[1])"     value="foo-1.xml"/>
+					<test expression="   base-uri((/*/*)[1])"   value="foo-1.xml"/>
+					<test expression="pf:base-uri((/*/*)[1])"   value="foo-1.xml"/>
+					<test expression="   base-uri((//*)[1])"    value="foo-1.xml"/>
+					<test expression="pf:base-uri((//*)[1])"    value="foo-1.xml"/>
 					<foo>
 						<bar>
-							<test expression="   base-uri(root())" value="file:/tmp/foo-1.xml"/>
-							<test expression="pf:base-uri(root())" value="file:/tmp/foo-1.xml"/>
-							<test expression="   base-uri(.)"      value="file:/tmp/foo-1.xml"/>
-							<test expression="pf:base-uri(.)"      value="file:/tmp/foo-1.xml"/>
+							<test expression="   base-uri(root())" value="foo-1.xml"/>
+							<test expression="pf:base-uri(root())" value="foo-1.xml"/>
+							<test expression="   base-uri(.)"      value="foo-1.xml"/>
+							<test expression="pf:base-uri(.)"      value="foo-1.xml"/>
 							<quux/>
 						</bar>
 					</foo>
 					<bar>
-						<test expression="   base-uri(root())" value="file:/tmp/foo-1.xml"/>
-						<test expression="pf:base-uri(root())" value="file:/tmp/foo-1.xml"/>
-						<test expression="   base-uri(.)"      value="file:/tmp/foo-1.xml"/>
-						<test expression="pf:base-uri(.)"      value="file:/tmp/foo-1.xml"/>
+						<test expression="   base-uri(root())" value="foo-1.xml"/>
+						<test expression="pf:base-uri(root())" value="foo-1.xml"/>
+						<test expression="   base-uri(.)"      value="foo-1.xml"/>
+						<test expression="pf:base-uri(.)"      value="foo-1.xml"/>
 						<quux/>
 					</bar>
 				</_>
 			</x:document>
 			<!--
 			    ================================
-			    file:/tmp/foo-2.xml: normal case
+			    foo-2.xml: file loaded from disk
 			    ================================
 			    * document-uri() on an element does not work
 			-->
 			<x:document type="inline">
 				<_>
-					<test expression="   document-uri(.)"       value="file:/tmp/foo-2.xml"/>
-					<test expression="pf:document-uri(.)"       value="file:/tmp/foo-2.xml"/>
+					<test expression="   document-uri(.)"       value="foo-2.xml"/>
+					<test expression="pf:document-uri(.)"       value="foo-2.xml"/>
 					<test expression="   document-uri(/*)"      value=""/>
-					<test expression="pf:document-uri(/*)"      value="file:/tmp/foo-2.xml"/>
+					<test expression="pf:document-uri(/*)"      value="foo-2.xml"/>
 					<test expression="   document-uri(/*/*[1])" value=""/>
-					<test expression="pf:document-uri(/*/*[1])" value="file:/tmp/foo-2.xml"/>
-					<test expression="   base-uri(.)"           value="file:/tmp/foo-2.xml"/>
-					<test expression="pf:base-uri(.)"           value="file:/tmp/foo-2.xml"/>
-					<test expression="   base-uri(/*)"          value="file:/tmp/foo-2.xml"/>
-					<test expression="pf:base-uri(/*)"          value="file:/tmp/foo-2.xml"/>
-					<test expression="   base-uri(/*/*[1])"     value="file:/tmp/foo-2.xml"/>
-					<test expression="pf:base-uri(/*/*[1])"     value="file:/tmp/foo-2.xml"/>
-					<test expression="   base-uri((/*/*)[1])"   value="file:/tmp/foo-2.xml"/>
-					<test expression="pf:base-uri((/*/*)[1])"   value="file:/tmp/foo-2.xml"/>
-					<test expression="   base-uri((//*)[1])"    value="file:/tmp/foo-2.xml"/>
-					<test expression="pf:base-uri((//*)[1])"    value="file:/tmp/foo-2.xml"/>
+					<test expression="pf:document-uri(/*/*[1])" value="foo-2.xml"/>
+					<test expression="   base-uri(.)"           value="foo-2.xml"/>
+					<test expression="pf:base-uri(.)"           value="foo-2.xml"/>
+					<test expression="   base-uri(/*)"          value="foo-2.xml"/>
+					<test expression="pf:base-uri(/*)"          value="foo-2.xml"/>
+					<test expression="   base-uri(/*/*[1])"     value="foo-2.xml"/>
+					<test expression="pf:base-uri(/*/*[1])"     value="foo-2.xml"/>
+					<test expression="   base-uri((/*/*)[1])"   value="foo-2.xml"/>
+					<test expression="pf:base-uri((/*/*)[1])"   value="foo-2.xml"/>
+					<test expression="   base-uri((//*)[1])"    value="foo-2.xml"/>
+					<test expression="pf:base-uri((//*)[1])"    value="foo-2.xml"/>
 					<foo>
 						<bar>
-							<test expression="   base-uri(root())" value="file:/tmp/foo-2.xml"/>
-							<test expression="pf:base-uri(root())" value="file:/tmp/foo-2.xml"/>
-							<test expression="   base-uri(.)"      value="file:/tmp/foo-2.xml"/>
-							<test expression="pf:base-uri(.)"      value="file:/tmp/foo-2.xml"/>
+							<test expression="   base-uri(root())" value="foo-2.xml"/>
+							<test expression="pf:base-uri(root())" value="foo-2.xml"/>
+							<test expression="   base-uri(.)"      value="foo-2.xml"/>
+							<test expression="pf:base-uri(.)"      value="foo-2.xml"/>
 							<quux/>
 						</bar>
 					</foo>
 					<bar>
-						<test expression="   base-uri(root())" value="file:/tmp/foo-2.xml"/>
-						<test expression="pf:base-uri(root())" value="file:/tmp/foo-2.xml"/>
-						<test expression="   base-uri(.)"      value="file:/tmp/foo-2.xml"/>
-						<test expression="pf:base-uri(.)"      value="file:/tmp/foo-2.xml"/>
+						<test expression="   base-uri(root())" value="foo-2.xml"/>
+						<test expression="pf:base-uri(root())" value="foo-2.xml"/>
+						<test expression="   base-uri(.)"      value="foo-2.xml"/>
+						<test expression="pf:base-uri(.)"      value="foo-2.xml"/>
 						<quux/>
 					</bar>
 				</_>
 			</x:document>
 			<!--
-			    =====================================================
-			    file:/tmp/foo-3.xml: base URI set with p:set-base-uri
-			    =====================================================
+			    ===========================================
+			    foo-3.xml: base URI set with p:set-base-uri
+			    ===========================================
 			    * document-uri() does not work, also not on a document node
 			    * base-uri() works in simple cases but not if descendant axis is used
 			    * base-uri(root()) does not work
@@ -203,43 +211,43 @@
 			<x:document type="inline">
 				<_>
 					<test expression="   document-uri(.)"       value=""/>
-					<test expression="pf:document-uri(.)"       value="file:/tmp/foo-3.xml"/>
+					<test expression="pf:document-uri(.)"       value="foo-3.xml"/>
 					<test expression="   document-uri(/*)"      value=""/>
-					<test expression="pf:document-uri(/*)"      value="file:/tmp/foo-3.xml"/>
+					<test expression="pf:document-uri(/*)"      value="foo-3.xml"/>
 					<test expression="   document-uri(/*/*[1])" value=""/>
-					<test expression="pf:document-uri(/*/*[1])" value="file:/tmp/foo-3.xml"/>
-					<test expression="   base-uri(.)"           value="file:/tmp/foo-3.xml"/>
-					<test expression="pf:base-uri(.)"           value="file:/tmp/foo-3.xml"/>
-					<test expression="   base-uri(/*)"          value="file:/tmp/foo-3.xml"/>
-					<test expression="pf:base-uri(/*)"          value="file:/tmp/foo-3.xml"/>
-					<test expression="   base-uri(/*/*[1])"     value="file:/tmp/foo-3.xml"/>
-					<test expression="pf:base-uri(/*/*[1])"     value="file:/tmp/foo-3.xml"/>
-					<test expression="   base-uri((/*/*)[1])"   value="file:/tmp/foo-3.xml"/>
-					<test expression="pf:base-uri((/*/*)[1])"   value="file:/tmp/foo-3.xml"/>
+					<test expression="pf:document-uri(/*/*[1])" value="foo-3.xml"/>
+					<test expression="   base-uri(.)"           value="foo-3.xml"/>
+					<test expression="pf:base-uri(.)"           value="foo-3.xml"/>
+					<test expression="   base-uri(/*)"          value="foo-3.xml"/>
+					<test expression="pf:base-uri(/*)"          value="foo-3.xml"/>
+					<test expression="   base-uri(/*/*[1])"     value="foo-3.xml"/>
+					<test expression="pf:base-uri(/*/*[1])"     value="foo-3.xml"/>
+					<test expression="   base-uri((/*/*)[1])"   value="foo-3.xml"/>
+					<test expression="pf:base-uri((/*/*)[1])"   value="foo-3.xml"/>
 					<test expression="   base-uri((//*)[1])"    value=""/>
-					<test expression="pf:base-uri((//*)[1])"    value="file:/tmp/foo-3.xml"/>
+					<test expression="pf:base-uri((//*)[1])"    value="foo-3.xml"/>
 					<foo>
 						<bar>
 							<test expression="   base-uri(root())" value=""/>
-							<test expression="pf:base-uri(root())" value="file:/tmp/foo-3.xml"/>
-							<test expression="   base-uri(.)"      value="file:/tmp/foo-3.xml"/>
-							<test expression="pf:base-uri(.)"      value="file:/tmp/foo-3.xml"/>
+							<test expression="pf:base-uri(root())" value="foo-3.xml"/>
+							<test expression="   base-uri(.)"      value="foo-3.xml"/>
+							<test expression="pf:base-uri(.)"      value="foo-3.xml"/>
 							<quux/>
 						</bar>
 					</foo>
 					<bar>
 						<test expression="   base-uri(root())" value=""/>
-						<test expression="pf:base-uri(root())" value="file:/tmp/foo-3.xml"/>
+						<test expression="pf:base-uri(root())" value="foo-3.xml"/>
 						<test expression="   base-uri(.)"      value=""/>
-						<test expression="pf:base-uri(.)"      value="file:/tmp/foo-3.xml"/>
+						<test expression="pf:base-uri(.)"      value="foo-3.xml"/>
 						<quux/>
 					</bar>
 				</_>
 			</x:document>
 			<!--
-			    =====================================================
-			    file:/tmp/foo-4.xml: document from within XSLT itself
-			    =====================================================
+			    ===========================================
+			    foo-4.xml: document from within XSLT itself
+			    ===========================================
 			    * document-uri() does not work, also not on a document node
 			    * base-uri() works in simple cases but not if descendant axis is used
 			    * base-uri(root()) does not work
@@ -253,13 +261,13 @@
 					<test expression="pf:document-uri(/*)"      value=""/>
 					<test expression="   document-uri(/*/*[1])" value=""/>
 					<test expression="pf:document-uri(/*/*[1])" value=""/>
-					<test expression="   base-uri(.)"           value="file:/tmp/foo-4.xml"/>
+					<test expression="   base-uri(.)"           value="foo-4.xml"/>
 					<test expression="pf:base-uri(.)"           value=""/>
-					<test expression="   base-uri(/*)"          value="file:/tmp/foo-4.xml"/>
+					<test expression="   base-uri(/*)"          value="foo-4.xml"/>
 					<test expression="pf:base-uri(/*)"          value=""/>
-					<test expression="   base-uri(/*/*[1])"     value="file:/tmp/foo-4.xml"/>
+					<test expression="   base-uri(/*/*[1])"     value="foo-4.xml"/>
 					<test expression="pf:base-uri(/*/*[1])"     value=""/>
-					<test expression="   base-uri((/*/*)[1])"   value="file:/tmp/foo-4.xml"/>
+					<test expression="   base-uri((/*/*)[1])"   value="foo-4.xml"/>
 					<test expression="pf:base-uri((/*/*)[1])"   value=""/>
 					<test expression="   base-uri((//*)[1])"    value=""/>
 					<test expression="pf:base-uri((//*)[1])"    value=""/>
@@ -267,7 +275,7 @@
 						<bar>
 							<test expression="   base-uri(root())" value=""/>
 							<test expression="pf:base-uri(root())" value=""/>
-							<test expression="   base-uri(.)"      value="file:/tmp/foo-4.xml"/>
+							<test expression="   base-uri(.)"      value="foo-4.xml"/>
 							<test expression="pf:base-uri(.)"      value=""/>
 							<quux/>
 						</bar>

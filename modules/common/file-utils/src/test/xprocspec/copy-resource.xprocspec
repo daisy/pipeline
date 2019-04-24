@@ -2,7 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:c="http://www.w3.org/ns/xproc-step"
-               script="../../main/resources/xml/xproc/copy-resource.xpl" focus="">
+               script="../../main/resources/xml/xproc/copy-resource.xpl">
     
     <x:scenario label="absolute path">
         <x:call step="px:copy-resource">

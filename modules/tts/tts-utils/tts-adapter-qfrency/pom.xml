@@ -38,6 +38,12 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.tts.qfrency.QfrencyService
+    </expose-services>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -50,8 +56,12 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-            <Export-Package />
+            <Export-Package/>
+            <Private-Package>
+              org.daisy.pipeline.tts.qfrency,
+              ${generated-packages}
+              {local-packages}
+            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

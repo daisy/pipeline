@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/create-linkbacks.xsl" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0"
-    xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xslt-version="2.0"
+               stylesheet="../../../src/main/resources/xml/xslt/create-linkbacks.xsl">
 
     <x:scenario label="A basic smil/html mapping">
-        <x:context>
-            <html:html xml:base="http://example.org/content.html">
-                <smil xml:base="http://example.org/smil.smil" xmlns="">
+        <x:call template="test">
+            <x:param name="html">
+                <html xml:base="http://example.org/content.html" xmlns="http://www.w3.org/1999/xhtml">
+                    <head/>
+                    <body>
+                        <span id="content-id">TEXT</span>
+                    </body>
+                </html>
+            </x:param>
+            <x:param name="smil" tunnel="yes">
+                <smil xml:base="http://example.org/smil.smil">
                     <head/>
                     <body>
                         <seq dur="28.901s">
@@ -16,19 +24,15 @@
                         </seq>
                     </body>
                 </smil>
-                <html:head/>
-                <html:body>
-                    <html:span id="content-id">TEXT</html:span>
-                </html:body>
-            </html:html>
-        </x:context>
+            </x:param>
+        </x:call>
         <x:expect label="should be inserted as a linkback">
-            <html:html xml:base="http://example.org/content.html">
-                <html:head/>
-                <html:body>
-                    <html:span id="content-id"><html:a href="smil.smil#smil-par">TEXT</html:a></html:span>
-                </html:body>
-            </html:html>
+            <html xml:base="http://example.org/content.html" xmlns="http://www.w3.org/1999/xhtml">
+                <head/>
+                <body>
+                    <span id="content-id"><a href="smil.smil#smil-par">TEXT</a></span>
+                </body>
+            </html>
         </x:expect>
     </x:scenario>
 

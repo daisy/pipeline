@@ -133,7 +133,6 @@
             </Private-Package>
             <Require-Capability>
               xproc.step;filter:="(name={http://liblouis.org/liblouis}translate-file)",
-              xpath.function;filter:="(name={http://liblouis.org/liblouis}translate)",
               xpath.function;filter:="(name={http://liblouis.org/liblouis}hyphenate)"
             </Require-Capability>
           </instructions>

@@ -10,16 +10,33 @@ before_install:
   - rm -f /opt/jdk_switcher/jdk_switcher.sh
   - sudo apt-get install -y lame espeak
 
-install: mvn install -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=true -B -V
-                     -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
-                     -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
-
 matrix:
   include:
     - env: SUBDIRS="common scripts-utils"
     - env: SUBDIRS="nlp audio tts"
     - env: SUBDIRS=braille
     - env: SUBDIRS=scripts
+
+install:
+  - mvn install --projects bom,parent
+  - for d in $(
+      for d in $SUBDIRS; do
+        case $d in
+          scripts-utils) echo common ;;
+          nlp)           echo common ;;
+          tts)           echo common scripts-utils audio nlp ;;
+          braille)       echo common scripts-utils ;;
+          scripts)       echo common scripts-utils audio nlp tts braille ;;
+        esac &&
+        echo $d;
+      done
+      | xargs -n1
+      | awk '!a[$0]++'
+    ); do
+      mvn install -f $d -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=true -B -V
+                  -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
+                  -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
+    done
 
 # main task, run the verify goal
 script:

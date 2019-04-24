@@ -6,10 +6,10 @@
                 exclude-inline-prefixes="#all"
                 name="main">
     
-    <p:output port="fileset.out" primary="true">
+    <p:output port="result.fileset" primary="true">
         <p:pipe step="fileset" port="result"/>
     </p:output>
-    <p:output port="in-memory.out" sequence="true">
+    <p:output port="result.in-memory" sequence="true">
         <p:pipe step="load" port="result.in-memory"/>
     </p:output>
     <p:output port="validation-report" sequence="true" px:media-type="application/vnd.pipeline.report+xml">

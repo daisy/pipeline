@@ -32,10 +32,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-    </dependency>
-    <dependency>
+      <!--
+          includes jna 4.0.0
+      -->
       <groupId>org.daisy.libs</groupId>
       <artifactId>jnaerator</artifactId>
     </dependency>
@@ -61,7 +60,7 @@
             </Import-Package>
             <Export-Package/>
             <Private-Package>
-              org.daisy.pipeline.tts.acapella,
+              org.daisy.pipeline.tts.acapela,
               ${generated-packages}
               {local-packages}
             </Private-Package>

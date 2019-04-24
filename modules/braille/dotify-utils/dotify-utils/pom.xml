@@ -51,12 +51,6 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>dotify-saxon</artifactId>
-      <scope>runtime</scope>
-      <!-- <optional>true</optional> -->
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>dotify-calabash</artifactId>
       <scope>runtime</scope>
       <!-- <optional>true</optional> -->
@@ -95,8 +89,7 @@
             </Private-Package>
             <Require-Capability>
               xproc.step;filter:="(name={http://code.google.com/p/dotify/}obfl-to-pef)",
-              xproc.step;filter:="(name={http://code.google.com/p/dotify/}file-to-obfl)",
-              xpath.function;filter:="(name={http://code.google.com/p/dotify/}translate)"
+              xproc.step;filter:="(name={http://code.google.com/p/dotify/}file-to-obfl)"
             </Require-Capability>
           </instructions>
         </configuration>

@@ -77,6 +77,8 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 			for (ResourcePath path : paths) {
 				tableFiles[i] = asFile(path.resolve(subTable));
 				if (tableFiles[i] != null) {
+					logger.trace("Table " + subTable + " was found in " + path);
+					// moving path the first position, so that it will be tried first next time
 					paths.remove(path);
 					paths.add(0, path);
 					break; }}
@@ -91,7 +93,7 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 
 		private static final URI identifier = asURI("file:/");
 		
-		private static final Predicate<String> isLiblouisTable = matchesGlobPattern("*.{dis,ctb,cti,uti,utb,dic}");
+		private static final Predicate<String> isLiblouisTable = matchesGlobPattern("*.{dis,ctb,cti,uti,utb,dic,tbl}");
 		
 		public URI getIdentifier() {
 			return identifier;
@@ -110,6 +112,11 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 		
 		public URI canonicalize(URI resource) {
 			return asURI(resolve(resource));
+		}
+		
+		@Override
+		public String toString() {
+			return identifier.toString();
 		}
 	}
 	

@@ -38,12 +38,26 @@
 	<p:input port="sass-variables" kind="parameter" primary="false"/>
 	
 	<p:output port="result" sequence="false" primary="true">
-		<p:documentation>
-			All styles are parsed, validated, normalized, cascaded and finally serialized into
-			'style' attributes. 'page' rules are serialized as '@page { ... } @page:left { ... }
-			@page:right { ... }'. 'before' and 'after' rules are serialized as '::before { ... }'
-			and '::after { ... }'. Shorthand declarations such as 'margin: a b c d' are decomposed
-			as 'margin-top: a; margin-right: b; margin-bottom: c; margin-left: d'.
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>All styles are parsed, validated, normalized, cascaded and finally serialized into
+			<code>style</code> attributes.</p>
+			<p>Shorthand declarations such as <code>margin: a b c d</code> are decomposed as
+			<code>margin-top: a; margin-right: b; margin-bottom: c; margin-left: d</code>.</p>
+			<p>'before' and 'after' rules are serialized as <code>&amp;::before { ... }</code> and
+			<code>&amp;::after { ... }</code>.</p>
+			<p>'page' properties are replaced with the corresponding named 'page' rules (without the
+			page type selector). If the root element does not have a 'page' property, the default
+			page rule is inserted. 'page' rules are serialized as <code>@page { ... } @page:left {
+			... } @page:right { ... }</code>. The declarations that named page rules inherit from
+			the default page rule are made explicit. The declarations that 'left' and 'right' page
+			rules inherit from their principal page rule are also made explicit.</p>
+			<p>'volume' rules are serialized as <code>@volume { ... } @volume:first { ... }
+			@volume:last { ... } @volume:nth(...) { ... } @volume:nth-last(...) { ... }</code> and
+			inserted for the root element. The declarations that '@volume:first' etc. inherit from
+			the principal volume rule are made explicit. ':nth(1)' and ':nth-last(1)' are normalized
+			to ':first' and ':last'. A special '@volume:only' rule, which is a combination of the
+			'@volume:first' and '@volume:last' rules, is created for the case that there is only a
+			single volume.</p>
 		</p:documentation>
 	</p:output>
 	

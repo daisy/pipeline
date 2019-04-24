@@ -34,7 +34,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@volume { min-length: 80; max-length: 100; } @volume:last { min-length: 0; max-length: 100; } @volume:nth(2) { max-length: auto; min-length: 80; } @volume:first { max-length: 120; min-length: 80; }'"/>
+              equals="'@volume { min-length: 80; max-length: 100; } @volume:last { min-length: 0; max-length: 100; } @volume:only { max-length: 120; min-length: 0; } @volume:nth(2) { max-length: auto; min-length: 80; } @volume:first { max-length: 120; min-length: 80; }'"/>
   </x:scenario>
   
   <x:scenario label="test_02">

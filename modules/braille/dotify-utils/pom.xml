@@ -19,7 +19,6 @@
 
   <modules>
     <module>dotify-core</module>
-    <module>dotify-saxon</module>
     <module>dotify-calabash</module>
     <module>dotify-formatter</module>
     <module>dotify-utils</module>

@@ -1,3 +1,5 @@
+space \s 0
+
 include uplows.cti
 include digits.cti
 include signs.cti

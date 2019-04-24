@@ -223,8 +223,7 @@
 				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 				<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
 			</xsl:apply-templates>
-			<xsl:sequence select="$style[@selector and matches(@selector,'^@text-transform')]"/>
-			<xsl:apply-templates mode="translate-style" select="$style[@selector and not(matches(@selector,'^(&amp;::(before|after)$|@text-transform)'))]">
+			<xsl:apply-templates mode="translate-style" select="$style[@selector and not(@selector=('&amp;::before','&amp;::after'))]">
 				<xsl:with-param name="restore-text-style" tunnel="yes" select="true()"/>
 			</xsl:apply-templates>
 		</xsl:variable>

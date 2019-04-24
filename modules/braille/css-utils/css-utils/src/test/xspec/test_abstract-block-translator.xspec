@@ -31,7 +31,7 @@
     <x:expect label="result">
       <_ style="text-transform: none">
         <doc xml:lang="en-Brai">
-          <br style="&amp;::before {{ content: &quot;\A&quot;; white-space: pre-line; text-transform: auto }}"/>
+          <br style="&amp;::before {{ content: &quot;\A &quot;; white-space: pre-line; text-transform: auto }}"/>
         </doc>
       </_>
     </x:expect>

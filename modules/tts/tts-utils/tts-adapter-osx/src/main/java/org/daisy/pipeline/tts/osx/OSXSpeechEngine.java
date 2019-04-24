@@ -1,15 +1,12 @@
 package org.daisy.pipeline.tts.osx;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,16 +17,18 @@ import javax.sound.sampled.AudioSystem;
 
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.shell.CommandRunner;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
 import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
 import org.daisy.pipeline.tts.MarklessTTSEngine;
 import org.daisy.pipeline.tts.SoundUtil;
-import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
-import org.daisy.pipeline.tts.TTSService.Mark;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OSXSpeechEngine extends MarklessTTSEngine {
 
@@ -37,6 +36,7 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 	private String mSayPath;
 	private int mPriority;
 	private final static int MIN_CHUNK_SIZE = 2048;
+	private final static Logger mLogger = LoggerFactory.getLogger(OSXSpeechEngine.class);
 
 	public OSXSpeechEngine(OSXSpeechService service, String osxPath, int priority) {
 		super(service);
@@ -51,26 +51,16 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 	        InterruptedException, MemoryException {
 
 		Collection<AudioBuffer> result = new ArrayList<AudioBuffer>();
-		Process p = null;
 		File waveOut = null;
 		try {
-
 			waveOut = File.createTempFile("pipeline", ".wav");
-			p = Runtime.getRuntime().exec(
-			        new String[]{
-			                mSayPath, "--data-format=LEI16@22050", "-o",
-			                waveOut.getAbsolutePath(), "-v", voice.name
-			        });
-
-			// write the sentence
-			BufferedOutputStream out = new BufferedOutputStream((p.getOutputStream()));
-			out.write(sentence.getBytes("utf-8"));
-			out.close();
-
-			p.waitFor();
-
+			new CommandRunner(mSayPath, "--data-format=LEI16@22050", "-o",
+			                  waveOut.getAbsolutePath(), "-v", voice.name)
+				.feedInput(sentence.getBytes("utf-8"))
+				.consumeError(mLogger)
+				.run();
+			
 			// read the wave on the standard output
-
 			BufferedInputStream in = new BufferedInputStream(new FileInputStream(waveOut));
 			AudioInputStream fi = AudioSystem.getAudioInputStream(in);
 
@@ -92,21 +82,13 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 			}
 
 			fi.close();
-		} catch (MemoryException e) {
+		} catch (MemoryException|InterruptedException e) {
 			SoundUtil.cancelFootPrint(result, bufferAllocator);
-			p.destroy();
 			throw e;
-		} catch (InterruptedException e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
-			if (p != null)
-				p.destroy();
-			throw e;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			SoundUtil.cancelFootPrint(result, bufferAllocator);
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			if (p != null)
-				p.destroy();
 			throw new SynthesisException(e);
 		} finally {
 			if (waveOut != null)
@@ -125,33 +107,24 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 	        InterruptedException {
 
 		Collection<Voice> result = new ArrayList<Voice>();
-		InputStream is;
-		Process proc = null;
-		Scanner scanner = null;
-		Matcher mr;
 		try {
-			proc = Runtime.getRuntime().exec(new String[]{
-			        mSayPath, "-v", "?"
-			});
-			is = proc.getInputStream();
-			mr = Pattern.compile("(.*?)\\s+\\w{2}_\\w{2}").matcher("");
-			scanner = new Scanner(is);
-			while (scanner.hasNextLine()) {
-				mr.reset(scanner.nextLine());
-				if (mr.find()) {
-					result.add(new Voice(getProvider().getName(), mr.group(1).trim()));
-				}
-			}
-			is.close();
-			proc.waitFor();
-		} catch (Exception e) {
-			if (proc != null) {
-				proc.destroy();
-			}
+			new CommandRunner(mSayPath, "-v", "?")
+				.consumeOutput(stream -> {
+						Matcher mr = Pattern.compile("(.*?)\\s+\\w{2}_\\w{2}").matcher("");
+						try (Scanner scanner = new Scanner(stream)) {
+							while (scanner.hasNextLine()) {
+								mr.reset(scanner.nextLine());
+								if (mr.find()) {
+									result.add(new Voice(getProvider().getName(), mr.group(1).trim()));
+								}
+							}
+						}
+					}
+				)
+				.consumeError(mLogger)
+				.run();
+		} catch (Throwable e) {
 			throw new SynthesisException(e.getMessage(), e.getCause());
-		} finally {
-			if (scanner != null)
-				scanner.close();
 		}
 
 		return result;

@@ -22,7 +22,7 @@
 	
 	<p:xslt px:message="Translating with Liblouis" px:progress=".95">
 		<p:input port="stylesheet">
-			<p:document href="liblouis-block-translate.xsl"/>
+			<p:document href="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl"/>
 		</p:input>
 		<p:with-param name="text-transform" select="$text-transform"/>
 		<p:with-param name="no-wrap" select="$no-wrap"/>

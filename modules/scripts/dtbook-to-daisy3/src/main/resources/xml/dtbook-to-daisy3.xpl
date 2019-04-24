@@ -106,7 +106,7 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
     </p:otherwise>
   </p:choose>
 
-  <px:dtbook-to-daisy3 name="convert">
+  <px:dtbook-to-daisy3 name="convert" px:progress="1">
     <p:input port="fileset.in">
       <p:pipe step="load" port="fileset.out"/>
     </p:input>

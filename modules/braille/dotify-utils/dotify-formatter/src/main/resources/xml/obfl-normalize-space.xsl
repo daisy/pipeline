@@ -22,7 +22,9 @@
         
         <xsl:template match="*[self::obfl:block or self::obfl:td]
                              //text()[not((ancestor::obfl:block|ancestor::obfl:td)[last()]//node()
-                                          intersect preceding::node()[not(self::obfl:marker or self::text()[normalize-space(.)=''])])]">
+                                          intersect preceding::node()[not(self::obfl:marker or
+                                                                          self::obfl:span[normalize-space(.)=''] or
+                                                                          self::text()[normalize-space(.)=''])])]">
             <xsl:sequence select="replace(., '^\s+', '')"/>
         </xsl:template>
     -->
@@ -34,7 +36,7 @@
     <xsl:template match="*" mode="strip-leading-space">
         <xsl:copy>
             <xsl:sequence select="@*"/>
-            <xsl:variable name="normalization-point" select="(node()[descendant-or-self::*[not(self::obfl:marker)] | descendant-or-self::text()[normalize-space()!='']])[1]"/>
+            <xsl:variable name="normalization-point" select="(node()[descendant-or-self::*[not(self::obfl:marker or self::obfl:span[normalize-space(.)=''])] | descendant-or-self::text()[normalize-space()!='']])[1]"/>
             <xsl:choose>
                 <xsl:when test="count($normalization-point) = 0">
                     <xsl:apply-templates select="node()" mode="strip-leading-space"/>

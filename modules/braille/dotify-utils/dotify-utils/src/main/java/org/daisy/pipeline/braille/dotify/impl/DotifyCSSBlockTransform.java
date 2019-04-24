@@ -56,28 +56,39 @@ public interface DotifyCSSBlockTransform {
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
 		
-		private final static List<String> supportedInput = ImmutableList.of("css");
-		private final static List<String> supportedOutput = ImmutableList.of("css");
-		
 		protected Iterable<BrailleTranslator> _get(Query query) {
 			final MutableQuery q = mutableQuery(query);
 			for (Feature f : q.removeAll("input"))
-				if (!supportedInput.contains(f.getValue().get()))
+				if ("html".equals(f.getValue().get())) {}
+				else if (!"css".equals(f.getValue().get()))
 					return empty;
-			for (Feature f : q.removeAll("output"))
-				if (!supportedOutput.contains(f.getValue().get()))
-					return empty;
+			boolean braille = false;
+			final boolean htmlOut; {
+				boolean html = false;
+				for (Feature f : q.removeAll("output"))
+					if ("css".equals(f.getValue().get())) {}
+					else if ("html".equals(f.getValue().get()))
+						html = true;
+					else if ("braille".equals(f.getValue().get()))
+						braille = true;
+					else
+						return empty;
+				htmlOut = html;
+			}
+			final String locale = q.containsKey("locale") ? q.getOnly("locale").getValue().get() : null;
 			if (q.containsKey("translator"))
 				if (!"dotify".equals(q.removeOnly("translator").getValue().get()))
 					return empty;
 			q.add("input", "text-css");
+			if (braille)
+				q.add("output", "braille");
 			Iterable<DotifyTranslator> translators = logSelect(q, dotifyTranslatorProvider);
 			return transform(
 				translators,
 				new Function<DotifyTranslator,BrailleTranslator>() {
 					public BrailleTranslator _apply(DotifyTranslator translator) {
 						return __apply(
-							logCreate(new TransformImpl(q.toString(), translator))
+							logCreate(new TransformImpl(q.toString(), translator, htmlOut, locale))
 						);
 					}
 				}
@@ -89,8 +100,14 @@ public interface DotifyCSSBlockTransform {
 			private final DotifyTranslator translator;
 			private final XProc xproc;
 			
-			private TransformImpl(String translatorQuery, DotifyTranslator translator) {
-				Map<String,String> options = ImmutableMap.of("query", translatorQuery);
+			private TransformImpl(String translatorQuery, DotifyTranslator translator, boolean htmlOut, String mainLocale) {
+				Map<String,String> options = ImmutableMap.of("text-transform", translatorQuery,
+				                                             // This will omit the <_ style="text-transform:none">
+				                                             // wrapper. It is assumed that if (output:html) is set, the
+				                                             // result is known to be braille (which is the case if
+				                                             // (output:braille) is also set).
+				                                             "no-wrap", String.valueOf(htmlOut),
+				                                             "main-locale", mainLocale != null ? mainLocale : "");
 				xproc = new XProc(href, null, options);
 				this.translator = translator;
 			}

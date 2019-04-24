@@ -3,7 +3,7 @@
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
   ns="http://www.w3.org/1999/xhtml"
   xmlns="http://relaxng.org/ns/structure/1.0"
-  xmlns:sch="http://www.ascc.net/xml/schematron"
+  xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"  
 >
   <a:documentation>

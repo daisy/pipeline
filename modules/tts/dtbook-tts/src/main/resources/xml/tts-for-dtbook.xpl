@@ -98,7 +98,7 @@
     </px:isolate-daisy3-skippable>
   </p:for-each>
 
-  <p:choose name="synthesize">
+  <p:choose name="synthesize" px:progress="1">
     <p:when test="$audio = 'false'">
       <p:output port="audio-map">
 	<p:inline>
@@ -156,7 +156,7 @@
 	  </p:input>
 	</px:dtbook-to-ssml>
       </p:for-each>
-      <px:ssml-to-audio name="to-audio">
+      <px:ssml-to-audio name="to-audio" px:progress="1">
 	<p:input port="config">
 	  <p:pipe port="config" step="main"/>
 	</p:input>

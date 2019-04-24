@@ -3,7 +3,7 @@
 # This file will produce Unicode Braille output.
 # Use it as the first file in a table list.
 
-display \x2800 0
+display \x0020 0
 display \x2801 1
 display \x2802 2
 display \x2803 12

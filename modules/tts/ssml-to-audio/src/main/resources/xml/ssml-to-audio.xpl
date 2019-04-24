@@ -19,7 +19,7 @@
 
   <p:import href="synthesize.xpl" />
 
-  <px:synthesize name="synthesize">
+  <px:synthesize name="synthesize" px:progress="1">
     <p:input port="config">
       <p:pipe port="config" step="main"/>
     </p:input>

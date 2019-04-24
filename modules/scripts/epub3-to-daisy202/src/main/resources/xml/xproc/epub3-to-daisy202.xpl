@@ -3,6 +3,7 @@
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 type="px:epub3-to-daisy202.script" name="main"
                 px:input-filesets="epub3"
                 px:output-filesets="daisy202"
@@ -106,29 +107,32 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
             </p:output>
             <p:try name="try-convert">
                 <p:group>
-                    <p:output port="status">
-                        <p:pipe step="load" port="status"/>
-                    </p:output>
+                    <p:output port="status"/>
                     
                     <px:epub3-to-daisy202 name="convert">
-                        <p:input port="fileset.in">
-                            <p:pipe port="fileset.out" step="load"/>
+                        <p:input port="source.fileset">
+                            <p:pipe step="load" port="result.fileset"/>
                         </p:input>
-                        <p:input port="in-memory.in">
-                            <p:pipe port="in-memory.out" step="load"/>
+                        <p:input port="source.in-memory">
+                            <p:pipe step="load" port="result.in-memory"/>
                         </p:input>
                     </px:epub3-to-daisy202>
         
                     <px:epub3-to-daisy202.store name="store">
-                        <p:input port="fileset.in">
-                            <p:pipe step="convert" port="fileset.out"/>
+                        <p:input port="source.fileset">
+                            <p:pipe step="convert" port="result.fileset"/>
                         </p:input>
-                        <p:input port="in-memory.in">
-                            <p:pipe step="convert" port="in-memory.out"/>
+                        <p:input port="source.in-memory">
+                            <p:pipe step="convert" port="result.in-memory"/>
                         </p:input>
                         <p:with-option name="output-dir" select="$output-dir"/>
                     </px:epub3-to-daisy202.store>
                     
+                    <p:identity cx:depends-on="store">
+                        <p:input port="source">
+                            <p:pipe step="load" port="status"/>
+                        </p:input>
+                    </p:identity>
                 </p:group>
                 <p:catch name="catch">
                     <p:output port="status">

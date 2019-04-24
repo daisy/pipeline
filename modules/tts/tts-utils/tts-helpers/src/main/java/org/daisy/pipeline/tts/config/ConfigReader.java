@@ -1,8 +1,7 @@
 package org.daisy.pipeline.tts.config;
 
-import java.net.MalformedURLException;
+import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +15,8 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
+import org.daisy.common.file.URLs;
+import org.daisy.common.file.URIs;
 import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
@@ -69,15 +70,16 @@ public class ConfigReader implements ConfigProperties {
 	}
 
 	static public URL URIinsideConfig(String pathOrURI, URI relativeTo) {
+		URI uri= null;
 		if (pathOrURI.startsWith("/")) {
-			pathOrURI = "file://" + pathOrURI;
-		}
-		URI uri = null;
-		try {
-			uri = new URI(pathOrURI);
-		} catch (URISyntaxException e) {
-			Logger.debug("URI " + uri + ": wrong format " + e);
-			return null;
+			uri = URIs.asURI(new File(pathOrURI));
+		} else {
+			try {
+				uri = URIs.asURI(pathOrURI);
+			} catch (Exception e) {
+				Logger.debug("URI " + uri + ": wrong format " + e);
+				return null;
+			}
 		}
 		if (!uri.isAbsolute()) {
 			if (relativeTo == null) {
@@ -86,14 +88,12 @@ public class ConfigReader implements ConfigProperties {
 			}
 			uri = relativeTo.resolve(uri);
 		}
-
-		URL url = null;
 		try {
-			return uri.toURL();
-		} catch (MalformedURLException e) {
+			return URLs.asURL(uri);
+		} catch (Exception e) {
 			Logger.debug("Malformed URL: " + uri);
+			return null;
 		}
-		return url;
 	}
 
 	static public XdmNode readFromURIinsideConfig(String pathOrURI, Processor saxonproc,

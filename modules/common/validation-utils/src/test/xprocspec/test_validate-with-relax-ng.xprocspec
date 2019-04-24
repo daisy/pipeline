@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:l="http://xproc.org/library"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+               xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+
+	<x:script>
+		<p:declare-step version="1.0" type="px:relax-ng-and-schematron-report" name="main">
+			<p:documentation>
+				Perform RelaxNG validation, also handling embedded Schematron rules, and return
+				reports of the validation errors (one report for each type of error: RelaxNG or
+				Schematron).
+			</p:documentation>
+			<p:input port="source" primary="true"/>
+			<p:input port="schema"/>
+			<p:output port="result" primary="true"/>
+			<p:output port="report" sequence="true">
+				<p:pipe step="rng" port="report"/>
+				<p:pipe step="sch" port="report"/>
+			</p:output>
+			<p:import href="../../main/resources/xml/xproc/validation-utils-library.xpl">
+				<p:documentation>
+					l:relax-ng-report
+					px:relax-ng-to-schematron
+				</p:documentation>
+			</p:import>
+			<l:relax-ng-report name="rng">
+				<p:input port="schema">
+					<p:pipe step="main" port="schema"/>
+				</p:input>
+			</l:relax-ng-report>
+			<p:sink/>
+			<px:relax-ng-to-schematron>
+				<p:input port="source">
+					<p:pipe step="main" port="schema"/>
+				</p:input>
+			</px:relax-ng-to-schematron>
+			<p:for-each name="sch">
+				<p:output port="report">
+					<p:pipe step="validate-with-schematron" port="report"/>
+				</p:output>
+				<p:validate-with-schematron assert-valid="false" name="validate-with-schematron">
+					<p:input port="source">
+						<p:pipe step="main" port="source"/>
+					</p:input>
+					<p:input port="schema">
+						<p:pipe step="sch" port="current"/>
+					</p:input>
+					<p:input port="parameters">
+						<p:empty/>
+					</p:input>
+				</p:validate-with-schematron>
+				<p:sink/>
+			</p:for-each>
+			<p:sink/>
+			<p:identity>
+				<p:input port="source">
+					<p:pipe step="main" port="source"/>
+				</p:input>
+			</p:identity>
+		</p:declare-step>
+	</x:script>
+
+	<x:scenario label="embedded schematron rules">
+		<x:call step="px:relax-ng-and-schematron-report">
+			<x:input port="schema">
+				<x:document type="inline">
+					<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+						<start>
+							<element name="hello">
+								<oneOrMore>
+									<element name="world">
+										<attribute name="id">
+											<sch:pattern name="nccCharset" id="nccCharset">
+												<sch:rule context="hello">
+													<sch:assert test="count(world)=count(distinct-values(world/@id))">
+														All id attributes should be distinct
+													</sch:assert>
+												</sch:rule>
+											</sch:pattern>
+										</attribute>
+									</element>
+								</oneOrMore>
+							</element>
+						</start>
+					</grammar>
+				</x:document>
+			</x:input>
+			<x:input port="source">
+				<x:document type="inline">
+					<hello>
+						<world id="earth"/>
+						<world id="mars"/>
+						<world id="earth"/>
+						<mars/>
+					</hello>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the reports">
+			<x:document type="port" port="report"/>
+		</x:context>
+		<x:expect label="there should be two reports" type="count" min="2" max="2"/>
+		<x:context label="the first report">
+			<x:document type="port" port="report" position="1"/>
+		</x:context>
+		<x:expect label="the first report should contain one RelaxNG error" type="xpath"
+		          test="/c:errors[count(*)=1]
+		                /c:error[@line='5' and
+		                         @column='14' and
+		                         contains(.,'element &quot;mars&quot; not allowed anywhere')]"/>
+		<x:context label="the second report">
+			<x:document type="port" port="report" position="2"/>
+		</x:context>
+		<x:expect label="the second report should contain one Schematron error" type="xpath"
+		          test="/svrl:schematron-output[count(svrl:failed-assert)=1]
+		                /svrl:failed-assert
+		                  [@location='/hello' and
+		                   contains(svrl:text,'All id attributes should be distinct')]"/>
+	</x:scenario>
+
+</x:description>

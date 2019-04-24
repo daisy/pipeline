@@ -152,7 +152,7 @@
     </p:otherwise>
   </p:choose>
 
-  <px:tts-for-dtbook name="tts">
+  <px:tts-for-dtbook name="tts" px:progress="1">
     <p:input port="fileset.in">
       <p:pipe port="fileset.in" step="main"/>
     </p:input>

@@ -5,40 +5,50 @@
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 name="main">
     
-    <p:input port="fileset.in" primary="true"/>
-    <p:input port="in-memory.in" sequence="true"/>
+    <p:input port="source.fileset" primary="true"/>
+    <p:input port="source.in-memory" sequence="true"/>
     
     <p:option name="output-dir" required="true"/>
+    
+    <p:output port="result.fileset" primary="false">
+        <p:pipe step="result.fileset" port="result"/>
+    </p:output>
     
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     
     <px:fileset-move name="move">
         <p:with-option name="new-base" select="concat($output-dir,replace(/*/@content,'[^a-zA-Z0-9]','_'),'/')">
-            <p:pipe port="result" step="identifier"/>
+            <p:pipe step="identifier" port="result"/>
         </p:with-option>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.in" step="main"/>
+            <p:pipe step="main" port="source.in-memory"/>
         </p:input>
     </px:fileset-move>
 
-    <px:fileset-store name="fileset-store">
+    <px:fileset-store name="fileset-store" fail-on-error="true">
         <p:input port="fileset.in">
-            <p:pipe port="fileset.out" step="move"/>
+            <p:pipe step="move" port="fileset.out"/>
         </p:input>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="move"/>
+            <p:pipe step="move" port="in-memory.out"/>
         </p:input>
     </px:fileset-store>
+    <p:identity>
+        <p:input port="source">
+            <p:pipe step="fileset-store" port="fileset.out"/>
+        </p:input>
+    </p:identity>
+    <p:delete match="@original-href" name="result.fileset"/>
     
     <p:group name="identifier">
         <p:output port="result"/>
         <px:fileset-load href="*/ncc.html">
             <p:input port="fileset">
-                <p:pipe port="fileset.in" step="main"/>
+                <p:pipe step="main" port="source.fileset"/>
             </p:input>
             <p:input port="in-memory">
-                <p:pipe port="in-memory.in" step="main"/>
+                <p:pipe step="main" port="source.in-memory"/>
             </p:input>
         </px:fileset-load>
         <!--

@@ -9,9 +9,10 @@
     <xsl:template match="/*" priority="100">
         <xsl:apply-templates select="." mode="moveout"/>
     </xsl:template>
-    
-    <xsl:template match="*[not(f:is-valid-parent(.))]" mode="moveout">
-        <xsl:variable name="this" select="."/>
+    <!-- before starting to dive into the tree check if the target is present among the descentants
+        otherwise the template is terribly slow -->
+    <xsl:template match="*[not(f:is-valid-parent(.)) and f:has-target(.)]" mode="moveout">
+        <xsl:variable name="this" select="."/>  
         <!-- depth first processing -->
         <xsl:variable name="children" as="node()*">
             <xsl:apply-templates select="node()" mode="moveout"/>

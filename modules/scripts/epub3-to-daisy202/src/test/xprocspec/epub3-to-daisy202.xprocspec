@@ -7,7 +7,7 @@
 
     <x:scenario label="hefty-water">
         <x:call step="px:epub3-to-daisy202">
-            <x:input port="fileset.in">
+            <x:input port="source.fileset">
                 <x:document type="inline" xml:base="hefty-water/">
                     <d:fileset>
                         <d:file href="mimetype" media-type="text/plain"/>
@@ -18,34 +18,35 @@
                     </d:fileset>
                 </x:document>
             </x:input>
-            <x:input port="in-memory.in"/>
+            <x:input port="source.in-memory"/>
         </x:call>
         <x:context label="The DAISY 2.02 fileset">
-            <x:document type="port" port="fileset.out"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="The DAISY 2.02 fileset"
                   type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
             <x:document type="inline">
                 <d:fileset>
                     <d:file href="hefty-water/EPUB/heftywater.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="hefty-water/EPUB/heftywater.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
                     <d:file href="hefty-water/EPUB/ncc.html"  media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
                 </d:fileset>
             </x:document>
         </x:expect>
         <!--<x:context label="result HTML head">
-            <x:document type="port" port="in-memory.out" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
+            <x:document type="port" port="result.in-memory" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
         </x:context>
         <x:expect label="The head of the resulting HTML-file should be as expected" type="compare">
             <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
         </x:expect>-->
         <!--<x:context label="result HTML body">
-            <x:document type="port" port="in-memory.out" select="/html:html/html:body"/>
+            <x:document type="port" port="result.in-memory" select="/html:html/html:body"/>
         </x:context>
         <x:expect label="The body of the resulting HTML-file should be as expected" type="compare">
             <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:body"/>
         </x:expect>-->
         <!--<x:context label="result HTML document" pending="validation not implemented in xprocspec yet?">
-            <x:document type="port" port="in-memory.out"/>
+            <x:document type="port" port="result.in-memory"/>
         </x:context>
         <x:expect label="The result should be valid according to the Nordic EPUB3 HTML content model" type="validate" grammar="relax-ng">
             <x:document type="file" href="../../main/resources/xml/schema/nordic-html5.rng"/>
@@ -57,7 +58,7 @@
 
     <x:scenario label="moby-dick-mo-20120214">
         <x:call step="px:epub3-to-daisy202">
-            <x:input port="fileset.in">
+            <x:input port="source.fileset">
                 <x:document type="inline" xml:base="moby-dick-mo-20120214/">
                     <d:fileset>
                         <d:file href="mimetype" media-type="text/plain"/>
@@ -220,10 +221,10 @@
                     </d:fileset>
                 </x:document>
             </x:input>
-            <x:input port="in-memory.in"/>
+            <x:input port="source.in-memory"/>
         </x:call>
         <x:context label="The DAISY 2.02 fileset">
-            <x:document type="port" port="fileset.out"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="The DAISY 2.02 fileset"
                   type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
@@ -383,23 +384,161 @@
                     <d:file href="moby-dick-mo-20120214/OPS/chapter_136.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
                     <d:file href="moby-dick-mo-20120214/OPS/toc-short.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
                     <d:file href="moby-dick-mo-20120214/OPS/ncc.html" media-type="application/xhtml+xml" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/toc-short.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/preface_001.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/introduction_001.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/epigraph_001.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_003.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_004.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_005.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_006.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_007.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_008.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_009.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_010.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_011.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_012.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_013.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_014.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_015.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_016.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_017.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_018.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_019.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_020.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_021.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_022.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_023.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_024.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_025.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_026.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_027.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_028.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_029.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_030.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_031.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_032.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_033.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_034.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_035.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_036.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_037.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_038.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_039.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_040.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_041.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_042.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_043.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_044.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_045.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_046.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_047.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_048.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_049.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_050.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_051.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_052.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_053.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_054.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_055.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_056.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_057.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_058.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_059.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_060.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_061.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_062.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_063.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_064.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_065.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_066.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_067.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_068.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_069.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_070.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_071.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_072.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_073.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_074.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_075.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_076.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_077.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_078.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_079.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_080.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_081.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_082.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_083.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_084.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_085.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_086.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_087.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_088.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_089.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_090.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_091.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_092.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_093.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_094.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_095.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_096.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_097.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_098.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_099.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_100.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_101.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_102.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_103.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_104.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_105.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_106.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_107.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_108.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_109.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_110.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_111.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_112.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_113.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_114.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_115.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_116.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_117.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_118.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_119.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_120.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_121.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_122.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_123.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_124.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_125.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_126.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_127.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_128.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_129.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_130.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_131.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_132.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_133.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_134.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_135.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="moby-dick-mo-20120214/OPS/chapter_136.smil" media-type="application/smil+xml" doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
                 </d:fileset>
             </x:document>
         </x:expect>
         <!--<x:context label="result HTML head">
-            <x:document type="port" port="in-memory.out" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
+            <x:document type="port" port="result.in-memory" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
         </x:context>
         <x:expect label="The head of the resulting HTML-file should be as expected" type="compare">
             <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
         </x:expect>-->
         <!--<x:context label="result HTML body">
-            <x:document type="port" port="in-memory.out" select="/html:html/html:body"/>
+            <x:document type="port" port="result.in-memory" select="/html:html/html:body"/>
         </x:context>
         <x:expect label="The body of the resulting HTML-file should be as expected" type="compare">
             <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:body"/>
         </x:expect>-->
         <!--<x:context label="result HTML document" pending="validation not implemented in xprocspec yet?">
-            <x:document type="port" port="in-memory.out"/>
+            <x:document type="port" port="result.in-memory"/>
         </x:context>
         <x:expect label="The result should be valid according to the Nordic EPUB3 HTML content model" type="validate" grammar="relax-ng">
             <x:document type="file" href="../../main/resources/xml/schema/nordic-html5.rng"/>

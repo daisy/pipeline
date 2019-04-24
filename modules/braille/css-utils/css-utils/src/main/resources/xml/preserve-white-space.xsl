@@ -21,7 +21,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="css:string|css:text|css:counter|css:content" priority="0.6">
+    <xsl:template match="css:string|css:text|css:counter|css:content|css:custom-func" priority="0.6">
         <xsl:param name="white-space" as="xs:string" select="'normal'" tunnel="yes"/>
         <xsl:variable name="white-space" as="xs:string" select="(@css:white-space/string(),$white-space)[1]"/>
         <xsl:copy>

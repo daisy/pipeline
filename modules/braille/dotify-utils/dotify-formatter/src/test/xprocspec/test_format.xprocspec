@@ -435,6 +435,7 @@
           <doc style="text-transform:none">
             <body style="@page {
                          size: 15 5;
+                         margin-bottom: 1;
                          @bottom-right { content: counter(page) }}">
               <section style="display: block;">
                 ⠤⠤⠤
@@ -480,9 +481,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <current-page number-format="default"/>
                 </field>
               </footer>
@@ -497,9 +495,6 @@
           <layout-master name="c" page-width="15" page-height="5" duplex="true" page-number-variable="page">
             <default-template>
               <header>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -655,9 +650,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <string value="⠏"/>
                   <current-page number-format="default"/>
                 </field>
@@ -672,9 +664,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <current-page number-format="default"/>
                 </field>
               </footer>
@@ -684,9 +673,6 @@
             <default-template>
               <header/>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -2096,7 +2082,7 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform:none">
-            <body style="@page { size: 14 8; @bottom-right { content: counter(page) }}">
+            <body style="@page { size: 14 8; margin-bottom: 1; @bottom-right { content: counter(page) }}">
               <frontmatter>
                 <toc>
                   <entry ref="chapter_1" style="&amp;::after {
@@ -2154,9 +2140,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <current-page number-format="default"/>
                 </field>
               </footer>
@@ -2181,26 +2164,29 @@
               ⠤⠤
               <page-number ref-id="chapter_3" number-format="default"/>
             </block>
-            <block align="center" break-before="page" id="chapter_1">
+            <block align="center" break-before="page">
               <block>
                 <marker class="print-page" value="⠤"/>
               </block>
+              <span id="chapter_1"/>
               ⠿
             </block>
             <block>
               ⠤⠤⠤
             </block>
-            <block align="center" break-before="page" id="chapter_2">
+            <block align="center" break-before="page">
+              <span id="chapter_2"/>
               ⠿⠿
             </block>
             <block>
               ⠤⠤⠤
             </block>
-            <block align="center" break-before="page" id="chapter_3">
+            <block align="center" break-before="page">
               <block>
                 <marker class="print-page/prev" value="⠤"/>
                 <marker class="print-page" value="⠤⠤"/>
               </block>
+              <span id="chapter_3"/>
               ⠿⠿⠿
             </block>
             <block>
@@ -2281,7 +2267,7 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform:none">
-            <body style="@page { size: 15 5; @bottom-right { content: counter(page) }}">
+            <body style="@page { size: 15 5; margin-bottom: 1; @bottom-right { content: counter(page) }}">
               <frontmatter>
                 <toc>
                   <entry ref="chapter_1" style="&amp;::after {
@@ -2346,9 +2332,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <current-page number-format="default"/>
                 </field>
               </footer>
@@ -2366,19 +2349,24 @@
               <page-number ref-id="chapter_2" number-format="default"/>
             </block>
             <block break-before="page">
-              <block id="chapter_1">
+              <block>
+                <span id="chapter_1"/>
                 ⠿
               </block>
-              <block id="x">
+              <block>
+                <span id="x"/>
                 ⠤⠤⠤
               </block>
-              <block id="chapter_2">
+              <block>
+                <span id="chapter_2"/>
                 ⠿⠿
               </block>
-              <block id="y">
+              <block>
+                <span id="y"/>
                 ⠤⠤⠤
               </block>
-              <block id="z">
+              <block>
+                <span id="z"/>
                 ⠤⠤⠤
               </block>
             </block>
@@ -2453,24 +2441,20 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_22" pending="xfail doesn't work because of error">
+  <x:scenario label="test_22">
     <x:documentation>
       Tests target-counter() referencing inline element.
-      
-      Broken: "Failed to complete volume division": is this a Dotify bug?
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none; @page { size: 14 8 }">
             <p style="display:block">
-              <a href="foo" style="&amp;::after { content: target-counter(attr(href), page) }"/>
+              <a href="foo" style="&amp;::after { content: target-counter(attr(href), page); text-transform: auto }"/>
             </p>
             <p style="display:block">
               ⠤⠤⠤⠤
-              <a id="foo">
-                ⠿
-              </a>
+              <a id="foo">⠿</a>
             </p>
             <p style="display:block">
               ⠤⠤⠤⠤
@@ -2492,14 +2476,12 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block>
+            <block translate="">
               <page-number ref-id="foo" number-format="default"/>
             </block>
             <block>
               ⠤⠤⠤⠤
-              <span id="foo">
-                ⠿
-              </span>
+              <span id="foo"/>⠿
             </block>
             <block>
               ⠤⠤⠤⠤
@@ -3256,9 +3238,6 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <footer/>
             </default-template>
@@ -3327,14 +3306,8 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <header>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -3410,9 +3383,6 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <footer/>
             </default-template>
@@ -3481,14 +3451,8 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <header>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -3565,9 +3529,6 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <footer/>
             </template>
@@ -3579,14 +3540,8 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <header>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -3792,17 +3747,16 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_40" pending="xfail doesn't work because of error">
+  <x:scenario label="test_40">
     <x:documentation>
-      Tests target-counter() referencing empty inline element. Broken: "Failed to complete volume
-      division": is this a Dotify bug?
+      Tests target-counter() referencing empty inline element.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform:none">
             <p style="display:block">
-              <a href="foo" style="&amp;::after { content: target-counter(attr(href), page) }"/>
+              <a href="foo" style="&amp;::after { content: target-counter(attr(href), page); text-transform: auto }"/>
             </p>
             <p style="display:block">
               <a id="foo"/>
@@ -3827,7 +3781,7 @@
             </default-template>
           </layout-master>
           <sequence master="a">
-            <block>
+            <block translate="">
               <page-number ref-id="foo" number-format="default"/>
             </block>
             <block>
@@ -3985,9 +3939,6 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </footer>
             </default-template>
           </layout-master>
@@ -4072,14 +4023,8 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </footer>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -4171,9 +4116,6 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </footer>
             </default-template>
           </layout-master>
@@ -4259,16 +4201,10 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </footer>
               <footer>
                 <field>
                   <string value="⠆"/>
-                </field>
-                <field>
-                  <string value=""/>
                 </field>
                 <field>
                   <string value=""/>
@@ -4359,16 +4295,10 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </footer>
               <footer>
                 <field>
                   <string value="⠆⠆"/>
-                </field>
-                <field>
-                  <string value=""/>
                 </field>
                 <field>
                   <string value=""/>
@@ -4459,16 +4389,10 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </footer>
               <footer>
                 <field>
                   <string value="⠆⠆"/>
-                </field>
-                <field>
-                  <string value=""/>
                 </field>
                 <field>
                   <string value=""/>
@@ -4638,9 +4562,6 @@
                   <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="/-dotify-ifndef:tmp_.+/"/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="spread-content" start-offset="-1"/>
                   <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="/-dotify-def:tmp_.+/"/>
                   <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="/-dotify-ifndef:tmp_.+/"/>
@@ -4655,9 +4576,6 @@
                   <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
                 </field>
                 -->
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -4684,9 +4602,6 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <footer>
                 <!--
@@ -4697,9 +4612,6 @@
                   <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
                 </field>
                 -->
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -4930,9 +4842,6 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </footer>
             </default-template>
           </layout-master>
@@ -5076,9 +4985,6 @@
                   <marker-reference marker="print-page/prev" direction="forward" scope="page-content" text-style="/-dotify-def:tmp_.+/"/>
                   <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="/-dotify-defifndef:tmp_.+/"/>
                   <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="/-dotify-ifndef:tmp_.+/"/>
-                </field>
-                <field>
-                  <string value=""/>
                 </field>
                 <field>
                   <string value=""/>
@@ -5689,9 +5595,6 @@
                   <marker-reference marker="foo" direction="forward" scope="page" text-style="/-dotify-def:tmp_.+/"/>
                   <marker-reference marker="foo" direction="backward" scope="sequence" text-style="/-dotify-defifndef:tmp_.+/"/>
                   <marker-reference marker="foo/entry" direction="backward" scope="sequence" text-style="/-dotify-ifndef:tmp_.+/"/>
-                </field>
-                <field>
-                  <string value=""/>
                 </field>
                 <field>
                   <marker-reference marker="foo/prev" direction="forward" scope="page-content" text-style="/-dotify-def:tmp_.+/"/>
@@ -7409,7 +7312,10 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none;
-                      @page { size: 15 7; @bottom-right { content: counter(page) }}
+                      @page {
+                        size: 15 7;
+                        margin-bottom: 1;
+                        @bottom-right { content: counter(page) }}
                       @volume:first { max-length: 3; @begin { content: flow(first-front) }}
                       @volume { max-length: 3; @begin { content: flow(next-front) }}">
             <front>
@@ -7475,9 +7381,6 @@
             <default-template>
               <header/>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -7581,24 +7484,24 @@
           <sequence master="main">
             <block translate=""/>
             <block>
-              <block id="ch_1" translate=""> 1 </block>
-              <block id="ch_1_1" translate=""> 1 </block>
+              <block translate=""><span id="ch_1"/> 1 </block>
+              <block translate=""><span id="ch_1_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_1_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_1_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2" translate=""> 2 </block>
-              <block id="ch_2_1" translate=""> 1 </block>
+              <block translate=""><span id="ch_2"/> 2 </block>
+              <block translate=""><span id="ch_2_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_2_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -7772,7 +7675,10 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none;
-                      @page { size: 15 7; @bottom-right {content: counter(page) }}
+                      @page {
+                        size: 15 7;
+                        margin-bottom: 1;
+                        @bottom-right {content: counter(page) }}
                       @volume { @begin { content: flow(front) }}">
             <front>
               <h1 id="ch_0" style="display:block; margin-bottom:1; flow:front; text-transform:auto"> 0 </h1>
@@ -7816,9 +7722,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <current-page number-format="default"/>
                 </field>
               </footer>
@@ -7854,13 +7757,13 @@
           <sequence master="main">
             <block translate=""/>
             <block>
-              <block id="ch_1" translate=""> 1 </block>
-              <block id="ch_1_1" translate=""> 1 </block>
+              <block translate=""><span id="ch_1"/> 1 </block>
+              <block translate=""><span id="ch_1_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_1_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_1_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -7999,7 +7902,7 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
+            <block>
               <block>⠤⠤⠤</block>
             </block>
             <block break-before="page"/>
@@ -8105,8 +8008,8 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block translate="" id="x">
-              <block id="a">⠿⠿⠿ 1</block>
+            <block translate="">
+              <block><span id="a"/>⠿⠿⠿ 1</block>
               <block>⠤⠤⠤</block>
             </block>
           </sequence>
@@ -8190,9 +8093,6 @@
           <layout-master name="master_1" duplex="true" page-number-variable="page" page-width="15" page-height="5">
             <default-template>
               <header>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -8360,7 +8260,7 @@
         <x:document type="inline">
           <doc style="text-transform:none">
             <body style="@page { size: 10 5; }
-                         @page:right { @bottom-right { content: counter(page) }}">
+                         @page:right { margin-bottom: 1; @bottom-right { content: counter(page) }}">
               <p style="display:block">
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -8394,9 +8294,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <current-page number-format="default"/>
                 </field>
               </footer>
@@ -8410,9 +8307,6 @@
             <template use-when="(= (% $page 2) 0)">
               <header/>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -8753,6 +8647,7 @@
                        display:block;
                        @page {
                          size: 15 5;
+                         margin-bottom: 1;
                          @bottom-right { content: counter(page, symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔')) }}">
             ⠤⠤⠤
           </body>
@@ -8769,9 +8664,6 @@
             <default-template>
               <header/>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -8850,7 +8742,7 @@
                   <page-number ref-id="a" number-format="default"/>
                 </style>
               </block>
-              <block break-before="page" id="a"> ⠤⠤⠤ </block>
+              <block break-before="page"><span id="a"/> ⠤⠤⠤ </block>
             </block>
           </sequence>
         </obfl>
@@ -9164,15 +9056,15 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
-              <block id="ch_1" translate=""> 1 </block>
+            <block>
+              <block translate=""><span id="ch_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -9332,15 +9224,15 @@
             </post-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
-              <block id="ch_1" translate=""> 1 </block>
+            <block>
+              <block translate=""><span id="ch_1"/> 1 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block id="ch_2" translate=""> 2 </block>
+              <block translate=""><span id="ch_2"/> 2 </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -9501,7 +9393,7 @@
             </pre-content>
           </volume-template>
           <sequence master="body">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤
             </block>
           </sequence>
@@ -9660,7 +9552,7 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤
             </block>
           </sequence>
@@ -9753,7 +9645,7 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤
             </block>
           </sequence>
@@ -9895,7 +9787,7 @@
             </item>
           </collection>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤ ⠶
               <anchor item="a"/>
               ⠤⠤⠤ ⠶⠶
@@ -10247,20 +10139,20 @@
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠤⠤⠤⠤⠤</row>
-                </page>
-                <page>
-                  <row>⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤</row>
                 </page>
               </section>
             </volume>
             <volume cols="10" rows="5" rowgap="0" duplex="true">
               <section>
                 <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                 </page>
@@ -10757,7 +10649,8 @@
         <x:document type="inline">
           <doc style="text-transform: none;
                       @page {
-                        size: 15 5
+                        size: 15 5;
+                        margin-bottom: 1;
                         @bottom-right {
                           content: counter(page) }}
                       @volume {
@@ -10785,9 +10678,6 @@
             <default-template>
               <header/>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -11012,14 +10902,8 @@
                 <field>
                   <string value=""/>
                 </field>
-                <field>
-                  <string value=""/>
-                </field>
               </header>
               <footer>
-                <field>
-                    <string value=""/>
-                </field>
                 <field>
                     <string value=""/>
                 </field>
@@ -11354,7 +11238,7 @@
             </item>
           </collection>
           <sequence master="main">
-            <block id="x">
+            <block>
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠶
               <anchor item="a"/>
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -11878,6 +11762,7 @@
             <body style="@page {
                            counter-increment: page;
                            size: 15 5;
+                           margin-bottom: 1;
                            @bottom-right { content: counter(page) }}">
               <section style="display: block">
                 ⠤⠤⠤
@@ -11892,6 +11777,7 @@
                               @page {
                                 counter-increment: page2;
                                 size: 15 5;
+                                margin-bottom: 1;
                                 @bottom-right { content: counter(page2) }}">
                 ⠤⠤⠤
               </section>
@@ -11917,9 +11803,6 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <current-page number-format="default"/>
                 </field>
               </footer>
@@ -11929,9 +11812,6 @@
             <default-template>
               <header/>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -12037,6 +11917,7 @@
                       @page {
                         counter-increment: page;
                         size: 10 5;
+                        margin-bottom: 1;
                         @bottom-right {
                           content: counter(page) }}
                       @volume {
@@ -12065,9 +11946,6 @@
             <default-template>
               <header/>
               <footer>
-                <field>
-                  <string value=""/>
-                </field>
                 <field>
                   <string value=""/>
                 </field>
@@ -12624,9 +12502,6 @@
                   <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="/-dotify-ifndef:tmp_.+/"/>
                 </field>
                 <field>
-                  <string value=""/>
-                </field>
-                <field>
                   <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="/-dotify-def:tmp_.*/"/>
                   <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="/-dotify-ifndef:tmp_.+/"/>
                 </field>
@@ -12810,102 +12685,6 @@
                   <row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
                   <row>⠀⠀⠀⠀⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
                   <row>⠀⠀⠀⠀⠿⠿⠿⠿⠀⠀⠀⠀⠀⠿⠿⠿⠿⠿⠿⠿</row>
-                </page>
-              </section>
-            </volume>
-          </body>
-        </pef>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-  
-  <x:scenario label="test_112">
-    <x:documentation>
-      Tests that tables do not inherit padding.
-    </x:documentation>
-    <x:call step="dotify:format">
-      <x:input port="source">
-        <x:document type="inline">
-          <doc style="text-transform: none; @page { size: 20 15 }">
-            <div style="display: block; padding-top: 2">
-              ⠛⠛⠛
-              <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-                     style="display:table">
-                <tr>
-                  <td>⠤⠤⠤</td>
-                  <td>⠤⠤⠤</td>
-                </tr>
-                <tr>
-                  <td>⠤⠤⠤</td>
-                  <td>⠤⠤⠤</td>
-                </tr>
-                <tr>
-                  <td>⠤⠤⠤</td>
-                  <td>⠤⠤⠤</td>
-                </tr>
-              </table>
-            </div>
-          </doc>
-        </x:document>
-      </x:input>
-    </x:call>
-    <x:context label="obfl">
-      <x:document type="port" port="obfl"/>
-    </x:context>
-    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
-      <x:document type="inline">
-        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
-          <layout-master name="body" page-width="20" page-height="15" duplex="true" page-number-variable="page">
-            <default-template>
-              <header/>
-              <footer/>
-            </default-template>
-          </layout-master>
-          <sequence master="body">
-            <block padding-top="2">
-              <block>⠛⠛⠛</block>
-              <block>
-                <table>
-                  <tr>
-                    <td>⠤⠤⠤</td>
-                    <td>⠤⠤⠤</td>
-                  </tr>
-                  <tr>
-                    <td>⠤⠤⠤</td>
-                    <td>⠤⠤⠤</td>
-                  </tr>
-                  <tr>
-                    <td>⠤⠤⠤</td>
-                    <td>⠤⠤⠤</td>
-                  </tr>
-                </table>
-              </block>
-            </block>
-          </sequence>
-        </obfl>
-      </x:document>
-    </x:expect>
-    <x:context label="pef">
-      <x:document type="port" port="result"/>
-    </x:context>
-    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
-      <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
-          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
-            <meta>
-              <dc:format>application/x-pef+xml</dc:format>
-            </meta>
-          </head>
-          <body>
-            <volume rows="15" cols="20" rowgap="0" duplex="true">
-              <section>
-                <page>
-                  <row/>
-                  <row/>
-                  <row>⠛⠛⠛</row>
-                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠀⠀⠤⠤⠤</row>
                 </page>
               </section>
             </volume>
@@ -13515,6 +13294,198 @@
                   <row/>
                   <row/>
                   <row>⠛⠛⠛</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_118">
+    <x:documentation>
+      Tests bottom right margin box of height 2 inside page margin of height 0, which results in
+      text being flowed into the whole footer.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none;
+                      @page {
+                        size: 15 5;
+                        margin-bottom: 0;
+                        @bottom-right {
+                          content: '⠤⠤\A⠤⠤';
+                          white-space: pre-wrap; }}">
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="a" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+            <default-template>
+              <header/>
+              <footer>
+                <field allow-text-flow="true"/>
+                <field>
+                  <string value="⠤⠤"/>
+                </field>
+              </footer>
+              <footer>
+                <field allow-text-flow="true"/>
+                <field>
+                  <string value="⠤⠤"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
+          <sequence master="a">
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="5" cols="15" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                  <row>⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠿</row>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_119">
+    <x:documentation>
+      Tests bottom right margin box of height 2 inside page margin of height 1, which results in
+      text being partly flowed into whole footer.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none;
+                      @page {
+                        size: 15 5;
+                        margin-bottom: 1;
+                        @bottom-right {
+                          content: '⠤⠤\A⠤⠤';
+                          white-space: pre-wrap; }}">
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+            <p style="display: block"> ⠿ </p>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="a" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+            <default-template>
+              <header/>
+              <footer>
+                <field allow-text-flow="true"/>
+                <field>
+                  <string value="⠤⠤"/>
+                </field>
+              </footer>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <string value="⠤⠤"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
+          <sequence master="a">
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+            <block> ⠿ </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="5" cols="15" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
                 </page>
               </section>
             </volume>

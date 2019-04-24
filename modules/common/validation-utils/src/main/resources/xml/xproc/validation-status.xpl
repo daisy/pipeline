@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step name="validation-status" type="px:validation-status"
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" 
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+                type="px:validation-status" name="validation-status"
+                exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Validation status XML</h1>
@@ -36,7 +37,7 @@
     <p:for-each name="has-errors">
         <p:output port="result" sequence="true"/>
         <p:choose>
-            <p:when test="count(//d:error) > 0">
+            <p:when test="count(//d:error|//svrl:failed-assert|//svrl:successful-report|//d:message[@severity='error']) > 0">
                 <p:identity>
                     <p:input port="source">
                         <p:inline>

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,6 +30,8 @@ import org.daisy.common.xslt.CompiledStylesheet;
 import org.daisy.common.xslt.XslTransformCompiler;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.audio.AudioServices;
+import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.tts.AudioBufferTracker;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
 import org.daisy.pipeline.tts.StraightBufferAllocator;
@@ -458,8 +462,13 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		mCurrentSection = null;
 	}
 
+	private ProgressMessage progress;
+
 	public Iterable<SoundFileLink> blockingRun(AudioServices audioServices)
 	        throws SynthesisException, InterruptedException, EncodingException {
+
+		progress = ProgressMessage.getActiveBlock().post(new ProgressMessageBuilder().withProgress(BigDecimal.ONE));
+		try {
 
 		//SSML mark splitter shared by the threads:
 		SSMLMarkSplitter ssmlSplitter = new StructuredSSMLSplitter(mProc);
@@ -560,6 +569,11 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		mLogger.printInfo("Audio encoding finished.");
 
 		return Iterables.concat(fragments);
+
+		} finally {
+			progress.close();
+			progress = null;
+		}
 	}
 
 	int getErrorCount() {
@@ -568,6 +582,11 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 	@Override
 	synchronized public void notifyFinished(ContiguousText section) {
+		progress.post(
+			new ProgressMessageBuilder()
+				.withProgress(
+					new BigDecimal(section.getStringSize()).divide(new BigDecimal(mTotalTextSize), MathContext.DECIMAL128))
+		).close();
 		mProgress += section.getStringSize();
 		if (mProgress - mPrintedProgress > mTotalTextSize / 15) {
 			int TTSMem = mAudioBufferTracker.getUnreleasedTTSMem() / 1000000;

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+	
+	<x:script>
+		<p:pipeline xmlns:p="http://www.w3.org/ns/xproc" version="1.0" type="pxi:test">
+			<p:xslt>
+				<p:input port="stylesheet">
+					<p:document href="../../main/resources/xml/xslt/augment-smil.xsl"/>
+				</p:input>
+			</p:xslt>
+		</p:pipeline>
+	</x:script>
+	
+	<x:scenario label="Augmenting existing SMIL">
+		<x:call step="pxi:test">
+			<x:input port="source">
+				<!--
+				    the SMIL
+				-->
+				<x:document type="inline" xml:base="file:/tmp/EPUB/chapter_001.smil">
+					<smil>
+						<body>
+							<seq id="seq1">
+								<par id="heading1">
+									<text src="chapter_001.xhtml#c1"/>
+									<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:00.000" clip-end="0:00:01.000"/>
+								</par>
+								<par id="paragraph1">
+									<text src="chapter_001.xhtml#c1_p1"/>
+									<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:01.000" clip-end="0:00:02.000"/>
+								</par>
+								<par id="paragraph2">
+									<text src="chapter_001.xhtml#c1_p2"/>
+									<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:03.000" clip-end="0:00:04.000"/>
+								</par>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+				<!--
+				    the associated HTML
+				-->
+				<x:document type="inline" xml:base="file:/tmp/EPUB/chapter_001.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<section>
+								<h1 id="c1">Chapter 1</h1>
+								<p id="c1_p1">...</p>
+								<section>
+									<h2 id="c1-1">Chapter 1.1</h2>
+								</section>
+								<p id="c1_p2">...</p>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="The resulting SMIL">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="should be as expected" type="compare">
+			<x:document type="inline">
+				<smil>
+					<body>
+						<seq id="seq1">
+							<par id="heading1">
+								<text src="chapter_001.xhtml#c1"/>
+								<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:00.000" clip-end="0:00:01.000"/>
+							</par>
+							<par id="paragraph1">
+								<text src="chapter_001.xhtml#c1_p1"/>
+								<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:01.000" clip-end="0:00:02.000"/>
+							</par>
+							<par id="par_c1-1" endsync="last">
+								<text id="text_c1-1" src="chapter_001.xhtml#c1-1"/>
+							</par>
+							<par id="paragraph2">
+								<text src="chapter_001.xhtml#c1_p2"/>
+								<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:03.000" clip-end="0:00:04.000"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="Generating a new SMIL">
+		<x:call step="pxi:test">
+			<x:input port="source">
+				<!--
+				    the empty SMIL
+				-->
+				<x:document type="inline" xml:base="file:/tmp/EPUB/chapter_002.smil">
+					<smil>
+						<body>
+							<seq/>
+						</body>
+					</smil>
+				</x:document>
+				<!--
+				    the associated HTML
+				-->
+				<x:document type="inline" xml:base="file:/tmp/EPUB/chapter_002.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<section>
+								<h1 id="c2">Chapter 2</h1>
+								<p id="c2_p1">...</p>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="The resulting SMIL">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="should be as expected" type="compare">
+			<x:document type="inline">
+				<smil>
+					<body>
+						<seq>
+							<par id="par_c2" endsync="last">
+								<text id="text_c2" src="chapter_002.xhtml#c2"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="Augmenting SMIL with word-level synchronization">
+		<x:call step="pxi:test">
+			<x:input port="source">
+				<!--
+				    the SMIL
+				-->
+				<x:document type="inline" xml:base="file:/tmp/EPUB/chapter_001.smil">
+					<smil>
+						<body>
+							<seq id="seq1">
+								<par id="word1">
+									<text src="chapter_001.xhtml#c1_w1"/>
+									<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:00.000" clip-end="0:00:00.500"/>
+								</par>
+								<par id="word2">
+									<text src="chapter_001.xhtml#c1_w2"/>
+									<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:00.500" clip-end="0:00:01.000"/>
+								</par>
+								<par id="paragraph1">
+									<text src="chapter_001.xhtml#c1_p1"/>
+									<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:01.000" clip-end="0:00:02.000"/>
+								</par>
+								<par id="paragraph2">
+									<text src="chapter_001.xhtml#c1_p2"/>
+									<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:03.000" clip-end="0:00:04.000"/>
+								</par>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+				<!--
+				    the associated HTML
+				-->
+				<x:document type="inline" xml:base="file:/tmp/EPUB/chapter_001.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<section>
+								<h1 id="c1">
+									<span id="c1_w1">Chapter</span>
+									<span id="c1_w2">1</span>
+								</h1>
+								<p id="c1_p1">...</p>
+								<section>
+									<h2 id="c1-1">Chapter 1.1</h2>
+								</section>
+								<p id="c1_p2">...</p>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="The resulting SMIL">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="should be as expected" type="compare">
+			<x:document type="inline">
+				<smil>
+					<body>
+						<seq id="seq1">
+							<par id="par_c1" endsync="last">
+								<text id="text_c1" src="chapter_001.xhtml#c1"/>
+								<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:00.000" clip-end="0:00:01.000"/>
+							</par>
+							<par id="paragraph1">
+								<text src="chapter_001.xhtml#c1_p1"/>
+								<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:01.000" clip-end="0:00:02.000"/>
+							</par>
+							<par id="par_c1-1" endsync="last">
+								<text id="text_c1-1" src="chapter_001.xhtml#c1-1"/>
+							</par>
+							<par id="paragraph2">
+								<text src="chapter_001.xhtml#c1_p2"/>
+								<audio src="audio/chapter_001_002.mp4" clip-begin="0:00:03.000" clip-end="0:00:04.000"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

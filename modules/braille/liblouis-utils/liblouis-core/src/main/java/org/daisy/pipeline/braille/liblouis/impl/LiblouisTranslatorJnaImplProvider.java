@@ -62,6 +62,7 @@ import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator.Typeform;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider.LiblouisTableJnaImpl;
 
+import org.liblouis.DisplayException;
 import org.liblouis.TranslationException;
 import org.liblouis.TranslationResult;
 import org.liblouis.Translator;
@@ -901,6 +902,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						interCharacterIndicesInBraille = r.getCharacterAttributes(); }
 					catch (TranslationException e) {
 						throw new RuntimeException(e); }
+					catch (DisplayException e) {
+						throw new RuntimeException(e); }
 					
 					// TODO: also check whether curPos still matches curPosInBraille according to new characterIndicesInBraille?
 					if (curPosInBraille > 0 && !joinedBraille.substring(0, curPosInBraille).equals(partBeforeCurPos))
@@ -949,7 +952,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							preserveLines[i] = preserveSpace[i] = true;
 						else if (val == WhiteSpace.PRE_LINE)
 							preserveLines[i] = true;
-						style.removeProperty("white-space"); }
+						// don't remove "white-space" property because it has not been fully handled
+					}
 					val = style.getProperty("text-transform");
 					if (val != null) {
 						if (val == TextTransform.NONE) {
@@ -1311,6 +1315,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					}
 				}
 			} catch (TranslationException e) {
+				throw new RuntimeException(e);
+			} catch (DisplayException e) {
 				throw new RuntimeException(e); }
 			
 			// recombine white space segments with other segments

@@ -88,22 +88,28 @@
                     <xsl:sequence select="obfl:not(obfl:or($stylesheets[position()&lt;$i or @selector[not(.='@volume')]]
                                                                        /obfl:volume-stylesheets-use-when(.)))"/>
                 </xsl:when>
+                <xsl:when test="@selector='&amp;:only'">
+                    <xsl:sequence select="'(= $volumes 1)'"/>
+                </xsl:when>
                 <xsl:when test="@selector='&amp;:first'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume 1)',
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                            obfl:not(obfl:or($stylesheets[(position()&lt;$i and @selector[not(.='@volume')])
+                                                                          or @selector[.='&amp;:only']]
                                                                          /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:when test="@selector='&amp;:last'">
                     <xsl:sequence select="obfl:and((
                                             '(= $volume $volumes)',
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                            obfl:not(obfl:or($stylesheets[(position()&lt;$i and @selector[not(.='@volume')])
+                                                                          or @selector[.='&amp;:only']]
                                                                          /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:when test="matches(@selector,'^&amp;:nth\([1-9][0-9]*\)$')">
                     <xsl:sequence select="obfl:and((
                                             concat('(= $volume ',substring(@selector,7)),
-                                            obfl:not(obfl:or($stylesheets[position()&lt;$i and @selector[not(.='@volume')]]
+                                            obfl:not(obfl:or($stylesheets[(position()&lt;$i and @selector[not(.='@volume')])
+                                                                          or @selector[.='&amp;:only']]
                                                                          /obfl:volume-stylesheets-use-when(.)))))"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -1272,7 +1278,7 @@
     <!-- Inline boxes -->
     <!-- ============ -->
     
-    <xsl:template mode="block span td toc-entry"
+    <xsl:template mode="block td toc-entry"
                   match="css:box[@type='inline']">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
@@ -1285,9 +1291,11 @@
         <xsl:apply-templates mode="marker" select="@css:string-set|@css:_obfl-marker"/>
         <xsl:apply-templates mode="assert-nil-attr"
                              select="@* except (@type|
+                                                @css:id|
                                                 @css:string-set|
                                                 @css:_obfl-marker|
                                                 @css:text-transform|@css:hyphens)"/>
+        <xsl:apply-templates mode="#current" select="@css:id"/>
         <xsl:for-each-group select="node()" group-adjacent="boolean(
                                                               self::css:box[@type='inline'] or
                                                               self::css:custom-func[@name='-obfl-evaluate'] or
@@ -1363,6 +1371,7 @@
                   match="css:box/css:_|
                          css:_/css:_">
         <xsl:apply-templates mode="assert-nil-attr" select="@* except (@css:id|@css:string-set|@css:_obfl-marker)"/>
+        <xsl:apply-templates mode="#current" select="@css:id"/>
         <xsl:apply-templates mode="marker" select="@css:string-set|@css:_obfl-marker"/>
         <xsl:apply-templates mode="#current"/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
@@ -2024,15 +2033,19 @@
             <xsl:if test="$hyphens='none'">
                 <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
             </xsl:if>
+            <xsl:if test="@css:white-space[not(.='normal')]">
+                <xsl:sequence select="concat('white-space: ',@css:white-space)"/>
+            </xsl:if>
         </xsl:variable>
+        <xsl:variable name="expression" as="xs:string" select="css:parse-string(@arg1)/@value"/>
         <xsl:choose>
             <xsl:when test="exists($style)">
                 <style name="{string-join($style,'; ')}">
-                    <evaluate expression="{substring(@arg1,2,string-length(@arg1)-2)}"/>
+                    <evaluate expression="{$expression}"/>
                 </style>
             </xsl:when>
             <xsl:otherwise>
-                <evaluate expression="{substring(@arg1,2,string-length(@arg1)-2)}"/>
+                <evaluate expression="{$expression}"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -2100,31 +2113,31 @@
     <!-- IDs and anchors -->
     <!-- =============== -->
     
-    <!--
-        FIXME: don't add id attribute if block not referenced by any toc-entry or page-number
-    -->
-    <xsl:template mode="block-attr toc-entry-attr"
-                  match="css:box[@type='block']/@css:id">
+    <xsl:variable name="page-number-references" as="xs:string*"
+                  select="$sections//css:counter[@name='page']/@target"/>
+    
+    <xsl:variable name="toc-entry-references" as="xs:string*"
+                  select="$sections//css:box[@type='block' and @css:_obfl-toc]
+                          /((descendant::css:counter)/@target|
+                            (descendant::css:string)/@target|
+                            (descendant::css:box)/@css:anchor)"/>
+    
+    <xsl:template mode="block-attr toc-entry-attr span-attr"
+                  match="css:box[@type='block']/@css:id|
+                         css:box[@type='inline']/@css:id|
+                         css:box[@type='inline']/css:_/@css:id">
         <xsl:variable name="id" as="xs:string" select="."/>
-        <xsl:if test="not(ancestor::*/@css:flow[not(.='normal')])">
+        <xsl:if test="not(ancestor::*/@css:flow[not(.='normal')]) and $id=($page-number-references,$toc-entry-references)">
             <xsl:attribute name="id" select="$id"/>
         </xsl:if>
     </xsl:template>
     
-    <!--
-        FIXME: id attribute not supported on a span
-    -->
-    <xsl:template mode="block-attr assert-nil-attr"
+    <xsl:template mode="block td toc-entry"
                   match="css:box[@type='inline']/@css:id|
                          css:box[@type='inline']/css:_/@css:id">
         <xsl:variable name="id" as="xs:string" select="."/>
-        <!--
-            FIXME: what about css:string[@target] and css:box[@css:anchor] ?
-        -->
-        <xsl:if test="$sections//css:counter[@name=$page-counter-names][@target=$id]">
-            <xsl:call-template name="pf:error">
-                <xsl:with-param name="msg">target-counter(page) referencing inline elements not supported.</xsl:with-param>
-            </xsl:call-template>
+        <xsl:if test="not(ancestor::*/@css:flow[not(.='normal')]) and $id=($page-number-references,$toc-entry-references)">
+            <span id="{$id}"/>
         </xsl:if>
     </xsl:template>
     
@@ -2144,10 +2157,17 @@
     <!-- Markers -->
     <!-- ======= -->
     
+    <!--
+        wrap markers at the start of a block in an additional block (in order to support page-start
+        and page-start-except-last)
+    -->
     <xsl:template priority="0.6"
                   mode="marker"
                   match="css:box[@type='block']/css:box[@type='inline'][not(preceding-sibling::css:box)]/@css:string-set|
-                         css:box[@type='block']/css:box[@type='inline'][not(preceding-sibling::css:box)]
+                         css:box[@type='block']/css:box[@type='inline'][not(preceding-sibling::css:box) and
+                                                                        not(@css:id and
+                                                                            not(ancestor::*/@css:flow[not(.='normal')]) and
+                                                                            @css:id=($page-number-references,$toc-entry-references))]
                          /css:_[not(preceding-sibling::*) and
                                 not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
                          //@css:string-set">

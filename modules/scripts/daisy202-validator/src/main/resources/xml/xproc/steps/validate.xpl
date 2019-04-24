@@ -178,43 +178,86 @@
                 </p:identity>
             </p:when>
             <p:otherwise>
-                <l:relax-ng-report name="for-each.smil.validate-smil-other">
-                    <p:input port="schema">
-                        <p:document href="../../schemas/d202/d202smil.rng"/>
-                    </p:input>
-                </l:relax-ng-report>
-                <p:sink/>
-                <p:identity>
-                    <p:input port="source">
-                        <p:pipe port="report" step="for-each.smil.validate-smil-other"/>
-                    </p:input>
-                </p:identity>
+                <p:group>
+                    <p:output port="report" sequence="true">
+                        <p:pipe step="for-each.smil.validate-smil-other.rng" port="report"/>
+                        <p:pipe step="for-each.smil.validate-smil-other.sch" port="report"/>
+                    </p:output>
+                    <l:relax-ng-report name="for-each.smil.validate-smil-other.rng">
+                        <p:input port="schema">
+                            <p:document href="../../schemas/d202/d202smil.rng"/>
+                        </p:input>
+                    </l:relax-ng-report>
+                    <p:sink/>
+                    <px:relax-ng-to-schematron>
+                        <p:input port="source">
+                            <p:document href="../../schemas/d202/d202smil.rng"/>
+                        </p:input>
+                    </px:relax-ng-to-schematron>
+                    <p:for-each name="for-each.smil.validate-smil-other.sch">
+                        <p:output port="report" sequence="true">
+                            <p:pipe step="validate-with-schematron" port="report"/>
+                        </p:output>
+                        <p:validate-with-schematron assert-valid="false" name="validate-with-schematron">
+                            <p:input port="source">
+                                <p:pipe step="for-each.smil" port="current"/>
+                            </p:input>
+                            <p:input port="schema">
+                                <p:pipe step="for-each.smil.validate-smil-other.sch" port="current"/>
+                            </p:input>
+                            <p:input port="parameters">
+                                <p:empty/>
+                            </p:input>
+                        </p:validate-with-schematron>
+                        <p:sink/>
+                    </p:for-each>
+                    <p:sink/>
+                </p:group>
             </p:otherwise>
         </p:choose>
-        <p:identity>
-            <p:input port="source">
-                <p:empty/>
-            </p:input>
-        </p:identity>
     </p:for-each>
     <p:identity name="smil-schema-tests"/>
     <p:sink/>
 
     <!-- validate NCC file -->
-    <l:relax-ng-report name="ncc.validate-ncc">
-        <p:input port="source">
-            <p:pipe port="result" step="ncc"/>
-        </p:input>
-        <p:input port="schema">
-            <p:document href="../../schemas/d202/d202ncc.rng"/>
-        </p:input>
-    </l:relax-ng-report>
-    <p:sink/>
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="report" step="ncc.validate-ncc"/>
-        </p:input>
-    </p:identity>
+    <p:group name="ncc.validate-ncc">
+        <p:output port="report" sequence="true">
+            <p:pipe step="ncc.validate-ncc.rng" port="report"/>
+            <p:pipe step="ncc.validate-ncc.sch" port="report"/>
+        </p:output>
+        <l:relax-ng-report name="ncc.validate-ncc.rng">
+            <p:input port="source">
+                <p:pipe port="result" step="ncc"/>
+            </p:input>
+            <p:input port="schema">
+                <p:document href="../../schemas/d202/d202ncc.rng"/>
+            </p:input>
+        </l:relax-ng-report>
+        <p:sink/>
+        <px:relax-ng-to-schematron>
+            <p:input port="source">
+                <p:document href="../../schemas/d202/d202ncc.rng"/>
+            </p:input>
+        </px:relax-ng-to-schematron>
+        <p:for-each name="ncc.validate-ncc.sch">
+            <p:output port="report" sequence="true">
+                <p:pipe step="validate-with-schematron" port="report"/>
+            </p:output>
+            <p:validate-with-schematron assert-valid="false" name="validate-with-schematron">
+                <p:input port="source">
+                    <p:pipe step="ncc" port="result"/>
+                </p:input>
+                <p:input port="schema">
+                    <p:pipe step="ncc.validate-ncc.sch" port="current"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:validate-with-schematron>
+            <p:sink/>
+        </p:for-each>
+        <p:sink/>
+    </p:group>
     <p:identity name="ncc-schema-tests"/>
     <p:sink/>
 

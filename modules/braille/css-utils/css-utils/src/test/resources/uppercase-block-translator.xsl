@@ -5,7 +5,7 @@
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 exclude-result-prefixes="#all">
 	
-	<xsl:import href="../../main/resources/xml/transform/block-translator-template.xsl"/>
+	<xsl:import href="../../main/resources/xml/transform/abstract-block-translator.xsl"/>
 	
 	<xsl:template match="css:block" mode="#default after before">
 		<xsl:variable name="uppercase-text" as="text()*">

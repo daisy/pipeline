@@ -349,7 +349,9 @@
                                           then QName('','page')
                                           else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@volume'])
                                             then QName('','volume')
-                                            else ())"/>
+                                            else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@-')])
+                                              then QName('','vendor-rule')
+                                              else ())"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="css:parse-stylesheet($stylesheet, true())"/>
@@ -367,6 +369,17 @@
         <xsl:sequence select="css:parse-stylesheet($stylesheet, true(), QName('','volume'))"/>
     </xsl:function>
     
+    <xsl:function name="css:parse-string" as="element()?">
+        <xsl:param name="string" as="xs:string"/>
+        <xsl:if test="matches($string,re:exact($css:STRING_RE))">
+            <css:string value="{replace(replace(replace(
+                                  substring($string, 2, string-length($string)-2),
+                                  '\\A\s?','&#xA;'),
+                                  '\\27\s?',''''),
+                                  '\\22\s?','&quot;')}"/>
+        </xsl:if>
+    </xsl:function>
+    
     <xsl:template name="css:parse-content-list" as="element()*">
         <xsl:param name="content-list" as="xs:string?"/>
         <xsl:param name="context" as="element()?" select="."/>
@@ -378,10 +391,7 @@
                             <string>
                         -->
                         <xsl:when test="regex-group($css:CONTENT_RE_string)!=''">
-                            <css:string value="{replace(
-                                                  substring(regex-group($css:CONTENT_RE_string),
-                                                            2, string-length(regex-group($css:CONTENT_RE_string))-2),
-                                                  '\\A','&#xA;')}"/>
+                            <xsl:sequence select="css:parse-string(regex-group($css:CONTENT_RE_string))"/>
                         </xsl:when>
                         <!--
                             content()
@@ -881,7 +891,12 @@
     </xsl:template>
     
     <xsl:template match="css:string[@value]" mode="css:serialize" as="xs:string">
-        <xsl:sequence select="concat('&quot;',replace(@value,'\n','\\A'),'&quot;')"/>
+        <xsl:sequence select="concat('&quot;',
+                                     replace(replace(
+                                       @value,
+                                       '\n','\\A '),
+                                       '&quot;','\\22 '),
+                                     '&quot;')"/>
     </xsl:template>
     
     <xsl:template match="css:content[not(@target)]" mode="css:serialize" as="xs:string">

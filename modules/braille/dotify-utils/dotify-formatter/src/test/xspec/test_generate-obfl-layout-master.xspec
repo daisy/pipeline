@@ -46,9 +46,6 @@
               <string value=""/>
             </field>
             <field>
-              <string value=""/>
-            </field>
-            <field>
               <current-page number-format="lower-roman"/>
             </field>
           </header>
@@ -102,9 +99,6 @@
               <string value=""/>
             </field>
             <field>
-              <string value=""/>
-            </field>
-            <field>
               <current-page number-format="default"/>
             </field>
           </header>
@@ -118,14 +112,8 @@
             <field>
               <string value=""/>
             </field>
-            <field>
-              <string value=""/>
-            </field>
           </header>
           <header>
-            <field>
-              <string value=""/>
-            </field>
             <field>
               <string value=""/>
             </field>
@@ -165,9 +153,6 @@
             <field>
               <string value=""/>
             </field>
-            <field>
-              <string value=""/>
-            </field>
           </footer>
         </default-template>
       </layout-master>
@@ -196,14 +181,8 @@
             <field>
               <string value=""/>
             </field>
-            <field>
-              <string value=""/>
-            </field>
           </footer>
           <footer>
-            <field>
-              <string value=""/>
-            </field>
             <field>
               <string value=""/>
             </field>
@@ -241,9 +220,6 @@
             <field>
               <string value=""/>
             </field>
-            <field>
-              <string value=""/>
-            </field>
           </footer>
         </default-template>
       </layout-master>
@@ -275,16 +251,10 @@
             <field>
               <string value=""/>
             </field>
-            <field>
-              <string value=""/>
-            </field>
           </footer>
           <footer>
             <field>
               <string value="⠆"/>
-            </field>
-            <field>
-              <string value=""/>
             </field>
             <field>
               <string value=""/>
@@ -321,16 +291,10 @@
             <field>
               <string value=""/>
             </field>
-            <field>
-              <string value=""/>
-            </field>
           </footer>
           <footer>
             <field>
               <string value="⠆⠆"/>
-            </field>
-            <field>
-              <string value=""/>
             </field>
             <field>
               <string value=""/>
@@ -367,16 +331,10 @@
             <field>
               <string value=""/>
             </field>
-            <field>
-              <string value=""/>
-            </field>
           </footer>
           <footer>
             <field>
               <string value="⠆⠆"/>
-            </field>
-            <field>
-              <string value=""/>
             </field>
             <field>
               <string value=""/>

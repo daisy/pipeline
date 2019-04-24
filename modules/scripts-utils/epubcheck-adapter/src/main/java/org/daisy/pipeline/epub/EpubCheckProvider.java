@@ -38,6 +38,9 @@ import com.adobe.epubcheck.util.*;
 
 import org.osgi.service.component.annotations.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component(
 	name = "pxi:epubcheck",
 	service = { XProcStepProvider.class },
@@ -163,9 +166,10 @@ public class EpubCheckProvider implements XProcStepProvider {
 								tempDir = Files.createTempDirectory("epubcheck-").toFile();
 						}
 						File zippedEpubFile = new File(tempDir, epubName);
+						logger.debug("Creating zipped EPUB from " + path + " at " + zippedEpubFile);
 						tempDir.mkdirs();
 						epub.createArchive(zippedEpubFile);
-						EpubCheck check = new EpubCheck(epub.getEpubFile(), xmlReport);
+						EpubCheck check = new EpubCheck(zippedEpubFile, xmlReport);
 						check.validate();
 					}
 
@@ -219,4 +223,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 			}
 		}
 	}
+	
+	private final Logger logger = LoggerFactory.getLogger(EpubCheckProvider.class);
+	
 }

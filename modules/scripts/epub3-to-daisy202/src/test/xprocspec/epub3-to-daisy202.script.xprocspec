@@ -31,6 +31,7 @@
                         <c:file name="chapter_002.html"/>
                         <c:file name="chapter_002_overlay.smil"/>
                         <c:file name="chapter_003.html"/>
+                        <c:file name="chapter_003.smil"/>
                         <c:directory name="css">
                             <c:file name="stylesheet.css"/>
                         </c:directory>
@@ -97,6 +98,7 @@
                             <c:file name="chapter_001.html"/>
                             <c:file name="chapter_002.html"/>
                             <c:file name="chapter_003.html"/>
+                            <c:file name="chapter_003.smil"/>
                         </c:directory>
                     </c:directory>
                 </c:directory>

@@ -2,7 +2,7 @@
 <grammar  
   xmlns="http://relaxng.org/ns/structure/1.0"  
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
-  xmlns:sch="http://www.ascc.net/xml/schematron"  
+  xmlns:sch="http://purl.oclc.org/dsdl/schematron"
 >
   <a:documentation>
     d202smil.rng

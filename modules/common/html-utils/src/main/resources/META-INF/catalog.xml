@@ -2,6 +2,8 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
      <uri name="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"
           uri="../xml/xproc/html-library.xpl"/>
+     <uri name="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"
+          uri="../xml/xslt/uri-functions.xsl"/>
      <uri name="http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl"
           uri="../xml/xslt/html5-outliner.xsl"/>
      <uri name="http://www.daisy.org/pipeline/modules/html-utils/html5-upgrade.xsl"

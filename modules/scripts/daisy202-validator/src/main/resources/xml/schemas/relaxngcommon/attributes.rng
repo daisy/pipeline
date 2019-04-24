@@ -2,7 +2,7 @@
 <grammar
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
   xmlns="http://relaxng.org/ns/structure/1.0"
-  xmlns:sch="http://www.ascc.net/xml/schematron"
+  xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
   xmlns:zed="http://www.daisy.org/ns/zedval/testmap"
 >

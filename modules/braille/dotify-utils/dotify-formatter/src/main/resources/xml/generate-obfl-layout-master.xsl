@@ -88,6 +88,10 @@
         </field>
     </xsl:variable>
     
+    <xsl:variable name="text-flow-area" as="element()">
+        <field allow-text-flow="true"/>
+    </xsl:variable>
+    
     <xsl:function name="obfl:generate-layout-master">
         <xsl:param name="page-stylesheet" as="element()*"/> <!-- css:rule* -->
         <xsl:param name="name" as="xs:string"/>
@@ -308,7 +312,7 @@
         <xsl:if test="exists(($left, $center, $right)) or $times &gt; 0">
             <header>
                 <xsl:sequence select="($left,$empty-field)[1]"/>
-                <xsl:sequence select="($center,$empty-field)[1]"/>
+                <xsl:sequence select="$center[1]"/>
                 <xsl:sequence select="($right,$empty-field)[1]"/>
             </header>
             <xsl:call-template name="headers">
@@ -333,8 +337,10 @@
                 <xsl:with-param name="right" select="$right[position()&lt;last()]"/>
             </xsl:call-template>
             <footer>
-                <xsl:sequence select="($empty-field,$left)[last()]"/>
-                <xsl:sequence select="($empty-field,$center)[last()]"/>
+                <xsl:sequence select="if ($times &lt;= 0 and not(exists($left)) and not(exists($center)) and exists($right))
+                                      then $text-flow-area
+                                      else ($empty-field,$left)[last()]"/>
+                <xsl:sequence select="$center[last()]"/>
                 <xsl:sequence select="($empty-field,$right)[last()]"/>
             </footer>
         </xsl:if>

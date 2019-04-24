@@ -1,22 +1,14 @@
 package org.daisy.pipeline.tts.qfrency;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -24,6 +16,7 @@ import javax.sound.sampled.AudioSystem;
 
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.shell.CommandRunner;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
 import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
@@ -34,6 +27,9 @@ import org.daisy.pipeline.tts.TTSService.Mark;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QfrencyEngine extends TTSEngine {
 
 	private AudioFormat mAudioFormat;
@@ -41,6 +37,7 @@ public class QfrencyEngine extends TTSEngine {
 	private String mQfrencyPath;
 	private final static int MIN_CHUNK_SIZE = 2048;
 	private int mPriority;
+	private final static Logger mLogger = LoggerFactory.getLogger(QfrencyEngine.class);
 
 	public QfrencyEngine(QfrencyService qfrencyService, String qfrencyPath, String address, int priority) {
 		super(qfrencyService);
@@ -56,7 +53,6 @@ public class QfrencyEngine extends TTSEngine {
 																										  InterruptedException, MemoryException {
 
 		Collection<AudioBuffer> result = new ArrayList<AudioBuffer>();
-		Process proc = null;
 		File outFile = null;
 		String outPath = null;
 		sentence = stripSSML(sentence);
@@ -73,8 +69,9 @@ public class QfrencyEngine extends TTSEngine {
 			lCmd[5]=voice.name;
 			lCmd[6]="\'"+sentence+"\'";
 
-			proc = Runtime.getRuntime().exec(lCmd);
-			proc.waitFor();
+			new CommandRunner(lCmd)
+				.consumeError(mLogger)
+				.run();
 
 			BufferedInputStream in = new BufferedInputStream(new FileInputStream(outFile));
 			AudioInputStream fi = AudioSystem.getAudioInputStream(in);
@@ -96,21 +93,13 @@ public class QfrencyEngine extends TTSEngine {
 			fi.close();
 
 
-							} catch (MemoryException e) {
+		} catch (MemoryException|InterruptedException e) {
 			SoundUtil.cancelFootPrint(result, bufferAllocator);
-			proc.destroy();
 			throw e;
-		} catch (InterruptedException e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
-			if (proc != null)
-				proc.destroy();
-			throw e;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			SoundUtil.cancelFootPrint(result, bufferAllocator);
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			if (proc != null)
-				proc.destroy();
 			throw new SynthesisException(e);
 		}
 		outFile.delete();
@@ -135,19 +124,20 @@ public class QfrencyEngine extends TTSEngine {
 	 */
 	public Collection<Voice> getAvailableVoices() throws SynthesisException,
 														 InterruptedException {
-		Scanner scanner = null;
-		InputStream is = null;
 		ArrayList<Voice> list = new ArrayList<Voice>();
-		Process proc = null;
 		try {
-			proc = Runtime.getRuntime().exec(new String[] {mQfrencyPath, "-a", mHostAddress, "-l"});
-			is = proc.getInputStream();
-			scanner = new Scanner(is);
-			while (scanner.hasNext())
-				list.add(new Voice(getProvider().getName(), scanner.next()));
-			scanner.close();
+			new CommandRunner(mQfrencyPath, "-a", mHostAddress, "-l")
+				.consumeOutput(stream -> {
+						try (Scanner scanner = new Scanner(stream)) {
+							while (scanner.hasNext())
+								list.add(new Voice(getProvider().getName(), scanner.next()));
+						}
+					}
+				)
+				.consumeError(mLogger)
+				.run();
 			return list;
-		} catch(Exception x) {
+		} catch (Throwable x) {
 			System.out.println("Error listing voices");
 			x.printStackTrace();
 		}

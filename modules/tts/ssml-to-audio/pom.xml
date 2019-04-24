@@ -34,6 +34,11 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>audio-common</artifactId>
     </dependency>
+    <!-- for ProgressMessage -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
     <!-- for DefaultStep ... -->
     <dependency>
       <groupId>org.daisy.libs</groupId>

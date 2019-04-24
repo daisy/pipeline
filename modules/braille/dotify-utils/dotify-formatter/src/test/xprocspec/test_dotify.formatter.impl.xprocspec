@@ -2464,6 +2464,59 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="white-space-normalization-around-empty-span">
+    <x:documentation>
+      Tests that white space at the beginning of a block is stripped, also when it is preceded
+      directly by an empty span element. Empty span elements are inserted in order to place IDs on
+      them. This is an issue in Dotify but a normalisation step in DP2 fixes it.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="body" page-width="15" page-height="10" duplex="true">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="body">
+              <block>
+                <span id="x"/>
+                ⠤⠤⠤
+                ⠤⠤⠤
+                ⠤⠤⠤
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
   <x:scenario label="comment-in-white-space">
     <x:documentation>
       Tests presence of a comment surrounded by white space. Dotify would normally drop the white
@@ -4847,11 +4900,9 @@
   </x:expect>
 </x:scenario>
 
-<x:scenario label="page-number-reference-span" pending="xfail (Exception)">
+<x:scenario label="page-number-reference-span">
   <x:documentation>
     Tests page-number reference to span.
-    
-    Broken: "Failed to complete volume division": is this a bug?
   </x:documentation>
   <x:call>
     <x:input port="source">

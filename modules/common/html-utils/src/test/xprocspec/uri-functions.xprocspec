@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:c="http://www.w3.org/ns/xproc-step">
+
+    <x:script>
+        <p:pipeline version="1.0" type="pxi:test">
+            <p:xslt template-name="main">
+                <p:input port="stylesheet">
+                    <p:inline>
+                        <xsl:stylesheet version="2.0" xpath-default-namespace="http://www.w3.org/1999/xhtml">
+                            <xsl:import href="../../main/resources/xml/xslt/uri-functions.xsl"/>
+                            <xsl:template name="main">
+                                <c:result>
+                                    <xsl:value-of select="pf:html-base-uri(/*/body)"/>
+                                </c:result>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    </p:inline>
+                </p:input>
+            </p:xslt>
+        </p:pipeline>
+    </x:script>
+
+    <x:scenario label="pf:html-base-uri">
+        <x:call step="pxi:test"/>
+        <x:scenario label="no base element">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline">
+                        <html>
+                            <body/>
+                        </html>
+                    </x:document>
+                </x:input>
+            </x:call>
+            <x:context label="result">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect label="result" type="xpath" test="string(/c:result)" equals="$test-base-uri"/>
+        </x:scenario>
+        <x:scenario label="base element with absolute href">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline">
+                        <html>
+                            <head>
+                                <base href="http://example.com/foo.html"/>
+                            </head>
+                            <body/>
+                        </html>
+                    </x:document>
+                </x:input>
+            </x:call>
+            <x:context label="result">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect label="result" type="xpath" test="string(/c:result)" equals="'http://example.com/foo.html'"/>
+        </x:scenario>
+        <x:scenario label="base element with relative href">
+            <x:call>
+                <x:input port="source">
+                    <x:document type="inline">
+                        <html>
+                            <head>
+                                <base href="foo.html"/>
+                            </head>
+                            <body/>
+                        </html>
+                    </x:document>
+                </x:input>
+            </x:call>
+            <x:context label="result">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect label="result" type="xpath" test="string(/c:result)" equals="resolve-uri('foo.html',$test-base-uri)"/>
+        </x:scenario>
+    </x:scenario>
+
+</x:description>

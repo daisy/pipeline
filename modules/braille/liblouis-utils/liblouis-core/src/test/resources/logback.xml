@@ -19,6 +19,7 @@
   </root>
   
   <logger name="org.daisy" level="DEBUG"/>
+  <logger name="org.liblouis" level="DEBUG"/>
   
   <logger name="JOB_MESSAGES" level="TRACE">
     <appender-ref ref="STDOUT"/>

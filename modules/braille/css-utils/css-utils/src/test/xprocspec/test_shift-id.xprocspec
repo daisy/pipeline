@@ -12,13 +12,13 @@
             <css:_ css:id="a">
               <css:_ css:id="b"/>
             </css:_>
-            <css:box css:id="c"/>
-            <css:box/>
+            <css:box type="inline" css:id="c"/>
+            <css:box type="inline"/>
           </_>
         </x:document>
         <x:document type="inline">
           <css:_ css:flow="foo">
-            <css:box css:anchor="a"/>
+            <css:box type="inline" css:anchor="a"/>
           </css:_>
         </x:document>
         <x:document type="inline">
@@ -37,13 +37,13 @@
           <css:_>
             <css:_/>
           </css:_>
-          <css:box css:id="c"/>
-          <css:box/>
+          <css:box type="inline" css:id="c"/>
+          <css:box type="inline"/>
         </_>
       </x:document>
       <x:document type="inline">
         <css:_ css:flow="foo">
-          <css:box css:anchor="c"/>
+          <css:box type="inline" css:anchor="c"/>
         </css:_>
       </x:document>
       <x:document type="inline">

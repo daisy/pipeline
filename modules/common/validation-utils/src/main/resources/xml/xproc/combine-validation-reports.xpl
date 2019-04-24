@@ -232,7 +232,7 @@
 
     <p:group name="add-error-count">
         <p:variable name="error-count"
-            select="count(//d:error) + count(//svrl:failed-assert) + count(//svrl:successful-report)"/>
+                    select="count(//d:error|//svrl:failed-assert|//svrl:successful-report|//d:message[@severity='error'])"/>
         <p:insert match="d:document-validation-report/d:document-info" position="last-child">
             <p:input port="insertion">
                 <p:inline>

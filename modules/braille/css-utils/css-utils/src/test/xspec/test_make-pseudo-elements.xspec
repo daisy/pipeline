@@ -90,4 +90,27 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_05">
+    <x:context>
+      <doc>
+        <body>
+          <p css:alternate="content: 'foo'" css:alternate-2="content: 'bar'">
+            foo
+          </p>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <p css:id="...">
+            foo
+          </p>
+          <css:alternate css:anchor="..." style="content: 'foo'" name="p::alternate"/>
+          <css:alternate css:anchor="..." style="content: 'bar'" name="p::alternate(2)"/>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

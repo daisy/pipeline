@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.dotify.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.TermInteger;
 
+import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 import org.daisy.braille.css.SimpleInlineStyle;
 
@@ -33,6 +35,7 @@ import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.QUERY;
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
+import static org.daisy.pipeline.braille.common.util.Strings.join;
 import static org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl.BRAILLE;
 import static org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl.cssStyledTextFromTranslatable;
 
@@ -125,11 +128,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 				throw new TranslatorConfigurationException();
 			Query query = query(mode);
 			for (org.daisy.pipeline.braille.common.BrailleTranslator t : brailleTranslatorProvider.get(query))
-				try {
-					return new BrailleTranslatorFromBrailleTranslator(mode, t.lineBreakingFromStyledText()); }
-				catch (UnsupportedOperationException e) {
-					// TODO: could also try with t.fromStyledTextToBraille()
-					}
+				return new BrailleTranslatorFromBrailleTranslator(mode, t);
 			return new BrailleTranslatorFromFilter(mode, filterFactory.newFilter(locale, mode));
 		}
 	}
@@ -177,14 +176,20 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 */
 	private static class BrailleTranslatorFromBrailleTranslator implements BrailleTranslator {
 		
-		private final String mode;
-		private final org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText translator;
+		final String mode;
+		org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText lineBreakingFromStyledText;
+		org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille;
 		
 		private BrailleTranslatorFromBrailleTranslator(
 				String mode,
-				org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText translator) {
+				org.daisy.pipeline.braille.common.BrailleTranslator translator) {
 			this.mode = mode;
-			this.translator = translator;
+			try {
+				this.lineBreakingFromStyledText = translator.lineBreakingFromStyledText();
+				this.fromStyledTextToBraille = null; }
+			catch (UnsupportedOperationException e) {
+				this.lineBreakingFromStyledText = null;
+				this.fromStyledTextToBraille = translator.fromStyledTextToBraille(); }
 		}
 		
 		public BrailleTranslatorResult translate(Translatable input) throws TranslationException {
@@ -196,7 +201,26 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 					return new DefaultLineBreaker.LineIterator("??", '\u2800', '\u2824', 1);
 				if (BRAILLE.matcher(text).matches())
 					return new DefaultLineBreaker.LineIterator(text, '\u2800', '\u2824', 1); }
-			return translator.transform(cssStyledTextFromTranslatable(input));
+			Iterable<CSSStyledText> styledText = cssStyledTextFromTranslatable(input);
+			if (lineBreakingFromStyledText != null)
+				return lineBreakingFromStyledText.transform(styledText);
+			else {
+				StringBuilder result = new StringBuilder();
+				Iterator<CSSStyledText> style = styledText.iterator();
+				for (String s : fromStyledTextToBraille.transform(styledText)) {
+					SimpleInlineStyle st = style.next().getStyle();
+					if (st != null) {
+						CSSProperty ws = st.getProperty("white-space");
+						if (ws != null) {
+							if (ws == WhiteSpace.PRE_WRAP)
+								s = s.replaceAll("[\\x20\t\\u2800]", "\u00A0").replaceAll("[\\n\\r]", "\u2028");
+							else if (ws == WhiteSpace.PRE_LINE)
+								s = s.replaceAll("[\\n\\r]", "\u2028");
+							st.removeProperty("white-space"); }}
+					result.append(s);
+				}
+				return new DefaultLineBreaker.LineIterator(result.toString(), '\u2800', '\u2824', 1);
+			}
 		}
 		
 		public String getTranslatorMode() {

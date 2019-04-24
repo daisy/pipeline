@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import javax.sound.sampled.AudioFormat;
 
+import org.daisy.common.shell.CommandRunner;
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.audio.AudioEncoder;
@@ -103,27 +104,24 @@ public class LameEncoder implements AudioEncoder {
 		        "-", encodedFile.getAbsolutePath()
 		};
 
-		Process p = null;
-		try {
-			String[] cmd = new String[cmdbegin.length + lameOpts.cliOptions.length
-			        + cmdend.length];
-			System.arraycopy(cmdbegin, 0, cmd, 0, cmdbegin.length);
-			System.arraycopy(lameOpts.cliOptions, 0, cmd, cmdbegin.length,
-			        lameOpts.cliOptions.length);
-			System.arraycopy(cmdend, 0, cmd, cmdbegin.length + lameOpts.cliOptions.length,
-			        cmdend.length);
-			p = Runtime.getRuntime().exec(cmd);
-			BufferedOutputStream out = new BufferedOutputStream((p.getOutputStream()));
-			for (AudioBuffer b : pcm) {
-				out.write(b.data, 0, b.size);
-			}
-			out.close();
-			p.waitFor();
-		} catch (Throwable t) {
-			if (p != null)
-				p.destroy();
-			throw t;
-		}
+		String[] cmd = new String[cmdbegin.length + lameOpts.cliOptions.length
+		        + cmdend.length];
+		System.arraycopy(cmdbegin, 0, cmd, 0, cmdbegin.length);
+		System.arraycopy(lameOpts.cliOptions, 0, cmd, cmdbegin.length,
+		        lameOpts.cliOptions.length);
+		System.arraycopy(cmdend, 0, cmd, cmdbegin.length + lameOpts.cliOptions.length,
+		        cmdend.length);
+		new CommandRunner(cmd)
+			.feedInput(stream -> {
+					try (BufferedOutputStream out = new BufferedOutputStream(stream)) {
+						for (AudioBuffer b : pcm) {
+							out.write(b.data, 0, b.size);
+						}
+					}
+				}
+			)
+			.consumeError(mLogger)
+			.run();
 
 		return Optional.of(encodedFile.toURI().toString());
 	}

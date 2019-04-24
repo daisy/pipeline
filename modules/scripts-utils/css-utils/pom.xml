@@ -22,6 +22,26 @@
         </expose-services>
     </properties>
 
+    <dependencies>
+        <!--
+            test dependencies
+        -->
+        <dependency>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xproc-engine-daisy-pipeline</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--
+            for MessageStorage, needed by JobMonitorFactory
+            FIXME: make optional
+        -->
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>framework-volatile</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

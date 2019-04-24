@@ -146,7 +146,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <br style="&amp;::before { content: '\A'; white-space: pre-line; }"/>
+          <br style="&amp;::before { content: '\A '; white-space: pre-line; }"/>
         </body>
       </x:document>
     </x:expect>

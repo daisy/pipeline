@@ -56,6 +56,7 @@ import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativePage;
 import org.daisy.braille.css.InlineStyle.RuleRelativeVolume;
+import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
@@ -88,6 +89,7 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 	private static final QName VALUE = new QName("value");
 	private static final QName PAGE = new QName("page");
 	private static final QName VOLUME = new QName("volume");
+	private static final QName VENDOR_RULE = new QName("vendor-rule");
 	
 	public StructuredQName getFunctionQName() {
 		return funcname;
@@ -135,6 +137,8 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 								styleCtxt = Context.PAGE;
 							else if (qn.equals(VOLUME))
 								styleCtxt = Context.VOLUME;
+							else if (qn.equals(VENDOR_RULE))
+								styleCtxt = Context.VENDOR_RULE;
 							else
 								throw new RuntimeException(); }}}
 				List<NodeInfo> result = new ArrayList<>();
@@ -146,11 +150,19 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 							style.add((List<Declaration>)rule);
 						else if (rule instanceof RuleRelativeBlock) {
 							String[] selector = serializeSelector((RuleRelativeBlock)rule);
-							List<Declaration> decls = (List<Declaration>)rule;
+							Style decls = new Style(); {
+								for (Rule<?> r : (RuleRelativeBlock)rule)
+									if (r instanceof Declaration)
+										decls.add((Declaration)r);
+									else if (r instanceof RulePage)
+										decls.add("@page", Style.of((RulePage)r));
+									else
+										throw new RuntimeException("coding error");
+							}
 							style.add(selector[0],
 							          selector.length == 2
-							              ? new Style().add(selector[1], new Style().add(decls))
-							              : new Style().add(decls)); }
+							              ? new Style().add(selector[1], decls)
+							              : decls); }
 						else if (rule instanceof RulePage)
 							style.add("@page", Style.of((RulePage)rule));
 						else if (rule instanceof RuleVolume)
@@ -198,7 +210,7 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 		};
 	}
 	
-	private static class Style implements Comparator<String> {
+	static class Style implements Comparator<String> {
 		
 		List<Declaration> declarations;
 		SortedMap<String,Style> nestedStyles; // sorted by key
@@ -292,10 +304,13 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 					for (Declaration d : declarations) {
 						writeStartElement(w, CSS_PROPERTY);
 						writeAttribute(w, NAME, d.getProperty());
-						if (d.getProperty().equals("string-set")) {
-							// FIXME: special handling of string-set because serializeTerm omits the commas
-							writeAttribute(w, VALUE, Strings.join(d, "", Object::toString));
-						} else
+						if (d.getProperty().equals("string-set")
+						    || d.getProperty().equals("render-table-by"))
+							// Special handling of string-set and render-table-by because
+							// serializeTerm would otherwise omit the commas. PropertyValue.parse()
+							// transforms the declaration with BrailleCSSDeclarationTransformer.
+							writeAttribute(w, VALUE, serializeTerm.apply(PropertyValue.parse(d).getValue()));
+						else
 							writeAttribute(w, VALUE, Strings.join(d, " ", serializeTerm));
 						w.writeEndElement();
 					}
@@ -507,7 +522,7 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 					return "" + value.intValue() + "%";
 				else
 					return "" + value + "%"; }
-			else if (term instanceof TermList && !(term instanceof TermFunction)) {
+			else if (term instanceof TermList) {
 				TermList list = (TermList)term;
 				String s = "";
 				for (Term<?> t : list) {
@@ -519,6 +534,9 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 								s += ","; }
 						s += " "; }
 					s += serializeTerm.apply(t); }
+				if (list instanceof TermFunction) {
+					TermFunction function = (TermFunction)term;
+					s = function.getFunctionName() + "(" + s + ")"; }
 				return s; }
 			else if (term instanceof TermPair) {
 				TermPair<?,?> pair = (TermPair<?,?>)term;
@@ -526,7 +544,7 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 				return "" + pair.getKey() + " " + (val instanceof Term ? serializeTerm.apply((Term)val) : val.toString()); }
 			else if (term instanceof TermString) {
 				TermString string = (TermString)term;
-				return "'" + string.getValue().replaceAll("\n", "\\\\A") + "'"; }
+				return "'" + string.getValue().replaceAll("\n", "\\\\A ").replaceAll("'", "\\\\27 ") + "'"; }
 			else
 				return term.toString().replaceAll("^[,/ ]+", "");
 		}

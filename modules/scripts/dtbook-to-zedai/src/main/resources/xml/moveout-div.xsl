@@ -16,10 +16,16 @@
         <xsl:param name="elem" as="item()*"/>
         <xsl:sequence select="exists($elem/self::dtb:div)"/>
     </xsl:function>
+
+    <xsl:function name="f:has-target" as="xs:boolean">
+        <xsl:param name="elem" as="item()*"/>
+        <xsl:sequence select="exists($elem//self::dtb:div)"/>
+    </xsl:function>
+
     <xsl:function name="f:is-valid-parent" as="xs:boolean">
         <xsl:param name="elem" as="element()"/>
         <xsl:sequence
-            select="exists($elem/(self::tmp:annotation-block|self::dtb:prodnote|self::dtb:sidebar|self::dtb:div|self::dtb:caption|self::tmp:code-block|self::dtb:li|self::dtb:note|self::dtb:img|self::dtb:blockquote|self::dtb:level1|self::dtb:level2|self::dtb:level3|self::dtb:level4|self::dtb:level5|self::dtb:level6|self::dtb:level|self::dtb:td|self::dtb:th|self::tmp:item))"
+                        select="exists($elem/(self::tmp:annotation-block|self::dtb:prodnote|self::dtb:sidebar|self::dtb:div|self::dtb:caption|self::tmp:code-block|self::dtb:li|self::dtb:note|self::dtb:img|self::dtb:blockquote|self::dtb:level1|self::dtb:level2|self::dtb:level3|self::dtb:level4|self::dtb:level5|self::dtb:level6|self::dtb:level|self::dtb:td|self::dtb:th|self::tmp:item)) or not(exists($elem//self::dtb:div))"
         />
     </xsl:function>
 

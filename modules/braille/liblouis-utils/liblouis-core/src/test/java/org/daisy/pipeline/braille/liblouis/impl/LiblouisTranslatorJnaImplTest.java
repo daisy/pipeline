@@ -1,6 +1,7 @@
 package org.daisy.pipeline.braille.liblouis.impl;
 
 import java.io.File;
+import java.net.URL;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,8 @@ import cz.vutbr.web.csskit.TermIdentImpl;
 import cz.vutbr.web.csskit.TermListImpl;
 
 import org.daisy.braille.css.SimpleInlineStyle;
+
+import static org.daisy.common.file.URLs.asURL;
 
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.CSSStyledText;
@@ -101,6 +104,28 @@ public class LiblouisTranslatorJnaImplTest {
 		
 		Louis.setLibraryPath(asFile(liblouisNativePath.resolve(liblouisNativePath.get("liblouis").iterator().next())));
 		File table = new File(LiblouisTranslatorJnaImplTest.class.getResource("/tables/foobar.ctb").toURI());
+		
+		// FIXME: fix in liblouis-java
+		Louis.setTableResolver(new org.liblouis.TableResolver() {
+				public URL resolve(String table, URL base) {
+					if (base != null && base.toString().startsWith("file:")) {
+						File f = base.toString().endsWith("/")
+							? new File(asFile(base), table)
+							: new File(asFile(base).getParentFile(), table);
+						if (f.exists())
+							return asURL(f);
+					} else if (base == null) {
+						File f = new File(table);
+						if (f.exists())
+							return asURL(f);
+					}
+					return null;
+				}
+				public java.util.Set<String> list() {
+					return new java.util.HashSet<String>();
+				}
+			}
+		);
 		Translator liblouisTranslator = new Translator(table.getAbsolutePath());
 		LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl stream
 		= new LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl(

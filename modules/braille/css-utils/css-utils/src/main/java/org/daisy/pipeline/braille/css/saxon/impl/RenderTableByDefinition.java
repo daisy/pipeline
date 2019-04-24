@@ -29,12 +29,15 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
 import com.xmlcalabash.core.XProcException;
 
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
+import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoClass;
@@ -299,10 +302,10 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 									String builder = null;
 									for (RuleBlock<?> block : style) {
 										if (block instanceof RuleMainBlock)
-											builder = joinRuleSets(builder, serializeRuleSet(style.getMainStyle()));
+											builder = joinRuleBlocks(builder, serializeRuleBlock(style.getMainStyle()));
 										else if (block instanceof RuleRelativeBlock) {
-											RuleRelativeBlock ruleset = (RuleRelativeBlock)block;
-											List<Selector> selector = ruleset.getSelector();
+											RuleRelativeBlock ruleblock = (RuleRelativeBlock)block;
+											List<Selector> selector = ruleblock.getSelector();
 											if (selector.size() > 0) { // should always be true
 												// note that in the cases "&::list-item", "&::list-header" and "&::table-by(...)" we
 												// are ignoring any following selector parts except those that are "stacked" onto the
@@ -315,11 +318,11 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 														if ("list-item".equals(pseudo.getName()))
 															addListItemStyle(
 																pseudo.getPseudoClasses(),
-																new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset));
+																new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock));
 														else if ("list-header".equals(pseudo.getName())) {
 															if (pseudo.getPseudoClasses().isEmpty())
 																addListHeaderStyle(
-																	new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset)); }
+																	new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock)); }
 														else if ("table-by".equals(pseudo.getName())) {
 															String axis = pseudo.getArguments()[0];
 															if (pseudo.getPseudoClasses().isEmpty()) {
@@ -328,21 +331,21 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 																	if ("list-item".equals(pseudo.getName()))
 																		getTableByStyle(axis).addListItemStyle(
 																			pseudo.getPseudoClasses(),
-																			new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset));
+																			new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock));
 																	else if ("list-header".equals(pseudo.getName())) {
 																		if (pseudo.getPseudoClasses().isEmpty())
 																			getTableByStyle(axis).addListHeaderStyle(
-																				new ListItemStyle(pseudo.getStackedPseudoElement(), ruleset)); }
+																				new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock)); }
 																	else
-																		getTableByStyle(axis).addRuleSet(pseudo, ruleset); }
+																		getTableByStyle(axis).addRuleBlock(pseudo, ruleblock); }
 																else
-																	getTableByStyle(axis).addRuleSet(ruleset); }}
+																	getTableByStyle(axis).addRuleBlock(ruleblock); }}
 														else
-															builder = joinRuleSets(builder, serializeRuleSet(ruleset)); }
+															builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }
 													else
-														builder = joinRuleSets(builder, serializeRuleSet(ruleset)); }
+														builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }
 												else
-													builder = joinRuleSets(builder, serializeRuleSet(ruleset)); }}
+													builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }}
 										else
 											throw new RuntimeException("Unexpected style " + block); }
 									newStyle = builder; }
@@ -882,29 +885,29 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		
 		private static class PseudoElementStyle {
 			
-			final protected Map<PseudoElementImpl,List<Declaration>> ruleSets = new HashMap<PseudoElementImpl,List<Declaration>>();
+			final protected Map<PseudoElementImpl,List<Rule<?>>> ruleBlocks = new HashMap<PseudoElementImpl,List<Rule<?>>>();
 			
-			public void addRuleSet(List<Declaration> ruleset) {
-				addRuleSet(null, ruleset);
+			public void addRuleBlock(List<Rule<?>> ruleblock) {
+				addRuleBlock(null, ruleblock);
 			}
 			
-			public void addRuleSet(PseudoElementImpl pseudo, List<Declaration> ruleset) {
-				if (!ruleset.isEmpty())
-					if (!ruleSets.containsKey(pseudo))
-						ruleSets.put(pseudo, ruleset);
+			public void addRuleBlock(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
+				if (!ruleblock.isEmpty())
+					if (!ruleBlocks.containsKey(pseudo))
+						ruleBlocks.put(pseudo, ruleblock);
 					else
-						ruleSets.put(pseudo, ImmutableList.<Declaration>builder().addAll(ruleSets.get(pseudo)).addAll(ruleset).build());
+						ruleBlocks.put(pseudo, ImmutableList.<Rule<?>>builder().addAll(ruleBlocks.get(pseudo)).addAll(ruleblock).build());
 			}
 			
 			public boolean isEmpty() {
-				return ruleSets.isEmpty();
+				return ruleBlocks.isEmpty();
 			}
 			
 			@Override
 			public String toString() {
 				String style = null;
-				for (PseudoElementImpl pseudo : ruleSets.keySet())
-					style = joinRuleSets(style, serializeRuleSet(ruleSets.get(pseudo), pseudo));
+				for (PseudoElementImpl pseudo : ruleBlocks.keySet())
+					style = joinRuleBlocks(style, serializeRuleBlock(ruleBlocks.get(pseudo), pseudo));
 				if (style != null)
 					return style;
 				else
@@ -920,8 +923,8 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			public TableByStyle() {}
 			
 			@SuppressWarnings("unused")
-			public TableByStyle(PseudoElementImpl pseudo, List<Declaration> ruleset) {
-				addRuleSet(pseudo, ruleset);
+			public TableByStyle(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
+				addRuleBlock(pseudo, ruleblock);
 			}
 			
 			public void addListItemStyle(List<PseudoClass> pseudo, ListItemStyle style) {
@@ -951,8 +954,8 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			
 			@SuppressWarnings("unused")
 			public TableByStyle mergeWith(TableByStyle style) {
-				for (Map.Entry<PseudoElementImpl,List<Declaration>> r: style.ruleSets.entrySet())
-					addRuleSet(r.getKey(), r.getValue());
+				for (Map.Entry<PseudoElementImpl,List<Rule<?>>> r: style.ruleBlocks.entrySet())
+					addRuleBlock(r.getKey(), r.getValue());
 				for (Map.Entry<List<PseudoClass>,ListItemStyle> s: style.listItemStyles.entrySet())
 					addListItemStyle(s.getKey(), s.getValue());
 				addListHeaderStyle(style.listHeaderStyle);
@@ -964,13 +967,13 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			
 			public ListItemStyle() {}
 			
-			public ListItemStyle(PseudoElementImpl pseudo, List<Declaration> ruleset) {
-				addRuleSet(pseudo, ruleset);
+			public ListItemStyle(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
+				addRuleBlock(pseudo, ruleblock);
 			}
 			
 			public ListItemStyle mergeWith(ListItemStyle style) {
-				for (Map.Entry<PseudoElementImpl,List<Declaration>> r: style.ruleSets.entrySet())
-					addRuleSet(r.getKey(), r.getValue());
+				for (Map.Entry<PseudoElementImpl,List<Rule<?>>> r: style.ruleBlocks.entrySet())
+					addRuleBlock(r.getKey(), r.getValue());
 				return this;
 			}
 		}
@@ -1267,8 +1270,9 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	 * TODO: move to shared component!
 	 */
 	
-	private static String serializeDeclarations(List<Declaration> declarations) {
-		List<Declaration> sortedDeclarations = new ArrayList<Declaration>(declarations);
+	private static String serializeDeclarations(Iterable<Declaration> declarations) {
+		List<Declaration> sortedDeclarations = new ArrayList<Declaration>();
+		for (Declaration d : declarations) sortedDeclarations.add(d);
 		sort(sortedDeclarations);
 		return join(sortedDeclarations, "; ", serializeDeclaration);
 	}
@@ -1307,21 +1311,28 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		}
 	};
 	
-	private static String serializeRuleSet(List<Declaration> declarations, PseudoElementImpl pseudo) {
+	private static String serializeRuleBlock(List<? extends Rule<?>> declarations, PseudoElementImpl pseudo) {
 		StringBuilder b = new StringBuilder();
 		if (pseudo != null)
 			b.append("&").append(pseudo.toString()).append(" { ");
-		b.append(serializeDeclarations(declarations));
+		b.append(serializeDeclarations(Iterables.filter(declarations, Declaration.class)));
+		for (Rule<?> r : declarations)
+			if (r instanceof Declaration);
+			else if (r instanceof RulePage)
+				b.append(new ParseStylesheetDefinition.Style().add("@page",
+				                                                   ParseStylesheetDefinition.Style.of((RulePage)r)));
+			else
+				throw new RuntimeException("coding error");
 		if (pseudo != null)
 			b.append(" }");
 		return b.toString();
 	}
 
-	private static String serializeRuleSet(RuleMainBlock rule) {
+	private static String serializeRuleBlock(RuleMainBlock rule) {
 		return serializeDeclarations(rule);
 	}
 	
-	private static String serializeRuleSet(RuleRelativeBlock rule) {
+	private static String serializeRuleBlock(RuleRelativeBlock rule) {
 		StringBuilder b = new StringBuilder();
 		boolean first = true;
 		for (Selector s : rule.getSelector()) {
@@ -1337,14 +1348,14 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			b = OutputUtil.appendList(b, s, OutputUtil.EMPTY_DELIM);
 		}
 		b.append(" { ");
-		b.append(serializeDeclarations(rule));
+		b.append(serializeRuleBlock(rule, null));
 		b.append(" }");
 		return b.toString();
 	}
 	
-	private static String joinRuleSets(String... ruleSets) {
+	private static String joinRuleBlocks(String... ruleBlocks) {
 		String b = null;
-		for (String r : ruleSets)
+		for (String r : ruleBlocks)
 			if (r != null && !r.isEmpty())
 				if (b == null)
 					b = r;

@@ -16,6 +16,12 @@
         <xsl:param name="elem" as="item()*"/>
         <xsl:sequence select="exists($elem/self::dtb:prodnote)"/>
     </xsl:function>
+
+    <xsl:function name="f:has-target" as="xs:boolean">
+        <xsl:param name="elem" as="item()*"/>
+        <xsl:sequence select="exists($elem//self::dtb:prodnote)"/>
+    </xsl:function>
+
     <xsl:function name="f:is-valid-parent" as="xs:boolean">
         <xsl:param name="elem" as="element()"/>
         <xsl:sequence

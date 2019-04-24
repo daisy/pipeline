@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 type="css:shift-id"
                 exclude-inline-prefixes="#all"
                 version="1.0">
@@ -11,34 +12,38 @@
     
     <p:input port="source" sequence="true">
         <p:documentation>
-            Boxes must be represented by css:box elements. target-counter() values must be
-            represented by css:counter elements. If a document in the input sequence represents a
-            named flow this must be indicated with a css:flow attribute on the document element.
+            Boxes must be represented by css:box elements. All block boxes must have at least one
+            descendant inline box and inline boxes must have no descendant block
+            boxes. target-counter() values must be represented by css:counter elements. If a
+            document in the input sequence represents a named flow this must be indicated with a
+            css:flow attribute on the document element.
         </p:documentation>
     </p:input>
     
     <p:output port="result" sequence="true">
         <p:documentation>
-            For each non css:box element in the input that has a css:id attribute and is not a
-            descendant of an inline box and not an inline box itself, the attribute is
-            moved to the first following css:box element. If this css:box element already has a
-            css:id attribute in the input, the attribute is not overwritten. Instead, any
-            target-counter() values and any elements in named flows that reference the non css:box
-            element are altered to reference the following css:box element.
+            For each element in the input that has a css:id attribute and is not a descendant of an
+            inline box and not an inline box itself, the attribute is moved to the first descendant
+            or following inline box within the same block (which may be the element itself). If
+            there is no such element, the attribute is placed on an empty css:_ element inserted as
+            the last child of the last preceding inline box (in the same block). In the former case,
+            if the attribute is moved to a css:box element that already has a css:id attribute in
+            the input, the attribute is not overwritten. Instead, any target-counter() values and
+            any elements in named flows that reference the non css:box element are altered to
+            reference the following css:box element.
         </p:documentation>
     </p:output>
     
+    <p:declare-step type="pxi:css-shift-id">
+        <p:input port="source"/>
+        <p:output port="result"/>
+        <!--
+            implemented in Java
+        -->
+    </p:declare-step>
+    
     <p:wrap-sequence wrapper="_"/>
-    
-    <p:xslt>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="shift-id.xsl"/>
-        </p:input>
-    </p:xslt>
-    
+    <pxi:css-shift-id/>
     <p:filter select="/_/*"/>
     
 </p:declare-step>

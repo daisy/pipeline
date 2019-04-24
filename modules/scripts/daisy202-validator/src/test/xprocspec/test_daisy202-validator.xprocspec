@@ -3,6 +3,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                script="../../main/resources/xml/xproc/steps/validate.xpl">
 
     <x:scenario label="simple validation">
@@ -37,12 +38,24 @@
             <x:input port="in-memory.in"/>
             <x:option name="ncc" select="resolve-uri('../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html')"/>
         </x:call>
+        <x:context label="the validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should be ok" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
         <x:context label="the xml report">
             <x:document type="port" port="xml-report"/>
         </x:context>
-        <x:expect label="the messages" type="xpath"
-                  test="every $x in /d:document-validation-report/d:reports/d:report/* satisfies $x/self::d:message"/>
-        <x:expect label="there should be 15 of them" type="xpath" test="count(//d:message)" equals="15"/>
+        <x:expect label="there should be no errors" type="xpath"
+                  test="/d:document-validation-report/d:document-info/d:error-count" equals="'0'"/>
+        <x:expect label="the reports should be of type 'unknown' or 'schematron'" type="xpath"
+                  test="every $x in /d:document-validation-report/d:reports/d:report satisfies
+                        $x[@type='unknown'][d:message] or $x[@type='schematron']"/>
+        <x:expect label="there should be 15 messages" type="xpath" test="count(//d:message)" equals="15"/>
+        <x:expect label="there should be no Schematron failures" type="xpath" test="count(//svrl:failed-assert)" equals="0"/>
     </x:scenario>
     
 </x:description>
