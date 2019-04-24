@@ -4,12 +4,17 @@ language: java
 before_install:
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
 
+install: mvn install -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=true -B -V
+
 # main task, run the verify goal
 script: mvn verify
 
 # if the build succeeds, deploy the artifact (tests are skipped)
 after_success: 
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/after_success)
+
+after_failure:
+  - find . -type f -path '*/target/it/*/build.log' -execdir bash -c 'if ! cat build.log | grep -qFx "[INFO] BUILD SUCCESS"; then tail -250 build.log; fi' \;
 
 before_cache:
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_cache)

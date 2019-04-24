@@ -466,7 +466,7 @@ public class XProcSpecRunner {
 						b.append(prefix);
 					col += prefix.length();
 				}
-				if (col + word.length() <= maxColumns) {
+				if (col + word.length() <= maxColumns || col == 0) {
 					b.append(word).append(" ");
 					col += (word.length() + 1);
 					break;

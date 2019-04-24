@@ -20,6 +20,17 @@
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
+    <!--
+        xproc-engine-calabash is put in test dependencies and not in plugin dependencies because the
+        way XMLCalabash loads extension steps (ex:foo), namely via the current class loader, requires
+        that the class loader that loaded XMLCalabash can also find Foo.
+    -->
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-calabash</artifactId>
+      <version>${xproc-engine-calabash.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -35,6 +46,7 @@
             </goals>
           </execution>
         </executions>
+        <!--
         <dependencies>
           <dependency>
             <groupId>org.daisy.maven</groupId>
@@ -42,6 +54,7 @@
             <version>${xproc-engine-calabash.version}</version>
           </dependency>
         </dependencies>
+        -->
       </plugin>
     </plugins>
   </build>
