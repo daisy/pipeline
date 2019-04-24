@@ -631,4 +631,38 @@ public class XProcException extends RuntimeException {
             return "procedure " + objectName;
         }
     }
+    
+    // adapted from java.lang.Throwable
+    private String printEnclosedLocation(SourceLocator[] enclosingLocation) {
+        StringBuilder s = new StringBuilder();
+        if (getErrorCode() != null) {
+            s.append("[").append(getErrorCode()).append("]");
+            if (getMessage() != null)
+                s.append(" ").append(getMessage());
+        } else
+            s.append(getMessage());
+        SourceLocator[] loc = getLocator();
+        int m = loc.length - 1;
+        int n = enclosingLocation.length - 1;
+        while (m >= 0 && n >=0 && loc[m].equals(enclosingLocation[n])) {
+            m--;
+            n--;
+        }
+        int inCommon = loc.length - 1 - m;
+        for (int i = 0; i <= m; i++)
+            s.append("\n\tat " + loc[i]);
+        if (inCommon != 0)
+            s.append("\n\t... " + inCommon + " more");
+        Throwable cause = getCause();
+        if (cause != null && cause instanceof XProcException) {
+            s.append("\nCaused by: ");
+            s.append(((XProcException)cause).printEnclosedLocation(loc));
+        }
+        return s.toString();
+    }
+    
+    @Override
+    public String toString() {
+        return printEnclosedLocation(new SourceLocator[]{});
+    }
 }

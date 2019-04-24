@@ -109,10 +109,10 @@ public class Eval extends DefaultStep {
         XdmNode piperoot = S9apiUtils.getDocumentElement(pipedoc);
 
         XProcRuntime innerRuntime = new XProcRuntime(runtime);
+        XPipeline pipeline = null;
 
         try {
             QName stepName = getOption(_step, (QName) null);
-            XPipeline pipeline = null;
             if (XProcConstants.p_pipeline.equals(piperoot.getNodeName())
                     || XProcConstants.p_declare_step.equals(piperoot.getNodeName())) {
                 if (stepName != null) {
@@ -275,6 +275,11 @@ public class Eval extends DefaultStep {
             }
 
         } finally {
+            if (pipeline != null) {
+                for (XdmNode doc : pipeline.errors()) {
+                    step.reportError(doc);
+                }
+            }
             innerRuntime.close();
             runtime.resetExtensionFunctions();
         }

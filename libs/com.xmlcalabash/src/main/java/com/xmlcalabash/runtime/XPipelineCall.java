@@ -6,6 +6,7 @@ import com.xmlcalabash.model.*;
 import com.xmlcalabash.util.XProcMessageListenerHelper;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.XdmNode;
 
 import java.util.HashSet;
 
@@ -102,6 +103,9 @@ public class XPipelineCall extends XAtomicStep {
         } catch (Throwable e) {
             throw handleException(e);
         } finally {
+            for (XdmNode doc : newstep.errors()) {
+                reportError(doc);
+            }
             runtime.getMessageListener().closeStep();
         }
         runtime.finish(this);
