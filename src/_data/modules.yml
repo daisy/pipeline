@@ -70,8 +70,6 @@
 - group: org.daisy.pipeline.modules.braille
   artifact: dotify-formatter
 - group: org.daisy.pipeline.modules.braille
-  artifact: dotify-saxon
-- group: org.daisy.pipeline.modules.braille
   artifact: libhyphen-core
 - group: org.daisy.pipeline.modules.braille
   artifact: libhyphen-libreoffice-tables
