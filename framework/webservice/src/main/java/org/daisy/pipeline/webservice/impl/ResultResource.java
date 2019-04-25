@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice.impl;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -91,19 +92,40 @@ public class ResultResource extends AuthenticatedResource {
                 }
         }
 
-        public static Representation getZippedRepresentation(
-                        Collection<JobResult> results, Job job) throws IOException,
-                        NoSuchAlgorithmException {
-                        byte[] zip =JobResultSet.asZippedByteArray(results);
-                        //DigesterRepresentation doesn't add the header
-                        Representation rep = new InputRepresentation(new ByteArrayInputStream(zip),
-                                        MediaType.APPLICATION_ZIP);
-                        rep.setDigest(new Digest(MessageDigest.getInstance("MD5").digest(zip)));
-                        Disposition disposition = new Disposition();
-                        disposition.setFilename(job.getId().toString() + ".zip");
-                        disposition.setType(Disposition.TYPE_ATTACHMENT);
-                        disposition.setSize(zip.length);
-                        rep.setDisposition(disposition);
-                        return rep;
+        public static Representation getZippedRepresentation(Collection<JobResult> results, Job job)
+                        throws IOException, NoSuchAlgorithmException {
+
+                InputStream zip = JobResultSet.asZip(results);
+                zip = new BufferedInputStream(zip, 8192);
+                Integer size = getSize(zip, 32768);
+                // DigesterRepresentation doesn't add the header
+                Representation rep = new InputRepresentation(zip, MediaType.APPLICATION_ZIP);
+                if (size != null) { // if > 32 Mb
+                        byte[] bytes = new byte[size];
+                        zip.mark(size);
+                        zip.read(bytes);
+                        rep.setDigest(new Digest(MessageDigest.getInstance("MD5").digest(bytes)));
+                        zip.reset();
+                }
+                Disposition disposition = new Disposition();
+                disposition.setFilename(job.getId().toString() + ".zip");
+                disposition.setType(Disposition.TYPE_ATTACHMENT);
+                if (size != null) // if > 32 Mb
+                        disposition.setSize(size);
+                rep.setDisposition(disposition);
+                return rep;
+        }
+
+        // null means greater than the limit
+        private static Integer getSize(InputStream stream, int limit) throws IOException {
+                Integer size = 0;
+                if (!stream.markSupported())
+                        throw new RuntimeException();
+                stream.mark(limit + 2048);
+                byte[] buf = new byte[2048];
+                while (size != null && (size += stream.read(buf)) > 0)
+                        if (size > limit) size = null;
+                stream.reset();
+                return size;
         }
 }

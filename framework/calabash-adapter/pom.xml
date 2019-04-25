@@ -43,7 +43,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xpath-registry</artifactId>
+      <artifactId>saxon-adapter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>

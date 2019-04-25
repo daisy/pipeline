@@ -12,6 +12,7 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
+import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webserviceutils.Routes;
@@ -41,6 +42,8 @@ public class JobXmlWriter {
                 MSG_LEVELS.add(Level.WARNING);
                 MSG_LEVELS.add(Level.INFO);
                 MSG_LEVELS.add(Level.ERROR);
+                if (Properties.getProperty("org.daisy.pipeline.log.level", "INFO").toUpperCase().equals("DEBUG"))
+                    MSG_LEVELS.add(Level.DEBUG);
         }
 
         public JobXmlWriter(Job job) {

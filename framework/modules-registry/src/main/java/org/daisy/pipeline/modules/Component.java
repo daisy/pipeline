@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.daisy.common.file.URIs;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,15 +68,16 @@ public class Component {
 	public URI getResource() {
 		try {
 
-			mLogger.trace("getting resource from component:"+path);
+			mLogger.trace("Getting resource from component " + this + ": " + path);
 			URL url= loader.loadResource(path);
 			if(url!=null) {
-				return url.toURI();
+				return URIs.asURI(url);
 			} else {
 				return null;
 			}
 
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
+			mLogger.debug("Resource " + path + " does not exist", e);
 			return null;
 		}
 	}

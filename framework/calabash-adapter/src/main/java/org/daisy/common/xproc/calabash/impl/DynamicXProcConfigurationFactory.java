@@ -24,7 +24,9 @@ import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XProcStepRegistry;
-import org.daisy.pipeline.xpath.XPathFunctionRegistry;
+
+import org.daisy.pipeline.saxon.SaxonConfigurator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -33,6 +35,7 @@ import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
+import com.xmlcalabash.util.Input;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -64,8 +67,7 @@ public class DynamicXProcConfigurationFactory implements
 	/** The step providers. */
 	private final Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
 
-	// private FunctionLibraryList mFunctionLibrary=new FunctionLibraryList();
-	private XPathFunctionRegistry mXPathRegistry = null;
+	private SaxonConfigurator saxonConfigurator = null;
 	private final List<ConfigurationFileProvider> configurationFiles = new ArrayList<>();
 
 	/*
@@ -77,15 +79,18 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcConfiguration newConfiguration() {
-		XProcConfiguration config = new DynamicXProcConfiguration(this);
+		XProcConfiguration config = new DynamicXProcConfiguration(
+			new Input(null, null, Input.Type.XML) {
+				@Override
+				public InputStream getInputStream() {
+					return saxonConfigurator.getConfigurationAsStream(); }},
+			this);
 		loadMainConfigurationFile(config);
 		for (ConfigurationFileProvider f : configurationFiles) {
 			logger.debug("Reading {}", f);
 			loadConfigurationFile(config, f.get());
 		}
 		registerExtensionFunctions(config);
-		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
-
 		return config;
 	}
 
@@ -265,30 +270,20 @@ public class DynamicXProcConfigurationFactory implements
 	}
 
 	@Reference(
-		name = "FunctionLibary",
-		unbind = "unsetXPathFunctionRegistry",
-		service = XPathFunctionRegistry.class,
-		cardinality = ReferenceCardinality.OPTIONAL,
-		policy = ReferencePolicy.DYNAMIC
+		name = "SaxonConfigurator",
+		unbind = "-",
+		service = SaxonConfigurator.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
 	)
-	public void setXPathFunctionRegistry(XPathFunctionRegistry xpathFunctions) {
-		logger.debug("Setting function registry");
-		// mFunctionLibrary.addFunctionLibrary(xpathFunctions);
-		mXPathRegistry = xpathFunctions;
-	}
-
-	public void unsetXPathFunctionRegistry(XPathFunctionRegistry xpathFunctions) {
-		logger.debug("Unsetting function registry");
-		if (mXPathRegistry == xpathFunctions)
-			mXPathRegistry = null;
+	public void setSaxonConfigurator(SaxonConfigurator configurator) {
+		logger.debug("Setting Saxon configurator");
+		saxonConfigurator = configurator;
 	}
 
 	private void registerExtensionFunctions(XProcConfiguration config) {
-		if (mXPathRegistry != null) {
-			for (ExtensionFunctionDefinition func : mXPathRegistry
-					.getFunctions()) {
-				config.getProcessor().registerExtensionFunction(func);
-			}
+		for (ExtensionFunctionDefinition func : saxonConfigurator.getExtensionFunctions()) {
+			config.getProcessor().registerExtensionFunction(func);
 		}
 	}
 }

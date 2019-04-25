@@ -165,7 +165,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 			"org.slf4j:slf4j-api:?",
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
-			"org.daisy.pipeline:xpath-registry:?",
+			"org.daisy.pipeline:saxon-adapter:?",
 			"org.daisy.pipeline:xproc-api:?",
 			"org.daisy.pipeline:modules-registry:?",
 			"org.apache.httpcomponents:httpclient-osgi:?",

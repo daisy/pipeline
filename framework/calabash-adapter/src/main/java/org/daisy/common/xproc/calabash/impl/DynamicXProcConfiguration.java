@@ -1,9 +1,5 @@
 package org.daisy.common.xproc.calabash.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
 import org.daisy.common.xproc.calabash.XProcStepRegistry;
 
 import net.sf.saxon.s9api.Processor;
@@ -23,25 +19,12 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 	/** The step registry. */
 	XProcStepRegistry stepRegistry;
 
-	// see http://www.saxonica.com/documentation9.5/configuration/configuration%2Dfile
-	final static Input saxonCfg = new Input(null, null, Input.Type.XML) {
-		@Override
-		public InputStream getInputStream() {
-			return new ByteArrayInputStream((
-				"<configuration xmlns='http://saxon.sf.net/ns/configuration'>" +
-				"   <global expandAttributeDefaults='false'" +
-				"           lineNumbering='true'/>" +
-				"</configuration>\n"
-				).getBytes(StandardCharsets.UTF_8));
-		}
-	};
-
 	/**
 	 * Instantiates a new dynamic x proc configuration which holds the given step registry.
 	 *
 	 * @param stepRegistry the step registry
 	 */
-	public DynamicXProcConfiguration(XProcStepRegistry stepRegistry) {
+	public DynamicXProcConfiguration(Input saxonCfg, XProcStepRegistry stepRegistry) {
 		super(saxonCfg);
 		this.stepRegistry = stepRegistry;
 		// FIXME: This is a hack to disable the Calabash hack that makes sure the Saxon processor

@@ -56,7 +56,7 @@ public class JobResultSetTest   {
 		List<JobResult> results= new LinkedList<JobResult>();
 		results.add(jres1);
 		results.add(jres2);
-		InputStream is=JobResultSet.asZippedInputStream(results);
+		InputStream is=JobResultSet.asZip(results);
 		tmpFile=File.createTempFile("diasy_test",".zip");
 		IOHelper.dump(is,new FileOutputStream(tmpFile));
 	}

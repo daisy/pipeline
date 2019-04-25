@@ -12,9 +12,7 @@ import net.sf.saxon.trans.XPathException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -25,18 +23,9 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class XPathFunctionRegistry  {
 
-
-	private static final Logger mLogger = LoggerFactory
-			.getLogger(XPathFunctionRegistry.class);
+	private static final Logger mLogger = LoggerFactory.getLogger(XPathFunctionRegistry.class);
 
 	HashMap<QName,ExtensionFunctionDefinition> mFunctions = new HashMap<QName, ExtensionFunctionDefinition>();
-
-	@Activate
-	public void init(){
-
-	}
-
-
 
 	@Reference(
 		name = "ExtensionFunctionDefinition",
@@ -45,27 +34,17 @@ public class XPathFunctionRegistry  {
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC
 	)
-	public void addFunction(ExtensionFunctionDefinition functionDefinition) throws XPathException{
-		mLogger.info("Adding extension function definition to registry {}",functionDefinition.getFunctionQName().toString());
+	public void addFunction(ExtensionFunctionDefinition functionDefinition) throws XPathException {
+		mLogger.info("Adding extension function definition to registry {}", functionDefinition.getFunctionQName().toString());
 		mFunctions.put(functionDefinition.getFunctionQName().toJaxpQName(), functionDefinition);
 	}
 
 	public void removeFunction(ExtensionFunctionDefinition functionDefinition){
 		mLogger.info("Deleting extension function definition to registry {}",functionDefinition.getFunctionQName().toString());
 		mFunctions.remove(functionDefinition.getFunctionQName().toJaxpQName());
-
 	}
 
-
-	@Deactivate
-	public void close(){
-
-	}
-
-	public Set<ExtensionFunctionDefinition> getFunctions(){
+	public Set<ExtensionFunctionDefinition> getFunctions() {
 		return new HashSet<ExtensionFunctionDefinition>(mFunctions.values());
 	}
-
-
-
 }

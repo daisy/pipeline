@@ -1,11 +1,11 @@
 package org.daisy.pipeline.job;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -73,24 +73,57 @@ public final class JobResultSet {
                 this.options = Multimaps.unmodifiableMultimap(options);
         }
 
-        public static InputStream asZippedInputStream(Collection<JobResult> results) throws IOException{
-                return new ByteArrayInputStream(asZippedByteArray(results));
+        public static InputStream asZip(Collection<JobResult> results) throws IOException {
+                return new InputStream() {
+                        byte[] buffer = null;
+                        int idx = 0;
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ZipOutputStream zipos = new ZipOutputStream(baos);
+                        Iterator<JobResult> resultsIt = results.iterator();
+                        boolean end = false;
+                        @Override
+                        public int read() throws IOException {
+                                if (available() > 0)
+                                        return buffer[idx++] & 0xff;
+                                return -1;
+                        }
+                        @Override
+                        public int available() throws IOException {
+                                if (end)
+                                        return 0;
+                                if (buffer == null || buffer.length <= idx) {
+                                        if (baos.size() == 0) {
+                                                if (!resultsIt.hasNext()) {
+                                                        close();
+                                                        return 0;
+                                                }
+                                                JobResult result = resultsIt.next();
+                                                ZipEntry entry = new ZipEntry(result.getIdx().toString());
+                                                zipos.putNextEntry(entry);
+                                                InputStream is = result.getPath().toURL().openStream();
+                                                IOHelper.dump(is, zipos);
+                                                is.close();
+                                                if (!resultsIt.hasNext())
+                                                        zipos.finish();
+                                        }
+                                        buffer = baos.toByteArray();
+                                        idx = 0;
+                                        baos.reset();
+                                }
+                                return buffer.length - idx;
+                        }
+                        @Override
+                        public void close() throws IOException {
+                                if (!end) {
+                                        zipos.close();
+                                        baos.close();
+                                        buffer = null;
+                                        end = true;
+                                }
+                        }
+                };
         }
 
-        public static byte[] asZippedByteArray(Collection<JobResult> results) throws IOException{
-                ByteArrayOutputStream buf=new ByteArrayOutputStream();
-                ZipOutputStream zout= new ZipOutputStream(buf);
-                for(JobResult res: results){
-                        ZipEntry entry=new ZipEntry(res.getIdx().toString());      
-                        zout.putNextEntry(entry);
-                        InputStream is= res.getPath().toURL().openStream();
-                        IOHelper.dump(is,zout);
-                        is.close();
-                }
-                zout.close();
-                buf.close();
-                return buf.toByteArray();
-        }
         public Collection<String> getPorts(){
                 return outputPorts.keySet();
         }
