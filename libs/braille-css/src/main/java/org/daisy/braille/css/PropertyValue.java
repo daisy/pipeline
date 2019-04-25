@@ -55,15 +55,18 @@ public class PropertyValue implements Cloneable {
 		transformerInstance = new BrailleCSSDeclarationTransformer(); }
 	private final static BrailleCSSParserFactory parserFactoryInstance = new BrailleCSSParserFactory();
 	
-	
 	public static PropertyValue parse(String property, String value) {
-		Declaration d = parserFactoryInstance.parseDeclaration(property + ":" + value);
+		return parse(parserFactoryInstance.parseDeclaration(property + ":" + value));
+	}
+	
+	public static PropertyValue parse(Declaration declaration) {
 		Map<String,CSSProperty> properties = new HashMap<String,CSSProperty>();
 		Map<String,Term<?>> terms = new HashMap<String,Term<?>>();
 		// SupportedCSS injected via CSSFactory in Repeater.assignDefaults, Variator.assignDefaults
 		CSSFactory.registerSupportedCSS(cssInstance);
-		if (!transformerInstance.parseDeclaration(d, properties, terms))
+		if (!transformerInstance.parseDeclaration(declaration, properties, terms))
 			return null;
+		String property = declaration.getProperty();
 		return new PropertyValue(properties.get(property), terms.get(property));
 	}
 }

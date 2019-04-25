@@ -12,10 +12,12 @@ import org.w3c.dom.Element;
 public class Preparator extends SimplePreparator {
 	
 	private static final RuleFactory ruleFactoryInstance = new BrailleCSSRuleFactory();
+	private final BrailleCSSParserFactory.Context context;
 	
-	public Preparator(Element e, boolean inlinePriority) {
+	public Preparator(Element e, boolean inlinePriority, BrailleCSSParserFactory.Context context) {
 		super(e, inlinePriority);
 		rf = ruleFactoryInstance;
+		this.context = context;
 	}
 	
 	public RuleVolume prepareRuleVolume(List<Declaration> declarations,
@@ -26,7 +28,9 @@ public class Preparator extends SimplePreparator {
 		    (volumeAreas == null || volumeAreas.isEmpty())) {
 			log.debug("Empty RuleVolume was omited");
 			return null; }
-		RuleVolume rv = new RuleVolume(pseudo, pseudoFuncArg);
+		RuleVolume rv = new RuleVolume(pseudo, pseudoFuncArg,
+		                               context == BrailleCSSParserFactory.Context.VOLUME
+		                               || context == BrailleCSSParserFactory.Context.ELEMENT);
 		if (declarations != null)
 			for (Declaration d : declarations)
 				rv.add(d);

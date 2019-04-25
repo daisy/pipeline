@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/braille-css.git
 	branch = master
 	commit = 088275195350047a576c6944b3ba4024258fb0c3
-	parent = f974cc704a1672b47e7c914cee59be2343b968be
+	parent = 6a186ddaa8461aec6542a71f8068dd733f86524d
 	cmdver = 0.3.1

@@ -1,6 +1,7 @@
 import java.util.Iterator;
 
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.Combinator;
@@ -24,6 +25,7 @@ public class InlineStyleTest {
 		Iterator<RuleBlock<?>> blocks;
 		RuleBlock<?> block;
 		Iterator<Declaration> declarations;
+		Iterator<Rule<?>> declarationsAndPages;
 		Declaration declaration;
 		Selector selector;
 		Iterator<Term<?>> terms;
@@ -83,15 +85,19 @@ public class InlineStyleTest {
 		Assert.assertEquals("list-item", pseudo.getName());
 		Assert.assertTrue(pseudo.getPseudoClasses().isEmpty());
 		Assert.assertFalse(pseudo.hasStackedPseudoElement());
-		declarations = relativeRule.iterator();
-		Assert.assertTrue(declarations.hasNext());
-		declaration = declarations.next();
+		declarationsAndPages = relativeRule.iterator();
+		Assert.assertTrue(declarationsAndPages.hasNext());
+		{
+				Rule<?> r = declarationsAndPages.next();
+				Assert.assertTrue(r instanceof Declaration);
+				declaration = (Declaration)r;
+		}
 		Assert.assertEquals("margin-left", declaration.getProperty());
 		terms = declaration.iterator();
 		Assert.assertTrue(terms.hasNext());
 		Assert.assertEquals("2", terms.next().toString());
 		Assert.assertFalse(terms.hasNext());
-		Assert.assertFalse(declarations.hasNext());
+		Assert.assertFalse(declarationsAndPages.hasNext());
 		Assert.assertTrue(blocks.hasNext());
 		block = blocks.next();
 		Assert.assertTrue(block instanceof RuleRelativeBlock);

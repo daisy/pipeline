@@ -76,6 +76,7 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 			           || block instanceof RuleVolume
 			           || block instanceof RuleMargin
 			           || block instanceof RuleVolumeArea
+			           || block instanceof RuleRelativeBlock
 			           || block instanceof RuleRelativePage
 			           || block instanceof RuleRelativeVolume
 			           || block instanceof AnyAtRule
@@ -165,13 +166,21 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 		}
 	}
 	
-	public static class RuleRelativeBlock extends AbstractRuleBlock<Declaration> {
+	public static class RuleRelativeBlock extends AbstractRuleBlock<Rule<?>> {
 		
 		private final List<Selector> selector;
 		
 		public RuleRelativeBlock(List<Selector> selector, List<Declaration> declarations) {
 			this.selector = new ArrayList<Selector>(selector);
-			replaceAll(declarations);
+			List<Rule<?>> list = new ArrayList<Rule<?>>();
+			for (Declaration d : declarations) list.add(d);
+			replaceAll(list);
+		}
+		
+		public boolean add(Rule<?> r) {
+			if (!(r instanceof Declaration || r instanceof RulePage))
+				throw new IllegalArgumentException("Element must be either a Declaration or a RulePage, but got " + r);
+			return super.add(r);
 		}
 		
 		public List<Selector> getSelector() {

@@ -297,7 +297,7 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			BEFORE("before"),
 			AFTER("after"),
 			DUPLICATE("duplicate"),
-			ALTERNATE("alternate"),
+			ALTERNATE("alternate", 0, 1),
 			LIST_ITEM("list-item"),
 			LIST_HEADER("list-header"),
 			TABLE_BY("table-by", 1),
@@ -362,11 +362,29 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 					throw new IllegalArgumentException(name + " must not be a function");
 				if (args.length == 0 && def.minArgs > 0)
 					throw new IllegalArgumentException(name + " must be a function");
-				if (def.minArgs > 0) {
-					if (args.length < def.minArgs || args.length > def.maxArgs)
-						throw new IllegalArgumentException(name + " requires " + def.minArgs
-						                                   + (def.maxArgs > def.minArgs ? ".." + def.maxArgs : "") + " "
-						                                   + (def.minArgs == 1 && def.maxArgs == 1 ? "argument" : "arguments"));
+				if (args.length < def.minArgs || args.length > def.maxArgs)
+					throw new IllegalArgumentException(name + " requires " + def.minArgs
+					                                   + (def.maxArgs > def.minArgs ? ".." + def.maxArgs : "") + " "
+					                                   + (def.minArgs == 1 && def.maxArgs == 1 ? "argument" : "arguments"));
+				
+				// validate ::alternate(N) and normalize ::alternate(1) to ::alternate
+				switch (def) {
+				case ALTERNATE:
+					if (args.length != 0) {
+						Integer i = null;
+						String a = args[0];
+						try {
+							i = Integer.parseInt(a);
+							if (i > 1)
+								this.args.add(a);
+							else if (i < 1)
+								i = null;
+						} catch (NumberFormatException e) {}
+						if (i == null)
+							throw new IllegalArgumentException("Argument of ::alternate must be a number greater than zero, but got " + a);
+					}
+					break;
+				default:
 					for (String a : args)
 						this.args.add(a);
 				}
