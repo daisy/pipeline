@@ -49,11 +49,12 @@ public class UpdaterPane extends BorderPane{
                                                 } catch (IOException e) {
                                                         e.printStackTrace();
                                                         logPane.error("Couldn't start the update process");
-
+                                                } catch (IllegalArgumentException e) {
+                                                        e.printStackTrace();
+                                                        logPane.error(e.getMessage());
                                                 }finally{
                                                         Platform.runLater(new Runnable(){
                                                                 public void run(){
-                                                                        butt.setDisable(false);
                                                                         bar.setVisible(false);
                                                                 }
                                                         });
