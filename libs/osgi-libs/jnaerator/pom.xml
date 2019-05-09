@@ -55,24 +55,56 @@
       <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
       <version>4.0.0</version>
+      <!--
+          Embedding JNA 4.0.0 because we make use of another version of JNA for other modules, so we
+          need OSGi to differentiate between the versions, however JNA 4.0.0 has no version declared
+          in its Export-Package.
+      -->
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-	<groupId>org.apache.felix</groupId>
-	<artifactId>maven-bundle-plugin</artifactId>
-	<configuration>
-	  <instructions>
-	    <Embed-Dependency>jnaerator-runtime,ochafik-util</Embed-Dependency>
-	    <!-- The best practice is to use Import-Package instead of
-	         Require-Bundle, but the latter usually fails to load
-	         JNA's classes on time, probably because JNAerator
-	         satisfies itself the Import-Package dependencies by
-	         adding some classes in the com.sun.jna package. -->
-	    <Require-Bundle>com.sun.jna</Require-Bundle>
-	    <_exportcontents>*</_exportcontents>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Embed-Dependency>
+              jnaerator-runtime,
+              ochafik-util,
+              inline=com/sun/jna/**
+            </Embed-Dependency>
+            <Export-Package>
+              com.ochafik.*,
+              com.sun.jna;version="4.0.0",
+              com.sun.jna.ptr;version="4.0.0",
+              com.sun.jna.win32;version="4.0.0"
+            </Export-Package>
+            <Bundle-NativeCode>
+              com/sun/jna/win32-x86/jnidispatch.dll; processor=x86;osname=win32,
+              com/sun/jna/win32-x86-64/jnidispatch.dll; processor=x86-64;osname=win32,
+              com/sun/jna/w32ce-arm/jnidispatch.dll; processor=arm;osname=wince,
+              com/sun/jna/sunos-x86/libjnidispatch.so; processor=x86;osname=sunos,
+              com/sun/jna/sunos-x86-64/libjnidispatch.so; processor=x86-64;osname=sunos,
+              com/sun/jna/sunos-sparc/libjnidispatch.so; processor=sparc;osname=sunos,
+              com/sun/jna/sunos-sparcv9/libjnidispatch.so; processor=sparcv9;osname=sunos,
+              com/sun/jna/aix-ppc/libjnidispatch.a; processor=ppc;osname=aix,
+              com/sun/jna/aix-ppc64/libjnidispatch.a; processor=ppc64;osname=aix,
+              com/sun/jna/linux-ppc/libjnidispatch.so; processor=ppc;osname=linux,
+              com/sun/jna/linux-ppc64/libjnidispatch.so; processor=ppc64;osname=linux,
+              com/sun/jna/linux-x86/libjnidispatch.so; processor=x86;osname=linux,
+              com/sun/jna/linux-x86-64/libjnidispatch.so; processor=x86-64;osname=linux,
+              com/sun/jna/linux-arm/libjnidispatch.so; processor=arm;osname=linux,
+              com/sun/jna/linux-ia64/libjnidispatch.so; processor=ia64;osname=linux,
+              com/sun/jna/freebsd-x86/libjnidispatch.so; processor=x86;osname=freebsd,
+              com/sun/jna/freebsd-x86-64/libjnidispatch.so; processor=x86-64;osname=freebsd,
+              com/sun/jna/openbsd-x86/libjnidispatch.so; processor=x86;osname=openbsd,
+              com/sun/jna/openbsd-x86-64/libjnidispatch.so; processor=x86-64;osname=openbsd,
+              com/sun/jna/darwin/libjnidispatch.jnilib; processor=x86;processor=x86-64;processor=ppc;osname=macosx
+            </Bundle-NativeCode>
+            <_removeheaders>Embed-Dependency,Include-Resource,Private-Package</_removeheaders>
           </instructions>
         </configuration>
       </plugin>
