@@ -19,7 +19,7 @@
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
-    <module>clientlib/java</module>
+    
     
     <module>utils/daisy-parent/daisy-parent</module>
     <module>framework</module>
@@ -38,6 +38,8 @@
     <module>updater/gui</module>
     <module>assembly</module>
    <!-- <module>website/target/maven</module> -->
+
+   <module>clientlib/java</module>
     
   </modules>
   
