@@ -46,13 +46,14 @@
       <artifactId>velocity-tools</artifactId>
       <version>2.0</version>
     </dependency>
+    <!-- Non available une java 11
     <dependency>
       <groupId>com.sun</groupId>
       <artifactId>tools</artifactId>
       <version>7</version>
       <scope>system</scope>
       <systemPath>${tools.jar}</systemPath>
-    </dependency>
+    </dependency>-->
   </dependencies>
 
 </project>

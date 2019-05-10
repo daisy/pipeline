@@ -1,10 +1,68 @@
 # pipeline
 
-## Code
-
 This is a convenience "super" Pipeline project that aggregates all sub-projects and 3rd-party libraries.
 
 This makes branching, building, and releasing of several sub-projects at once easier.
+
+## Build the pipeline
+
+**The build process can take a while, even without the unit test enabled**
+
+This super-project requires 
+- java 11 (with the JAVA_HOME environment variable set)
+- maven (mvn available in your PATH),
+- Golang (go avaible in your path)
+- Bazaar (bzr available in your path)
+
+You can build the project archive using the following commands in a terminal positionned in the pipeline repo : 
+- For macOS : 
+```bash
+mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-mac -Punpack-updater-mac -Passemble-mac-zip
+```
+- For Linux : 
+```bash
+mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-linux -Punpack-updater-linux -Passemble-linux-zip
+```
+- For Windows :
+```bash
+mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-win -Punpack-updater-win -Punpack-updater-gui-win -Passemble-win-zip
+```
+
+In case an error occured while building the "cli" project, relaunch the command with the argument `-rf :cli`.
+
+You will find the resulting archive in the folder `assembly/target`. Just unzip it wherever you want to start using the pipeline.
+
+### re-build / update
+
+If you wish to test a modified module or package, you must specified the new version of the module (see the pom.xml of the module) in the `assembly/pom.xml` maven project.
+
+If you already did the previous build step within the pipeline repo, you can rebuild the archive by going in the `assembly` sub-repo and launching the following command : 
+- For macOS : 
+```bash
+mvn clean install -Punpack-cli-mac -Punpack-updater-mac -Passemble-mac-zip
+```
+- For Linux : 
+```bash
+mvn clean install -Punpack-cli-linux -Punpack-updater-linux -Passemble-linux-zip
+```
+- For Windows :
+```bash
+mvn clean install -Punpack-cli-win -Punpack-updater-win -Punpack-updater-gui-win -Passemble-win-zip
+```
+
+### Launch the pipeline
+
+To launch the pipeline graphical application, go to your `daisy-pipeline` unzipped folder and launch the following command from a terminal : 
+- Mac and Linux : `bin/pipeline2 gui`
+- Windows : `bin/pipeline2.bat gui`
+
+## Build the website
+
+TODO
+
+Requires ruby with bundle gem available in path.
+
+## Code
 
 The aggregating and the backporting of changes to the individual projects is done using a tool called [git-subrepo][]. The idea is that all the git magic will be done by the owners, and that committers can just treat this repository as a regular one. There is a rule though that committers need to follow because of some limitations of git-subrepo:
 

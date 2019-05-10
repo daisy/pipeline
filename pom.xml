@@ -16,25 +16,29 @@
   <packaging>pom</packaging>
   
   <modules>
+    <module>libs/jstyleparser</module>
+    <module>libs/braille-css</module>
+    <module>libs/osgi-libs</module>
+    <module>clientlib/java</module>
+    
     <module>utils/daisy-parent/daisy-parent</module>
+    <module>framework</module>
     <module>utils/build-utils</module>
     <module>utils/xspec-maven-plugin</module>
     <module>utils/xprocspec</module>
     <module>utils/xproc-maven-plugin</module>
-    <module>libs/jstyleparser</module>
-    <module>libs/braille-css</module>
-    <module>libs/osgi-libs</module>
+
     <module>libs/xsweet/htmlevator</module>
     <module>libs/xsweet/xsweet</module>
-    <module>framework</module>
+    <module>libs/transpect</module>
     <module>modules</module>
     <module>cli</module>
     <module>gui</module>
     <module>updater/cli</module>
     <module>updater/gui</module>
     <module>assembly</module>
-    <module>website/target/maven</module>
-    <module>clientlib/java</module>
+   <!-- <module>website/target/maven</module> -->
+    
   </modules>
   
   <build>

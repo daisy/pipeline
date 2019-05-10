@@ -31,9 +31,11 @@
     <jetty.version>7.6.5.v20120716</jetty.version>
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
-    <mockito.version>1.9.5</mockito.version>
+    <!--<mockito.version>1.9.5</mockito.version>-->
+    <mockito.version>2.18.0</mockito.version>
     <osgi.version>5.0.0</osgi.version>
-    <powermock.version>1.5.4</powermock.version>
+    <!-- <powermock.version>1.5.4</powermock.version> -->
+    <powermock.version>2.0.2</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
     <saxon-he.version>9.8.0.8</saxon-he.version>
     <slf4j.version>1.7.2</slf4j.version>
@@ -562,7 +564,7 @@
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
-        <artifactId>mockito-all</artifactId>
+        <artifactId>mockito-core</artifactId>
         <version>${mockito.version}</version>
       </dependency>
       <dependency>
@@ -572,7 +574,7 @@
      </dependency>
      <dependency>
         <groupId>org.powermock</groupId>
-        <artifactId>powermock-api-mockito</artifactId>
+        <artifactId>powermock-api-mockito2</artifactId>
         <version>${powermock.version}</version>
      </dependency>
 

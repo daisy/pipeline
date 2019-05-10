@@ -458,8 +458,8 @@
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.9.5</version>
+                <artifactId>mockito-core</artifactId>
+                <version>2.18.0</version>
             </dependency>
             <dependency>
                 <groupId>org.powermock</groupId>
@@ -468,8 +468,8 @@
             </dependency>
             <dependency>
                 <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
-                <version>1.5.4</version>
+                <artifactId>powermock-api-mockito2</artifactId>
+                <version>2.0.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules</groupId>

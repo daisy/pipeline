@@ -124,7 +124,10 @@
             </goals>
             <configuration>
               <pomIncludes>
-                <pomInclude>*-calabash/pom.xml</pomInclude>
+                <pomInclude>it-xprocspec-catalog-calabash/pom.xml</pomInclude>
+                <!--<pomInclude>it-xprocspec-config-calabash/pom.xml</pomInclude> not working : class Foo not found -->
+                <pomInclude>it-xprocspec-error-calabash/pom.xml</pomInclude>
+                <pomInclude>it-xprocspec-hello-world-calabash/pom.xml</pomInclude>
               </pomIncludes>
             </configuration>
           </execution>

@@ -411,43 +411,45 @@ dump-gradle-cmd :
 
 .PHONY : help
 help :
-	echo "make all:"                                                                                                >&2
-	echo "	Incrementally compile and test code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"  >&2
-	echo "make check:"                                                                                              >&2
-	echo "	Incrementally compile and test code"                                                                    >&2
-	echo "make dist:"                                                                                               >&2
-	echo "	Incrementally compile code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"           >&2
-	echo "make dist-dmg:"                                                                                           >&2
-	echo "	Incrementally compile code and package into a DMG"                                                      >&2
-	echo "make dist-exe:"                                                                                           >&2
-	echo "	Incrementally compile code and package into a EXE"                                                      >&2
-	echo "make dist-deb:"                                                                                           >&2
-	echo "	Incrementally compile code and package into a DEB"                                                      >&2
-	echo "make dist-rpm:"                                                                                           >&2
-	echo "	Incrementally compile code and package into a RPM"                                                      >&2
-	echo "make dist-zip-linux:"                                                                                     >&2
-	echo "	Incrementally compile code and package into a ZIP for Linux"                                            >&2
-	echo "make dist-zip-mac:"                                                                                       >&2
-	echo "	Incrementally compile code and package into a ZIP for MacOS"                                            >&2
-	echo "make dist-zip-win:"                                                                                       >&2
-	echo "	Incrementally compile code and package into a ZIP for Windows"                                          >&2
-	echo "make dist-docker-image:"                                                                                  >&2
-	echo "	Incrementally compile code and package into a Docker image"                                             >&2
-	echo "make dist-webui-deb:"                                                                                     >&2
-	echo "	Compile Web UI and package into a DEB"                                                                  >&2
-	echo "make dist-webui-rpm:"                                                                                     >&2
-	echo "	Compile Web UI and package into a RPM"                                                                  >&2
-	echo "make run:"                                                                                                >&2
-	echo "	Incrementally compile code and run a server locally"                                                    >&2
-	echo "make run-gui:"                                                                                            >&2
-	echo "	Incrementally compile code and run the GUI locally"                                                     >&2
-	echo "make run-webui:"                                                                                          >&2
-	echo "	Compile and run web UI locally"                                                                         >&2
-	echo "make run-cli:"                                                                                            >&2
-	echo "	Get the command for compiling and running CLI locally"                                                  >&2
-	echo "make run-docker:"                                                                                         >&2
-	echo "	Incrementally compile code and run a server inside a Docker container"                                  >&2
-	echo "make website:"                                                                                            >&2
-	echo "	Build the website"                                                                                      >&2
-	echo "make dump-maven-cmd:"                                                                                     >&2
-	echo '	Get the Maven command used. To configure your shell: eval $$(make dump-maven-cmd)'                      >&2
+	@echo "Super-build makefile to package the latest pipeline version"
+	@echo "-- Build commands available --"
+	@echo "make all:"                                                                                                >&2
+	@echo "	Incrementally compile and test code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"  >&2
+	@echo "make check:"                                                                                              >&2
+	@echo "	Incrementally compile and test code"                                                                    >&2
+	@echo "make dist:"                                                                                               >&2
+	@echo "	Incrementally compile code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"           >&2
+	@echo "make dist-dmg:"                                                                                           >&2
+	@echo "	Incrementally compile code and package into a DMG"                                                      >&2
+	@echo "make dist-exe:"                                                                                           >&2
+	@echo "	Incrementally compile code and package into a EXE"                                                      >&2
+	@echo "make dist-deb:"                                                                                           >&2
+	@echo "	Incrementally compile code and package into a DEB"                                                      >&2
+	@echo "make dist-rpm:"                                                                                           >&2
+	@echo "	Incrementally compile code and package into a RPM"                                                      >&2
+	@echo "make dist-zip-linux:"                                                                                     >&2
+	@echo "	Incrementally compile code and package into a ZIP for Linux"                                            >&2
+	@echo "make dist-zip-mac:"                                                                                       >&2
+	@echo "	Incrementally compile code and package into a ZIP for MacOS"                                            >&2
+	@echo "make dist-zip-win:"                                                                                       >&2
+	@echo "	Incrementally compile code and package into a ZIP for Windows"                                          >&2
+	@echo "make dist-docker-image:"                                                                                  >&2
+	@echo "	Incrementally compile code and package into a Docker image"                                             >&2
+	@echo "make dist-webui-deb:"                                                                                     >&2
+	@echo "	Compile Web UI and package into a DEB"                                                                  >&2
+	@echo "make dist-webui-rpm:"                                                                                     >&2
+	@echo "	Compile Web UI and package into a RPM"                                                                  >&2
+	@echo "make run:"                                                                                                >&2
+	@echo "	Incrementally compile code and run a server locally"                                                    >&2
+	@echo "make run-gui:"                                                                                            >&2
+	@echo "	Incrementally compile code and run the GUI locally"                                                     >&2
+	@echo "make run-webui:"                                                                                          >&2
+	@echo "	Compile and run web UI locally"                                                                         >&2
+	@echo "make run-cli:"                                                                                            >&2
+	@echo "	Get the command for compiling and running CLI locally"                                                  >&2
+	@echo "make run-docker:"                                                                                         >&2
+	@echo "	Incrementally compile code and run a server inside a Docker container"                                  >&2
+	@echo "make website:"                                                                                            >&2
+	@echo "	Build the website"                                                                                      >&2
+	@echo "make dump-maven-cmd:"                                                                                     >&2
+	@echo '	Get the Maven command used. To configure your shell: eval $$(make dump-maven-cmd)'                      >&2

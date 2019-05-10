@@ -31,6 +31,23 @@
       <artifactId>framework-core</artifactId>
       <scope>provided</scope>
     </dependency>
+     <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.activation</groupId>
+            <artifactId>jakarta.activation</artifactId>
+            <version>1.2.1</version>
+            <scope>runtime</scope>
+        </dependency> 
   </dependencies>
   <build>
     <pluginManagement>
@@ -142,6 +159,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/script</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.script</packageName>
@@ -156,6 +174,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/base</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.base</packageName>
@@ -169,6 +188,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/job</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.job</packageName>
@@ -182,6 +202,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/queue</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.queue</packageName>
@@ -195,6 +216,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/request</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.request</packageName>
@@ -208,6 +230,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/client</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.clients</packageName>
@@ -221,12 +244,25 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>7
                 <source>${project.build.directory}/trang/properties</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.properties</packageName>
             </configuration>
           </execution>
         </executions>
+        <dependencies>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-xjc</artifactId>
+                <version>2.3.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.activation</groupId>
+                <artifactId>jakarta.activation</artifactId>
+                <version>1.2.1</version>
+            </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
