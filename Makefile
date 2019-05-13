@@ -61,7 +61,7 @@ dist-deb : pipeline2-$(assembly/VERSION)_debian.deb
 dist-rpm : pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
-dist-docker-image : assembly/.compile-dependencies
+dist-docker-image : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(EVAL) 'bash -c "unset MAKECMDGOALS && $(MAKE) -C assembly docker"'
 
 .PHONY : dist-webui-deb
