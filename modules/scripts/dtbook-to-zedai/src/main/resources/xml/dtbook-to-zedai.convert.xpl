@@ -91,47 +91,44 @@
             Converts DTBook 2005-3 to ZedAI
         </p:documentation>
     </p:import>
-
-    <!-- for use with the pipeline framework -->
-    <p:import href="http://www.daisy.org/pipeline/modules/metadata-utils/library.xpl">
+    <p:import href="dtbook-to-zedai-meta.xpl">
         <p:documentation>
-            Collection of utilities for generating metadata.
+            For px:dtbook-to-zedai-meta
         </p:documentation>
     </p:import>
-
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
         <p:documentation>
-            Collection of utilities for merging and upgrading DTBook files.
+            For px:dtbook-to-mods-meta
         </p:documentation>
     </p:import>
-
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/library.xpl">
         <p:documentation>
             Schema selector used for DTBook validation.
         </p:documentation>
     </p:import>
-
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             For manipulating filesets.
         </p:documentation>
     </p:import>
-
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
         <p:documentation>
             For determining the media type of files.
         </p:documentation>
     </p:import>
-
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
         <p:documentation>
             Collection of utilities for validation and reporting.
         </p:documentation>
     </p:import>
-
     <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
         <p:documentation>
             For removing the Aural CSS attributes before validation
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            For px:set-base-uri
         </p:documentation>
     </p:import>
 
@@ -374,9 +371,10 @@
         </p:input>
         <p:with-option name="assert-valid" select="$opt-assert-valid"/>
     </px:dtbook-to-mods-meta>
-    <p:add-attribute name="generate-mods-metadata" match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="$mods-file"/>
-    </p:add-attribute>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="$mods-file"/>
+    </px:set-base-uri>
+    <p:add-xml-base name="generate-mods-metadata"/>
 
     <p:documentation>Generate ZedAI metadata</p:documentation>
     <px:dtbook-to-zedai-meta name="generate-zedai-metadata">
@@ -585,12 +583,13 @@
         <px:mediatype-detect/>
     </p:group>
 
-    <p:add-attribute match="/*" attribute-name="xml:base" name="result.zedai">
+    <px:set-base-uri>
         <p:input port="source">
             <p:pipe step="validate-zedai" port="result"/>
         </p:input>
-        <p:with-option name="attribute-value" select="$zedai-file"/>
-    </p:add-attribute>
+        <p:with-option name="base-uri" select="$zedai-file"/>
+    </px:set-base-uri>
+    <p:add-xml-base name="result.zedai"/>
     <p:for-each name="result.in-memory">
         <p:output port="result" sequence="true"/>
         <p:iteration-source>

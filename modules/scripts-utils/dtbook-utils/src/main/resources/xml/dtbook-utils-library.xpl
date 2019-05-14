@@ -16,4 +16,6 @@
     <p:import href="merge-dtbook/merge-dtbook.xpl"/>
     <p:import href="validate-dtbook/dtbook-validator.check-images.xpl"/>
     <p:import href="validate-dtbook/dtbook-validator.select-schema.xpl"/>
+    <p:import href="dtbook-to-mods-meta.xpl"/>
+    
 </p:library>

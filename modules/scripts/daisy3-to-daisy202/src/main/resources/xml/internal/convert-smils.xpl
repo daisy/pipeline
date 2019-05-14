@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
-    xmlns:c="http://www.w3.org/ns/xproc-step" type="pxi:daisy3-to-daisy202-smils" name="main"
-    version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="pxi:daisy3-to-daisy202-smils" name="main">
 
     <p:input port="smils" sequence="true" primary="true"/>
     <p:input port="ncx"/>
@@ -20,6 +20,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
 
 
     <!--NCX smilCustomTest elements used for SMIL conversion-->
@@ -110,12 +115,11 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="//@href">
+        <px:set-base-uri name="result-smil">
+            <p:with-option name="base-uri" select="//@href">
                 <p:pipe port="result" step="daisy202-smil-uri"/>
             </p:with-option>
-        </p:add-attribute>
-        <p:delete match="/*/@xml:base" name="result-smil"/>
+        </px:set-base-uri>
 
         <!--Fileset of the audio files used in this SMIL-->
         <p:group>

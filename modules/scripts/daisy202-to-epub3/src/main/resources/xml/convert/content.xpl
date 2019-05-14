@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:mo="http://www.w3.org/ns/SMIL" xmlns:epub="http://www.idpf.org/2007/ops" type="pxi:daisy202-to-epub3-content" name="content" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                type="pxi:daisy202-to-epub3-content"
+                name="content">
 
     <p:input port="content-flow" primary="true" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">DAISY 2.02 content files.</p:documentation>
@@ -37,8 +40,23 @@
     <p:option name="content-dir" required="true"/>
     <p:option name="daisy-dir" required="true"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="resolve-links.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">Resolves SMIL-linkbacks.</p:documentation>
     </p:import>
@@ -51,10 +69,9 @@
                 <p:pipe port="resolve-links-mapping" step="content"/>
             </p:input>
         </pxi:daisy202-to-epub3-resolve-links>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$result-uri"/>
-        </p:add-attribute>
-        <p:delete match="/*/@xml:base"/>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$result-uri"/>
+        </px:set-base-uri>
         <p:xslt>
             <p:with-param name="content-dir" select="$content-dir"/>
             <p:input port="stylesheet">
@@ -82,10 +99,9 @@
         </p:xslt>
         <!-- TODO: add html-outline-fixer.xsl here when it's done -->
         <!-- TODO: add html-outline-cleaner.xsl here when it's done -->
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$result-uri"/>
-        </p:add-attribute>
-        <p:delete match="/*/@xml:base"/>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$result-uri"/>
+        </px:set-base-uri>
         <p:add-attribute match="/*" attribute-name="original-href">
             <p:with-option name="attribute-value" select="$original-uri"/>
         </p:add-attribute>

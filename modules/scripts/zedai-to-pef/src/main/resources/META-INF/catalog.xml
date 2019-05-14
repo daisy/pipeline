@@ -10,8 +10,8 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-epub3" />
 </catalog>

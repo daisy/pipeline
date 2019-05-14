@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="../../main/resources/xml/validate-mods.xpl">
+  
+  <x:scenario label="test">
+    <x:call step="px:validate-mods">
+      <x:input port="source">
+        <x:document type="inline">
+          <mods xmlns="http://www.loc.gov/mods/v3" version="3.3">
+            <titleInfo>
+              <title>Valentin Haüy - the father of the education for the blind</title>
+            </titleInfo>
+            <name>
+              <namePart>Beatrice Christensen Sköld</namePart>
+              <role>
+                <roleTerm type="text">author</roleTerm>
+              </role>
+            </name>
+            <identifier type="uid">C00000</identifier>
+            <language>
+              <languageTerm type="code" authority="rfc3066">en-GB</languageTerm>
+            </language>
+          </mods>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="the result port">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="the result should be the same as the input" type="compare">
+      <x:document type="inline">
+        <mods xmlns="http://www.loc.gov/mods/v3" version="3.3">
+          <titleInfo>
+            <title>Valentin Haüy - the father of the education for the blind</title>
+          </titleInfo>
+          <name>
+            <namePart>Beatrice Christensen Sköld</namePart>
+            <role>
+              <roleTerm type="text">author</roleTerm>
+            </role>
+          </name>
+          <identifier type="uid">C00000</identifier>
+          <language>
+            <languageTerm type="code" authority="rfc3066">en-GB</languageTerm>
+          </language>
+        </mods>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -43,6 +43,11 @@
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
 
     <p:for-each>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">For each SMIL</p:documentation>
@@ -83,9 +88,10 @@
             </p:template>
         </p:for-each>
         <p:wrap-sequence wrapper="di:smil" xmlns:di="http://www.daisy.org/ns/pipeline/tmp"/>
-        <p:add-attribute attribute-name="xml:base" match="/*">
-            <p:with-option name="attribute-value" select="$smil-base"/>
-        </p:add-attribute>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$smil-base"/>
+        </px:set-base-uri>
+        <p:add-xml-base/>
         <px:message>
             <p:with-option name="message" select="concat('created a map of links from the SMIL file ',$smil-base)"/>
         </px:message>

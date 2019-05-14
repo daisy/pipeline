@@ -20,8 +20,19 @@
     <p:option name="media-type" required="true"/>
     <p:option name="suffix" required="true"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-add-entry
+            px:fileset-filter
+            px:fileset-store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:tempfile
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     
     <px:tempfile delete-on-exit="false" name="file">
         <p:with-option name="href" select="/d:fileset/@xml:base">
@@ -30,15 +41,14 @@
         <p:with-option name="suffix" select="$suffix"/>
     </px:tempfile>
     
-    <p:add-attribute match="/*" attribute-name="xml:base">
+    <px:set-base-uri name="in-memory">
         <p:input port="source">
             <p:pipe step="main" port="source"/>
         </p:input>
-        <p:with-option name="attribute-value" select="/c:result">
+        <p:with-option name="base-uri" select="/c:result">
             <p:pipe step="file" port="result"/>
         </p:with-option>
-    </p:add-attribute>
-    <p:delete match="@xml:base" name="in-memory"/>
+    </px:set-base-uri>
     
     <px:fileset-add-entry name="result">
         <p:input port="source">
@@ -56,7 +66,7 @@
         </p:with-option>
     </px:fileset-filter>
     
-    <px:fileset-store name="generated-css">
+    <px:fileset-store>
         <p:input port="in-memory.in">
             <p:pipe step="in-memory" port="result"/>
         </p:input>

@@ -7,10 +7,14 @@
                 version="2.0">
     
     <!--
-        Use this as a replacement for base-uri() because base-uri() does not behave as expected in
-        Saxon 9.8 (+ Calabash 1.1.20)
+        Use this as a replacement for base-uri() because base-uri() does not behave as expected.
         
         See https://www.w3.org/TR/xquery-operators/#func-base-uri
+        
+        Note that it could also be that base-uri() does work correctly, but that the element's base
+        URI is not what we expect, e.g. when the value is not consistent with the ancestors'
+        xml:base attributes and the document's base URI. This is permitted, but could be confusing,
+        and it could be caused by bugs elsewhere.
     -->
     <xsl:function name="pf:base-uri" as="xs:anyURI?">
         <xsl:param name="arg" as="node()?"/>

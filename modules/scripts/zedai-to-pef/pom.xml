@@ -48,11 +48,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>metadata-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>file-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -64,6 +59,11 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>zedai-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>zedai-to-epub3</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--

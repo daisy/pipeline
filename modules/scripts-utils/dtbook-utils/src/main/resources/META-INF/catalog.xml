@@ -12,4 +12,5 @@
    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
    <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
+   <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
 </catalog>

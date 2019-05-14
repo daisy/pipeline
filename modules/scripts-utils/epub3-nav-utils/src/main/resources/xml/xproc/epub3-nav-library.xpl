@@ -7,4 +7,6 @@
 <!--  <p:import href="epub3-nav-create-custom.xpl"/>-->
 <!--  <p:import href="epub3-nav-create-landmarks.xpl"/>-->
   <p:import href="epub3-nav-create-page-list.xpl"/>
+  <p:import href="epub3-nav-to-guide.xpl"/>
+  
 </p:library>

@@ -61,6 +61,12 @@
       </p:documentation>
     </p:option>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
+
     <p:xslt>
       <p:input port="stylesheet">
 	<p:document href="create-opf.xsl"/>
@@ -75,8 +81,9 @@
       <p:with-param name="mathml-xslt-fallback" select="$mathml-xslt-fallback"/>
     </p:xslt>
 
-    <p:add-attribute match="/*" attribute-name="xml:base">
-      <p:with-option name="attribute-value" select="$opf-uri"/>
-    </p:add-attribute>
+    <px:set-base-uri>
+      <p:with-option name="base-uri" select="$opf-uri"/>
+    </px:set-base-uri>
+    <p:add-xml-base/>
 
 </p:declare-step>

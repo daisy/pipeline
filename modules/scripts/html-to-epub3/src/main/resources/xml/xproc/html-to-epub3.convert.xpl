@@ -27,6 +27,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="html-to-epub3.content.xpl"/>
 
@@ -97,7 +102,7 @@
             <p:input port="source">
                 <p:pipe port="docs" step="content-docs"/>
             </p:input>
-            <p:with-option name="base-dir" select="$content-dir">
+            <p:with-option name="output-base-uri" select="$nav-base">
                 <p:empty/>
             </p:with-option>
         </px:epub3-nav-create-toc>
@@ -116,11 +121,9 @@
                 <p:pipe port="result" step="navigation.page-list"/>
             </p:input>
         </px:epub3-nav-aggregate>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$nav-base"/>
-        </p:add-attribute>
-        <p:delete match="/*/@xml:base" name="navigation.doc"/>
-
+        <px:set-base-uri name="navigation.doc">
+            <p:with-option name="base-uri" select="$nav-base"/>
+        </px:set-base-uri>
 
         <p:group name="navigation.fileset">
             <p:output port="result"/>

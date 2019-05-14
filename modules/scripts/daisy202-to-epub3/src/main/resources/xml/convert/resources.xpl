@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" type="pxi:daisy202-to-epub3-resources"
-    name="resources" version="1.0" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="pxi:daisy202-to-epub3-resources"
+                name="resources">
 
     <p:documentation>
         <h1 px:role="desc">Copy the auxiliary resources from the DAISY 2.02 fileset to the EPUB 3 fileset, and return a manifest of all the resulting files.</h1>
@@ -28,6 +32,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
 
     <p:for-each name="content-resources">
         <p:output port="result" sequence="true"/>
@@ -35,9 +44,10 @@
             <p:pipe port="daisy-content" step="resources"/>
         </p:iteration-source>
         <p:variable name="original-href" select="/*/@original-href"/>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$original-href"/>
-        </p:add-attribute>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$original-href"/>
+        </px:set-base-uri>
+        <p:add-xml-base/>
         <px:html-to-fileset/>
         <!-- not using fileset-filter because we don't want to delete files references from iframes -->
         <p:delete match="d:file[@media-type='application/xhtml+xml' and not(@kind='content')]"/>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-    xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
-    exclude-inline-prefixes="#all"
-    type="odt:store" name="store" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
+                exclude-inline-prefixes="#all"
+                type="odt:store" name="store">
     
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -18,9 +18,24 @@
         <p:pipe step="result" port="result"/>
     </p:output>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:normalize-uri
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:zip-manifest-from-fileset
+            px:fileset-add-entry
+            px:fileset-store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl">
+        <p:documentation>
+            px:zip
+        </p:documentation>
+    </p:import>
     
     <p:variable name="base" select="//d:file[starts-with(@media-type, 'application/vnd.oasis.opendocument')]
                                     /resolve-uri(@href, base-uri(.))"/>
@@ -71,9 +86,10 @@
     </p:string-replace>
     <p:string-replace match="text()" replace="normalize-space()"/>
     
-    <p:add-attribute match="/*" attribute-name="xml:base" name="mimetype">
-        <p:with-option name="attribute-value" select="resolve-uri('mimetype', $base)"/>
-    </p:add-attribute>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="resolve-uri('mimetype', $base)"/>
+    </px:set-base-uri>
+    <p:add-xml-base name="mimetype"/>
     <p:sink/>
     
     <px:fileset-add-entry first="true" media-type="text/plain" name="fileset.with-mimetype">
@@ -107,7 +123,7 @@
     
     <p:add-attribute name="zip-manifest" match="c:entry[@name='mimetype']" attribute-name="compression-method" attribute-value="stored"/>
     
-    <px:zip compression-method="deflated">
+    <px:zip compression-method="deflated" cx:depends-on="fileset-store">
         <p:input port="source">
             <p:empty/>
         </p:input>

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:epub3-nav-create-toc" name="main" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" version="1.0"
-    xmlns:epub="http://www.idpf.org/2007/ops">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:h="http://www.w3.org/1999/xhtml"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                type="px:epub3-nav-create-toc" name="main">
 
     <p:input port="source" sequence="true"/>
     <p:output port="result">
         <p:pipe port="result" step="result"/>
     </p:output>
-    <p:option name="base-dir" select="''"/>
+    <p:option name="output-base-uri"/>
 
     <!--TODO honnor the 'untitled' option-->
     <p:option name="untitled" select="'unwrap'"/>
@@ -19,28 +22,20 @@
     <!-- integer -->
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
 
+    
+    <!-- create an ordered list (ol) from an xhtml document -->
     <p:for-each name="tocs">
         <p:output port="result" sequence="true"/>
-        <p:variable name="base-uri" select="p:base-uri(/*)"/>
-        <p:variable name="base-ref" select="if (starts-with($base-uri,$base-dir)) 
-                    then substring-after($base-uri,$base-dir) 
-                    else $base-uri"/>
-        <p:xslt>
-            <p:input port="stylesheet">
-                <p:document href="http://www.daisy.org/pipeline/modules/html-utils/html5-outliner.xsl"/>
-            </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-        </p:xslt>
-        <p:string-replace match="//@href">
-            <p:with-option name="replace" select="concat('concat(&quot;',$base-ref,'&quot;,.)')"/>
-        </p:string-replace>
+        <px:html-outline>
+            <p:with-option name="output-base-uri" select="$output-base-uri"/>
+        </px:html-outline>
         <p:filter select="/h:ol/h:li"/>
     </p:for-each>
 
     <p:insert match="/h:nav/h:ol" position="first-child">
+        <!-- Prepare the table of content -->
         <p:input port="source">
             <p:inline exclude-inline-prefixes="#all">
                 <nav epub:type="toc" xmlns="http://www.w3.org/1999/xhtml">
@@ -49,6 +44,7 @@
                 </nav>
             </p:inline>
         </p:input>
+        <!-- Insert the result of previous step in the inlined "ol" -->
         <p:input port="insertion">
             <p:pipe port="result" step="tocs"/>
         </p:input>
@@ -60,8 +56,11 @@
             <p:pipe port="result" step="toc-string"/>
         </p:input>
     </p:replace>
+
+    <!-- unwrap the tocs titles subnodes (replace by their children) -->
     <p:unwrap match="//h:nav[@epub:type='toc']/h:h1/*"/>
 
+    <!-- Navigation correction -->
     <p:xslt>
         <p:input port="stylesheet">
             <p:document href="../xslt/nav-fixer.xsl"/>

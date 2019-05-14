@@ -4,7 +4,6 @@
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/library.xpl" uri="../xml/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>

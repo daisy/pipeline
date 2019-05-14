@@ -120,6 +120,12 @@
                     an undeclared vocab.</xsl:message>
             </xsl:when>
             <xsl:when
+                test="$property/@prefix='' and $property/@name=('display-seq','meta-auth')">
+                <xsl:message>[WARNING] The deprecated property '<xsl:value-of select="@property"
+                    />' was found.</xsl:message>
+                    <xsl:next-match/>
+            </xsl:when>
+            <xsl:when
                 test="$property/@prefix='' and not($property/@name=('alternate-script','display-seq',
                 'file-as','group-position','identifier-type','meta-auth','role','title-type'))">
                 <xsl:message>[WARNING] Discarding unknown property '<xsl:value-of select="@property"
@@ -139,9 +145,17 @@
                 <xsl:message>[WARNING] Discarding link with no @href or @rel
                     attributes.</xsl:message>
             </xsl:when>
+            <!-- EPUB3.2: values marc21xml-record, mods-record, onix-record, and xmp-signature of @rel are deprecated and should be replaced by 'record'-->
+            <xsl:when
+                test="$rel/@prefix='' and $rel/@name=('marc21xml-record',
+                'mods-record','onix-record','xml-signature xmp-record')">
+                <xsl:message>[WARNING] Found link with deprecated @rel value '<xsl:value-of
+                        select="@rel"/>'. This value should be replaced by 'record' with a corresponding 'media-type' attribute.</xsl:message>
+                    <xsl:next-match/>
+            </xsl:when>
             <xsl:when
                 test="$rel/@prefix='' and not($rel/@name=('marc21xml-record',
-                'mods-record','onix-record','xml-signature xmp-record'))">
+                'mods-record','onix-record','xml-signature xmp-record','record','acquire','alternate'))">
                 <xsl:message>[WARNING] Discarding link with unknown @rel value '<xsl:value-of
                         select="@rel"/>'.</xsl:message>
             </xsl:when>

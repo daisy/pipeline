@@ -171,6 +171,7 @@
               <includes>
                 <include>**/*.md</include>
                 <include>**/*.html</include>
+                <include>src/main/java/stylesheet.css</include>
                 <include>src/test/xprocspec/test_content.xprocspec.css</include>
                 <include>src/test/xprocspec/orion3.jpg</include>
                 <include>src/test/xprocspec/orion62.jpg</include>

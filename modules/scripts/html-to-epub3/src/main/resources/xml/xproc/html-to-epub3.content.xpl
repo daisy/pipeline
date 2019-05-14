@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    type="pxi:html-to-epub3-content" name="main" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                type="pxi:html-to-epub3-content" name="main">
 
     <p:input port="html" sequence="true" primary="true"/>
     <p:input port="fileset.in.resources"/>
@@ -22,6 +24,11 @@
     <p:option name="publication-dir" required="true"/>
     <p:option name="content-dir" required="true"/>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="convert-diagram-descriptions.xpl"/>
@@ -53,9 +60,10 @@
         <pxi:convert-diagram-descriptions name="diagram-descriptions">
             <p:with-option name="content-dir" select="$content-dir"/>
         </pxi:convert-diagram-descriptions>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$content-dir"/>
-        </p:add-attribute>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$content-dir"/>
+        </px:set-base-uri>
+        <p:add-xml-base/>
     </p:group>
     <p:sink/>
 
@@ -181,13 +189,12 @@
                     <p:pipe port="result" step="html-final"/>
                 </p:input>
             </p:identity>
-            <p:add-attribute match="/*" attribute-name="xml:base">
-                <p:with-option name="attribute-value"
+            <px:set-base-uri>
+                <p:with-option name="base-uri"
                     select="resolve-uri(replace(normalize-space(.),'^.*?([^/]+)\.[^/]*$','$1.xhtml'), $content-dir)">
                     <p:pipe port="result" step="safe-uri"/>
                 </p:with-option>
-            </p:add-attribute>
-            <p:delete match="/*/@xml:base"/>
+            </px:set-base-uri>
             <!--<px:message>
                 <p:with-option name="message"
                     select="concat('upgraded HTML document to the EPUB3 content document ',substring($result-uri,string-length($publication-dir)+1))"

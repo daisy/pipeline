@@ -13,6 +13,13 @@
         <p:pipe port="result" step="media-overlays"/>
     </p:output>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+            px:add-xml-base
+        </p:documentation>
+    </p:import>
+
     <p:variable name="audio-dir" select="concat($content-dir,'audio/')">
         <p:empty/>
     </p:variable>
@@ -25,9 +32,7 @@
         <p:variable name="mo-uri"
             select="concat($mo-dir,replace(base-uri(/*),'.*?([^/]*)\.x?html$','$1.smil'))"/>
         <p:identity name="content-doc"/>
-
         <p:xslt>
-            <p:with-option name="output-base-uri" select="$mo-uri"/>
             <p:input port="source">
                 <p:pipe port="result" step="content-doc"/>
                 <p:pipe port="audio-map" step="main"/>
@@ -46,11 +51,14 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
-        <!--Hack to set the base URI-->
-        <p:add-attribute attribute-name="xml:base" match="/*">
-            <p:with-option name="attribute-value" select="$mo-uri"/>
-        </p:add-attribute>
-        <p:delete match="/*/@xml:base"/>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$mo-uri"/>
+        </px:set-base-uri>
+        <px:add-xml-base root="false">
+            <!--
+                otherwise the base URI of some elements would be empty (Calabash bug?)
+            -->
+        </px:add-xml-base>
     </p:for-each>
 
     <p:group name="fileset">

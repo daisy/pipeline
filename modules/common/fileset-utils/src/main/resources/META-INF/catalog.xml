@@ -3,8 +3,6 @@
     
     <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" uri="../xml/xproc/fileset-library.xpl"/>
     
-    <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset-to-zip-manifests.xsl" uri="../xml/xslt/fileset-to-zip-manifests.xsl"/>
-    
     <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset.rnc" uri="../xml/schemas/fileset.rnc"/>
     
     <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>

@@ -6,34 +6,28 @@
                 type="px:normalize-document-base"
                 version="1.0">
     
-    <p:input port="source" sequence="true"/>
-    <p:output port="result" sequence="true"/>
+    <p:input port="source"/>
+    <p:output port="result"/>
     
-    <p:import href="normalize-uri.xpl"/>
+    <p:import href="normalize-uri.xpl">
+        <p:documentation>
+            px:normalize-uri
+        </p:documentation>
+    </p:import>
+    <p:import href="set-base-uri.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
+
+    <px:normalize-uri name="normalized-base-uri">
+        <p:with-option name="href" select="base-uri(/*)"/>
+    </px:normalize-uri>
     
-    <p:for-each name="for-each">
-        <p:variable name="has-attribute" select="if (/*/@xml:base) then 'true' else 'false'"/>
-        
-        <px:normalize-uri name="normalized-base-uri">
-            <p:with-option name="href" select="base-uri(/*)">
-                <p:pipe port="current" step="for-each"/>
-            </p:with-option>
-        </px:normalize-uri>
-        
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="/*/text()">
-                <p:pipe port="normalized" step="normalized-base-uri"/>
-            </p:with-option>
-        </p:add-attribute>
-        
-        <p:choose>
-            <p:when test="$has-attribute = 'false'">
-                <p:delete match="/*/@xml:base"/>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-    </p:for-each>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="/*/text()">
+            <p:pipe port="normalized" step="normalized-base-uri"/>
+        </p:with-option>
+    </px:set-base-uri>
     
 </p:declare-step>

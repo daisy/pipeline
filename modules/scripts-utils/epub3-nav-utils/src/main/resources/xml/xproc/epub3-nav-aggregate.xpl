@@ -10,6 +10,11 @@
     <p:option name="css" select="''"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:add-xml-base
+        </p:documentation>
+    </p:import>
 
     <p:wrap-sequence wrapper="wrapper">
         <p:input port="source">
@@ -94,6 +99,12 @@
                 <p:pipe step="main" port="source"/>
             </p:input>
         </p:insert>
+
+        <px:add-xml-base root="false">
+            <!--
+                otherwise the base URI of some elements would be empty (Calabash bug?)
+            -->
+        </px:add-xml-base>
     </p:group>
 
 </p:declare-step>

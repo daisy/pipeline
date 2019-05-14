@@ -9,6 +9,12 @@
                 exclude-inline-prefixes="p px xsl"
                 name="main">
     
+    <p:documentation>
+        <p>Add <a
+        href="https://w3c.github.io/publ-epub-revision/epub32/spec/epub-packages.html#sec-pkg-metadata">OPF
+        metadata</a> to PEF document</p>
+    </p:documentation>
+    
     <p:input port="source" primary="true" px:media-type="application/x-pef+xml"/>
     <p:input port="metadata"/>
     <p:output port="result" px:media-type="application/x-pef+xml"/>

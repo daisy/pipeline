@@ -34,6 +34,11 @@
             px:fileset-load
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/zedai-to-epub3/library.xpl">
+        <p:documentation>
+            px:zedai-to-opf-metadata
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:transform
@@ -76,18 +81,14 @@
         <p:with-option name="query" select="concat('(input:css)(output:pef)',$transform,'(locale:',(/*/@xml:lang,'und')[1],')')"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:transform>
-    
-    <p:xslt name="metadata">
+    <p:sink/>
+
+    <px:zedai-to-opf-metadata name="metadata">
         <p:input port="source">
             <p:pipe step="zedai" port="result"/>
         </p:input>
-        <p:input port="stylesheet">
-            <p:document href="http://www.daisy.org/pipeline/modules/metadata-utils/zedai-to-metadata.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
+    </px:zedai-to-opf-metadata>
+    <p:sink/>
     
     <pef:add-metadata>
         <p:input port="source">

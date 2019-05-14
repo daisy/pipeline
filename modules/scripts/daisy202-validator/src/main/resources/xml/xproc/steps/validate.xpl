@@ -94,9 +94,7 @@
         </p:input>
     </px:fileset-load>
     <p:for-each>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="base-uri(/*)"/>
-        </p:add-attribute>
+        <p:add-xml-base/>
     </p:for-each>
     <p:identity name="interdoc-urichecker.before-wrap"/>
     <p:wrap-sequence wrapper="wrapper">
@@ -307,9 +305,7 @@
         <p:iteration-source>
             <p:pipe port="result" step="smil"/>
         </p:iteration-source>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="base-uri(/*)"/>
-        </p:add-attribute>
+        <p:add-xml-base/>
     </p:for-each>
     <p:wrap-sequence wrapper="c:result"/>
     <p:xslt>

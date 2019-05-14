@@ -5,6 +5,18 @@
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 	
+	<!--
+		Convert a d:fileset, representing a set of zipped files in one or more zip files, to a
+		series of c:zip-manifest documents, one for each zip file, which can be passed to px:zip
+		steps (http://exproc.org/proposed/steps/other.html#zip) on the "manifest" port to create the
+		zip files. Each of the c:zip-manifest documents have a @href attribute which can be passed
+		as the value of the "href" option. The hrefs of the input d:fileset must be of the form
+		`<path/to/zip/file>!/<path/within/zip>`. The paths may be relative (to @xml:base) or
+		absolute. A second d:fileset defines which of the files in the first d:fileset are present
+		in memory. Files that are not in memory must be present on disk (at the path indicated by
+		@original-href).
+	-->
+	
 	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" name="zip-manifest"/>
@@ -15,7 +27,7 @@
 	<xsl:template match="/">
 		<xsl:for-each select="distinct-values(//d:file/substring-before(resolve-uri(@href,base-uri(.)),'!/'))">
 			<xsl:variable name="href" select="."/>
-			<xsl:result-document href="manifest.xml" format="zip-manifest">
+			<xsl:result-document href="manifest_{position()}.xml" format="zip-manifest">
 				<xsl:element name="c:zip-manifest">
 					<xsl:attribute name="xml:base" select="base-uri($fileset.zip/*)"/>
 					<xsl:attribute name="href" select="$href"/>

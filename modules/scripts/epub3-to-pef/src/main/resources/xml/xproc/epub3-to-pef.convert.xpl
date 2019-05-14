@@ -53,7 +53,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
@@ -74,9 +78,7 @@
         </p:input>
     </px:fileset-load>
     <p:for-each>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="base-uri(/*)"/>
-        </p:add-attribute>
+        <p:add-xml-base/>
     </p:for-each>
     <p:wrap-sequence wrapper="wrapper"/>
     <p:xslt px:progress=".01">
@@ -91,10 +93,7 @@
     
     <!-- In case there exists any CSS in the EPUB already, and $apply-document-specific-stylesheets = 'true',  then inline that CSS. -->
     <p:for-each px:message="Processing CSS that is already present in the EPUB" px:progress=".09">
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="base-uri(/*)"/>
-        </p:add-attribute>
-        
+        <p:add-xml-base/>
         <p:choose px:progress="1/2">
             <p:when test="$apply-document-specific-stylesheets='true'">
                 <px:message>
@@ -114,9 +113,7 @@
         <p:filter select="/*/html:body"/>
         
         <!-- xml:base attribute is required for resolving cross-references between different bodies -->
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="base-uri(/*)"/>
-        </p:add-attribute>
+        <p:add-xml-base/>
     </p:for-each>
     <p:identity name="spine-bodies"/>
     

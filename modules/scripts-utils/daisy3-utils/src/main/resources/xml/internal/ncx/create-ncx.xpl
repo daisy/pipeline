@@ -39,9 +39,13 @@
       </p:documentation>
     </p:option>
 
-    <p:output port="result" primary="true">
-      <p:pipe port="result" step="create-ncx"/>
-    </p:output>
+    <p:output port="result" primary="true"/>
+
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
 
     <p:xslt>
       <p:input port="source">
@@ -57,8 +61,9 @@
       <p:with-param name="uid" select="$uid"/>
     </p:xslt>
 
-    <p:add-attribute name="create-ncx" match="/*" attribute-name="xml:base">
-      <p:with-option name="attribute-value" select="concat($ncx-dir, 'navigation.ncx')"/>
-    </p:add-attribute>
+    <px:set-base-uri>
+      <p:with-option name="base-uri" select="concat($ncx-dir, 'navigation.ncx')"/>
+    </px:set-base-uri>
+    <p:add-xml-base/>
 
 </p:declare-step>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="../../main/resources/xml/xproc/epub3-nav-create-toc.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:epub3-nav-create-toc">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+						<head><meta charset="UTF-8" /><title></title></head>
+						<body xmlns:epub="http://www.idpf.org/2007/ops" id="d862273e7-0" epub:type="frontmatter">
+							<section id="d861827e19">
+								<h1 id="d862273e9-0" epub:type="title"><span class="ftit"></span></h1>
+								<p><span class="auteur"><span class="pc">LOREM IPSUM</span> <span class="pc">LOREM IPSUM</span></span></p>
+								<aside id="d862273e18-0" epub:type="annotation">Lorem ipsum dolor sit amet</aside>
+							</section>
+							<section id="d861827e29"><p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+								<aside id="d862273e51-0" epub:type="annotation">Lorem ipsum</aside>
+							</section>
+							<section id="d861827e87">
+								<h1 id="d862273e78-0"><em>Table des matières</em></h1>
+								<p>Lorem ipsum dolor sit amet</p>
+							</section>
+							</body>
+						</html>
+				</x:document>
+			</x:input>
+			<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<!--
+		    FIXME: generated IDs make this test brittle
+		-->
+		<x:expect label="the result" type="compare">
+			<x:document type="inline">
+				<nav xmlns="http://www.w3.org/1999/xhtml" epub:type="toc">
+					<h1>Table des matières</h1>
+					<ol>
+						<li>
+							<a href="foo.xhtml#d861827e87">
+								<em>Table des matières</em>
+							</a>
+						</li>
+					</ol>
+				</nav>
+			</x:document>
+		</x:expect>
+		<x:expect label="the output base uri" type="xpath" test="base-uri(/*)" equals="'file:/tmp/toc.xhtml'"
+		          xfail="this is currently done in the calling step"/>
+	</x:scenario>
+	
+</x:description>

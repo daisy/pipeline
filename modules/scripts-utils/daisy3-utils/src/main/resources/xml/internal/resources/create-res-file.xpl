@@ -21,7 +21,13 @@
     </p:documentation>
   </p:option>
 
-  <p:add-attribute match="/*" attribute-name="xml:base">
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+    <p:documentation>
+      px:set-base-uri
+    </p:documentation>
+  </p:import>
+
+  <px:set-base-uri>
     <p:input port="source">
       <!-- TODO: use different words depending on the document
 	   language to localize the file, and generate the
@@ -89,7 +95,8 @@
 	</resources>
       </p:inline>
     </p:input>
-    <p:with-option name="attribute-value" select="concat($output-dir, 'resources.res')"/>
-  </p:add-attribute>
+    <p:with-option name="base-uri" select="concat($output-dir, 'resources.res')"/>
+  </px:set-base-uri>
+  <p:add-xml-base/>
 
 </p:declare-step>

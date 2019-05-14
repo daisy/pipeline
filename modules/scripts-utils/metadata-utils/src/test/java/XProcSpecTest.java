@@ -8,7 +8,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			"org.daisy.libs:jing:?",
 			pipelineModule("common-utils"),
 			pipelineModule("validation-utils"),
-			pipelineModule("dtbook-utils"),
 		};
 	}
 }

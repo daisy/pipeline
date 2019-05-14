@@ -38,6 +38,11 @@
     <!--    <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <!--    <p:import href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="convert-smils.xpl"/>
 
     <!--=========================================================================-->
@@ -126,10 +131,9 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$ncc-uri"/>
-        </p:add-attribute>
-        <p:delete match="/*/@xml:base" name="ncc.doc"/>
+        <px:set-base-uri name="ncc.doc">
+            <p:with-option name="base-uri" select="$ncc-uri"/>
+        </px:set-base-uri>
 
         <p:group name="ncc.fileset">
             <p:output port="result"/>

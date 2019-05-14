@@ -1,53 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description script="../../../src/main/resources/xml/xproc/normalize-document-base.xpl"
-               xmlns:p="http://www.w3.org/ns/xproc"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               xmlns:xs="http://www.w3.org/2001/XMLSchema"
-               xmlns:x="http://www.daisy.org/ns/xprocspec">
+               script="../../../src/main/resources/xml/xproc/normalize-document-base.xpl">
     
-    <x:scenario label="Scenario for testing px:normalize-document-base">
-        
+    <x:scenario label="Scenario for testing px:normalize-document-base - document #1">
         <x:call step="px:normalize-document-base">
             <x:input port="source">
-                <x:document type="inline"><doc xml:base="file:/tmp//dir/file.xml"/></x:document>
-                <x:document type="inline" xml:base="file:/tmp//dir/file.xml"><doc/></x:document>
-                <x:document type="inline" xml:base="file:/tmp//dir/"><doc/></x:document>
-                <x:document type="inline" xml:base="file:/tmp//dir//"><doc xml:base="subdir//file.xml"/></x:document>
+                <x:document type="inline">
+                    <doc xml:base="file:/tmp//dir/file.xml"/>
+                </x:document>
             </x:input>
         </x:call>
-        
-        <x:context label="the result port - all documents">
+        <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="There must be exactly four documents on the result port" type="count" min="4" max="4"/>
-        
-        <x:context label="the result port - document #1">
-            <x:document type="port" port="result" position="1"/>
+        <x:expect label="the document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/tmp/dir/file.xml'"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/file.xml'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:normalize-document-base - document #2">
+        <x:call step="px:normalize-document-base">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp//dir/file.xml">
+                    <doc/>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the first document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/tmp/dir/file.xml'"/>
-        <x:expect label="the first document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/file.xml'"/>
-        
-        <x:context label="the result port - document #2">
-            <x:document type="port" port="result" position="2"/>
+        <x:expect label="the document must not have a @xml:base attribute" type="xpath" test="boolean(/*/@xml:base)" equals="false()"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/file.xml'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:normalize-document-base - document #3">
+        <x:call step="px:normalize-document-base">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp//dir/">
+                    <doc/>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the second document must not have a @xml:base attribute" type="xpath" test="boolean(/*/@xml:base)" equals="false()"/>
-        <x:expect label="the second document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/file.xml'"/>
-        
-        <x:context label="the result port - document #3">
-            <x:document type="port" port="result" position="3"/>
+        <x:expect label="the document must not have a @xml:base attribute" type="xpath" test="boolean(/*/@xml:base)" equals="false()"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:normalize-document-base - document #4">
+        <x:call step="px:normalize-document-base">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp//dir//">
+                    <doc xml:base="subdir//file.xml"/>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the third document must not have a @xml:base attribute" type="xpath" test="boolean(/*/@xml:base)" equals="false()"/>
-        <x:expect label="the third document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/'"/>
-        
-        <x:context label="the result port - document #4">
-            <x:document type="port" port="result" position="4"/>
-        </x:context>
-        <x:expect label="the first document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/tmp/dir/subdir/file.xml'"/>
-        <x:expect label="the fourth document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/subdir/file.xml'"/>
-        
+        <x:expect label="the document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/tmp/dir/subdir/file.xml'"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/subdir/file.xml'"/>
     </x:scenario>
     
 </x:description>

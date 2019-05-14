@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:c="http://www.w3.org/ns/xproc-step" type="pxi:daisy202-to-epub3-ncc-navigation" name="ncc-navigation"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                type="pxi:daisy202-to-epub3-ncc-navigation" name="ncc-navigation">
 
     <p:documentation>
         <p px:role="desc">Transform the DAISY 2.02 NCC into a EPUB 3 Navigation Document.</p>
@@ -55,7 +58,16 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="resolve-links.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">De-references links to SMIL-files.</p:documentation>
     </p:import>
@@ -166,9 +178,10 @@
     <p:add-attribute match="/*" attribute-name="original-href">
         <p:with-option name="attribute-value" select="base-uri(/*)"/>
     </p:add-attribute>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="concat($content-dir,'ncc.xhtml')"/>
-    </p:add-attribute>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="concat($content-dir,'ncc.xhtml')"/>
+    </px:set-base-uri>
+    <p:add-xml-base/>
     <px:message message="created Navigation Document from NCC"/>
     <p:identity name="ncc-navigation.result"/>
     <p:sink/>

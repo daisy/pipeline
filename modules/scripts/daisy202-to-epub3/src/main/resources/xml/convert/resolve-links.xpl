@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" type="pxi:daisy202-to-epub3-resolve-links" name="resolve-links" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                type="pxi:daisy202-to-epub3-resolve-links" name="resolve-links">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p px:role="desc">De-references links in content documents.</p>
@@ -51,14 +54,9 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <p:variable name="content-base" select="base-uri(/*)"/>
-    <p:variable name="content-filename" select="replace(replace($content-base,'^.*/([^/]+)$','$1'),'^([^#]+)#.*$','$1')"/>
-    <p:variable name="content-filename-position" select="string-length($content-filename)+1"/>
 
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">For each 'a'-link</p:documentation>
     <p:xslt>
         <p:with-param name="content-base" select="$content-base"/>
-        <p:with-param name="content-filename" select="$content-filename"/>
-        <p:with-param name="content-filename-position" select="$content-filename-position"/>
         <p:input port="source">
             <p:pipe step="resolve-links" port="source"/>
             <p:pipe step="resolve-links" port="resolve-links-mapping"/>
@@ -69,8 +67,8 @@
                                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
                     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
                     <xsl:param name="content-base" required="yes"/>
-                    <xsl:param name="content-filename" required="yes"/>
-                    <xsl:param name="content-filename-position" required="yes"/>
+                    <xsl:variable name="content-filename" select="replace(replace($content-base,'^.*/([^/]+)$','$1'),'^([^#]+)#.*$','$1')"/>
+                    <xsl:variable name="content-filename-position" select="string-length($content-filename)+1"/>
                     <xsl:variable name="resolve-links-mapping" select="collection()[2]"/>
                     <xsl:template match="*">
                         <xsl:copy>
@@ -88,10 +86,13 @@
                         <xsl:copy>
                             <xsl:copy-of select="@* except @xml:base"/>
                             <xsl:if test="exists($result)">
-                                <xsl:attribute name="href" select="pf:relativize-uri($result,$content-base)"/>
-                                <xsl:if test="starts-with(@href,$content-filename)">
-                                    <xsl:attribute name="href" select="substring(@href,$content-filename-position)"/>
-                                </xsl:if>
+                                <xsl:variable name="href" select="pf:relativize-uri($result,$content-base)"/>
+                                <!--
+                                    pf:relativize-uri('foo.html#bar', 'foo.html') != '#bar'
+                                -->
+                                <xsl:attribute name="href" select="if (starts-with($href,concat($content-filename,'#')))
+                                                                   then substring($href,$content-filename-position)
+                                                                   else $href"/>
                             </xsl:if>
                             <xsl:apply-templates/>
                         </xsl:copy>

@@ -30,6 +30,28 @@
     </expose-services>
   </properties>
   
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>htmlize-sources</id>
+            <configuration>
+              <sourceDirectory>${project.build.directory}/classes</sourceDirectory>
+              <outputDirectory>${project.build.directory}/doc/src/main/resources</outputDirectory>
+              <includes>
+                hyphen/,
+                hyphen/*
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
   <profiles>
     <profile>
       <id>generate-table-files</id>

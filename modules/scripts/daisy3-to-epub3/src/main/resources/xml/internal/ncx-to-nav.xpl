@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step name="main" type="pxi:ncx-to-nav" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-epub3" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-epub3"
+                type="pxi:ncx-to-nav" name="main">
 
 
     <p:input port="source" primary="true" sequence="false">
@@ -31,6 +32,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">For manipulating
             filesets.</p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
     </p:import>
     
     <p:group name="id-map">
@@ -64,10 +70,9 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$result-uri"/>
-        </p:add-attribute>
-        <p:identity name="ncx-with-smilrefs"/>
+        <px:set-base-uri name="ncx-with-smilrefs">
+            <p:with-option name="base-uri" select="$result-uri"/>
+        </px:set-base-uri>
         <p:xslt>
             <p:input port="source">
                 <p:pipe port="result" step="ncx-with-smilrefs"/>
@@ -80,7 +85,6 @@
                 <p:pipe port="source" step="main"/>
             </p:with-param>
         </p:xslt>
-        <p:delete match="/*/@xml:base"/>
     </p:group>
     
     <p:group name="create-fileset">

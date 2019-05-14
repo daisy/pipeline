@@ -146,13 +146,24 @@
                 </px:message>
                 <p:sink/>
 
-                <px:info>
-                  <p:with-option name="href" select="replace(resolve-uri($on-disk, base-uri()), '^([^!]+)(!/.+)?$', '$1')">
-                    <p:inline>
-                      <doc/>
-                    </p:inline>
-                  </p:with-option>
-                </px:info>
+                <p:choose>
+                  <p:when test="starts-with($on-disk,'file:')">
+                    <px:info>
+                      <p:with-option name="href" select="replace(resolve-uri($on-disk, base-uri()), '^([^!]+)(!/.+)?$', '$1')">
+                        <p:inline>
+                          <doc/>
+                        </p:inline>
+                      </p:with-option>
+                    </px:info>
+                  </p:when>
+                  <p:otherwise>
+                    <p:identity>
+                      <p:input port="source">
+                        <p:empty/>
+                      </p:input>
+                    </p:identity>
+                  </p:otherwise>
+                </p:choose>
                 <p:count name="file-exists"/>
 
                 <p:choose>
@@ -282,16 +293,16 @@
                 </p:choose>
                 
               </p:group>
-              <p:catch>
+              <p:catch name="catch">
                 <!-- could not retrieve file from neither memory nor disk -->
                 <p:variable name="file-not-found-message" select="concat('Could neither retrieve file from memory nor disk: ',$target)"/>
                 <p:choose>
                   <p:when test="$fail-on-not-found='true'">
                     <p:in-scope-names name="vars"/>
-                    <p:template name="error">
+                    <p:template>
                       <p:input port="template">
                         <p:inline>
-                          <c:message><![CDATA[]]>{$file-not-found-message}<![CDATA[]]></c:message>
+                          <c:message><![CDATA[]]>{$file-not-found-message}<![CDATA[]]>&#xa;Cause: <c:cause/></c:message>
                         </p:inline>
                       </p:input>
                       <p:input port="source">
@@ -301,6 +312,11 @@
                         <p:pipe step="vars" port="result"/>
                       </p:input>
                     </p:template>
+                    <p:insert match="/*/c:cause" position="first-child" name="error">
+                      <p:input port="insertion">
+                        <p:pipe step="catch" port="error"/>
+                      </p:input>
+                    </p:insert>
                     <p:error code="PEZE00">
                       <p:input port="source">
                         <p:pipe port="result" step="error"/>

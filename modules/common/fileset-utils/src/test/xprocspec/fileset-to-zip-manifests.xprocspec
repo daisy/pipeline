@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data">
+	
+	<x:script>
+		<p:declare-step version="1.0" type="pxi:fileset-to-zip-manifests" name="main">
+			<p:input port="fileset.zip" primary="true"/>
+			<p:input port="fileset.in-memory"/>
+			<p:output port="result" sequence="true">
+				<p:pipe step="zip-manifests" port="secondary"/>
+			</p:output>
+			<p:xslt name="zip-manifests">
+				<p:input port="source">
+					<p:pipe step="main" port="fileset.zip"/>
+					<p:pipe step="main" port="fileset.in-memory"/>
+				</p:input>
+				<p:input port="stylesheet">
+					<p:document href="../../main/resources/xml/xslt/fileset-to-zip-manifests.xsl"/>
+				</p:input>
+				<p:input port="parameters">
+					<p:empty/>
+				</p:input>
+			</p:xslt>
+			<p:sink/>
+		</p:declare-step>
+	</x:script>
+	
+	<x:scenario label="test">
+		<x:call step="pxi:fileset-to-zip-manifests">
+			<x:input port="fileset.zip">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/users/me/dir/">
+						<d:file href="1.zip!/a.xml"/>
+						<d:file href="2.zip!/b.xml"/>
+						<d:file href="2.zip!/c.xml" original-href="file:/users/me/dir/c.xml"/>
+						<d:file href="file:/users/me/dir/1.zip!/d.xml" original-href="../d.xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="fileset.in-memory">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/users/me/dir/">
+						<d:file href="1.zip!/a.xml"/>
+						<d:file href="2.zip!/b.xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result should be as expected" type="compare">
+			<x:document type="inline">
+				<c:zip-manifest xml:base="file:/users/me/dir/" href="file:/users/me/dir/1.zip">
+					<c:entry name="a.xml" href="1.zip!/a.xml"/>
+					<c:entry name="d.xml" href="../d.xml"/>
+				</c:zip-manifest>
+			</x:document>
+			<x:document type="inline">
+				<c:zip-manifest xml:base="file:/users/me/dir/" href="file:/users/me/dir/2.zip">
+					<c:entry name="b.xml" href="2.zip!/b.xml"/>
+					<c:entry name="c.xml" href="file:/users/me/dir/c.xml"/>
+				</c:zip-manifest>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

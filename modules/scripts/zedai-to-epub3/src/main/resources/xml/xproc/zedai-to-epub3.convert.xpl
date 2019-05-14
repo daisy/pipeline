@@ -43,11 +43,20 @@
         <p:documentation>Set to false to bypass aural CSS processing.</p:documentation>
     </p:option>
 
+    <p:import href="zedai-to-opf-metadata.xpl">
+        <p:documentation>
+            px:zedai-to-opf-metadata
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl" />
@@ -112,18 +121,7 @@
     <!--=========================================================================-->
 
     <p:documentation>Extract metadata from ZedAI</p:documentation>
-    <p:group name="metadata">
-        <p:output port="result"/>
-        <p:xslt>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-            <p:input port="stylesheet">
-                <p:document href="http://www.daisy.org/pipeline/modules/metadata-utils/zedai-to-metadata.xsl"/>
-            </p:input>
-        </p:xslt>
-    </p:group>
-
+    <px:zedai-to-opf-metadata name="metadata"/>
 
     <!--=========================================================================-->
     <!-- CONVERT TO XHTML                                                        -->
@@ -188,16 +186,19 @@
     <p:documentation>Generate the EPUB 3 navigation document</p:documentation>
     <p:group name="navigation-doc">
         <p:output port="result" primary="true">
-            <p:pipe port="fileset" step="navigation-doc.result"/>
+            <p:pipe port="result" step="navigation-doc.result.fileset"/>
         </p:output>
         <p:output port="html-file">
-            <p:pipe port="html-file" step="navigation-doc.result"/>
+            <p:pipe port="result" step="navigation-doc.result.html-file"/>
         </p:output>
+        <p:variable name="nav-base" select="concat($content-dir,'toc.xhtml')">
+            <p:empty/>
+        </p:variable>
         <px:epub3-nav-create-toc name="navigation-doc.toc">
             <p:input port="source">
                 <p:pipe port="html-files" step="zedai-to-html"/>
             </p:input>
-            <p:with-option name="base-dir" select="$content-dir">
+            <p:with-option name="output-base-uri" select="$nav-base">
                 <p:empty/>
             </p:with-option>
         </px:epub3-nav-create-toc>
@@ -213,28 +214,19 @@
             </p:input>
         </px:epub3-nav-aggregate>
         <!--TODO create other nav types (configurable ?)-->
-        <p:group name="navigation-doc.result">
-            <p:output port="fileset">
-                <p:pipe port="result" step="navigation-doc.result.fileset"/>
-            </p:output>
-            <p:output port="html-file">
-                <p:pipe port="result" step="navigation-doc.result.html-file"/>
-            </p:output>
-            <p:variable name="nav-base" select="concat($content-dir,'toc.xhtml')"/>
-            <px:fileset-create>
-                <p:with-option name="base" select="$content-dir"/>
-            </px:fileset-create>
-            <px:fileset-add-entry media-type="application/xhtml+xml" name="navigation-doc.result.fileset">
-                <p:with-option name="href" select="$nav-base"/>
-            </px:fileset-add-entry>
-            <px:set-base-uri>
-                <p:input port="source">
-                    <p:pipe port="result" step="navigation-doc.html-file"/>
-                </p:input>
-                <p:with-option name="base-uri" select="$nav-base"/>
-            </px:set-base-uri>
-            <px:message message="Navigation Document Created." name="navigation-doc.result.html-file"/>
-        </p:group>
+        <px:fileset-create>
+            <p:with-option name="base" select="$content-dir"/>
+        </px:fileset-create>
+        <px:fileset-add-entry media-type="application/xhtml+xml" name="navigation-doc.result.fileset">
+            <p:with-option name="href" select="$nav-base"/>
+        </px:fileset-add-entry>
+        <px:set-base-uri>
+            <p:input port="source">
+                <p:pipe port="result" step="navigation-doc.html-file"/>
+            </p:input>
+            <p:with-option name="base-uri" select="$nav-base"/>
+        </px:set-base-uri>
+        <px:message message="Navigation Document Created." name="navigation-doc.result.html-file"/>
     </p:group>
 
     <!--=========================================================================-->

@@ -215,7 +215,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>file-utils</artifactId>
-        <version>1.5.1-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -235,7 +235,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>mediatype-utils</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -328,12 +328,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-utils</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-nav-utils</artifactId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -343,7 +343,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-pub-utils</artifactId>
-        <version>1.0.7-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -358,7 +358,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>metadata-utils</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -472,7 +472,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-to-epub3</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>

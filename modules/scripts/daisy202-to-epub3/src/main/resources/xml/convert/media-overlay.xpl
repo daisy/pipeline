@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:mo="http://www.w3.org/ns/SMIL"
-    xmlns:epub="http://www.idpf.org/2007/ops" type="pxi:daisy202-to-epub3-mediaoverlay" name="mediaoverlay" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:mo="http://www.w3.org/ns/SMIL"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                type="pxi:daisy202-to-epub3-mediaoverlay" name="mediaoverlay">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p px:role="desc">For processing the SMILs.</p>
@@ -42,12 +45,21 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">For manipulating filesets.</p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/library.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">For manipulating media overlays.</p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
     </p:import>
 
     <p:for-each name="daisy-smil-iterate">
@@ -59,9 +71,10 @@
         <px:message message="upgraded the SMIL file $1">
             <p:with-option name="param1" select="$original-uri"/>
         </px:message>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$original-uri"/>
-        </p:add-attribute>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$original-uri"/>
+        </px:set-base-uri>
+        <p:add-xml-base/>
     </p:for-each>
     <px:mediaoverlay-join name="mediaoverlay-joined"/>
     <px:message message="joined all the media overlays"/>
@@ -79,10 +92,10 @@
                 </p:iteration-source>
                 <p:variable name="content-result-uri" select="base-uri(/*)"/>
                 <p:variable name="result-uri" select="replace($content-result-uri,'xhtml$','smil')"/>
-
-                <p:add-attribute match="/*" attribute-name="xml:base">
-                    <p:with-option name="attribute-value" select="/*/@original-href"/>
-                </p:add-attribute>
+                <px:set-base-uri>
+                    <p:with-option name="base-uri" select="/*/@original-href"/>
+                </px:set-base-uri>
+                <p:add-xml-base/>
                 <p:add-attribute match="/*" attribute-name="original-href">
                     <p:with-option name="attribute-value" select="$result-uri"/>
                 </p:add-attribute>
@@ -100,10 +113,10 @@
             <px:message message="SMIL fragments have been rearranged according to the content order"/>
 
             <p:for-each>
-                <p:add-attribute match="/*" attribute-name="xml:base">
-                    <p:with-option name="attribute-value" select="/*/@original-href"/>
-                </p:add-attribute>
-                <!--<p:delete match="/*/@xml:base"/>-->
+                <px:set-base-uri>
+                    <p:with-option name="base-uri" select="/*/@original-href"/>
+                </px:set-base-uri>
+                <p:add-xml-base/>
                 <p:xslt name="rearrange.mediaoverlay-annotated">
                     <p:input port="parameters">
                         <p:empty/>

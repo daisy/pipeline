@@ -3,13 +3,15 @@
                xmlns="http://www.w3.org/1999/xhtml"
                stylesheet="../../main/resources/xml/xslt/html5-outliner.xsl">
 
+	<x:param name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+
 	<!-- ========================================================================== -->
 	<!-- the first heading element in sectioning content is the section heading     -->
 	<!-- ========================================================================== -->
 	
 	<x:scenario label="section heading: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">heading</h1>
 				</body>
@@ -17,14 +19,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">heading</a></li>
+				<li><a href="content.xhtml#body">heading</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="section heading: 'a' in heading content is translated to 'span'">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">heading <a href="#dummy" class="foo">with a link</a> and <span><a href="#dummy" class="bar">another link</a></span></h1>
 				</body>
@@ -32,14 +34,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">heading <span class="foo">with a link</span> and <span><span class="bar">another link</span></span></a></li>
+				<li><a href="content.xhtml#body">heading <span class="foo">with a link</span> and <span><span class="bar">another link</span></span></a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="section heading: not h1">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h3 id="h1">heading</h3>
 				</body>
@@ -47,14 +49,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">heading</a></li>
+				<li><a href="content.xhtml#body">heading</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="section heading: hgroup">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<hgroup id="hg">
 						<h1>heading</h1>
@@ -65,14 +67,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">heading</a></li>
+				<li><a href="content.xhtml#body">heading</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="section heading: hgroup with highest rank not first child">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<hgroup id="hg">
 						<h3>other</h3>
@@ -83,14 +85,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">heading</a></li>
+				<li><a href="content.xhtml#body">heading</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="section heading: not first child">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<p>paragraph</p>
 					<h1 id="h1">heading</h1>
@@ -99,14 +101,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">heading</a></li>
+				<li><a href="content.xhtml#body">heading</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="section heading: after subsection">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<section id="section">
 						<h1 id="h11">h11</h1>
@@ -117,9 +119,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h12</a>
+				<li><a href="content.xhtml#body">h12</a>
 				<ol>
-					<li><a href="#section">h11</a></li>
+					<li><a href="content.xhtml#section">h11</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -128,7 +130,7 @@
 	
 	<x:scenario label="section heading: between subsections">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<section id="section1">
 						<h1 id="h11">h11</h1>
@@ -142,10 +144,10 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h12</a>
+				<li><a href="content.xhtml#body">h12</a>
 				<ol>
-					<li><a href="#section1">h11</a></li>
-					<li><a href="#section2">h13</a></li>
+					<li><a href="content.xhtml#section1">h11</a></li>
+					<li><a href="content.xhtml#section2">h13</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -158,7 +160,7 @@
 	
 	<x:scenario label="'section' subsection: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<section id="section">
@@ -169,9 +171,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#section">h12</a></li>
+					<li><a href="content.xhtml#section">h12</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -180,7 +182,7 @@
 	
 	<x:scenario label="'section' subsection: nested">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<section id="section1">
@@ -194,11 +196,11 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#section1">h12</a>
+					<li><a href="content.xhtml#section1">h12</a>
 					<ol>
-						<li><a href="#section2">h13</a></li>
+						<li><a href="content.xhtml#section2">h13</a></li>
 					</ol>
 					</li>
 				</ol>
@@ -209,7 +211,7 @@
 	
 	<x:scenario label="'section' subsection: siblings">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<section id="section1">
@@ -223,10 +225,10 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#section1">h12</a></li>
-					<li><a href="#section2">h13</a></li>
+					<li><a href="content.xhtml#section1">h12</a></li>
+					<li><a href="content.xhtml#section2">h13</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -235,7 +237,7 @@
 	
 	<x:scenario label="'article' subsection: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<article id="article">
@@ -246,9 +248,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#article">h12</a></li>
+					<li><a href="content.xhtml#article">h12</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -257,7 +259,7 @@
 	
 	<x:scenario label="'aside' subsection: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<aside id="aside">
@@ -268,9 +270,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#aside">h12</a></li>
+					<li><a href="content.xhtml#aside">h12</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -279,7 +281,7 @@
 	
 	<x:scenario label="'nav' subsection: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<nav id="nav">
@@ -290,9 +292,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#nav">h12</a></li>
+					<li><a href="content.xhtml#nav">h12</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -301,7 +303,7 @@
 	
 	<x:scenario label="mixed subsections: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<section id="section">
@@ -321,16 +323,16 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#section">h12</a>
+					<li><a href="content.xhtml#section">h12</a>
 					<ol>
-						<li><a href="#aside">h13</a></li>
+						<li><a href="content.xhtml#aside">h13</a></li>
 					</ol>
 					</li>
-					<li><a href="#article">h14</a>
+					<li><a href="content.xhtml#article">h14</a>
 					<ol>
-						<li><a href="#nav">h15</a></li>
+						<li><a href="content.xhtml#nav">h15</a></li>
 					</ol>
 					</li>
 				</ol>
@@ -345,7 +347,7 @@
 	
 	<x:scenario label="lower rank heading: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<h2 id="h2">h2</h2>
@@ -354,9 +356,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li><a href="#h2">h2</a></li>
+					<li><a href="content.xhtml#h2">h2</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -365,7 +367,7 @@
 	
 	<x:scenario label="lower rank heading: skip rank">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<h3 id="h3">h3</h3>
@@ -374,9 +376,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li><a href="#h3">h3</a></li>
+					<li><a href="content.xhtml#h3">h3</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -385,7 +387,7 @@
 	
 	<x:scenario label="lower rank heading: hgroup">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<hgroup id="hg">
@@ -397,9 +399,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li><a href="#hg">h2</a></li>
+					<li><a href="content.xhtml#hg">h2</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -408,7 +410,7 @@
 	
 	<x:scenario label="lower rank heading: hgroup with highest rank not first child">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<hgroup id="hg">
@@ -420,9 +422,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li><a href="#hg">h2</a></li>
+					<li><a href="content.xhtml#hg">h2</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -431,7 +433,7 @@
 	
 	<x:scenario label="lower rank heading: successively">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<h2 id="h2">h2</h2>
@@ -444,17 +446,17 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li><a href="#h2">h2</a>
+					<li><a href="content.xhtml#h2">h2</a>
 					<ol>
-						<li><a href="#h3">h3</a>
+						<li><a href="content.xhtml#h3">h3</a>
 						<ol>
-							<li><a href="#h4">h4</a>
+							<li><a href="content.xhtml#h4">h4</a>
 							<ol>
-								<li><a href="#h5">h5</a>
+								<li><a href="content.xhtml#h5">h5</a>
 								<ol>
-									<li><a href="#h6">h6</a></li>
+									<li><a href="content.xhtml#h6">h6</a></li>
 								</ol>
 								</li>
 							</ol>
@@ -471,7 +473,7 @@
 
 	<x:scenario label="lower rank heading: after subsection">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<section id="section">
@@ -483,10 +485,10 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#section">h12</a></li>
-					<li><a href="#h2">h2</a></li>
+					<li><a href="content.xhtml#section">h12</a></li>
+					<li><a href="content.xhtml#h2">h2</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -499,7 +501,7 @@
 	
 	<x:scenario label="same rank heading: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<h1 id="h12">h12</h1>
@@ -508,15 +510,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
-				<li><a href="#h12">h12</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
+				<li><a href="content.xhtml#h12">h12</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="same rank heading: within nested divs">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<div id="div">
@@ -529,15 +531,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
-				<li><a href="#h12">h12</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
+				<li><a href="content.xhtml#h12">h12</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="same rank heading: within an hgroup">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<hgroup id="hg">
@@ -549,15 +551,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
-				<li><a href="#hg">h12</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
+				<li><a href="content.xhtml#hg">h12</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="same rank heading: within a section">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<section id="section">
@@ -569,10 +571,10 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#section">h12</a></li>
-					<li><a href="#h13">h13</a></li>
+					<li><a href="content.xhtml#section">h12</a></li>
+					<li><a href="content.xhtml#h13">h13</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -585,7 +587,7 @@
 	
 	<x:scenario label="higher rank heading: basic">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h2 id="h2">h2</h2>
 					<h1 id="h1">h1</h1>
@@ -594,15 +596,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h2</a></li>
-				<li><a href="#h1">h1</a></li>
+				<li><a href="content.xhtml#body">h2</a></li>
+				<li><a href="content.xhtml#h1">h1</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="higher rank heading: within nested divs">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h2 id="h2">h2</h2>
 					<div id="div">
@@ -615,15 +617,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h2</a></li>
-				<li><a href="#h1">h1</a></li>
+				<li><a href="content.xhtml#body">h2</a></li>
+				<li><a href="content.xhtml#h1">h1</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="higher rank heading: within an hgroup">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h2 id="h2">h2</h2>
 					<hgroup id="hg">
@@ -635,15 +637,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h2</a></li>
-				<li><a href="#hg">h1</a></li>
+				<li><a href="content.xhtml#body">h2</a></li>
+				<li><a href="content.xhtml#hg">h1</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="higher rank heading: within a section">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<section id="section">
@@ -655,10 +657,10 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a>
+				<li><a href="content.xhtml#body">h11</a>
 				<ol>
-					<li><a href="#section">h2</a></li>
-					<li><a href="#h12">h12</a></li>
+					<li><a href="content.xhtml#section">h2</a></li>
+					<li><a href="content.xhtml#h12">h12</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -671,20 +673,20 @@
 	
 	<x:scenario label="default heading: body">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body"/>
 			</html>
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li data-generated="true"><a href="#body">Untitled document</a></li>
+				<li data-generated="true"><a href="content.xhtml#body">Untitled document</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="default heading: section">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<section id="section"/>
@@ -693,9 +695,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li data-generated="true"><a href="#section">Untitled section</a></li>
+					<li data-generated="true"><a href="content.xhtml#section">Untitled section</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -704,7 +706,7 @@
 	
 	<x:scenario label="default heading: article">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<article id="article"/>
@@ -713,9 +715,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li data-generated="true"><a href="#article">Article</a></li>
+					<li data-generated="true"><a href="content.xhtml#article">Article</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -724,7 +726,7 @@
 	
 	<x:scenario label="default heading: aside">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<aside id="aside"/>
@@ -733,9 +735,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li data-generated="true"><a href="#aside">Sidebar</a></li>
+					<li data-generated="true"><a href="content.xhtml#aside">Sidebar</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -744,7 +746,7 @@
 	
 	<x:scenario label="default heading: nav">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<nav id="nav"/>
@@ -753,9 +755,9 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li data-generated="true"><a href="#nav">Navigation</a></li>
+					<li data-generated="true"><a href="content.xhtml#nav">Navigation</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -768,7 +770,7 @@
 	
 	<x:scenario label="sectioning root: blockquote">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<blockquote id="root">
@@ -779,14 +781,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="sectioning root: details">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<details id="root">
@@ -797,14 +799,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="sectioning root: fieldset">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<fieldset id="root">
@@ -815,14 +817,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="sectioning root: figure">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<figure id="root">
@@ -833,14 +835,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="sectioning root: td">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h11</h1>
 					<table>
@@ -855,7 +857,7 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h11</a></li>
+				<li><a href="content.xhtml#body">h11</a></li>
 			</ol>
 		</x:expect>
 	</x:scenario>
@@ -866,7 +868,7 @@
 	
 	<x:scenario label="complex 1">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="foo">Foo</h1>
 					<h2 id="bar">Bar</h2>
@@ -884,11 +886,11 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">Foo</a>
+				<li><a href="content.xhtml#body">Foo</a>
 				<ol>
-					<li><a href="#bar">Bar</a></li>
-					<li><a href="#quux">Quux</a></li>
-					<li><a href="#section">Thud</a></li>
+					<li><a href="content.xhtml#bar">Bar</a></li>
+					<li><a href="content.xhtml#quux">Quux</a></li>
+					<li><a href="content.xhtml#section">Thud</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -897,7 +899,7 @@
 	
 	<x:scenario label="complex 2">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<section id="section1">
 						<h3>Thud</h3>
@@ -913,15 +915,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">Foo</a>
+				<li><a href="content.xhtml#body">Foo</a>
 				<ol>
-					<li><a href="#section1">Thud</a></li>
+					<li><a href="content.xhtml#section1">Thud</a></li>
 				</ol>
 				</li>
-				<li><a href="#bar">Bar</a>
+				<li><a href="content.xhtml#bar">Bar</a>
 				<ol>
-					<li><a href="#quux">Quux</a></li>
-					<li><a href="#section2">Thud</a></li>
+					<li><a href="content.xhtml#quux">Quux</a></li>
+					<li><a href="content.xhtml#section2">Thud</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -930,7 +932,7 @@
 	
 	<x:scenario label="complex 3">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<section id="section1">
 						<h3>Thud</h3>
@@ -950,20 +952,20 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">Foo</a>
+				<li><a href="content.xhtml#body">Foo</a>
 				<ol>
-					<li><a href="#section1">Thud</a></li>
+					<li><a href="content.xhtml#section1">Thud</a></li>
 				</ol>
 				</li>
-				<li><a href="#bar1">Bar</a>
+				<li><a href="content.xhtml#bar1">Bar</a>
 				<ol>
-					<li><a href="#section2">Thud</a></li>
+					<li><a href="content.xhtml#section2">Thud</a></li>
 				</ol>
 				</li>
-				<li><a href="#bar2">Bar</a>
+				<li><a href="content.xhtml#bar2">Bar</a>
 				<ol>
-					<li><a href="#quux">Quux</a></li>
-					<li><a href="#section3">Thud</a></li>
+					<li><a href="content.xhtml#quux">Quux</a></li>
+					<li><a href="content.xhtml#section3">Thud</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -972,7 +974,7 @@
 	
 	<x:scenario label="complex 4">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h1</h1>
 					<h1 id="h12">h1</h1>
@@ -988,17 +990,17 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a></li>
-				<li><a href="#h12">h1</a>
+				<li><a href="content.xhtml#body">h1</a></li>
+				<li><a href="content.xhtml#h12">h1</a>
 				<ol>
-					<li><a href="#h21">h2</a>
+					<li><a href="content.xhtml#h21">h2</a>
 					<ol>
-						<li><a href="#h31">h3</a></li>
+						<li><a href="content.xhtml#h31">h3</a></li>
 					</ol>
 					</li>
-					<li><a href="#section">h1</a></li>
-					<li><a href="#h32">h3</a></li>
-					<li><a href="#h22">h2</a></li>
+					<li><a href="content.xhtml#section">h1</a></li>
+					<li><a href="content.xhtml#h32">h3</a></li>
+					<li><a href="content.xhtml#h22">h2</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -1007,7 +1009,7 @@
 	
 	<x:scenario label="complex 5">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h11">h1</h1>
 					<h1 id="h12">h1</h1>
@@ -1022,14 +1024,14 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a></li>
-				<li><a href="#h12">h1</a>
+				<li><a href="content.xhtml#body">h1</a></li>
+				<li><a href="content.xhtml#h12">h1</a>
 				<ol>
-					<li><a href="#section">h1</a></li>
-					<li><a href="#h31">h3</a></li>
-					<li><a href="#h21">h2</a>
+					<li><a href="content.xhtml#section">h1</a></li>
+					<li><a href="content.xhtml#h31">h3</a></li>
+					<li><a href="content.xhtml#h21">h2</a>
 					<ol>
-						<li><a href="#h32">h3</a></li>
+						<li><a href="content.xhtml#h32">h3</a></li>
 					</ol>
 					</li>
 				</ol>
@@ -1040,7 +1042,7 @@
 	
 	<x:scenario label="complex 6">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<section id="section">
 						<h1>h1</h1>
@@ -1054,15 +1056,15 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h2</a>
+				<li><a href="content.xhtml#body">h2</a>
 				<ol>
-					<li><a href="#section">h1</a></li>
-					<li><a href="#h31">h3</a></li>
+					<li><a href="content.xhtml#section">h1</a></li>
+					<li><a href="content.xhtml#h31">h3</a></li>
 				</ol>
 				</li>
-				<li><a href="#h22">h2</a>
+				<li><a href="content.xhtml#h22">h2</a>
 				<ol>
-					<li><a href="#h32">h3</a></li>
+					<li><a href="content.xhtml#h32">h3</a></li>
 				</ol>
 				</li>
 			</ol>
@@ -1071,7 +1073,7 @@
 	
 	<x:scenario label="complex 7">
 		<x:context>
-			<html>
+			<html xml:base="file:/tmp/content.xhtml">
 				<body id="body">
 					<h1 id="h1">h1</h1>
 					<h2 id="h2">h2</h2>
@@ -1084,20 +1086,70 @@
 		</x:context>
 		<x:expect label="outline">
 			<ol>
-				<li><a href="#body">h1</a>
+				<li><a href="content.xhtml#body">h1</a>
 				<ol>
-					<li><a href="#h2">h2</a>
+					<li><a href="content.xhtml#h2">h2</a>
 					<ol>
-						<li><a href="#h31">h3</a></li>
-						<li><a href="#h32">h3</a>
+						<li><a href="content.xhtml#h31">h3</a></li>
+						<li><a href="content.xhtml#h32">h3</a>
 						<ol>
-							<li><a href="#h41">h4</a></li>
-							<li><a href="#h42">h4</a></li>
+							<li><a href="content.xhtml#h41">h4</a></li>
+							<li><a href="content.xhtml#h42">h4</a></li>
 						</ol>
 						</li>
 					</ol>
 					</li>
 				</ol>
+				</li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="complex 8 - handle empty titles">
+		<x:context>
+			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" xml:base="file:/tmp/content.xhtml">
+				<head><meta charset="UTF-8" /><title></title></head>
+				<body xmlns:epub="http://www.idpf.org/2007/ops" id="d862273e7-0" epub:type="frontmatter">
+					<section id="d861827e19">
+						<h1 id="d862273e9-0" epub:type="title"><span class="ftit"></span></h1>
+						<p><span class="auteur"><span class="pc">LOREM IPSUM</span> <span class="pc">LOREM IPSUM</span></span></p><aside id="d862273e18-0" epub:type="annotation">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</aside>
+					</section>
+					<section id="d861827e29"><p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p><aside id="d862273e51-0" epub:type="annotation">Image non fournie par l éditeur.</aside>
+					</section>
+					<section id="d861827e87">
+						<h1 id="d862273e78-0"><em>Table des matières</em></h1>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+					</section>
+				</body>
+			</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol xmlns="http://www.w3.org/1999/xhtml">
+				<li data-generated="true">
+					<a href="content.xhtml#d862273e7-0">Untitled document</a>
+					<ol>
+						<li data-generated="true">
+							<a href="content.xhtml#d861827e19">Untitled section</a>
+							<ol>
+								<li data-generated="true">
+									<a href="content.xhtml#d862273e18-0">Sidebar</a>
+								</li>
+							</ol>
+						</li>
+						<li data-generated="true">
+							<a href="content.xhtml#d861827e29">Untitled section</a>
+							<ol>
+								<li data-generated="true">
+									<a href="content.xhtml#d862273e51-0">Sidebar</a>
+								</li>
+							</ol>
+						</li>
+						<li>
+							<a href="content.xhtml#d861827e87">
+								<em xmlns:epub="http://www.idpf.org/2007/ops">Table des matières</em>
+							</a>
+						</li>
+					</ol>
 				</li>
 			</ol>
 		</x:expect>

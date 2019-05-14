@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:z="http://www.daisy.org/ns/z3998/authoring/" version="2.0" exclude-result-prefixes="xs z"
-  xpath-default-namespace="http://www.idpf.org/2007/opf">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+                xmlns:rdfa="rdfa-functions"
+                xmlns="http://www.idpf.org/2007/opf"
+                xpath-default-namespace="http://www.idpf.org/2007/opf"
+                exclude-result-prefixes="xs z">
 
   <xsl:output method="xml" indent="yes"/>
 
@@ -87,19 +91,21 @@
     </metadata>
   </xsl:template>
 
-  <xsl:template match="z:meta[@rel='z3998:meta-record']">
+  <xsl:template match="z:meta[@rel='z3998:meta-record' and @resource]">
     <xsl:variable name="this" select="."/>
     <xsl:variable name="record-type"
-      select="ancestor::z:head//z:meta[@property='z3998:meta-record-type' and @about=$this/@resource][1]/@content"/>
+                  select="ancestor::z:head//z:meta[@property='z3998:meta-record-type']
+                                                  [rdfa:context(.)=$this/@resource]
+                                                  [1]/@content"/>
     <xsl:choose>
       <xsl:when test="$record-type='z3998:mods'">
-        <link rel="mods-record" href="{@resource}"/>
+        <link rel="record" href="{@resource}" media-type="application/mods+xml"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:onix-books'">
-        <link rel="onix-record" href="{@resource}"/>
+        <link rel="record" href="{@resource}" media-type="application/xml" properties="onix"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:marc21-xml'">
-        <link rel="marc21xml-record" href="{@resource}"/>
+        <link rel="record" href="{@resource}" media-type="application/marcxml+xml"/>
       </xsl:when>
       <xsl:when test="$record-type=('z3998:dcterms-rdf','z3998:dctersm-rdfa')">
         <!--TODO translate external DCTERMS records ?-->
@@ -176,6 +182,7 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- in case of DTBooks, the doctitle tag is converted here as a dc:title -->
   <xsl:template match="z:*[f:hasPropOrRole(.,('title','covertitle','halftitle'))]" mode="title">
     <xsl:call-template name="create-title"/>
   </xsl:template>
@@ -185,11 +192,17 @@
   </xsl:template>
 
   <xsl:template name="create-title">
-    <dc:title id="{generate-id()}">
-      <xsl:copy-of select="@dir"/>
-      <xsl:copy-of select="@xml:lang"/>
-      <xsl:value-of select="if (string(.)) then normalize-space(string(.)) else @content"/>
-    </dc:title>
+    <!-- FIX - http://www.github.com/daisy/pipeline-tasks#125 : 
+      empty doctitle could lead to empty tag with role title, 
+        wich would lead to the creation of an empty dc:title tag
+        thus making the epub invalid for epubcheck. -->
+    <xsl:if test=".//text()[not(self::text()[not(normalize-space())])] != '' or @content">
+      <dc:title id="{generate-id()}">
+        <xsl:copy-of select="@dir"/>
+        <xsl:copy-of select="@xml:lang"/>
+        <xsl:value-of select="if (string(.)) then normalize-space(string(.)) else @content"/>
+      </dc:title>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="text()" mode="#all"/>
@@ -238,4 +251,12 @@
     <xsl:sequence select="f:hasProp($node,$value) or f:hasRole($node,$value)"/>
   </xsl:function>
 
+  <!-- FIXME: move to a rdfa-utils module? -->
+  <xsl:function name="rdfa:context" as="xs:anyURI?">
+    <xsl:param name="elem" as="element()"/>
+    <xsl:sequence select="if (exists($elem/@about))
+                          then $elem/@about
+                          else ($elem/parent::*[@resource|@about])[last()]/(@resource,@about)[1]"/>
+  </xsl:function>
+  
 </xsl:stylesheet>

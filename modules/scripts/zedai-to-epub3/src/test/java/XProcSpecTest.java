@@ -15,7 +15,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("file-utils"),
 			pipelineModule("html-utils"),
 			pipelineModule("mediaoverlay-utils"),
-			pipelineModule("metadata-utils"),
 			pipelineModule("tts-helpers"),
 			pipelineModule("zedai-to-html"),
 			pipelineModule("zedai-utils")

@@ -62,11 +62,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>metadata-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>validation-utils</artifactId>
       <scope>runtime</scope>
     </dependency>

@@ -4,5 +4,6 @@
     <p:import href="html-load.xpl"/>
     <p:import href="html-chunker.xpl"/>
     <p:import href="html-to-fileset.xpl"/>
+    <p:import href="html-outline.xpl"/>
 
 </p:library>

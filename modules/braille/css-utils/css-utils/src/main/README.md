@@ -4,7 +4,8 @@
 
 - <a href="resources/xml/library.xsl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl`</a>: Utility functions for CSS-parsing.
 - <a href="resources/xml/library.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl`</a>
-- <a href="resources/xml/transform/block-translator-template.xsl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-template.xsl`</a>
+- <a href="resources/xml/transform/abstract-block-translator.xsl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl`</a>
+- <a href="resources/xml/transform/block-translator-from-text-transform.xsl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl`</a>
 
 ## OSGi services
 

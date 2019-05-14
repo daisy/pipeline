@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="../../main/resources/xml/xproc/zedai-to-opf-metadata.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:zedai-to-opf-metadata">
+			<x:input port="source">
+				<x:document type="inline">
+					<document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en-US">
+						<head>
+							<meta>foobar</meta>
+							<meta rel="z3998:meta-record" resource="foo.xml">
+								<meta property="z3998:meta-record-type" content="z3998:mods" />
+								<meta property="z3998:meta-record-version" content="3.3" />
+							</meta>
+						</head>
+						<body>
+							<section>
+								<h>foo</h>
+								<p>bar</p>
+							</section>
+						</body>
+					</document>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<!--
+		    FIXME: generated id makes test brittle
+		-->
+		<x:expect label="the result should be as expected" type="compare">
+			<x:document type="inline">
+				<metadata xmlns="http://www.idpf.org/2007/opf"
+				          xmlns:dc="http://purl.org/dc/elements/1.1/"
+				          prefix="dc: http://purl.org/dc/elements/1.1/">
+					<dc:title id="d444e20">foo</dc:title>
+					<dc:language>en-US</dc:language>
+					<link rel="record" href="foo.xml" media-type="application/mods+xml"/>
+				</metadata>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

@@ -116,7 +116,12 @@
   <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/dtbook-tts/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+    <p:documentation>
+      px:copy-resource
+      px:set-base-uri
+    </p:documentation>
+  </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
 
 
@@ -271,12 +276,13 @@
     </px:create-daisy3-smils>
 
     <!-- ===== CONTENT DOCUMENT FILE AND ITS FILESET ENTRY ==== -->
-    <p:add-attribute match="/*" attribute-name="xml:base">
+    <px:set-base-uri>
       <p:input port="source">
-	<p:pipe port="updated-content" step="create-mo"/>
+        <p:pipe port="updated-content" step="create-mo"/>
       </p:input>
-      <p:with-option name="attribute-value" select="$daisy3-dtbook-uri"/>
-    </p:add-attribute>
+      <p:with-option name="base-uri" select="$daisy3-dtbook-uri"/>
+    </px:set-base-uri>
+    <p:add-xml-base/>
     <p:add-attribute match="//dtbook:meta[@name='dtb:uid']" attribute-name="content">
       <p:with-option name="attribute-value" select="$uid"/>
     </p:add-attribute>
@@ -359,9 +365,10 @@
 
 	<!-- xslt fallback -->
 	<p:load href="mathml-fallback.xsl"/>
-	<p:add-attribute match="/*" attribute-name="xml:base" name="mathml-xslt-fallback">
-	  <p:with-option name="attribute-value" select="$mathml-fallback-uri"/>
-	</p:add-attribute>
+	<px:set-base-uri name="mathml-xslt-fallback">
+	  <p:with-option name="base-uri" select="$mathml-fallback-uri"/>
+	</px:set-base-uri>
+	<p:add-xml-base/>
 	<px:fileset-create>
 	  <p:with-option name="base" select="$output-fileset-base"/>
 	</px:fileset-create>

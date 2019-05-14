@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:epub3-ocf-finalize" name="main" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:err="http://www.w3.org/ns/xproc-error" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc-internal" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc-internal"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:err="http://www.w3.org/ns/xproc-error"
+                type="px:epub3-ocf-finalize" name="main">
     
     <p:input port="source" primary="true"/>
     <p:input port="metadata" sequence="true">
@@ -29,6 +33,11 @@
     </p:output>
     
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     
     <p:declare-step type="pxi:fileset-add-ocf-entry" name="store-in-ocf">
         <p:input port="fileset" primary="true"/>
@@ -108,12 +117,11 @@
                 <p:empty/>
             </p:input>
         </p:xslt>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="resolve-uri('META-INF/container.xml',/*/@result-base)">
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="resolve-uri('META-INF/container.xml',/*/@result-base)">
                 <p:pipe port="result" step="result-base"/>
             </p:with-option>
-        </p:add-attribute>
-        <p:delete match="/*/@xml:base"/>
+        </px:set-base-uri>
     </p:group>
     <p:sink/>
 
@@ -134,12 +142,11 @@
                         <p:empty/>
                     </p:input>
                 </p:xslt>
-                <p:add-attribute match="/*" attribute-name="xml:base">
-                    <p:with-option name="attribute-value" select="resolve-uri('META-INF/manifest.xml',/*/@result-base)">
+                <px:set-base-uri>
+                    <p:with-option name="base-uri" select="resolve-uri('META-INF/manifest.xml',/*/@result-base)">
                         <p:pipe port="result" step="result-base"/>
                     </p:with-option>
-                </p:add-attribute>
-                <p:delete match="/*/@xml:base"/>
+                </px:set-base-uri>
             </p:when>
             <p:otherwise>
                 <p:identity/>

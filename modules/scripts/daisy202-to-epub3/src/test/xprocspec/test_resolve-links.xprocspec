@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               script="../../main/resources/xml/convert/resolve-links.xpl">
+  
+  <x:scenario label="test">
+    <x:call step="pxi:daisy202-to-epub3-resolve-links">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/tmp/content.html">
+          <html>
+            <head>
+              <meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8"/>
+              <title>Minimal DAISY 2.02</title>
+            </head>
+            <body>
+              <h1 id="a">
+                <a href="speechgen0001.smil#a">Chapter</a>
+              </h1>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+      <x:input port="resolve-links-mapping">
+        <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+          <di:mapping xmlns:di="http://www.daisy.org/ns/pipeline/tmp">
+            <di:smil xml:base="file:/tmp/speechgen0001.smil">
+              <di:text par-id="a" text-id="txta" src="file:/tmp/content.html#a"/>
+              <di:text par-id="b" text-id="txtb" src="file:/tmp/content.html#b"/>
+              <di:text par-id="c" text-id="txtc" src="file:/tmp/content.html#c"/>
+            </di:smil>
+          </di:mapping>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="the result port">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="the result port" type="compare">
+      <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+          <html>
+            <head>
+              <meta http-equiv="Content-type" content="application/xhtml+xml; charset=utf-8"/>
+              <title>Minimal DAISY 2.02</title>
+            </head>
+            <body>
+              <h1 id="a">
+                <span>Chapter</span>
+              </h1>
+            </body>
+          </html>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

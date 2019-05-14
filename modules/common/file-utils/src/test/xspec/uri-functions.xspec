@@ -590,6 +590,13 @@
             </x:call>
             <x:expect label="test #22" select="''"/>
         </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml#fragment'"/>
+                <x:param name="base" select="'file:/dir/file.xml'"/>
+            </x:call>
+            <x:expect label="test #23" select="'file.xml#fragment'"/>
+        </x:scenario>
     </x:scenario>
 
     <x:scenario label="function normalize-path">

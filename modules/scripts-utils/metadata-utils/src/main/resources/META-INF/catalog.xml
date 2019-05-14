@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-   <uri name="http://www.daisy.org/pipeline/modules/metadata-utils/library.xpl"
-        uri="../xml/metadata-utils-library.xpl"/>
-   <uri name="http://www.daisy.org/pipeline/modules/metadata-utils/zedai-to-metadata.xsl"
-        uri="../xml/zedai-to-metadata.xsl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/metadata-utils/library.xpl" uri="../xml/metadata-utils-library.xpl"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
 </catalog>
