@@ -28,7 +28,7 @@
     <aether.version>1.13.1</aether.version>
     <maven.version>3.0.4</maven.version>
     <wagon.version>2.2</wagon.version>
-    <saxon-adapter.version>1.4-SNAPSHOT</saxon-adapter.version>
+    <saxon-adapter.version>1.4.0-SNAPSHOT</saxon-adapter.version>
     <xspec-runner.version>1.0.4-SNAPSHOT</xspec-runner.version>
     <xprocspec.version>1.2.0</xprocspec.version>
     <xprocspec-runner.version>1.2.3-SNAPSHOT</xprocspec-runner.version>
