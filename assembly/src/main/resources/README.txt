@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.11.1 - October 1, 2018
+              DAISY Pipeline 2 - 1.12.1 - May 13, 2019
 ==============================================================================
 
 
@@ -72,30 +72,19 @@ The package includes:
 3. Release Notes
 ------------------------------------------------------------------------------
 
-The package includes the 1.11.0 version of the project.
+The package includes the 1.12.1 version of the project.
 
-### Distribution/Installation
+This is a bugfix release. It fixes **epub3-validator** which was broken in
+release v1.12.0.
 
-- [FIX] Installation and launch issues on Windows
-
-### Modules
-
-- [FIX] Error in **epub3-to-daisy202** when EPUB has multiple `dc:identifier` in OPF
-- [FIX] Support "dir" attribute on dtbook element in **dtbook-to-epub3**
-- [FIX] Support validating unzipped EPUBs
-- [FIX] Issue with adapter for Qfrency speech engine
-- various changes to braille scripts, see the release notes of the Braille modules
-  v1.11.1: https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1111
-
-
-See also the full release notes on the release page:
-  https://github.com/daisy/pipeline-assembly/releases/tag/v1.11.1
+See the full release notes on the release page:
+  https://github.com/daisy/pipeline-assembly/releases/tag/v1.12.1
 
 4. Prerequisites
 ------------------------------------------------------------------------------
 
 Modules already include their dependent libraries and only require a recent
-Java environment (Java SE 9 or later).
+Java environment (Java SE 11 or later).
 
 To get the latest version of Java, go to http://www.java.com/
 

@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.12.1-SNAPSHOT</version>
+  <version>1.12.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -20,7 +20,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.1</cli.version>
+    <cli.version>2.1.2</cli.version>
     <javafx.version>11.0.1</javafx.version>
   </properties>
   <dependencyManagement>
@@ -38,7 +38,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>updater</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>

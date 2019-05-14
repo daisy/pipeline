@@ -1,3 +1,13 @@
+Changes in release v1.12.1
+==========================
+
+This is a bugfix release. It fixes **epub3-validator** which was broken in [release
+v1.12.0](https://github.com/daisy/pipeline-assembly/releases/tag/v1.12.0).
+
+### Details
+
+- [Closed issues](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline+milestone%3Av1.12.1)
+
 Changes in release v1.12.0
 ==========================
 
@@ -26,6 +36,30 @@ Changes in release v1.12.0
 - Scripts with TTS now fail when audio is missing
 - Various changes to braille production scripts, see [release notes of Braille modules v1.11.2](https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1112)
 - XProc code cleanup
+
+### Details
+
+- [Closed issues in osgi-libs](https://github.com/issues?q=repo%3Adaisy%2Fosgi-libs+milestone%3Av1.12.0)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.12.0)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.12.0)
+- [Closed issues in pipeline-build-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-build-utils+milestone%3Av1.12.0)
+- [Closed issues in pipeline-cli-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-cli-go+milestone%3Av1.12.0)
+- [Closed issues in pipeline-clientlib-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-clientlib-go+milestone%3Av1.12.0)
+- [Closed issues in pipeline-clientlib-java](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-clientlib-java+milestone%3Av1.12.0)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.12.0)
+- [Closed issues in pipeline-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.12.0)
+- [Closed issues in pipeline-mod-audio](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-audio+milestone%3Av1.12.0)
+- [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.12.0)
+- [Closed issues in pipeline-mod-nlp](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-nlp+milestone%3Av1.12.0)
+- [Closed issues in pipeline-mod-tts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-tts+milestone%3Av1.12.0)
+- [Closed issues in pipeline-modules-common](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules-common+milestone%3Av1.12.0)
+- [Closed issues in pipeline-scripts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts+milestone%3Av1.12.0)
+- [Closed issues in pipeline-scripts-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts-utils+milestone%3Av1.12.0)
+- [Closed issues in pipeline-tasks](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.12.0)
+- [Closed issues in pipeline-updater](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-updater+milestone%3Av1.12.0)
+- [Closed issues in xmlcalabash1](https://github.com/issues?q=repo%3Adaisy%2Fxmlcalabash1+milestone%3Av1.12.0)
+- [Closed issues in xproc-maven-plugin](https://github.com/issues?q=repo%3Adaisy%2Fxproc-maven-plugin+milestone%3Av1.12.0)
+- [Closed issues in xspec-maven-plugin](https://github.com/issues?q=repo%3Adaisy%2Fxspec-maven-plugin+milestone%3Av1.12.0)
 
 
 Changes in release v1.11.1

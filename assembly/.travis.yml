@@ -19,3 +19,7 @@ cache:
 branches:
   except:
     - /^rd-/
+env:
+  global:
+  - secure: "BBoHwYnFXbniuy1MF44k1byHTxRhhbXNFQhd7p6HhDwm7d4ThbdTj15weASuLEfFgIp7yX7znwiqctraETsM8CiH6CPYJcMiski57NifUMSMMC6I+l/GpPd7Ci7rrkOHQP/wKZkrZMp35o9Sf5EIveTtZXaMNCK2inmmVUBm/hw="
+  - secure: "gkYYo7TL4ROzE8mWK2Iw6i1+zkyTf38J/O4KJVEMCLM3bq2gwzvsPWtfiNmk+L5FcoT9qBmfAcMkI09Dutv/I/IyiAvVZLtRzQn1oSq8ZbRiyz/KwdO1LBNYJDqJYGXYM4IFnh+Sl+MVW2zhR75OW67ENUDLdSo3hotJwtVrq4E="

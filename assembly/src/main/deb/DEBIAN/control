@@ -4,7 +4,7 @@ Section: text
 Priority: optional
 Architecture: all
 Depends: debconf, lsb-base (>= 3.0-6), adduser (>= 3.9), procps
-Recommends: openjdk-11-jre
+Recommends: openjdk-11-jre, lame
 Maintainer: Romain Deltour <romain.deltour@gmail.com>
 Description: DAISY Pipeline 2
  .

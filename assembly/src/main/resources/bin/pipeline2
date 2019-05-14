@@ -233,10 +233,12 @@ locateJava() {
 }
 
 checkJavaVersion() {
-    local VERSION
-    VERSION=$( "$JAVA" -version 2>&1 | sed 's/[^ ]* version "\([^\.-]*\).*".*/\1/; 1q' )
-    if [ "$VERSION" -lt "11" ]; then
-        die "Java version must be at least 11"
+    JAVA_VERSION=$( "$JAVA" -version 2>&1 | sed 's/[^ ]* version "\([^\.-]*\).*".*/\1/; 1q' )
+    if [ "$JAVA_VERSION" == "1" ]; then
+        JAVA_VERSION=$( "$JAVA" -version 2>&1 | sed 's/[^ ]* version "1\.\([^\._-]*\).*".*/\1/; 1q' )
+    fi
+    if [ "$JAVA_VERSION" -lt "8" ]; then
+        die "Java version must be at least 8" >&2
     fi
     return 0
 }
@@ -423,24 +425,35 @@ run() {
     export PIPELINE2_WS_LOCALFS
     export PIPELINE2_WS_AUTHENTICATION
     
-    eval exec "\"$JAVA"\" "$JAVA_OPTS" \
-         --illegal-access=warn \
-         --add-opens java.base/java.security=ALL-UNNAMED \
-         --add-opens java.base/java.net=ALL-UNNAMED \
-         --add-opens java.base/java.lang=ALL-UNNAMED \
-         --add-opens java.base/java.util=ALL-UNNAMED \
-         --add-opens java.naming/javax.naming.spi=ALL-UNNAMED \
-         --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED \
-         --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-         --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-         --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED \
-         --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED \
-         --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED \
-         -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" \
-         -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
-         -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
-         -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
-         $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
+    if [ $JAVA_VERSION -lt 9 ]; then
+        # java 8
+        eval exec "\"$JAVA"\" "$JAVA_OPTS" \
+             -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" \
+             -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
+             -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
+             -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
+             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
+    else
+        # java >= 9
+        eval exec "\"$JAVA"\" "$JAVA_OPTS" \
+             --illegal-access=warn \
+             --add-opens java.base/java.security=ALL-UNNAMED \
+             --add-opens java.base/java.net=ALL-UNNAMED \
+             --add-opens java.base/java.lang=ALL-UNNAMED \
+             --add-opens java.base/java.util=ALL-UNNAMED \
+             --add-opens java.naming/javax.naming.spi=ALL-UNNAMED \
+             --add-opens java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED \
+             --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED \
+             --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED \
+             --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED \
+             --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED \
+             --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED \
+             -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" \
+             -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
+             -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
+             -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
+             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
+    fi
 }
 
 main() {
