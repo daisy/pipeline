@@ -20,6 +20,91 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>prepare-updater</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}</directory>
+                  <includes>
+                      <include>*.go</include>
+                      <include>testserver</include>
+                  </includes>
+                </resource>
+              </resources>
+              <outputDirectory>${project.basedir}/build//src/github.com/capitancambio/pipeline-updater</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <executions>
+          <execution>
+            <id>go-get-dependencies</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                  <GOPATH>
+                      ${project.basedir}/build
+                  </GOPATH>
+              </environmentVariables>
+              <executable>go</executable>
+              <commandlineArgs>get github.com/kardianos/osext 
+                github.com/blang/semver  
+                github.com/smartystreets/goconvey 
+                golang.org/x/tools/cmd/cover 
+                github.com/mitchellh/gox</commandlineArgs>
+            </configuration>
+          </execution>
+          <execution>
+            <id>cover-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                  <GOPATH>
+                      ${project.basedir}/build
+                  </GOPATH>
+              </environmentVariables>
+              <executable>go</executable>
+              <commandlineArgs>test -covermode=atomic -coverprofile=${project.basedir}/build/profile.cov github.com/capitancambio/pipeline-updater</commandlineArgs>
+            </configuration>
+          </execution>
+          <execution>
+            <id>gox-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                  <GOPATH>
+                      ${project.basedir}/build
+                  </GOPATH>
+              </environmentVariables>
+              <executable>${project.basedir}/build/bin/gox</executable>
+              <commandlineArgs>-output="${project.basedir}/build/bin/{{.OS}}_{{.Arch}}/pipeline-updater" -osarch="linux/amd64 linux/386 darwin/386 darwin/amd64 windows/386 windows/amd64" ./</commandlineArgs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.5.0</version>
@@ -36,7 +121,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
       <plugin>
         <groupId>com.soebes.maven.plugins</groupId>
         <artifactId>iterator-maven-plugin</artifactId>
@@ -63,6 +148,26 @@
                   </configuration>
                 </pluginExecutor>
               </pluginExecutors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+             <filesets>
+                <fileset>
+                  <directory>${project.basedir}/build</directory>
+                </fileset>
+              </filesets>
             </configuration>
           </execution>
         </executions>

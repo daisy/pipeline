@@ -20,6 +20,118 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>prepare-libs</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/libs</directory>
+                </resource>
+              </resources>
+              <outputDirectory>${project.basedir}/build/src/github.com/capitancambio/</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>prepare-cli</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/cli</directory>
+                </resource>
+              </resources>
+              <outputDirectory>${project.basedir}/build/src/github.com/daisy/pipeline-cli-go/cli</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <executions>
+          <execution>
+            <id>go-get-dependencies</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                  <GOPATH>
+                      ${project.basedir}/build
+                  </GOPATH>
+              </environmentVariables>
+              <executable>go</executable>
+              <commandlineArgs>get github.com/capitancambio/chalk
+                github.com/russross/blackfriday
+                github.com/go-yaml/yaml
+                github.com/daisy/pipeline-clientlib-go
+                github.com/kardianos/osext
+                golang.org/x/tools/cmd/cover
+                github.com/mitchellh/gox</commandlineArgs>
+            </configuration>
+          </execution>
+          <!-- tests are failing on windows due to malformed temp uri (using /tmp) 
+          <execution>
+            <id>cover-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                  <GOPATH>
+                      ${project.basedir}/build
+                  </GOPATH>
+              </environmentVariables>
+              <executable>go</executable>
+              <commandlineArgs>test -covermode=atomic -coverprofile=${project.basedir}/build/profile.cov github.com/daisy/pipeline-cli-go/cli</commandlineArgs>
+            </configuration>
+          </execution>-->
+          <execution>
+            <id>gox-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                  <GOPATH>
+                      ${project.basedir}/build
+                  </GOPATH>
+              </environmentVariables>
+              <executable>${project.basedir}/build/bin/gox</executable>
+              <commandlineArgs>-output="${project.basedir}/build/bin/{{.OS}}_{{.Arch}}/{{.Dir}}" -osarch="linux/amd64 linux/386 darwin/386 darwin/amd64 windows/386 windows/amd64" "./dp2/"</commandlineArgs>
+            </configuration>
+          </execution>
+          <!--
+          <execution>
+            <id>clean-builddir</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <commandlineArgs>clean</commandlineArgs>
+            </configuration>
+          </execution> -->
+        </executions>
+      </plugin>
+      
+      <!--
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.5.0</version>
@@ -47,7 +159,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
       <plugin>
         <groupId>com.soebes.maven.plugins</groupId>
         <artifactId>iterator-maven-plugin</artifactId>
@@ -74,6 +186,26 @@
                   </configuration>
                 </pluginExecutor>
               </pluginExecutors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+             <filesets>
+                <fileset>
+                  <directory>${project.basedir}/build</directory>
+                </fileset>
+              </filesets>
             </configuration>
           </execution>
         </executions>

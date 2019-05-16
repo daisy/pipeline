@@ -64,21 +64,21 @@ public class DefaultJobExecutionServiceTest {
                         Job job = Mockito.mock(Job.class);
                         JobId id = Mockito.mock(JobId.class);
 
-                        Mockito.when(client.getPriority()).thenReturn(Priority.LOW);
-                        Mockito.when(ctxt.getClient()).thenReturn(client);
-                        Mockito.when(job.getContext()).thenReturn(ctxt);
-                        Mockito.when(job.getPriority()).thenReturn(Priority.HIGH);
-                        Mockito.when(job.getId()).thenReturn(id);
-                        Mockito.when(id.toString()).thenReturn(
-                                        String.format("%d",i));
+                        //Mockito.when(client.getPriority()).thenReturn(Priority.LOW);
+                        //Mockito.when(ctxt.getClient()).thenReturn(client);
+                        //Mockito.when(job.getContext()).thenReturn(ctxt);
+                        //Mockito.when(job.getPriority()).thenReturn(Priority.HIGH);
+                        //Mockito.when(job.getId()).thenReturn(id);
+                        //Mockito.when(id.toString()).thenReturn(
+                        //                String.format("%d",i));
                         //Mockito.when(id.equals(Mockito.any(JobId.class))).thenAnswer(new Answer<Boolean>() {
                                 //public Boolean answer(InvocationOnMock invocation) {
                                         //Object[] args = invocation.getArguments();
                                         //return args[0].toString().equals(invocation.getMock().toString());
                                 //}});
                         jobs[i] = job;
-                        Mockito.doReturn(tracker.getRunnable(jobs[i])).when(service)
-                                .getRunnable(jobs[i]);
+                        //Mockito.doReturn(tracker.getRunnable(jobs[i])).when(service)
+                        //        .getRunnable(jobs[i]);
                 }
 
         }

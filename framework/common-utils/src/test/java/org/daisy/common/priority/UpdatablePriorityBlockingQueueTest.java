@@ -86,7 +86,7 @@ public class UpdatablePriorityBlockingQueueTest{
        public void swapNonExistent(){
                when(task1.getPriority()).thenReturn(-5.0);
                when(task2.getPriority()).thenReturn(-10.0);
-               when(task3.getPriority()).thenReturn(-1.0);
+               //when(task3.getPriority()).thenReturn(-1.0);
 
                UpdatablePriorityBlockingQueue queue = 
                        new UpdatablePriorityBlockingQueue(); 

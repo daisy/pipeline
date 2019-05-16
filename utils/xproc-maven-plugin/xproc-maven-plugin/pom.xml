@@ -107,10 +107,7 @@
               dependency of Maven itself. The solution is probably to run the tests in a forked
               process, like the surefire-plugin does also.
           -->
-          <mavenOpts>
-            -Dorg.slf4j.simpleLogger.log.com.xmlcalabash=debug
-            -Dorg.slf4j.simpleLogger.log.org.daisy.xprocspec=debug
-          </mavenOpts>
+          <mavenOpts>-Dorg.slf4j.simpleLogger.log.com.xmlcalabash=debug -Dorg.slf4j.simpleLogger.log.org.daisy.xprocspec=debug</mavenOpts>
           <goals>
             <goal>surefire-report:report</goal>
           </goals>

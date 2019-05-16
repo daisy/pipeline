@@ -67,7 +67,8 @@
       <resource>
         <directory>src/main/resources</directory>
         <excludes>
-          <exclude>templates/**</exclude>
+          <!--Replaced the all template exclusion by the unziped folder-->
+          <exclude>templates/default_unzipped.ott</exclude>
           <exclude>xml/dtbook-to-odt.xpl</exclude>
         </excludes>
       </resource>
@@ -86,6 +87,7 @@
       </resource>
     </resources>
     <plugins>
+      <!-- Replaced by the copy of the zipped version of the only template defined in the templates folder
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>shell-maven-plugin</artifactId>
@@ -116,11 +118,29 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
+          <execution>
+            <id>copy-templates</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/main/resources/templates</directory>
+                  <includes>
+                    <include>default.ott</include>
+                  </includes>
+                </resource>
+              </resources>
+              <outputDirectory>${project.build.directory}/generated-resources/templates/</outputDirectory>
+            </configuration>
+          </execution>
           <execution>
             <id>copy-sources</id>
             <phase>prepare-package</phase>

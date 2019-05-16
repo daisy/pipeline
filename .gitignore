@@ -5,8 +5,8 @@
 /*.zip
 /.gradle/
 /.make-target/
-/.maven-cache/
-/.maven-workspace/
+*/.maven-cache/
+*/.maven-workspace/
 /maven.log
 # eclipse
 bin/

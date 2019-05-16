@@ -8,11 +8,14 @@ This makes branching, building, and releasing of several sub-projects at once ea
 
 **The build process can take a while, even without the unit test enabled**
 
-This super-project requires 
+This super-project requires
+- Git (git available in your path) 
 - java 11 (with the JAVA_HOME environment variable set)
-- maven (mvn available in your PATH),
+- maven (mvn available in your path),
 - Golang (go avaible in your path)
 - Bazaar (bzr available in your path)
+- Ant (ant availabe in your path)
+
 
 You can build the project archive using the following commands in a terminal positionned in the pipeline repo : 
 - For macOS : 
@@ -62,7 +65,7 @@ TODO
 
 Requires ruby with bundle gem available in path.
 
-## Code
+## Code and repo structure
 
 The aggregating and the backporting of changes to the individual projects is done using a tool called [git-subrepo][]. The idea is that all the git magic will be done by the owners, and that committers can just treat this repository as a regular one. There is a rule though that committers need to follow because of some limitations of git-subrepo:
 

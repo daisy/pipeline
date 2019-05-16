@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import junit.framework.Assert;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Test;
+import static org.junit.Assume.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
@@ -108,6 +110,9 @@ public class BinaryFinderTest {
 	
 	@Test
 	public void pathFromPathHelper() throws Exception {
+		// path helper is a MacOS specific library, this test will failed on other platform !
+		assumeTrue(SystemUtils.IS_OS_MAC);
+
 		String pathHelperExecPath = "/usr/libexec/path_helper";
 		File pathHelperExecFile = PowerMockito.mock(File.class);
 		PowerMockito.whenNew(File.class)
