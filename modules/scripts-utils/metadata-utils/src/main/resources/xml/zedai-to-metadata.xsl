@@ -93,13 +93,13 @@
       select="ancestor::z:head//z:meta[@property='z3998:meta-record-type' and @about=$this/@resource][1]/@content"/>
     <xsl:choose>
       <xsl:when test="$record-type='z3998:mods'">
-        <link rel="mods-record" href="{@resource}"/>
+        <link rel="record" href="{@resource}" media-type="application/mods+xml"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:onix-books'">
-        <link rel="onix-record" href="{@resource}"/>
+        <link rel="record" href="{@resource}" media-type="application/xml" properties="onix"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:marc21-xml'">
-        <link rel="marc21xml-record" href="{@resource}"/>
+        <link rel="record" href="{@resource}" media-type="application/marcxml+xml"/>
       </xsl:when>
       <xsl:when test="$record-type=('z3998:dcterms-rdf','z3998:dctersm-rdfa')">
         <!--TODO translate external DCTERMS records ?-->
@@ -176,6 +176,7 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- in case of DTBooks, the doctitle tag is converted here as a dc:title -->
   <xsl:template match="z:*[f:hasPropOrRole(.,('title','covertitle','halftitle'))]" mode="title">
     <xsl:call-template name="create-title"/>
   </xsl:template>
@@ -185,11 +186,17 @@
   </xsl:template>
 
   <xsl:template name="create-title">
-    <dc:title id="{generate-id()}">
-      <xsl:copy-of select="@dir"/>
-      <xsl:copy-of select="@xml:lang"/>
-      <xsl:value-of select="if (string(.)) then normalize-space(string(.)) else @content"/>
-    </dc:title>
+    <!-- FIX - http://www.github.com/daisy/pipeline-tasks#125 : 
+      empty doctitle could lead to empty tag with role title, 
+        wich would lead to the creation of an empty dc:title tag
+        thus making the epub invalid for epubcheck. -->
+    <xsl:if test=".//text()[not(self::text()[not(normalize-space())])] != '' or @content">
+      <dc:title id="{generate-id()}">
+        <xsl:copy-of select="@dir"/>
+        <xsl:copy-of select="@xml:lang"/>
+        <xsl:value-of select="if (string(.)) then normalize-space(string(.)) else @content"/>
+      </dc:title>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="text()" mode="#all"/>

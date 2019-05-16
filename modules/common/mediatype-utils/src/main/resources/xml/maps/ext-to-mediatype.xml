@@ -13,7 +13,9 @@
     <entry key="xquery"    value="application/xquery+xml"/>
     <entry key="otf"       value="application/x-font-opentype"/>
     <entry key="ttf"       value="application/x-font-ttf"/>
+    <entry key="sfnt"      value="application/font-sfnt"/>
     <entry key="woff"      value="application/font-woff"/>
+    <entry key="woff2"     value="font/woff2"/>
     <entry key="eot"       value="application/vnd.ms-fontobject"/>
     <entry key="wav"       value="audio/x-wav"/>
     <entry key="opf"       value="application/oebps-package+xml"/>

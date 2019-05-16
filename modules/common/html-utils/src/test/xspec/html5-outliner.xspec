@@ -1103,4 +1103,54 @@
 		</x:expect>
 	</x:scenario>
 	
+	<x:scenario label="complex 8 - handle empty titles">
+		<x:context>
+			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+				<head><meta charset="UTF-8" /><title></title></head>
+				<body xmlns:epub="http://www.idpf.org/2007/ops" id="d862273e7-0" epub:type="frontmatter">
+					<section id="d861827e19">
+						<h1 id="d862273e9-0" epub:type="title"><span class="ftit"></span></h1>
+						<p><span class="auteur"><span class="pc">LOREM IPSUM</span> <span class="pc">LOREM IPSUM</span></span></p><aside id="d862273e18-0" epub:type="annotation">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</aside>
+				        </section>
+				        <section id="d861827e29"><p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p><aside id="d862273e51-0" epub:type="annotation">Image non fournie par l éditeur.</aside>
+				        </section>
+				        <section id="d861827e87">
+				        	<h1 id="d862273e78-0"><em>Table des matières</em></h1>
+				        	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+				        </section>
+				    </body>
+				</html>
+		</x:context>
+		<x:expect label="outline">
+			<ol xmlns="http://www.w3.org/1999/xhtml">
+			   <li data-generated="true">
+			      <a href="#d862273e7-0">Untitled document</a>
+			      <ol>
+			         <li data-generated="true">
+			            <a href="#d861827e19">Untitled section</a>
+			            <ol>
+			               <li data-generated="true">
+			                  <a href="#d862273e18-0">Sidebar</a>
+			               </li>
+			            </ol>
+			         </li>
+			         <li data-generated="true">
+			            <a href="#d861827e29">Untitled section</a>
+			            <ol>
+			               <li data-generated="true">
+			                  <a href="#d862273e51-0">Sidebar</a>
+			               </li>
+			            </ol>
+			         </li>
+			         <li>
+			            <a href="#d861827e87">
+			               <em xmlns:epub="http://www.idpf.org/2007/ops">Table des matières</em>
+			            </a>
+			         </li>
+			      </ol>
+			   </li>
+			</ol>
+		</x:expect>
+	</x:scenario>
+	
 </x:description>
