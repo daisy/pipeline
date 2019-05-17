@@ -1,15 +1,20 @@
 @echo off
 rem Checks java version via the following methods, respectively:
-rem    - check if JAVA env variable is set, and parse it's java -version output
-rem    - check if JAVA_HOME env variable is set, and parse it's java -version output
-rem    - parse java -version output of the java.exe on PATH env variable (run java command)
-rem    - search the registry and use CurrentVersion, check if it's > 3 numbers, and get JAVA_HOME with JavaHome registry key
-rem    - search the registry and parse java -version from JavaHome key's path to the exe
-rem Then sets JAVA to the path to the java.exe that passed the version check (if any)
+REM    - 1 : Check if a local JRE is present along the daisy-pipeline
+REM    - 2 : Check if a java registry key exists
+REM    - 3 : Check if a JAVA_HOME environment var is set
+REM For all this case, if a version of java corresponding to the 
+REM "REQUIRED_JAVA_VER" is found, the JAVA env var is set to the java.exe found.
 rem Exit code:
 rem   0 check passed and JAVA set
 rem   1 check failed
 rem   3 check failed fatally (something wrong with code)
+
+rem For unit testing
+if not [%1]==[] (
+    call %*
+    goto :EOF
+)
 
 setlocal enabledelayedexpansion
 
@@ -30,6 +35,7 @@ goto BEGIN
 rem # # HELPERS # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 :warn
+REM Warning messaging
     echo %PROGNAME%: %*
 goto :EOF
 
@@ -91,46 +97,28 @@ goto :EOF
 goto :EOF
 
 :search_registry_with_cmd reg_query_cmd
-  :javaHome_try_jre1
+    call:warn Searching registry key HKLM\SOFTWARE\JavaSoft\JRE
     call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JRE"" /v CurrentVersion"
-    if errorLevel 1 goto javaHome_try_jre2
+    if errorLevel 1 goto javaHome_try_jdk
     set JAVA_VER=%RETURN%
     call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
-    if errorLevel 1 goto javaHome_try_jre2
+    if errorLevel 1 goto javaHome_try_jdk
     call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JRE\%JAVA_VER%"" /v JavaHome"
-    if errorLevel 1 goto javaHome_try_jre2
+    if errorLevel 1 goto javaHome_try_jdk
     set JAVA_HOME=%RETURN%
     exit /b 0
-  :javaHome_try_jre2
-    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Runtime Environment"" /v CurrentVersion"
-    if errorLevel 1 goto javaHome_try_jdk1
-    set JAVA_VER=%RETURN%
-    call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
-    if errorLevel 1 goto javaHome_try_jdk1
-    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Runtime Environment\%JAVA_VER%"" /v JavaHome"
-    if errorLevel 1 goto javaHome_try_jdk1
-    set JAVA_HOME=%RETURN%
-    exit /b 0
-  :javaHome_try_jdk1
-    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK"" /v CurrentVersion"
-    if errorLevel 1 goto javaHome_try_jdk2
-    set JAVA_VER=%RETURN%
-    call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
-    if errorLevel 1 goto javaHome_try_jdk2
-    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK\%JAVA_VER%"" /v JavaHome"
-    if errorLevel 1 goto javaHome_try_jdk2
-    set JAVA_HOME=%RETURN%
-    exit /b 0
-  :javaHome_try_jdk2
-    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Development Kit"" /v CurrentVersion"
-    if errorLevel 1 goto :EOF
-    set JAVA_VER=%RETURN%
-    call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
-    if errorLevel 1 goto :EOF
-    call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\Java Development Kit\%JAVA_VER%"" /v JavaHome"
-    if errorLevel 1 goto :EOF
-    set JAVA_HOME=%RETURN%
-    exit /b 0
+    :javaHome_try_jdk
+        rem some versions use the "Java Development Kit"
+        call:warn Searching registry key HKLM\SOFTWARE\JavaSoft\JDK
+        call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK"" /v CurrentVersion"
+        if errorLevel 1 goto :EOF
+        set JAVA_VER=%RETURN%
+        call:validate_version "CurrentVersion is not valid: ""%JAVA_VER%"""
+        if errorLevel 1 goto :EOF
+        call:parse_regKey_value "%~1 ""HKLM\SOFTWARE\JavaSoft\JDK\%JAVA_VER%"" /v JavaHome"
+        if errorLevel 1 goto :EOF
+        set JAVA_HOME=%RETURN%
+        exit /b 0
 goto :EOF
 
 :parse_regKey_value cmd
@@ -159,12 +147,20 @@ goto :EOF
 
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+
+REM // -----------------------------
+REM // Starting point of the script
+REM // -----------------------------
 :BEGIN
     call:warn Checking Java version, at least Java "%REQUIRED_JAVA_VER%" is required...
 
+
+REM Step 1 
 :CheckRelative
+REM check if a local jre is present
+    call:warn Searching for a local JRE in "%DIRNAME%..\jre" 
     call:parse_java_version "%DIRNAME%..\jre\bin\java.exe"
-    if errorLevel 1 goto CheckJAVA
+    if errorLevel 1 goto CheckRegistry
     call:check_version
     if errorLevel 3 goto END
     if errorLevel 1 (
@@ -175,76 +171,29 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     set JAVA=%DIRNAME%..\jre\bin\java.exe
 goto END
 
-:CheckJAVA
-    if not defined JAVA goto CheckJAVA_HOME
-    if not exist "%JAVA%" (
-        call:warn JAVA is not valid: "%JAVA%", trying JAVA_HOME...
-        goto CheckJAVA_HOME
-    )
-    call:parse_java_version "%JAVA%"
-    if errorLevel 1 goto END
-    call:check_version
-    if errorLevel 3 goto END
-    if errorLevel 1 (
-        call:warn JAVA points to incompatible JVM: "%JAVA_VER%", trying JAVA_HOME...
-        goto CheckJAVA_HOME
-    )
-    call:warn Found compatible JVM from JAVA env variable: "%JAVA_VER%"
-goto END
-
-:CheckJAVA_HOME
-    if "%JAVA_HOME%" == "" goto CheckJavaExecutable
-    if not exist "%JAVA_HOME%" (
-        call:warn JAVA_HOME is not valid: "%JAVA_HOME%", trying java.exe on PATH...
-        goto CheckJavaExecutable
-    )
-    if not exist "%JAVA_HOME%\bin\java.exe" (
-        call:warn java.exe not found in "%JAVA_HOME%\bin", trying java.exe on PATH...
-        goto CheckJavaExecutable
-    )
-    call:parse_java_version "%JAVA_HOME%\bin\java.exe"
-    if errorLevel 1 goto END
-    call:check_version
-    if errorLevel 3 goto END
-    if errorLevel 1 (
-      call:warn JAVA_HOME points to an incompatible JVM: "%JAVA_VER%", trying java.exe on PATH...
-      goto CheckJavaExecutable
-    )
-    call:warn Found compatible JVM from JAVA_HOME: "%JAVA_VER%"
-    set JAVA=%JAVA_HOME%\bin\java.exe
-goto END
-
-:CheckJavaExecutable
-    call:parse_java_version "java.exe"
-    if errorLevel 1 goto CheckCurrentVersion
-    call:check_version
-    if errorLevel 3 goto END
-    if errorLevel 1 (
-      call:warn java.exe on PATH is from an incompatible JVM: "%JAVA_VER%", trying registry...
-      goto CheckCurrentVersion
-    )
-    call:warn Found compatible JVM from java.exe: "%JAVA_VER%"
-    set JAVA=java.exe
-goto END
-
-:CheckCurrentVersion
+REM Step 2
+:CheckRegistry
+REM Check through registry if java was installed with an valid version
     call:search_registry
     if errorLevel 1 (
-        call:warn Registry does not contain a compatible JVM
-        goto END
+        call:warn Registry does not contain a compatible JVM, trying JAVA_HOME
+        goto CheckJavaHome
     )
     call:check_version
     if errorLevel 3 goto END
     if errorLevel 1 (
-        call:warn CurrentVersion registry key shows an incompatible version of Java: "%JAVA_VER%", trying JavaHome registry key...
-        goto CheckJavaHomeKey
+        call:warn CurrentVersion registry key shows an incompatible version of Java: "%JAVA_VER%", trying JAVA_HOME ...
+        goto CheckJavaHome
     )
     call:warn Found compatible JVM from CurrentVersion registry key: "%JAVA_VER%"
     set JAVA=%JAVA_HOME%\bin\java.exe
 goto END
 
-:CheckJavaHomeKey
-    rem JAVA_HOME was set when :search_registry was called as part of :CheckCurrentVersion
+REM Step 3
+:CheckJavaHome
+REM Check if a JAVA_HOME env var is set with a valid version of java
+    REM JAVA_HOME can be set by the :search_registry call as part of :CheckRegistry
+    REM Or can be already defined as an environement variable
     call:parse_java_version "%JAVA_HOME%\bin\java.exe"
     if errorLevel 1 goto END
     call:check_version
@@ -254,12 +203,12 @@ goto END
       goto END
     )
 
-    call:warn Found compatible JVM from JavaHome registry key: "%JAVA_VER%"
+    call:warn Found compatible JVM from JAVA_HOME : "%JAVA_VER%"
     set JAVA=%JAVA_HOME%\bin\java.exe
 goto END
 
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 :END
-    endlocal & set JAVA=%JAVA% & set JAVA_VER=%JAVA_VER%
+    endlocal & set JAVA=%JAVA%
     exit /b %ERRORLEVEL%

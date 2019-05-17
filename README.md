@@ -8,16 +8,15 @@ This makes branching, building, and releasing of several sub-projects at once ea
 
 **The build process can take a while, even without the unit test enabled**
 
-This super-project requires
-- Git (git available in your path) 
-- java 11 (with the JAVA_HOME environment variable set)
-- maven (mvn available in your path),
-- Golang (go avaible in your path)
-- Bazaar (bzr available in your path)
-- Ant (ant availabe in your path)
+This super-project requires the following `tools` available in your `PATH` environment variable:
+- [Git](https://git-scm.com/) (`git` in terminal) 
+- java 11, preferably [AdopOpenJDK 11](https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot), (don't forget to set the `JAVA_HOME` environment variable)
+- [Apache Maven 3.6+](https://maven.apache.org/) (`mvn` in terminal),
+- [Apache Ant 1.10+](https://ant.apache.org/) (`ant` in terminal)
+- [Golang](https://golang.org/) (`go` in terminal)
+- [Bazaar](http://bazaar.canonical.com/en/) (`bzr` in terminal)
 
-
-You can build the project archive using the following commands in a terminal positionned in the pipeline repo : 
+You can build the project archive using the following commands in a terminal positioned in the pipeline repository : 
 - For macOS : 
 ```bash
 mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-mac -Punpack-updater-mac -Passemble-mac-zip
@@ -31,9 +30,7 @@ mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.op
 mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-win -Punpack-updater-win -Punpack-updater-gui-win -Passemble-win-zip
 ```
 
-In case an error occured while building the "cli" project, relaunch the command with the argument `-rf :cli`.
-
-You will find the resulting archive in the folder `assembly/target`. Just unzip it wherever you want to start using the pipeline.
+You will find the resulting archive in the folder `assembly/target`. Just unzip its content (a `daisy-pipeline` folder) wherever you want to start using the pipeline (see [how to launch the pipeline](#launch-the-pipeline)).
 
 ### re-build / update
 
@@ -55,7 +52,7 @@ mvn clean install -Punpack-cli-win -Punpack-updater-win -Punpack-updater-gui-win
 
 ### Launch the pipeline
 
-To launch the pipeline graphical application, go to your `daisy-pipeline` unzipped folder and launch the following command from a terminal : 
+To launch the pipeline graphical application, go the `daisy-pipeline` folder (from the unzipped archive obtained after the [build](#build-the-pipeline)) and launch the following command from a terminal : 
 - Mac and Linux : `bin/pipeline2 gui`
 - Windows : `bin/pipeline2.bat gui`
 

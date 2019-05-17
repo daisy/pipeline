@@ -61,7 +61,7 @@ goto :EOF
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 :BEGIN
-    call:warn %DATE:~10,4%-%DATE:~4,2%-%DATE:~7,2% %TIME:~0,2%:%TIME:~3,2%:%TIME:~6,2%
+    call:warn %DATE% %TIME%
 
     rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -100,13 +100,13 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     if "%LOCAL_CLASSPATH%" == "" goto :PIPELINE2_CLASSPATH_EMPTY
         set CLASSPATH=%LOCAL_CLASSPATH%;%PIPELINE2_BASE%\conf
         goto :PIPELINE2_CLASSPATH_END
-
 :PIPELINE2_CLASSPATH_EMPTY
-    set CLASSPATH=%PIPELINE2_BASE%\conf
-
+        set CLASSPATH=%PIPELINE2_BASE%\conf
 :PIPELINE2_CLASSPATH_END
+
     rem Support for loading native libraries
     set PATH=%PATH%;%PIPELINE2_BASE%\lib;%PIPELINE2_HOME%\lib
+    call:warn Start checking java version
     rem Setup the Java Virtual Machine
     call "%~dp0\checkJavaVersion.bat" 11
     if errorLevel 1 (
@@ -214,8 +214,7 @@ goto :RUN_LOOP
     SET ARGS=%1 %2 %3 %4 %5 %6 %7 %8
     rem Execute the Java Virtual Machine
     cd "%PIPELINE2_BASE%"
-
-    call "%~dp0\checkJavaVersion.bat" _ :compare_versions %JAVA_VER% 9
+    call "%~dp0\bin\checkJavaVersion.bat" _ :compare_versions %JAVA_VER% 9
     if %ERRORLEVEL% geq 0 (
         if errorLevel 3 (
             rem unexpected error
