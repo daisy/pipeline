@@ -156,13 +156,7 @@ public class DeclareStep extends CompoundStep {
         if (declaredSteps.containsKey(type)) {
             return declaredSteps.get(type);
         } else if (parentDecl != null) {
-            try {
-                return parentDecl.getStepDeclaration(type);
-            } catch (XProcException e) {
-                // step was not found
-                // throw same exception but with more precise location info
-                throw XProcException.staticError(44, node, "Unexpected step name: " + type);
-            }
+            return parentDecl.getStepDeclaration(type);
         } else {
             return runtime.getBuiltinDeclaration(type);
         }

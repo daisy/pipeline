@@ -40,11 +40,12 @@
             last-modified="2010-03-03T21:52:55Z"
             size="3859">
   <c:header name="Server" value="Apache"/>
+  <c:header name="Upgrade" value="h2"/>
+  <c:header name="Connection" value="Upgrade, Keep-Alive"/>
   <c:header name="Last-Modified" value="Wed, 03 Mar 2010 21:52:55 GMT"/>
   <c:header name="ETag" value="&#34;f13-480ec8131bbc0&#34;"/>
   <c:header name="Accept-Ranges" value="bytes"/>
   <c:header name="Content-Length" value="3859"/>
-  <c:header name="Connection" value="Keep-Alive"/>
   <c:header name="Content-Type" value="image/png"/>
 </c:uri-info>
 </t:output>

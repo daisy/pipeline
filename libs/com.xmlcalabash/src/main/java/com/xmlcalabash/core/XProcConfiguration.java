@@ -307,22 +307,26 @@ public class XProcConfiguration {
             HashSet<Class<?>> set = new HashSet<Class<?>>();
             try {
                 Bundle bundle = FrameworkUtil.getBundle(XProcConfiguration.class);
-                String path = "META-INF/annotations/" + type.getCanonicalName();
-                URL url = bundle.getEntry(path);
-                if (url != null)
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
-                        String line = reader.readLine();
-                        while (line != null) {
-                            try {
-                                set.add(XProcConfiguration.class.getClassLoader().loadClass(line));
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException("coding error"); // META-INF/annotations/... is corrupt
+                if (bundle != null) {
+                    String path = "META-INF/annotations/" + type.getCanonicalName();
+                    URL url = bundle.getEntry(path);
+                    if (url != null)
+                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
+                            String line = reader.readLine();
+                            while (line != null) {
+                                try {
+                                    set.add(XProcConfiguration.class.getClassLoader().loadClass(line));
+                                } catch (ClassNotFoundException e) {
+                                    throw new RuntimeException("coding error"); // META-INF/annotations/... is corrupt
+                                }
+                                line = reader.readLine();
                             }
-                            line = reader.readLine();
                         }
-                    }
-                else
-                    logger.warn("file " + path + " does not exist");
+                    else
+                        logger.warn("file " + path + " does not exist");
+                } else {
+                    // not in OSGi context after all
+                }
             } catch (IOException e) {
                 throw new RuntimeException("coding error");
             } catch (NoClassDefFoundError e) {

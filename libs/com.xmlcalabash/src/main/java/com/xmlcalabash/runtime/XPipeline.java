@@ -35,8 +35,6 @@ public class XPipeline extends XCompoundStep {
     private static final QName _namespace = new QName("namespace");
     private static final QName _value = new QName("value");
 
-    private Vector<XdmNode> errors = new Vector<XdmNode> ();
-
     private Hashtable<QName, RuntimeValue> optionsPassedIn = null;
 
     public XPipeline(XProcRuntime runtime, Step step, XCompoundStep parent) {
@@ -264,13 +262,5 @@ public class XPipeline extends XCompoundStep {
                 }
             }
         }
-    }
-
-    public void reportError(XdmNode doc) {
-        errors.add(doc);
-    }
-
-    public List<XdmNode> errors() {
-        return errors;
     }
 }
