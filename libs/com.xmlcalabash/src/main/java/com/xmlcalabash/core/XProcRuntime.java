@@ -973,6 +973,10 @@ public class XProcRuntime {
         return errorMessage;
     }
 
+    public XdmNode getErrorNode() {
+        return errorNode;
+    }
+    
     // ===========================================================
     // This logging stuff is still accessed through XProcRuntime
     // so that messages can be formatted in a common way and so

@@ -109,6 +109,7 @@ public class XTry extends XCompoundStep {
         } catch (Exception xe) {
             
             logger.debug("p:try: caught error: " + xe.toString());
+            logger.trace("", xe);
             
             TreeWriter treeWriter = new TreeWriter(runtime);
             treeWriter.startDocument(step.getNode().getBaseURI());
@@ -222,8 +223,8 @@ public class XTry extends XCompoundStep {
                 treeWriter.addEndElement();
             }
             treeWriter.addEndElement();
-            Throwable underlying = xe.getCause();
-            if (underlying != null && underlying instanceof XProcException) {
+            XProcException underlying = ((XProcException)xe).getXProcCause();
+            if (underlying != null) {
                 treeWriter.addStartElement(px_cause);
                 treeWriter.startContent();
                 serializeError(underlying, null, treeWriter);

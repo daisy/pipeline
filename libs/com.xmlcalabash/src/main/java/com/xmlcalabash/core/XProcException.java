@@ -288,17 +288,17 @@ public class XProcException extends RuntimeException {
                 };
             }
         }
-        Throwable cause = throwable.getCause();
-        if (cause != null)
-            cause = javaError(cause, offset, base, baseOffset);
-        else
-            // make the original exception part of the stack trace in order to get some
-            // info that might be missing from the XProcException wrapper otherwise
-            cause = throwable;
-        return new XProcException(throwable.getMessage(), cause) {
+        final XProcException xprocCause; {
+            Throwable cause = throwable.getCause();
+            xprocCause = cause == null ? null : javaError(cause, offset, base, baseOffset);
+        }
+        return new XProcException(throwable.getMessage(), throwable) {
             @Override
             public SourceLocator[] getLocator() {
-                return location; }};
+                return location; }
+            @Override
+            public XProcException getXProcCause() {
+                return xprocCause; }};
     }
 
     public XProcException rebaseOnto(Step step) {
@@ -326,12 +326,10 @@ public class XProcException extends RuntimeException {
             for (SourceLocator ll : base)
                 location[i++] = ll;
         }
-        final Throwable cause; {
-            Throwable c = this.getCause();
-            if (c != null && c instanceof XProcException)
-                cause = ((XProcException)c).rebaseOnto(base);
-            else
-                cause = c;
+        final Throwable cause = this;
+        final XProcException xprocCause; {
+            XProcException xc = this.getXProcCause();
+            xprocCause = xc == null ? null : xc.rebaseOnto(base);
         }
         return new XProcException() {
             @Override
@@ -358,6 +356,10 @@ public class XProcException extends RuntimeException {
             public Throwable getCause() {
                 return cause;
             }
+            @Override
+            public XProcException getXProcCause() {
+                return xprocCause;
+            }
         };
     }
 
@@ -371,6 +373,10 @@ public class XProcException extends RuntimeException {
 
     public XdmNode getNode() {
         return node;
+    }
+
+    public XProcException getXProcCause() {
+        return null;
     }
 
     public SourceLocator[] getLocator() {
@@ -653,10 +659,10 @@ public class XProcException extends RuntimeException {
             s.append("\n\tat " + loc[i]);
         if (inCommon != 0)
             s.append("\n\t... " + inCommon + " more");
-        Throwable cause = getCause();
-        if (cause != null && cause instanceof XProcException) {
+        XProcException cause = getXProcCause();
+        if (cause != null) {
             s.append("\nCaused by: ");
-            s.append(((XProcException)cause).printEnclosedLocation(loc));
+            s.append(cause.printEnclosedLocation(loc));
         }
         return s.toString();
     }

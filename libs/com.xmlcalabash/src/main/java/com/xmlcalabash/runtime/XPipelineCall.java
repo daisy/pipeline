@@ -40,7 +40,7 @@ public class XPipelineCall extends XAtomicStep {
         decl.setup();
 
         if (runtime.getErrorCode() != null) {
-            throw new XProcException(runtime.getErrorCode(), runtime.getErrorMessage());
+            throw new XProcException(runtime.getErrorCode(), runtime.getErrorNode(), runtime.getErrorMessage());
         }
 
         XRootStep root = new XRootStep(runtime);
