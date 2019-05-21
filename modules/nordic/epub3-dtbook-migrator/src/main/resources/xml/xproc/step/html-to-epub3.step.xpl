@@ -159,7 +159,7 @@
                     </p:xslt>
                     <p:delete match="html:a[tokenize(@epub:type,'\s+')='noteref']" name="html-to-epub3.step.nav.toc.delete-noterefs"/>
                     <px:epub3-nav-create-toc name="html-to-epub3.step.nav.toc.nav-create-toc">
-                        <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
+                        <p:with-option name="output-base-uri" select="base-uri(/*)">
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-option>
                     </px:epub3-nav-create-toc>
@@ -189,11 +189,9 @@
                 <p:sink/>
 
                 <px:epub3-nav-create-page-list name="html-to-epub3.step.nav.page-list">
-                    <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
-                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
-                    </p:with-option>
+                    <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
                     <p:input port="source">
-                        <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split"/>
+                        <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split.moved"/>
                     </p:input>
                 </px:epub3-nav-create-page-list>
                 <p:sink/>
@@ -206,10 +204,8 @@
                     <p:with-option name="language" select="/*/(@xml:lang,@lang)[1]">
                         <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-option>
+                    <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
                 </px:epub3-nav-aggregate>
-                <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.add-nav-xml-base">
-                    <p:with-option name="attribute-value" select="concat($publication-dir,'nav.xhtml')"/>
-                </p:add-attribute>
                 <p:xslt name="html-to-epub3.step.navdoc-nordic-normalization">
                     <p:with-param name="identifier" select="/*/html:head/html:meta[@name='dc:identifier']/@content">
                         <p:pipe port="result" step="html-to-epub3.step.single-html"/>

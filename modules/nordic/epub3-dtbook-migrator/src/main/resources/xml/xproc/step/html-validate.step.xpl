@@ -73,8 +73,9 @@
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </p:identity>
-            <px:normalize-document-base>
-            </px:normalize-document-base>
+            <p:for-each>
+                <px:normalize-document-base/>
+            </p:for-each>
             <p:identity name="html-validate.step.in-memory-normalized-base"/>
             <px:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
                 <p:input port="fileset">
