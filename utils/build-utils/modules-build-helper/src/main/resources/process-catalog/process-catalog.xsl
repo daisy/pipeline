@@ -247,7 +247,7 @@ import org.osgi.service.component.annotations.Component;
 	service = { XProcScriptService.class },
 	property = {
 		"script.id:String=<xsl:value-of select="$id"/>",
-		"script.description:String=<xsl:value-of select="replace(replace($desc,'&quot;','\\&quot;'),'\\','\\\\')"/>",
+		"script.description:String=<xsl:value-of select="replace(replace($desc,'\\','\\\\'),'&quot;','\\&quot;')"/>",
 		"script.url:String=<xsl:value-of select="$url"/>",
 		"script.version:String=<xsl:value-of select="$version"/>"
 	}

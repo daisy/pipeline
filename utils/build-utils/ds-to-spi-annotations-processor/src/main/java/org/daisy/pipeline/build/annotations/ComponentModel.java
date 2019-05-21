@@ -102,7 +102,7 @@ public class ComponentModel {
 		}
 		
 		public String getFilter() {
-			return filter == null ? null : "\"" + filter.replaceAll("\"", "\\\"") + "\"";
+			return filter == null ? null : "\"" + filter.replaceAll("\"", "\\\\\"") + "\"";
 		}
 		
 		public Class<?> getPropertiesArgumentType() {
@@ -117,12 +117,12 @@ public class ComponentModel {
 		Object value;
 		
 		public String getKeyLiteral() {
-			return "\"" + key.replaceAll("\"", "\\\"") + "\"";
+			return "\"" + key.replaceAll("\"", "\\\\\"") + "\"";
 		}
 		
 		public String getValueLiteral() {
 			if (type == String.class)
-				return "\"" + value.toString().replaceAll("\"", "\\\"") + "\"";
+				return "\"" + value.toString().replaceAll("\"", "\\\\\"") + "\"";
 			else
 				return value.toString();
 		}
