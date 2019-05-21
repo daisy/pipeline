@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/epub3-to-dtbook.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <x:scenario label="px:nordic-epub3-to-dtbook">
+        <x:call step="px:nordic-epub3-to-dtbook">
+            <x:option name="epub" select="resolve-uri('../resources/C00000.epub',base-uri())"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
+            <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+            <x:option name="discard-intermediary-html" select="'false'"/>
+        </x:call>
+        
+        <x:context label="validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one document on the validation-status port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors" test="/*/@result" equals="'ok'"/>
+        
+        <x:context label="validation report">
+            <x:document type="file" base-uri="temp-dir" href="html-report/report.xhtml" method="xml"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one document on the html-report port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors in the HTML report"
+            test="sum(//*[matches(@class,'(^|\s)document-validation-report(\s|$)')]//html:p[matches(normalize-space(string-join(text(),' ')),'^\d+ issue.*')]/xs:integer(replace(normalize-space(string-join(text(),' ')),'(\d+) .*','$1')))"
+            equals="0"/>
+        
+        <x:context label="result fileset">
+            <x:document type="directory" base-uri="temp-dir" href="output-dir/" recursive="true"/>
+        </x:context>
+        <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+        <x:expect type="xpath" label="The results should be stored in a directory named 'C00000'" test="/*/c:directory/@name" equals="'C00000'"/>
+        <x:expect type="xpath" label="The resulting DTBook should be named C00000.xml" test="/*/c:directory/c:file[ends-with(@name,'.xml')]/@name" equals="'C00000.xml'"/>
+        <x:expect type="xpath" label="The resulting image should be stored in the same directory as the DTBook" test="/*/c:directory/c:file[ends-with(@name,'.jpg')]/@name" equals="'valentin.jpg'"/>
+        <x:expect type="xpath" label="The intermediary HTML should be named C00000.xhtml (in the same directory as the DTBook)" test="/*/c:directory/c:file[ends-with(@name,'.xhtml')]/@name" equals="'C00000.xhtml'"/>
+        <x:expect type="xpath" label="There should be exactly one directory in the resulting fileset" test="count(/*//c:directory)" equals="1"/>
+        <x:expect type="xpath" label="There should be exactly three files in the resulting fileset" test="count(//c:file)" equals="3"/>
+        
+        <x:context label="result DTBook">
+            <x:document type="file" base-uri="temp-dir" href="output-dir/C00000/C00000.xml"/>
+        </x:context>
+        <x:expect type="custom" href="xprocspec-assert-xml-declaration.xpl" step="px:xprocspec-read-xml-declaration"
+            label="The XML declaration must be present and equal '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;'">
+            <x:document type="inline">
+                <c:result version="1.0" encoding="UTF-8"/>
+            </x:document>
+        </x:expect>
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*/count(namespace::*)" equals="2" label="There should be exactly two namespaces declared on the root element (the default namespace and the implicit xml namespace)"/>
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*/namespace::*[name()='']" equals="'http://www.daisy.org/z3986/2005/dtbook/'" label="The DTBook namespace should be the default namespace on the root element"/>
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])" equals="0" label="No namespaces should be declared other than on the root element"/>
+        
+        <x:context label="the DTBook metadata">
+            <x:document type="file" href="output-dir/C00000/C00000.xml" base-uri="temp-dir" select="/dtbook:dtbook/dtbook:head"/>
+        </x:context>
+        <x:expect label="there must be a DTBook head element" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        <x:expect label="The output should preserve metadata with the a11y prefix in the DTBook file" type="xpath" test="//dtbook:meta[@name='a11y:certifiedBy']/@content" equals="'Certifying Organization'"/>
+        <x:expect label="The output should preserve metadata using unknown prefixes in the DTBook file" type="xpath" test="//dtbook:meta[@name='schema:audience']/@content" equals="'Adult'"/>
+        
+    </x:scenario>
+    
+</x:description>

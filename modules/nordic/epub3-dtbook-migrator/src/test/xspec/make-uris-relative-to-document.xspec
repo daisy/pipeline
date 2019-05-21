@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/make-uris-relative-to-document.xsl" xmlns="http://www.w3.org/1999/xhtml">
+
+    <x:scenario label="Basic example with external resources">
+        <x:context>
+            <html xml:base="file:/tmp/dir/file.xhtml">
+                <head/>
+                <body>
+                    <section xml:base="file:/tmp/dir/a.xhtml">
+                        <a href="link1"/>
+                        <img src="img/img2"/>
+                    </section>
+                    <section xml:base="file:/tmp/dir/b.xhtml">
+                        <a href="link2"/>
+                        <img src="img/img2"/>
+                    </section>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="xml:base attributes should be removed">
+            <html xml:base="file:/tmp/dir/file.xhtml">
+                <head/>
+                <body>
+                    <section>
+                        <a href="link1"/>
+                        <img src="img/img2"/>
+                    </section>
+                    <section>
+                        <a href="link2"/>
+                        <img src="img/img2"/>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Inter-document links">
+        <x:context>
+            <html xml:base="file:/tmp/dir/file.xhtml">
+                <head/>
+                <body id="outlineid">
+                    <section xml:base="file:/tmp/dir/a.xhtml" id="id1">
+                        <a href="b.xhtml#id2"/>
+                    </section>
+                    <section xml:base="file:/tmp/dir/b.xhtml">
+                        <h2 id="id2">Headline</h2>
+                        <a href="a.xhtml#id1"/>
+                    </section>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="Internal links should be used (starting with '#')">
+            <html xml:base="file:/tmp/dir/file.xhtml">
+                <head/>
+                <body id="outlineid">
+                    <section id="id1">
+                        <a href="#id2"/>
+                    </section>
+                    <section>
+                        <h2 id="id2">Headline</h2>
+                        <a href="#id1"/>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Handle links without a fragment identifier">
+        <x:scenario label="across documents">
+            <x:context>
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section xml:base="file:/tmp/dir/a.xhtml" id="id1">
+                            <a href="b.xhtml"/>
+                        </section>
+                        <section xml:base="file:/tmp/dir/b.xhtml">
+                            <h2 id="id2">Headline</h2>
+                            <a href="a.xhtml"/>
+                        </section>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="Internal links should be used (starting with '#')">
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section id="id1">
+                            <a href="#id2"/>
+                        </section>
+                        <section>
+                            <h2 id="id2">Headline</h2>
+                            <a href="#id1"/>
+                        </section>
+                    </body>
+                </html>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="in the same document">
+            <x:context>
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section xml:base="file:/tmp/dir/a.xhtml" id="id1">
+                            <a href="a.xhtml"/>
+                        </section>
+                        <section xml:base="file:/tmp/dir/b.xhtml">
+                            <h2 id="id2">Headline</h2>
+                            <a href="b.xhtml"/>
+                        </section>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="Internal links should be used (starting with '#')">
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section id="id1">
+                            <a href="#id1"/>
+                        </section>
+                        <section>
+                            <h2 id="id2">Headline</h2>
+                            <a href="#id2"/>
+                        </section>
+                    </body>
+                </html>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    
+</x:description>

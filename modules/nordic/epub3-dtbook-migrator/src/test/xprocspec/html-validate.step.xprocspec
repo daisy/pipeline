@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/html-validate.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
+    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="px:nordic-html-validate.step">
+        <x:call step="px:nordic-html-validate.step">
+            <x:input port="fileset.in">
+                <x:document type="inline">
+                    <d:fileset xml:base="../resources/">
+                        <d:file media-type="image/jpeg" href="single-html/images/valentin.jpg"/>
+                        <d:file media-type="application/xhtml+xml" href="single-html/C00000.xhtml" doctype="&lt;!DOCTYPE html&gt;"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in">
+                <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
+            </x:input>
+            <x:input port="report.in"/>
+            <x:option name="fail-on-error" select="'true'"/>
+        </x:call>
+
+        <x:context label="fileset.out">
+            <x:document type="port" port="fileset.out"/>
+        </x:context>
+        <x:expect type="compare" label="the fileset.out port should contain the same document as was received on the fileset.in port">
+            <x:document type="port" port="fileset.in"/>
+        </x:expect>
+
+        <x:context label="in-memory.out">
+            <x:document type="port" port="in-memory.out"/>
+        </x:context>
+        <x:expect type="compare" label="the in-memory.out port should contain the same documents as was received on the in-memory.in port">
+            <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
+        </x:expect>
+        <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix" test="/html:html/html:head/html:meta[@name='a11y:certifiedBy']/@content" equals="'Certifying Organization'"/>
+        <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes" test="/html:html/html:head/html:meta[@name='schema:audience']/@content" equals="'Adult'"/>
+
+        <x:context label="report.out">
+            <x:document type="port" port="report.out"/>
+        </x:context>
+        <x:expect label="there should be at least one report document" type="count" min="1"/>
+        <x:expect label="there should be no errors under d:reports" type="xpath" test="count(/*/d:reports/d:report/d:error)" equals="0"/>
+        <x:expect label="the error cound should be 0" type="xpath" test="/*/d:document-info/d:error-count/number(.)" equals="0"/>
+
+    </x:scenario>
+
+</x:description>

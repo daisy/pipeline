@@ -1,0 +1,15 @@
+target/
+src/test/xspec/*.html
+src/test/xspec/xspec/*
+src/test/xprocspec/*.html
+src/test/xprocspec/report/
+*.xpr
+batch-converter/results/
+release.properties
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+dependency-reduced-pom.xml
+buildNumber.properties
+*~
