@@ -59,5 +59,40 @@
     <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
+
+    <!-- for testing -->
+    <uri name="module:/xml/xproc/dtbook-to-epub3.xpl"                      uri="../xml/xproc/dtbook-to-epub3.xpl"/>
+    <uri name="module:/xml/xproc/dtbook-to-html.xpl"                       uri="../xml/xproc/dtbook-to-html.xpl"/>
+    <uri name="module:/xml/xproc/dtbook-validate.xpl"                      uri="../xml/xproc/dtbook-validate.xpl"/>
+    <uri name="module:/xml/xproc/epub3-asciimath-to-mathml.xpl"            uri="../xml/xproc/epub3-asciimath-to-mathml.xpl"/>
+    <uri name="module:/xml/xproc/epub3-to-dtbook.xpl"                      uri="../xml/xproc/epub3-to-dtbook.xpl"/>
+    <uri name="module:/xml/xproc/epub3-to-html.xpl"                        uri="../xml/xproc/epub3-to-html.xpl"/>
+    <uri name="module:/xml/xproc/epub3-validate.xpl"                       uri="../xml/xproc/epub3-validate.xpl"/>
+    <uri name="module:/xml/xproc/html-to-dtbook.xpl"                       uri="../xml/xproc/html-to-dtbook.xpl"/>
+    <uri name="module:/xml/xproc/html-to-epub3.xpl"                        uri="../xml/xproc/html-to-epub3.xpl"/>
+    <uri name="module:/xml/xproc/html-validate.xpl"                        uri="../xml/xproc/html-validate.xpl"/>
+    <uri name="module:/xml/xproc/step/check-image-file-signatures.xpl"     uri="../xml/xproc/step/check-image-file-signatures.xpl"/>
+    <uri name="module:/xml/xproc/step/dtbook-to-html.step.xpl"             uri="../xml/xproc/step/dtbook-to-html.step.xpl"/>
+    <uri name="module:/xml/xproc/step/dtbook-validate.step.xpl"            uri="../xml/xproc/step/dtbook-validate.step.xpl"/>
+    <uri name="module:/xml/xproc/step/epub3-asciimath-to-mathml.step.xpl"  uri="../xml/xproc/step/epub3-asciimath-to-mathml.step.xpl"/>
+    <uri name="module:/xml/xproc/step/epub3-to-html.step.xpl"              uri="../xml/xproc/step/epub3-to-html.step.xpl"/>
+    <uri name="module:/xml/xproc/step/epub3-validate.step.xpl"             uri="../xml/xproc/step/epub3-validate.step.xpl"/>
+    <uri name="module:/xml/xproc/step/html-add-accessibility.step.xpl"     uri="../xml/xproc/step/html-add-accessibility.step.xpl"/>
+    <uri name="module:/xml/xproc/step/html-split.xpl"                      uri="../xml/xproc/step/html-split.xpl"/>
+    <uri name="module:/xml/xproc/step/html-to-dtbook.step.xpl"             uri="../xml/xproc/step/html-to-dtbook.step.xpl"/>
+    <uri name="module:/xml/xproc/step/html-to-epub3.step.xpl"              uri="../xml/xproc/step/html-to-epub3.step.xpl"/>
+    <uri name="module:/xml/xproc/step/html-validate.step.xpl"              uri="../xml/xproc/step/html-validate.step.xpl"/>
+    <uri name="module:/xml/xslt/deep-level-grouping.xsl"                   uri="../xml/xslt/deep-level-grouping.xsl"/>
+    <uri name="module:/xml/xslt/dtbook-to-epub3.xsl"                       uri="../xml/xslt/dtbook-to-epub3.xsl"/>
+    <uri name="module:/xml/xslt/epub3-to-dtbook.xsl"                       uri="../xml/xslt/epub3-to-dtbook.xsl"/>
+    <uri name="module:/xml/xslt/generate-missing-headlines.xsl"            uri="../xml/xslt/generate-missing-headlines.xsl"/>
+    <uri name="module:/xml/xslt/list-heading-and-pagebreak-references.xsl" uri="../xml/xslt/list-heading-and-pagebreak-references.xsl"/>
+    <uri name="module:/xml/xslt/make-uris-relative-to-document.xsl"        uri="../xml/xslt/make-uris-relative-to-document.xsl"/>
+    <uri name="module:/xml/xslt/navdoc-to-outline.xsl"                     uri="../xml/xslt/navdoc-to-outline.xsl"/>
+    <uri name="module:/xml/xslt/opf-to-html-metadata.xsl"                  uri="../xml/xslt/opf-to-html-metadata.xsl"/>
+    <uri name="module:/xml/xslt/replace-sections-with-documents.xsl"       uri="../xml/xslt/replace-sections-with-documents.xsl"/>
+    <uri name="module:/xml/xslt/split-html.annotate.xsl"                   uri="../xml/xslt/split-html.annotate.xsl"/>
+    <uri name="module:/xml/xslt/split-html.xsl"                            uri="../xml/xslt/split-html.xsl"/>
+    <uri name="module:/xml/xslt/update-epub-prefixes.xsl"                  uri="../xml/xslt/update-epub-prefixes.xsl"/>
     
 </catalog>

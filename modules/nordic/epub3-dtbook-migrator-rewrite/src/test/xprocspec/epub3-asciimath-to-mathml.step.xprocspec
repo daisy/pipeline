@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description pending="asciimath elements are not replaced" xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/epub3-asciimath-to-mathml.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
+<x:description pending="asciimath elements are not replaced" xmlns:x="http://www.daisy.org/ns/xprocspec" script="module:/xml/xproc/step/epub3-asciimath-to-mathml.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mathml="http://www.w3.org/1998/Math/MathML">
 

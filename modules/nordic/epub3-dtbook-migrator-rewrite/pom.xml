@@ -5,13 +5,13 @@
 
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>scripts-parent</artifactId>
-        <version>1.12.0</version>
+        <artifactId>modules-parent</artifactId>
+        <version>1.12.1-SNAPSHOT</version>
         <!--<relativePath>../../scripts/parent/</relativePath>-->
     </parent>
     
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>nordic-epub3-dtbook-migrator</artifactId>
+    <artifactId>nordic-epub3-dtbook-migrator-rewrite</artifactId>
     <version>1.4.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
@@ -25,8 +25,21 @@
         <version-description>Version: ${project.version}${buildNr}, build date: ${timestamp}.</version-description>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <expose-services>
+            org.daisy.pipeline.modules.impl.Module_nordic_epub3_dtbook_migrator_rewrite,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_dtbook_to_epub3,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_dtbook_to_html,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_dtbook_validate,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_epub3_asciimath_to_mathml,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_epub3_to_dtbook,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_epub3_to_html,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_epub3_validate,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_html_to_dtbook,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_html_to_epub3,
+            org.daisy.pipeline.script.impl.XProcScript_nordic_html_validate
+        </expose-services>
     </properties>
-    
+
     <scm>
         <connection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</connection>
         <url>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</url>
@@ -36,35 +49,49 @@
     
     <dependencies>
         <!--
+            for XProcScriptService
+        -->
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>framework-core</artifactId>
+        </dependency>
+        <!--
             runtime dependencies
         -->
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>asciimath-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>common-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>dtbook-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>dtbook-validator</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>epub3-nav-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>epub3-ocf-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>epub3-pub-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
@@ -75,45 +102,38 @@
                     <artifactId>epubcheck</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.w3c</groupId>
             <artifactId>epubcheck</artifactId>
             <version>4.2.0</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>file-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>fileset-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>html-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>mediatype-utils</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>validation-utils</artifactId>
-        </dependency>
-        
-        <!--
-            test dependencies
-        -->
-        <dependency>
-            <groupId>org.daisy.pipeline.build</groupId>
-            <artifactId>modules-test-helper</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline</groupId>
-            <artifactId>framework-volatile</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -131,6 +151,18 @@
                 </includes>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.daisy.maven</groupId>
+                <artifactId>xspec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>xspecTest</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     
 </project>
