@@ -23,13 +23,16 @@ import org.ops4j.pax.exam.util.PathUtils;
 
 public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 	
+	protected String XSPEC_TESTS_DIR = "src/test/xspec";
+	protected String XPROCSPEC_TESTS_DIR = "src/test/xprocspec";
+	
 	@Inject
 	protected XSpecRunner xspecRunner;
 	
 	@Test
 	public void runXSpec() throws Exception {
 		File baseDir = new File(PathUtils.getBaseDir());
-		File testsDir = new File(baseDir, "src/test/xspec");
+		File testsDir = new File(baseDir, XSPEC_TESTS_DIR);
 		if (testsDir.exists()) {
 			File reportsDir = new File(baseDir, "target/surefire-reports");
 			for (int i = 2; reportsDir.exists(); i++)
@@ -49,7 +52,7 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 	@Test
 	public void runXProcSpec() throws Exception {
 		File baseDir = new File(PathUtils.getBaseDir());
-		File testsDir = new File(baseDir, "src/test/xprocspec");
+		File testsDir = new File(baseDir, XPROCSPEC_TESTS_DIR);
 		if (testsDir.exists()) {
 			File reportsDir = new File(baseDir, "target/xprocspec-reports");
 			for (int i = 2; reportsDir.exists(); i++)
