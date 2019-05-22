@@ -29,6 +29,7 @@
     <module>braille</module>
     <module>scripts</module>
     <module>nordic/epub3-dtbook-migrator</module>
+    <module>nordic/epub3-dtbook-migrator-rewrite</module>
   </modules>
 
   <!-- don't publish aggregator -->
