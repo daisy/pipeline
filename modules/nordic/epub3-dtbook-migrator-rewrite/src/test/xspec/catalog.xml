@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <uri name="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" uri="mock/uri-functions.xsl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/common-utils/i18n.xsl" uri="mock/i18n.xsl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl" uri="mock/numeral-conversion.xsl"/>
+</catalog>

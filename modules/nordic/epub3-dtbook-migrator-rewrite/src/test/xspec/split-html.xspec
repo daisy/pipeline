@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/xslt/split-html.xsl"
+               xslt-version="2.0">
+    
+    <x:scenario label="when processing a HTML document with all kinds of sections">
+        <x:context>
+            <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/content.xhtml">
+                <head>
+                    <title>Single-page title</title>
+                    <meta name="nordic:guidelines" value="2015-1"/>
+                </head>
+                <body>
+                    <section epub:type="cover" xml:base="file:/tmp/cover.xhtml">
+                        <h1>cover</h1>
+                        <p>covercovercover</p>
+                    </section>
+                    <section epub:type="titlepage" xml:base="file:/tmp/titlepage.xhtml">
+                        <h1>titlepage</h1>
+                        <p>titlepagetitlepagetitlepage</p>
+                        <p epub:type="z3998:author">author</p>
+                    </section>
+                    <section epub:type="colophon" xml:base="file:/tmp/colophon.xhtml">
+                        <h1>colophon</h1>
+                        <p>colophoncolophoncolophon</p>
+                    </section>
+                    <section epub:type="toc" xml:base="file:/tmp/toc.xhtml">
+                        <h1>toc</h1>
+                        <p>toctoctoc</p>
+                    </section>
+                    <section epub:type="part" xml:base="file:/tmp/part1.xhtml">
+                        <h1>part</h1>
+                        <p>partpartpart</p>
+                    </section>
+                    <section epub:type="chapter" xml:base="file:/tmp/chapter1.xhtml">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </section>
+                    <section epub:type="chapter" xml:base="file:/tmp/chapter2.xhtml">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </section>
+                    <section epub:type="part" xml:base="file:/tmp/part2.xhtml">
+                        <h1>part</h1>
+                        <p>partpartpart</p>
+                    </section>
+                    <section epub:type="chapter" xml:base="file:/tmp/chapter3.xhtml">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </section>
+                    <section epub:type="chapter" xml:base="file:/tmp/chapter4.xhtml">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </section>
+                    <section epub:type="index" xml:base="file:/tmp/index.xhtml">
+                        <h1>index</h1>
+                        <p>indexindexindex</p>
+                    </section>
+                    <section epub:type="appendix" xml:base="file:/tmp/appendix1.xhtml">
+                        <h1>appendix</h1>
+                        <p>appendixappendixappendix</p>
+                    </section>
+                    <section epub:type="appendix" xml:base="file:/tmp/appendix2.xhtml">
+                        <h1>appendix</h1>
+                        <p>appendixappendixappendix</p>
+                    </section>
+                    <section epub:type="glossary" xml:base="file:/tmp/glossary.xhtml">
+                        <h1>glossary</h1>
+                        <p>glossaryglossaryglossary</p>
+                    </section>
+                    <section epub:type="footnotes" xml:base="file:/tmp/footnotes.xhtml">
+                        <h1>footnotes</h1>
+                        <p>footnotesfootnotesfootnotes</p>
+                    </section>
+                    <section epub:type="rearnotes" xml:base="file:/tmp/rearnotes.xhtml">
+                        <h1>rearnotes</h1>
+                        <p>rearnotesrearnotesrearnotes</p>
+                    </section>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="each section should be split into its own HTML document, with a filename reflecting the type of its contents">
+            <wrapper xml:base="file:/tmp/content.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/cover.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="next" href="titlepage.xhtml"/>
+                    </head>
+                    <body epub:type="cover">
+                        <h1>cover</h1>
+                        <p>covercovercover</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/ z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/titlepage.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="cover.xhtml"/>
+                        <link rel="next" href="colophon.xhtml"/>
+                    </head>
+                    <body epub:type="titlepage">
+                        <h1>titlepage</h1>
+                        <p>titlepagetitlepagetitlepage</p>
+                        <p epub:type="z3998:author">author</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/colophon.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="titlepage.xhtml"/>
+                        <link rel="next" href="toc.xhtml"/>
+                    </head>
+                    <body epub:type="colophon">
+                        <h1>colophon</h1>
+                        <p>colophoncolophoncolophon</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/toc.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="colophon.xhtml"/>
+                        <link rel="next" href="part1.xhtml"/>
+                    </head>
+                    <body epub:type="toc">
+                        <h1>toc</h1>
+                        <p>toctoctoc</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/part1.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="toc.xhtml"/>
+                        <link rel="next" href="chapter1.xhtml"/>
+                    </head>
+                    <body epub:type="part">
+                        <h1>part</h1>
+                        <p>partpartpart</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter1.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="part1.xhtml"/>
+                        <link rel="next" href="chapter2.xhtml"/>
+                    </head>
+                    <body epub:type="chapter">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter2.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="chapter1.xhtml"/>
+                        <link rel="next" href="part2.xhtml"/>
+                    </head>
+                    <body epub:type="chapter">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/part2.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="chapter2.xhtml"/>
+                        <link rel="next" href="chapter3.xhtml"/>
+                    </head>
+                    <body epub:type="part">
+                        <h1>part</h1>
+                        <p>partpartpart</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter3.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="part2.xhtml"/>
+                        <link rel="next" href="chapter4.xhtml"/>
+                    </head>
+                    <body epub:type="chapter">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter4.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="chapter3.xhtml"/>
+                        <link rel="next" href="index.xhtml"/>
+                    </head>
+                    <body epub:type="chapter">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/index.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="chapter4.xhtml"/>
+                        <link rel="next" href="appendix1.xhtml"/>
+                    </head>
+                    <body epub:type="index">
+                        <h1>index</h1>
+                        <p>indexindexindex</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/appendix1.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="index.xhtml"/>
+                        <link rel="next" href="appendix2.xhtml"/>
+                    </head>
+                    <body epub:type="appendix">
+                        <h1>appendix</h1>
+                        <p>appendixappendixappendix</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/appendix2.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="appendix1.xhtml"/>
+                        <link rel="next" href="glossary.xhtml"/>
+                    </head>
+                    <body epub:type="appendix">
+                        <h1>appendix</h1>
+                        <p>appendixappendixappendix</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/glossary.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="appendix2.xhtml"/>
+                        <link rel="next" href="footnotes.xhtml"/>
+                    </head>
+                    <body epub:type="glossary">
+                        <h1>glossary</h1>
+                        <p>glossaryglossaryglossary</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/footnotes.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="glossary.xhtml"/>
+                        <link rel="next" href="rearnotes.xhtml"/>
+                    </head>
+                    <body epub:type="footnotes">
+                        <h1>footnotes</h1>
+                        <p>footnotesfootnotesfootnotes</p>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/rearnotes.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
+                        <link rel="prev" href="footnotes.xhtml"/>
+                    </head>
+                    <body epub:type="rearnotes">
+                        <h1>rearnotes</h1>
+                        <p>rearnotesrearnotesrearnotes</p>
+                    </body>
+                </html>
+            </wrapper>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="when processing a HTML document with all kinds of sections">
+        <x:context>
+            <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/content.xhtml">
+                <head>
+                    <title>Single-page title</title>
+                </head>
+                <body>
+                    <section epub:type="chapter" xml:base="file:/tmp/chapter1.xhtml">
+                        <h1>chapter</h1>
+                        <ul>
+                            <li><a href="content.xhtml">Link without fragment</a></li>
+                            <li><a href="#chapter2">Reference to other chapter</a></li>
+                            <li><a href="#chapter2-h2">Reference to element in other chapter</a></li>
+                            <li><a href="content.xhtml#chapter2-h2">Reference to element in other chapter - with relative href</a></li>
+                            <li><a href="file:/tmp/content.xhtml#chapter2-h2">Reference to element in other chapter - with absolute href</a></li>
+                            <li><a href="http://www.daisy.org/">Reference to external resource</a></li>
+                        </ul>
+                    </section>
+                    <section id="chapter2" epub:type="chapter" xml:base="file:/tmp/chapter2.xhtml">
+                        <h1 id="chapter2-h2">chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </section>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="each section should be split into its own HTML document, with a filename reflecting the type of its contents">
+            <wrapper xml:base="file:/tmp/content.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter1.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <link rel="next" href="chapter2.xhtml"/>
+                    </head>
+                    <body epub:type="chapter">
+                        <h1>chapter</h1>
+                        <ul>
+                            <li><a href="#">Link without fragment</a></li>
+                            <li><a href="chapter2.xhtml#chapter2">Reference to other chapter</a></li>
+                            <li><a href="chapter2.xhtml#chapter2-h2">Reference to element in other chapter</a></li>
+                            <li><a href="chapter2.xhtml#chapter2-h2">Reference to element in other chapter - with relative href</a></li>
+                            <li><a href="chapter2.xhtml#chapter2-h2">Reference to element in other chapter - with absolute href</a></li>
+                            <li><a href="http://www.daisy.org/">Reference to external resource</a></li>
+                        </ul>
+                    </body>
+                </html>
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter2.xhtml">
+                    <head>
+                        <title>Single-page title</title>
+                        <link rel="prev" href="chapter1.xhtml"/>
+                    </head>
+                    <body id="chapter2" epub:type="chapter">
+                        <h1 id="chapter2-h2">chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </body>
+                </html>
+            </wrapper>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

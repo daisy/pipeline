@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/xslt/update-epub-prefixes.xsl"
+               xslt-version="2.0">
+    
+    <x:scenario label="add prefixes as necessary">
+        <x:context>
+            <html xmlns:schema="http://schema.org/">
+                <head>
+                    <meta name="schema:isbn" content=""/>
+                    <meta name="nordic:guidelines" content="2015-1"/>
+                    <meta name="dcterms:modified" content="2018-09-12T10:24:30Z"/>
+                </head>
+                <body>
+                    <h1 epub:type="prism:title"/>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="the prefixes should be calculated as expected">
+            <html epub:prefix="nordic: http://www.mtm.se/epub/ schema: http://schema.org/ prism: http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#">
+                <head>
+                    <meta name="schema:isbn" content=""/>
+                    <meta name="nordic:guidelines" content="2015-1"/>
+                    <meta name="dcterms:modified" content="2018-09-12T10:24:30Z"/>
+                </head>
+                <body>
+                    <h1 epub:type="prism:title"/>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="look for namespaces in existing epub:prefix attribute">
+        <x:context>
+            <html epub:prefix="schema: http://schema.org/">
+                <head>
+                    <meta name="schema:isbn" content=""/>
+                </head>
+                <body/>
+            </html>
+        </x:context>
+        <x:expect label="the prefixes should be calculated as expected">
+            <html epub:prefix="nordic: http://www.mtm.se/epub/ schema: http://schema.org/">
+                <head>
+                    <meta name="schema:isbn" content=""/>
+                </head>
+                <body/>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="handle DTBook metadata">
+        <x:call function="f:prefixes">
+            <x:param name="head" as="element()">
+                <dtbook:head xmlns:schema="http://schema.org/">
+                    <dtbook:meta name="schema:isbn" content=""/>
+                    <dtbook:meta name="nordic:guidelines" content="2015-1"/>
+                    <dtbook:meta name="dcterms:modified" content="2018-09-12T10:24:30Z"/>
+                </dtbook:head>
+            </x:param>
+            <x:param name="body"/>
+            <x:param name="other"/>
+        </x:call>
+        <x:expect label="the prefixes should be calculated as expected"
+            select="('schema: http://schema.org/', 'nordic: http://www.mtm.se/epub/')"/>
+    </x:scenario>
+    
+</x:description>

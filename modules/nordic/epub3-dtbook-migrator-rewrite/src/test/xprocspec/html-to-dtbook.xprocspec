@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/html-to-dtbook.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <x:scenario label="px:nordic-html-to-dtbook">
+        <x:call step="px:nordic-html-to-dtbook">
+            <x:option name="html" select="resolve-uri('../resources/single-html/C00000.xhtml')"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
+        </x:call>
+
+        <x:context label="validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one document on the validation-status port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors" test="/*/@result" equals="'ok'"/>
+
+        <x:context label="validation report">
+            <x:document type="file" href="html-report/report.xhtml" base-uri="temp-dir"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one document on the html-report port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors in the HTML report"
+            test="sum(//*[matches(@class,'(^|\s)document-validation-report(\s|$)')]//html:p[matches(normalize-space(string-join(text(),' ')),'^\d+ issue.*')]/xs:integer(replace(normalize-space(string-join(text(),' ')),'(\d+) .*','$1')))"
+            equals="0"/>
+        
+        <x:context label="result fileset">
+            <x:document type="directory" base-uri="temp-dir" href="output-dir/" recursive="true"/>
+        </x:context>
+        <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+        <x:expect type="xpath" label="The results should be stored in a directory named 'C00000'" test="/*/c:directory/@name" equals="'C00000'"/>
+        <x:expect type="xpath" label="The resulting DTBook should be named C00000.xml" test="/*/c:directory/c:file[ends-with(@name,'.xml')]/@name" equals="'C00000.xml'"/>
+        <x:expect type="xpath" label="The resulting image should be stored in the same directory as the DTBook" test="/*/c:directory/c:file[ends-with(@name,'.jpg')]/@name" equals="'valentin.jpg'"/>
+        <x:expect type="xpath" label="There should be exactly one directory in the resulting fileset" test="count(/*//c:directory)" equals="1"/>
+        <x:expect type="xpath" label="There should be exactly two files in the resulting fileset" test="count(//c:file)" equals="2"/>
+        
+        <x:context label="the DTBook metadata">
+            <x:document type="file" href="output-dir/C00000/C00000.xml" base-uri="temp-dir" select="/dtbook:dtbook/dtbook:head"/>
+        </x:context>
+        <x:expect label="there must be a DTBook head element" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+
+    </x:scenario>
+    
+    <x:scenario label="px:nordic-html-to-dtbook - with an invalid HTML and fail-on-error set to 'false'">
+        <x:call step="px:nordic-html-to-dtbook">
+            <x:option name="html" select="resolve-uri('../resources/single-html.invalid/C00000.invalid.xhtml')"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir-2/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report-2/')"/>
+            <x:option name="fail-on-error" select="'false'"/>
+        </x:call>
+        
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="conversion should succeed">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="px:nordic-html-to-dtbook - with an invalid HTML and fail-on-error set to 'true'">
+        <x:call step="px:nordic-html-to-dtbook">
+            <x:option name="html" select="resolve-uri('../resources/single-html.invalid/C00000.invalid.xhtml')"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir-3/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report-3/')"/>
+            <x:option name="fail-on-error" select="'true'"/>
+        </x:call>
+        
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="conversion should fail">
+            <x:document type="inline">
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

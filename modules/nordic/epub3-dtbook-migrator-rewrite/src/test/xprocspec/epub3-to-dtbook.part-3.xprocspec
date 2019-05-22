@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/epub3-to-dtbook.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
+
+    <x:scenario label="px:nordic-epub3-to-dtbook - with an invalid EPUB and fail-on-error set to 'true'">
+        <x:call step="px:nordic-epub3-to-dtbook">
+            <x:option name="epub" select="resolve-uri('../resources/C00000.invalid.epub',base-uri())"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir-3/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report-3/')"/>
+            <x:option name="temp-dir" select="concat($temp-dir,'temp-dir-3/')"/>
+            <x:option name="fail-on-error" select="'true'"/>
+        </x:call>
+        
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="conversion should fail">
+            <x:document type="inline">
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

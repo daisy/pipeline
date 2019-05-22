@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/deep-level-grouping.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/">
+
+    <x:param name="name" select="'section article'"/>
+    <x:param name="namespace" select="'http://www.w3.org/1999/xhtml'"/>
+    <x:param name="max-depth" select="6"/>
+    <x:param name="copy-wrapping-elements-into-result" select="true()"/>
+
+    <x:scenario label="unwrap 7-deep html sections">
+        <x:context>
+            <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:lang="en">
+                <head>
+                    <meta charset="UTF-8"/>
+                    <title>Valentin Haüy - the father of the education for the blind</title>
+                </head>
+                <body>
+                    <header>
+                        <h1>Valentin Haüy - the father of the education for the blind</h1>
+                        <span>text 1</span>
+                    </header>
+                    <section>
+                        <h1>Valentin Haüy - the father of the education for the blind</h1>
+                        <span>text 2</span>
+                        <section>
+                            <h2>List of contents</h2>
+                            <span>text 3</span>
+                        </section>
+                        <section>
+                            <h2>Preface</h2>
+                            <span>text 4</span>
+                        </section>
+                    </section>
+                    <section>
+                        <h1>1. Research questions</h1>
+                        <span>text 5</span>
+                    </section>
+                    <section>
+                        <h1>2. Purpose, method and sources</h1>
+                        <span>text 6</span>
+                    </section>
+                    <section>
+                        <h1>3. Valentin Haüy</h1>
+                        <span>text 7</span>
+                        <section>
+                            <h2>3.1 Introduction</h2>
+                            <span>text 8</span>
+                        </section>
+                        <section>
+                            <h2>3.2 Biographical background</h2>
+                            <span>text 9</span>
+                        </section>
+                        <section>
+                            <h2>3.9 Valentin Haüy in Russia</h2>
+                            <span>text 10</span>
+                            <section>
+                                <h3>3.9.1 An invitation from Alexander I</h3>
+                                <span>text 11</span>
+                            </section>
+                            <section>
+                                <h3>3.9.2 Berlin</h3>
+                                <span>text 12</span>
+                                <section>
+                                    <h4>3.9.2.1 level 4</h4>
+                                    <span>text 13</span>
+                                    <section>
+                                        <h4>3.9.2.1.1 level 5</h4>
+                                        <span>text 14</span>
+                                    </section>
+                                    <section>
+                                        <h5>3.9.2.1.2 level 5</h5>
+                                        <span>text 15</span>
+                                        <section>
+                                            <h6>3.9.2.1.2 level 6</h6>
+                                            <span>text 16</span>
+                                            <section>
+                                                <h6>3.9.2.1.2 level 7</h6>
+                                                <span>text 17</span>
+                                            </section>
+                                        </section>
+                                    </section>
+                                </section>
+                            </section>
+                        </section>
+                        <section>
+                            <h2>3.10 Haüy's telegraph</h2>
+                            <span>text 18</span>
+                        </section>
+                        <section>
+                            <h2>3.11 The final years</h2>
+                            <span>text 19</span>
+                        </section>
+                    </section>
+                    <section>
+                        <h1>4. The importance of Haüy in the education of the blind in Sweden and elsewhere</h1>
+                        <span>text 20</span>
+                    </section>
+                    <section>
+                        <h1>References</h1>
+                        <span>text 21</span>
+                        <section>
+                            <h2>Footnotes</h2>
+                            <span>text 22</span>
+                        </section>
+                    </section>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="the 7th level must be moved up to level 6 and the rest of the content must remain unchanged.">
+            <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:lang="en">
+                <head>
+                    <meta charset="UTF-8"/>
+                    <title>Valentin Haüy - the father of the education for the blind</title>
+                </head>
+                <body>
+                    <header>
+                        <h1>Valentin Haüy - the father of the education for the blind</h1>
+                        <span>text 1</span>
+                    </header>
+                    <section>
+                        <h1>Valentin Haüy - the father of the education for the blind</h1>
+                        <span>text 2</span>
+                        <section>
+                            <h2>List of contents</h2>
+                            <span>text 3</span>
+                        </section>
+                        <section>
+                            <h2>Preface</h2>
+                            <span>text 4</span>
+                        </section>
+                    </section>
+                    <section>
+                        <h1>1. Research questions</h1>
+                        <span>text 5</span>
+                    </section>
+                    <section>
+                        <h1>2. Purpose, method and sources</h1>
+                        <span>text 6</span>
+                    </section>
+                    <section>
+                        <h1>3. Valentin Haüy</h1>
+                        <span>text 7</span>
+                        <section>
+                            <h2>3.1 Introduction</h2>
+                            <span>text 8</span>
+                        </section>
+                        <section>
+                            <h2>3.2 Biographical background</h2>
+                            <span>text 9</span>
+                        </section>
+                        <section>
+                            <h2>3.9 Valentin Haüy in Russia</h2>
+                            <span>text 10</span>
+                            <section>
+                                <h3>3.9.1 An invitation from Alexander I</h3>
+                                <span>text 11</span>
+                            </section>
+                            <section>
+                                <h3>3.9.2 Berlin</h3>
+                                <span>text 12</span>
+                                <section>
+                                    <h4>3.9.2.1 level 4</h4>
+                                    <span>text 13</span>
+                                    <section>
+                                        <h4>3.9.2.1.1 level 5</h4>
+                                        <span>text 14</span>
+                                    </section>
+                                    <section>
+                                        <h5>3.9.2.1.2 level 5</h5>
+                                        <span>text 15</span>
+                                        <section>
+                                            <h6>3.9.2.1.2 level 6</h6>
+                                            <span>text 16</span>
+                                        </section>
+                                        <section>
+                                            <h6>3.9.2.1.2 level 7</h6>
+                                            <span>text 17</span>
+                                        </section>
+                                    </section>
+                                </section>
+                            </section>
+                        </section>
+                        <section>
+                            <h2>3.10 Haüy's telegraph</h2>
+                            <span>text 18</span>
+                        </section>
+                        <section>
+                            <h2>3.11 The final years</h2>
+                            <span>text 19</span>
+                        </section>
+                    </section>
+                    <section>
+                        <h1>4. The importance of Haüy in the education of the blind in Sweden and elsewhere</h1>
+                        <span>text 20</span>
+                    </section>
+                    <section>
+                        <h1>References</h1>
+                        <span>text 21</span>
+                        <section>
+                            <h2>Footnotes</h2>
+                            <span>text 22</span>
+                        </section>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

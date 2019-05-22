@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf.sch"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-identifier" xmlns:dc="http://purl.org/dc/elements/1.1/" prefix="nordic: http://www.mtm.se/epub/"
+    xmlns:dcterms="http://purl.org/dc/terms/">
+    <metadata>
+        <dc:identifier id="pub-identifier">C00000.invalid</dc:identifier>
+        <dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
+        <dc:creator>Beatrice Christensen Sköld</dc:creator>
+        <dc:language>en</dc:language>
+        <dc:source>urn:isbn:123456789</dc:source>
+        <dc:format>EPUB3</dc:format>
+        <dc:publisher>MTM</dc:publisher>
+        <dc:date>2006-03-23</dc:date>
+        <meta property="dcterms:modified">2013-11-07T10:05:30Z</meta>
+        <meta name="dcterms:modified" content="2013-11-07T10:05:30Z"/>
+        <meta property="nordic:guidelines">2015-1</meta>
+        <meta name="nordic:guidelines" content="2015-1"/>
+        <meta property="nordic:supplier">MTM</meta>
+        <meta name="nordic:supplier" content="MTM"/>
+    </metadata>
+    <manifest>
+        <item id="item_1" media-type="application/xhtml+xml" href="C00000.invalid-01-cover.xhtml"/>
+        <item id="item_2" media-type="application/xhtml+xml" href="C00000.invalid-02-chapter.xhtml"/>
+        <item id="item_3" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+        <item id="item_4" media-type="application/x-dtbncx+xml" href="nav.ncx"/>
+    </manifest>
+    <spine toc="item_4">
+        <itemref id="itemref_1" idref="item_1" linear="no"/>
+        <itemref id="itemref_2" idref="item_2"/>
+    </spine>
+</package>
