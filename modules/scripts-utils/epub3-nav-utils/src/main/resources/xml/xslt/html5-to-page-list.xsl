@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:epub="http://www.idpf.org/2007/ops">
 
     <xsl:output indent="yes"/>
 
-    <xsl:param name="base-uri" select="base-uri(/*)"/>
+    <xsl:param name="output-base-uri" select="base-uri(/*)"/>
 
     <xsl:variable name="base-ref">
-        <xsl:variable name="base-dir" select="replace($base-uri,'/[^/]*(#.*)?$','/')"/>
+        <xsl:variable name="base-dir" select="replace($output-base-uri,'/[^/]*(#.*)?$','/')"/>
         <xsl:choose>
             <xsl:when test="starts-with(base-uri(/*),$base-dir)">
                 <xsl:value-of select="concat(substring-after(base-uri(/*),$base-dir),'#')"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message
-                    select="concat('Document base URI [',base-uri(/*),'] is not relative to the given base URI [',$base-uri,']')"/>
+                    select="concat('Document base URI [',base-uri(/*),'] is not relative to the given base URI [',$output-base-uri,']')"/>
                 <xsl:value-of select="concat(base-uri(/),'#')"/>
             </xsl:otherwise>
         </xsl:choose>

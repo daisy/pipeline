@@ -338,7 +338,7 @@
             </x:input>
             <x:input port="in-memory">
                 <x:document type="inline">
-                    <doc xml:base="file:///samples/fileset2/xml/not-on-disk-only-in-memory.xml"/>
+                    <doc xml:base="file:///samples/fileset2//xml/not-on-disk-only-in-memory.xml"/>
                 </x:document>
             </x:input>
         </x:call>

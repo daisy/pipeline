@@ -8,10 +8,16 @@
     <p:option name="title" select="''"/>
     <p:option name="language" select="''"/>
     <p:option name="css" select="''"/>
+    <p:option name="output-base-uri" required="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The base URI of the resulting document.</p>
+        </p:documentation>
+    </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
+            px:set-base-uri
             px:add-xml-base
         </p:documentation>
     </p:import>
@@ -100,6 +106,9 @@
             </p:input>
         </p:insert>
 
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$output-base-uri"/>
+        </px:set-base-uri>
         <px:add-xml-base root="false">
             <!--
                 otherwise the base URI of some elements would be empty (Calabash bug?)

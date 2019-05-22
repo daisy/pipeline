@@ -27,11 +27,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
-        <p:documentation>
-            px:set-base-uri
-        </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="html-to-epub3.content.xpl"/>
 
@@ -111,19 +106,20 @@
             <p:input port="source">
                 <p:pipe port="docs" step="content-docs"/>
             </p:input>
+            <p:with-option name="output-base-uri" select="$nav-base">
+                <p:empty/>
+            </p:with-option>
         </px:epub3-nav-create-page-list>
         <!--TODO create other nav types (configurable ?)-->
 
-        <!--TODO epub3-nav-aggregate should allow setting the base URI-->
         <px:epub3-nav-aggregate>
             <p:input port="source">
                 <p:pipe port="result" step="navigation.toc"/>
                 <p:pipe port="result" step="navigation.page-list"/>
             </p:input>
+            <p:with-option name="output-base-uri" select="$nav-base"/>
         </px:epub3-nav-aggregate>
-        <px:set-base-uri name="navigation.doc">
-            <p:with-option name="base-uri" select="$nav-base"/>
-        </px:set-base-uri>
+        <px:identity name="navigation.doc"/>
 
         <p:group name="navigation.fileset">
             <p:output port="result"/>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+    
+    <x:documentation>
+        This test show the effect of px:set-base-uri on a document that has fragments with a
+        different base URI than the document base URI, either explicit (indicated with xml:base
+        attribute) or non-explicit.
+    </x:documentation>
+    
+    <x:script>
+        <p:declare-step version="1.0" type="pxi:test">
+            <p:input port="source"/>
+            <p:output port="result-1">
+                <p:pipe step="add-xml-base" port="result"/>
+            </p:output>
+            <p:output port="result-2">
+                <p:pipe step="set-base-uri-without-xml-base" port="result"/>
+            </p:output>
+            <p:output port="result-3">
+                <p:pipe step="set-base-uri-with-xml-base" port="result"/>
+            </p:output>
+            <p:option name="base-uri" required="true"/>
+            <p:import href="../../../src/main/resources/xml/xproc/set-base-uri.xpl"/>
+            <p:delete match="@xml:base" name="delete-xml-base">
+                <!--
+                    removing the @xml:base attributes does not change the elements' base URIs
+                    see https://www.w3.org/TR/xproc/#c.delete
+                -->
+            </p:delete>
+            <p:add-xml-base name="add-xml-base">
+                <!-- this makes the @xml:base attributes explicit again -->
+            </p:add-xml-base>
+            <px:set-base-uri>
+                <p:with-option name="base-uri" select="$base-uri"/>
+            </px:set-base-uri>
+            <p:add-xml-base name="set-base-uri-with-xml-base"/>
+            <p:sink/>
+            <px:set-base-uri>
+                <p:input port="source">
+                    <p:pipe step="delete-xml-base" port="result"/>
+                </p:input>
+                <p:with-option name="base-uri" select="$base-uri"/>
+            </px:set-base-uri>
+            <p:add-xml-base name="set-base-uri-without-xml-base"/>
+            <p:sink/>
+        </p:declare-step>
+    </x:script>
+    
+    <x:scenario label="test">
+        <x:call step="pxi:test">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/tmp/file.xml">
+                    <doc>
+                        <elem xml:base="subdir/file.xml"/>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="base-uri" select="'file:/tmp/dir/file.xml'"/>
+        </x:call>
+        <x:context label="the first port">
+            <x:document type="port" port="result-1"/>
+        </x:context>
+        <x:expect label="Merely removing an xml:base attribute with p:delete does not change the base uri of the element."
+                  type="compare">
+            <x:document type="inline">
+                <doc xml:base="file:/tmp/file.xml">
+                    <elem xml:base="subdir/file.xml"/>
+                </doc>
+            </x:document>
+        </x:expect>
+        <x:context label="the second port">
+            <x:document type="port" port="result-2"/>
+        </x:context>
+        <x:expect label="px:set-base-uri has an effect on all elements that do not have an ancestor with an absolute xml:base,
+                         unless that element is the root element. Whether an element has a different base URI than its parent
+                         does not matter as long as this is not made explicit with an xml:base attribute."
+                  type="compare">
+            <x:document type="inline">
+                <doc xml:base="file:/tmp/dir/file.xml">
+                    <elem/>
+                </doc>
+            </x:document>
+        </x:expect>
+        <x:context label="the third port">
+            <x:document type="port" port="result-3"/>
+        </x:context>
+        <x:expect label="Elements with a relative xml:base are also affected by the px:set-base-uri in that their absolute base
+                         URI changes accordingly, but the xml:base attribute is not changed. Elements with an absolute xml:base,
+                         and their descendants, are not affected by the px:set-base-uri."
+                  type="compare">
+            <x:document type="inline">
+                <doc xml:base="file:/tmp/dir/file.xml">
+                    <elem xml:base="subdir/file.xml"/>
+                </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

@@ -4,6 +4,17 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 exclude-inline-prefixes="px">
 	
+	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+		<p>Changes the base URI of the document.</p>
+		<p>px:set-base-uri has an effect on all elements that do not have an ancestor with an
+		absolute xml:base, unless that element is the root element. Whether an element has a
+		different base URI than its parent does not matter as long as this is not made explicit with
+		an xml:base attribute. Elements with a relative xml:base are also affected by the
+		px:set-base-uri in that their absolute base URI changes accordingly, but the xml:base
+		attribute is not changed. Elements with an absolute xml:base, and their descendants, are not
+		affected by the px:set-base-uri.</p>
+	</p:documentation>
+	
 	<p:input port="source"/>
 	<p:output port="result"/>
 	<p:option name="base-uri"/>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="px:fileset-load" name="main" xmlns:p="http://www.w3.org/ns/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-  xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/fileset-load" xmlns:c="http://www.w3.org/ns/xproc-step" exclude-inline-prefixes="px">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/fileset-load"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                type="px:fileset-load" name="main"
+                exclude-inline-prefixes="px">
 
   <p:input port="fileset" primary="true"/>
   <p:input port="in-memory" sequence="true"/>
@@ -15,11 +20,36 @@
   <p:option name="load-if-not-in-memory" select="'true'"/>
   <p:option name="method" select="''"/>
 
-  <p:import href="fileset-library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+  <p:import href="fileset-library.xpl">
+    <p:documentation>
+      px:fileset-filter
+      px:fileset-create
+      px:fileset-add-entry
+      px:fileset-join
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+    <p:documentation>
+      px:html-load
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+    <p:documentation>
+      px:info
+      px:set-base-uri
+      px:normalize-uri
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl">
+    <p:documentation>
+      px:unzip
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+    <p:documentation>
+      px:message
+    </p:documentation>
+  </p:import>
 
   <p:declare-step type="pxi:load-text">
     <p:output port="result"/>
@@ -394,11 +424,9 @@
   <p:sink/>
   <p:for-each name="normalized">
     <p:output port="in-memory" sequence="true">
-      <p:pipe port="result" step="normalized.in-memory"/>
+        <p:pipe step="normalized.group" port="in-memory"/>
     </p:output>
-    <p:output port="filesets" sequence="true" primary="true">
-      <p:pipe port="result" step="normalized.fileset"/>
-    </p:output>
+    <p:output port="filesets" sequence="true" primary="true"/>
 
     <p:iteration-source>
       <p:pipe port="in-memory" step="main"/>
@@ -407,46 +435,56 @@
     <!--
         - The base URI is computed based on the xml:base attribute if present. If it is a relative
           URI, it is resolved against the original base URI.
-        - Normalize file:/// to file:/
-          FIXME: use pf:normalize-uri from http://www.daisy.org/pipeline/modules/file-utils/library.xsl
+        - Normalize URI (e.g. "file:///" to "file:/")
     -->
-    <p:variable name="base-uri" select="replace(resolve-uri(base-uri(/*)),'^file:///','file:/')"/>
-    <p:variable name="base-uri-changed" select="not($base-uri=base-uri(/))"/>
+    <px:normalize-uri name="normalize-uri">
+      <p:with-option name="href" select="resolve-uri(base-uri(/*))"/>
+    </px:normalize-uri>
+    <p:group name="normalized.group">
+      <p:output port="in-memory" sequence="true">
+        <p:pipe step="normalized.in-memory" port="result"/>
+      </p:output>
+      <p:output port="filesets" sequence="true" primary="true">
+        <p:pipe step="normalized.fileset" port="result"/>
+      </p:output>
+      <p:variable name="base-uri" select="string(/*)">
+        <p:pipe step="normalize-uri" port="normalized"/>
+      </p:variable>
+      <p:variable name="base-uri-changed" select="not($base-uri=base-uri(/))"/>
+  
+      <px:fileset-add-entry name="normalized.fileset">
+        <p:with-option name="href" select="$base-uri"/>
+        <p:input port="source">
+          <p:pipe port="result" step="fileset.in-memory-base"/>
+        </p:input>
+      </px:fileset-add-entry>
 
-    <px:fileset-add-entry name="normalized.fileset">
-      <p:with-option name="href" select="$base-uri"/>
-      <p:input port="source">
-        <p:pipe port="result" step="fileset.in-memory-base"/>
-      </p:input>
-    </px:fileset-add-entry>
-
-    <p:choose>
-      <!--
-          If URI was normalized in px:fileset-add-entry, adapt the actual base URI of the
-          document. Also adapt the actual base URI if the value passed to px:fileset-add-entry was
-          computed based on the xml:base attribute.
-      -->
-      <p:when test="/d:fileset/d:file/resolve-uri(@href, base-uri()) != $base-uri
-                    or $base-uri-changed='true'">
-        <px:set-base-uri>
-          <p:input port="source">
-            <p:pipe port="current" step="normalized"/>
-          </p:input>
-          <p:with-option name="base-uri" select="$base-uri"/>
-        </px:set-base-uri>
-      </p:when>
-      <p:otherwise>
-        <p:identity>
-          <p:input port="source">
-            <p:pipe port="current" step="normalized"/>
-          </p:input>
-        </p:identity>
-
-      </p:otherwise>
-    </p:choose>
-    <p:identity name="normalized.in-memory"/>
-    <p:sink/>
-
+      <p:choose>
+        <!--
+            If URI was normalized in px:fileset-add-entry, adapt the actual base URI of the
+            document. Also adapt the actual base URI if the value passed to px:fileset-add-entry was
+            computed based on the xml:base attribute.
+        -->
+        <p:when test="/d:fileset/d:file/resolve-uri(@href, base-uri()) != $base-uri
+                      or $base-uri-changed='true'">
+          <px:set-base-uri>
+            <p:input port="source">
+              <p:pipe port="current" step="normalized"/>
+            </p:input>
+            <p:with-option name="base-uri" select="$base-uri"/>
+          </px:set-base-uri>
+        </p:when>
+        <p:otherwise>
+          <p:identity>
+            <p:input port="source">
+              <p:pipe port="current" step="normalized"/>
+            </p:input>
+          </p:identity>
+        </p:otherwise>
+      </p:choose>
+      <p:identity name="normalized.in-memory"/>
+      <p:sink/>
+    </p:group>
   </p:for-each>
 
   <p:wrap-sequence wrapper="d:fileset"/>

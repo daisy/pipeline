@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" type="px:epub3-nav-create-page-list" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" version="1.0"
-    xmlns:epub="http://www.idpf.org/2007/ops" name="main">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:h="http://www.w3.org/1999/xhtml"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                type="px:epub3-nav-create-page-list" name="main">
 
 
     <p:input port="source" sequence="true"/>
@@ -8,9 +11,18 @@
         <p:pipe port="result" step="result"/>
     </p:output>
     <p:option name="hidden" select="'true'"/>
-    <p:option name="base-dir" select="''"/>
+    <p:option name="output-base-uri" required="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The base URI of the resulting document.</p>
+        </p:documentation>
+    </p:option>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     
     <p:for-each name="page-lists">
         <p:output port="result"/>
@@ -18,7 +30,8 @@
             <p:input port="stylesheet">
                 <p:document href="../xslt/html5-to-page-list.xsl"/>
             </p:input>
-            <p:with-param name="base-uri" select="if ($base-dir='') then base-uri(/*) else $base-dir"/>
+            <p:with-param name="output-base-uri" select="$output-base-uri"/>
+            <p:with-option name="output-base-uri" select="$output-base-uri"/>
         </p:xslt>
         <p:filter select="(//h:ol)[1]"/>
     </p:for-each>
@@ -58,6 +71,9 @@
             <p:identity/>
         </p:otherwise>
     </p:choose>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="$output-base-uri"/>
+    </px:set-base-uri>
     <p:identity name="result"/>
     <p:sink/>
 
