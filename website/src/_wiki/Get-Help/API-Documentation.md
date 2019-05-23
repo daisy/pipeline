@@ -194,7 +194,6 @@ FIXME: add short description for every package
 - [`org.daisy.pipeline.modules.braille:dotify-calabash`](http://daisy.github.io/pipeline/modules/braille/dotify-calabash/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:dotify-core`](http://daisy.github.io/pipeline/modules/braille/dotify-core/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:dotify-formatter`](http://daisy.github.io/pipeline/modules/braille/dotify-formatter/src/main/README.html)
-- [`org.daisy.pipeline.modules.braille:dotify-saxon`](http://daisy.github.io/pipeline/modules/braille/dotify-saxon/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:dotify-utils`](http://daisy.github.io/pipeline/modules/braille/dotify-utils/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:dtbook-to-pef`](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:epub3-to-pef`](http://daisy.github.io/pipeline/modules/braille/epub3-to-pef/src/main/README.html)
