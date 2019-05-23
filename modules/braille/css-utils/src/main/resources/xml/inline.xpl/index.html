@@ -40,11 +40,25 @@
 	
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-			All styles are parsed, validated, normalized, cascaded and finally serialized into
-			'style' attributes. 'page' rules are serialized as '@page { ... } @page:left { ... }
-			@page:right { ... }'. 'before' and 'after' rules are serialized as '::before { ... }'
-			and '::after { ... }'. Shorthand declarations such as 'margin: a b c d' are decomposed
-			as 'margin-top: a; margin-right: b; margin-bottom: c; margin-left: d'.
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;All styles are parsed, validated, normalized, cascaded and finally serialized into
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;style&lt;/<span class="code-xml-element-local-name">code</span>&gt; attributes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Shorthand declarations such as &lt;<span class="code-xml-element-local-name">code</span>&gt;margin: a b c d&lt;/<span class="code-xml-element-local-name">code</span>&gt; are decomposed as
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;margin-top: a; margin-right: b; margin-bottom: c; margin-left: d&lt;/<span class="code-xml-element-local-name">code</span>&gt;.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;'before' and 'after' rules are serialized as &lt;<span class="code-xml-element-local-name">code</span>&gt;&amp;::before { ... }&lt;/<span class="code-xml-element-local-name">code</span>&gt; and
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;&amp;::after { ... }&lt;/<span class="code-xml-element-local-name">code</span>&gt;.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;'page' properties are replaced with the corresponding named 'page' rules (without the
+			page type selector). If the root element does not have a 'page' property, the default
+			page rule is inserted. 'page' rules are serialized as &lt;<span class="code-xml-element-local-name">code</span>&gt;@page { ... } @page:left {
+			... } @page:right { ... }&lt;/<span class="code-xml-element-local-name">code</span>&gt;. The declarations that named page rules inherit from
+			the default page rule are made explicit. The declarations that 'left' and 'right' page
+			rules inherit from their principal page rule are also made explicit.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;'volume' rules are serialized as &lt;<span class="code-xml-element-local-name">code</span>&gt;@volume { ... } @volume:first { ... }
+			@volume:last { ... } @volume:nth(...) { ... } @volume:nth-last(...) { ... }&lt;/<span class="code-xml-element-local-name">code</span>&gt; and
+			inserted for the root element. The declarations that '@volume:first' etc. inherit from
+			the principal volume rule are made explicit. ':nth(1)' and ':nth-last(1)' are normalized
+			to ':first' and ':last'. A special '@volume:only' rule, which is a combination of the
+			'@volume:first' and '@volume:last' rules, is created for the case that there is only a
+			single volume.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
 	

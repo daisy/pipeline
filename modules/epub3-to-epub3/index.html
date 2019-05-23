@@ -790,6 +790,132 @@ if (window.addEventListener) {
 
 <div class="gui-synopsis">
 
+  <h3 id="inputs">Inputs</h3>
+
+  <ul class="synopsis-inputs">
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">Input EPUB 3</div>
+<div class="synopsis-input-desc">
+The EPUB you want to convert. You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.idpf.org/epub/301/spec/epub-ocf.html" class="media-type external-link" target="_blank">application/epub+zip</a></li>
+<li>text/plain</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+</ul>
+
+  <h3 id="outputs">Outputs</h3>
+
+  <ul class="synopsis-outputs">
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">Output EPUB 3</div>
+<div class="synopsis-output-desc">
+
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Braille translator query</div>
+<div class="synopsis-option-desc">
+
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>(translator:liblouis)</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
+</div>
+<div class="longdesc">CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
+
+<p>All CSS style sheets are applied at once, but the order in which they are specified has an influence
+on the cascading order.</p>
+
+<p>If the “Apply document-specific CSS” option is enabled, the document-specific style sheets will be
+applied before the ones specified through this option (see below).</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Apply document-specific CSS</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">If this option is enabled, any pre-existing CSS in the EPUB for medium "embossed" will be taken into account for the translation, or preserved in the result EPUB.
+</div>
+<div class="longdesc">If this option is enabled, any pre-existing CSS in the EPUB for medium "embossed" will be taken into account for the translation, or preserved in the result EPUB.
+
+<p>The HTML files inside the source EPUB may already contain CSS that applies to embossed media. Style
+sheets can be associated with an HTML file in several ways: linked (using an ‘xml-stylesheet’
+processing instruction or a ‘link’ element), embedded (using a ‘style’ element) and/or inlined
+(using ‘style’ attributes).</p>
+
+<p>Document-specific CSS takes precedence over any CSS provided through the “Style sheets” option. For
+instance, if the EPUB already contains the rule <code>p { padding-left: 2; }</code>, and using this script the
+rule <code>p#docauthor { padding-left: 4; }</code> is provided, then the <code>padding-left</code> property will get the
+value <code>2</code> because that’s what was defined in the EPUB, even though the provided CSS is more
+specific.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Set default rendition to braille.</div>
+<div class="synopsis-option-desc">
+Make the generated braille rendition the default rendition.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+</ul>
+
   <script type="text/javascript">
 var allElements = [];
 function showDetailsAndHideAllOther() {
@@ -831,6 +957,27 @@ if (window.addEventListener) {
 
 Options:</pre>
   <table>
+<tr>
+<td>--source <span style="text-transform: uppercase">source</span>
+</td>
+<td>The EPUB you want to convert. You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.</td>
+</tr>
+<tr>
+<td>--braille-translator [<span style="text-transform: uppercase">braille-translator</span>]</td>
+<td>Braille translator query (default: <span class="synopsis-option-default"><code>(translator:liblouis)</code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--apply-document-specific-stylesheets [<span style="text-transform: uppercase">apply-document-specific-stylesheets</span>]</td>
+<td>Apply document-specific CSS (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--set-default-rendition-to-braille [<span style="text-transform: uppercase">set-default-rendition-to-braille</span>]</td>
+<td>Set default rendition to braille. (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
 <td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>

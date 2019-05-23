@@ -27,10 +27,10 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  	<em class="jxr_comment">/*       UTILS        */</em>
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  	<em class="jxr_comment">/* ================== */</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  	
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/WithSideEffect.html">util</a> {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/AbstractBrailleTranslator.html">util</a> {
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  		
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  		<em class="jxr_comment">// TODO: caching?</em>
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/AbstractHyphenator.html">DefaultLineBreaker</a> <strong class="jxr_keyword">implements</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Hyphenator.html">LineBreaker</a> {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/AbstractBrailleTranslator.html">DefaultLineBreaker</a> <strong class="jxr_keyword">implements</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Hyphenator.html">LineBreaker</a> {
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  			
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  			<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/AbstractHyphenator.html">Break</a> breakWord(String word, <strong class="jxr_keyword">int</strong> limit, <strong class="jxr_keyword">boolean</strong> force);
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  			
@@ -57,9 +57,9 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Pattern ON_SPACE_SPLITTER = Pattern.compile(<span class="jxr_string">"\\s+"</span>);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Hyphenator.html">LineIterator</a> transform(<strong class="jxr_keyword">final</strong> String text) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/AbstractBrailleTranslator.html">LineIterator</a> transform(<strong class="jxr_keyword">final</strong> String text) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  				
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Hyphenator.html">LineIterator</a>() {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/AbstractBrailleTranslator.html">LineIterator</a>() {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  					
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  					String remainder = text;
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  					String remainderAtMark = text;

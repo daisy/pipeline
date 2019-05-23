@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Module_epub3_tts xref</title>
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/epub3-tts/src/main/java/stylesheet.css">
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.modules.impl;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.net.URI;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.modules.AbstractModuleBuilder;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.modules.JarModuleBuilder;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.modules.Module;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.modules.ModuleRef;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  @Component(
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>      name = <span class="jxr_string">"org.daisy.pipeline.modules.impl.Module_epub3_tts"</span>,
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>      service = { ModuleRef.<strong class="jxr_keyword">class</strong> },
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>      immediate = <strong class="jxr_keyword">true</strong>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  )
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/epub3-tts/src/main/java/org/daisy/pipeline/modules/impl/Module_epub3_tts.html">Module_epub3_tts</a> <strong class="jxr_keyword">implements</strong> ModuleRef {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>      
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>      <strong class="jxr_keyword">private</strong> Module instance;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      <strong class="jxr_keyword">private</strong> XmlCatalogParser catalogParser;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">public</strong> Module get() {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>          <strong class="jxr_keyword">if</strong> (instance == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>              AbstractModuleBuilder builder
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>              = AbstractModuleBuilder.fromContainedClass(Module_epub3_tts.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>                                     .withCatalogParser(catalogParser);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>              <strong class="jxr_keyword">if</strong> (builder instanceof JarModuleBuilder) {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>                  <em class="jxr_comment">// name, version and title not set yet</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>                  builder.withName(<span class="jxr_string">"epub3-tts"</span>)
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>                         .withVersion(<span class="jxr_string">"1.1.1-SNAPSHOT"</span>)
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>                         .withTitle(<span class="jxr_string">"DAISY Pipeline 2 module :: EPUB3 HTML to TTS Audio"</span>);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>              }
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>              instance = builder.build();
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>          }
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>          <strong class="jxr_keyword">return</strong> instance;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      }
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      @Reference(
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          name = <span class="jxr_string">"XmlCatalogParser"</span>,
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          unbind = <span class="jxr_string">"-"</span>,
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          service = XmlCatalogParser.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          cardinality = ReferenceCardinality.MANDATORY,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          policy = ReferencePolicy.STATIC
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      )
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setParser(XmlCatalogParser parser) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          catalogParser = parser;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
+</pre>
+<hr>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+</body>
+</html>

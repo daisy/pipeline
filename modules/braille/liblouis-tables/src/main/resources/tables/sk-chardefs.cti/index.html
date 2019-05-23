@@ -44,6 +44,11 @@
 #     Derived from the Czech braille table by Bert Frees and Jan Halousek
 # ----------------------------------------------------------------------------------------------
 
+space       \x0009        9                                       &lt;control&gt; HORIZONTAL TABULATION
+space       \x001B        1b                                      &lt;control&gt; ESCAPE
+space       \x00A0        a                                       NO-BREAK SPACE
+include spaces.uti
+
 # ==============================================================================================
 # SINGLE-CELL
 # ==============================================================================================
@@ -100,13 +105,6 @@ uplow       \x017D\x017E  2346,2346           Žž                  LATIN CAPITA
 # Unicode 0000..007F  C0 Controls and Basic Latin
 # ----------------------------------------------------------------------------------------------
 
-space       \x0009        9                                       &lt;control&gt; HORIZONTAL TABULATION
-space       \x000A        0                                       &lt;control&gt; LINE FEED
-space       \x000C        0                                       &lt;control&gt; FORM FEED
-space       \x000D        0                                       &lt;control&gt; CARRIAGE RETURN
-space       \x001B        1b                                      &lt;control&gt; ESCAPE
-space       \x0020        0                                       SPACE
-
 punctuation \x0021        235                 !                   EXCLAMATION MARK
 punctuation \x0022        2356                "                   QUOTATION MARK
 sign        \x0023        3456                #                   NUMBER SIGN
@@ -140,7 +138,6 @@ punctuation \x0060        6                   `                   GRAVE ACCENT
 # Unicode 0080..00FF  C1 Controls and Latin-1 Supplement
 # ----------------------------------------------------------------------------------------------
 
-space       \x00A0        a                                       NO-BREAK SPACE
 punctuation \x00A7        346                 §                   SECTION
 punctuation \x00AD        36                  ­                   SOFT HYPHEN
 sign        \x00B4        4                   ´                   ACUTE ACCENT

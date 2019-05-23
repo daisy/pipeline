@@ -55,14 +55,11 @@
 
 # Created by Leon Ungier &lt;Leon.Ungier@ViewPlus.com&gt;.
 
-locale Portugal
-
+space \x00a0 a
+include spaces.uti
 include text_nabcc.dis
 
 #--------------------- All chars definitions ------------------------------
-
-space \t 0 tab            #  9
-space \s 0 blank					# 32
 
 punctuation ! 235				exclamation mark	33
 punctuation " 236				double quote			34
@@ -79,7 +76,6 @@ punctuation , 2					coma							44
 punctuation - 36				hyphen-minus			45
 punctuation . 3					point							46
 math / 6-2							solidus						47
-include digits6Dots.uti
 punctuation : 25			colon					58		x003A
 punctuation ;	23			semicolon			59		x003B
 math &lt; 246													60		x003C
@@ -88,7 +84,9 @@ math &gt; 135													62		x003E
 punctuation ? 26										63		x003F
 sign @ 156						commercial at	64		x0040
 
-include latinLetterDef6Dots.uti
+include latinLetterDef6Dots.uti 
+include digits6Dots.uti # Must come after letters.
+include litdigits6Dots.uti # Must come after letters.
 
 punctuation [ 12356-3		left square bracket			x005B
 sign \\ 5-3							reverse solidus					x005C
@@ -105,7 +103,6 @@ punctuation } 456-2		right curly bracket			x007D
 sign ~ 5						tilde										x007E
 sign \x0080 15-136-1235-135										x0080
 
-space \X00A0 0				# no-break space													x00A0
 sign ¢ 4-14						cent sign																	x00A2
 sign £ 4-123					pound sign																x00A3
 sign ¤ 45-15					currency sign															x00A4

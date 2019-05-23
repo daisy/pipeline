@@ -790,6 +790,57 @@ if (window.addEventListener) {
 
 <div class="gui-synopsis">
 
+  <h3 id="inputs">Inputs</h3>
+
+  <ul class="synopsis-inputs">
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">NCC</div>
+<div class="synopsis-input-desc">
+The NCC file in the DAISY 2.02 fileset
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="https://www.w3.org/TR/html5/" class="media-type external-link" target="_blank">application/xhtml+xml</a></li>
+<li>text/html</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+</ul>
+
+  <h3 id="reports">Reports</h3>
+
+  <ul class="synopsis-reports">
+<li class="synopsis-report details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-report-name">Validation report</div>
+<div class="synopsis-report-desc">
+
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Time Tolerance</div>
+<div class="synopsis-option-desc">
+The duration of the audio files can deviate from the duration declared in the DAISY 2.02 fileset by this many milliseconds.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>500</code>
+</div>
+</li>
+</ul>
+
   <script type="text/javascript">
 var allElements = [];
 function showDetailsAndHideAllOther() {
@@ -831,6 +882,15 @@ if (window.addEventListener) {
 
 Options:</pre>
   <table>
+<tr>
+<td>--ncc <span style="text-transform: uppercase">ncc</span>
+</td>
+<td>The NCC file in the DAISY 2.02 fileset</td>
+</tr>
+<tr>
+<td>--timeToleranceMs [<span style="text-transform: uppercase">timeToleranceMs</span>]</td>
+<td>Time Tolerance (default: <span class="synopsis-option-default"><code>500</code></span>)</td>
+</tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
 <td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>

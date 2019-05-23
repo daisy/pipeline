@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Datatype_px_html_to_pef_script_stylesheet xref</title>
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/braille/html-to-pef/src/main/java/stylesheet.css">
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.datatypes.impl;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> javax.xml.transform.URIResolver;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.datatypes.DatatypeService;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.datatypes.UrlBasedDatatypeService;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Activate;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  @Component(
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  	name = <span class="jxr_string">"px:html-to-pef.script-stylesheet"</span>,
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  	immediate = <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  	service = { DatatypeService.<strong class="jxr_keyword">class</strong> },
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  	property = {
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  		<span class="jxr_string">"data-type.id:String=px:html-to-pef.script-stylesheet"</span>,
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  		<span class="jxr_string">"data-type.url:String=/data-types/html-to-pef.script-stylesheet.xml"</span>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  	}
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  )
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/html-to-pef/src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_px_html_to_pef_script_stylesheet.html">Datatype_px_html_to_pef_script_stylesheet</a> <strong class="jxr_keyword">extends</strong> UrlBasedDatatypeService {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	@Activate
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> activate(Map&lt;?,?&gt; properties) {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		<strong class="jxr_keyword">super</strong>.activate(properties, Datatype_px_html_to_pef_script_stylesheet.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	}
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  }
+</pre>
+<hr>
+<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+</body>
+</html>

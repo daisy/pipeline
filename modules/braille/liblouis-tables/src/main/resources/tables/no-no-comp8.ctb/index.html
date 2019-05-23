@@ -13,12 +13,45 @@
   <body>
     <link rev="doc" href="../no-no-comp8.ctb">
 
-<pre><code># liblouis: Norwegian 8-dot computer braille table
+<pre><code># liblouis: Norwegian computer braille, 8-dot
+#
+#-name: Norsk datapunktskrift, 8-punkt
+#-display-name: Norwegian computer braille
+#
+#+locale:no
+#+type:computer
+#+dots:8
+#+grade:0
 #
 #  Copyright (C) 1995-2004 The BRLTTY Team
 #  Copyright (C) 2004-2006 ViewPlus Technologies, Inc. www.viewplus.com
 #  Copyright (C) 2004-2006 JJB Software, Inc. www.jjb-software.com
 #  Copyright (C) 2015 NLB Norwegian library of talking books and braille, http://www.nlb.no/
+#
+#-copyright: 1995-2004, The BRLTTY Team
+#-copyright: 2004-2006, ViewPlus Technologies, Inc. www.viewplus.com
+#-copyright: 2004-2006, JJB Software, Inc. www.jjb-software.com
+#-copyright: 2015, NLB Norwegian library of talking books and braille, http://www.nlb.no/
+#-license: LGPLv2.1
+#
+# Updated August 2015 by Jostein Austvik Jacobsen &lt;jostein@nlb.com&gt; and Ammar Usama &lt;ammar.usama@nlb.no&gt;
+#
+#-author-name: Jostein Austvik Jacobsen
+#-author-email: jostein@nlb.no
+#-author-url: https://github.com/josteinaj
+#
+#-author-name: Ammar Usama
+#-author-email: ammar.usama@nlb.no
+#-author-url: https://github.com/usama49
+#
+# Based on the braille contraction modules in BRLTTY
+#
+# This is to be used with Norwegian translation tables.
+#
+# BRLTTY Text Translation Table - Norwegian (iso-8859-1), based on the
+# Offentlig Utvalg for Blindeskrift (Public Commission for Braille)
+# translation table for Windows 1252.
+# Updated January 2008.
 #
 #  This file is part of liblouis.
 #
@@ -36,16 +69,6 @@
 #  License along with liblouis. If not, see
 #  &lt;http://www.gnu.org/licenses/&gt;.
 #
-# Based on the braille contraction modules in BRLTTY
-#
-# This is to be used with Norwegian translation tables.
-#
-# BRLTTY Text Translation Table - Norwegian (iso-8859-1), based on the
-# Offentlig Utvalg for Blindeskrift (Public Commission for Braille)
-# translation table for Windows 1252.
-# Updated January 2008.
-#
-# Updated August 2015 by Jostein Austvik Jacobsen &lt;jostein@nlb.com&gt; and Ammar Usama &lt;ammar.usama@nlb.no&gt;
 
 sign \x0000 4578       # NULL ( - &lt;Kontrolltegn&gt;)
 sign \x0001 178        # START OF HEADING ( - &lt;Kontrolltegn&gt;)
@@ -211,11 +234,7 @@ sign \x009C 1234568    # String Terminator
 sign \x009D 235678     # Operating System Command
 sign \x009E 23468      # Privacy Message
 sign \x009F 125678     # Application Program Command
-
-# does not work because `space \x00a0 a` is hardcoded in compileTranslationTable.c; replacing with a pass2 rule
-# sign \x00A0 8          # NO-BREAK SPACE ( - Hardt mellomrom)
-noback pass2 @a @8
-
+sign \x00A0 8          # NO-BREAK SPACE ( - Hardt mellomrom)
 sign \x00A1 2358       # INVERTED EXCLAMATION MARK (¡ - Omvendt utropstegn)
 sign \x00A2 2578       # CENT SIGN (¢ - Cent-tegn)
 sign \x00A3 1238       # POUND SIGN (£ - Pund-tegn)

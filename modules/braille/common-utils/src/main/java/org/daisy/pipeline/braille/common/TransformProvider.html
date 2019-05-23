@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  	<em class="jxr_comment">/*       UTILS        */</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<em class="jxr_comment">/* ================== */</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  	
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/WithSideEffect.html">util</a> {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/AbstractBrailleTranslator.html">util</a> {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  		
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<em class="jxr_comment">/* --------- */</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<em class="jxr_comment">/* memoize() */</em>
@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  			
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  			<strong class="jxr_keyword">private</strong> Map&lt;Logger,TransformProvider&lt;T&gt;&gt; providerCache = <strong class="jxr_keyword">new</strong> HashMap&lt;Logger,TransformProvider&lt;T&gt;&gt;();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  			
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/util.html">Memoize</a>() {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/TransformProvider.html">Memoize</a>() {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  				providerCache.put(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			}
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			

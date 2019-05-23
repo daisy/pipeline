@@ -798,7 +798,13 @@ This page describes the steps, comments and issues related to this transformatio
   <li>
 <a href="#daisy-202-to-epub-3" id="markdown-toc-daisy-202-to-epub-3">DAISY 2.02 To EPUB 3</a>    <ul>
       <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
-      <li><a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a></li>
+      <li>
+<a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a>        <ul>
+          <li><a href="#inputs" id="markdown-toc-inputs">Inputs</a></li>
+          <li><a href="#outputs" id="markdown-toc-outputs">Outputs</a></li>
+          <li><a href="#options" id="markdown-toc-options">Options</a></li>
+        </ul>
+      </li>
       <li><a href="#example-running-from-command-line" id="markdown-toc-example-running-from-command-line">Example running from command line</a></li>
       <li><a href="#outline" id="markdown-toc-outline">Outline</a></li>
       <li><a href="#errors" id="markdown-toc-errors">Errors</a></li>
@@ -815,6 +821,83 @@ This page describes the steps, comments and issues related to this transformatio
 <h2 id="synopsis">Synopsis</h2>
 
 <div class="gui-synopsis">
+
+  <h3 id="inputs">Inputs</h3>
+
+  <ul class="synopsis-inputs">
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">NCC</div>
+<div class="synopsis-input-desc">
+
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="https://www.w3.org/TR/html5/" class="media-type external-link" target="_blank">application/xhtml+xml</a></li>
+<li>text/html</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+</ul>
+
+  <h3 id="outputs">Outputs</h3>
+
+  <ul class="synopsis-outputs">
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">EPUB</div>
+<div class="synopsis-output-desc">
+
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include Media Overlay</div>
+<div class="synopsis-option-desc">
+Whether or not to include media overlays and associated audio files.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Backwards compatible</div>
+<div class="synopsis-option-desc">
+Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">EPUB 3 Filename</div>
+<div class="synopsis-option-desc">
+By default, the filename is the dc:identifier with a "epub" file extension. This option can be used to set a custom filename.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+</ul>
 
   <script type="text/javascript">
 var allElements = [];
@@ -857,6 +940,23 @@ if (window.addEventListener) {
 
 Options:</pre>
   <table>
+<tr>
+<td>--href <span style="text-transform: uppercase">href</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td>--mediaoverlay [<span style="text-transform: uppercase">mediaoverlay</span>]</td>
+<td>Include Media Overlay (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--compatibility-mode [<span style="text-transform: uppercase">compatibility-mode</span>]</td>
+<td>Backwards compatible (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
+<td>EPUB 3 Filename (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
 <td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>
