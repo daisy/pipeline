@@ -158,7 +158,7 @@
 					<property name="script.version" type="String" value="${project.version}"/>
 					<property name="script.id" type="String" value="my-script"/>
 					<property name="script.description" type="String" value="Does stuff."/>
-					<property name="script.url" type="String" value="/xml/script.xpl"/>
+					<property name="script.url" type="String" value="/xml/__processed__script.xpl"/>
 				</scr:component>
 			</x:document>
 		</x:expect>

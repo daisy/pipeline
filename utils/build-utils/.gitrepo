@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-build-utils.git
 	branch = master
 	commit = 0368c99294124cebfd9bbb434c56d78ca1a18b6b
-	parent = 73ba0944fe19a72dc99feb4b1d019a0aed06408f
+	parent = 0572204673de2f1177e8a238a5659f24a04d479f
 	cmdver = 0.3.1

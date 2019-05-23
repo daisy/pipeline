@@ -39,7 +39,7 @@
 	</xsl:template>
 	
 	<xsl:template mode="serialize" match="cat:uri">
-		<xsl:if test="@name">
+		<xsl:if test="@name or @px:content-type=('script','data-type')">
 			<span about="../{@uri}">
 				<xsl:choose>
 					<xsl:when test="@px:content-type='script'">
