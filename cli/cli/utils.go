@@ -199,7 +199,7 @@ func AssertJava(minJavaVersion int) error {
 	}
 	//check with the min version
 	if ver < minJavaVersion {
-		return fmt.Errorf("A java version 1.7 or greater is need in order to run the pipeline")
+		return fmt.Errorf("A java version " + strconv.Itoa(minJavaVersion) + " or greater is need in order to run the pipeline")
 	}
 	return nil
 }
