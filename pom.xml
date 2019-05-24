@@ -19,10 +19,12 @@
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
-    
+    <!-- issues in the repo version of xmlcalabash, 
+    cannot build framework due to nullpointerexception 
+    when building Apache derby connector -->
+    <!--<module>libs/com.xmlcalabash</module>-->
     
     <module>utils/daisy-parent/daisy-parent</module>
-    <module>framework</module>
     <module>utils/build-utils</module>
     <module>utils/xspec-maven-plugin</module>
     <module>utils/xprocspec</module>
@@ -31,6 +33,7 @@
     <module>libs/xsweet/htmlevator</module>
     <module>libs/xsweet/xsweet</module>
     <module>libs/transpect</module>
+    <module>framework</module>
     <module>modules</module>
     <module>cli</module>
     <module>gui</module>

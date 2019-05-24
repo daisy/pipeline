@@ -52,7 +52,7 @@ public class PersistentJobStorageTest {
                 storage.setEntityManagerFactory(DatabaseProvider.getEMF());
                 storage.setRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
                 storage.setConfigurator(configurator);
-                Mockito.when(registry.getScript(Mockito.any(String.class))).thenReturn(script);
+                //Mockito.when(registry.getScript(Mockito.any(String.class))).thenReturn(script);
                 db.addObject(this.cl);
                 db.addObject(this.clAdmin);
                 clientsToDel.add(this.cl);

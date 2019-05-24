@@ -15,19 +15,20 @@ This super-project requires the following `tools` available in your `PATH` envir
 - [Apache Ant 1.10+](https://ant.apache.org/) (`ant` in terminal)
 - [Golang](https://golang.org/) (`go` in terminal)
 - [Bazaar](http://bazaar.canonical.com/en/) (`bzr` in terminal)
+- [Gradle](https://gradle.org/) (`gradle` in terminal)
 
 You can build the project archive using the following commands in a terminal positioned in the pipeline repository : 
 - For macOS : 
 ```bash
-mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-mac -Punpack-updater-mac -Passemble-mac-zip
+mvn clean install -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -Punpack-cli-mac -Punpack-updater-mac -Passemble-mac-zip
 ```
 - For Linux : 
 ```bash
-mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-linux -Punpack-updater-linux -Passemble-linux-zip
+mvn clean install -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -Punpack-cli-linux -Punpack-updater-linux -Passemble-linux-zip
 ```
 - For Windows :
 ```bash
-mvn clean install -Dworkspace=".maven-workspace" -Dcache=".maven-cache" -Dorg.ops4j.pax.url.mvn.localRepository=".maven-workspace" -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-win -Punpack-updater-win -Punpack-updater-gui-win -Passemble-win-zip
+mvn clean install -Dorg.daisy.org.ops4j.pax.url.mvn.settings="settings.xml" -DskipTests -Punpack-cli-win -Punpack-updater-win -Punpack-updater-gui-win -Passemble-win-zip
 ```
 
 You will find the resulting archive in the folder `assembly/target`. Just unzip its content (a `daisy-pipeline` folder) wherever you want to start using the pipeline (see [how to launch the pipeline](#launch-the-pipeline)).

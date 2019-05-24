@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>4</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.libs</groupId>
+  <artifactId>com.xmlcalabash</artifactId>
+  <version>2.1.2-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>XMLCalabash :: gradle building project</name>
+  <description>Maven projet to build the calabash engine (deffered to the system-wide gradle install)</description>
+  <!-- TODO : launch the gradle jar from maven instead of the script provided by gradle -->
+  <profiles>
+    <profile>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <extension>.bat</extension>
+      </properties>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <executions>
+          <execution>
+            <id>gradle-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>gradle${extension}</executable>
+              <commandlineArgs>install</commandlineArgs>
+            </configuration>
+          </execution>
+          <!--
+          <execution>
+            <id>gox-build</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                  <GOPATH>
+                      ${project.basedir}/build
+                  </GOPATH>
+              </environmentVariables>
+              <executable>${project.basedir}/build/bin/gox</executable>
+              <commandlineArgs>-output="${project.basedir}/build/bin/{{.OS}}_{{.Arch}}/{{.Dir}}" -osarch="linux/amd64 linux/386 darwin/386 darwin/amd64 windows/386 windows/amd64" "./dp2/"</commandlineArgs>
+            </configuration>
+          </execution>
+          
+          <execution>
+            <id>clean-builddir</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <commandlineArgs>clean</commandlineArgs>
+            </configuration>
+          </execution> -->
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+             <filesets>
+                <fileset>
+                  <directory>${project.basedir}/build</directory>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

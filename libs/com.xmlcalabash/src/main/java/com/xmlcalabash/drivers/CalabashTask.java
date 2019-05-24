@@ -348,7 +348,7 @@ public class CalabashTask extends MatchingTask {
     /**
      * Set the destination directory into which the XSL result
      * files should be copied to;
-     * required, unless <tt>in</tt> and <tt>out</tt> are
+     * required, unless <var>in</var> and <var>out</var> are
      * specified.
      *
      * @param dir the name of the destination directory
