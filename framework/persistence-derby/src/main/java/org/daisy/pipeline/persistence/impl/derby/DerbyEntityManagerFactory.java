@@ -1,5 +1,6 @@
 package org.daisy.pipeline.persistence.impl.derby;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -28,7 +29,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 
 	private static final String DERBY_JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-	private static final String DERBY_DB_URL = "jdbc:derby:"+Properties.getProperty("org.daisy.pipeline.data")+"/db;create=true";
+	private static final String DERBY_DB_URL = "jdbc:derby:"+Properties.getProperty("org.daisy.pipeline.data")+ File.separator + "db;create=true";
 	
 	protected static Logger logger = LoggerFactory
 			.getLogger(DerbyEntityManagerFactory.class.getName());

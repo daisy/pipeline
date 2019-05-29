@@ -26,7 +26,7 @@ public class PersistentMessage extends Message{
 	
 	public PersistentMessage(Message other){
 		this();
-		this.throwable = other.getThrowable();
+		this.throwable = (SerializedThrowable) other.getThrowable();
 		this.text = trim(other.getText(),TEXT_LEN-1);
 		this.level = other.getLevel();
 		this.timeStamp = other.getTimeStamp();
@@ -48,14 +48,14 @@ public class PersistentMessage extends Message{
 	 */
 	@Column(name="throwable")
 	@Override
-	public Throwable getThrowable() {
-		return this.throwable;
+	public SerializedThrowable getThrowable() {
+		return  (SerializedThrowable) this.throwable;
 	}
 	/**
 	 * @param throwable the throwable to set
 	 */
 	@SuppressWarnings("unused") //jpa
-	private void setThrowable(Throwable throwable) {
+	private void setThrowable(SerializedThrowable throwable) {
 		this.throwable = throwable;
 	}
 

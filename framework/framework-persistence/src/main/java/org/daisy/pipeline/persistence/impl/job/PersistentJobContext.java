@@ -59,27 +59,27 @@ public final class PersistentJobContext extends AbstractJobContext {
 
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         @MapsId("job_id")
-        private List<PersistentInputPort> inputPorts= new ArrayList<PersistentInputPort>();
+        private List<PersistentInputPort> inputPorts = new ArrayList<PersistentInputPort>();
 
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
         @MapsId("job_id")
-        private List<PersistentOption> options= new ArrayList<PersistentOption>();
+        private List<PersistentOption> options = new ArrayList<PersistentOption>();
 
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         @MapsId("job_id")
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
-        private List<PersistentParameter> parameters= new ArrayList<PersistentParameter>();
+        private List<PersistentParameter> parameters = new ArrayList<PersistentParameter>();
 
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         @MapsId("job_id")
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
-        private List<PersistentPortResult> portResults= new ArrayList<PersistentPortResult>();
+        private List<PersistentPortResult> portResults = new ArrayList<PersistentPortResult>();
 
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         @MapsId("job_id")
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
-        private List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
+        private List<PersistentOptionResult> optionResults = new ArrayList<PersistentOptionResult>();
 
         public PersistentJobContext(AbstractJobContext ctxt) {
                 super(ctxt.getClient(),ctxt.getId(),ctxt.getBatchId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
