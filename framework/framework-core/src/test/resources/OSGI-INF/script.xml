@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.osgi.org/xmlns/scr/v1.1.0" name="unit-test-script" immediate="true">
+  <implementation class="org.daisy.pipeline.script.impl.XProcScript_unit_test_script"/>
+  <service>
+    <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
+  </service>
+  <property name="script.version" type="String" value="1.0.0"/>
+  <property name="script.id" type="String" value="unit-test-script"/>
+  <property name="script.name" type="String" value="Unit Test Script"/>
+  <property name="script.description" type="String" value="detail description"/>
+  <property name="script.url" type="String" value="/script.xpl"/>
+</component>

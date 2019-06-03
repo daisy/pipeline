@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" activate="activate" name="mydatatype">
+  <implementation class="org.daisy.pipeline.datatypes.impl.Datatype_dtbook_mydatatype"/>
+  <service>
+	<provide interface="org.daisy.pipeline.datatypes.DatatypeService"/>
+  </service>
+  <property name="data-type.id" type="String" value="dtbook:mydatatype"/>
+  <property name="data-type.url" type="String" value="/datatype.xml"/>
+</component>
