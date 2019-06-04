@@ -101,8 +101,11 @@ A number of environment variables will influence the program:
 `PIPELINE2_DEBUG`
 : When "true", passes debug options to Java ("true" or "false", default is "false").
 
+`PIPELINE2_DATA`
+: Directory for storing program data. Defaults to the "data" folder inside the Pipeline installation folder.
+
+
 <!--
-- `PIPELINE2_DATA`: Directory for storing program data.
 - `PIPELINE2_BASE`: what is this for?
 - `PIPELINE2_HOME`: will be ignored?
 - `PIPELINE2_CONFIG`: will be ignored?
