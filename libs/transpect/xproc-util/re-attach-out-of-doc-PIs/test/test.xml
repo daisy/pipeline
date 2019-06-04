@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?test This is a PI?>
+<?yet another?><?PI?>
+<doc>
+  <p>Doc</p>
+</doc>
+<?end PIs, is this a thing?>
