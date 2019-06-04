@@ -473,7 +473,7 @@ public class XSpecRunner {
 					InputStream is = XSpecRunner.class.getResourceAsStream(uri
 							.substring(6));
 					return new StreamSource(is, uri);
-				} else if (Pattern.compile("\\.(zip|jar)!/").matcher(uri).find() && uri.startsWith("file:")) {
+				} else if (Pattern.compile("\\.(zip|jar|docx)!/").matcher(uri).find() && uri.startsWith("file:")) {
 					Source s = delegate.resolve("jar:" + uri, base);
 					if (s != null) return s;
 				}
