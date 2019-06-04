@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>transpect.github.io Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Android 5 window color -->
+    <meta name="theme-color" content="#FF9800" />
+    <!-- try to prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- favicons -->
+<!--    <meta name="msapplication-TileImage" content="icons/mstile-144x144.png"/>
+    <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-152x152.png"/>    
+    <link rel="icon" href="icons/favicon-32x32.png" sizes="32x32"/>
+-->    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/scrolling-nav.css"/>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen"/>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<!--    <script src="js/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="js/TeX-AMS-MML_HTMLorMML.js"></script>
+-->    <!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+    
+    
+  </head>
+  <body id="page-top" data-spy="scroll" data-target=".navbar-minitoc" data-offset="60">
+    <!--  *
+          * head section
+          * -->
+    <header>
+      
+      <div class="header-content">
+        <nav id="tr-topnav" class="navbar navbar-default navbar-static-top">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <!-- mobile nav button -->
+              <button type="button" class="navbar-toggle collapsed" 
+                data-toggle="collapse" data-target="#mobile-navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <!-- brand icon or logo -->
+              <a id="tr-logo" class="navbar-brand" href="#"></a>
+            </div>
+            <!-- collapsible navbar -->
+            <div class="collapse navbar-collapse" id="mobile-navbar-collapse">
+              <ul class="nav navbar-nav navbar-left">
+                <li id="tr-headline"><a href="http://transpect.github.io">transpect.io</a></li>
+              </ul>
+<!--           <ul class="nav navbar-nav navbar-center">
+                <li id="tr-timestamp"></li>
+              </ul>-->
+              <!-- place project-specific links, e.g. for guidelines, redmine etc here -->
+              <ul class="nav navbar-nav navbar-right" id="tr-project-links">
+                <li><a href="http://transpect.github.io">transpect.io</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+      
+    </header>
+    <!--  *
+          * main section
+          * -->
+    <main>
+      
+      <section>
+        <div class="row">
+          <!-- mini-toc is hidden at < 1400px -->
+          <div id="tr-minitoc-wrapper" class="visible-lg-block col-lg-3 col-rg-offset-3 affix-top" data-spy="affix" data-offset-top="50" data-offset-bottom="0">
+            <nav id="tr-minitoc" class="navbar-minitoc">
+              <!-- a minitoc to provide better convenience for reading the report -->
+            </nav>
+          </div>
+        </div>
+      </section>
+      
+      <section>
+        <div class="row">
+          <div id="tr-minitoc-placeholder" class="visible-lg-block col-lg-3 col-rg-offset-3">
+          </div>
+          <div id="tr-content" class="col-lg-6 col-md-7 col-sm-7">
+            <!-- the html rendering of the source file -->
+            <div id="tr-msgfallback">
+              <!-- messages without sourcepath are copied here -->
+            </div>
+          </div>
+          <div id="tr-report" class="col-lg-3 col-md-5 col-sm-5 col-lg-offset-9 affix-top" data-spy="affix" data-offset-top="50" data-offset-bottom="0">
+            <h2>report</h2>
+            <!-- an overview of the occurred errors -->
+          </div>
+        </div>
+      </section>
+      
+    </main>
+    <!--  *
+          * footer section
+          * -->
+    <footer>
+      <div id="tr-footer" class="container-fluid footer col-lg-6 col-md-7 col-sm-7 col-lg-offset-3">
+        <p>developed by <a href="http://www.le-tex.de">le-tex</a> with <a href="http://transpect.io">transpect.io</a></p>
+      </div>
+    </footer>
+    
+    <!--JS modules-->
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <!-- bootstrap -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- plugins -->
+    <script src="js/jquery.easing.1.3.js"></script>
+    <!-- initalize plugins -->
+    <script src="js/scrolling-nav.js"></script>
+    
+    <script>
+        // close mobile navbar menu on click
+        $(document).ready(function () {
+          $(".navbar-nav li a").click(function(event) {
+          
+            $(".navbar-collapse").collapse('hide');
+          });
+                    
+          /* show minitoc sub-entries on demand 
+          $('.navbar-minitoc').on('activate.bs.scrollspy', function () {
+            $("#li:not([attr_all])");
+            var sublist = $(this).find("li ul").hide();
+            var sublist = $(this).find("li.active ul").show();
+          })
+          */
+          
+        });
+    </script>  
+  </body>
+</html>

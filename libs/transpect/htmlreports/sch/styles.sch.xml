@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:tr="http://transpect.io"
+  queryBinding="xslt2">
+
+  <ns prefix="aid" uri="http://ns.adobe.com/AdobeInDesign/4.0/" />
+  <ns prefix="aid5" uri="http://ns.adobe.com/AdobeInDesign/5.0/" />
+  <ns prefix="idPkg" uri="http://ns.adobe.com/AdobeInDesign/idml/1.0/packaging" />
+  <ns prefix="idml2xml" uri="http://transpect.io/idml2xml" />
+  <ns prefix="css" uri="http://www.w3.org/1996/css" />
+  <ns prefix="dbk" uri="http://docbook.org/ns/docbook" />
+  <ns prefix="tr" uri="http://transpect.io" />
+  <ns prefix="schematron" uri="http://purl.oclc.org/dsdl/schematron" />
+  
+  <let name="base-dir" value="/tr:doc-and-template-styles/*[1]/dbk:info/dbk:keywordset/dbk:keyword[@role eq 'source-dir-uri']"/>
+  <!-- all styles from cssa file -->
+  <let name="template-styles" value="/tr:doc-and-template-styles/*[2]/self::css:rules/css:rule"/>
+	<let name="default-style-names" value="('NormalParagraphStyle', 'No_character_style', 'hub:page-number', 'hub:separator', 'hub:identifier', 'hub:foreign', 'frontispiz', 'frontispiz2', 'about-contrib', 'title-page', 'copyright-page', 'dedication', 'hub:caption-text', 'hub:caption-number', 'hub:lists', 'hub:embedded', 'start', 'end', 'hub:ooxml-symbol','page','hub:toc')"/>
+  <let name="template-style-names" value="(distinct-values(for $n in $template-styles/@name return replace($n, '(_-_|[~&#x2dc;]).+$', '')),
+                                           $default-style-names)"/>
+  <let name="template-style-regexes" value="(distinct-values(for $n in $template-styles/@regex return $n))"/>
+  <xsl:key name="tr:rule-definition-in-document" match="/tr:doc-and-template-styles/*[1]//css:rule" use="@name"/>
+  
+  <pattern id="sch_styles">
+    
+   <rule context="*[count($template-style-names) gt count($default-style-names)]
+                   [@role[not(matches(., 'virtual'))]]
+                   [not(self::dbk:keywordset or self::dbk:keyword or self::dbk:info or self::dbk:tab)]">
+      <let name="base-role" value="replace(@role, '(_-_|[~&#x2dc;]).+$', '')" />
+      <let name="style-type" value="$template-styles[@native-name = current()/@role]/@layout-type"/>
+      <let name="user-friendly-stylename" value="for $nn in 
+                                                 key('tr:rule-definition-in-document', current()/@role)/(@native-name,@name)[1]
+                                                 return replace(replace($nn, '(_-_|[~&#x2dc;]).+$', ''), ':', '/')"/>
+      <assert test="($base-role = $template-style-names) or (some $i in $template-style-regexes satisfies (matches(@role, $i)))" role="warning" 
+        id="sch_styles_undefined" diagnostics="sch_styles_undefined_de">
+        <span class="category">Style names</span>
+        <span class="issue" xmlns="http://www.w3.org/1999/xhtml">Stylename <xsl:value-of select="$user-friendly-stylename"/> unknown</span>
+        Style '<span class="style-name"><xsl:value-of select="$user-friendly-stylename"/></span>' of type '<value-of select="key('tr:rule-definition-in-document', current()/@role)/@layout-type"/>' not found in the style catalog 
+        <span class="file-uri"><value-of select="string-join(tokenize(base-uri($template-styles[1]), '/')[position() ge last() - 4],'/')"/></span>. This may lead to conversion errors and rendering issues.
+        <br xmlns="http://www.w3.org/1999/xhtml"/>
+        <br xmlns="http://www.w3.org/1999/xhtml"/>
+        Steps to analyse the problem:<br xmlns="http://www.w3.org/1999/xhtml"/>
+        <ul xmlns="http://www.w3.org/1999/xhtml">
+          <xsl:if test="matches(@role, '^\p{L}+__')">
+            <li style="list-style-type:disc;">Is there another style with the same name? For example a table style named like a cell style? Then transpect adds a prefix to the name that doesn't exist in the list of allowed style names.</li>
+          </xsl:if>
+          <li style="list-style-type:disc;">Check the spelling of the style name, especially typos or whitespaces.</li>
+          <li style="list-style-type:disc;">Is the style located in the correct folder hierarchy?</li>
+          <li style="list-style-type:disc;">If the style name is correct, either arrange that it is added to the list mentioned above, or if it is an unimportant style just ignore it (missing style names often indicate an incorrect processing or missing CSS declarations).</li>
+        </ul>
+        <xsl:sequence select="schematron:style-documentation('en', ())"/>
+      </assert>
+    </rule>
+       
+  </pattern>
+
+  <diagnostics>
+    <diagnostic id="sch_styles_undefined_de" xml:lang="de">
+      <span class="category">Formatvorlagennamen</span>
+      <span class="issue" xmlns="http://www.w3.org/1999/xhtml">Formatvorlage <xsl:value-of select="$user-friendly-stylename"/>  unbekannt</span>
+      Formatvorlage '<span class="style-name"><xsl:value-of select="$user-friendly-stylename"/></span>' vom Typ '<value-of select="key('tr:rule-definition-in-document', current()/@role)/@layout-type"/>' existiert nicht in der Liste 
+      '<value-of select="string-join(tokenize(base-uri($template-styles[1]), '/')[position() ge last() - 4], '/')"/>'
+      der zulässigen Formate. Oft ist dies eine Ursache für unerwartete Effekte und unerwünschte Konvertierungsergebnisse.<br xmlns="http://www.w3.org/1999/xhtml"/>
+      <br xmlns="http://www.w3.org/1999/xhtml"/>Vorgehen zur Fehleranalyse:<br xmlns="http://www.w3.org/1999/xhtml"/>
+      <ul xmlns="http://www.w3.org/1999/xhtml">
+        <xsl:if test="matches(@role, '^\p{L}+__')">
+          <li style="list-style-type:disc;">Prüfen, ob der Name nicht schon anderweitig vergeben wurde. Beispielsweise, wenn Tabellenzellen oder Tabellen gleich heißen, fügt transpect ein Präfix hinzu um die beiden zu unterscheiden. Namen mit diesem Präfix stehen aber wahrscheinlich nicht in der Liste der erlaubten Formatnamen.</li>
+        </xsl:if>
+        <li style="list-style-type:disc;">Formatvorlagennamen prüfen auf Tippfehler oder Leerzeichen.</li>
+        <li style="list-style-type:disc;">Ordnerstruktur prüfen.</li>
+        <li style="list-style-type:disc;">Falls alles stimmt, entweder das Nachtragen der Vorlage in obiger Liste veranlassen oder einfach als Hinweis zur Kenntnis nehmen. (Fehlende Formate deuten auch auf fehlende Weiterverarbeitung oder fehlende CSS-Eigenschaften hin).</li>
+      </ul>
+      <xsl:sequence select="schematron:style-documentation('de', ())"/>
+    </diagnostic>
+  </diagnostics>
+  
+  <xsl:function name="schematron:style-documentation" as="element(*)">
+    <xsl:param name="lang" as="xs:string"/>
+    <xsl:param name="link-target" as="xs:string?"/>
+    <xsl:choose>
+      <xsl:when test="$lang eq 'de'">
+        <span class="documentation" xmlns="http://www.w3.org/1999/xhtml">→ Für Details zu den erlaubten Formatvorlagennamen, schauen Sie bitte in der <a href="{concat('htt\
+          ps://redmine.le-tex.de/projects/extern/wiki/Formatvorlagen', $link-target)}" xmlns="http://www.w3.org/1999/xhtml">Liste der erlaubtern Formatvorlagen</a>
+          nach oder belesen sich im <a href="https://redmine.le-tex.de/projects/extern/wiki/FAQ"  xmlns="http://www.w3.org/1999/xhtml">FAQ-Bereich</a>.</span>
+      </xsl:when>
+      <xsl:otherwise>
+        <span class="documentation" xmlns="http://www.w3.org/1999/xhtml">→ For further information please read the <a href="{concat('https://redmine.le-tex.de/projects/ext\
+          ern/wiki/Formatvorlagen', $link-target)}" xmlns="http://www.w3.org/1999/xhtml">style documentation</a>
+          or have a look into the <a href="https://redmine.le-tex.de/projects/extern/wiki/FAQ" xmlns="http://www.w3.org/1999/xhtml">FAQ section</a>.</span>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+</schema>
