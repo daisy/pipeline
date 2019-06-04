@@ -56,7 +56,6 @@ type Option struct {
 	ShortDesc  string   `xml:"-"`
 	LongDesc   string   `xml:"desc,attr,omitempty"`
 	TypeAttr   string   `xml:"type,attr,omitempty"`
-	DataTypeAttr string `xml:"data-type,attr,omitempty"`
 	Type       DataType `xml:"-"`
 	Default    string   `xml:"default,attr,omitempty"`
 	OutputType string   `xml:"optionType,attr,omitempty"`

@@ -162,9 +162,7 @@ func processInputsAndOptions(p Pipeline, script *Script) (err error) {
 		}
 		// get data type definition
 		var optionType DataType
-		if option.DataTypeAttr != "" {
-			optionType, err = p.dataType(option.DataTypeAttr)
-		} else if option.TypeAttr != "" {
+		if option.TypeAttr != "" {
 			if option.TypeAttr == "integer" || option.TypeAttr == "xs:integer" {
 				optionType = XsInteger{
 					XmlDefinition: "<data type=\"integer\"/>"}
@@ -180,9 +178,11 @@ func processInputsAndOptions(p Pipeline, script *Script) (err error) {
 			} else if option.TypeAttr == "anyDirURI" {
 				optionType = AnyDirURI{
 					XmlDefinition: "<data type=\"anyDirURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>"}
-			} else {
+			} else if option.TypeAttr == "string" || option.TypeAttr == "xs:string" {
 				optionType = XsString{
 					XmlDefinition: "<data type=\"string\"/>"}
+			} else {
+				optionType, err = p.dataType(option.TypeAttr)
 			}
 		} else {
 			optionType = XsString{
