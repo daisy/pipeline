@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/transpect/hub2html
+	branch = master
+	commit = 6f8fa9bdd22405d64acba1f33a67cc7c0dff64f8
+	parent = a6e35581f2a5abb247ffb95296af743e44689ca6
+	method = merge
+	cmdver = 0.4.0
