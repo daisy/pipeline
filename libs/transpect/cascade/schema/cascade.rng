@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
+  xmlns:s="http://purl.oclc.org/dsdl/schematron"
+  ns="http://transpect.io"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <s:ns uri="http://transpect.io" prefix="tr"/>
+  <s:ns uri="http://transpect.io/cascade" prefix="cascade"/>
+
+  <start>
+    <ref name="conf"/>
+  </start>
+  
+  <define name="conf">
+    <element name="conf">
+      <ref name="content-base-uri"/>
+      <optional>
+        <attribute name="paths-xsl-uri">
+          <data type="anyURI"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="cascade"/>
+      </optional>  
+    </element>
+  </define>
+
+  <define name="content-base-uri">
+    <optional>
+      <attribute name="content-base-uri">
+        <data type="anyURI"/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="param">
+    <element name="param">
+      <a:documentation>Name-value pairs that may contain arbitrary configuration options that 
+      may be assigned to the clades. In their XProc documentation, transpect modules should give you a list of 
+      configuration parameters that will be read from the cascade.</a:documentation>
+      <attribute name="name"/>
+      <attribute name="value"/>
+    </element>
+  </define>
+  <define name="cascade">
+    <element name="cascade">
+      <a:documentation>Contains declarations of the content categorization that corresponds to the different cofiguration
+        inheritance levels.</a:documentation>
+      <zeroOrMore>
+        <element name="reserved">
+          <s:pattern id="reserved">
+            <s:rule context="tr:clade">
+              <s:report test="@name = ancestor::tr:cascade/tr:reserved/@name">'<s:value-of select="@name"/>' is a reserved name.</s:report>
+            </s:rule>
+          </s:pattern>
+          <a:documentation>Subdirectory names (in the code repo below adaptions or in the content repo below the current content
+            item) that must not be assigned to a clade or content item name.</a:documentation>
+          <attribute name="name"/>
+        </element>
+      </zeroOrMore>
+      <oneOrMore><ref name="clade"/></oneOrMore>
+    </element>
+  </define>
+
+  <define name="clade-model">
+    <optional>
+      <ref name="content"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="clade"/>
+    </zeroOrMore>
+  </define>
+
+  <define name="clade">
+    <s:pattern id="globally-unique">
+      <s:rule context="tr:clade[not(tr:clade)]">
+        <s:let name="other-clades" value="//tr:clade[not(. is current())]"/>
+        <s:let name="other-branch-clades" value="$other-clades[empty(. intersect current()/ancestor::tr:clade)]"/>
+        <s:let name="footprint" value="for $c in ancestor-or-self::tr:clade return concat($c/@role, '=', $c/@name)"/>
+        <s:let name="footprint-path" value="string-join($footprint, ',')"/> 
+        <s:report test="$other-clades[every $i in (for $c in ancestor-or-self::tr:clade return concat($c/@role, '=', $c/@name)) 
+                                      satisfies $i = $footprint]
+                                     [every $i in $footprint 
+                                      satisfies $i = (for $c in ancestor-or-self::tr:clade return concat($c/@role, '=', $c/@name))]
+         ">There is another clade that may not be discerned from the current clade.
+           Please use a different name or surround one of the clades with a clade of a different role.</s:report>
+        <!--<s:report test="$other-branch-clades[string-join(for $c in ancestor-or-self::tr:clade return concat($c/@role, '=', $c/@name), ',')
+                                              = $footprint-path]
+         ">This clade has the same path as another clade. This ambiguity may prevent the converter from selecting a unique clade for a given input.</s:report>-->
+      </s:rule>
+    </s:pattern>
+    <element name="clade">
+      <attribute name="role"/>
+      <attribute name="name"/>
+      <ref name="content-base-uri"/>
+      <optional>
+        <attribute name="file-name-component"/>
+      </optional>
+      <optional>
+        <attribute name="filesystem-path-component"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="param"/>
+      </zeroOrMore>
+      <ref name="clade-model"/>
+    </element>
+  </define>
+  
+  <define name="content">
+    <s:pattern id="max-levels">
+      <s:rule context="tr:content[not(*)]">
+        <s:assert test="count(ancestor-or-self::*[local-name() = ('content', 'clade')]) le 8">Currently, only 8 levels 
+          of configuration (plus a common level) are supported.</s:assert>
+      </s:rule>
+    </s:pattern>
+    <element name="content">
+      <attribute name="role"/>
+      <optional>
+        <attribute name="name-regex"/>
+      </optional>
+      <ref name="content-base-uri"/>
+      <zeroOrMore>
+        <ref name="param"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="content"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+</grammar>
