@@ -15,7 +15,7 @@ export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST
 export MAKECMDGOALS
 # MAKEFLAGS exported by default
 
-rwildcard = $(shell [ -d $1 ] && find $1 -type f | sed 's/ /\\ /g')
+rwildcard = $(shell [ -d $1 ] && find $1 -type f -name '$2' | sed 's/ /\\ /g')
 # alternative, but does not support spaces in file names:
 #rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
