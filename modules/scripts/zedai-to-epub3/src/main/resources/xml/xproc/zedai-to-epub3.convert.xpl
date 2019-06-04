@@ -194,7 +194,7 @@
         <p:variable name="nav-base" select="concat($content-dir,'toc.xhtml')">
             <p:empty/>
         </p:variable>
-        <px:epub3-nav-create-toc name="navigation-doc.toc">
+        <px:epub3-nav-create-toc>
             <p:input port="source">
                 <p:pipe port="html-files" step="zedai-to-html"/>
             </p:input>
@@ -202,11 +202,17 @@
                 <p:empty/>
             </p:with-option>
         </px:epub3-nav-create-toc>
-        <px:epub3-nav-create-page-list name="navigation-doc.page-list">
+        <px:set-base-uri name="navigation-doc.toc">
+            <p:with-option name="base-uri" select="$nav-base"/>
+        </px:set-base-uri>
+        <px:epub3-nav-create-page-list>
             <p:input port="source">
                 <p:pipe port="html-files" step="zedai-to-html"/>
             </p:input>
         </px:epub3-nav-create-page-list>
+        <px:set-base-uri name="navigation-doc.page-list">
+            <p:with-option name="base-uri" select="$nav-base"/>
+        </px:set-base-uri>
         <px:epub3-nav-aggregate name="navigation-doc.html-file">
             <p:input port="source">
                 <p:pipe port="result" step="navigation-doc.toc"/>

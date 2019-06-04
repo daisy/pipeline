@@ -98,7 +98,7 @@
             <p:empty/>
         </p:variable>
 
-        <px:epub3-nav-create-toc name="navigation.toc">
+        <px:epub3-nav-create-toc>
             <p:input port="source">
                 <p:pipe port="docs" step="content-docs"/>
             </p:input>
@@ -106,12 +106,18 @@
                 <p:empty/>
             </p:with-option>
         </px:epub3-nav-create-toc>
+        <px:set-base-uri name="navigation.toc">
+            <p:with-option name="base-uri" select="$nav-base"/>
+        </px:set-base-uri>
 
-        <px:epub3-nav-create-page-list name="navigation.page-list">
+        <px:epub3-nav-create-page-list>
             <p:input port="source">
                 <p:pipe port="docs" step="content-docs"/>
             </p:input>
         </px:epub3-nav-create-page-list>
+        <px:set-base-uri name="navigation.page-list">
+            <p:with-option name="base-uri" select="$nav-base"/>
+        </px:set-base-uri>
         <!--TODO create other nav types (configurable ?)-->
 
         <!--TODO epub3-nav-aggregate should allow setting the base URI-->

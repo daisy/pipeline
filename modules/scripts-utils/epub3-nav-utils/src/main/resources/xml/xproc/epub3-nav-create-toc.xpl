@@ -9,7 +9,9 @@
     <p:output port="result">
         <p:pipe port="result" step="result"/>
     </p:output>
-    <p:option name="output-base-uri"/>
+    <p:option name="output-base-uri">
+        <p:documentation>Note that this does not actually set the base URI of the output document.</p:documentation>
+    </p:option>
 
     <!--TODO honnor the 'untitled' option-->
     <p:option name="untitled" select="'unwrap'"/>

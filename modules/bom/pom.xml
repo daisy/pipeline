@@ -396,6 +396,11 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>docx-to-epub3</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-daisy3</artifactId>
         <version>3.0.1-SNAPSHOT</version>
       </dependency>
@@ -734,6 +739,14 @@
         <groupId>com.googlecode.texhyphj</groupId>
         <artifactId>texhyphj</artifactId>
         <version>1.2</version>
+      </dependency>
+      <!--
+          for docx-to-epub3
+      -->
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>xsweet</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

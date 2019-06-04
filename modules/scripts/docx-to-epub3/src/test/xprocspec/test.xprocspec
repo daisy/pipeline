@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="../../main/resources/xml/docx-to-epub3.xpl">
+	
+	<x:scenario label="minimal">
+		<x:call step="px:docx-to-epub3">
+			<x:option name="docx" select="resolve-uri('../resources/minimal.docx')"/>
+			<x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output directory">
+			<x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/" recursive="true"/>
+		</x:context>
+		<x:expect label="the output directory should contain the EPUB 3 (zipped and unzipped)" type="compare">
+			<x:document type="inline">
+				<c:directory name="output-dir">
+					<c:directory name="epub">
+						<c:directory name="EPUB">
+							<c:file name="document.xhtml"/>
+							<c:file name="package.opf"/>
+							<c:file name="toc.xhtml"/>
+						</c:directory>
+						<c:directory name="META-INF">
+							<c:file name="container.xml"/>
+						</c:directory>
+						<c:file name="mimetype"/>
+					</c:directory>
+					<c:file name="minimal.epub"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+		<x:context label="the toc file">
+			<x:document type="file" base-uri="temp-dir" href="minimal/output-dir/epub/EPUB/toc.xhtml"/>
+		</x:context>
+		<x:expect label="the toc file should be as expected" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+					<head>
+						<meta charset="UTF-8"/>
+						<title>Table of contents</title>
+					</head>
+					<body>
+						<nav epub:type="toc">
+							<h1>Table of contents</h1>
+							<ol>
+								<li>
+									<a href="document.xhtml#d2107e13-0">Test</a>
+								</li>
+							</ol>
+						</nav>
+						<nav epub:type="page-list" hidden="">
+							<h1>قائمة الصفحات</h1>
+							<ol/>
+						</nav>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="the HTML file">
+			<x:document type="file" base-uri="temp-dir" href="minimal/output-dir/epub/EPUB/document.xhtml"/>
+		</x:context>
+		<x:expect label="the HTML file should be as expected" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+					<head>
+						<title>Test</title>
+						<meta charset="UTF-8"/>
+						<style type="text/css">
+.Normal { ; /* Normal*/ font-family: Liberation Serif; color: auto; font-size: 12pt }
+.Heading1 { ; /* Normal*/ font-family: Liberation Serif; color: auto; font-size: 12pt; /* Heading*/ margin-top: 12pt; margin-bottom: 6pt; font-family: Liberation Sans; font-size: 14pt; /* Heading1*/ -xsweet-list-level: 0; margin-top: 12pt; margin-bottom: 6pt; -xsweet-outline-level: 0; font-weight: bold; font-size: 18pt }</style>
+						<style type="text/css">
+.xsw_marginbottom6ptmargintop12ptfontLiberationSans18ptlistlevel0outlinelevel0boldauto { color: auto; font-family: Liberation Sans; font-size: 18pt; font-weight: bold; margin-bottom: 6pt; margin-top: 12pt; -xsweet-list-level: 0; -xsweet-outline-level: 0 }
+.xsw_fontLiberationSerif12ptauto { color: auto; font-family: Liberation Serif; font-size: 12pt }</style>
+					</head>
+					<body id="d2107e13-0">
+						<div class="docx-body">
+							<ul>
+								<li>
+									<p class="Heading1 xsw_marginbottom6ptmargintop12ptfontLiberationSans18ptlistlevel0outlinelevel0boldauto">Test document</p>
+								</li>
+							</ul>
+							<h1 id="d2107e22-0" class="Normal xsw_fontLiberationSerif12ptauto">Test</h1>
+						</div>
+						<div class="docx-endnotes"><!-- empty --></div>
+						<div class="docx-footnotes"><!-- empty --></div>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>
