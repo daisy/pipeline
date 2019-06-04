@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-align:wrap xmlns:sequence-align="http://transpect.io/sequence-align" n="1 3">
+   <sequence-align:item key="Wq" n="1 3">
+      <sequence-align:item n="1" key="Wq">
+         <item>
+            <head>Wq</head>
+            <content>1</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="3" key="Wq">
+         <item>
+            <head>Wq</head>
+            <content>3</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+   <sequence-align:item key="Ax" n="1 2">
+      <sequence-align:item n="1" key="Ax">
+         <item>
+            <head>Ax</head>
+            <content>1</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="2" key="Ax">
+         <item>
+            <head>Ax</head>
+            <content>2</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+   <sequence-align:item key="7f" n="2 3">
+      <sequence-align:item n="2" key="7f">
+         <item>
+            <head>7f</head>
+            <content>2</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="3" key="7f">
+         <item>
+            <head>7f</head>
+            <content>3</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+   <sequence-align:item key="F5" n="1 2">
+      <sequence-align:item n="1" key="F5">
+         <item>
+            <head>F5</head>
+            <content>1</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="2" key="F5">
+         <item>
+            <head>F5</head>
+            <content>2</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+   <sequence-align:item key="Bb" n="1 2 3">
+      <sequence-align:item n="1" key="Bb">
+         <item>
+            <head>Bb</head>
+            <content>1</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="2" key="Bb">
+         <item>
+            <head>Bb</head>
+            <content>2</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="3" key="Bb">
+         <item>
+            <head>Bb</head>
+            <content>3</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+   <sequence-align:item n="2" key="Tg">
+      <item>
+         <head>Tg</head>
+         <content>2</content>
+      </item>
+   </sequence-align:item>
+   <sequence-align:item key="jj" n="2 3">
+      <sequence-align:item n="2" key="jj">
+         <item>
+            <head>jj</head>
+            <content>2</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="3" key="jj">
+         <item>
+            <head>jj</head>
+            <content>3</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+   <sequence-align:item n="3" key="oP">
+      <item>
+         <head>oP</head>
+         <content>3</content>
+      </item>
+   </sequence-align:item>
+   <sequence-align:item n="3" key="Ck">
+      <item>
+         <head>Ck</head>
+         <content>3</content>
+      </item>
+   </sequence-align:item>
+   <sequence-align:item key=";p" n="1 2 3">
+      <sequence-align:item n="1" key=";p">
+         <item>
+            <head>;p</head>
+            <content>1</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="2" key=";p">
+         <item>
+            <head>;p</head>
+            <content>2</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="3" key=";p">
+         <item>
+            <head>;p</head>
+            <content>3</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+   <sequence-align:item n="1" key="Yi">
+      <item>
+         <head>Yi</head>
+         <content>1</content>
+      </item>
+   </sequence-align:item>
+   <sequence-align:item key="Dr" n="2 3">
+      <sequence-align:item n="2" key="Dr">
+         <item>
+            <head>Dr</head>
+            <content>2</content>
+         </item>
+      </sequence-align:item>
+      <sequence-align:item n="3" key="Dr">
+         <item>
+            <head>Dr</head>
+            <content>3</content>
+         </item>
+      </sequence-align:item>
+   </sequence-align:item>
+</sequence-align:wrap>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<hub xmlns="http://docbook.org/ns/docbook" xmlns:css="http://www.w3.org/1996/css"
+  xml:base="file:/var/autofs/data/develop/kraetke/word2tex/tmp/table.hub.xml" css:version="3.0-variant le-tex_Hub-1.1"
+  css:rule-selection-attribute="role" version="5.1-variant le-tex_Hub-1.1">
+  <info>
+    <keywordset role="hub">
+      <keyword role="formatting-deviations-only">true</keyword>
+      <keyword role="source-type">docx</keyword>
+      <keyword role="source-dir-uri">file:/var/autofs/data/develop/kraetke/word2tex/tmp/table.docx.tmp/</keyword>
+    </keywordset>
+    <css:rules>
+      <css:rule layout-type="inline" name="SchwacheHervorhebung" native-name="Subtle Emphasis" css:font-style="italic"
+        css:color="#808080"/>
+      <css:rule layout-type="table" name="Tabellenraster" native-name="Table Grid" css:margin-bottom="0pt"
+        css:line-height="12pt"/>
+    </css:rules>
+  </info>
+  <informaltable role="Tabellenraster">
+    <tgroup cols="4">
+      <colspec colname="col1" colwidth="40.62236367mm"/>
+      <colspec colname="col2" colwidth="40.62236367mm"/>
+      <colspec colname="col-three" colwidth="40.62236367mm"/>
+      <colspec colname="colX" colwidth="40.62236367mm"/>
+      <spanspec spanname="bar" namest="col2" nameend="colX"/>
+      <tbody>
+        <row>
+          <entry css:width="230.3pt" namest="col1" nameend="col2" morerows="1" xml:id="foo" css:border-bottom-style="none">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black" >A</phrase></para>
+          </entry>
+          <entry css:width="230.3pt" namest="col-three" nameend="colX">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black">b</phrase></para>
+          </entry>
+        </row>
+        <row>
+          <entry css:width="115.15pt" colname="col-three">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black">c</phrase></para>
+          </entry>
+          <entry css:width="115.15pt" colname="colX" morerows="2" css:border-bottom-style="none">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black">d</phrase></para>
+          </entry>
+        </row>
+        <row>
+          <entry css:width="345.45pt" namest="col1" nameend="col-three">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black">E</phrase></para>
+          </entry>
+        </row>
+        <row>
+          <entry css:width="115.15pt" colname="col1">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black">F</phrase></para>
+          </entry>
+          <entry css:width="115.15pt" colname="col2">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black">G</phrase></para>
+          </entry>
+
+          <entry>
+            <para>extra cell</para>
+          </entry>
+
+          <entry css:width="115.15pt" colname="col-three">
+            <para><phrase role="SchwacheHervorhebung" css:font-style="normal" css:color="black">h</phrase></para>
+          </entry>
+        </row>
+        <row>
+
+          <!--<entry>
+            <para>I</para>
+          </entry>-->
+
+          <entry spanname="bar">
+            <para>J</para>
+          </entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+  <para/>
+</hub>

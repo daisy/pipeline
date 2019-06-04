@@ -1,0 +1,11 @@
+<tgroup cols="1">
+	<colspec colname="col1" colnum="1"/>
+	<tbody>
+		<row>
+			<entry colname="col1">
+				<para>Text</para>
+			</entry>
+		</row>
+	</tbody>
+</tgroup>
+

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="http://www.le-tex.de/resource/schema/hub/1.1/hub.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?><hub xmlns="http://docbook.org/ns/docbook"
+     xmlns:css="http://www.w3.org/1996/css"
+     xml:base="file:/var/autofs/data/develop/kraetke/word2tex/tmp/table.hub.xml"
+     css:version="3.0-variant le-tex_Hub-1.1"
+     css:rule-selection-attribute="role"
+     version="5.1-variant le-tex_Hub-1.1">
+  <info>
+      <keywordset role="hub">
+         <keyword role="formatting-deviations-only">true</keyword>
+         <keyword role="source-type">docx</keyword>
+         <keyword role="source-dir-uri">file:/var/autofs/data/develop/kraetke/word2tex/tmp/table.docx.tmp/</keyword>
+      </keywordset>
+      <css:rules>
+         <css:rule layout-type="inline"
+                   name="SchwacheHervorhebung"
+                   native-name="Subtle Emphasis"
+                   css:font-style="italic"
+                   css:color="#808080"/>
+         <css:rule layout-type="table"
+                   name="Tabellenraster"
+                   native-name="Table Grid"
+                   css:margin-bottom="0pt"
+                   css:line-height="12pt"/>
+      </css:rules>
+  </info>
+  <informaltable role="Tabellenraster">
+      <tgroup cols="4">
+         <colspec colname="col1" colwidth="40.62236367mm"/>
+         <colspec colname="col2" colwidth="40.62236367mm"/>
+         <colspec colname="col-three" colwidth="40.62236367mm"/>
+         <colspec colname="colX" colwidth="40.62236367mm"/>
+         <spanspec spanname="bar" namest="col2" nameend="colX"/>
+         <tbody>
+            <row>
+               <entry xml:id="foo" css:width="230.3pt" css:border-bottom-style="none">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">A</phrase>
+                  </para>
+               </entry>
+               <entry linkend="foo"/>
+               <entry xml:id="calstable_d2e53" css:width="230.3pt">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">b</phrase>
+                  </para>
+               </entry>
+               <entry linkend="calstable_d2e53"/>
+            </row>
+            <row>
+               <entry linkend="foo"/>
+               <entry linkend="foo"/>
+               <entry css:width="115.15pt" colname="col-three">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">c</phrase>
+                  </para>
+               </entry>
+               <entry xml:id="calstable_d2e70"
+                      css:width="115.15pt"
+                      colname="colX"
+                      css:border-bottom-style="none">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">d</phrase>
+                  </para>
+               </entry>
+            </row>
+            <row>
+               <entry xml:id="calstable_d2e80" css:width="345.45pt">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">E</phrase>
+                  </para>
+               </entry>
+               <entry linkend="calstable_d2e80"/>
+               <entry linkend="calstable_d2e80"/>
+               <entry linkend="calstable_d2e70"/>
+            </row>
+            <row>
+               <entry css:width="115.15pt" colname="col1">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">F</phrase>
+                  </para>
+               </entry>
+               <entry css:width="115.15pt" colname="col2">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">G</phrase>
+                  </para>
+               </entry>
+               <entry css:width="115.15pt" colname="col-three">
+                  <para>
+                     <phrase role="SchwacheHervorhebung"
+                             css:font-style="normal"
+                             css:color="black">h</phrase>
+                  </para>
+               </entry>
+               <entry linkend="calstable_d2e70"/>
+            </row>
+            <row>
+               <entry>
+                  <para>I</para>
+               </entry>
+               <entry xml:id="calstable_d2e120">
+                  <para>J</para>
+               </entry>
+               <entry linkend="calstable_d2e120"/>
+               <entry linkend="calstable_d2e120"/>
+            </row>
+         </tbody>
+      </tgroup>
+  </informaltable>
+  <para/>
+</hub>

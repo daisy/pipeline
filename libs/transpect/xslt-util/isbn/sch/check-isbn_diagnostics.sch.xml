@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagnostics xmlns="http://purl.oclc.org/dsdl/schematron">
+    <diagnostic id="wrong_isbn_check_de" xml:lang="de">
+      ISBN ist nicht korrekt, die Prüfsumme stimmt nicht überein. ISBN: <value-of select="$isbn"/>, korrekte Prüfziffer:  <value-of select="tr:check-isbn($isbn, string-length($isbn))"/>,
+      verwendete Prüfziffer: <value-of select="substring($isbn, 13, 1)"/>
+  </diagnostic>
+  <diagnostic id="wrong_isbn_length_de" xml:lang="de">
+        Falsche Angabe der ISBN. Die ISBN <value-of select="$isbn"/> muss 10 oder 13 Ziffern besitzen. Verwendete Länge:
+      <value-of select="string-length($isbn)"/>
+  </diagnostic>
+  <diagnostic id="wrong_isbn_country_de" xml:lang="de">
+     Falsche ISBN Ländernummer. ISBN: <value-of select="$isbn"/>. Ländernummer: 
+      <value-of select="substring((if($length = 13) then replace($isbn,'978','') else $isbn),1,5)"/>
+  </diagnostic>
+</diagnostics>
+

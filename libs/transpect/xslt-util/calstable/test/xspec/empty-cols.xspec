@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description
+		xmlns:x="http://www.jenitennison.com/xslt/xspec"
+		xmlns:calstable="http://docs.oasis-open.org/ns/oasis-exchange/table"
+		stylesheet="../../xsl/empty-cols.xsl">
+	<x:scenario label="Given a tgroup with no empty row/entry">
+    <x:call function="calstable:empty-cols">
+      <x:param name="tgroup" href="../xml/text-col.xml" select="tgroup"/>
+    </x:call>
+    <x:expect label="the function returns an empty sequence" select="()"/>
+  </x:scenario>
+	
+  <x:scenario label="Given a tgroup with at least one empty col">
+		<x:scenario label="and no text-like-elements parameter">
+			<x:scenario label="for an empty col1">
+				<x:call function="calstable:empty-cols">
+					<x:param name="tgroup" href="../xml/empty-col.xml" select="wrap/tgroup[1]"/>
+				</x:call>
+				<x:expect label="the function returns 1" select="1"/>
+			</x:scenario>
+			<x:scenario label="for an empty col1 col2">
+				<x:call function="calstable:empty-cols">
+					<x:param name="tgroup" href="../xml/empty-col.xml" select="wrap/tgroup[2]"/>
+				</x:call>
+				<x:expect label="the function returns (1,2)" select="(1,2)"/>
+			</x:scenario>
+			<x:scenario label="for an empty col1 col2">
+				<x:call function="calstable:empty-cols">
+					<x:param name="tgroup" href="../xml/empty-col.xml" select="wrap/tgroup[3]"/>
+				</x:call>
+				<x:expect label="the function returns (1,3)" select="(1,3)"/>
+			</x:scenario>
+			<x:scenario label="for an col1 containing no whitespace and an empty element">
+				<x:call function="calstable:empty-cols">
+					<x:param name="tgroup" href="../xml/empty-col.xml" select="wrap/tgroup[4]"/>
+				</x:call>
+				<x:expect label="the function returns 1" select="1"/>
+			</x:scenario>
+		</x:scenario>
+		<!-- <x:scenario label="and text-like-elements parameter 'text-like'"> -->
+		
+		<!-- </x:scenario> -->
+	</x:scenario>
+</x:description>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:dbk="http://docbook.org/ns/docbook"
+  queryBinding="xslt2">
+  
+  <ns prefix="w" uri="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>
+  <ns prefix="dbk" uri="http://docbook.org/ns/docbook" />
+  
+  <title>tables</title>
+  
+  <let name="base-dir" value="/*/dbk:info/dbk:keywordset[@role eq 'hub']/dbk:keyword[@role eq 'source-dir-uri']"/>
+
+ <pattern id="flat_tablestructure">
+    <rule context="dbk:informaltable | dbk:table">
+      <let name="cols" value="number(dbk:tgroup/@cols)" />
+      <assert id="Tabellenstruktur_fehlerhaft" role="error" 
+              test="every $row in descendant::dbk:row satisfies count($row/descendant::dbk:entry) = $cols" >
+        <span class="srcpath"><xsl:value-of select="concat($base-dir, @srcpath)"/></span>
+        In this table are rows that contain more (or less) entries than defined in Word. This table is defined with <xsl:value-of select="$cols"/> columns. But in rows number <xsl:value-of select="descendant::dbk:row[count(descendant::dbk:entry) ne $cols]/position()"/> are <xsl:value-of select="descendant::dbk:row[count(descendant::dbk:entry) ne $cols]/count(descendant::dbk:entry)"/> entries used. Row starting with text: 
+        "<xsl:value-of select="descendant::dbk:row[count(descendant::dbk:entry) ne $cols]/descendant::dbk:entry[1]/dbk:para"/>".
+        Please check whether column dividers are correctly placed in Word.
+      </assert>
+    </rule>    
+       
+  </pattern>
+  
+</schema>

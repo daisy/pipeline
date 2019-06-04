@@ -1,0 +1,46 @@
+<wrap>
+  <informaltable>
+    <tgroup cols="4" rowsep="1" colsep="1">
+      <colspec colnum="1" colname="col1"/>
+      <colspec colnum="2" colname="col2"/>
+      <colspec colnum="3" colname="col3"/>
+      <colspec colnum="4" colname="col4"/>
+      <thead>
+        <row>
+          <entry namest="col1" nameend="col2" id="0"/>
+          <entry colname="col3" id="1"/>
+          <entry colname="col4" id="2"/>
+        </row>
+        <row>
+          <entry colname="col1" morerows="1" id="3"/>
+          <entry namest="col2" nameend="col4" id="4"/>
+        </row>
+        <row>
+          <entry colname="col2" id="5"/>
+          <entry colname="col3" id="6"/>
+          <entry colname="col4" id="7"/>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry colname="col1" morerows="4" id="8"/>
+          <entry colname="col2" id="9"/>
+          <entry namest="col3" nameend="col4" morerows="1" id="10"/>
+        </row>
+        <row>
+          <entry colname="col2" id="11"/>
+        </row>
+        <row>
+          <entry namest="col2" nameend="col4" id="12"/>
+        </row>
+        <row>
+          <entry namest="col2" nameend="col3" morerows="1" id="13"/>
+          <entry colname="col4" id="14"/>
+        </row>
+        <row>
+          <entry colname="col4" id="15"/>
+        </row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+</wrap>

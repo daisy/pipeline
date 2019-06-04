@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  
+	<rewriteURI uriStartString="http://transpect.io/xslt-util/" rewritePrefix="../"/>
+  <nextCatalog catalog="../functx/xmlcatalog/catalog.xml"/>
+
+</catalog>

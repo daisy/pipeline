@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <head>
+    <title>Bidirectional XML catalog resolution with Saxon CE</title>
+    <meta charset="UTF-8"/>
+    <style type="text/css">
+        body { max-width: 60em; 
+               font-family: Calibri, Lucida, sans-serif }
+        #catalog {display:none}
+        button { visibility: hidden }
+    </style>
+    <script type="text/javascript" src="https://subversion.le-tex.de/common/saxon-ce/SaxonceDebug/Saxonce.nocache.js"></script>
+    <script>
+      var customCatalog = decodeURIComponent(location.search.substring(1))
+                          .split(new RegExp('[' + String.fromCharCode(38) + ';]'))
+                          .filter(function(s){return s.match(/^catalog=/)})
+                          .map(function(s){return s.replace(/^catalog=/, '')});
+      var catalog = customCatalog.length == 0 ? "https://subversion.le-tex.de/common/xmlcatalog/catalog.xml" : customCatalog[0];
+      var onSaxonLoad = function(){
+        Saxon.run( {source:     catalog,
+                    stylesheet: "interactive.xsl"} );
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Bidirectional XML catalog resolution with Saxon CE</h1>
+    <p>This will translate the URL of a file that is in our svn repository to the abstract, immutable URL that you may use for accessing
+      the file from a transpect pipeline (for example, when importing an XProc or an XSLT file). This abstract URL is called the file’s <em>canonical</em> URL</p>
+    <p>In the other direction, it will serve as a catalog resolver that uses the <a href="https://subversion.le-tex.de/common/xmlcatalog/catalog.xml">transpect module catalog</a>
+    to give you the location of a file that is imported by its canonical URL.</p>
+    <p>A use case for this is: if a transpect module <a href="https://subversion.le-tex.de/idmltools/trunk/idml2xml/">A</a> depends on another 
+      module <a href="https://subversion.le-tex.de/common/xproc-util/store-debug/">B</a>, 
+      this dependency is declared within a <code>&lt;p:pipeinfo></code> instruction within A’s pipelines, by referring to B’s canonical base URL. 
+      The catalog resolver will then translate the canonical URL to the svn repository URL that may be used for specifying
+      the <code>svn:external</code> location. (In addition,
+      it will create a <code>&lt;nextCatalog></code> entry in the project’s central catalog file. This entry will point to the locally checked out 
+      <a href="https://subversion.le-tex.de/common/xproc-util/store-debug/xmlcatalog/catalog.xml">catalog of module B</a>.) </p>
+    <p>The motivations for these indirections are:</p>
+    <ul>
+      <li>The module’s canonical URL is an identifier, just like a namespace URI. It should never change.</li>
+      <li>The module’s current repository location is accidental, fragile, and transient.</li>
+      <li>There will always be <em>some</em> URL from where to retrieve the modules (not necessarily an svn repo).
+      It can be either a central, Web-accessible repository, a local repository, or a local working copy.</li>
+      <li>We don’t want to change application code when the module repositories change. We also don’t want to import
+        module code by relative URLs, because the relative locations that worked so well in one project will inevitably break in another project. 
+        We only want to update the pointers to the 
+        module locations if the modules move. In the current setting, this is being done by changing the <code>svn:externals</code> for a project).</li>
+    </ul>
+    <h3>The Form</h3>
+    <p>Repository URL: <input type="text" size="100" id="repo" value="https://subversion.le-tex.de/common/hub2html_simple/trunk/xpl/hub2html.xpl"/>
+    <button id="gothere">Go there</button></p>
+    <p><span class="loading">Loading the catalog file(s)…</span><button id="repo2abstract">&#x21e9; Repository to canonical URL</button>
+      <button id="abstract2repo">&#x21e7; Canonical to repository URL</button>
+    </p>
+    <p>Canonical URL: <input type="text" size="100" id="abstract"/></p>
+    <p>(try for example <code>https://github.com/transpect/xslt-util/xslt-based-catalog-resolver/xsl/resolve-uri-by-catalog.xsl</code>)</p>
+    <p>Please note that if a URL does not resolve (or does not reversely resolve, respectively), the original URL will be used.</p>
+    <p>You may specify a different catalog location URL in 
+      the <a href="https://github.com/transpect/xslt-util/xslt-based-catalog-resolver/xsl/interactive.html?catalog=https%3A%2F%2Fsubversion.le-tex.de%2Fcommon%2Fxmlcatalog%2Fcatalog.xml">query string</a>.</p>
+    <p>Please note that this page, the invoked XSLT, and the catalogs must be served from the same host. 
+      You can probably do something about it with CORS.</p>
+    <h3>The Code</h3>
+    <p>Apart from a <a href="interactive.xsl">thin Saxon CE adaption layer</a>, it is the <a href="resolve-uri-by-catalog.xsl">same XSLT stylesheet</a> that is used for 
+    catalog resolution in transpect pipelines.</p>
+    <hr/>
+    <p>The XSLT-based catalog resolver was originally developed to overcome a limitation of Saxon’s default behavior: We tried to exploit
+      the recursive wildcard search of <a href="http://www.saxonica.com/documentation/index.html#!sourcedocs/collections"><code>collection()</code></a> URLs,
+    but discovered that this would only work for <code>file:</code> URLs, while the URLs in our code were abstract <code>http:</code> URLs.
+      This would be ok if Saxon sent the URLs to the catalog resolver <em>before</em> deciding whether recursive wildcard search was feasible. (It should be, post-resolution, 
+      because they are <code>file:</code> URLs then.) </p>
+    <p>We might have written our own URI resolver in Java, but this would make deployment more difficult, and it would probably require that we run commercial
+    versions of Saxon everywhere which would be to high a hurdle for the adoption of transpect as an open-source, (almost) ready-to-run framework.</p>
+    <p>So we wrote this XSLT-based resolver. It doesn’t implement the <a href="https://www.oasis-open.org/committees/download.php/14810/xml-catalogs.pdf">whole catalog standard</a>, 
+      but the elements that are most important to our pipelines, 
+      namely <code>uri</code>, <code>rewriteURI</code>, and <code>nextCatalog</code>.</p>
+    <p>We usually rely on the standard catalog resolvers (Apache Common or Norman Walsh’s). We use the XSLT-based resolver only for collections with 
+      wildcard <code>http:</code> URLs, for reverse resolution, and when we just need the local name for a resource without actually retrieving 
+    the resource, for example when we prepare the packing list for an EPUB. Fonts in our font library are referenced by canonical URL but must be included 
+    from a working copy of their <a href="https://github.com/transpect/fontlib/">repository location</a>.</p>
+    <div id="catalog"></div>
+  </body>
+</html>

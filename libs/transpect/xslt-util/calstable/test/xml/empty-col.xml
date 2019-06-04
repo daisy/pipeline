@@ -1,0 +1,47 @@
+<wrap>
+	<tgroup cols="1">
+		<!-- one empty col -->
+		<colspec colname="col1" colnum="1"/>
+		<tbody>
+			<row>
+				<entry colname="col1"/>
+			</row>
+		</tbody>
+	</tgroup>
+	<tgroup cols="2">
+		<!-- two adjacent empty cols -->
+		<colspec colname="col1" colnum="1"/>
+		<colspec colname="col2" colnum="2"/>
+		<tbody>
+			<row>
+				<entry colname="col1"/>
+				<entry colname="col2"/>
+			</row>
+		</tbody>
+	</tgroup>
+	<tgroup cols="3">
+		<!-- two empty cols not adjacent -->
+		<colspec colname="col1" colnum="1"/>
+		<colspec colname="col2" colnum="2"/>
+		<colspec colname="col3" colnum="3"/>
+		<tbody>
+			<row>
+				<entry colname="col1"/>
+				<entry colname="col2">
+					<para>Text</para>
+				</entry>
+				<entry colname="col3"/>
+			</row>
+		</tbody>
+	</tgroup>
+	
+	<tgroup cols="1">
+		<!-- one col containing element 'text-like' -->
+		<colspec colname="col1" colnum="1"/>
+		<tbody>
+			<row>
+				<entry colname="col1" xml:space="default"><text-like/></entry>
+			</row>
+		</tbody>
+	</tgroup>
+</wrap>

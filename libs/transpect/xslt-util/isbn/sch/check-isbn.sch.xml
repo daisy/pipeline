@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pattern id="isbn-check-included-pattern" xmlns="http://purl.oclc.org/dsdl/schematron">
+  <!-- You need to insert <xsl:include href="http://transpect.io/xslt-util/isbn/xsl/isbncheck.xsl"/>
+    in the importing schematron file. 
+  Activate this pattern with <check param="isbn-checks" value="true"/> in your epub-config file-->
+  <rule abstract="true" id="isbn-check-abstract-rule">
+    <let name="length" value="string-length($isbn)"/>
+    <let name="check_digit" value="substring($isbn, $length, 1)"/>
+    <assert role="error" id="wrong_isbn_length"
+            test="if ($active='true') 
+                  then ($length = 10) or ($length = 13) 
+                  else true()">
+      <span class="srcpath">BC_orphans</span>
+      Wrong ISBN length used. ISBN: <value-of select="$isbn"/> must have 10 or 13 digits. Current length:
+      <value-of select="string-length($isbn)"/>
+    </assert>
+    <assert role="error" id="wrong_isbn_check"
+            test="if ($active='true') 
+                    then
+                      if (($length = 10) or ($length = 13)) 
+                      then tr:check-isbn($isbn,$length) = $check_digit 
+                      else true()
+                    else true()">
+      <span class="srcpath">BC_orphans</span>
+      The ISBN check digit doesn't match. ISBN: <value-of select="$isbn"/>, calculated digit:  <value-of select="tr:check-isbn($isbn,$length)"/>,
+      used digit: <value-of select="substring($isbn, $length, 1)"/>
+    </assert>
+    <let name="prefix" value="if($length = 13) then '978' else ''"/>
+    <assert role="error" id="wrong_isbn_country"
+             test="if ($active='true') 
+                   then matches($isbn, 
+                   concat('^', $prefix,  '([0-578]\d{4}|9[0-35-7]\d{3}|98[0-57]\d{2}|995[2-9]\d|996[0-8]\d|99[78]\d{2}|9990[13489]|999[12]\d|9993[0-7])\d{5}$'))
+                   else true()">
+      <span class="srcpath">BC_orphans</span>
+      Wrong ISBN country identifier. ISBN: <value-of select="$isbn"/>. Country: 
+      <value-of select="substring((if($length = 13) then replace($isbn,'978','') else $isbn),1,5)"/>
+    </assert>
+  </rule>
+</pattern>
