@@ -225,12 +225,12 @@ export PIPELINE_CLIENTLIB_PATH = $(CURDIR)/clientlib/go
 
 cli/build/bin/darwin_386/dp2 cli/build/bin/linux_386/dp2 : cli/.install
 
-cli/.install : cli/cli/*.go clientlib/go/*.go
+cli/.install : $(call rwildcard,cli/cli/,*.go) $(call rwildcard,cli/dp2/,*.go) $(call rwildcard,clientlib/go/,*.go)
 
 .SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip
 cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip : cli/.install
 
-updater/cli/.install : updater/cli/*.go
+updater/cli/.install : $(call rwildcard,updater/cli/,*)
 
 .SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
 updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip : updater/cli/.install
