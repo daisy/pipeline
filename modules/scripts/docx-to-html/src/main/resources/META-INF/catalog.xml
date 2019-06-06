@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri name="http://www.daisy.org/pipeline/modules/docx-to-html/docx-to-html.xpl"
+       uri="../xml/docx-to-html.xpl" px:content-type="script" px:id="docx-to-html"/>
+  <uri name="http://www.daisy.org/pipeline/modules/docx-to-html/library.xpl" uri="../xml/library.xpl"/>
+  
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+</catalog>
