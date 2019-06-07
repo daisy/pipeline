@@ -109,11 +109,8 @@ class BlockSequenceManipulator {
 		HashMap<String, Integer> entries = new HashMap<>();
 		int i = 0;
 		for (Block group : seq) {
-			if (group.getBlockIdentifier()!=null && !group.getBlockIdentifier().equals("")) {
-				if (entries.put(group.getBlockIdentifier(), i)!=null) {
-					throw new IllegalArgumentException("Duplicate id " + group.getBlockIdentifier());
-				}
-				//System.out.println("GROUP! " + fg.getIdentifier());
+			if (group.getBlockIdentifier()!=null && !group.getBlockIdentifier().equals("") && entries.put(group.getBlockIdentifier(), i)!=null) {
+				throw new IllegalArgumentException("Duplicate id " + group.getBlockIdentifier());
 			}
 			i++;
 		}

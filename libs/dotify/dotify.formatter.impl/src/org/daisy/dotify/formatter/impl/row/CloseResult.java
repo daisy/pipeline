@@ -34,9 +34,9 @@ class CloseResult implements CurrentResult {
 	}
 
 	@Override
-	public Optional<RowImpl> process(SegmentProcessing spi, boolean wholeWordsOnly) {
+	public Optional<RowImpl> process(SegmentProcessing spi, LineProperties lineProps) {
 		if (cr.isPresent() && cr.get().hasNext(spi)) {
-			return cr.get().process(spi, wholeWordsOnly);
+			return cr.get().process(spi, lineProps);
 		} else if (doFlush) {
 			doFlush = false;
 			if (spi.hasCurrentRow()) {

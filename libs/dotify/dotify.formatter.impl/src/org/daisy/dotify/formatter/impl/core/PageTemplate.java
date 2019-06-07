@@ -11,7 +11,6 @@ import org.daisy.dotify.api.formatter.FieldList;
 import org.daisy.dotify.api.formatter.MarginRegion;
 import org.daisy.dotify.api.formatter.NoField;
 import org.daisy.dotify.api.formatter.PageTemplateBuilder;
-import org.daisy.dotify.api.obfl.Expression;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 
 
@@ -40,8 +39,8 @@ public class PageTemplate implements PageTemplateBuilder {
 
 	/**
 	 * Create a new SimpleTemplate.
-	 * @param useWhen string to evaluate. In addition to the syntax of {@link Expression}, the value $page can be
-	 * used. This will be replaced by the current page number before the expression is evaluated.
+	 * @param condition condition to evaluate.
+	 * @param rowSpacing the default row spacing
 	 */
 	PageTemplate(Condition condition, float rowSpacing) {
 		this.condition = condition;
@@ -177,8 +176,6 @@ public class PageTemplate implements PageTemplateBuilder {
 				if (f instanceof NoField) {
 					if (hasEmptyField) {
 						throw new RuntimeException("At most one <field allow-text-flow=\"true\"/> allowed.");
-					} else if (k > 0) {
-						throw new RuntimeException("<field allow-text-flow=\"true\"/> only allowed on the left.");
 					} else {
 						hasEmptyField = true;
 					}
@@ -188,8 +185,6 @@ public class PageTemplate implements PageTemplateBuilder {
 			if (hasEmptyField) {
 				if (k == 1) {
 					throw new RuntimeException("<field allow-text-flow=\"true\"/> does not make sense as single child.");
-				} else if (k > 2) {
-					throw new RuntimeException("<field allow-text-flow=\"true\"/> only allowed in combination with a single <field allow-text-flow=\"false\"/>.");
 				}
 				float rowSpacing;
 				if (row.getRowSpacing() != null) {

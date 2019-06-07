@@ -55,7 +55,7 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 		
 		/**
 		 * Adds an identifier segment to the aggregated result.
-		 * @param as the identifier segment to add
+		 * @param is as the identifier segment to add
 		 */
 		void add(IdentifierSegment is) {
 			results.add(is);
@@ -112,7 +112,7 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 		String row = "";
 		BrailleTranslatorResult current = computeNext();
 		while (limit > row.length()) {
-			row += current.nextTranslatedRow(limit - row.length(), force);
+			row += current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
 			current = computeNext();
 			if (current == null) {
 				break;
@@ -196,10 +196,8 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
 		if (METRIC_FORCED_BREAK.equals(metric) || METRIC_HYPHEN_COUNT.equals(metric)) {
 			for (int i = 0; i <= currentIndex && i < results.size(); i++) {
 				Object o = results.get(i);
-				if (o instanceof BrailleTranslatorResult) {
-					if (!((BrailleTranslatorResult)o).supportsMetric(metric)) {
-						return false;
-					}
+				if (o instanceof BrailleTranslatorResult && !((BrailleTranslatorResult)o).supportsMetric(metric)) {
+					return false;
 				}
 			}
 			return true;

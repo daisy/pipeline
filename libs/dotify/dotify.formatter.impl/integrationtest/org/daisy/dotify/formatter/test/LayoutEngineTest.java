@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.daisy.dotify.api.engine.FormatterEngine;
+import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
+import org.daisy.dotify.api.translator.TranslatorType;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
-import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
 import org.junit.Test;
 @SuppressWarnings("javadoc")
@@ -26,7 +26,7 @@ public class LayoutEngineTest extends AbstractFormatterEngineTest {
 	public void testLayoutEnginge() throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		PagedMediaWriterFactory f = PagedMediaWriterFactoryMaker.newInstance().getFactory(MediaTypes.TEXT_MEDIA_TYPE);
 		FormatterEngine engine = FormatterEngineMaker.newInstance().newFormatterEngine("en",
-				BrailleTranslatorFactory.MODE_BYPASS,
+				TranslatorType.BYPASS.toString(),
 				f.newPagedMediaWriter());
 		File res = File.createTempFile("TestResult", ".tmp");
 		res.deleteOnExit();

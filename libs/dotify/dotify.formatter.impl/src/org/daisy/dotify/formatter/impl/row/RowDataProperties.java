@@ -14,8 +14,7 @@ import org.daisy.dotify.formatter.impl.row.Margin.Type;
  */
 public final class RowDataProperties {
 	private final int blockIndent, blockIndentParent;
-	private final Margin leftMargin;
-	private final Margin rightMargin;
+	private final BlockMargin margins;
 	private final ListItem listProps;
 	private final int textIndent;
 	private final int firstLineIndent;
@@ -44,8 +43,12 @@ public final class RowDataProperties {
 		private int widows = 0;
 		private Alignment align = Alignment.LEFT;
 		private Float rowSpacing = null;
-		private Margin leftMargin = new Margin(Type.LEFT, Collections.emptyList());
-		private Margin rightMargin = new Margin(Type.RIGHT, Collections.emptyList());
+		private BlockMargin margins = new BlockMargin(
+				new Margin(Type.LEFT, Collections.emptyList()),
+				new Margin(Type.RIGHT, Collections.emptyList()),
+				// Space character doesn't matter, because the margin is empty
+				' ');
+				
 		private SingleLineDecoration leadingDecoration = null;
 		private SingleLineDecoration trailingDecoration = null;
 		private String underlineStyle = null;
@@ -58,9 +61,7 @@ public final class RowDataProperties {
 		public Builder(RowDataProperties template) {
 			this.blockIndent = template.blockIndent;
 			this.blockIndentParent = template.blockIndentParent;
-			this.leftMargin = template.leftMargin;
-			this.rightMargin = template.rightMargin;
-
+			this.margins = template.margins;
 			this.listProps = template.listProps;
 			this.textIndent = template.textIndent;
 			this.firstLineIndent = template.firstLineIndent;
@@ -107,16 +108,11 @@ public final class RowDataProperties {
 			return this;
 		}
 		
-		public Builder leftMargin(Margin value) {
-			leftMargin = value;
+		public Builder margins(BlockMargin value) {
+			margins = value;
 			return this;
 		}
 		
-		public Builder rightMargin(Margin value) {
-			rightMargin = value;
-			return this;
-		}
-
 		public Builder listProperties(ListItem value) {
 			listProps = value;
 			return this;
@@ -178,9 +174,7 @@ public final class RowDataProperties {
 	private RowDataProperties(Builder builder) {
 		this.blockIndent = builder.blockIndent;
 		this.blockIndentParent = builder.blockIndentParent;
-		this.leftMargin = builder.leftMargin;
-		this.rightMargin = builder.rightMargin;
-
+		this.margins = builder.margins;
 		this.listProps = builder.listProps;
 		this.textIndent = builder.textIndent;
 		this.firstLineIndent = builder.firstLineIndent;
@@ -228,13 +222,10 @@ public final class RowDataProperties {
 		return rowSpacing;
 	}
 
-	public Margin getLeftMargin() {
-		return leftMargin;
+	public BlockMargin getMargins() {
+		return margins;
 	}
 
-	public Margin getRightMargin() {
-		return rightMargin;
-	}
 	public boolean isList() {
 		return listProps!=null;
 	}
@@ -290,17 +281,16 @@ public final class RowDataProperties {
 		result = prime * result + innerSpaceAfter;
 		result = prime * result + innerSpaceBefore;
 		result = prime * result + ((leadingDecoration == null) ? 0 : leadingDecoration.hashCode());
-		result = prime * result + ((leftMargin == null) ? 0 : leftMargin.hashCode());
 		result = prime * result + ((listProps == null) ? 0 : listProps.hashCode());
+		result = prime * result + ((margins == null) ? 0 : margins.hashCode());
 		result = prime * result + orphans;
 		result = prime * result + outerSpaceAfter;
 		result = prime * result + outerSpaceBefore;
-		result = prime * result + ((rightMargin == null) ? 0 : rightMargin.hashCode());
 		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
 		result = prime * result + textIndent;
 		result = prime * result + ((trailingDecoration == null) ? 0 : trailingDecoration.hashCode());
-		result = prime * result + widows;
 		result = prime * result + ((underlineStyle == null) ? 0 : underlineStyle.hashCode());
+		result = prime * result + widows;
 		return result;
 	}
 
@@ -341,18 +331,18 @@ public final class RowDataProperties {
 		} else if (!leadingDecoration.equals(other.leadingDecoration)) {
 			return false;
 		}
-		if (leftMargin == null) {
-			if (other.leftMargin != null) {
-				return false;
-			}
-		} else if (!leftMargin.equals(other.leftMargin)) {
-			return false;
-		}
 		if (listProps == null) {
 			if (other.listProps != null) {
 				return false;
 			}
 		} else if (!listProps.equals(other.listProps)) {
+			return false;
+		}
+		if (margins == null) {
+			if (other.margins != null) {
+				return false;
+			}
+		} else if (!margins.equals(other.margins)) {
 			return false;
 		}
 		if (orphans != other.orphans) {
@@ -362,13 +352,6 @@ public final class RowDataProperties {
 			return false;
 		}
 		if (outerSpaceBefore != other.outerSpaceBefore) {
-			return false;
-		}
-		if (rightMargin == null) {
-			if (other.rightMargin != null) {
-				return false;
-			}
-		} else if (!rightMargin.equals(other.rightMargin)) {
 			return false;
 		}
 		if (rowSpacing == null) {
@@ -388,14 +371,14 @@ public final class RowDataProperties {
 		} else if (!trailingDecoration.equals(other.trailingDecoration)) {
 			return false;
 		}
-		if (widows != other.widows) {
-			return false;
-		}
 		if (underlineStyle == null) {
 			if (other.underlineStyle != null) {
 				return false;
 			}
 		} else if (!underlineStyle.equals(other.underlineStyle)) {
+			return false;
+		}
+		if (widows != other.widows) {
 			return false;
 		}
 		return true;
@@ -404,12 +387,12 @@ public final class RowDataProperties {
 	@Override
 	public String toString() {
 		return "RowDataProperties [blockIndent=" + blockIndent + ", blockIndentParent=" + blockIndentParent
-				+ ", leftMargin=" + leftMargin + ", rightMargin=" + rightMargin + ", listProps=" + listProps
-				+ ", textIndent=" + textIndent + ", firstLineIndent=" + firstLineIndent + ", align=" + align
-				+ ", rowSpacing=" + rowSpacing + ", outerSpaceBefore=" + outerSpaceBefore + ", outerSpaceAfter="
-				+ outerSpaceAfter + ", innerSpaceBefore=" + innerSpaceBefore + ", innerSpaceAfter=" + innerSpaceAfter
-				+ ", orphans=" + orphans + ", widows=" + widows + ", leadingDecoration=" + leadingDecoration
-				+ ", trailingDecoration=" + trailingDecoration + ", underlineStyle=" + underlineStyle + "]";
+				+ ", margins=" + margins + ", listProps=" + listProps + ", textIndent=" + textIndent
+				+ ", firstLineIndent=" + firstLineIndent + ", align=" + align + ", rowSpacing=" + rowSpacing
+				+ ", outerSpaceBefore=" + outerSpaceBefore + ", outerSpaceAfter=" + outerSpaceAfter
+				+ ", innerSpaceBefore=" + innerSpaceBefore + ", innerSpaceAfter=" + innerSpaceAfter + ", orphans="
+				+ orphans + ", widows=" + widows + ", leadingDecoration=" + leadingDecoration + ", trailingDecoration="
+				+ trailingDecoration + ", underlineStyle=" + underlineStyle + "]";
 	}
 
 }

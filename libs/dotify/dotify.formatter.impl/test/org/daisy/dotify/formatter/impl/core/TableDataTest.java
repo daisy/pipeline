@@ -3,14 +3,18 @@ package org.daisy.dotify.formatter.impl.core;
 import static org.junit.Assert.assertEquals;
 
 import org.daisy.dotify.api.formatter.TableCellProperties;
+import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 @SuppressWarnings("javadoc")
 public class TableDataTest {
 
 	@Test
 	public void testTableData() {
-		TableData td = new TableData(null);
+		FormatterCoreContext context = Mockito.mock(FormatterCoreContext.class);
+		Mockito.when(context.getSpaceCharacter()).thenReturn(' ');
+		TableData td = new TableData(context);
 		td.beginsTableRow();
 		Object a1 = td.beginsTableCell(new TableCellProperties.Builder().rowSpan(2).colSpan(2).build());
 		Object a2 = td.beginsTableCell(new TableCellProperties.Builder().build());

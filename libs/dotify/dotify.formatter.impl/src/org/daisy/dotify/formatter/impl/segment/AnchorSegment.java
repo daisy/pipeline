@@ -1,6 +1,5 @@
 package org.daisy.dotify.formatter.impl.segment;
 
-
 public class AnchorSegment implements Segment {
 	private final String referenceID;
 	
@@ -15,6 +14,21 @@ public class AnchorSegment implements Segment {
 
 	public String getReferenceID() {
 		return referenceID;
+	}
+
+	@Override
+	public String peek() {
+		return "";
+	}
+
+	@Override
+	public String resolve() {
+		return "";
+	}
+
+	@Override
+	public boolean isStatic() {
+		return true;
 	}
 
 }

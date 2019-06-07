@@ -30,7 +30,7 @@ class TableCellInfo {
 	
 	/**
 	 * Starting point, inclusive
-	 * @return
+	 * @return the starting point
 	 */
 	GridPoint getStartingPoint() {
 		return start;
@@ -38,7 +38,7 @@ class TableCellInfo {
 	
 	/**
 	 * End point, inclusive.
-	 * @return
+	 * @return the end point
 	 */
 	GridPoint getEndPoint() {
 		return end;

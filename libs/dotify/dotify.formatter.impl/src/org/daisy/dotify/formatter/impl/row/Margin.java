@@ -86,20 +86,26 @@ public final class Margin {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Margin other = (Margin) obj;
 		if (components == null) {
-			if (other.components != null)
+			if (other.components != null) {
 				return false;
-		} else if (!components.equals(other.components))
+			}
+		} else if (!components.equals(other.components)) {
 			return false;
-		if (t != other.t)
+		}
+		if (t != other.t) {
 			return false;
+		}
 		return true;
 	}
 

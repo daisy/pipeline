@@ -21,24 +21,24 @@ public class BorderManager {
 	private boolean closed;
 	private final TextBorderStyle borderStyle;
 	private final TextBorder border;
-	private final LayoutMaster master;
+	private final BorderManagerProperties master;
 	private final FormatterContext fcontext;
-	private final int pageMargin;
+	private final int rightMargin;
 	
 	// This variable is used to compensate for the fact that the top border was
 	// calculated outside of the main logic before
 	// and can be removed once the logic has been updated.
 	private final float offsetHeight;
 
-	public BorderManager(LayoutMaster master, FormatterContext fcontext, int pageMargin) {
+	public BorderManager(BorderManagerProperties master, FormatterContext fcontext, int leftMargin, int rightMargin) {
 		this.hc = new HeightCalculator(master.getRowSpacing());
 		this.ret2 = new ArrayList<>();
 		this.closed = false;
 		this.borderStyle = master.getBorder()!=null?master.getBorder():TextBorderStyle.NONE;
-		this.border = buildBorder(borderStyle, master, fcontext, pageMargin);
+		this.border = buildBorder(borderStyle, master.getFlowWidth(), fcontext, leftMargin);
 		this.master = master;
 		this.fcontext = fcontext;
-		this.pageMargin = pageMargin;
+		this.rightMargin = rightMargin;
 
 		if (!TextBorderStyle.NONE.equals(borderStyle)) {
 			addTopBorder();
@@ -56,12 +56,12 @@ public class BorderManager {
 		this.border = template.border;
 		this.master = template.master;
 		this.fcontext = template.fcontext;
-		this.pageMargin = template.pageMargin;
+		this.rightMargin = template.rightMargin;
 	}
-	
-	private static TextBorder buildBorder(TextBorderStyle borderStyle, LayoutMaster master, FormatterContext fcontext, int pageMargin) {
+
+	public static TextBorder buildBorder(TextBorderStyle borderStyle, int flowWidth, FormatterContext fcontext, int pageMargin) {
 		int fsize = borderStyle.getLeftBorder().length() + borderStyle.getRightBorder().length();
-		int w = master.getFlowWidth() + fsize + pageMargin;
+		int w = flowWidth + fsize + pageMargin;
 		return new TextBorder.Builder(w, fcontext.getSpaceCharacter()+"")
 				.style(borderStyle)
 				.outerLeftMargin(pageMargin)
@@ -111,7 +111,7 @@ public class BorderManager {
 		Float rs2 = row.getRowSpacing();
 		if (!TextBorderStyle.NONE.equals(borderStyle)) {
 			// distribute row spacing
-			rs = master.distributeRowSpacing(rs2, true);
+			rs = LayoutMaster.distributeRowSpacing(master.getRowSpacing(), rs2, true);
 			r2Builder.rowSpacing(rs.spacing);
 		} else {
 			r2Builder.rowSpacing(rs2);
@@ -159,7 +159,7 @@ public class BorderManager {
 	}
 
 	private void addTopBorder() {
-		DistributedRowSpacing rs = master.distributeRowSpacing(master.getRowSpacing(), true);
+		DistributedRowSpacing rs = LayoutMaster.distributeRowSpacing(master.getRowSpacing(), true);
 		RowImpl r = new RowImpl.Builder(border.getTopBorder()).rowSpacing(rs.spacing).build();
 		addRowInner(r);
 	}
@@ -214,7 +214,7 @@ public class BorderManager {
 				}
 			}
 		}
-		int rowWidth = StringTools.length(res) + pageMargin;
+		int rowWidth = StringTools.length(res) + rightMargin;
 		if (rowWidth > master.getPageWidth()) {
 			throw new PaginatorException(
 					"Row is too long (" + rowWidth + "/" + master.getPageWidth() + ") '" + res + "'");

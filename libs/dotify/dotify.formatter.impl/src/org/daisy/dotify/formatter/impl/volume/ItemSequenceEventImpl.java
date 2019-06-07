@@ -17,6 +17,12 @@ import org.daisy.dotify.formatter.impl.search.BlockAddress;
 import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 
+/**
+ * <p>Provides a {@link ReferenceListBuilder} implementation. 
+ * Used for footnotes and end notes.</p>
+ * 
+ * @author Joel Håkansson
+ */
 class ItemSequenceEventImpl implements ReferenceListBuilder, BlockGroup {
 	private final String collectionID;
 	private final ItemSequenceProperties.Range range;

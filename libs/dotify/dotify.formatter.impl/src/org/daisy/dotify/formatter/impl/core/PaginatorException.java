@@ -19,7 +19,7 @@ public class PaginatorException extends RuntimeException {
 		super(message);
 	}
 
-	PaginatorException(Throwable cause) {
+	public PaginatorException(Throwable cause) {
 		super(cause);
 	}
 

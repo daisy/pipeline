@@ -1,10 +1,10 @@
 package org.daisy.dotify.formatter.impl.sheet;
 
 /**
- * Provides a list of consecutive sheets without manual volume breaks
- * inside.
+ * <p>Provides a list of consecutive sheets without manual volume breaks
+ * inside.</p>
+ * 
  * @author Joel Håkansson
- *
  */
 public class SheetGroup {
 	private SheetDataSource units;

@@ -2,8 +2,8 @@ package org.daisy.dotify.formatter.impl.core;
 class DistributedRowSpacing {
 	final Float spacing;
 	final int lines;
-	DistributedRowSpacing(Float s, int l) {
-		this.spacing = s;
-		this.lines = l;
+	DistributedRowSpacing(Float spacing, int lines) {
+		this.spacing = spacing;
+		this.lines = lines;
 	}
 }

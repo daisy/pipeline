@@ -23,9 +23,9 @@ class OrphanWidowControl {
 
 	/**
 	 * Returns true if break is allowed after the specified index, zero based.  
-	 * @param index
-	 * @return
-	 * @throws IndexOutOfBounds if index is >= size or < 0
+	 * @param index the index
+	 * @return true if break is allowed after the specified index, false otherwise
+	 * @throws IndexOutOfBoundsException if index is &gt;= size or &lt; 0
 	 */
 	boolean allowsBreakAfter(int index) {
 		if (index < 0) {

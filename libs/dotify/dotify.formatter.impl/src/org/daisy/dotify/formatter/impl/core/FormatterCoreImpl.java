@@ -28,6 +28,7 @@ import org.daisy.dotify.api.translator.TextBorderFactory;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
+import org.daisy.dotify.formatter.impl.row.BlockMargin;
 import org.daisy.dotify.formatter.impl.row.ListItem;
 import org.daisy.dotify.formatter.impl.row.Margin;
 import org.daisy.dotify.formatter.impl.row.Margin.Type;
@@ -38,14 +39,12 @@ import org.daisy.dotify.formatter.impl.search.BlockAddress;
 import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.segment.AnchorSegment;
-import org.daisy.dotify.formatter.impl.segment.ConnectedTextSegment;
 import org.daisy.dotify.formatter.impl.segment.Evaluate;
 import org.daisy.dotify.formatter.impl.segment.IdentifierSegment;
 import org.daisy.dotify.formatter.impl.segment.LeaderSegment;
 import org.daisy.dotify.formatter.impl.segment.MarkerSegment;
 import org.daisy.dotify.formatter.impl.segment.NewLineSegment;
-import org.daisy.dotify.formatter.impl.segment.PageNumberReferenceSegment;
-import org.daisy.dotify.formatter.impl.segment.StyledSegmentGroup;
+import org.daisy.dotify.formatter.impl.segment.PageNumberReference;
 import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
 public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGroup {
@@ -61,7 +60,6 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 	private Stack<MarginComponent> rightMarginComps;
 	
 	private Stack<Integer> blockIndentParent;
-	private Stack<StyledSegmentGroup> styles;
 	private int blockIndent;
 	private ListItem listItem;
 	protected RenderingScenario scenario;
@@ -87,7 +85,6 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		this.listItem = null;
 		this.blockIndent = 0;
 		this.blockIndentParent = new Stack<>();
-		this.styles = new Stack<StyledSegmentGroup>();
 		blockIndentParent.add(0);
 		this.discardIdentifiers = discardIdentifiers;
 		this.scenario = null;
@@ -105,7 +102,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 			throw new IllegalStateException("A table is open.");
 		}
 		if (endStart!=null && endStart == true) {
-			getCurrentBlock().setVolumeKeepAfterPriority(getCurrentVolumeKeepPriority());
+			getCurrentBlock().setAvoidVolumeBreakAfterPriority(getCurrentVolumeKeepPriority());
 		}
 		endStart = null;
 		String lb = "";
@@ -130,45 +127,42 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 					widows(p.getWidows()).
 					blockIndent(blockIndent).
 					blockIndentParent(blockIndentParent.peek()).
-					leftMargin(new Margin(Type.LEFT, leftMarginComps)).
-					rightMargin(new Margin(Type.RIGHT, rightMarginComps)).
+					margins(new BlockMargin(new Margin(Type.LEFT, leftMarginComps), new Margin(Type.RIGHT, rightMarginComps), fc.getSpaceCharacter())).
 					outerSpaceBefore(p.getMargin().getTopSpacing()).
 					underlineStyle(p.getUnderlineStyle());
 		Block c = newBlock(blockId, rdp.build());
-		if (propsContext.size()>0) {
-			if (propsContext.peek().getBlockProperties().getListType()!=FormattingTypes.ListStyle.NONE) {
-				String listLabel = p.getListItemLabel();
-				switch (propsContext.peek().getBlockProperties().getListType()) {
-				case OL:
-					Integer item = null;
-					if (listLabel!=null) {
-						try {
-							item = Integer.parseInt(listLabel);
-							propsContext.peek().setListNumber(item);
-						} catch (NumberFormatException e) {
-							logger.log(Level.FINE, "Failed to convert a list item label to an integer.", e);
-						}
-					} else {
-						item = propsContext.peek().nextListNumber();
+		if (propsContext.size()>0 && propsContext.peek().getBlockProperties().getListType()!=FormattingTypes.ListStyle.NONE) {
+			String listLabel = p.getListItemLabel();
+			switch (propsContext.peek().getBlockProperties().getListType()) {
+			case OL:
+				Integer item = null;
+				if (listLabel!=null) {
+					try {
+						item = Integer.parseInt(listLabel);
+						propsContext.peek().setListNumber(item);
+					} catch (NumberFormatException e) {
+						logger.log(Level.FINE, "Failed to convert a list item label to an integer.", e);
 					}
-					if (item!=null) {
-						NumeralStyle f = propsContext.peek().getBlockProperties().getListNumberFormat();
-						listLabel = f.format(item.intValue());
-					}
-					break;
-				case UL:
-					if (listLabel==null) {
-						listLabel = propsContext.peek().getBlockProperties().getDefaultListLabel();
-						if (listLabel==null) {
-							listLabel = "•";
-						}
-					}
-					break;
-				case PL: default:
-					listLabel = "";
+				} else {
+					item = propsContext.peek().nextListNumber();
 				}
-				listItem = new ListItem(listLabel, propsContext.peek().getBlockProperties().getListType());
+				if (item!=null) {
+					NumeralStyle f = propsContext.peek().getBlockProperties().getListNumberFormat();
+					listLabel = f.format(item.intValue());
+				}
+				break;
+			case UL:
+				if (listLabel==null) {
+					listLabel = propsContext.peek().getBlockProperties().getDefaultListLabel();
+					if (listLabel==null) {
+						listLabel = "•";
+					}
+				}
+				break;
+			case PL: default:
+				listLabel = "";
 			}
+			listItem = new ListItem(listLabel, propsContext.peek().getBlockProperties().getListType());
 		}
 		c.setBreakBeforeType(p.getBreakBeforeType());
 		c.setKeepType(p.getKeepType());
@@ -180,8 +174,8 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		c.setVerticalPosition(p.getVerticalPosition());
 		AncestorContext ac = new AncestorContext(p, inheritVolumeKeepPriority(p.getVolumeKeepPriority()));
 		// We don't get the volume keep priority from block properties, because it could have been inherited from an ancestor
-		c.setVolumeKeepInsidePriority(ac.getVolumeKeepPriority());
-		c.setVolumeKeepAfterPriority(ac.getVolumeKeepPriority());
+		c.setAvoidVolumeBreakInsidePriority(ac.getVolumeKeepPriority());
+		c.setAvoidVolumeBreakAfterPriority(ac.getVolumeKeepPriority());
 		propsContext.push(ac);
 		Block bi = getCurrentBlock();
 		RowDataProperties.Builder builder = new RowDataProperties.Builder(bi.getRowDataProperties());
@@ -237,7 +231,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		bi.setKeepWithPreviousSheets(p.getKeepWithPreviousSheets());
 		bi.setRowDataProperties(builder.build());
 		//set the volume keep after for the closing block to the parent priority 
-		bi.setVolumeKeepAfterPriority(getCurrentVolumeKeepPriority());
+		bi.setAvoidVolumeBreakAfterPriority(getCurrentVolumeKeepPriority());
 		if (bi.isEmpty()) {
 			// if this group doesn't have data, then 
 			// apply this blocks volume break after priority to the previous block 
@@ -266,18 +260,18 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 						widows(p.getWidows()).
 						blockIndent(blockIndent).
 						blockIndentParent(blockIndentParent.peek()).
-						leftMargin(new Margin(Type.LEFT, leftMarginComps)). //.stackMarginComp(formatterContext, false, false)
-						//leftMarginParent((Margin)leftMargin.clone()). //.stackMarginComp(formatterContext, true, false)
-						rightMargin(new Margin(Type.RIGHT, rightMarginComps)). //.stackMarginComp(formatterContext, false, true)
-						//rightMarginParent((Margin)rightMargin.clone())
-						//.stackMarginComp(formatterContext, true, true)
+						margins(new BlockMargin(
+								new Margin(Type.LEFT, leftMarginComps),
+								new Margin(Type.RIGHT, rightMarginComps),
+								fc.getSpaceCharacter()
+								)).
 						underlineStyle(p.getUnderlineStyle());
 			Block c = newBlock(null, rdp.build());
 			c.setKeepType(keep);
 			c.setKeepWithNext(next);
 			// We don't get the volume keep priority from the BlockProperties, as it could have been inherited from an ancestor
-			c.setVolumeKeepInsidePriority(getCurrentVolumeKeepPriority());
-			c.setVolumeKeepAfterPriority(getParentVolumeKeepPriority());
+			c.setAvoidVolumeBreakInsidePriority(getCurrentVolumeKeepPriority());
+			c.setAvoidVolumeBreakAfterPriority(getParentVolumeKeepPriority());
 		}
 		//firstRow = true;
 	}
@@ -331,9 +325,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 			//list item has been used now, discard
 			listItem = null;
 		}
-		bl.addSegment(styles.isEmpty() ?
-			new TextSegment(c.toString(), p) :
-			new ConnectedTextSegment(c.toString(), p, styles.peek()));
+		bl.addSegment(new TextSegment(c.toString(), p, fc.getConfiguration().isMarkingCapitalLetters()));
 	}
 
 	@Override
@@ -349,18 +341,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		if (table!=null) {
 			throw new IllegalStateException("A table is open.");
 		}
-		PageNumberReferenceSegment r; {
-			if (styles.isEmpty()) {
-				r = new PageNumberReferenceSegment(identifier, numeralStyle);
-			} else {
-				String[] style = new String[styles.size()];
-				int i = 0;
-				for (StyledSegmentGroup s : styles) {
-					style[i++] = s.getName();
-				}
-				r = new PageNumberReferenceSegment(identifier, numeralStyle, style);
-			}
-		}
+		PageNumberReference r = new PageNumberReference(identifier, numeralStyle, fc.getConfiguration().isMarkingCapitalLetters());
 		getCurrentBlock().addSegment(r);
 	}
 
@@ -369,18 +350,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		if (table!=null) {
 			throw new IllegalStateException("A table is open.");
 		}
-		Evaluate e; {
-			if (styles.isEmpty()) {
-				e = new Evaluate(exp, t);
-			} else {
-				String[] style = new String[styles.size()];
-				int i = 0;
-				for (StyledSegmentGroup s : styles) {
-					style[i++] = s.getName();
-				}
-				e = new Evaluate(exp, t, style);
-			}
-		}
+		Evaluate e = new Evaluate(exp, t, fc.getConfiguration().isMarkingCapitalLetters());
 		getCurrentBlock().addSegment(e);
 	}
 	
@@ -464,8 +434,11 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 				//text properties are not relevant here, since a table block doesn't support mixed content
 				//textIndent, firstLineIndent, align, orphans, widows, blockIndent and blockIndentParent
 				//rowSpacing is handled by the table itself
-				.leftMargin(new Margin(Type.LEFT, leftMarginComps))
-				.rightMargin(new Margin(Type.RIGHT, rightMarginComps))
+				.margins(new BlockMargin(
+						new Margin(Type.LEFT, leftMarginComps),
+						new Margin(Type.RIGHT, rightMarginComps),
+						fc.getSpaceCharacter()
+						))
 				//all margins are set here, because the table is an opaque block
 				.outerSpaceBefore(props.getMargin().getTopSpacing())
 				.outerSpaceAfter(props.getMargin().getBottomSpacing())
@@ -519,16 +492,12 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 
 	@Override
 	public void startStyle(String style) {
-		if (styles.isEmpty()) {
-			styles.push(new StyledSegmentGroup(style, fc));
-		} else {
-			styles.push(new StyledSegmentGroup(style, styles.peek(), fc));
-		}
+		getCurrentBlock().startStyle(style);
 	}
 
 	@Override
 	public void endStyle() {
-		styles.pop();
+		getCurrentBlock().endStyle();
 	}
 
 	@Override

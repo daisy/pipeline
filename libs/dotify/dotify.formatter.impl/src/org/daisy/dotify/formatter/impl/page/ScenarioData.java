@@ -7,17 +7,20 @@ import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
+import org.daisy.dotify.formatter.impl.row.BlockStatistics;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 
 /**
  * Provides data about a single rendering scenario.
  * 
  * @author Joel Håkansson
  */
-class ScenarioData extends BlockProcessor {
+class ScenarioData {
+	private final BlockProcessor blockProcessor;
 	private Stack<RowGroupSequence> dataGroups = new Stack<>();
 
 	ScenarioData() {
-		super();
+		blockProcessor = new BlockProcessor();
 		dataGroups = new Stack<>();
 	}
 
@@ -26,7 +29,7 @@ class ScenarioData extends BlockProcessor {
 	 * @param template the instance to copy
 	 */
 	ScenarioData(ScenarioData template) {
-		super(template);
+		this.blockProcessor = new BlockProcessor(template.blockProcessor);
 		dataGroups = new Stack<>();
 		for (RowGroupSequence rgs : template.dataGroups) {
 			dataGroups.add(new RowGroupSequence(rgs));
@@ -47,25 +50,21 @@ class ScenarioData extends BlockProcessor {
 		return (dataGroups.isEmpty()||dataGroups.peek().getGroup().isEmpty());
 	}
 	
-	protected boolean hasSequence() {
+	private boolean hasSequence() {
 		return !dataGroups.isEmpty();
 	}
 	
-	protected boolean hasResult() {
+	private boolean hasResult() {
 		return !isDataEmpty();
 	}
 	
-	protected void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
+	private void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
 		RowGroupSequence rgs = new RowGroupSequence(breakBefore, vs);
 		dataGroups.add(rgs);
 	}
 	
-	protected void addRowGroup(RowGroup rg) {
-		dataGroups.peek().getGroup().add(rg);
-	}
-	
-	RowGroup peekResult() {
-		return dataGroups.peek().currentGroup();
+	private void setVerticalSpacing(VerticalSpacing vs) {
+		dataGroups.peek().setVerticalSpacing(vs);
 	}
 
 	List<RowGroupSequence> getDataGroups() {
@@ -73,10 +72,24 @@ class ScenarioData extends BlockProcessor {
 	}
 	
 	void processBlock(LayoutMaster master, Block g, BlockContext bc) {
-		loadBlock(master, g, bc);
-		while (hasNextInBlock()) {
-			processNextRowGroup(bc, false);
+		blockProcessor.loadBlock(master, g, bc, hasSequence(), hasResult(), this::newRowGroupSequence, this::setVerticalSpacing);
+		while (blockProcessor.hasNextInBlock()) {
+			blockProcessor.getNextRowGroup(bc, LineProperties.DEFAULT)
+			.ifPresent(rg->dataGroups.peek().getGroup().add(rg));
 		}
 		dataGroups.peek().getBlocks().add(g);
+	}
+	
+
+	/**
+	 * Gets the current block's statistics, or null if no block has been loaded.
+	 * @return returns the block statistics, or null
+	 */
+	BlockStatistics getBlockStatistics() {
+		if (blockProcessor.rowGroupProvider!=null) {
+			return blockProcessor.rowGroupProvider.getBlockStatistics();
+		} else {
+			return null;
+		}
 	}
 }

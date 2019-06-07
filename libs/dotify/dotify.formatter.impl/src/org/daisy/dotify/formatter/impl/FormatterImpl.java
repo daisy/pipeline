@@ -2,7 +2,6 @@ package org.daisy.dotify.formatter.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,26 +18,23 @@ import org.daisy.dotify.api.formatter.TransitionBuilder;
 import org.daisy.dotify.api.formatter.VolumeTemplateBuilder;
 import org.daisy.dotify.api.formatter.VolumeTemplateProperties;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
+import org.daisy.dotify.formatter.impl.common.Volume;
+import org.daisy.dotify.formatter.impl.common.WriterHandler;
 import org.daisy.dotify.formatter.impl.page.BlockSequence;
 import org.daisy.dotify.formatter.impl.page.RestartPaginationException;
-import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.sheet.VolumeImpl;
-import org.daisy.dotify.formatter.impl.volume.TableOfContentsImpl;
 import org.daisy.dotify.formatter.impl.volume.VolumeTemplate;
-import org.daisy.dotify.formatter.impl.writer.Volume;
-import org.daisy.dotify.formatter.impl.writer.WriterHandler;
 
 
 /**
- * Breaks flow into rows, page related block properties are left to next step
+ * Provides an implementation of the {@link Formatter} API.
+ * 
  * @author Joel Håkansson
  */
 class FormatterImpl implements Formatter {
 
-	private final HashMap<String, TableOfContentsImpl> tocs;
 	private final Stack<VolumeTemplate> volumeTemplates;
 	private final Logger logger;
 
@@ -55,11 +51,21 @@ class FormatterImpl implements Formatter {
 	 * @param locale a locale
 	 * @param mode a braille mode
 	 */
-	FormatterImpl(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, MarkerProcessorFactoryMakerService mpf, String locale, String mode) {
-		this.context = new LazyFormatterContext(translatorFactory, tbf, mpf, FormatterConfiguration.with(locale, mode).build());
+	FormatterImpl(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, String locale, String mode) {
+		this(translatorFactory, tbf, FormatterConfiguration.with(locale, mode).build());
+	}
+
+	/**
+	 * Creates a new formatter.
+	 * @param translatorFactory a braille translator factory maker service
+	 * @param tbf a text border factory maker service
+	 * @param mpf a marker processor factory maker service
+	 * @param config the configuration
+	 */
+	FormatterImpl(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, FormatterConfiguration config) {
+		this.context = new LazyFormatterContext(translatorFactory, tbf, config);
 		this.blocks = new Stack<>();
 		this.unopened = true;
-		this.tocs = new HashMap<>();
 		this.volumeTemplates = new Stack<>();
 		
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
@@ -98,7 +104,7 @@ class FormatterImpl implements Formatter {
 	@Override
 	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props) {
 		unopened = false;
-		VolumeTemplate template = new VolumeTemplate(context.getFormatterContext(), tocs, props.getCondition(), props.getSplitterMax());
+		VolumeTemplate template = new VolumeTemplate(context.getFormatterContext(), props.getCondition(), props.getSplitterMax());
 		volumeTemplates.push(template);
 		return template;
 	}
@@ -106,9 +112,7 @@ class FormatterImpl implements Formatter {
 	@Override
 	public TableOfContents newToc(String tocName) {
 		unopened = false;
-		TableOfContentsImpl toc = new TableOfContentsImpl(context.getFormatterContext());
-		tocs.put(tocName, toc);
-		return toc;
+		return context.getFormatterContext().newTableOfContents(tocName);
 	}
 
 	@Override
@@ -128,17 +132,37 @@ class FormatterImpl implements Formatter {
 	}
 
 	private Iterable<? extends Volume> getVolumes() {
-		CrossReferenceHandler crh = new CrossReferenceHandler();
-		VolumeProvider volumeProvider = new VolumeProvider(blocks, volumeTemplates, context, crh);
+		VolumeProvider volumeProvider = new VolumeProvider(blocks, volumeTemplates, context);
 
 		ArrayList<VolumeImpl> ret;
 
+		/*
+		 * Inside this loop a result is created. The volume provider does all the work, and this loop
+		 * simply controls the number of iterations and adds the content to the result. If
+		 * the volume provider indicates that something is wrong with its result, another iteration
+		 * is attempted. The reason that more than one iteration may be needed, is because of
+		 * references. For example, in order to produce a TOC, information about the volume and page
+		 * number for each item is typically requested before that page has been produced.
+		 * Therefore, these values are recorded on the first iteration and then used in the second
+		 * and so on. But even subsequent iterations may contain errors, due to different
+		 * constraints being activated when the dynamic text changes, which leads to different
+		 * volume breaks etc.
+		 *
+		 * The maximum number of iterations below is a balance between giving up when in fact a
+		 * solution could be found and pointless iterations when in fact no solution will ever be
+		 * found. When no solution is found, this is either because of an error in the input OBFL,
+		 * or because of a bug in the code. In other words, in theory this should never happen.
+		 *
+		 * Experience and a solid understanding of the algorithm should be involved when changing
+		 * this value permanently. It should therefore not be parameterized.  Having that said,
+		 * changing this value temporarily could be useful for debugging purposes.
+		 */
 		int maxIterations = 50;
 		for (int j=1;j<=maxIterations;j++) {
 			try {
 				ret = new ArrayList<>();
 				volumeProvider.prepare();
-				for (int i=1;i<= crh.getVolumeCount();i++) {
+				for (int i=1;i<= volumeProvider.getVolumeCount();i++) {
 					ret.add(volumeProvider.nextVolume());
 				}
 	

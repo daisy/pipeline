@@ -13,7 +13,6 @@ import javax.xml.namespace.QName;
 import org.daisy.dotify.api.writer.AttributeItem;
 import org.daisy.dotify.api.writer.MetaDataItem;
 import org.daisy.dotify.api.writer.PagedMediaWriterException;
-import org.daisy.dotify.formatter.impl.writer.PEFMediaWriter;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")

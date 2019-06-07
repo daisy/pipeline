@@ -17,4 +17,19 @@ public class LeaderSegment extends Leader implements Segment{
 		return SegmentType.Leader;
 	}
 
+	@Override
+	public String peek() {
+		return "";
+	}
+
+	@Override
+	public String resolve() {
+		return "";
+	}
+
+	@Override
+	public boolean isStatic() {
+		return true;
+	}
+
 }

@@ -13,7 +13,7 @@ class Keys {
 	/**
 	 * Provides a format name for text files
 	 */
-	static final String TEXT_FORMAT = "text";
+	static final String FORMATTED_TEXT_FORMAT = "formatted-text";
 	/**
 	 * Provides a format name for obfl files
 	 */

@@ -4,6 +4,6 @@ import java.util.Optional;
 
 interface CurrentResult {
 	boolean hasNext(SegmentProcessing spi);
-	Optional<RowImpl> process(SegmentProcessing spi, boolean wholeWordsOnly);
+	Optional<RowImpl> process(SegmentProcessing spi, LineProperties lineProps);
 	CurrentResult copy();
 }

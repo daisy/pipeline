@@ -1,7 +1,5 @@
 package org.daisy.dotify.formatter.impl.search;
 
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
-
 /**
  * Provides details about a page that are needed for advanced volume transitions.
  *  
@@ -58,20 +56,26 @@ public class TransitionProperties {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		TransitionProperties other = (TransitionProperties) obj;
-		if (hasBlockBoundary != other.hasBlockBoundary)
+		if (hasBlockBoundary != other.hasBlockBoundary) {
 			return false;
+		}
 		if (keepPriority == null) {
-			if (other.keepPriority != null)
+			if (other.keepPriority != null) {
 				return false;
-		} else if (!keepPriority.equals(other.keepPriority))
+			}
+		} else if (!keepPriority.equals(other.keepPriority)) {
 			return false;
+		}
 		return true;
 	}
 

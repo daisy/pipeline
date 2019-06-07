@@ -13,4 +13,19 @@ public class MarkerSegment extends Marker implements Segment {
 		return SegmentType.Marker;
 	}
 
+	@Override
+	public String peek() {
+		return "";
+	}
+
+	@Override
+	public String resolve() {
+		return "";
+	}
+
+	@Override
+	public boolean isStatic() {
+		return true;
+	}
+
 }

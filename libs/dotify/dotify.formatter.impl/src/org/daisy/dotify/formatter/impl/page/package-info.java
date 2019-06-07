@@ -1,11 +1,12 @@
 /**
- * <p>Provides a formatter implementation.</p>
+ * <p>This package is responsible for laying out a block sequence into pages.
+ * The main class is {@link org.daisy.dotify.formatter.impl.page.PageSequenceBuilder2}.</p>
+ *
+ * <p>Uses the {@link org.daisy.dotify.formatter.impl.row} package to layout blocks into rows.</p>
  * 
- * <p><b>IMPORTANT: This package contains implementations that should only be 
- * accessed using the Java Services API. Additional classes in this package 
- * should only be used by these implementations. This package is not part of the 
- * public API.</b>
- * </p>
+ * <p><b>IMPORTANT: This package is part of the FormatterFactory implementation 
+ * in {@link org.daisy.dotify.formatter.impl}. Classes in this package 
+ * should only be used by this implementation.</b></p>
  * @author Joel Håkansson
  */
 package org.daisy.dotify.formatter.impl.page;

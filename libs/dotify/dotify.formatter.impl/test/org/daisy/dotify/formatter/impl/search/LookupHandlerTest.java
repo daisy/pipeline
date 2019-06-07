@@ -41,5 +41,18 @@ public class LookupHandlerTest {
 		lh.keep(key1, value1);
 		lh.setDirty(false);
 	}
+	
+	@Test
+	public void testUseCase() {
+		String charCountKey = "character-count";
+		LookupHandler<String, Integer> variables = new LookupHandler<>();
+		String message;
+		do {
+			variables.setDirty(false);
+			message = String.format("This string is %s characters long.", variables.get(charCountKey, 0));
+			variables.put(charCountKey, message.length());
+		} while (variables.isDirty());
+		assertEquals(34, message.length());
+	}
 
 }

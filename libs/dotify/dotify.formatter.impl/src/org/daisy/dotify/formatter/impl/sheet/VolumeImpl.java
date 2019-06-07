@@ -3,9 +3,9 @@ package org.daisy.dotify.formatter.impl.sheet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.daisy.dotify.formatter.impl.common.Section;
+import org.daisy.dotify.formatter.impl.common.Volume;
 import org.daisy.dotify.formatter.impl.search.Overhead;
-import org.daisy.dotify.formatter.impl.writer.Section;
-import org.daisy.dotify.formatter.impl.writer.Volume;
 
 /**
  * Provides a container for a physical volume of braille

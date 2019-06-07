@@ -4,15 +4,16 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.3.0'
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.1.0'
 	}
 }
 
 plugins {
 	id 'java'
-	id 'maven'
+	id 'maven-publish'
 	id 'signing'
 	//id 'jacoco'
+	id 'pmd'
 }
 
 apply plugin: 'biz.aQute.bnd.builder'
@@ -21,6 +22,16 @@ group = 'org.daisy.dotify'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+// Used for dependencies resolution and javadoc links.
+// Never use snapshots here.
+// To test with snapshots, modify the version directly in the dependencies section,
+// but don't forget to change it back when you're done.
+ext.versions = [
+	'dotifyApi'		: '5.0.0',
+	'dotifyCommon'	: '4.4.0',
+	'streamlineApi'	: '1.4.0',
+]
 
 sourceSets {
 	main {	java { srcDir 'src' }	resources { srcDir 'src' } }
@@ -38,8 +49,15 @@ compileTestJava {
 def repoRevision = System.getenv("REPO_REVISION")!=null?System.getenv("REPO_REVISION"):repositoryRevision
 
 javadoc {
-	options.encoding = 'UTF-8'
-	options.links('http://docs.oracle.com/javase/8/docs/api/')
+	options {
+		encoding = 'UTF-8'
+		source = 8
+		overview = 'src/javadoc-overview.html'
+		links('https://docs.oracle.com/javase/8/docs/api/')
+		links("https://brailleapps.github.io/dotify.api/$versions.dotifyApi/javadoc/")
+		links("https://brailleapps.github.io/dotify.common/$versions.dotifyCommon/javadoc/")
+		links("https://www.ologolo.org/streamline-api/$versions.streamlineApi/javadoc/")
+	}
 }
 
 repositories {
@@ -51,25 +69,25 @@ repositories {
 
 dependencies {
     compileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
-    compile "org.daisy.dotify:dotify.api:4.4.0"
-    compile "org.daisy.dotify:dotify.common:4.3.0"
-    compile 'org.daisy.streamline:streamline-api:1.2.0'
+    compile "org.daisy.dotify:dotify.api:$versions.dotifyApi"
+    compile "org.daisy.dotify:dotify.common:$versions.dotifyCommon"
+    compile "org.daisy.streamline:streamline-api:$versions.streamlineApi"
     compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
 	}
 
-    runtime 'com.fasterxml.woodstox:woodstox-core:5.1.0'
+    runtimeOnly 'com.fasterxml.woodstox:woodstox-core:5.1.0'
     
     testCompileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
-    testCompile group: "junit", name: "junit", version: "4.12"
-    testCompile ('org.daisy.braille:braille-utils.pef-tools:5.0.0') {
+    testImplementation group: "junit", name: "junit", version: "4.12"
+    testImplementation ('org.daisy.braille:braille-utils.pef-tools:6.0.0') {
 		exclude module: 'Saxon-HE'
 	}
-    testCompile "org.mockito:mockito-core:1.10.19"
-    
-	testRuntime group: group, name:'dotify.hyphenator.impl', version:'4.0.0'
-	testRuntime group: group, name:'dotify.text.impl', version:'4.0.0'
-	testRuntime group: group, name:'dotify.translator.impl', version:'4.0.0'
+	testImplementation "org.mockito:mockito-core:1.10.19"
+	testImplementation group: group, name:'dotify.translator.impl', version:'5.0.0'
+	
+	testRuntimeOnly group: group, name:'dotify.hyphenator.impl', version:'5.0.0'
+	testRuntimeOnly group: group, name:'dotify.text.impl', version:'5.0.0'
 }
 
 ext.writeTestsOverviewFile = { folderPath, fileName ->
@@ -139,7 +157,6 @@ jar {
 								'org.daisy.streamline.api.tasks; provide:=true,*',
 			////The split-package instruction is because a resource folder is included twice on the classpath
 			//'Private-Package': 'org.daisy.dotify.formatter.impl.*;-split-package:=merge-first,',
-			'Service-Component': '*',
 			'Automatic-Module-Name': "$moduleName",
 			'Bundle-Name': "$bundleName",
 			'Bundle-SymbolicName': "$bundleName",
@@ -162,57 +179,93 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 signing {
-    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
+	required { isReleaseVersion }
+	sign publishing.publications
 }
 
-uploadArchives {
+publishing {
 	//Only upload if a git hash is supplied. On Travis only upload snapshots.
-	enabled = repoRevision.size()==40 && System.getenv("TRAVIS_BUILD_ID")!=null
-    repositories {
-        mavenDeployer {
+	//enabled = repoRevision.size()==40 && System.getenv("TRAVIS_BUILD_ID")!=null
+	publications {
+		maven(MavenPublication) {
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+		/*
             if (isReleaseVersion) {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-            }
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-            pom.project {
-                name 'dotify.formatter.impl'
-                packaging 'jar'
-                description 'Dotify Formatter'
-                url "$repositoryURL"
-                scm {
-                    connection "$repositorySCM"
-                    developerConnection "$repositorySCM"
-                    url "$repositoryURL"
-                }
-                licenses {
-                    license {
-                        name 'LGPL'
-                        url 'http://www.gnu.org/licenses/lgpl.html'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'joel'
-                        name 'Joel Håkansson'
-                    }
-                }
-            }
-        }
-    }
+            }*/
+			pom {
+				name = 'dotify.formatter.impl'
+				packaging = 'jar'
+				description = 'Dotify Formatter'
+				url = "$repositoryURL"
+				scm {
+					connection = "$repositorySCM"
+					developerConnection = "$repositorySCM"
+					url = "$repositoryURL"
+				}
+				licenses {
+					license {
+						name = 'LGPL'
+						url = 'http://www.gnu.org/licenses/lgpl.html'
+					}
+				}
+				developers {
+					developer {
+						id = 'joel'
+						name = 'Joel Håkansson'
+					}
+				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			def stagingRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+			def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : stagingRepoUrl
+			credentials {
+				username = sonatypeUsername
+				password = sonatypePassword
+			}
+		}
+	}
 }
+
+pmd.ruleSets = [
+	// New rule sets:
+	//'category/java/bestpractices.xml',
+	//'category/java/codestyle.xml',
+	//'category/java/design.xml',
+	//'category/java/documentation.xml',
+	//'category/java/errorprone.xml',
+	//'category/java/multithreading.xml',
+	//'category/java/performance.xml',
+	'category/java/security.xml',
+	
+	// Old rule sets (use for now):
+	'java-basic',
+	'java-braces',
+	//'java-clone',
+	//'java-codesize',
+	//'java-comments',
+	//'java-controversial',
+	//'java-coupling',
+	//'java-design',
+	//'java-empty',
+	'java-finalizers',
+	'java-imports',
+	//'java-optimizations',
+	//->'java-strictexception',
+	//'java-strings',
+	//->'java-typeresolution',
+	//'java-unnecessary',
+	//->'java-unusedcode'
+]
 
 wrapper {
 	distributionType = Wrapper.DistributionType.ALL

@@ -13,7 +13,7 @@ class DocumentSpaceData {
 
 		final List<PageDetails> pageDetails;
 		final Map<Integer, View<PageDetails>> volumeViews;
-		final Map<Integer, View<PageDetails>> sequenceViews;
+		final Map<SequenceId, View<PageDetails>> sequenceViews;
 		
 		DocumentSpaceData() {
 			this.pageDetails = new ArrayList<>();

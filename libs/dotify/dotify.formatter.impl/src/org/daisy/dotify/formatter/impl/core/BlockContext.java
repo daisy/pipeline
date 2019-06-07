@@ -99,20 +99,26 @@ public class BlockContext extends DefaultContext {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		BlockContext other = (BlockContext) obj;
 		if (fcontext == null) {
-			if (other.fcontext != null)
+			if (other.fcontext != null) {
 				return false;
-		} else if (!fcontext.equals(other.fcontext))
+			}
+		} else if (!fcontext.equals(other.fcontext)) {
 			return false;
-		if (flowWidth != other.flowWidth)
+		}
+		if (flowWidth != other.flowWidth) {
 			return false;
+		}
 		return true;
 	}
 

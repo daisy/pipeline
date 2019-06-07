@@ -22,7 +22,7 @@ import org.daisy.dotify.api.obfl.ObflParserFactoryService;
 import org.daisy.dotify.api.writer.MetaDataItem;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.PagedMediaWriterException;
-import org.daisy.dotify.formatter.impl.FactoryManager;
+import org.daisy.dotify.formatter.impl.common.FactoryManager;
 
 /**
  * <p>
@@ -48,8 +48,8 @@ class LayoutEngineImpl implements FormatterEngine {
 	
 	/**
 	 * Creates a new instance of LayoutEngineTask.
-	 * @param locale
-	 * @param mode
+	 * @param locale the locale
+	 * @param mode the mode
 	 * @param writer the output writer
 	 * @param fm factory manager
 	 * @param obflFactoryService the obfl factory service
@@ -111,10 +111,8 @@ class LayoutEngineImpl implements FormatterEngine {
 				throw new LayoutEngineException("FormatterException while running task.", e);
 			}
 		} finally {
-			if (f != null) {
-				if (!f.delete()) {
-					f.deleteOnExit();
-				}
+			if (f != null && !f.delete()) {
+				f.deleteOnExit();
 			}
 		}
 	}

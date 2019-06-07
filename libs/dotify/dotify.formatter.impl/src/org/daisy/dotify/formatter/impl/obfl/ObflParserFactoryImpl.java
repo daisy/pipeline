@@ -13,11 +13,9 @@ import org.daisy.dotify.api.obfl.ExpressionFactory;
 import org.daisy.dotify.api.obfl.ExpressionFactoryMaker;
 import org.daisy.dotify.api.obfl.ObflParser;
 import org.daisy.dotify.api.obfl.ObflParserFactoryService;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMaker;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
-import org.daisy.dotify.formatter.impl.FactoryManager;
+import org.daisy.dotify.formatter.impl.common.FactoryManager;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -92,23 +90,6 @@ public class ObflParserFactoryImpl implements ObflParserFactoryService {
 	 * @param service the dependency
 	 */
 	@Reference(cardinality=ReferenceCardinality.MANDATORY)
-	public void setMarkerProcessor(MarkerProcessorFactoryMakerService service) {
-		factoryManager.setMarkerProcessorFactory(service);
-	}
-
-	/**
-	 * Removes a factory dependency.
-	 * @param service the dependency to remove
-	 */
-	public void unsetMarkerProcessor(MarkerProcessorFactoryMakerService service) {
-		factoryManager.setMarkerProcessorFactory(null);
-	}
-
-	/**
-	 * Sets a factory dependency.
-	 * @param service the dependency
-	 */
-	@Reference(cardinality=ReferenceCardinality.MANDATORY)
 	public void setTextBorderFactoryMaker(TextBorderFactoryMakerService service) {
 		factoryManager.setTextBorderFactory(service);
 	}
@@ -141,7 +122,6 @@ public class ObflParserFactoryImpl implements ObflParserFactoryService {
 	@Override
 	public void setCreatedWithSPI() {
 		setFormatterFactory(FormatterFactoryMaker.newInstance().getFactory());
-		setMarkerProcessor(MarkerProcessorFactoryMaker.newInstance());
 		setTextBorderFactoryMaker(TextBorderFactoryMaker.newInstance());
 		setExpressionFactory(ExpressionFactoryMaker.newInstance().getFactory());
 		factoryManager.setTransformerFactory(TransformerFactory.newInstance());

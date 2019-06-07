@@ -7,8 +7,19 @@ import java.util.Objects;
 
 import org.daisy.dotify.api.writer.SectionProperties;
 import org.daisy.dotify.common.splitter.SplitPointUnit;
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.page.PageImpl;
+import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
+
+/**
+ * <p>Provides a sheet data type. A sheet represents a physical paper
+ * and  just like a physical sheet, it can hold one or two pages.</p>
+ *
+ * <p>Sheet is the unit used when calculating volume breaks. For this reason, 
+ * Sheet implements {@link SplitPointUnit}. The last sheet of the volume may
+ * be modified after the volume break has been calculated.</p>
+ * 
+ * @author Joel Håkansson
+ */
 public class Sheet implements SplitPointUnit {
 	private static final List<String> SUPPLEMENTS = Collections.unmodifiableList(new ArrayList<String>());
 	private final SectionProperties master;

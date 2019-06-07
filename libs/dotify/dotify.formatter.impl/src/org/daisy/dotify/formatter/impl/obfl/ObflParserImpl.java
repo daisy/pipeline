@@ -88,7 +88,7 @@ import org.daisy.dotify.api.translator.TextBorderFactory;
 import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.api.writer.MetaDataItem;
 import org.daisy.dotify.common.text.FilterLocale;
-import org.daisy.dotify.formatter.impl.FactoryManager;
+import org.daisy.dotify.formatter.impl.common.FactoryManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -1430,6 +1430,10 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 				parseTransitionSequence(event, input, template.getSequenceInterruptedBuilder(), tp);
 			} else if (equalsStart(event, ObflQName.SEQUENCE_RESUMED)) {
 				parseTransitionSequence(event, input, template.getSequenceResumedBuilder(), tp);
+			} else if (equalsStart(event, ObflQName.ANY_INTERRUPTED)) {
+				parseTransitionSequence(event, input, template.getAnyInterruptedBuilder(), tp);
+			} else if (equalsStart(event, ObflQName.ANY_RESUMED)) {
+				parseTransitionSequence(event, input, template.getAnyResumedBuilder(), tp);
 			} else if (equalsEnd(event, ObflQName.VOLUME_TRANSITION)) {
 				break;
 			} else {
@@ -1456,7 +1460,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
 			event=input.nextEvent();
 			if (equalsStart(event, ObflQName.BLOCK)) {
 				parseBlock(event, input, builder, tp);
-			} else if (equalsEnd(event, ObflQName.SEQUENCE_INTERRUPTED, ObflQName.SEQUENCE_RESUMED)) {
+			} else if (equalsEnd(event, ObflQName.SEQUENCE_INTERRUPTED, ObflQName.SEQUENCE_RESUMED, ObflQName.ANY_INTERRUPTED, ObflQName.ANY_RESUMED)) {
 				break;
 			} else {
 				report(event);

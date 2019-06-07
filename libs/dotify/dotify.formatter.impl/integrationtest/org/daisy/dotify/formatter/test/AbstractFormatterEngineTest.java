@@ -15,7 +15,7 @@ import org.daisy.braille.utils.pef.PEFFileCompareException;
 import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
+import org.daisy.dotify.api.translator.TranslatorType;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
@@ -27,7 +27,7 @@ abstract class AbstractFormatterEngineTest {
 	
 	void testPEF(String input, String expected, File res) throws LayoutEngineException, IOException, PagedMediaWriterConfigurationException {
 		testPEF(FormatterEngineMaker.newInstance().newFormatterEngine("sv-SE",
-				BrailleTranslatorFactory.MODE_UNCONTRACTED, 
+				TranslatorType.UNCONTRACTED.toString(), 
 				PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)), input, expected, res);
 	}
 

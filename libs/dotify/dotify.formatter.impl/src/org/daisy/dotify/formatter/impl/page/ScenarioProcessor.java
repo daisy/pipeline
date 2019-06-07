@@ -67,8 +67,9 @@ class ScenarioProcessor {
 	
 	/**
 	 * Process a new block for a scenario
-	 * @param g
-	 * @param rec
+	 * @param master the layout master
+	 * @param g the block
+	 * @param context the context
 	 */
 	void processBlock(LayoutMaster master, Block g, BlockContext context) {
 		if (g.getRenderingScenario()!=null) {

@@ -40,20 +40,26 @@ public final class PageId {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		PageId other = (PageId) obj;
-		if (pageIndex != other.pageIndex)
+		if (pageIndex != other.pageIndex) {
 			return false;
+		}
 		if (sequenceId == null) {
-			if (other.sequenceId != null)
+			if (other.sequenceId != null) {
 				return false;
-		} else if (!sequenceId.equals(other.sequenceId))
+			}
+		} else if (!sequenceId.equals(other.sequenceId)) {
 			return false;
+		}
 		return true;
 	}
 

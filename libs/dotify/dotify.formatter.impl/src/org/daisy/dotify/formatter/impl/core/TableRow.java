@@ -46,8 +46,8 @@ class TableRow implements Iterable<TableCell> {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Gets the current cell.
+	 * @return the current cell
 	 * @throws IllegalStateException if the row is empty
 	 */
 	TableCell getCurrentCell() {

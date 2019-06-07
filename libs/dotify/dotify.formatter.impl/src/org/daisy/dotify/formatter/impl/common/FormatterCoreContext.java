@@ -6,7 +6,6 @@ import java.util.Map;
 import org.daisy.dotify.api.formatter.FormatterConfiguration;
 import org.daisy.dotify.api.translator.BrailleTranslator;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
 import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslationException;
@@ -15,16 +14,14 @@ import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 public class FormatterCoreContext {
 	private final TextBorderFactoryMakerService tbf;
 	private final FormatterConfiguration config;
-	private final MarkerProcessorFactoryMakerService mpf;
 	private final BrailleTranslator translator;
 	private final BrailleTranslatorFactoryMakerService translatorFactory;
 	private final char spaceChar;
 	private final Map<String, BrailleTranslator> cache;
 
-	protected FormatterCoreContext(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, FormatterConfiguration config, MarkerProcessorFactoryMakerService mpf) {
+	protected FormatterCoreContext(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, FormatterConfiguration config) {
 		this.tbf = tbf;
 		this.config = config;
-		this.mpf = mpf;
 		this.translatorFactory = translatorFactory;
 		this.cache = new HashMap<>();
 		try {
@@ -75,10 +72,6 @@ public class FormatterCoreContext {
 		return config;
 	}
 
-	public MarkerProcessorFactoryMakerService getMarkerProcessorFactoryMakerService() {
-		return mpf;
-	}
-	
 	public char getSpaceCharacter() {
 		return spaceChar;
 	}

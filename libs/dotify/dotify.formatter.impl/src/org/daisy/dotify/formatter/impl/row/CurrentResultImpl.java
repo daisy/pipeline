@@ -42,17 +42,17 @@ class CurrentResultImpl implements CurrentResult {
 	}
 
 	@Override
-	public Optional<RowImpl> process(SegmentProcessing spi, boolean wholeWordsOnly) {
+	public Optional<RowImpl> process(SegmentProcessing spi, LineProperties lineProps) {
 		if (first) {
 			first = false;
-			return processFirst(spi, wholeWordsOnly);
+			return processFirst(spi, lineProps);
 		}
 		try {
 			if (btr.hasNext()) { //LayoutTools.length(chars.toString())>0
 				if (spi.hasCurrentRow()) {
 					return Optional.of(spi.flushCurrentRow());
 				}
-				return startNewRow(spi, btr, "", spc.getRdp().getTextIndent(), spc.getRdp().getBlockIndent(), mode, wholeWordsOnly);
+				return startNewRow(spi, btr, "", spc.getRdp().getTextIndent(), spc.getRdp().getBlockIndent(), mode, lineProps);
 			}
 		} finally {
 			if (!btr.hasNext() && btr.supportsMetric(BrailleTranslatorResult.METRIC_FORCED_BREAK)) {
@@ -62,7 +62,7 @@ class CurrentResultImpl implements CurrentResult {
 		return Optional.empty();
 	}
 
-	private Optional<RowImpl> processFirst(SegmentProcessing spi, boolean wholeWordsOnly) {
+	private Optional<RowImpl> processFirst(SegmentProcessing spi, LineProperties lineProps) {
 		// process first row, is it a new block or should we continue the current row?
 		if (!spi.hasCurrentRow()) {
 			// add to left margin
@@ -76,27 +76,27 @@ class CurrentResultImpl implements CurrentResult {
 				}
 				try {
 					if (item.getType()==FormattingTypes.ListStyle.PL) {
-						return startNewRow(spi, btr, listLabel, 0, spc.getRdp().getBlockIndentParent(), mode, wholeWordsOnly);
+						return startNewRow(spi, btr, listLabel, 0, spc.getRdp().getBlockIndentParent(), mode, lineProps);
 					} else {
-						return startNewRow(spi, btr, listLabel, spc.getRdp().getFirstLineIndent(), spc.getRdp().getBlockIndent(), mode, wholeWordsOnly);
+						return startNewRow(spi, btr, listLabel, spc.getRdp().getFirstLineIndent(), spc.getRdp().getBlockIndent(), mode, lineProps);
 					}
 				} finally {
 					spi.discardListItem();
 				}
 			} else {
-				return startNewRow(spi, btr, "", spc.getRdp().getFirstLineIndent(), spc.getRdp().getBlockIndent(), mode, wholeWordsOnly);
+				return startNewRow(spi, btr, "", spc.getRdp().getFirstLineIndent(), spc.getRdp().getBlockIndent(), mode, lineProps);
 			}
 		} else {
-			return continueRow(spi, new RowInfo("", spc.getAvailable()), btr, spc.getRdp().getBlockIndent(), mode, wholeWordsOnly);
+			return continueRow(spi, new RowInfo("", spc.getAvailable()-lineProps.getReservedWidth()), btr, spc.getRdp().getBlockIndent(), mode, lineProps);
 		}
 	}
 	
-	private Optional<RowImpl> startNewRow(SegmentProcessing spi, BrailleTranslatorResult chars, String contentBefore, int indent, int blockIndent, String mode, boolean wholeWordsOnly) {
+	private Optional<RowImpl> startNewRow(SegmentProcessing spi, BrailleTranslatorResult chars, String contentBefore, int indent, int blockIndent, String mode, LineProperties lineProps) {
 		if (spi.hasCurrentRow()) {
 			throw new RuntimeException("Error in code.");
 		}
 		spi.newCurrentRow(spc.getMargins().getLeftMargin(), spc.getMargins().getRightMargin());
-		return continueRow(spi, new RowInfo(getPreText(contentBefore, indent+blockIndent), spc.getAvailable()), chars, blockIndent, mode, wholeWordsOnly);
+		return continueRow(spi, new RowInfo(getPreText(contentBefore, indent+blockIndent), spc.getAvailable()-lineProps.getReservedWidth()), chars, blockIndent, mode, lineProps);
 	}
 	
 	private String getPreText(String contentBefore, int totalIndent) {
@@ -110,14 +110,14 @@ class CurrentResultImpl implements CurrentResult {
 	}
 
 	//TODO: check leader functionality
-	private Optional<RowImpl> continueRow(SegmentProcessing spi, RowInfo m1, BrailleTranslatorResult btr, int blockIndent, String mode, boolean wholeWordsOnly) {
+	private Optional<RowImpl> continueRow(SegmentProcessing spi, RowInfo m1, BrailleTranslatorResult btr, int blockIndent, String mode, LineProperties lineProps) {
 		RowImpl ret = null;
 		// [margin][preContent][preTabText][tab][postTabText] 
 		//      preContentPos ^
 		String tabSpace = "";
 		if (spi.getLeaderManager().hasLeader()) {
 			int preTabPos = m1.getPreTabPosition(spi.getCurrentRow());
-			int leaderPos = spi.getLeaderManager().getLeaderPosition(spc.getAvailable());
+			int leaderPos = spi.getLeaderManager().getLeaderPosition(spc.getAvailable()-lineProps.getReservedWidth());
 			int offset = leaderPos-preTabPos;
 			int align = spi.getLeaderManager().getLeaderAlign(btr.countRemaining());
 			
@@ -127,7 +127,7 @@ class CurrentResultImpl implements CurrentResult {
 					ret = spi.flushCurrentRow();
 				}
 				spi.newCurrentRow(_leftMargin, spc.getMargins().getRightMargin());
-				m1 = new RowInfo(getPreText("", spc.getRdp().getTextIndent()+blockIndent), spc.getAvailable());
+				m1 = new RowInfo(getPreText("", spc.getRdp().getTextIndent()+blockIndent), spc.getAvailable()-lineProps.getReservedWidth());
 				//update offset
 				offset = leaderPos-m1.getPreTabPosition(spi.getCurrentRow());
 			}
@@ -138,7 +138,7 @@ class CurrentResultImpl implements CurrentResult {
 				spi.getLeaderManager().removeLeader();
 			}
 		}
-		breakNextRow(m1, spi.getCurrentRow(), btr, tabSpace, wholeWordsOnly);
+		breakNextRow(m1, spi.getCurrentRow(), btr, tabSpace, lineProps.suppressHyphenation());
 		return Optional.ofNullable(ret);
 	}
 

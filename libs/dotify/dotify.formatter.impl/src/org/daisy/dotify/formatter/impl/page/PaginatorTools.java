@@ -71,7 +71,7 @@ class PaginatorTools {
 					throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units);
 				}
 			} else {
-				throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units);
+				throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units + " (" + units.stream().mapToInt(v->v.length()).sum() + ")");
 			}
 		}
 		int parts = units.size()-1;
@@ -138,8 +138,9 @@ class PaginatorTools {
 			return distributeTable(units, width, padding);
 		default:
 			StringBuffer b = new StringBuffer();
-			for (String s : distributeRetain(units, width, padding, mode))
+			for (String s : distributeRetain(units, width, padding, mode)) {
 				b.append(s);
+			}
 			return b.toString();
 		}
 	}

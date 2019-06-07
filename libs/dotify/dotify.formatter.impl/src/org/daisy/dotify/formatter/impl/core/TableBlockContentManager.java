@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowDataProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
@@ -54,7 +55,7 @@ class TableBlockContentManager extends AbstractBlockContentManager {
     }
 	
 	@Override
-	public Optional<RowImpl> getNext(boolean wholeWordsOnly) {
+	public Optional<RowImpl> getNext(LineProperties lineProps) {
 		if (rowIndex<rows.size()) {
 			RowImpl ret = rows.get(rowIndex);
 			rowIndex++;

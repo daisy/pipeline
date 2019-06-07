@@ -19,12 +19,12 @@ import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.common.text.StringTools;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
+import org.daisy.dotify.formatter.impl.row.BlockMargin;
 import org.daisy.dotify.formatter.impl.row.MarginProperties;
 import org.daisy.dotify.formatter.impl.row.RowDataProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.segment.Segment;
-import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
 class Table extends Block {
 	private static final Logger logger = Logger.getLogger(Table.class.getCanonicalName());
@@ -81,15 +81,20 @@ class Table extends Block {
 	}
 
 	@Override
-	public void addSegment(TextSegment s) {
+	public void addSegment(Segment s) {
 		super.addSegment(s);
 		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().addSegment(s);
 	}
 	
+
 	@Override
-	public void addSegment(Segment s) {
-		super.addSegment(s);
-		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().addSegment(s);
+	void startStyle(String style) {
+		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().startStyle(style);
+	}
+
+	@Override
+	void endStyle() {
+		((FormatterCoreImpl)td.getCurrentCell()).getCurrentBlock().endStyle();
 	}
 
 	@Override
@@ -98,8 +103,9 @@ class Table extends Block {
 		int rowCount = countRows();
 		int[] colSpace = calcSpacings(new ColumnSpaceCalculator(rowCount, columnCount));
 		//int[] rowSpace = calcSpacings(new RowSpaceCalculator(rowCount, columnCount));
-		MarginProperties leftMargin = rdp.getLeftMargin().buildMargin(context.getFcontext().getSpaceCharacter());
-		MarginProperties rightMargin = rdp.getRightMargin().buildMargin(context.getFcontext().getSpaceCharacter());
+		BlockMargin bm = rdp.getMargins();
+		MarginProperties leftMargin = bm.getLeftMargin();
+		MarginProperties rightMargin = bm.getRightMargin();
 		int maxWidth = (context.getFlowWidth() 
 				- leftMargin.getContent().length() 
 				- rightMargin.getContent().length()

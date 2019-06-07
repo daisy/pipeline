@@ -8,12 +8,16 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.namespace.QName;
 
@@ -21,7 +25,8 @@ import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.formatter.FormatterConfiguration;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
+import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
+import org.daisy.dotify.api.translator.TranslatorType;
 import org.daisy.dotify.api.writer.AttributeItem;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.MetaDataItem;
@@ -69,6 +74,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	private final PagedMediaWriter writer;
 	private final FormatterEngineFactoryService fe;
 	private final ValidatorFactoryMakerService vf;
+	private final BrailleTranslatorFactoryMakerService translatorFactory;
 	private final TaskGroupSpecification spec;
 	private static final Logger logger = Logger.getLogger(LayoutEngineTask.class.getCanonicalName());
 	private List<UserOption> options;
@@ -80,17 +86,19 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	 * @param pmw the paged media writer factory maker service
 	 * @param fe the formatter engine factory service
 	 * @param vf a validator factory service
+	 * @param translatorFactory a translator factory maker service
 	 * @throws TaskSystemException if the instance could not be created 
 	 */
-	public LayoutEngineTask(Properties p2, TaskGroupSpecification spec, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe, ValidatorFactoryMakerService vf) throws TaskSystemException {
-		super(buildName(spec.getOutputType().getIdentifier().toUpperCase()));
+	public LayoutEngineTask(Properties p2, TaskGroupSpecification spec, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe, ValidatorFactoryMakerService vf, BrailleTranslatorFactoryMakerService translatorFactory) throws TaskSystemException {
+		super(buildName(spec.getOutputType().getIdentifier().toUpperCase().replace('-', ' ')));
 		addDefaults(p2);
-		String translatorMode = getTranslationMode(p2, spec.getOutputType());
+		String translatorMode = getTranslationMode(p2, spec.getOutputType(), spec.getLocale(), translatorFactory);
 		this.spec = spec;
 		this.writer = getWriter(p2, spec, pmw);
 		this.config = getFormatterConfig(p2, translatorMode, spec.getLocale());
 		this.fe = fe;
 		this.vf = vf;
+		this.translatorFactory = translatorFactory;
 		this.options = null;
 	}
 	
@@ -109,12 +117,17 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		}		
 	}
 	
-	private static String getTranslationMode(Properties p2, FormatIdentifier out) throws TaskSystemException {
+	private static String getTranslationMode(Properties p2, FormatIdentifier out, String locale, BrailleTranslatorFactoryMakerService translatorFactory) throws TaskSystemException {
 		switch (out.getIdentifier()) {
 			case Keys.PEF_FORMAT:
-				return p2.getProperty(TRANSLATE, BrailleTranslatorFactory.MODE_UNCONTRACTED);
-			case Keys.TEXT_FORMAT:
-				return p2.getProperty(TRANSLATE, BrailleTranslatorFactory.MODE_BYPASS);
+				return Optional.ofNullable(
+							Optional.ofNullable(p2.getProperty(TRANSLATE)).orElseGet(
+									()->getDefaultMode(listSupportedModes(translatorFactory, locale).collect(Collectors.toSet()))
+										.orElse(null)
+									)
+							).orElseThrow(()->new TaskSystemException("No supported translator for " + locale));
+			case Keys.FORMATTED_TEXT_FORMAT:
+				return p2.getProperty(TRANSLATE, TranslatorType.BYPASS.toString());
 			default:
 				throw new TaskSystemException("Unknown format: " + out);
 		}
@@ -124,7 +137,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		switch (ext.getIdentifier()) {
 			case Keys.PEF_FORMAT:
 				return MediaTypes.PEF_MEDIA_TYPE;
-			case Keys.TEXT_FORMAT:
+			case Keys.FORMATTED_TEXT_FORMAT:
 				return MediaTypes.TEXT_MEDIA_TYPE;
 			default:
 				throw new TaskSystemException("Unknown format: " + ext);
@@ -184,7 +197,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		return new MetaDataItem.Builder(new QName("http://purl.org/dc/elements/1.1/", name, "dc"), value).build();
 	}
 
-	private static List<UserOption> buildOptions(TaskGroupSpecification spec) {
+	private List<UserOption> buildOptions(TaskGroupSpecification spec) {
 		List<UserOption> ret = new ArrayList<>();
 		ret.add(withBooleanValues(
 				new UserOption.Builder(MARK_CAPITAL_LETTERS)
@@ -201,11 +214,16 @@ public class LayoutEngineTask extends ReadWriteTask  {
 				.description("Specifies if hyphenation should be used."))
 				.defaultValue("true")
 			.build());
-		ret.add(new UserOption.Builder(TRANSLATE)
-			.description("Specifies a translation mode.")
-			.build());
+		
 		//PEF supports additional options
 		if (Keys.PEF_FORMAT.equals(spec.getOutputType().getIdentifier())) {
+			UserOption.Builder tr = new UserOption.Builder(TRANSLATE)
+					.description("Specifies a translation mode.");
+			List<String> specs = listSupportedModes(translatorFactory, spec.getLocale())
+					.sorted()
+					.collect(Collectors.toList());
+			getDefaultMode(specs).ifPresent(v->tr.defaultValue(v));
+			specs.forEach(v->tr.addValue(new UserOptionValue.Builder(v).build()));
 			ret.add(new UserOption.Builder(IDENTIFIER)
 				.description("Sets identifier in meta data.")
 				.build());
@@ -213,8 +231,28 @@ public class LayoutEngineTask extends ReadWriteTask  {
 				.description("Sets date in meta data.")
 				.defaultValue(getDefaultDate(DEFAULT_DATE_FORMAT))
 				.build());
+			ret.add(tr.build());
 		}
+		
 		return ret;
+	}
+	
+	private static Optional<String> getDefaultMode(Collection<String> specs) {
+		if (specs.contains(TranslatorType.UNCONTRACTED.toString())) {
+			return Optional.of(TranslatorType.UNCONTRACTED.toString());
+		} else if (specs.contains(TranslatorType.CONTRACTED.toString())) {
+			return Optional.of(TranslatorType.CONTRACTED.toString());
+		} else if (!specs.isEmpty()) {
+			return Optional.of(specs.iterator().next());
+		}
+		return Optional.empty();
+	}
+	
+	private static Stream<String> listSupportedModes(BrailleTranslatorFactoryMakerService translatorFactory, String locale) {
+		return translatorFactory.listSpecifications().stream()
+			.filter(v->v.getLocale().equals(locale) && v.getModeDetails().getType().map(x->!(x==TranslatorType.BYPASS || x==TranslatorType.PRE_TRANSLATED)).orElse(true).booleanValue())
+			.map(v->v.getMode())
+			.distinct();
 	}
 	
 	private static UserOption.Builder withBooleanValues(UserOption.Builder builder) {

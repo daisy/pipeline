@@ -13,21 +13,25 @@ public class TransitionBuilderImpl implements TransitionBuilder {
 	private final FormatterCoreImpl blockInterrupted;
 	private final FormatterCoreImpl seqResumed;
 	private final FormatterCoreImpl seqInterrupted;
+	private final FormatterCoreImpl anyResumed;
+	private final FormatterCoreImpl anyInterrupted;
 	
 	public TransitionBuilderImpl(FormatterCoreContext fc) {
 		this.props = new TransitionBuilderProperties.Builder().build();
 		this.blockResumed = new FormatterCoreImpl(fc);
 		this.blockInterrupted = new FormatterCoreImpl(fc);
 		this.seqResumed = new FormatterCoreImpl(fc);
-		this.seqInterrupted = new FormatterCoreImpl(fc);		
+		this.seqInterrupted = new FormatterCoreImpl(fc);
+		this.anyResumed = new FormatterCoreImpl(fc);
+		this.anyInterrupted = new FormatterCoreImpl(fc);
 	}
 	
 	public TransitionContent getInterruptTransition() {
-		return new TransitionContent(Type.INTERRUPT, blockInterrupted, seqInterrupted);
+		return new TransitionContent(Type.INTERRUPT, blockInterrupted, seqInterrupted, anyInterrupted);
 	}
 	
 	public TransitionContent getResumeTransition() {
-		return new TransitionContent(Type.RESUME, blockResumed, seqResumed);
+		return new TransitionContent(Type.RESUME, blockResumed, seqResumed, anyResumed);
 	}
 
 	@Override
@@ -58,6 +62,16 @@ public class TransitionBuilderImpl implements TransitionBuilder {
 	@Override
 	public void setProperties(TransitionBuilderProperties props) {
 		this.props = props;
+	}
+
+	@Override
+	public BlockBuilder getAnyResumedBuilder() {
+		return anyResumed;
+	}
+
+	@Override
+	public BlockBuilder getAnyInterruptedBuilder() {
+		return anyInterrupted;
 	}
 
 }

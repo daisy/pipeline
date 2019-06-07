@@ -61,6 +61,8 @@ interface ObflQName {
 	 static final QName BLOCK_RESUMED = new QName(OBFL_NS, "block-resumed");
 	 static final QName SEQUENCE_INTERRUPTED = new QName(OBFL_NS, "sequence-interrupted");
 	 static final QName SEQUENCE_RESUMED = new QName(OBFL_NS, "sequence-resumed");
+	static final QName ANY_INTERRUPTED = new QName(OBFL_NS, "any-interrupted");
+	static final QName ANY_RESUMED = new QName(OBFL_NS, "any-resumed");
 	
 	 static final QName TABLE_OF_CONTENTS = new QName(OBFL_NS, "table-of-contents");
 	 

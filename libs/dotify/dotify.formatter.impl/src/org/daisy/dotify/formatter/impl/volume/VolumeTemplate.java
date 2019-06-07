@@ -1,24 +1,26 @@
 package org.daisy.dotify.formatter.impl.volume;
 
-import java.util.Map;
-
 import org.daisy.dotify.api.formatter.Condition;
 import org.daisy.dotify.api.formatter.Context;
 import org.daisy.dotify.api.formatter.VolumeContentBuilder;
 import org.daisy.dotify.api.formatter.VolumeTemplateBuilder;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 
-
+/**
+ * Provides a {@link VolumeTemplateBuilder} implementation.
+ * 
+ * @author Joel Håkansson
+ */
 public class VolumeTemplate implements VolumeTemplateBuilder {
 	private final Condition condition;
 	private final int splitterMax;
 	private final VolumeContentBuilderImpl preVolumeContent, postVolumeContent;
 
-	public VolumeTemplate(FormatterCoreContext fc, Map<String, TableOfContentsImpl> tocs, Condition condition, Integer splitterMax) {
+	public VolumeTemplate(FormatterCoreContext fc, Condition condition, Integer splitterMax) {
 		this.condition = condition;
 		this.splitterMax = splitterMax;
-		this.preVolumeContent = new VolumeContentBuilderImpl(fc, tocs);
-		this.postVolumeContent = new VolumeContentBuilderImpl(fc, tocs);
+		this.preVolumeContent = new VolumeContentBuilderImpl(fc);
+		this.postVolumeContent = new VolumeContentBuilderImpl(fc);
 	}
 
 	/**

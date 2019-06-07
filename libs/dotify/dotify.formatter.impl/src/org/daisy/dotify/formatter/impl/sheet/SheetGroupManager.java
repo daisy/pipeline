@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides a manager for sheet groups (consecutive sheets without manual volume breaks
- * inside).
- * 
+ * <p>Provides a manager for {@link SheetGroup}.</p>
+ *
+ * <p>Used by {@link org.daisy.dotify.formatter.impl.VolumeProvider}.</p>
+ *
  * @author Joel Håkansson
  */
 public class SheetGroupManager {

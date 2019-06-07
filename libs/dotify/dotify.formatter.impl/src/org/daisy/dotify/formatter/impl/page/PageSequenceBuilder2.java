@@ -5,17 +5,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.daisy.dotify.api.formatter.BlockPosition;
 import org.daisy.dotify.api.formatter.FallbackRule;
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
-import org.daisy.dotify.api.formatter.MarginRegion;
-import org.daisy.dotify.api.formatter.MarkerIndicatorRegion;
 import org.daisy.dotify.api.formatter.PageAreaProperties;
 import org.daisy.dotify.api.formatter.RenameFallbackRule;
 import org.daisy.dotify.api.formatter.TransitionBuilderProperties.ApplicationRange;
-import org.daisy.dotify.api.translator.Translatable;
-import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.common.splitter.SplitPoint;
 import org.daisy.dotify.common.splitter.SplitPointCost;
 import org.daisy.dotify.common.splitter.SplitPointDataSource;
@@ -31,16 +28,15 @@ import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.core.PaginatorException;
 import org.daisy.dotify.formatter.impl.core.TransitionContent;
 import org.daisy.dotify.formatter.impl.core.TransitionContent.Type;
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
-import org.daisy.dotify.formatter.impl.row.MarginProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
+import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
-import org.daisy.dotify.formatter.impl.search.DocumentSpace;
 import org.daisy.dotify.formatter.impl.search.PageDetails;
 import org.daisy.dotify.formatter.impl.search.PageId;
 import org.daisy.dotify.formatter.impl.search.SequenceId;
 import org.daisy.dotify.formatter.impl.search.TransitionProperties;
+import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 public class PageSequenceBuilder2 {
 	private final FormatterContext context;
@@ -64,11 +60,14 @@ public class PageSequenceBuilder2 {
 	private int dataGroupsIndex;
 	private boolean nextEmpty = false;
 
+	private BlockLineLocation cbl;
+	private BlockLineLocation pcbl;
+
 	//From view, temporary
 	private final int fromIndex;
 	private int toIndex;
-	
-	public PageSequenceBuilder2(int fromIndex, LayoutMaster master, int pageOffset, BlockSequence seq, FormatterContext context, DefaultContext rcontext, int sequenceId) {
+
+	public PageSequenceBuilder2(int fromIndex, LayoutMaster master, int pageOffset, BlockSequence seq, FormatterContext context, DefaultContext rcontext, SequenceId seqId, BlockLineLocation blc) {
 		this.fromIndex = fromIndex;
 		this.toIndex = fromIndex;
 		this.master = master;
@@ -95,8 +94,10 @@ public class PageSequenceBuilder2 {
 		this.dataGroups = seq.selectScenario(master, bc, true);
 		this.cd = new CollectionData(staticAreaContent, blockContext, master, collection);
 		this.dataGroupsIndex = 0;
-		this.seqId = new SequenceId(sequenceId, new DocumentSpace(blockContext.getSpace(), blockContext.getCurrentVolume()));
-		PageDetails details = new PageDetails(master.duplex(), new PageId(pageCount, getGlobalStartIndex(), seqId), pageOffset);
+		this.seqId = seqId;
+		this.cbl = blc;
+		this.pcbl = null;
+		PageDetails details = new PageDetails(master.duplex(), new PageId(pageCount, getGlobalStartIndex(), seqId), cbl, pageOffset);
 		this.fieldResolver = new FieldResolver(master, context, rcontext.getRefs(), details);
 	}
 
@@ -120,6 +121,8 @@ public class PageSequenceBuilder2 {
 		this.nextEmpty = template.nextEmpty;
 		this.fromIndex = template.fromIndex;
 		this.toIndex = template.toIndex;
+		this.cbl = template.cbl;
+		this.pcbl = template.pcbl;
 	}
 	
 	public static PageSequenceBuilder2 copyUnlessNull(PageSequenceBuilder2 template) {
@@ -134,18 +137,20 @@ public class PageSequenceBuilder2 {
 	public PageId nextPageId(int offset) {
 		return new PageId(pageCount+offset, getGlobalStartIndex(), seqId);
 	}
+	
+	public BlockLineLocation currentBlockLineLocation() {
+		return cbl;
+	}
 
 	private PageImpl newPage(int pageNumberOffset) {
-		PageDetails details = new PageDetails(master.duplex(), new PageId(pageCount, getGlobalStartIndex(), seqId), pageNumberOffset);
+		PageDetails details = new PageDetails(master.duplex(), new PageId(pageCount, getGlobalStartIndex(), seqId), cbl, pageNumberOffset);
 		PageImpl ret = new PageImpl(fieldResolver, details, master, context, staticAreaContent);
 		pageCount ++;
 		if (keepNextSheets>0) {
 			ret.setAllowsVolumeBreak(false);
 		}
-		if (!master.duplex() || pageCount%2==0) {
-			if (keepNextSheets>0) {
-				keepNextSheets--;
-			}
+		if ((!master.duplex() || pageCount%2==0) && keepNextSheets>0) {
+			keepNextSheets--;
 		}
 		return ret;
 	}
@@ -162,9 +167,9 @@ public class PageSequenceBuilder2 {
 		return dataGroupsIndex<dataGroups.size() || (data!=null && !data.isEmpty());
 	}
 	
-	public PageImpl nextPage(int pageNumberOffset, boolean hyphenateLastLine, Optional<TransitionContent> transitionContent) throws PaginatorException, RestartPaginationException // pagination must be restarted in PageStructBuilder.paginateInner
+	public PageImpl nextPage(int pageNumberOffset, boolean hyphenateLastLine, Optional<TransitionContent> transitionContent, boolean wasSplitInSequence, boolean isFirst) throws PaginatorException, RestartPaginationException // pagination must be restarted in PageStructBuilder.paginateInner
 	{
-		PageImpl ret = nextPageInner(pageNumberOffset, hyphenateLastLine, transitionContent);
+		PageImpl ret = nextPageInner(pageNumberOffset, hyphenateLastLine, transitionContent, wasSplitInSequence, isFirst);
 		blockContext.getRefs().keepPageDetails(ret.getDetails());
 		for (String id : ret.getIdentifiers()) {
 			blockContext.getRefs().setPageNumber(id, ret.getPageNumber());
@@ -179,13 +184,18 @@ public class PageSequenceBuilder2 {
 		return ret;
 	}
 
-	private PageImpl nextPageInner(int pageNumberOffset, boolean hyphenateLastLine, Optional<TransitionContent> transitionContent) throws PaginatorException, RestartPaginationException // pagination must be restarted in PageStructBuilder.paginateInner
+	private PageImpl nextPageInner(int pageNumberOffset, boolean hyphenateLastLine, Optional<TransitionContent> transitionContent, boolean wasSplitInSequence, boolean isFirst) throws PaginatorException, RestartPaginationException // pagination must be restarted in PageStructBuilder.paginateInner
 	{
 		PageImpl current = newPage(pageNumberOffset);
+		if (pcbl!=null) {
+			blockContext.getRefs().setNextPageDetailsInSequence(pcbl, current.getDetails());
+		}
 		if (nextEmpty) {
 			nextEmpty = false;
 			return current;
 		}
+		// The purpose of this is to prevent supplements from combining with header/footer
+		cd.setExtraOverhead(current.getPageTemplate().validateAndAnalyzeHeader() + current.getPageTemplate().validateAndAnalyzeFooter());
 		while (dataGroupsIndex<dataGroups.size() || (data!=null && !data.isEmpty())) {
 			if ((data==null || data.isEmpty()) && dataGroupsIndex<dataGroups.size()) {
 				//pick up next group
@@ -215,6 +225,10 @@ public class PageSequenceBuilder2 {
 					.flowWidth(master.getFlowWidth() - master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth())
 					.build();
 			data.setContext(bc);
+			Function<Integer, Integer> reservedWidths = x->{
+				return master.getFlowWidth()-fieldResolver.getWidth(current.getPageNumber(), x);
+			}; 
+			data.setReservedWidths(reservedWidths);
 			Optional<Boolean> blockBoundary = Optional.empty();
 			if (!data.isEmpty()) {
 				RowGroupDataSource copy = new RowGroupDataSource(data);
@@ -231,6 +245,10 @@ public class PageSequenceBuilder2 {
 				List<RowGroup> seqTransitionText = transitionContent.isPresent()
 						?new RowGroupDataSource(master, bc, transitionContent.get().getInSequence(), BreakBefore.AUTO, null, cd).getRemaining()
 						:Collections.emptyList();
+				List<RowGroup> anyTransitionText = transitionContent.isPresent()
+						?new RowGroupDataSource(master, bc, transitionContent.get().getInAny(), BreakBefore.AUTO, null, cd).getRemaining()
+						:Collections.emptyList();
+				float anyHeight = height(anyTransitionText, true);
 				SplitPointSpecification spec;
 				boolean addTransition = true;
 				if (transitionContent.isPresent() && transitionContent.get().getType()==Type.INTERRUPT) {
@@ -241,7 +259,7 @@ public class PageSequenceBuilder2 {
 					// Transition rows:		 X-|
 					// This transition doesn't fit, because the last row of the text flow takes up three rows, not just one (which it would
 					// if a transition didn't follow).
-					float flowHeight = current.getFlowHeight() - height(seqTransitionText, true);
+					float flowHeight = current.getFlowHeight() - anyHeight - height(seqTransitionText, true);
 					SplitPointCost<RowGroup> cost = (SplitPointDataSource<RowGroup, ?> units, int in, int limit)->{
 						VolumeKeepPriority volumeBreakPriority = 
 								data.get(in).getAvoidVolumeBreakAfterPriority();
@@ -257,7 +275,7 @@ public class PageSequenceBuilder2 {
 								)*limit-in;
 					};
 					// Finding from the full height
-					spec = sph.find(current.getFlowHeight(), copy, cost, force?StandardSplitOption.ALLOW_FORCE:null);
+					spec = sph.find(current.getFlowHeight() - anyHeight, copy, cost, force?StandardSplitOption.ALLOW_FORCE:null);
 					SplitPoint<RowGroup, RowGroupDataSource> x = sph.split(spec, copy);
 					// If the tail is empty, there's no need for a transition
 					// If there isn't a transition between blocks available, don't insert the text
@@ -269,9 +287,19 @@ public class PageSequenceBuilder2 {
 						addTransition = false;
 					}
 				} else {
+					SplitPointCost<RowGroup> cost = (SplitPointDataSource<RowGroup, ?> units, int in, int limit)->{
+							double variableWidthCost = (reservedWidths.apply(in)>0 && !units.get(in).isMergeable())?10:0;
+							return (
+										(units.get(in).isBreakable()?1:2) + variableWidthCost
+									)*limit-in;
+					};
+					float seqHeight = 0;
+					if (wasSplitInSequence) {
+						seqHeight = height(seqTransitionText, false);
+					}
 					// Either RESUME, or no transition on this page.
-					float flowHeight = current.getFlowHeight() - height(seqTransitionText, false);
-					spec = sph.find(flowHeight, copy, force?StandardSplitOption.ALLOW_FORCE:null);
+					float flowHeight = current.getFlowHeight() - anyHeight - seqHeight;
+					spec = sph.find(flowHeight, copy, cost, force?StandardSplitOption.ALLOW_FORCE:null);
 				}
 				// Now apply the information to the live data
 				data.setAllowHyphenateLastLine(hyphenateLastLine);
@@ -294,7 +322,7 @@ public class PageSequenceBuilder2 {
 					if (transitionContent.get().getType()==TransitionContent.Type.INTERRUPT) {
 						head = new ArrayList<>(res.getHead());
 						head.addAll(seqTransitionText);
-					} else if (transitionContent.get().getType()==TransitionContent.Type.RESUME) {
+					} else if (transitionContent.get().getType()==TransitionContent.Type.RESUME && wasSplitInSequence) {
 						head = new ArrayList<>(seqTransitionText);
 						head.addAll(res.getHead());
 					} else {
@@ -303,12 +331,29 @@ public class PageSequenceBuilder2 {
 				} else {
 					head = res.getHead();
 				}
+				//TODO: combine this if statement with the one above
+				if (!anyTransitionText.isEmpty()) {
+					if (transitionContent.get().getType()==TransitionContent.Type.INTERRUPT) {
+						head.addAll(anyTransitionText);
+					 } else if (transitionContent.get().getType()==TransitionContent.Type.RESUME  && !isFirst) {
+						 // Adding to the top of the list isn't very efficient.
+						 // When combined with the if statement above, this isn't necessary.
+						 head.addAll(0, anyTransitionText); 
+					 }
+				}
+				//TODO: Get last row
+				if (!head.isEmpty()) {
+					int s = head.size();
+					RowGroup gr = head.get(s-1);
+					pcbl = cbl;
+					cbl = gr.getLineProperties().getBlockLineLocation();
+				}
 				addRows(head, current);
 				current.setAvoidVolumeBreakAfter(getVolumeKeepPriority(res.getDiscarded(), getVolumeKeepPriority(res.getHead(), VolumeKeepPriority.empty())));
 				if (context.getTransitionBuilder().getProperties().getApplicationRange()!=ApplicationRange.NONE) {
 					// no need to do this, unless there is an active transition builder
 					boolean hasBlockBoundary = blockBoundary.isPresent()?blockBoundary.get():res.getHead().stream().filter(r->r.isLastRowGroupInBlock()).findFirst().isPresent();
-					bc.getRefs().keepTransitionProperties(current.getDetails().getPageId(), new TransitionProperties(current.getAvoidVolumeBreakAfter(), hasBlockBoundary));
+					bc.getRefs().keepTransitionProperties(current.getDetails().getPageLocation(), new TransitionProperties(current.getAvoidVolumeBreakAfter(), hasBlockBoundary));
 				}
 				for (RowGroup rg : res.getDiscarded()) {
 					addProperties(current, rg);
@@ -329,6 +374,7 @@ public class PageSequenceBuilder2 {
 				}
 			}
 		}
+
 		return current;
 	}
 	
@@ -380,26 +426,11 @@ public class PageSequenceBuilder2 {
 			int j = rows.size();
 			for (RowImpl r : rows) {
 				j--;
-				if (r.shouldAdjustForMargin() || (i == 0 && j == 0)) {
+				if ((i == 0 && j == 0)) {
 					// clone the row as not to append the margins twice
 					RowImpl.Builder b = new RowImpl.Builder(r);
-					if (r.shouldAdjustForMargin()) {
-						MarkerRef rf = r::hasMarkerWithName;
-						MarginProperties margin = r.getLeftMargin();
-						for (MarginRegion mr : p.getPageTemplate().getLeftMarginRegion()) {
-							margin = getMarginRegionValue(mr, rf, false).append(margin);
-						}
-						b.leftMargin(margin);
-						margin = r.getRightMargin();
-						for (MarginRegion mr : p.getPageTemplate().getRightMarginRegion()) {
-							margin = margin.append(getMarginRegionValue(mr, rf, true));
-						}
-						b.rightMargin(margin);
-					}
-					if (i == 0 && j == 0) {
-						// this is the last row; set row spacing to 1 because this is how sph treated it
-						b.rowSpacing(null);
-					}
+					// this is the last row; set row spacing to 1 because this is how sph treated it
+					b.rowSpacing(null);
 					p.newRow(b.build());
 				} else {
 					p.newRow(r);
@@ -430,50 +461,6 @@ public class PageSequenceBuilder2 {
 	
 	private boolean hasPageAreaCollection() {
 		return master.getPageArea()!=null && collection!=null;
-	}
-	
-	@FunctionalInterface
-	interface MarkerRef {
-		boolean hasMarkerWithName(String name);
-	}
-	
-	private MarginProperties getMarginRegionValue(MarginRegion mr, MarkerRef r, boolean rightSide) throws PaginatorException {
-		String ret = "";
-		int w = mr.getWidth();
-		if (mr instanceof MarkerIndicatorRegion) {
-			ret = firstMarkerForRow(r, (MarkerIndicatorRegion)mr);
-			if (ret.length()>0) {
-				try {
-					ret = context.getDefaultTranslator().translate(Translatable.text(context.getConfiguration().isMarkingCapitalLetters()?ret:ret.toLowerCase()).build()).getTranslatedRemainder();
-				} catch (TranslationException e) {
-					throw new PaginatorException("Failed to translate: " + ret, e);
-				}
-			}
-			boolean spaceOnly = ret.length()==0;
-			if (ret.length()<w) {
-				StringBuilder sb = new StringBuilder();
-				if (rightSide) {
-					while (sb.length()<w-ret.length()) { sb.append(context.getSpaceCharacter()); }
-					sb.append(ret);
-				} else {
-					sb.append(ret);				
-					while (sb.length()<w) { sb.append(context.getSpaceCharacter()); }
-				}
-				ret = sb.toString();
-			} else if (ret.length()>w) {
-				throw new PaginatorException("Cannot fit " + ret + " into a margin-region of size "+ mr.getWidth());
-			}
-			return new MarginProperties(ret, spaceOnly);
-		} else {
-			throw new PaginatorException("Unsupported margin-region type: " + mr.getClass().getName());
-		}
-	}
-	
-	private String firstMarkerForRow(MarkerRef r, MarkerIndicatorRegion mrr) {
-		return mrr.getIndicators().stream()
-				.filter(mi -> r.hasMarkerWithName(mi.getName()))
-				.map(mi -> mi.getIndicator())
-				.findFirst().orElse("");
 	}
 	
 	private void addProperties(PageImpl p, RowGroup rg) {
@@ -511,27 +498,33 @@ public class PageSequenceBuilder2 {
 	
 	static class CollectionData implements Supplements<RowGroup> {
 		private final BlockContext c;
-		private final PageAreaContent staticAreaContent;
+		private final double overhead;
 		private final LayoutMaster master;
 		private final ContentCollectionImpl collection;
+		private double extraOverhead = 0;
 		
 		private CollectionData(PageAreaContent staticAreaContent, BlockContext c, LayoutMaster master, ContentCollectionImpl collection) {
 			this.c = c;
-			this.staticAreaContent = staticAreaContent;
 			this.master = master;
 			this.collection = collection;
+			
+			this.overhead = PageImpl.rowsNeeded(staticAreaContent.getBefore(), master.getRowSpacing())
+					+ PageImpl.rowsNeeded(staticAreaContent.getAfter(), master.getRowSpacing());
+		}
+		
+		private void setExtraOverhead(double extra) {
+			this.extraOverhead = extra;
 		}
 		
 		@Override
 		public double getOverhead() {
-			return PageImpl.rowsNeeded(staticAreaContent.getBefore(), master.getRowSpacing()) 
-					+ PageImpl.rowsNeeded(staticAreaContent.getAfter(), master.getRowSpacing());
+			return overhead + extraOverhead;
 		}
 
 		@Override
 		public RowGroup get(String id) {
 			if (collection!=null) {
-				RowGroup.Builder b = new RowGroup.Builder(master.getRowSpacing());
+				RowGroup.Builder b = new RowGroup.Builder(master.getRowSpacing()).mergeable(false);
 				for (Block g : collection.getBlocks(id)) {
 					AbstractBlockContentManager bcm = g.getBlockContentManager(c);
 					b.addAll(bcm.getCollapsiblePreContentRows());
@@ -575,10 +568,15 @@ public class PageSequenceBuilder2 {
 	}
 	
 	public int getSizeLast() {
-		if (master.duplex() && (size() % 2)==1) {
-			return size() + 1;
+		return getSizeLast(fromIndex);
+	}
+	
+	public int getSizeLast(int fromIndex) {
+		int size = getToIndex()-fromIndex;
+		if (master.duplex() && (size % 2)==1) {
+			return size + 1;
 		} else {
-			return size();
+			return size;
 		}
 	}
 	

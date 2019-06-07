@@ -1,9 +1,10 @@
 package org.daisy.dotify.formatter.impl.segment;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import org.daisy.dotify.api.formatter.DynamicContent;
 import org.daisy.dotify.api.formatter.TextProperties;
-import org.daisy.dotify.api.translator.DefaultTextAttribute;
-import org.daisy.dotify.api.translator.TextAttribute;
 
 
 /**
@@ -15,52 +16,111 @@ import org.daisy.dotify.api.translator.TextAttribute;
 public class Evaluate implements Segment {
 	private final DynamicContent expression;
 	private final TextProperties props;
-	private final String[] textStyle;
-	
-	public Evaluate(DynamicContent expression, TextProperties props) {
-		this(expression, props, null);
-	}
+	private final boolean markCapitalLetters;
+	private Supplier<String> v = ()->"";
+	private String resolved;
 	
 	/**
 	 * @param expression the expression
 	 * @param props the text properties
-	 * @param textStyle Array of styles to apply (from outer to inner).
-	 * 
+	 * @param markCapitalLetters true if capital letters should be marked
 	 */
-	public Evaluate(DynamicContent expression, TextProperties props, String[] textStyle) {
+	public Evaluate(DynamicContent expression, TextProperties props, boolean markCapitalLetters) {
+		this(expression, props, markCapitalLetters, null);
+	}
+
+	public Evaluate(DynamicContent expression, TextProperties props, boolean markCapitalLetters, MarkerValue marker) {
 		this.expression = expression;
 		this.props = props;
-		this.textStyle = textStyle;
+		this.markCapitalLetters = markCapitalLetters;
 	}
 	
 	public DynamicContent getExpression() {
 		return expression;
 	}
 
-	public TextProperties getTextProperties() {
-		return props;
-	}
-
-	/**
-	 * Creates a new text attribute with the specified width.
-	 * @param width The width of the evaluated expression.
-	 * @return returns the new text attribute
-	 */
-	public TextAttribute getTextAttribute(int width) {
-		if (textStyle == null || textStyle.length == 0) {
-			return null;
-		} else {
-			TextAttribute a = new DefaultTextAttribute.Builder(textStyle[0]).build(width);
-			for (int i = 1; i < textStyle.length; i++) {
-				a = new DefaultTextAttribute.Builder(textStyle[i]).add(a).build(width);
-			}
-			return a;
-		}
-	}
-
 	@Override
 	public SegmentType getSegmentType() {
 		return SegmentType.Evaluate;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((expression == null) ? 0 : expression.hashCode());
+		result = prime * result + ((props == null) ? 0 : props.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Evaluate other = (Evaluate) obj;
+		if (expression == null) {
+			if (other.expression != null) {
+				return false;
+			}
+		} else if (!expression.equals(other.expression)) {
+			return false;
+		}
+		if (props == null) {
+			if (other.props != null) {
+				return false;
+			}
+		} else if (!props.equals(other.props)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String peek() {
+		return resolved==null?v.get():resolved;
+	}
+
+	@Override
+	public String resolve() {
+		if (resolved==null) {
+			resolved = v.get();
+			if (resolved == null) {
+				resolved = "";
+			}
+		}
+		return resolved;
+	}
+
+	public void setResolver(Supplier<String> v) {
+		this.resolved = null;
+		this.v = v;
+	}
+
+	@Override
+	public boolean isStatic() {
+		return false;
+	}
+	
+	@Override
+	public Optional<String> getLocale() {
+		return Optional.of(props.getLocale());
+	}
+
+	@Override
+	public boolean shouldHyphenate() {
+		return props.isHyphenating();
+	}
+
+	@Override
+	public boolean shouldMarkCapitalLetters() {
+		return markCapitalLetters;
 	}
 
 }

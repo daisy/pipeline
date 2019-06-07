@@ -16,4 +16,20 @@ public class IdentifierSegment implements Segment {
 	public String getName() {
 		return name;
 	}
+
+	@Override
+	public String peek() {
+		return "";
+	}
+
+	@Override
+	public String resolve() {
+		return "";
+	}
+	
+	@Override
+	public boolean isStatic() {
+		return true;
+	}
+
 }

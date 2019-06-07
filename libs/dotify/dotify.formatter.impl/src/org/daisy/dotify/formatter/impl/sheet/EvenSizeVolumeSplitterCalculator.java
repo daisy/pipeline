@@ -41,9 +41,12 @@ class EvenSizeVolumeSplitterCalculator {
 			}}, volumeOffset);
 	}
 	/**
-	 * @param sheets
-	 * @param splitterMax
-	 * @param volumeOffset
+	 * Creates a new instance.
+	 * @param sheets the total number of sheets
+	 * @param splitterMax the slitter limit
+	 * @param volumeOffset when &gt; 0, the specified number of additional volumes is used
+	 * 		when creating sheet targets for each volume. A value &gt; 0 is
+	 * 		not strictly needed to accommodate the number of sheets.
 	 */
 	public EvenSizeVolumeSplitterCalculator(int sheets, SplitterLimit splitterMax, int volumeOffset) {
 		this.sheets = sheets;
@@ -64,7 +67,9 @@ class EvenSizeVolumeSplitterCalculator {
 	 * 
 	 * @param sheets then number of sheets
 	 * @param splitterMax the splitter limits
-	 * @param volumeOffset a number of additional volumes (not strictly needed to accommodate the number of sheets)
+	 * @param volumeOffset when &gt; 0, the specified number of additional volumes is used
+	 * 		when creating sheet targets for each volume. A value &gt; 0 is
+	 * 		not strictly needed to accommodate the number of sheets.
 	 * @return returns the volume capacity
 	 */
 	private static SplitterSpecification getSplitterSpecification(int sheets, SplitterLimit splitterMax, int volumeOffset) {
@@ -141,6 +146,8 @@ class EvenSizeVolumeSplitterCalculator {
 	
 	/**
 	 * Makes a volume for sheet map
+     * The result maps every sheet to a volume, one-based
+     * 
 	 * @param sheets the number of sheets
 	 * @param breakpoints the breakpoints
 	 * @return returns a volume for sheet map

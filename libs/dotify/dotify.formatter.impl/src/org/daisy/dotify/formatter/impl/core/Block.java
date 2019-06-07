@@ -9,7 +9,6 @@ import org.daisy.dotify.formatter.impl.search.BlockAddress;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.segment.Segment;
 import org.daisy.dotify.formatter.impl.segment.Segment.SegmentType;
-import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
 /**
  * <p>Provides a block of rows and the properties associated with it.</p>
@@ -92,11 +91,20 @@ public abstract class Block {
 	
 	protected abstract AbstractBlockContentManager newBlockContentManager(BlockContext context);
 	
+	/**
+	 * Opens a text style, such as emphasis or strong. Note that the style is
+	 * expected to be closed eventually with {@link #endStyle()}.
+	 * @param style the name of the style
+	 */
+	abstract void startStyle(String style);
+	
+	/**
+	 * Ends an open text style. Calling this method without a preceding call to
+	 * {@link #startStyle(String)} may throw an exception.
+	 */
+	abstract void endStyle();
+	
 	void addSegment(Segment s) {
-		markIfVolatile(s);
-	}
-
-	void addSegment(TextSegment s) {
 		markIfVolatile(s);
 	}
 	
@@ -144,14 +152,6 @@ public abstract class Block {
 		return keepWithNextSheets;
 	}
 	
-	Integer getVolumeKeepInsidePriority() {
-		return avoidVolumeBreakInsidePriority;
-	}
-	
-	Integer getVolumeKeepAfterPriority() {
-		return avoidVolumeBreakAfterPriority;
-	}
-	
 	public String getIdentifier() {
 		return id;
 	}
@@ -178,14 +178,6 @@ public abstract class Block {
 	
 	void setKeepWithNextSheets(int keepWithNextSheets) {
 		this.keepWithNextSheets = keepWithNextSheets;
-	}
-	
-	void setVolumeKeepInsidePriority(Integer priority) {
-		this.avoidVolumeBreakInsidePriority = priority;
-	}
-	
-	void setVolumeKeepAfterPriority(Integer priority) {
-		this.avoidVolumeBreakAfterPriority = priority;
 	}
 	
 	void setIdentifier(String id) {
@@ -252,6 +244,10 @@ public abstract class Block {
 	
 	public Integer getAvoidVolumeBreakInsidePriority() {
 		return avoidVolumeBreakInsidePriority;
+	}
+	
+	void setAvoidVolumeBreakInsidePriority(Integer value) {
+		this.avoidVolumeBreakInsidePriority = value;
 	}
 
 }

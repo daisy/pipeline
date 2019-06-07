@@ -13,17 +13,19 @@ import org.daisy.dotify.common.splitter.SplitResult;
 import org.daisy.dotify.common.splitter.Supplements;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
 import org.daisy.dotify.formatter.impl.core.TransitionContent;
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.page.BlockSequence;
 import org.daisy.dotify.formatter.impl.page.PageImpl;
 import org.daisy.dotify.formatter.impl.page.PageSequenceBuilder2;
 import org.daisy.dotify.formatter.impl.page.RestartPaginationException;
+import org.daisy.dotify.formatter.impl.search.BlockAddress;
+import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.DocumentSpace;
 import org.daisy.dotify.formatter.impl.search.PageDetails;
-import org.daisy.dotify.formatter.impl.search.PageId;
+import org.daisy.dotify.formatter.impl.search.SequenceId;
 import org.daisy.dotify.formatter.impl.search.SheetIdentity;
 import org.daisy.dotify.formatter.impl.search.TransitionProperties;
+import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 /**
  * Provides a data source for sheets. Given a list of 
@@ -42,7 +44,9 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 	private final int sheetOffset;
 	//Local state
 	private int seqsIndex;
+	private SequenceId seqId;
 	private PageSequenceBuilder2 psb;
+	private int psbCurStartIndex; // index of first page of current psb in current volume
 	private SectionProperties sectionProperties;
 	private int sheetIndex;
 	private int pageIndex;
@@ -51,6 +55,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 	private boolean volBreakAllowed;
 	private boolean updateCounter;
 	private boolean allowsSplit;
+	private boolean isFirst;
 	private boolean wasSplitInsideSequence;
 	private boolean volumeEnded;
 	//Output buffer
@@ -66,7 +71,9 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		this.volBreakAllowed = true;
 		this.sheetOffset = 0;
 		this.seqsIndex = 0;
+		this.seqId = null;
 		this.psb = null;
+		this.psbCurStartIndex = 0;
 		this.sectionProperties = null;
 		this.sheetIndex = 0;
 		this.pageIndex = 0;
@@ -74,6 +81,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		this.initialPageOffset = 0;
 		this.updateCounter = false;
 		this.allowsSplit = true;
+		this.isFirst = true;
 		this.wasSplitInsideSequence = false;
 		this.volumeEnded = false;
 	}
@@ -98,7 +106,9 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		this.volumeGroup = template.volumeGroup;
 		this.seqsIterator = template.seqsIterator;
 		this.seqsIndex = template.seqsIndex;
+		this.seqId = template.seqId;
 		this.psb = tail?template.psb:PageSequenceBuilder2.copyUnlessNull(template.psb);
+		this.psbCurStartIndex = template.psbCurStartIndex;
 		this.sectionProperties = template.sectionProperties;
 		this.sheetOffset = template.sheetOffset+offset;
 		this.sheetIndex = template.sheetIndex;
@@ -111,8 +121,9 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		this.volBreakAllowed = template.volBreakAllowed;
 		this.counter = template.counter;
 		this.initialPageOffset = template.initialPageOffset;
-		this.updateCounter = tail?true:template.updateCounter;
+		this.updateCounter = tail || template.updateCounter;
 		this.allowsSplit = true;
+		this.isFirst = template.isFirst;
 		this.wasSplitInsideSequence = template.wasSplitInsideSequence;
 		this.volumeEnded = false;
 	}
@@ -172,6 +183,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 				} else {
 					initialPageOffset = pageCounter.getDefaultPageOffset() - psb.size();
 				}
+				psbCurStartIndex = psb.getToIndex();
 				updateCounter = false;
 			}
 			if (psb==null || !psb.hasNext()) {
@@ -196,7 +208,10 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 				} else {
 					 initialPageOffset = pageCounter.getDefaultPageOffset();
 				}
-				psb = new PageSequenceBuilder2(pageCounter.getPageCount(), bs.getLayoutMaster(), initialPageOffset, bs, context, rcontext, seqsIndex);
+				seqId = new SequenceId(seqsIndex, new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), volumeGroup);
+				BlockLineLocation cbl = psb!=null?psb.currentBlockLineLocation():new BlockLineLocation(new BlockAddress(-1, -1), -1);
+				psbCurStartIndex = pageCounter.getPageCount();
+				psb = new PageSequenceBuilder2(psbCurStartIndex, bs.getLayoutMaster(), initialPageOffset, bs, context, rcontext, seqId, cbl);
 				sectionProperties = bs.getLayoutMaster().newSectionProperties();
 				s = null;
 				si = null;
@@ -230,23 +245,30 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 							transition = context.getTransitionBuilder().getInterruptTransition();
 						} else if (context.getTransitionBuilder().getProperties().getApplicationRange()==ApplicationRange.SHEET) {
 							// This id is the same id as the one created below in the call to nextPage
-							PageId thisPageId = psb.nextPageId(0);
+							BlockLineLocation thisPageId = psb.currentBlockLineLocation();
 							// This gets the page details for the next page in this sequence (if any)
-							Optional<PageDetails> next = rcontext.getRefs().findNextPageInSequence(thisPageId);
+							Optional<PageDetails> next = rcontext.getRefs().getNextPageDetailsInSequence(thisPageId);
 							// If there is a page details in this sequence and volume break is preferred on this page
 							if (next.isPresent()) {
-								TransitionProperties st = rcontext.getRefs().getTransitionProperties(thisPageId);
-								double v1 = st.getVolumeKeepPriority().orElse(10) + (st.hasBlockBoundary()?0.5:0);
-								st = rcontext.getRefs().getTransitionProperties(next.get().getPageId());
-								double v2 = st.getVolumeKeepPriority().orElse(10) + (st.hasBlockBoundary()?0.5:0);
-								if (v1>v2) {
+								Optional<TransitionProperties> st1 = rcontext.getRefs().getTransitionProperties(thisPageId);
+								TransitionProperties p = st1.orElse(TransitionProperties.empty());
+								double v1 = p.getVolumeKeepPriority().orElse(10) + (p.hasBlockBoundary()?0.5:0);
+								Optional<TransitionProperties> st2 = rcontext.getRefs().getTransitionProperties(next.get().getPageLocation());
+								p = st2.orElse(TransitionProperties.empty());
+								double v2 = p.getVolumeKeepPriority().orElse(10) + (p.hasBlockBoundary()?0.5:0);
+								if (v1>v2 || !st1.isPresent()) {
+									// this page is preferable to break on
+									// or, if st1 isn't present the lookup has been marked as dirty. This will cause
+									// a value to be recorded for this position (st1 will be present for the next iteration)
+									// and there will be at least one more iteration to get it right.
+									
 									//break here
 									transition = context.getTransitionBuilder().getInterruptTransition();
 								}
 							}
 						}
 						volumeEnded = transition!=null;
-					} else if (wasSplitInsideSequence && sheetBuffer.size()==0  && (!sectionProperties.duplex() || pageIndex % 2 == 0)) {
+					} else if (sheetBuffer.size()==0  && (!sectionProperties.duplex() || pageIndex % 2 == 0)) {
 						transition = context.getTransitionBuilder().getResumeTransition();
 					}
 				}
@@ -255,7 +277,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 								&& sheetBuffer.size()==index-1 
 								&& (!sectionProperties.duplex() || pageIndex % 2 == 1));
 				
-				PageImpl p = psb.nextPage(initialPageOffset, hyphenateLastLine, Optional.ofNullable(transition));
+				PageImpl p = psb.nextPage(initialPageOffset, hyphenateLastLine, Optional.ofNullable(transition), wasSplitInsideSequence, isFirst);
 				pageCounter.increasePageCount();
 				VolumeKeepPriority vpx = p.getAvoidVolumeBreakAfter();
 				if (context.getTransitionBuilder().getProperties().getApplicationRange()==ApplicationRange.SHEET) {
@@ -283,7 +305,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 
 				setPreviousSheet(si.getSheetIndex()-1, Math.min(p.keepPreviousSheets(), sheetIndex-1), rcontext);
 				volBreakAllowed &= p.allowsVolumeBreak();
-				if (!sectionProperties.duplex() || pageIndex % 2 == 1) {
+				if (!sectionProperties.duplex() || pageIndex % 2 == 1 || volumeEnded) {
 					rcontext.getRefs().keepBreakable(si, volBreakAllowed);
 				}
 				s.add(p);
@@ -291,12 +313,13 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 			}
 			if (!psb.hasNext()||volumeEnded) {
 				if (!psb.hasNext()) {
-					rcontext.getRefs().setSequenceScope(new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()), seqsIndex, psb.getGlobalStartIndex(), psb.getToIndex());
+					rcontext.getRefs().setSequenceScope(seqId, psb.getGlobalStartIndex(), psb.getToIndex());
 				}
+				int lastPageNumber = initialPageOffset + psbCurStartIndex - psb.getGlobalStartIndex() + psb.getSizeLast(psbCurStartIndex);
 				if (counter!=null) {
-					rcontext.getRefs().setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
+					rcontext.getRefs().setPageNumberOffset(counter, lastPageNumber);
 				} else {
-					pageCounter.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
+					pageCounter.setDefaultPageOffset(lastPageNumber);
 				}
 			}
 		}
@@ -327,12 +350,14 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		if (!ensureBuffer(atIndex)) {
 			throw new IndexOutOfBoundsException("" + atIndex);
 		}
+		int lastPageNumber = initialPageOffset + psbCurStartIndex - psb.getGlobalStartIndex() + psb.getSizeLast(psbCurStartIndex);
 		if (counter!=null) {
-			rcontext.getRefs().setPageNumberOffset(counter, initialPageOffset + psb.getSizeLast());
+			rcontext.getRefs().setPageNumberOffset(counter, lastPageNumber);
 		} else {
-			pageCounter.setDefaultPageOffset(initialPageOffset + psb.getSizeLast());
+			pageCounter.setDefaultPageOffset(lastPageNumber);
 		}
 		wasSplitInsideSequence = psb.hasNext();
+		isFirst = false;
 		if (atIndex==0) {
 			return new DefaultSplitResult<Sheet, SheetDataSource>(Collections.emptyList(), new SheetDataSource(this, atIndex, true));
 		} else {

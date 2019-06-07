@@ -2,7 +2,6 @@ package org.daisy.dotify.formatter.impl.obfl;
 
 import static org.junit.Assert.assertEquals;
 
-import org.daisy.dotify.formatter.impl.obfl.XMLParserBase;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")

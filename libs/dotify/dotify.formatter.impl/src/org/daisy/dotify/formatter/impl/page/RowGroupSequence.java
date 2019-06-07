@@ -8,13 +8,17 @@ import org.daisy.dotify.formatter.impl.core.Block;
 
 class RowGroupSequence {
 	private final List<Block> blocks;
-	private final List<RowGroup> group;
-	private final VerticalSpacing vSpacing;
 	private final BreakBefore breakBefore;
+	private VerticalSpacing vSpacing;
+	private List<RowGroup> group;
 
 	public RowGroupSequence(BreakBefore breakBefore, VerticalSpacing vSpacing) {
-		this.blocks = new ArrayList<>();
-		this.group = new ArrayList<RowGroup>();
+		this(breakBefore, vSpacing, new ArrayList<>(), new ArrayList<>());
+	}
+	
+	public RowGroupSequence(BreakBefore breakBefore, VerticalSpacing vSpacing, List<Block> blocks, List<RowGroup> group) {
+		this.blocks = blocks;
+		this.group = group;
 		this.vSpacing = vSpacing;
 		this.breakBefore = breakBefore;
 	}
@@ -24,35 +28,53 @@ class RowGroupSequence {
 	 * @param template the instance to copy
 	 */
 	RowGroupSequence(RowGroupSequence template) {
-		this.blocks = new ArrayList<>(template.blocks);
-		this.group = new ArrayList<>();
-		for (RowGroup rg : template.group) {
-			group.add(new RowGroup(rg));
+		this(template, template.vSpacing, 0, true);
+	}
+
+	RowGroupSequence(RowGroupSequence template, int offset) {
+		this(template, template.vSpacing, offset, false);
+	}
+	
+	private RowGroupSequence(RowGroupSequence template, VerticalSpacing vs, int offset, boolean deepMode) {
+		this.blocks = deepMode?new ArrayList<>(template.blocks):template.blocks;
+		if (deepMode) {
+			this.group = new ArrayList<>();
+			for (RowGroup rg : template.group) {
+				group.add(new RowGroup(rg));
+			}
+		} else {
+			if (template.group==null) {
+				this.group = null;
+			} else if (template.group.size()>offset) {
+				this.group = new ArrayList<>(
+						offset>0?template.group.subList(offset, template.group.size()):template.group);
+			} else {
+				this.group = new ArrayList<>();
+			}
 		}
-		this.vSpacing = template.vSpacing;
+		this.vSpacing = vs;
 		this.breakBefore = template.breakBefore;
 	}
 
-	@Deprecated
-	public List<RowGroup> getGroup() {
+	List<RowGroup> getGroup() {
 		return group;
+	}
+	
+	void setGroup(List<RowGroup> value) {
+		this.group = value;
 	}
 	
 	List<Block> getBlocks() {
 		return blocks;
 	}
-
-	RowGroup currentGroup() {
-		if (group.isEmpty()) {
-			return null;
-		} else {
-			return group.get(group.size()-1);
-		}
+	
+	VerticalSpacing getVerticalSpacing() {
+		return vSpacing;
 	}
 	
-    VerticalSpacing getVerticalSpacing() {
-        return vSpacing;
-    }
+	void setVerticalSpacing(VerticalSpacing vs) {
+		this.vSpacing = vs;
+	}
 
 	BreakBefore getBreakBefore() {
 		return breakBefore;

@@ -59,12 +59,12 @@ class SearchInfo {
 	}
 	
 	View<PageDetails> getContentsInSequence(SequenceId seqId) {
-		return getViewForSpace(seqId.getSpace()).sequenceViews.get(seqId.getOrdinal());
+		return getViewForSpace(seqId.getSpace()).sequenceViews.get(seqId);
 	}
 	
-	void setSequenceScope(DocumentSpace space, int sequenceNumber, int fromIndex, int toIndex) {
-		View<PageDetails> pw = new View<PageDetails>(getViewForSpace(space).pageDetails, fromIndex, toIndex);
-		getViewForSpace(space).sequenceViews.put(sequenceNumber, pw);
+	void setSequenceScope(SequenceId sequenceId, int fromIndex, int toIndex) {
+		View<PageDetails> pw = new View<PageDetails>(getViewForSpace(sequenceId.getSpace()).pageDetails, fromIndex, toIndex);
+		getViewForSpace(sequenceId.getSpace()).sequenceViews.put(sequenceId, pw);
 	}
 	
 	void setVolumeScope(int volumeNumber, int fromIndex, int toIndex) {
@@ -155,62 +155,57 @@ class SearchInfo {
 		}
 	}
 	
-	String findMarker(PageDetails page, MarkerReferenceField markerRef) {
-		if (page==null) {
-			return "";
-		}
-		if (markerRef.getSearchScope()==MarkerSearchScope.VOLUME || markerRef.getSearchScope()==MarkerSearchScope.DOCUMENT) {
-			throw new RuntimeException("Marker reference scope not implemented: " + markerRef.getSearchScope());
-		}
-		int dir = 1;
-		int index = 0;
-		int count = 0;
-		List<Marker> m;
-		boolean skipLeading = false;
-		if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.PAGE_CONTENT) {
-			skipLeading = true;
-		} else if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.SPREAD_CONTENT) {
-			PageDetails prevPageInVolume = getPageInVolumeWithOffset(page, -1, false);
-			if (prevPageInVolume == null || !page.isWithinSpreadScope(-1, prevPageInVolume)) {
+	String findMarker(final PageDetails page, final MarkerReferenceField markerRef) {
+		PageDetails currentPage = page;
+		while (currentPage!=null) {
+			if (markerRef.getSearchScope()==MarkerSearchScope.VOLUME || markerRef.getSearchScope()==MarkerSearchScope.DOCUMENT) {
+				throw new RuntimeException("Marker reference scope not implemented: " + markerRef.getSearchScope());
+			}
+			int dir = 1;
+			int index = 0;
+			int count = 0;
+			List<Marker> m;
+			boolean skipLeading = false;
+			if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.PAGE_CONTENT) {
 				skipLeading = true;
+			} else if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.SPREAD_CONTENT) {
+				PageDetails prevPageInVolume = getPageInVolumeWithOffset(currentPage, -1, false);
+				if (prevPageInVolume == null || !currentPage.isWithinSpreadScope(-1, prevPageInVolume)) {
+					skipLeading = true;
+				}
+			}
+			if (skipLeading) {
+				m = currentPage.getContentMarkers();
+			} else {
+				m = currentPage.getMarkers();
+			}
+			if (markerRef.getSearchDirection() == MarkerReferenceField.MarkerSearchDirection.BACKWARD) {
+				dir = -1;
+				index = m.size()-1;
+			}
+			while (count < m.size()) {
+				Marker m2 = m.get(index);
+				if (m2.getName().equals(markerRef.getName())) {
+					return m2.getValue();
+				}
+				index += dir; 
+				count++;
+			}
+			if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.SEQUENCE ||
+				markerRef.getSearchScope() == MarkerSearchScope.SHEET && currentPage.isWithinSheetScope(dir) //||
+				//markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinSequenceSpreadScope(dir)
+				) {
+				//Keep while moving: next = page.getPageInScope(page.getSequenceParent(), dir, false);
+				currentPage = currentPage.getPageInScope(getContentsInSequence(currentPage.getSequenceId()), dir, false);
+			} //else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinDocumentSpreadScope(dir)) {
+			  else if ((markerRef.getSearchScope() == MarkerSearchScope.SPREAD ||
+			           markerRef.getSearchScope() == MarkerSearchScope.SPREAD_CONTENT) && isWithinVolumeSpreadScope(currentPage, dir)) {
+				currentPage = getPageInVolumeWithOffset(currentPage, dir, false);
+			} else {
+				currentPage = null;
 			}
 		}
-		if (skipLeading) {
-			m = page.getContentMarkers();
-		} else {
-			m = page.getMarkers();
-		}
-		if (markerRef.getSearchDirection() == MarkerReferenceField.MarkerSearchDirection.BACKWARD) {
-			dir = -1;
-			index = m.size()-1;
-		}
-		while (count < m.size()) {
-			Marker m2 = m.get(index);
-			if (m2.getName().equals(markerRef.getName())) {
-				return m2.getValue();
-			}
-			index += dir; 
-			count++;
-		}
-		PageDetails next = null;
-		if (markerRef.getSearchScope() == MarkerReferenceField.MarkerSearchScope.SEQUENCE ||
-			markerRef.getSearchScope() == MarkerSearchScope.SHEET && page.isWithinSheetScope(dir) //||
-			//markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinSequenceSpreadScope(dir)
-			) {
-			//Keep while moving: next = page.getPageInScope(page.getSequenceParent(), dir, false);
-			next = page.getPageInScope(getContentsInSequence(page.getSequenceId()), dir, false);
-		} //else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinDocumentSpreadScope(dir)) {
-		  else if (markerRef.getSearchScope() == MarkerSearchScope.SPREAD ||
-		           markerRef.getSearchScope() == MarkerSearchScope.SPREAD_CONTENT) {
-			if (isWithinVolumeSpreadScope(page, dir)) {
-				next = getPageInVolumeWithOffset(page, dir, false);
-			}
-		}
-		if (next!=null) {
-			return findMarker(next, markerRef);
-		} else {
-			return "";
-		}
+		return "";
 	}
 	
 	private Optional<PageDetails> getPageDetails(PageId p) {
@@ -236,10 +231,6 @@ class SearchInfo {
 					return findMarker(start, f2);
 				})
 			.orElse("");
-	}
-	
-	Optional<PageDetails> findNextPageInSequence(PageId id) {
-		return getPageDetails(id).flatMap(p->Optional.ofNullable(getPageInSequenceWithOffset(p, 1, false)));
 	}
 	
 	boolean isDirty() {

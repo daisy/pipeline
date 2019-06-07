@@ -16,7 +16,6 @@ import org.daisy.dotify.common.splitter.SplitPointHandler;
 import org.daisy.dotify.common.splitter.SplitPointSpecification;
 import org.daisy.dotify.common.splitter.StandardSplitOption;
 import org.daisy.dotify.formatter.impl.core.PaginatorException;
-import org.daisy.dotify.formatter.impl.datatype.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.page.BlockSequence;
 import org.daisy.dotify.formatter.impl.page.PageImpl;
 import org.daisy.dotify.formatter.impl.page.RestartPaginationException;
@@ -24,6 +23,7 @@ import org.daisy.dotify.formatter.impl.search.AnchorData;
 import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.Space;
+import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 import org.daisy.dotify.formatter.impl.sheet.PageCounter;
 import org.daisy.dotify.formatter.impl.sheet.SectionBuilder;
 import org.daisy.dotify.formatter.impl.sheet.Sheet;
@@ -65,8 +65,9 @@ public class VolumeProvider {
 	 * @param context the formatter context
 	 * @param crh the cross reference handler
 	 */
-	VolumeProvider(List<BlockSequence> blocks, Stack<VolumeTemplate> volumeTemplates, LazyFormatterContext context, CrossReferenceHandler crh) {
+	VolumeProvider(List<BlockSequence> blocks, Stack<VolumeTemplate> volumeTemplates, LazyFormatterContext context) {
 		this.blocks = blocks;
+		this.crh = new CrossReferenceHandler();
 		this.splitterLimit = volumeNumber -> {
             final DefaultContext c = new DefaultContext.Builder(crh)
                     .currentVolume(volumeNumber)
@@ -81,7 +82,6 @@ public class VolumeProvider {
         };
 		this.volumeTemplates = volumeTemplates;
 		this.context = context;
-		this.crh = crh;
 		this.volSplitter = new SplitPointHandler<>();
 	}
 		
@@ -297,10 +297,8 @@ public class VolumeProvider {
 	 * @return returns true if the volumes can be accepted, false otherwise  
 	 */
 	boolean done() {
-		if (groups.hasNext()) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("There is more content (sheets: " + groups.countRemainingSheets() + ", pages: " + groups.countRemainingPages() + ")");
-			}
+		if (groups.hasNext() && logger.isLoggable(Level.FINE)) {
+			logger.fine("There is more content (sheets: " + groups.countRemainingSheets() + ", pages: " + groups.countRemainingPages() + ")");
 		}
 		// this changes the value of groups.getVolumeCount() to the newly computed
 		// required number of volume based on groups.countTotalSheets()
@@ -319,6 +317,10 @@ public class VolumeProvider {
 		}
 		j++;
 		return false;
+	}
+	
+	int getVolumeCount() {
+		return crh.getVolumeCount();
 	}
 
 }

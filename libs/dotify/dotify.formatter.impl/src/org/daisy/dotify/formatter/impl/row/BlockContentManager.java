@@ -61,12 +61,12 @@ public class BlockContentManager extends AbstractBlockContentManager {
 	 * if the specified index cannot be made available (because the input doesn't contain
 	 * the required amount of data).
 	 */
-	private boolean ensureBuffer(int index, boolean wholeWordsOnly) {
+	private boolean ensureBuffer(int index, LineProperties lineProps) {
 		while (index<0 || rows.size()<index) {
 			if (!sp.hasMoreData()) {
 				return false;
 			}
-			sp.getNext(wholeWordsOnly).ifPresent(v->rows.add(v));
+			sp.getNext(lineProps).ifPresent(v->rows.add(v));
 		}
 		return rows.size()>=index;
 	}
@@ -81,7 +81,11 @@ public class BlockContentManager extends AbstractBlockContentManager {
 	
 	@Override
 	public boolean supportsVariableWidth() {
-		return true;
+		return rdp.getMargins().getLeftMargin().isSpaceOnly()
+			&& rdp.getMargins().getRightMargin().isSpaceOnly()
+			&& rdp.getUnderlineStyle()==null
+			&& rdp.getLeadingDecoration()==null
+			&& rdp.getTrailingDecoration()==null;
 	}
 	
     @Override
@@ -98,7 +102,7 @@ public class BlockContentManager extends AbstractBlockContentManager {
 			if (!sp.hasMoreData()) {
 				return false;
 			} else {
-				return new SegmentProcessor(sp).getNext(false).isPresent();
+				return new SegmentProcessor(sp).getNext(LineProperties.DEFAULT).isPresent();
 			}
 		} else if (diff<0) {
 			// The next value should always follow the size of the last produced result.
@@ -110,8 +114,8 @@ public class BlockContentManager extends AbstractBlockContentManager {
 	}
 
 	@Override
-	public Optional<RowImpl> getNext(boolean wholeWordsOnly) {
-		if (ensureBuffer(rowIndex+1, wholeWordsOnly)) {
+	public Optional<RowImpl> getNext(LineProperties lineProps) {
+		if (ensureBuffer(rowIndex+1, lineProps)) {
 			RowImpl ret = rows.get(rowIndex);
 			rowIndex++;
 			return Optional.of(ret);

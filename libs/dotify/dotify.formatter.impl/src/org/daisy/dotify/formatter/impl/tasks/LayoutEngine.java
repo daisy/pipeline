@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
+import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.streamline.api.tasks.InternalTask;
 import org.daisy.streamline.api.tasks.TaskGroup;
@@ -24,6 +25,7 @@ public class LayoutEngine implements TaskGroup {
 	private final PagedMediaWriterFactoryMakerService pmw;
 	private final FormatterEngineFactoryService fe;
 	private final ValidatorFactoryMakerService vf;
+	private final BrailleTranslatorFactoryMakerService translatorFactory;
 
 	/**
 	 * Creates a new layout engine with the specified parameters.
@@ -31,12 +33,14 @@ public class LayoutEngine implements TaskGroup {
 	 * @param pmw a paged media writer factory maker service
 	 * @param fe a formatter engine factory service
 	 * @param vf a validator factory service
+	 * @param translatorFactory a translator factory maker service
 	 */
-	public LayoutEngine(TaskGroupSpecification spec, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe, ValidatorFactoryMakerService vf) {
+	public LayoutEngine(TaskGroupSpecification spec, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe, ValidatorFactoryMakerService vf, BrailleTranslatorFactoryMakerService translatorFactory) {
 		this.spec = spec;
 		this.pmw = pmw;
 		this.fe = fe;
 		this.vf = vf;
+		this.translatorFactory = translatorFactory;
 	}
 
 	@Override
@@ -60,7 +64,7 @@ public class LayoutEngine implements TaskGroup {
 		p2.remove("output");
 		p2.remove("obfl-output-location");
 		p2.remove(Keys.TEMP_FILES_DIRECTORY);
-		ret.add(new LayoutEngineTask(p2, spec, pmw, fe, vf));
+		ret.add(new LayoutEngineTask(p2, spec, pmw, fe, vf, translatorFactory));
 		return ret;
 	}
 

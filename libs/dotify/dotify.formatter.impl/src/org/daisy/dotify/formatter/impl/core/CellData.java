@@ -28,7 +28,7 @@ class CellData {
 
 	/**
 	 * Gets a consumable row iterator
-	 * @return
+	 * @return a row iterator
 	 */
 	Iterator<RowImpl> getRowIterator() {
 		return rowsIterator;

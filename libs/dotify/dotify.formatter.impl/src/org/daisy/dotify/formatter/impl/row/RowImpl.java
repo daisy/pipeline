@@ -71,7 +71,7 @@ public final class RowImpl implements Row {
 			this.leaderSpace = template.leaderSpace;
 		}
 
-		Builder text(String value) {
+		public Builder text(String value) {
 			this.chars = value;
 			return this;
 		}
@@ -95,7 +95,7 @@ public final class RowImpl implements Row {
 			this.rightMargin = value;
 			return this;
 		}
-		Builder alignment(Alignment value) {
+		public Builder alignment(Alignment value) {
 			this.alignment = value;
 			return this;
 		}

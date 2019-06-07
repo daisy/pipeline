@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Marker reference sequence search test</dc:title>
+		<dc:description>Tests marker reference with direction="backward" and scope="sequence" combined with break-before="volume".</dc:description>
+	</meta>
+	<layout-master name="master" duplex="true" page-width="10" page-height="5">
+		<default-template>
+			<header/>
+			<footer><field><marker-reference marker="foo" direction="backward" scope="sequence"/></field>
+			</footer>
+		</default-template>
+	</layout-master>
+	<sequence master="master">
+		<block><marker class="foo" value="1"/></block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+	</sequence>
+	<sequence master="master" break-before="volume">
+		<block><marker class="foo" value="1"/></block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block><marker class="foo" value="2"/></block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+		<block>⠤⠤⠤⠤⠤</block>
+	</sequence>
+</obfl>

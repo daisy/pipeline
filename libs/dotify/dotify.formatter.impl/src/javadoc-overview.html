@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Overview</title>
+</head>
+<body>
+	<p>Provides implementations for the interfaces most closely related to formatting in the Dotify API as well as an implementation of the TaskGroupFactory from the Streamline API. The API supports both SPI and OSGi runtime contexts.</p>
+	
+	<h2>Standalone implementations</h2>
+	<p>There are four packages that are standalone in the sense that these packages provide implementations through SPI or OSGi, without any or with very little direct use of other packages in this bundle (they may of course use them through the service discovery mechanism):</p>
+	<ul>
+		<li>{@link org.daisy.dotify.formatter.impl.engine}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.obfl}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.tasks}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.writer}</li>
+	</ul>
+
+	<h2>FormatterFactory implementation</h2>
+	<p>org.daisy.dotify.formatter.impl is the fifth package in this bundle that provides implementations through SPI or OSGi. The bulk of the code in this bundle is related to this implementation and is distributed over the following packages:</p>
+
+	<ul>
+		<li>{@link org.daisy.dotify.formatter.impl}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.core}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.page}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.row}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.search}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.segment}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.sheet}</li>
+		<li>{@link org.daisy.dotify.formatter.impl.volume}</li>
+	</ul>
+
+	<h2>org.daisy.dotify.formatter.impl.common</h2>
+	<p>This package contains some classes that are required by several other packages. Most of them are related to the FormatterFactory implementation. FactoryManager is also used by other implementations.</p>
+
+</body>
+</html>

@@ -16,7 +16,7 @@ import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
  * Specifies the layout of a paged media.
  * @author Joel Håkansson
  */
-public class LayoutMaster implements LayoutMasterBuilder, SectionProperties {
+public class LayoutMaster implements LayoutMasterBuilder, SectionProperties, BorderManagerProperties {
 	private final LayoutMasterProperties props; 
 	private final ArrayList<PageTemplate> templates;
 	private final PageTemplate defaultPageTemplate;
@@ -92,11 +92,7 @@ public class LayoutMaster implements LayoutMasterBuilder, SectionProperties {
 		return pageArea;
 	}
 
-	/**
-	 * Gets the page width.
-	 * An implementation must ensure that getPageWidth()=getFlowWidth()+getInnerMargin()+getOuterMargin()
-	 * @return returns the page width
-	 */
+	@Override
 	public int getPageWidth() {
 		return props.getPageWidth();
 	}
@@ -110,10 +106,7 @@ public class LayoutMaster implements LayoutMasterBuilder, SectionProperties {
 		return props.getPageHeight();
 	}
 
-	/**
-	 * Gets row spacing, in row heights. For example, use 2.0 for double row spacing and 1.0 for normal row spacing.
-	 * @return returns row spacing
-	 */
+	@Override
 	public float getRowSpacing() {
 		return props.getRowSpacing();
 	}
@@ -126,18 +119,12 @@ public class LayoutMaster implements LayoutMasterBuilder, SectionProperties {
 		return props.duplex();
 	}
 
-	/**
-	 * Gets the flow width
-	 * @return returns the flow width
-	 */
+	@Override
 	public int getFlowWidth() {
 		return props.getFlowWidth();
 	}
 
-	/**
-	 * Gets the border.
-	 * @return the border
-	 */
+	@Override
 	public TextBorderStyle getBorder() {
 		return props.getBorder();
 	}
@@ -165,23 +152,28 @@ public class LayoutMaster implements LayoutMasterBuilder, SectionProperties {
 	}
 	
 	/**
-	 * Divide a row-spacing value into several rows with a row-spacing < 2.
+	 * Divide a row-spacing value into several rows with a row-spacing &lt; 2.
 	 * <p>E.g. A row spacing of 2.5 will return:</p>
 	 * <dl>
 	 * 	<dt>RowSpacing.spacing</dt><dd>1.25</dd> 
 	 *  <dt>RowSpacing.lines</dt><dd>2</dd>
 	 * </dl>
-	 * @param rs
-	 * @return
+	 * @param drs the default row spacing
+	 * @param nullIfEqualToDefault if true, use null for the spacing in the returned object
+	 * @return a {@link DistributedRowSpacing} instance
 	 */
-	DistributedRowSpacing distributeRowSpacing(Float rs, boolean nullIfEqualToDefault) {
+	static DistributedRowSpacing distributeRowSpacing(float drs, boolean nullIfEqualToDefault) {
+		return distributeRowSpacing(drs, drs, nullIfEqualToDefault);
+	}
+	
+	static DistributedRowSpacing distributeRowSpacing(float drs, Float rs, boolean nullIfEqualToDefault) {
 		if (rs == null) {
 			//use default
-			rs = getRowSpacing();
+			rs = drs;
 		}
 		int ins = Math.max((int)Math.floor(rs), 1);
 		Float spacing = rs / ins;
-		if (nullIfEqualToDefault && spacing.equals(getRowSpacing())) {
+		if (nullIfEqualToDefault && spacing.equals(drs)) {
 			return new DistributedRowSpacing(null, ins);
 		} else {
 			return new DistributedRowSpacing(spacing, ins);
@@ -192,6 +184,6 @@ public class LayoutMaster implements LayoutMasterBuilder, SectionProperties {
 		return getPageHeight() - 
 				(int)Math.ceil(template.getHeaderHeight()) + template.validateAndAnalyzeHeader() -
 				(int)Math.ceil(template.getFooterHeight()) + template.validateAndAnalyzeFooter() -
-				(getBorder() != null ? (int)Math.ceil(distributeRowSpacing(null, false).spacing*2) : 0);
+				(getBorder() != null ? (int)Math.ceil(distributeRowSpacing(getRowSpacing(), null, false).spacing*2) : 0);
 	}
 }
