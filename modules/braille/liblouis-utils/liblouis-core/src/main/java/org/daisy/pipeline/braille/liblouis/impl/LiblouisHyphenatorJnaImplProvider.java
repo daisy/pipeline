@@ -1,6 +1,7 @@
 package org.daisy.pipeline.braille.liblouis.impl;
 
 import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import static com.google.common.collect.Iterables.toArray;
@@ -190,6 +191,11 @@ public class LiblouisHyphenatorJnaImplProvider implements LiblouisHyphenator.Pro
 			catch (TranslationException e) {
 				throw new RuntimeException(e); }
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(LiblouisHyphenatorJnaImplProvider.class.getName()).toString();
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(LiblouisHyphenatorJnaImplProvider.class);

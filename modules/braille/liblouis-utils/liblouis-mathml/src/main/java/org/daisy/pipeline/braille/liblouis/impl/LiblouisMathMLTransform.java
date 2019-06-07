@@ -110,5 +110,9 @@ public interface LiblouisMathMLTransform {
 				return null;
 		}
 		
+		@Override
+		public ToStringHelper toStringHelper() {
+			return MoreObjects.toStringHelper(LiblouisMathMLTransform.Provider.class.getName());
+		}
 	}
 }

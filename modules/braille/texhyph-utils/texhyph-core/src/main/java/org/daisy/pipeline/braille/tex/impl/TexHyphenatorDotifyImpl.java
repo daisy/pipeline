@@ -9,6 +9,9 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.Properties;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import net.davidashen.text.Utf8TexParser.TexParserException;
 
 import static org.daisy.common.file.URIs.asURI;
@@ -234,6 +237,11 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 					throw new RuntimeException("Error during TeX hyphenation", e); }
 			return hyphenated;
 		}
+	}
+	
+	@Override
+	public ToStringHelper toStringHelper() {
+		return MoreObjects.toStringHelper(TexHyphenatorDotifyImpl.class.getName());
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(TexHyphenatorDotifyImpl.class);

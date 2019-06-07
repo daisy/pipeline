@@ -281,6 +281,11 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 		return asFile(resolvedTable);
 	}
 	
+	@Override
+	public ToStringHelper toStringHelper() {
+		return MoreObjects.toStringHelper(LibhyphenJnaImpl.class.getName());
+	}
+	
 	private static final Logger logger = LoggerFactory.getLogger(LibhyphenJnaImpl.class);
 	
 }

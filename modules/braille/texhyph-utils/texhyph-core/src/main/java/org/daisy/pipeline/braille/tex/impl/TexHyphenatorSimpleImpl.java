@@ -6,6 +6,9 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Locale;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import static org.daisy.common.file.URIs.asURI;
 import static org.daisy.common.file.URLs.asURL;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
@@ -170,6 +173,11 @@ public class TexHyphenatorSimpleImpl extends AbstractTransformProvider<TexHyphen
 		if (resolvedTable == null)
 			throw new RuntimeException("Hyphenation table " + table + " could not be resolved");
 		return resolvedTable;
+	}
+	
+	@Override
+	public ToStringHelper toStringHelper() {
+		return MoreObjects.toStringHelper(TexHyphenatorSimpleImpl.class.getName());
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(TexHyphenatorSimpleImpl.class);

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
 import org.daisy.dotify.api.hyphenator.HyphenatorInterface;
 import org.daisy.dotify.api.hyphenator.HyphenatorFactoryService;
@@ -149,6 +152,11 @@ public class DotifyHyphenatorImpl extends AbstractHyphenator implements DotifyHy
 		}
 		
 		private static final Logger logger = LoggerFactory.getLogger(Provider.class);
+		
+		@Override
+		public ToStringHelper toStringHelper() {
+			return MoreObjects.toStringHelper(DotifyHyphenatorImpl.Provider.class.getName());
+		}
 		
 		private static abstract class OSGiHelper {
 			static boolean inOSGiContext() {

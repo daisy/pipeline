@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableList;
 import static com.google.common.collect.Iterables.size;
 
@@ -283,6 +285,10 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 		private TransformProvider.util.MemoizingProvider<Hyphenator> hyphenatorProvider
 		= memoize(dispatch(hyphenatorProviders));
 		
+		@Override
+		public ToStringHelper toStringHelper() {
+			return MoreObjects.toStringHelper(DotifyTranslatorImpl.Provider.class.getName());
+		}
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(DotifyTranslatorImpl.class);

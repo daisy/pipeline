@@ -21,7 +21,6 @@ import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.NativePath;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTranslatorJnaImplProvider.LiblouisTranslatorImpl;
-import org.daisy.pipeline.braille.liblouis.LiblouisTranslator.Typeform;
 import org.daisy.pipeline.junit.OSGiLessRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -38,20 +37,6 @@ import org.liblouis.Translator;
 @RunWith(OSGiLessRunner.class)
 public class LiblouisTranslatorJnaImplTest {
 	
-	private static short typeformFromInlineCSS(String style) {
-		return LiblouisTranslatorJnaImplProvider.typeformFromInlineCSS(new SimpleInlineStyle(style));
-	}
-	
-	@Ignore // this doesn't work anymore because the print properties
-			// text-decoration, font-weight and color are not supported by
-			// org.daisy.braille.css.SimpleInlineStyle
-	@Test
-	public void testTypeformFromInlineCSS() {
-		assertEquals(Typeform.BOLD + Typeform.UNDERLINE,
-		             typeformFromInlineCSS(
-			             " text-decoration: underline ;font-weight: bold  ; hyphens:auto; color: #FF00FF "));
-	}
-
 	private static String textFromTextTransform(String text, String... textTransform) {
 		TermList list = new TermListImpl() {};
 		for (String t : textTransform)
@@ -69,19 +54,6 @@ public class LiblouisTranslatorJnaImplTest {
 			textFromTextTransform("Ik ben Moos", "uppercase", "lowercase"));
 		assertEquals("Ik ben Moos",
 			textFromTextTransform("Ik ben Moos", "foo", "bar"));
-	}
-	
-	private static short typeformFromTextTransform(String... textTransform) {
-		TermList list = new TermListImpl() {};
-		for (String t : textTransform)
-			list.add((new TermIdentImpl() {}).setValue(t));
-		return LiblouisTranslatorJnaImplProvider.typeformFromTextTransform(list);
-	}
-	
-	@Test
-	public void testTypeformFromTextTransform() {
-		assertEquals(Typeform.BOLD + Typeform.UNDERLINE,
-			typeformFromTextTransform("louis-bold", "ital", "louis-under", "foo"));
 	}
 	
 	@Test
@@ -130,6 +102,7 @@ public class LiblouisTranslatorJnaImplTest {
 		LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl stream
 		= new LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl(
 			liblouisTranslator,
+			null,
 			hyphenator,
 			null,
 			styledText("volleyballederen volleyballederen", "hyphens:auto"));

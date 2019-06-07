@@ -132,6 +132,11 @@ public interface LiblouisCSSStyledDocumentTransform {
 		private TransformProvider.util.MemoizingProvider<BrailleTranslator> brailleTranslatorProvider
 		= memoize(dispatch(brailleTranslatorProviders));
 		
+		@Override
+		public ToStringHelper toStringHelper() {
+			return MoreObjects.toStringHelper(LiblouisCSSStyledDocumentTransform.Provider.class.getName());
+		}
+		
 		private static final Logger logger = LoggerFactory.getLogger(Provider.class);
 		
 	}

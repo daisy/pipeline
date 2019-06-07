@@ -26,7 +26,6 @@ import org.daisy.pipeline.braille.liblouis.LiblouisHyphenator;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
-import org.daisy.pipeline.braille.liblouis.LiblouisTranslator.Typeform;
 
 import org.daisy.pipeline.junit.AbstractTest;
 
@@ -124,7 +123,7 @@ public class LiblouisCoreTest extends AbstractTest {
 		assertArrayEquals(new String[]{"⠨⠋⠕⠕⠃⠁⠗"},
 		                  provider.withContext(messageBus)
 		                          .get(query("(table:'foobar.cti,ital.cti')")).iterator().next()
-		                          .fromTypeformedTextToBraille().transform(new String[]{"foobar"}, new short[]{Typeform.ITALIC}));
+		                          .fromTypeformedTextToBraille().transform(new String[]{"foobar"}, new String[]{"italic"}));
 	}
 	
 	@Test
@@ -146,7 +145,11 @@ public class LiblouisCoreTest extends AbstractTest {
 		assertEquals(braille("⠋⠕⠕ ", "⠨⠃⠁⠗", " ⠃⠁⠵"),
 		             translator.transform(styledText("foo ", "",
 		                                             "bar",  "text-transform:-louis-ital",
-		                                             " baz", "")));
+		                                             // this doesn't work anymore because the print properties
+		                                             // text-decoration, font-weight and color are not supported by
+		                                             // org.daisy.braille.css.SimpleInlineStyle
+		                                             " baz", "font-style: italic;"
+		                                  )));
 	}
 	
 	@Test

@@ -81,5 +81,10 @@ public interface DotifyOBFLTransform {
 				return MoreObjects.toStringHelper("o.d.p.b.dotify.impl.DotifyOBFLTransform$Provider$TransformImpl");
 			}
 		}
+		
+		@Override
+		public ToStringHelper toStringHelper() {
+			return MoreObjects.toStringHelper(DotifyOBFLTransform.Provider.class.getName());
+		}
 	}
 }

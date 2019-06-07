@@ -151,5 +151,9 @@ public interface DotifyCSSStyledDocumentTransform {
 		private TransformProvider.util.MemoizingProvider<BrailleTranslator> brailleTranslatorProvider
 		= memoize(dispatch(brailleTranslatorProviders));
 		
+		@Override
+		public ToStringHelper toStringHelper() {
+			return MoreObjects.toStringHelper(DotifyCSSStyledDocumentTransform.Provider.class.getName());
+		}
 	}
 }

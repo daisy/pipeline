@@ -145,6 +145,10 @@ public interface DotifyCSSBlockTransform {
 		
 		private TransformProvider.util.MemoizingProvider<DotifyTranslator> dotifyTranslatorProvider
 		= memoize(dispatch(dotifyTranslatorProviders));
-	
+		
+		@Override
+		public ToStringHelper toStringHelper() {
+			return MoreObjects.toStringHelper(DotifyCSSBlockTransform.Provider.class.getName());
+		}
 	}
 }

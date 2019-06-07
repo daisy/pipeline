@@ -3,6 +3,9 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import javax.inject.Inject;
 
+import com.google.common.base.Optional;
+
+import org.daisy.pipeline.braille.common.CSSStyledText;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 
@@ -37,8 +40,8 @@ public class LiblouisTablesTest extends AbstractXSpecAndXProcSpecTest {
 	@Test
 	public void testUnicodeBraille() {
 		assertTrue(provider.get(query("(locale:nl-BE)")).iterator().next()
-		           .fromTypeformedTextToBraille()
-		           .transform(new String[]{"foobar"}, new short[]{LiblouisTranslator.Typeform.PLAIN})[0]
+		           .fromStyledTextToBraille()
+		           .transform(Optional.of(new CSSStyledText("foobar")).asSet()).iterator().next()
 		           .matches("[\\s\\t\\n\u00a0\u00ad\u200b\u2800-\u28ff]*"));
 	}
 	
