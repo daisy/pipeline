@@ -19,6 +19,7 @@ import org.daisy.braille.css.BrailleCSSProperty.BorderWidth;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.Display;
 import org.daisy.braille.css.BrailleCSSProperty.Flow;
+import org.daisy.braille.css.BrailleCSSProperty.GenericVendorCSSPropertyProxy;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.LetterSpacing;
 import org.daisy.braille.css.BrailleCSSProperty.LineHeight;
@@ -39,7 +40,6 @@ import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 
 import cz.vutbr.web.css.CSSProperty;
-import cz.vutbr.web.css.CSSProperty.GenericCSSPropertyProxy;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
@@ -92,14 +92,14 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 				if (d.size() == 1) {
 					Term<?> term = d.get(0);
 					if (term instanceof TermIdent)
-						return genericProperty(GenericCSSPropertyProxy.class, (TermIdent)term,
+						return genericProperty(GenericVendorCSSPropertyProxy.class, (TermIdent)term,
 						                       true, properties, property);
 					else if (term instanceof TermInteger)
 						return genericTerm(TermInteger.class, term, d.getProperty(),
-						                   null, false, properties, values);
+						                   GenericVendorCSSPropertyProxy.valueOf(null), false, properties, values);
 					else if (term instanceof TermFunction)
 						return genericTerm(TermFunction.class, term, d.getProperty(),
-						                   null, false, properties, values);
+						                   GenericVendorCSSPropertyProxy.valueOf(null), false, properties, values);
 				}
 				log.warn("Ignoring unsupported declaration: " + declarationToString(d));
 			} else {

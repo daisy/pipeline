@@ -723,4 +723,40 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return text;
 		}
 	}
+	
+	// vendor properties are inherited
+	public class GenericVendorCSSPropertyProxy implements CSSProperty {
+		
+		public static GenericVendorCSSPropertyProxy INHERIT = GenericVendorCSSPropertyProxy.valueOf("inherit");
+		
+		private String text;
+		
+		private GenericVendorCSSPropertyProxy(String text) {
+			this.text = text;
+		}
+		
+		@Override
+		public boolean inherited() {
+			return true;
+		}
+		
+		@Override
+		public boolean equalsInherit() {
+			return "inherit".equals(text);
+		}
+		
+		@Override
+		public boolean equalsInitial() {
+			return "initial".equals(text);
+		}
+		
+		@Override
+		public String toString() {
+			return text;
+		}
+		
+		public static GenericVendorCSSPropertyProxy valueOf(String value) {
+			return new GenericVendorCSSPropertyProxy(value == null ? "" : value.toLowerCase());
+		}
+	}
 }

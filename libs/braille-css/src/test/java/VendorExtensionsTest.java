@@ -10,13 +10,16 @@ import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.StyleSheet;
+import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
+import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
 import cz.vutbr.web.csskit.DefaultNetworkProcessor;
 
 import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
+import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +28,7 @@ public class VendorExtensionsTest {
 	
 	private static final RuleFactory rf = new BrailleCSSRuleFactory();
 	
-	//@Test
+	@Test
 	public void testVendorPseudoElement() throws CSSException, IOException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			"ol.toc::-obfl-on-toc-start { content: '...' }",
@@ -43,7 +46,7 @@ public class VendorExtensionsTest {
 		Assert.assertEquals(cslist, rule.getSelectors());
 	}
 	
-	//@Test
+	@Test
 	public void testVendorFunction() throws CSSException, IOException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			"p::after { content: -obfl-evaluate('(...)') }",
@@ -72,5 +75,40 @@ public class VendorExtensionsTest {
 		Assert.assertEquals(1, rule.size());
 		Declaration decl = (Declaration)rule.get(0);
 		Assert.assertEquals("content", decl.getProperty());
+	}
+	
+	@Test
+	public void testVendorProperty() throws CSSException, IOException {
+		StyleSheet sheet = new BrailleCSSParserFactory().parse(
+			"span { -dotify-counter-style: symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔'); }",
+			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+		Assert.assertEquals(1, sheet.size());
+		RuleSet rule = (RuleSet)sheet.get(0);
+		Assert.assertEquals(1, rule.size());
+		Declaration decl = (Declaration)rule.get(0);
+		Assert.assertEquals("-dotify-counter-style", decl.getProperty());
+		Assert.assertEquals(1, decl.size());
+		TermFunction fn = (TermFunction)decl.get(0);
+		Assert.assertEquals("symbols", fn.getFunctionName());
+		SimpleInlineStyle style = new SimpleInlineStyle(rule);
+		fn = (TermFunction)style.getValue("-dotify-counter-style");
+		Assert.assertEquals("symbols", fn.getFunctionName());
+		style = new SimpleInlineStyle("", style);
+		Assert.assertTrue(!style.isEmpty());
+	}
+	
+	@Test
+	public void testVendorIdentValue() throws CSSException, IOException {
+		StyleSheet sheet = new BrailleCSSParserFactory().parse(
+			"span { transform: -dotify-counter; }",
+			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+		Assert.assertEquals(1, sheet.size());
+		RuleSet rule = (RuleSet)sheet.get(0);
+		Assert.assertEquals(1, rule.size());
+		Declaration decl = (Declaration)rule.get(0);
+		Assert.assertEquals("transform", decl.getProperty());
+		Assert.assertEquals(1, decl.size());
+		TermIdent ident = (TermIdent)decl.get(0);
+		Assert.assertEquals("-dotify-counter", ident.toString());
 	}
 }
