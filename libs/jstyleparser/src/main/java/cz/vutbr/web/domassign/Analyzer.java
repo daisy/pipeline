@@ -109,7 +109,10 @@ public class Analyzer {
 	 * @return Map where each element contains its CSS properties
 	 */
 	public StyleMap evaluateDOM(Document doc, MediaSpec media, final boolean inherit) {
-
+		return evaluateDOM(doc, media, inherit, inherit);
+	}
+	
+	public StyleMap evaluateDOM(Document doc, MediaSpec media, final boolean inherit, final boolean inheritPseudo) {
 		DeclarationMap declarations = assingDeclarationsToDOM(doc, media, inherit);
 
 		StyleMap nodes = new StyleMap(declarations.size());
@@ -145,7 +148,8 @@ public class Analyzer {
 	                    for (Declaration d : declarations) {
 	                        pdata.push(d);
 	                    }
-                        pdata.inheritFrom(main); //always inherit from the main element style
+	                    if (inheritPseudo)
+		                    pdata.inheritFrom(main);
 	                }
 	                // concretize values and store them
 	                result.put((Element) current, pseudo, pdata.concretize());
