@@ -24,6 +24,9 @@
                                                 <xsl:when test="pom:id = 'copy-felix-bundles'">
                                                         <xsl:value-of select="'system/felix'"/>
                                                 </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-felix-gogo-bundles'">
+                                                        <xsl:value-of select="'system/felix/gogo'"/>
+                                                </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-framework-libs-bundles'">
                                                         <xsl:value-of select="'system/felix'"/>
                                                 </xsl:when>

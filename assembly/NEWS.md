@@ -1,3 +1,48 @@
+Changes in release v1.13.0
+==========================
+
+### Distribution/Installation
+- The minimum required Java version is changed back to 8 (but newer versions are also still supported)
+- **FIX** Loading of TTS configuration on Mac OS
+- **FIX** Problem with windows start menu
+
+### Framework
+- The core part of Pipeline including all the conversion scripts can now be run outside the OSGi framework. This means it is possible to use Pipeline as a regular Java library from any Java application and get most of the functionality. The web server and the graphical user interface are not part of this yet.
+- **FIX** Out of memory error when zipping up a lot of mp3's
+
+### Modules
+
+- **NEW** Produced EPUBs are now compliant with the EPUB 3.2 specification
+- **NEW** "Accessibility check" option for the "EPUB 3 Validator" script that invokes DAISY Ace if it is installed on the system.
+- **FIX** Validation issues with produced DAISY 2.02, especially in case of text-only
+- **FIX** Attempt to fix timeout issues in text-to-speech process
+- **FIX** Speed up the DTBook to ZedAI conversion
+- **FIX** Make it possible to run a DAISY 3 to EPUB 3 conversion offline, or when the DAISY website is down
+- EPUBCheck updated to 4.2.2
+- Various changes to braille production scripts, see [release notes of Braille modules v1.12.1](https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1121)
+- XProc code cleanup
+
+### Details
+
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.12.2)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.12.2)
+- [Closed issues in pipeline-build-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-build-utils+milestone%3Av1.12.2)
+- [Closed issues in pipeline-cli-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-cli-go+milestone%3Av1.12.2)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.12.2)
+- [Closed issues in pipeline-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.12.2)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.12.2)
+- [Closed issues in pipeline-mod-audio](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-audio+milestone%3Av1.12.2)
+- [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.12.2)
+- [Closed issues in pipeline-mod-nlp](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-nlp+milestone%3Av1.12.2)
+- [Closed issues in pipeline-mod-tts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-tts+milestone%3Av1.12.2)
+- [Closed issues in pipeline-modules-common](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules-common+milestone%3Av1.12.2)
+- [Closed issues in pipeline-scripts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts+milestone%3Av1.12.2)
+- [Closed issues in pipeline-scripts-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts-utils+milestone%3Av1.12.2)
+- [Closed issues in pipeline-tasks](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.12.2)
+- [Closed issues in xproc-maven-plugin](https://github.com/issues?q=repo%3Adaisy%2Fxproc-maven-plugin+milestone%3Av1.12.2)
+- [Closed issues in xspec-maven-plugin](https://github.com/issues?q=repo%3Adaisy%2Fxspec-maven-plugin+milestone%3Av1.12.2)
+
+
 Changes in release v1.12.1
 ==========================
 

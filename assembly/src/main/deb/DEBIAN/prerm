@@ -16,8 +16,8 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-SYSTEM_PROPERTIES=${pipeline.home}/etc/system.properties
-CLI_CONFIG_YML=${pipeline.home}/cli/config.yml
+SYSTEM_PROPERTIES=${deb.pipeline.home}/etc/system.properties
+CLI_CONFIG_YML=${deb.pipeline.home}/cli/config.yml
 
 case "$1" in
     

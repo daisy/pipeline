@@ -2,7 +2,7 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>target/bundles/modules/win</directory>
+      <directory>target/bundles/felix/win</directory>
       <outputDirectory>system/felix</outputDirectory>
     </fileSet>
   </fileSets>

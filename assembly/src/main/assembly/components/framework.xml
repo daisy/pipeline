@@ -2,66 +2,22 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>target/bundles/bootstrap</directory>
-      <outputDirectory>system/bootstrap</outputDirectory>
+      <directory>target/bundles</directory>
+      <outputDirectory>system</outputDirectory>
       <excludes>
-        <exclude>linux</exclude>
-        <exclude>linux/*</exclude>
-        <exclude>mac</exclude>
-        <exclude>mac/*</exclude>
-        <exclude>win</exclude>
-        <exclude>win/*</exclude>
+        <exclude>bootstrap/linux</exclude>
+        <exclude>bootstrap/linux/*</exclude>
+        <exclude>bootstrap/mac</exclude>
+        <exclude>bootstrap/mac/*</exclude>
+        <exclude>bootstrap/win</exclude>
+        <exclude>bootstrap/win/*</exclude>
+        <exclude>felix/linux</exclude>
+        <exclude>felix/linux/*</exclude>
+        <exclude>felix/mac</exclude>
+        <exclude>felix/mac/*</exclude>
+        <exclude>felix/win</exclude>
+        <exclude>felix/win/*</exclude>
       </excludes>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/felix</directory>
-      <outputDirectory>system/felix</outputDirectory>
-      <excludes>
-        <exclude>org.apache.felix.org.apache.felix.gogo*</exclude>
-      </excludes>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/felix</directory>
-      <outputDirectory>system/felix/gogo</outputDirectory>
-      <includes>
-        <include>org.apache.felix.org.apache.felix.gogo*</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/libs</directory>
-      <outputDirectory>system/framework</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/libs/gui</directory>
-      <outputDirectory>system/framework/gui</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/libs/persistence</directory>
-      <outputDirectory>system/framework/persistence</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/pipeline</directory>
-      <outputDirectory>system/framework</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/frontend</directory>
-      <outputDirectory>system/frontend</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/gui</directory>
-      <outputDirectory>system/gui</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>target/bundles/modules</directory>
-      <excludes>
-        <exclude>linux</exclude>
-        <exclude>linux/*</exclude>
-        <exclude>mac</exclude>
-        <exclude>mac/*</exclude>
-        <exclude>win</exclude>
-        <exclude>win/*</exclude>
-      </excludes>
-      <outputDirectory>modules</outputDirectory>
     </fileSet>
   </fileSets>
 </component>

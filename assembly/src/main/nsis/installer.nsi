@@ -287,11 +287,12 @@ SectionEnd
 Section -StartMenu
 	SetOutPath $INSTDIR
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-	createDirectory "$SMPROGRAMS\${APPNAME}"
-	createShortCut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\pipeline2-gui.vbs" "" "$INSTDIR\logo.ico"
-	createShortCut "$SMPROGRAMS\${APPNAME}\Pipeline Updater.lnk" "$INSTDIR\daisy-pipeline\bin\pipeline-updater-gui.exe" "" "$INSTDIR\logo.ico"
-	#createShortCut "$SMPROGRAMS\${APPNAME}\${APPNAME}-webservice.lnk" "$INSTDIR\pipeline2-webservice.vbs" "" "$INSTDIR\logo.ico"
-	CreateShortCut "$SMPROGRAMS\${APPNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe"
+	; not using ${APPNAME} because that results in wrong files on some versions of Windows
+	CreateDirectory "$SMPROGRAMS\DAISY Pipeline 2"
+	CreateShortCut  "$SMPROGRAMS\DAISY Pipeline 2\DAISY Pipeline 2.lnk" "$INSTDIR\pipeline2-gui.vbs" "" "$INSTDIR\logo.ico"
+	CreateShortCut  "$SMPROGRAMS\DAISY Pipeline 2\DAISY Pipeline 2 Updater.lnk" "$INSTDIR\daisy-pipeline\bin\pipeline-updater-gui.exe" "" "$INSTDIR\logo.ico"
+	#CreateShortCut "$SMPROGRAMS\DAISY Pipeline 2\DAISY Pipeline 2 Web Server.lnk" "$INSTDIR\pipeline2-webservice.vbs" "" "$INSTDIR\logo.ico"
+	CreateShortCut  "$SMPROGRAMS\DAISY Pipeline 2\Uninstall DAISY Pipeline 2.lnk" "$INSTDIR\uninstall.exe"
 	!insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 

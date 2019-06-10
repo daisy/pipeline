@@ -12,7 +12,6 @@
         <exclude>etc/system.properties</exclude>
         <exclude>etc/config.properties</exclude>
         <exclude>etc/config-logback.xml</exclude>
-        <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
       </excludes>
       <outputDirectory></outputDirectory>
     </fileSet>
@@ -22,7 +21,6 @@
         <include>etc/system.properties</include>
         <include>etc/config.properties</include>
         <include>etc/config-logback.xml</include>
-        <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
       </includes>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>

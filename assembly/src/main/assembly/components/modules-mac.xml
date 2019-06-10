@@ -2,8 +2,8 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>target/bundles/modules/mac</directory>
-      <outputDirectory>/system/felix</outputDirectory>
+      <directory>target/bundles/felix/mac</directory>
+      <outputDirectory>system/felix</outputDirectory>
     </fileSet>
   </fileSets>
 </component>

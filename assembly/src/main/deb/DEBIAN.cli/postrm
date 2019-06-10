@@ -18,7 +18,7 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-CLI_CONFIG_YML=${pipeline.cli.home}/config.yml
+CLI_CONFIG_YML=${deb.pipeline.cli.home}/config.yml
 
 case "$1" in
     
