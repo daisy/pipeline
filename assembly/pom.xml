@@ -22,6 +22,31 @@
   <properties>
     <cli.version>2.1.2</cli.version>
     <javafx.version>11.0.1</javafx.version>
+    <!--
+        for package-exe
+    -->
+    <nsis.scriptfile>${project.build.directory}/nsis/installer.nsi</nsis.scriptfile>
+    <nsis.output.file>assembly-${project.version}-win.exe</nsis.output.file>
+    <!--
+        for package-deb
+    -->
+    <deb.user>pipeline2</deb.user>
+    <deb.pipeline.home>/opt/daisy-pipeline2</deb.pipeline.home>
+    <deb.pipeline.data>/var/opt/daisy-pipeline2</deb.pipeline.data>
+    <deb.pipeline.log>/var/log/daisy-pipeline2</deb.pipeline.log>
+    <deb.pipeline.config>/etc/opt/daisy-pipeline2</deb.pipeline.config>
+    <!--
+        for package-deb-cli
+    -->
+    <deb.pipeline.cli.home>/opt/daisy-pipeline2-cli</deb.pipeline.cli.home>
+    <deb.pipeline.cli.config>/etc/opt/daisy-pipeline2-cli</deb.pipeline.cli.config>
+    <!--
+        for package-rpm and package-rpm-cli
+    -->
+    <rpm.user>root</rpm.user>
+    <rpm.group>root</rpm.group>
+    <rpm.pipeline.home>/opt/daisy-pipeline2</rpm.pipeline.home>
+    <rpm.pipeline.cli.home>/opt/daisy-pipeline2/cli</rpm.pipeline.cli.home>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -160,21 +185,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
-                  <artifactId>org.apache.felix.gogo.command</artifactId>
-                  <version>0.14.0</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.felix</groupId>
-                  <artifactId>org.apache.felix.gogo.runtime</artifactId>
-                  <version>0.12.1</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.felix</groupId>
-                  <artifactId>org.apache.felix.gogo.shell</artifactId>
-                  <version>0.10.0</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.configadmin</artifactId>
                   <version>1.6.0</version>
                 </artifactItem>
@@ -229,12 +239,38 @@
             </configuration>
           </execution>
           <execution>
+            <id>copy-felix-gogo-bundles</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/felix/gogo</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.gogo.command</artifactId>
+                  <version>0.14.0</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.gogo.runtime</artifactId>
+                  <version>0.12.1</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.gogo.shell</artifactId>
+                  <version>0.10.0</version>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
             <id>copy-persistence-libs-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/libs/persistence</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/framework/persistence</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>javax.el</groupId>
@@ -550,7 +586,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/pipeline/persistence</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/framework/persistence</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -569,7 +605,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/pipeline/volatile</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/framework/volatile</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -1241,7 +1277,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/modules/linux</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/felix/linux</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -1262,7 +1298,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/modules/mac</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/felix/mac</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -1283,7 +1319,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/modules/win</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/felix/win</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -2056,10 +2092,6 @@
     </profile>
     <profile>
       <id>package-exe</id>
-      <properties>
-        <nsis.scriptfile>${project.build.directory}/nsis/installer.nsi</nsis.scriptfile>
-        <nsis.output.file>assembly-${project.version}-win.exe</nsis.output.file>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -2115,26 +2147,6 @@
     </profile>
     <profile>
       <id>package-deb</id>
-      <properties>
-        <pipeline.user>pipeline2</pipeline.user>
-        <pipeline.home>/opt/daisy-pipeline2</pipeline.home>
-        <pipeline.data>/var/opt/daisy-pipeline2</pipeline.data>
-        <pipeline.log>/var/log/daisy-pipeline2</pipeline.log>
-        <pipeline.config>/etc/opt/daisy-pipeline2</pipeline.config>
-        <bundles.auto.deploy>system/felix</bundles.auto.deploy>
-        <bundles.bootstrap>system/bootstrap</bundles.bootstrap>
-        <bundles.modules>modules</bundles.modules>
-        <pipeline.ws.host>http://localhost</pipeline.ws.host>
-        <pipeline.ws.port>8181</pipeline.ws.port>
-        <pipeline.ws.path>ws</pipeline.ws.path>
-        <pipeline.ws.timeout>60</pipeline.ws.timeout>
-        <pipeline.ws.cmd.unix>../bin/pipeline2</pipeline.ws.cmd.unix>
-        <pipeline.ws.local>true</pipeline.ws.local>
-        <pipeline.ws.authenticate>false</pipeline.ws.authenticate>
-        <pipeline.ws.clientkey>clientid</pipeline.ws.clientkey>
-        <pipeline.ws.clientsecret>supersecret</pipeline.ws.clientsecret>
-        <pipeline.log.jobappender>org.daisy.pipeline.logging.IgnoreSiftAppender</pipeline.log.jobappender>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -2154,9 +2166,11 @@
                       <targetPath>resources</targetPath>
                       <filtering>true</filtering>
                       <includes>
+                        <!--
+                            note that only system.properties really needs filtering
+                        -->
                         <include>bin/pipeline2</include>
                         <include>etc/config.properties</include>
-                        <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
                         <include>etc/system.properties</include>
                         <include>etc/config-logback.xml</include>
                       </includes>
@@ -2172,6 +2186,9 @@
                       </includes>
                     </resource>
                   </resources>
+                  <filters>
+                    <filter>src/main/assembly/dist-deb.properties</filter>
+                  </filters>
                 </configuration>
               </execution>
             </executions>
@@ -2202,14 +2219,14 @@
                       </includes>
                       <mapper>
                         <type>perm</type>
-                        <prefix>${pipeline.home}/bin</prefix>
+                        <prefix>${deb.pipeline.home}/bin</prefix>
                         <filemode>755</filemode>
                       </mapper>
                     </data>
                     <data>
                       <type>file</type>
-                      <src>${project.build.directory}/filtered-resources/deb${pipeline.home}/bin/debian.cfg</src>
-                      <dst>${pipeline.home}/bin/debian.cfg</dst>
+                      <src>${project.build.directory}/filtered-resources/deb${deb.pipeline.home}/bin/debian.cfg</src>
+                      <dst>${deb.pipeline.home}/bin/debian.cfg</dst>
                     </data>
                     <!-- ====== -->
                     <!-- daemon -->
@@ -2232,11 +2249,10 @@
                       <excludes>
                         config.properties,
                         config-logback.xml,
-                        org.apache.felix.fileinstall-modules.cfg,
                         system.properties
                       </excludes>
                       <mapper>
-                        <prefix>${pipeline.home}/etc</prefix>
+                        <prefix>${deb.pipeline.home}/etc</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
@@ -2245,49 +2261,57 @@
                       <src>${project.build.directory}/filtered-resources/resources/etc</src>
                       <includes>
                         config.properties,
-                        org.apache.felix.fileinstall-modules.cfg,
                         system.properties
                       </includes>
                       <mapper>
-                        <prefix>${pipeline.home}/etc</prefix>
+                        <prefix>${deb.pipeline.home}/etc</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
                     <data>
                       <type>file</type>
                       <src>${project.build.directory}/filtered-resources/resources/etc/config-logback.xml</src>
-                      <dst>${pipeline.config}/config-logback.xml</dst>
+                      <dst>${deb.pipeline.config}/config-logback.xml</dst>
                     </data>
                     <data>
                       <type>link</type>
                       <symlink>true</symlink>
-                      <linkName>${pipeline.config}/system.properties</linkName>
-                      <linkTarget>${pipeline.home}/etc/system.properties</linkTarget>
+                      <linkName>${deb.pipeline.config}/system.properties</linkName>
+                      <linkTarget>${deb.pipeline.home}/etc/system.properties</linkTarget>
                     </data>
                     <data>
                       <type>link</type>
                       <symlink>true</symlink>
-                      <linkName>${pipeline.config}/tts-default-config.xml</linkName>
-                      <linkTarget>${pipeline.home}/etc/tts-default-config.xml</linkTarget>
+                      <linkName>${deb.pipeline.config}/tts-default-config.xml</linkName>
+                      <linkTarget>${deb.pipeline.home}/etc/tts-default-config.xml</linkTarget>
                     </data>
                     <data>
                       <type>file</type>
                       <src>src/main/deb/etc/default/daisy-pipeline2</src>
                       <dst>/etc/default/daisy-pipeline2</dst>
                     </data>
-                    <!-- ============== -->
-                    <!-- system bundles -->
-                    <!-- ============== -->
+                    <!-- ======= -->
+                    <!-- bundles -->
+                    <!-- ======= -->
                     <data>
                       <type>directory</type>
-                      <src>${project.build.directory}/bundles/bootstrap</src>
+                      <src>${project.build.directory}/bundles</src>
                       <excludes>
-                        linux, linux/*,
-                        win,   win/*,
-                        mac,   mac/*
+                        bootstrap/linux,
+                        bootstrap/linux/*,
+                        bootstrap/win,
+                        bootstrap/win/*,
+                        bootstrap/mac,
+                        bootstrap/mac/*
+                        felix/linux,
+                        felix/linux/*,
+                        felix/win,
+                        felix/win/*,
+                        felix/mac,
+                        felix/mac/*
                       </excludes>
                       <mapper>
-                        <prefix>${pipeline.home}/${bundles.bootstrap}</prefix>
+                        <prefix>${deb.pipeline.home}/system</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
@@ -2295,77 +2319,15 @@
                       <type>directory</type>
                       <src>${project.build.directory}/bundles/bootstrap/linux</src>
                       <mapper>
-                        <prefix>${pipeline.home}/${bundles.bootstrap}</prefix>
+                        <prefix>${deb.pipeline.home}/system/bootstrap</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>${project.build.directory}/bundles/felix</src>
-                      <excludes>
-                        org.apache.felix.org.apache.felix.gogo*
-                      </excludes>
+                      <src>${project.build.directory}/bundles/felix/linux</src>
                       <mapper>
-                        <prefix>${pipeline.home}/${bundles.auto.deploy}</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <data>
-                      <type>directory</type>
-                      <src>${project.build.directory}/bundles/felix</src>
-                      <includes>
-                        org.apache.felix.org.apache.felix.gogo*
-                      </includes>
-                      <mapper>
-                        <prefix>${pipeline.home}/${bundles.auto.deploy}/gogo</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <data>
-                      <type>directory</type>
-                      <src>${project.build.directory}/bundles/libs</src>
-                      <mapper>
-                        <prefix>${pipeline.home}/system/framework</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <data>
-                      <type>directory</type>
-                      <src>${project.build.directory}/bundles/pipeline</src>
-                      <mapper>
-                        <prefix>${pipeline.home}/system/framework</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <data>
-                      <type>directory</type>
-                      <src>${project.build.directory}/bundles/frontend</src>
-                      <mapper>
-                        <prefix>${pipeline.home}/system/frontend</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <!-- ======= -->
-                    <!-- modules -->
-                    <!-- ======= -->
-                    <data>
-                      <type>directory</type>
-                      <src>${project.build.directory}/bundles/modules</src>
-                      <excludes>
-                        linux, linux/*,
-                        win,   win/*,
-                        mac,   mac/*
-                      </excludes>
-                      <mapper>
-                        <prefix>${pipeline.home}/${bundles.auto.deploy}</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <data>
-                      <type>directory</type>
-                      <src>${project.build.directory}/bundles/modules/linux</src>
-                      <mapper>
-                        <prefix>${pipeline.home}/${bundles.auto.deploy}</prefix>
+                        <prefix>${deb.pipeline.home}/system/felix</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
@@ -2375,7 +2337,7 @@
                     <data>
                       <type>template</type>
                       <paths>
-                        <path>${pipeline.log}</path>
+                        <path>${deb.pipeline.log}</path>
                       </paths>
                     </data>
                   </dataSet>
@@ -2388,12 +2350,6 @@
     </profile>
     <profile>
       <id>package-deb-cli</id>
-      <properties>
-        <pipeline.cli.home>/opt/daisy-pipeline2-cli</pipeline.cli.home>
-        <pipeline.cli.config>/etc/opt/daisy-pipeline2-cli</pipeline.cli.config>
-        <pipeline.cli.exec_line>/dev/null</pipeline.cli.exec_line>
-        <pipeline.cli.starting>false</pipeline.cli.starting>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -2425,6 +2381,9 @@
                       <filtering>true</filtering>
                     </resource>
                   </resources>
+                  <filters>
+                    <filter>src/main/assembly/dist-deb.properties</filter>
+                  </filters>
                 </configuration>
               </execution>
             </executions>
@@ -2456,7 +2415,7 @@
                       </includes>
                       <mapper>
                         <type>perm</type>
-                        <prefix>${pipeline.cli.home}</prefix>
+                        <prefix>${deb.pipeline.cli.home}</prefix>
                         <filemode>755</filemode>
                       </mapper>
                     </data>
@@ -2466,13 +2425,13 @@
                     <data>
                       <type>file</type>
                       <src>${project.build.directory}/filtered-resources/cli/config.yml</src>
-                      <dst>${pipeline.cli.home}/config.yml</dst>
+                      <dst>${deb.pipeline.cli.home}/config.yml</dst>
                     </data>
                     <data>
                       <type>link</type>
                       <symlink>true</symlink>
-                      <linkName>${pipeline.cli.config}/config.yml</linkName>
-                      <linkTarget>${pipeline.cli.home}/config.yml</linkTarget>
+                      <linkName>${deb.pipeline.cli.config}/config.yml</linkName>
+                      <linkTarget>${deb.pipeline.cli.home}/config.yml</linkTarget>
                     </data>
                   </dataSet>
                 </configuration>
@@ -2484,14 +2443,6 @@
     </profile>
     <profile>
       <id>package-rpm</id>
-      <properties>
-        <pipeline.user>root</pipeline.user>
-        <pipeline.group>root</pipeline.group>
-        <pipeline.home>/opt/daisy-pipeline2</pipeline.home>
-        <bundles.auto.deploy>system/felix</bundles.auto.deploy> <!-- don't change! must be the same as in dist.properties -->
-        <bundles.bootstrap>system/bootstrap</bundles.bootstrap> <!-- don't change! must be the same as in dist.properties -->
-        <pipeline.log.jobappender>org.daisy.pipeline.logging.IgnoreSiftAppender</pipeline.log.jobappender>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -2511,10 +2462,10 @@
                   <needarch>x86_64</needarch>
                   <mappings>
                     <mapping>
-                      <directory>${pipeline.home}</directory>
+                      <directory>${rpm.pipeline.home}</directory>
                       <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
                           <location>src/main/resources</location>
@@ -2526,23 +2477,21 @@
                           <excludes>
                             <exclude>etc/system.properties</exclude>
                             <exclude>etc/config.properties</exclude>
-                            <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
                           </excludes>
                         </source>
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${pipeline.home}</directory>
+                      <directory>${rpm.pipeline.home}</directory>
                       <filemode>0640</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
                           <location>src/main/resources</location>
                           <includes>
                             <include>etc/system.properties</include>
                             <include>etc/config.properties</include>
-                            <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
                             <include>etc/config-logback.xml</include>
                           </includes>
                           <filter>true</filter>
@@ -2550,10 +2499,10 @@
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${pipeline.home}</directory>
+                      <directory>${rpm.pipeline.home}</directory>
                       <filemode>0550</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
                           <location>src/main/resources</location>
@@ -2568,96 +2517,49 @@
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${pipeline.home}/${bundles.bootstrap}</directory>
+                      <directory>${rpm.pipeline.home}/system</directory>
                       <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
-                          <location>${project.build.directory}/bundles/bootstrap</location>
-                        </source>
-                      </sources>
-                    </mapping>
-                    <mapping>
-                      <directory>${pipeline.home}/${bundles.auto.deploy}</directory>
-                      <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
-                      <sources>
-                        <source>
-                          <location>${project.build.directory}/bundles/felix</location>
+                          <location>${project.build.directory}/bundles</location>
                           <excludes>
-                            <exclude>org.apache.felix.org.apache.felix.gogo*</exclude>
+                            <exclude>bootstrap/linux</exclude>
+                            <exclude>bootstrap/linux/*</exclude>
+                            <exclude>bootstrap/win</exclude>
+                            <exclude>bootstrap/win/*</exclude>
+                            <exclude>bootstrap/mac</exclude>
+                            <exclude>bootstrap/mac/*</exclude>
+                            <exclude>felix/linux</exclude>
+                            <exclude>felix/linux/*</exclude>
+                            <exclude>felix/win</exclude>
+                            <exclude>felix/win/*</exclude>
+                            <exclude>felix/mac</exclude>
+                            <exclude>felix/mac/*</exclude>
                           </excludes>
                         </source>
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${pipeline.home}/${bundles.auto.deploy}/gogo</directory>
+                      <directory>${rpm.pipeline.home}/system/bootstrap</directory>
                       <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
-                          <location>${project.build.directory}/bundles/felix</location>
-                          <includes>
-                            <include>org.apache.felix.org.apache.felix.gogo*</include>
-                          </includes>
+                          <location>${project.build.directory}/bundles/bootstrap/linux</location>
                         </source>
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${pipeline.home}/system/framework</directory>
+                      <directory>${rpm.pipeline.home}/system/felix</directory>
                       <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
-                          <location>${project.build.directory}/bundles/libs</location>
-                        </source>
-                      </sources>
-                    </mapping>
-                    <mapping>
-                      <directory>${pipeline.home}/system/framework</directory>
-                      <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
-                      <sources>
-                        <source>
-                          <location>${project.build.directory}/bundles/pipeline</location>
-                        </source>
-                      </sources>
-                    </mapping>
-                    <mapping>
-                      <directory>${pipeline.home}/system/frontend</directory>
-                      <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
-                      <sources>
-                        <source>
-                          <location>${project.build.directory}/bundles/frontend</location>
-                        </source>
-                      </sources>
-                    </mapping>
-                    <mapping>
-                      <directory>${pipeline.home}/${bundles.auto.deploy}</directory>
-                      <filemode>0644</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
-                      <sources>
-                        <source>
-                          <location>${project.build.directory}/bundles/modules</location>
-                          <excludes>
-                            <exclude>linux</exclude>
-                            <exclude>linux/*</exclude>
-                            <exclude>win</exclude>
-                            <exclude>win/*</exclude>
-                            <exclude>mac</exclude>
-                            <exclude>mac/*</exclude>
-                          </excludes>
-                        </source>
-                        <source>
-                          <location>${project.build.directory}/bundles/modules/linux</location>
+                          <location>${project.build.directory}/bundles/felix/linux</location>
                         </source>
                       </sources>
                     </mapping>
@@ -2668,7 +2570,7 @@
                   </filters>
                   <postremoveScriptlet>
                     <script>
-                      rm -rf /opt/daisy-pipeline2
+                      rm -rf ${rpm.pipeline.home}
                     </script>
                   </postremoveScriptlet>
                 </configuration>
@@ -2680,12 +2582,6 @@
     </profile>
     <profile>
       <id>package-rpm-cli</id>
-      <properties>
-        <pipeline.user>root</pipeline.user>
-        <pipeline.group>root</pipeline.group>
-        <pipeline.home>/opt/daisy-pipeline2</pipeline.home>
-        <pipeline.cli.home>${pipeline.home}/cli</pipeline.cli.home>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -2706,10 +2602,10 @@
                   <needarch>x86_64</needarch>
                   <mappings>
                     <mapping>
-                      <directory>${pipeline.cli.home}</directory>
+                      <directory>${rpm.pipeline.cli.home}</directory>
                       <filemode>0640</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
                           <location>src/main/resources/cli</location>
@@ -2720,10 +2616,10 @@
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${pipeline.cli.home}</directory>
+                      <directory>${rpm.pipeline.cli.home}</directory>
                       <filemode>0640</filemode>
-                      <username>${pipeline.user}</username>
-                      <groupname>${pipeline.group}</groupname>
+                      <username>${rpm.user}</username>
+                      <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
                           <location>${project.build.directory}/cli/linux32</location>
@@ -2736,7 +2632,7 @@
                   </mappings>
                   <postremoveScriptlet>
                     <script>
-                      rm -rf /opt/daisy-pipeline2/cli
+                      rm -rf ${rpm.pipeline.cli.home}
                     </script>
                   </postremoveScriptlet>
                 </configuration>

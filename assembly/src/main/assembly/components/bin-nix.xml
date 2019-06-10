@@ -6,7 +6,7 @@
       <includes>
         <include>bin/pipeline2</include>
       </includes>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>
       <filtered>true</filtered>
     </fileSet>

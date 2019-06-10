@@ -3,7 +3,7 @@
   <fileSets>
     <fileSet>
       <directory>target/bundles/bootstrap/linux</directory>
-      <outputDirectory>/system/bootstrap</outputDirectory>
+      <outputDirectory>system/bootstrap</outputDirectory>
     </fileSet>
   </fileSets>
 </component>

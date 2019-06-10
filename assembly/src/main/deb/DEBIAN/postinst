@@ -36,20 +36,20 @@ case "$1" in
     
     configure)
         
-        # create ${pipeline.user} group
-        if ! getent group ${pipeline.user} >/dev/null; then
-            addgroup --system ${pipeline.user}
+        # create ${deb.user} group
+        if ! getent group ${deb.user} >/dev/null; then
+            addgroup --system ${deb.user}
         fi
         
-        # create ${pipeline.user} user
-        if ! getent passwd ${pipeline.user} >/dev/null; then
+        # create ${deb.user} user
+        if ! getent passwd ${deb.user} >/dev/null; then
             adduser --system --group --home ${pipeline.data} --no-create-home --disabled-login \
-                --gecos "DAISY Pipeline 2 server" ${pipeline.user}
+                --gecos "DAISY Pipeline 2 server" ${deb.user}
         fi
         
         mkdir -p ${pipeline.data}
-        chown -R ${pipeline.user}:${pipeline.user} ${pipeline.data}
-        chown -R ${pipeline.user}:${pipeline.user} ${pipeline.log}
+        chown -R ${deb.user}:${deb.user} ${pipeline.data}
+        chown -R ${deb.user}:${deb.user} ${pipeline.log}
         
         if [ ! -e $SYSTEM_PROPERTIES ]; then
             echo "$SYSTEM_PROPERTIES: no such file" >&2 && exit 1

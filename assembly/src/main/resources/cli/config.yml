@@ -7,8 +7,8 @@ ws_timeup: 25
 exec_line: ${pipeline.cli.exec_line}
 local: true
 # ROBOT CONF
-client_key: clientid
-client_secret: supersecret
+client_key: ${pipeline.cli.clientkey}
+client_secret: ${pipeline.cli.clientsecret}
 #connection settings
 timeout: 60
 #debug
