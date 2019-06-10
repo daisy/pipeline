@@ -94,15 +94,15 @@ dp2 : $(dp2)
 
 .PHONY : run
 run : $(dev_launcher)
-	$(call with-java-11,$< shell)
+	$< shell
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
-	$(call with-java-11,$< gui shell)
+	$< gui shell
 
 .PHONY : run-cli
 run-cli :
-	echo "dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(call with-java-11,$(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"\$$@\"); }"
+	echo "dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"\$$@\"; }"
 	echo '# Run this command to configure your shell: '
 	echo '# eval $$(make $@)'
 
