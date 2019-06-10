@@ -147,11 +147,12 @@ func Download(path string, as ...Artifact) ([]LocalArtifact, error) {
 	errors := []error{}
 
 	chanArts := make(chan downloadResult)
+	chanFiles := make(chan bool, 100) // max 100 downloads at a time
 	//do it async to go faster!!
 	for _, artifact := range as {
 		//local copy
 		a := artifact
-		go func() {
+		go func(chanFiles chan bool) {
 			result := downloadResult{
 				la: LocalArtifact{
 					Artifact: a,
@@ -161,8 +162,12 @@ func Download(path string, as ...Artifact) ([]LocalArtifact, error) {
 			//create file
 			path := filepath.Join(path, a.DeployPath)
 			os.MkdirAll(filepath.Dir(path), 0755)
+			chanFiles <- true
 			f, err := os.Create(path)
-			defer f.Close()
+			defer func(f *os.File, chanFiles chan bool) {
+				f.Close()
+				<-chanFiles
+			}(f, chanFiles)
 			if err != nil {
 				result.err = err
 				chanArts <- result
@@ -177,7 +182,7 @@ func Download(path string, as ...Artifact) ([]LocalArtifact, error) {
 			//store the file name
 			result.la.Path = f.Name()
 			chanArts <- result
-		}()
+		}(chanFiles)
 
 	}
 	for i := 0; i < len(as); i++ {
