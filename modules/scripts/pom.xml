@@ -43,6 +43,7 @@
     <module>zedai-to-epub3</module>
     <module>zedai-to-html</module>
     <module>zedai-to-pef</module>
+    <module>docx-to-html</module>
   </modules>
   
   <!-- don't publish aggregator -->

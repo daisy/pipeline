@@ -43,12 +43,13 @@
             </xsl:if>
         </xsl:for-each>
         <!--
-            generate bnd file
+            generate bnd file for identified module references
+            (when nextCatalog/@catalog is not ending by .xml, considering that a module will not end with .xml like a catalog file uri)
         -->
         <xsl:result-document href="{$generatedResourcesDirectory}/bnd.bnd" method="text"><c:data>
-            <xsl:if test="cat:nextCatalog">
+            <xsl:if test="//cat:nextCatalog[not(ends-with(@catalog,'.xml'))]">
                 <xsl:text>Require-Bundle: </xsl:text>
-                <xsl:value-of select="string-join(//cat:nextCatalog/translate(@catalog,':','.'),',')"/>
+                <xsl:value-of select="string-join(//cat:nextCatalog[not(ends-with(@catalog,'.xml'))]/translate(@catalog,':','.'),',')"/>
                 <xsl:text>&#xa;</xsl:text>
             </xsl:if>
         </c:data></xsl:result-document>

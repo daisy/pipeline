@@ -1,0 +1,93 @@
+/*
+ * general
+ */
+html{-ms-overflow-style: scrollbar;} /* fix overlapping scrollbars in IE11 */
+body { position:relative; padding:0; margin:0 !important; background-color: #f8f8f8 !important;  }
+main div.row {margin-right:0; margin-left:0}
+.btn.active, .btn.disabled, .btn:active, .btn:hover, .btn:focus, .btn, .btn-default.active, .btn-default:active,
+.list-group, .list-group-item, .list-group-item:first-child, .list-group-item:last-child, .well{ box-shadow:none !important; -webkit-box-shadow:none !important; border-radius:0 !important; border-style:none !important}
+ 
+/*
+ * fonts
+ */
+#tr-topnav a, #tr-minitoc a, #tr-report *, #tr-content .BC_tooltip, #tr-content .BC_message, #tr-timestamp{font-family: 'Segoe UI', 'Calibri', Helvetica, Arial, sans-serif; }
+/*
+ * header
+ */
+header{background-color:#f8f8f8; font-weight:300; margin: auto; width: 100%;}
+#tr-logo{padding:0 1rem 0 0;margin:0; width:50px; height:50px; background:no-repeat url('../icons/logo-transpect.svg');}
+#tr-project-links a, #tr-project-links a:hover, #tr-project-links a:active, #tr-project-links a:focus {text-decoration:none}
+/*
+ * footer
+ */
+ #tr-footer{padding:15px 0;}
+ /*
+ *  images
+ */
+ img {max-width: 100%;}
+/*
+ *  content
+ */
+#tr-content{background-color:#fff; padding:15px; font-family: Georgia, Times, serif}
+/* smooth transitions for minitoc and report */
+#tr-report.affix, #tr-minitoc-wrapper.affix {margin-top:-95px;
+-webkit-transition: background .5s ease-in-out,margin .5s ease-in-out;
+-moz-transition: background .5s ease-in-out,margin .5s ease-in-out;
+transition: background .5s ease-in-out,margin .5s ease-in-out;}
+#tr-minitoc-wrapper.affix{position:relative}
+
+.navbar-toggle .icon-bar {background-color:#ccc}
+
+/*
+ * minitoc
+ */
+ #tr-minitoc {max-width:23%; width:23%; overflow-y:auto; height:100%}
+.BC_minitoc{margin-left:1%;}
+.BC_minitoc-item {padding-left:1rem; font-size:1.2rem; border-left: 2px solid #777; }
+.BC_minitoc-item a{color: #777 !important; padding: 2px 0 !important;text-decoration:none}
+.BC_minitoc-item a:focus{background-color:inherit !important}
+.BC_minitoc-level-h2{padding-left:1.5rem !important;}
+/* scroll-spy hover */
+#tr-minitoc .active a{color:#e53935 !important;}
+#tr-minitoc .active {border-left: 2px solid #fff !important}
+/*
+ * report
+ */
+#tr-report {font-size:1.2rem; color:#777; overflow-y:auto; height:100%; padding-bottom:100px;}
+/* labels for schematron rule families */
+.BC_family-label{padding: 10px 10px; font-weight: bold;}
+.BC_family-label-collapse {width:20px; text-decoration:none}
+/* buttons to filter by severity */
+.BC_severity span {margin-right:5px}
+.BC_severity span {font-weight:bold}
+/* warning buttons */
+.BC_link span.btn-xs {min-width:32px}
+.BC_link span.BC_arrow-down, .BC_link span.BC_arrow-up {min-width:10px}
+.BC_family-summary{ margin:0 !important; border-style:none}
+#tr-report .well {margin-bottom:0}
+#tr-report .checkbox {margin: 3px 0}
+#tr-report .badge {background-color:#888; color:#fff}
+#tr-report .BC_no-messages{ background-color:#c5e1a5; color:#33691e; font-weight:bold; margin-top:5px; border-radius:0; padding: 5px 10px;}
+#tr-report .BC_no-messages_mark{padding: 1px 5px}
+#tr-content .BC_tooltip{display:inline-block; margin:5px 5px 5px 0; text-align:left; text-indent:0;}
+#tr-report li.BC_tooltip{ padding: 5px 10px; border-style:none}
+#tr-report .BC_link{color:#337ab7 !important; text-decoration:none}
+#BC_msg_container{margin-top:15px}
+.BC_message, .BC_tooltip{font-size:1.2rem !important; text-transform:none !important}
+.BC_step-name{font-weight:normal; font-style:italic; font-size:0.9rem; margin-top:0.6rem}
+.BC_xpath{font-weight:normal; font-style:normal; font-family: monospace; font-size:1.2rem; margin-top:0.6rem}
+.BC_error_count{font-size:1rem}
+.fatal-error div.BC_message-text {font-weight:bold; color:#fff}
+div.BC_message-text code {color: inherit; background-color:inherit}
+
+#BC_orphans { margin:-1.05em -1.05em 1.05em; border-bottom:1px solid #bfd6e3; background-color:#FAFAFA; padding:1.25em 1em 1em 1em; }
+
+@media (min-width: 1200px){
+  #tr-minitoc, #tr-report{position:fixed;}
+}
+
+@media (max-width: 1200px){
+  #tr-report.affix{ left:58.33333333% !important; /* fix wrong placement after affix */}
+}
+/* sections in which errors are ignored */
+div.bc_ignore {background-color:#faf1cd; border: 2px solid #fae282; padding:0.5em; margin:1em; border-radius:0.5em;}

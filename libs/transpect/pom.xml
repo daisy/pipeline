@@ -6,16 +6,23 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.6</version>
-    <relativePath/>
+    <version>1.12.1-SNAPSHOT</version>
+    <relativePath>../modules/parent</relativePath>
   </parent>
 
-  <groupId>org.daisy.libs</groupId>
+  <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>transpect</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
+  <name>Transpect Xproc modules</name>
+
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>modules-registry</artifactId>
@@ -29,6 +36,13 @@
     </dependency>
   </dependencies>
 
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_transpect
+    </expose-services>
+  </properties>
+<!--
   <build>
     <resources>
       <resource>
@@ -108,5 +122,7 @@
       </plugin>
     </plugins>
   </build>
+-->
+
 
 </project>

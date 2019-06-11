@@ -89,6 +89,11 @@
         <artifactId>javafx-fxml</artifactId>
         <version>${javafx.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>docx-to-html</artifactId>
+        <version>2.0.1-SNAPSHOT</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>
@@ -1231,6 +1236,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>zedai-to-pef</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>docx-to-html</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>

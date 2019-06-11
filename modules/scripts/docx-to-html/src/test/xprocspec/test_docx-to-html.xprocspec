@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               script="../../main/resources/xml/docx-to-html.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:docx-to-html.script">
+			<x:input port="source">
+				<x:document type="file" href="../resources/resources/test.docx"/>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('test/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output directory">
+			<x:document type="directory" base-uri="temp-dir" href="test/output-dir/" recursive="true"/>
+		</x:context>
+		<x:expect label="the output directory should contain the XHTML" type="compare" >
+			<x:document type="inline">
+				<c:directory name="output-dir">
+					<c:file name="test.xhtml"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+
+</x:description>

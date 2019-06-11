@@ -19,6 +19,7 @@
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
+    <module>libs/transpect</module>
     <!-- issues in the repo version of xmlcalabash, 
     cannot build framework due to nullpointerexception 
     when building Apache derby connector -->

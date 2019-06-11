@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description
+		xmlns:x="http://www.jenitennison.com/xslt/xspec"
+		xmlns:calstable="http://docs.oasis-open.org/ns/oasis-exchange/table"
+		stylesheet="../../xsl/functions.xsl">
+  <!-- <xsl:function name="calstable:in-first-col" as="xs:boolean">
+    <xsl:param name="entry" as="element()"/>
+    <xsl:param name="colspecs" as="element()+"/>
+    <xsl:sequence select="($entry/@colname, $entry/@namest) = $colspecs[@colnum = 1]/@colname"/>
+  </xsl:function>
+   -->
+  <x:scenario label="Testing in-first-col">
+    <x:scenario label="Given entry in first-col">
+      <x:scenario label="with colname">
+        <x:call function="calstable:in-first-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 3]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-first-col returns true" select="true()"/>
+      </x:scenario>
+      <x:scenario label="with namest/nameend">
+        <x:call function="calstable:in-first-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 0]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-first-col returns true" select="true()"/>
+      </x:scenario>
+    </x:scenario>
+    <x:scenario label="Given entry not in first-col">
+      <x:scenario label="with colname">
+        <x:call function="calstable:in-first-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 6]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-first-col returns false" select="false()"/>
+      </x:scenario>
+      <x:scenario label="with namest/nameend">
+        <x:call function="calstable:in-first-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 13]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-first-col returns false" select="false()"/>
+      </x:scenario>
+    </x:scenario>
+  </x:scenario>
+  <x:scenario label="Testing in-last-col">
+    <x:scenario label="Given entry in last-col">
+      <x:scenario label="with colname">
+        <x:call function="calstable:in-last-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 2]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-last-col returns true" select="true()"/>
+      </x:scenario>
+      <x:scenario label="with namest/nameend">
+        <x:call function="calstable:in-last-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 4]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-last-col returns true" select="true()"/>
+      </x:scenario>
+    </x:scenario>
+    <x:scenario label="Given entry not in last-col">
+      <x:scenario label="with colname">
+        <x:call function="calstable:in-last-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 8]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-last-col returns false" select="false()"/>
+      </x:scenario>
+      <x:scenario label="with namest/nameend">
+        <x:call function="calstable:in-last-col">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 13]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="in-last-col returns false" select="false()"/>
+      </x:scenario>
+    </x:scenario>
+  </x:scenario>
+  <x:scenario label="Testing entry-overlaps">
+    <!--<xsl:function name="calstable:entry-overlaps" as="xs:boolean">
+    <xsl:param name="entry" as="element()"/><!-\- entry in any namespace -\->
+    <xsl:param name="entries" as="element()*"/><!-\- entry+ in any namespace -\->
+    <xsl:param name="colspecs" as="element()+"/>
+    <xsl:sequence select="
+      exists($entries[ 
+        calstable:is-col-in-span(
+          xs:decimal($colspecs[($entry/@colname, $entry/@namest)[1] = @colname]/@colnum),
+          (@colname, @namest)[1],
+          (@colname, @nameend)[1],
+          $colspecs
+        )
+      ])
+      "/>-->
+    <x:scenario label="Given entry in col1">
+      <x:scenario label="and exactly 1 entry in col1">
+        <x:call function="calstable:entry-overlaps">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 3]"/>
+          <x:param name="entries" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 8]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="it overlaps" select="true()"/>
+      </x:scenario>
+      <x:scenario label="and exactly 1 entry in col2">
+        <x:call function="calstable:entry-overlaps">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 3]"/>
+          <x:param name="entries" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 4]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="it does not overlap" select="false()"/>
+      </x:scenario>
+      <x:scenario label="and multiple entries with colname, some in col1">
+        <x:call function="calstable:entry-overlaps">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 3]"/>
+          <x:param name="entries" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@colname][not(@id = 3)]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="it overlaps" select="true()"/>
+      </x:scenario>
+      <x:scenario label="and multiple entries with colname, none in col1">
+        <x:call function="calstable:entry-overlaps">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 3]"/>
+          <x:param name="entries" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@colname][not(@colname = 'col1')]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="it does not overlap" select="false()"/>
+      </x:scenario>
+    </x:scenario>
+    <x:scenario label="Given entry in col3">
+      <x:scenario label="and exactly 1 entry in span col2 to col3">
+        <x:call function="calstable:entry-overlaps">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 1]"/>
+          <x:param name="entries" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 13]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="it overlaps" select="true()"/>
+      </x:scenario>
+      <x:scenario label="and exactly 1 entry in span col1 to col2">
+        <x:call function="calstable:entry-overlaps">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 1]"/>
+          <x:param name="entries" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 0]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="it does not overlap" select="false()"/>
+      </x:scenario>
+      <x:scenario label="and exactly 1 entry in span col2 to col4">
+        <x:call function="calstable:entry-overlaps">
+          <x:param name="entry" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 1]"/>
+          <x:param name="entries" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//entry[@id = 12]"/>
+          <x:param name="colspecs" href="../xml/tables-with-spans.xml" select="wrap/informaltable[1]//colspec"/>
+        </x:call>
+        <x:expect label="it overlaps" select="true()"/>
+      </x:scenario>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="Testing first-width-ge">
+    <x:scenario label="Given both width are 0">
+      <x:call function="calstable:first-width-ge">
+        <x:param name="width1" select="'0'"/>
+        <x:param name="width2" select="'0'"/>
+      </x:call>
+      <x:expect label="function returns true" select="true()"/>
+    </x:scenario>
+    <x:scenario label="Given width1 is 0">
+      <x:call function="calstable:first-width-ge">
+        <x:param name="width1" select="'0'"/>
+        <x:param name="width2" select="'1'"/>
+      </x:call>
+      <x:expect label="function returns true" select="false()"/>
+    </x:scenario>
+    <x:scenario label="Given width2 is 0">
+      <x:call function="calstable:first-width-ge">
+        <x:param name="width1" select="'1'"/>
+        <x:param name="width2" select="'0'"/>
+      </x:call>
+      <x:expect label="function returns true" select="true()"/>
+    </x:scenario>
+    <x:scenario label="Given width with 'pt' unit">
+      <x:call function="calstable:first-width-ge">
+        <x:param name="width1" select="'0pt'"/>
+        <x:param name="width2" select="'0pt'"/>
+      </x:call>
+      <x:expect label="function returns true" select="true()"/>
+    </x:scenario>
+  </x:scenario>
+</x:description>

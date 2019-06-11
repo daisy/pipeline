@@ -5,12 +5,11 @@
                 xmlns:docx2hub="http://transpect.io/docx2hub"
                 type="px:docx-to-html.script" name="main"
                 px:input-filesets="docx"
-                px:output-filesets="html"
-                exclude-inline-prefixes="#all">
+                px:output-filesets="html">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Office OpenXML to HTML</h1>
-        <p px:role="desc">Transforms a Microsoft Office OpenXML document into HTML using the <a href="https://transpect.github.io/modules-docx2hub.html">docx2hub module of the transpect pipeline</a>.</p>
+        <p px:role="desc">Transforms a Microsoft Office OpenXML document into HTML using thedocx2hub module of the transpect pipeline.</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/docx-to-html">
             Online documentation
         </a>
@@ -53,13 +52,18 @@ the given maximum size.</p>
         </p:documentation>
     </p:option>
 
+
+    <!-- DEPENDENCIES -->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://transpect.io/docx2hub/xpl/docx2html.xpl"/>
+
+
+    <!-- Starting script -->
     <px:normalize-uri name="output-dir-uri">
         <p:with-option name="href" select="concat($output-dir,'/')"/>
     </px:normalize-uri>
     
     <p:sink/>
-
-    <p:import href="http://transpect.io/docx2hub/xpl/docx2html.xpl"/>
     
     <p:group>
         <p:variable name="encoded-title"

@@ -11,10 +11,10 @@ rem   1 check failed
 rem   3 check failed fatally (something wrong with code)
 
 rem For unit testing
-if not [%1]==[] (
-    call %*
-    goto :EOF
-)
+REM if not [%1]==[] (
+REM     call %*
+REM     goto :EOF
+REM )
 
 setlocal enabledelayedexpansion
 
