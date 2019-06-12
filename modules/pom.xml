@@ -30,6 +30,8 @@
     <module>scripts</module>
     <module>nordic/epub3-dtbook-migrator</module>
     <module>nordic/epub3-dtbook-migrator-rewrite</module>
+    <module>sbs/epub3-dtbook-migrator</module>
+    <module>sbs/epub3-dtbook-migrator-rewrite</module>
   </modules>
 
   <!-- don't publish aggregator -->
