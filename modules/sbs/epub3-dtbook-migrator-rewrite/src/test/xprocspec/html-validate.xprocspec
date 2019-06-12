@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/html-validate.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="px:nordic-html-validate">
+        <x:call step="px:nordic-html-validate">
+            <x:option name="html" select="resolve-uri('../resources/single-html/C00000.xhtml',base-uri())"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
+        </x:call>
+
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="C00000.xhtml should be valid">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+
+        <x:context label="html-report - publication statistics">
+            <x:document type="file" base-uri="temp-dir" href="html-report/report.xhtml" method="xml" select="//html:tbody[html:tr/html:td[starts-with(text(),'element: ')]]"/>
+        </x:context>
+        <x:expect label="there should be exactly one table containing statistics of elements, classes and epub:types" type="count" min="1" max="1"/>
+        <x:expect label="The publication statistics should contain stuff" type="xpath" test="count(//html:tr) &gt; 0"/>
+
+    </x:scenario>
+    
+    <x:scenario label="px:nordic-html-validate - validating an invalid HTML document">
+        <x:call step="px:nordic-html-validate">
+            <x:option name="html" select="resolve-uri('../resources/single-html.invalid/C00000.invalid.xhtml',base-uri())"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
+        </x:call>
+        
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="single-html.invalid/C00000.invalid.xhtml should be invalid">
+            <x:document type="inline">
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
+        
+    </x:scenario>
+
+</x:description>

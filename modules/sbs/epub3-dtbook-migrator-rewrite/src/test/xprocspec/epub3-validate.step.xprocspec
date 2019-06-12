@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/epub3-validate.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
+    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="px:nordic-epub3-validate.step" pending="https://github.com/daisy/pipeline-scripts-utils/pull/92">
+        <x:call step="px:nordic-epub3-validate.step">
+            <x:input port="fileset.in">
+                <x:document type="inline" xml:base="../resources/C00000/">
+                    <d:fileset>
+                        <d:file href="mimetype" media-type="text/plain"/>
+                        <d:file href="META-INF/container.xml"/>
+                        <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-01-cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-02-toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-03-frontmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-04-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-05-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-06-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-07-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-08-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-09-part.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-10-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-11-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-12-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
+                        <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
+                        <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>
+                        <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
+                        <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf"/>
+                        <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
+                        <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
+                        <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
+                        <d:file href="EPUB/css/fonts/opendyslexic/LICENSE.txt"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in">
+                <x:document href="../resources/C00000/EPUB/package.opf" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/nav.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-01-cover.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-02-toc.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-03-frontmatter.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-05-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-09-part.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-10-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-11-conclusion.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-12-footnotes.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/nav.ncx" type="file" method="xml"/>
+            </x:input>
+            <x:input port="report.in"/>
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:option name="fail-on-error" select="'true'"/>
+        </x:call>
+
+        <x:context label="fileset.out">
+            <x:document type="port" port="fileset.out"/>
+        </x:context>
+        <x:expect type="compare" label="the fileset.out port should contain the same document as was received on the fileset.in port">
+            <x:document type="port" port="fileset.in"/>
+        </x:expect>
+
+        <x:context label="in-memory.out">
+            <x:document type="port" port="in-memory.out"/>
+        </x:context>
+        <x:expect type="compare" label="the in-memory.out port should contain the same documents as was received on the in-memory.in port">
+            <x:document href="../resources/C00000/EPUB/package.opf" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/nav.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-01-cover.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-02-toc.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-03-frontmatter.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-05-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-09-part.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-10-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-11-conclusion.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-12-footnotes.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/nav.ncx" type="file" method="xml"/>
+        </x:expect>
+
+        <x:context label="report.out">
+            <x:document type="port" port="report.out"/>
+        </x:context>
+        <x:expect label="there should be no errors under d:reports" type="xpath" test="count(/*/d:reports/d:report/d:error)" equals="0"/>
+        <x:expect label="the error count should be 0" type="xpath" test="if (/d:errors) then count(/*/*) else if (/*/d:document-info) then /*/d:document-info/d:error-count/number(.) else 0" equals="0"/>
+        <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix in the HTML file" test="count(/html:html/html:head/html:meta[@name='a11y:certifiedBy' and @content='Certifying Organization'])" equals="1"/>
+        <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix in the OPF file" test="/opf:package/opf:metadata/opf:meta[@property='a11y:certifiedBy']/text()" equals="'Certifying Organization'"/>
+        <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes in the HTML file" test="count(/html:html/html:head/html:meta[@name='schema:audience' and @content='Adult'])" equals="1"/>
+        <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes in the OPF file" test="/opf:package/opf:metadata/opf:meta[@property='schema:audience']/text()" equals="'Adult'"/>
+        
+    </x:scenario>
+    
+    <x:scenario label="px:nordic-epub3-validate.step - regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'" pending="https://github.com/daisy/pipeline-scripts-utils/pull/92">
+        <x:call step="px:nordic-epub3-validate.step">
+            <x:input port="fileset.in">
+                <x:document type="inline" xml:base="../resources/regression-MissingFormatArgumentException/">
+                    <d:fileset>
+                        <d:file href="mimetype" media-type="text/plain"/>
+                        <d:file href="META-INF/container.xml"/>
+                        <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-04-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in">
+                <x:document href="../resources/C00000/EPUB/package.opf" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/nav.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
+            </x:input>
+            <x:input port="report.in"/>
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:option name="fail-on-error" select="'true'"/>
+        </x:call>
+        
+        <x:context label="errors">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect type="xpath" label="the validator should complain about a missing nav.xhtml" test="/*/*/@code" equals="'NORDICDTBOOKEPUB014'"/>
+    </x:scenario>
+
+</x:description>
