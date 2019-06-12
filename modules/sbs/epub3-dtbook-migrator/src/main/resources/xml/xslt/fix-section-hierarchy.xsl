@@ -11,7 +11,7 @@
     </xsl:template>
 
     <xsl:template match="h1 | h2 | h3 | h4 | h5 | h6">
-        <xsl:variable name="level" select="count(ancestor::section | ancestor::article | ancestor::nav | ancestor::aside | ancestor::header)"/>
+        <xsl:variable name="level" select="count(ancestor::section | ancestor::article | ancestor::nav | ancestor::aside)"/>
         <xsl:variable name="level" select="if ($body-is-section='true') then ($level+1) else $level"/>
         <xsl:variable name="level" select="min(($level,6))"/>
         <xsl:element name="h{$level}">

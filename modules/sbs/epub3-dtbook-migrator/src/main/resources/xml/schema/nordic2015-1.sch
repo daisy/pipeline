@@ -71,7 +71,7 @@
     <!-- Rule 13: All books must have frontmatter and bodymatter -->
     <pattern id="epub_nordic_13_a">
         <!-- see also nordic2015-1.opf-and-html.sch for multi-document version -->
-        <rule context="html:body[html:header]">
+        <rule context="html:body[html:header and *[not(self::html:header)]]">
             <assert test="((html:section|html:article)/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[nordic13a] A single-HTML document must have at least one frontmatter or cover
                 section</assert>
             <assert test="((html:section|html:article)/tokenize(@epub:type,'\s+')='bodymatter') = true()">[nordic13a] A single-HTML document must have at least one bodymatter section</assert>

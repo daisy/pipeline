@@ -177,7 +177,7 @@
             <assert test="$identifier = ../../opf:metadata/dc:identifier/text()">[opf12b_identifier] The "identifier" part of the filename ("<value-of select="$identifier"/>") must be the same as
                 declared in metadata, i.e.: "<value-of select="../../opf:metadata/dc:identifier/text()"/>".</assert>
 
-            <assert test="$type = ($vocab-default, $vocab-z3998)">[opf12b_type] "<value-of select="$type"/>" is not a valid type. <value-of
+            <assert test="$type = ($vocab-default, $vocab-z3998, 'header')">[opf12b_type] "<value-of select="$type"/>" is not a valid type. <value-of
                     select="if (count(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])) then concat('Did you mean &quot;',(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])[1],'&quot;?') else ''"
                 /> The filename of content documents must end with a epub:type defined in either the EPUB3 Structural Semantics Vocabulary (http://www.idpf.org/epub/vocab/structure/#) or the
                 Z39.98-2012 Structural Semantics Vocabulary (http://www.daisy.org/z3998/2012/vocab/structure/).</assert>

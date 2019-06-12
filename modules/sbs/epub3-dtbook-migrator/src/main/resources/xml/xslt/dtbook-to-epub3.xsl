@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+<xsl:stylesheet xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-epub3.xsl"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:epub="http://www.idpf.org/2007/ops"
@@ -16,6 +16,11 @@
     <xsl:import href="epub3-vocab.xsl"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
+
+    <xsl:param name="generate-ids" select="true()"/>
+    <xsl:param name="supported-list-types" select="('ol','ul','pl')"/>
+    <xsl:param name="parse-list-marker" select="true()"/>
+    <xsl:param name="add-tbody" select="true()"/>
 
     <xsl:template match="comment()">
         <xsl:copy-of select="." exclude-result-prefixes="#all"/>
@@ -47,7 +52,7 @@
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]" exclude-result-prefixes="#all"/>
         <xsl:if
-            test="not(@id) and ($types[.='epigraph'] or not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/'))">
+            test="$generate-ids and not(@id) and ($types[.='epigraph'] or not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/'))">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
         <xsl:call-template name="f:classes-and-types">
@@ -562,7 +567,9 @@
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
-        <xsl:if test="not(@id)">
+        <xsl:if test="not(@id) and (
+                        $generate-ids or (
+                        some $ref in tokenize(@imgref,'\s+')[not(.='')] satisfies //dtbook:img[@id=$ref]))">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
     </xsl:template>
@@ -738,24 +745,31 @@
     </xsl:template>
 
     <xsl:template name="f:attlist.a">
+        <xsl:variable name="target" as="xs:string?">
+            <xsl:choose>
+                <xsl:when test="f:classes(.)[matches(.,'^target--')]">
+                    <xsl:sequence select="replace((f:classes(.)[matches(.,'^target--')])[1],'^target--','_')"/>
+                </xsl:when>
+                <xsl:when test="f:classes(.)[matches(.,'^target-')]">
+                    <xsl:sequence select="replace((f:classes(.)[matches(.,'^target-')])[1],'^target-','')"/>
+                </xsl:when>
+                <xsl:when test="@external='true'">
+                    <xsl:sequence select="'_blank'"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:call-template name="f:attrs">
-            <xsl:with-param name="classes" select="(if (@external) then concat('external-',@external) else (), if (@rev) then concat('rev-',@rev) else ())" tunnel="yes"/>
+            <xsl:with-param name="classes" select="(if (@external) then concat('external-',@external)
+                                                    else if ($target='_blank' or matches(@href,'^(\w+:|/)')) then 'external-false'
+                                                    else (),
+                                                    if (@rev) then concat('rev-',@rev) else ())" tunnel="yes"/>
             <xsl:with-param name="exclude-classes" select="for $target in (f:classes(.)[matches(.,'^target-')]) return $target" tunnel="yes"/>
         </xsl:call-template>
         <xsl:copy-of select="@type|@href|@hreflang|@rel|@accesskey|@tabindex" exclude-result-prefixes="#all"/>
         <!-- @rev is dropped since it's not supported in HTML5 -->
-
-        <xsl:choose>
-            <xsl:when test="f:classes(.)[matches(.,'^target--')]">
-                <xsl:attribute name="target" select="replace((f:classes(.)[matches(.,'^target--')])[1],'^target--','_')"/>
-            </xsl:when>
-            <xsl:when test="f:classes(.)[matches(.,'^target-')]">
-                <xsl:attribute name="target" select="replace((f:classes(.)[matches(.,'^target-')])[1],'^target-','')"/>
-            </xsl:when>
-            <xsl:when test="@external='true'">
-                <xsl:attribute name="target" select="'_blank'"/>
-            </xsl:when>
-        </xsl:choose>
+        <xsl:if test="$target">
+            <xsl:attribute name="target" select="$target"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="dtbook:em">
@@ -971,7 +985,7 @@
     <xsl:template name="f:attlist.pagenum">
         <xsl:call-template name="f:attrsrqd">
             <xsl:with-param name="types" select="'pagebreak'" tunnel="yes"/>
-            <xsl:with-param name="classes" select="concat('page-',(@page,if (normalize-space(.)='') then 'special' else 'normal')[1])" tunnel="yes"/>
+            <xsl:with-param name="classes" select="if (@page) then concat('page-',@page) else if (normalize-space(.)='') then 'page-special' else ()" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -1137,7 +1151,7 @@
     <xsl:template match="dtbook:p">
         <xsl:variable name="element" select="."/>
         <xsl:variable name="has-block-elements" select="if (dtbook:list or dtbook:dl or dtbook:imggroup) then true() else false()"/>
-        <xsl:variable name="contains-single-code-element" select="count(dtbook:code) = 1 and count(* | text()[normalize-space()]) = 1"/>
+        <xsl:variable name="contains-single-code-element" select="count(dtbook:code) = 1 and count(* | text()[normalize-space()]) = 1 and @xml:space='preserve'"/>
         <xsl:if test="f:classes($element)=('precedingemptyline','precedingseparator')">
             <hr class="{if (f:classes($element)='precedingseparator') then 'separator' else 'emptyline'}"/>
         </xsl:if>
@@ -1216,7 +1230,29 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="dtbook:h1 | dtbook:h2 | dtbook:h3 | dtbook:h4 | dtbook:h5 | dtbook:h6 | dtbook:hd">
+    <xsl:template match="dtbook:h1 | dtbook:h2 | dtbook:h3 | dtbook:h4 | dtbook:h5 | dtbook:h6">
+        <xsl:variable name="name">
+            <xsl:choose>
+                <xsl:when test="ancestor-or-self::*[self::dtbook:level1 or
+                                                    self::dtbook:level2 or
+                                                    self::dtbook:level3 or
+                                                    self::dtbook:level4 or
+                                                    self::dtbook:level5 or
+                                                    self::dtbook:level6]">
+                    <xsl:sequence select="concat('h',f:level(.))"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="local-name(.)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:element name="{$name}">
+            <xsl:call-template name="f:attlist.h"/>
+            <xsl:apply-templates select="node()"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="dtbook:hd">
         <xsl:element name="h{f:level(.)}">
             <xsl:call-template name="f:attlist.h"/>
             <xsl:apply-templates select="node()"/>
@@ -1341,6 +1377,9 @@
     </xsl:template>
 
     <xsl:template name="f:list.content">
+        <xsl:if test="not(@type=$supported-list-types)">
+            <xsl:message terminate="yes">Error</xsl:message>
+        </xsl:if>
         <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::dtbook:li)]">
             <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
         </xsl:apply-templates>
@@ -1349,7 +1388,7 @@
             select="if (starts-with($first-marker-text,'•')) then '•' else if (matches($first-marker-text,'^[0-9a-zA-Z]+\.')) then substring-before($first-marker-text,'.') else ''"/>
         <xsl:variable name="first-marker-type"
             select="if (not($first-marker)) then '' else if ($first-marker='•') then '•' else if (string(number($first-marker)) != 'NaN') then '1' else if ($first-marker='i') then 'i' else if ($first-marker='I') then 'I' else if ($first-marker=lower-case($first-marker)) then 'a' else 'A'"/>
-        <xsl:element name="{if ($first-marker-type='•') then 'ul' else 'ol'}">
+        <xsl:element name="{if (@type=('ol','ul')) then @type else if ($parse-list-marker and $first-marker-type='•') then 'ul' else 'ol'}">
             <xsl:call-template name="f:attlist.list">
                 <xsl:with-param name="marker-type" select="$first-marker-type"/>
             </xsl:call-template>
@@ -1365,38 +1404,63 @@
     <xsl:template name="f:attlist.list">
         <xsl:param name="marker-type" select="''"/>
         <xsl:call-template name="f:attrs">
-            <xsl:with-param name="classes" select="if ($marker-type='' and not(ancestor-or-self::dtbook:list[f:classes(.)='toc'])) then 'list-style-type-none' else ()" tunnel="yes"/>
+            <xsl:with-param name="classes" tunnel="yes"
+                            select="if (ancestor-or-self::dtbook:list[f:classes(.)='toc'] or @type=('ol','ul')) then ()
+                                    else (if (not($parse-list-marker) or $marker-type='') then ('list-style-type-none') else (),
+                                          if (@type='pl') then 'preformatted' else ())" />
             <xsl:with-param name="except-types" select="if (ancestor-or-self::dtbook:list[f:classes(.)='toc']) then 'toc' else ()" tunnel="yes"/>
         </xsl:call-template>
         <!-- @depth is implicit; ignore it -->
-        <!--<xsl:if test="@enum">
-            <xsl:attribute name="type" select="@enum"/>
-        </xsl:if>-->
-        <xsl:if test="$marker-type=('a','A','i','I')">
-            <xsl:attribute name="type" select="$marker-type"/>
+        <!-- NOTE: type attribute is actually deprecated; list styles should be handled through CSS -->
+        <xsl:choose>
+            <xsl:when test="@type=('ol','ul')">
+                <xsl:if test="@enum">
+                    <xsl:attribute name="type" select="@enum"/>
+                </xsl:if>
+            </xsl:when>
+            <xsl:when test="not($parse-list-marker)"/>
+            <xsl:when test="$marker-type='•'">
+                <!-- <xsl:attribute name="type" select="'disc'"/> -->
+            </xsl:when>
+            <xsl:when test="$marker-type=('a','A','i','I')">
+                <xsl:attribute name="type" select="$marker-type"/>
+            </xsl:when>
+        </xsl:choose>
+        <!-- NOTE: start attribute is actually deprecated -->
+        <xsl:if test="@type='ol' or not($parse-list-marker and $marker-type='•')">
+            <xsl:copy-of select="@start"/>
         </xsl:if>
-        <xsl:copy-of select="@start" exclude-result-prefixes="#all"/>
     </xsl:template>
 
     <xsl:template match="dtbook:li">
         <xsl:param name="marker-type" select="''"/>
         <xsl:apply-templates select="preceding-sibling::comment() intersect preceding-sibling::*[1]/following-sibling::comment()"/>
         <li>
-            <xsl:variable name="marker-text" select="(text() | dtbook:p/text())[normalize-space()][1]"/>
-            <xsl:variable name="marker"
-                select="if (starts-with($marker-text,'•')) then '•' else if (matches($marker-text,'^[0-9a-zA-Z]+\.')) then substring-before($marker-text,'.') else ()"/>
-            <xsl:variable name="marker-type"
-                select="if (not($marker)) then '' else if ($marker='•') then '•' else if (string(number($marker)) != 'NaN') then '1' else parent::*/dtbook:li[1]/(text()[normalize-space()]|dtbook:p/text()[normalize-space()])[1]/(if (starts-with(.,'i.')) then 'i' else if (starts-with(.,'I.')) then 'I' else if (substring(.,1,1)=lower-case(substring(.,1,1))) then 'a' else 'A')"/>
-            <!-- NOTE: list is assumed to be preformatted; a generic script would calculate implicit value based on start attribute etc. -->
-            <xsl:variable name="marker-value"
-                select="if ($marker-type=('a','A')) then f:numeric-alpha-to-decimal(lower-case($marker)) else if ($marker-type=('i','I')) then pf:numeric-roman-to-decimal(lower-case($marker)) else $marker"/>
-
-            <xsl:call-template name="f:attlist.li">
-                <xsl:with-param name="li-value" select="$marker-value"/>
-            </xsl:call-template>
-
+            <xsl:choose>
+                <xsl:when test="parent::*/@type=('ol','ul') or not($parse-list-marker)">
+                    <xsl:call-template name="f:attlist.li"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="marker-text" select="(text() | dtbook:p/text())[normalize-space()][1]"/>
+                    <xsl:variable name="marker"
+                                  select="if (starts-with($marker-text,'•')) then '•' else if (matches($marker-text,'^[0-9a-zA-Z]+\.')) then substring-before($marker-text,'.') else ()"/>
+                    <xsl:variable name="marker-type"
+                                  select="if (not($marker)) then '' else if ($marker='•') then '•' else if (string(number($marker)) != 'NaN') then '1' else parent::*/dtbook:li[1]/(text()[normalize-space()]|dtbook:p/text()[normalize-space()])[1]/(if (starts-with(.,'i.')) then 'i' else if (starts-with(.,'I.')) then 'I' else if (substring(.,1,1)=lower-case(substring(.,1,1))) then 'a' else 'A')"/>
+                    <!-- NOTE: list is assumed to be preformatted; a generic script would calculate implicit value based on start attribute etc. -->
+                    <xsl:variable name="marker-value"
+                                  select="if ($marker-type=('a','A')) then f:numeric-alpha-to-decimal(lower-case($marker)) else if ($marker-type=('i','I')) then pf:numeric-roman-to-decimal(lower-case($marker)) else $marker"/>
+                    
+                    <xsl:call-template name="f:attlist.li">
+                        <xsl:with-param name="li-value" select="$marker-value"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+            
             <xsl:for-each select="node()">
                 <xsl:choose>
+                    <xsl:when test="parent::*/@type=('ol','ul') or not($parse-list-marker)">
+                        <xsl:apply-templates select="."/>
+                    </xsl:when>
                     <xsl:when
                         test="self::dtbook:* and not(preceding-sibling::node()[self::* or self::text()[normalize-space()]]) and not(text()[1]/preceding-sibling::*) and matches(text()[1],'^(\w+\.|•)')">
                         <xsl:if test="* or normalize-space(replace(text()[1],'^(\w+\.|•) ','')) != ''">
@@ -1503,9 +1567,16 @@
             </xsl:for-each>
             <xsl:apply-templates select="dtbook:thead | dtbook:tfoot | dtbook:tbody"/>
             <xsl:if test="not(dtbook:tbody) and dtbook:tr">
-                <tbody>
-                    <xsl:apply-templates select="dtbook:tr"/>
-                </tbody>
+                <xsl:choose>
+                    <xsl:when test="$add-tbody">
+                        <tbody>
+                            <xsl:apply-templates select="dtbook:tr"/>
+                        </tbody>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="dtbook:tr"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
         </table>
 
@@ -1575,7 +1646,9 @@
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
-        <xsl:if test="not(@id)">
+        <xsl:if test="not(@id) and (
+                        $generate-ids or (
+                        some $ref in tokenize(@imgref,'\s+')[not(.='')] satisfies //dtbook:img[@id=$ref]))">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
     </xsl:template>

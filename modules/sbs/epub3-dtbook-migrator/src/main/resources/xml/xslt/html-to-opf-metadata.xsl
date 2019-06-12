@@ -3,7 +3,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0">
 
     <xsl:template match="/*">
-        <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" prefix="nordic: http://www.mtm.se/epub/">
+        <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" prefix="nordic: http://www.mtm.se/epub/ prod: http://www.sbs.ch/prod/">
 
             <xsl:variable name="identifier" select="//html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid')][1]"/>
             <dc:identifier id="pub-id">
@@ -12,6 +12,12 @@
             </dc:identifier>
 
             <dc:format id="format">EPUB3</dc:format>
+
+            <xsl:if test="not(/html:html/html:head/html:meta[lower-case(@name)='dc:language'])">
+                <dc:language>
+                    <xsl:value-of select="(/*/@xml:lang,'und')[1]"/>
+                </dc:language>
+            </xsl:if>
 
             <xsl:if test="not(/html:html/html:head/html:meta[lower-case(@name)='dc:title'])">
                 <dc:title>
