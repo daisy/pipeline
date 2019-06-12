@@ -109,8 +109,8 @@
             <level1 id="d910e43">
                 <h1>Valentin Haüy - the father of the education for the blind</h1>
                 <p>
-                    <span id="dtb4">Published by the Swedish Library of Talking Books and Braille (<span title="The Swedish Library of Talking Books and Braille" id="d910e49" class="initialism"
-                            >MTM</span>).</span>
+                    <span id="dtb4">Published by the Swedish Library of Talking Books and Braille (<acronym title="The Swedish Library of Talking Books and Braille" id="d910e49" pronounce="no"
+                            >MTM</acronym>).</span>
                 </p>
                 <imggroup id="d910e54">
                     <img id="d910e56" src="valentin.jpg" alt="image"/>
@@ -212,6 +212,7 @@
                 <level2 id="d910e124">
                     <h2 id="d910e126">List of contents</h2>
                     <table id="dtb21">
+                    <tbody>
                         <tr id="dtb22">
                             <td rowspan="1" colspan="1">
                                 <span id="dtb23">Preface</span>
@@ -461,14 +462,15 @@
                                 <span id="dtb111">29</span>
                             </td>
                         </tr>
+                    </tbody>
                     </table>
                     <pagenum id="page_4" page="front">iv</pagenum>
                 </level2>
                 <level2 id="d910e617">
                     <h2 id="d910e619">Preface</h2>
                     <p>
-                        <span id="dtb113">During my 19 years at the Swedish Library of Talking Books and Braille (<span title="The Swedish Library of Talking Books and Braille" id="d910e629"
-                                class="initialism">MTM</span>), I have frequently been asked about the history of the Braille system and these questions were really what motivated my research into the
+                        <span id="dtb113">During my 19 years at the Swedish Library of Talking Books and Braille (<acronym title="The Swedish Library of Talking Books and Braille" id="d910e629"
+                                pronounce="no">MTM</acronym>), I have frequently been asked about the history of the Braille system and these questions were really what motivated my research into the
                             life of Louis Braille, the inventor of the system of writing for the blind which was named after him. </span>
                         <span id="dtb114">My investigations revealed that Louis Braille himself would have had almost no schooling at all if it had not been for Valentin Haüy, the father of education
                             for the blind.</span>
@@ -506,14 +508,14 @@
             <level1 id="d910e694" class="chapter">
                 <pagenum id="page_5" page="normal">5</pagenum>
                 <h1 id="d910e696">1. Research questions</h1>
-                <p xml:space="preserve"><code xml:space="preserve">
+                <p xml:space="preserve"><code>
     public static void main(String[] args) {
         ...
     }
 </code></p>
                 <p>
-                    <span id="dtb128">My interest in Valentin Haüy, the father of education for the blind in Europe, was aroused while working at <span
-                            title="The Swedish Library of Talking Books and Braille" id="d910e709" class="initialism">MTM</span> on a book about Louis Braille, the creator of the Braille system. </span>
+                    <span id="dtb128">My interest in Valentin Haüy, the father of education for the blind in Europe, was aroused while working at <acronym
+                            title="The Swedish Library of Talking Books and Braille" id="d910e709" pronounce="no">MTM</acronym> on a book about Louis Braille, the creator of the Braille system. </span>
                     <span id="dtb129">I discovered that there was a dearth of literature on Haüy in Swedish, and that in the limited literature I was able to consult, information about him was often
                         contradictory. </span>
                     <span id="dtb130">In particular, I noticed that there were no references to the period of the more than ten years which Haüy spent in Russia.</span>
@@ -2210,8 +2212,8 @@
                 <p>
                     <span id="dtb958">Haüy was also a utilitarian (a term coined by Jeremy Bentham). </span>
                     <span id="dtb959">He believed wholeheartedly that the blind should taught to be self-sufficient. </span>
-                    <span id="dtb960">This utilitarian view characterised teaching of the blind for a long time and is still the basis of education for the blind in the <span
-                            title="United States of America" id="d910e4274" class="initialism">USA</span>, Canada and several Asian countries where the aim of the education for the blind is that they
+                    <span id="dtb960">This utilitarian view characterised teaching of the blind for a long time and is still the basis of education for the blind in the <acronym
+                            title="United States of America" id="d910e4274" pronounce="no">USA</acronym>, Canada and several Asian countries where the aim of the education for the blind is that they
                         should eventually be able to fend for themselves in life. </span>
                     <span id="d910e4278">
                         <span id="dtb961">Haüy does not stand alone amongst his contemporaries in taking this utilitarian view of education for the visually impaired: it was characteristic of all
@@ -2321,7 +2323,7 @@
                     <span id="dtb1012">Underlying this policy is a belief in equality and fraternity, two of the fundamental values of the Enlightenment. </span>
                     <span id="dtb1013">The Swedish government recently presented the draft of a proposed law (pro. 1999/2000:79) to the Riksdag: Från patient till medborgare - en nationell
                         handlingsplan för handikappolitiken (From patient to citizen - a national policy for the handicapped). </span>
-                    <span id="dtb1014">This was a consequence of Sweden's adoption of the <span title="United Nations" id="d910e4503" class="initialism">UN</span> standard legislation on the right of
+                    <span id="dtb1014">This was a consequence of Sweden's adoption of the <acronym title="United Nations" id="d910e4503" pronounce="no">UN</acronym> standard legislation on the right of
                         the handicapped to participation and equality and other amendments to the Declaration of Human Rights. </span>
                     <span id="dtb1015">Haüy's ideas on integration and participation in society were thus strikingly modern.</span>
                 </p>

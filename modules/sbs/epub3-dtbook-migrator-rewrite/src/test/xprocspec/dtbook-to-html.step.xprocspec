@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/dtbook-to-html.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
+    
+    <x:script>
+        <p:declare-step version="1.0" type="px:nordic-dtbook-to-html-with-css" name="main">
+            <p:input port="fileset.in" primary="true"/>
+            <p:input port="in-memory.in" sequence="true">
+                <p:empty/>
+            </p:input>
+            <p:output port="fileset.out" primary="true"/>
+            <p:output port="in-memory.out" sequence="true">
+                <p:pipe step="add-css" port="in-memory.out"/>
+            </p:output>
+            <p:option name="fail-on-error" required="true"/>
+            <p:option name="temp-dir" required="true"/>
+            <p:import href="module:/xml/xproc/step/dtbook-to-html.step.xpl"/>
+            <p:import href="module:/xml/xproc/step/html-add-accessibility.step.xpl"/>
+            <px:nordic-dtbook-to-html.step name="dtbook-to-html">
+                <p:input port="in-memory.in">
+                    <p:pipe step="main" port="in-memory.in"/>
+                </p:input>
+                <p:with-option name="fail-on-error" select="fail-on-error"/>
+                <p:with-option name="temp-dir" select="$temp-dir"/>
+            </px:nordic-dtbook-to-html.step>
+            <px:nordic-html-add-accessibility-css.step name="add-css">
+                <p:input port="in-memory.in">
+                    <p:pipe step="dtbook-to-html" port="in-memory.out"/>
+                </p:input>
+            </px:nordic-html-add-accessibility-css.step>
+        </p:declare-step>
+    </x:script>
+    
     <x:scenario label="px:nordic-dtbook-to-html.step">
-        <x:call step="px:nordic-dtbook-to-html.step">
+        <x:call step="px:nordic-dtbook-to-html-with-css">
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="../resources/DTBook/">
                     <d:fileset>
@@ -28,7 +57,7 @@
         <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute with filename C00000.xhtml" test="tokenize(/*/@xml:base,'/')[last()]"
             equals="'C00000.xhtml'"/>
         <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute pointing to the temp-dir directory" test="/*/@xml:base"
-            equals="concat($temp-dir,'temp-dir/C00000.xhtml')"/>
+            equals="concat($temp-dir,'temp-dir/C00000.xhtml')" pending="the base URI is normalized"/>
 
         <x:context label="the fileset">
             <x:document type="port" port="fileset.out"/>

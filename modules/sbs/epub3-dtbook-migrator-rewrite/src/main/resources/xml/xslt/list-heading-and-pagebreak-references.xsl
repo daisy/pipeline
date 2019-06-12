@@ -15,6 +15,9 @@
         </c:result>
     </xsl:template>
 
+    <xsl:template match="header/h1[@epub:type='fulltitle']"/>
+    <xsl:template match="body[header and not(*[not(self::header)])]"/>
+
     <xsl:template match="h1 | h2 | h3 | h4 | h5 | h6">
         <xsl:variable name="sectioning-element" select="parent::*"/>
         <c:result>

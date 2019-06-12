@@ -1288,9 +1288,9 @@
             <x:expect
                 label="the resulting element should be a span for inline contexts or a div otherwise. An epub:type of pagebreak should be added, the page attribute should be converted into a class and the contents of the element moved into its title attribute">
                 <html:div>
-                    <html:div class="page-normal" epub:type="pagebreak" title="1"/>
+                    <html:div epub:type="pagebreak" title="1"/>
                     <html:p>
-                        <html:span class="page-normal" epub:type="pagebreak" title="2"/>
+                        <html:span epub:type="pagebreak" title="2"/>
                     </html:p>
                 </html:div>
             </x:expect>
@@ -1435,7 +1435,7 @@
                 <html:figure id="..." class="image">
                     <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
                     <html:aside id="prodnote1" epub:type="z3998:production" class="prodnote"/>
-                    <html:div epub:type="pagebreak" class="page-normal" title="1"/>
+                    <html:div epub:type="pagebreak" title="1"/>
                     <html:figcaption id="caption1"/>
                 </html:figure>
             </x:expect>
@@ -1601,7 +1601,7 @@
             <x:context>
                 <dtbook:p id="paragraph">
                     <dtbook:span>A</dtbook:span>
-                    <dtbook:list/>
+                    <dtbook:list type="pl"/>
                     <dtbook:span>B</dtbook:span>
                     <dtbook:dl/>
                     <dtbook:span>C</dtbook:span>
@@ -1612,7 +1612,7 @@
                     <html:p>
                         <html:span>A</html:span>
                     </html:p>
-                    <html:ol id="..." class="list-style-type-none"/>
+                    <html:ol id="..." class="list-style-type-none preformatted"/>
                     <html:p>
                         <html:span>B</html:span>
                     </html:p>
@@ -2365,17 +2365,17 @@
                 </dtbook:dl>
             </x:context>
             <x:expect label="the resulting element should be dl">
-                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1"/>
+                <html:div epub:type="pagebreak" title="2"/>
                 <html:dl id="...">
-                    <html:dt id="...">dt #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:dt>
-                    <html:dd>dd #1 <html:span epub:type="pagebreak" title="5" class="page-normal"/>
-                        <html:span epub:type="pagebreak" title="6" class="page-normal"/></html:dd>
-                    <html:dt id="...">dt #2 <html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:dt>
+                    <html:dt id="...">dt #1 <html:span epub:type="pagebreak" title="3"/><html:span epub:type="pagebreak" title="4"/></html:dt>
+                    <html:dd>dd #1 <html:span epub:type="pagebreak" title="5"/>
+                        <html:span epub:type="pagebreak" title="6"/></html:dd>
+                    <html:dt id="...">dt #2 <html:span epub:type="pagebreak" title="7"/><html:span epub:type="pagebreak" title="8"/></html:dt>
                     <html:dd>dd #2</html:dd>
                 </html:dl>
-                <html:div epub:type="pagebreak" title="9" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="10" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="9"/>
+                <html:div epub:type="pagebreak" title="10"/>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -2413,14 +2413,14 @@
     <x:scenario label="when processing a list element">
         <x:scenario label="which has a headline">
             <x:context>
-                <dtbook:list>
+                <dtbook:list type="pl">
                     <dtbook:hd>TEXT</dtbook:hd>
                 </dtbook:list>
             </x:context>
             <x:expect label="the resulting list should be wrapped in a section element containing the hd">
                 <html:section id="...">
                     <html:h1 id="...">TEXT</html:h1>
-                    <html:ol id="..." class="list-style-type-none">...</html:ol>
+                    <html:ol id="..." class="list-style-type-none preformatted">...</html:ol>
                 </html:section>
             </x:expect>
         </x:scenario>
@@ -2431,7 +2431,7 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the resulting element should be a ol">
-                <html:ol id="..." class="list-style-type-none">
+                <html:ol id="...">
                     <html:li id="...">TEXT</html:li>
                 </html:ol>
             </x:expect>
@@ -2442,10 +2442,10 @@
                     <dtbook:li>TEXT</dtbook:li>
                 </dtbook:list>
             </x:context>
-            <x:expect label="the resulting element should be a ol (the type attribute is ignored since it is disallowed in nordic guidelines)">
-                <html:ol id="..." class="list-style-type-none">
+            <x:expect label="the resulting element should be a ul">
+                <html:ul id="...">
                     <html:li id="...">TEXT</html:li>
-                </html:ol>
+                </html:ul>
             </x:expect>
         </x:scenario>
         <x:scenario label="which is preformatted">
@@ -2455,7 +2455,7 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the resulting element should be a ol">
-                <html:ol id="..." class="list-style-type-none">
+                <html:ol id="..." class="list-style-type-none preformatted">
                     <html:li id="...">TEXT</html:li>
                 </html:ol>
             </x:expect>
@@ -2472,10 +2472,10 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the result should be one span and one nested list">
-                <html:ol id="..." class="list-style-type-none">
+                <html:ol id="..." class="list-style-type-none preformatted">
                     <html:li id="...">
                         <html:span>TEXT</html:span>
-                        <html:ol id="..." class="list-style-type-none">
+                        <html:ol id="..." class="list-style-type-none preformatted">
                             <html:li id="...">TEXT</html:li>
                         </html:ol>
                     </html:li>
@@ -2496,12 +2496,12 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the result should be the contents of the lic and one nested list">
-                <html:ol id="..." class="list-style-type-none">
+                <html:ol id="..." class="list-style-type-none preformatted">
                     <html:li id="...">
                         <html:span class="lic">
                             <html:span>TEXT</html:span>
                         </html:span>
-                        <html:ol id="..." class="list-style-type-none">
+                        <html:ol id="..." class="list-style-type-none preformatted">
                             <html:li id="...">TEXT</html:li>
                         </html:ol>
                     </html:li>
@@ -2525,7 +2525,7 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the result should be two lics and one nested list">
-                <html:ol id="..." class="list-style-type-none">
+                <html:ol id="..." class="list-style-type-none preformatted">
                     <html:li id="...">
                         <html:span class="lic">
                             <html:span>TEXT</html:span>
@@ -2533,7 +2533,7 @@
                         <html:span class="lic">
                             <html:span>TEXT</html:span>
                         </html:span>
-                        <html:ol id="..." class="list-style-type-none">
+                        <html:ol id="..." class="list-style-type-none preformatted">
                             <html:li id="...">TEXT</html:li>
                         </html:ol>
                     </html:li>
@@ -2550,7 +2550,7 @@
             </dtbook:list>
         </x:context>
         <x:expect label="the resulting list should be wrapped in a section element">
-            <html:ol id="..." start="1" class="list-style-type-none">
+            <html:ol id="..." start="1" class="list-style-type-none preformatted">
                 <html:li id="...">TEXT</html:li>
             </html:ol>
         </x:expect>
@@ -2575,9 +2575,9 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the result should become ul and the bullets should be removed">
-                <html:ul id="...">
+                <html:ul id="..." class="preformatted">
                     <html:li id="li_814"><html:p>TEXT1 <html:em>TEXT2</html:em> TEXT3</html:p>
-                        <html:ul id="list_213">
+                        <html:ul id="list_213" class="preformatted">
                             <html:li id="li_815">TEXT4 <html:em>TEXT5 </html:em> TEXT6</html:li>
                         </html:ul>
                     </html:li>
@@ -2598,9 +2598,9 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the ul should become list, bullets should be added to text or block content as necessary">
-                <html:ol id="...">
+                <html:ol id="..." class="preformatted">
                     <html:li id="li_814" value="1"><html:p>TEXT1 <html:em>TEXT2</html:em> TEXT3</html:p>
-                        <html:ol id="list_213">
+                        <html:ol id="list_213" class="preformatted">
                             <html:li id="li_815" value="1">TEXT4 <html:em>TEXT5 </html:em> TEXT6</html:li>
                         </html:ol>
                     </html:li>
@@ -2634,23 +2634,23 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the type of list should be detected, and the list markers removed">
-                <html:ol id="...">
+                <html:ol id="..." class="preformatted">
                     <html:li id="..." value="1">ONE</html:li>
                     <html:li id="..." value="2">TWO</html:li>
                 </html:ol>
-                <html:ol id="..." type="a">
+                <html:ol id="..." type="a" class="preformatted">
                     <html:li id="..." value="1">ONE</html:li>
                     <html:li id="..." value="2">TWO</html:li>
                 </html:ol>
-                <html:ol id="..." type="A">
+                <html:ol id="..." type="A" class="preformatted">
                     <html:li id="..." value="1">ONE</html:li>
                     <html:li id="..." value="2">TWO</html:li>
                 </html:ol>
-                <html:ol id="..." type="i">
+                <html:ol id="..." type="i" class="preformatted">
                     <html:li id="..." value="1">ONE</html:li>
                     <html:li id="..." value="2">TWO</html:li>
                 </html:ol>
-                <html:ol id="..." type="I">
+                <html:ol id="..." type="I" class="preformatted">
                     <html:li id="..." value="1">ONE</html:li>
                     <html:li id="..." value="2">TWO</html:li>
                 </html:ol>
@@ -2664,7 +2664,7 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the type of list should be detected, the list markers removed and the value should be correct">
-                <html:ol id="...">
+                <html:ol id="..." class="preformatted">
                     <html:li id="..." value="2">Halten Sie
 		  Sie es tunlichst, der Öffentlichkeit jene Hautfladen auch bekannt als Bingofladen, die unter den Oberarmen hängen, zuzumuten. Dasselbe gilt für die Röllchen unter der Achsel, zwischen Oberarm und Oberkörper.</html:li>
                 </html:ol>
@@ -2680,7 +2680,7 @@
                 </dtbook:list>
             </x:context>
             <x:expect label="the result should be 10, 9, 5, 4">
-                <html:ol id="...">
+                <html:ol id="..." class="preformatted">
                     <html:li id="..." value="10">ONE</html:li>
                     <html:li id="..." value="9">TWO</html:li>
                     <html:li id="..." value="5">THREE</html:li>
@@ -2763,26 +2763,26 @@
                 </dtbook:table>
             </x:context>
             <x:expect label="the resulting element should be table, with pagebreaks moved before or after the table element, or inside the table cells">
-                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1"/>
+                <html:div epub:type="pagebreak" title="2"/>
                 <html:table id="...">
                     <html:tbody>
                         <html:tr>
-                            <html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td>
+                            <html:td>td #1<html:span epub:type="pagebreak" title="3"/><html:span epub:type="pagebreak" title="4"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td>td #2<html:span epub:type="pagebreak" title="5" class="page-normal"/><html:span epub:type="pagebreak" title="6" class="page-normal"/></html:td>
+                            <html:td>td #2<html:span epub:type="pagebreak" title="5"/><html:span epub:type="pagebreak" title="6"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td>td #3<html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:td>
+                            <html:td>td #3<html:span epub:type="pagebreak" title="7"/><html:span epub:type="pagebreak" title="8"/></html:td>
                         </html:tr>
                         <html:tr>
                             <html:td>td #4</html:td>
                         </html:tr>
                     </html:tbody>
                 </html:table>
-                <html:div epub:type="pagebreak" title="9" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="10" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="9"/>
+                <html:div epub:type="pagebreak" title="10"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with pagenum, thead and tr children">
@@ -2809,8 +2809,8 @@
                 </dtbook:table>
             </x:context>
             <x:expect label="the resulting element should be table, with pagebreaks moved before or after the table element, or inside the table cells">
-                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1"/>
+                <html:div epub:type="pagebreak" title="2"/>
                 <html:table id="...">
                     <html:thead>
                         <html:tr>
@@ -2823,12 +2823,12 @@
                         </html:tr>
                     </html:thead>
                     <html:tbody>
-                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3"/><html:span epub:type="pagebreak" title="4"/></html:td></html:tr>
                         <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
-                <html:div epub:type="pagebreak" title="5" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="6" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="5"/>
+                <html:div epub:type="pagebreak" title="6"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with pagenum, tfoot and tr children">
@@ -2855,8 +2855,8 @@
                 </dtbook:table>
             </x:context>
             <x:expect label="the resulting element should be table, with pagebreaks moved before or after the table element, or inside the table cells">
-                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1"/>
+                <html:div epub:type="pagebreak" title="2"/>
                 <html:table id="...">
                     <html:tfoot>
                         <html:tr>
@@ -2869,12 +2869,12 @@
                         </html:tr>
                     </html:tfoot>
                     <html:tbody>
-                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3"/><html:span epub:type="pagebreak" title="4"/></html:td></html:tr>
                         <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
-                <html:div epub:type="pagebreak" title="5" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="6" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="5"/>
+                <html:div epub:type="pagebreak" title="6"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with thead, tfoot and tbody children, and pagenum children inside the tbody">
@@ -2913,8 +2913,8 @@
                 </dtbook:table>
             </x:context>
             <x:expect label="the resulting element should be table, with pagebreaks moved before or after the table element, or inside the table cells">
-                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1"/>
+                <html:div epub:type="pagebreak" title="2"/>
                 <html:table id="...">
                     <html:thead>
                         <html:tr>
@@ -2937,12 +2937,12 @@
                         </html:tr>
                     </html:tfoot>
                     <html:tbody>
-                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3"/><html:span epub:type="pagebreak" title="4"/></html:td></html:tr>
                         <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
-                <html:div epub:type="pagebreak" title="5" class="page-normal"/>
-                <html:div epub:type="pagebreak" title="6" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="5"/>
+                <html:div epub:type="pagebreak" title="6"/>
             </x:expect>
         </x:scenario>
         <!-- TODO: table captions
@@ -3579,7 +3579,7 @@
             </dtbook:list>
         </x:context>
         <x:expect label="the letters should be correctly parsed">
-            <html:ol id="..." type="a">
+            <html:ol id="..." type="a" class="preformatted">
                 <html:li id="..." value="27">ONE</html:li>
                 <html:li id="..." value="1406">TWO</html:li>
             </html:ol>
@@ -3695,7 +3695,7 @@
             </dtbook:list>
         </x:context>
         <x:expect label="the result should be as expected">
-            <html:ol id="..." class="list-style-type-none">
+            <html:ol id="..." class="list-style-type-none preformatted">
                 <html:li id="..."><html:strong>Totalt antal häckande par</html:strong> 49 024 037–101 782 306</html:li>
                 <html:li id="..."><html:strong>Antal ökande arter</html:strong> 64</html:li>
                 <html:li id="..."><html:strong>Procentandel ökande arter</html:strong> 26%</html:li>
@@ -3775,7 +3775,7 @@
             </dtbook:list>
         </x:context>
         <x:expect label="the lic elements should be direct children of li and the a should become spans inside the lics">
-            <html:ol class="list-style-type-none" id="...">
+            <html:ol class="list-style-type-none preformatted" id="...">
                 <html:li id="...">
                     <html:span class="lic">
                         <html:a id="id1" href="mtm06350-1.xhtml#d130172e14">Chapter 1</html:a>
@@ -3791,7 +3791,7 @@
                     <html:span class="lic">
                         <html:a href="mtm06350-1.xhtml#d130172e14" id="...">2</html:a>
                     </html:span>
-                    <html:ol class="list-style-type-none" id="...">
+                    <html:ol class="list-style-type-none preformatted" id="...">
                         <html:li id="...">
                             <html:span class="lic">Chapter 2.1</html:span>
                             <html:span class="lic">3</html:span>
@@ -3811,7 +3811,7 @@
                     </html:span>
                     <html:span>non-lic</html:span>
                     <html:span>span</html:span>
-                    <html:ol class="list-style-type-none" id="...">
+                    <html:ol class="list-style-type-none preformatted" id="...">
                         <html:li id="...">
                             <html:span class="lic">Chapter 4.1</html:span>
                             <html:span class="lic">4</html:span>
@@ -3832,7 +3832,7 @@
         <x:expect label="the pagebreaks should have become a div">
             <html:figure class="image" id="...">
                 <html:img id="img1" src="images/img.jpg" alt="image"/>
-                <html:div epub:type="pagebreak" class="page-normal" title="1"/>
+                <html:div epub:type="pagebreak" title="1"/>
             </html:figure>
         </x:expect>
     </x:scenario>
@@ -4091,19 +4091,19 @@
         </x:context>
         <x:expect label="all the tocs should be converted and placed in the matter they occured in the DTBook">
             <html:section epub:type="frontmatter toc" id="...">
-                <html:ol class="list-style-type-none" id="..."/>
+                <html:ol class="list-style-type-none preformatted" id="..."/>
             </html:section>
             <html:section epub:type="frontmatter toc" id="...">
                 <html:ol id="..."/>
             </html:section>
             <html:section epub:type="bodymatter toc" id="...">
-                <html:ol class="list-style-type-none" id="..."/>
+                <html:ol class="list-style-type-none preformatted" id="..."/>
             </html:section>
             <html:section epub:type="bodymatter toc" id="...">
                 <html:ol id="..."/>
             </html:section>
             <html:section epub:type="backmatter toc" id="...">
-                <html:ol class="list-style-type-none" id="..."/>
+                <html:ol class="list-style-type-none preformatted" id="..."/>
             </html:section>
             <html:section epub:type="backmatter toc" id="...">
                 <html:ol id="..."/>
@@ -4113,26 +4113,27 @@
 
     <x:scenario label="a p element with code children">
         <x:context xml:space="preserve">
-            <dtbook:p/>
-            <dtbook:p><dtbook:code/></dtbook:p>
-            <dtbook:p>TEXT<dtbook:code/>TEXT</dtbook:p>
-            <dtbook:p>
+            <dtbook:p xml:space="preserve"/>
+            <dtbook:p xml:space="preserve"><dtbook:code/></dtbook:p>
+            <dtbook:p xml:space="preserve">TEXT<dtbook:code/>TEXT</dtbook:p>
+            <dtbook:p xml:space="preserve">
                 <dtbook:code/>
                 <dtbook:code/>
             </dtbook:p>
-            <dtbook:p><dtbook:code>  preserve  whitespace  </dtbook:code></dtbook:p>
             <dtbook:p xml:space="preserve"><dtbook:code>  preserve  whitespace  </dtbook:code></dtbook:p>
+            <dtbook:p><dtbook:code>  preserve  whitespace  </dtbook:code></dtbook:p>
         </x:context>
-        <x:expect xml:space="preserve" label="should map to a pre element if it contains exactly one code child and nothing else">
-            <html:p/>
+        <x:expect xml:space="preserve" label="should map to a pre element if it has a xml:space='preserve' attribute
+                                              and contains exactly one code child and nothing else">
+            <html:p xml:space="preserve"/>
             <html:pre><html:code/></html:pre>
-            <html:p>TEXT<html:code/>TEXT</html:p>
-            <html:p>
+            <html:p xml:space="preserve">TEXT<html:code/>TEXT</html:p>
+            <html:p xml:space="preserve">
                 <html:code/>
                 <html:code/>
             </html:p>
             <html:pre><html:code>  preserve  whitespace  </html:code></html:pre>
-            <html:pre><html:code>  preserve  whitespace  </html:code></html:pre>
+            <html:p><html:code>  preserve  whitespace  </html:code></html:p>
         </x:expect>
     </x:scenario>
 

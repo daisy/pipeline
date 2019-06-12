@@ -568,8 +568,8 @@
         <x:context>
             <html:address/>
         </x:context>
-        <x:expect label="the resulting element should be a p with a address class">
-            <dtbook:p class="address"/>
+        <x:expect label="the resulting element should be a address">
+            <dtbook:address/>
         </x:expect>
     </x:scenario>
 
@@ -658,7 +658,7 @@
                         </dtbook:poem>
                         <dtbook:poem>
                             <dtbook:author>Author in poem context (2015-2)</dtbook:author>
-                            <dtbook:linegroup class="verse"/>
+                            <dtbook:linegroup/>
                         </dtbook:poem>
                         <dtbook:p class="author">Author on p element</dtbook:p>
                         <dtbook:p><dtbook:span class="author">Author on span element</dtbook:span></dtbook:p>
@@ -795,7 +795,7 @@
                 <html:aside epub:type="epigraph"/>
             </x:context>
             <x:expect label="the resulting element should be a p element">
-                <dtbook:p class="epigraph"/>
+                <dtbook:epigraph/>
             </x:expect>
         </x:scenario>
         
@@ -804,7 +804,7 @@
                 <html:blockquote epub:type="epigraph" class="epigraph other-class"/>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:p class="epigraph other-class"/>
+                <dtbook:epigraph class="other-class"/>
             </x:expect>
         </x:scenario>
         
@@ -813,7 +813,7 @@
                 <html:blockquote epub:type="epigraph" class="epigraph"><html:p>foo</html:p></html:blockquote>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:epigraph class="epigraph"><dtbook:p>foo</dtbook:p></dtbook:epigraph>
+                <dtbook:epigraph><dtbook:p>foo</dtbook:p></dtbook:epigraph>
             </x:expect>
         </x:scenario>
         
@@ -822,7 +822,7 @@
                 <html:blockquote epub:type="epigraph" class="epigraph"><html:p epub:type="epigraph" class="epigraph other-class">foo</html:p></html:blockquote>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:epigraph class="epigraph"><dtbook:p class="epigraph other-class">foo</dtbook:p></dtbook:epigraph>
+                <dtbook:epigraph><dtbook:epigraph class="other-class">foo</dtbook:epigraph></dtbook:epigraph>
             </x:expect>
         </x:scenario>
         
@@ -831,7 +831,7 @@
                 <html:p epub:type="epigraph" class="epigraph"/>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:p class="epigraph"/>
+                <dtbook:epigraph/>
             </x:expect>
         </x:scenario>
         
@@ -840,7 +840,7 @@
                 <html:p epub:type="epigraph" class="epigraph"><html:p epub:type="epigraph" class="epigraph">foo</html:p></html:p>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:epigraph class="epigraph"><dtbook:p class="epigraph">foo</dtbook:p></dtbook:epigraph>
+                <dtbook:epigraph><dtbook:epigraph>foo</dtbook:epigraph></dtbook:epigraph>
             </x:expect>
         </x:scenario>
         
@@ -904,7 +904,7 @@
             <html:span class="byline"/>
         </x:context>
         <x:expect label="the resulting element should be a byline and the byline class should be removed">
-            <dtbook:span class="byline"/>
+            <dtbook:byline/>
         </x:expect>
     </x:scenario>
 
@@ -917,7 +917,7 @@
             <html:span class="dateline"/>
         </x:context>
         <x:expect label="the resulting element should be a dateline and the dateline class should be removed">
-            <dtbook:span class="dateline"/>
+            <dtbook:dateline/>
         </x:expect>
     </x:scenario>
 
@@ -1054,7 +1054,7 @@
             <html:dfn/>
         </x:context>
         <x:expect label="the resulting element should be a dfn">
-            <dtbook:span class="definition"/>
+            <dtbook:dfn/>
         </x:expect>
     </x:scenario>
 
@@ -1066,8 +1066,8 @@
         <x:context>
             <html:kbd/>
         </x:context>
-        <x:expect label="the resulting element should be a code">
-            <dtbook:code xml:space="preserve" class="keyboard"/>
+        <x:expect label="the resulting element should be a kbd">
+            <dtbook:kbd/>
         </x:expect>
     </x:scenario>
 
@@ -1080,7 +1080,7 @@
             <html:code/>
         </x:context>
         <x:expect label="the resulting element should be a code">
-            <dtbook:code xml:space="preserve"/>
+            <dtbook:code/>
         </x:expect>
     </x:scenario>
 
@@ -1093,7 +1093,7 @@
             <html:samp/>
         </x:context>
         <x:expect label="the resulting element should be a samp">
-            <dtbook:code xml:space="preserve" class="example"/>
+            <dtbook:samp/>
         </x:expect>
     </x:scenario>
 
@@ -1119,7 +1119,7 @@
             <html:abbr/>
         </x:context>
         <x:expect label="the resulting element should be a abbr">
-            <dtbook:span class="acronym"/>
+            <dtbook:abbr/>
         </x:expect>
     </x:scenario>
 
@@ -1129,16 +1129,16 @@
             <x:context>
                 <html:abbr epub:type="z3998:acronym"/>
             </x:context>
-            <x:expect label="the resulting element should be a span with class 'acronym'">
-                <dtbook:span class="acronym"/>
+            <x:expect label="the resulting element should be a acronym">
+                <dtbook:acronym/>
             </x:expect>
         </x:scenario>
         <x:scenario label="when the epub:type is 'z3998:initialism'">
             <x:context>
                 <html:abbr epub:type="z3998:initialism"/>
             </x:context>
-            <x:expect label="the resulting element should be a span with class 'initialism'">
-                <dtbook:span class="initialism"/>
+            <x:expect label="the resulting element should be a acronym with pronounce attribute 'no'">
+                <dtbook:acronym pronounce="no"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="when the epub:type is 'z3998:truncation'">
@@ -1157,7 +1157,7 @@
             <html:abbr epub:type="z3998:acronym"/>
         </x:context>
         <x:expect label="the resulting element should be a acronym">
-            <dtbook:span class="acronym"/>
+            <dtbook:acronym/>
         </x:expect>
     </x:scenario>
 
@@ -1209,7 +1209,7 @@
             <html:bdo/>
         </x:context>
         <x:expect label="the resulting element should be a bdo">
-            <dtbook:span class="bdo"/>
+            <dtbook:bdo/>
         </x:expect>
     </x:scenario>
 
@@ -1222,7 +1222,7 @@
             <html:span epub:type="z3998:sentence"/>
         </x:context>
         <x:expect label="the resulting element should be a sent">
-            <dtbook:span class="sentence"/>
+            <dtbook:sent/>
         </x:expect>
     </x:scenario>
 
@@ -1234,8 +1234,8 @@
         <x:context>
             <html:span epub:type="z3998:word"/>
         </x:context>
-        <x:expect label="the resulting element should be a sent">
-            <dtbook:span class="word"/>
+        <x:expect label="the resulting element should be a w">
+            <dtbook:w/>
         </x:expect>
     </x:scenario>
 
@@ -1272,11 +1272,11 @@
                 </html:p>
             </html:div>
         </x:context>
-        <x:expect label="the resulting element should be a pagenum and the page attribute should default to 'normal'">
+        <x:expect label="the resulting element should be a pagenum">
             <dtbook:div>
-                <dtbook:pagenum page="normal">1</dtbook:pagenum>
+                <dtbook:pagenum>1</dtbook:pagenum>
                 <dtbook:p>
-                    <dtbook:pagenum page="normal">2</dtbook:pagenum>
+                    <dtbook:pagenum>2</dtbook:pagenum>
                 </dtbook:p>
             </dtbook:div>
         </x:expect>
@@ -1316,12 +1316,9 @@
         <x:context>
             <html:q cite="#"/>
         </x:context>
-        <x:expect label="the resulting element should be a span with a class of 'quote'; the cite attribute is dropped">
-            <dtbook:span class="quote"/>
-        </x:expect>
-        <!--<x:expect label="the resulting element should be a q">
+        <x:expect label="the resulting element should be a q">
             <dtbook:q cite="#"/>
-        </x:expect>-->
+        </x:expect>
     </x:scenario>
 
     <!-- attlist.q -->
@@ -1701,9 +1698,11 @@
                     </html:header>
                 </html:body>
             </x:context>
-            <x:expect label="the resulting covertitle should be dropped (covertitle is not allowed in nordic dtbook)">
+            <x:expect label="the resulting element should be a covertitle">
                 <dtbook:book>
-                    <dtbook:frontmatter/>
+                    <dtbook:frontmatter>
+                        <dtbook:covertitle>COVERTITLE</dtbook:covertitle>
+                    </dtbook:frontmatter>
                 </dtbook:book>
             </x:expect>
         </x:scenario>
@@ -1828,8 +1827,8 @@
         <x:context>
             <html:p epub:type="bridgehead"/>
         </x:context>
-        <x:expect label="the resulting element should be a p">
-            <dtbook:p class="bridgehead"/>
+        <x:expect label="the resulting element should be a bridgehead">
+            <dtbook:bridgehead/>
         </x:expect>
     </x:scenario>
 
@@ -2463,7 +2462,7 @@
             <dtbook:book>
                 <dtbook:bodymatter>
                     <dtbook:level1>
-                        <dtbook:pagenum id="page-26" page="normal">26</dtbook:pagenum>
+                        <dtbook:pagenum id="page-26">26</dtbook:pagenum>
                         <dtbook:h1>3. Rättskällorna</dtbook:h1>
                         <dtbook:level2>
                             <dtbook:h2>3.1 Lag</dtbook:h2>
@@ -2496,18 +2495,20 @@
         </x:context>
         <x:expect label="all the pagebreaks should become pagenums and be placed in front of the table row">
             <dtbook:table>
-                <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
-                <dtbook:pagenum page="normal" id="page-26">26</dtbook:pagenum>
-                <dtbook:pagenum page="normal" id="page-27">27</dtbook:pagenum>
-                <dtbook:tr>
-                    <dtbook:td>CONTENT 1CONTENT 2</dtbook:td>
-                    <dtbook:td>CONTENT 3</dtbook:td>
-                </dtbook:tr>
+                <dtbook:tbody>
+                    <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum id="page-26">26</dtbook:pagenum>
+                    <dtbook:pagenum id="page-27">27</dtbook:pagenum>
+                    <dtbook:tr>
+                        <dtbook:td>CONTENT 1CONTENT 2</dtbook:td>
+                        <dtbook:td>CONTENT 3</dtbook:td>
+                    </dtbook:tr>
+                </dtbook:tbody>
             </dtbook:table>
             <dtbook:table>
                 <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
-                <dtbook:pagenum page="normal" id="page-26">26</dtbook:pagenum>
-                <dtbook:pagenum page="normal" id="page-27">27</dtbook:pagenum>
+                <dtbook:pagenum id="page-26">26</dtbook:pagenum>
+                <dtbook:pagenum id="page-27">27</dtbook:pagenum>
                 <dtbook:tr>
                     <dtbook:td>CONTENT 1CONTENT 2</dtbook:td>
                     <dtbook:td>CONTENT 3</dtbook:td>
@@ -3096,7 +3097,7 @@
 
     <x:scenario label="the pre element">
         <x:context xml:space="preserve"><html:pre><html:code>  1  2  </html:code></html:pre></x:context>
-        <x:expect label="should map to a p element and whitespace should be preserved"><dtbook:p xml:space="preserve"><dtbook:code xml:space="preserve">  1  2  </dtbook:code></dtbook:p></x:expect>
+        <x:expect label="should map to a p element and whitespace should be preserved"><dtbook:p xml:space="preserve"><dtbook:code>  1  2  </dtbook:code></dtbook:p></x:expect>
     </x:scenario>
 
     <x:scenario label="lists with list item components (class='lic')">
@@ -3525,7 +3526,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="bridgehead conversion - issue #315">
+    <x:scenario label="bridgehead conversion - issue #315" pending="skip">
         <x:context>
             <html:p epub:type="bridgehead" class="bridgehead">test bridgehead 1</html:p>
         </x:context>

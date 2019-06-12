@@ -64,12 +64,13 @@
 
 
 
-
-            <px:normalize-document-base name="html-store.step.normalize-base">
-                <p:input port="source">
+            <p:for-each name="html-store.step.normalize-base">
+                <p:iteration-source>
                     <p:pipe port="in-memory.in" step="main"/>
-                </p:input>
-            </px:normalize-document-base>
+                </p:iteration-source>
+                <p:output port="result" sequence="true"/>
+                <px:normalize-document-base/>
+            </p:for-each>
             <px:fileset-join>
                 <p:input port="source">
                     <p:pipe port="fileset.in" step="main"/>

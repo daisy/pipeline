@@ -475,9 +475,9 @@
             context="dtbk:*[self::dtbk:link or self::dtbk:level or self::dtbk:epigraph or self::dtbk:byline or
                                 self::dtbk:dateline or self::dtbk:cite or self::dtbk:sent or self::dtbk:w or
                                 self::dtbk:covertitle or self::dtbk:bridgehead or self::dtbk:thead or
-                                self::dtbk:tfoot or self::dtbk:tbody or self::dtbk:colgroup or self::dtbk:col or
+                                self::dtbk:tfoot or self::dtbk:colgroup or self::dtbk:col or
                                 self::dtbk:address or self::dtbk:annotation or self::dtbk:a or self::dtbk:dfn or
-                                self::dtbk:kbd or self::dtbk:samp or self::dtbk:abbr or self::dtbk:acronym or
+                                self::dtbk:kbd or self::dtbk:samp or self::dtbk:abbr or
                                 self::dtbk:q or self::dtbk:bdo or self::dtbk:bdo or self::dtbk:annoref]">
             <sch:assert test="false()">[tpb133] Element <sch:name/> is disallowed</sch:assert>
         </sch:rule>

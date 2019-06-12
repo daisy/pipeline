@@ -605,6 +605,20 @@
             <choice>
                 <choice>
                     <!-- multi-page HTML -->
+                    <group>
+                        <attribute name="epub:type">
+                            <value>frontmatter</value>
+                        </attribute>
+                        <element name="header">
+                            <ref name="doctitle.headline"/> <!-- h1 -->
+                            <optional>
+                                <ref name="covertitle"/> <!-- p -->
+                            </optional>
+                            <zeroOrMore>
+                                <ref name="docauthor"/> <!-- p -->
+                            </zeroOrMore>
+                        </element>
+                    </group>
                     <ref name="cover"/>
                     <ref name="frontmatter"/>
                     <ref name="bodymatter"/>

@@ -12,8 +12,7 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
+    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
     <xsl:import href="update-epub-prefixes.xsl"/>
 
     <xsl:template match="@*|node()">
@@ -24,9 +23,8 @@
 
     <xsl:template match="/*">
         <wrapper>
-            <xsl:attribute name="xml:base" select="base-uri(/*)"/>
-
-            <xsl:variable name="base" select="base-uri(/*)"/>
+            <xsl:variable name="base" select="pf:base-uri(.)"/>
+            <xsl:attribute name="xml:base" select="$base"/>
             <xsl:variable name="head" select="/html/head"/>
             <xsl:for-each select="/html/body/*">
                 <xsl:variable name="body" select="."/>
@@ -53,10 +51,10 @@
                             </xsl:choose>
                         </xsl:for-each>
                         <xsl:if test="position()&gt;1">
-                            <link rel="prev" href="{pf:relativize-uri(base-uri(preceding-sibling::*[1]),base-uri(.))}"/>
+                            <link rel="prev" href="{pf:relativize-uri(pf:base-uri(preceding-sibling::*[1]),pf:base-uri(.))}"/>
                         </xsl:if>
                         <xsl:if test="position()&lt;last()">
-                            <link rel="next" href="{pf:relativize-uri(base-uri(following-sibling::*[1]),base-uri(.))}"/>
+                            <link rel="next" href="{pf:relativize-uri(pf:base-uri(following-sibling::*[1]),pf:base-uri(.))}"/>
                         </xsl:if>
                     </head>
                     <xsl:text>
@@ -64,11 +62,28 @@
                     <body>
                         <xsl:apply-templates select="$body/(@* except @xml:base)"/>
                         <xsl:if test="$body[self::header]">
-                            <xsl:attribute name="epub:type" select="string-join(('frontmatter','titlepage',tokenize($body/@epub:type,'\s+')),' ')"/>
+                            <xsl:attribute name="epub:type" select="string-join(('frontmatter',tokenize($body/@epub:type,'\s+')),' ')"/>
                         </xsl:if>
                         <xsl:text>
 </xsl:text>
-                        <xsl:apply-templates select="$body/*"/>
+                        <xsl:choose>
+                            <xsl:when test="$body[self::header]">
+                                <header>
+                                    <xsl:text>
+</xsl:text>
+                                    <xsl:apply-templates select="$body/*">
+                                        <xsl:with-param name="base" tunnel="yes" select="$base"/>
+                                    </xsl:apply-templates>
+                                    <xsl:text>
+</xsl:text>
+                                </header>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:apply-templates select="$body/*">
+                                        <xsl:with-param name="base" tunnel="yes" select="$base"/>
+                                </xsl:apply-templates>
+                            </xsl:otherwise>
+                        </xsl:choose>
                         <xsl:text>
 </xsl:text>
                     </body>
@@ -83,15 +98,18 @@
     </xsl:template>
 
     <xsl:template match="@src | @href | @data[parent::object] | @xlink:href | @altimg | @longdesc">
-        <xsl:variable name="original-uri" select="if (replace(.,'^(.*)#(.*)$','$1')='') then base-uri(/*) else resolve-uri(replace(.,'^(.*)#(.*)$','$1'), base-uri(/*))"/>
-        <xsl:variable name="original-uri-relative" select="pf:relativize-uri($original-uri, base-uri(/*))"/>
+        <xsl:param name="base" tunnel="yes"/>
+        <xsl:variable name="original-uri" select="if (replace(.,'^(.*)#(.*)$','$1')='')
+                                                  then $base
+                                                  else resolve-uri(replace(.,'^(.*)#(.*)$','$1'), $base)"/>
+        <xsl:variable name="original-uri-relative" select="pf:relativize-uri($original-uri, $base)"/>
         <xsl:choose>
-            <xsl:when test="$original-uri-relative=replace(base-uri(/*),'^.*/([^/]*)$','$1')">
+            <xsl:when test="$original-uri-relative=replace($base,'^.*/([^/]*)$','$1')">
                 <xsl:variable name="target-id" select="substring-after(.,'#')"/>
                 <xsl:variable name="target" select="(//*[(@id,@xml:id)=$target-id])[1]"/>
                 <xsl:choose>
                     <xsl:when test="$target">
-                        <xsl:attribute name="{name()}" select="concat(pf:relativize-uri(base-uri($target),$original-uri),'#',$target-id)"/>
+                        <xsl:attribute name="{name()}" select="concat(pf:relativize-uri(pf:base-uri($target),$original-uri),'#',$target-id)"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:attribute name="{name()}" select="'#'"/>

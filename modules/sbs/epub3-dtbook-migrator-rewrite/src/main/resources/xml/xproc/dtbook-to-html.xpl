@@ -61,6 +61,7 @@
 
     <p:import href="step/dtbook-validate.step.xpl"/>
     <p:import href="step/dtbook-to-html.step.xpl"/>
+    <p:import href="step/html-add-accessibility.step.xpl"/>
     <p:import href="step/html-store.step.xpl"/>
     <p:import href="step/html-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
@@ -119,10 +120,16 @@
         </p:input>
     </px:nordic-dtbook-to-html.step>
 
+    <px:nordic-html-add-accessibility-css.step name="dtbook-to-html.add-css">
+        <p:input port="in-memory.in">
+            <p:pipe step="dtbook-to-html.dtbook-to-html" port="in-memory.out"/>
+        </p:input>
+    </px:nordic-html-add-accessibility-css.step>
+
     <px:nordic-html-store.step name="dtbook-to-html.html-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="dtbook-to-html.dtbook-to-html"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-html.add-css"/>
         </p:input>
         <p:input port="report.in">
             <p:pipe port="report.out" step="dtbook-to-html.dtbook-to-html"/>

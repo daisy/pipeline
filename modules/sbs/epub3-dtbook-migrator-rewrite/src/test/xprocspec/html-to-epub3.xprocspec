@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/html-to-epub3.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="module:/xml/xproc/html-to-epub3.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/">
 
@@ -42,18 +42,19 @@
         
         <x:context label="the HTML metadata">
             <x:document type="file" href="temp-dir/validate-epub/EPUB/nav.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-01-cover.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-02-toc.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-03-frontmatter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-04-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-01-header.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-02-cover.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-03-toc.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-04-frontmatter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
             <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-05-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
             <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-06-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-07-rearnotes.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-08-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-09-part.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-10-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-11-conclusion.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-12-footnotes.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-07-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-08-rearnotes.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-09-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-10-part.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-11-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-12-conclusion.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-13-footnotes.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
         </x:context>
         <x:expect label="there must be HTML head elements" type="count" min="1"/>
         <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
