@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-dtbook-2005-3.rng"?>
+<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.sch"?>
+<!DOCTYPE dtbook
+  PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+    <head>
+        <meta name="dtb:uid" content="C00000"/>
+        <meta name="dc:Title" content="Valentin Haüy - the father of the education for the blind"/>
+        <meta name="dc:Identifier" content="C00000"/>
+        <meta name="track:Guidelines" content="2015-1"/>
+        <meta name="track:Supplier" content="MTM"/>
+        <meta name="dc:Creator" content="Beatrice Christensen Sköld"/>
+        <meta name="dc:Language" content="en"/>
+        <meta name="dc:Source" content="urn:isbn:123456789"/>
+        <meta name="dc:Format" content="DTBook"/>
+        <meta name="dc:Publisher" content="MTM"/>
+        <meta name="dc:Date" content="2006-03-23"/>
+        <meta name="dcterms:modified" content="2014-01-27T13:13:47Z"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Valentin Haüy - the father of the education for the blind</doctitle>
+            <docauthor>Beatrice Christensen Sköld</docauthor>
+            <level1 id="level1_1" class="jacketcopy">
+                <prodnote id="prodnote_1" class="rearcover" render="optional">
+                    <p>Gro försöker att få Runa på gott humör igen.</p>
+                    <p>– Vi har det bara så långtråkigt. Du har tur. Du får gå ut och in i tornet. Alvilda och jag måste sitta här dag ut och dag in. Bara om natten får vi komma till kvinnosalen. Om
+                        det bara snart ville kommma någon som kan slå ihjäl ormen.</p>
+                    <p>Gro suckar djupt. Liksom Alvilda är hon trött på att vara inspärrad.</p>
+                    <p>Alvilda tittar ner på sina bröder igen.</p>
+                    <p>– Jag vill hellre lära mig att slåss, mumlar hon. Då skulle jag själv kunna slå ihjäl odjuret.</p>
+                    <p>– Jag hörde nog vad du sa. Runa ruskar på huvudet. Du vet inte vad som är bäst för dig. Tänk på allt det besvär din pappa och mamma har haft. Först byggde de det här tornet av
+                        koppar. Sedan har de skaffat en orm, som kan vakta din dygd. Många unga män har mist sina liv för din skull.</p>
+                    <prodnote render="optional" id="nested-prodnote-in-rearcover" class="prodnote"><p>Prodnote inside rearcover</p></prodnote>
+                </prodnote>
+            </level1>
+        </frontmatter>
+        <bodymatter>
+            <level1 id="d910e694" class="chapter">
+                <pagenum id="page_5" page="normal">5</pagenum>
+                <h1 id="d910e696">1. Research questions</h1>
+                <p xml:space="preserve"><code xml:space="preserve">
+    public static void main(String[] args) {
+        ...
+    }
+</code></p>
+                <p>
+                    <span id="dtb128">My interest in Valentin Haüy, the father of education for the blind in Europe, was aroused while working at <span
+                            title="The Swedish Library of Talking Books and Braille" id="d910e709" class="initialism">MTM</span> on a book about Louis Braille, the creator of the Braille system. </span>
+                    <span id="dtb129">I discovered that there was a dearth of literature on Haüy in Swedish, and that in the limited literature I was able to consult, information about him was often
+                        contradictory. </span>
+                    <span id="dtb130">In particular, I noticed that there were no references to the period of the more than ten years which Haüy spent in Russia.</span>
+                </p>
+                <p>
+                    <span id="dtb131">In this paper I have proposed a number of research questions:</span>
+                </p>
+                <list type="pl" id="dtb132" depth="1">
+                    <li id="d910e728">• <span id="dtb133">Who was Valentin Haüy? </span>
+                        <span id="dtb134">What do we know about his life?</span>
+                    </li>
+                    <li id="d910e737">• <span id="dtb135">What role did he play in the creation of special education for the blind?</span>
+                    </li>
+                    <li id="d910e743">• <span id="dtb136">Was he really "the father of education for the blind" or were there others who merit that distinction?</span>
+                    </li>
+                    <li id="d910e749">• <span id="dtb137">How great was his influence on the introduction of education for the blind in Sweden and other countries?</span>
+                    </li>
+                    <li id="d910e755">• <span id="dtb138">What were his teaching methods?</span>
+                    </li>
+                    <li id="d910e762">• <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span></li>
+                </list>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

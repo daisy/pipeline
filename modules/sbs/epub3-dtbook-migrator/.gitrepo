@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/nlbdev/nordic-epub3-dtbook-migrator.git
+	branch = dev
+	commit = b1164ef8c420e98be8c2fc7ca339884f91caf658
+	parent = 3f844830c1d5b4da3fbe6c5069b0069beb189daa
+	cmdver = 0.3.1
