@@ -75,7 +75,8 @@ public class XmlCatalogParserTest {
         public void rewrite(){
 
 		Map<URI, URI> uris=catalog.getRewriteUris();
-		Assert.assertEquals(uris.size(), 1);
+		Assert.assertEquals(uris.size(), 2);
 		Assert.assertEquals(uris.get(URI.create("http://example.com/static/")), URI.create("mybase/static/"));
+		Assert.assertEquals(uris.get(URI.create("http://example.com/testing/")), URI.create("./testing/"));
         }
 }

@@ -1,6 +1,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
          prefer="public">
 
+  <rewriteURI uriStartString="http://example.com/testing/" rewritePrefix="./testing/"/>
   <group xml:base="mybase">
     <public publicId="-//OASIS//DTD DocBook XML V4.1.2//EN"
             uri="docbookx.dtd"/>

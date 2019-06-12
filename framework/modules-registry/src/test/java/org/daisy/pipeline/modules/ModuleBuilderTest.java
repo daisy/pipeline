@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLInputFactory;
@@ -43,10 +44,25 @@ public class ModuleBuilderTest {
 					throw new RuntimeException(e); }
 			}
 			public Iterable<URL> loadResources(String path) {
-				throw new UnsupportedOperationException("not implemented");
+				ArrayList<URL> result = new ArrayList<URL>();
+				File currentElement = new File(resourcesDir, path);
+				if(currentElement.isFile()) {
+					try {
+						result.add(currentElement.toURI().toURL()); }
+					catch (MalformedURLException e) {
+						throw new RuntimeException(e); }
+				} else {
+					for (String fileName : currentElement.list()) {
+						result.addAll((ArrayList<URL>)this.loadResources(currentElement + File.separator + fileName));
+					}
+				}
+				return result;
 			}
 		};
-		Module module = new MyModuleBuilder().withLoader(resourceLoader).withCatalog(catalog).build();
+		Module module = new MyModuleBuilder()
+				.withLoader(resourceLoader)
+				.withCatalog(catalog)
+				.build();
 		Iterator<Component> components = module.getComponents().iterator();
 		assertTrue(components.hasNext());
 		Component c = components.next();
