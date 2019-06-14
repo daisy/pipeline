@@ -94,15 +94,30 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 			withEntity(entry.getKey(), entry.getValue().toString());
 		}
 		for (Map.Entry<URI, URI> rule : catalog.getRewriteUris().entrySet()) {
-			Iterable<URL> entries = this.loader.loadResources(rule.getValue().toString());
-			for (URL url : entries) {
-				try {
-					//get tail of the path i.e. ../static/css/ -> /css/
-					String path = url.toURI().getPath().toString().replace(rule.getValue().toString().replace("..",""),"");
-					withComponent(rule.getKey().resolve(URI.create(path)), url.toString());
-				} catch (URISyntaxException e) {
-					mLogger.warn("Exception while generating paths");
+			try {
+				String base = rule.getValue().toString();
+				base = base.replaceAll("\\\\", "/");
+				if(base.startsWith("..")) base = base.substring(2);
+				Iterable<URL> entries = this.loader.loadResources(rule.getValue().toString());
+				for (URL url : entries) {
+					try {
+						String resultingPath = url.toURI().getPath().toString();
+						int startIndex = resultingPath.indexOf(base);
+						withComponent(
+								rule.getKey().resolve(
+										URI.create(resultingPath.substring(startIndex + base.length()))), 
+								".." + resultingPath.substring(startIndex));
+					} catch (URISyntaxException e) {
+						mLogger.warn("Exception while rewriting URI for link URI " + 
+								rule.getKey().toString() + 
+								" and resource url " + 
+								url.toURI().getPath().toString() + 
+								" : " + e.getLocalizedMessage());
+					}
 				}
+			} catch (Exception e) {
+				mLogger.warn("RewriteURI for " + rule.getValue().toString() + " ignored - Exception raised : " + e.getLocalizedMessage());
+				
 			}
 		}
 		return self();

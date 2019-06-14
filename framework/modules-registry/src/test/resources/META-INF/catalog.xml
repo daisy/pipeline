@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+	<uri name="http://example-module/hello.xml" uri="../hello.xml"/>
+	<rewriteURI uriStartString="http://example-module/should-be-ignored/" rewritePrefix="../test/"/>
+	<rewriteURI uriStartString="http://example-module/rewrite-uri-ok/" rewritePrefix="../test-rewrite-uri/"/>
+</catalog>
