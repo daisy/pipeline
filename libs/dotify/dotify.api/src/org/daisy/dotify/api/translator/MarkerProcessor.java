@@ -6,8 +6,10 @@ package org.daisy.dotify.api.translator;
  * responsible for converting and inserting the supplied
  * text attributes as text markers.
  * 
+ * @deprecated This class has been replaced by functionality supplied by {@link TranslatableWithContext}.
  * @author Joel Håkansson
  */
+@Deprecated
 public interface MarkerProcessor {
 
 	/**

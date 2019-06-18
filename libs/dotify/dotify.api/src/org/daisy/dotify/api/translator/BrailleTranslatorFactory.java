@@ -8,12 +8,17 @@ package org.daisy.dotify.api.translator;
 public interface BrailleTranslatorFactory {
 	/**
 	 * Defines bypass mode
+	 * @deprecated use {@link TranslatorType}
 	 */
+	@Deprecated
 	public static final String MODE_BYPASS = "bypass";
 	/**
 	 * Defines uncontracted mode
+	 * @deprecated use {@link TranslatorType}
 	 */
+	@Deprecated
 	public static final String MODE_UNCONTRACTED = "uncontracted";
+	
 	
 	/**
 	 * Creates a new translator with the given specification

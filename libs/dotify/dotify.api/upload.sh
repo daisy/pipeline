@@ -1,5 +1,5 @@
 #!/bin/bash
-#version: 2016-11-17 (allows uploading of snapshots from branches)
+#version: 2019-03-13 (use maven publish)
 
 branch=$TRAVIS_BRANCH
 if [ -z "$branch" ]; then
@@ -42,7 +42,7 @@ if [ "$pullrequest" = "false" ]; then
 		if [ -n "$SONATYPE_USER" ]; then
 			if [ -n "$SONATYPE_PASSWORD" ]; then
 				echo "Starting upload..."
-				./gradlew uploadArchives -PsonatypeUsername=$SONATYPE_USER -PsonatypePassword=$SONATYPE_PASSWORD -PrepositoryRevision=$revision -Psigning.keyId=$SIGNING_KEY -Psigning.password=$SIGNING_PASSWORD -Psigning.secretKeyRingFile=secring.gpg
+				./gradlew publishMavenPublicationToMavenRepository -PsonatypeUsername=$SONATYPE_USER -PsonatypePassword=$SONATYPE_PASSWORD -PrepositoryRevision=$revision -Psigning.keyId=$SIGNING_KEY -Psigning.password=$SIGNING_PASSWORD -Psigning.secretKeyRingFile=secring.gpg
 			else
 				echo "SONATYPE_PASSWORD not set. Skipping upload."
 			fi
@@ -55,6 +55,3 @@ if [ "$pullrequest" = "false" ]; then
 else
 	echo "Pull request. Skipping upload."
 fi
-
-
-

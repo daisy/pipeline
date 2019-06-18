@@ -27,9 +27,11 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * implementation when a new instance is requested.
  * </p>
  * 
+ * @deprecated This class has been replaced by functionality supplied by {@link TranslatableWithContext}.
  * @author Joel Håkansson
  * 
  */
+@Deprecated
 @Component
 public class MarkerProcessorFactoryMaker implements
 		MarkerProcessorFactoryMakerService {

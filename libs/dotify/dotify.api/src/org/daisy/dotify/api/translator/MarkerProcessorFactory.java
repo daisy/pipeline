@@ -4,8 +4,9 @@ package org.daisy.dotify.api.translator;
  * Provides a factory for braille markers.
  * 
  * @author Joel Håkansson
- * 
+ * @deprecated This class has been replaced by functionality supplied by {@link TranslatableWithContext}.
  */
+@Deprecated
 public interface MarkerProcessorFactory {
 
 	/**

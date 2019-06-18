@@ -1,5 +1,5 @@
 language: java
-jdk: oraclejdk11
+jdk: openjdk11
 after_success:
 - ./upload.sh
 - ./publish-javadoc.sh

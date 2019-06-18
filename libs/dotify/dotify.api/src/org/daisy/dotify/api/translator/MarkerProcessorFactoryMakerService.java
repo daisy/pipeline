@@ -16,9 +16,11 @@ package org.daisy.dotify.api.translator;
  * throughout and that new instances are created as desired.
  * </p>
  * 
+ * @deprecated This class has been replaced by functionality supplied by {@link TranslatableWithContext}.
  * @author Joel Håkansson
  * 
  */
+@Deprecated
 public interface MarkerProcessorFactoryMakerService {
 
 	/**
