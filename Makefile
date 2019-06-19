@@ -15,7 +15,6 @@ MVN_PROPERTIES          := -Dworkspace="$(CURDIR)/$(MVN_WORKSPACE)" \
                            -Dorg.ops4j.pax.url.mvn.localRepository="$(CURDIR)/$(MVN_WORKSPACE)" \
                            -Dorg.daisy.org.ops4j.pax.url.mvn.settings="$(CURDIR)/settings.xml"
 MVN_RELEASE_CACHE_REPO  := $(MVN_CACHE)
-GRADLE                  := $(CURDIR)/libs/dotify/dotify.api/gradlew
 
 ifneq ($(MAKECMDGOALS),)
 ifneq ($(MAKECMDGOALS), help)

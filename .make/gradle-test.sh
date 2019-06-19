@@ -3,5 +3,5 @@
 set -e
 for arg in "$@"; do
     cd "$ROOT_DIR/$arg"
-    eval $GRADLE --no-search-upward test
+    eval $GRADLE test
 done

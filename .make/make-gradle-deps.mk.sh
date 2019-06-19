@@ -55,7 +55,7 @@ if [[ $v == *-SNAPSHOT ]]; then
 	# FIXME: gradle eclipse does not take into account localRepository from .gradle-settings/conf/settings.xml
 	# when creating .classpath (but it does need the dependencies to be installed in .maven-workspace)
 	echo "$module/.project : $module/build.gradle $module/gradle.properties $module/.dependencies .group-eval"
-	echo "	+\$(EVAL) '.make/gradle-eclipse.sh' \$\$(dirname \$@)"
+	echo "	+\$(EVAL) '${MY_DIR}/gradle-eclipse.sh' \$\$(dirname \$@)"
 	echo ""
 	echo "clean-eclipse : $module/.clean-eclipse"
 	echo ".PHONY : $module/.clean-eclipse"
