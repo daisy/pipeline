@@ -3,5 +3,5 @@
 set -e
 for arg in "$@"; do
     cd "$ROOT_DIR/$arg"
-    eval $GRADLE install
+    eval $GRADLE publishToMavenLocal
 done
