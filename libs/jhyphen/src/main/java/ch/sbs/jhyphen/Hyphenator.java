@@ -354,6 +354,11 @@ public class Hyphenator {
 			int breakPosInRep = repString.indexOf('=');
 			if (breakPosInRep < 0)
 				throw new HyphenationException("Table error");
+			String toReplace = text.substring(repStart, repStart + repLength);
+			// if the replaced string contains uppercase letters and no lowercase letters, convert
+			// the replacement string to uppercase
+			if (toReplace.toUpperCase().equals(toReplace) && !toReplace.toLowerCase().equals(toReplace))
+				repString = repString.toUpperCase();
 			this.text = text.substring(0, repStart)
 				+ repString.substring(0, breakPosInRep)
 				+ repString.substring(breakPosInRep + 1)
