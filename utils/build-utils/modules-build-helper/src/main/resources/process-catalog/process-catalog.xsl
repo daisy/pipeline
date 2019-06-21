@@ -55,7 +55,6 @@
         <!--
             generate Java files
         -->
-        <xsl:call-template name="module-class"/>
         <xsl:apply-templates mode="java"/>
         <!--
             process XProc files
@@ -74,6 +73,10 @@
                     <xsl:sequence select="$catalog"/>
                 </xsl:copy>
             </xsl:result-document>
+            <!--
+                generate Java file
+            -->
+            <xsl:call-template name="module-class"/>
         </xsl:if>
     </xsl:template>
     
@@ -247,7 +250,7 @@ import org.osgi.service.component.annotations.Component;
 	service = { XProcScriptService.class },
 	property = {
 		"script.id:String=<xsl:value-of select="$id"/>",
-		"script.description:String=<xsl:value-of select="replace(replace($desc,'&quot;','\\&quot;'),'\\','\\\\')"/>",
+		"script.description:String=<xsl:value-of select="replace(replace($desc,'\\','\\\\'),'&quot;','\\&quot;')"/>",
 		"script.url:String=<xsl:value-of select="$url"/>",
 		"script.version:String=<xsl:value-of select="$version"/>"
 	}
