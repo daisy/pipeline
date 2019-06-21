@@ -19,6 +19,7 @@
         <!-- for each scenario -->
 
         <p:variable name="base" select="base-uri(/*)"/>
+        <p:variable name="label" select="/x:description/x:scenario/@label"/>
 
         <p:choose>
             <p:when test="/*[self::c:errors]">
@@ -45,7 +46,7 @@
                 <p:variable name="skip-scenario" select="if (/x:description/x:scenario[@pending]) then 'true' else 'false'"/>
 
                 <pxi:message message=" * evaluating scenario '$1' ($2)">
-                    <p:with-option name="param1" select="/x:description/x:scenario/@label"/>
+                    <p:with-option name="param1" select="$label"/>
                     <p:with-option name="param2" select="$base"/>
                     <p:with-option name="logfile" select="$logfile">
                         <p:empty/>
@@ -484,6 +485,14 @@ Error message: "{/*/text()/normalize-space()}"
                                             <p:input port="stylesheet">
                                                 <p:document href="expect-to-custom-invocation.xsl"/>
                                             </p:input>
+                                            <!--
+                                                This was added because in some cases the input has an empty
+                                                base URI, so that the output pipeline also gets an empty base
+                                                URI, which causes an error in the Calabash implementation of
+                                                p:split-sequence. The exact value of the base URI is not
+                                                important.
+                                            -->
+                                            <p:with-option name="output-base-uri" select="'file:/irrelevant'"/>
                                         </p:xslt>
 
                                         <!-- multiplex context and expect document sequences for cx:eval -->
@@ -636,6 +645,9 @@ Error message: "{/*/text()/normalize-space()}"
                         <p:add-attribute match="/*" attribute-name="test-base-uri">
                             <p:with-option name="attribute-value" select="$base"/>
                         </p:add-attribute>
+                        <p:add-attribute match="/*" attribute-name="scenario-label">
+                            <p:with-option name="attribute-value" select="$label"/>
+                        </p:add-attribute>
                         <p:add-attribute match="/*" attribute-name="error-location" attribute-value="evaluate.xpl - evaluation of assertions"/>
 
                         <p:identity name="errors-without-was"/>
@@ -691,6 +703,9 @@ Error message: "{/*/text()/normalize-space()}"
                     </p:add-attribute>
                     <p:add-attribute match="/*" attribute-name="test-base-uri">
                         <p:with-option name="attribute-value" select="$base"/>
+                    </p:add-attribute>
+                    <p:add-attribute match="/*" attribute-name="scenario-label">
+                        <p:with-option name="attribute-value" select="$label"/>
                     </p:add-attribute>
                     <p:add-attribute match="/*" attribute-name="error-location" attribute-value="evaluate.xpl - validation of output grammar"/>
 

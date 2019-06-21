@@ -30,13 +30,20 @@
         <xsl:variable name="total" select="count($tests | $pending-description) + $error-count"/>
 
         <testsuite timestamp="{x:now()}" hostname="localhost" tests="{$total}" errors="{$error-count}" failures="{$failed}" skipped="{$pending}" id="{generate-id()}"
-            temp-global-duration="{x:duration($start-time,$end-time)}" temp-global-name="{x:camelCase(replace(replace(@test-base-uri,'\.xprocspec$','','i'),'^.*/([^/]*)$','$1'))}">
+            temp-global-duration="{x:duration($start-time,$end-time)}" temp-global-name="{replace(replace(@test-base-uri,'\.xprocspec$','','i'),'^.*/([^/]*)$','$1')}">
             <!-- the @disabled attribute is not used (don't know what it means as opposed to @skipped...) -->
 
             <xsl:choose>
                 <xsl:when test="$errors">
-                    <xsl:attribute name="name" select="'compilationError'"/>
-                    <xsl:attribute name="package" select="'org.daisy.xprocspec'"/>
+                    <xsl:choose>
+                        <xsl:when test="$errors/@scenario-label">
+                            <xsl:attribute name="name" select="$errors/@scenario-label"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="name" select="'compilationError'"/>
+                            <xsl:attribute name="package" select="'org.daisy.xprocspec'"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
 
                     <properties>
                         <xsl:for-each select="@*">
@@ -69,13 +76,13 @@
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="$pending-description">
-                            <xsl:attribute name="name" select="x:camelCase($pending-description/x:scenario/@label)"/>
+                            <xsl:attribute name="name" select="$pending-description/x:scenario/@label"/>
                             <xsl:if test="$pending-description/x:scenario[@start-time and @end-time]">
                                 <xsl:attribute name="time" select="x:duration($pending-description/x:scenario/@start-time,$pending-description/x:scenario/@end-time)"/>
                             </xsl:if>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:attribute name="name" select="x:camelCase($scenario/@label)"/>
+                            <xsl:attribute name="name" select="$scenario/@label"/>
                             <xsl:attribute name="package" select="replace($declaration/@x:type,'^\{(.*)\}.*','$1')"/>
                             <xsl:if test="$scenario[@start-time and @end-time]">
                                 <xsl:attribute name="time" select="x:duration($scenario/@start-time,$scenario/@end-time)"/>
@@ -135,7 +142,7 @@
 </xsl:text>
 
                     <xsl:if test="$pending-description">
-                        <testcase name="pendingScenario-{x:camelCase($pending-description/x:scenario/@label)}" classname="pendingScenario" assertions="1" time="0">
+                        <testcase name="pendingScenario-{$pending-description/x:scenario/@label}" classname="pendingScenario" assertions="1" time="0">
                             <skipped type="xprocspec.skip" message="{string($pending-description/x:scenario/@pending)}">
                                 <xsl:value-of select="string($pending-description/x:scenario/@pending)"/>
                             </skipped>
@@ -146,7 +153,7 @@
                     </xsl:if>
 
                     <xsl:for-each select="$tests">
-                        <testcase name="{x:camelCase(@label)}" classname="{tokenize($declaration/@type,':')[last()]}" assertions="1" time="0">
+                        <testcase name="{@label}" classname="{tokenize($declaration/@type,':')[last()]}" assertions="1" time="0">
                             <!--
                                  TODO: @time: Time taken (in seconds) to execute the test
                              -->
