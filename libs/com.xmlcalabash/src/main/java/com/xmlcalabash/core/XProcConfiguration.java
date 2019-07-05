@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
+import javax.management.RuntimeErrorException;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 import java.io.BufferedReader;
@@ -101,7 +102,8 @@ public class XProcConfiguration {
     public String entityResolver = "org.xmlresolver.Resolver";
     public String uriResolver = "org.xmlresolver.Resolver";
     public String errorListener = null;
-    public Hashtable<QName,Class> implementations = new Hashtable<QName,Class> ();
+    @SuppressWarnings("rawtypes")
+	public Hashtable<QName,Class> implementations = new Hashtable<QName,Class> ();
     public Hashtable<String,String> serializationOptions = new Hashtable<String,String>();
     public LogOptions logOpt = LogOptions.WRAPPED;
     public HashMap<String,SaxonExtensionFunction> extensionFunctions = new HashMap<String,SaxonExtensionFunction>();
@@ -226,8 +228,9 @@ public class XProcConfiguration {
         for (String path : pathElements) {
             // Make the path absolute wrt the cwd so that it can be opened later regardless of context
             path = new File(path).getAbsolutePath();
-            String jarFileURL = URLDecoder.decode(new File(path).toURI().toString().replace("+", "%2B"));
+            
             try {
+            	String jarFileURL = URLDecoder.decode(new File(path).toURI().toString().replace("+", "%2B"),"UTF-8");
                 JarFile jar = new JarFile(path);
                 ZipEntry catalog = jar.getEntry("catalog.xml");
                 if (catalog != null) {
@@ -239,6 +242,7 @@ public class XProcConfiguration {
                     catalogs.add("jar:" + jarFileURL + "!/META-INF/catalog.xml");
                     logger.debug("Using catalog: jar:" + jarFileURL + "!/META-INF/catalog.xml");
                 }
+                jar.close();
             } catch (IOException e) {
                 // If it's not a jar file, maybe it's a directory with a catalog
                 String catfn = path;
@@ -297,7 +301,8 @@ public class XProcConfiguration {
     private Iterable<Class<?>> findClasses(Class<?> type) {
         Iterable<Class<?>> classes = null;
         try {
-            classes = ClassFilter.only().from(ClassIndex.getAnnotated(XMLCalabash.class));
+        	Iterable<Class<?>> annotedClass = ClassIndex.getAnnotated(XMLCalabash.class);
+            classes = ClassFilter.only().from(annotedClass);
         } catch (NoClassDefFoundError e) {
             // org.atteo.classindex package does not exist
         }
@@ -308,6 +313,7 @@ public class XProcConfiguration {
             try {
                 Bundle bundle = FrameworkUtil.getBundle(XProcConfiguration.class);
                 String path = "META-INF/annotations/" + type.getCanonicalName();
+                if(bundle == null) throw new RuntimeException("No class finder available for XProcConfiguration class (OSGI bundle or atteo ClassFilter");
                 URL url = bundle.getEntry(path);
                 if (url != null)
                     try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
@@ -321,13 +327,18 @@ public class XProcConfiguration {
                             line = reader.readLine();
                         }
                     }
-                else
-                    logger.warn("file " + path + " does not exist");
+                else {
+                	logger.warn("file " + path + " does not exist");
+                }
+                    
             } catch (IOException e) {
                 throw new RuntimeException("coding error");
             } catch (NoClassDefFoundError e) {
                 // not in OSGi context after all
-            }
+            } catch (Exception e) {
+            	// NullPointerException thrown by OSGI when calling getEntry
+				//throw new RuntimeException("An error occured on searching this class (OSGI) : " + type.getCanonicalName(),e);
+			}
             return set;
         }
         return classes;

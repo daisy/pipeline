@@ -18,6 +18,16 @@ I'm no longer attempting to maintain the Saxon 9.4 version.
 
 You can download compiled versions from [the releases page](https://github.com/ndw/xmlcalabash1/releases).
 
+## Build from source
+
+This project requires [gradle]() to build.
+Use the following commands : 
+```bash
+gradle :clean # if an existing build directory exists
+gradle :build -x test # tests are failing due to an error while parsing annotations in test context
+```
+If you need to use this project as a maven dependency, launch `gradle :publishToMavenLocal` after a successful build
+
 ## Modularity
 
 As of version 1.1.0, XML Calabash is distributed in modules. This

@@ -64,7 +64,11 @@ import java.util.Objects;
  * @author ndw
  */
 public class XProcException extends RuntimeException {
-    public static final QName err_E0001 = new QName(XProcConstants.NS_XPROC_ERROR_EX, "XE0001"); // invalid pipeline
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2315304992747995591L;
+	public static final QName err_E0001 = new QName(XProcConstants.NS_XPROC_ERROR_EX, "XE0001"); // invalid pipeline
     public static final QName err_E0002 = new QName(XProcConstants.NS_XPROC_ERROR_EX, "XE0002"); // invalid configuration
 
     private QName error = null;
@@ -173,6 +177,11 @@ public class XProcException extends RuntimeException {
         error = errorCode;
     }
 
+    public XProcException(QName errorCode, String message, Throwable cause) {
+        super("XProc error err:" + errorCode.getLocalName() + " - " + message, cause);
+        error = errorCode;
+    }
+
     public static XProcException staticError(int errno) {
         return new XProcException(XProcConstants.staticError(errno));
     }
@@ -232,11 +241,18 @@ public class XProcException extends RuntimeException {
     public static XProcException stepError(int errno, Exception except) {
         return new XProcException(XProcConstants.stepError(errno), except);
     }
+    public static XProcException stepError(int errno, String message, Exception except) {
+        return new XProcException(XProcConstants.stepError(errno), message, except);
+    }
+
 
     /**
-     * @param offset Make the locator of this error start "offset" number of frames from
-     *               the point where this method is called (a positive number results in
-     *               less frames in the locator).
+     * 
+     * @param throwable The throwable object to raise
+     * @param offset	Make the locator of this error start "offset" number of frames from
+     *               	the point where this method is called (a positive number results in
+     *               	less frames in the locator).
+     * @return the XProcException
      */
     public static XProcException javaError(Throwable throwable, int offset) {
         StackTraceElement[] base = new RuntimeException().getStackTrace();
@@ -293,7 +309,11 @@ public class XProcException extends RuntimeException {
             xprocCause = cause == null ? null : javaError(cause, offset, base, baseOffset);
         }
         return new XProcException(throwable.getMessage(), throwable) {
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 7001800852794632504L;
+			@Override
             public SourceLocator[] getLocator() {
                 return location; }
             @Override
@@ -332,7 +352,11 @@ public class XProcException extends RuntimeException {
             xprocCause = xc == null ? null : xc.rebaseOnto(base);
         }
         return new XProcException() {
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -3838318576965830738L;
+			@Override
             public QName getErrorCode() {
                 return error;
             }

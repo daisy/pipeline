@@ -56,6 +56,7 @@ import net.sf.saxon.s9api.XdmSequenceIterator;
 import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.tree.util.NamespaceIterator;
+import net.sf.saxon.type.SchemaType;
 import nu.validator.htmlparser.sax.HtmlSerializer;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
@@ -269,6 +270,7 @@ public class S9apiUtils {
 
     public static HashSet<String> excludeInlinePrefixes(XdmNode node, String prefixList) {
         HashSet<String> excludeURIs = new HashSet<String> ();
+        // Exclude the default xproc namespace (usually associated with the "p" prefix)
         excludeURIs.add(XProcConstants.NS_XPROC);
 
         if (prefixList != null) {
@@ -323,7 +325,7 @@ public class S9apiUtils {
         tree.endDocument();
         return tree.getResult();
     }
-
+    // FIXME : Namespace used in attributes may be deleted
     private static void removeNamespacesWriter(TreeWriter tree, XdmNode node, HashSet<String> excludeNS, boolean preserveUsed) {
         if (node.getNodeKind() == XdmNodeKind.DOCUMENT) {
             XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
@@ -335,14 +337,17 @@ public class S9apiUtils {
             boolean usesDefaultNS = ("".equals(node.getNodeName().getPrefix())
                                      && !"".equals(node.getNodeName().getNamespaceURI()));
 
+           
+            
             NodeInfo inode = node.getUnderlyingNode();
+            
             int nscount = 0;
             Iterator<NamespaceBinding> nsiter = NamespaceIterator.iterateNamespaces(inode);
             while (nsiter.hasNext()) {
                 nscount++;
                 nsiter.next();
             }
-
+            
             boolean excludeDefault = false;
             boolean changed = false;
             NamespaceBinding newNS[] = null;
@@ -377,13 +382,14 @@ public class S9apiUtils {
             }
 
             NodeName newName = NameOfNode.makeName(inode);
+            
             if (!preserveUsed) {
                 NamespaceBinding binding = newName.getNamespaceBinding();
                 if (excludeNS.contains(binding.getURI())) {
                     newName = new FingerprintedQName("", "", newName.getLocalPart());
                 }
             }
-
+            
             tree.addStartElement(newName, inode.getSchemaType(), newNS, node.getLineNumber());
 
             if (!preserveUsed) {
@@ -401,7 +407,7 @@ public class S9apiUtils {
             } else {
                 tree.addAttributes(node);
             }
-
+            // 
             XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
             while (iter.hasNext()) {
                 XdmNode cnode = (XdmNode) iter.next();
@@ -409,6 +415,7 @@ public class S9apiUtils {
             }
             tree.addEndElement();
         } else {
+        	// Copy the node substructure directly
             tree.addSubtree(node);
         }
     }

@@ -6,6 +6,7 @@ buildscript {
   dependencies {
     classpath fileTree(dir: 'lib').include("*.jar")
     classpath group: 'net.sf.saxon', name: 'Saxon-HE', version: saxonVersion
+
   }
 }
 
@@ -44,10 +45,14 @@ configurations.all {
       details.useTarget "net.sf.saxon:Saxon-HE:" + saxonVersion
     }
   }
+  
 }
+
 
 dependencies {
   izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.4'
+  annotationProcessor("org.atteo.classindex:classindex:3.3")
+
 
   compile fileTree(dir: 'lib').include("*.jar")
   compile (
@@ -183,6 +188,7 @@ izpack {
 
 compileJava {
   options.deprecation = true
+  //options.compilerArgs += '-proc:none'
 }
 
 task copyNotices(type: Copy) {
@@ -282,6 +288,7 @@ task dist(dependsOn: [zipDist, izPackDist]) {
   // nop
 }
 
+///// Tests //////
 task testSuiteMessages {
   doLast {
     println "Running test-suite...this may take a few minutes..."
@@ -301,9 +308,9 @@ task testSuite(dependsOn: [makeDist, testSuiteMessages], type: JavaExec) {
        testsRoot + '/tests/extension/test-suite.xml',
        'http://xmlcalabash.com/tests/test-suite.xml')
   // 'http://localhost:8130/tests/test-suite.xml')
-
-  standardOutput = new FileOutputStream(new File(testsReport))
-  errorOutput = new FileOutputStream(new File(testsErrors))
+	
+  standardOutput = new FileOutputStream(new File("$projectDir", testsReport))
+  errorOutput = new FileOutputStream(new File("$projectDir", testsErrors))
 }
 
 task testSuiteClassPath {

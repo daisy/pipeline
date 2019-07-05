@@ -51,7 +51,6 @@ public class ModuleBuilderTest {
 				} catch (MalformedURLException e) {
 					throw new RuntimeException(e);
 				}
-				
 			}
 			public Iterable<URL> loadResources(String path) {
 				ArrayList<URL> result = new ArrayList<URL>();

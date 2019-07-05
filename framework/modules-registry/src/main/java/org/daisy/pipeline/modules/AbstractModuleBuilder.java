@@ -98,22 +98,26 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 				String base = rule.getValue().toString();
 				base = base.replaceAll("\\\\", "/");
 				if(base.startsWith("..")) base = base.substring(2);
+				URL baseURL = this.loader.loadResource(rule.getValue().toString());
+				
+				String basePath = baseURL.toString();
+				// remove every last / if there is one
+				while(basePath.endsWith("/"))
+					basePath = basePath.substring(0, basePath.length() - 1);
+				
 				Iterable<URL> entries = this.loader.loadResources(rule.getValue().toString());
 				for (URL url : entries) {
-					try {
-						String resultingPath = url.toURI().getPath().toString();
-						int startIndex = resultingPath.indexOf(base);
-						withComponent(
-								rule.getKey().resolve(
-										URI.create(resultingPath.substring(startIndex + base.length()))), 
-								".." + resultingPath.substring(startIndex));
-					} catch (URISyntaxException e) {
-						mLogger.warn("Exception while rewriting URI for link URI " + 
-								rule.getKey().toString() + 
-								" and resource url " + 
-								url.toURI().getPath().toString() + 
-								" : " + e.getLocalizedMessage());
-					}
+					// reconstruct the relative paths from both URLs
+					String resourcePath = url.toString();
+					String relativePath = resourcePath.substring(basePath.lastIndexOf("/"));
+					if(relativePath.startsWith("/")) relativePath = relativePath.substring(1);
+					
+					String relativeSubPath = resourcePath.substring(basePath.length());
+					if(relativeSubPath.startsWith("/")) relativeSubPath = relativeSubPath.substring(1);
+					withComponent(
+							rule.getKey().resolve(URI.create(relativeSubPath)), 
+							"../" + relativePath);
+					
 				}
 			} catch (Exception e) {
 				mLogger.warn("RewriteURI for " + rule.getValue().toString() + " ignored - Exception raised : " + e.getLocalizedMessage());

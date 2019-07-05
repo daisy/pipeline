@@ -47,6 +47,7 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.StaticError;
 import net.sf.saxon.s9api.ValidationMode;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
@@ -71,6 +72,7 @@ import javax.xml.transform.sax.SAXSource;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -82,7 +84,6 @@ import java.util.Vector;
 @XMLCalabash(
         name = "p:xslt",
         type = "{http://www.w3.org/ns/xproc}xslt")
-
 public class XSLT extends DefaultStep {
     private static final QName _initial_mode = new QName("", "initial-mode");
     private static final QName _template_name = new QName("", "template-name");
@@ -212,10 +213,12 @@ public class XSLT extends DefaultStep {
         config.setCollectionFinder(new XProcCollectionFinder(runtime, defaultCollection, collectionFinder));
 
         XdmDestination result = null;
+        ArrayList<StaticError> errorList = new ArrayList<StaticError>();
         try {
             XsltCompiler compiler = runtime.getProcessor().newXsltCompiler();
             compiler.setSchemaAware(processor.isSchemaAware());
             compiler.setErrorListener(new LogCompileErrors());
+            compiler.setErrorList(errorList);
             XsltExecutable exec = compiler.compile(stylesheet.asSource());
             XsltTransformer transformer = exec.load();
 
@@ -265,6 +268,9 @@ public class XSLT extends DefaultStep {
                     if (e instanceof TerminationException) {
                         message = catchMessages.getTerminatingMessage().toString();
                     }
+                    if(!errorList.isEmpty()) {
+                    	message += errorList.toString();
+                    }
                     final SourceLocator[] frames = XProcException.getLocator((TransformerException)e);
                     Throwable cause = e.getCause();
                     if (cause != null) {
@@ -282,10 +288,17 @@ public class XSLT extends DefaultStep {
                             @Override
                             public SourceLocator[] getLocator() {
                                 return frames; }};
-                } else
-                    throw XProcException.javaError(sae, 0);
+                } else throw XProcException.javaError(sae, 0);
             }
-        } finally {
+        } catch (SaxonApiException e) {
+        	String message = "Exception raised while compiling XSLT " + stylesheet.toString();
+        	if(!errorList.isEmpty()) {
+        		for(StaticError saxerr : errorList) {
+        			message += " ; " + saxerr.getLineNumber() + ":" + saxerr.getColumnNumber() + ": " + saxerr.getMessage();
+        		}
+        	}
+        	throw new SaxonApiException(message, e);
+		} finally {
             config.setOutputURIResolver(uriResolver);
             config.setCollectionFinder(collectionFinder);
         }

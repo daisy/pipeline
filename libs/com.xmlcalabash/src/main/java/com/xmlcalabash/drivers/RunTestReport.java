@@ -49,8 +49,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+//import org.xml.sax.helpers.XMLReaderFactory;
 
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -201,7 +202,8 @@ public class RunTestReport {
             prettyPrint = S9apiUtils.getDocumentElement(ppd);
 
             InputSource isource = new InputSource(testfile);
-            XMLReader reader = XMLReaderFactory.createXMLReader();
+            //XMLReader reader = XMLReaderFactory.createXMLReader();
+            XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
             reader.setEntityResolver(runtime.getResolver());
             SAXSource source = new SAXSource(reader,isource);
             DocumentBuilder builder = runtime.getProcessor().newDocumentBuilder();
@@ -256,7 +258,8 @@ public class RunTestReport {
             URI turi = testNode.getBaseURI().resolve(testNode.getAttributeValue(_href));
             try {
                 InputSource isource = new InputSource(turi.toASCIIString());
-                XMLReader reader = XMLReaderFactory.createXMLReader();
+                //XMLReader reader = XMLReaderFactory.createXMLReader();
+                XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
                 reader.setEntityResolver(runtime.getResolver());
                 SAXSource source = new SAXSource(reader, isource);
                 DocumentBuilder builder = runtime.getProcessor().newDocumentBuilder();

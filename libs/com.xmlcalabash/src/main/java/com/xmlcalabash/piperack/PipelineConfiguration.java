@@ -74,7 +74,7 @@ public class PipelineConfiguration {
         if (inputs.containsKey(port)) {
             count = inputs.get(port);
         }
-        inputs.put(port, new Integer(count + 1));
+        inputs.put(port, Integer.valueOf(count + 1));
     }
 
     public int documentCount(String port) {

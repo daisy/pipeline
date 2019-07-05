@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @IndexAnnotated
-public @interface XMLCalabash {
+public @interface XMLCalabash{
     String name() default "unnamed";
     String type();
 }

@@ -216,14 +216,14 @@ public class XProcRuntime {
 
         try {
             if (config.uriResolver != null) {
-                uriResolver.setUnderlyingURIResolver(Class.forName(config.uriResolver).asSubclass(URIResolver.class).newInstance());
+                uriResolver.setUnderlyingURIResolver(Class.forName(config.uriResolver).asSubclass(URIResolver.class).getConstructor().newInstance());
             }
             if (config.entityResolver != null) {
-                uriResolver.setUnderlyingEntityResolver(Class.forName(config.entityResolver).asSubclass(EntityResolver.class).newInstance());
+                uriResolver.setUnderlyingEntityResolver(Class.forName(config.entityResolver).asSubclass(EntityResolver.class).getConstructor().newInstance());
             }
 
             if (config.errorListener != null) {
-                msgListener = Class.forName(config.errorListener).asSubclass(XProcMessageListener.class).newInstance();
+                msgListener = Class.forName(config.errorListener).asSubclass(XProcMessageListener.class).getConstructor().newInstance();
             } else {
                 msgListener = new DefaultXProcMessageListener();
             }
@@ -261,7 +261,7 @@ public class XProcRuntime {
                     warnLevel = annotation.warnLevel().toUpperCase();
                 }
 
-                Object def = Class.forName(className).newInstance();
+                Object def = Class.forName(className).getConstructor().newInstance();
                 logger.trace("Instantiated: " + className);
                 if (def instanceof ExtensionFunctionDefinition)
                     processor.registerExtensionFunction((ExtensionFunctionDefinition) def);

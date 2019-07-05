@@ -16,6 +16,8 @@ import java.util.Vector;
 import org.slf4j.Logger;
 
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
 
 import com.xmlcalabash.core.XProcConstants;
@@ -44,7 +46,8 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+//import org.xml.sax.helpers.XMLReaderFactory;
+
 
 /**
  *
@@ -209,7 +212,9 @@ public class Parser {
 
     private XdmNode parse(InputStream instream, URI baseURI) throws SaxonApiException {
         try {
-            XMLReader reader = XMLReaderFactory.createXMLReader();
+            //XMLReader reader = XMLReaderFactory.createXMLReader();
+            XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+            
             reader.setEntityResolver(runtime.getResolver());
             SAXSource source = new SAXSource(reader, new InputSource(instream));
             DocumentBuilder builder = runtime.getProcessor().newDocumentBuilder();
@@ -217,7 +222,7 @@ public class Parser {
             builder.setDTDValidation(false);
             builder.setBaseURI(baseURI);
             return builder.build(source);
-        } catch (SAXException se) {
+        } catch (SAXException | ParserConfigurationException se) {
             throw new XProcException(se);
         }
     }

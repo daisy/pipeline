@@ -39,6 +39,7 @@
     </developer>
   </developers>
   
+  
   <dependencies>
       <dependency>
         <groupId>isorelax</groupId>
@@ -89,6 +90,104 @@
       </dependency>
     </dependencies>
     
+    <properties>
+      <script.exec>./ant</script.exec>
+    </properties>
+  <profiles>
+    <profile>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <script.exec>ant.bat</script.exec>
+      </properties>
+    </profile>
+    <profile>
+      <id>sonatype-oss-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.2.1</version>
+            <executions>
+              <execution>
+                <id>ant-dist</id>
+                <phase>compile</phase>  
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <workingDirectory>${project.basedir}/sources</workingDirectory>
+                  <executable>${script.exec}</executable>
+                  <commandlineArgs>jing-dist</commandlineArgs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-src-javadoc</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                      <unzip src="${project.basedir}/sources/build/mod/jing/src.zip" dest="${project.build.directory}/sources" /> 
+                      <copy todir="${project.build.directory}/javadoc">
+                          <fileset dir="${project.basedir}/sources/build/api/jing" />
+                      </copy>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources-and-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <descriptors>
+                    <descriptor>sources.xml</descriptor>
+                    <descriptor>javadoc.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
         <plugin>
@@ -127,7 +226,7 @@
               </goals>
               <configuration>
                 <workingDirectory>${project.basedir}/sources</workingDirectory>
-                <executable>ant</executable>
+                <executable>${script.exec}</executable>
                 <commandlineArgs>jar</commandlineArgs>
               </configuration>
             </execution>
@@ -192,99 +291,5 @@
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>sonatype-oss-release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.2.1</version>
-            <executions>
-              <execution>
-                <id>ant-dist</id>
-                <phase>compile</phase>  
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <workingDirectory>${project.basedir}/sources</workingDirectory>
-                  <executable>./ant</executable>
-                  <commandlineArgs>jing-dist</commandlineArgs>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-src-javadoc</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target>
-                      <unzip src="${project.basedir}/sources/build/mod/jing/src.zip" dest="${project.build.directory}/sources" /> 
-                      <copy todir="${project.build.directory}/javadoc">
-                          <fileset dir="${project.basedir}/sources/build/api/jing" />
-                      </copy>
-                  </target>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-sources-and-javadoc</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <descriptors>
-                    <descriptor>sources.xml</descriptor>
-                    <descriptor>javadoc.xml</descriptor>
-                  </descriptors>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-	<profile>
-		<activation>
-			<os>
-				<family>Windows</family>
-			</os>
-		</activation>
-		<properties>
-			<jing.ant>ant.bat</jing.ant>
-		</properties>
-	</profile>
-	
-  </profiles>
+  
 </project>

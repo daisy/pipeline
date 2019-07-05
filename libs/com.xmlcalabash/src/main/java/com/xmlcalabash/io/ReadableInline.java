@@ -81,8 +81,10 @@ public class ReadableInline implements ReadablePipe {
         try {
             S9apiUtils.writeXdmValue(runtime, nodes, dest, baseURI);
             XdmNode doc = dest.getXdmNode();
-
-            doc = S9apiUtils.removeNamespaces(runtime, doc, excludeNS, true);
+            // Do not clean XSLT inlined, or fix S9apiUtils.removeNamespacesWriter to also parse the attributes
+            if(!"xsl".equals(node.getUnderlyingNode().getPrefix())) {
+            	doc = S9apiUtils.removeNamespaces(runtime, doc, excludeNS, true);
+            }
             documents.add(doc);
         } catch (SaxonApiException sae) {
             throw new XProcException(sae);

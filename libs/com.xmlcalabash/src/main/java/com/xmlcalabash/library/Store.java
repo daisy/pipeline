@@ -192,7 +192,6 @@ public class Store extends DefaultStep {
                             GZIPOutputStream gzout = new GZIPOutputStream(outstr);
                             outstr = gzout;
                         }
-
                         serializer.setOutputStream(outstr);
                         try {
                             S9apiUtils.serialize(runtime, doc, serializer);
@@ -203,12 +202,12 @@ public class Store extends DefaultStep {
                 });
             }
         } catch (FileNotFoundException e) {
-            throw XProcException.stepError(50);
+            throw XProcException.stepError(50, "Java FileNotFoundException : " + e.getLocalizedMessage(), e);
         } catch (IOException ioe) {
             if (ioe.getCause() instanceof SaxonApiException) {
                 throw (SaxonApiException) ioe.getCause();
             }
-            throw XProcException.stepError(50, ioe);
+            throw XProcException.stepError(50, "Java IOException : " + ioe.getLocalizedMessage(),ioe);
         }
     }
 

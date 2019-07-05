@@ -10,7 +10,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+//import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.Source;
@@ -243,10 +243,11 @@ public class XProcURIResolver implements URIResolver, EntityResolver, ModuleURIR
                 XMLReader reader = ((SAXSource) source).getXMLReader();
                 if (reader == null) {
                     try {
-                        reader = XMLReaderFactory.createXMLReader();
+                        //reader = XMLReaderFactory.createXMLReader();
+                        reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
                         ((SAXSource) source).setXMLReader(reader);
                         reader.setEntityResolver(this);
-                    } catch (SAXException se) {
+                    } catch (SAXException | ParserConfigurationException se) {
                         // nop?
                     }
                 }
@@ -276,14 +277,15 @@ public class XProcURIResolver implements URIResolver, EntityResolver, ModuleURIR
     public XdmNode parse(InputSource isource) {
         try {
             // Make sure the builder uses our entity resolver
-            XMLReader reader = XMLReaderFactory.createXMLReader();
+        	//XMLReader reader = XMLReaderFactory.createXMLReader();
+            XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
             reader.setEntityResolver(this);
             SAXSource source = new SAXSource(reader, isource);
             DocumentBuilder builder = runtime.getProcessor().newDocumentBuilder();
             builder.setLineNumbering(true);
             builder.setDTDValidation(false);
             return builder.build(source);
-        } catch (SaxonApiException sae) {
+        } catch (SaxonApiException | ParserConfigurationException sae) {
             String msg = sae.getMessage();
             if (msg.contains("validation")) {
                 throw XProcException.stepError(27, sae);

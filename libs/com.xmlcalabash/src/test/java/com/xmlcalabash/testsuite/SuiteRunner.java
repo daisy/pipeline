@@ -10,9 +10,14 @@ import com.xmlcalabash.util.SilentTestReporter;
  * Created by ndw on 8/19/14.
  */
 public class SuiteRunner {
-    XProcConfiguration config = new XProcConfiguration("he", true);
-    XProcRuntime runtime = new XProcRuntime(config);
+    XProcConfiguration config;// = new XProcConfiguration("he", true);
+    XProcRuntime runtime;// = new XProcRuntime(config);
 
+    public SuiteRunner() {
+    	config = new XProcConfiguration("he", true);
+    	runtime = new XProcRuntime(config);
+    }
+    
     public void close() {
         runtime.close();
     }
