@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  stylesheet="../xsl/whitespace-handle.xsl">
+  <x:scenario label="Given param mml-space-handling='mspace'">
+    <x:scenario label="with default space values">
+      <x:scenario label="an mtext containing whitespace">
+        <x:context mode="handle-whitespace" xml:space="preserve"><math xmlns="http://www.w3.org/1998/Math/MathML"
+          ><mtext> </mtext></math></x:context>
+        <x:expect label="should be translated to mspace with default width">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mspace width="0.16em"/>
+          </math>
+        </x:expect>
+      </x:scenario>
+      <x:scenario label="an mi containing whitespace">
+        <x:context mode="handle-whitespace" xml:space="preserve"><math xmlns="http://www.w3.org/1998/Math/MathML"
+          ><mi> </mi></math></x:context>
+        <x:expect label="should be translated to mspace with default width">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mspace width="0.16em"/>
+          </math>
+        </x:expect>
+      </x:scenario>
+      <x:scenario label="an mtext containing U+2004">
+        <x:context mode="handle-whitespace" xml:space="preserve"><x:param
+          name="en-width" select="'0.33em'"/><math xmlns="http://www.w3.org/1998/Math/MathML"
+          ><mtext>&#x2004;</mtext></math></x:context>
+        <x:expect label="should be translated to mspace with en-width">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mspace width="0.33em"/>
+          </math>
+        </x:expect>
+      </x:scenario>
+      <x:scenario label="an mi containing U+2004">
+        <x:context mode="handle-whitespace" xml:space="preserve"><x:param
+          name="en-width" select="'0.33em'"/><math xmlns="http://www.w3.org/1998/Math/MathML"
+          ><mi>&#x2004;</mi></math></x:context>
+        <x:expect label="should be translated to mspace with en-width">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mspace width="0.33em"/>
+          </math>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>

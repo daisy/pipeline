@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <p:library xmlns:p="http://www.w3.org/ns/xproc" 
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:cx="http://xmlcalabash.com/ns/extensions" 
@@ -99,23 +100,21 @@
           <p:with-param name="lang" select="$lang">
             <p:empty/>
           </p:with-param>
-    
           <p:input port="stylesheet">
             <p:inline>
-              <xsl:stylesheet version="2.0">
-                <xsl:param name="lang" as="xs:string"/>
-                <xsl:param name="basename" select="''"/>
-                <xsl:template match="/">
-                  <c:message>
-                    <xsl:value-of
-                      select="replace((//c:message[@xml:lang eq $lang], //c:message)[1], '(.)[&#xa;&#xd;]*$', '$1&#xa;')"/>
-                  </c:message>
-                </xsl:template>
-              </xsl:stylesheet>
-            </p:inline>
+  	            <xsl:stylesheet version="2.0">
+          					<xsl:param name="lang" as="xs:string"/>
+          					<xsl:param name="basename" select="''"/>
+          					<xsl:template match="/">
+          					  <c:message>
+          					    <xsl:value-of
+          					      select="replace((//c:message[@xml:lang eq $lang], //c:message)[1], '(.)[&#xa;&#xd;]*$', '$1&#xa;')"/>
+          					  </c:message>
+          					</xsl:template>
+          			</xsl:stylesheet>
+      			</p:inline>
           </p:input>
         </p:xslt>
-    
         <p:store method="text">
           <p:with-option name="href" 
             select="concat($status-dir-uri-without-query-string, '/', concat(p:system-property('p:episode'), '_', $file))"/>
@@ -209,16 +208,7 @@
         <p:empty/>
       </p:input>
       <p:input port="stylesheet">
-        <p:inline>
-          <xsl:stylesheet version="2.0">
-            <xsl:template match="c:errors | c:error">
-              <xsl:element name="{replace(name(), 'error', 'message')}">
-                <xsl:copy-of select="@*"/>
-                <xsl:apply-templates/>
-              </xsl:element>
-            </xsl:template>
-          </xsl:stylesheet>
-        </p:inline>
+        <p:document href="../xsl/error-msg.xsl"/>
       </p:input>
     </p:xslt>
     

@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-  <rewriteURI uriStartString="http://transpect.io/" rewritePrefix="../"/>
-  <!--<nextCatalog catalog="../docx2hub/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../htmlreports/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xproc-util/xmlcatalog/catalog.xml"/>
-  <nextCatalog catalog="../xslt-util/xmlcatalog/catalog.xml"/>-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <rewriteURI uriStartString="http://transpect.io/cascade/" rewritePrefix="../cascade/"/>
+  <rewriteURI uriStartString="http://transpect.io/docx2hub/" rewritePrefix="../docx2hub/"/>
+  <rewriteURI uriStartString="http://transpect.io/htmlreports/" rewritePrefix="../htmlreports/"/>
+  <rewriteURI uriStartString="http://transpect.io/hub2html/" rewritePrefix="../hub2html/"/>
+  <rewriteURI uriStartString="http://transpect.io/xproc-util/" rewritePrefix="../xproc-util/"/>
+  <rewriteURI uriStartString="http://transpect.io/xslt-util/" rewritePrefix="../xslt-util/"/>
+  <rewriteURI uriStartString="http://transpect.le-tex.de/calabash-extensions/ltx-unzip/" rewritePrefix="../unzip-extension/"/>
+  <rewriteURI uriStartString="http://transpect.io/calabash-extensions/unzip-extension/" rewritePrefix="../unzip-extension/"/>
+  <rewriteURI uriStartString="http://transpect.le-tex.de/calabash-extensions/ltx-mathtype/" rewritePrefix="../mathtype-extension/"/>
+  <rewriteURI uriStartString="http://transpect.io/calabash-extensions/mathtype-extension/" rewritePrefix="../mathtype-extension/"/> 
+  <rewriteURI uriStartString="http://this.transpect.io/xmlcatalog/" rewritePrefix="../META-INF/"/>
+  <rewriteURI uriStartString="http://www.functx.com/" rewritePrefix="../xslt-util/functx/"/>
+	<uri uri="../config-calabash.xml" px:content-type="calabash-config"/>
+
 </catalog>

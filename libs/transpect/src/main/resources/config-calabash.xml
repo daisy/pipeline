@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xproc-config xmlns="http://xmlcalabash.com/ns/configuration"
+    xmlns:tr="http://transpect.io"
+    xmlns:tr-internal="http://transpect.io/internal">
+  <implementation type="tr-internal:unzip" class-name="io.transpect.calabash.extensions.UnZip"/>
+  <implementation type="tr:ole2xml" class-name="io.transpect.calabash.extensions.Mtef2Xml"/>
+  
+</xproc-config>

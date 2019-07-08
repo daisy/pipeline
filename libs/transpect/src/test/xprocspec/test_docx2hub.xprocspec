@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:docx2hub="http://transpect.io/docx2hub"
+               script="../../main/resources/docx2hub/xpl/docx2hub.xpl">
+
+	<x:scenario label="test">
+		<x:call step="docx2hub:convert">
+			<x:option name="docx" select="resolve-uri('../resources/test_normal.docx')"/>
+			<x:option name="extract-dir" select="resolve-uri($temp-dir)"/>
+			<x:option name="status-dir-uri" select="resolve-uri($temp-dir)"/>
+			<x:option name="debug-dir-uri" select="resolve-uri($temp-dir)"/>
+		</x:call>
+		<x:context label="the result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="is a hub document" type="xpath"
+			          test="name(/*) = 'hub'"/>
+	</x:scenario>
+	
+
+</x:description>

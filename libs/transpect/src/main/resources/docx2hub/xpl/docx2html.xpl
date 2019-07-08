@@ -35,6 +35,7 @@
   </p:option>
   <p:option name="debug" required="false" select="'no'"/>
   <p:option name="debug-dir-uri" required="false" select="'debug'"/>
+  <p:option name="status-dir-uri" required="false" select="'status'"/>
   <p:option name="srcpaths" required="false" select="'no'"/>
   <p:option name="unwrap-tooltip-links" required="false" select="'no'"/>
   <p:option name="hub-version" required="false" select="'1.2'"/>
@@ -56,6 +57,7 @@
     <p:with-option name="docx" select="$docx"/>
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
     <p:with-option name="hub-version" select="$hub-version"/>
     <p:with-option name="unwrap-tooltip-links" select="$unwrap-tooltip-links"/>
     <p:with-option name="fail-on-error" select="$fail-on-error"/>
@@ -72,6 +74,6 @@
     <p:input port="other-params"><p:empty/></p:input>    
     <p:with-option name="debug" select="$debug"/>
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </hub2htm:convert>
-
 </p:declare-step>

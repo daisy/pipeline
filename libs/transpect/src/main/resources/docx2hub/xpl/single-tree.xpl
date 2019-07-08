@@ -242,7 +242,7 @@
     </tr:store-debug>
 
     <p:sink name="sink3"/>
-
+    
     <tr:xslt-mode msg="yes" mode="insert-xpath" name="insert-xpath">
       <p:input port="source">
         <p:pipe step="document" port="result"/>
@@ -259,6 +259,7 @@
       <p:with-option name="prefix" select="concat('docx2hub/', $basename, '/01')"/>
       <p:with-option name="debug" select="$debug"/>
       <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+      <p:with-option name="status-dir-uri" select="$debug-dir-uri"/>
       <p:with-option name="fail-on-error" select="$fail-on-error"/>
       <p:with-param name="srcpaths" select="$srcpaths"/>
       <p:with-param name="fail-on-error" select="$fail-on-error"/>
@@ -334,5 +335,4 @@
   <p:sink name="sink6"/>
 
   </p:group>
-
 </p:declare-step>

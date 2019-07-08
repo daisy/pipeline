@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns="http://www.w3.org/1998/Math/MathML" stylesheet="../xsl/map-fonts.xsl">
+  <x:scenario label="Using #xdf in varying mathvariants">
+    <x:context mode="map-fonts">
+      <mi mathvariant="bold-italic">ß</mi>
+      <mi mathvariant="bold">ß</mi>
+      <mi mathvariant="italic">ß</mi>
+      <mi mathvariant="normal">ß</mi>
+      <mi>ß</mi>
+      <mtext>ß</mtext>
+    </x:context>
+    <x:expect label="mtext is generated">
+      <mtext mathvariant="bold-italic">ß</mtext>
+      <mtext mathvariant="bold">ß</mtext>
+      <mtext mathvariant="italic">ß</mtext>
+      <mtext mathvariant="normal">ß</mtext>
+      <mtext mathvariant="italic">ß</mtext>
+      <mtext mathvariant="normal">ß</mtext>
+    </x:expect>
+  </x:scenario>
+  <x:scenario label="Using many characters in separate mi">
+    <x:context mode="map-fonts">
+      <mi>À</mi>
+      <mi>Á</mi>
+      <mi>Â</mi>
+      <mi>Ã</mi>
+      <mi>Ä</mi>
+      <mi>Å</mi>
+      <mi>Æ</mi>
+      <mi>Ç</mi>
+      <mi>È</mi>
+      <mi>É</mi>
+      <mi>Ê</mi>
+      <mi>Ë</mi>
+      <mi>Ì</mi>
+      <mi>Í</mi>
+      <mi>Î</mi>
+      <mi>Ï</mi>
+      <mi>Ð</mi>
+      <mi>Ñ</mi>
+      <mi>Ò</mi>
+      <mi>Ó</mi>
+      <mi>Ô</mi>
+      <mi>Õ</mi>
+      <mi>Ö</mi>
+      <mi>Ù</mi>
+      <mi>Ú</mi>
+      <mi>Û</mi>
+      <mi>Ü</mi>
+      <mi>Ý</mi>
+      <mi>Þ</mi>
+      <mi>ß</mi>
+      <mi>à</mi>
+      <mi>á</mi>
+      <mi>â</mi>
+      <mi>ã</mi>
+      <mi>ä</mi>
+      <mi>å</mi>
+      <mi>æ</mi>
+      <mi>ç</mi>
+      <mi>è</mi>
+      <mi>é</mi>
+      <mi>ê</mi>
+      <mi>ë</mi>
+      <mi>ì</mi>
+      <mi>í</mi>
+      <mi>î</mi>
+      <mi>ï</mi>
+      <mi>ð</mi>
+      <mi>ñ</mi>
+      <mi>ò</mi>
+      <mi>ó</mi>
+      <mi>ô</mi>
+      <mi>õ</mi>
+      <mi>ö</mi>
+      <mi>ù</mi>
+      <mi>ú</mi>
+      <mi>û</mi>
+      <mi>ü</mi>
+      <mi>ý</mi>
+      <mi>þ</mi>
+      <mi>ÿ</mi>
+      <mi>Ā</mi>
+      <mi>ā</mi>
+      <mi>Ă</mi>
+      <mi>ă</mi>
+      <mi>Ą</mi>
+      <mi>ą</mi>
+      <mi>Ć</mi>
+      <mi>ć</mi>
+      <mi>Ĉ</mi>
+      <mi>ĉ</mi>
+      <mi>Ċ</mi>
+      <mi>ċ</mi>
+      <mi>Č</mi>
+      <mi>č</mi>
+      <mi>Ď</mi>
+      <mi>ď</mi>
+      <mi>Đ</mi>
+      <mi>đ</mi>
+      <mi>Ē</mi>
+      <mi>ē</mi>
+      <mi>Ĕ</mi>
+      <mi>ĕ</mi>
+      <mi>Ė</mi>
+      <mi>ė</mi>
+      <mi>Ę</mi>
+      <mi>ę</mi>
+      <mi>Ě</mi>
+      <mi>ě</mi>
+      <mi>Ĝ</mi>
+      <mi>ĝ</mi>
+      <mi>Ğ</mi>
+      <mi>ğ</mi>
+      <mi>Ġ</mi>
+      <mi>ġ</mi>
+      <mi>Ģ</mi>
+      <mi>ģ</mi>
+      <mi>Ĥ</mi>
+      <mi>ĥ</mi>
+      <mi>Ħ</mi>
+      <mi>ħ</mi>
+      <mi>Ĩ</mi>
+      <mi>ĩ</mi>
+      <mi>Ī</mi>
+      <mi>ī</mi>
+      <mi>Ĭ</mi>
+      <mi>ĭ</mi>
+      <mi>Į</mi>
+      <mi>į</mi>
+      <mi>İ</mi>
+      <mi>ı</mi>
+      <mi>Ĳ</mi>
+      <mi>ĳ</mi>
+      <mi>Ĵ</mi>
+      <mi>ĵ</mi>
+      <mi>Ķ</mi>
+      <mi>ķ</mi>
+      <mi>ĸ</mi>
+      <mi>Ĺ</mi>
+      <mi>ĺ</mi>
+      <mi>Ļ</mi>
+      <mi>ļ</mi>
+      <mi>Ľ</mi>
+      <mi>ľ</mi>
+      <mi>Ŀ</mi>
+      <mi>ŀ</mi>
+      <mi>Ł</mi>
+      <mi>ł</mi>
+      <mi>Ń</mi>
+      <mi>ń</mi>
+      <mi>Ņ</mi>
+      <mi>ņ</mi>
+      <mi>Ň</mi>
+      <mi>ň</mi>
+      <mi>ŉ</mi>
+      <mi>Ŋ</mi>
+      <mi>ŋ</mi>
+      <mi>Ō</mi>
+      <mi>ō</mi>
+      <mi>Ŏ</mi>
+      <mi>ŏ</mi>
+      <mi>Ő</mi>
+      <mi>ő</mi>
+      <mi>Œ</mi>
+      <mi>œ</mi>
+      <mi>Ŕ</mi>
+      <mi>ŕ</mi>
+      <mi>Ŗ</mi>
+      <mi>ŗ</mi>
+      <mi>Ř</mi>
+      <mi>ř</mi>
+      <mi>Ś</mi>
+      <mi>ś</mi>
+      <mi>Ŝ</mi>
+      <mi>ŝ</mi>
+      <mi>Ş</mi>
+      <mi>ş</mi>
+      <mi>Š</mi>
+      <mi>š</mi>
+      <mi>Ţ</mi>
+      <mi>ţ</mi>
+      <mi>Ť</mi>
+      <mi>ť</mi>
+      <mi>Ŧ</mi>
+      <mi>ŧ</mi>
+      <mi>Ũ</mi>
+      <mi>ũ</mi>
+      <mi>Ū</mi>
+      <mi>ū</mi>
+      <mi>Ŭ</mi>
+      <mi>ŭ</mi>
+      <mi>Ů</mi>
+      <mi>ů</mi>
+      <mi>Ű</mi>
+      <mi>ű</mi>
+      <mi>Ų</mi>
+      <mi>ų</mi>
+      <mi>Ŵ</mi>
+      <mi>ŵ</mi>
+      <mi>Ŷ</mi>
+      <mi>ŷ</mi>
+      <mi>Ÿ</mi>
+      <mi>Ź</mi>
+      <mi>ź</mi>
+      <mi>Ż</mi>
+      <mi>ż</mi>
+      <mi>Ž</mi>
+      <mi>ž</mi>
+      <mi>ſ</mi>
+      <mi>ƀ</mi>
+      <mi>Ɓ</mi>
+      <mi>Ƃ</mi>
+      <mi>ƃ</mi>
+      <mi>Ƅ</mi>
+      <mi>ƅ</mi>
+      <mi>Ɔ</mi>
+      <mi>Ƈ</mi>
+      <mi>ƈ</mi>
+      <mi>Ɖ</mi>
+      <mi>Ɗ</mi>
+      <mi>Ƌ</mi>
+      <mi>ƌ</mi>
+      <mi>ƍ</mi>
+      <mi>Ǝ</mi>
+      <mi>Ə</mi>
+      <mi>Ɛ</mi>
+      <mi>Ƒ</mi>
+      <mi>ƒ</mi>
+      <mi>Ɠ</mi>
+      <mi>Ɣ</mi>
+      <mi>ƕ</mi>
+      <mi>Ɩ</mi>
+      <mi>Ɨ</mi>
+      <mi>Ƙ</mi>
+      <mi>ƙ</mi>
+      <mi>ƚ</mi>
+      <mi>ƛ</mi>
+      <mi>Ɯ</mi>
+      <mi>Ɲ</mi>
+      <mi>ƞ</mi>
+      <mi>Ɵ</mi>
+      <mi>Ơ</mi>
+      <mi>ơ</mi>
+      <mi>Ƣ</mi>
+      <mi>ƣ</mi>
+      <mi>Ƥ</mi>
+      <mi>ƥ</mi>
+      <mi>Ʀ</mi>
+      <mi>Ƨ</mi>
+      <mi>ƨ</mi>
+      <mi>Ʃ</mi>
+      <mi>ƪ</mi>
+      <mi>ƫ</mi>
+      <mi>Ƭ</mi>
+      <mi>ƭ</mi>
+      <mi>Ʈ</mi>
+      <mi>Ư</mi>
+      <mi>ư</mi>
+      <mi>Ʊ</mi>
+      <mi>Ʋ</mi>
+      <mi>Ƴ</mi>
+      <mi>ƴ</mi>
+      <mi>Ƶ</mi>
+      <mi>ƶ</mi>
+      <mi>Ʒ</mi>
+      <mi>Ƹ</mi>
+      <mi>ƹ</mi>
+      <mi>ƺ</mi>
+      <mi>ƻ</mi>
+      <mi>Ƽ</mi>
+      <mi>ƽ</mi>
+      <mi>ƾ</mi>
+      <mi>ƿ</mi>
+      <mi>ǀ</mi>
+      <mi>ǁ</mi>
+      <mi>ǂ</mi>
+      <mi>ǃ</mi>
+      <mi>Ǆ</mi>
+      <mi>ǅ</mi>
+      <mi>ǆ</mi>
+      <mi>Ǉ</mi>
+      <mi>ǈ</mi>
+      <mi>ǉ</mi>
+      <mi>Ǌ</mi>
+      <mi>ǋ</mi>
+      <mi>ǌ</mi>
+      <mi>Ǎ</mi>
+      <mi>ǎ</mi>
+      <mi>Ǐ</mi>
+      <mi>ǐ</mi>
+      <mi>Ǒ</mi>
+      <mi>ǒ</mi>
+      <mi>Ǔ</mi>
+      <mi>ǔ</mi>
+      <mi>Ǖ</mi>
+      <mi>ǖ</mi>
+      <mi>Ǘ</mi>
+      <mi>ǘ</mi>
+      <mi>Ǚ</mi>
+      <mi>ǚ</mi>
+      <mi>Ǜ</mi>
+      <mi>ǜ</mi>
+      <mi>ǝ</mi>
+      <mi>Ǟ</mi>
+      <mi>ǟ</mi>
+      <mi>Ǡ</mi>
+      <mi>ǡ</mi>
+      <mi>Ǣ</mi>
+      <mi>ǣ</mi>
+      <mi>Ǥ</mi>
+      <mi>ǥ</mi>
+      <mi>Ǧ</mi>
+      <mi>ǧ</mi>
+      <mi>Ǩ</mi>
+      <mi>ǩ</mi>
+      <mi>Ǫ</mi>
+      <mi>ǫ</mi>
+      <mi>Ǭ</mi>
+      <mi>ǭ</mi>
+      <mi>Ǯ</mi>
+      <mi>ǯ</mi>
+      <mi>ǰ</mi>
+      <mi>Ǳ</mi>
+      <mi>ǲ</mi>
+      <mi>ǳ</mi>
+      <mi>Ǵ</mi>
+      <mi>ǵ</mi>
+      <mi>Ƕ</mi>
+      <mi>Ƿ</mi>
+      <mi>Ǹ</mi>
+      <mi>ǹ</mi>
+      <mi>Ǻ</mi>
+      <mi>ǻ</mi>
+      <mi>Ǽ</mi>
+      <mi>ǽ</mi>
+    </x:context>
+    <x:expect label="one mtext is generated">
+      <mtext mathvariant="italic">À</mtext>
+      <mtext mathvariant="italic">Á</mtext>
+      <mtext mathvariant="italic">Â</mtext>
+      <mtext mathvariant="italic">Ã</mtext>
+      <mtext mathvariant="italic">Ä</mtext>
+      <mtext mathvariant="italic">Å</mtext>
+      <mtext mathvariant="italic">Æ</mtext>
+      <mtext mathvariant="italic">Ç</mtext>
+      <mtext mathvariant="italic">È</mtext>
+      <mtext mathvariant="italic">É</mtext>
+      <mtext mathvariant="italic">Ê</mtext>
+      <mtext mathvariant="italic">Ë</mtext>
+      <mtext mathvariant="italic">Ì</mtext>
+      <mtext mathvariant="italic">Í</mtext>
+      <mtext mathvariant="italic">Î</mtext>
+      <mtext mathvariant="italic">Ï</mtext>
+      <mtext mathvariant="italic">Ð</mtext>
+      <mtext mathvariant="italic">Ñ</mtext>
+      <mtext mathvariant="italic">Ò</mtext>
+      <mtext mathvariant="italic">Ó</mtext>
+      <mtext mathvariant="italic">Ô</mtext>
+      <mtext mathvariant="italic">Õ</mtext>
+      <mtext mathvariant="italic">Ö</mtext>
+      <mtext mathvariant="italic">Ù</mtext>
+      <mtext mathvariant="italic">Ú</mtext>
+      <mtext mathvariant="italic">Û</mtext>
+      <mtext mathvariant="italic">Ü</mtext>
+      <mtext mathvariant="italic">Ý</mtext>
+      <mtext mathvariant="italic">Þ</mtext>
+      <mtext mathvariant="italic">ß</mtext>
+      <mtext mathvariant="italic">à</mtext>
+      <mtext mathvariant="italic">á</mtext>
+      <mtext mathvariant="italic">â</mtext>
+      <mtext mathvariant="italic">ã</mtext>
+      <mtext mathvariant="italic">ä</mtext>
+      <mtext mathvariant="italic">å</mtext>
+      <mtext mathvariant="italic">æ</mtext>
+      <mtext mathvariant="italic">ç</mtext>
+      <mtext mathvariant="italic">è</mtext>
+      <mtext mathvariant="italic">é</mtext>
+      <mtext mathvariant="italic">ê</mtext>
+      <mtext mathvariant="italic">ë</mtext>
+      <mtext mathvariant="italic">ì</mtext>
+      <mtext mathvariant="italic">í</mtext>
+      <mtext mathvariant="italic">î</mtext>
+      <mtext mathvariant="italic">ï</mtext>
+      <mtext mathvariant="italic">ð</mtext>
+      <mtext mathvariant="italic">ñ</mtext>
+      <mtext mathvariant="italic">ò</mtext>
+      <mtext mathvariant="italic">ó</mtext>
+      <mtext mathvariant="italic">ô</mtext>
+      <mtext mathvariant="italic">õ</mtext>
+      <mtext mathvariant="italic">ö</mtext>
+      <mtext mathvariant="italic">ù</mtext>
+      <mtext mathvariant="italic">ú</mtext>
+      <mtext mathvariant="italic">û</mtext>
+      <mtext mathvariant="italic">ü</mtext>
+      <mtext mathvariant="italic">ý</mtext>
+      <mtext mathvariant="italic">þ</mtext>
+      <mtext mathvariant="italic">ÿ</mtext>
+      <mtext mathvariant="italic">Ā</mtext>
+      <mtext mathvariant="italic">ā</mtext>
+      <mtext mathvariant="italic">Ă</mtext>
+      <mtext mathvariant="italic">ă</mtext>
+      <mtext mathvariant="italic">Ą</mtext>
+      <mtext mathvariant="italic">ą</mtext>
+      <mtext mathvariant="italic">Ć</mtext>
+      <mtext mathvariant="italic">ć</mtext>
+      <mtext mathvariant="italic">Ĉ</mtext>
+      <mtext mathvariant="italic">ĉ</mtext>
+      <mtext mathvariant="italic">Ċ</mtext>
+      <mtext mathvariant="italic">ċ</mtext>
+      <mtext mathvariant="italic">Č</mtext>
+      <mtext mathvariant="italic">č</mtext>
+      <mtext mathvariant="italic">Ď</mtext>
+      <mtext mathvariant="italic">ď</mtext>
+      <mtext mathvariant="italic">Đ</mtext>
+      <mtext mathvariant="italic">đ</mtext>
+      <mtext mathvariant="italic">Ē</mtext>
+      <mtext mathvariant="italic">ē</mtext>
+      <mtext mathvariant="italic">Ĕ</mtext>
+      <mtext mathvariant="italic">ĕ</mtext>
+      <mtext mathvariant="italic">Ė</mtext>
+      <mtext mathvariant="italic">ė</mtext>
+      <mtext mathvariant="italic">Ę</mtext>
+      <mtext mathvariant="italic">ę</mtext>
+      <mtext mathvariant="italic">Ě</mtext>
+      <mtext mathvariant="italic">ě</mtext>
+      <mtext mathvariant="italic">Ĝ</mtext>
+      <mtext mathvariant="italic">ĝ</mtext>
+      <mtext mathvariant="italic">Ğ</mtext>
+      <mtext mathvariant="italic">ğ</mtext>
+      <mtext mathvariant="italic">Ġ</mtext>
+      <mtext mathvariant="italic">ġ</mtext>
+      <mtext mathvariant="italic">Ģ</mtext>
+      <mtext mathvariant="italic">ģ</mtext>
+      <mtext mathvariant="italic">Ĥ</mtext>
+      <mtext mathvariant="italic">ĥ</mtext>
+      <mtext mathvariant="italic">Ħ</mtext>
+      <mtext mathvariant="italic">ħ</mtext>
+      <mtext mathvariant="italic">Ĩ</mtext>
+      <mtext mathvariant="italic">ĩ</mtext>
+      <mtext mathvariant="italic">Ī</mtext>
+      <mtext mathvariant="italic">ī</mtext>
+      <mtext mathvariant="italic">Ĭ</mtext>
+      <mtext mathvariant="italic">ĭ</mtext>
+      <mtext mathvariant="italic">Į</mtext>
+      <mtext mathvariant="italic">į</mtext>
+      <mtext mathvariant="italic">İ</mtext>
+      <mtext mathvariant="italic">ı</mtext>
+      <mtext mathvariant="italic">Ĳ</mtext>
+      <mtext mathvariant="italic">ĳ</mtext>
+      <mtext mathvariant="italic">Ĵ</mtext>
+      <mtext mathvariant="italic">ĵ</mtext>
+      <mtext mathvariant="italic">Ķ</mtext>
+      <mtext mathvariant="italic">ķ</mtext>
+      <mtext mathvariant="italic">ĸ</mtext>
+      <mtext mathvariant="italic">Ĺ</mtext>
+      <mtext mathvariant="italic">ĺ</mtext>
+      <mtext mathvariant="italic">Ļ</mtext>
+      <mtext mathvariant="italic">ļ</mtext>
+      <mtext mathvariant="italic">Ľ</mtext>
+      <mtext mathvariant="italic">ľ</mtext>
+      <mtext mathvariant="italic">Ŀ</mtext>
+      <mtext mathvariant="italic">ŀ</mtext>
+      <mtext mathvariant="italic">Ł</mtext>
+      <mtext mathvariant="italic">ł</mtext>
+      <mtext mathvariant="italic">Ń</mtext>
+      <mtext mathvariant="italic">ń</mtext>
+      <mtext mathvariant="italic">Ņ</mtext>
+      <mtext mathvariant="italic">ņ</mtext>
+      <mtext mathvariant="italic">Ň</mtext>
+      <mtext mathvariant="italic">ň</mtext>
+      <mtext mathvariant="italic">ŉ</mtext>
+      <mtext mathvariant="italic">Ŋ</mtext>
+      <mtext mathvariant="italic">ŋ</mtext>
+      <mtext mathvariant="italic">Ō</mtext>
+      <mtext mathvariant="italic">ō</mtext>
+      <mtext mathvariant="italic">Ŏ</mtext>
+      <mtext mathvariant="italic">ŏ</mtext>
+      <mtext mathvariant="italic">Ő</mtext>
+      <mtext mathvariant="italic">ő</mtext>
+      <mtext mathvariant="italic">Œ</mtext>
+      <mtext mathvariant="italic">œ</mtext>
+      <mtext mathvariant="italic">Ŕ</mtext>
+      <mtext mathvariant="italic">ŕ</mtext>
+      <mtext mathvariant="italic">Ŗ</mtext>
+      <mtext mathvariant="italic">ŗ</mtext>
+      <mtext mathvariant="italic">Ř</mtext>
+      <mtext mathvariant="italic">ř</mtext>
+      <mtext mathvariant="italic">Ś</mtext>
+      <mtext mathvariant="italic">ś</mtext>
+      <mtext mathvariant="italic">Ŝ</mtext>
+      <mtext mathvariant="italic">ŝ</mtext>
+      <mtext mathvariant="italic">Ş</mtext>
+      <mtext mathvariant="italic">ş</mtext>
+      <mtext mathvariant="italic">Š</mtext>
+      <mtext mathvariant="italic">š</mtext>
+      <mtext mathvariant="italic">Ţ</mtext>
+      <mtext mathvariant="italic">ţ</mtext>
+      <mtext mathvariant="italic">Ť</mtext>
+      <mtext mathvariant="italic">ť</mtext>
+      <mtext mathvariant="italic">Ŧ</mtext>
+      <mtext mathvariant="italic">ŧ</mtext>
+      <mtext mathvariant="italic">Ũ</mtext>
+      <mtext mathvariant="italic">ũ</mtext>
+      <mtext mathvariant="italic">Ū</mtext>
+      <mtext mathvariant="italic">ū</mtext>
+      <mtext mathvariant="italic">Ŭ</mtext>
+      <mtext mathvariant="italic">ŭ</mtext>
+      <mtext mathvariant="italic">Ů</mtext>
+      <mtext mathvariant="italic">ů</mtext>
+      <mtext mathvariant="italic">Ű</mtext>
+      <mtext mathvariant="italic">ű</mtext>
+      <mtext mathvariant="italic">Ų</mtext>
+      <mtext mathvariant="italic">ų</mtext>
+      <mtext mathvariant="italic">Ŵ</mtext>
+      <mtext mathvariant="italic">ŵ</mtext>
+      <mtext mathvariant="italic">Ŷ</mtext>
+      <mtext mathvariant="italic">ŷ</mtext>
+      <mtext mathvariant="italic">Ÿ</mtext>
+      <mtext mathvariant="italic">Ź</mtext>
+      <mtext mathvariant="italic">ź</mtext>
+      <mtext mathvariant="italic">Ż</mtext>
+      <mtext mathvariant="italic">ż</mtext>
+      <mtext mathvariant="italic">Ž</mtext>
+      <mtext mathvariant="italic">ž</mtext>
+      <mtext mathvariant="italic">ſ</mtext>
+      <mtext mathvariant="italic">ƀ</mtext>
+      <mtext mathvariant="italic">Ɓ</mtext>
+      <mtext mathvariant="italic">Ƃ</mtext>
+      <mtext mathvariant="italic">ƃ</mtext>
+      <mtext mathvariant="italic">Ƅ</mtext>
+      <mtext mathvariant="italic">ƅ</mtext>
+      <mtext mathvariant="italic">Ɔ</mtext>
+      <mtext mathvariant="italic">Ƈ</mtext>
+      <mtext mathvariant="italic">ƈ</mtext>
+      <mtext mathvariant="italic">Ɖ</mtext>
+      <mtext mathvariant="italic">Ɗ</mtext>
+      <mtext mathvariant="italic">Ƌ</mtext>
+      <mtext mathvariant="italic">ƌ</mtext>
+      <mtext mathvariant="italic">ƍ</mtext>
+      <mtext mathvariant="italic">Ǝ</mtext>
+      <mtext mathvariant="italic">Ə</mtext>
+      <mtext mathvariant="italic">Ɛ</mtext>
+      <mtext mathvariant="italic">Ƒ</mtext>
+      <mtext mathvariant="italic">ƒ</mtext>
+      <mtext mathvariant="italic">Ɠ</mtext>
+      <mtext mathvariant="italic">Ɣ</mtext>
+      <mtext mathvariant="italic">ƕ</mtext>
+      <mtext mathvariant="italic">Ɩ</mtext>
+      <mtext mathvariant="italic">Ɨ</mtext>
+      <mtext mathvariant="italic">Ƙ</mtext>
+      <mtext mathvariant="italic">ƙ</mtext>
+      <mtext mathvariant="italic">ƚ</mtext>
+      <mtext mathvariant="italic">ƛ</mtext>
+      <mtext mathvariant="italic">Ɯ</mtext>
+      <mtext mathvariant="italic">Ɲ</mtext>
+      <mtext mathvariant="italic">ƞ</mtext>
+      <mtext mathvariant="italic">Ɵ</mtext>
+      <mtext mathvariant="italic">Ơ</mtext>
+      <mtext mathvariant="italic">ơ</mtext>
+      <mtext mathvariant="italic">Ƣ</mtext>
+      <mtext mathvariant="italic">ƣ</mtext>
+      <mtext mathvariant="italic">Ƥ</mtext>
+      <mtext mathvariant="italic">ƥ</mtext>
+      <mtext mathvariant="italic">Ʀ</mtext>
+      <mtext mathvariant="italic">Ƨ</mtext>
+      <mtext mathvariant="italic">ƨ</mtext>
+      <mtext mathvariant="italic">Ʃ</mtext>
+      <mtext mathvariant="italic">ƪ</mtext>
+      <mtext mathvariant="italic">ƫ</mtext>
+      <mtext mathvariant="italic">Ƭ</mtext>
+      <mtext mathvariant="italic">ƭ</mtext>
+      <mtext mathvariant="italic">Ʈ</mtext>
+      <mtext mathvariant="italic">Ư</mtext>
+      <mtext mathvariant="italic">ư</mtext>
+      <mtext mathvariant="italic">Ʊ</mtext>
+      <mtext mathvariant="italic">Ʋ</mtext>
+      <mtext mathvariant="italic">Ƴ</mtext>
+      <mtext mathvariant="italic">ƴ</mtext>
+      <mtext mathvariant="italic">Ƶ</mtext>
+      <mtext mathvariant="italic">ƶ</mtext>
+      <mtext mathvariant="italic">Ʒ</mtext>
+      <mtext mathvariant="italic">Ƹ</mtext>
+      <mtext mathvariant="italic">ƹ</mtext>
+      <mtext mathvariant="italic">ƺ</mtext>
+      <mtext mathvariant="italic">ƻ</mtext>
+      <mtext mathvariant="italic">Ƽ</mtext>
+      <mtext mathvariant="italic">ƽ</mtext>
+      <mtext mathvariant="italic">ƾ</mtext>
+      <mtext mathvariant="italic">ƿ</mtext>
+      <mtext mathvariant="italic">ǀ</mtext>
+      <mtext mathvariant="italic">ǁ</mtext>
+      <mtext mathvariant="italic">ǂ</mtext>
+      <mtext mathvariant="italic">ǃ</mtext>
+      <mtext mathvariant="italic">Ǆ</mtext>
+      <mtext mathvariant="italic">ǅ</mtext>
+      <mtext mathvariant="italic">ǆ</mtext>
+      <mtext mathvariant="italic">Ǉ</mtext>
+      <mtext mathvariant="italic">ǈ</mtext>
+      <mtext mathvariant="italic">ǉ</mtext>
+      <mtext mathvariant="italic">Ǌ</mtext>
+      <mtext mathvariant="italic">ǋ</mtext>
+      <mtext mathvariant="italic">ǌ</mtext>
+      <mtext mathvariant="italic">Ǎ</mtext>
+      <mtext mathvariant="italic">ǎ</mtext>
+      <mtext mathvariant="italic">Ǐ</mtext>
+      <mtext mathvariant="italic">ǐ</mtext>
+      <mtext mathvariant="italic">Ǒ</mtext>
+      <mtext mathvariant="italic">ǒ</mtext>
+      <mtext mathvariant="italic">Ǔ</mtext>
+      <mtext mathvariant="italic">ǔ</mtext>
+      <mtext mathvariant="italic">Ǖ</mtext>
+      <mtext mathvariant="italic">ǖ</mtext>
+      <mtext mathvariant="italic">Ǘ</mtext>
+      <mtext mathvariant="italic">ǘ</mtext>
+      <mtext mathvariant="italic">Ǚ</mtext>
+      <mtext mathvariant="italic">ǚ</mtext>
+      <mtext mathvariant="italic">Ǜ</mtext>
+      <mtext mathvariant="italic">ǜ</mtext>
+      <mtext mathvariant="italic">ǝ</mtext>
+      <mtext mathvariant="italic">Ǟ</mtext>
+      <mtext mathvariant="italic">ǟ</mtext>
+      <mtext mathvariant="italic">Ǡ</mtext>
+      <mtext mathvariant="italic">ǡ</mtext>
+      <mtext mathvariant="italic">Ǣ</mtext>
+      <mtext mathvariant="italic">ǣ</mtext>
+      <mtext mathvariant="italic">Ǥ</mtext>
+      <mtext mathvariant="italic">ǥ</mtext>
+      <mtext mathvariant="italic">Ǧ</mtext>
+      <mtext mathvariant="italic">ǧ</mtext>
+      <mtext mathvariant="italic">Ǩ</mtext>
+      <mtext mathvariant="italic">ǩ</mtext>
+      <mtext mathvariant="italic">Ǫ</mtext>
+      <mtext mathvariant="italic">ǫ</mtext>
+      <mtext mathvariant="italic">Ǭ</mtext>
+      <mtext mathvariant="italic">ǭ</mtext>
+      <mtext mathvariant="italic">Ǯ</mtext>
+      <mtext mathvariant="italic">ǯ</mtext>
+      <mtext mathvariant="italic">ǰ</mtext>
+      <mtext mathvariant="italic">Ǳ</mtext>
+      <mtext mathvariant="italic">ǲ</mtext>
+      <mtext mathvariant="italic">ǳ</mtext>
+      <mtext mathvariant="italic">Ǵ</mtext>
+      <mtext mathvariant="italic">ǵ</mtext>
+      <mtext mathvariant="italic">Ƕ</mtext>
+      <mtext mathvariant="italic">Ƿ</mtext>
+      <mtext mathvariant="italic">Ǹ</mtext>
+      <mtext mathvariant="italic">ǹ</mtext>
+      <mtext mathvariant="italic">Ǻ</mtext>
+      <mtext mathvariant="italic">ǻ</mtext>
+      <mtext mathvariant="italic">Ǽ</mtext>
+      <mtext mathvariant="italic">ǽ</mtext>
+    </x:expect>
+  </x:scenario>
+  <x:scenario label="Using #xf7 in varying mathvariants">
+    <x:context mode="map-fonts">
+      <mi mathvariant="bold-italic">÷</mi>
+      <mi mathvariant="bold">÷</mi>
+      <mi mathvariant="italic">÷</mi>
+      <mi mathvariant="normal">÷</mi>
+      <mi>÷</mi>
+      <mtext>÷</mtext>
+    </x:context>
+    <x:expect label="everything is unchanged">
+      <mi mathvariant="bold-italic">÷</mi>
+      <mi mathvariant="bold">÷</mi>
+      <mi mathvariant="italic">÷</mi>
+      <mi mathvariant="normal">÷</mi>
+      <mi>÷</mi>
+      <mtext>÷</mtext>
+    </x:expect>
+  </x:scenario>
+  <x:scenario label="Using font Symbol (without font-maps defined)" pending="">
+    <x:context mode="map-fonts">
+      <mo mathvariant="normal"
+          font-position="003D"
+          fontfamily="Symbol">=</mo>
+    </x:context>
+    <x:expect label="everything is unchanged">
+      <mo
+        mathvariant="normal"
+        font-position="003D"
+        fontfamily="Symbol">=</mo>
+    </x:expect>
+  </x:scenario>
+</x:description>

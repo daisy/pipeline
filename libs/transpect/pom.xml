@@ -7,7 +7,7 @@
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
     <version>1.12.1-SNAPSHOT</version>
-    <relativePath>../modules/parent</relativePath>
+    <relativePath>../../modules/parent</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
@@ -15,9 +15,14 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>Transpect Xproc modules</name>
+  <name>Transpect Xproc library modules</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>com.xmlcalabash</artifactId>
+      <version>1.1.20-p3-98-SNAPSHOT</version>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
@@ -34,15 +39,59 @@
       <version>5.0.0</version>
       <scope>provided</scope>
     </dependency>
-  </dependencies>
 
+    <dependency>
+      <groupId>org.jruby</groupId>
+      <artifactId>jruby-complete</artifactId>
+      <version>9.1.8.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId> 
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+
+  </dependencies>
 
   <properties>
     <expose-services>
-      org.daisy.pipeline.modules.impl.Module_transpect
+      org.daisy.pipeline.modules.impl.Module_transpect,
+      org.daisy.common.xproc.calabash.impl.ConfigurationFileProvider_transpect,
+      io.transpect.calabash.extensions.TranspectUnZipProvider
     </expose-services>
   </properties>
+
+
+
 <!--
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
+              *
+            </Import-Package>
+            <Export-Package/>
+            <Private-Package>
+              io.transpect.calabash.extensions;-split-package:=first,
+              ${generated-packages}
+              {local-packages}
+            </Private-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <build>
     <resources>
       <resource>

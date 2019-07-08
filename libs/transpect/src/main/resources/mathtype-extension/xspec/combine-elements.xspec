@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  stylesheet="../xsl/combine-elements.xsl">
+  <x:scenario label="Given two msubs">
+    <x:scenario label="which are adjacent">
+      <x:context mode="combine-elements">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub>
+            <mi>1</mi> 
+          </msub>
+          <msub>
+            <mi>2</mi>
+          </msub>
+        </math>
+      </x:context>
+      <x:expect label="they should be joined to one msub, with a mrow wrapper">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub>
+            <mrow>
+              <mi>1</mi>
+              <mi>2</mi>
+            </mrow>
+          </msub>
+        </math>
+      </x:expect>
+      <x:scenario label="containing another nested msub">
+        <x:context mode="combine-others">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <msub>
+              <mrow>
+                <mi>λ</mi>
+              </mrow>
+            </msub>
+            <msub>
+              <mrow>
+                <msub>
+                  <mrow>
+                    <mi>λ</mi>
+                  </mrow>
+                </msub>
+              </mrow>
+            </msub>
+          </math>
+        </x:context>
+        <x:expect label="only the outer msubs should be joined">
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <msub>
+              <mrow>
+                <mi>λ</mi>
+                <msub>
+                  <mi>λ</mi>
+                </msub>
+              </mrow>
+            </msub>
+          </math>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
+    <x:scenario label="divided by one element">
+      <x:context mode="combine-elements">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub>
+            <mi>1</mi> 
+          </msub>
+          <mrow/>
+          <msub>
+            <mi>2</mi>
+          </msub>
+        </math>
+      </x:context>
+      <x:expect label="nothing should be modified">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msub>
+            <mi>1</mi>
+          </msub>
+          <mrow/>
+          <msub>
+            <mi>2</mi>
+          </msub>
+        </math>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="where both are embellishments">
+      <x:context mode="combine-elements">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msup>
+            <mi mathsize="100%" mathvariant="italic">a</mi>
+            <mo>′</mo>
+          </msup>
+          <msup>
+            <mi mathsize="100%" mathvariant="italic">b</mi>
+            <mo>″</mo>
+          </msup>
+        </math>
+      </x:context>
+      <x:expect label="they must not be joined">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msup>
+            <mi mathsize="100%" mathvariant="italic">a</mi>
+            <mo>′</mo>
+          </msup>
+          <msup>
+            <mi mathsize="100%" mathvariant="italic">b</mi>
+            <mo>″</mo>
+          </msup>
+        </math>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="where the first ist an embellishment">
+      <x:context mode="combine-elements">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msup>
+            <mi mathsize="100%" mathvariant="italic">a</mi>
+            <mo>′</mo>
+          </msup>
+          <msup>
+            <mn mathsize="100%">2</mn>
+          </msup>
+        </math>
+      </x:context>
+      <x:expect label="they are not joined">
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+          <msup>
+            <mi mathsize="100%" mathvariant="italic">a</mi>
+            <mo>′</mo>
+          </msup>
+          <msup>
+            <mn mathsize="100%">2</mn>
+          </msup>
+        </math>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="Given multiple mi">
+    <x:scenario label="without mathvariant">
+      <x:scenario label="all adjacent">
+        <x:scenario label="containing whitespace">
+          <x:context mode="combine-elements" xml:space="preserve"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"
+            ><mi fontfamily="Arial" mathsize="100%"
+            >s</mi><mi fontfamily="Arial" mathsize="100%"
+            >o</mi><mi fontfamily="Arial" mathsize="100%"
+            >m</mi><mi fontfamily="Arial" mathsize="100%"
+            >e</mi><mi fontfamily="Arial" mathsize="100%"
+            > </mi><mi fontfamily="Arial" mathsize="100%"
+            >T</mi><mi fontfamily="Arial" mathsize="100%"
+            >e</mi><mi fontfamily="Arial" mathsize="100%"
+            >x</mi><mi fontfamily="Arial" mathsize="100%"
+            >t</mi></math></x:context>
+          <x:expect label="they should be joined to one mi">
+            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+              <mi fontfamily="Arial" mathsize="100%" mathvariant="italic">some Text</mi>
+            </math>
+          </x:expect>
+        </x:scenario>
+        <x:scenario label="containing no whitespace">
+          <x:context>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+              <mi fontfamily="Arial" mathsize="100%">p</mi>
+              <mi fontfamily="Arial" mathsize="100%">a</mi>
+            </math>
+          </x:context>
+          <x:expect label="nothing should be joined">
+            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+              <mi fontfamily="Arial" mathsize="100%">p</mi>
+              <mi fontfamily="Arial" mathsize="100%">a</mi>
+            </math>
+          </x:expect>
+        </x:scenario>
+      </x:scenario>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>
