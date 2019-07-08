@@ -37,6 +37,9 @@ public class JarModuleBuilderTest {
 		c = components.next();
 		assertEquals("http://example-module/hello.xml", c.getURI().toString());
 		assertTrue(new File(c.getResource()).exists());
+		c = components.next();
+		assertEquals("http://example-module/rewrite-sub-ok/test.xml", c.getURI().toString());
+		assertTrue(c.getResource().toString().endsWith("test-rewrite-sub/test2/test.xml"));
 		assertFalse(components.hasNext());
 		
 	}
@@ -61,6 +64,9 @@ public class JarModuleBuilderTest {
 		assertTrue(components.hasNext());
 		c = components.next();
 		assertEquals("http://example-module/hello.xml", c.getURI().toString());
+		c = components.next();
+		assertEquals("http://example-module/rewrite-sub-ok/test.xml", c.getURI().toString());
+		assertTrue(c.getResource().toString().endsWith("test-rewrite-sub/test2/test.xml"));
 		assertFalse(components.hasNext());
 		
 	}

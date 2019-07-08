@@ -109,7 +109,7 @@ public abstract class AbstractModuleBuilder<T extends AbstractModuleBuilder> {
 				for (URL url : entries) {
 					// reconstruct the relative paths from both URLs
 					String resourcePath = url.toString();
-					String relativePath = resourcePath.substring(basePath.lastIndexOf("/"));
+					String relativePath = resourcePath.substring(basePath.length() - base.length() + 1 );
 					if(relativePath.startsWith("/")) relativePath = relativePath.substring(1);
 					
 					String relativeSubPath = resourcePath.substring(basePath.length());

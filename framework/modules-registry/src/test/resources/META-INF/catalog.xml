@@ -3,4 +3,5 @@
 	<uri name="http://example-module/hello.xml" uri="../hello.xml"/>
 	<rewriteURI uriStartString="http://example-module/should-be-ignored/" rewritePrefix="../test/"/>
 	<rewriteURI uriStartString="http://example-module/rewrite-uri-ok/" rewritePrefix="../test-rewrite-uri/"/>
+  <rewriteURI uriStartString="http://example-module/rewrite-sub-ok/" rewritePrefix="../test-rewrite-sub/test2/"/>
 </catalog>
