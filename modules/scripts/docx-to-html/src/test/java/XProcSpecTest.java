@@ -6,8 +6,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			pipelineModule("transpect"),
-			pipelineModule("common-utils"),
-			pipelineModule("fileset-utils"),
 			pipelineModule("file-utils")
 		};
 	}

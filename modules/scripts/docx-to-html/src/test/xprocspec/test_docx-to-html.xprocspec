@@ -6,19 +6,18 @@
                script="../../main/resources/xml/docx-to-html.xpl">
 
 	<x:scenario label="test">
-		<x:call step="px:docx-to-html.script">
-			<x:input port="source">
-				<x:document type="file" href="../resources/resources/test.docx"/>
-			</x:input>
-			<x:option name="output-dir" select="resolve-uri('test/output-dir/',$temp-dir)"/>
+		<x:call step="px:docx-to-html">
+			<x:option name="docx" select="resolve-uri('../resources/test_normal.docx')"/>
+			<x:option name="temp-dir" select="resolve-uri($temp-dir)"/>
+			<x:option name="output-dir" select="resolve-uri('result/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output directory">
-			<x:document type="directory" base-uri="temp-dir" href="test/output-dir/" recursive="true"/>
+			<x:document type="directory" base-uri="temp-dir" href="result" recursive="true"/>
 		</x:context>
-		<x:expect label="the output directory should contain the XHTML" type="compare" >
+		<x:expect label="the output directory should contain an html file" type="compare">
 			<x:document type="inline">
-				<c:directory name="output-dir">
-					<c:file name="test.xhtml"/>
+				<c:directory name="result">
+					<c:file name="test_normal.html"/>
 				</c:directory>
 			</x:document>
 		</x:expect>
