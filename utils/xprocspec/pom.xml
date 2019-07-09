@@ -134,7 +134,7 @@
                 <dependency>
                   <groupId>org.daisy.maven</groupId>
                   <artifactId>xproc-engine-calabash</artifactId>
-                  <version>1.1.2-SNAPSHOT</version>
+                  <version>1.1.2</version>
                 </dependency>
                 <dependency>
                   <groupId>nu.validator.htmlparser</groupId>
