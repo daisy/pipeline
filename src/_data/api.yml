@@ -132,17 +132,15 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: epubcheck-adapter
 - group: org.daisy.pipeline.modules
-  artifact: epub3-nav-utils
+  artifact: epub-utils
 - group: org.daisy.pipeline.modules
-  artifact: epub3-ocf-utils
+  artifact: mathml-utils
 - group: org.daisy.pipeline.modules
-  artifact: epub3-pub-utils
-- group: org.daisy.pipeline.modules
-  artifact: mediaoverlay-utils
+  artifact: smil-utils
 - group: org.daisy.pipeline.modules
   artifact: metadata-utils
 - group: org.daisy.pipeline.modules
-  artifact: odt-utils
+  artifact: odf-utils
 - group: org.daisy.pipeline.modules
   artifact: zedai-utils
 - group: org.daisy.pipeline.modules
