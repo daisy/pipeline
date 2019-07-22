@@ -6,6 +6,8 @@
   <rewriteURI uriStartString="http://transpect.io/hub2html/" rewritePrefix="../hub2html/"/>
   <rewriteURI uriStartString="http://transpect.io/xproc-util/" rewritePrefix="../xproc-util/"/>
   <rewriteURI uriStartString="http://transpect.io/xslt-util/" rewritePrefix="../xslt-util/"/>
+  <rewriteURI uriStartString="http://transpect.io/fontmaps/" rewritePrefix="../fontmaps/"/>
+  <rewriteURI uriStartString="http://transpect.io/hub2tei/" rewritePrefix="../hub2tei/"/>
   <rewriteURI uriStartString="http://transpect.le-tex.de/calabash-extensions/ltx-unzip/" rewritePrefix="../unzip-extension/"/>
   <rewriteURI uriStartString="http://transpect.io/calabash-extensions/unzip-extension/" rewritePrefix="../unzip-extension/"/>
   <rewriteURI uriStartString="http://transpect.le-tex.de/calabash-extensions/ltx-mathtype/" rewritePrefix="../mathtype-extension/"/>
