@@ -18,5 +18,8 @@ bin/
 /.recommenders/
 # for build remainders on subrepo branches
 target/
-/build/
+**/build/
+**/modbuild.xml
+**/modules.xml
 /node-modules/
+*.docx.tmp

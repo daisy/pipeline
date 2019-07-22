@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri name="http://www.daisy.org/pipeline/modules/docx-to-epub3/docx-to-epub3.xpl"
+       uri="../xml/xproc/docx-to-epub3.xpl" px:content-type="script" px:id="docx-to-epub3"/>
+
+  <nextCatalog catalog="org:daisy:pipeline:modules:transpect"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:html-to-epub3"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>
+</catalog>

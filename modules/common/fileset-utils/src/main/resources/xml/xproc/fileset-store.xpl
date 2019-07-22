@@ -199,6 +199,11 @@
                             <p:with-option name="undeclare-prefixes" select="$undeclare-prefixes"/>
                             <p:with-option name="version" select="$version"/>
                         </p:store>
+                        <px:message severity="DEBUG">
+                            <p:with-option name="message"
+                                select="concat('Storing xml at ', $target)"
+                            />
+                        </px:message>
                         <p:choose>
                             <p:when test="$doctype">
                                 <px:set-doctype>

@@ -24,7 +24,7 @@
     <module>daisy202-validator</module>
     <module>daisy3-to-daisy202</module>
     <module>daisy3-to-epub3</module>
-    <module>docx-to-epub3</module>
+    <module>docx-to-epub3_transpect</module>
     <module>dtbook-to-daisy3</module>
     <module>dtbook-to-epub3</module>
     <module>dtbook-to-html</module>

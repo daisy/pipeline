@@ -3,21 +3,26 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../main/resources/xml/docx-to-html.xpl">
+               script="../../main/resources/xml/xproc/docx-to-html.xpl">
 
 	<x:scenario label="test">
-		<x:call step="px:docx-to-html">
-			<x:option name="docx" select="resolve-uri('../resources/test_normal.docx')"/>
+		<x:call step="px:docx-to-html.script">
+			<x:option name="docx" select="resolve-uri('../resources/testWithLists_normal.docx')"/>
 			<x:option name="temp-dir" select="resolve-uri($temp-dir)"/>
 			<x:option name="output-dir" select="resolve-uri('result/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output directory">
 			<x:document type="directory" base-uri="temp-dir" href="result" recursive="true"/>
 		</x:context>
-		<x:expect label="the output directory should contain an html file" type="compare">
+		<x:expect label="the output directory should contain an xhtml file" type="compare">
 			<x:document type="inline">
 				<c:directory name="result">
-					<c:file name="test_normal.html"/>
+					<c:file name="testWithLists_normal.xhtml"/>
+					<c:directory name="word">
+						<c:directory name="media">
+							<c:file name="image1.png"/>
+						</c:directory>
+					</c:directory>
 				</c:directory>
 			</x:document>
 		</x:expect>

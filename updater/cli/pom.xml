@@ -39,7 +39,7 @@
                   </includes>
                 </resource>
               </resources>
-              <outputDirectory>${project.basedir}/build//src/github.com/capitancambio/pipeline-updater</outputDirectory>
+              <outputDirectory>${project.basedir}/build/src/github.com/capitancambio/pipeline-updater</outputDirectory>
             </configuration>
           </execution>
         </executions>
@@ -60,6 +60,9 @@
                   <GOPATH>
                       ${project.basedir}/build
                   </GOPATH>
+                  <GOBIN>
+                      ${project.basedir}/build/bin
+                  </GOBIN>
               </environmentVariables>
               <executable>go</executable>
               <commandlineArgs>get github.com/kardianos/osext 
@@ -80,6 +83,9 @@
                   <GOPATH>
                       ${project.basedir}/build
                   </GOPATH>
+                  <GOBIN>
+                      ${project.basedir}/build/bin
+                  </GOBIN>
               </environmentVariables>
               <executable>go</executable>
               <commandlineArgs>test -covermode=atomic -coverprofile=${project.basedir}/build/profile.cov github.com/capitancambio/pipeline-updater</commandlineArgs>

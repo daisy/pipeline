@@ -33,6 +33,7 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
+  <!-- Results in error when building with java 11 
   <build>
     <plugins>
       <plugin>
@@ -48,5 +49,5 @@
         </executions>
       </plugin>
     </plugins>
-  </build>
+  </build>-->
 </project>

@@ -19,11 +19,8 @@
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
+    <module>libs/com.xmlcalabash</module>
     <module>libs/transpect</module>
-    <!-- issues in the repo version of xmlcalabash, 
-    cannot build framework due to nullpointerexception 
-    when building Apache derby connector -->
-    <!--<module>libs/com.xmlcalabash</module>-->
     
     <module>utils/daisy-parent/daisy-parent</module>
     <module>utils/build-utils</module>

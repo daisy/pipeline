@@ -71,6 +71,9 @@
 
   <xsl:variable name="css:rule-selection-attribute-names" select="'role'" as="xs:string*"/>
   
+  <xsl:variable name="css-heading-rules" select="//css:rule[@layout-type='para' and matches(@remap,'h[1-6]')]" />
+  <xsl:variable name="extracted-title" select="//dbk:para[@role=//css:rule[@native-name='Title']/@name]/text()"/>
+
   <xsl:output 
     method="xhtml" 
     indent="yes" 
@@ -116,6 +119,7 @@
         * global variables, may overwrite from importing stylesheet 
         * -->
   
+
   <xsl:param name="html-title" select="'Titel'"/>
   <xsl:variable name="headline-toc" select="'Inhaltsverzeichnis'" as="xs:string"/>
   <xsl:variable name="toc-level" select="3" as="xs:integer"/>
@@ -224,7 +228,16 @@
         </xsl:if>
         <xsl:if test="not(dbk:info/dbk:title[normalize-space(.)])">
           <title>
-            <xsl:value-of select="$html-title"/>
+            <xsl:choose>
+              <xsl:when test="$extracted-title">
+                <xsl:value-of select="$extracted-title"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$html-title"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            
+            <!-- <xsl:value-of select="$html-title"/> -->
           </title>
         </xsl:if>
         <xsl:apply-templates select="dbk:info" mode="#current"/>
@@ -451,10 +464,24 @@
   </xsl:template>
   
   <xsl:template match="dbk:para" mode="hub2htm-default">
-    <p>
-      <xsl:call-template name="css:content"/>
-      <!--<xsl:apply-templates select="@*|node()" mode="#current"/>-->
-    </p>
+    <!-- FIX 10/07/2019 (for the DAISY pipeline 2 process): 
+          when a css rule notify a possible header level remapping
+          for the currant para, apply the remapping-->
+    <xsl:variable name="current-role" select="./@role"/>
+    <xsl:choose>
+      <xsl:when test="$css-heading-rules[@name = $current-role]">
+        <xsl:element name="{$css-heading-rules[@name = $current-role]/@remap}">
+          <xsl:call-template name="css:content"/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <p>
+          <xsl:call-template name="css:content"/>
+          <!--<xsl:apply-templates select="@*|node()" mode="#current"/>-->
+        </p>
+      </xsl:otherwise>
+    </xsl:choose>
+    
   </xsl:template>
   
   <xsl:template match="dbk:phrase[not(@*)] | dbk:emphasis[not(@*)]" mode="hub2htm-default">

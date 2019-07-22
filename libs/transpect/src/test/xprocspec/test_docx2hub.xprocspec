@@ -8,7 +8,7 @@
 
 	<x:scenario label="test">
 		<x:call step="docx2hub:convert">
-			<x:option name="docx" select="resolve-uri('../resources/test_normal.docx')"/>
+			<x:option name="docx" select="resolve-uri('../resources/testWithLists_normal.docx')"/>
 			<x:option name="extract-dir" select="resolve-uri($temp-dir)"/>
 			<x:option name="status-dir-uri" select="resolve-uri($temp-dir)"/>
 			<x:option name="debug-dir-uri" select="resolve-uri($temp-dir)"/>

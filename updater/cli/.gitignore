@@ -11,6 +11,6 @@ tags
 #bins
 
 #build directories
-build
-target
+build/
+target/
 

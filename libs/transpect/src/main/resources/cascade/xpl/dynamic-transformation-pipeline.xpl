@@ -158,7 +158,8 @@
     <p:group>
       <p:validate-with-relax-ng  assert-valid="true">
         <p:input port="schema">
-          <p:document href="http://www.w3.org/TR/xproc/schema/1.0/xproc.rng"/>
+          <!-- <p:document href="http://www.w3.org/TR/xproc/schema/1.0/xproc.rng"/> -->
+          <p:document href="https://www.w3.org/XML/XProc/docs/schemas/xproc.rng"/>
         </p:input>
         <p:input port="source">
           <p:pipe port="result" step="pipeline"/>
