@@ -1,8 +1,5 @@
 <p:library xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
-           xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-           xmlns:c="http://www.w3.org/ns/xproc-step"
-           xmlns:cx="http://xmlcalabash.com/ns/extensions"
-           xmlns:l="http://xproc.org/library">
+           xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
 
     <p:documentation>
         <h1 px:role="name">Validation Utilities Library</h1>
@@ -12,8 +9,6 @@
             <p px:role="organization">DAISY Consortium</p>
         </div>
     </p:documentation>
-    
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     
     <p:import href="combine-validation-reports.xpl">
         <p:documentation>Utility step that combines many validation reports into one XML document.</p:documentation>

@@ -29,7 +29,7 @@
           </document>
         </x:document>
       </x:input>
-      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="temp-dir" select="$temp-dir"/>
     </x:call>
     <x:context label="the result port">

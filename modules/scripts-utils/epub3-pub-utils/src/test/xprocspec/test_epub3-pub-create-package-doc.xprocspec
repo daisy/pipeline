@@ -34,7 +34,7 @@
 						<dc:title>Minimal DTBook</dc:title>
 						<dc:language>en</dc:language>
 						<dc:publisher>unknown</dc:publisher>
-						<dc:identifier>my-id</dc:identifier>
+						<dc:identifier id="pub-id">my-id</dc:identifier>
 					</metadata>
 				</x:document>
 			</x:input>
@@ -185,15 +185,12 @@
 		<x:context label="the result port">
 			<x:document type="port" port="result"/>
 		</x:context>
-		<!--
-		    FIXME: generated IDs make test brittle
-		-->
 		<x:expect label="the result" type="custom" href="compare-package-doc.xpl" step="x:compare-package-doc">
 			<x:document type="inline">
-				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="d1089e13" version="3.0">
+				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id" version="3.0">
 					<metadata>
 						<dc:title>Minimal DTBook</dc:title>
-						<dc:identifier id="d1089e13">my-id</dc:identifier>
+						<dc:identifier id="pub-id">my-id</dc:identifier>
 						<dc:language>en</dc:language>
 						<meta property="dcterms:modified">2019-05-20T18:14:36Z</meta>
 						<dc:publisher>unknown</dc:publisher>

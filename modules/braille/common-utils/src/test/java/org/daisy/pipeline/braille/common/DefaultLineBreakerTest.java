@@ -9,7 +9,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.CSSStyledText;
@@ -85,9 +84,11 @@ public class DefaultLineBreakerTest {
 		TestHyphenator hyphenator = new TestHyphenator();
 		TestTranslator translator = new TestTranslator(hyphenator);
 		assertEquals(
+			" \n" +
 			"ABC\n" +
+			" \n" +
 			"DEF",
-			fillLines(translator.lineBreakingFromStyledText().transform(text("abc\u2028def")), 10));
+			fillLines(translator.lineBreakingFromStyledText().transform(text("\u2028abc\u2028\u2028def")), 10));
 	}
 	
 	@Test
@@ -102,6 +103,54 @@ public class DefaultLineBreakerTest {
 		assertEquals("ABC-",        i.nextTranslatedRow(5,  true, false));
 		assertEquals("DEF",         i.nextTranslatedRow(5,  true, false));
 		assertFalse(i.hasNext());
+	}
+	
+	@Test
+	public void testKeepSegmentsTogether() {
+		assertEquals(
+			"xxx abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcdef",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx\n" +
+			"abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcdefg",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx\n" +
+			"abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcdef­g",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcde­fg",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcde-\u200Bfg",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx ab-",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx ab­cdefg",
+					0, 7, ' ', '-', 1),
+				10));
 	}
 	
 	private static class TestHyphenator extends AbstractHyphenator {
@@ -156,13 +205,18 @@ public class DefaultLineBreakerTest {
 		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
 		
 		private final LineBreakingFromStyledText lineBreaker = new AbstractBrailleTranslator.util.DefaultLineBreaker(' ', '-', null) {
-			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText) {
+			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText, int from, int to) {
+				if (from != 0 && to >= 0)
+					throw new UnsupportedOperationException();
 				return new BrailleStream() {
 					int pos = 0;
 					String text; {
 						text = "";
 						for (CSSStyledText t : styledText)
-							text += t.getText(); }
+							text += t.getText();
+						if (text.replaceAll("[\u00ad\u200b]","").isEmpty())
+							text = "";
+					}
 					public boolean hasNext() {
 						return pos < text.length();
 					}
@@ -217,6 +271,9 @@ public class DefaultLineBreakerTest {
 					}
 					public String remainder() {
 						return translate(text.substring(pos));
+					}
+					public boolean hasPrecedingSpace() {
+						return false;
 					}
 					@Override
 					public Object clone() {

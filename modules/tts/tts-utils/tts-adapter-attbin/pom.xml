@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.0-SNAPSHOT</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
@@ -35,7 +35,7 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.att.ATTBin
+      org.daisy.pipeline.tts.att.impl.ATTBin
     </expose-services>
   </properties>
 
@@ -51,12 +51,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.tts.att,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

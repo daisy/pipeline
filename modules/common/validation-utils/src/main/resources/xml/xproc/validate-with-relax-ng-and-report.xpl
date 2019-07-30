@@ -11,8 +11,16 @@
     <p:option name="dtd-attribute-values" select="'false'"/>
     <p:option name="dtd-id-idref-warnings" select="'false'"/>
 
-    <p:import href="relax-ng-report.xpl"/>
-    <p:import href="report-errors.xpl"/>
+    <p:import href="relax-ng-report.xpl">
+        <p:documentation>
+            l:relax-ng-report
+        </p:documentation>
+    </p:import>
+    <p:import href="report-errors.xpl">
+        <p:documentation>
+            px:report-errors
+        </p:documentation>
+    </p:import>
 
     <l:relax-ng-report name="validate">
         <p:input port="source">

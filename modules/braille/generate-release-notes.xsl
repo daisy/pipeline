@@ -8,7 +8,7 @@
 	<xsl:template match="/">
 		<xsl:variable name="version" select="/pom:project/pom:version"/>
 		<!--
-		    FIXME: moved to liblouis-native
+		    FIXME: moved to liblouis-utils
 		-->
 		<xsl:variable name="liblouis-version" select="/pom:project/pom:dependencyManagement
 		                                              /pom:dependencies/pom:dependency[pom:artifactId='louis']
@@ -62,7 +62,7 @@
 		                                           /pom:dependencies/pom:dependency[pom:artifactId='io.bit3.jsass']
 		                                           /pom:version"/>
 		<!--
-		    FIXME: moved to libhyphen-native
+		    FIXME: moved to libhyphen-utils
 		-->
 		<xsl:variable name="libhyphen-version" select="/pom:project/pom:dependencyManagement
 		                                               /pom:dependencies/pom:dependency[pom:artifactId='hyphen']

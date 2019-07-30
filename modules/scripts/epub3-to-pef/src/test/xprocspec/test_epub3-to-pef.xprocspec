@@ -54,7 +54,7 @@
       <x:param port="parameters" name="capital-letters" select="true()"/>
       <x:param port="parameters" name="include-images" select="true()"/>
       -->
-      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="include-obfl" select="true()"/>
       <x:option name="temp-dir" select="$temp-dir"/>
     </x:call>

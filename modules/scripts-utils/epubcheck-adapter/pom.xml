@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>epubcheck-adapter</artifactId>
-  <version>1.1.6-SNAPSHOT</version>
+  <version>1.1.7-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EpubCheck Adapter</name>
@@ -38,7 +38,7 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_epubcheck_adapter,
-      org.daisy.pipeline.epub.EpubCheckProvider,
+      org.daisy.pipeline.epub.calabash.impl.EpubCheckProvider,
       org.idpf.epubcheck.util.saxon95.ColumnNumberFunction,
       org.idpf.epubcheck.util.saxon95.LineNumberFunction,
       org.idpf.epubcheck.util.saxon95.SystemIdFunction
@@ -59,7 +59,6 @@
             </Import-Package>
             <Export-Package/>
             <Private-Package>
-              org.daisy.pipeline.epub,
               org.idpf.epubcheck.util.saxon95,
               ${generated-packages}
               {local-packages}

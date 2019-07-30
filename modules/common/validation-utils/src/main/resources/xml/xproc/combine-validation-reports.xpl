@@ -1,13 +1,10 @@
-<p:declare-step version="1.0" name="combine-validation-reports" type="px:combine-validation-reports"
-    xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:l="http://xproc.org/library" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                exclude-inline-prefixes="#all"
+                type="px:combine-validation-reports" name="combine-validation-reports">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Combine validation reports</h1>
@@ -54,7 +51,6 @@
     </p:option>
 
     <p:output port="result" primary="true"/>
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
     <!-- iterate through the documents on the source port -->
     <p:for-each>

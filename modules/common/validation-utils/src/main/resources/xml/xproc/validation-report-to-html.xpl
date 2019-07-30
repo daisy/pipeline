@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="validation-report-to-html" type="px:validation-report-to-html"
-    xmlns:p="http://www.w3.org/ns/xproc" 
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" 
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                exclude-inline-prefixes="#all"
+                name="validation-report-to-html" type="px:validation-report-to-html">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Validation Report to HTML</h1>
@@ -23,7 +19,6 @@
     <p:output port="result" primary="true" px:media-type="application/vnd.pipeline.report+xml"/>
     <p:option name="toc" required="false" select="'false'"/>
     
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     <p:for-each name="convert-to-html">
         <p:output port="result" sequence="true"/>
         

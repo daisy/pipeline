@@ -33,7 +33,7 @@
         <x:expect label="the step should execute successfully without throwing any errors" type="count" min="1"/>
     </x:scenario>
     
-    <x:scenario label="resource from catalog">
+    <x:scenario label="resource from catalog" pending="new daisy website does show something at this address">
         <x:documentation>
             URIs from catalogs are currently not resolved
         </x:documentation>

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>common-utils</artifactId>
-  <version>1.1.6-SNAPSHOT</version>
+  <version>1.1.7-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Common Utilities</name>
@@ -34,7 +34,7 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_common_utils,
-      org.daisy.common.xproc.calabash.steps.Message
+      org.daisy.pipeline.common.calabash.impl.Message
     </expose-services>
   </properties>
   
@@ -50,12 +50,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.common.xproc.calabash.steps;-split-package:=first,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

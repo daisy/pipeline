@@ -7,12 +7,12 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>5</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-parent</artifactId>
-  <version>1.12.1-SNAPSHOT</version>
+  <version>1.13.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Parent POM</name>
@@ -108,7 +108,6 @@
   <properties>
     <java.source.version>1.8</java.source.version> <!-- if we change this to 9 we also have to change target to 9 -->
     <java.target.version>1.8</java.target.version>
-    <liblouis.version>3.9.0</liblouis.version>
     <!-- must match version from framework-bom -->
     <saxon.versionRange>[9.8.0,9.8.1)</saxon.versionRange>
   </properties>
@@ -150,7 +149,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>modules-build-helper</artifactId>
-          <version>2.3.0-SNAPSHOT</version>
+          <version>2.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -160,7 +159,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>ds-to-spi-maven-plugin</artifactId>
-          <version>1.0.0-SNAPSHOT</version>
+          <version>1.0.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
@@ -202,7 +201,7 @@
         <plugin>
           <groupId>org.daisy.maven</groupId>
           <artifactId>xproc-maven-plugin</artifactId>
-          <version>1.0.1-SNAPSHOT</version>
+          <version>1.0.1</version>
           <dependencies>
             <!--
                 provided dependencies of xprocspec-runner
@@ -214,22 +213,22 @@
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>modules-registry</artifactId>
-              <version>3.0.0-SNAPSHOT</version>
+              <version>3.0.0</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>xmlcatalog</artifactId>
-              <version>2.0.5-SNAPSHOT</version>
+              <version>2.0.5</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>calabash-adapter</artifactId>
-              <version>3.0.2-SNAPSHOT</version>
+              <version>3.0.2</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>ds-to-spi-runtime</artifactId>
-              <version>1.0.0-SNAPSHOT</version>
+              <version>1.0.0</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -261,7 +260,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -274,7 +273,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -287,7 +286,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -300,7 +299,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -313,7 +312,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -326,7 +325,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -354,7 +353,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -367,7 +366,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -382,7 +381,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -395,7 +394,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -411,21 +410,21 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.12.1-SNAPSHOT</version>
+        <version>1.13.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.12.1-SNAPSHOT</version>
+        <version>1.13.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>ds-to-spi-runtime</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
       <!--
           test dependencies
@@ -433,17 +432,17 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>obfl-utils</artifactId>
-        <version>1.1.4-SNAPSHOT</version>
+        <version>1.1.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-engine-daisy-pipeline</artifactId>
-        <version>1.12.1-SNAPSHOT</version>
+        <version>1.13.0</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
@@ -548,12 +547,8 @@
                       <includes>
                         <include>index.md</include>
                         <include>src/main/README.md</include>
-                        <include>doc/**/*.md</include>
-                        <include>doc/**/*.html</include>
+                        <include>doc/**/*</include>
                       </includes>
-                      <excludes>
-                        <exclude>src/main/resources/**/*</exclude>
-                      </excludes>
                     </resource>
                   </resources>
                   <outputDirectory>${project.build.directory}/doc/</outputDirectory>
@@ -633,6 +628,7 @@
                   <includes>
                     <include>**/*.md</include>
                     <include>**/*.html</include>
+                    <include>doc/**/*</include>
                     <include>src/main/java/stylesheet.css</include>
                   </includes>
                   <archive>

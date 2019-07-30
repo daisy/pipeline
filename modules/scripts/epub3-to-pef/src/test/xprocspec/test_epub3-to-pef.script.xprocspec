@@ -20,7 +20,7 @@
   <x:scenario label="test default.css + reset.css + style.css">
     <x:call step="px:epub3-to-pef.script">
       <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
-      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'C00000_reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'C00000_reset/temp-dir/')"/>
       <x:option name="stylesheet" select="string-join((resolve-uri('../resources/reset.css'), resolve-uri('../resources/style.css')), ' ')"/>
@@ -66,7 +66,7 @@
     </x:documentation>
     <x:call step="px:epub3-to-pef.script">
       <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
-      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="stylesheet" select="'../test-option_apply-document-specific-stylesheets.override.css'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'stylesheet-relative/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'stylesheet-relative/temp-dir/')"/>
@@ -108,7 +108,7 @@
   <x:scenario label="option: apply-document-specific-stylesheets (enabled)">
       <x:call step="px:epub3-to-pef.script">
           <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
-          <x:option name="transform" select="'(grade:2)'"/>
+          <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
           <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="true()"/>
@@ -158,7 +158,7 @@
   <x:scenario label="option: apply-document-specific-stylesheets (disabled)">
       <x:call step="px:epub3-to-pef.script">
           <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
-          <x:option name="transform" select="'(grade:2)'"/>
+          <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
           <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="false()"/>
@@ -208,7 +208,7 @@
   <x:scenario label="option: apply-document-specific-stylesheets (enabled, with global override)">
       <x:call step="px:epub3-to-pef.script">
           <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
-          <x:option name="transform" select="'(grade:2)'"/>
+          <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
           <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="true()"/>
@@ -278,7 +278,7 @@
    <x:scenario label="ascii-file-format has priority over dc:language">
      <x:call>
        <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_1/package.opf')"/>
-       <x:option name="transform" select="'(grade:2)'"/>
+       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
        <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
                                                    (line-breaks:DOS)
                                                    (page-breaks:&quot;---&quot;)

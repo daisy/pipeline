@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/xproc/library.xpl">
+    
+    <x:scenario label="Checking Ace launch">
+        <x:call step="px:ace">
+            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214.OK.epub')"/>
+            <x:option name="temp-dir" select="resolve-uri($temp-dir)"/>
+            <x:option name="lang" select="'fr'"/>
+        </x:call>
+        <x:context label="the html-report output">
+            <x:document type="port" port="html-report"/>
+        </x:context>
+        <x:expect label="there should be a html document" type="xpath" test="name(/*)" equals="'html'"/>
+        <x:context label="the json-report output">
+            <x:document type="port" port="json-report"/>
+        </x:context>
+        <x:expect label="there should be a c:data json document" type="xpath" test="/c:data/@content-type" equals="'text/json'"/>
+    </x:scenario>
+    
+</x:description>

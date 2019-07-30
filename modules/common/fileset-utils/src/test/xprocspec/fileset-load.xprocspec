@@ -148,7 +148,7 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline" xml:space="preserve">
-<c:body content-type="text/plain; charset=utf-8">&lt;html&gt;&#xD;
+<c:data content-type="text/plain; charset=utf-8">&lt;html&gt;&#xD;
 &lt;head&gt;&#xD;
 &lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt;&#xD;
 &lt;title&gt;This is a test basic html file&lt;/title&gt;&#xD;
@@ -156,7 +156,7 @@
 &lt;body&gt;&#xD;
 &#xD;
 &lt;/body&gt;&#xD;
-&lt;/html&gt;</c:body>
+&lt;/html&gt;</c:data>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -175,7 +175,7 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline" xml:space="preserve">
-<c:body content-type="binary/octet-stream" encoding="base64">VGhpcyBpcyBqdXN0IGEgcGxhaW4gdGV4dCBmaWxlDQo=</c:body>
+<c:data content-type="binary/octet-stream" encoding="base64">VGhpcyBpcyBqdXN0IGEgcGxhaW4gdGV4dCBmaWxlDQo=</c:data>
             </x:document>
         </x:expect>
     </x:scenario>

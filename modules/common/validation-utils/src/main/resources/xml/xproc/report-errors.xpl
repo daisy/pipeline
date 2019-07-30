@@ -12,6 +12,12 @@
     <p:option name="code-prefix"/>
     <p:option name="code-namespace"/>
 
+    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl">
+        <p:documentation>
+            cx:report-errors
+        </p:documentation>
+    </p:import>
+
     <!--We count the report docs to simply pipe the identity if there are no errors (used in the choose/when) -->
     <p:count name="count" limit="1">
         <p:input port="source">

@@ -38,7 +38,7 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="pef-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
       <x:option name="brf-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
       <x:option name="preview-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
@@ -74,7 +74,7 @@
   
   <x:scenario label="various options">
   <x:call step="px:dtbook-to-pef.script">
-    <x:option name="transform" select="'(grade:2)'"/>
+    <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
   </x:call>
     
   <x:scenario label="page-size">
@@ -957,7 +957,7 @@
             </dtbook>
           </x:document>
         </x:input>
-        <x:option name="transform" select="''"/>
+        <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
         <x:option name="pef-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="brf-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="preview-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>

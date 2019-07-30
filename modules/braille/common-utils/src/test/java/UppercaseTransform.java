@@ -28,7 +28,9 @@ public class UppercaseTransform extends AbstractBrailleTranslator implements Bra
 	}
 	
 	private FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
-		public Iterable<String> transform(Iterable<CSSStyledText> styledText) {
+		public Iterable<String> transform(Iterable<CSSStyledText> styledText, int from, int to) {
+			if (from != 0 && to >= 0)
+				throw new UnsupportedOperationException();
 			List<String> ret = new ArrayList<String>();
 			for (CSSStyledText t : styledText)
 				ret.add(t.getText().toUpperCase());

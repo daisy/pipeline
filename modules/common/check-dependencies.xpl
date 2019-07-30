@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" version="1.0" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xpath-version="2.0"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:catalog="urn:oasis:names:tc:entity:xmlns:xml:catalog"
-    xmlns:cx="http://xmlcalabash.com/ns/extensions">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0" xpath-version="2.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:catalog="urn:oasis:names:tc:entity:xmlns:xml:catalog">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:type="name">XProc+XSLT Dependency Checker</h1>
@@ -15,7 +18,6 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>

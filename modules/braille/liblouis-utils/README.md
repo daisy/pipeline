@@ -4,21 +4,24 @@ liblouis-utils
 Building blocks related to the Braille translation library
 [liblouis][].
 
-Submodules
-----------
+[API](src/main)
 
-- [`liblouis-utils`](liblouis-utils/src/main)
-- [`liblouis-core`](liblouis-core/src/main): Java interface for
-  liblouis and liblouisutdml, and a registry for liblouis tables.
-- [`liblouis-native`](liblouis-native/src/main): The precompiled C
-  libraries/executables.
-- [`liblouis-calabash`](liblouis-calabash/src/main): XProc bindings.
-- [`liblouis-saxon`](liblouis-saxon/src/main): XPath bindings.
-- [`liblouis-tables`](liblouis-tables/src/main): The default
-  translation tables that come with liblouis.
-- [`liblouis-formatter`](liblouis-formatter/src/main): XProc step for
-  converting XML with inline Braille CSS to PEF using liblouisutdml.
-- [`liblouis-mathml`](liblouis-mathml/src/main): XProc step for
-  translating MathML to Braille using liblouisutdml.
+
+## Regenerating files for math conversion
+
+When moving to a newer version of Liblouisutdml, you may want to
+update the liblouis files:
+
+- Possibly edit the `filter_liblouis_files.sh` script.
+- Generate the files:
+  ```sh
+  mvn process-sources -Pgenerate-liblouis-mathml-files
+  ```
+- Move the generated files to the `src` directory and check them in:
+  ```sh
+  mvn process-sources -Pgenerate-liblouis-mathml-files
+  mv target/generated-resources/lbu_files/* src/main/resources/lbu_files/mathml/
+  ```
+
 
 [liblouis]: https://code.google.com/p/liblouis

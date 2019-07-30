@@ -1,3 +1,65 @@
+v1.13.0
+=======
+
+Changes
+-------
+- Update to Liblouis [3.11.0](https://github.com/liblouis/liblouis/releases/tag/v3.11.0)
+  (https://github.com/daisy/pipeline-mod-braille/issues/190)
+- Update to latest Dotify which includes many improvements, notably some important bugfixes in the
+  formatter (see [release notes of
+  v5.0.2-RC2](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv5.0.2-RC2))
+- Support for flowing of text into the page header or footer area (set `margin-top: 0` or
+  `margin-bottom: 0` on a `@page` rule that has content in the margin)
+  (https://github.com/sbsdev/pipeline-mod-sbs/issues/37,
+  https://github.com/brailleapps/dotify.formatter.impl/issues/63)
+- `target-counter()` function can reference span elements
+  (https://github.com/sbsdev/pipeline-mod-sbs/issues/60,
+  https://github.com/brailleapps/dotify.formatter.impl/issues/25,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/44)
+- Both `@volume:first` and `@volume:last` rules match when there is only a single volume
+- Allow the evaluation of `$volume` (with `-obfl-evaluate()`) everywhere
+  (https://github.com/sbsdev/pipeline-mod-sbs/issues/68)
+- Support for preserving white space in `-obfl-evaluate()` function
+  (https://github.com/sbsdev/pipeline-mod-sbs/issues/68,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/99)
+- Support for `::alternate(2)`, `::alternate(3)`,
+  etc. (https://github.com/sbsdev/pipeline-mod-sbs/issues/68)
+- Support for `text-transform: -louis-foo` when `foo` is the name of an emphasis class in the
+  Liblouis table.
+- Avoid line breaks between segments that are not separated by white space, such as a text node and
+  an immediately following note reference (https://github.com/sbsdev/pipeline-mod-sbs/issues/63)
+- Enhanced the CSS module for volume breaking so that preference is
+  given to split points before higher level chapters
+- Fixed bug in non-standard hyphenation that caused case information to get lost
+- Improved PEF preview so that all empty pages are visible
+- Various bugfixes (https://github.com/nlbdev/pipeline/issues/141,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/94, ...)
+- Various invisible changes
+
+Components
+----------
+- **liblouis** ([**3.11.0**](https://github.com/liblouis/liblouis/releases/tag/v3.11.0)), liblouisutdml
+  ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)), **liblouis-java**
+  ([**4.2.0**](https://github.com/liblouis/liblouis-java/releases/tag/4.2.0))
+- **dotify** (**api** [**5.0.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv5.0.0), **common**
+  [**4.4.0**](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv4.4.0), **hyphenator.impl**
+  [**5.0.0**](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv5.0.0), **translator.impl**
+  [**5.0.0**](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv5.0.0), **formatter.impl**
+  [**5.0.2-RC2**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv5.0.2-RC2), **text.impl**
+  [**5.0.0**](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv5.0.0), **streamline-api**
+  [**1.5.0**](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.5.0), **streamline-engine**
+  [**1.3.0**](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.3.0), **task.impl**
+  [**5.0.0**](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv5.0.0))
+- brailleutils (api
+  [3.0.1](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.1), impl
+  [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
+  [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
+- **braille-css** ([**1.15.0**](https://github.com/daisy/braille-css/releases/tag/1.15.0))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), **jhyphen**
+  ([**1.0.2**](https://github.com/daisy/jhyphen/releases/tag/v1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.12.0
 =======
 

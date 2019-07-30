@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:dotify="http://code.google.com/p/dotify/"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+  
+  <x:script>
+    <p:declare-step type="pxi:test" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result"/>
+      <p:option name="text-transform" select="''"/>
+      <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
+      <pxi:obfl-normalize-space/>
+      <dotify:obfl-to-pef locale="und">
+        <p:with-option name="mode" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
+      </dotify:obfl-to-pef>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="text-transform-write-out-numbers">
+    <x:documentation>
+      Tests text-transform option. A liblouis table is selected that writes out numbers.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="a" duplex="false" page-width="40" page-height="25">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="a">
+              <block>
+                <page-number ref-id="x" number-format="default"/>
+              </block>
+              <block break-before="page" id="x" translate="pre-translated-text-css">
+                ⠤⠤⠤
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+      <x:option name="text-transform" select="concat('(liblouis-table:&quot;', resolve-uri('../resources/write-out-numbers.utb'), '&quot;)')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="valid" type="validate" grammar="relax-ng">
+      <x:document type="file" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/schema/pef-2008-1.rng"/>
+    </x:expect>
+    <x:expect label="valid" type="validate" grammar="schematron">
+      <x:document type="file" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/schema/pef-2008-1.sch"/>
+    </x:expect>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠞⠺⠕</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="simple-line-breaking">
+    <x:documentation>
+      Tests simple line breaking.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+          <layout-master name="a" page-width="20" page-height="10" duplex="false">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="a">
+            <block>
+              ⠤⠤⠤⠀⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤
+            </block>
+          </sequence>
+        </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="valid" type="validate" grammar="relax-ng">
+      <x:document type="file" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/schema/pef-2008-1.rng"/>
+    </x:expect>
+    <x:expect label="valid" type="validate" grammar="schematron">
+      <x:document type="file" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/schema/pef-2008-1.sch"/>
+    </x:expect>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="20" rows="10" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠀⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="toc-sequence">
+    <x:documentation>
+      Tests toc-sequence/table-of-contents. Test that nested toc-entries have no special
+      behavior. Tests that on-toc-start and on-toc-end can be used for creating top and bottom
+      borders. Tests that break-before="page" works inside on-toc-start.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="main" page-width="15" page-height="6" duplex="false">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <table-of-contents name="toc">
+              <toc-entry ref-id="ch_1"
+                         border-left-style="solid"
+                         border-left-align="outer"
+                         padding-left="1"
+                         border-right-style="solid"
+                         border-right-align="outer">
+                <toc-entry ref-id="ch_1">
+                  ⠿
+                  <toc-entry ref-id="ch_1_1" margin-left="1">
+                    ⠿⠿
+                  </toc-entry>
+                  <toc-entry ref-id="ch_1_2" margin-left="1">
+                    ⠿⠿
+                  </toc-entry>
+                </toc-entry>
+              </toc-entry>
+            </table-of-contents>
+            <volume-template sheets-in-volume-max="3" use-when="(= $volume 1)">
+              <pre-content>
+                <toc-sequence toc="toc" master="main" range="document">
+                  <on-toc-start>
+                    <block> ⠿⠿⠿⠿ </block>
+                    <block break-before="page"
+                           border-top-style="solid"
+                           border-top-align="outer"
+                           border-left-style="solid"
+                           border-left-align="outer"
+                           padding-left="2"
+                           padding-right="2"
+                           border-right-style="solid"
+                           border-right-align="outer">
+                      <block border-bottom-style="solid"
+                             border-bottom-align="outer"
+                             align="center"> ⠿⠿⠿⠿ </block>
+                    </block>
+                  </on-toc-start>
+                  <on-volume-start>
+                    <block border-left-style="solid"
+                           border-left-align="outer"
+                           border-right-style="solid"
+                           border-right-align="outer"
+                           padding-left="1"> ⠒⠒⠒⠒⠒ </block>
+                  </on-volume-start>
+                  <on-toc-end>
+                    <block border-bottom-style="solid"
+                           border-bottom-align="outer"
+                           border-left-style="solid"
+                           border-left-align="outer"
+                           border-right-style="solid"
+                           border-right-align="outer">
+                    </block>
+                  </on-toc-end>
+                </toc-sequence>
+              </pre-content>
+            </volume-template>
+            <volume-template sheets-in-volume-max="3">
+              <pre-content>
+                <toc-sequence toc="toc" master="main" range="volume">
+                  <on-toc-start>
+                    <block border-top-style="solid"
+                           border-top-align="outer"
+                           border-left-style="solid"
+                           border-left-align="outer"
+                           border-right-style="solid"
+                           border-right-align="outer">
+                    </block>
+                  </on-toc-start>
+                  <on-toc-end>
+                    <block border-bottom-style="solid"
+                           border-bottom-align="outer"
+                           border-left-style="solid"
+                           border-left-align="outer"
+                           border-right-style="solid"
+                           border-right-align="outer">
+                    </block>
+                  </on-toc-end>
+                </toc-sequence>
+              </pre-content>
+            </volume-template>
+            <sequence master="main">
+              <block id="ch_1"> ⠿ </block>
+              <block id="ch_1_1"> ⠿⠿ </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+              <block id="ch_1_2"> ⠿⠿ </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="6" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                  <row>⠇⠀⠀⠀⠀⠿⠿⠿⠿⠀⠀⠀⠀⠀⠸</row>
+                  <row>⠇⠀⠀⠤⠤⠤⠤⠤⠤⠤⠤⠤⠀⠀⠸</row>
+                  <row>⠇⠀⠒⠒⠒⠒⠒⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                  <row>⠇⠀⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                  <row>⠇⠀⠀⠿⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                </page>
+                <page>
+                  <row>⠇⠀⠒⠒⠒⠒⠒⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                  <row>⠇⠀⠀⠿⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                  <row>⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="15" rows="6" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                  <row>⠇⠀⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                  <row>⠇⠀⠀⠿⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                  <row>⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠿</row>
+                  <row>⠿⠿</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                </page>
+                <page>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                </page>
+            </section>
+        </volume>
+        <volume cols="15" rows="6" rowgap="0" duplex="false">
+            <section>
+                <page>
+                    <row>⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹</row>
+                    <row>⠇⠀⠀⠿⠿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸</row>
+                    <row>⠧⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠼</row>
+                </page>
+            </section>
+            <section>
+                <page>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                    <row>⠿⠿</row>
+                </page>
+            </section>
+        </volume>
+        <volume cols="15" rows="6" rowgap="0" duplex="false">
+            <section>
+                <page>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                </page>
+                <page>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                    <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                </page>
+            </section>
+        </volume>
+    </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="table-of-contents-ref-itself">
+    <x:documentation>
+      Tests that a toc-entry can also reference a block inside a on-toc-start, even when it belongs
+      to the toc-sequence that corresponds to the table-of-contents that contains the toc-entry.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="main" page-width="15" page-height="6" duplex="false">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <table-of-contents name="toc">
+              <toc-entry ref-id="ch_1">
+                <toc-entry ref-id="ch_0">
+                  ⠤⠤⠤
+                  <page-number ref-id="ch_0" number-format="default"/>
+                </toc-entry>
+                <toc-entry ref-id="ch_1">
+                  ⠿ <page-number ref-id="ch_1" number-format="default"/>
+                  <toc-entry ref-id="ch_1_1" margin-left="1">
+                    ⠿⠿ <page-number ref-id="ch_1_1" number-format="default"/>
+                  </toc-entry>
+                  <toc-entry ref-id="ch_1_2" margin-left="1">
+                    ⠿⠿ <page-number ref-id="ch_1_2" number-format="default"/>
+                  </toc-entry>
+                </toc-entry>
+              </toc-entry>
+            </table-of-contents>
+            <volume-template sheets-in-volume-max="100" use-when="(= $volume 1)">
+              <pre-content>
+                <toc-sequence toc="toc" master="main" range="document">
+                  <on-toc-start>
+                    <block id="ch_0" margin-bottom="1"> ⠤⠤⠤ </block>
+                  </on-toc-start>
+                </toc-sequence>
+              </pre-content>
+            </volume-template>
+            <sequence master="main">
+              <block id="ch_1"> ⠿ </block>
+              <block id="ch_1_1"> ⠿⠿ </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+              <block id="ch_1_2"> ⠿⠿ </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="6" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠤⠤⠤</row>
+                  <row/>
+                  <row>⠤⠤⠤⠀⠼⠁</row>
+                  <row>⠿⠀⠼⠁</row>
+                  <row>⠀⠿⠿⠀⠼⠁</row>
+                  <row>⠀⠿⠿⠀⠼⠉</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠿</row>
+                  <row>⠿⠿</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="style" xfail="true">
+    <x:documentation>
+      Tests handling of text-transform through style elements and text-style attributes.
+      
+      Broken: text-style on evaluate does not work (Dotify bug).
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="front" duplex="false" page-width="40" page-height="25">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <layout-master name="body" duplex="false" page-width="40" page-height="25">
+              <default-template>
+                <header>
+                  <field>
+                    <current-page number-format="default" text-style="text-transform: downshift"/>
+                  </field>
+                  <field>
+                    <string value="2" text-style="text-transform: downshift"/>
+                  </field>
+                  <field>
+                    <marker-reference marker="print-page" direction="forward" scope="page"
+                                      text-style="text-transform: downshift"/>
+                  </field>
+                </header>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <volume-template sheets-in-volume-max="1000">
+              <pre-content>
+                <sequence master="front">
+                  <block>
+                    <evaluate expression="(round $volume)"/><evaluate expression="(round $volumes)" text-style="text-transform: downshift"/>
+                  </block>
+                </sequence>
+              </pre-content>
+            </volume-template>
+            <sequence master="body">
+              <block>
+                1<style name="text-transform: downshift">2</style>
+                <marker class="print-page" value="3"/>
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠼⠁⠂</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒</row>
+                  <row>⠼⠁⠂</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="scenario-renderer">
+    <x:documentation>
+      Tests the scenario-renderer feature. The `$forced-break-count` variable may be used to avoid
+      tables with small columns. If a scenario can not be rendered, it should simply be ignored
+      (should not result in an error).
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data">
+            <layout-master name="main" duplex="false" page-width="20" page-height="10">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <xml-processor name="take-nth">
+              <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                              xpath-default-namespace="http://www.daisy.org/ns/pipeline/data">
+                <xsl:param name="n" as="xs:integer" required="yes"/>
+                <xsl:template match="/">
+                  <xsl:sequence select="/*/scenario[position()=$n]"/>
+                </xsl:template>
+              </xsl:stylesheet>
+            </xml-processor>
+            <renderer name="renderer">
+              <rendering-scenario processor="take-nth" cost="0">
+                <parameter name="n" value="1"/>
+              </rendering-scenario>
+              <rendering-scenario processor="take-nth" cost="(+ 1 (* $forced-break-count 10))">
+                <parameter name="n" value="2"/>
+              </rendering-scenario>
+              <rendering-scenario processor="take-nth" cost="(+ 2 (* $forced-break-count 10))">
+                <parameter name="n" value="3"/>
+              </rendering-scenario>
+              <rendering-scenario processor="take-nth" cost="3">
+                <parameter name="n" value="4"/>
+              </rendering-scenario>
+            </renderer>
+            <sequence master="main">
+              <xml-data renderer="renderer">
+                <d:scenarios>
+                  <d:scenario>
+                    <table table-col-spacing="4">
+                      <tr>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                      </tr>
+                    </table>
+                  </d:scenario>
+                  <d:scenario>
+                    <table table-col-spacing="2">
+                      <tr>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                      </tr>
+                    </table>
+                  </d:scenario>
+                  <d:scenario>
+                    <table table-col-spacing="1">
+                      <tr>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                        <td>⠿⠿⠿</td>
+                      </tr>
+                    </table>
+                  </d:scenario>
+                  <d:scenario>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                    <block>⠿⠿⠿</block>
+                  </d:scenario>
+                </d:scenarios>
+              </xml-data>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="the third scenario wins"
+              type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="20" rows="10" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="translate-multiple-segments">
+    <x:documentation>
+      Tests that multiple segments are translated as a whole.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="true">
+            <layout-master name="body" page-width="25" page-height="10" duplex="true">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="body">
+              <block>
+                ONE TWO
+              </block>
+              <block>
+                ONE TWO THREE
+              </block>
+              <block>
+                ONE TWO <marker class="x" value="y"/> THREE
+              </block>
+              <block>
+                ONE <evaluate expression="(round 2)"/> THREE
+              </block>
+              <block>
+                ONE <evaluate expression="TWO"/> THREE
+              </block>
+              <block>
+                ONE <page-number ref-id="x"/> THREE
+              </block>
+              <block break-before="page" id="x"/>
+              <!--
+                  "FOOBAR" was added to show that it also works when some segments contains words with non-standard hyphenation
+              -->
+              <block>
+                ONE <evaluate expression="TWO"/> THREE FOOBAR
+              </block>
+              <block>
+                ONE <evaluate expression="TWO"/> THREE FOUR FOOBAR
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+      <x:option name="text-transform"
+                select="concat('(liblouis-table:&quot;', resolve-uri('../resources/capsphrase.utb'), '&quot;)
+                                (hyphenator:&quot;', resolve-uri('../resources/non-standard-hyph.dic'), '&quot;)')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="25" rows="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠠⠠⠕⠝⠑⠀⠠⠠⠞⠺⠕</row>
+                  <row>⠠⠠⠠⠕⠝⠑⠀⠞⠺⠕⠀⠞⠓⠗⠑⠑⠠⠄</row>
+                  <row>⠠⠠⠠⠕⠝⠑⠀⠞⠺⠕⠀⠞⠓⠗⠑⠑⠠⠄</row>
+                  <row>⠠⠠⠠⠕⠝⠑⠀⠞⠺⠕⠀⠞⠓⠗⠑⠑⠠⠄</row>
+                  <row>⠠⠠⠠⠕⠝⠑⠀⠞⠺⠕⠀⠞⠓⠗⠑⠑⠠⠄</row>
+                  <row>⠠⠠⠠⠕⠝⠑⠀⠞⠺⠕⠀⠞⠓⠗⠑⠑⠠⠄</row>
+                </page>
+                <page>
+                  <row>⠠⠠⠠⠕⠝⠑⠀⠞⠺⠕⠀⠞⠓⠗⠑⠑⠀⠋⠕⠕⠃⠁⠗⠠⠄</row>
+                  <row>⠠⠠⠠⠕⠝⠑⠀⠞⠺⠕⠀⠞⠓⠗⠑⠑⠀⠋⠕⠥⠗⠀⠋⠥⠤</row>
+                  <row>⠃⠁⠗⠠⠄</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="keep-segments-without-white-space-together">
+    <x:documentation>
+      Tests that two segments that are not separated with white space are not broken across
+      lines.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="body" page-width="15" page-height="10" duplex="true">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="body">
+              <block>
+                ⠤⠤⠤⠤⠤⠤⠤⠤⠤ ⠤⠤<evaluate expression="(round 1)"/>
+              </block>
+              <block>
+                ⠤⠤⠤⠤⠤⠤⠤⠤⠤ ⠤⠤⠤⠤<evaluate expression="(round 1)"/>
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤⠀⠤⠤⠼⠁</row>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠼⠁</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

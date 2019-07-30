@@ -20,6 +20,7 @@ import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
 import org.daisy.pipeline.braille.common.BrailleTranslator;
+import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Provider;
@@ -125,10 +126,19 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 					else
 						for (int i = 0; i < text.size(); i++)
 							styledText.add(new CSSStyledText(text.get(i)));
-					for (BrailleTranslator t : translators.get(query))
+					for (BrailleTranslator t : translators.get(query)) {
+						FromStyledTextToBraille fsttb;
 						try {
-							return iterableToSequence(t.fromStyledTextToBraille().transform(styledText)); }
-						catch (UnsupportedOperationException e) {}
+							fsttb = t.fromStyledTextToBraille(); }
+						catch (UnsupportedOperationException e) {
+							logger.trace("Translator does not implement the FromStyledTextToBraille interface: " + t);
+							continue; }
+						try {
+							return iterableToSequence(fsttb.transform(styledText)); }
+						catch (Exception e) {
+							logger.debug("Failed to translate string with translator " + t);
+							throw e; }
+					}
 					throw new RuntimeException("Could not find a BrailleTranslator for query: " + query); }
 				catch (Exception e) {
 					throw new XPathException("pf:text-transform failed", XProcException.javaError(e, 0)); }

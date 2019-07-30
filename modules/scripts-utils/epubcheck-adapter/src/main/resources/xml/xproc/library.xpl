@@ -62,17 +62,17 @@
             select="if (p:value-available('mode') and not($mode='')) then $mode else if ((not(p:value-available('mode')) or $mode='') and matches(lower-case($epub),'\.(opf|xml)$')) then 'expanded' else 'epub'"/>
         <p:variable name="_version" select="if (p:value-available('version') and not($version='')) then $version else '3'"/>
 
-        <p:choose>
+        <p:choose px:progress="1">
             <p:when test="p:step-available('pxi:epubcheck')">
 
-                <p:choose>
+                <p:choose px:progress="1">
                     <p:when test="$_mode='expanded'">
 
                         <pxi:epubcheck-locate-mimetype-dir>
                             <p:with-option name="path" select="$epub"/>
                         </pxi:epubcheck-locate-mimetype-dir>
 
-                        <pxi:epubcheck>
+                        <pxi:epubcheck px:progress="1">
                             <p:with-option name="epub" select="if (/*/@xml:base) then /*/@xml:base else replace($epub,'[^/]+$','')"/>
                             <p:with-option name="mode" select="$_mode"/>
                             <p:with-option name="version" select="$_version"/>
@@ -80,7 +80,7 @@
                         </pxi:epubcheck>
                     </p:when>
                     <p:otherwise>
-                        <pxi:epubcheck>
+                        <pxi:epubcheck px:progress="1">
                             <p:with-option name="epub" select="$epub"/>
                             <p:with-option name="mode" select="$_mode"/>
                             <p:with-option name="version" select="$_version"/>

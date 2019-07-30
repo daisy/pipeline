@@ -21,7 +21,7 @@
   <x:scenario label="reset.css">
     <x:call step="px:html-to-pef.script">
       <x:option name="html" select="resolve-uri('../resources/reset-test.html')"/>
-      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="show-braille-page-numbers" select="false()"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'alice_reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'alice_reset/temp-dir/')"/>
@@ -60,7 +60,7 @@
     <x:scenario label="ascii-file-format has priority over dc:language / xml:lang">
       <x:call step="px:html-to-pef.script">
         <x:option name="html" select="resolve-uri('../resources/test_ascii-table_1.xhtml')"/>
-        <x:option name="transform" select="'(grade:2)'"/>
+        <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
         <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
                                                     (line-breaks:DOS)
                                                     (page-breaks:&quot;---&quot;)

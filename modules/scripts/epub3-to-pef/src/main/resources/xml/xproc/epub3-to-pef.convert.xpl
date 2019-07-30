@@ -44,6 +44,11 @@
     <p:option name="apply-document-specific-stylesheets" select="'false'"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
     <p:option name="include-obfl" select="'false'"/>
+    <p:option name="content-media-types" select="'application/xhtml+xml'">
+        <!--
+            space separated list of content document media-types to include for braille transcription
+        -->
+    </p:option>
     
     <!-- Empty temporary directory dedicated to this conversion -->
     <p:option name="temp-dir" required="true"/>
@@ -68,14 +73,14 @@
     </px:merge-parameters>
     
     <!-- Load XHTML documents in spine order. -->
-    <px:fileset-load px:message="Load XHTML documents in spine order" px:progress=".04"
-                     media-types="application/oebps-package+xml application/xhtml+xml">
+    <px:fileset-load px:message="Load XHTML documents in spine order" px:progress=".04">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
+        <p:with-option name="media-types" select="string-join(('application/oebps-package+xml',$content-media-types),' ')"/>
     </px:fileset-load>
     <p:for-each>
         <p:add-xml-base/>

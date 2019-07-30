@@ -1,43 +1,196 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.daisy</groupId>
-    <artifactId>daisy</artifactId>
-    <version>3</version>
-    <relativePath />
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.2-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
   </parent>
-  
+
   <groupId>org.daisy.pipeline.modules.braille</groupId>
-  <artifactId>pef-utils-aggregator</artifactId>
-  <version>1.12.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  
+  <artifactId>pef-utils</artifactId>
+  <version>3.0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
   <name>DP2 Braille Modules :: pef-utils</name>
 
-  <modules>
-    <module>pef-calabash</module>
-    <module>pef-core</module>
-    <module>pef-saxon</module>
-    <module>pef-utils</module>
-  </modules>
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.braille</groupId>
+      <artifactId>braille-utils.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.braille</groupId>
+      <artifactId>braille-utils.pef-tools</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>com.xmlcalabash</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <!--
+        for processing org.daisy.pipeline.braille.pef.impl.TableCatalog_SPI in generate-spi-classes
+        FIXME: in generate-spi-classes, skip compilation of excluded classes completely (currently
+        only the processing of annotations is skipped)
+    -->
+    <dependency>
+      <groupId>biz.aQute.bnd</groupId>
+      <artifactId>annotation</artifactId>
+      <version>2.3.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.braille</groupId>
+      <artifactId>braille-utils.impl</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>logging-activator</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>logging-appender</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_pef_utils,
+      org.daisy.pipeline.braille.pef.impl.BrailleUtilsFileFormatCatalog,
+      org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog,
+      org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
+      org.daisy.pipeline.braille.pef.impl.LocaleBasedTableProvider,
+      org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,
+      org.daisy.pipeline.braille.pef.calabash.impl.Text2PEFStep$Provider,
+      org.daisy.pipeline.braille.pef.calabash.impl.ValidateStep$Provider,
+      org.daisy.pipeline.braille.pef.saxon.impl.DecodeDefinition,
+      org.daisy.pipeline.braille.pef.saxon.impl.EncodeDefinition
+    </expose-services>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-install-plugin</artifactId>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                DispatchingFileFormatProvider,
+                DispatchingTableProvider
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
-          <skip>true</skip>
+          <instructions>
+            <Import-Package>
+              net.sf.saxon.*;version="${saxon.versionRange}",
+              !org.daisy.common.spi,
+              !org.daisy.braille.consumer.table,
+              *
+            </Import-Package>
+            <Provide-Capability>
+              xpath.function;name="{http://www.daisy.org/ns/2008/pef}encode",
+              xpath.function;name="{http://www.daisy.org/ns/2008/pef}decode",
+              xproc.step;name="{http://www.daisy.org/ns/2008/pef}pef2text",
+              xproc.step;name="{http://www.daisy.org/ns/2008/pef}text2pef",
+              xproc.step;name="{http://www.daisy.org/ns/2008/pef}validate"
+            </Provide-Capability>
+          </instructions>
         </configuration>
       </plugin>
       <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>package-list</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>dependencies-package-list</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+              <includes>
+                org.daisy.pipeline.*,
+                org.daisy.common.*
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <offlineLinks>
+                <offlineLink>
+                  <url>http://daisy.github.io/pipeline/api/</url>
+                  <location>${project.build.directory}/dependencies-package-list/</location>
+                </offlineLink>
+              </offlineLinks>
+              <links>
+                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+                <link>http://brailleapps.github.io/braille-utils.api/3.0.1/javadoc</link>
+              </links>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+  
 </project>

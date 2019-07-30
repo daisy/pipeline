@@ -10,6 +10,11 @@ import org.daisy.braille.css.SimpleInlineStyle;
 
 import cz.vutbr.web.css.RuleBlock;
 
+/**
+ * Note that <code>CSSStyledText</code> objects are not immutable because {@link SimpleInlineStyle}
+ * is mutable (due to {@link SimpleInlineStyle#removeProperty(String)} and {@link
+ * SimpleInlineStyle#iterator()} methods).
+ */
 public class CSSStyledText implements Cloneable {
 		
 	private final String text;

@@ -1,12 +1,15 @@
 package org.daisy.pipeline.braille.common;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.collect.AbstractIterator;
 
@@ -15,6 +18,7 @@ import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractTransformProvider<T extends Transform> implements TransformProvider<T> {
 	
@@ -189,11 +193,15 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 			);
 		}
 		
+		private static final Logger fallbackLogger = LoggerFactory.getLogger(AbstractTransformProvider.class);
+		
 		public static com.google.common.base.Function<Logger,Void> debug(final String message) {
 			return new com.google.common.base.Function<Logger,Void>() {
 				public Void apply(Logger logger) {
 					if (logger != null)
 						logger.debug(message);
+					else
+						fallbackLogger.debug(message);
 					return null;
 				}
 			};
@@ -204,6 +212,8 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 				public Void apply(Logger logger) {
 					if (logger != null)
 						logger.info(message);
+					else
+						fallbackLogger.debug(message);
 					return null;
 				}
 			};
@@ -214,6 +224,8 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 				public Void apply(Logger logger) {
 					if (logger != null)
 						logger.warn(message);
+					else
+						fallbackLogger.debug(message);
 					return null;
 				}
 			};
@@ -375,6 +387,52 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 			
 			protected static abstract class Concat<T> extends WithSideEffect.util.Iterables.Concat<T,Logger>
 			                                          implements Iterable<T> {}
+			
+			/* intersection() */
+			
+			public static <T> Iterable<T> intersection(Iterable<T> a, Iterable<T> b) {
+				return of(
+					new java.lang.Iterable<WithSideEffect<T,Logger>>() {
+						public Iterator<WithSideEffect<T,Logger>> iterator() {
+							return new AbstractIterator<WithSideEffect<T,Logger>>() {
+								Iterator<WithSideEffect<T,Logger>> itrA = a.iterator();
+								Iterator<WithSideEffect<T,Logger>> itrB = b.iterator();
+								Set<T> returned = new HashSet<>();
+								Set<T> setB = new HashSet<>();
+								protected WithSideEffect<T,Logger> computeNext() {
+									if (!itrA.hasNext())
+										return endOfData();
+									return new WithSideEffect<T,Logger>() {
+										public T _apply() throws Throwable {
+											while (itrA.hasNext()) {
+												T nextA; {
+													try {
+														nextA = __apply(itrA.next()); }
+													catch (WithSideEffect.Exception e) {
+														continue; }}
+												if (returned.contains(nextA))
+													continue;
+												if (setB.contains(nextA)) {
+													returned.add(nextA);
+													return nextA; }
+												while (itrB.hasNext())
+													try {
+														T nextB = __apply(itrB.next());
+														setB.add(nextB);
+														if (Objects.equal(nextA, nextB)) {
+															returned.add(nextA);
+															return nextA; }}
+													catch (WithSideEffect.Exception e) {}
+											}
+											throw new NoSuchElementException();
+										}
+									};
+								}
+							};
+						}
+					}
+				);
+			}
 		}
 	}
 }

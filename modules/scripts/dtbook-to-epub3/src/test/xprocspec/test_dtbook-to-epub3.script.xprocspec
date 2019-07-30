@@ -88,76 +88,9 @@
                 <x:option name="temp-dir" select="resolve-uri('assert-valid-true/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the error">
-                <x:document type="errors" select="//c:error"/>
+                <x:document type="errors"/>
             </x:context>
-            <x:expect label="the script should fail with a number of validation errors" type="compare">
-                <x:document type="inline">
-                    <c:error>Renaming certain elements to span with @role</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Renaming code and kbd elements to reflect block or phrase variants.</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Renaming annotation elements to identify block or phrase variants.</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Convert br to lines</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Grouping contents of a definition list into items</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined image groups</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined lists</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined definition lists</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined prodnotes</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined divs</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined poems</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined linegroups</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined tables</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined sidebars</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined notes</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined epigraphs</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined annotation blocks</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Move out inlined code blocks</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Normalize mixed block/inline content</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Normalize mixed section/block content</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Normalize mixed section and block content model for level2</c:error>
-                </x:document>
-                <x:document type="inline">
-                    <c:error>Translate to ZedAI</c:error>
-                </x:document>
-            </x:expect>
+            <x:expect label="the script should fail with a 'XC0053' error" type="xpath" test="//c:error[@code='ERR:XC0053']"/>
         </x:scenario>
         <x:scenario label="false">
             <x:call>

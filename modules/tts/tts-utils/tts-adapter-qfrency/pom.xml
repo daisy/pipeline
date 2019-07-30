@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
   <artifactId>tts-adapter-qfrency</artifactId>
   <packaging>bundle</packaging>
 
@@ -40,7 +40,7 @@
 
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.qfrency.QfrencyService
+      org.daisy.pipeline.tts.qfrency.impl.QfrencyService
     </expose-services>
   </properties>
 
@@ -56,12 +56,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.tts.qfrency,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

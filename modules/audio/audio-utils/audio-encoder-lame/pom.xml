@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.4-SNAPSHOT</version>
   <artifactId>audio-encoder-lame</artifactId>
   <packaging>bundle</packaging>
 
@@ -41,27 +41,8 @@
 
   <properties>
     <expose-services>
-      org.daisy.pipeline.audio.lame.LameEncoder
+      org.daisy.pipeline.audio.lame.impl.LameEncoder
     </expose-services>
   </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.audio.lame,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

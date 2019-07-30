@@ -44,11 +44,31 @@
             <h2 px:role="name">Temporary directory</h2>
         </p:documentation>
     </p:option>
+
+    <p:option name="accessibility-check" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Enable accessibility check</h2>
+            <p px:role="desc" xml:space="preserve">Check the compliance to the EPUB accessibility specification using the [DAISY Ace](https://daisy.github.io/ace) tool.
+
+To use this option, check [how to install
+Ace](https://daisy.github.io/ace/getting-started/installation/) on your system. Note that this
+option is only available for zipped EPUBs.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:output port="ace-report" px:media-type="application/vnd.pipeline.report+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">Accessibility report</h1>
+            <p px:role="desc" xml:space="preserve">If the accessibility check option is enabled, an HTML report detailing the compliance to the EPUB Accessibility specification is output on this port.</p>
+        </p:documentation>
+        <p:pipe port="result" step="ace-report"/>
+    </p:output>
     
+    <p:import href="http://www.daisy.org/pipeline/modules/ace-adapter/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
 
-    <px:epubcheck>
+    <px:epubcheck px:message="Running EPUBCheck" px:progress=".8">
         <p:with-option name="epub" select="$epub"/>
         <p:with-option name="mode" select="if (ends-with(lower-case($epub),'.epub')) then 'epub' else 'expanded'"/>
         <p:with-option name="version" select="'3'"/>
@@ -132,4 +152,25 @@
     </p:group>
     <p:sink/>
 
+    <p:choose name="ace-report">
+        <p:when test="$accessibility-check = 'true' and not(ends-with($epub,'.opf'))">
+            <p:output port="result">
+                <p:pipe step="ace-check" port="html-report" />
+            </p:output>
+            <px:ace name="ace-check" px:message="Running Ace">
+                <p:with-option name="epub" select="$epub"/>
+            </px:ace>
+            <p:sink/>
+        </p:when>
+        <p:otherwise>
+            <p:output port="result" />
+            <p:identity>
+                <p:input port="source">
+                    <p:inline>
+                        <html />
+                    </p:inline>
+                </p:input>
+            </p:identity>
+        </p:otherwise>
+    </p:choose>
 </p:declare-step>

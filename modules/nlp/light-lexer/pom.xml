@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
@@ -40,27 +40,8 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.nlp.lexing.light.LightLexer
+      org.daisy.pipeline.nlp.lexing.light.impl.LightLexer
     </expose-services>
   </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.nlp.lexing.light,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

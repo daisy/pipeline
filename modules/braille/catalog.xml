@@ -2,13 +2,9 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
     <nextCatalog catalog="./xml-to-pef/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./common-utils/src/main/resources/META-INF/catalog.xml"/>
-    <nextCatalog catalog="./css-utils/css-core/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./css-utils/css-utils/src/main/resources/META-INF/catalog.xml"/>
-    <nextCatalog catalog="./dotify-utils/dotify-formatter/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./dotify-utils/dotify-utils/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./libhyphen-utils/libhyphen-utils/src/main/resources/META-INF/catalog.xml"/>
-    <nextCatalog catalog="./liblouis-utils/liblouis-formatter/src/main/resources/META-INF/catalog.xml"/>
-    <nextCatalog catalog="./liblouis-utils/liblouis-mathml/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./liblouis-utils/liblouis-utils/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./obfl-utils/src/main/resources/META-INF/catalog.xml"/>
     <nextCatalog catalog="./pef-utils/pef-utils/src/main/resources/META-INF/catalog.xml"/>

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
   <artifactId>css-speech</artifactId>
-  <version>2.1.5-SNAPSHOT</version>
+  <version>2.1.6-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: CSS Speech inlining</name>
@@ -60,8 +60,8 @@
 
   <properties>
     <expose-services>
-      org.daisy.pipeline.cssinlining.InlineCSSProvider,
-      org.daisy.pipeline.modules.impl.Module_css_speech
+      org.daisy.pipeline.modules.impl.Module_css_speech,
+      org.daisy.pipeline.tts.css.calabash.impl.InlineCSSProvider,
     </expose-services>
   </properties>
   
@@ -77,12 +77,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.cssinlining,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

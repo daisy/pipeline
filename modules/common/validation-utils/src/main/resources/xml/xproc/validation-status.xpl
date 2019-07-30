@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:xhtml="http://www.w3.org/1999/xhtml"
                 xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                 xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
                 type="px:validation-status" name="validation-status"
@@ -28,10 +26,6 @@
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
     </p:output>
-    
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl">
-        <p:documentation>Calabash extension steps.</p:documentation>
-    </p:import>
     
     
     <p:for-each name="has-errors">

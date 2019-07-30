@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-bom</artifactId>
-  <version>1.12.1-SNAPSHOT</version>
+  <version>1.13.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules BoM</name>
@@ -26,12 +26,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-common</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-encoder-lame</artifactId>
-        <version>3.0.3-SNAPSHOT</version>
+        <version>3.0.3</version>
       </dependency>
       
       <!--
@@ -40,168 +40,78 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>common-utils</artifactId>
-        <version>7.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>css-core</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>7.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>css-utils</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>dotify-calabash</artifactId>
-        <version>2.1.3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>dotify-core</artifactId>
-        <version>2.1.3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>dotify-formatter</artifactId>
-        <version>1.15.0-SNAPSHOT</version>
+        <version>4.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dotify-utils</artifactId>
-        <version>2.1.3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>libhyphen-core</artifactId>
-        <version>4.1.4-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>libhyphen-libreoffice-tables</artifactId>
-        <version>4.0.0-3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>libhyphen-native</artifactId>
-        <classifier>linux</classifier>
-        <version>1.2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>libhyphen-native</artifactId>
-        <classifier>mac</classifier>
-        <version>1.2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>libhyphen-native</artifactId>
-        <classifier>windows</classifier>
-        <version>1.2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>libhyphen-saxon</artifactId>
-        <version>2.1.3-SNAPSHOT</version>
+        <version>3.1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>libhyphen-utils</artifactId>
-        <version>1.1.3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-calabash</artifactId>
-        <version>2.0.7-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-core</artifactId>
-        <version>5.0.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-formatter</artifactId>
-        <version>2.1.5-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-mathml</artifactId>
-        <version>2.1.4-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-native</artifactId>
         <classifier>linux</classifier>
-        <version>1.5.2-SNAPSHOT</version>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-native</artifactId>
+        <artifactId>libhyphen-utils</artifactId>
         <classifier>mac</classifier>
-        <version>1.5.2-SNAPSHOT</version>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-native</artifactId>
+        <artifactId>libhyphen-utils</artifactId>
         <classifier>windows</classifier>
-        <version>1.5.2-SNAPSHOT</version>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-saxon</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>liblouis-tables</artifactId>
-        <version>3.9.0-SNAPSHOT</version>
+        <artifactId>libhyphen-utils</artifactId>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>liblouis-utils</artifactId>
-        <version>1.5.2-SNAPSHOT</version>
+        <classifier>linux</classifier>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>pef-calabash</artifactId>
-        <version>3.2.3-SNAPSHOT</version>
+        <artifactId>liblouis-utils</artifactId>
+        <classifier>mac</classifier>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>pef-core</artifactId>
-        <version>2.1.4-SNAPSHOT</version>
+        <artifactId>liblouis-utils</artifactId>
+        <classifier>windows</classifier>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>pef-saxon</artifactId>
-        <version>2.1.3-SNAPSHOT</version>
+        <artifactId>liblouis-utils</artifactId>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>pef-utils</artifactId>
-        <version>2.2.3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>texhyph-core</artifactId>
-        <version>4.1.3-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules.braille</groupId>
-        <artifactId>texhyph-saxon</artifactId>
-        <version>2.0.4-SNAPSHOT</version>
+        <version>3.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>texhyph-utils</artifactId>
-        <version>1.1.3-SNAPSHOT</version>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>xml-to-pef</artifactId>
-        <version>3.2.1-SNAPSHOT</version>
+        <version>3.2.1</version>
       </dependency>
       
       <!--
@@ -210,42 +120,42 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils</artifactId>
-        <version>1.1.6-SNAPSHOT</version>
+        <version>1.1.6</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>file-utils</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>fileset-utils</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>html-utils</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
+        <version>3.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>image-utils</artifactId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.5</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>mediatype-utils</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>validation-utils</artifactId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.5</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zip-utils</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2</version>
       </dependency>
       
       <!--
@@ -254,22 +164,22 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-break-detection</artifactId>
-        <version>2.0.2-SNAPSHOT</version>
+        <version>2.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>html-break-detection</artifactId>
-        <version>1.1.3-SNAPSHOT</version>
+        <version>1.1.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-break-detection</artifactId>
-        <version>2.0.4-SNAPSHOT</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-lexing</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -279,17 +189,17 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-common</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-omnilang-lexer</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-ruled-lexer</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -303,72 +213,72 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>asciimath-utils</artifactId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.0.6</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-entities</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>css-utils</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy202-utils</artifactId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.0.6</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy3-utils</artifactId>
-        <version>1.2.3-SNAPSHOT</version>
+        <version>1.2.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-utils</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-nav-utils</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-ocf-utils</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-pub-utils</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epubcheck-adapter</artifactId>
-        <version>1.1.6-SNAPSHOT</version>
+        <version>1.1.6</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>mediaoverlay-utils</artifactId>
-        <version>1.1.5-SNAPSHOT</version>
+        <version>1.1.5</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>metadata-utils</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>odt-utils</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-utils</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
       </dependency>
       
       <!--
@@ -377,112 +287,117 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy202-to-epub3</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy202-validator</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy3-to-daisy202</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy3-to-epub3</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-daisy3</artifactId>
-        <version>3.0.1-SNAPSHOT</version>
+        <version>3.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-epub3</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-html</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-odt</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dtbook-to-pef</artifactId>
-        <version>6.1.1-SNAPSHOT</version>
+        <version>6.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-rtf</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-zedai</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-validator</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-daisy202</artifactId>
-        <version>2.0.2-SNAPSHOT</version>
+        <version>2.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-epub3</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>epub3-to-pef</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-validator</artifactId>
-        <version>1.1.6-SNAPSHOT</version>
+        <version>1.1.6</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>html-to-epub3</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>html-to-pef</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nimas-fileset-validator</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-to-epub3</artifactId>
-        <version>2.1.0-SNAPSHOT</version>
+        <version>2.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-to-html</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>zedai-to-pef</artifactId>
-        <version>4.0.1-SNAPSHOT</version>
+        <version>4.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>ace-adapter</artifactId>
+        <version>1.0.0</version>
       </dependency>
       
       <!--
@@ -491,42 +406,42 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>css-speech</artifactId>
-        <version>2.1.5-SNAPSHOT</version>
+        <version>2.1.5</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-ssml</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-tts</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-tts</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-ssml</artifactId>
-        <version>2.0.3-SNAPSHOT</version>
+        <version>2.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>ssml-to-audio</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>text-to-ssml</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-acapela</artifactId>
-        <version>3.0.4-SNAPSHOT</version>
+        <version>3.0.4</version>
       </dependency>
       <!--
       <dependency>
@@ -543,27 +458,27 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-espeak</artifactId>
-        <version>3.0.4-SNAPSHOT</version>
+        <version>3.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-osx</artifactId>
-        <version>3.0.3-SNAPSHOT</version>
+        <version>3.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-sapinative</artifactId>
-        <version>3.0.3-SNAPSHOT</version>
+        <version>3.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-qfrency</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-common</artifactId>
-        <version>3.0.5-SNAPSHOT</version>
+        <version>3.0.5</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -573,12 +488,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-helpers</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>mathml-to-ssml</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
       </dependency>
       
       <!--
@@ -590,7 +505,7 @@
       <dependency>
         <groupId>org.w3c</groupId>
         <artifactId>epubcheck</artifactId>
-        <version>4.2.0</version>
+        <version>4.2.2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -626,12 +541,31 @@
         <version>2.2.0</version>
       </dependency>
       <!--
-          for common-utils (braille) and css-utils (braille)
+          for css-utils (braille) and css-speech
+      -->
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jstyleparser</artifactId>
+        <version>1.20-p13</version>
+        <exclusions>
+          <exclusion>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.unbescape</groupId>
+        <artifactId>unbescape</artifactId>
+        <version>1.1.0.RELEASE</version>
+      </dependency>
+      <!--
+          for braille/common-utils and braille/css-utils
       -->
       <dependency>
         <groupId>org.daisy.braille</groupId>
         <artifactId>braille-css</artifactId>
-        <version>1.15.0-SNAPSHOT</version>
+        <version>1.15.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
@@ -639,7 +573,7 @@
         <version>3.5.2_1</version>
       </dependency>
       <!--
-          for css-utils
+          for braille/css-utils
       -->
       <dependency>
         <groupId>org.daisy.libs</groupId>
@@ -652,12 +586,12 @@
         <version>3.7</version>
       </dependency>
       <!--
-          for common-utils (braille) and dotify-utils
+          for braille/common-utils and dotify-utils
       -->
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.api</artifactId>
-        <version>4.6.0</version>
+        <version>5.0.0</version>
       </dependency>
       <!--
           for dotify-utils
@@ -665,22 +599,22 @@
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.common</artifactId>
-        <version>4.3.1</version>
+        <version>4.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.translator.impl</artifactId>
-        <version>4.1.0</version>
+        <version>5.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.hyphenator.impl</artifactId>
-        <version>4.0.0</version>
+        <version>5.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.formatter.impl</artifactId>
-        <version>4.5.0</version>
+        <version>5.0.2-RC2</version>
         <exclusions>
           <exclusion>
             <!--
@@ -694,22 +628,22 @@
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.task.impl</artifactId>
-        <version>4.5.0</version>
+        <version>5.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.text.impl</artifactId>
-        <version>4.0.0</version>
+        <version>5.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.streamline</groupId>
         <artifactId>streamline-api</artifactId>
-        <version>1.3.0</version>
+        <version>1.5.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.streamline</groupId>
         <artifactId>streamline-engine</artifactId>
-        <version>1.2.0</version>
+        <version>1.3.0</version>
       </dependency>
       <!--
           for liblouis-utils
@@ -719,13 +653,18 @@
         <artifactId>liblouis-java</artifactId>
         <version>4.2.0</version>
       </dependency>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>5.2.0</version>
+      </dependency>
       <!--
           for libhyphen-utils
       -->
       <dependency>
         <groupId>org.daisy.bindings</groupId>
         <artifactId>jhyphen</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
       </dependency>
       <!--
           for texhyph-utils
@@ -735,7 +674,14 @@
         <artifactId>texhyphj</artifactId>
         <version>1.2</version>
       </dependency>
+      <!--
+          for tts-adapter-acapela (includes jna 4.0.0)
+      -->
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jnaerator</artifactId>
+        <version>0.11-p1</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-
 </project>

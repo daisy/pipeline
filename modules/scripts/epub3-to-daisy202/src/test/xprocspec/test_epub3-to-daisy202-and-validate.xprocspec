@@ -79,9 +79,6 @@
         </p:declare-step>
     </x:script>
     
-    <!--
-        FIXME: generated ids make test brittle
-    -->
     <x:scenario label="hefty-water">
         <x:call step="pxi:epub3-to-daisy202-and-validate">
             <x:input port="epub3.fileset">
@@ -136,13 +133,13 @@
                             <a href="heftywater.smil#par_title">Hefty Water</a>
                         </h1>
                         <h2 id="_2">
-                            <a href="heftywater.smil#par_d2924e27">The Switch</a>
+                            <a href="heftywater.smil#par_h2-switch">The Switch</a>
                         </h2>
                         <h2 id="_3">
-                            <a href="heftywater.smil#par_d2924e93">The Source</a>
+                            <a href="heftywater.smil#par_h2-source">The Source</a>
                         </h2>
                         <h2 id="_4">
-                            <a href="heftywater.smil#par_d2924e110">Hefty Ruby Water</a>
+                            <a href="heftywater.smil#par_h2-ruby">Hefty Ruby Water</a>
                         </h2>
                     </body>
                 </html>

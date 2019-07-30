@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
   <artifactId>nlp-break-detection</artifactId>
-  <version>2.0.4-SNAPSHOT</version>
+  <version>2.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Break Detection</name>
@@ -59,7 +59,7 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_nlp_break_detection,
-      org.daisy.pipeline.nlp.breakdetect.BreakDetectProvider
+      org.daisy.pipeline.nlp.breakdetect.calabash.impl.BreakDetectProvider
     </expose-services>
   </properties>
 
@@ -75,12 +75,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.nlp.breakdetect,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

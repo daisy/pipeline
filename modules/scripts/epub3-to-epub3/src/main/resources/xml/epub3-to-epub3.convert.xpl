@@ -30,6 +30,11 @@
     <p:option name="stylesheet" required="true"/>
     <p:option name="apply-document-specific-stylesheets" required="true"/>
     <p:option name="set-default-rendition-to-braille" required="true"/>
+    <p:option name="content-media-types" select="'application/xhtml+xml'">
+        <!--
+            space separated list of content document media-types to include in the braille rendition
+        -->
+    </p:option>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
@@ -138,9 +143,7 @@
         <p:input port="stylesheet">
             <p:document href="braille-rendition.fileset.xsl"/>
         </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
+        <p:with-param name="content-media-types" select="$content-media-types"/>
     </p:xslt>
     
     <!--
@@ -195,10 +198,11 @@
     <!--
         braille rendition xhtml documents
     -->
-    <px:fileset-filter media-types="application/xhtml+xml" name="braille-rendition.html.fileset">
+    <px:fileset-filter name="braille-rendition.html.fileset">
         <p:input port="source">
             <p:pipe step="braille-rendition.fileset" port="result"/>
         </p:input>
+        <p:with-option name="media-types" select="$content-media-types"/>
     </px:fileset-filter>
     <px:fileset-load>
         <p:input port="in-memory">

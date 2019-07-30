@@ -4,6 +4,8 @@ import static java.lang.Math.min;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.collect.Iterators.concat;
 import static com.google.common.collect.Iterators.peekingIterator;
@@ -14,6 +16,8 @@ import com.google.common.collect.PeekingIterator;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.TermInteger;
 
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
+import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.dotify.api.translator.UnsupportedMetricException;
@@ -38,6 +42,17 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 	public static abstract class util {
 		
 		public static abstract class DefaultLineBreaker implements LineBreakingFromStyledText {
+			
+			private final static char SHY = '\u00ad';   // soft hyphen
+			private final static char ZWSP = '\u200b';  // zero-width space
+			private final static char SPACE = ' ';      // space
+			private final static char CR = '\r';        // carriage return
+			private final static char LF = '\n';        // line feed
+			private final static char TAB = '\t';       // tab
+			private final static char NBSP = '\u00a0';  // no-break space
+			private final static char BLANK = '\u2800'; // blank braille pattern
+			private final static char LS = '\u2028';    // line separator (preserved line breaks)
+			private final static char RS = '\u001E';    // (for segmentation)
 			
 			private final char blankChar;
 			
@@ -68,28 +83,43 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 			 * white space and perform line breaking outside or at the boundaries of words
 			 * (according to the CSS rules), but it doesn't need to because the result will be
 			 * passed though a white space processing and line breaking stage anyway. Preserved
-			 * spaces MUST be converted to NBSP characters. Line breaking may be achieved "directly"
-			 * by indicating that the end of a line has been reached, by returning an empty string
-			 * when the next() method is called again (with a `limit` &gt; 0). The "allowHyphens"
-			 * argument must be respected in this case. A hyphen character at the end the line MUST
-			 * be inserted when hyphenating. If it's a soft hyphen (SHY) it will be substituted with
-			 * a real hyphen automatically. If line breaking is not done directly, it is left up to
-			 * the line breaking stage. Preserved line breaks MUST be converted to LS characters in
-			 * this case, and other break characters (SHY, ZWSP) MUST be included for all break
-			 * opportunities, including those within words, regardless of the "allowHyphens"
-			 * argument.
+			 * spaces MUST be converted to NBSP characters. Line breaking may be "explicit" by
+			 * indicating that the end of a line has been reached, by returning an empty string the
+			 * next time the next() method is called (and `limit` &gt; 0). The returned string is
+			 * normally smaller or equal to `limit` in this case. The "allowHyphens" argument must
+			 * be respected, and a hyphen character at the end the line MUST be inserted when
+			 * hyphenating. If it's a soft hyphen (SHY) it will be substituted with a real hyphen
+			 * automatically. If line breaking is "implicit", it is left up to the line breaking
+			 * stage. Preserved line breaks MUST be converted to LS characters in this case, and
+			 * other break characters (SHY, ZWSP) MUST be included for all break opportunities,
+			 * including those within words, regardless of the "allowHyphens" argument.
 			 */
-			protected abstract BrailleStream translateAndHyphenate(Iterable<CSSStyledText> text);
+			protected abstract BrailleStream translateAndHyphenate(Iterable<CSSStyledText> text, int from, int to);
 			
 			protected interface BrailleStream extends Cloneable {
 				public boolean hasNext();
+				/**
+				 * @param limit The available space left on the current line. The returned string
+				 *              does not have to fit in this space, but normally does in case of
+				 *              "explicit" line breaking. If the returned string is longer, it will
+				 *              be broken.
+				 */
 				public String next(int limit, boolean force, boolean allowHyphens);
 				public Character peek();
 				public String remainder();
 				public Object clone();
+				/**
+				 * Whether the already streamed text, or the preceding segment if we are at the
+				 * beginning of the stream, ended with a space.
+				 *
+				 * This method is only mandatory when we are the beginning of the stream. After the
+				 * {@link #next(int, boolean, boolean)} method has been called,
+				 * <code>hasPrecedingSpace</code> may throw a {@link UnsupportedOperationException}.
+				 */
+				public boolean hasPrecedingSpace();
 			}
 			
-			public LineIterator transform(final Iterable<CSSStyledText> text) throws TransformationException {
+			public LineIterator transform(final Iterable<CSSStyledText> text, int from, int to) throws TransformationException {
 				
 				// FIXME: determine wordSpacing of individual segments
 				int wordSpacing; {
@@ -115,38 +145,131 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							throw new TransformationException("word-spacing must be constant, but both "
 							                                  + wordSpacing + " and " + spacing + " specified"); }
 					if (wordSpacing < 0) wordSpacing = 1; }
-				return new LineIterator(translateAndHyphenate(text), blankChar, hyphenChar, wordSpacing);
+				return new LineIterator(translateAndHyphenate(text, from, to), blankChar, hyphenChar, wordSpacing);
 			}
 			
 			protected static class FullyHyphenatedAndTranslatedString implements BrailleStream {
 				private String next;
-				public FullyHyphenatedAndTranslatedString(String string) {
-					next = string;
+				private String lastWordPart; // if the last word continues in the next segment
+				private String lastWordOtherPart;
+				private final boolean precedingSpace;
+				private final boolean alwaysEmpty;
+				private final char hyphenChar;
+				// words are separated with SPACE, TAB, LF, CR, BLANK, NBSP or LS
+				private final static Pattern WORD_BOUNDARY = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0\u2028]");
+				public FullyHyphenatedAndTranslatedString(String string, int from, int to) {
+					this(string, from, to, '\u2824');
+				}
+				public FullyHyphenatedAndTranslatedString(String string, int from, int to, char hyphenChar) {
+					// if there are no preceding segments, assume that we are at the beginning of a line,
+					// so leading space can be stripped
+					// FIXME: we can not make this assumption! see for example FormatterCoreContext,
+					// which translates a space in order to obtain a value to use as margin
+					// character, and it expects it to be a non-empty string
+					//if (from == 0) precedingSpace = true; else
+					precedingSpace = DefaultLineBreaker.hasPrecedingSpace(string, from);
+					int len = string.length();
+					if (from < 0 || from > len)
+						throw new IllegalArgumentException();
+					next = string.substring(from);
+					lastWordPart = lastWordOtherPart = null;
+					if (to >= 0 && to != len) {
+						if (to > len || to < from)
+							throw new IllegalArgumentException();
+						to -= from;
+						len -= from;
+						int i = lastIndexOf(next, WORD_BOUNDARY);
+						if (i > 0 && i + 1 < to) {
+							lastWordPart = next.substring(i + 1, to);
+							lastWordOtherPart = next.substring(to, len);
+							next = next.substring(0, i + 1);
+						} else
+							next = next.substring(0, to);
+					}
+					if (next.replaceAll("[\u00ad\u200b]","").isEmpty())
+						next = null;
+					alwaysEmpty = (next == null);
+					this.hyphenChar = hyphenChar;
 				}
 				public boolean hasNext() {
-					return (next != null && !next.isEmpty());
+					return next != null || lastWordPart != null;
 				}
 				public String next(int limit, boolean force, boolean allowHyphens) {
-					if (next == null)
-						throw new NoSuchElementException();
-					else {
+					if (next != null) {
 						String n = next;
 						next = null;
 						return n; }
+					else if (lastWordPart != null) {
+						if (force) {
+							String n = lastWordPart;
+							lastWordPart = null;
+							return n; }
+						Tuple2<String,byte[]> t = extractHyphens(lastWordPart + RS + lastWordOtherPart, SHY, ZWSP, RS);
+						String lastWord = t._1;
+						// if last word fits
+						if (lastWord.length() <= limit) {
+							String n = lastWordPart;
+							lastWordPart = null;
+							return n; }
+						// else if the word can be hyphenated
+						// assuming that if allowHyphens is true for this segment it will be true for the next segment
+						else if (allowHyphens) {
+							byte[] hyphens = t._2;
+							boolean inFirstPart = false;
+							String nextLastWordPart = null;
+							for (int i = limit; i > 0; i--) {
+								// FIXME: don't hard-code the number 4
+								if ((hyphens[i - 1] & 4) == 4) {
+									inFirstPart = true;
+									nextLastWordPart = lastWord.substring(0, i); }
+								// FIXME: don't hard-code these numbers
+								if ((((hyphens[i - 1] & 1) == 1) && (i < limit)) || ((hyphens[i - 1] & 2) == 2)) {
+									if (!inFirstPart) {
+										// break point in second part of word, or in first part and first part does not fit on line
+										// in both cases the implicit line breaking will break correctly
+										String n = lastWordPart;
+										lastWordPart = null;
+										return n; }
+									else {
+										// break point in first part of word and first part fits on line
+										// need to switch to "explicit" mode because otherwise the first part would not be broken
+										String n = lastWord.substring(0, i);
+										// FIXME: don't hard-code the number 1
+										if ((hyphens[i - 1] & 1) == 1)
+											// don't use SHY because it would be dropped by LineIterator if no more characters follow
+											n += hyphenChar;
+										lastWordPart = nextLastWordPart.substring(i);
+										if (lastWordPart.isEmpty()) lastWordPart = null;
+										return n; }}}}
+						// else move the word to the next line
+						return "";
+					}
+					else
+						throw new NoSuchElementException();
 				}
 				public Character peek() {
-					if (next == null)
-						throw new NoSuchElementException();
-					else if (next.isEmpty())
-						return null;
-					else
+					if (next != null)
 						return next.charAt(0);
+					else if (lastWordPart != null)
+						return lastWordPart.charAt(0);
+					else
+						throw new NoSuchElementException();
 				}
 				public String remainder() {
-					if (next == null)
+					if (next == null && lastWordPart == null)
 						throw new NoSuchElementException();
+					StringBuilder remainder = new StringBuilder();
+					if (next != null)
+						remainder.append(next);
+					if (lastWordPart != null)
+						remainder.append(lastWordPart);
+					return remainder.toString();
+				}
+				public boolean hasPrecedingSpace() {
+					if (next == null && !alwaysEmpty)
+						throw new UnsupportedOperationException();
 					else
-						return next;
+						return precedingSpace;
 				}
 				@Override
 				public Object clone() {
@@ -155,6 +278,16 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					} catch (CloneNotSupportedException e) {
 						throw new InternalError("coding error");
 					}
+				}
+				/**
+				 * Version of {@link String#lastIndexOf(int)} that searched for pattern instead of character.
+				 */
+				private static int lastIndexOf(String string, Pattern pattern) {
+					Matcher m = pattern.matcher(string);
+					int lastIndex = -1;
+					while (m.find())
+						lastIndex = m.start();
+					return lastIndex;
 				}
 			}
 			
@@ -165,7 +298,13 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				private final int wordSpacing;
 				
 				public LineIterator(String fullyHyphenatedAndTranslatedString, char blankChar, char hyphenChar, int wordSpacing) {
-					this(new FullyHyphenatedAndTranslatedString(fullyHyphenatedAndTranslatedString), blankChar, hyphenChar, wordSpacing);
+					this(fullyHyphenatedAndTranslatedString, 0, -1, blankChar, hyphenChar, wordSpacing);
+				}
+				
+				public LineIterator(String fullyHyphenatedAndTranslatedString, int from, int to,
+				                    char blankChar, char hyphenChar, int wordSpacing) {
+					this(new FullyHyphenatedAndTranslatedString(fullyHyphenatedAndTranslatedString, from, to, hyphenChar),
+					     blankChar, hyphenChar, wordSpacing);
 				}
 				
 				public LineIterator(BrailleStream inputStream, char blankChar, char hyphenChar, int wordSpacing) {
@@ -173,6 +312,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					this.blankChar = blankChar;
 					this.hyphenChar = hyphenChar;
 					this.wordSpacing = wordSpacing;
+					this.lastCharIsSpace = inputStream.hasPrecedingSpace();
 				}
 				
 				private BrailleStream inputStream;
@@ -187,23 +327,17 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				 *
 				 * @see <a href="http://braillespecs.github.io/braille-css/#h3_line-breaking">Braille CSS – § 9.4 Line Breaking</a>
 				 */
+				// byte at index i corresponds with boundary between characters i and i+1 of charBuffer
+				// or end of string if i == charBuffer.length()
 				private ArrayList<Byte> wrapInfo = new ArrayList<Byte>();
+				// from lowest to highest precedence:
 				private final static byte NO_SOFT_WRAP = (byte)0x0;
-				private final static byte SOFT_WRAP_WITH_HYPHEN = (byte)0x1;
-				private final static byte SOFT_WRAP_WITHOUT_HYPHEN = (byte)0x3;
-				private final static byte SOFT_WRAP_AFTER_SPACE = (byte)0x7;
-				private final static byte HARD_WRAP = (byte)0x15;
+				private final static byte SOFT_WRAP_WITH_HYPHEN = (byte)0x1;     //    x
+				private final static byte SOFT_WRAP_WITHOUT_HYPHEN = (byte)0x3;  //   xx
+				private final static byte SOFT_WRAP_AFTER_SPACE = (byte)0x7;     //  xxx
+				private final static byte HARD_WRAP = (byte)0x15;                // xxxx
 				
-				private final static char SHY = '\u00ad';
-				private final static char ZWSP = '\u200b';
-				private final static char SPACE = ' ';
-				private final static char CR = '\r';
-				private final static char LF = '\n';
-				private final static char TAB = '\t';
-				private final static char NBSP = '\u00a0';
-				private final static char BLANK = '\u2800';
-				private final static char LS = '\u2028';
-				
+				// for collapsing spaces
 				private boolean lastCharIsSpace = false;
 				private int forcedBreakCount = 0;
 				
@@ -252,7 +386,6 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 						case ZWSP:
 							if (bufSize > 0)
 								wrapInfo.set(bufSize - 1, (byte)(wrapInfo.get(bufSize - 1) | SOFT_WRAP_WITHOUT_HYPHEN));
-							lastCharIsSpace = false;
 							break;
 						case SPACE:
 						case LF:
@@ -277,8 +410,15 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							lastCharIsSpace = false;
 							break;
 						case LS:
-							if (bufSize > 0)
+							if (bufSize > 0 && (wrapInfo.get(bufSize - 1) & HARD_WRAP) != HARD_WRAP)
 								wrapInfo.set(bufSize - 1, (byte)(wrapInfo.get(bufSize - 1) | HARD_WRAP));
+							else {
+								// add a blank to attach the HARD_WRAP info to
+								// otherwise we can't preserve empty lines
+								charBuffer.append(blankChar);
+								bufSize ++;
+								wrapInfo.add(HARD_WRAP);
+							}
 							lastCharIsSpace = true;
 							break;
 						default:
@@ -480,7 +620,6 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					ArrayList<Byte> save_wrapInfo = wrapInfo;
 					wrapInfo = new ArrayList<Byte>(wrapInfo);
 					boolean save_lastCharIsSpace = lastCharIsSpace;
-					lastCharIsSpace = false;
 					int save_forcedBreakCount = forcedBreakCount;
 					forcedBreakCount = 0;
 					fillRow(Integer.MAX_VALUE, true, false);
@@ -546,9 +685,31 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					public String next(int limit, boolean force, boolean allowHyphens) { throw new NoSuchElementException(); }
 					public Character peek() { throw new NoSuchElementException(); }
 					public String remainder() { throw new NoSuchElementException(); }
+					public boolean hasPrecedingSpace() { return false; }
 					@Override
 					public Object clone() { return this; }
 				};
+			}
+			
+			/**
+			 * Whether there is a space immediately before the substring starting at <code>before</code>.
+			 */
+			protected static boolean hasPrecedingSpace(String string, int before) {
+				while (before > 0)
+					switch (string.charAt(--before)) {
+					case SPACE:
+					case BLANK:
+					case CR:
+					case LF:
+					case TAB:
+					case LS:
+						return true;
+					case ZWSP:
+						continue;
+					default:
+						return false;
+					}
+				return false;
 			}
 		}
 	}

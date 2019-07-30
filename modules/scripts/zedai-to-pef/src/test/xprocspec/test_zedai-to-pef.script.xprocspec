@@ -38,7 +38,7 @@
           </document>
         </x:document>
       </x:input>
-      <x:option name="transform" select="'(grade:2)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'reset/temp-dir/')"/>
     </x:call>

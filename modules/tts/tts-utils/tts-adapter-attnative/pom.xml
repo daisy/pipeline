@@ -43,7 +43,7 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.attnative.ATTService
+      org.daisy.pipeline.tts.attnative.impl.ATTService
     </expose-services>
   </properties>
 
@@ -140,12 +140,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.tts.attnative,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
         <executions>

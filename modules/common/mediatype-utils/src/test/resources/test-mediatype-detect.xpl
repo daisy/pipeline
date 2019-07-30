@@ -1,15 +1,30 @@
-<p:declare-step version="1.0" xmlns:p="http://www.w3.org/ns/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" type="pxi:test-mediatype-detect" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                exclude-inline-prefixes="#all"
+                type="pxi:test-mediatype-detect">
 
     <p:output port="result">
         <p:pipe port="result" step="result"/>
     </p:output>
 
-    <p:import href="../../main/resources/xml/xproc/mediatype.xpl"/>
-    <p:import href="compare.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
+    <p:import href="../../main/resources/xml/xproc/mediatype.xpl">
+        <p:documentation>
+            px:mediatype-detect
+        </p:documentation>
+    </p:import>
+    <p:import href="compare.xpl">
+        <p:documentation>
+            px:compare
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+        </p:documentation>
+    </p:import>
 
     <p:wrap-sequence wrapper="c:results">
         <p:input port="source">

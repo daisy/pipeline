@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
   <artifactId>nlp-omnilang-lexer</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Omni-lingual Lexer</name>
@@ -40,27 +40,8 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.nlp.lexing.omni.OmnilangLexer
+      org.daisy.pipeline.nlp.lexing.omni.impl.OmnilangLexer
     </expose-services>
   </properties>
-
-   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.nlp.lexing.omni,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

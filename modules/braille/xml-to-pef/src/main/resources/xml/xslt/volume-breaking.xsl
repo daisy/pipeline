@@ -101,18 +101,28 @@
 					</xsl:for-each>
 				</xsl:variable>
 				<xsl:variable name="content-nodes-split-position" select="count($content-nodes-split-position[.=false()]) + 1"/>
-				<xsl:call-template name="create-div-leaf-section">
-					<xsl:with-param name="content" as="node()*" select="$content[position() le $content-nodes-split-position]"/>
-					<xsl:with-param name="pages-estimates" as="xs:double*"
-					                select="$pages-estimates[position() le $content-nodes-split-position]"/>
-					<xsl:with-param name="namespace" select="$namespace"/>
-				</xsl:call-template>
-				<xsl:call-template name="create-div-leaf-section">
-					<xsl:with-param name="content" as="node()*" select="$content[position() gt $content-nodes-split-position]"/>
-					<xsl:with-param name="pages-estimates" as="xs:double*"
-					                select="$pages-estimates[position() gt $content-nodes-split-position]"/>
-					<xsl:with-param name="namespace" select="$namespace"/>
-				</xsl:call-template>
+				<xsl:choose>
+					<xsl:when test="$content-nodes-split-position=count($pages-estimates)">
+						<!--
+						    FIXME: can not be split in small enough parts; don't wrap in a leaf section
+						-->
+						<xsl:apply-templates mode="#current" select="$content"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="create-div-leaf-section">
+							<xsl:with-param name="content" as="node()*" select="$content[position() le $content-nodes-split-position]"/>
+							<xsl:with-param name="pages-estimates" as="xs:double*"
+							                select="$pages-estimates[position() le $content-nodes-split-position]"/>
+							<xsl:with-param name="namespace" select="$namespace"/>
+						</xsl:call-template>
+						<xsl:call-template name="create-div-leaf-section">
+							<xsl:with-param name="content" as="node()*" select="$content[position() gt $content-nodes-split-position]"/>
+							<xsl:with-param name="pages-estimates" as="xs:double*"
+							                select="$pages-estimates[position() gt $content-nodes-split-position]"/>
+							<xsl:with-param name="namespace" select="$namespace"/>
+						</xsl:call-template>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

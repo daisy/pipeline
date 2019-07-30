@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-		<version>1.12.1-SNAPSHOT</version>
+		<version>1.13.2-SNAPSHOT</version>
 		<relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.4-SNAPSHOT</version>
   <artifactId>tts-adapter-sapinative</artifactId>
   <packaging>bundle</packaging>
 
@@ -41,7 +41,7 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.sapinative.SAPIservice
+      org.daisy.pipeline.tts.sapinative.impl.SAPIservice
     </expose-services>
   </properties>
 
@@ -114,7 +114,7 @@
               <tasks>
                 <copy todir="target/generated-resources/">
                   <fileset dir="target/dependency">
-                    <include name="**/*.dll" />
+                    <include name="**/*.dll"/>
                   </fileset>
                 </copy>
               </tasks>
@@ -134,12 +134,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.tts.sapinative,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
         <executions>
