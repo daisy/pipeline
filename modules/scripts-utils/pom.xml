@@ -30,6 +30,7 @@
     <module>epub3-ocf-utils</module>
     <module>epub3-pub-utils</module>
     <module>epubcheck-adapter</module>
+    <module>ace-adapter</module>
     <module>mediaoverlay-utils</module>
     <module>metadata-utils</module>
     <module>odt-utils</module>
