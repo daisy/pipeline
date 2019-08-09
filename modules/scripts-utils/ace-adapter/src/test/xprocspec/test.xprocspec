@@ -8,12 +8,16 @@
         <x:call step="px:ace">
             <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214.OK.epub')"/>
             <x:option name="temp-dir" select="resolve-uri($temp-dir)"/>
-            <x:option name="output-dir" select="resolve-uri($temp-dir)"/>
+            <x:option name="lang" select="'fr'"/>
         </x:call>
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
+        <x:context label="the html-report output">
+            <x:document type="port" port="html-report"/>
         </x:context>
-        <x:expect label="there should be a result document" type="count" min="1"/>
+        <x:expect label="there should be a html document" type="xpath" test="name(/*)" equals="'html'"/>
+        <x:context label="the json-report output">
+            <x:document type="port" port="json-report"/>
+        </x:context>
+        <x:expect label="there should be a c:data json document" type="xpath" test="/c:data/@content-type" equals="'application/json'"/>
     </x:scenario>
     
 </x:description>
