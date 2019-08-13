@@ -24,7 +24,7 @@ If not, a <code>jhove</code> report will be returned by the step instead of the 
         <p:option name="temp-dir" required="false" select="''">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                 <h1 px:role="name">Temporary directory URI (optionnal)</h1>
-                <p px:role="desc">Intermediate directory where the unzipped epub and html and json ACE reports will be stored.
+                <p px:role="desc">Directory where the intermediate ace reports will be stored.
                  If empty or not defined, the system temporary folder is used</p>
             </p:documentation>
         </p:option>
@@ -36,17 +36,17 @@ If not, a <code>jhove</code> report will be returned by the step instead of the 
             </p:documentation>
         </p:option>
 
-        <p:output port="html-report" sequence="true" primary="true">
+        <p:output port="html-report" sequence="true">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                 <h1 px:role="name">HTML report</h1>
-                <p px:role="desc">the html report created by Ace. If Ace could not be found, a jhove report is returned.</p>
+                <p px:role="desc">the html report created by Ace.</p>
             </p:documentation>
             <p:pipe port="html-report" step="launching-ace" />
         </p:output>
-        <p:output port="json-report" sequence="true">
+        <p:output port="json-report" sequence="true" primary="true">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                 <h1 px:role="name">JSON report</h1>
-                <p px:role="desc">The json report created by Ace</p>
+                <p px:role="desc">The json report created by Ace within a <code>c:data</code> tag. If Ace could not be found, a <code>jhove</code> report is returned.</p>
             </p:documentation>
             <p:pipe port="json-report" step="launching-ace" />
         </p:output>
@@ -55,13 +55,13 @@ If not, a <code>jhove</code> report will be returned by the step instead of the 
         <p:declare-step type="pxi:ace">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                 <h1 px:role="name">Ace internal adapter</h1>
-                <p px:role="desc">Java-implemented step to call Ace on an epub and retrieve the reports URIs</p>
+                <p px:role="desc">Java-implemented step to call Ace on an epub and retrieve the reports URIs.</p>
             </p:documentation>
             <!-- step declaration for the epubcheck-adapter implemented in java -->
             <p:option name="epub" required="true">
                 <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                     <h1 px:role="name">EPUB URI</h1>
-                    <p px:role="desc">URI of the checked EPUB</p>
+                    <p px:role="desc">URI of the checked EPUB.</p>
                 </p:documentation>
             </p:option>
             <p:option name="temp-dir" required="false">
@@ -77,18 +77,18 @@ If not, a <code>jhove</code> report will be returned by the step instead of the 
                     <p px:role="desc">Code of the language to use to localize the reports. Default is 'en' for english.</p>
                 </p:documentation>
             </p:option>
-            <p:output port="html-report-uri" primary="true">
+            <p:output port="html-report-uri">
                 <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                     <h1 px:role="name">Ace HTML report's uri</h1>
                     <p px:role="desc">A <code>c:result</code> tag containing the accessibility check html report URI 
                     (To use with the <code>px:html-load</code> step). </p>
                 </p:documentation>
             </p:output>
-            <p:output port="json-report">
+            <p:output port="json-report-uri" primary="true">
                 <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                    <h1 px:role="name">Ace JSON report's content</h1>
-                    <p px:role="desc">A <code>c:data</code> tag containing the accessibility check json report.
-                    (Warning : special characters &#x3e;, &#x3c; and &#x26; are replaced by their corresponding entities in the report)</p>
+                    <h1 px:role="name">Ace JSON report's uri</h1>
+                    <p px:role="desc">A <code>c:result</code> tag containing the accessibility check json report URI.
+                    (to load using a <code>c:request</code> and <code>p:http-request</code>)</p>
                 </p:documentation>
             </p:output>
         </p:declare-step>
@@ -105,18 +105,60 @@ If not, a <code>jhove</code> report will be returned by the step instead of the 
             and json-report output port-->
         <p:choose name="launching-ace">
             <p:when test="p:step-available('pxi:ace')">
-                <p:output port="html-report" primary="true">
+                <p:output port="html-report" >
                     <p:pipe step="loading-html-report" port="result" />
                 </p:output>
-                <p:output port="json-report">
-                    <p:pipe step="checking-epub" port="json-report" />
+                <p:output port="json-report" primary="true">
+                    <p:pipe step="loading-json-report" port="result" />
                 </p:output>
                 <pxi:ace name="checking-epub">
                     <p:with-option name="epub" select="$epub"/>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
                     <p:with-option name="lang" select="$lang"/>
                 </pxi:ace>
-                <p:sink/>
+                <!-- Loading the json -->
+                <p:group name="loading-json-report">
+                    <p:output port="result" />
+                    <p:variable name="json-uri" select="/c:result/text()"/>
+                    <!--It seems p:data within identity does not allow to load a file from a computed URI,
+                        but it is possible to use a http-request with a constructed c:request to load as plain text the content pointed by the file-uri.
+                        (without content type override, the json is load in base64) -->
+                    <p:try>
+                        <p:group>
+                            <p:identity>
+                                <p:input port="source">
+                                    <p:inline>
+                                        <c:request method="GET" detailed="true" override-content-type="text/plain; charset=utf-8"/>
+                                    </p:inline>
+                                </p:input>
+                            </p:identity>
+                            <p:add-attribute match="c:request" attribute-name="href">
+                                <p:with-option name="attribute-value" select="$json-uri"/>
+                            </p:add-attribute>
+                            <p:http-request/>
+                        </p:group>
+                        <p:catch>
+                            <p:identity>
+                                <p:input port="source">
+                                    <p:inline>
+                                        <error/>
+                                    </p:inline>
+                                </p:input>
+                            </p:identity>
+                        </p:catch>
+                    </p:try>
+                    <!--The resulting c:body is replaced by a c:data with spectified 
+                        content type and encoding.  -->
+                    <p:wrap wrapper="c:data" match="/c:body/text()"/>
+                    <p:unwrap match="/*"/>
+                    <p:add-attribute match="/*" 
+                            attribute-name="content-type" 
+                            attribute-value="application/json"/>
+                    <p:add-attribute match="/*"
+                            attribute-name="encoding" 
+                            attribute-value="UTF-8"/>
+                </p:group>
+                <p:sink />
                 <!-- Load the html report -->
                 <p:identity>
                     <p:input port="source">
@@ -129,10 +171,14 @@ If not, a <code>jhove</code> report will be returned by the step instead of the 
                 <p:sink />
             </p:when>
             <p:otherwise>
-                <p:output port="html-report" primary="true"/>
-                <p:output port="json-report" />
+                <p:output port="json-report" primary="true">
+                    <p:pipe step="ace-not-found" port="result" />
+                </p:output>
+                <p:output port="html-report" >
+                    <p:empty />
+                </p:output>
                 <p:in-scope-names name="vars"/>
-                <p:template>
+                <p:template name="ace-not-found">
                     <p:input port="template">
                         <p:inline>
                             <jhove xmlns="http://hul.harvard.edu/ois/xml/ns/jhove" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="ace-adapter" release="x.x"

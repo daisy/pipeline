@@ -80,10 +80,10 @@ public class AceProvider implements XProcStepProvider {
 
 		@Override
 		public void setOutput(String port, WritablePipe pipe) {
-			if ("json-report".equals(port)) {
-				jsonReportData = pipe;
-			} else { // default output to htmlReportURI
+			if ("html-report-uri".equals(port)) {
 				htmlReportURIport = pipe;
+			} else { // default output to htmlReportURI
+				jsonReportData = pipe;
 			}
 		}
 
@@ -111,9 +111,6 @@ public class AceProvider implements XProcStepProvider {
 					tempDir = Files.createTempDirectory("ace-").toFile();
 				}else tempDir = new File(new URI(getOption(_tempDir).getString())); 
 				
-				System.out.println(getOption(_tempDir).getString());
-				System.out.println(tempDir.getAbsolutePath());
-				
 				String language = getOption(_lang).getString();
 				
 				String[] cmd = new String[] {
@@ -131,7 +128,6 @@ public class AceProvider implements XProcStepProvider {
 						.consumeError(mLogger)
 						.run();
 				
-				
 				File htmlReport = new File(tempDir.getAbsolutePath() + File.separator + "report.html");
 				File jsonReport = new File(tempDir.getAbsolutePath() + File.separator + "report.json");
 				
@@ -145,28 +141,14 @@ public class AceProvider implements XProcStepProvider {
 				tempWriter.close();
 				htmlReportURIport.write(runtime.getProcessor().newDocumentBuilder().build(tempFile));
 				tempFile.delete();
-
-				String jsonContent = new String(Files.readAllBytes(Paths.get(jsonReport.getAbsolutePath())),StandardCharsets.UTF_8)
-						.replaceAll("<", "&#x3e;")
-						.replaceAll(">", "&#x3c;")
-						.replaceAll("&", "&#x26;");
 				
-				if (!jsonContent.isBlank()) {
-					tempFile = File.createTempFile("json-data",".xml");
-					tempWriter = new PrintWriter(tempFile,"UTF-8");
-					tempWriter.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-					// Wrapping (and replacing by entities the <, > and & characters in) the json data in a c:data tag
-					tempWriter.println("<c:data xmlns:c=\"http://www.w3.org/ns/xproc-step\" content-type=\"application/json\" enconding=\"UTF-8\" >" + 
-							new String(Files.readAllBytes(Paths.get(jsonReport.getAbsolutePath())),StandardCharsets.UTF_8)
-								.replaceAll("<", "&#x3e;")
-								.replaceAll(">", "&#x3c;")
-								.replaceAll("&", "&#x26;") + 
-							"</c:data>");
-					tempWriter.close();
-					jsonReportData.write(runtime.getProcessor().newDocumentBuilder().build(tempFile));
-					tempFile.delete();
-					
-				}
+				tempFile = File.createTempFile("json-uri-",".xml");
+				tempWriter = new PrintWriter(tempFile,"UTF-8");
+				tempWriter.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				tempWriter.println("<c:result xmlns:c=\"http://www.w3.org/ns/xproc-step\">" + jsonReport.toURI().toString() + "</c:result>");
+				tempWriter.close();
+				jsonReportData.write(runtime.getProcessor().newDocumentBuilder().build(tempFile));
+				tempFile.delete();
 				
 			} catch (Throwable e) {
 				logger.error("Exception raised while checking the epub with ACE : " + e.getMessage());
