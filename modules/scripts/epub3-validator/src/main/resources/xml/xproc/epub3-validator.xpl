@@ -44,7 +44,26 @@
             <h2 px:role="name">Temporary directory</h2>
         </p:documentation>
     </p:option>
+
+    <p:option name="accessibility-check" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Accessibility check</h2>
+            <p px:role="desc" xml:space="preserve">(For zipped epub only)
+Check the compliance to the EPUB accessibility specification using the [DAISY Ace App](https://daisy.github.io/ace).
+To use this option, check [how to install Ace](https://daisy.github.io/ace/getting-started/installation/) on your system.</p>
+        </p:documentation>
+    </p:option>
+    <p:output port="ace-report" px:media-type="application/vnd.pipeline.report+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">Accessibility report</h1>
+            <p px:role="desc" xml:space="preserve">If the accessibility check option is enable, and for a selected <code>.epub</code> file, this port will output a html report detailing the compliance to the EPUB Accessibility specification. 
+
+If Ace was not found on your system during the accessibility check, a <code>jhove</code> warning report will be returned through this port.</p>
+        </p:documentation>
+        <p:pipe port="result" step="ace-report"/>
+    </p:output>
     
+    <p:import href="http://www.daisy.org/pipeline/modules/ace-adapter/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
 
@@ -132,4 +151,25 @@
     </p:group>
     <p:sink/>
 
+    <p:choose name="ace-report">
+        <p:when test="$accessibility-check = 'true' and not(ends-with($epub,'.opf'))">
+            <p:output port="result">
+                <p:pipe step="ace-check" port="html-report" />
+            </p:output>
+            <px:ace name="ace-check">
+                <p:with-option name="epub" select="$epub"/>
+            </px:ace>
+            <p:sink/>
+        </p:when>
+        <p:otherwise>
+            <p:output port="result" />
+            <p:identity>
+                <p:input port="source">
+                    <p:inline>
+                        <html />
+                    </p:inline>
+                </p:input>
+            </p:identity>
+        </p:otherwise>
+    </p:choose>
 </p:declare-step>

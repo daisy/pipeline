@@ -5,6 +5,7 @@
    <uri name="http://www.daisy.org/pipeline/modules/epub3-validator/library.xpl" uri="../xml/xproc/library.xpl"/>
    
    <nextCatalog catalog="org:daisy:pipeline:modules:epubcheck-adapter"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:ace-adapter"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
    
 </catalog>

@@ -9,8 +9,9 @@
             <!--
                 reusing test data from epub3-to-daisy202
             -->
-            <x:option name="epub" select="resolve-uri('../../../../epub3-to-daisy202/src/test/xprocspec/moby-dick-mo-20120214.epub')"/>
+            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214.OK.epub')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick',$temp-dir)"/>
+            <x:option name="accessibility-check" select="'true'"/>
         </x:call>
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>
@@ -20,6 +21,10 @@
                 <d:validation-status result="ok"/>
             </x:document>
         </x:expect>
+        <x:context label="the ace report output">
+            <x:document type="port" port="ace-report"/>
+        </x:context>
+        <x:expect label="there should be a html document" type="xpath" test="name(/*)" equals="'html'"/>
     </x:scenario>
     
     <x:scenario label="moby dick unzipped">
@@ -27,7 +32,7 @@
             <!--
                 reusing test data from epub3-to-daisy202
             -->
-            <x:option name="epub" select="resolve-uri('../../../../epub3-to-daisy202/src/test/xprocspec/moby-dick-mo-20120214/OPS/package.opf')"/>
+            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214/OPS/package.opf')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick-unzipped',$temp-dir)"/>
         </x:call>
         <x:context label="the validation status">
