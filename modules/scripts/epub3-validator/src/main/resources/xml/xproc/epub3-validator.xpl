@@ -47,16 +47,19 @@
 
     <p:option name="accessibility-check" required="false" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Accessibility check</h2>
-            <p px:role="desc" xml:space="preserve">(For zipped epub only)
-Check the compliance to the EPUB accessibility specification using the [DAISY Ace App](https://daisy.github.io/ace).
-To use this option, check [how to install Ace](https://daisy.github.io/ace/getting-started/installation/) on your system.</p>
+            <h2 px:role="name">Enable accessibility check</h2>
+            <p px:role="desc" xml:space="preserve">Check the compliance to the EPUB accessibility specification using the [DAISY Ace](https://daisy.github.io/ace) tool.
+
+To use this option, check [how to install
+Ace](https://daisy.github.io/ace/getting-started/installation/) on your system. Note that this
+option is only available for zipped EPUBs.</p>
         </p:documentation>
     </p:option>
+
     <p:output port="ace-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Accessibility report</h1>
-            <p px:role="desc" xml:space="preserve">If the accessibility check option is enable, and for a selected <code>.epub</code> file, this port will output a html report detailing the compliance to the EPUB Accessibility specification. 
+            <p px:role="desc" xml:space="preserve">If the accessibility check option is enabled, an HTML report detailing the compliance to the EPUB Accessibility specification is output on this port.
 
 If Ace was not found on your system during the accessibility check, a <code>jhove</code> warning report will be returned through this port.</p>
         </p:documentation>

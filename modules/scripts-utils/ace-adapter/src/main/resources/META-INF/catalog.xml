@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-
-   <uri name="http://www.daisy.org/pipeline/modules/ace-adapter/library.xpl" uri="../xml/xproc/library.xpl"/>
-   
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+	<uri name="http://www.daisy.org/pipeline/modules/ace-adapter/library.xpl" uri="../xml/xproc/library.xpl"/>
+	<nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
 </catalog>
