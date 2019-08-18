@@ -1,10 +1,12 @@
 package org.daisy.pipeline.epub.ace.impl;
 
 import java.io.File;
-import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.Optional;
+import javax.xml.transform.stream.StreamSource;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
@@ -127,27 +129,26 @@ public class AceProvider implements XProcStepProvider {
 				File jsonReportFile = new File(tempDir.getAbsolutePath() + File.separator + "report.json");
 
 				// write the result uris in c:result documents
-				File tempFile = File.createTempFile("html-uri-", ".xml");
-				PrintWriter tempWriter = new PrintWriter(tempFile, "UTF-8");
-				tempWriter.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-				tempWriter.println("<c:result xmlns:c=\"http://www.w3.org/ns/xproc-step\">" + htmlReportFile.toURI().toString() + "</c:result>");
-				tempWriter.close();
-				htmlReport.write(runtime.getProcessor().newDocumentBuilder().build(tempFile));
-				tempFile.delete();
-
-				tempFile = File.createTempFile("json-uri-", ".xml");
-				tempWriter = new PrintWriter(tempFile, "UTF-8");
-				tempWriter.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-				tempWriter.println("<c:result xmlns:c=\"http://www.w3.org/ns/xproc-step\">" + jsonReportFile.toURI().toString() + "</c:result>");
-				tempWriter.close();
-				jsonReport.write(runtime.getProcessor().newDocumentBuilder().build(tempFile));
-				tempFile.delete();
+				writeCResult(htmlReport, htmlReportFile.toURI());
+				writeCResult(jsonReport, jsonReportFile.toURI());
 
 			} catch (Throwable e) {
 				logger.error("Exception raised while checking the epub with Ace: " + e.getMessage());
 				e.printStackTrace();
 				throw new XProcException(step.getNode(), e);
 			}
+		}
+
+		private void writeCResult(WritablePipe port, URI uri) throws SaxonApiException {
+			port.write(runtime.getProcessor().newDocumentBuilder().build(new StreamSource(cResultDocument(uri))));
+		}
+
+		private static Reader cResultDocument(URI uri) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("<c:result xmlns:c=\"http://www.w3.org/ns/xproc-step\">")
+			  .append(uri)
+			  .append("</c:result>");
+			return new StringReader(sb.toString());
 		}
 	}
 }
