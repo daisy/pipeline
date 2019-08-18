@@ -39,7 +39,7 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_ace_adapter,
-      org.daisy.pipeline.epub.AceProvider
+      org.daisy.pipeline.epub.ace.impl.AceProvider
     </expose-services>
   </properties>
 
@@ -55,12 +55,6 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
-            <Private-Package>
-              org.daisy.pipeline.epub,
-              ${generated-packages}
-              {local-packages}
-            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

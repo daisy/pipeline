@@ -1,4 +1,4 @@
-package org.daisy.pipeline.epub;
+package org.daisy.pipeline.epub.ace.impl;
 
 import java.io.File;
 import java.io.PrintWriter;
