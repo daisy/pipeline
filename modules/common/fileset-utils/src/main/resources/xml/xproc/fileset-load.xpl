@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="px:fileset-load" name="main" xmlns:p="http://www.w3.org/ns/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-  xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/fileset-load" xmlns:c="http://www.w3.org/ns/xproc-step" exclude-inline-prefixes="px">
+<p:declare-step version="1.0" type="px:fileset-load" name="main" xmlns:p="http://www.w3.org/ns/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" exclude-inline-prefixes="px">
 
   <p:input port="fileset" primary="true"/>
   <p:input port="in-memory" sequence="true"/>
@@ -17,41 +16,15 @@
 
   <p:import href="fileset-library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+    <p:documentation>
+      px:info
+      px:set-base-uri
+      px:data
+    </p:documentation>
+  </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
-  <p:declare-step type="pxi:load-text">
-    <p:output port="result"/>
-    <p:option name="href"/>
-    <p:identity>
-      <p:input port="source">
-        <p:inline>
-          <c:request method="GET" override-content-type="text/plain; charset=utf-8"/>
-        </p:inline>
-      </p:input>
-    </p:identity>
-    <p:add-attribute match="c:request" attribute-name="href">
-      <p:with-option name="attribute-value" select="$href"/>
-    </p:add-attribute>
-    <p:http-request/>
-  </p:declare-step>
-
-  <p:declare-step type="pxi:load-binary">
-    <p:output port="result"/>
-    <p:option name="href"/>
-    <p:identity>
-      <p:input port="source">
-        <p:inline>
-          <c:request method="GET" override-content-type="binary/octet-stream"/>
-        </p:inline>
-      </p:input>
-    </p:identity>
-    <p:add-attribute match="c:request" attribute-name="href">
-      <p:with-option name="attribute-value" select="$href"/>
-    </p:add-attribute>
-    <p:http-request/>
-  </p:declare-step>
 
   <p:add-attribute match="/*" attribute-name="href">
     <p:with-option name="attribute-value" select="$href"/>
@@ -224,16 +197,16 @@
 
                   <!-- Force text -->
                   <p:when test="$method='text'">
-                    <pxi:load-text>
+                    <px:data content-type="text/plain; charset=utf-8">
                       <p:with-option name="href" select="$on-disk"/>
-                    </pxi:load-text>
+                    </px:data>
                   </p:when>
 
                   <!-- Force binary -->
                   <p:when test="$method='binary'">
-                    <pxi:load-binary>
+                    <px:data content-type="binary/octet-stream">
                       <p:with-option name="href" select="$on-disk"/>
-                    </pxi:load-binary>
+                    </px:data>
                   </p:when>
 
                   <!-- HTML -->
@@ -258,25 +231,25 @@
                           </p:input>
                           <p:with-option name="message" select="concat('unable to load ',$on-disk,' as XML; trying as text...')"/>
                         </px:message>
-                        <pxi:load-text>
+                        <px:data content-type="text/plain; charset=utf-8">
                           <p:with-option name="href" select="$on-disk"/>
-                        </pxi:load-text>
+                        </px:data>
                       </p:catch>
                     </p:try>
                   </p:when>
 
                   <!-- text -->
                   <p:when test="matches($media-type,'^text/')">
-                    <pxi:load-text>
+                    <px:data content-type="text/plain; charset=utf-8">
                       <p:with-option name="href" select="$on-disk"/>
-                    </pxi:load-text>
+                    </px:data>
                   </p:when>
 
                   <!-- binary -->
                   <p:otherwise>
-                    <pxi:load-binary>
+                    <px:data content-type="binary/octet-stream">
                       <p:with-option name="href" select="$on-disk"/>
-                    </pxi:load-binary>
+                    </px:data>
                   </p:otherwise>
 
                 </p:choose>

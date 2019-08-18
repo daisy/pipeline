@@ -17,7 +17,7 @@
         <x:context label="the json-report output">
             <x:document type="port" port="json-report"/>
         </x:context>
-        <x:expect label="there should be a c:data json document" type="xpath" test="/c:data/@content-type" equals="'application/json'"/>
+        <x:expect label="there should be a c:data json document" type="xpath" test="/c:data/@content-type" equals="'text/json'"/>
     </x:scenario>
     
 </x:description>

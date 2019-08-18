@@ -87,6 +87,11 @@ to notify that Ace was not found.</p>
                 px:html-load
             </p:documentation>
         </p:import>
+        <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+            <p:documentation>
+                px:data
+            </p:documentation>
+        </p:import>
 
         <!-- If the ace adapter module has been correctly loaded, use it to retrieve the report
              URIs, load the reports and pipe their content through the html-report and json-report
@@ -104,48 +109,14 @@ to notify that Ace was not found.</p>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
                     <p:with-option name="lang" select="$lang"/>
                 </pxi:ace>
-                <!-- Loading the json -->
+                <!-- Load the json report -->
                 <p:group name="loading-json-report">
                     <p:output port="result"/>
                     <p:variable name="json-uri" select="/c:result/text()"/>
-                    <!-- It seems p:data within identity does not allow to load a file from a
-                         computed URI, but it is possible to use a http-request with a constructed
-                         c:request to load as plain text the content pointed by the file-uri.
-                         (without content type override, the json is load in base64) -->
-                    <p:try>
-                        <p:group>
-                            <p:identity>
-                                <p:input port="source">
-                                    <p:inline>
-                                        <c:request method="GET" detailed="true" override-content-type="text/plain; charset=utf-8"/>
-                                    </p:inline>
-                                </p:input>
-                            </p:identity>
-                            <p:add-attribute match="c:request" attribute-name="href">
-                                <p:with-option name="attribute-value" select="$json-uri"/>
-                            </p:add-attribute>
-                            <p:http-request/>
-                        </p:group>
-                        <p:catch>
-                            <p:identity>
-                                <p:input port="source">
-                                    <p:inline>
-                                        <error/>
-                                    </p:inline>
-                                </p:input>
-                            </p:identity>
-                        </p:catch>
-                    </p:try>
-                    <!-- The resulting c:body is replaced by a c:data with spectified content type
-                         and encoding. -->
-                    <p:wrap wrapper="c:data" match="/c:body/text()"/>
-                    <p:unwrap match="/*"/>
-                    <p:add-attribute match="/*"
-                                     attribute-name="content-type"
-                                     attribute-value="application/json"/>
-                    <p:add-attribute match="/*"
-                                     attribute-name="encoding"
-                                     attribute-value="UTF-8"/>
+                    <px:data content-type="text/json">
+                        <p:with-option name="href" select="$json-uri"/>
+                    </px:data>
+                    <p:add-attribute match="/*" attribute-name="encoding" attribute-value="UTF-8"/>
                 </p:group>
                 <p:sink/>
                 <!-- Load the html report -->
