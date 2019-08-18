@@ -31,6 +31,13 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>html-utils</artifactId>
       <scope>runtime</scope>
     </dependency>

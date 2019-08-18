@@ -1,8 +1,6 @@
 package org.daisy.pipeline.epub.ace.impl;
 
 import java.io.File;
-import java.io.Reader;
-import java.io.StringReader;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.Optional;
@@ -21,6 +19,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.common.shell.CommandRunner;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import static org.daisy.common.xproc.file.FileUtils.cResultDocument;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -140,15 +139,7 @@ public class AceProvider implements XProcStepProvider {
 		}
 
 		private void writeCResult(WritablePipe port, URI uri) throws SaxonApiException {
-			port.write(runtime.getProcessor().newDocumentBuilder().build(new StreamSource(cResultDocument(uri))));
-		}
-
-		private static Reader cResultDocument(URI uri) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("<c:result xmlns:c=\"http://www.w3.org/ns/xproc-step\">")
-			  .append(uri)
-			  .append("</c:result>");
-			return new StringReader(sb.toString());
+			port.write(runtime.getProcessor().newDocumentBuilder().build(new StreamSource(cResultDocument(uri.toString()))));
 		}
 	}
 }

@@ -87,7 +87,9 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package/>
+            <Export-Package>
+              org.daisy.common.xproc.file
+            </Export-Package>
             <Private-Package>
               org.daisy.common.xproc.calabash.steps;-split-package:=first,
               org.daisy.saxon.functions.file,
