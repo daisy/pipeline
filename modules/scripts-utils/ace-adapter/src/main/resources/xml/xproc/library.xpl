@@ -12,8 +12,7 @@
 
 Please make sure that Ace is installed or <a
 href="https://daisy.github.io/ace/getting-started/installation/">install Ace</a> before using this
-step. If not, a <code>jhove</code> report will be returned by the step instead of the HTML report,
-to notify that Ace was not found.</p>
+step. If this is not the case, the reports will contain a message that Ace was not found.</p>
         </p:documentation>
 
         <p:option name="epub" required="true" px:type="anyFileURI">
@@ -39,21 +38,22 @@ to notify that Ace was not found.</p>
             </p:documentation>
         </p:option>
 
-        <p:output port="html-report" sequence="true">
+        <p:output port="html-report">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                 <h1 px:role="name">HTML report</h1>
-                <p px:role="desc">The HTML report created by Ace.</p>
+                <p px:role="desc">The HTML report created by Ace, or if Ace could not be found, a
+                short HTML document stating this.</p>
             </p:documentation>
-            <p:pipe step="launching-ace" port="html-report"/>
+            <p:pipe step="ace-or-not-found" port="html-report"/>
         </p:output>
 
-        <p:output port="json-report" sequence="true" primary="true">
+        <p:output port="json-report" primary="true">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
                 <h1 px:role="name">JSON report</h1>
-                <p px:role="desc">The JSON report created by Ace. If Ace could not be found, a
-                <code>jhove</code> report is returned.</p>
+                <p px:role="desc">The JSON report created by Ace, or if Ace could not be found, a
+                short JSON document stating this.</p>
             </p:documentation>
-            <p:pipe step="launching-ace" port="json-report"/>
+            <p:pipe step="ace-or-not-found" port="json-report"/>
         </p:output>
 
         <!-- Java internal step signature -->
@@ -96,21 +96,21 @@ to notify that Ace was not found.</p>
         <!-- If the ace adapter module has been correctly loaded, use it to retrieve the report
              URIs, load the reports and pipe their content through the html-report and json-report
              output port -->
-        <p:choose name="launching-ace">
+        <p:choose name="ace-or-not-found">
             <p:when test="p:step-available('pxi:ace')">
-                <p:output port="html-report" >
-                    <p:pipe step="loading-html-report" port="result"/>
+                <p:output port="html-report">
+                    <p:pipe step="html" port="result"/>
                 </p:output>
                 <p:output port="json-report" primary="true">
-                    <p:pipe step="loading-json-report" port="result"/>
+                    <p:pipe step="json" port="result"/>
                 </p:output>
-                <pxi:ace name="checking-epub">
+                <pxi:ace name="ace">
                     <p:with-option name="epub" select="$epub"/>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
                     <p:with-option name="lang" select="$lang"/>
                 </pxi:ace>
                 <!-- Load the json report -->
-                <p:group name="loading-json-report">
+                <p:group name="json">
                     <p:output port="result"/>
                     <p:variable name="json-uri" select="/c:result/text()"/>
                     <px:data content-type="text/json">
@@ -122,45 +122,53 @@ to notify that Ace was not found.</p>
                 <!-- Load the html report -->
                 <p:identity>
                     <p:input port="source">
-                        <p:pipe step="checking-epub" port="html-report-uri"/>
+                        <p:pipe step="ace" port="html-report-uri"/>
                     </p:input>
                 </p:identity>
-                <px:html-load name="loading-html-report">
+                <px:html-load name="html">
                     <p:with-option name="href" select="/c:result/text()"/>
                 </px:html-load>
                 <p:sink/>
             </p:when>
             <p:otherwise>
                 <p:output port="json-report" primary="true">
-                    <p:pipe step="ace-not-found" port="result"/>
+                    <p:pipe step="json" port="result"/>
                 </p:output>
-                <p:output port="html-report" >
-                    <p:empty/>
+                <p:output port="html-report">
+                    <p:pipe step="html" port="result"/>
                 </p:output>
-                <p:in-scope-names name="vars"/>
-                <p:template name="ace-not-found">
-                    <p:input port="template">
-                        <p:inline>
-                            <jhove xmlns="http://hul.harvard.edu/ois/xml/ns/jhove" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="ace-adapter" release="x.x"
-                                date="{tokenize(string(current-date()),'\+')[1]}">
-                                <date>{current-dateTime()}</date>
-                                <repInfo uri="{$epub}">
-                                    <messages>
-                                        <message>WARN: {$epub}: Ace program is not available. Are you sure Ace is installed on your system ? Please check your environment variable PATH, or follow the instructions at 'https://daisy.github.io/ace/getting-started/installation/' .</message>
-                                    </messages>
-                                </repInfo>
-                            </jhove>
-                        </p:inline>
-                    </p:input>
+                <p:identity name="json">
                     <p:input port="source">
                         <p:inline>
-                            <irrelevant/>
+                            <c:data content-type="text/json" encoding="UTF-8">
+                                {
+                                  "error": "ace-not-available",
+                                  "message": "Ace was not found. Please check your \"PATH\" environment variable, or follow the installation instructions at https://daisy.github.io/ace/getting-started/installation/." }
+                            </c:data>
                         </p:inline>
                     </p:input>
-                    <p:input port="parameters">
-                        <p:pipe step="vars" port="result"/>
+                </p:identity>
+                <p:sink/>
+                <p:identity name="html">
+                    <p:input port="source">
+                        <p:inline>
+                            <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                                <head>
+                                    <meta charset="utf-8"/>
+                                    <title>EPUB Accessibility Report</title>
+                                </head>
+                                <body>
+                                    <h1>EPUB Accessibility Report</h1>
+                                    <p>Ace was not found. Please check your "PATH" environment
+                                    variable, or follow the <a
+                                    href="https://daisy.github.io/ace/getting-started/installation/">installation
+                                    instructions</a>.</p>
+                                </body>
+                            </html>
+                        </p:inline>
                     </p:input>
-                </p:template>
+                </p:identity>
+                <p:sink/>
             </p:otherwise>
         </p:choose>
     </p:declare-step>

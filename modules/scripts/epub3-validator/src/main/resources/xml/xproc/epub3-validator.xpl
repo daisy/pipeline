@@ -59,9 +59,7 @@ option is only available for zipped EPUBs.</p>
     <p:output port="ace-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Accessibility report</h1>
-            <p px:role="desc" xml:space="preserve">If the accessibility check option is enabled, an HTML report detailing the compliance to the EPUB Accessibility specification is output on this port.
-
-If Ace was not found on your system during the accessibility check, a <code>jhove</code> warning report will be returned through this port.</p>
+            <p px:role="desc" xml:space="preserve">If the accessibility check option is enabled, an HTML report detailing the compliance to the EPUB Accessibility specification is output on this port.</p>
         </p:documentation>
         <p:pipe port="result" step="ace-report"/>
     </p:output>
