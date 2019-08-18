@@ -117,10 +117,7 @@ public class AceProvider implements XProcStepProvider {
 					epubFile.getCanonicalPath()
 				};
 
-				// FIXME: the command runner would raise an IOException on Windows if consumeOutput() is not used
-				// (the CommandRunner pipes the process output to the file '/dev/null' by default)
 				new CommandRunner(cmd)
-					.consumeOutput(stream -> {})
 					.consumeError(mLogger)
 					.run();
 
