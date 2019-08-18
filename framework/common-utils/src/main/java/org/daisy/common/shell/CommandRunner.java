@@ -17,7 +17,11 @@ import org.slf4j.Logger;
 
 public class CommandRunner {
 
-	final private String[] command;
+	private static final File devNull = System.getProperty("os.name").toLowerCase().startsWith("windows")
+		? new File("NUL")
+		: new File("/dev/null");
+
+	private final String[] command;
 	private Consumer<InputStream> outputConsumer;
 	private Consumer<InputStream> errorConsumer;
 	private Consumer<OutputStream> inputFeeder;
@@ -86,9 +90,9 @@ public class CommandRunner {
 		ProcessBuilder pb = new ProcessBuilder();
 		pb.command(command);
 		if (outputConsumer == null)
-			pb.redirectOutput(new File("/dev/null"));
+			pb.redirectOutput(devNull);
 		if (errorConsumer == null)
-			pb.redirectError(new File("/dev/null"));
+			pb.redirectError(devNull);
 		final Process p = pb.start();
 		try {
 			if (inputFeeder != null)
