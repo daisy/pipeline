@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/maven-parents.git
 	branch = master
 	commit = 1aae8e5741695772ecf769ed51841612e86348a2
-	parent = aa08a0a38614ee4c9ba2811d45e19f6df1b4c5b7
+	parent = b38d9eade71a80bfdb2f2b74895fc172f271bc60
 	cmdver = 0.3.1
