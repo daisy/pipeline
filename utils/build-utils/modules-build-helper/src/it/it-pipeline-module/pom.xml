@@ -52,11 +52,11 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>liblouis-core</artifactId>
+      <artifactId>liblouis-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>libhyphen-core</artifactId>
+      <artifactId>libhyphen-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>

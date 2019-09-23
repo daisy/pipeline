@@ -55,6 +55,7 @@ public class XProcDocMojo extends AbstractMojo {
 			                           "output-base-uri", asURI(outputDirectory).toASCIIString()),
 			           null); }
 		catch (XProcExecutionException e) {
+			e.printStackTrace();
 			throw new MojoFailureException(e.getMessage()); }
 	}
 }

@@ -12,11 +12,11 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>ds-to-spi-maven-plugin</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <properties>
-    <ds-to-spi-annotations-processor.version>1.0.0-SNAPSHOT</ds-to-spi-annotations-processor.version>
+    <ds-to-spi-annotations-processor.version>1.0.0</ds-to-spi-annotations-processor.version>
   </properties>
 
   <dependencies>
@@ -100,5 +100,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

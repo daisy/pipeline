@@ -190,7 +190,8 @@ public class <xsl:value-of select="$className"/> implements ModuleRef {
                                                      'liblouis-tables',
                                                      'libhyphen-tables')]|
                          cat:uri/@px:extends|
-                         cat:uri[@px:content-type=('data-type','script')]/@px:id"/>
+                         cat:uri[@px:content-type=('data-type','script')]/@px:id|
+                         cat:nextCatalog"/>
     
     <xsl:template match="cat:uri[@px:content-type='script']" mode="java">
         <xsl:variable name="id" as="xs:string">
@@ -359,10 +360,6 @@ public class <xsl:value-of select="$className"/> extends BundledConfigurationFil
             <xsl:with-param name="identifier" select="@name"/>
             <xsl:with-param name="path" select="$path"/>
             <xsl:with-param name="includes" select="(@px:include,'*')[1]"/>
-            <xsl:with-param name="ordinal"
-                            select="if ((preceding-sibling::cat:uri|following-sibling::cat:uri)[@px:content-type='liblouis-tables'])
-                                    then 1+count(preceding-sibling::cat:uri[@px:content-type='liblouis-tables'])
-                                    else ''"/>
         </xsl:call-template>
     </xsl:template>
     
@@ -370,8 +367,8 @@ public class <xsl:value-of select="$className"/> extends BundledConfigurationFil
         <xsl:param name="identifier" as="xs:string" required="yes"/>
         <xsl:param name="path" as="xs:string" required="yes"/>
         <xsl:param name="includes" as="xs:string" required="yes"/>
-        <xsl:param name="ordinal" as="xs:string" required="yes"/>
-        <xsl:variable name="className" select="string-join(('LiblouisTablePath',if ($ordinal='') then () else ('_',$ordinal)),'')"/>
+        <xsl:variable name="className" select="concat('LiblouisTablePath_',
+                                                      replace(if (@px:id) then @px:id else $identifier,'[^a-zA-Z]','_'))"/>
         <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/braille/liblouis/impl/{$className}.java"
                              method="text" xml:space="preserve"><c:data>package org.daisy.pipeline.braille.liblouis.impl;
 
@@ -381,7 +378,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
 @Component(
-	name = "liblouis-tables<xsl:value-of select="if ($ordinal='') then '' else concat('-',$ordinal)"/>",
+	name = "<xsl:value-of select="if (@px:id) then @px:id
+	                              else concat('org.daisy.pipeline.braille.liblouis.impl.',$className)"/>",
 	service = { org.daisy.pipeline.braille.liblouis.LiblouisTablePath.class },
 	property = {
 		"identifier:String=<xsl:value-of select="$identifier"/>",
@@ -406,10 +404,6 @@ public class <xsl:value-of select="$className"/> extends org.daisy.pipeline.brai
             <xsl:with-param name="identifier" select="@name"/>
             <xsl:with-param name="path" select="$path"/>
             <xsl:with-param name="includes" select="(@px:include,'*')[1]"/>
-            <xsl:with-param name="ordinal"
-                            select="if ((preceding-sibling::cat:uri|following-sibling::cat:uri)[@px:content-type='libhyphen-tables'])
-                                    then 1+count(preceding-sibling::cat:uri[@px:content-type='libhyphen-tables'])
-                                    else ''"/>
         </xsl:call-template>
     </xsl:template>
     
@@ -417,8 +411,8 @@ public class <xsl:value-of select="$className"/> extends org.daisy.pipeline.brai
         <xsl:param name="identifier" as="xs:string" required="yes"/>
         <xsl:param name="path" as="xs:string" required="yes"/>
         <xsl:param name="includes" as="xs:string" required="yes"/>
-        <xsl:param name="ordinal" as="xs:string" required="yes"/>
-        <xsl:variable name="className" select="string-join(('LibhyphenTablePath',if ($ordinal='') then () else ('_',$ordinal)),'')"/>
+        <xsl:variable name="className" select="concat('LibhyphenTablePath_',
+                                                      replace(if (@px:id) then @px:id else $identifier,'[^a-zA-Z]','_'))"/>
         <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/braille/libhyphen/impl/{$className}.java"
                              method="text" xml:space="preserve"><c:data>package org.daisy.pipeline.braille.libhyphen.impl;
 
@@ -428,7 +422,8 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
 @Component(
-	name = "libhyphen-tables<xsl:value-of select="if ($ordinal='') then '' else concat('-',$ordinal)"/>",
+	name = "<xsl:value-of select="if (@px:id) then @px:id
+	                              else concat('org.daisy.pipeline.braille.libhyphen.impl.',$className)"/>",
 	service = { org.daisy.pipeline.braille.libhyphen.LibhyphenTablePath.class },
 	property = {
 		"identifier:String=<xsl:value-of select="$identifier"/>",

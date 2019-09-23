@@ -11,9 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.transform.ErrorListener;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -112,7 +114,17 @@ abstract class utils {
 	
 	static abstract class XML {
 		
-		private static XPath xpath = new XPathFactoryImpl().newXPath();
+		private static XPath xpath;
+		static {
+			XPathFactoryImpl xpathFactory = new XPathFactoryImpl();
+			// to make messages not end up on stderr
+			xpathFactory.getConfiguration().setErrorListener(new ErrorListener() {
+					public void error(TransformerException exception) {}
+					public void fatalError(TransformerException exception) {}
+					public void warning(TransformerException exception) {}
+				});
+			xpath = xpathFactory.newXPath();
+		}
 		
 		static Object evaluateXPath(File context, String expression, final Map<String,String> namespaces, Class<?> type) {
 			return evaluateXPath(URIs.asURI(context), expression, namespaces, type);
