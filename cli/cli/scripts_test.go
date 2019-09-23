@@ -59,7 +59,13 @@ func TestParseInputsBased(t *testing.T) {
 	if url.String() != "file:///mydata/"+"tmp/dir1/file.xml" {
 		t.Errorf("Url 1 is not formated %v", url.String())
 	}
-	url, err = pathToUri(in2, "/mydata/")
+	// for windows
+	oldSep := pathSeparator
+	defer func() {
+		pathSeparator = oldSep
+	}()
+	pathSeparator = '\\'
+	url, err = pathToUri(in1, "C:\\Users\\bert\\mydata\\")
 	if !os.IsNotExist(err) {
 		t.Errorf("Unexpected pass %v", err)
 		if err != nil {
@@ -67,7 +73,7 @@ func TestParseInputsBased(t *testing.T) {
 			return
 		}
 	}
-	if url.String() != "file:///mydata/"+"tmp/dir2/file.xml" {
+	if url.String() != "file:///C:/Users/bert/mydata/tmp/dir1/file.xml" {
 		t.Errorf("Url 1 is not formated %v", url.String())
 	}
 }
