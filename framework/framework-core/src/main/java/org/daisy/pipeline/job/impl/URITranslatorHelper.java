@@ -97,11 +97,11 @@ public final class URITranslatorHelper   {
 		String parts[]=null;
 		//on the result/result.xml way
 		if (systemId==null || systemId.isEmpty()){
-			parts= new String[]{String.format("%s/%s",name,name),".xml"};
+			parts= new String[]{String.format("%s/%s",name,name),getFileExtension(mimetype)};
 		//directory-> dir/name, .xml
 		//the first part is the last char of the sysId
 		}else if(systemId.charAt(systemId.length()-1)=='/'){
-			parts= new String[]{String.format("%s%s",systemId,name),".xml"};
+			parts= new String[]{String.format("%s%s",systemId,name),getFileExtension(mimetype)};
 		//file name/name, (".???"|"")
 		}else{
 			String ext="";
@@ -126,6 +126,18 @@ public final class URITranslatorHelper   {
 
 		
 		return parts;	
+	}
+
+	private static final String MEDIA_TYPE_REPORT_XML = "application/vnd.pipeline.report+xml";
+
+	/**
+	 * Map mimetype to file extension
+	 */
+	private static String getFileExtension(String mimetype) {
+		if (MEDIA_TYPE_REPORT_XML.equals(mimetype))
+			return ".html";
+		else
+			return ".xml";
 	}
 
 	/**

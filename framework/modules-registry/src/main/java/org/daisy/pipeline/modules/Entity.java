@@ -1,8 +1,9 @@
 package org.daisy.pipeline.modules;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
+
+import org.daisy.common.file.URIs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,15 +78,16 @@ public class Entity {
 	public URI getResource() {
 try {
 
-			mLogger.trace("getting resource from entity:"+mPath);
+			mLogger.trace("Getting resource from entity " + this + ": " + mPath);
 			URL url= mLoader.loadResource(mPath);
 			if(url!=null) {
-				return url.toURI();
+				return URIs.asURI(url);
 			} else {
 				return null;
 			}
 
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
+			mLogger.debug("Resource " + mPath + " does not exist", e);
 			return null;
 		}
 	}

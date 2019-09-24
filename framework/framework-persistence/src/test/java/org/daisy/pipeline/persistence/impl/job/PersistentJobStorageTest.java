@@ -16,7 +16,6 @@ import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScriptService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,7 +38,6 @@ public class PersistentJobStorageTest {
         PersistentJobStorage storage;
         PersistentClient cl = new PersistentClient("paco","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
         PersistentClient clAdmin = new PersistentClient("power_paco","asdf",Role.ADMIN,"afasd",Priority.LOW);
-        @Mock XProcScriptService script;
         @Mock ScriptRegistry registry;
         @Mock RuntimeConfigurator configurator;
         @Mock EventBus bus;
@@ -52,7 +50,6 @@ public class PersistentJobStorageTest {
                 storage.setEntityManagerFactory(DatabaseProvider.getEMF());
                 storage.setRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
                 storage.setConfigurator(configurator);
-                Mockito.when(registry.getScript(Mockito.any(String.class))).thenReturn(script);
                 db.addObject(this.cl);
                 db.addObject(this.clAdmin);
                 clientsToDel.add(this.cl);

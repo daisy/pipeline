@@ -40,7 +40,7 @@ public class FuzzyPriorityCalculatorTest   {
         public void calculatePriority(){
                 Mockito.when(runnable.isDirty()).thenReturn(true);
                 Mockito.when(runnable.getRelativeWaitingTime()).thenReturn(0.5);
-                Mockito.when(engine.getScore( Mockito.anyFloat(), Mockito.anyFloat())).thenReturn(123.0);
+                Mockito.when(engine.getScore( Mockito.anyDouble(), Mockito.anyDouble())).thenReturn(123.0);
                 double priority=calculator.getPriority(runnable);
                 Assert.assertEquals("The priority is right",-123.0,priority,0.0);
                 //check that the runnable has been marked as no dirty
@@ -53,7 +53,7 @@ public class FuzzyPriorityCalculatorTest   {
         public void calculatePriorityCached(){
                 Mockito.when(runnable.isDirty()).thenReturn(true).thenReturn(false);
                 Mockito.when(runnable.getRelativeWaitingTime()).thenReturn(0.5);
-                Mockito.when(engine.getScore( Mockito.anyFloat(), Mockito.anyFloat())).thenReturn(123.0).thenReturn(0.0);
+                Mockito.when(engine.getScore( Mockito.anyDouble(), Mockito.anyDouble())).thenReturn(123.0).thenReturn(0.0);
                 //first
                 calculator.getPriority(runnable);
                 //cached

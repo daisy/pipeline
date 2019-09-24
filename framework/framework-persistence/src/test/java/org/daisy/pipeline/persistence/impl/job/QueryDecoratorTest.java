@@ -69,7 +69,6 @@ public class QueryDecoratorTest {
 
         @Test
         public void decorate(){
-                Mockito.when(cb.and((Predicate)Mockito.anyVararg())).thenReturn(pred);
                 dec1.setNext(dec2);
                 QueryDecorator<PersistentJob>.QueryHolder holder=dec1.holder(cb,root,cq);
                 dec1.decorateWhere(holder,pred);

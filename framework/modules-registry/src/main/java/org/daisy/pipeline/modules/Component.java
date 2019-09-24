@@ -1,7 +1,6 @@
 package org.daisy.pipeline.modules;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.daisy.common.file.URIs;

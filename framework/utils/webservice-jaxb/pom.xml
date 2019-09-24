@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.0-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
@@ -35,6 +35,11 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>jaxb2-maven-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
@@ -123,7 +128,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>2.4</version>
         <configuration>
           <xjcSourceExcludeFilters>
             <filter implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
@@ -142,6 +146,8 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <!-- "dummy.xsd" hack found at https://artofcode.wordpress.com/2019/02/26/jaxb2-maven-plugin-2-4-and-java-11 -->
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/script</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.script</packageName>
@@ -156,6 +162,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/base</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.base</packageName>
@@ -169,6 +176,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/job</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.job</packageName>
@@ -182,6 +190,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/queue</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.queue</packageName>
@@ -195,6 +204,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/request</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.request</packageName>
@@ -208,6 +218,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/client</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.clients</packageName>
@@ -221,6 +232,7 @@
             <configuration>
               <clearOutputDir>false</clearOutputDir>
               <sources>
+                <source>dummy.xsd</source>
                 <source>${project.build.directory}/trang/properties</source>
               </sources>
               <packageName>org.daisy.pipeline.webservice.jaxb.properties</packageName>
@@ -230,4 +242,40 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <dependencies>
+        <!--
+            for jaxb2-maven-plugin
+        -->
+        <dependency>
+          <groupId>javax.xml.bind</groupId>
+          <artifactId>jaxb-api</artifactId>
+          <version>2.3.0</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>jaxb2-maven-plugin</artifactId>
+              <version>2.4</version>
+              <dependencies>
+                <dependency>
+                  <groupId>com.sun.activation</groupId>
+                  <artifactId>jakarta.activation</artifactId>
+                  <version>1.2.1</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 </project>

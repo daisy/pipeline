@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
@@ -86,7 +87,6 @@ public class UpdatablePriorityBlockingQueueTest{
        public void swapNonExistent(){
                when(task1.getPriority()).thenReturn(-5.0);
                when(task2.getPriority()).thenReturn(-10.0);
-               when(task3.getPriority()).thenReturn(-1.0);
 
                UpdatablePriorityBlockingQueue queue = 
                        new UpdatablePriorityBlockingQueue(); 
@@ -103,6 +103,8 @@ public class UpdatablePriorityBlockingQueueTest{
 
                Assert.assertEquals("First is task 2",task2,queue.poll());
                Assert.assertEquals("Second is task 1",task1,queue.poll());
+
+               Mockito.verify(task3, Mockito.times(0)).getPriority();
        }
 
        //@Test

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.13.0</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
   <groupId>org.daisy.maven</groupId>
   <artifactId>xproc-engine-daisy-pipeline</artifactId>
-  <version>1.12.1-SNAPSHOT</version>
+  <version>1.13.0</version>
   <packaging>bundle</packaging>
   <name>xproc-engine-daisy-pipeline</name>
   
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.3.0-SNAPSHOT</version>
+      <version>1.3.0</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.maven</groupId>
@@ -79,7 +79,7 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>ds-to-spi-runtime</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0</version>
       <scope>provided</scope>
     </dependency>
     <!--
@@ -142,7 +142,7 @@
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
           <executions>
             <execution>
               <id>generate-spi-classes</id>

@@ -17,6 +17,7 @@ public class JobUtilsTest {
         private static final String XML_ERR = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='error'/>";
         private static final String XML_OK = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='ok'/>";
         private static final String XML_INVALID = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' invalid='ok'/>";
+        private static final String MEDIA_TYPE_STATUS_XML = "application/vnd.pipeline.status+xml";
 
         XProcScript script;
         XProcOutput outputs;
@@ -24,7 +25,7 @@ public class JobUtilsTest {
         @Before
         public void setUp() throws IOException {
                 script= new Mock.ScriptGenerator.Builder()
-                        .withOutputPort("status", "application/vnd.pipeline.status+xml", true, false)
+                        .withOutputPort("status", MEDIA_TYPE_STATUS_XML, true, false)
                         .build().generate();
                 outputs = XProcDecorator.from(script, null).decorate(new XProcOutput.Builder().build());
         }

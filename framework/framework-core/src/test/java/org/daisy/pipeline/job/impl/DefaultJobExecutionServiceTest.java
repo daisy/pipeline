@@ -52,7 +52,7 @@ public class DefaultJobExecutionServiceTest {
         static public void warning(){
                 System.out.println("Checking thread safety, this may take a while...");
         }
-        @Before
+        //@Before
         public void setUp() {
                 mon = new Monitor();
                 tracker = new RunnableTracker();

@@ -29,7 +29,6 @@ public class TimeTrackerTest {
         @Test
         public void noUpdate(){
                 TimeTracker tracker = Mockito.spy(new TimeTracker(3,new UpdatablePriorityBlockingQueue(),TimeFunctions.newLinearTimeFunctionFactory())); 
-                Mockito.doNothing().when(tracker).update(Mockito.any(long[].class));
                 tracker.executing();
                 tracker.executing();
                 Mockito.verify(tracker,Mockito.times(0)).update(Mockito.any(long[].class));
