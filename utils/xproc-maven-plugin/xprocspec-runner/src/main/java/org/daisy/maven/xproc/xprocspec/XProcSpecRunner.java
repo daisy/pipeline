@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -185,8 +186,8 @@ public class XProcSpecRunner {
 				reporter.skipping(testName);
 				continue; }
 			File test = tests.get(testName);
-			File report = new File(reportsDir, testName + ".html");
-			File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
+			File report = new File(reportsDir, testName.replaceAll("[/\\\\]", "_") + ".html");
+			File surefireReport = new File(surefireReportsDir, "TEST-" + testName.replaceAll("[/\\\\]", "_") + ".xml");
 			Map<String,List<String>> input = ImmutableMap.of("source", Arrays.asList(new String[]{asURI(test).toASCIIString()}));
 			Map<String,String> output = ImmutableMap.of("html", asURI(report).toASCIIString(),
 			                                            "junit", asURI(surefireReport).toASCIIString());
@@ -195,7 +196,7 @@ public class XProcSpecRunner {
 			reporter.running(testName, focusTests.contains(testName));
 			try {
 				engine.run(xprocspec.toASCIIString(), input, output, options, null,
-				           ImmutableMap.of("XPROCSPEC_TEST_ID", testName));
+				           ImmutableMap.of("XPROCSPEC_TEST_ID", testName.replaceAll("[/\\\\]", "_")));
 				if (!surefireReport.exists()) {
 					totalRun += 1;
 					totalErrors += 1;
@@ -239,12 +240,12 @@ public class XProcSpecRunner {
 			int j = 0;
 			for (String testName : tests.keySet()) {
 				if (skipTests.contains(testName))
-					skipTestNames[j++] = testName;
+					skipTestNames[j++] = URLEncoder.encode(testName, "UTF-8");
 				else {
-					testNames[i] = testName;
-					File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
+					testNames[i] = URLEncoder.encode(testName, "UTF-8");
+					File surefireReport = new File(surefireReportsDir, "TEST-" + testName.replaceAll("[/\\\\]", "_") + ".xml");
 					surefireReports[i] = asURI(surefireReport).toASCIIString();
-					File report = new File(reportsDir, testName + ".html");
+					File report = new File(reportsDir, testName.replaceAll("[/\\\\]", "_") + ".html");
 					reports[i] = asURI(report).toASCIIString();
 					i++; }}
 			Map<String,String> output = ImmutableMap.of("result", asURI(summary).toASCIIString());
@@ -282,8 +283,7 @@ public class XProcSpecRunner {
 		for (File file : listXProcSpecFilesRecursively(testsDir))
 			tests.put(
 				file.getAbsolutePath().substring(testsDir.getAbsolutePath().length() + 1)
-					.replaceAll("\\.xprocspec$", "")
-					.replaceAll("[\\./\\\\]", "_"),
+					.replaceAll("\\.xprocspec$", ""),
 				file);
 		File catalogFile = new File(testsDir, "catalog.xml");
 		if (!catalogFile.exists()) catalogFile = null;

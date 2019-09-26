@@ -28,7 +28,7 @@
               <tbody>
                 <xsl:for-each select="tokenize($test-names, ' ')">
                   <xsl:variable name="i" as="xs:integer" select="position()"/>
-                  <xsl:variable name="test-name" as="xs:string" select="."/>
+                  <xsl:variable name="test-name" as="xs:string" select="pxi:url-decode(.)"/>
                   <xsl:variable name="surefire-report-uri" as="xs:string" select="tokenize($surefire-reports, ' ')[$i]"/>
                   <xsl:variable name="report-uri" as="xs:string" select="tokenize($reports, ' ')[$i]"/>
                   <xsl:choose>
@@ -93,7 +93,7 @@
                 <xsl:for-each select="tokenize($skip-test-names, ' ')">
                   <tr class="pending">
                     <th>
-                      <xsl:value-of select="."/>
+                      <xsl:value-of select="pxi:url-decode(.)"/>
                     </th>
                     <th>
                       <span>0</span>
@@ -151,6 +151,13 @@
               </body>
             </html>
           </xsl:template>
+          <xsl:function name="pxi:url-decode">
+            <xsl:param name="url"/>
+            <xsl:sequence select="replace(replace(
+                                    $url,
+                                    '\+',' '),
+                                    '%2F','/')"/>
+          </xsl:function>
         </xsl:stylesheet>
       </p:inline>
     </p:input>

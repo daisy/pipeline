@@ -23,7 +23,6 @@
   </scm>
   
   <modules>
-    <module>parent</module>
     <module>xproc-engine-api</module>
     <module>xproc-engine-calabash</module>
     <module>xprocspec-runner</module>

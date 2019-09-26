@@ -4,20 +4,21 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>org.daisy.maven</groupId>
-    <artifactId>xproc-maven-plugin-parent</artifactId>
-    <version>1.4-SNAPSHOT</version>
-    <relativePath>../parent/</relativePath>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>5</version>
+    <relativePath />
   </parent>
   
   <groupId>org.daisy.maven</groupId>
   <artifactId>xproc-maven-plugin</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>xproc-maven-plugin</name>
   
   <properties>
-    <it.xproc-engine-calabash.version>1.1.3-SNAPSHOT</it.xproc-engine-calabash.version>
+    <it.com.xmlcalabash.version>1.1.20-p3-98</it.com.xmlcalabash.version>
+    <it.xproc-engine-calabash.version>1.1.3</it.xproc-engine-calabash.version>
   </properties>
   
   <dependencies>
@@ -42,12 +43,12 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.3.0-SNAPSHOT</version>
+      <version>1.3.0</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xprocspec-runner</artifactId>
-      <version>1.2.3-SNAPSHOT</version>
+      <version>1.2.3</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -67,7 +68,7 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>ds-to-spi-runtime</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -79,11 +80,13 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
+      <version>${it.com.xmlcalabash.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
+      <version>9.8.0.8</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -100,6 +103,7 @@
           <properties>
             <xproc-maven-plugin.version>${project.version}</xproc-maven-plugin.version>
             <xproc-engine-calabash.version>${it.xproc-engine-calabash.version}</xproc-engine-calabash.version>
+            <com.xmlcalabash.version>${it.com.xmlcalabash.version}</com.xmlcalabash.version>
           </properties>
           <!--
               We have to configure logging with slf4j-simple because it is chosen over
