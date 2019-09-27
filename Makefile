@@ -240,22 +240,22 @@ libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 modules/scripts/dtbook-to-odt/.install-doc.jar : $(call rwildcard,modules/scripts/dtbook-to-odt/src/test/,*)
 
 .SECONDARY : \
-	modules/braille/liblouis-utils/liblouis-native/.install-mac.jar \
-	modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
-	modules/braille/liblouis-utils/liblouis-native/.install-windows.jar
-modules/braille/liblouis-utils/liblouis-native/.install-mac.jar \
-modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
-modules/braille/liblouis-utils/liblouis-native/.install-windows.jar: \
-	modules/braille/liblouis-utils/liblouis-native/.install
+	modules/braille/liblouis-utils/.install-mac.jar \
+	modules/braille/liblouis-utils/.install-linux.jar \
+	modules/braille/liblouis-utils/.install-windows.jar
+modules/braille/liblouis-utils/.install-mac.jar \
+modules/braille/liblouis-utils/.install-linux.jar \
+modules/braille/liblouis-utils/.install-windows.jar: \
+	modules/braille/liblouis-utils/.install
 
 .SECONDARY : \
-	modules/braille/libhyphen-utils/libhyphen-native/.install-mac.jar \
-	modules/braille/libhyphen-utils/libhyphen-native/.install-linux.jar \
-	modules/braille/libhyphen-utils/libhyphen-native/.install-windows.jar
-modules/braille/libhyphen-utils/libhyphen-native/.install-mac.jar \
-modules/braille/libhyphen-utils/libhyphen-native/.install-linux.jar \
-modules/braille/libhyphen-utils/libhyphen-native/.install-windows.jar: \
-	modules/braille/libhyphen-utils/libhyphen-native/.install
+	modules/braille/libhyphen-utils/.install-mac.jar \
+	modules/braille/libhyphen-utils/.install-linux.jar \
+	modules/braille/libhyphen-utils/.install-windows.jar
+modules/braille/libhyphen-utils/.install-mac.jar \
+modules/braille/libhyphen-utils/.install-linux.jar \
+modules/braille/libhyphen-utils/.install-windows.jar: \
+	modules/braille/libhyphen-utils/.install
 
 # dotify dependencies
 

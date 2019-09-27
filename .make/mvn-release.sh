@@ -82,11 +82,6 @@ fi
 release_branch=release/$tag
 echo "git checkout -b $release_branch $base_commit && \\"
 
-if [ $release_dir == "modules/braille" ]; then
-    echo ": Finalize the release notes and commit. If there are no notes yet for this release, create a template with:"
-    echo ": make release-notes"
-fi
-
 if [ $release_dir != $gitrepo_dir ]; then
     echo "cd ${release_dir#${gitrepo_dir}/} && \\"
 fi
