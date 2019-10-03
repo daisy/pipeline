@@ -231,8 +231,7 @@
 						              string(pom:groupId)=string(current()/pom:groupId) and
 						              string(pom:artifactId)=string(current()/pom:artifactId) and
 						              string(pom:version)=string(current()/pom:version) and
-						              string(pom:type)=string(current()/pom:type) and
-						              string(pom:classifier)=string(current()/pom:classifier)])">
+						              string(pom:type)=string(current()/pom:type)])">
 							<xsl:sequence select="."/>
 						</xsl:if>
 					</xsl:for-each>
