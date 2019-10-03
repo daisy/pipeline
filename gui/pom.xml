@@ -15,7 +15,7 @@
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>gui</artifactId>
   <packaging>bundle</packaging>
-  <version>1.2.2-SNAPSHOT</version>
+  <version>1.2.2</version>
   <name>gui</name>
   <description>A lightweight cross-platform GUI for the Pipeline2</description>
   <url>https://github.com/daisy-consortium/pipeline-gui</url>
@@ -136,4 +136,8 @@
     </profile>
   </profiles>
   <repositories> </repositories>
+
+  <scm>
+    <tag>v1.2.2</tag>
+  </scm>
 </project>
