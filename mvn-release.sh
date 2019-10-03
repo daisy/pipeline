@@ -47,6 +47,9 @@ if [[ -z $on_remote_branch ]]; then
     exit 1
 fi
 
+echo
+echo "# checkout"
+echo
 echo ": first cd to the $github_repo repo you want to release from && \\"
 echo "git fetch $remote $on_remote_branch && \\"
 
@@ -80,7 +83,7 @@ else
     tag="\${TAG}"
 fi
 release_branch=release/$tag
-echo "git checkout -b $release_branch $base_commit && \\"
+echo -n "git checkout -b $release_branch $base_commit"
 
 if [ $release_dir == "modules/braille" ]; then
     echo ": Finalize the release notes and commit. If there are no notes yet for this release, create a template with:"
@@ -88,8 +91,14 @@ if [ $release_dir == "modules/braille" ]; then
 fi
 
 if [ $release_dir != $gitrepo_dir ]; then
-    echo "cd ${release_dir#${gitrepo_dir}/} && \\"
+    echo " && \\"
+    echo -n "cd ${release_dir#${gitrepo_dir}/}"
 fi
+echo
+
+echo
+echo "# fix poms before release"
+echo
 
 # update versions of external dependencies in dependepencyManagement section
 # other external dependencies are handled by maven-release-plugin.
@@ -101,10 +110,11 @@ echo "java -cp $SAXON \\
      >/dev/null && \\"
 echo "find . -name pom.xml.new -execdir bash -c 'diff -Biw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
 echo "git add -u && \\"
-echo "( git commit -m 'Resolve snapshot dependencies (BOMs/parents)' >/dev/null || true ) && \\"
+echo -n "( git commit -m 'Resolve snapshot dependencies (BOMs/parents)' >/dev/null || true )"
 
 # disable modules that should not be released
 if [ ${#modules[@]} -gt 0 ]; then
+    echo " && \\"
     echo "java -cp $SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$select_modules_xsl \\
@@ -114,8 +124,13 @@ if [ ${#modules[@]} -gt 0 ]; then
      >/dev/null && \\"
     echo "find . -name pom.xml.new -execdir bash -c 'diff -Biw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
     echo "git add -u && \\"
-    echo "( git commit -m 'Disable modules that should not be released' >/dev/null || true ) && \\"
+    echo -n "( git commit -m 'Disable modules that should not be released' >/dev/null || true )"
 fi
+echo
+
+echo
+echo "# release"
+echo
 
 if [ ${#modules[@]} -gt 0 ]; then
     
@@ -145,11 +160,13 @@ if [ ${#modules[@]} -gt 0 ]; then
     --settings '$tmp_dir/settings.xml'"
 fi
 echo " && \\"
-
-echo "git diff-index --quiet HEAD && \\"
+echo "git diff-index --quiet HEAD"
 
 # parents were updated by release-plugin but not the ones of disabled modules and also internal bom import is not updated
 if [ ${#modules[@]} -gt 0 ]; then
+    echo
+    echo "# fix poms after release (pt. 1)"
+    echo
     echo "java -cp $SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$update_internal_versions_xsl \\
@@ -158,8 +175,12 @@ if [ ${#modules[@]} -gt 0 ]; then
      >/dev/null && \\"
     echo "find . -name pom.xml.new -execdir bash -c 'diff -Biw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
     echo "git add -u && \\"
-    echo "git commit --amend --no-edit && \\"
+    echo "git commit --amend --no-edit"
 fi
+
+echo
+echo "# stage artifacts"
+echo
 
 # work around a Maven bug: https://issues.apache.org/jira/browse/MNG-4979
 # note that this workaround can not be applied to the prepare step because the pom would get committed
@@ -180,20 +201,27 @@ echo "mvn release:perform -DlocalCheckout=true \\
                                  -DserverId=sonatype-nexus-staging \\
                                  -DstagingDescription='$release_dir $version' \\
                                  -DkeepStagingRepositoryOnCloseRuleFailure=true\" && \\"
-echo "git checkout HEAD -- pom.xml && \\"
+echo "git checkout HEAD -- pom.xml"
 
 if [ ${#modules[@]} -gt 0 ]; then
+    echo
+    echo "# fix poms after release (pt. 2)"
+    echo
     echo "if [[ \$(git log -1 --pretty=format:%B HEAD~2) == 'Disable modules that should not be released' ]]; then \\"
     echo "    git revert --no-edit HEAD~2 && \\"
     echo "    git reset --soft HEAD^ && \\"
     echo "    git commit --amend --no-edit; \\"
-    echo "fi && \\"
+    echo "fi"
 fi
 
-echo "git push -u $remote $release_branch:$release_branch && \\"
+echo
+echo "# push and make pull request"
+echo
+echo -n "git push -u $remote $release_branch:$release_branch"
 
 # create PR
 if [ $github_owner == "daisy" ]; then
+    echo " && \\"
     if [ $release_dir != $gitrepo_dir ]; then
         title="Release ${release_dir#${gitrepo_dir}/} v$version"
     else
@@ -246,12 +274,14 @@ if [ $github_owner == "daisy" ]; then
         echo "| curl -u \"\$credentials\" -X PATCH --data @- \\"
         echo "       https://api.github.com/repos/$github_owner/$github_repo/issues/\$pr_number"
     fi
-    echo "open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
+    echo -n "open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
 fi
 
 if [ $release_dir == "assembly" ]; then
-    echo "./update_rd.sh && \\"
+    echo " && \\"
+    echo -n "./update_rd.sh"
     if [ $github_owner == "daisy" ]; then
+        echo " && \\"
         echo "pr_number=\$("
         echo "    echo \"{\\\"title\\\": \\\"Release descriptor $version\\\", \\"
         echo "           \\\"head\\\":  \\\"rd-$version\\\", \\"
@@ -264,20 +294,27 @@ if [ $release_dir == "assembly" ]; then
             echo "| curl -u \"\$credentials\" -X PATCH --data @- \\"
             echo "       https://api.github.com/repos/$github_owner/$github_repo/issues/\$pr_number"
         fi
-        echo ": open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
+        echo -n ": open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
     fi
 fi
+echo
 
+echo
+echo "# pull into super project"
+echo
 echo "cd $ROOT_DIR && \\"
 echo "git fetch subrepo/$gitrepo_dir && \\"
-
 echo "git subrepo commit -f $gitrepo_dir subrepo/$gitrepo_dir/$release_branch^ && \\"
-echo "git commit --amend -m \"git subrepo pull $gitrepo_dir ($tag)\" -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" && \\"
+echo "git commit --amend -m \"git subrepo pull $gitrepo_dir ($tag)\" -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\""
 
 if [ -e "$tmp_dir" ]; then
+    echo
+    echo "# cleanup"
+    echo
     echo "rm -r $tmp_dir"
 fi
 
+echo
 echo ": exit"
 
 set +e
