@@ -35,7 +35,6 @@ options {
    * @param preparator The preparator to be used for creating the rules.
    * @param wrapMedia The media queries to be used for wrapping the created rules (e.g. in case
    *    of parsing and imported style sheet) or null when no wrapping is required.
-   * @return The initialized tree parser 
    */
   public void init(cz.vutbr.web.csskit.antlr.Preparator preparator, List<cz.vutbr.web.css.MediaQuery> wrapMedia) {
 		this.preparator = preparator;
