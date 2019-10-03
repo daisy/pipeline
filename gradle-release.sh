@@ -20,7 +20,7 @@ if [ $1 == "libs/com.xmlcalabash" ]; then
     echo ": cd to $1"
     echo ": update version in gradle.properties to $version and distVersion to $distVersion"
     echo "git commit -m \"XML Calabash $version released\""
-    echo "gradle uploadArchives"
+    echo "$ROOT_DIR/$MY_DIR/gradlew uploadArchives"
     echo "open \"https://oss.sonatype.org\""
     echo ": login and close stage"
     echo ": checkout subrepo and cherry-pick commit"
