@@ -206,9 +206,20 @@ if [ $github_owner == "daisy" ]; then
     fi
     echo "staging_repo_id=\$(cat $nexus_staging_props_file \\"
     echo "                  | grep 'stagingRepository.id' | sed 's/^stagingRepository\.id=//g') && \\"
-    echo "credentials=\$( echo -n \"Enter user name: \" >&2 && read user && \\"
-    echo "               echo -n \"Enter password: \" >&2 && read -s pass && echo \"***\" >&2 && \\"
-    echo "               echo \"\$user:\$pass\" ) && \\"
+    echo "credentials=\$( \\"
+    
+    # export GITHUB_USER=bertfrees
+    # export GITHUB_ASK_PASS="pass github.com | head -1"
+    
+    [[ -n ${GITHUB_USER+x} ]] || echo "  echo -n \"Enter Github user name: \" >&2 && read user && \\"
+    if [[ -n ${GITHUB_ASK_PASS+x} ]]; then
+        echo -n "  pass=\$($GITHUB_ASK_PASS)"
+    else
+        echo -n "  echo -n \"Enter password for Github user ${GITHUB_USER-"\$user"}: \" >&2 && read -s pass && echo \"***\" >&2"
+    fi
+    echo " && \\"
+    echo "  echo \"${GITHUB_USER-"\$user"}:\$pass\" \\"
+    echo ") && \\"
     echo "pr_number=\$("
     echo "    echo \"{\\\"title\\\": \\\"$title\\\", \\"
     echo "           \\\"body\\\":  \\\"staged: https://oss.sonatype.org/content/repositories/\$staging_repo_id\\\", \\"
