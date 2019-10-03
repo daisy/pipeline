@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/xspec-maven-plugin
 	branch = master
 	commit = 20ec78add7499b32c11bc2b5456ec05af5bff79a
-	parent = e8be0d2c62f3a54770f08157a5decebbf8c0971d
+	parent = 102748c2e4f12f3ed783e39e1ca2ae0e973bf217
 	cmdver = 0.3.1
