@@ -10,7 +10,7 @@
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.1.0-SNAPSHOT</version>
   <artifactId>dtbook-to-ssml</artifactId>
   <packaging>bundle</packaging>
 

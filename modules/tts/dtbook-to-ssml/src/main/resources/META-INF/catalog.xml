@@ -3,6 +3,9 @@
 
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-ssml/library.xpl"
     uri="../xml/library.xpl"/>
+    
+   <uri name="http://braillenet.org/phonetic"
+    uri="../dtd/phonetic.dtd"/>
 
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:text-to-ssml" />

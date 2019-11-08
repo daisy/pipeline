@@ -3,6 +3,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:ssml="http://www.w3.org/2001/10/synthesis"
     xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:pho="http://braillenet.org/phonetic"
     exclude-result-prefixes="#all"
     version="2.0">
 
@@ -20,6 +21,25 @@
 	<ssml:s id="{@id}"><xsl:value-of select="@alt"/></ssml:s>
       </xsl:if>
       <xsl:apply-templates select="node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="dt:span[@pho:ipa]|dt:span[@pho:sampa]">
+    <xsl:copy>
+      <xsl:copy-of select="@*[not(name()='pho:ipa') and not(name()='pho:sampa')]" />
+      <ssml:phoneme>
+        <xsl:choose>
+          <xsl:when test="@pho:sampa">
+            <xsl:attribute name="ssml:alphabet">sampa</xsl:attribute>
+            <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:sampa"/></xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="ssml:alphabet">ipa</xsl:attribute>
+            <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:ipa"/></xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:copy-of select="text()" />
+      </ssml:phoneme>
     </xsl:copy>
   </xsl:template>
 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook
+  PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd" [
+            <!ENTITY % phonetic SYSTEM "phonetic.dtd">
+            %phonetic;
+        ]>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="fr">
+    <head>
+        <meta name="dtb:uid" content="d1t31"/>
+        <meta name="dc:Identifier" content="d1t31"/>
+        <meta name="dc:Identifier" scheme="EAN" content="d1t31"/>
+        <meta name="dc:Identifier" scheme="ISBN" content="978-2-7529-1192-6"/>
+        <meta name="dc:Creator" content="Julie Sauvage-Vincent"/>
+        <meta name="dc:Title" content="DTBook de test pour la TTS"/>
+        <meta name="dtb:sourceRights" content="© BrailleNet, 2019"/>
+        <meta name="dtb:sourcePublisher" content="BrailleNet"/>
+        <meta name="dc:Publisher" content="BrailleNet"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>DTBook de test pour la TTS</doctitle>
+            <docauthor><span class="auteur">Julie Sauvage-Vincent</span></docauthor>
+            <level>
+                <div class="edit">
+                    <p>BrailleNet</p>
+                </div>
+                <div class="isbn">
+                    <p>978-2-0000-0000-0</p>
+                </div>
+                <div class="ean">
+                    <p>9782000000000</p>
+                </div>
+                <div class="copy">
+                    <p>© BrailleNet, 2019</p>
+                </div>
+                <div class="info">
+                    <p>Fichier test contenant des cas particuliers dont la phonétique n'est pas
+                        correctement prise en compte par Acapela</p>
+                </div>
+            </level>
+        </frontmatter>
+
+
+        <bodymatter>
+            <level class="chapitre">
+                <level>
+
+                    <p>Dépité, il va <span pho:ipa="kɛ̃pe" xmlns:pho="http://braillenet.org/phonetic/">quimper</span> à <span pho:ipa="kɛ̃pɛʁ" xmlns:pho="http://braillenet.org/phonetic/">Quimper</span> avant que nous  <span pho:ipa="ɔptjɔ̃" xmlns:pho="http://braillenet.org/phonetic/">options</span> pour les <span pho:ipa="ɔpsjɔ̃" xmlns:pho="http://braillenet.org/phonetic/">options</span> tout en <span pho:ipa="tʃatɑ̃" xmlns:pho="http://braillenet.org/phonetic/">chattant</span> et en faisant des comparaisons sur les <span pho:ipa="byldozɛʁ" xmlns:pho="http://braillenet.org/phonetic/">bulldozers</span> partis <span pho:ipa="byldoze" xmlns:pho="http://braillenet.org/phonetic/">bulldozer</span>.</p>
+                    <p>Sortant de l'abbaye où les poules du <span pho:ipa="kuvɑ̃" xmlns:pho="http://braillenet.org/phonetic/">couvent</span> <span pho:ipa="kuv" xmlns:pho="http://braillenet.org/phonetic/">couvent</span>, je <span pho:ipa="vi" xmlns:pho="http://braillenet.org/phonetic/">vis</span> ces <span pho:ipa="vis" xmlns:pho="http://braillenet.org/phonetic/">vis</span>.</p>
+                    <p>Nous <span pho:ipa="pɔʁtjɔ̃" xmlns:pho="http://braillenet.org/phonetic/">portions</span> nos <span pho:ipa="pɔʁsjɔ̃" xmlns:pho="http://braillenet.org/phonetic/">portions</span>, lorsque mes <span pho:ipa="fis" xmlns:pho="http://braillenet.org/phonetic/">fils</span> on cassé les <span pho:ipa="fil" xmlns:pho="http://braillenet.org/phonetic/">fils</span>.</p>
+                    <p>Je suis <span pho:ipa="kɔ̃tɑ̃" xmlns:pho="http://braillenet.org/phonetic/">content</span> qu'ils vous <span pho:ipa="kɔ̃tɑ" xmlns:pho="http://braillenet.org/phonetic/">content</span> cette histoire.</p>
+                    <p>Mon premier <span pho:ipa="fis" xmlns:pho="http://braillenet.org/phonetic/">fils</span> est de l'<span pho:ipa="ɛst" xmlns:pho="http://braillenet.org/phonetic/">Est</span>, il est <span pho:ipa="fjɛʁ" xmlns:pho="http://braillenet.org/phonetic/">fier</span> et l'on peut s'y <span pho:ipa="fje" xmlns:pho="http://braillenet.org/phonetic/">fier</span>, ils n'ont pas de caractère <span pho:ipa="vjɔlɑ̃" xmlns:pho="http://braillenet.org/phonetic/">violent</span> et ne <span pho:ipa="vjɔl" xmlns:pho="http://braillenet.org/phonetic/">violent</span> pas leurs promesses, leurs femmes se <span pho:ipa="paʁ" xmlns:pho="http://braillenet.org/phonetic/">parent</span> de fleurs pour leurs <span pho:ipa="paʁɑ̃" xmlns:pho="http://braillenet.org/phonetic/">parents</span>.</p>
+                    <p>Elles <span pho:ipa="ɛksɛl" xmlns:pho="http://braillenet.org/phonetic/">excellent</span> à composer un <span pho:ipa="ɛksɛlɑ̃" xmlns:pho="http://braillenet.org/phonetic/">excellent</span> repas avec des poissons qui <span pho:ipa="afly" xmlns:pho="http://braillenet.org/phonetic/">affluent</span> de l'<span pho:ipa="aflyɑ̃" xmlns:pho="http://braillenet.org/phonetic/">affluent</span>.</p>
+                    <p>Il <span pho:ipa="kɔ̃vjɛ̃" xmlns:pho="http://braillenet.org/phonetic/">convient</span> qu'elles <span pho:ipa="kɔ̃vi" xmlns:pho="http://braillenet.org/phonetic/">convient</span> leurs amis, elles <span pho:ipa="ekspedi" xmlns:pho="http://braillenet.org/phonetic/">expédient</span> une lettre pour les inviter, c'est un bon <span pho:ipa="ekspedjɑ̃" xmlns:pho="http://braillenet.org/phonetic/">expédient</span>.</p>
+                    <p>Il serait bien que nous <span pho:ipa="editjɔ̃" xmlns:pho="http://braillenet.org/phonetic/">éditions</span> cette histoire pour en réaliser de belles
+                        <span pho:ipa="editsɔ̃" xmlns:pho="http://braillenet.org/phonetic/">éditions</span>.</p>
+                    <p>Les <span pho:ipa="ʁezidɑ̃" xmlns:pho="http://braillenet.org/phonetic/">résidents</span> de la maison de retraite ne <span pho:ipa="ʁezid" xmlns:pho="http://braillenet.org/phonetic/">résident</span> pas dans les meilleures
+                        conditions.</p>
+                    <p>Vous <span pho:ipa="ʁode" xmlns:pho="http://braillenet.org/phonetic/">rodez</span> à <span pho:ipa="ʁodɛz" xmlns:pho="http://braillenet.org/phonetic/">Rodez</span>.</p>
+                    <p>Les <span pho:ipa="paʁɑ̃" xmlns:pho="http://braillenet.org/phonetic/">parents</span> se <span pho:ipa="paʁ" xmlns:pho="http://braillenet.org/phonetic/">parent</span> de leurs plus beaux couteaux de <span pho:ipa="damas" xmlns:pho="http://braillenet.org/phonetic/">Damas</span>.</p>
+                    <p>Le <span pho:ipa="fjɛʁ" xmlns:pho="http://braillenet.org/phonetic/">fier</span> faucon <span pho:ipa="ɥi" xmlns:pho="http://braillenet.org/phonetic/">huit</span> et les <span pho:ipa="ɥit" xmlns:pho="http://braillenet.org/phonetic/">huit</span> pigeons ont peur de se <span pho:ipa="fje" xmlns:pho="http://braillenet.org/phonetic/">fier</span> à lui.</p>
+
+                </level>
+            </level>
+            <level class="chapitre">
+                <level>
+                    <p>Je vais d'abord te dire qu'elle est d'abord agréable.</p>
+                    <p>A Calais, où je calais ma voiture, le mousse grattait la mousse de la
+                        coque.</p>
+                        <p>Cette dame qui dame le sol.</p>
+                    <p>Le bruit dérangea une grue, elle alla se percher sur la grue.</p>
+                    <p>On ne badine pas avec une badine en mangeant des éclairs au chocolat à la
+                        lueur des éclairs.</p>
+                    <p>En découvrant le palais royal, il en eut le palais asséché.</p>
+                    <p>Je ne pense pas qu'il faille relever la faille de mon raisonnement.</p>
+                    <p>Le ver allait vers le verre vert.</p>
+                </level>
+            </level>
+        </bodymatter>
+    </book>
+</dtbook>

@@ -6,7 +6,8 @@
 	       xmlns:xml="http://www.w3.org/XML/1998/namespace"
 	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
 	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tts">
+	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tts"
+	       xmlns:pho="http://braillenet.org/phonetic">
 
   <x:script>
     <p:declare-step version="1.0" name="main"
@@ -203,5 +204,42 @@
     </x:expect>
   </x:scenario>
 
+  <x:scenario label="Phonetic correction to ssml">
+    <x:call step="pxi:semantic-tr">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <book>
+	      <bodymatter>
+		<level class="chapitre">
+		  <level>
+		    <p>Dépité, il va <span pho:ipa="kɛ̃pe">quimper</span> à <span pho:ipa="kɛ̃pɛʁ">Quimper</span> avant que nous  <span pho:ipa="ɔptjɔ̃">options</span> pour les <span pho:ipa="ɔpsjɔ̃">options</span> tout en <span pho:ipa="tʃatɑ̃">chattant</span> et en faisant des comparaisons sur les <span pho:ipa="byldozɛʁ">bulldozers</span> partis <span pho:ipa="byldoze">bulldozer</span>.</p>
+		  </level>
+		</level>
+	      </bodymatter>
+	    </book>
+	  </dtbook>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" />
+    </x:context>
+    <x:expect label="transformed" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <book>
+	    <bodymatter>
+	      <level class="chapitre">
+		<level>
+		  <p>Dépité, il va <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pe">quimper</ssml:phoneme></span> à <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pɛʁ">Quimper</ssml:phoneme></span> avant que nous  <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="ɔptjɔ̃">options</ssml:phoneme></span> pour les <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="ɔpsjɔ̃">options</ssml:phoneme></span> tout en <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="tʃatɑ̃">chattant</ssml:phoneme></span> et en faisant des comparaisons sur les <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="byldozɛʁ">bulldozers</ssml:phoneme></span> partis <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="byldoze">bulldozer</ssml:phoneme></span>.</p>
+		</level>
+	      </level>
+	    </bodymatter>
+	  </book>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
 
 </x:description>
