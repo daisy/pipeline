@@ -38,7 +38,7 @@
             <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:ipa"/></xsl:attribute>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:copy-of select="text()" />
+        <xsl:copy-of select="descendant-or-self::node()/text()" />
       </ssml:phoneme>
     </xsl:copy>
   </xsl:template>
