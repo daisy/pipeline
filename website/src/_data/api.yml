@@ -8,7 +8,9 @@ javadoc:
   version: 2.1.2-SNAPSHOT
 - group: org.daisy.pipeline
   artifact: ds-to-spi-runtime
-  version: 1.0.0
+  version: 1.1.0
+- group: org.daisy.pipeline
+  artifact: calabash-adapter
 - group: org.daisy.pipeline
   artifact: common-utils
 - group: org.daisy.pipeline
@@ -18,7 +20,13 @@ javadoc:
 - group: org.daisy.pipeline
   artifact: modules-registry
 - group: org.daisy.pipeline
+  artifact: saxon-adapter
+- group: org.daisy.pipeline
   artifact: xmlcatalog
+- group: org.daisy.pipeline.modules
+  artifact: audio-common
+- group: org.daisy.pipeline.modules
+  artifact: css-utils
 - group: org.daisy.pipeline.modules
   artifact: tts-common
 - group: org.daisy.pipeline.modules.braille
@@ -61,11 +69,21 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: dtbook-validator
 - group: org.daisy.pipeline.modules
+  artifact: epub-to-daisy
+- group: org.daisy.pipeline.modules
+  artifact: epub2-to-epub3
+- group: org.daisy.pipeline.modules
   artifact: epub3-to-daisy202
+- group: org.daisy.pipeline.modules
+  artifact: epub3-to-daisy3
 - group: org.daisy.pipeline.modules
   artifact: epub3-to-epub3
 - group: org.daisy.pipeline.modules
+  artifact: epub3-to-html
+- group: org.daisy.pipeline.modules
   artifact: epub3-validator
+- group: org.daisy.pipeline.modules
+  artifact: html-to-dtbook
 - group: org.daisy.pipeline.modules
   artifact: html-to-epub3
 - group: org.daisy.pipeline.modules
@@ -120,8 +138,6 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: asciimath-utils
 - group: org.daisy.pipeline.modules
-  artifact: common-entities
-- group: org.daisy.pipeline.modules
   artifact: css-utils
 - group: org.daisy.pipeline.modules
   artifact: daisy202-utils
@@ -132,31 +148,25 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: epubcheck-adapter
 - group: org.daisy.pipeline.modules
-  artifact: epub3-nav-utils
+  artifact: epub-utils
 - group: org.daisy.pipeline.modules
-  artifact: epub3-ocf-utils
+  artifact: mathml-utils
 - group: org.daisy.pipeline.modules
-  artifact: epub3-pub-utils
-- group: org.daisy.pipeline.modules
-  artifact: mediaoverlay-utils
+  artifact: smil-utils
 - group: org.daisy.pipeline.modules
   artifact: metadata-utils
 - group: org.daisy.pipeline.modules
-  artifact: odt-utils
+  artifact: odf-utils
 - group: org.daisy.pipeline.modules
   artifact: zedai-utils
 - group: org.daisy.pipeline.modules
   artifact: css-speech
 - group: org.daisy.pipeline.modules
-  artifact: tts-helpers
+  artifact: tts-common
 - group: org.daisy.pipeline.modules
   artifact: dtbook-tts
 - group: org.daisy.pipeline.modules
   artifact: epub3-tts
-- group: org.daisy.pipeline.modules
-  artifact: dtbook-to-ssml
-- group: org.daisy.pipeline.modules
-  artifact: epub3-to-ssml
 - group: org.daisy.pipeline.modules
   artifact: mathml-to-ssml
 - group: org.daisy.pipeline.modules
@@ -164,7 +174,7 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: ssml-to-audio
 - group: org.daisy.pipeline.modules
-  artifact: nlp-break-detection
+  artifact: nlp-common
 - group: org.daisy.pipeline.modules
   artifact: html-break-detection
 - group: org.daisy.pipeline.modules

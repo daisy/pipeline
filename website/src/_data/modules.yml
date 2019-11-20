@@ -21,11 +21,21 @@
 - group: org.daisy.pipeline.modules
   artifact: dtbook-validator
 - group: org.daisy.pipeline.modules
+  artifact: epub-to-daisy
+- group: org.daisy.pipeline.modules
+  artifact: epub2-to-epub3
+- group: org.daisy.pipeline.modules
   artifact: epub3-to-daisy202
+- group: org.daisy.pipeline.modules
+  artifact: epub3-to-daisy3
 - group: org.daisy.pipeline.modules
   artifact: epub3-to-epub3
 - group: org.daisy.pipeline.modules
+  artifact: epub3-to-html
+- group: org.daisy.pipeline.modules
   artifact: epub3-validator
+- group: org.daisy.pipeline.modules
+  artifact: html-to-dtbook
 - group: org.daisy.pipeline.modules
   artifact: html-to-epub3
 - group: org.daisy.pipeline.modules
@@ -80,8 +90,6 @@
 - group: org.daisy.pipeline.modules
   artifact: asciimath-utils
 - group: org.daisy.pipeline.modules
-  artifact: common-entities
-- group: org.daisy.pipeline.modules
   artifact: css-utils
 - group: org.daisy.pipeline.modules
   artifact: daisy202-utils
@@ -94,17 +102,15 @@
 - group: org.daisy.pipeline.modules
   artifact: ace-adapter
 - group: org.daisy.pipeline.modules
-  artifact: epub3-nav-utils
+  artifact: epub-utils
 - group: org.daisy.pipeline.modules
-  artifact: epub3-ocf-utils
+  artifact: mathml-utils
 - group: org.daisy.pipeline.modules
-  artifact: epub3-pub-utils
-- group: org.daisy.pipeline.modules
-  artifact: mediaoverlay-utils
+  artifact: smil-utils
 - group: org.daisy.pipeline.modules
   artifact: metadata-utils
 - group: org.daisy.pipeline.modules
-  artifact: odt-utils
+  artifact: odf-utils
 - group: org.daisy.pipeline.modules
   artifact: zedai-utils
 - group: org.daisy.pipeline.modules
@@ -112,15 +118,9 @@
 - group: org.daisy.pipeline.modules
   artifact: css-speech
 - group: org.daisy.pipeline.modules
-  artifact: tts-helpers
-- group: org.daisy.pipeline.modules
   artifact: dtbook-tts
 - group: org.daisy.pipeline.modules
   artifact: epub3-tts
-- group: org.daisy.pipeline.modules
-  artifact: dtbook-to-ssml
-- group: org.daisy.pipeline.modules
-  artifact: epub3-to-ssml
 - group: org.daisy.pipeline.modules
   artifact: mathml-to-ssml
 - group: org.daisy.pipeline.modules
@@ -128,7 +128,7 @@
 - group: org.daisy.pipeline.modules
   artifact: ssml-to-audio
 - group: org.daisy.pipeline.modules
-  artifact: nlp-break-detection
+  artifact: nlp-common
 - group: org.daisy.pipeline.modules
   artifact: html-break-detection
 - group: org.daisy.pipeline.modules
