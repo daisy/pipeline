@@ -441,7 +441,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-acapela</artifactId>
-        <version>3.0.4</version>
+        <version>3.0.5-SNAPSHOT</version>
       </dependency>
       <!--
       <dependency>
