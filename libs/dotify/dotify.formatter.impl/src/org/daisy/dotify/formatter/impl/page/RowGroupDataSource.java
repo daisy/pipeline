@@ -20,11 +20,21 @@ import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
 
 /**
- * <p>Provides a data source for row groups.</p>
- * 
+ * <p>Provides a {@link SplitPointDataSource data source} for {@link RowGroup row groups}.</p>
+ *
+ * <p>The input is</p>
+ * <ul>
+ *   <li>a {@link RowGroupSequence}, i.e. a sequence of {@link Block}s starting at a hard page
+ *       break (<code>break-before="page"</code> or <code>break-before="sheet"</code>) or a block
+ *       with absolute positioning (<code>vertical-position</code>)</li>
+ *   <li>a {@link Supplements} of {@link RowGroup}s: a map containing the items in the collection
+ *       corresponding to the page's <code>page-area</code> (if any). Each item is a single RowGroup.</li>
+ * </ul>
+ *
  * <p>Note that the implementation requires that break point searching is performed on a copy,
  * so that the items are created when a split is performed. If this assumption is not met,
  * things will break.</p>
+ *
  * @author Joel Håkansson
  */
 class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataSource> {
@@ -184,6 +194,7 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
 		return true;
 	}
 
+	// this happens when a new page is started
 	@Override
 	public SplitResult<RowGroup, RowGroupDataSource> splitInRange(int atIndex) {
 		// TODO: rewrite this so that rendered tail data is discarded
@@ -212,6 +223,9 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
 	private void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
 		// Vertical spacing isn't used at this stage.
 		if (data.getGroup()!=null) {
+			// this means the return values of ScenarioData.hasSequence() and
+			// ScenarioData.hasResult() did not match those of RowGroupDataSource.hasSequence() and
+			// RowGroupDataSource.hasResult() for the same block
 			throw new IllegalStateException();
 		} else {
 			data.setGroup(new ArrayList<>());

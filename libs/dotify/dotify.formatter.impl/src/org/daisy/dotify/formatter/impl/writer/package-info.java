@@ -2,7 +2,10 @@
  * <p>
  * Provides {@link org.daisy.dotify.api.writer.PagedMediaWriterFactoryService} implementations.
  * </p>
- * 
+ *
+ * <p>The main classes are {@link PEFMediaWriterFactoryService} and {@link
+ * TextMediaWriterFactoryService}.</p>
+ *
  * <p>
  * Note on adding PagedMediaWriter implementations: First consider if your needs
  * can be met by converting a PEF file to your desired format using (or

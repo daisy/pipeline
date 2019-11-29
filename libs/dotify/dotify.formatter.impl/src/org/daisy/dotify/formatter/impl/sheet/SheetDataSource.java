@@ -28,9 +28,22 @@ import org.daisy.dotify.formatter.impl.search.TransitionProperties;
 import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 /**
- * Provides a data source for sheets. Given a list of 
- * BlockSequences, sheets are produced one by one.
- * 
+ * Provides a data source for {@link Sheet}s. Given a list of {@link BlockSequence}s, sheets are
+ * produced one by one.
+ *
+ * <p>The input is:</p>
+ * <ul>
+ *   <li>The list of {@link BlockSequence}s contained in a volume group or in the pre- or post-content
+ *       of a volume. A volume group is a set of block sequences starting with a hard volume break
+ *       (<code>break-before="volume"</code>).</li>
+ *   <li>A {@link PageCounter}</li>
+ *   <li>The index of the volume group (0-based) or null if the input comes from pre- or post-content.</li>
+ * </ul>
+ *
+ * <p>The computed {@link VolumeKeepPriority} of a sheet is the priority of the back side page, or
+ * the priority of the front side page if that value is higher (lower priority) and if
+ * <code>&lt;volume-transition range="sheet"/&gt;</code>.</p>
+ *
  * @author Joel Håkansson
  */
 public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSource> {
@@ -38,7 +51,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 	private final PageCounter pageCounter;
 	private final FormatterContext context;
 	//Input data
-	private final DefaultContext rcontext;
+	private DefaultContext rcontext;
 	private final Integer volumeGroup;
 	private final List<BlockSequence> seqsIterator;
 	private final int sheetOffset;
@@ -167,6 +180,13 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		return null;
 	}
 	
+	public void setCurrentVolumeNumber(int volume) {
+		rcontext = DefaultContext.from(rcontext).currentVolume(volume).build();
+		if (psb != null) {
+			psb.setCurrentVolumeNumber(volume);
+		}
+	}
+	
 	/**
 	 * Ensures that there are at least index elements in the buffer.
 	 * When index is -1 this method always returns false.
@@ -177,12 +197,14 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		Sheet.Builder s = null;
 		SheetIdentity si = null;
 		while (index<0 || sheetBuffer.size()<index) {
+			// this happens when a new volume is started
 			if (updateCounter) { 
 				if(counter!=null) {
 					initialPageOffset = rcontext.getRefs().getPageNumberOffset(counter) - psb.size();
 				} else {
 					initialPageOffset = pageCounter.getDefaultPageOffset() - psb.size();
 				}
+				// psbCurStartIndex (index of first page of current psb in current volume) is changed because we started a new volume
 				psbCurStartIndex = psb.getToIndex();
 				updateCounter = false;
 			}
@@ -272,10 +294,14 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 						transition = context.getTransitionBuilder().getResumeTransition();
 					}
 				}
-				boolean hyphenateLastLine = 
-						!(	!context.getConfiguration().allowsEndingVolumeOnHyphen() 
-								&& sheetBuffer.size()==index-1 
-								&& (!sectionProperties.duplex() || pageIndex % 2 == 1));
+				// The last line may be hyphenated when
+				// - the configuration allows it, or
+				// - we are not on the last sheet of the volume, or
+				// - we are in duplex mode and the current page index is even (so we're not on the last page of the sheet)
+				boolean hyphenateLastLine =
+					context.getConfiguration().allowsEndingVolumeOnHyphen()
+					|| sheetBuffer.size() != index-1
+					|| (sectionProperties.duplex() && pageIndex % 2 == 0);
 				
 				PageImpl p = psb.nextPage(initialPageOffset, hyphenateLastLine, Optional.ofNullable(transition), wasSplitInsideSequence, isFirst);
 				pageCounter.increasePageCount();
@@ -315,7 +341,12 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 				if (!psb.hasNext()) {
 					rcontext.getRefs().setSequenceScope(seqId, psb.getGlobalStartIndex(), psb.getToIndex());
 				}
-				int lastPageNumber = initialPageOffset + psbCurStartIndex - psb.getGlobalStartIndex() + psb.getSizeLast(psbCurStartIndex);
+				// page number of the last page returned by psb
+				int lastPageNumber =
+					initialPageOffset                    // page number corresponding to the first page returned by psb, minus 1
+					+ psbCurStartIndex                   // index of first page of psb in current volume
+					- psb.getGlobalStartIndex()          // value of psbCurStartIndex when psb was created
+					+ psb.getSizeLast(psbCurStartIndex); // number of supplied pages since psbCurStartIndex, rounded to an even number if duplex
 				if (counter!=null) {
 					rcontext.getRefs().setPageNumberOffset(counter, lastPageNumber);
 				} else {
@@ -345,6 +376,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
 		return SplitPointDataSource.super.split(atIndex);
 	}
 
+	// this happens when a new volume is started
 	@Override
 	public SplitResult<Sheet, SheetDataSource> splitInRange(int atIndex) {
 		if (!ensureBuffer(atIndex)) {

@@ -29,8 +29,16 @@ import org.daisy.dotify.formatter.impl.volume.VolumeTemplate;
 
 
 /**
- * Provides an implementation of the {@link Formatter} API.
- * 
+ * <p>Provides an implementation of the {@link Formatter} API.</p>
+ *
+ * <p>Is used for creating a paged document. Uses {@link
+ * org.daisy.dotify.formatter.impl.VolumeProvider} to produce {@link
+ * org.daisy.dotify.formatter.impl.common.Volume} objects from a list of {@link BlockSequence},
+ * which are provided through {@link #newSequence(SequenceProperties)}, and populated through
+ * methods like {@link BlockSequence#startBlock(BlockProperties)}, {@link
+ * BlockSequence#addChars(CharSequence, TextProperties)}, etc. The resuling paged document is
+ * collected through a {@link org.daisy.dotify.api.writer.PagedMediaWriter}.</p>
+ *
  * @author Joel Håkansson
  */
 class FormatterImpl implements Formatter {
@@ -47,7 +55,6 @@ class FormatterImpl implements Formatter {
 	 * Creates a new formatter.
 	 * @param translatorFactory a braille translator factory maker service
 	 * @param tbf a text border factory maker service
-	 * @param mpf a marker processor factory maker service
 	 * @param locale a locale
 	 * @param mode a braille mode
 	 */
@@ -59,7 +66,6 @@ class FormatterImpl implements Formatter {
 	 * Creates a new formatter.
 	 * @param translatorFactory a braille translator factory maker service
 	 * @param tbf a text border factory maker service
-	 * @param mpf a marker processor factory maker service
 	 * @param config the configuration
 	 */
 	FormatterImpl(BrailleTranslatorFactoryMakerService translatorFactory, TextBorderFactoryMakerService tbf, FormatterConfiguration config) {

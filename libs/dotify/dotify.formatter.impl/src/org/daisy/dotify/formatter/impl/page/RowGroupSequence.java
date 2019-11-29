@@ -6,6 +6,11 @@ import java.util.List;
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.formatter.impl.core.Block;
 
+/**
+ * Sequence of {@link Block}s starting at a hard page break (<code>break-before="page"</code> or
+ * <code>break-before="sheet"</code>) or a block with absolute positioning
+ * (<code>vertical-position</code>).
+ */
 class RowGroupSequence {
 	private final List<Block> blocks;
 	private final BreakBefore breakBefore;

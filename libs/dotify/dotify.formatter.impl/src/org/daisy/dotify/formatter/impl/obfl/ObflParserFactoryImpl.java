@@ -21,7 +21,10 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
- * Provides an expression factory implementation.
+ * <p>Provides an {@link ObflParserFactoryService OBFL parser factory} implementation.</p>
+ *
+ * <p>Produces instances of {@link ObflParserImpl}.</p>
+ *
  * @author Joel Håkansson
  */
 @Component

@@ -13,6 +13,11 @@ import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
+/**
+ * <code>RowGroup</code> is the unit used when calculating page breaks. For this reason,
+ * <code>RowGroup</code> implements {@link SplitPointUnit}. It contains zero, one or more rows that
+ * can not be separated.
+ */
 class RowGroup implements SplitPointUnit {
 	private final List<RowImpl> rows;
 	private final List<Marker> markers;
@@ -187,21 +192,33 @@ class RowGroup implements SplitPointUnit {
 		return Collections.unmodifiableList(rows);
 	}
 
+	/**
+	 * Means that the page can be broken after this RowGroup.
+	 */
 	@Override
 	public boolean isBreakable() {
 		return breakable;
 	}
 
+	/**
+	 * Means that this RowGroup can be skipped if a page break follows (e.g. bottom margins).
+	 */
 	@Override
 	public boolean isSkippable() {
 		return skippable;
 	}
 
+	/**
+	 * Means that this RowGroup may be combined with preceding RowGroups (e.g. adjoining margins).
+	 */
 	@Override
 	public boolean isCollapsible() {
 		return collapsible;
 	}
 
+	/**
+	 * <code>1</code> means <a href="http://braillespecs.github.io/pef/images/rendering.jpg">dot-to-dot height</a>.
+	 */
 	@Override
 	public float getUnitSize() {
 		return unitSize;

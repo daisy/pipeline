@@ -8,6 +8,11 @@ import org.daisy.dotify.api.translator.Border.Builder.BuilderView;
 import org.daisy.dotify.api.translator.BorderSpecification.Align;
 import org.daisy.dotify.api.translator.BorderSpecification.Style;
 
+/**
+ * Parses the <a
+ * href="http://braillespecs.github.io/obfl/obfl-specification.html#borders">border-*</a> attributes
+ * and returns a {@link Border} object.
+ */
 class BorderBuilder {
 	
 	private static final String KEY_BORDER = "border";

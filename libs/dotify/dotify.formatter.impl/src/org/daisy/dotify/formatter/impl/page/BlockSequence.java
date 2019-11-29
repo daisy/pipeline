@@ -11,7 +11,10 @@ import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 
 /**
  * Provides an interface for a sequence of block contents.
- * 
+ *
+ * <p>{@link #selectScenario(LayoutMaster, BlockContext, boolean) selectScenario} is used to access
+ * the blocks, as a list of {@link RowGroupSequence}s (one RowGroupSequence for each block).
+ *
  * @author Joel Håkansson
  */
 public class BlockSequence extends FormatterCoreImpl implements FormatterSequence {

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import org.daisy.dotify.api.formatter.NumeralStyle;
 import org.daisy.dotify.api.obfl.Expression;
@@ -102,6 +103,8 @@ class ExpressionImpl implements Expression {
 		globalVars.clear();
 	}
 
+	private static final Pattern IDENT = Pattern.compile("[_a-zA-Z][_a-zA-Z0-9-]*");
+
 	private Object doEval1(String expr) {
 		if (expr.startsWith("\"") && expr.endsWith("\"")) {
 			return expr.substring(1, expr.length()-1);
@@ -109,11 +112,20 @@ class ExpressionImpl implements Expression {
 		if (localVars.containsKey(expr)) {
 			return localVars.get(expr);
 		}
+		if ("true".equals(expr)) {
+			return Boolean.TRUE;
+		}
+		if ("false".equals(expr)) {
+			return Boolean.FALSE;
+		}
+		if (IDENT.matcher(expr).matches()) {
+			return expr;
+		}
 		try {
 			return toNumber(expr);
 		} catch (NumberFormatException e) {
-			return expr;
 		}
+		throw new IllegalArgumentException("Can not evaluate: " + expr);
 	}
 	
 	private Object doEval2(String[] args1) {
@@ -174,7 +186,6 @@ class ExpressionImpl implements Expression {
 	private Object doEvaluate(String expr) {
 		
 		expr = expr.trim();
-		expr = expr.replaceAll("\\s+", " ");
 		int leftPar = expr.indexOf('(');
 		int rightPar = expr.lastIndexOf(')');
 		if (leftPar==-1 && rightPar==-1) {
@@ -427,6 +438,7 @@ class ExpressionImpl implements Expression {
 			}
 			else if (expr.charAt(i)==' ' && level==0 && !str) {
 				ret.add(expr.substring(ci, i));
+				while (i+1<expr.length() && expr.charAt(i+1)==' ') { i++; }
 				ci=i+1;
 			}
 		}

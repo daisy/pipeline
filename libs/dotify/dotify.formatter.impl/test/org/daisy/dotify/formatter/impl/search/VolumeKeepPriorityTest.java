@@ -1,6 +1,7 @@
 package org.daisy.dotify.formatter.impl.search;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -30,39 +31,31 @@ public class VolumeKeepPriorityTest {
 
 	@Test
 	public void testCompare_01() {
-		// This appears counter-intuitive because the *priority* of the first argument is lower, 
-		// but the value is in fact higher.
-		assertEquals(1, VolumeKeepPriority.compare(VolumeKeepPriority.empty(), VolumeKeepPriority.of(9)));
+		assertTrue(VolumeKeepPriority.naturalOrder().compare(VolumeKeepPriority.empty(), VolumeKeepPriority.of(9)) < 0);
 	}
 	
 	@Test
 	public void testCompare_02() {
-		// This appears counter-intuitive because the *priority* of the first argument is lower, 
-		// but the value is higher.
-		assertEquals(1, VolumeKeepPriority.compare(VolumeKeepPriority.of(9), VolumeKeepPriority.of(3)));
+		assertTrue(VolumeKeepPriority.naturalOrder().compare(VolumeKeepPriority.of(9), VolumeKeepPriority.of(3)) < 0);
 	}
 	
 	@Test
 	public void testCompare_03() {
-		// This appears counter-intuitive because the *priority* of the first argument is higher, 
-		// but the value is in fact lower.
-		assertEquals(-1, VolumeKeepPriority.compare(VolumeKeepPriority.of(9), VolumeKeepPriority.empty()));
+		assertTrue(VolumeKeepPriority.naturalOrder().compare(VolumeKeepPriority.of(9), VolumeKeepPriority.empty()) > 0);
 	}
 	
 	@Test
 	public void testCompare_04() {
-		// This appears counter-intuitive because the *priority* of the first argument is higher, 
-		// but the value is lower. 
-		assertEquals(-1, VolumeKeepPriority.compare(VolumeKeepPriority.of(1), VolumeKeepPriority.of(9)));
+		assertTrue(VolumeKeepPriority.naturalOrder().compare(VolumeKeepPriority.of(1), VolumeKeepPriority.of(9)) > 0);
 	}
 	
 	@Test
 	public void testCompare_05() {
-		assertEquals(0, VolumeKeepPriority.compare(VolumeKeepPriority.of(4), VolumeKeepPriority.of(4)));
+		assertEquals(0, VolumeKeepPriority.naturalOrder().compare(VolumeKeepPriority.of(4), VolumeKeepPriority.of(4)));
 	}
 	
 	@Test
 	public void testCompare_06() {
-		assertEquals(0, VolumeKeepPriority.compare(VolumeKeepPriority.empty(), VolumeKeepPriority.empty()));
+		assertEquals(0, VolumeKeepPriority.naturalOrder().compare(VolumeKeepPriority.empty(), VolumeKeepPriority.empty()));
 	}
 }

@@ -47,6 +47,10 @@ import org.daisy.dotify.formatter.impl.segment.NewLineSegment;
 import org.daisy.dotify.formatter.impl.segment.PageNumberReference;
 import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
+/**
+ * <p>Implementation of {@link FormatterCore}. Can contain for example a parsed OBFL
+ * <code>sequence</code>.</p>
+ */
 public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGroup {
 	/**
 	 * 
@@ -67,8 +71,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 	private final boolean discardIdentifiers;
 	private Table table;
 	protected final FormatterCoreContext fc;
-	//The code where this variable is used is not very nice, but it will do to get the feature running
-	private Boolean endStart = null;
+	
 	// TODO: fix recursive keep problem
 	// TODO: Implement floating elements
 	public FormatterCoreImpl(FormatterCoreContext fc) {
@@ -101,10 +104,6 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		if (table!=null) {
 			throw new IllegalStateException("A table is open.");
 		}
-		if (endStart!=null && endStart == true) {
-			getCurrentBlock().setAvoidVolumeBreakAfterPriority(getCurrentVolumeKeepPriority());
-		}
-		endStart = null;
 		String lb = "";
 		String rb = "";
 		if (p.getTextBorderStyle()!=null) {
@@ -130,6 +129,9 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 					margins(new BlockMargin(new Margin(Type.LEFT, leftMarginComps), new Margin(Type.RIGHT, rightMarginComps), fc.getSpaceCharacter())).
 					outerSpaceBefore(p.getMargin().getTopSpacing()).
 					underlineStyle(p.getUnderlineStyle());
+		// We don't get the volume keep priority from block properties, because it could have been inherited from an ancestor
+		AncestorContext ac = new AncestorContext(p, inheritVolumeKeepPriority(p.getVolumeKeepPriority()));
+		setPrecedingVolumeKeepAfterPriority(ac.getVolumeKeepPriority());
 		Block c = newBlock(blockId, rdp.build());
 		if (propsContext.size()>0 && propsContext.peek().getBlockProperties().getListType()!=FormattingTypes.ListStyle.NONE) {
 			String listLabel = p.getListItemLabel();
@@ -172,10 +174,8 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		}
 		c.setKeepWithNextSheets(p.getKeepWithNextSheets());
 		c.setVerticalPosition(p.getVerticalPosition());
-		AncestorContext ac = new AncestorContext(p, inheritVolumeKeepPriority(p.getVolumeKeepPriority()));
-		// We don't get the volume keep priority from block properties, because it could have been inherited from an ancestor
 		c.setAvoidVolumeBreakInsidePriority(ac.getVolumeKeepPriority());
-		c.setAvoidVolumeBreakAfterPriority(ac.getVolumeKeepPriority());
+		c.setAvoidVolumeBreakAfterPriority(-1); // value will be overwritten later
 		propsContext.push(ac);
 		Block bi = getCurrentBlock();
 		RowDataProperties.Builder builder = new RowDataProperties.Builder(bi.getRowDataProperties());
@@ -198,8 +198,24 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		return propsContext.isEmpty()?null:propsContext.peek().getVolumeKeepPriority();
 	}
 	
-	private Integer getParentVolumeKeepPriority() {
-		return propsContext.size()<2?null:propsContext.get(propsContext.size()-2).getVolumeKeepPriority();
+	// Set volume-break-after priority of the preceding block to volume-break-inside of the current
+	// block if the new value is higher (lower priority). If the preceding block is empty, do the
+	// same with the block before it, etc. This is done because it's the RowGroup objects that will
+	// carry the priority information to the PageSequenceBuilder/SheetDataSource, and the priority
+	// information of empty blocks will be ignored.
+	private void setPrecedingVolumeKeepAfterPriority(Integer currentPriority) {
+		int i = size();
+		while (i > 0) {
+			Block b = get(i - 1);
+			Integer pr = b.getAvoidVolumeBreakAfterPriority();
+			if (currentPriority == null || (pr != null && currentPriority > pr)) {
+				b.setAvoidVolumeBreakAfterPriority(currentPriority);
+			}
+			if (!b.isEmpty()) {
+				break;
+			}
+			i--;
+		}
 	}
 
 	@Override
@@ -209,11 +225,6 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 		}
 		if (listItem!=null) {
 			addChars("", new TextProperties.Builder(null).build());
-		}
-		if (endStart == null) {
-			endStart = true;
-		} else {
-			endStart = false;
 		}
 		{
 		AncestorContext ac = propsContext.pop();
@@ -230,21 +241,10 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 			outerSpaceAfter(bi.getRowDataProperties().getOuterSpaceAfter()+p.getMargin().getBottomSpacing());
 		bi.setKeepWithPreviousSheets(p.getKeepWithPreviousSheets());
 		bi.setRowDataProperties(builder.build());
-		//set the volume keep after for the closing block to the parent priority 
-		bi.setAvoidVolumeBreakAfterPriority(getCurrentVolumeKeepPriority());
-		if (bi.isEmpty()) {
-			// if this group doesn't have data, then 
-			// apply this blocks volume break after priority to the previous block 
-			// if that block's break after priority is equal to this block's break
-			// inside priority.
-			Block preceding = size()>1?get(size()-2):null;
-			if (preceding!=null && preceding.getAvoidVolumeBreakAfterPriority()==bi.getAvoidVolumeBreakInsidePriority()) {
-				preceding.setAvoidVolumeBreakAfterPriority(bi.getAvoidVolumeBreakAfterPriority());
-			}
-		}
 		}
 		leftMarginComps.pop();
 		rightMarginComps.pop();
+		setPrecedingVolumeKeepAfterPriority(getCurrentVolumeKeepPriority());
 		if (propsContext.size()>0) {
 			AncestorContext ac = propsContext.peek(); 
 			BlockProperties p = ac.getBlockProperties();
@@ -271,7 +271,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
 			c.setKeepWithNext(next);
 			// We don't get the volume keep priority from the BlockProperties, as it could have been inherited from an ancestor
 			c.setAvoidVolumeBreakInsidePriority(getCurrentVolumeKeepPriority());
-			c.setAvoidVolumeBreakAfterPriority(getParentVolumeKeepPriority());
+			c.setAvoidVolumeBreakAfterPriority(-1); // value will be overwritten later
 		}
 		//firstRow = true;
 	}

@@ -25,7 +25,10 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
- * Provides a layout engine factory.
+ * <p>Provides a {@link FormatterEngineFactoryService layout engine factory}.</p>
+ *
+ * <p>Produces instances of {@link LayoutEngineImpl}.</p>
+ *
  * @author Joel Håkansson
  */
 @Component

@@ -1,6 +1,8 @@
 package org.daisy.dotify.formatter.impl.search;
 
 public final class BlockAddress {
+	private final static Object NEXT_GROUP_NUMBER_SYNCHRONIZER = new Object();
+
 	private static long nextGroupNumber = 0;
 	private final long groupNumber;
 	private final int blockNumber;
@@ -10,9 +12,13 @@ public final class BlockAddress {
 		this.blockNumber = blockNumber;
 	}
 	
-	public static synchronized long getNextGroupNumber() {
-		nextGroupNumber++;
-		return nextGroupNumber;
+	public static long getNextGroupNumber() {
+		long ngs;
+		synchronized (NEXT_GROUP_NUMBER_SYNCHRONIZER) {
+			nextGroupNumber++;
+			ngs = nextGroupNumber;
+		}
+		return ngs;
 	}
 
 	public long getGroupNumber() {

@@ -6,11 +6,19 @@ class RowInfo {
 	private final String preContent;
 	private final int available;
 
+	/**
+	 * @param preContent The content
+	 * @param available The total space available on a row for content and left margin.
+	 */
 	RowInfo(String preContent, int available) {
 		this.preContent = preContent;
 		this.available = available;
 	}
 
+	/**
+	 * @param r a row
+	 * @return the space available on the row for additional content.
+	 */
 	int getMaxLength(RowImpl.Builder r) {
 		int preContentPos = r.getLeftMargin().getContent().length()+StringTools.length(preContent);
 		int maxLenText = available-(preContentPos);

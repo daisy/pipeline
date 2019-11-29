@@ -8,9 +8,17 @@ public class SheetIdentity {
 
 	public SheetIdentity(Space s, Integer volumeIndex, Integer volumeGroup, int sheetIndex) {
 		this.space = s;
-		if ((space == Space.BODY && (volumeIndex != null || volumeGroup == null))
-		    || (space != Space.BODY && (volumeIndex == null || volumeGroup != null))) {
-			throw new IllegalArgumentException();
+		if (space == Space.BODY) {
+			if (volumeIndex != null) {
+				volumeIndex = null;
+			}
+			if (volumeGroup == null) {
+				throw new IllegalArgumentException();
+			}
+		} else {
+			if (volumeIndex == null || volumeGroup != null) {
+				throw new IllegalArgumentException();
+			}
 		}
 		this.volumeIndex = volumeIndex;
 		this.volumeGroup = volumeGroup;

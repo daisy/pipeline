@@ -36,8 +36,27 @@ import org.daisy.dotify.formatter.impl.volume.VolumeSequence;
 import org.daisy.dotify.formatter.impl.volume.VolumeTemplate;
 
 /**
- * Provides contents in volumes.
- *  
+ * <p>Given a list of {@link BlockSequence}s, produces {@link
+ * org.daisy.dotify.formatter.impl.common.Volume} objects one by one. The volumes are obtained
+ * through a {@link #nextVolume() "iterator" interface}.</p>
+ *
+ * <p>The input is a list of {@link BlockSequence}s, which are first converted to a sequence of
+ * "volume groups", where every group is a list of {@link BlockSequence}s, of which the first one
+ * has a hard volume break (<code>break-before="volume"</code>). For every volume group a {@link
+ * SheetDataSource} is then created, which is wrapped in a {@link SheetGroup} together with its
+ * respective {@link org.daisy.dotify.formatter.impl.sheet.VolumeSplitter}, which determines the
+ * number of required volumes and their target sizes. All groups are managed in a {@link
+ * SheetGroupManager}. {@link SheetDataSource}s that do not fit in a volume are broken, using {@link
+ * SplitPointHandler}. The cost function takes into account how much the total size of a volume
+ * deviates from the target size, the <code>volume-break-priority</code> of the last sheet, and
+ * whether the {@link Sheet#isBreakable() isBreakable} constraint of the last sheet is violated.</p>
+ *
+ * <p>Pre- and post-content is added to every volume based on the provided {@link
+ * VolumeTemplate}s.</p>
+ *
+ * <p>One {@link PageCounter} is created for the body of the whole document, and one for every pre-
+ * or post-content of every volume.</p>
+ *
  * @author Joel Håkansson
  *
  */
@@ -63,7 +82,6 @@ public class VolumeProvider {
 	 * @param blocks the block sequences
 	 * @param volumeTemplates volume templates
 	 * @param context the formatter context
-	 * @param crh the cross reference handler
 	 */
 	VolumeProvider(List<BlockSequence> blocks, Stack<VolumeTemplate> volumeTemplates, LazyFormatterContext context) {
 		this.blocks = blocks;
@@ -126,7 +144,7 @@ public class VolumeProvider {
 		VolumeImpl volume = new VolumeImpl(crh.getOverhead(currentVolumeNumber));
 		ArrayList<AnchorData> ad = new ArrayList<>();
 		volume.setPreVolData(updateVolumeContents(currentVolumeNumber, ad, true));
-		volume.setBody(nextBodyContents(volume.getOverhead().total(), ad));
+		volume.setBody(nextBodyContents(currentVolumeNumber, volume.getOverhead().total(), ad));
 		
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Sheets  in volume " + currentVolumeNumber + ": " + (volume.getVolumeSize()) + 
@@ -148,9 +166,9 @@ public class VolumeProvider {
 	 * @param ad the anchor data
 	 * @return returns the contents of the next volume
 	 */
-	private SectionBuilder nextBodyContents(final int overhead, ArrayList<AnchorData> ad) {
+	private SectionBuilder nextBodyContents(int volumeNumber, final int overhead, ArrayList<AnchorData> ad) {
 		groups.currentGroup().setOverheadCount(groups.currentGroup().getOverheadCount() + overhead);
-		final int splitterMax = splitterLimit.getSplitterLimit(currentVolumeNumber);
+		final int splitterMax = splitterLimit.getSplitterLimit(volumeNumber);
 		final int targetSheetsInVolume = (groups.lastInGroup()?splitterMax:groups.sheetsInCurrentVolume());
 		//Not using lambda for now, because it's noticeably slower.
 		SplitPointCost<Sheet> cost = new SplitPointCost<Sheet>(){
@@ -179,14 +197,20 @@ public class VolumeProvider {
 			}};
 		SplitPoint<Sheet, SheetDataSource> sp;
 
+		// The data is consumed two times. Once to find the optimal break point ("find" function),
+		// and once to do the actual split at that position ("split" function). We only record the
+		// changes made to the CrossReferenceHandler during the second pass. Note that although no
+		// changes are made to the CrossReferenceHandler, it can still become dirty if some info
+		// that is requested is not available.
 		crh.setReadOnly();
 		SheetDataSource data = groups.currentGroup().getUnits();
+		data.setCurrentVolumeNumber(volumeNumber);
 		SheetDataSource copySource = new SheetDataSource(data);
 		SplitPointSpecification spec = volSplitter.find(splitterMax-overhead, 
 				copySource, 
 				cost, StandardSplitOption.ALLOW_FORCE);
 		crh.setReadWrite();
-		sp = volSplitter.split(spec, groups.currentGroup().getUnits());
+		sp = volSplitter.split(spec, data);
 		/*
 			sp = volSplitter.split(splitterMax-overhead, 
 					groups.currentGroup().getUnits(),
@@ -196,14 +220,14 @@ public class VolumeProvider {
 		List<Sheet> contents = sp.getHead();
 		int pageCount = Sheet.countPages(contents);
 		crh.commitPageDetails();
-		crh.setVolumeScope(currentVolumeNumber, pageIndex, pageIndex+pageCount);
+		crh.setVolumeScope(volumeNumber, pageIndex, pageIndex+pageCount);
 
 		pageIndex += pageCount;
 		SectionBuilder sb = new SectionBuilder();
 		for (Sheet sheet : contents) {
 			for (PageImpl p : sheet.getPages()) {
 				for (String id : p.getIdentifiers()) {
-					crh.setVolumeNumber(id, currentVolumeNumber);
+					crh.setVolumeNumber(id, volumeNumber);
 				}
 				if (p.getAnchors().size()>0) {
 					ad.add(new AnchorData(p.getAnchors(), p.getPageNumber()));
@@ -234,10 +258,13 @@ public class VolumeProvider {
 					break;
 				}
 			}
-			List<Sheet> ret = prepareToPaginate(ib, c, null).getRemaining();
+			List<Sheet> ret = prepareToPaginatePrePostVolumeContent(ib, c).getRemaining();
 			SectionBuilder sb = new SectionBuilder();
 			for (Sheet ps : ret) {
 				for (PageImpl p : ps.getPages()) {
+					for (String id : p.getIdentifiers()) {
+						crh.setVolumeNumber(id, volumeNumber);
+					}
 					if (p.getAnchors().size()>0) {
 						ad.add(new AnchorData(p.getAnchors(), p.getPageNumber()));
 					}
@@ -250,10 +277,20 @@ public class VolumeProvider {
 		}
 	}
 	
-	private SheetDataSource prepareToPaginate(List<BlockSequence> fs, DefaultContext rcontext, Integer volumeGroup) throws PaginatorException {
-		return prepareToPaginate(new PageCounter(), rcontext, volumeGroup, fs);
+	/**
+	 * Convert a list of {@link BlockSequence}s from a pre- or post-content to a {@link SheetDataSource}.
+	 */
+	private SheetDataSource prepareToPaginatePrePostVolumeContent(List<BlockSequence> fs, DefaultContext rcontext) throws PaginatorException {
+		return prepareToPaginate(new PageCounter(), rcontext, null, fs);
 	}
 	
+	/**
+	 * Process hard volume breaks.
+	 *
+	 * <p>Convert a list of {@link BlockSequence}s to a sequence of {@link SheetDataSource}. At
+	 * every <code>BlockSequence</code> with a hard volume break
+	 * (<code>break-before="volume"</code>) a new <code>SheetDataSource</code> is started.
+	 */
 	private Iterable<SheetDataSource> prepareToPaginateWithVolumeGroups(List<BlockSequence> fs, DefaultContext rcontext) {
 		List<List<BlockSequence>> volGroups = new ArrayList<>();
 		List<BlockSequence> currentGroup = new ArrayList<>();
@@ -278,6 +315,10 @@ public class VolumeProvider {
 			}};
 	}
 
+	/**
+	 * Convert a list of {@link BlockSequence}s, grouped in "volume groups" that start with a hard
+	 * volume break, to a list of {@link SheetDataSource}.
+	 */
 	private List<SheetDataSource> prepareToPaginateWithVolumeGroups(PageCounter pageCounter, DefaultContext rcontext, Iterable<List<BlockSequence>> volGroups) throws PaginatorException {
 		List<SheetDataSource> ret = new ArrayList<>();
 		int i = 0;
@@ -287,6 +328,9 @@ public class VolumeProvider {
 		return ret;
 	}
 	
+	/**
+	 * Convert a list of {@link BlockSequence}s to a single {@link SheetDataSource}.
+	 */
 	private SheetDataSource prepareToPaginate(PageCounter pageCounter, DefaultContext rcontext, Integer volumeGroup, List<BlockSequence> seqs) throws PaginatorException {
 		return new SheetDataSource(pageCounter, context.getFormatterContext(), rcontext, volumeGroup, seqs);
 	}

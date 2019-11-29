@@ -1,6 +1,6 @@
 package org.daisy.dotify.formatter.impl.segment;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.daisy.dotify.api.formatter.NumeralStyle;
 
@@ -14,7 +14,7 @@ public class PageNumberReference implements Segment {
 	private final String refid;
 	private final NumeralStyle style;
 	private final boolean markCapitalLetters;
-	private Supplier<String> v=()->"";
+	private Function<PageNumberReference,String> v = (x)->"";
 	private String resolved;
 	
 	public PageNumberReference(String refid, NumeralStyle style, boolean markCapitalLetters) {
@@ -90,7 +90,7 @@ public class PageNumberReference implements Segment {
 	@Override
 	public String resolve() {
 		if (resolved==null) {
-			resolved = v.get();
+			resolved = v.apply(this);
 			if (resolved == null) {
 				resolved = "";
 			}
@@ -98,7 +98,7 @@ public class PageNumberReference implements Segment {
 		return resolved;
 	}
 	
-	public void setResolver(Supplier<String> v) {
+	public void setResolver(Function<PageNumberReference,String> v) {
 		this.resolved = null;
 		this.v = v;
 	}

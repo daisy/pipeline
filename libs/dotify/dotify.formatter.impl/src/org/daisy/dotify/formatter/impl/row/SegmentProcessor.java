@@ -2,6 +2,7 @@ package org.daisy.dotify.formatter.impl.row;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Function;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -57,6 +58,8 @@ class SegmentProcessor implements SegmentProcessing {
 	private CurrentResult cr;
 	private boolean closed;
 	private String blockId;
+	private Function<PageNumberReference,String> pagenumResolver;
+	private Function<Evaluate,String> expressionResolver;
 
 	SegmentProcessor(String blockId, List<Segment> segments, int flowWidth, CrossReferenceHandler refs, Context context, int available, BlockMargin margins, FormatterCoreContext fcontext, RowDataProperties rdp) {
 		this.refs = refs;
@@ -70,6 +73,17 @@ class SegmentProcessor implements SegmentProcessing {
 		this.significantContent = calculateSignificantContent(this.segments, context, rdp);
 		this.spc = new SegmentProcessorContext(fcontext, rdp, margins, flowWidth, available);
 		this.blockId = blockId;
+		this.pagenumResolver = (refs == null)
+			? (rs)->"??"
+			: (rs)->{
+				Integer page = refs.getPageNumber(rs.getRefId());
+				if (page==null) {
+					return "??";
+				} else {
+					return "" + rs.getNumeralStyle().format(page);
+				}
+			};
+		this.expressionResolver = (e)->e.getExpression().render(getContext());
 		initFields();
 	}
 	
@@ -99,6 +113,9 @@ class SegmentProcessor implements SegmentProcessing {
 		this.closed = template.closed;
 		this.significantContent = template.significantContent;
 		this.blockId = template.blockId;
+		this.pagenumResolver = template.pagenumResolver;
+		// can't simply copy because getContext() of template would be used
+		this.expressionResolver = (e)->e.getExpression().render(getContext());
 	}
 	
 	/**
@@ -238,6 +255,20 @@ class SegmentProcessor implements SegmentProcessing {
 		closed = false;
 		if (blockId != null && !"".equals(blockId)) {
 			groupIdentifiers.add(blockId);
+		}
+		// reset resolved values and (re)set resolvers
+		for (Segment s : segments) {
+			switch (s.getSegmentType()) {
+			case Reference:
+				PageNumberReference rs = (PageNumberReference)s;
+				rs.setResolver(pagenumResolver);
+				break;
+			case Evaluate:
+				Evaluate e = (Evaluate)s;
+				e.setResolver(expressionResolver);
+				break;
+			default:
+			}
 		}
 		// produce group markers and anchors
 		getNext(false, LineProperties.DEFAULT);
@@ -446,18 +477,12 @@ class SegmentProcessor implements SegmentProcessing {
 	}
 
 	private Optional<CurrentResult> layoutPageSegment(PageNumberReference rs) {
-		if (refs!=null) {
-			rs.setResolver(()->{
-				Integer page = refs.getPageNumber(rs.getRefId());
-				if (page==null) {
-					return "??";
-				} else {
-					return "" + rs.getNumeralStyle().format(page);
-				}
-			});
-		} else {
-			rs.setResolver(()->"??");
-		}
+		// This is done to reset the state of the PageNumberReference, i.e. to "unfreeze" its
+		// value. It is safe to do this because by the time we get here the translator has not had
+		// the chance to resolve() the segment yet (the segment has only been available as a
+		// FollowingText). Still, it would be nicer if deep copies would be made of the segments
+		// when needed, or if the segments would be completely stateless.
+		rs.setResolver(pagenumResolver);
 		//TODO: translate references using custom language?
 		TranslatableWithContext spec;
 		spec = TranslatableWithContext.from(segments, segmentIndex-1)
@@ -475,7 +500,12 @@ class SegmentProcessor implements SegmentProcessing {
 	}
 	
 	private Optional<CurrentResult> layoutEvaluate(Evaluate e) {
-		e.setResolver(()->e.getExpression().render(getContext()));
+		// This is done to reset the state of the Evaluate, i.e. to "unfreeze" its value. It is safe
+		// to do this because by the time we get here the translator has not had the chance to
+		// resolve() the segment yet (the segment has only been available as a FollowingText).
+		// Still, it would be nicer if deep copies would be made of the segments when needed, or if
+		// the segments would be completely stateless.
+		e.setResolver(expressionResolver);
 		if (!e.peek().isEmpty()) { // Don't create a new row if the evaluated expression is empty
 		                    // Note: this could be handled more generally (also for regular text) in layout().
 			TranslatableWithContext spec = TranslatableWithContext.from(segments, segmentIndex-1)

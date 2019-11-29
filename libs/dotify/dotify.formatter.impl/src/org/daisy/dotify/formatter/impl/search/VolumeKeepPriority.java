@@ -1,12 +1,16 @@
 package org.daisy.dotify.formatter.impl.search;
 
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 /**
  * <p>Provides a simple data type for volume keep priority, where 1 represents the highest priority
- * and 9 the lowest. This class is modeled on Java's Optional and provides similar
- * capabilities. As with Optional, setting a field with this type to null is strongly
- * discouraged. Instead, use {@link #empty()} to create an empty instance.</p>
+ * and 9 the lowest. A high priority means that we do more effort to avoid splitting a volume within
+ * the area the priority is declared on.</p>
+ *
+ * <p>This class is modeled on Java's Optional and provides similar capabilities. As with Optional,
+ * setting a field with this type to null is strongly discouraged. Instead, use {@link #empty()} to
+ * create an empty instance.</p>
  * 
  * <p>The primary reason for creating a special class is to make the meaning of the 
  * number contained in it clearer. But in addition, it makes it possible to enforce 
@@ -15,7 +19,8 @@ import java.util.NoSuchElementException;
  * 
  * @author Joel Håkansson
  */
-public final class VolumeKeepPriority {
+public final class VolumeKeepPriority implements Comparable<VolumeKeepPriority> {
+
 	// For performance reasons, -1 is used to represent the empty object
 	private static final VolumeKeepPriority EMPTY = new VolumeKeepPriority(-1);
 	private final int value;
@@ -30,8 +35,8 @@ public final class VolumeKeepPriority {
 	 * @return returns a new instance
 	 */
 	public static VolumeKeepPriority of(int value) {
-		if (value<1 || value>=10) {
-			throw new IllegalArgumentException("Value out of range [1, 10): " + value);
+		if (value<1 || value>9) {
+			throw new IllegalArgumentException("Value out of range [1, 9]: " + value);
 		}
 		return new VolumeKeepPriority(value);
 	}
@@ -54,9 +59,8 @@ public final class VolumeKeepPriority {
 	}
 	
 	/**
-	 * Gets the priority, if present. The value is in the range
-	 * [1, 10) where 1 represents the highest priority and 9 the
-	 * lowest.
+	 * Gets the priority value, if present. The value is in the range
+	 * [1, 9] where 1 represents the highest priority and 9 the lowest.
 	 * @return returns the priority
 	 * @throws NoSuchElementException if no priority is set.
 	 */
@@ -86,25 +90,45 @@ public final class VolumeKeepPriority {
 	}
 
 	/**
-	 * <p>Compares the specified values.</p>
-	 * <p>Note that, because a higher priority is represented by a lower value,
-	 * this function may appear to be incorrect in some contexts.</p>
-	 * @param p1 the first value
-	 * @param p2 the second value
-	 * @return the value {@code 0} if the priority of {@code p1} is
-	 *			equal to {@code p2}; a value less than
-	 *			{@code 0} if the priority of {@code p1} is less than
-	 *			the priority of {@code p2}; and a value greater than {@code 0}
-	 *			if the priority of {@code p1} is greater than
-	 *			the priority of {@code p2}; if {@code p1} does not have 
-	 * 			a priority value and {@code p2} does, a value greater than {@code 0}
-	 * 			is returned; if {@code p1} has a priority value and {@code p2} does not,
-	 * 			a value less than {@code 0} is returned; if neither {@code p1} 
-	 * 			nor {@code p2} has a priority value, the value {@code 0} is returned.
+	 * <p>Compares this priority with the specified priority.</p>
+	 *
+	 * <p>Returns a negative integer, zero, or a positive integer as this priority is lower, equal
+	 * to, or higher than the specified priority. An {@link #empty() absent} priority is considered
+	 * lower than the lowest priority.</p>
+	 *
+	 * <p>Note that this method does not compare the <em>integer values</em> returned by {@link
+	 * #getValue()}, but rather represents the "natural" ordering. (The fact that a higher priority
+	 * is represented by a lower integer value may cause some confusion in this regard.)</p>
+	 *
+	 * @param o The other priority
+	 * @return The value {@code 0} if the priority of {@code this} is equal to {@code o}; a value
+	 *			less than {@code 0} if the priority of {@code this} is lower than the priority of
+	 *			{@code o}; and a value greater than {@code 0} if the priority of {@code this} is
+	 *			greater than the priority of {@code o}; if {@code this} does not have a priority
+	 *			value and {@code o} does, a value greater than {@code 0} is returned; if {@code
+	 *			this} has a priority value and {@code o} does not, a value less than {@code 0} is
+	 *			returned; if neither {@code this} nor {@code o} has a priority value, the value
+	 *			{@code 0} is returned.
 	 */
-	public static int compare(VolumeKeepPriority p1, VolumeKeepPriority p2) {
-		return Integer.compare(p1.orElse(10), p2.orElse(10));
+	public int compareTo(VolumeKeepPriority o) {
+		return Integer.compare(o.orElse(10), this.orElse(10));
 	}
+
+	/**
+	 * <p>Returns a comparator that imposes the natural ordering on {@link VolumeKeepPriority} objects.</p>
+	 *
+	 * <p>Objects are ordered according to {@link #compareTo(VolumeKeepPriority)}, from lower to higher priority.</p>
+	 *
+	 * @return a comparator that imposes the natural ordering on {@link VolumeKeepPriority} objects.
+	 */
+	public static Comparator<VolumeKeepPriority> naturalOrder() {
+		if (comparator == null) {
+			comparator = Comparator.<VolumeKeepPriority>naturalOrder();
+		}
+		return comparator;
+	}
+
+	private static Comparator<VolumeKeepPriority> comparator = null;
 
 	@Override
 	public int hashCode() {

@@ -1,7 +1,9 @@
 package org.daisy.dotify.formatter.impl.sheet;
 
 /**
- * Provides a volume splitter.
+ * Allocates a number of volumes required to accomodate the sheets, and determines the target
+ * (i.e. optimal) number of sheets for each volume. The maximum number of sheets for each volume is
+ * determined by a {@link SplitterLimit}.
  * 
  * @author Joel Håkansson
  *
@@ -18,8 +20,8 @@ public interface VolumeSplitter {
 	void updateSheetCount(int sheets, int sheetsRemaining);
 
 	/**
-	 * Gets the number of sheets in a volume.
-	 * 
+	 * Gets the target number of sheets in a volume.
+	 *
 	 * @param volIndex volume index, one-based
 	 * @return returns the number of sheets in the volume
 	 */

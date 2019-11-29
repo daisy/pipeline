@@ -11,8 +11,11 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
- * Provides a formatter proxy implementation. This class is intended to be instantiated
- * by the formatter factory, and is not part of the public API.
+ * <p>Provides a {@link FormatterFactory formatter proxy implementation}. This class is intended to
+ * be instantiated by the formatter factory, and is not part of the public API.</p>
+ *
+ * <p>Produces instances of {@link FormatterImpl}.</p>
+ *
  * @author Joel Håkansson
  */
 @Component

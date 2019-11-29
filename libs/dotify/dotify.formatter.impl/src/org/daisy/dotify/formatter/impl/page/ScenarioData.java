@@ -46,16 +46,12 @@ class ScenarioData {
 		return size;
 	}
 	
-	private boolean isDataEmpty() {
-		return (dataGroups.isEmpty()||dataGroups.peek().getGroup().isEmpty());
-	}
-	
 	private boolean hasSequence() {
 		return !dataGroups.isEmpty();
 	}
 	
 	private boolean hasResult() {
-		return !isDataEmpty();
+		return !dataGroups.isEmpty();
 	}
 	
 	private void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {

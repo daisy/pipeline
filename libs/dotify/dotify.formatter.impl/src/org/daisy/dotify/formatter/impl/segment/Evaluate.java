@@ -1,7 +1,7 @@
 package org.daisy.dotify.formatter.impl.segment;
 
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.daisy.dotify.api.formatter.DynamicContent;
 import org.daisy.dotify.api.formatter.TextProperties;
@@ -17,7 +17,7 @@ public class Evaluate implements Segment {
 	private final DynamicContent expression;
 	private final TextProperties props;
 	private final boolean markCapitalLetters;
-	private Supplier<String> v = ()->"";
+	private Function<Evaluate,String> v = (x)->"";
 	private String resolved;
 	
 	/**
@@ -84,13 +84,13 @@ public class Evaluate implements Segment {
 
 	@Override
 	public String peek() {
-		return resolved==null?v.get():resolved;
+		return resolved==null?v.apply(this):resolved;
 	}
 
 	@Override
 	public String resolve() {
 		if (resolved==null) {
-			resolved = v.get();
+			resolved = v.apply(this);
 			if (resolved == null) {
 				resolved = "";
 			}
@@ -98,7 +98,7 @@ public class Evaluate implements Segment {
 		return resolved;
 	}
 
-	public void setResolver(Supplier<String> v) {
+	public void setResolver(Function<Evaluate,String> v) {
 		this.resolved = null;
 		this.v = v;
 	}

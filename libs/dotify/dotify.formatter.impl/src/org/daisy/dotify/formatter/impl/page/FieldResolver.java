@@ -163,6 +163,12 @@ class FieldResolver {
 		return f.getNumeralStyle().format(pagenum);
 	}
 
+	/**
+	 * @param pagenum the page
+	 * @param rowOffset the row
+	 * @return returns the available width for content on a certain row and page. When there are
+	 *         header or footer fields on the row, the available width is less than the page width.
+	 */
 	public int getWidth(int pagenum, int rowOffset) {
 		while (true) {
 			// Iterates until rowOffset is less than the height of the page.

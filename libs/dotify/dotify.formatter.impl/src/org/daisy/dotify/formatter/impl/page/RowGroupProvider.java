@@ -16,6 +16,24 @@ import org.daisy.dotify.formatter.impl.search.CrossReferenceHandler;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
+/**
+ * Used by {@link RowGroupDataSource} to generate {@link RowGroup}s from a {@link Block}.
+ *
+ * <p>The input is a {@link Block} (and its corresponding {@link AbstractBlockContentManager}).</p>
+ *
+ * <p>The {@link RowGroup.Builder#avoidVolumeBreakAfterPriority(VolumeKeepPriority)
+ * avoidVolumeBreakAfterPriority} of the {@link RowGroup}s are set to the {@link
+ * Block#getAvoidVolumeBreakInsidePriority() getAvoidVolumeBreakInsidePriority} or {@link
+ * Block#getAvoidVolumeBreakAfterPriority() getAvoidVolumeBreakAfterPriority} of the {@link Block},
+ * depending on whether a RowGroup follows or not.</p>
+ *
+ * <p>Group markers, group anchors and group identifiers are added to the
+ * first content RowGroup (content = not padding, margin or border).</p>
+ *
+ * <p>An empty RowGroup is produced if the block contains markers, anchors or identifiers but no
+ * significant content (significant content = content that results in an actual line, i.e. non-empty
+ * text, a non-empty evaluate, a br, a page-number, a leader).</p>
+ */
 class RowGroupProvider {
 	private final LayoutMaster master;
 	private final Block g;
@@ -102,6 +120,8 @@ class RowGroupProvider {
 	}
 
 	private RowGroup nextInner(LineProperties lineProps) {
+		// if the block does not support variable width (e.g. when there are left or right borders)
+		// and header or footer fields are present on the line, insert an empty row
 		if (lineProps.getReservedWidth()>0 && !bcm.supportsVariableWidth()) {
 			return new RowGroup.Builder(master.getRowSpacing()).add(new RowImpl())
 					.mergeable(false)
@@ -133,7 +153,7 @@ class RowGroupProvider {
 			//TODO: Does this interfere with collapsing margins?
 			if (shouldAddGroupForEmptyContent()) {
 				RowGroup.Builder rgb = setPropertiesForFirstContentRowGroup(
-					new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>()).mergeable(true).lineProperties(lineProps), 
+					new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>()).mergeable(true).lineProperties(lineProps).skippable(true),
 					bc.getRefs(),
 					g
 				);

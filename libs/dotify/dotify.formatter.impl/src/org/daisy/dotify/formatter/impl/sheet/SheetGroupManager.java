@@ -6,6 +6,8 @@ import java.util.List;
 /**
  * <p>Provides a manager for {@link SheetGroup}.</p>
  *
+ * <p>An {@link EvenSizeVolumeSplitter} is associated with every <code>SheetGroup</code>.</p>
+ *
  * <p>Used by {@link org.daisy.dotify.formatter.impl.VolumeProvider}.</p>
  *
  * @author Joel Håkansson

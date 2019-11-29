@@ -22,7 +22,7 @@ public class ExpressionTools {
 			return expr;
 		}
 		for (String varName : variables.keySet()) {
-			expr = expr.replaceAll("\\$"+varName+"(?=\\W)", variables.get(varName));
+			expr = expr.replaceAll("\\$"+varName+"($|(?=\\W))", variables.get(varName));
 		}
 		return expr;
 	}
@@ -36,7 +36,7 @@ public class ExpressionTools {
 	public static String resolveVariables(String expr, String ... vars) {
 		for (String var : vars) {
 			String[] v = var.split("=", 2);
-			expr = expr.replaceAll("\\$"+v[0]+"(?=\\W)", v[1]);
+			expr = expr.replaceAll("\\$"+v[0]+"($|(?=\\W))", v[1]);
 		}
 		return expr;
 	}

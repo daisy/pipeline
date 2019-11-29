@@ -93,8 +93,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- * Provides a parser for OBFL. The parser accepts OBFL input, either
- * as an InputStream or as an XMLEventReader.
+ * <p>Provides a {@link ObflParser parser for OBFL}.</p>
+ *
+ * <p>The parser accepts OBFL input as an {@link XMLEventReader}. Based on the OBFL it populates the
+ * supplied (empty) {@link Formatter} object.</p>
  *
  * @author Joel Håkansson
  *

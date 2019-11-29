@@ -7,3 +7,4 @@
 .project
 /.nb-gradle/
 .nb-gradle-properties
+local.properties

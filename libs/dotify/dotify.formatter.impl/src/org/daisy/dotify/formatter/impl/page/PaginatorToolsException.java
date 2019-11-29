@@ -1,9 +1,17 @@
 package org.daisy.dotify.formatter.impl.page;
 
 /**
- * A LayoutToolsException is an exception that indicates 
- * conditions in a LayoutTools process that a reasonable 
- * application might want to catch.
+ * A PaginatorToolsException is an exception that indicates conditions in a PaginatorTools process
+ * that is intended to be propagated to the calling application and that a reasonable application
+ * might want to catch.
+ *
+ * <p>Examples:</p>
+ * <ul>
+ *   <li>Text does not fit within provided space (in header/footer)</li>
+ *   <li>Translation of resolved header/footer field failed</li>
+ *   <li>Text does not fit within cell (in table)</li>
+ * </ul>
+ *
  * @author Joel Håkansson
  */
 class PaginatorToolsException extends Exception {

@@ -29,9 +29,10 @@ import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 
 //FIXME: scope spread is currently implemented using document wide scope, i.e. across volume boundaries. This is wrong, but is better than the previous sequence scope.
+
 /**
- * Provides a page object.
- * 
+ * <p>Provides a {@link Page} object.</p>
+ *
  * @author Joel Håkansson
  */
 public class PageImpl implements Page {
@@ -398,4 +399,7 @@ public class PageImpl implements Page {
 		return details;
 	}
 
+	boolean hasRows() {
+		return hasRows;
+	}
 }

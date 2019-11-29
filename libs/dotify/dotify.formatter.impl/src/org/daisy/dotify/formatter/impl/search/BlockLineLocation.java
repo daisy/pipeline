@@ -1,5 +1,9 @@
 package org.daisy.dotify.formatter.impl.search;
 
+/**
+ * Precise location in the content, consisting of a {@link BlockAddress} which identifies the block,
+ * and a line number which indicates the line within that block (0-based).
+ */
 public final class BlockLineLocation {
 	private final BlockAddress blockAddress;
 	private final int lineNumber;

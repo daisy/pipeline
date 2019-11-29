@@ -7,6 +7,9 @@ import java.util.TreeSet;
 
 import org.daisy.dotify.common.text.StringTools;
 
+/**
+ * Does positioning of header/footer fields, and layout of tables.
+ */
 class PaginatorTools {
 	/**
 	 * Distribution modes 

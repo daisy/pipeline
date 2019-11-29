@@ -89,7 +89,12 @@ public abstract class OBFLExpressionBase {
 			variables.put(pageNumberVariable, ""+context.getCurrentPage());
 		}
 		if (volumeNumberVariable!=null) {
-			variables.put(volumeNumberVariable, ""+context.getCurrentVolume());
+			// Passing a default value for the case the current volume is not known. This is the
+			// case during the preparation phase of the VolumeProvider. If we wouldn't pass a value,
+			// the evaluation of an expression with "$volume" would fail. Passing the value "??"
+			// would not work because $volume is expected to be a number, so e.g. arithmetic
+			// operations can be applied to it.
+			variables.put(volumeNumberVariable, context.getCurrentVolume() == null ? "0": (""+context.getCurrentVolume()));
 		}
 		if (volumeCountVariable!=null) {
 			variables.put(volumeCountVariable, ""+context.getVolumeCount());
