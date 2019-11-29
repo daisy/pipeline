@@ -26,20 +26,22 @@
 
   <xsl:template match="dt:span[@pho:ipa]|dt:span[@pho:sampa]">
     <xsl:copy>
-      <xsl:copy-of select="@*[not(name()='pho:ipa') and not(name()='pho:sampa')]" />
-      <ssml:phoneme>
-        <xsl:choose>
-          <xsl:when test="@pho:sampa">
-            <xsl:attribute name="ssml:alphabet">sampa</xsl:attribute>
-            <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:sampa"/></xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="ssml:alphabet">ipa</xsl:attribute>
-            <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:ipa"/></xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:copy-of select="descendant-or-self::node()/text()" />
-      </ssml:phoneme>
+      <xsl:copy-of select="@*[not(name()='pho:ipa' or name()='pho:sampa')]" />
+      <dt:w>
+        <ssml:phoneme>
+          <xsl:choose>
+            <xsl:when test="@pho:sampa">
+              <xsl:attribute name="ssml:alphabet">sampa</xsl:attribute>
+              <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:sampa"/></xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="ssml:alphabet">ipa</xsl:attribute>
+              <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:ipa"/></xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:copy-of select="descendant-or-self::node()/text()" />
+        </ssml:phoneme>
+      </dt:w>
     </xsl:copy>
   </xsl:template>
 

@@ -232,7 +232,7 @@
 	    <bodymatter>
 	      <level class="chapitre">
 		<level>
-		  <p>Dépité, il va <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pe">quimper</ssml:phoneme></span> à <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pɛʁ">Quimper</ssml:phoneme></span> avant que nous  <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="ɔptjɔ̃">options</ssml:phoneme></span> pour les <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="ɔpsjɔ̃">options</ssml:phoneme></span> tout en <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="tʃatɑ̃">chattant</ssml:phoneme></span> et en faisant des comparaisons sur les <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="byldozɛʁ">bulldozers</ssml:phoneme></span> partis <span><ssml:phoneme ssml:alphabet="ipa" ssml:ph="byldoze">bulldozer</ssml:phoneme></span>.</p>
+		  <p>Dépité, il va <span><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pe">quimper</ssml:phoneme></w></span> à <span><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pɛʁ">Quimper</ssml:phoneme></w></span> avant que nous  <span><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="ɔptjɔ̃">options</ssml:phoneme></w></span> pour les <span><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="ɔpsjɔ̃">options</ssml:phoneme></w></span> tout en <span><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="tʃatɑ̃">chattant</ssml:phoneme></w></span> et en faisant des comparaisons sur les <span><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="byldozɛʁ">bulldozers</ssml:phoneme></w></span> partis <span><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="byldoze">bulldozer</ssml:phoneme></w></span>.</p>
 		</level>
 	      </level>
 	    </bodymatter>
