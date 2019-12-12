@@ -30,6 +30,10 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.NativeLongByReference;
 import com.sun.jna.ptr.PointerByReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * AcapelaTTS requires libnscube.so to be available in the library path.
  * 
@@ -40,7 +44,7 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public class AcapelaEngine extends TTSEngine {
 
-	//private Logger mLogger = LoggerFactory.getLogger(AcapelaEngine.class);
+	private Logger mLogger = LoggerFactory.getLogger(AcapelaEngine.class);
 
 	private AudioFormat mAudioFormat;
 	private LoadBalancer mLoadBalancer;
@@ -298,7 +302,7 @@ public class AcapelaEngine extends TTSEngine {
 	        TTSResource threadResources, List<Mark> marks, List<String> expectedMarks,
 	        AudioBufferAllocator bufferAllocator, boolean retry) throws SynthesisException,
 	        InterruptedException, MemoryException {
-
+		mLogger.info("Synthesizing audio for " + ssml);
 		ThreadResources th = (ThreadResources) threadResources;
 		if (retry) {
 			releaseThreadResources(th);

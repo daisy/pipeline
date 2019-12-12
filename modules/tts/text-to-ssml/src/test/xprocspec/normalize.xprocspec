@@ -87,6 +87,26 @@
       </x:document>
     </x:expect>
   </x:scenario>
+  
+  <x:scenario label="Keep phonetic corrections">
+    <x:call step="pxi:normalize">
+      <x:input port="source">
+		<x:document type="inline">
+		  	<dtbook>
+				<p id="s1"><w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pe">quimper</ssml:phoneme></w> <w><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pɛʁ">Quimper</ssml:phoneme></w></p>
+			</dtbook>
+		</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare">
+      <x:document type="inline">
+		<dtbook><ssml:s id="s1"><ssml:token><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pe">quimper</ssml:phoneme></ssml:token> <ssml:token><ssml:phoneme ssml:alphabet="ipa" ssml:ph="kɛ̃pɛʁ">Quimper</ssml:phoneme></ssml:token></ssml:s></dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
 
   <x:scenario label="Attribute-dependent Word normalization">
     <x:call step="pxi:normalize">

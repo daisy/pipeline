@@ -46,6 +46,12 @@
   <p:option name="lang" required="false" select="'en'">
     <p:documentation>Default language.</p:documentation>
   </p:option>
+  
+  <!-- TODO : add an optional phonetic correction tag to be checked on word-element 
+  	and to replace ssml:token by a ssml:phoneme element-->
+  <p:option name="phonetic-ipa-attr" required="false" select="''"/>
+  <p:option name="phonetic-sampa-attr" required="false" select="''"/>
+  
 
   <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>

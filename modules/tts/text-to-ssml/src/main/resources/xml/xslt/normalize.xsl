@@ -6,6 +6,10 @@
   <xsl:param name="word-element" />
   <xsl:param name="word-attr" select="''"/>
   <xsl:param name="word-attr-val" select="''"/>
+  
+  <!-- <xsl:param name="phonetic-alphabet-attr" select="''"/> -->
+  <xsl:param name="phonetic-ipa-attr" select="''"/>
+  <xsl:param name="phonetic-sampa-attr" select="''"/>
 
   <xsl:variable name="sentence-ids" select="collection()[2]"/>
   <xsl:key name="sentences" match="*[@id]" use="@id"/>
@@ -29,6 +33,7 @@
     </ssml:s>
   </xsl:template>
 
+	<!-- Replacing word by ssml:token element -->
   <xsl:template match="*[local-name()=$word-element and string(@*[local-name()=$word-attr]) = $word-attr-val]"
 		priority="2" mode="inside-sentence">
     <ssml:token>
