@@ -31,8 +31,7 @@ all : $(JEKYLL_DIR)/_site
 
 ifeq ($(RUBY),bundle exec)
 .SECONDARY : gems
-gems : .bundle/config
-.bundle/config :
+gems : Gemfile.lock
 	bundle install --path gems
 else
 .PHONY : gems
