@@ -204,8 +204,7 @@
     </x:expect>
   </x:scenario>
 
-  <!-- testing ssml phoneme injection within a sentence. Does not work, as the "normalize"
-       stylesheet of the text-to-ssml step seems to removes it. -->
+  <!-- testing ssml phoneme injection within a sentence -->
   <x:scenario label="Phonetic correction to ssml">
     <x:call step="pxi:semantic-tr">
       <x:input port="source">

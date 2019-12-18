@@ -44,6 +44,26 @@
     </dt:w>
   </xsl:template> -->
 
+  <xsl:template match="dt:w[@pho:ipa|@pho:sampa]" priority="1">
+    <xsl:copy>
+      <xsl:sequence select="@* except (@pho:ipa|@pho:sampa)" />
+      <ssml:phoneme>
+        <xsl:choose>
+          <!-- apply direct phonetic correction -->
+          <xsl:when test="@pho:sampa">
+            <xsl:attribute name="ssml:alphabet" select="'sampa'"/>
+            <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:sampa"/></xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="ssml:alphabet" select="'ipa'"/>
+            <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:ipa"/></xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="node()"/>
+      </ssml:phoneme>
+    </xsl:copy>
+  </xsl:template>
+
   <!-- Add extra white spaces around elements that are sometimes badly juxtaposed. -->
   <xsl:template match="dt:abbr|dt:acronym|dt:br|dt:a">
     <xsl:value-of select="' '"/>
@@ -93,10 +113,10 @@
        level can be quite different from one format to another, XHTML
        being less strict than DTBook regarding headers' positioning. -->
   <xsl:variable name="headers" select="('levelhd', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6')"/>
-  <xsl:template match="dt:w[count(*) = 0]|dt:w[@pho:ipa]|dt:w[@pho:sampa]">
+  <xsl:template match="dt:w[count(*) = 0]">
     <xsl:variable name="text" select="dt:normalize(text())"/>
     <xsl:copy>
-      <xsl:copy-of select="@*[not(name()='pho:ipa' or name()='pho:sampa')]"/>
+      <xsl:copy-of select="@*"/>
       <xsl:choose>
 	<xsl:when test="not(dt:is-numeral($text))">
 	  <xsl:apply-templates select="node()"/>
@@ -105,26 +125,7 @@
 	  <xsl:variable name="header" select="ancestor::*[$headers = local-name()][1]"/>
 	  <xsl:choose>
 	    <xsl:when test="not($header)">
-	      <xsl:choose>
-		<!-- apply direct phonetic correction -->
-		<xsl:when test="@pho:sampa">
-		  <ssml:phoneme>
-		    <xsl:attribute name="ssml:alphabet">sampa</xsl:attribute>
-		    <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:sampa"/></xsl:attribute>
-		    <xsl:apply-templates select="node()" />
-		  </ssml:phoneme>
-		</xsl:when>
-		<xsl:when test="@pho:ipa">
-		  <ssml:phoneme>
-		    <xsl:attribute name="ssml:alphabet">ipa</xsl:attribute>
-		    <xsl:attribute name="ssml:ph"><xsl:value-of select="@pho:ipa"/></xsl:attribute>
-		    <xsl:apply-templates select="node()" />
-		  </ssml:phoneme>
-		</xsl:when>
-		<xsl:otherwise>
-		  <xsl:apply-templates select="node()" />
-		</xsl:otherwise>
-	      </xsl:choose>
+	      <xsl:apply-templates select="node()"/>
 	    </xsl:when>
 	    <xsl:otherwise>
 	      <xsl:variable name="level" select="$header/ancestor::*[dt:is-level(.)][1]"/>
