@@ -1,6 +1,6 @@
 source 'https://rubygems.org' do
   ruby '>= 2.3.3'
-  gem 'jekyll', '3.3.0'
+  gem 'jekyll', '3.6.3'
   gem 'rdf', '1.1.15'
   gem 'rdf-xsd', '1.1.4'
   gem 'rdf-aggregate-repo', '1.1.0'
