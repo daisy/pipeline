@@ -1,5 +1,4 @@
 #+type:translation
 #+locale: foo
-#+contraction:full
+#+contraction:no
 include foobar.uti
-always foo 124-136

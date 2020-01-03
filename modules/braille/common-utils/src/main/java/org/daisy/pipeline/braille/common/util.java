@@ -308,6 +308,10 @@ public abstract class util {
 			}
 		}
 		
+		/**
+		 * Returns all combinations of N items, where each item comes from a different map entry and
+		 * N is the size of the map.
+		 */
 		public static <K,V> Iterable<Map<K,V>> combinations(final Map<K,? extends Iterable<V>> fromMap) {
 			if (fromMap.isEmpty())
 				return Collections.singleton(Collections.<K,V>emptyMap());
