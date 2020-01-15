@@ -2590,7 +2590,7 @@
                   <goal>copy</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${project.build.directory}/bundles/pipeline/persistence</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles/framework/persistence</outputDirectory>
                   <artifactItems>
                     <artifactItem>
                       <groupId>org.daisy.pipeline</groupId>

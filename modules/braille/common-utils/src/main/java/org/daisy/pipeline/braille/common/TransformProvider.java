@@ -27,6 +27,17 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 	
 	public static abstract class util {
 		
+		/* ------ */
+		/* cast() */
+		/* ------ */
+		
+		@SuppressWarnings(
+			"unchecked" // safe cast
+		)
+		public static <T extends Transform> TransformProvider<T> cast(TransformProvider<? extends T> provider) {
+			return (TransformProvider<T>)provider;
+		}
+		
 		/* --------- */
 		/* memoize() */
 		/* --------- */
@@ -136,6 +147,33 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 			@Override
 			public String toString() {
 				return "dispatch( " + join(_dispatch(), ", ") + " )";
+			}
+		}
+		
+		/* --------- */
+		/* partial() */
+		/* --------- */
+		
+		public static <T extends Transform> TransformProvider<T> partial(Query query, TransformProvider<T> provider) {
+			return new Partial<T>(query, provider);
+		}
+		
+		private static class Partial<T extends Transform> implements TransformProvider<T> {
+			private final Query partialQuery;
+			private final TransformProvider<T> provider;
+			public Partial(Query partialQuery, TransformProvider<T> provider) {
+				this.partialQuery = partialQuery;
+				this.provider = provider;
+			}
+			public final Iterable<T> get(Query query) {
+				return provider.get(mutableQuery().addAll(partialQuery).addAll(query));
+			}
+			public TransformProvider<T> withContext(Logger context) {
+				return new Partial<T>(partialQuery, provider.withContext(context));
+			}
+			@Override
+			public String toString() {
+				return "partial( " + partialQuery + ", " + provider + " )";
 			}
 		}
 		
