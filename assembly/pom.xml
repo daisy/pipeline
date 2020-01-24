@@ -78,7 +78,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.0</version>
+        <version>1.13.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1451,7 +1451,7 @@
                       <groupId>org.daisy.pipeline</groupId>
                       <artifactId>cli</artifactId>
                       <type>zip</type>
-                      <classifier>darwin_386</classifier>
+                      <classifier>darwin_amd64</classifier>
                       <outputDirectory>${project.build.directory}/cli/mac32</outputDirectory>
                     </artifactItem>
                   </artifactItems>
@@ -1541,7 +1541,7 @@
                       <groupId>org.daisy.pipeline</groupId>
                       <artifactId>updater</artifactId>
                       <type>zip</type>
-                      <classifier>darwin_386</classifier>
+                      <classifier>darwin_amd64</classifier>
                       <outputDirectory>${project.build.directory}/updater/mac32</outputDirectory>
                     </artifactItem>
                   </artifactItems>
@@ -2635,17 +2635,6 @@
       Restlet is not on Maven Central
       https://github.com/restlet/restlet-framework-java/issues/481
      -->
-    <repository>
-      <id>central</id>
-      <name>Maven Central</name>
-      <url>https://repo.maven.apache.org/maven2/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
     <!-- Restlet maven repository - They don't publish their stuff on maven central -->
     <repository>
       <id>restlet-repo</id>
