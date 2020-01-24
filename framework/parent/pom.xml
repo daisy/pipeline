@@ -7,12 +7,12 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>4</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.13.0</version>
+  <version>1.13.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
@@ -110,7 +110,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.0</version>
+        <version>1.13.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -241,7 +241,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute />
+                    <execute/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -257,17 +257,6 @@
       Restlet is not on Maven Central
       https://github.com/restlet/restlet-framework-java/issues/481
      -->
-    <repository>
-      <id>central</id>
-      <name>Maven Central</name>
-      <url>https://repo.maven.apache.org/maven2/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
     <!-- Restlet maven repository -->
     <repository>
       <id>restlet-repo</id>
@@ -327,8 +316,4 @@
       </snapshots>
     </repository>
   </repositories>
-
-  <scm>
-    <tag>v1.13.0</tag>
-  </scm>
 </project>

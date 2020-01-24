@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-aggregator</artifactId>
-  <version>1.13.0</version>
+  <version>1.13.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Aggregator</name>
@@ -21,7 +21,7 @@
     <connection>scm:git:git@github.com:daisy/pipeline-framework.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-framework.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-framework.git</developerConnection>
-    <tag>v1.13.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <modules>
