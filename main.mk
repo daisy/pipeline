@@ -7,6 +7,7 @@ MODULES            = $(MAVEN_MODULES) $(GRADLE_MODULES)
 GITREPOS          := $(shell find * -name .gitrepo -exec dirname {} \;)
 MVN               := mvn --batch-mode --settings "$(ROOT_DIR)/$(MVN_SETTINGS)" $(MVN_PROPERTIES)
 MVN_LOG           := cat>>$(ROOT_DIR)/maven.log
+MVN_LOG_LOCATION  := maven.log
 GRADLE            := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(ROOT_DIR)/$(MY_DIR)/gradle.sh $(MVN_PROPERTIES)
 EVAL              := :
 
@@ -150,9 +151,15 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON)
 				     >$$dest; \
 			fi; \
 		done && \
-		$(MVN) -Dworkspace="$(TARGET_DIR)/poms" \
-		       --projects $$(printf "%s\n" $$MAVEN_MODULES |paste -sd , -) \
-		       org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
+		if $(MVN) -Dworkspace="$(TARGET_DIR)/poms" \
+		          --projects $$(printf "%s\n" $$MAVEN_MODULES |paste -sd , -) \
+		          org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
+		then true; \
+		else \
+			rv=$$? && \
+			echo "Failed to compute Maven dependencies. See $(MVN_LOG_LOCATION) for more info." >&2 && \
+			exit $$rv; \
+		fi \
 	else \
 		touch $@; \
 	fi
@@ -228,6 +235,8 @@ $(addsuffix /.project,$(MODULES)) : .metadata/.plugins/org.eclipse.core.runtime/
 
 endif
 
+# FIXME: "MAKEFLAGS=" for some reason does not cancel "--debug"
+# passing "--debug=no" to the sub-make would be a solution but not all versions support it
 .SECONDARY : .group-eval
 .group-eval :
 ifndef SKIP_GROUP_EVAL_TARGET
@@ -235,7 +244,7 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 	# assuming that command grouping is not needed in this case, so we just print the commands
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) MAKEFLAGS= -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
@@ -251,12 +260,14 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 			| $(MY_DIR)/pretty-print.pl; \
 		fi \
 	else \
-		exit $$?; \
+		rv=$$? && \
+		echo "Error in build script. Contact maintainer." >&2 && \
+		exit $$rv; \
 	fi
 else
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) MAKEFLAGS= -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
@@ -270,7 +281,9 @@ else
 			echo "$$commands" | $(MY_DIR)/group-eval.pl; \
 		fi \
 	else \
-		exit $$?; \
+		rv=$$? && \
+		echo "Error in build script. Contact maintainer." >&2 && \
+		exit $$rv; \
 	fi
 endif
 endif
