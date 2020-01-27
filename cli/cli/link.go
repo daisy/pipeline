@@ -116,6 +116,7 @@ func (p PipelineLink) Scripts() (scripts []pipeline.Script, err error) {
 	for idx, script := range scriptsStruct.Scripts {
 		scripts[idx], err = p.pipeline.Script(script.Id)
 		if err != nil {
+			err = fmt.Errorf("Error loading script %v: %v", script.Id, err)
 			return nil, err
 		}
 	}
