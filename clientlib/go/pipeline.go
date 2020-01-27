@@ -116,11 +116,13 @@ func (p Pipeline) Scripts() (scripts Scripts, err error) {
 	req := p.newResquest(API_SCRIPTS, &scripts, nil)
 	_, err = p.do(req, defaultErrorHandler())
 	if err != nil {
+		err = fmt.Errorf("Error parsing scripts XML: %v", err)
 		return
 	}
 	for _, script := range scripts.Scripts {
 		err = processInputsAndOptions(p, &script)
 		if err != nil {
+			err = fmt.Errorf("Error parsing scripts XML: %v: %v", script.Id, err)
 			return
 		}
 	}
@@ -135,6 +137,9 @@ func (p Pipeline) Script(id string) (script Script, err error) {
 		return
 	}
 	err = processInputsAndOptions(p, &script)
+	if err != nil {
+		err = fmt.Errorf("Error parsing script XML: %v: %v", script.Id, err)
+	}
 	return
 }
 
