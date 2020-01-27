@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 exclude-result-prefixes="#all"
                 version="2.0">
@@ -48,14 +49,22 @@
     </xsl:template>
     
     <xsl:template match="css:string[@value]" mode="eval-content-list">
-        <xsl:apply-templates select="." mode="css:eval"/>
+        <xsl:variable name="string" as="xs:string">
+            <xsl:apply-templates select="." mode="css:eval"/>
+        </xsl:variable>
+        <xsl:value-of select="$string"/>
     </xsl:template>
     
     <xsl:template match="css:attr" mode="eval-content-list">
         <xsl:param name="context" as="element()"/>
-        <xsl:apply-templates select="." mode="css:eval">
-            <xsl:with-param name="context" select="$context"/>
-        </xsl:apply-templates>
+        <xsl:variable name="string" as="xs:string?">
+            <xsl:apply-templates select="." mode="css:eval">
+                <xsl:with-param name="context" select="$context"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:if test="exists($string)">
+            <xsl:value-of select="$string"/>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="css:text[@target]|

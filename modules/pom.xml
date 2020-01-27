@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-aggregator</artifactId>
-  <version>1.13.2-SNAPSHOT</version>
+  <version>1.13.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for all the modules</name>
@@ -30,9 +30,9 @@
     <module>scripts</module>
   </modules>
 
-  <!-- don't publish aggregator -->
   <build>
     <plugins>
+      <!-- don't publish aggregator -->
       <plugin>
         <artifactId>maven-install-plugin</artifactId>
         <version>2.4</version>
@@ -45,6 +45,15 @@
         <version>2.4</version>
         <configuration>
           <skip>true</skip>
+        </configuration>
+      </plugin>
+      <!-- for releasing via super-project -->
+      <!-- FIXME: better to remove arguments=-Psonatype-oss-release from daisy-parent -->
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <arguments>${arguments}</arguments>
         </configuration>
       </plugin>
     </plugins>

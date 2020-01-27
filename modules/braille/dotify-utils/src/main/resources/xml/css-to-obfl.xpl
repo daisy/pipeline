@@ -201,8 +201,8 @@
     <p:wrap-sequence wrapper="_"/>
     <css:parse-content px:progress=".015">
         <p:documentation>
-            Make css:string, css:text, css:content, css:counter and css:custom-func elements from
-            css:content attributes. <!-- depends on make-pseudo-element -->
+            Make css:string, css:text, css:content, css:counter and css:custom-func elements and
+            text nodes from css:content attributes. <!-- depends on make-pseudo-element -->
         </p:documentation>
     </css:parse-content>
     <p:filter select="/_/*"/>

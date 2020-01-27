@@ -730,11 +730,12 @@
             </xsl:for-each-group>
     </xsl:template>
     
-    <xsl:template name="apply-templates-within-post-or-pre-content-sequence">
+    <xsl:template name="apply-templates-within-post-or-pre-content-sequence" as="element()*"> <!-- block|list-of-references -->
         <xsl:param name="select" as="element()*" required="yes"/> <!-- (css:box|obfl:list-of-references)* -->
         <xsl:for-each-group select="$select" group-adjacent="boolean(self::obfl:list-of-references or
                                                                      self::css:box[@type='block' and @css:_obfl-list-of-references])">
             <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
+            <xsl:variable name="last" as="xs:boolean" select="position()=last()"/>
             <xsl:choose>
                 <xsl:when test="current-grouping-key()">
                     <xsl:for-each select="current-group()">
@@ -791,6 +792,7 @@
                     </xsl:variable>
                     <xsl:for-each-group select="$block-boxes" group-adjacent="(@css:_obfl-use-when-collection-not-empty,'normal')[1]">
                         <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
+                        <xsl:variable name="last" as="xs:boolean" select="$last and position()=last()"/>
                         <xsl:variable name="flow" as="xs:string" select="current-grouping-key()"/>
                         <xsl:choose>
                             <xsl:when test="not($flow='normal')">
@@ -810,6 +812,7 @@
                                 <xsl:for-each select="current-group()">
                                     <xsl:apply-templates mode="sequence" select=".">
                                         <xsl:with-param name="top-of-page" tunnel="yes" select="$first and position()=1"/>
+                                        <xsl:with-param name="last-of-sequence" tunnel="yes" select="$last and position()=last()"/>
                                     </xsl:apply-templates>
                                 </xsl:for-each>
                             </xsl:otherwise>
@@ -1696,21 +1699,30 @@
     </xsl:template>
     
     <!--
-        page-break-after:always|right becomes break-before="page|sheet" on next block unless there is no next block
+        page-break-after:always|right|left has been previously propagated and converted to a
+        page-break-before on the following block. We now handle the case where there was no
+        following block. We can't just ignore the page-break-after because several flows may be
+        combined in the same sequence.
     -->
     <xsl:template priority="1"
                   mode="block"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)][@css:page-break-after[.='always']]">
+        <xsl:param name="last-of-sequence" as="xs:boolean" tunnel="yes" select="false()"/>
         <xsl:next-match/>
-        <block break-before="page"/>
+        <xsl:if test="not($last-of-sequence)">
+            <block break-before="page"/>
+        </xsl:if>
     </xsl:template>
     <xsl:template mode="block-attr"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='always']"/>
     <xsl:template priority="1"
                   mode="block"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)][@css:page-break-after[.='right']]">
+        <xsl:param name="last-of-sequence" as="xs:boolean" tunnel="yes" select="false()"/>
         <xsl:next-match/>
-        <block break-before="sheet"/>
+        <xsl:if test="not($last-of-sequence)">
+            <block break-before="sheet"/>
+        </xsl:if>
     </xsl:template>
     <xsl:template mode="block-attr"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='right']"/>

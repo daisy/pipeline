@@ -217,28 +217,30 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			locale,
 			hyphenator,
 			handleNonStandardHyphenation);
-		String contraction = q.containsKey("contraction")
-			? q.removeAll("contraction").iterator().next().getValue().get()
-			: null;
-		if (!"no".equals(contraction)) {
-			q.add("contraction", "no");
-			q.removeAll("grade");
-			Iterable<LiblouisTranslator> nonContractingTranslators = Iterables.memoize(
-				getSimpleTranslator(
-					q.asImmutable(),
-					locale,
-					hyphenator,
-					handleNonStandardHyphenation));
-			if (nonContractingTranslators.iterator().hasNext())
-				return Iterables.transform(
-					combinations(
-						Maps.toMap(
-							ImmutableList.<Boolean>of(Boolean.TRUE, Boolean.FALSE),
-							contracted -> contracted ? translators : nonContractingTranslators)),
-					new Function<Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>>,LiblouisTranslator>() {
-						public LiblouisTranslator _apply(Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>> translators) {
-							return new HandleTextTransformUncontracted(__apply(translators.get(true)),
-							                                           __apply(translators.get(false))); }});
+		if (translators.iterator().hasNext()) {
+			String contraction = q.containsKey("contraction")
+				? q.removeAll("contraction").iterator().next().getValue().get()
+				: null;
+			if (!"no".equals(contraction)) {
+				q.add("contraction", "no");
+				q.removeAll("grade");
+				Iterable<LiblouisTranslator> nonContractingTranslators = Iterables.memoize(
+					getSimpleTranslator(
+						q.asImmutable(),
+						locale,
+						hyphenator,
+						handleNonStandardHyphenation));
+				if (nonContractingTranslators.iterator().hasNext())
+					return Iterables.transform(
+						combinations(
+							Maps.toMap(
+								ImmutableList.<Boolean>of(Boolean.TRUE, Boolean.FALSE),
+								contracted -> contracted ? translators : nonContractingTranslators)),
+						new Function<Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>>,LiblouisTranslator>() {
+							public LiblouisTranslator _apply(Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>> translators) {
+								return new HandleTextTransformUncontracted(__apply(translators.get(true)),
+								                                           __apply(translators.get(false))); }});
+			}
 		}
 		return translators;
 	}

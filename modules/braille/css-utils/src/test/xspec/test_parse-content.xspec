@@ -92,4 +92,17 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_05">
+    <x:context>
+      <foo>
+        <css:after css:content="'⠄' '⠄'"/>
+      </foo>
+    </x:context>
+    <x:expect label="result">
+      <foo>
+        <css:after>⠄⠄</css:after>
+      </foo>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

@@ -56,7 +56,7 @@
 	  </xsl:if>
 	</frontmatter>
       </xsl:if>
-      <xsl:apply-templates select="node()|@*"/>
+      <xsl:apply-templates select="node()"/>
     </xsl:copy>
   </xsl:template>
 
@@ -66,7 +66,7 @@
       <xsl:if test="not(//doctitle)">
 	<xsl:call-template name="add-doc-title"/>
       </xsl:if>
-      <xsl:apply-templates select="node()|@*"/>
+      <xsl:apply-templates select="node()"/>
     </xsl:copy>
   </xsl:template>
 

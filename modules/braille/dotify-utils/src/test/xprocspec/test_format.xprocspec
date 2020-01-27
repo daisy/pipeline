@@ -7897,7 +7897,6 @@
                 <block>
                   <block>⠤⠤⠤</block>
                 </block>
-                <block break-before="page"/>
               </sequence>
             </pre-content>
           </volume-template>
@@ -7937,7 +7936,6 @@
                 <page>
                   <row>⠤⠤⠤</row>
                 </page>
-                <page/>
               </section>
               <section>
                 <page>
