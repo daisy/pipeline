@@ -516,7 +516,7 @@ public abstract class Options {
 				if (localRepository == null)
 					localRepository = DEFAULT_LOCAL_REPOSITORY;
 				if (!centralRedefined)
-					repositories.add(new RemoteRepository("central", "default", "http://repo1.maven.org/maven2/")); }
+					repositories.add(new RemoteRepository("central", "default", "https://repo1.maven.org/maven2/")); }
 			CollectRequest request = new CollectRequest();
 			for (MavenBundle bundle : fromBundles)
 				request.addDependency(new Dependency(bundle.asArtifact(), "runtime", false, bundle.exclusions));
