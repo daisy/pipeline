@@ -8,6 +8,7 @@
 /.maven-cache/
 /.maven-workspace/
 /maven.log
+/settings.xml
 # eclipse
 bin/
 .classpath
