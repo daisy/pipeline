@@ -178,7 +178,7 @@ pipeline2-$(assembly/VERSION)_debian.deb \
 	+$(EVAL) cp $< $@
 
 pipeline2-$(assembly/VERSION)_redhat.rpm \
-	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).rpm \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm \
 	| .group-eval
 	+$(EVAL) cp $< $@
 
@@ -194,8 +194,8 @@ $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
 assembly/.install.deb : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,deb)
 
-.SECONDARY : assembly/.install.rpm
-assembly/.install.rpm : assembly/.compile-dependencies | .maven-init .group-eval
+.SECONDARY : assembly/.install-linux.rpm
+assembly/.install-linux.rpm : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,rpm)
 
 .SECONDARY : assembly/.install-linux.zip
