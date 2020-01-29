@@ -2386,6 +2386,7 @@
                 <configuration>
                   <name>pipeline2</name>
                   <group>daisy-pipeline2</group>
+                  <classifier>linux</classifier>
                   <description>daisy-pipeline2</description>
                   <needarch>x86_64</needarch>
                   <mappings>
@@ -2520,12 +2521,13 @@
                 <id>package-rpm-cli</id>
                 <phase>package</phase>
                 <goals>
-                  <goal>rpm</goal>
+                  <goal>attached-rpm</goal>
                 </goals>
                 <configuration>
                   <name>pipeline2-cli</name>
                   <group>daisy-pipeline2-cli</group>
                   <projversion>${cli.version}</projversion>
+                  <classifier>cli</classifier>
                   <description>daisy-pipeline2-cli</description>
                   <needarch>x86_64</needarch>
                   <mappings>
