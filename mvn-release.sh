@@ -134,12 +134,16 @@ if [ ${#modules[@]} -gt 0 ]; then
     mkdir -p $tmp_dir
     
     # substitutions in settings file need to be made in advance because the release-plugin doesn't pass along
-    # system properties to the sub-process (and we can't use the "arguments" property, see below)
+    # system properties to the sub-process (and we can't use -Darguments because of the Maven bug and we can't
+    # apply the workaround below to the prepare step because the pom would get committed)
     # and also because Pax Exam wouldn't even resolve the system properties
     cat "$ROOT_DIR/$MY_DIR/mvn-release-settings.xml" | sed -e "s|\${releaseRepo}|$tmp_dir/repo|g" \
                                                            -e "s|\${cacheRepo}|$ROOT_DIR/$MVN_RELEASE_CACHE_REPO|g" \
                                                            -e "s|\${user\.home}|$HOME|g" \
                                                            >$tmp_dir/settings.xml
+    # because we can't reliably use -Darguments
+    # note however that below we pass -Darguments anyway because it might work (if the workaround is already
+    # applied to the POM, or if no parent POMs define the arguments property)
     echo "env org.ops4j.pax.url.mvn.settings='$tmp_dir/settings.xml' \\"
 fi
 printf "mvn clean release:clean release:prepare \\
@@ -152,6 +156,7 @@ fi
 if [ ${#modules[@]} -gt 0 ]; then
     printf " \\
     -DpreparationGoals='clean install' \\
+    -Darguments=\"-Dorg.ops4j.pax.url.mvn.settings='$tmp_dir/settings.xml'\" \\
     --settings '$tmp_dir/settings.xml'"
 fi
 echo " && \\"
