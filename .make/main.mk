@@ -127,7 +127,7 @@ $(SAXON) : | .maven-init
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # MAVEN_MODULES computed here because maven.mk may not be up to date yet
-$(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON)
+$(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(MVN_SETTINGS)
 	MAVEN_MODULES=$$(cat $< 2>/dev/null) && \
 	poms=($$(for m in $$MAVEN_MODULES; do echo "$$m/pom.xml"; done)) && \
 	if ! [ -e $@ ] || [[ -n $$(find pom.xml $${poms[*]} -newer $@ 2>/dev/null) ]]; then \
