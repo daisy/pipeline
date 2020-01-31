@@ -132,7 +132,7 @@
                                 <xsl:when test="$groupId='org.eclipse.persistence'">http://download.eclipse.org/rt/eclipselink/maven.repo/</xsl:when>
                                 <xsl:when test="$groupId='org.eclipse'">http://download.eclipse.org/gemini/mvn/</xsl:when>
                                 
-                                <xsl:otherwise>http://central.maven.org/maven2/</xsl:otherwise>
+                                <xsl:otherwise>https://repo1.maven.org/maven2/</xsl:otherwise>
                         </xsl:choose>
                 </xsl:variable>
                 <xsl:variable name="href" select="concat($repository, replace($groupId,'\.','/'), '/',$artifactId,'/',$version,'/',$artifactId,'-',$version,
