@@ -523,4 +523,48 @@
     </x:expect>
   </x:scenario>
   
+  <!--
+      Child selector followed by descendant selector: A > B C
+      
+      This does not select the C that have multiple B ancestors (bug).
+  -->
+  <x:scenario label="test_13" xfail="jstyleparser bug">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                body > section p { display: block }
+              </style>
+            </head>
+            <body>
+              <section>
+                <p>foo</p>
+                <section>
+                  <p>foo</p>
+                </section>
+              </section>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <section>
+            <p style="display: block;">foo</p>
+            <section>
+              <p style="display: block;">foo</p>
+            </section>
+          </section>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

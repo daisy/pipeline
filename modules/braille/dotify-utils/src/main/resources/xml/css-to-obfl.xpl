@@ -21,12 +21,64 @@
     <p:option name="duplex" select="'true'"/>
     <p:option name="skip-margin-top-of-page" select="'false'"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
-    <p:import href="propagate-page-break.xpl"/>
-    <p:import href="shift-obfl-marker.xpl"/>
-    <p:import href="make-obfl-pseudo-elements.xpl"/>
-    <p:import href="extract-obfl-pseudo-elements.xpl"/>
-    <p:import href="deep-parse-page-and-volume-stylesheets.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        px:error
+      </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
+      <p:documentation>
+        css:adjust-boxes
+        css:eval-counter
+        css:eval-string-set
+        css:eval-target-content
+        css:eval-target-text
+        css:flow-from
+        css:flow-into
+        css:inline
+        css:label-targets
+        css:make-anonymous-block-boxes
+        css:make-anonymous-inline-boxes
+        css:make-boxes
+        css:make-pseudo-elements
+        css:make-table-grid
+        css:new-definition
+        css:parse-content
+        css:parse-properties
+        css:parse-stylesheet
+        css:preserve-white-space
+        css:render-table-by
+        css:repeat-string-set
+        css:shift-id
+        css:shift-string-set
+        css:split
+      </p:documentation>
+    </p:import>
+    <p:import href="propagate-page-break.xpl">
+      <p:documentation>
+        pxi:propagate-page-break
+      </p:documentation>
+    </p:import>
+    <p:import href="shift-obfl-marker.xpl">
+      <p:documentation>
+        pxi:shift-obfl-marker
+      </p:documentation>
+    </p:import>
+    <p:import href="make-obfl-pseudo-elements.xpl">
+      <p:documentation>
+        pxi:make-obfl-pseudo-elements
+      </p:documentation>
+    </p:import>
+    <p:import href="extract-obfl-pseudo-elements.xpl">
+      <p:documentation>
+        pxi:extract-obfl-pseudo-elements
+      </p:documentation>
+    </p:import>
+    <p:import href="deep-parse-page-and-volume-stylesheets.xpl">
+      <p:documentation>
+        pxi:deep-parse-page-and-volume-stylesheets
+      </p:documentation>
+    </p:import>
     
     <p:declare-step type="pxi:recursive-parse-stylesheet-and-make-pseudo-elements">
         <p:input port="source"/>
@@ -35,8 +87,8 @@
             <p:documentation>
                 Make css:page, css:volume, css:after, css:before, css:footnote-call, css:duplicate,
                 css:alternate, css:_obfl-alternate-scenario, css:_obfl-on-toc-start,
-                css:_obfl-on-volume-start, css:_obfl-on-volume-end, css:_obfl-on-toc-end and
-                css:_obfl-volume-transition attributes.
+                css:_obfl-on-volume-start, css:_obfl-on-volume-end, css:_obfl-on-toc-end,
+                css:_obfl-volume-transition and css:_obfl-on-resumed attributes.
             </p:documentation>
         </css:parse-stylesheet>
         <p:delete match="@css:*[matches(local-name(),'^text-transform-')]">
@@ -64,6 +116,7 @@
                           //*/@css:_obfl-on-volume-start|
                           //*/@css:_obfl-on-volume-end|
                           //*/@css:_obfl-on-toc-end|
+                          //*/@css:_obfl-on-resumed[not(.='_')]|
                           //*/@css:_obfl-alternate-scenario
                           ">
                 <css:make-pseudo-elements>
@@ -76,7 +129,7 @@
                 <pxi:make-obfl-pseudo-elements>
                     <p:documentation>
                         Make css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-                        css:_obfl-on-volume-end, css:_obfl-on-toc-end and
+                        css:_obfl-on-volume-end, css:_obfl-on-toc-end, css:_obfl-on-resumed and
                         css:_obfl-alternate-scenario pseudo-elements.
                     </p:documentation>
                 </pxi:make-obfl-pseudo-elements>
@@ -131,8 +184,8 @@
         <p:documentation>
             Make css:page and css:volume and css:_obfl-volume-transition attributes, css:after,
             css:before, css:duplicate, css:alternate, css:footnote-call, css:_obfl-on-toc-start,
-            css:_obfl-on-volume-start, css:_obfl-on-volume-end and css:_obfl-on-toc-end
-            pseudo-elements.
+            css:_obfl-on-volume-start, css:_obfl-on-volume-end, css:_obfl-on-toc-end,
+            css:_obfl-on-resumed and css:_obfl-alternate-scenario pseudo-elements.
         </p:documentation>
     </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
     
@@ -262,7 +315,7 @@
             </p:documentation>
         </css:preserve-white-space>
         <p:add-attribute px:progress=".01"
-                         match="css:_[@css:_obfl-scenario and not(css:inline[not(.=('block','table'))])]"
+                         match="*[@css:_obfl-scenario and not(@css:display[.=('block','table')])]"
                          attribute-name="css:display"
                          attribute-value="block">
             <p:documentation>
@@ -456,18 +509,20 @@
     
     <css:shift-id px:progress=".01">
         <p:documentation>
-            Move css:id attributes to css:box elements.
+            Move css:id attributes to inline css:box elements.
         </p:documentation>
     </css:shift-id>
     
     <p:for-each px:progress=".27">
         <p:unwrap name="unwrap-css-_"
-                  match="css:_[not(@css:*) and parent::*]">
+                  match="css:_[not(@css:* except @css:_obfl-on-resumed) and parent::*]">
             <p:documentation>
                 All css:_ elements except for root elements, top-level elements in named flows (with
                 css:anchor attribute), and empty elements with a css:id, css:string-set or
-                css:_obfl-marker attribute within a css:box element should be gone now. <!-- depends
-                on shift-id and shift-string-set -->
+                css:_obfl-marker attribute within a css:box element should be gone now.
+                FIXME: We ignore that css:_ elements with a css:_obfl-on-resumed attribute may exist
+                if an inline `::-obfl-on-resumed` pseudo-element contains a block
+                pseudo-element. <!-- depends on shift-id and shift-string-set -->
             </p:documentation>
         </p:unwrap>
         <css:make-anonymous-block-boxes px:progress=".05">
@@ -751,15 +806,52 @@
     </p:group>
     
     <!--
+        add range attributes to toc-entry-on-resumed
+        
+        It is assumed that a ::-obfl-on-resumed pseudo-element is used on an element that represents
+        a single regular toc entry (a block element that generates only a single block box with
+        inline content), in which case the first preceding toc-entry element gives us the start of
+        the range and the last toc-entry before the first following toc-entry-on-resumed gives us
+        the end of the range. This is the only sensible way to use ::-obfl-on-resumed
+        pseudo-element.
+    -->
+    <p:label-elements match="obfl:toc-entry-on-resumed"
+                      attribute="range"
+                      label="concat('[',
+                                    ((preceding::obfl:toc-entry)[last()] intersect ancestor::obfl:table-of-contents/descendant::*)/@ref-id,
+                                    ',',
+                                    ((following::obfl:toc-entry-on-resumed[1]/preceding::obfl:toc-entry)[last()]
+                                      intersect ancestor::obfl:table-of-contents/descendant::*
+                                      intersect following::*)/@ref-id,
+                                    ')')"/>
+    <p:choose>
+      <p:when test="//obfl:toc-entry-on-resumed[starts-with(@range,'[,')]">
+        <px:error code="XXX" message="Unexpected use of ::-obfl-on-resumed"/>
+      </p:when>
+      <p:otherwise>
+        <p:identity/>
+      </p:otherwise>
+    </p:choose>
+    
+    <!--
         fill in <marker class="foo/prev"/> values
     -->
     <p:label-elements px:progress=".005"
                       match="obfl:marker[not(@value)]
-                                        [some $class in @class satisfies preceding::obfl:marker[concat(@class,'/prev')=$class]]"
+                                        [some $class in @class satisfies
+                                         preceding::obfl:marker[concat(@class,'/prev')=$class]]"
                       attribute="value"
-                      label="string-join(for $class in @class return (preceding::obfl:marker[concat(@class,'/prev')=$class])[last()]/@value,'')"/>
+                      label="(for $class in @class return
+                              (preceding::obfl:marker[concat(@class,'/prev')=$class])[last()]/@value)[1]"/>
     <p:delete match="obfl:marker[not(@value)]"/>
     
+    <!--
+        remove markers that are not used
+    -->
+    <p:delete match="obfl:marker[for $class in @class return
+                                 not(//obfl:marker-reference[@marker=$class] or
+                                     //obfl:marker-indicator[tokenize(normalize-space(@markers),' ')=$class])]"/>
+
     <!--
         because empty marker values would be regarded as absent in BrailleFilterImpl
     -->

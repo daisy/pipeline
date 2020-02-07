@@ -7740,12 +7740,12 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-entry ref-id="ch_1">
-              ⠿⠿⠿ ⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_1" number-format="default"/>
-            </toc-entry>
-            <toc-entry ref-id="ch_2">
-              ⠿⠿⠿ ⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_2" number-format="default"/>
-            </toc-entry>
+            <toc-block>
+              <toc-entry ref-id="ch_1">⠿⠿⠿ ⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+            </toc-block>
+            <toc-block>
+              <toc-entry ref-id="ch_2">⠿⠿⠿ ⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_2" number-format="default"/></toc-entry>
+            </toc-block>
           </table-of-contents>
           <volume-template sheets-in-volume-max="100">
             <post-content>
@@ -8071,12 +8071,12 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-entry ref-id="a">
-              <page-number ref-id="a" number-format="default"/>
-            </toc-entry>
-            <toc-entry ref-id="b">
-              <page-number ref-id="b" number-format="default"/>
-            </toc-entry>
+            <toc-block>
+              <toc-entry ref-id="a"><page-number ref-id="a" number-format="default"/></toc-entry>
+            </toc-block>
+            <toc-block>
+              <toc-entry ref-id="b"><page-number ref-id="b" number-format="default"/></toc-entry>
+            </toc-block>
           </table-of-contents>
           <volume-template sheets-in-volume-max="10">
             <pre-content>

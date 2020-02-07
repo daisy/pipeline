@@ -492,14 +492,10 @@
                                                                                     </xsl:apply-templates>
                                                                                 </table-of-contents>
                                                                                 <xsl:if test="(exists($before-toc) and $toc-range='document' and not($before-toc/self::obfl:list-of-references))
-                                                                                              or exists($on-toc-start)
-                                                                                              or $toc/@css:page-break-before='always'">
+                                                                                              or exists($on-toc-start)">
                                                                                     <on-toc-start>
                                                                                         <xsl:if test="$toc-range='document' and not($before-toc/self::obfl:list-of-references)">
                                                                                             <xsl:sequence select="$before-toc"/>
-                                                                                        </xsl:if>
-                                                                                        <xsl:if test="$toc/@css:page-break-before='always'">
-                                                                                            <block break-before="page"/>
                                                                                         </xsl:if>
                                                                                         <xsl:apply-templates mode="sequence" select="$on-toc-start">
                                                                                             <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
@@ -896,7 +892,7 @@
     <xsl:template mode="block-attr span-attr td-attr table-attr assert-nil-attr"
                   match="css:box/@part"/>
     
-    <xsl:template mode="block-attr span-attr td-attr table-attr toc-entry-attr assert-nil-attr"
+    <xsl:template mode="block-attr span-attr td-attr table-attr assert-nil-attr"
                   match="css:box/@name|
                          css:box/css:_/@name|
                          css:_/css:_/@name"/>
@@ -912,11 +908,11 @@
     
     <xsl:template mode="table-of-contents"
                   match="css:box[@type='block']">
-        <xsl:apply-templates mode="toc-entry" select="."/>
+        <xsl:apply-templates mode="toc-block" select="."/>
     </xsl:template>
     
     <!--
-        block or toc-entry element depending on context
+        block or toc-block element depending on context
     -->
     <xsl:template priority="0.8"
                   mode="block"
@@ -926,7 +922,7 @@
         </block>
     </xsl:template>
     <xsl:template priority="0.8"
-                  mode="toc-entry"
+                  mode="toc-block"
                   match="css:box[@type='block']">
         <!--
             Automatically compute the toc-entry's ref-id by searching for target-counter(),
@@ -956,11 +952,11 @@
             <xsl:when test="exists($descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])">
                 <xsl:variable name="ref-id" as="xs:string"
                               select="$descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]"/>
-                <toc-entry ref-id="{$ref-id}">
+                <toc-block>
                     <xsl:next-match>
                         <xsl:with-param name="toc-entry-ref-id" select="$ref-id" tunnel="yes"/>
                     </xsl:next-match>
-                </toc-entry>
+                </toc-block>
             </xsl:when>
             <xsl:when test="exists($descendant-refs)">
                 <!--
@@ -972,20 +968,20 @@
             <xsl:when test="exists($following-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])">
                 <xsl:variable name="ref-id" as="xs:string"
                               select="$following-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]"/>
-                <toc-entry ref-id="{$ref-id}">
+                <toc-block>
                     <xsl:next-match>
                         <xsl:with-param name="toc-entry-ref-id" select="$ref-id" tunnel="yes"/>
                     </xsl:next-match>
-                </toc-entry>
+                </toc-block>
             </xsl:when>
             <xsl:when test="exists($preceding-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])">
                 <xsl:variable name="ref-id" as="xs:string"
                               select="$preceding-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][last()]"/>
-                <toc-entry ref-id="{$ref-id}">
+                <toc-block>
                     <xsl:next-match>
                         <xsl:with-param name="toc-entry-ref-id" select="$ref-id" tunnel="yes"/>
                     </xsl:next-match>
-                </toc-entry>
+                </toc-block>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="pf:warn">
@@ -1000,11 +996,11 @@
     </xsl:template>
     
     <!--
-        wrap content in additional block or toc-entry element (depending on context) when
+        wrap content in additional block or toc-block element (depending on context) when
         page-break-before is combined with padding-top and string-set
     -->
     <xsl:template priority="0.73"
-                  mode="block"
+                  mode="block toc-block"
                   match="css:box[@type='block'][@css:page-break-before]">
           <xsl:apply-templates mode="block-attr" select="@css:page-break-before"/>
           <xsl:next-match/>
@@ -1018,14 +1014,21 @@
                               $first-inline/css:_[not(preceding-sibling::*) and
                                                   not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
                                            //@css:string-set"/>
+        <xsl:variable name="id-on-first-inline" as="attribute()*"
+                      select="$first-inline/@css:id|
+                              $first-inline/css:_[not(preceding-sibling::*) and
+                                                  not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
+                                           //@css:id"/>
         <xsl:choose>
-            <xsl:when test="$string-set-on-first-inline
+            <xsl:when test="($string-set-on-first-inline or $id-on-first-inline)
                             and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:padding-top
                             and not((descendant::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:page-break-before)">
                 <xsl:apply-templates mode="marker" select="$string-set-on-first-inline"/>
+                <xsl:apply-templates mode="#current" select="$id-on-first-inline"/>
                 <block>
                     <xsl:next-match>
                         <xsl:with-param name="string-set-handled" tunnel="yes" select="$string-set-on-first-inline"/>
+                        <xsl:with-param name="id-handled" tunnel="yes" select="$id-on-first-inline"/>
                     </xsl:next-match>
                 </block>
             </xsl:when>
@@ -1035,25 +1038,31 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template priority="0.72"
-                  mode="toc-entry"
+                  mode="toc-block"
                   match="css:box[@type='block'][@css:page-break-before]">
-        <xsl:param name="toc-entry-ref-id" as="xs:string" tunnel="yes"/>
         <xsl:variable name="first-inline" as="element()?" select="(descendant::css:box[@type='inline'])[1]"/>
         <xsl:variable name="string-set-on-first-inline" as="attribute()*"
                       select="$first-inline/@css:string-set|
                               $first-inline/css:_[not(preceding-sibling::*) and
                                                   not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
                                            //@css:string-set"/>
+        <xsl:variable name="id-on-first-inline" as="attribute()*"
+                      select="$first-inline/@css:id|
+                              $first-inline/css:_[not(preceding-sibling::*) and
+                                                  not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
+                                           //@css:id"/>
         <xsl:choose>
-            <xsl:when test="$string-set-on-first-inline
+            <xsl:when test="($string-set-on-first-inline or $id-on-first-inline)
                             and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:padding-top
                             and not((descendant::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:page-break-before)">
                 <xsl:apply-templates mode="marker" select="$string-set-on-first-inline"/>
-                <toc-entry ref-id="{$toc-entry-ref-id}">
+                <xsl:apply-templates mode="#current" select="$id-on-first-inline"/>
+                <toc-block>
                     <xsl:next-match>
                         <xsl:with-param name="string-set-handled" tunnel="yes" select="$string-set-on-first-inline"/>
+                        <xsl:with-param name="id-handled" tunnel="yes" select="$id-on-first-inline"/>
                     </xsl:next-match>
-                </toc-entry>
+                </toc-block>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:next-match/>
@@ -1067,9 +1076,15 @@
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>
+    <xsl:template priority="0.7" mode="block td toc-entry" match="@css:id">
+        <xsl:param name="id-handled" as="attribute()*" tunnel="yes" select="()"/>
+        <xsl:if test="not(. intersect $id-handled)">
+            <xsl:next-match/>
+        </xsl:if>
+    </xsl:template>
     
     <!--
-        wrap content in additional block or toc-entry element (depending on context) when
+        wrap content in additional block or toc-block element (depending on context) when
         line-height > 1 is combined with top/bottom margin or border
     -->
     <xsl:template priority="0.61"
@@ -1083,22 +1098,21 @@
         </block>
     </xsl:template>
     <xsl:template priority="0.61"
-                  mode="toc-entry"
+                  mode="toc-block"
                   match="css:box[@type='block']
                                 [@css:line-height
                                  and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
                                       @css:border-top-pattern or @css:border-bottom-pattern)]">
-        <xsl:param name="toc-entry-ref-id" as="xs:string" tunnel="yes"/>
-        <toc-entry ref-id="{$toc-entry-ref-id}">
+        <toc-block>
             <xsl:next-match/>
-        </toc-entry>
+        </toc-block>
     </xsl:template>
     
     <!--
         attributes that apply on inner block if content is wrapped in additional block
     -->
     <xsl:template priority="0.6"
-                  mode="block toc-entry"
+                  mode="block toc-block"
                   match="css:box[@type='block']
                                 [not(@css:line-height
                                      and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
@@ -1109,7 +1123,7 @@
         <xsl:apply-templates mode="anchor" select="@css:id"/>
     </xsl:template>
     <xsl:template priority="0.6"
-                  mode="block toc-entry"
+                  mode="block toc-block"
                   match="css:box[@type='block']
                                 [@css:line-height
                                  and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
@@ -1125,9 +1139,29 @@
     </xsl:template>
     
     <xsl:template priority="0.59"
-                  mode="block toc-entry"
+                  mode="block toc-block"
                   match="css:box[@type='block']">
         <xsl:apply-templates mode="#current"/>
+    </xsl:template>
+    <xsl:template priority="0.591"
+                  mode="toc-block"
+                  match="css:box[@type='block'][child::css:box[@type='inline']]">
+        <xsl:param name="toc-entry-ref-id" as="xs:string" tunnel="yes"/>
+        <xsl:choose>
+            <xsl:when test="ancestor-or-self::*/@css:_obfl-on-resumed or descendant::*/@css:_obfl-on-resumed">
+                <toc-entry-on-resumed>
+                    <!--
+                        The range attribute is added later
+                    -->
+                    <xsl:apply-templates mode="toc-entry"/>
+                </toc-entry-on-resumed>
+            </xsl:when>
+            <xsl:otherwise>
+                <toc-entry ref-id="{$toc-entry-ref-id}">
+                    <xsl:apply-templates mode="toc-entry"/>
+                </toc-entry>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!--
@@ -1156,7 +1190,7 @@
                          css:box[@type='block'][@css:_obfl-scenarios]/css:box[@type=('block','table')]/@css:_obfl-scenario-cost"/>
     
     <xsl:template priority="0.7"
-                  mode="toc-entry"
+                  mode="toc-block"
                   match="css:box[@type='block']">
         <xsl:apply-templates mode="assert-nil-attr" select="@css:_obfl-scenarios"/>
         <xsl:next-match/>
@@ -1166,7 +1200,7 @@
         attributes translate, hyphenate
     -->
     <xsl:template priority="0.71"
-                  mode="block toc-entry"
+                  mode="block toc-block"
                   match="css:box[@type='block']"
                   name="insert-text-attributes-and-next-match">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
@@ -1197,7 +1231,7 @@
         all other attributes
     -->
     <xsl:template priority="0.7"
-                  mode="block toc-entry"
+                  mode="block toc-block"
                   match="css:box[@type='block']">
         <xsl:apply-templates mode="block-attr"
                              select="@* except (@type|
@@ -1514,7 +1548,7 @@
         </xsl:next-match>
     </xsl:template>
     
-    <xsl:template mode="block-attr span-attr td-attr table-attr toc-entry-attr assert-nil-attr"
+    <xsl:template mode="block-attr span-attr td-attr table-attr assert-nil-attr"
                   match="css:box/@css:word-spacing"/>
     
     <xsl:template priority="1.01"
@@ -1533,16 +1567,15 @@
     <!-- ================ -->
     
     <xsl:template priority="0.6"
-                  mode="block-attr toc-entry-attr"
+                  mode="block-attr"
                   match="/css:_/*/@css:_obfl-toc|
-                         /css:_/*[@css:_obfl-toc]/@css:page-break-before[.='always']|
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-toc-range|
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-on-toc-start|
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-on-volume-start|
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-on-volume-end|
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-on-toc-end"/>
     
-    <xsl:template mode="block-attr table-attr toc-entry-attr"
+    <xsl:template mode="block-attr table-attr"
                   match="css:box[@type=('block','table')]/@css:margin-left|
                          css:box[@type=('block','table')]/@css:margin-right|
                          css:box[@type=('block','table')]/@css:margin-top|
@@ -1585,7 +1618,7 @@
         <xsl:attribute name="{local-name()}" select="format-number($padding + $margin, '0')"/>
     </xsl:template>
     
-    <xsl:template mode="block-attr table-attr toc-entry-attr"
+    <xsl:template mode="block-attr table-attr"
                   match="css:box[@type=('block','table')]/@css:line-height">
         <xsl:variable name="rounded" as="xs:double" select="number(css:round-line-height(.))"/>
         <xsl:choose>
@@ -1603,7 +1636,7 @@
         handle negative text-indent
     -->
     <xsl:template priority="0.6"
-                  mode="block-attr table-attr td-attr toc-entry-attr"
+                  mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table-cell')
                                  and not(child::css:box[@type='block'])
                                  and not(@css:border-top-pattern|@css:border-bottom-pattern|@css:border-left-pattern)
@@ -1611,14 +1644,14 @@
                          /@css:margin-left"/>
     
     <xsl:template priority="0.6"
-                  mode="block-attr table-attr td-attr toc-entry-attr"
+                  mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table-cell')
                                  and not(child::css:box[@type='block'])
                                  and @css:text-indent]
                          /@css:padding-left"/>
     
     <xsl:template priority="0.6"
-                  mode="block-attr table-attr td-attr toc-entry-attr"
+                  mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table-cell')
                                  and not(child::css:box[@type='block'])]
                          /@css:text-indent">
@@ -1645,10 +1678,10 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
+    <xsl:template mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table-cell')]/@css:text-indent"/>
     
-    <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
+    <xsl:template mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table-cell')]/@css:text-align">
         <xsl:attribute name="align" select="."/>
     </xsl:template>
@@ -1713,6 +1746,12 @@
             <block break-before="page"/>
         </xsl:if>
     </xsl:template>
+    <xsl:template priority="1"
+                  mode="toc-block"
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)][@css:page-break-after[.='always']]">
+        <xsl:next-match/>
+        <toc-block break-before="page"/>
+    </xsl:template>
     <xsl:template mode="block-attr"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='always']"/>
     <xsl:template priority="1"
@@ -1723,6 +1762,12 @@
         <xsl:if test="not($last-of-sequence)">
             <block break-before="sheet"/>
         </xsl:if>
+    </xsl:template>
+    <xsl:template priority="1"
+                  mode="toc-block"
+                  match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)][@css:page-break-after[.='right']]">
+        <xsl:next-match/>
+        <toc-block break-before="sheet"/>
     </xsl:template>
     <xsl:template mode="block-attr"
                   match="css:box[@type='block'][not(parent::css:box) and not(following-sibling::*)]/@css:page-break-after[.='right']"/>
@@ -1779,20 +1824,6 @@
         <xsl:attribute name="{replace(local-name(),'^_obfl-','')}" select="format-number(xs:integer(.), '0')"/>
     </xsl:template>
     
-    <xsl:template mode="toc-entry-attr"
-                  match="css:box[@type='block']/@css:_obfl-vertical-position|
-                         css:box[@type='block']/@css:_obfl-vertical-align|
-                         css:box[@type='block' and not(@css:_obfl-toc)]/@css:page-break-before|
-                         css:box[@type='block']/@css:page-break-after|
-                         css:box[@type='block']/@css:page-break-inside|
-                         css:box[@type='block']/@css:orphans|
-                         css:box[@type='block']/@css:widows">
-        <xsl:call-template name="pf:warn">
-            <xsl:with-param name="msg">Property {} not supported inside an element with display: -obfl-toc</xsl:with-param>
-            <xsl:with-param name="args" select="replace(local-name(),'^_','-')"/>
-        </xsl:call-template>
-    </xsl:template>
-    
     <xsl:template priority="1.1"
                   mode="block-attr"
                   match="css:box[@type='table-cell']//css:box[@type='block']/@css:_obfl-vertical-position|
@@ -1808,7 +1839,7 @@
         </xsl:call-template>
     </xsl:template>
     
-    <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
+    <xsl:template mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table','table-cell')]/@css:border-left-pattern|
                          css:box[@type=('block','table','table-cell')]/@css:border-right-pattern">
         <xsl:variable name="name" select="replace(local-name(),'-pattern$','')"/>
@@ -1839,7 +1870,7 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
+    <xsl:template mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table','table-cell')]/@css:border-top-pattern|
                          css:box[@type=('block','table','table-cell')]/@css:border-bottom-pattern">
         <xsl:variable name="name" select="replace(local-name(),'-pattern$','')"/>
@@ -1879,7 +1910,7 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
+    <xsl:template mode="block-attr table-attr td-attr"
                   match="css:box[@type='block']/@css:_obfl-underline">
         <xsl:attribute name="underline-pattern" select="."/>
     </xsl:template>
@@ -2214,13 +2245,33 @@
                             (descendant::css:string)/@target|
                             (descendant::css:box)/@css:anchor)"/>
     
-    <xsl:template mode="block-attr toc-entry-attr span-attr"
+    <xsl:template mode="block-attr span-attr"
                   match="css:box[@type='block']/@css:id|
                          css:box[@type='inline']/@css:id|
                          css:box[@type='inline']/css:_/@css:id">
         <xsl:variable name="id" as="xs:string" select="."/>
         <xsl:if test="not(ancestor::*/@css:flow[not(.='normal')]) and $id=($page-number-references,$toc-entry-references)">
             <xsl:attribute name="id" select="$id"/>
+        </xsl:if>
+    </xsl:template>
+    
+    <!--
+        wrap ID spans at the start of a block in an additional block
+    -->
+    <xsl:template priority="0.6"
+                  mode="block td toc-entry"
+                  match="css:box[@type='block']/css:box[@type='inline'][not(preceding-sibling::css:box)]/@css:id|
+                         css:box[@type='block']/css:box[@type='inline'][not(preceding-sibling::css:box)]
+                         /css:_[not(preceding-sibling::*) and
+                                not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
+                         //@css:id">
+        <xsl:variable name="span" as="node()*">
+            <xsl:next-match/>
+        </xsl:variable>
+        <xsl:if test="exists($span)">
+            <block>
+                <xsl:sequence select="$span"/>
+            </block>
         </xsl:if>
     </xsl:template>
     
@@ -2242,7 +2293,7 @@
         </xsl:if>
     </xsl:template>
     
-    <xsl:template mode="block-attr span-attr toc-entry-attr assert-nil-attr"
+    <xsl:template mode="block-attr span-attr assert-nil-attr"
                   match="css:box/@css:anchor"/>
     
     <!-- ======= -->
@@ -2421,7 +2472,7 @@
     <!-- === -->
     
     <xsl:template priority="0.1"
-                  mode="block-attr toc-entry-attr"
+                  mode="block-attr"
                   match="css:box[@type='block']/@css:_obfl-toc">
         <xsl:call-template name="pf:warn">
             <xsl:with-param name="msg">display: -obfl-toc only allowed on elements that are flowed into @begin or @end area.</xsl:with-param>
@@ -2445,10 +2496,31 @@
                                ' pseudo-element only allowed on elements with display: -obfl-toc or -obfl-list-of-references.')"/>
     </xsl:template>
     
+    <xsl:template priority="0.1"
+                  mode="block-attr span-attr assert-nil-attr"
+                  match="@css:_obfl-on-resumed">
+        <xsl:if test="not(ancestor::css:box[@type='block' and @css:_obfl-toc])">
+            <xsl:message terminate="yes">
+                <xsl:text>::-obfl-on-resumed pseudo-element only allowed within a display:-obfl-toc</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <xsl:if test="parent::*/ancestor::*/@css:_obfl-on-resumed">
+            <xsl:message terminate="yes">
+                <xsl:text>::-obfl-on-resumed pseudo-elements may not be nested</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <xsl:if test="parent::*/ancestor-or-self::css:box[@type='block'][1]/descendant::css:box[@type='inline']
+                      except parent::*/descendant-or-self::css:box">
+            <xsl:message terminate="yes">
+                <xsl:text>::-obfl-on-resumed pseudo-element must have its own block box</xsl:text>
+            </xsl:message>
+        </xsl:if>
+    </xsl:template>
+    
     <xsl:template priority="-10"
-                  mode="#default sequence item table-of-contents block span table tr td toc-entry assert-nil
+                  mode="#default sequence item table-of-contents block span table tr td toc-block toc-entry assert-nil
                         sequence-attr item-attr table-of-contents-attr block-attr span-attr
-                        table-attr tr-attr td-attr toc-entry-attr assert-nil-attr
+                        table-attr tr-attr td-attr assert-nil-attr
                         marker sequence-interrupted-resumed"
                   match="@*|node()">
         <xsl:call-template name="coding-error"/>
@@ -2499,6 +2571,7 @@
     <xsl:template match="pxi:print-mode" mode="table">table</xsl:template>
     <xsl:template match="pxi:print-mode" mode="tr">tr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="td">td</xsl:template>
+    <xsl:template match="pxi:print-mode" mode="toc-block">toc-block</xsl:template>
     <xsl:template match="pxi:print-mode" mode="toc-entry">toc-entry</xsl:template>
     <xsl:template match="pxi:print-mode" mode="assert-nil">assert-nil</xsl:template>
     <xsl:template match="pxi:print-mode" mode="sequence-attr">sequence-attr</xsl:template>
@@ -2509,7 +2582,6 @@
     <xsl:template match="pxi:print-mode" mode="table-attr">table-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="tr-attr">tr-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="td-attr">td-attr</xsl:template>
-    <xsl:template match="pxi:print-mode" mode="toc-entry-attr">toc-entry-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="assert-nil-attr">assert-nil-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="marker">marker</xsl:template>
     <xsl:template match="pxi:print-mode" mode="xml-data">xml-data</xsl:template>

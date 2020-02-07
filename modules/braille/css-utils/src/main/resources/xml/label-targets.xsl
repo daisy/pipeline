@@ -55,7 +55,7 @@
                 </xsl:if>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="target" as="element()?" select="$target[1]"/>
+        <xsl:variable name="target" as="element()?" select="$target[1]"/> <!-- first occurence wins -->
         <xsl:choose>
             <xsl:when test="exists($target)">
                 <xsl:copy>

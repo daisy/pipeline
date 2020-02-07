@@ -46,9 +46,10 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 	private final static char LF = '\n';
 	private final static char TAB = '\t';
 	private final static char NBSP = '\u00a0';
-	private final static Pattern VALID_INPUT = Pattern.compile("[ivxlcdm0-9\u2800-\u28ff" + SHY + ZWSP + SPACE + LF + CR + TAB + NBSP + "]*");
-	private final static Pattern NUMBER = Pattern.compile("(?<natural>[0-9]+)|(?<roman>[ivxlcdm]+)");
+	private final static Pattern VALID_INPUT = Pattern.compile("[ivxlcdm0-9\\.\u2800-\u28ff" + SHY + ZWSP + SPACE + LF + CR + TAB + NBSP + "]*");
+	private final static Pattern NUMBER = Pattern.compile("(?<decimal>[0-9]+\\.[0-9]+)|(?<natural>[0-9]+)|(?<roman>[ivxlcdm]+)");
 	private final static String NUMSIGN = "\u283c";
+	private final static String DECIMAL_POINT = "\u2832";
 	private final static String[] DIGIT_TABLE = new String[]{
 		"\u281a","\u2801","\u2803","\u2809","\u2819","\u2811","\u280b","\u281b","\u2813","\u280a"};
 	private final static String[] DOWNSHIFTED_DIGIT_TABLE = new String[]{
@@ -73,15 +74,19 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 			String number = m.group();
 			if (m.group("roman") != null)
 				sb.append(translateRomanNumber(number));
+			else if (m.group("decimal") != null)
+				sb.append(translateDecimalNumber(Integer.parseInt(number.split("\\.")[0]),
+				                                 Integer.parseInt(number.split("\\.")[1]),
+				                                 downshift));
 			else
-				sb.append(translateNaturalNumber(Integer.parseInt(number), downshift)); }
+				sb.append(translateNaturalNumber(Integer.parseInt(number), !downshift, downshift)); }
 		if (idx == 0)
 			return text;
 		sb.append(text.substring(idx));
 		return sb.toString();
 	}
 	
-	private static String translateNaturalNumber(int number, boolean downshift) {
+	private static String translateNaturalNumber(int number, boolean numsign, boolean downshift) {
 		StringBuilder sb = new StringBuilder();
 		String[] table = downshift ? DOWNSHIFTED_DIGIT_TABLE : DIGIT_TABLE;
 		if (number == 0)
@@ -89,11 +94,19 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 		while (number > 0) {
 			sb.insert(0, table[number % 10]);
 			number = number / 10; }
-		if (!downshift)
+		if (numsign)
 			sb.insert(0, NUMSIGN);
 		return sb.toString();
 	}
 	
+	private static String translateDecimalNumber(int whole, int decimal, boolean downshift) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(translateNaturalNumber(whole, true, downshift));
+		sb.append(DECIMAL_POINT);
+		sb.append(translateNaturalNumber(decimal, false, downshift));
+		return sb.toString();
+	}
+
 	private static String translateRomanNumber(String number) {
 		return number.replace('i', '⠊')
 		             .replace('v', '⠧')

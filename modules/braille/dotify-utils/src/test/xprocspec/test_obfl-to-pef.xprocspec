@@ -138,9 +138,8 @@
   
   <x:scenario label="toc-sequence">
     <x:documentation>
-      Tests toc-sequence/table-of-contents. Test that nested toc-entries have no special
-      behavior. Tests that on-toc-start and on-toc-end can be used for creating top and bottom
-      borders. Tests that break-before="page" works inside on-toc-start.
+      Tests toc-sequence/table-of-contents. Tests that on-toc-start and on-toc-end can be used for
+      creating top and bottom borders. Tests that break-before="page" works inside on-toc-start.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -153,22 +152,21 @@
               </default-template>
             </layout-master>
             <table-of-contents name="toc">
-              <toc-entry ref-id="ch_1"
-                         border-left-style="solid"
+              <toc-block border-left-style="solid"
                          border-left-align="outer"
                          padding-left="1"
                          border-right-style="solid"
                          border-right-align="outer">
-                <toc-entry ref-id="ch_1">
-                  ⠿
-                  <toc-entry ref-id="ch_1_1" margin-left="1">
-                    ⠿⠿
-                  </toc-entry>
-                  <toc-entry ref-id="ch_1_2" margin-left="1">
-                    ⠿⠿
-                  </toc-entry>
-                </toc-entry>
-              </toc-entry>
+                <toc-block>
+                  <toc-entry ref-id="ch_1">⠿</toc-entry>
+                  <toc-block margin-left="1">
+                    <toc-entry ref-id="ch_1_1">⠿⠿</toc-entry>
+                  </toc-block>
+                  <toc-block margin-left="1">
+                    <toc-entry ref-id="ch_1_2">⠿⠿</toc-entry>
+                  </toc-block>
+                </toc-block>
+              </toc-block>
             </table-of-contents>
             <volume-template sheets-in-volume-max="3" use-when="(= $volume 1)">
               <pre-content>
@@ -369,21 +367,21 @@
               </default-template>
             </layout-master>
             <table-of-contents name="toc">
-              <toc-entry ref-id="ch_1">
-                <toc-entry ref-id="ch_0">
-                  ⠤⠤⠤
-                  <page-number ref-id="ch_0" number-format="default"/>
-                </toc-entry>
-                <toc-entry ref-id="ch_1">
-                  ⠿ <page-number ref-id="ch_1" number-format="default"/>
-                  <toc-entry ref-id="ch_1_1" margin-left="1">
-                    ⠿⠿ <page-number ref-id="ch_1_1" number-format="default"/>
-                  </toc-entry>
-                  <toc-entry ref-id="ch_1_2" margin-left="1">
-                    ⠿⠿ <page-number ref-id="ch_1_2" number-format="default"/>
-                  </toc-entry>
-                </toc-entry>
-              </toc-entry>
+              <toc-block>
+                <toc-block>
+                  <toc-entry ref-id="ch_0">⠤⠤⠤
+                  <page-number ref-id="ch_0" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block>
+                  <toc-entry ref-id="ch_1">⠿ <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+                  <toc-block margin-left="1">
+                    <toc-entry ref-id="ch_1_1">⠿⠿ <page-number ref-id="ch_1_1" number-format="default"/></toc-entry>
+                  </toc-block>
+                  <toc-block margin-left="1">
+                    <toc-entry ref-id="ch_1_2">⠿⠿ <page-number ref-id="ch_1_2" number-format="default"/></toc-entry>
+                  </toc-block>
+                </toc-block>
+              </toc-block>
             </table-of-contents>
             <volume-template sheets-in-volume-max="100" use-when="(= $volume 1)">
               <pre-content>

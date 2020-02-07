@@ -35,6 +35,22 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="*[@css:_obfl-on-resumed[not(.='_')]]">
+        <xsl:copy>
+            <xsl:sequence select="@* except @css:_obfl-on-resumed"/>
+            <xsl:apply-templates/>
+        </xsl:copy>
+        <!--
+            Set an attribute in addition to the element because the element are renamed later in the process.
+        -->
+        <css:_obfl-on-resumed css:_obfl-on-resumed="_" style="{@css:_obfl-on-resumed}">
+            <!--
+                Copy attributes so that attr(...) can be evaluated correctly
+            -->
+            <xsl:sequence select="@* except (@style|@css:*)"/>
+        </css:_obfl-on-resumed>
+    </xsl:template>
+    
     <xsl:template match="*[@css:_obfl-alternate-scenario]">
         <xsl:if test="@css:flow[not(.='normal')]">
             <xsl:message terminate="yes">Elements with a ::-obfl-alternate-scenario pseudo-element must participate in the normal flow.</xsl:message>
@@ -42,12 +58,9 @@
         <!--
             The reason we use attributes to tag the scenarios, and not elements, is because elements
             are renamed later in the process. We ensure the tree structure is not changed by forcing
-            the "obfl-scenarios" and "obfl-scenario" elements to be blocks (this happens later in
-            pxi:css-to-obfl).
+            the "obfl-scenarios" and "obfl-scenario" elements to be blocks (the latter happens later
+            in pxi:css-to-obfl).
         -->
-        <xsl:variable name="id" select="if (@css:id) then string(@css:id)
-                                        else if (@css:anchor) then @css:anchor
-                                        else generate-id(.)"/>
         <css:_ css:_obfl-scenarios="_" css:display="block">
             <xsl:copy>
                 <xsl:attribute name="css:_obfl-scenario" select="'_'"/>

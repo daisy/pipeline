@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.13.3-SNAPSHOT</version>
+    <version>1.13.5-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
@@ -347,6 +347,9 @@
               <sourceDirectory>${project.build.directory}/classes</sourceDirectory>
               <outputDirectory>${project.build.directory}/doc/src/main/resources</outputDirectory>
               <includes>
+                META-INF/catalog.xml,
+                **/*.xpl,
+                **/*.xsl,
                 hyphen/,
                 hyphen/*
               </includes>

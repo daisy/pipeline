@@ -230,7 +230,6 @@
             </block>
             <block break-before="page">
               <block>
-                <marker class="print-page/prev" value="⠤"/>
                 <marker class="print-page" value="⠤⠤"/>
                 <marker class="running-footer" value="⠤⠤"/>
               </block>
@@ -238,7 +237,6 @@
             </block>
             <block break-before="page">
               <block>
-                <marker class="print-page/prev" value="⠤⠤"/>
                 <marker class="print-page" value="​"/>
                 <marker class="running-header" value="⠤⠤"/>
               </block>
@@ -246,9 +244,7 @@
             </block>
             <block break-before="page">
               <block>
-                <marker class="print-page/prev" value="​"/>
                 <marker class="print-page" value="⠤⠤⠤"/>
-                <marker class="running-footer/prev" value="⠤⠤"/>
                 <marker class="running-footer" value="​"/>
               </block>
               ⠤⠤⠤
@@ -2165,28 +2161,29 @@
               <page-number ref-id="chapter_3" number-format="default"/>
             </block>
             <block align="center" break-before="page">
+              <block/>
               <block>
-                <marker class="print-page" value="⠤"/>
+                <span id="chapter_1"/>
               </block>
-              <span id="chapter_1"/>
               ⠿
             </block>
             <block>
               ⠤⠤⠤
             </block>
             <block align="center" break-before="page">
-              <span id="chapter_2"/>
+              <block>
+                <span id="chapter_2"/>
+              </block>
               ⠿⠿
             </block>
             <block>
               ⠤⠤⠤
             </block>
             <block align="center" break-before="page">
+              <block/>
               <block>
-                <marker class="print-page/prev" value="⠤"/>
-                <marker class="print-page" value="⠤⠤"/>
+                <span id="chapter_3"/>
               </block>
-              <span id="chapter_3"/>
               ⠿⠿⠿
             </block>
             <block>
@@ -2350,23 +2347,33 @@
             </block>
             <block break-before="page">
               <block>
-                <span id="chapter_1"/>
+                <block>
+                  <span id="chapter_1"/>
+                </block>
                 ⠿
               </block>
               <block>
-                <span id="x"/>
+                <block>
+                  <span id="x"/>
+                </block>
                 ⠤⠤⠤
               </block>
               <block>
-                <span id="chapter_2"/>
+                <block>
+                  <span id="chapter_2"/>
+                </block>
                 ⠿⠿
               </block>
               <block>
-                <span id="y"/>
+                <block>
+                  <span id="y"/>
+                </block>
                 ⠤⠤⠤
               </block>
               <block>
-                <span id="z"/>
+                <block>
+                  <span id="z"/>
+                </block>
                 ⠤⠤⠤
               </block>
             </block>
@@ -3785,7 +3792,9 @@
               <page-number ref-id="foo" number-format="default"/>
             </block>
             <block>
-              <span id="foo"/>
+              <block>
+                <span id="foo"/>
+              </block>
             </block>
             <block>
               ⠿
@@ -4630,8 +4639,6 @@
             <block>
               <block>
                 <marker class="print-page" value="1"/>
-                <marker class="dash-print-page" value="⠒1"/>
-                <marker class="print-page-dash" value="1⠒"/>
               </block>
               ⠁⠁⠁
             </block>
@@ -4642,12 +4649,8 @@
             <!-- begin left page -->
             <block>
               <block>
-                <marker class="print-page/prev" value="1"/>
                 <marker class="print-page" value="2"/>
-                <marker class="dash-print-page/prev" value="⠒1"/>
-                <marker class="dash-print-page" value="⠒2"/>
                 <marker class="print-page-dash/prev" value="1⠒"/>
-                <marker class="print-page-dash" value="2⠒"/>
               </block>
               ⠁⠁⠁
             </block>
@@ -4662,35 +4665,23 @@
             <block>⠁⠁⠁</block>
             <block>
               <block>
-                <marker class="print-page/prev" value="2"/>
                 <marker class="print-page" value="3"/>
-                <marker class="dash-print-page/prev" value="⠒2"/>
-                <marker class="dash-print-page" value="⠒3"/>
                 <marker class="print-page-dash/prev" value="2⠒"/>
-                <marker class="print-page-dash" value="3⠒"/>
               </block>
               ⠁⠁⠁
             </block>
             <!-- begin left page -->
             <block>
               <block>
-                <marker class="print-page/prev" value="3"/>
                 <marker class="print-page" value="4"/>
-                <marker class="dash-print-page/prev" value="⠒3"/>
-                <marker class="dash-print-page" value="⠒4"/>
                 <marker class="print-page-dash/prev" value="3⠒"/>
-                <marker class="print-page-dash" value="4⠒"/>
               </block>
               ⠁⠁⠁
             </block>
             <block>
               <block>
-                <marker class="print-page/prev" value="4"/>
                 <marker class="print-page" value="5"/>
-                <marker class="dash-print-page/prev" value="⠒4"/>
-                <marker class="dash-print-page" value="⠒5"/>
                 <marker class="print-page-dash/prev" value="4⠒"/>
-                <marker class="print-page-dash" value="5⠒"/>
               </block>
               ⠁⠁⠁
             </block>
@@ -4703,12 +4694,8 @@
             <block>⠁⠁⠁</block>
             <block>
               ⠁⠁⠁
-              <marker class="print-page/prev" value="5"/>
               <marker class="print-page" value="6"/>
-              <marker class="dash-print-page/prev" value="⠒5"/>
-              <marker class="dash-print-page" value="⠒6"/>
               <marker class="print-page-dash/prev" value="5⠒"/>
-              <marker class="print-page-dash" value="6⠒"/>
             </block>
           </sequence>
         </obfl>
@@ -6112,7 +6099,6 @@
                   </tr>
                   <tr>
                     <td>
-                      <marker class="print-page" value="⠿⠿"/>
                       ⠤⠤⠤
                     </td>
                     <td>⠤⠤⠤</td>
@@ -7391,68 +7377,68 @@
             </default-template>
           </layout-master>
           <table-of-contents name="volume-toc">
-            <toc-entry ref-id="ch_1" translate="">
-              <toc-entry ref-id="ch_1">
-                1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
-                <page-number ref-id="ch_1" number-format="default"/>
-              </toc-entry>
-              <toc-entry ref-id="ch_1_1">
-                <toc-entry ref-id="ch_1_1" padding-left="1">
-                  1 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_1_1" number-format="default"/>
-                </toc-entry>
-                <toc-entry ref-id="ch_1_2" padding-left="1">
-                  2 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_1_2" number-format="default"/>
-                </toc-entry>
-              </toc-entry>
-              <toc-entry ref-id="ch_2">
-                2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
-                <page-number ref-id="ch_2" number-format="default"/>
-              </toc-entry>
-              <toc-entry ref-id="ch_2_1">
-                <toc-entry ref-id="ch_2_1" padding-left="1">
-                  1 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_2_1" number-format="default"/>
-                </toc-entry>
-                <toc-entry ref-id="ch_2_2" padding-left="1">
-                  2 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_2_2" number-format="default"/>
-                </toc-entry>
-              </toc-entry>
-            </toc-entry>
+            <toc-block translate="">
+              <toc-block>
+                <toc-entry ref-id="ch_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
+                <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+              </toc-block>
+              <toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_1_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_1_1" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_1_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_1_2" number-format="default"/></toc-entry>
+                </toc-block>
+              </toc-block>
+              <toc-block>
+                <toc-entry ref-id="ch_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
+                <page-number ref-id="ch_2" number-format="default"/></toc-entry>
+              </toc-block>
+              <toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_2_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_2_1" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_2_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_2_2" number-format="default"/></toc-entry>
+                </toc-block>
+              </toc-block>
+            </toc-block>
           </table-of-contents>
           <table-of-contents name="document-toc">
-            <toc-entry ref-id="ch_1" translate="">
-              <toc-entry ref-id="ch_1">
-                1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
-                <page-number ref-id="ch_1" number-format="default"/>
-              </toc-entry>
-              <toc-entry ref-id="ch_1_1">
-                <toc-entry ref-id="ch_1_1" padding-left="1">
-                  1 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_1_1" number-format="default"/>
-                </toc-entry>
-                <toc-entry ref-id="ch_1_2" padding-left="1">
-                  2 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_1_2" number-format="default"/>
-                </toc-entry>
-              </toc-entry>
-              <toc-entry ref-id="ch_2">
-                2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
-                <page-number ref-id="ch_2" number-format="default"/>
-              </toc-entry>
-              <toc-entry ref-id="ch_2_1">
-                <toc-entry ref-id="ch_2_1" padding-left="1">
-                  1 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_2_1" number-format="default"/>
-                </toc-entry>
-                <toc-entry ref-id="ch_2_2" padding-left="1">
-                  2 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_2_2" number-format="default"/>
-                </toc-entry>
-              </toc-entry>
-            </toc-entry>
+            <toc-block translate="">
+              <toc-block>
+                <toc-entry ref-id="ch_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
+                <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+              </toc-block>
+              <toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_1_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_1_1" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_1_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_1_2" number-format="default"/></toc-entry>
+                </toc-block>
+              </toc-block>
+              <toc-block>
+                <toc-entry ref-id="ch_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
+                <page-number ref-id="ch_2" number-format="default"/></toc-entry>
+              </toc-block>
+              <toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_2_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_2_1" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_2_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_2_2" number-format="default"/></toc-entry>
+                </toc-block>
+              </toc-block>
+            </toc-block>
           </table-of-contents>
           <volume-template sheets-in-volume-max="3" use-when="(! (= $volume 1))">
             <pre-content>
@@ -7484,24 +7470,54 @@
           <sequence master="main">
             <block translate=""/>
             <block>
-              <block translate=""><span id="ch_1"/> 1 </block>
-              <block translate=""><span id="ch_1_1"/> 1 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1"/>
+                </block>
+                1
+              </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1_1"/>
+                </block>
+                1
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block translate=""><span id="ch_1_2"/> 2 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1_2"/>
+                </block>
+                2
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block translate=""><span id="ch_2"/> 2 </block>
-              <block translate=""><span id="ch_2_1"/> 1 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_2"/>
+                </block>
+                2
+              </block>
+              <block translate="">
+                <block>
+                  <span id="ch_2_1"/>
+                </block>
+                1
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block translate=""><span id="ch_2_2"/> 2 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_2_2"/>
+                </block>
+                2
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -7728,22 +7744,22 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-entry ref-id="ch_1" translate="">
-              <toc-entry ref-id="ch_1">
-                1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
-                <page-number ref-id="ch_1" number-format="default"/>
-              </toc-entry>
-              <toc-entry ref-id="ch_1_1">
-                <toc-entry ref-id="ch_1_1" padding-left="1">
-                  1 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_1_1" number-format="default"/>
-                </toc-entry>
-                <toc-entry ref-id="ch_1_2" padding-left="1">
-                  2 ⠄⠄⠄⠄⠄⠄⠄⠄
-                  <page-number ref-id="ch_1_2" number-format="default"/>
-                </toc-entry>
-              </toc-entry>
-            </toc-entry>
+            <toc-block translate="">
+              <toc-block>
+                <toc-entry ref-id="ch_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
+                <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+              </toc-block>
+              <toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_1_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_1_1" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block padding-left="1">
+                  <toc-entry ref-id="ch_1_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄
+                  <page-number ref-id="ch_1_2" number-format="default"/></toc-entry>
+                </toc-block>
+              </toc-block>
+            </toc-block>
           </table-of-contents>
           <volume-template sheets-in-volume-max="1000">
             <pre-content>
@@ -7757,13 +7773,28 @@
           <sequence master="main">
             <block translate=""/>
             <block>
-              <block translate=""><span id="ch_1"/> 1 </block>
-              <block translate=""><span id="ch_1_1"/> 1 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1"/>
+                </block>
+                1
+              </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1_1"/>
+                </block>
+                1
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block translate=""><span id="ch_1_2"/> 2 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1_2"/>
+                </block>
+                2
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -7987,11 +8018,11 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-entry ref-id="a" translate="">
-              <toc-entry ref-id="a"> ⠿⠿⠿ 1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
-              <page-number ref-id="a" number-format="default"/>
-              </toc-entry>
-            </toc-entry>
+            <toc-block translate="" break-before="page">
+              <toc-block> <toc-entry ref-id="a">⠿⠿⠿ 1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
+              <page-number ref-id="a" number-format="default"/></toc-entry>
+              </toc-block>
+            </toc-block>
           </table-of-contents>
           <volume-template sheets-in-volume-max="1000">
             <pre-content>
@@ -8000,14 +8031,18 @@
                   <block break-before="page" translate="">
                     <block>⠿⠿⠿ 0</block>
                   </block>
-                  <block break-before="page"/>
                 </on-toc-start>
               </toc-sequence>
             </pre-content>
           </volume-template>
           <sequence master="main">
             <block translate="" break-before="page">
-              <block><span id="a"/>⠿⠿⠿ 1</block>
+              <block>
+                <block>
+                  <span id="a"/>
+                </block>
+                ⠿⠿⠿ 1
+              </block>
               <block>⠤⠤⠤</block>
             </block>
           </sequence>
@@ -8761,7 +8796,12 @@
                   <page-number ref-id="a" number-format="default"/>
                 </style>
               </block>
-              <block break-before="page"><span id="a"/> ⠤⠤⠤ </block>
+              <block break-before="page">
+                <block>
+                  <span id="a"/>
+                </block>
+                ⠤⠤⠤
+              </block>
             </block>
           </sequence>
         </obfl>
@@ -9059,14 +9099,14 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-entry ref-id="ch_1" translate="">
-              <toc-entry ref-id="ch_1">
-                1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_1" number-format="default"/>
-              </toc-entry>
-              <toc-entry ref-id="ch_2">
-                2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_2" number-format="default"/>
-              </toc-entry>
-            </toc-entry>
+            <toc-block translate="">
+              <toc-block>
+                <toc-entry ref-id="ch_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+              </toc-block>
+              <toc-block>
+                <toc-entry ref-id="ch_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_2" number-format="default"/></toc-entry>
+              </toc-block>
+            </toc-block>
           </table-of-contents>
           <volume-template sheets-in-volume-max="2" use-when="(! (= $volume $volumes))"/>
           <volume-template sheets-in-volume-max="2" use-when="(= $volume $volumes)">
@@ -9076,14 +9116,24 @@
           </volume-template>
           <sequence master="main">
             <block>
-              <block translate=""><span id="ch_1"/> 1 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1"/>
+                </block>
+                1
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block translate=""><span id="ch_2"/> 2 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_2"/>
+                </block>
+                2
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -9227,14 +9277,14 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-entry ref-id="ch_1" translate="">
-              <toc-entry ref-id="ch_1">
-                1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_1" number-format="default"/>
-              </toc-entry>
-              <toc-entry ref-id="ch_2">
-                2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_2" number-format="default"/>
-              </toc-entry>
-            </toc-entry>
+            <toc-block translate="">
+              <toc-block>
+                <toc-entry ref-id="ch_1">1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+              </toc-block>
+              <toc-block>
+                <toc-entry ref-id="ch_2">2 ⠄⠄⠄⠄⠄⠄⠄⠄⠄ <page-number ref-id="ch_2" number-format="default"/></toc-entry>
+              </toc-block>
+            </toc-block>
           </table-of-contents>
           <volume-template sheets-in-volume-max="2" use-when="(! (= $volume $volumes))"/>
           <volume-template sheets-in-volume-max="2" use-when="(= $volume $volumes)">
@@ -9244,14 +9294,24 @@
           </volume-template>
           <sequence master="main">
             <block>
-              <block translate=""><span id="ch_1"/> 1 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1"/>
+                </block>
+                1
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block translate=""><span id="ch_2"/> 2 </block>
+              <block translate="">
+                <block>
+                  <span id="ch_2"/>
+                </block>
+                2
+              </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -10937,8 +10997,6 @@
             <block>
               <block>
                 <marker class="print-page" value="1"/>
-                <marker class="dash-print-page" value="⠒1"/>
-                <marker class="print-page-dash" value="1⠒"/>
               </block>
               ⠁⠁⠁
             </block>
@@ -10949,12 +11007,8 @@
             <!-- begin page -->
             <block break-before="page">
               <block>
-                <marker class="print-page/prev" value="1"/>
                 <marker class="print-page" value="2"/>
-                <marker class="dash-print-page/prev" value="⠒1"/>
-                <marker class="dash-print-page" value="⠒2"/>
                 <marker class="print-page-dash/prev" value="1⠒"/>
-                <marker class="print-page-dash" value="2⠒"/>
               </block>
               <block padding-top="1">
                 ⠁⠁⠁
@@ -12529,7 +12583,6 @@
                 <marker class="print-page" value="1"/>
               </block>
               <block>
-                <marker class="print-page/prev" value="1"/>
                 <marker class="print-page" value="⠿⠿⠿"/>
               </block>
               ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁
@@ -13721,6 +13774,464 @@
                 <page>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_121">
+    <x:documentation>
+      Tests table of contents with "continuation entries".
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none;
+                      @page {
+                        size: 15 7;
+                        margin-bottom: 1;
+                        @bottom-right { content: counter(page) }}
+                      @volume:first { @begin { content: flow(first-front) }}
+                      @volume { @begin { content: flow(next-front) }}">
+            <front>
+              <ol style="display: -obfl-toc;
+                         flow: first-front;
+                         text-transform: auto;
+                         &amp;::duplicate {
+                           display:-obfl-toc;
+                           -obfl-toc-range:volume;
+                           flow:next-front;
+                           text-transform:auto }">
+                <li style="display: block">
+                  <a href="ch_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                        &amp;::-obfl-on-resumed {
+                                          display: block;
+                                          content: '1 ⠄⠄⠄'}"
+                     >1</a>
+                  <ol style="display: block; margin-left: 1">
+                    <li style="display: block">
+                      <a href="ch_1_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }"
+                         >1.1</a>
+                    </li>
+                    <li style="display: block">
+                      <a href="ch_1_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }"
+                         >1.2</a>
+                    </li>
+                  </ol>
+                </li>
+                <li style="display: block">
+                  <a href="ch_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                        &amp;::-obfl-on-resumed {
+                                          display: block;
+                                          content: '2 ⠄⠄⠄'}"
+                     >2</a>
+                  <ol style="display: block; margin-left: 1">
+                    <li style="display: block">
+                      <a href="ch_2_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                              &amp;::-obfl-on-resumed {
+                                                display: block;
+                                                content: '2.1 ⠄⠄⠄'}"
+                         >2.1</a>
+                    </li>
+                    <li style="display: block">
+                      <a href="ch_2_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                              &amp;::-obfl-on-resumed {
+                                                display: block;
+                                                content: '2.2 ⠄⠄⠄'}"
+                         >2.2</a>
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+            </front>
+            <body style="display: block">
+              <h1 id="ch_1" style="display:block; text-transform:auto"> 1 </h1>
+              <h2 id="ch_1_1" style="display:block; text-transform:auto"> 1.1 </h2>
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              <br style="display: block; volume-break-before: always"/>
+              <h2 id="ch_1_2" style="display:block; text-transform:auto"> 1.2 </h2>
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              <br style="display: block; volume-break-before: always"/>
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              <h1 id="ch_2" style="display:block; text-transform:auto"> 2 </h1>
+              <br style="display: block; volume-break-before: always"/>
+              <h2 id="ch_2_1" style="display:block; text-transform:auto"> 2.1 </h2>
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              <h2 id="ch_2_2" style="display:block; text-transform:auto"> 2.2 </h2>
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+            </body>
+          </doc>
+        </x:document>
+      </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="main" duplex="true" page-number-variable="page" page-width="15" page-height="7">
+            <default-template>
+              <header/>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
+          <table-of-contents name="volume-toc">
+            <toc-block translate="">
+              <toc-block>
+                <toc-block>
+                  <toc-entry ref-id="ch_1">1 ⠐⠐⠐⠐⠐⠐⠐⠐⠐
+                  <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block>
+                  <toc-entry-on-resumed range="[ch_1,ch_2)">1 ⠄⠄⠄</toc-entry-on-resumed>
+                </toc-block>
+                <toc-block>
+                  <toc-block padding-left="1">
+                    <toc-entry ref-id="ch_1_1">1.1 ⠐⠐⠐⠐⠐⠐
+                    <page-number ref-id="ch_1_1" number-format="default"/></toc-entry>
+                  </toc-block>
+                  <toc-block padding-left="1">
+                    <toc-entry ref-id="ch_1_2">1.2 ⠐⠐⠐⠐⠐⠐
+                    <page-number ref-id="ch_1_2" number-format="default"/></toc-entry>
+                  </toc-block>
+                </toc-block>
+              </toc-block>
+              <toc-block>
+                <toc-block>
+                  <toc-entry ref-id="ch_2">2 ⠐⠐⠐⠐⠐⠐⠐⠐⠐
+                  <page-number ref-id="ch_2" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block>
+                  <toc-entry-on-resumed range="[ch_2,ch_2_1)">2 ⠄⠄⠄</toc-entry-on-resumed>
+                </toc-block>
+                <toc-block>
+                  <toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry ref-id="ch_2_1">2.1 ⠐⠐⠐⠐⠐⠐
+                      <page-number ref-id="ch_2_1" number-format="default"/></toc-entry>
+                    </toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry-on-resumed range="[ch_2_1,ch_2_2)">2.1 ⠄⠄⠄</toc-entry-on-resumed>
+                    </toc-block>
+                  </toc-block>
+                  <toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry ref-id="ch_2_2">2.2 ⠐⠐⠐⠐⠐⠐
+                      <page-number ref-id="ch_2_2" number-format="default"/></toc-entry>
+                    </toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry-on-resumed range="[ch_2_2,)">2.2 ⠄⠄⠄</toc-entry-on-resumed>
+                    </toc-block>
+                  </toc-block>
+                </toc-block>
+              </toc-block>
+            </toc-block>
+          </table-of-contents>
+          <table-of-contents name="document-toc">
+            <toc-block translate="">
+              <toc-block>
+                <toc-block>
+                  <toc-entry ref-id="ch_1">1 ⠐⠐⠐⠐⠐⠐⠐⠐⠐
+                  <page-number ref-id="ch_1" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block>
+                  <toc-entry-on-resumed range="[ch_1,ch_2)">1 ⠄⠄⠄</toc-entry-on-resumed>
+                </toc-block>
+                <toc-block>
+                  <toc-block padding-left="1">
+                    <toc-entry ref-id="ch_1_1">1.1 ⠐⠐⠐⠐⠐⠐
+                    <page-number ref-id="ch_1_1" number-format="default"/></toc-entry>
+                  </toc-block>
+                  <toc-block padding-left="1">
+                    <toc-entry ref-id="ch_1_2">1.2 ⠐⠐⠐⠐⠐⠐
+                    <page-number ref-id="ch_1_2" number-format="default"/></toc-entry>
+                  </toc-block>
+                </toc-block>
+              </toc-block>
+              <toc-block>
+                <toc-block>
+                  <toc-entry ref-id="ch_2">2 ⠐⠐⠐⠐⠐⠐⠐⠐⠐
+                  <page-number ref-id="ch_2" number-format="default"/></toc-entry>
+                </toc-block>
+                <toc-block>
+                  <toc-entry-on-resumed range="[ch_2,ch_2_1)">2 ⠄⠄⠄</toc-entry-on-resumed>
+                </toc-block>
+                <toc-block>
+                  <toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry ref-id="ch_2_1">2.1 ⠐⠐⠐⠐⠐⠐
+                      <page-number ref-id="ch_2_1" number-format="default"/></toc-entry>
+                    </toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry-on-resumed range="[ch_2_1,ch_2_2)">2.1 ⠄⠄⠄</toc-entry-on-resumed>
+                    </toc-block>
+                  </toc-block>
+                  <toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry ref-id="ch_2_2">2.2 ⠐⠐⠐⠐⠐⠐
+                      <page-number ref-id="ch_2_2" number-format="default"/></toc-entry>
+                    </toc-block>
+                    <toc-block padding-left="1">
+                      <toc-entry-on-resumed range="[ch_2_2,)">2.2 ⠄⠄⠄</toc-entry-on-resumed>
+                    </toc-block>
+                  </toc-block>
+                </toc-block>
+              </toc-block>
+            </toc-block>
+          </table-of-contents>
+          <volume-template sheets-in-volume-max="1000" use-when="(! (= $volume 1))">
+            <pre-content>
+              <toc-sequence toc="volume-toc" master="main" range="volume"/>
+            </pre-content>
+          </volume-template>
+          <volume-template sheets-in-volume-max="1000" use-when="(= $volume 1)">
+            <pre-content>
+              <toc-sequence toc="document-toc" master="main" range="document"/>
+            </pre-content>
+          </volume-template>
+          <sequence master="main">
+            <block translate=""/>
+            <block>
+              <block translate="">
+                <block>
+                  <span id="ch_1"/>
+                </block>
+                1
+              </block>
+              <block translate="">
+                <block>
+                  <span id="ch_1_1"/>
+                </block>
+                1.1
+              </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </block>
+          </sequence>
+          <sequence master="main" break-before="volume">
+            <block>
+              <block/>
+              <block translate="">
+                <block>
+                  <span id="ch_1_2"/>
+                </block>
+                1.2
+              </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </block>
+          </sequence>
+          <sequence master="main" break-before="volume">
+            <block>
+              <block/>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+              <block translate="">
+                <block>
+                  <span id="ch_2"/>
+                </block>
+                2
+              </block>
+            </block>
+          </sequence>
+          <sequence master="main" break-before="volume">
+            <block>
+              <block/>
+              <block translate="">
+                <block>
+                  <span id="ch_2_1"/>
+                </block>
+                2.1
+              </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+              <block translate="">
+                <block>
+                  <span id="ch_2_2"/>
+                </block>
+                2.2
+              </block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="7" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠼⠁⠀⠐⠐⠐⠐⠐⠐⠐⠐⠐⠀⠼⠁</row>
+                  <row>⠀⠼⠁⠲⠁⠀⠐⠐⠐⠐⠐⠐⠀⠼⠁</row>
+                  <row>⠼⠁⠀⠄⠄⠄</row>
+                  <row>⠀⠼⠁⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠉</row>
+                  <row>⠼⠁⠀⠄⠄⠄</row>
+                  <row>⠼⠃⠀⠐⠐⠐⠐⠐⠐⠐⠐⠐⠀⠼⠑</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+                <page>
+                  <row>⠀⠼⠃⠲⠁⠀⠐⠐⠐⠐⠐⠐⠀⠼⠛</row>
+                  <row>⠀⠼⠃⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠓</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠼⠁</row>
+                  <row>⠼⠁⠲⠁</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="15" rows="7" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠼⠁⠀⠄⠄⠄</row>
+                  <row>⠀⠼⠁⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠉</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠼⠁⠲⠃</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="15" rows="7" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠼⠁⠀⠄⠄⠄</row>
+                  <row>⠼⠃⠀⠐⠐⠐⠐⠐⠐⠐⠐⠐⠀⠼⠑</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠼⠃</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="15" rows="7" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠀⠼⠃⠲⠁⠀⠐⠐⠐⠐⠐⠐⠀⠼⠛</row>
+                  <row>⠀⠼⠃⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠓</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠼⠃⠲⠁</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠛</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠼⠃⠲⠃</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠓</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠊</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠚</row>
                 </page>
               </section>
             </volume>

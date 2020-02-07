@@ -7,7 +7,7 @@
                 version="1.0">
     
     <p:documentation>
-        Move css:id attributes to boxes.
+        Move css:id attributes to inline boxes.
     </p:documentation>
     
     <p:input port="source" sequence="true">

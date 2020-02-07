@@ -49,6 +49,17 @@
                         <xsl:template match="@id|@ref-id|obfl:anchor/@item">
                             <xsl:attribute name="{name(.)}" select="concat('id',index-of($ids,string(.))[1])"/>
                         </xsl:template>
+                        <xsl:template match="obfl:toc-entry-on-resumed/@range">
+                            <xsl:variable name="range-start" as="xs:string"  select="replace(string(.),'^\[(.+?),(.*?)\)$','$1')"/>
+                            <xsl:variable name="range-end"   as="xs:string?" select="replace(string(.),'^\[(.+?),(.*?)\)$','$2')"/>
+                            <xsl:attribute name="{name(.)}" select="concat('[',
+                                                                           concat('id',index-of($ids,$range-start)[1]),
+                                                                           ',',
+                                                                           if ($range-end)
+                                                                             then concat('id',index-of($ids,$range-end)[1])
+                                                                             else '',
+                                                                           ')')"/>
+                        </xsl:template>
                     </xsl:stylesheet>
                 </p:inline>
             </p:input>
