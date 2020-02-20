@@ -92,7 +92,7 @@ dist-webui-rpm : assembly/.compile-dependencies
 
 ifeq ($(shell uname), Darwin)
 dev_launcher := assembly/target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
-dp2 := cli/build/bin/darwin_386/dp2
+dp2 := cli/build/bin/darwin_amd64/dp2
 with-java-11 = JAVA_HOME=`/usr/libexec/java_home -v 11` $(1)
 else
 dev_launcher := assembly/target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
@@ -238,23 +238,28 @@ clean-webui-deps :
 
 # FIXME: hard code dependency because unpack-cli-{mac,win,linux} are inside profiles
 # assembly/.compile-dependencies : \
-# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.2-SNAPSHOT/cli-2.1.2-SNAPSHOT-darwin_386.zip \
-# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.2-SNAPSHOT/cli-2.1.2-SNAPSHOT-linux_386.zip \
-# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.2-SNAPSHOT/cli-2.1.2-SNAPSHOT-windows_386.zip
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5-SNAPSHOT/cli-2.1.5-SNAPSHOT-darwin_amd64.zip \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5-SNAPSHOT/cli-2.1.5-SNAPSHOT-linux_386.zip \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5-SNAPSHOT/cli-2.1.5-SNAPSHOT-windows_386.zip
+
+# assembly/.release : \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5/cli-2.1.5-darwin_amd64.zip \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5/cli-2.1.5-linux_386.zip \
+# 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5/cli-2.1.5-windows_386.zip
 
 export PIPELINE_CLIENTLIB_PATH = $(CURDIR)/clientlib/go
 
-cli/build/bin/darwin_386/dp2 cli/build/bin/linux_386/dp2 : cli/.install
+cli/build/bin/darwin_amd64/dp2 cli/build/bin/linux_386/dp2 : cli/.install
 
 cli/.install : $(call rwildcard,cli/cli/,*.go) $(call rwildcard,cli/cli/,*.go.in) $(call rwildcard,cli/dp2/,*.go) $(call rwildcard,clientlib/go/,*.go)
 
-.SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip
-cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip : cli/.install
+.SECONDARY : cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_386.zip
+cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_386.zip : cli/.install
 
 updater/cli/.install : $(call rwildcard,updater/cli/,*)
 
-.SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
-updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip : updater/cli/.install
+.SECONDARY : updater/cli/.install-darwin_amd64.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
+updater/cli/.install-darwin_amd64.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip : updater/cli/.install
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
