@@ -294,8 +294,10 @@ relative_rule returns [RuleBlock<? extends Rule<?>> rb]
                   // We can't create a RuleSet, so this style won't be picked up by the DOM Analyzer.
                   // Anonymous pages inside relative rules are only supported when a single style element is parsed
                   // (when the BrailleCSSParserFactory.parseInlineStyle() function is called).
-                  InlineStyle.RuleRelativeBlock rrb = new InlineStyle.RuleRelativeBlock(sel, decl);
-                  for (RulePage rp : pages) rrb.add(rp);
+                  InlineStyle.RuleRelativeBlock rrb = new InlineStyle.RuleRelativeBlock(sel);
+                  rrb.unlock();
+                  rrb.addAll(decl);
+                  rrb.addAll(pages);
                   $rb = rrb;
               } else {
                   CombinedSelector cs = (CombinedSelector)gCSSTreeParser.rf.createCombinedSelector().unlock();

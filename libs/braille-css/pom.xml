@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.braille</groupId>
   <artifactId>braille-css</artifactId>
-  <version>1.15.0</version>
+  <version>1.15.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>braille-css</name>
@@ -21,7 +21,7 @@
     <connection>scm:git:git@github.com:snaekobbi/braille-css.git</connection>
     <url>scm:git:git@github.com:snaekobbi/braille-css.git</url>
     <developerConnection>scm:git:git@github.com:snaekobbi/braille-css.git</developerConnection>
-    <tag>1.15.0</tag>
+    <tag>HEAD</tag>
   </scm>
   
   <dependencyManagement>

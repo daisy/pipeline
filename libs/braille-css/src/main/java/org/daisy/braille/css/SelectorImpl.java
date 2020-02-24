@@ -500,6 +500,9 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			result = prime * result
 					+ ((stackedPseudoElement == null) ? 0
 							: stackedPseudoElement.hashCode());
+			result = prime * result
+					+ ((combinedSelectors == null) ? 0
+							: combinedSelectors.hashCode());
 			return result;
 		}
 		
@@ -521,6 +524,12 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			if (stackedPseudoElement == null) {
 				if (other.stackedPseudoElement != null)
 					return false;
+				else if (combinedSelectors == null) {
+					if (other.combinedSelectors != null)
+						return false;
+					else if (!combinedSelectors.equals(other.combinedSelectors))
+						return false;
+				}
 			} else if (!stackedPseudoElement.equals(other.stackedPseudoElement))
 				return false;
 			return true;

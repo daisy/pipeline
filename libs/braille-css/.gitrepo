@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/braille-css.git
 	branch = master
-	commit = 088275195350047a576c6944b3ba4024258fb0c3
-	parent = e408aa267511887ba568064492d62c6ad631d916
+	commit = 5fab2e8bdcec44603eaeb3efc7d7ced0099a2d3c
+	parent = bb2da1ce996f8ed13fbcb3af702bb26fa0406bde
 	cmdver = 0.3.1

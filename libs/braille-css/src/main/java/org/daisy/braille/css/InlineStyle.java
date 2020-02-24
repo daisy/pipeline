@@ -21,8 +21,6 @@ import cz.vutbr.web.css.Selector.SelectorPart;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.csskit.AbstractRuleBlock;
 
-import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
-
 /*
  * Represents style attributes that are the result of "inlining" a style sheet
  * attached to a document. Inlining is an operation intended to be done by CSS
@@ -170,11 +168,14 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 		
 		private final List<Selector> selector;
 		
+		public RuleRelativeBlock(List<Selector> selector) {
+			this.selector = selector;
+		}
+		
 		public RuleRelativeBlock(List<Selector> selector, List<Declaration> declarations) {
-			this.selector = new ArrayList<Selector>(selector);
-			List<Rule<?>> list = new ArrayList<Rule<?>>();
-			for (Declaration d : declarations) list.add(d);
-			replaceAll(list);
+			this(selector);
+			unlock();
+			addAll(declarations);
 		}
 		
 		public boolean add(Rule<?> r) {
