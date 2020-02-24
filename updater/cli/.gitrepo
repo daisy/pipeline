@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-updater.git
 	branch = master
-	commit = 2ec1ce04b17c4252f864253ffa2704ffd8b84e65
-	parent = e5fc1e2e57d16d43989c19556941884cf7f6026e
+	commit = 1f7e137ae26f89156c1ec183978ed6a90ac83d34
+	parent = 2f79dd24f7215cac73dcf6248966eb9a002cc3c7
 	cmdver = 0.3.1
