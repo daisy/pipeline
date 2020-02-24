@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/xspec-maven-plugin
 	branch = master
-	commit = 20ec78add7499b32c11bc2b5456ec05af5bff79a
-	parent = 102748c2e4f12f3ed783e39e1ca2ae0e973bf217
+	commit = 5ae7fcdb1c25f819ba3d2ac768e3605f01f7e999
+	parent = 2c74d24ce8bdf41ac0d02ad6aac89ddba8e4a881
 	cmdver = 0.3.1
