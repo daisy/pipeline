@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.13.1-SNAPSHOT</version>
+  <version>1.13.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -49,11 +49,6 @@
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>calabash-adapter</artifactId>
         <version>3.0.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>calabash-custom-steps</artifactId>
-        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
