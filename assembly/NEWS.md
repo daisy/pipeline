@@ -1,3 +1,29 @@
+Changes in release v1.13.3
+==========================
+
+### Modules
+
+- Changes to braille production scripts, see [release notes of Braille modules v1.13.4](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1134)
+
+### Details
+
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.13.3)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.13.3)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.13.3)
+
+Changes in release v1.13.2
+==========================
+
+### Modules
+
+- Changes to braille production scripts, see [release notes of Braille modules v1.13.3](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1133)
+
+### Details
+
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.13.2)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.13.2)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.13.2)
+
 Changes in release v1.13.1
 ==========================
 
