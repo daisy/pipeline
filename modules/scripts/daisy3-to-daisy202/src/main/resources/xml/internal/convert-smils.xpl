@@ -85,20 +85,14 @@
         </p:xslt>
         <p:sink/>
 
-        <p:identity>
-            <p:input port="source">
-                <p:inline>
-                    <doc/>
-                </p:inline>
-            </p:input>
-        </p:identity>
-
         <!--Get the list of NCX ID references to this SMIL-->
         <p:filter name="idrefs">
             <p:input port="source">
                 <p:pipe port="result" step="ncx-idrefs"/>
             </p:input>
-            <p:with-option name="select" select="concat('/*/d:doc[@href=''',base-uri(/),''']')"/>
+            <p:with-option name="select" select="concat('/*/d:doc[@href=''',base-uri(/),''']')">
+                <p:pipe step="iter-smils" port="current"/>
+            </p:with-option>
         </p:filter>
 
         <!--Convert DAISY 2.02 SMIL to DAISY 3 SMIL-->

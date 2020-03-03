@@ -45,7 +45,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>css-utils</artifactId>
-        <version>4.1.1</version>
+        <version>4.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -235,7 +235,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy3-utils</artifactId>
-        <version>1.2.4</version>
+        <version>1.2.5-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>

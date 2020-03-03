@@ -112,10 +112,218 @@
 				</d:fileset>
 			</x:document>
 		</x:expect>
+		<x:context label="a SMIL file">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/0001.smil')]"/>
+		</x:context>
+		<x:expect label="a SMIL file" type="compare">
+			<x:document type="inline">
+				<smil xmlns="">
+					<head>
+						<meta name="dc:format" content="Daisy 2.02"/>
+						<meta name="ncc:generator" content="DAISY Pipeline 2"/>
+						<meta name="dc:identifier" content="ghBOOK1211212736"/>
+						<meta name="ncc:totalElapsedTime" content="00:00:00"/>
+						<meta name="ncc:timeInThisSmil" content="00:00:02.4829932"/>
+						<layout>
+							<region id="txtView"/>
+						</layout>
+					</head>
+					<body>
+						<seq dur="00:00:02.4829932">
+							<par endsync="last" id="sm_3" system-required="pagenumber-on">
+								<!--
+								    FIXME: generated ids make test brittle
+								-->
+								<text id="d4039e23" src="ncc.html#ncx_2"/>
+								<audio id="d4039e25" src="aud001.mp3" clip-begin="00:00:00" clip-end="00:00:02.4829932"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
 		<x:context label="the NCC file">
 			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/ncc.html')]"/>
 		</x:context>
-		<x:expect label="the NCC file" type="xpath" test="/html:html/html:head/html:meta[@name='dc:title']/@content" equals="'Chimpanzees'"/>
+		<x:expect label="the NCC title" type="xpath" test="/html:html/html:head/html:meta[@name='dc:title']/@content" equals="'Chimpanzees'"/>
+		<x:expect label="the NCC file" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<head>
+						<title/>
+						<meta name="dc:identifier" content="ghBOOK1211212736"/>
+						<meta name="dc:title" content="Chimpanzees"/>
+						<meta name="dc:creator" content="Julie Murray"/>
+						<meta name="dc:description" content="Introduces the habitat and characteristics of chimpanzees, and briefly describes Jane Goodall's work with them."/>
+						<meta name="dc:language" content="EN-US"/>
+						<meta name="dc:publisher" content="gh LLC."/>
+						<meta name="dc:subject" content="Chimpanzee"/>
+						<meta name="ncc:totalTime" content="00:14:49.7939004"/>
+						<meta name="ncc:multimediaType" content="audioNcc"/>
+						<meta name="prod:multimediaContent" content="audio"/>
+						<meta name="ncc:producer" content="gh, LLC."/>
+						<meta name="ncc:sourceDate" content="2002-01-01"/>
+						<meta name="ncc:sourcePublisher" content="ABDO Publishing Company"/>
+						<meta name="ncc:sourceTitle" content="Chimpanzees"/>
+						<meta name="ncc:narrator" content="Rachana Singh"/>
+						<meta name="ncc:revision" content="1"/>
+						<meta name="ncc:revisionDate" content="2015-01-23"/>
+						<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+						<meta name="ncc:charset" content="utf-8"/>
+						<meta name="dc:format" content="Daisy 2.02"/>
+						<meta name="dc:date" content="2020-03-03"/>
+						<meta name="ncc:generator" content="DAISY Pipeline 2"/>
+						<meta name="ncc:depth" content=""/>
+						<meta name="ncc:pageFront" content="0"/>
+						<meta name="ncc:pageNormal" content="24"/>
+						<meta name="ncc:pageSpecial" content="0"/>
+						<meta name="ncc:prodNotes" content="0"/>
+						<meta name="ncc:footnotes" content="0"/>
+						<meta name="ncc:sidebars" content="0"/>
+						<meta name="ncc:maxPageNormal" content="24"/>
+						<!--
+						    FIXME: brittle test because of data
+						-->
+						<meta name="ncc:producedDate" content="2020-03-03"/>
+						<meta name="ncc:tocItems" content="44"/>
+					</head>
+					<body>
+						<h1 class="title" id="ncx_2">
+							<a href="0001.smil#sm_3">Chimpanzees</a>
+						</h1>
+						<span class="page-normal" id="ncx_1">
+							<a href="0001.smil#sm_3">1</a>
+						</span>
+						<h1 id="ncx_3">
+							<a href="0002.smil#sm_5">Chimpanzees</a>
+						</h1>
+						<span class="page-normal" id="ncx_4">
+							<a href="0002.smil#sm_9">2</a>
+						</span>
+						<h1 id="ncx_5">
+							<a href="0003.smil#sm_21">Library of Congress Cataloging-in-Publication Data</a>
+						</h1>
+						<span class="page-normal" id="ncx_6">
+							<a href="0003.smil#sm_34">3</a>
+						</span>
+						<h1 id="ncx_7">
+							<a href="0004.smil#sm_36">Contents</a>
+						</h1>
+						<span class="page-normal" id="ncx_8">
+							<a href="0004.smil#sm_60">4</a>
+						</span>
+						<h1 id="ncx_9">
+							<a href="0005.smil#sm_62">Great Apes</a>
+						</h1>
+						<span class="page-normal" id="ncx_10">
+							<a href="0005.smil#sm_70">5</a>
+						</span>
+						<span class="page-normal" id="ncx_11">
+							<a href="0005.smil#sm_72">6</a>
+						</span>
+						<h1 id="ncx_12">
+							<a href="0006.smil#sm_74">Chimpanzees And People</a>
+						</h1>
+						<span class="page-normal" id="ncx_13">
+							<a href="0006.smil#sm_85">7</a>
+						</span>
+						<span class="page-normal" id="ncx_14">
+							<a href="0006.smil#sm_90">8</a>
+						</span>
+						<h1 id="ncx_15">
+							<a href="0007.smil#sm_92">Talking To Chimps</a>
+						</h1>
+						<span class="page-normal" id="ncx_16">
+							<a href="0007.smil#sm_97">9</a>
+						</span>
+						<h1 id="ncx_17">
+							<a href="0008.smil#sm_99">What They Look Like</a>
+						</h1>
+						<span class="page-normal" id="ncx_18">
+							<a href="0008.smil#sm_104">10</a>
+						</span>
+						<span class="page-normal" id="ncx_19">
+							<a href="0008.smil#sm_111">11</a>
+						</span>
+						<h1 id="ncx_20">
+							<a href="0009.smil#sm_113">The Chimpanzee's Home</a>
+						</h1>
+						<span class="page-normal" id="ncx_21">
+							<a href="0009.smil#sm_117">12</a>
+						</span>
+						<span class="page-normal" id="ncx_22">
+							<a href="0009.smil#sm_123">13</a>
+						</span>
+						<span class="page-normal" id="ncx_23">
+							<a href="0009.smil#sm_128">14</a>
+						</span>
+						<h1 id="ncx_24">
+							<a href="0010.smil#sm_130">Everyday Life</a>
+						</h1>
+						<span class="page-normal" id="ncx_25">
+							<a href="0010.smil#sm_138">15</a>
+						</span>
+						<span class="page-normal" id="ncx_26">
+							<a href="0010.smil#sm_145">16</a>
+						</span>
+						<h1 id="ncx_27">
+							<a href="0011.smil#sm_147">Chimp Communities</a>
+						</h1>
+						<span class="page-normal" id="ncx_28">
+							<a href="0011.smil#sm_152">17</a>
+						</span>
+						<span class="page-normal" id="ncx_29">
+							<a href="0011.smil#sm_157">18</a>
+						</span>
+						<h1 id="ncx_30">
+							<a href="0012.smil#sm_159">Baby Chimps</a>
+						</h1>
+						<span class="page-normal" id="ncx_31">
+							<a href="0012.smil#sm_167">19</a>
+						</span>
+						<span class="page-normal" id="ncx_32">
+							<a href="0012.smil#sm_169">20</a>
+						</span>
+						<h1 id="ncx_33">
+							<a href="0013.smil#sm_171">Jane Goodall</a>
+						</h1>
+						<span class="page-normal" id="ncx_34">
+							<a href="0013.smil#sm_179">21</a>
+						</span>
+						<span class="page-normal" id="ncx_35">
+							<a href="0013.smil#sm_181">22</a>
+						</span>
+						<h1 id="ncx_36">
+							<a href="0014.smil#sm_183">Important Words</a>
+						</h1>
+						<span class="page-normal" id="ncx_37">
+							<a href="0014.smil#sm_193">23</a>
+						</span>
+						<h1 id="ncx_38">
+							<a href="0015.smil#sm_195">Web Sites</a>
+						</h1>
+						<h2 id="ncx_39">
+							<a href="0016.smil#sm_197">All about Chimpanzees</a>
+						</h2>
+						<h2 id="ncx_40">
+							<a href="0017.smil#sm_201">African Primates at Home</a>
+						</h2>
+						<h2 id="ncx_41">
+							<a href="0018.smil#sm_205">Animal Bytes: Chimpanzee</a>
+						</h2>
+						<span class="page-normal" id="ncx_42">
+							<a href="0018.smil#sm_208">24</a>
+						</span>
+						<h1 id="ncx_43">
+							<a href="0019.smil#sm_210">Index</a>
+						</h1>
+						<h1 id="ncx_44">
+							<a href="0020.smil#sm_233">Questions</a>
+						</h1>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
 	</x:scenario>
 	
 </x:description>

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/"
-    xpath-default-namespace="http://www.w3.org/2001/SMIL20/" exclude-result-prefixes="#all"
-    version="2.0">
-
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/"
+                xpath-default-namespace="http://www.w3.org/2001/SMIL20/"
+                exclude-result-prefixes="#all">
 
     <xsl:output indent="yes"/>
     <xsl:param name="ncc-uri" select="'ncc.html'"/>
 
-    <!--<xsl:variable name="test-note-ids"
+    <xsl:variable name="ncx-idrefs" as="document-node()" select="collection()[/d:doc]"/>
+    <xsl:variable name="test-note-ids"
         select="collection()/ncx:smilCustomTest[@bookStruct='NOTE']/string(@id)" as="xs:string*"/>
     <xsl:variable name="test-noteref-ids"
         select="collection()/ncx:smilCustomTest[@bookStruct='NOTE_REFERENCE']/string(@id)"
@@ -24,21 +25,6 @@
     <xsl:variable name="test-sidebar-ids"
         select="collection()/ncx:smilCustomTest[@bookStruct='OPTIONAL_SIDEBAR']/string(@id)"
         as="xs:string*"/>
-    <xsl:variable name="ncx-idrefs" as="document-node()" select="collection()[d:doc]"/>-->
-    <xsl:variable name="ncx-idrefs" as="document-node()">
-        <xsl:document>
-            <d:doc>
-                <d:idref idref="bagw_0015" id="bagw_0015" navmap="true"/>
-                <d:idref idref="bagw_0017" id="bagw_0017"/>
-                <d:idref idref="bagw_0016" id="noteref-1"/>
-            </d:doc>
-        </xsl:document>
-    </xsl:variable>
-    <xsl:variable name="test-note-ids" select="('note','footnote')" as="xs:string*"/>
-    <xsl:variable name="test-noteref-ids" select="'noteref'" as="xs:string*"/>
-    <xsl:variable name="test-page-ids" select="'pagenumber'" as="xs:string*"/>
-    <xsl:variable name="test-prodnote-ids" select="'prodnote'" as="xs:string*"/>
-    <xsl:variable name="test-sidebar-ids" select="'sidebar'" as="xs:string*"/>
 
     <xsl:key name="ncx-idrefs" match="d:idref" use="@idref"/>
     <xsl:key name="ids" match="*" use="@id"/>
@@ -211,10 +197,10 @@
             $par/ancestor-or-self::*[@id and exists(key('ncx-idrefs',@id,$ncx-idrefs))][1]/@id"/>
 
         <xsl:sequence
-            select="
+            select="(
             if ($this-or-parent-id) then key('ncx-idrefs',$this-or-parent-id,$ncx-idrefs)/@id
             else $ncx-idrefs//d:idref[@navmap][for $idref in @idref return $par/(.>>./key('ids',$idref))]/@id
-            "
+            )[1]"
         />
     </xsl:function>
 

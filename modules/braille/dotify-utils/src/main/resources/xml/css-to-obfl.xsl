@@ -1161,7 +1161,7 @@
                                      and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
                                           @css:border-top-pattern or @css:border-bottom-pattern))]">
         <xsl:apply-templates mode="block-attr"
-                             select="@css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|@page-break-inside"/>
+                             select="@css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|@css:page-break-inside"/>
         <xsl:next-match/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
     </xsl:template>
@@ -1172,7 +1172,7 @@
                                  and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
                                       @css:border-top-pattern or @css:border-bottom-pattern)]">
         <xsl:apply-templates mode="block-attr"
-                             select="@css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|@page-break-inside"/>
+                             select="@css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|@css:page-break-inside"/>
         <!--
             repeat orphans/widows (why?)
         -->
@@ -1280,7 +1280,7 @@
                              select="@* except (@type|
                                                 @css:text-transform|@css:hyphens|
                                                 @css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|
-                                                @page-break-inside|@css:page-break-before)"/>
+                                                @css:page-break-inside|@css:page-break-before)"/>
         <xsl:next-match/>
     </xsl:template>
     

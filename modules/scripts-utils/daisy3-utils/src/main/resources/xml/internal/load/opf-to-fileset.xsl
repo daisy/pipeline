@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:smil="http://www.w3.org/2001/SMIL20/"
-    xpath-default-namespace="http://openebook.org/namespaces/oeb-package/1.0/"
-    exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:smil="http://www.w3.org/2001/SMIL20/"
+                xpath-default-namespace="http://openebook.org/namespaces/oeb-package/1.0/"
+                exclude-result-prefixes="#all">
 
     <xsl:output indent="yes" method="xml"/>
 
@@ -54,7 +55,8 @@
     <xsl:template match="item">
         <d:file href="{@href}" media-type="{
             if(@media-type='application/smil') then 'application/smil+xml'
-            else if (@media-type='text/xml' and ends-with(@href,'.opf')) then 'application/oebps-package+xml' 
+            else if (@media-type='text/xml' and ends-with(@href,'.opf')) then 'application/oebps-package+xml'
+            else if (@media-type='text/xml' and ends-with(@href,'.ncx')) then 'application/x-dtbncx+xml'
             else @media-type}"/>
     </xsl:template>
 

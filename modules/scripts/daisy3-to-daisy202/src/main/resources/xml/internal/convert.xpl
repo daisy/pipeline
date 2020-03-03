@@ -69,7 +69,7 @@
     </px:fileset-rebase>
     <p:identity name="fileset.in"/>
 
-    <px:fileset-load media-types="application/x-dtbncx+xml" name="ncx">
+    <px:fileset-load media-types="application/x-dtbncx+xml">
         <p:input port="fileset">
             <p:pipe step="fileset.in" port="result"/>
         </p:input>
@@ -77,7 +77,9 @@
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </px:fileset-load>
-    <px:fileset-load media-types="application/smil" name="input-smils">
+    <px:assert error-code="XXXX" message="The input DTB must contain exactly one NCX file (media-type 'application/x-dtbncx+xml')"
+               test-count-min="1" test-count-max="1" name="ncx"/>
+    <px:fileset-load media-types="application/smil+xml" name="input-smils">
         <p:input port="fileset">
             <p:pipe step="fileset.in" port="result"/>
         </p:input>
