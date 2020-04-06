@@ -257,13 +257,19 @@
 						</xsl:choose>
 					</xsl:for-each>
 				</xsl:variable>
-				<!-- TODO : add a language test to use this next line only for french --> 
-				<!-- in the french version of SAMPA (and in acapela language manual), 
-					lowercase e, a and o are used for nasalized vowel /ɛ̃/ /ɑ̃/ and /ɔ̃/ 
-					instead of E A and O. We correct the result here to match 
-					the acapela version of sampa -->
-				<xsl:value-of select="replace(replace(replace($sampa_conversion,'A~','a~'),'E~','e~'),'O~','o~')"/>
 				
+				<xsl:choose>
+					<xsl:when test="ancestor-or-self::node()/@xml:lang = 'fr'">
+						<!-- in the french version of SAMPA (and in acapela language manual), 
+							lowercase e, a and o are used for nasalized vowel /ɛ̃/ /ɑ̃/ and /ɔ̃/ 
+							instead of E A and O. We correct the result here to match 
+							the acapela version of sampa -->
+						<xsl:value-of select="replace(replace(replace($sampa_conversion,'A~','a~'),'E~','e~'),'O~','o~')"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$sampa_conversion"/>
+					</xsl:otherwise>
+				</xsl:choose>
 				
 				<xsl:value-of select="' \'"/>
 				<!-- <xsl:value-of select="'&quot;&gt;'"/>
