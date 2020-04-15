@@ -10,6 +10,7 @@
     <p:import href="../utils/load.xpl"/>
     <p:import href="../utils/recursive-directory-list.xpl"/>
     <p:import href="../utils/logging-library.xpl"/>
+    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
     <p:variable name="type" select="/*/@type"/>
     <p:variable name="select" select="/*/@select"/>

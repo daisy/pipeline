@@ -24,7 +24,7 @@
         <p:load name="test">
             <p:with-option name="href" select="/*"/>
         </p:load>
-        <p:choose dpx:message=" " dpx:progress="1">
+        <p:choose dpx:progress="1">
             <p:when test="/*[self::c:errors]">
                 <pxi:message message=" * error document; skipping">
                     <p:with-option name="logfile" select="$logfile">
@@ -35,8 +35,9 @@
             </p:when>
             <p:otherwise>
                 <p:variable name="test-href" select="(//x:description)[1]/@test-base-uri"/>
+                <p:variable name="label" select="(//x:description/x:scenario)[1]/@label"/>
                 <p:identity name="try.input"/>
-                <p:try dpx:progress="1">
+                <p:try dpx:progress="1" dpx:message="{$label}" >
                     <p:group>
                         <cx:eval dpx:progress="1">
                             <p:input port="pipeline">

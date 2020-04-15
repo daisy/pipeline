@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" name="main" type="pxi:load" xmlns:cx="http://xmlcalabash.com/ns/extensions" version="1.0" xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" name="main" type="pxi:load" version="1.0" xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/">
 
     <p:output port="result"/>
 
@@ -59,61 +59,40 @@
     <p:sink/>
 
     <p:choose>
-        <p:when test="contains($href, '!/')">
-            <pxi:message>
-                <p:input port="source">
-                    <p:inline>
-                        <doc/>
-                    </p:inline>
-                </p:input>
-                <p:with-option name="message" select="replace($href, '^([^!]+)!/(.+)$', 'loading $2 from ZIP $1')"/>
-                <p:with-option name="logfile" select="$logfile">
-                    <p:empty/>
-                </p:with-option>
-            </pxi:message>
-            <p:sink/>
-            <cx:unzip>
-                <!--
-                    note that "file" needs to be specified before "href" because otherwise $href
-                    variable in select part is affected
-                -->
-                <p:with-option name="file" select="replace($href, '^([^!]+)!/(.+)$', '$2')"/>
-                <p:with-option name="href" select="replace($href, '^([^!]+)!/(.+)$', '$1')"/>
-            </cx:unzip>
-        </p:when>
+        <p:variable name="href-maybe-in-zip" select="if (contains($href,'!/')) then replace($href,'^file:','jar:file:') else $href"/>
 
         <!-- Force HTML -->
         <p:when test="$method='html'">
             <pxi:html-load>
-                <p:with-option name="href" select="$href"/>
+                <p:with-option name="href" select="$href-maybe-in-zip"/>
             </pxi:html-load>
         </p:when>
 
         <!-- XML -->
         <p:when test="$method='xml'">
             <p:load>
-                <p:with-option name="href" select="$href"/>
+                <p:with-option name="href" select="$href-maybe-in-zip"/>
             </p:load>
         </p:when>
 
         <!-- text -->
         <p:when test="$method='text'">
             <pxi:load-text>
-                <p:with-option name="href" select="$href"/>
+                <p:with-option name="href" select="$href-maybe-in-zip"/>
             </pxi:load-text>
         </p:when>
 
         <!-- HTML -->
-        <p:when test="matches(lower-case($href),'\.x?html?$')">
+        <p:when test="matches(lower-case($href-maybe-in-zip),'\.x?html?$')">
             <pxi:html-load>
-                <p:with-option name="href" select="$href"/>
+                <p:with-option name="href" select="$href-maybe-in-zip"/>
             </pxi:html-load>
         </p:when>
 
         <!-- default to 'binary' -->
         <p:otherwise>
             <pxi:load-binary>
-                <p:with-option name="href" select="$href"/>
+                <p:with-option name="href" select="$href-maybe-in-zip"/>
             </pxi:load-binary>
         </p:otherwise>
     </p:choose>
