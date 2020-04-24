@@ -87,8 +87,11 @@ def to_source(dest_path)
   raise "source file of #{dest_path} not found"
 end
 
+$error_count = 0
+
 def link_error(link, href_attr, source_file)
-  raise "link can not be processed: #{link[href_attr]} (source: #{source_file})"
+  puts "ERROR: link can not be processed: #{link[href_attr]} (source: #{source_file})"
+  $error_count = $error_count + 1
 end
 
 def link_warning(link, href_attr, source_file)
@@ -314,6 +317,10 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     end
     
     a[href_attr] = baseurl + abs_path + fragment
+  end
+
+  if $error_count > 0
+    raise "errors were reported"
   end
 
   ## work around css shortcomings

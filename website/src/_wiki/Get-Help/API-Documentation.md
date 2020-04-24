@@ -127,6 +127,8 @@ FIXME: add short description for every package
 - [`org.daisy.pipeline.job`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/job/package-summary.html)
 - [`org.daisy.pipeline.modules`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/package-summary.html)
 - [`org.daisy.pipeline.script`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/package-summary.html)
+- [`org.daisy.pipeline.tts`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/tts/package-summary.html)
+
 
 ## XProc Utility Libraries
 
@@ -178,10 +180,8 @@ FIXME: add short description for every package
 - [`http://www.daisy.org/pipeline/modules/text-to-ssml/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/text-to-ssml/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/tts-helpers/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/validation-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/validation-utils/library.xpl)
-- [`http://www.daisy.org/pipeline/modules/zedai-break-detection/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/zedai-break-detection/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/zedai-to-epub3/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/zedai-to-epub3/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/zedai-to-html/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/zedai-to-html/library.xpl)
-- [`http://www.daisy.org/pipeline/modules/zedai-to-ssml/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/zedai-to-ssml/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/zedai-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/zip-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/zip-utils/library.xpl)
 
