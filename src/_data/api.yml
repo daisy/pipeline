@@ -8,7 +8,7 @@ javadoc:
   version: 2.1.2-SNAPSHOT
 - group: org.daisy.pipeline
   artifact: ds-to-spi-runtime
-  version: 1.0.0-SNAPSHOT
+  version: 1.0.0
 - group: org.daisy.pipeline
   artifact: common-utils
 - group: org.daisy.pipeline
@@ -98,7 +98,7 @@ xprocdoc:
   artifact: texhyph-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: obfl-utils
-  version: 1.1.4-SNAPSHOT
+  version: 1.1.4
 - group: org.daisy.pipeline.modules
   artifact: common-utils
 - group: org.daisy.pipeline.modules
@@ -156,8 +156,6 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: epub3-to-ssml
 - group: org.daisy.pipeline.modules
-  artifact: zedai-to-ssml
-- group: org.daisy.pipeline.modules
   artifact: mathml-to-ssml
 - group: org.daisy.pipeline.modules
   artifact: text-to-ssml
@@ -167,7 +165,5 @@ xprocdoc:
   artifact: nlp-break-detection
 - group: org.daisy.pipeline.modules
   artifact: html-break-detection
-- group: org.daisy.pipeline.modules
-  artifact: zedai-break-detection
 - group: org.daisy.pipeline.modules
   artifact: dtbook-break-detection
