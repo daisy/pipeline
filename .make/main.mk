@@ -235,8 +235,9 @@ $(addsuffix /.project,$(MODULES)) : .metadata/.plugins/org.eclipse.core.runtime/
 
 endif
 
-# FIXME: "MAKEFLAGS=" for some reason does not cancel "--debug"
-# passing "--debug=no" to the sub-make would be a solution but not all versions support it
+# FIXME: specifying "--debug" option breaks this code
+# - passing "MAKEFLAGS=" does not fix it for some reason, and also has unwanted side effects
+# - passing "--debug=no" to the sub-make would be a solution but not all versions of make support it
 .SECONDARY : .group-eval
 .group-eval :
 ifndef SKIP_GROUP_EVAL_TARGET
@@ -244,7 +245,7 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 	# assuming that command grouping is not needed in this case, so we just print the commands
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) MAKEFLAGS= -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
@@ -267,7 +268,7 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 else
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) MAKEFLAGS= -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
