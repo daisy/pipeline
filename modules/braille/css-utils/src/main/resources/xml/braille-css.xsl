@@ -12,6 +12,10 @@
     <!-- Property Definitions -->
     <!-- ==================== -->
     
+    <!--
+        FIXME: needs to contain the OBFL-specific -obfl-right-text-indent because inheritance
+        wouldn't work otherwise
+    -->
     <xsl:variable name="css:properties" as="xs:string*"
         select="('display',
                  'flow',
@@ -73,7 +77,8 @@
                  'letter-spacing',
                  'word-spacing',
                  'render-table-by',
-                 'table-header-policy')"/>
+                 'table-header-policy',
+                 '-obfl-right-text-indent')"/>
     
     <xsl:variable name="css:values" as="xs:string*"
         select="(re:exact(re:or(('block','inline','list-item','none','table',$css:VENDOR_PRF_IDENT_RE))),
@@ -136,7 +141,8 @@
                  re:exact($css:NON_NEGATIVE_INTEGER_RE),
                  re:exact($css:NON_NEGATIVE_INTEGER_RE),
                  re:exact(re:or(('auto',re:comma-separated($css:IDENT_RE)))),
-                 re:exact(re:or(('once','always','front'))))"/>
+                 re:exact(re:or(('once','always','front'))),
+                 re:exact($css:NON_NEGATIVE_INTEGER_RE))"/>
     
     <xsl:variable name="css:applies-to" as="xs:string*"
         select="('.*',
@@ -199,7 +205,8 @@
                  '.*',
                  '.*',
                  '.*',
-                 '.*')"/>
+                 '.*',
+                 '^(block|list-item)$')"/>
     
     <xsl:variable name="css:initial-values" as="xs:string*"
         select="('inline',
@@ -262,7 +269,8 @@
                  '0',
                  '1',
                  'auto',
-                 'once')"/>
+                 'once',
+                 '0')"/>
     
     <xsl:variable name="css:media" as="xs:string*"
         select="('embossed',
@@ -325,6 +333,7 @@
                  'embossed',
                  'embossed',
                  'embossed',
+                 'embossed',
                  'embossed')"/>
     
     <xsl:variable name="css:inherited-properties" as="xs:string*"
@@ -341,7 +350,8 @@
                  'line-height',
                  'letter-spacing',
                  'word-spacing',
-                 'text-transform')"/>
+                 'text-transform',
+                 '-obfl-right-text-indent')"/>
     
     <xsl:variable name="css:paged-media-properties" as="xs:string*"
         select="('page-break-before',

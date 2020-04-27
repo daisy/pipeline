@@ -113,7 +113,7 @@
     <p:viewport px:message="Transforming MathML" px:progress=".10"
                 match="math:math">
         <px:transform>
-            <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,'und')[1],')')">
+            <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,/*/@lang,'und')[1],')')">
                 <p:pipe step="html" port="result"/>
             </p:with-option>
             <p:with-option name="temp-dir" select="$temp-dir"/>
@@ -125,7 +125,7 @@
     </p:viewport>
     
     <p:choose name="transform" px:message="" px:progress=".76">
-        <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
+        <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]"/>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true"/>
             <p:output port="obfl">

@@ -17,7 +17,7 @@
         <xsl:variable name="context" as="element()?">
             <xsl:choose>
                 <xsl:when test="self::css:before or self::css:after">
-                    <xsl:sequence select="parent::*"/>
+                    <xsl:sequence select="(ancestor::*[not(self::css:before|self::css:after)])[last()]"/>
                 </xsl:when>
                 <xsl:when test="self::css:alternate">
                     <xsl:variable name="anchor" select="@css:anchor"/>

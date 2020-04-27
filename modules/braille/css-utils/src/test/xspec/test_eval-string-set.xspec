@@ -33,7 +33,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <h style="display: block" css:string-set="running-header &quot; foo &quot;">
+          <h style="display: block" css:string-set="running-header &quot;\A             foo\A           &quot;">
             foo
           </h>
         </body>

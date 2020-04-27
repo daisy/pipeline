@@ -337,36 +337,54 @@
         </xsl:if>
     </xsl:function>
     
-    <xsl:function name="css:deep-parse-stylesheet" as="element()*"> <!-- css:rule* -->
+    <xsl:template name="css:deep-parse-stylesheet" as="element(css:rule)*">
+        <xsl:param name="stylesheet" required="yes"/>
+        <xsl:param name="context" as="element()?" select="."/>
+        <xsl:variable name="stylesheet" as="element(css:rule)*">
+            <xsl:choose>
+                <xsl:when test="not(exists($stylesheet))"/>
+                <xsl:when test="$stylesheet instance of attribute()">
+                    <xsl:sequence select="css:parse-stylesheet(
+                                            $stylesheet,
+                                            true(),
+                                            if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@page'])
+                                              then QName('','page')
+                                              else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@volume'])
+                                                then QName('','volume')
+                                                else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@-')])
+                                                  then QName('','vendor-rule')
+                                                  else ())"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="css:parse-stylesheet($stylesheet, true())"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:apply-templates mode="css:deep-parse" select="$stylesheet">
+            <xsl:with-param name="context" tunnel="yes" select="$context"/>
+        </xsl:apply-templates>
+    </xsl:template>
+    
+    <xsl:function name="css:deep-parse-stylesheet" as="element(css:rule)*">
         <xsl:param name="stylesheet"/>
-        <xsl:choose>
-            <xsl:when test="not(exists($stylesheet))"/>
-            <xsl:when test="$stylesheet instance of attribute()">
-                <xsl:sequence select="css:parse-stylesheet(
-                                        $stylesheet,
-                                        true(),
-                                        if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@page'])
-                                          then QName('','page')
-                                          else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@volume'])
-                                            then QName('','volume')
-                                            else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@-')])
-                                              then QName('','vendor-rule')
-                                              else ())"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="css:parse-stylesheet($stylesheet, true())"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="css:deep-parse-stylesheet">
+            <xsl:with-param name="stylesheet" select="$stylesheet"/>
+            <xsl:with-param name="context" select="()"/>
+        </xsl:call-template>
     </xsl:function>
     
     <xsl:function name="css:deep-parse-page-stylesheet" as="element()*"> <!-- css:rule* -->
         <xsl:param name="stylesheet" as="xs:string?"/>
-        <xsl:sequence select="css:parse-stylesheet($stylesheet, true(), QName('','page'))"/>
+        <xsl:variable name="stylesheet" as="element(css:rule)*"
+                      select="css:parse-stylesheet($stylesheet, true(), QName('','page'))"/>
+        <xsl:apply-templates mode="css:deep-parse" select="$stylesheet"/>
     </xsl:function>
     
     <xsl:function name="css:deep-parse-volume-stylesheet" as="element()*"> <!-- css:rule* -->
         <xsl:param name="stylesheet" as="xs:string?"/>
-        <xsl:sequence select="css:parse-stylesheet($stylesheet, true(), QName('','volume'))"/>
+        <xsl:variable name="stylesheet" as="element(css:rule)*"
+                      select="css:parse-stylesheet($stylesheet, true(), QName('','volume'))"/>
+        <xsl:apply-templates mode="css:deep-parse" select="$stylesheet"/>
     </xsl:function>
     
     <xsl:function name="css:parse-string" as="element()?">
@@ -430,31 +448,67 @@
                             target-text(<url>)
                         -->
                         <xsl:when test="regex-group($css:CONTENT_RE_target_text_fn)!=''">
-                            <css:text target="{if (regex-group($css:CONTENT_RE_target_text_fn_url_string)!='')
-                                               then substring(regex-group($css:CONTENT_RE_target_text_fn_url_string),
-                                                              2, string-length(regex-group($css:CONTENT_RE_target_text_fn_url_string))-2)
-                                               else string($context/@*[name()=regex-group($css:CONTENT_RE_target_text_fn_url_attr)])}"/>
+                            <xsl:element name="css:text">
+                                <xsl:choose>
+                                    <xsl:when test="regex-group($css:CONTENT_RE_target_text_fn_url_string)!=''">
+                                        <xsl:attribute name="target"
+                                                       select="substring(regex-group($css:CONTENT_RE_target_text_fn_url_string),
+                                                                         2,
+                                                                         string-length(regex-group($css:CONTENT_RE_target_text_fn_url_string))-2)"/>
+                                    </xsl:when>
+                                    <xsl:when test="exists($context)">
+                                        <xsl:attribute name="target"
+                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_text_fn_url_attr)])"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_text_fn_url_attr)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:element>
                         </xsl:when>
                         <!--
                             target-string(<url>,<ident>)
                         -->
                         <xsl:when test="regex-group($css:CONTENT_RE_target_string_fn)!=''">
-                            <css:string target="{if (regex-group($css:CONTENT_RE_target_string_fn_url_string)!='')
-                                                 then substring(regex-group($css:CONTENT_RE_target_string_fn_url_string),
-                                                                2, string-length(regex-group($css:CONTENT_RE_target_string_fn_url_string))-2)
-                                                 else string($context/@*[name()=regex-group($css:CONTENT_RE_target_string_fn_url_attr)])}"
-                                        name="{regex-group($css:CONTENT_RE_target_string_fn_ident)}"/>
+                            <xsl:element name="css:string">
+                                <xsl:choose>
+                                    <xsl:when test="regex-group($css:CONTENT_RE_target_string_fn_url_string)!=''">
+                                        <xsl:attribute name="target"
+                                                       select="substring(regex-group($css:CONTENT_RE_target_string_fn_url_string),
+                                                                         2,
+                                                                         string-length(regex-group($css:CONTENT_RE_target_string_fn_url_string))-2)"/>
+                                    </xsl:when>
+                                    <xsl:when test="exists($context)">
+                                        <xsl:attribute name="target"
+                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_string_fn_url_attr)])"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_string_fn_url_attr)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:attribute name="name" select="regex-group($css:CONTENT_RE_target_string_fn_ident)"/>
+                            </xsl:element>
                         </xsl:when>
                         <!--
                             target-counter(<url>,<ident>,<counter-style>?)
                         -->
                         <xsl:when test="regex-group($css:CONTENT_RE_target_counter_fn)!=''">
                             <xsl:element name="css:counter">
-                                <xsl:attribute name="target"
-                                               select="if (regex-group($css:CONTENT_RE_target_counter_fn_url_string)!='')
-                                                       then substring(regex-group($css:CONTENT_RE_target_counter_fn_url_string),
-                                                                      2, string-length(regex-group($css:CONTENT_RE_target_counter_fn_url_string))-2)
-                                                       else string($context/@*[name()=regex-group($css:CONTENT_RE_target_counter_fn_url_attr)])"/>
+                                <xsl:choose>
+                                    <xsl:when test="regex-group($css:CONTENT_RE_target_counter_fn_url_string)!=''">
+                                        <xsl:attribute name="target"
+                                                       select="substring(regex-group($css:CONTENT_RE_target_counter_fn_url_string),
+                                                                         2,
+                                                                         string-length(regex-group($css:CONTENT_RE_target_counter_fn_url_string))-2)"/>
+                                    </xsl:when>
+                                    <xsl:when test="exists($context)">
+                                        <xsl:attribute name="target"
+                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_counter_fn_url_attr)])"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_counter_fn_url_attr)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                                 <xsl:attribute name="name" select="regex-group($css:CONTENT_RE_target_counter_fn_ident)"/>
                                 <xsl:if test="regex-group($css:CONTENT_RE_target_counter_fn_style)!=''">
                                     <xsl:attribute name="style" select="regex-group($css:CONTENT_RE_target_counter_fn_style)"/>
@@ -465,10 +519,23 @@
                             target-content(<url>)
                         -->
                         <xsl:when test="regex-group($css:CONTENT_RE_target_content_fn)!=''">
-                            <css:content target="{if (regex-group($css:CONTENT_RE_target_content_fn_url_string)!='')
-                                                  then substring(regex-group($css:CONTENT_RE_target_content_fn_url_string),
-                                                                 2, string-length(regex-group($css:CONTENT_RE_target_content_fn_url_string))-2)
-                                                  else string($context/@*[name()=regex-group($css:CONTENT_RE_target_content_fn_url_attr)])}"/>
+                            <xsl:element name="css:content">
+                                <xsl:choose>
+                                    <xsl:when test="regex-group($css:CONTENT_RE_target_content_fn_url_string)!=''">
+                                        <xsl:attribute name="target"
+                                                       select="substring(regex-group($css:CONTENT_RE_target_content_fn_url_string),
+                                                                         2,
+                                                                         string-length(regex-group($css:CONTENT_RE_target_content_fn_url_string))-2)"/>
+                                    </xsl:when>
+                                    <xsl:when test="exists($context)">
+                                        <xsl:attribute name="target"
+                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_content_fn_url_attr)])"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_content_fn_url_attr)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:element>
                         </xsl:when>
                         <!--
                             leader(<braille-string>[,[<integer>|<percentage>][,[left|center|right]]?]?)
@@ -551,6 +618,23 @@
             </xsl:analyze-string>
         </xsl:if>
     </xsl:function>
+    
+    <xsl:template mode="css:deep-parse" match="css:property[@name='content' and @value]">
+        <xsl:param name="context" as="element()?" tunnel="yes" select="()"/>
+        <xsl:copy>
+            <xsl:apply-templates mode="#current" select="@* except @value"/>
+            <xsl:call-template name="css:parse-content-list">
+                <xsl:with-param name="content-list" select="@value"/>
+                <xsl:with-param name="context" select="$context"/>
+            </xsl:call-template>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template mode="css:deep-parse" match="@*|node()">
+        <xsl:copy>
+            <xsl:apply-templates mode="#current" select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
     
     <!-- ===================================== -->
     <!-- Validating, inheriting and defaulting -->
@@ -828,7 +912,7 @@
     <!-- Serializing -->
     <!-- =========== -->
     
-     <xsl:template match="css:rule" mode="css:serialize" as="xs:string">
+    <xsl:template match="css:rule" mode="css:serialize" as="xs:string">
         <xsl:param name="base" as="xs:string*" select="()"/>
         <xsl:param name="level" as="xs:integer" select="1"/>
         <xsl:param name="indent" as="xs:string?" select="()"/>
@@ -878,8 +962,15 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="css:property" mode="css:serialize" as="xs:string">
+    <xsl:template match="css:property[@value]" mode="css:serialize" as="xs:string">
         <xsl:sequence select="concat(@name,': ',@value)"/>
+    </xsl:template>
+    
+    <xsl:template match="css:property[@name='content' and not(@value)]" mode="css:serialize" as="xs:string">
+        <xsl:variable name="value" as="xs:string*">
+            <xsl:apply-templates mode="#current" select="*"/>
+        </xsl:variable>
+        <xsl:sequence select="concat(@name,': ',if (exists($value)) then string-join($value,' ') else 'none')"/>
     </xsl:template>
     
     <xsl:template match="css:string-set" mode="css:serialize" as="xs:string">
@@ -899,7 +990,7 @@
                                      '&quot;')"/>
     </xsl:template>
     
-    <xsl:template match="css:content[not(@target)]" mode="css:serialize" as="xs:string">
+    <xsl:template match="css:content[not(@target|@target-attribute)]" mode="css:serialize" as="xs:string">
         <xsl:sequence select="'content()'"/>
     </xsl:template>
     
@@ -907,11 +998,15 @@
         <xsl:sequence select="concat('target-content(url(&quot;',@target,'&quot;))')"/>
     </xsl:template>
     
+    <xsl:template match="css:content[@target-attribute]" mode="css:serialize" as="xs:string">
+        <xsl:sequence select="concat('target-content(attr(',@target-attribute,' url))')"/>
+    </xsl:template>
+    
     <xsl:template match="css:attr" mode="css:serialize" as="xs:string">
         <xsl:sequence select="concat('attr(',@name,')')"/>
     </xsl:template>
     
-    <xsl:template match="css:string[@name][not(@target)]" mode="css:serialize" as="xs:string">
+    <xsl:template match="css:string[@name][not(@target|@target-attribute)]" mode="css:serialize" as="xs:string">
         <xsl:sequence select="concat('string(',@name,if (@scope) then concat(', ', @scope) else '',')')"/>
     </xsl:template>
     
@@ -923,14 +1018,26 @@
         <xsl:sequence select="concat('target-text(url(&quot;',@target,'&quot;))')"/>
     </xsl:template>
     
+    <xsl:template match="css:text[@target-attribute]" mode="css:serialize" as="xs:string">
+        <xsl:sequence select="concat('target-text(attr(',@target-attribute,' url))')"/>
+    </xsl:template>
+    
     <xsl:template match="css:string[@name][@target]" mode="css:serialize" as="xs:string">
         <xsl:sequence select="concat('target-string(url(&quot;',@target,'&quot;), ',@name,')')"/>
+    </xsl:template>
+    
+    <xsl:template match="css:string[@name][@target-attribute]" mode="css:serialize" as="xs:string">
+        <xsl:sequence select="concat('target-string(attr(',@target-attribute,' url), ',@name,')')"/>
     </xsl:template>
     
     <xsl:template match="css:counter[@target]" mode="css:serialize" as="xs:string">
         <xsl:variable name="target" as="xs:string" select="(@original-target,@target)[1]"/>
         <xsl:variable name="target" as="xs:string" select="if (contains($target,'#')) then $target else concat('#',$target)"/>
         <xsl:sequence select="concat('target-counter(url(&quot;',$target,'&quot;), ',@name,if (@style) then concat(', ', @style) else '',')')"/>
+    </xsl:template>
+    
+    <xsl:template match="css:counter[@target-attribute]" mode="css:serialize" as="xs:string">
+        <xsl:sequence select="concat('target-counter(attr(',@target-attribute,' url), ',@name,if (@style) then concat(', ', @style) else '',')')"/>
     </xsl:template>
     
     <xsl:template match="css:leader" mode="css:serialize" as="xs:string">

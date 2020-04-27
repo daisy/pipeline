@@ -26,4 +26,21 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_02">
+    <x:context>
+      <doc>
+        <body>
+          <a href="foo" style="&amp;::after {{ content: target-counter(attr(href), page); }}"/>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <a href="foo" style="&amp;::after {{ content: target-counter(attr(href url), page) }}"/>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import static java.nio.file.Files.createTempDirectory;
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -46,6 +47,8 @@ import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
 import org.liblouis.Louis;
 import org.liblouis.CompilationException;
 import org.liblouis.Logger.Level;
+import org.liblouis.Table;
+import org.liblouis.TableInfo;
 import org.liblouis.TableResolver;
 import org.liblouis.Translator;
 
@@ -67,14 +70,16 @@ import org.slf4j.LoggerFactory;
 )
 public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<LiblouisTableJnaImplProvider.LiblouisTableJnaImpl> {
 
-	// FIXME: isn't really a Transform
+	// FIXME: isn't really a Transform but implements it so that we can use TransformProvider
 	public class LiblouisTableJnaImpl extends LiblouisTable implements Transform {
 		
 		private final Translator translator;
+		private final TableInfo info;
 		
-		private LiblouisTableJnaImpl(String table) throws CompilationException {
+		private LiblouisTableJnaImpl(String table, TableInfo info) throws CompilationException {
 			super(table);
 			translator = new Translator(table);
+			this.info = info;
 		}
 		
 		public Translator getTranslator() {
@@ -87,6 +92,16 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		
 		public XProc asXProc() throws UnsupportedOperationException {
 			throw new UnsupportedOperationException();
+		}
+		
+		public Normalizer.Form getUnicodeNormalizationForm() {
+			if (info != null) {
+				String form = info.get("unicode-form");
+				if (form != null)
+					try {
+						return Normalizer.Form.valueOf(form.toUpperCase());
+					} catch (IllegalArgumentException e) {}}
+			return null;
 		}
 	}
 	
@@ -256,6 +271,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 						public LiblouisTableJnaImpl _apply() {
 							MutableQuery q = mutableQuery(query);
 							String table = null;
+							TableInfo tableInfo = null;
 							boolean unicode = false;
 							boolean whiteSpace = false;
 							boolean display = false;
@@ -306,7 +322,11 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 										b.append(":" + v); }
 									b.append(" "); }
 								try {
-									table = Translator.find(b.toString()).getTable(); }
+									Table t = Table.find(b.toString());
+									table = t.getTranslator().getTable();
+									tableInfo = t.getInfo(); }
+								catch (IllegalArgumentException e) {}
+								catch (NoSuchElementException e) {}
 								catch (CompilationException e) {}}
 							if (table != null) {
 								if (whiteSpace)
@@ -314,7 +334,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								if (unicode)
 									table = asURI(unicodeDisFile) + "," + table;
 								try {
-									return new LiblouisTableJnaImpl(table); }
+									return new LiblouisTableJnaImpl(table, tableInfo); }
 								catch (CompilationException e) {
 									__apply(
 										warn("Could not compile table " + table));

@@ -301,6 +301,7 @@
        <x:option name="ascii-file-format" select="'(line-breaks:DOS)
                                                    (page-breaks:&quot;---&quot;)
                                                    (pad:BOTH)'"/>
+       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(type:literary)'"/>
        <x:option name="pef-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
        <x:option name="brf-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
        <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>

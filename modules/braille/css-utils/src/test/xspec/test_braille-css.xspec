@@ -173,7 +173,7 @@
 				<css:rule selector="@-obfl-volume-transition" style="@any-interrupted {{ content: -obfl-evaluate('$volume'); }}"/>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="'display:block @page { size: 40 25 @bottom-center { content: ''foo'' } } @page:left { @bottom-left { content: counter(page) } } @volume { min-length: 20; max-length: 100 } @volume:nth(2) { max-length: 50 } @-obfl-volume-transition { @any-interrupted { content: -obfl-evaluate(''$volume'') } } &amp;::before { content: ''foo'' } &amp;::before::after { content: ''foo'' } &amp;::table-by(foo)::list-item::after { content: '', '' } &amp;::table-by(foo)::list-item:last-child::after { content: none }'"/>
+		<x:expect label="result" select="'display:block @page { size: 40 25 @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { min-length: 20; max-length: 100 } @volume:nth(2) { max-length: 50 } @-obfl-volume-transition { @any-interrupted { content: -obfl-evaluate(''$volume'') } } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none }'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_15">
@@ -402,14 +402,18 @@
 	</x:scenario>
 	
 	<x:scenario label="test_32">
-		<x:call function="css:deep-parse-stylesheet">
-			<x:param select="'display:block
+		<x:call template="css:deep-parse-stylesheet">
+			<x:param name="stylesheet"
+			         select="'display:block
 			                  &amp;::before { content: &quot;x&quot; }
-			                  &amp;::before::after { content: &quot;x&quot; }
+			                  &amp;::before::after { content: target-counter(attr(href), page) }
 			                  &amp;::after { @page { size: 10 10 }}
 			                  @page { size: 40 25 @top-right { content: &quot;x&quot; }}
 			                  @volume { @begin { content: flow(titlepage); @page { size: 15 5; } @page:left { size: 15 5; @top-right { content: none; }}}}
 			                  @volume:only { @begin { content: &quot;single volume&quot;; }}'"/>
+			<x:param name="context">
+				<a href="#foo"/>
+			</x:param>
 		</x:call>
 		<x:expect label="result">
 			<css:rule>
@@ -420,13 +424,17 @@
 					<css:property name="size" value="40 25"/>
 				</css:rule>
 				<css:rule selector="@top-right">
-					<css:property name="content" value="'x'"/>
+					<css:property name="content">
+						<css:string value="x"/>
+					</css:property>
 				</css:rule>
 			</css:rule>
 			<css:rule selector="@volume">
 				<css:rule selector="@begin">
 					<css:rule>
-						<css:property name="content" value="flow(titlepage)"/>
+						<css:property name="content">
+							<css:flow from="titlepage"/>
+						</css:property>
 					</css:rule>
 					<css:rule selector="@page">
 						<css:rule>
@@ -437,14 +445,16 @@
 								<css:property name="size" value="15 5"/>
 							</css:rule>
 							<css:rule selector="@top-right">
-								<css:property name="content" value="none"/>
+								<css:property name="content"/>
 							</css:rule>
 						</css:rule>
 					</css:rule>
 				</css:rule>
 				<css:rule selector="&amp;:only">
 					<css:rule selector="@begin">
-						<css:property name="content" value="'single volume'"/>
+						<css:property name="content">
+							<css:string value="single volume"/>
+						</css:property>
 					</css:rule>
 				</css:rule>
 			</css:rule>
@@ -455,10 +465,14 @@
 			</css:rule>
 			<css:rule selector="&amp;::before">
 				<css:rule>
-					<css:property name="content" value="'x'"/>
+					<css:property name="content">
+						<css:string value="x"/>
+					</css:property>
 				</css:rule>
 				<css:rule selector="&amp;::after">
-					<css:property name="content" value="'x'"/>
+					<css:property name="content">
+						<css:counter target="#foo" name="page" />
+					</css:property>
 				</css:rule>
 			</css:rule>
 		</x:expect>
@@ -474,10 +488,10 @@
 					<css:property name="size" value="32 27"/>
 				</css:rule>
 				<css:rule selector="@bottom-center">
-					<css:property name="content" value="none"/>
+					<css:property name="content"/>
 				</css:rule>
 				<css:rule selector="@bottom-left">
-					<css:property name="content" value="none"/>
+					<css:property name="content"/>
 				</css:rule>
 			</css:rule>
 		</x:expect>

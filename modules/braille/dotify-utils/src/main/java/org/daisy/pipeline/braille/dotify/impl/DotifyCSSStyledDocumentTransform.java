@@ -79,7 +79,7 @@ public interface DotifyCSSStyledDocumentTransform {
 					if (obfl && braille)
 						blockTransformQuery.add("output", "braille");
 					Iterable<BrailleTranslator> blockTransforms = logSelect(blockTransformQuery, brailleTranslatorProvider);
-					final String textTransformQuery = mutableQuery(q).add("input", "text-css").add("output", "braille").toString();
+					final Query textTransformQuery = mutableQuery(q).add("input", "text-css").add("output", "braille");
 					final boolean _obfl = obfl;
 					return transform(
 						blockTransforms,
@@ -103,12 +103,19 @@ public interface DotifyCSSStyledDocumentTransform {
 			private TransformImpl(boolean obfl,
 			                      String blockTransformQuery,
 			                      BrailleTranslator blockTransform,
-			                      String textTransformQuery) {
+			                      Query textTransformQuery) {
+				String locale = "und";
+				if (textTransformQuery.containsKey("locale")) {
+					MutableQuery q = mutableQuery(textTransformQuery);
+					locale = q.removeOnly("locale").getValue().get();
+					textTransformQuery = q;
+				}
 				this.output = obfl ? "obfl" : "pef";
 				Map<String,String> options = ImmutableMap.of(
 					"output", this.output,
 					"css-block-transform", blockTransformQuery,
-					"text-transform", textTransformQuery);
+					"locale", locale,
+					"mode", textTransformQuery.toString());
 				xproc = new XProc(href, null, options);
 				this.blockTransform = blockTransform;
 			}

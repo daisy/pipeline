@@ -11,7 +11,8 @@
 	<p:input port="source"/>
 	<p:output port="result"/>
 	
-	<p:option name="text-transform" required="true"/>
+	<p:option name="locale" required="true"/>
+	<p:option name="mode" required="true"/>
 	<p:input port="parameters" kind="parameter" primary="false"/>
 	
 	<p:import href="../obfl-normalize-space.xpl"/>
@@ -51,9 +52,9 @@
 		</p:input>
 	</pxi:obfl-normalize-space>
 	
-	<dotify:obfl-to-pef px:progress=".90"
-	                    locale="und">
-		<p:with-option name="mode" select="$text-transform"/>
+	<dotify:obfl-to-pef px:progress=".90">
+		<p:with-option name="locale" select="$locale"/>
+		<p:with-option name="mode" select="$mode"/>
 		<p:input port="parameters">
 			<p:pipe step="parameters" port="result"/>
 		</p:input>

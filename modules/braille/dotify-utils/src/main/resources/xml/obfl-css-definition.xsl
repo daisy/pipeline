@@ -17,7 +17,8 @@
                            'border-left-pattern',   'border-left-style',                                  '-obfl-keep-with-previous-sheets',
                            'border-right-pattern',  'border-right-style',                                 '-obfl-keep-with-next-sheets',
                            'border-top-pattern',    'border-top-style',                                   '-obfl-scenario-cost',
-                           'border-bottom-pattern', 'border-bottom-style')"/>
+                           'border-bottom-pattern', 'border-bottom-style',                                '-obfl-right-text-indent'
+                           )"/>
     
     <xsl:variable name="_OBFL_KEEP_FN_RE">-obfl-keep\(\s*[1-9]\s*\)</xsl:variable>
     

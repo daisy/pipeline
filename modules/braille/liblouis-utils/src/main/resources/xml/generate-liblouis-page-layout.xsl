@@ -96,9 +96,7 @@
     <xsl:function name="pxi:margin-content" as="element()*">
         <xsl:param name="margin-rules" as="element()*"/>
         <xsl:param name="selector" as="xs:string"/>
-        <xsl:sequence select="css:parse-content-list(
-                                $margin-rules[@selector=$selector]/*[@name='content'][1]/@value,
-                                ())"/>
+        <xsl:sequence select="$margin-rules[@selector=$selector]/*[@name='content'][1]/*"/>
     </xsl:function>
 
 </xsl:stylesheet>

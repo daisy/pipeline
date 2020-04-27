@@ -58,7 +58,7 @@ public interface DotifyOBFLTransform {
 								return empty;
 						q.add("output", "braille");
 						return Iterables.<Transform>of(
-							logCreate((Transform)new TransformImpl(q.toString()))); }}
+							logCreate((Transform)new TransformImpl(q))); }}
 			catch (IllegalStateException e) {}
 			return empty;
 		}
@@ -67,8 +67,19 @@ public interface DotifyOBFLTransform {
 			
 			private final XProc xproc;
 			
-			private TransformImpl(String textTransformQuery) {
-				xproc = new XProc(href, null, ImmutableMap.of("text-transform", textTransformQuery));
+			private TransformImpl(Query textTransformQuery) {
+				String locale = "und";
+				if (textTransformQuery.containsKey("locale")) {
+					MutableQuery q = mutableQuery(textTransformQuery);
+					locale = q.removeOnly("locale").getValue().get();
+					textTransformQuery = q;
+				}
+				xproc = new XProc(
+					href,
+					null,
+					ImmutableMap.of(
+						"locale", locale,
+						"mode", textTransformQuery.toString()));
 			}
 			
 			@Override

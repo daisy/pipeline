@@ -2,16 +2,16 @@ package org.daisy.pipeline.braille.dotify.impl;
 
 import java.util.ArrayList;
 
-import static org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl.counterRepresentationAlphabetic;
-import static org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl.counterRepresentationCyclic;
-import static org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl.counterRepresentationFixed;
-import static org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl.counterRepresentationNumeric;
-import static org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl.counterRepresentationSymbolic;
+import static org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl.counterRepresentationAlphabetic;
+import static org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl.counterRepresentationCyclic;
+import static org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl.counterRepresentationFixed;
+import static org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl.counterRepresentationNumeric;
+import static org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl.counterRepresentationSymbolic;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class BrailleFilterFactoryImplTest {
+public class CounterRepresentationTest {
 	
 	@Test
 	public void testCounterRepresentation() {

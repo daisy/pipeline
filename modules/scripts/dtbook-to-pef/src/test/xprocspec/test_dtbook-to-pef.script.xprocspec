@@ -957,7 +957,7 @@
             </dtbook>
           </x:document>
         </x:input>
-        <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
+        <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(type:literary)'"/>
         <x:option name="pef-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="brf-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="preview-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>

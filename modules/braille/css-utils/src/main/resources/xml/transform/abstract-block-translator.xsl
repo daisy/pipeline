@@ -81,7 +81,9 @@
 					<xsl:apply-templates mode="css:attribute-as-property" select="@css:*"/>
 				</css:rule>
 			</xsl:if>
-			<xsl:sequence select="css:deep-parse-stylesheet(@style)"/>
+			<xsl:call-template name="css:deep-parse-stylesheet">
+				<xsl:with-param name="stylesheet" select="@style"/>
+			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="context" as="element()" select="."/>
 		<xsl:variable name="translated-style" as="element()*"> <!-- css:rule* -->
@@ -381,14 +383,21 @@
 		<xsl:message><xsl:value-of select="@name"/>() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="translate-style" match="css:property[@name='content' and not(@value='none')]">
+	<xsl:template mode="translate-style" match="css:property[@name='content' and @value[not(.='none')]]">
 		<xsl:param name="context" as="element()" tunnel="yes"/>
+		<xsl:call-template name="translate-content-list">
+			<xsl:with-param name="content-list" select="css:parse-content-list(@value, $context)"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template mode="translate-style" match="css:property[@name='content' and not(@value)]" name="translate-content-list">
+		<xsl:param name="content-list" as="element()*" select="*"/>
 		<xsl:variable name="translated-content-list" as="element()*">
-			<xsl:apply-templates mode="#current" select="css:parse-content-list(@value, $context)"/>
+			<xsl:apply-templates mode="#current" select="$content-list"/>
 		</xsl:variable>
 		<xsl:sequence select="css:property('content', if (exists($translated-content-list))
-					                                  then css:serialize-content-list($translated-content-list)
-					                                  else '&quot;&quot;')"/>
+		                                              then css:serialize-content-list($translated-content-list)
+		                                              else 'none')"/>
 	</xsl:template>
 	
 	<xsl:template mode="translate-style" match="css:string[@value]|css:attr" as="element()?">
@@ -447,7 +456,9 @@
 					<xsl:apply-templates mode="css:attribute-as-property" select="@css:*"/>
 				</css:rule>
 			</xsl:if>
-			<xsl:sequence select="css:deep-parse-stylesheet(@style)"/>
+			<xsl:call-template name="css:deep-parse-stylesheet">
+				<xsl:with-param name="stylesheet" select="@style"/>
+			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="context" as="element()" select="."/>
 		<xsl:variable name="translated-style" as="element()*"> <!-- css:rule* -->

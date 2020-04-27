@@ -36,7 +36,12 @@
                 <xsl:apply-templates select="css:parse-content-list(@value, ())" mode="eval-content-list"/>
             </xsl:variable>
             <xsl:attribute name="value"
-              select="concat('&quot;',replace(string-join($evaluated-content, ''), '[\s&#x2800;]+', ' '), '&quot;')"/>
+                           select="concat('&quot;',
+                                          replace(replace(
+                                            string-join($evaluated-content,''),
+                                            '\n','\\A '),
+                                            '&quot;','\\22 '),
+                                          '&quot;')"/>
         </xsl:copy>
     </xsl:template>
     

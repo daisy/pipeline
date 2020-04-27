@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.dotify.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -165,7 +166,9 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 		
 		private final static Iterable<DotifyTranslator> empty = Iterables.<DotifyTranslator>empty();
 		
-		private final static List<String> supportedInput = ImmutableList.of("text-css");
+		// "text-css" not supported: CSS styles not recognized and line breaking and white space
+		// processing not according to CSS
+		private final static List<String> supportedInput = Collections.emptyList();
 		private final static List<String> supportedOutput = ImmutableList.of("braille");
 		
 		private TransformProvider<DotifyTranslator> _provider

@@ -12,10 +12,11 @@
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+    <xsl:include href="marker-reference.xsl"/>
     
     <xsl:param name="duplex" as="xs:string" required="yes"/>
     
-    <xsl:variable name="page-stylesheets" as="element()*" select="/*/css:rule[@selector='@page']"/>
+    <xsl:variable name="page-stylesheets" as="element(css:rule)*" select="/*/css:rule[@selector='@page']"/>
     
     <xsl:function name="pxi:layout-master-name" as="xs:string">
         <xsl:param name="page-stylesheet" as="xs:string"/>
@@ -36,10 +37,10 @@
                                           if ($s/parent::obfl:pre-content) then 'pre-page'
                                           else if ($s/parent::obfl:post-content) then 'post-page'
                                           else 'page')"/>
-                <xsl:sequence select="obfl:generate-layout-master(
-                                        $page-stylesheet/*,
-                                        $layout-master-name,
-                                        $default-page-counter-names[1])"/>
+                <xsl:apply-templates mode="obfl:generate-layout-master" select="$page-stylesheet">
+                    <xsl:with-param name="name" tunnel="yes" select="$layout-master-name"/>
+                    <xsl:with-param name="default-page-counter-name" tunnel="yes" select="$default-page-counter-names[1]"/>
+                </xsl:apply-templates>
                 <!--
                     The result of calling obfl:generate-layout-master is the same regardless of the
                     default-page-counter-name passed. Therefore only the first result is
@@ -49,10 +50,10 @@
                 -->
                 <xsl:for-each select="$default-page-counter-names[position()&gt;1]">
                     <xsl:variable name="_">
-                        <xsl:sequence select="obfl:generate-layout-master(
-                                                $page-stylesheet/*,
-                                                $layout-master-name,
-                                                .)"/>
+                        <xsl:apply-templates mode="obfl:generate-layout-master" select="$page-stylesheet">
+                            <xsl:with-param name="name" tunnel="yes" select="$layout-master-name"/>
+                            <xsl:with-param name="default-page-counter-name" tunnel="yes" select="."/>
+                        </xsl:apply-templates>
                     </xsl:variable>
                 </xsl:for-each>
             </xsl:for-each>
@@ -92,10 +93,18 @@
         <field allow-text-flow="true"/>
     </xsl:variable>
     
-    <xsl:function name="obfl:generate-layout-master">
-        <xsl:param name="page-stylesheet" as="element()*"/> <!-- css:rule* -->
-        <xsl:param name="name" as="xs:string"/>
-        <xsl:param name="default-page-counter-name" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
+    <xsl:template mode="obfl:generate-layout-master" match="css:rule[@selector='@page']" priority="1">
+        <xsl:call-template name="pf:next-match-with-generated-ids">
+            <xsl:with-param name="prefix" select="'tmp_'"/>
+            <xsl:with-param name="for-elements" select="descendant::css:string[@name][not(@target)]"/>
+            <xsl:with-param name="in-use" select="()"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template mode="obfl:generate-layout-master" match="css:rule[@selector='@page']">
+        <xsl:param name="name" tunnel="yes" as="xs:string"/>
+        <xsl:param name="default-page-counter-name" tunnel="yes" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
+        <xsl:variable name="page-stylesheet" as="element()*" select="*"/>
         <xsl:variable name="duplex" as="xs:boolean" select="$duplex='true'"/>
         <xsl:variable name="right-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:right']/*"/>
         <xsl:variable name="left-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:left']/*"/>
@@ -135,9 +144,8 @@
         <xsl:variable name="page-counter-name" as="xs:string" select="$counter-increment/@name"/>
         <xsl:variable name="footnotes-properties" as="element()*"
                       select="$default-page-stylesheet[@selector='@footnotes'][1]/css:property"/>
-        <xsl:variable name="footnotes-content" as="element()*"
-                      select="css:parse-content-list($footnotes-properties[@name='content'][1]/@value,())"/>
-        <layout-master name="{$name}" duplex="{$duplex}" page-number-variable="page"
+        <xsl:variable name="footnotes-content" as="element()*" select="$footnotes-properties[@name='content'][1]/*"/>
+        <layout-master name="{$name}" duplex="{$duplex}"
                        page-width="{$page-width}" page-height="{$page-height}">
             <xsl:if test="$right-page-stylesheet">
                 <template use-when="(= (% $page 2) 1)">
@@ -220,7 +228,7 @@
                 </page-area>
             </xsl:for-each>
         </layout-master>
-    </xsl:function>
+    </xsl:template>
     
     <xsl:template name="template">
         <xsl:param name="stylesheet" as="element()*" required="yes"/> <!-- css:rule*|css:property* -->
@@ -351,7 +359,7 @@
         <xsl:variable name="white-space" as="xs:string" select="($properties[@name='white-space']/@value,'normal')[1]"/>
         <xsl:variable name="text-transform" as="xs:string" select="($properties[@name='text-transform']/@value,'auto')[1]"/>
         <xsl:variable name="content" as="element()*">
-            <xsl:apply-templates select="css:parse-content-list($properties[@name='content'][1]/@value,())" mode="eval-content-list-top-bottom">
+            <xsl:apply-templates select="$properties[@name='content'][1]/*" mode="eval-content-list-top-bottom">
                 <xsl:with-param name="white-space" select="$white-space"/>
                 <xsl:with-param name="text-transform" select="$text-transform"/>
             </xsl:apply-templates>
@@ -370,7 +378,7 @@
         <xsl:param name="side" as="xs:string" required="yes"/>
         <xsl:param name="min-width" as="xs:integer" required="yes"/>
         <xsl:variable name="indicators" as="element()*">
-            <xsl:apply-templates select="css:parse-content-list($properties[@name='content'][1]/@value,())" mode="eval-content-list-left-right"/>
+            <xsl:apply-templates select="$properties[@name='content'][1]/*" mode="eval-content-list-left-right"/>
         </xsl:variable>
         <xsl:if test="exists($indicators) or $min-width &gt; 0">
             <margin-region align="{$side}" width="{max((count($indicators),$min-width))}">
@@ -449,49 +457,36 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-        <xsl:if test="$white-space!='normal'">
-            <xsl:call-template name="pf:warn">
-                <xsl:with-param name="msg">white-space:{} could not be applied to target-counter({})</xsl:with-param>
-                <xsl:with-param name="args" select="($white-space,
-                                                     @name)"/>
-            </xsl:call-template>
-        </xsl:if>
+        <xsl:variable name="text-transform" as="xs:string*">
+            <xsl:if test="matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                <xsl:sequence select="'-dotify-counter'"/>
+            </xsl:if>
+            <xsl:sequence select="$text-transform[not(.=('none','auto'))]"/>
+        </xsl:variable>
+        <xsl:variable name="text-style" as="xs:string*">
+            <xsl:if test="exists($text-transform)">
+                <xsl:sequence select="concat('text-transform: ',string-join($text-transform,' '))"/>
+            </xsl:if>
+            <xsl:if test="not($white-space='normal')">
+                <xsl:sequence select="concat('white-space: ',$white-space)"/>
+            </xsl:if>
+            <xsl:if test="matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                <xsl:sequence select="concat('-dotify-counter-style: ',@style)"/>
+            </xsl:if>
+        </xsl:variable>
         <current-page number-format="{if (@style=('roman', 'upper-roman', 'lower-roman', 'upper-alpha', 'lower-alpha'))
                                       then @style else 'default'}">
-            <xsl:choose>
-                <xsl:when test="matches(@style,re:exact($css:SYMBOLS_FN_RE))">
-                    <xsl:choose>
-                        <xsl:when test="not($text-transform=('none','auto'))">
-                            <xsl:attribute name="text-style"
-                                           select="concat('text-transform: -dotify-counter ',$text-transform,'; ',
-                                                          '-dotify-counter-style: ',@style)"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="text-style" select="concat('text-transform: -dotify-counter; ',
-                                                                            '-dotify-counter-style: ',@style)"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:when test="not($text-transform=('none','auto'))">
-                    <xsl:attribute name="text-style" select="concat('text-transform: ',$text-transform)"/>
-                </xsl:when>
-            </xsl:choose>
+            <xsl:if test="exists($text-style)">
+                <xsl:attribute name="text-style" select="string-join($text-style,'; ')"/>
+            </xsl:if>
         </current-page>
     </xsl:template>
     
     <xsl:template match="css:string[@name][not(@target)]" mode="eval-content-list-top-bottom">
-        <xsl:param name="white-space" as="xs:string" tunnel="yes" select="'normal'"/>
+        <xsl:param name="white-space" as="xs:string" select="'normal'"/>
         <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
-        <xsl:param name="page-side" as="xs:string" tunnel="yes" select="'both'"/>
-        <xsl:if test="$white-space!='normal'">
-            <xsl:call-template name="pf:warn">
-                <xsl:with-param name="msg">white-space:{} could not be applied to target-string({})</xsl:with-param>
-                <xsl:with-param name="args" select="($white-space,
-                                                     @name)"/>
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:variable name="scope" select="(@scope,'first')[1]"/>
-        <xsl:if test="$page-side='both' and $scope=('spread-first','spread-start','spread-last','spread-last-except-start')">
+        <xsl:param name="page-side" as="xs:string" tunnel="yes" select="'both'"/> <!-- right|left|both -->
+        <xsl:if test="$page-side='both' and @scope=('spread-first','spread-start','spread-last','spread-last-except-start')">
             <!--
                 FIXME: force creation of templates for left and right pages when margin
                 content contains "string(foo, spread-last)"
@@ -499,150 +494,13 @@
             <xsl:call-template name="pf:error">
                 <xsl:with-param name="msg">string({}, {}) on both left and right side currently not supported</xsl:with-param>
                 <xsl:with-param name="args" select="(@name,
-                                                     $scope)"/>
+                                                     @scope)"/>
             </xsl:call-template>
         </xsl:if>
-        <xsl:variable name="var-name" as="xs:string" select="concat('tmp_',generate-id(.))"/>
-        <xsl:variable name="text-transform-decl" as="xs:string" select="if (not($text-transform=('none','auto')))
-                                                                        then concat(' text-transform:',$text-transform)
-                                                                        else ''"/>
-        <xsl:choose>
-            <xsl:when test="$scope=('first','page-first')">
-                <marker-reference marker="{@name}" direction="forward" scope="page"
-                                  text-style="-dotify-def:{$var-name};{$text-transform-decl}"/>
-                <!--
-                    FIXME: replace with scope="document" and remove second marker-reference
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="sequence"
-                                  text-style="-dotify-defifndef:{$var-name};{$text-transform-decl}"/>
-                <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"
-                                  text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
-            </xsl:when>
-            <xsl:when test="$scope=('start','page-start')">
-                <!--
-                    Note that "start" behaves like "first" when no assignments have been made yet,
-                    which is not exactly according to the spec (see
-                    https://github.com/snaekobbi/pipeline-mod-dedicon/issues/49 and
-                    https://github.com/sbsdev/pipeline-mod-sbs/issues/42). An alternative solution
-                    could be to use "start" inside @page and "first" inside @page:first.
-                -->
-                <marker-reference marker="{@name}/prev" direction="forward" scope="page-content"
-                                  text-style="-dotify-def:{$var-name};{$text-transform-decl}"/>
-                <!--
-                    TODO: check that this does not match too much at the end of the page!
-                    FIXME: replace with scope="document" and remove second marker-reference
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="sequence"
-                                  text-style="-dotify-defifndef:{$var-name};{$text-transform-decl}"/>
-                <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"
-                                  text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
-            </xsl:when>
-            <xsl:when test="$scope=('start-except-last','page-start-except-last')">
-                <!--
-                    Note that "start" behaves like "first" when no assignments have been made yet,
-                    which is not exactly according to the spec.
-                -->
-                <marker-reference marker="{@name}/prev" direction="forward" scope="page-content">
-                    <xsl:if test="not($text-transform=('none','auto'))">
-                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
-                    </xsl:if>
-                </marker-reference>
-            </xsl:when>
-            <xsl:when test="$scope=('last','page-last')">
-                <!--
-                    FIXME: replace with scope="document" and remove second marker-reference
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="sequence"
-                                  text-style="-dotify-def:{$var-name};{$text-transform-decl}"/>
-                <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"
-                                  text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
-            </xsl:when>
-            <xsl:when test="$scope=('last-except-start','page-last-except-start')">
-                <xsl:message terminate="yes"
-                             select="concat('string(',@name,', ',$scope,') currently not supported. If you want to use it in combination with string(start), please consider using the combination start-except-last/last instead.')"/>
-            </xsl:when>
-            <xsl:when test="$scope='spread-first'">
-                <marker-reference marker="{@name}" direction="forward" scope="spread"
-                                  text-style="-dotify-def:{$var-name};{$text-transform-decl}">
-                    <xsl:if test="$page-side='right'">
-                        <xsl:attribute name="start-offset" select="'-1'"/>
-                    </xsl:if>
-                </marker-reference>
-                <!--
-                    FIXME: replace with scope="document" and remove second marker-reference
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="sequence"
-                                  text-style="-dotify-defifndef:{$var-name};{$text-transform-decl}">
-                    <xsl:if test="$page-side='right'">
-                        <xsl:attribute name="start-offset" select="'-1'"/>
-                    </xsl:if>
-                </marker-reference>
-                <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"
-                                  text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
-            </xsl:when>
-            <xsl:when test="$scope='spread-start'">
-                <!--
-                    Note that "start" behaves like "first" when no assignments have been made yet,
-                    which is not exactly according to the spec.
-                -->
-                <marker-reference marker="{@name}/prev" direction="forward" scope="spread-content"
-                                  text-style="-dotify-def:{$var-name};{$text-transform-decl}">
-                    <xsl:if test="$page-side='right'">
-                        <xsl:attribute name="start-offset" select="'-1'"/>
-                    </xsl:if>
-                </marker-reference>
-                <!--
-                    TODO: check that this does not match too much at the end of the page!
-                    FIXME: replace with scope="document" and remove second marker-reference
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="sequence"
-                                  text-style="-dotify-defifndef:{$var-name};{$text-transform-decl}">
-                    <xsl:if test="$page-side='left'">
-                        <xsl:attribute name="start-offset" select="'1'"/>
-                    </xsl:if>
-                </marker-reference>
-                <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"
-                                  text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
-            </xsl:when>
-            <xsl:when test="$scope='spread-start-except-last'">
-                <!--
-                    Note that "start" behaves like "first" when no assignments have been made yet,
-                    which is not exactly according to the spec.
-                -->
-                <marker-reference marker="{@name}/prev" direction="forward" scope="spread-content">
-                    <xsl:if test="$page-side='right'">
-                        <xsl:attribute name="start-offset" select="'-1'"/>
-                    </xsl:if>
-                    <xsl:if test="not($text-transform=('none','auto'))">
-                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
-                    </xsl:if>
-                </marker-reference>
-            </xsl:when>
-            <xsl:when test="$scope='spread-last'">
-                <!--
-                    FIXME: replace with scope="document" and remove second marker-reference
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="sequence"
-                                  text-style="-dotify-def:{$var-name};{$text-transform-decl}">
-                    <xsl:if test="$page-side='left'">
-                        <xsl:attribute name="start-offset" select="'1'"/>
-                    </xsl:if>
-                </marker-reference>
-                <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"
-                                  text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
-            </xsl:when>
-            <xsl:when test="$scope='spread-last-except-start'">
-                <xsl:message terminate="yes"
-                             select="concat('string(',@name,', ',$scope,') currently not supported. If you want to use it in combination with string(start), please consider using the combination start-except-last/last instead.')"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="pf:error">
-                    <xsl:with-param name="msg">in function string({}, {}): unknown keyword "{}"</xsl:with-param>
-                    <xsl:with-param name="args" select="(@name,
-                                                        $scope)"/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates mode="marker-reference" select=".">
+            <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
+            <xsl:with-param name="text-transform" tunnel="yes" select="$text-transform"/>
+        </xsl:apply-templates>
     </xsl:template>
     
     <xsl:template match="css:custom-func[@name='-obfl-marker-indicator'][matches(@arg2,$css:STRING_RE) and not(@arg3)]"
@@ -732,6 +590,17 @@
         <xsl:call-template name="pf:error">
             <xsl:with-param name="msg">Coding error</xsl:with-param>
         </xsl:call-template>
+    </xsl:template>
+    
+    <!-- for XSpec -->
+    <xsl:template name="obfl:generate-layout-master">
+        <xsl:param name="page-stylesheet" as="element(css:rule)"/>
+        <xsl:param name="name" as="xs:string"/>
+        <xsl:param name="default-page-counter-name" as="xs:string"/>
+        <xsl:apply-templates mode="obfl:generate-layout-master" select="$page-stylesheet">
+            <xsl:with-param name="name" tunnel="yes" select="$name"/>
+            <xsl:with-param name="default-page-counter-name" tunnel="yes" select="$default-page-counter-name"/>
+        </xsl:apply-templates>
     </xsl:template>
     
 </xsl:stylesheet>

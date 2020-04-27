@@ -17,7 +17,7 @@
     <p:input port="source"/>
     <p:output port="result"/>
     
-    <p:option name="text-transform" required="true"/>
+    <p:option name="locale" select="'und'"/>
     <p:option name="duplex" select="'true'"/>
     <p:option name="skip-margin-top-of-page" select="'false'"/>
     
@@ -763,13 +763,9 @@
         </p:choose>
     </p:for-each>
     
-    <!-- for debug info -->
-    <p:for-each><p:identity/></p:for-each>
-    
     <p:identity name="sections"/>
     
-    <p:xslt px:progress=".06"
-            template-name="start">
+    <p:xslt px:progress=".06">
         <p:input port="source">
             <p:pipe step="sections" port="result"/>
             <p:pipe step="extract-page-and-volume-styles" port="styles"/>
@@ -777,7 +773,7 @@
         <p:input port="stylesheet">
             <p:document href="css-to-obfl.xsl"/>
         </p:input>
-        <p:with-param name="braille-translator-query" select="if ($text-transform='auto') then '' else $text-transform">
+        <p:with-param name="locale" select="$locale">
             <p:empty/>
         </p:with-param>
         <p:with-param name="page-counters" select="$page-counters">
@@ -787,9 +783,6 @@
             <p:pipe step="extract-page-and-volume-styles" port="result"/>
         </p:with-param>
     </p:xslt>
-    
-    <!-- for debug info -->
-    <p:for-each><p:identity/></p:for-each>
     
     <!--
         generate layout-masters

@@ -204,6 +204,15 @@ public class LiblouisCoreTest extends AbstractTest {
 	}
 	
 	@Test
+	public void testUnicodeNormalization() {
+		FromStyledTextToBraille translator = provider.withContext(messageBus)
+		                                             .get(query("(locale:foo)(contraction:no)")).iterator().next()
+		                                             .fromStyledTextToBraille();
+		assertEquals(braille("⠷"), translator.transform(text("á")));
+		assertEquals(braille("⠷"), translator.transform(text("\u0061\u0301")));
+	}
+	
+	@Test
 	public void testHyphenate() {
 		assertEquals("foo\u00ADbar",
 		             hyphenatorProvider.withContext(messageBus)

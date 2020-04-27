@@ -28,10 +28,15 @@
 	<xsl:template mode="style" match="*" as="xs:string*">
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
 		<xsl:variable name="source-style" as="element()*">
+			<xsl:variable name="stylesheet" as="element()*">
+				<xsl:call-template name="css:deep-parse-stylesheet">
+					<xsl:with-param name="stylesheet" select="@style"/>
+				</xsl:call-template>
+			</xsl:variable>
 			<xsl:call-template name="css:computed-properties">
 				<xsl:with-param name="properties" select="$text-properties"/>
 				<xsl:with-param name="context" select="$dummy-element"/>
-				<xsl:with-param name="cascaded-properties" tunnel="yes" select="css:deep-parse-stylesheet(@style)[not(@selector)]/css:property"/>
+				<xsl:with-param name="cascaded-properties" tunnel="yes" select="$stylesheet[not(@selector)]/css:property"/>
 				<xsl:with-param name="parent-properties" tunnel="yes" select="$source-style"/>
 			</xsl:call-template>
 		</xsl:variable>

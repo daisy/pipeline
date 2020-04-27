@@ -9,6 +9,10 @@ import java.util.regex.Pattern;
 
 import static com.google.common.collect.Iterables.size;
 
+import cz.vutbr.web.css.CSSProperty;
+
+import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
+import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
@@ -101,12 +105,26 @@ class NumberBrailleTranslator extends AbstractBrailleTranslator implements Brail
 
 	private String transform(CSSStyledText styledText) {
 		SimpleInlineStyle style = styledText.getStyle();
-		if (style != null && !style.isEmpty())
-			throw new RuntimeException("Translator does not support style '" + style + "'");
+		String text = styledText.getText();
+		if (style != null) {
+			CSSProperty ws = style.getProperty("white-space");
+			if (ws != null) {
+				if (ws == WhiteSpace.PRE_WRAP)
+					text = text.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
+					           .replaceAll("[\\x20\t\\u2800]", "\u00A0");
+				if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
+					text = text.replaceAll("[\\n\\r]", "\u2028");
+				style.removeProperty("white-space"); }
+			CSSProperty textTransform = style.getProperty("text-transform");
+			if (textTransform == TextTransform.AUTO)
+				style.removeProperty("text-transform");
+			if (!style.isEmpty())
+				throw new RuntimeException("Translator does not support style '" + style + "'");
+		}
 		Map<String,String> attrs = styledText.getTextAttributes();
 		if (attrs != null && !attrs.isEmpty())
 			throw new RuntimeException("Translator does not support text attributes '" + attrs + "'");
-		return transform(styledText.getText());
+		return transform(text);
 	}
 
 	private String transform(String text) {

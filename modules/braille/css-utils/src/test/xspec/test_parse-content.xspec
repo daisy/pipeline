@@ -32,7 +32,9 @@
       <doc>
         <body>
           <p foo="bar">
-            <css:after css:content="attr(foo)"/>
+            <css:after>
+              <css:after css:content="attr(foo)"/>
+            </css:after>
           </p>
         </body>
       </doc>
@@ -41,7 +43,9 @@
       <doc>
         <body>
           <p foo="bar">
-            <css:after>bar</css:after>
+            <css:after>
+              <css:after>bar</css:after>
+            </css:after>
           </p>
         </body>
       </doc>

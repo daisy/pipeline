@@ -1,6 +1,7 @@
 package org.daisy.pipeline.braille.liblouis.impl;
 
 import java.net.URI;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -255,6 +256,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				new Function<LiblouisTableJnaImpl,Iterable<LiblouisTranslator>>() {
 					public Iterable<LiblouisTranslator> _apply(final LiblouisTableJnaImpl table) {
 						Iterable<LiblouisTranslator> translators = empty;
+						Normalizer.Form unicodeNormalization = table.getUnicodeNormalizationForm();
 						if (!"none".equals(hyphenator)) {
 							if ("liblouis".equals(hyphenator) || "auto".equals(hyphenator))
 								for (URI t : table.asURIs())
@@ -263,7 +265,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 											logCreate((LiblouisTranslator)new LiblouisTranslatorHyphenatorImpl(
 													table.getTranslator(),
 													handleNonStandardHyphenation,
-													locale))
+													locale,
+													unicodeNormalization))
 										);
 										break; }
 							if (!"liblouis".equals("hyphenator")) {
@@ -291,7 +294,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 																table.getTranslator(),
 																hyphenator,
 																handleNonStandardHyphenation,
-																locale))); }}));
+																locale,
+																unicodeNormalization))); }}));
 								}}
 						if ("none".equals(hyphenator) || "auto".equals(hyphenator))
 							translators = concat(
@@ -300,7 +304,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										table.getTranslator(),
 										null,
 										handleNonStandardHyphenation,
-										locale)));
+										locale,
+										unicodeNormalization)));
 						return translators;
 					}
 				}
@@ -332,22 +337,31 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		// contains non-braille characters, the result is an exact copy of the input with no styles
 		// applied.
 		private final int handleNonStandardHyphenation;
+		private final Normalizer.Form unicodeNormalization;
 		
 		private final static int NON_STANDARD_HYPH_IGNORE = 0;
 		private final static int NON_STANDARD_HYPH_FAIL = 1;
 		private final static int NON_STANDARD_HYPH_DEFER = 2;
 		
-		private LiblouisTranslatorImpl(Translator translator, int handleNonStandardHyphenation, String mainLocale) {
+		private LiblouisTranslatorImpl(Translator translator,
+			                           int handleNonStandardHyphenation,
+			                           String mainLocale,
+			                           Normalizer.Form unicodeNormalization) {
 			table = new LiblouisTable(translator.getTable());
 			this.translator = translator;
 			this.handleNonStandardHyphenation = handleNonStandardHyphenation;
 			this.mainLocale = mainLocale;
 			this.supportedTypeforms
 				= translator.getSupportedTypeforms().stream().collect(Collectors.toMap(Typeform::getName, e -> e));
+			this.unicodeNormalization = unicodeNormalization;
 		}
 		
-		private LiblouisTranslatorImpl(Translator translator, Hyphenator hyphenator, int handleNonStandardHyphenation, String mainLocale) {
-			this(translator, handleNonStandardHyphenation, mainLocale);
+		private LiblouisTranslatorImpl(Translator translator,
+			                           Hyphenator hyphenator,
+			                           int handleNonStandardHyphenation,
+			                           String mainLocale,
+			                           Normalizer.Form unicodeNormalization) {
+			this(translator, handleNonStandardHyphenation, mainLocale, unicodeNormalization);
 			this.hyphenator = hyphenator;
 			if (hyphenator != null) {
 				try {
@@ -415,6 +429,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				lineBreakingFromStyledText = new LineBreaker(
 					translator,
 					supportedTypeforms,
+					unicodeNormalization,
 					lineBreaker,
 					fullHyphenator,
 					new FromStyledTextToBraille() {
@@ -444,9 +459,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			final Hyphenator.LineBreaker lineBreaker;
 			final FullHyphenator fullHyphenator;
 			final FromStyledTextToBraille fullTranslator;
+			final Normalizer.Form unicodeNormalization;
 			
 			protected LineBreaker(Translator liblouisTranslator,
 			                      Map<String,Typeform> supportedTypeforms,
+			                      Normalizer.Form unicodeNormalization,
 			                      Hyphenator.LineBreaker lineBreaker,
 			                      FullHyphenator fullHyphenator,
 			                      FromStyledTextToBraille fullTranslator) {
@@ -456,6 +473,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				this.lineBreaker = lineBreaker;
 				this.fullHyphenator = fullHyphenator;
 				this.fullTranslator = fullTranslator;
+				this.unicodeNormalization = unicodeNormalization;
 			}
 			
 			protected BrailleStream translateAndHyphenate(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
@@ -466,7 +484,14 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				try {
 					braille = fullTranslator.transform(styledTextCopy); }
 				catch (Exception e) {
-					return new BrailleStreamImpl(liblouisTranslator, supportedTypeforms, lineBreaker, fullHyphenator, styledText, from, to); }
+					return new BrailleStreamImpl(liblouisTranslator,
+					                             supportedTypeforms,
+					                             lineBreaker,
+					                             fullHyphenator,
+					                             unicodeNormalization,
+					                             styledText,
+					                             from,
+					                             to); }
 				StringBuilder brailleString = new StringBuilder();
 				int fromChar = 0;
 				int toChar = to >= 0 ? 0 : -1;
@@ -540,6 +565,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				                  Map<String,Typeform> supportedTypeforms,
 				                  Hyphenator.LineBreaker lineBreaker,
 				                  FullHyphenator fullHyphenator,
+				                  Normalizer.Form unicodeNormalization,
 				                  java.lang.Iterable<CSSStyledText> styledText,
 				                  int from,
 				                  int to) {
@@ -566,6 +592,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							text[i] = t.getText();
 							styles[i] = t.getStyle();
 							i++; }}
+					
+					// perform Unicode normalization
+					if (unicodeNormalization != null)
+						for (int k = 0; k < text.length; k++)
+							text[k] = Normalizer.normalize(text[k], unicodeNormalization);
 					
 					boolean someTransform = false;
 					boolean someNotTransform = false;
@@ -1204,6 +1235,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		                           boolean forceBraille,
 		                           boolean failWhenNonStandardHyphenation) {
 			
+			// perform Unicode normalization
+			if (unicodeNormalization != null)
+				for (int k = 0; k < text.length; k++)
+					text[k] = Normalizer.normalize(text[k], unicodeNormalization);
+			
 			// text with some segments split up into white space segments that need to be preserved
 			// in the output and other segments
 			String[] textWithWs;
@@ -1681,8 +1717,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	
 	private static class LiblouisTranslatorHyphenatorImpl extends LiblouisTranslatorImpl {
 		
-		private LiblouisTranslatorHyphenatorImpl(Translator translator, int handleNonStandardHyphenation, String mainLocale) {
-			super(translator, handleNonStandardHyphenation, mainLocale);
+		private LiblouisTranslatorHyphenatorImpl(Translator translator,
+			                                     int handleNonStandardHyphenation,
+			                                     String mainLocale,
+			                                     Normalizer.Form unicodeNormalization) {
+			super(translator, handleNonStandardHyphenation, mainLocale, unicodeNormalization);
 			fullHyphenator = new LiblouisTranslatorAsFullHyphenator(translator);
 		}
 		

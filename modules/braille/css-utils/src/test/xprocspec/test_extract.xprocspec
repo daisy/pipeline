@@ -70,20 +70,20 @@
 			<x:document type="inline">
 				<c:result content-type="text/plain">@page page-1 {
 	@top-left {
-		content: 'foo'
+		content: "foo"
 	}
 }
 @page page-2 {
 	@top-left {
-		content: 'foo'
+		content: "foo"
 	}
 }
 @page page-2:left {
 	@top-left {
-		content: 'foo'
+		content: "foo"
 	}
 	@top-right {
-		content: 'bar'
+		content: "bar"
 	}
 }
 #a {
@@ -107,7 +107,7 @@
 	display: block
 }
 #f::before {
-	content: 'foo'
+	content: "foo"
 }
 </c:result>
 			</x:document>

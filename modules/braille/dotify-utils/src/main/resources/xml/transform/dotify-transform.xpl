@@ -15,7 +15,8 @@
 	
 	<p:option name="output" select="pef"/> <!-- pef | obfl -->
 	<p:option name="css-block-transform" required="true"/>
-	<p:option name="text-transform" required="true"/>
+	<p:option name="locale" required="true"/>
+	<p:option name="mode" required="true"/>
 	<p:option name="temp-dir" required="true"/>
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
@@ -36,9 +37,6 @@
 		<p:pipe step="main" port="parameters"/>
 	</p:variable>
 	
-	<!-- for debug info -->
-	<p:for-each><p:identity/></p:for-each>
-	
 	<px:transform px:message="Translating document with {
 	                            replace($css-block-transform,'\((input|output):css\)','')}"
 	              px:progress=".12">
@@ -49,11 +47,8 @@
 		</p:input>
 	</px:transform>
 	
-	<!-- for debug info -->
-	<p:for-each><p:identity/></p:for-each>
-	
 	<pxi:css-to-obfl px:message="Transforming from CSS to OBFL" px:progress=".83">
-		<p:with-option name="text-transform" select="$text-transform"/>
+		<p:with-option name="locale" select="$locale"/>
 		<p:with-option name="duplex" select="$duplex"/>
 		<p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
 	</pxi:css-to-obfl>
@@ -63,9 +58,6 @@
 	<p:choose px:progress=".04">
 		<p:when test="$output='pef'">
 			
-			<!-- for debug info -->
-			<p:for-each><p:identity/></p:for-each>
-
 			<!--
 			    Follow the OBFL standard which says that "when volume-transition is present, the
 			    last page or sheet in each volume may be modified so that the volume break occurs
@@ -88,12 +80,12 @@
 					<p:pipe step="main" port="parameters"/>
 				</p:input>
 			</px:merge-parameters>
-			<dotify:obfl-to-pef px:message="Transforming from OBFL to PEF" px:progress="1"
-			                    locale="und">
+			<dotify:obfl-to-pef px:message="Transforming from OBFL to PEF" px:progress="1">
 				<p:input port="source">
 					<p:pipe step="obfl" port="result"/>
 				</p:input>
-				<p:with-option name="mode" select="$text-transform"/>
+				<p:with-option name="locale" select="$locale"/>
+				<p:with-option name="mode" select="$mode"/>
 				<p:input port="parameters">
 					<p:pipe step="parameters" port="result"/>
 				</p:input>
