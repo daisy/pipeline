@@ -121,6 +121,7 @@ type Input struct {
 	Name      string   `xml:"name,attr,omitempty"`
 	NiceName  string   `xml:"nicename,attr,omitempty"`
 	Sequence  bool     `xml:"sequence,attr,omitempty"`
+	Required  bool     `xml:"required,attr,omitempty"`
 	Items     []Item
 }
 
