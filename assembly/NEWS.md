@@ -1,3 +1,33 @@
+Changes in release v1.13.5
+==========================
+
+### Modules
+
+- Changes to braille production scripts, see [release notes of Braille modules v1.13.6](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1136)
+
+### Details
+
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.13.5)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.13.5)
+
+Changes in release v1.13.4
+==========================
+
+### Modules
+
+- **FIX** Acapela TTS adapter
+- Changes to braille production scripts, see [release notes of Braille modules v1.13.5](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1135)
+
+### Details
+
+- [Closed issues in braille-css](https://github.com/issues?q=repo%3Adaisy%2Fbraille-css+milestone%3Av1.13.4)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.13.4)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.13.4)
+- [Closed issues in pipeline-cli-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-cli-go+milestone%3Av1.13.4)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.13.4)
+- [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.13.4)
+- [Closed issues in pipeline-tasks](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.13.4)
+
 Changes in release v1.13.3
 ==========================
 

@@ -18,7 +18,7 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-SYSTEM_PROPERTIES=${pipeline.home}/etc/system.properties
+SYSTEM_PROPERTIES=${deb.pipeline.home}/etc/system.properties
 
 case "$1" in
     
@@ -42,11 +42,11 @@ case "$1" in
         
         # remove log files
         
-        rm -rf ${pipeline.log}
+        rm -rf ${deb.pipeline.log}
         
         # remove data
         
-        rm -rf ${pipeline.data}
+        rm -rf ${deb.pipeline.data}
         
     ;;
     

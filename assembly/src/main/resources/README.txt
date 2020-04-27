@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.12.1 - May 13, 2019
+              DAISY Pipeline 2 - 1.13.5 - July 9, 2020
 ==============================================================================
 
 
@@ -72,13 +72,10 @@ The package includes:
 3. Release Notes
 ------------------------------------------------------------------------------
 
-The package includes the 1.12.1 version of the project.
+The package includes the 1.13.5 version of the project.
 
-This is a bugfix release. It fixes **epub3-validator** which was broken in
-release v1.12.0.
-
-See the full release notes on the release page:
-  https://github.com/daisy/pipeline-assembly/releases/tag/v1.12.1
+See the release notes on the release page:
+  https://github.com/daisy/pipeline-assembly/releases/tag/v1.13.5
 
 4. Prerequisites
 ------------------------------------------------------------------------------
