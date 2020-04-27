@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	MSG_WAIT = 200 * time.Millisecond //waiting time for getting messages
+	MSG_WAIT = 1000 * time.Millisecond //waiting time for getting messages
 )
 
 //Convinience for testing, propably move to pipeline-clientlib-go

@@ -94,11 +94,11 @@ func (j jobExecution) run(stdOut io.Writer) error {
 			return err
 		}
 		if j.verbose && msg.Message != "" || msg.Progress > progress {
-			//erase previous line
+			//erase the progress bar (last two lines)
 			//FIXME: don't do this when debug logging enabled
-			fmt.Fprint(stdOut, "\033[1A\033[K")
+			fmt.Fprint(stdOut, "\n\033[1A\033[K\033[1A\033[K")
 			if j.verbose && msg.Message != "" {
-				fmt.Fprintln(stdOut, msg.String())
+				fmt.Fprintf(stdOut, "%v\n", msg.String())
 			}
 			if (msg.Progress > progress) {
 				progress = msg.Progress
@@ -122,7 +122,7 @@ func (j jobExecution) run(stdOut io.Writer) error {
 			if err := wc.Close(); err != nil {
 				return err
 			}
-
+			fmt.Fprintln(stdOut)
 			if !j.persistent {
 				_, err = j.link.Delete(job.Id)
 				if err != nil {
@@ -141,14 +141,18 @@ func (j jobExecution) run(stdOut io.Writer) error {
 }
 
 func printProgressBar(stdOut io.Writer, value float64) {
+	line := ""
+	for len(line) < 78 {
+		line += "_"
+	}
 	bar := ""
 	for i := 1; i <= int(value * 72); i++ {
-		bar += "#"
+		bar += "█"
 	}
-	for len(bar) < 72 {
-		bar += " "
+	for len(bar) < 216 { // 72 * 3 because 3 bytes per character
+		bar += "░"
 	}
-	fmt.Fprintf(stdOut, "%v %.1f%%\n", bar, value * 100)
+	fmt.Fprintf(stdOut, "%v\n%v %.1f%% ", line, bar, value * 100)
 }
 
 var commonFlags = []string{"--output", "--zip", "--nicename", "--priority", "--quiet", "--persistent", "--background"}
@@ -188,12 +192,19 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		verbose: true,
 		zipped:  false,
 	}
-	command := cli.AddScriptCommand(script.Id, fmt.Sprintf("%s [v%s]", blackterm.MarkdownString(script.Description), script.Version), func(string, ...string) error {
-		if err := jExec.run(cli.Output); err != nil {
-			return err
-		}
-		return nil
-	}, jobRequest)
+	desc := blackterm.MarkdownString(script.Description)
+	command := cli.AddScriptCommand(
+		script.Id,
+		desc,
+		fmt.Sprintf("%s [v%s]", desc, script.Version),
+		func(string, ...string) error {
+			if err := jExec.run(cli.Output); err != nil {
+				return err
+			}
+			return nil
+		},
+		jobRequest,
+	)
 	command.SetArity(0, "")
 
 	for _, input := range script.Inputs {
@@ -203,12 +214,11 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		if (shortDesc == "") {
 			shortDesc = input.NiceName
 		} else if len(longDesc) > len(shortDesc) {
-			shortDesc += " [...]"
 		}
 		shortDesc = blackterm.MarkdownString(shortDesc)
 		// FIXME: assumes markdown without html
 		longDesc = blackterm.MarkdownString(longDesc)
-		command.AddOption(name, "", shortDesc, longDesc, italic("FILE"), inputFunc(jobRequest, link)).Must(true)
+		command.AddOption(name, "", shortDesc, longDesc, italic("FILE"), inputFunc(jobRequest, link)).Must(input.Required)
 	}
 
 	for _, option := range script.Options {
@@ -219,7 +229,6 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		if (shortDesc == "") {
 			shortDesc = option.NiceName
 		} else if len(longDesc) > len(shortDesc) {
-			shortDesc += " [...]"
 		}
 		shortDesc = blackterm.MarkdownString(shortDesc)
 		longDesc += ("\n\nPossible values: " + optionTypeToDetailedHelp(option.Type))

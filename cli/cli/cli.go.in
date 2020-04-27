@@ -24,12 +24,12 @@ Usage {{.Name}} [GLOBAL_OPTIONS] command [COMMAND_OPTIONS] [PARAMS]
 {{if .Scripts}}
 Script commands:
 
-        {{range .Scripts}}{{commandAligner .Name }} {{.Description}}
+        {{range .Scripts}}{{commandAligner .Name }} {{.ShortDesc}}
         {{end}}
 {{end}}
 General commands:
 
-        {{range .StaticCommands}}{{commandAligner .Name}} {{.Description}}
+        {{range .StaticCommands}}{{commandAligner .Name}} {{.ShortDesc}}
         {{end}}
 
 
@@ -41,7 +41,7 @@ Detailed help for a single command:     {{.Name}} help COMMAND
 Usage {{.Name}} [GLOBAL_OPTIONS] command [COMMAND_OPTIONS] [PARAMS]
 
 Admin commands:
-        {{range .AdminCommands}}{{commandAligner .Name}} {{.Description}}
+        {{range .AdminCommands}}{{commandAligner .Name}} {{.ShortDesc}}
         {{end}}
 
 List of global options:                 {{.Name}} help -g 
@@ -50,7 +50,7 @@ Detailed help for a single command:     {{.Name}} help COMMAND
 	COMMAND_HELP_TEMPLATE = `
 Usage: {{.Parent.Name}} [GLOBAL_OPTIONS] {{.Name}}{{if .MandatoryFlags}} REQUIRED_OPTIONS{{end}}{{if .MandatoryFlags}} [OPTIONS]{{end}} {{ .Arity.Description}}
 
-{{.Description}}
+{{.LongDesc}}
 
 {{if .MandatoryFlags}}Required options:
 {{range .MandatoryFlags }}       {{flagAligner .FlagStringPrefix}} {{.ShortDesc}}
@@ -68,7 +68,7 @@ Detailed help:                          {{.Parent.Name}} help --verbose {{.Name}
 	COMMAND_DETAILED_HELP_TEMPLATE = `
 Usage: {{.Parent.Name}} [GLOBAL_OPTIONS] {{.Name}}{{if .MandatoryFlags}} REQUIRED_OPTIONS{{end}}{{if .MandatoryFlags}} [OPTIONS]{{end}} {{ .Arity.Description}}
 
-{{.Description}}
+{{.LongDesc}}
 
 {{if .MandatoryFlags}}Required options:
 {{range .MandatoryFlags }}       {{.FlagStringPrefix}}
@@ -210,22 +210,22 @@ func (c *Cli) addConfigOptions(conf Config) {
 }
 
 //Adds the command to the cli and stores the it into the scripts list
-func (c *Cli) AddScriptCommand(name, desc string, fn func(string, ...string) error, request *JobRequest) *subcommand.Command {
-	cmd := c.Parser.AddCommand(name, desc, fn)
+func (c *Cli) AddScriptCommand(name, shortDesc string, longDesc string, fn func(string, ...string) error, request *JobRequest) *subcommand.Command {
+	cmd := c.Parser.AddCommand(name, shortDesc, longDesc, fn)
 	c.Scripts = append(c.Scripts, &ScriptCommand{cmd, request})
 	return cmd
 }
 
 //Adds a static command to the cli and keeps track of it for the displaying the help
 func (c *Cli) AddCommand(name, desc string, fn func(string, ...string) error) *subcommand.Command {
-	cmd := c.Parser.AddCommand(name, desc, fn)
+	cmd := c.Parser.AddCommand(name, desc, "", fn)
 	c.StaticCommands = append(c.StaticCommands, cmd)
 	return cmd
 }
 
 //Adds admin related commands to the cli and keeps track of it for displaying help
 func (c *Cli) AddAdminCommand(name, desc string, fn func(string, ...string) error) *subcommand.Command {
-	cmd := c.Parser.AddCommand(name, desc, fn)
+	cmd := c.Parser.AddCommand(name, desc, "", fn)
 	c.AdminCommands = append(c.AdminCommands, cmd)
 	return cmd
 }

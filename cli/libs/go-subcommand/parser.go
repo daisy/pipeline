@@ -14,7 +14,7 @@ type Parser struct {
 
 //Sets the help command. There is one default implementation automatically added when the parser is created.
 func (p *Parser) SetHelp(name string, description string, fn CommandFunction) *Command {
-	command := newCommand(&p.Command, name, description, fn)
+	command := newCommand(&p.Command, name, description, "", fn)
 	p.help = *command
 	return command
 
@@ -36,7 +36,7 @@ func (p *Parser) PostFlags(fn func() error) {
 //NewParser constructs a parser for program name given
 func NewParser(program string) *Parser {
 	parser := &Parser{
-		Command:  *newCommand(nil, program, "", func(string, ...string) error { return nil }),
+		Command:  *newCommand(nil, program, "", "", func(string, ...string) error { return nil }),
 		Commands: make(map[string]*Command),
 	}
 	parser.Command.arity = Arity{0, ""}
@@ -55,12 +55,12 @@ func NewParser(program string) *Parser {
 //              fmt.Printf("%v \n",arg)
 //      }
 //}
-func (p *Parser) AddCommand(name string, description string, fn CommandFunction) *Command {
+func (p *Parser) AddCommand(name string, shortDesc string, longDesc string, fn CommandFunction) *Command {
 	if _, exists := p.Commands[name]; exists {
 		panic(fmt.Sprintf("Command '%s' already exists ", name))
 	}
 	//create the command
-	command := newCommand(&p.Command, name, description, fn)
+	command := newCommand(&p.Command, name, shortDesc, longDesc, fn)
 	//add it to the parser
 	p.Commands[name] = command
 	return command

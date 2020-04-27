@@ -85,7 +85,7 @@ func TestEmptyLong(t *testing.T) {
 func TestAddCommand(t *testing.T) {
 	name := "com"
 	parser := NewParser("test")
-	command := parser.AddCommand(name, "", emptyFnMult)
+	command := parser.AddCommand(name, "", "", emptyFnMult)
 	if command.Name != name {
 		t.Errorf("Command name are not equals %v!=%v", command.Name, name)
 	}
@@ -103,8 +103,8 @@ func TestAddCommandTwice(t *testing.T) {
 	}()
 	name := "com"
 	parser := NewParser("test")
-	parser.AddCommand(name, "", emptyFnMult)
-	parser.AddCommand(name, "", emptyFnMult)
+	parser.AddCommand(name, "", "", emptyFnMult)
+	parser.AddCommand(name, "", "", emptyFnMult)
 }
 
 func TestParseGlobalOption(t *testing.T) {
@@ -215,7 +215,7 @@ func TestParseGlobalOptionEmpty(t *testing.T) {
 func TestParseCommand(t *testing.T) {
 	parser := NewParser("test")
 	proc := false
-	parser.AddCommand("command", "", func(string, ...string) error {
+	parser.AddCommand("command", "", "", func(string, ...string) error {
 		proc = true
 		return nil
 	})
@@ -227,7 +227,7 @@ func TestParseCommand(t *testing.T) {
 
 func TestParseCommandError(t *testing.T) {
 	parser := NewParser("test")
-	parser.AddCommand("command", "", func(string, ...string) error {
+	parser.AddCommand("command", "", "", func(string, ...string) error {
 		return errors.New("Error")
 	})
 	_, err := parser.Parse([]string{"command"})
@@ -244,7 +244,7 @@ func TestParseInnerFlagCommand(t *testing.T) {
 		shouldnt = true
 		return nil
 	})
-	cmd := parser.AddCommand("command", "", func(string, ...string) error {
+	cmd := parser.AddCommand("command", "", "", func(string, ...string) error {
 		return nil
 	})
 	cmd.AddSwitch("switch", "s", "This is a command switch", func(string, string) error {
@@ -283,7 +283,7 @@ func TestParseMandatoryOption(t *testing.T) {
 }
 func TestParseMandatoryInnerOption(t *testing.T) {
 	parser := NewParser("test")
-	cmd := parser.AddCommand("command", "", func(string, ...string) error { return nil })
+	cmd := parser.AddCommand("command", "", "", func(string, ...string) error { return nil })
 	cmd.AddOption("option", "o", "This is a mandatory option", "", "", func(string, string) error {
 		return nil
 	}).Must(true)
@@ -309,7 +309,7 @@ func TestParseCommandWithLefts(t *testing.T) {
 	var arg1 string
 	var arg2 string
 
-	parser.AddCommand("command", "", func(command string, args ...string) error {
+	parser.AddCommand("command", "", "", func(command string, args ...string) error {
 		name = command
 		arg1 = args[0]
 		arg2 = args[1]
@@ -339,7 +339,7 @@ func TestParseCommandWithLeftsMandatoryFlag(t *testing.T) {
 	var arg1 string
 	var arg2 string
 	visited := false
-	cmd := parser.AddCommand("command", "", func(command string, args ...string) error {
+	cmd := parser.AddCommand("command", "", "", func(command string, args ...string) error {
 		name = command
 		arg1 = args[0]
 		arg2 = args[1]
@@ -404,7 +404,7 @@ func TestSetHelpWithCommand(t *testing.T) {
 		return nil
 	})
 
-	cmd := parser.AddCommand("command", "", func(command string, args ...string) error {
+	cmd := parser.AddCommand("command", "", "", func(command string, args ...string) error {
 		return nil
 	})
 	cmd.AddOption("opt", "o", "Mandatory option", "", "", func(string, string) error {
@@ -424,7 +424,7 @@ func TestOnCommand(t *testing.T) {
 		onCommand = true
 		return nil
 	})
-	parser.AddCommand("command", "", func(string, ...string) error { return nil })
+	parser.AddCommand("command", "", "", func(string, ...string) error { return nil })
 	_, err := parser.Parse([]string{"command"})
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
@@ -440,7 +440,7 @@ func TestPostFlags(t *testing.T) {
 	visited := false
 	command := false
 	parser.PostFlags(func() error {
-		parser.AddCommand("command", "", func(string, ...string) error {
+		parser.AddCommand("command", "", "", func(string, ...string) error {
 			command = true
 			return nil
 		})
@@ -463,7 +463,7 @@ func TestPostFlags(t *testing.T) {
 func TestPostFlagsCheckTwice(t *testing.T) {
 	parser := NewParser("test")
 	parser.PostFlags(func() error {
-		parser.AddCommand("command", "", func(string, ...string) error {
+		parser.AddCommand("command", "", "", func(string, ...string) error {
 			return nil
 		})
 		return nil
@@ -475,7 +475,7 @@ func TestPostFlagsCheckTwice(t *testing.T) {
 }
 func TestArityCommandInf(t *testing.T) {
 	parser := NewParser("test")
-	parser.AddCommand("command", "", func(string, ...string) error {
+	parser.AddCommand("command", "", "", func(string, ...string) error {
 		return nil
 	})
 	//multiple args arity by default
@@ -487,7 +487,7 @@ func TestArityCommandInf(t *testing.T) {
 
 func TestArityCommandZero(t *testing.T) {
 	parser := NewParser("test")
-	parser.AddCommand("command", "", func(string, ...string) error {
+	parser.AddCommand("command", "", "", func(string, ...string) error {
 		return nil
 	}).SetArity(0, "")
 	//zero params ok
@@ -505,7 +505,7 @@ func TestArityCommandZero(t *testing.T) {
 
 func TestArityCommandOther(t *testing.T) {
 	parser := NewParser("test")
-	parser.AddCommand("command", "", func(string, ...string) error {
+	parser.AddCommand("command", "", "", func(string, ...string) error {
 		return nil
 	}).SetArity(2, "arg1 arg2")
 	//two params ok
@@ -523,7 +523,7 @@ func TestArityCommandOther(t *testing.T) {
 
 func TestArityParserErr(t *testing.T) {
 	parser := NewParser("test")
-	parser.AddCommand("command", "", func(string, ...string) error {
+	parser.AddCommand("command", "", "", func(string, ...string) error {
 		return nil
 	})
 	//zero arity by default
@@ -536,7 +536,7 @@ func TestArityParserErr(t *testing.T) {
 func TestArityParser(t *testing.T) {
 	parser := NewParser("test")
 	parser.SetArity(-1, "parg1 parg2 ...")
-	parser.AddCommand("command", "", func(string, ...string) error {
+	parser.AddCommand("command", "", "", func(string, ...string) error {
 		return nil
 	})
 	//multiple args arity by default
@@ -560,7 +560,7 @@ func TestOrderedFlags(t *testing.T) {
 	opts := []string{"zero", "one", "two", "three"}
 
 	parser := NewParser("test")
-	command := parser.AddCommand(name, "", emptyFnMult)
+	command := parser.AddCommand(name, "", "", emptyFnMult)
 	for _, o := range opts {
 		command.AddOption(o, "", "", "", "", emptyFn)
 	}

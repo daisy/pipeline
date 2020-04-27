@@ -87,7 +87,7 @@ func TestCliAddScriptCommand(t *testing.T) {
 		t.Error("Unexpected error")
 	}
 	link.pipeline.(*PipelineTest).withScripts = false
-	cli.AddScriptCommand("test", "", func(string, ...string) error { return nil }, nil)
+	cli.AddScriptCommand("test", "", "", func(string, ...string) error { return nil }, nil)
 	if cli.Scripts[0].Name != "test" {
 		t.Error("Add script is not adding scripts to the list")
 	}

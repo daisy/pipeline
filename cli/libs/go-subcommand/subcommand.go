@@ -13,7 +13,8 @@ type CommandFunction func(string, ...string) error
 type Command struct {
 	//Name
 	Name            string
-	Description     string //Command help line
+	ShortDesc       string //Command help line
+	LongDesc        string
 	innerFlagsLong  map[string]*Flag
 	innerFlagsShort map[string]*Flag
 	orderedFlags    []*Flag //so we keep the order of the flags
@@ -63,14 +64,18 @@ func (c Command) Parent() *Command {
 	return c.parent
 }
 
-func newCommand(parent *Command, name string, description string, fn CommandFunction) *Command {
+func newCommand(parent *Command, name string, shortDesc string, longDesc string, fn CommandFunction) *Command {
+	if longDesc == "" {
+		longDesc = shortDesc
+	}
 	return &Command{
 		Name:            name,
 		innerFlagsShort: make(map[string]*Flag),
 		innerFlagsLong:  make(map[string]*Flag),
 		fn:              fn,
 		postFlagsFn:     func() error { return nil },
-		Description:     description,
+		ShortDesc :      shortDesc,
+		LongDesc :       longDesc,
 		parent:          parent,
 		arity:           Arity{-1, "arg1 arg2 ..."},
 	}
