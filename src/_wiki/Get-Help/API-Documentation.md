@@ -127,6 +127,8 @@ FIXME: add short description for every package
 - [`org.daisy.pipeline.job`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/job/package-summary.html)
 - [`org.daisy.pipeline.modules`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/package-summary.html)
 - [`org.daisy.pipeline.script`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/package-summary.html)
+- [`org.daisy.pipeline.tts`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/tts/package-summary.html)
+
 
 ## XProc Utility Libraries
 

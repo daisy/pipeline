@@ -19,6 +19,8 @@ javadoc:
   artifact: modules-registry
 - group: org.daisy.pipeline
   artifact: xmlcatalog
+- group: org.daisy.pipeline.modules
+  artifact: tts-common
 - group: org.daisy.pipeline.modules.braille
   artifact: common-utils
 - group: org.daisy.pipeline.modules.braille
