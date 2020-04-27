@@ -770,9 +770,16 @@
 									                 string(pom:artifactId)=string(current()/pom:artifactId)]">
 										<xsl:value-of select="($project/pom:dependencyManagement/pom:dependencies/pom:dependency
 										                       [string(pom:groupId)=string(current()/pom:groupId) and
+										                        string(pom:artifactId)=string(current()/pom:artifactId) and
+										                        string(pom:classifier)=string(current()/pom:classifier)],
+										                       $project/pom:dependencyManagement/pom:dependencies/pom:dependency
+										                       [string(pom:groupId)=string(current()/pom:groupId) and
+										                        string(pom:artifactId)=string(current()/pom:artifactId) and
+										                        not(pom:classifier)],
+										                       $project/pom:dependencyManagement/pom:dependencies/pom:dependency
+										                       [string(pom:groupId)=string(current()/pom:groupId) and
 										                        string(pom:artifactId)=string(current()/pom:artifactId)]
-										                       /(.[string(pom:classifier)=string(current()/pom:classifier)],.)
-										                       /pom:version)[1]"/>
+										                      )[1]/pom:version"/>
 									</xsl:when>
 									<xsl:otherwise>
 										<!-- might be transitive dependency, but not supported here -->
