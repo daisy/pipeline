@@ -13,10 +13,62 @@
   <body>
     <h1 id="libhyphen-utils-api">libhyphen-utils API</h1>
 
+<h2 id="java-api">Java API</h2>
+
+<ul>
+  <li>package <a href="/pipeline/api/org/daisy/pipeline/braille/libhyphen/package-summary.html" class="apidoc"><code>org.daisy.pipeline.braille.libhyphen</code></a>
+</li>
+</ul>
+
 <h2 id="catalogxml"><a href="/pipeline/modules/braille/libhyphen-utils/src/main/resources/META-INF/catalog.xml" class="source">catalog.xml</a></h2>
 
 <ul>
   <li><a href="/pipeline/modules/braille/libhyphen-utils/src/main/resources/xml/library.xsl" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/libhyphen-utils/library.xsl</code></a></li>
+</ul>
+
+<h2 id="osgi-services">OSGi services</h2>
+
+<h3 id="hyphen-table-paths-orgdaisypipelinebraillelibhyphenlibhyphentablepath">Hyphen table paths (<a href="/pipeline/api/org/daisy/pipeline/braille/libhyphen/LibhyphenTablePath.html"><code>org.daisy.pipeline.braille.libhyphen.LibhyphenTablePath</code></a>)</h3>
+
+<ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/libhyphen-utils/src/main/resources/hyphen" class="apidoc"><code>http://www.libreoffice.org/dictionaries/hyphen/</code></a></p>
+
+    <p>A standard collection of hyphenation tables used in LibreOffice</p>
+  </li>
+</ul>
+
+<h3 id="transformers-orgdaisypipelinebraillecommontransformprovider">Transformers (<a href="/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html"><code>org.daisy.pipeline.braille.common.TransformProvider</code></a>)</h3>
+
+<ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/libhyphen-utils/src/main/java/org/daisy/pipeline/braille/libhyphen/impl/LibhyphenJnaImpl.html"><code>(hyphenator:hyphen)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>id</code>: If present it must be the only feature. Matches a hyphenator
+  with a unique ID.</li>
+      <li>
+<code>hyphenator</code>: Will only match if the value is <code>hyphen</code>, or if it’s
+  a hyphenator’s ID.</li>
+      <li>
+<code>table</code> or <code>libhyphen-table</code>: A Hyphen table is a URI that can be
+  either a file name, a file path relative to a registered table
+  path, an absolute file URI, or a fully qualified table
+  identifier. This feature is not compatible with other features
+  except <code>hyphenator</code>.</li>
+      <li>
+<code>locale</code>: Matches only hyphenators with that locale.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="saxon-functions-netsfsaxonlibextensionfunctiondefinition">Saxon functions (<code>net.sf.saxon.lib.ExtensionFunctionDefinition</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/libhyphen-utils/src/main/java/org/daisy/pipeline/braille/libhyphen/saxon/impl/HyphenateDefinition.html"><code>{http://hunspell.sourceforge.net/Hyphen}hyphenate</code></a></li>
 </ul>
 
 <link rev="dp2:doc" href="./">

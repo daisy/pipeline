@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  			TransformProvider.<strong class="jxr_keyword">class</strong>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		}
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	)
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.html">Provider</a> <strong class="jxr_keyword">extends</strong> AbstractTransformProvider&lt;BrailleTranslator&gt; <strong class="jxr_keyword">implements</strong> BrailleTranslatorProvider&lt;BrailleTranslator&gt; {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyTranslator.html">Provider</a> <strong class="jxr_keyword">extends</strong> AbstractTransformProvider&lt;BrailleTranslator&gt; <strong class="jxr_keyword">implements</strong> BrailleTranslatorProvider&lt;BrailleTranslator&gt; {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">private</strong> URI href;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		
@@ -95,21 +95,21 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">return</strong> transform(
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  				translators,
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  				<strong class="jxr_keyword">new</strong> Function&lt;DotifyTranslator,BrailleTranslator&gt;() {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					<strong class="jxr_keyword">public</strong> BrailleTranslator _apply(DotifyTranslator translator) {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					<strong class="jxr_keyword">public</strong> BrailleTranslator _apply(<a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyTranslator.html">DotifyTranslator</a> translator) {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  						<strong class="jxr_keyword">return</strong> __apply(
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  							logCreate(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.html">TransformImpl</a>(q.toString(), translator, htmlOut, locale))
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  							logCreate(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyOBFLTransform.html">TransformImpl</a>(q.toString(), translator, htmlOut, locale))
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  						);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  					}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  				}
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		}
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.html">TransformImpl</a> <strong class="jxr_keyword">extends</strong> AbstractBrailleTranslator {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyOBFLTransform.html">TransformImpl</a> <strong class="jxr_keyword">extends</strong> AbstractBrailleTranslator {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DotifyTranslator translator;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyTranslator.html">DotifyTranslator</a> translator;
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> XProc xproc;
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.html">TransformImpl</a>(String translatorQuery, DotifyTranslator translator, <strong class="jxr_keyword">boolean</strong> htmlOut, String mainLocale) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyOBFLTransform.html">TransformImpl</a>(String translatorQuery, <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyTranslator.html">DotifyTranslator</a> translator, <strong class="jxr_keyword">boolean</strong> htmlOut, String mainLocale) {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 				Map&lt;String,String&gt; options = ImmutableMap.of(<span class="jxr_string">"text-transform"</span>, translatorQuery,
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 				                                             <em class="jxr_comment">// This will omit the &lt;_ style="text-transform:none"&gt;</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 				                                             <em class="jxr_comment">// wrapper. It is assumed that if (output:html) is set, the</em>
@@ -154,11 +154,15 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">private</strong> TransformProvider.util.MemoizingProvider&lt;DotifyTranslator&gt; dotifyTranslatorProvider
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		= memoize(dispatch(dotifyTranslatorProviders));
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		@Override
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(DotifyCSSBlockTransform.Provider.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

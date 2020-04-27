@@ -5,26 +5,84 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
     <meta http-equiv="content-language" content="en">
-    <title>liblouis-utils API</title>
+    <title>liblouis-utils</title>
     <link rel="stylesheet" href="/pipeline/css/coderay.css">
     <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
   </head>
   <body>
-    <h1 id="liblouis-utils-api">liblouis-utils API</h1>
+    <h1 id="liblouis-utils">liblouis-utils</h1>
+
+<h2 id="api">API</h2>
+
+<h3 id="java-api">Java API</h3>
+
+<ul>
+  <li>package <a href="/pipeline/api/org/daisy/pipeline/braille/liblouis/package-summary.html" class="apidoc">org.daisy.pipeline.braille.liblouis</a>
+</li>
+</ul>
 
 <h2 id="catalogxml"><a href="/pipeline/modules/braille/liblouis-utils/src/main/resources/META-INF/catalog.xml" class="source">catalog.xml</a></h2>
 
 <ul>
   <li><a href="/pipeline/modules/braille/liblouis-utils/src/main/resources/xml/library.xsl" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xsl</code></a></li>
-  <li><a href="/pipeline/api/d154e6.html" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xpl</code></a></li>
+  <li><a href="/pipeline/api/d156e6.html" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xpl</code></a></li>
 </ul>
 
 <h2 id="osgi-services">OSGi services</h2>
 
+<h3 id="liblouis-table-paths-orgdaisypipelinebrailleliblouisliblouistablepath">Liblouis table paths (<a href="/pipeline/api/org/daisy/pipeline/braille/liblouis/LiblouisTablePath.html"><code>org.daisy.pipeline.braille.liblouis.LiblouisTablePath</code></a>)</h3>
+
+<ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/liblouis-utils/src/main/resources/tables" class="apidoc"><code>http://www.liblouis.org/tables/</code></a></p>
+
+    <p>The default translation tables that come with liblouis</p>
+  </li>
+</ul>
+
+<h3 id="pef-tables-orgdaisypipelinebraillepeftableprovider">PEF tables (<a href="/pipeline/api/org/daisy/pipeline/braille/pef/TableProvider.html"><code>org.daisy.pipeline.braille.pef.TableProvider</code></a>)</h3>
+
+<ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/pef/impl/LiblouisDisplayTableProvider.html"><code>(liblouis-table:...)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>id</code>: Matches liblouis display tables by their fully qualified
+  table identifier. Not compatible with other features.</li>
+      <li>
+<code>liblouis-table</code>: A liblouis table is a URI that can be either a
+  file name, a file path relative to a registered tablepath, an
+  absolute file URI, or a fully qualified table identifier.</li>
+      <li>
+<code>locale</code>: Matches only liblouis display tables with that locale.</li>
+    </ul>
+
+    <p>All matched tables must be of type “display table”.</p>
+  </li>
+</ul>
+
 <h3 id="transformers-orgdaisypipelinebraillecommontransformprovider">Transformers (<a href="/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html"><code>org.daisy.pipeline.braille.common.TransformProvider</code></a>)</h3>
 
 <ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSStyledDocumentTransform.html"><code>(input:css)(output:pef)(formatter:liblouis)</code></a></p>
+
+    <p>Converts an XML document with inline Braille CSS to PEF using liblouisutdml.</p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>formatter</code>: Will only match if the value is <code>liblouis</code>.</li>
+    </ul>
+
+    <p>Other features are used for finding sub-transformers of type
+<a href="/pipeline/api/org/daisy/pipeline/braille/common/BrailleTranslator.html">BrailleTranslator</a>.</p>
+  </li>
   <li>
     <p><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.html"><code>(input:css)(output:css)(translator:liblouis)</code></a></p>
 
@@ -44,6 +102,89 @@
     <p>Other features are used for finding sub-transformers of type
 <a href="/pipeline/api/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">LiblouisTranslator</a>.</p>
   </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTranslatorJnaImplProvider.html"><code>(input:text-css)(output:braille)(translator:liblouis)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>id</code>: If present it must be the only feature. Will match a
+  transformer with a unique ID.</li>
+      <li>
+<code>translator</code>: Will only match if the value is <code>liblouis</code>
+</li>
+      <li>
+<code>hyphenator</code>: A value <code>none</code> will disable hyphenation. <code>liblouis</code>
+  will match only liblouis translators that support hyphenation
+  out-of-the-box. <code>auto</code> is the default and will match any
+  liblouis translator, whether it supports hyphenation
+  out-of-the-box, with the help of an external hyphenator, or not
+  at all. A value not equal to <code>none</code>, <code>liblouis</code> or <code>auto</code> will
+  match every liblouis translator that uses an external hyphenator
+  that matches this feature.</li>
+      <li>
+<code>table</code> or <code>liblouis-table</code>: A liblouis table is a list of URIs
+  that can be either a file name, a file path relative to a
+  registered tablepath, an absolute file URI, or a fully qualified
+  table identifier. The tablepath that contains the first
+  “sub-table” in the list will be used as the base for resolving
+  the subsequent sub-tables. This feature is not compatible with
+  other features except <code>translator</code>, <code>hyphenator</code> and <code>locale</code>.</li>
+      <li>
+<code>locale</code>: Matches only liblouis translators with that locale.</li>
+      <li>
+<code>handle-non-standard-hyphenation</code>: Specifies how non-standard
+  hyphenation is handled in pre-translation mode. Can be <code>ignore</code>,
+  <code>defer</code> or <code>fail</code>.</li>
+    </ul>
+
+    <p>Other features are passed on to
+<a href="http://liblouis.org/documentation/liblouis.html#lou_005ffindTable" class="external-link" target="_blank"><code>lou_findTable</code></a>. All
+matched tables must be of type “translation table”.</p>
+
+    <p>A translator will only use external hyphenators with the same locale as the translator itself.</p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisHyphenatorJnaImplProvider.html"><code>(hyphenator:liblouis)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>hyphenator</code>: Will only match if the value is <code>liblouis</code>
+</li>
+      <li>
+<code>table</code> or <code>liblouis-table</code>: A liblouis table is a list of URIs
+  that can be either a file name, a file path relative to a
+  registered tablepath, an absolute file URI, or a fully qualified
+  table identifier. The tablepath that contains the first
+  “sub-table” in the list will be used as the base for resolving
+  the subsequent sub-tables. This feature is not compatible with
+  other features except <code>hyphenator</code> and <code>locale</code>.</li>
+      <li>
+<code>locale</code>: Matches only hyphenators with that locale.</li>
+    </ul>
+
+    <p>Other features are passed on to <a href="http://liblouis.org/documentation/liblouis.html#lou_005ffindTable" class="external-link" target="_blank"><code>lou_findTable</code></a>.</p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisMathMLTransform.html"><code>(input:mathml)(output:braille)</code></a></p>
+
+    <p>Translates a MathML document to Braille using liblouisutdml.</p>
+  </li>
+</ul>
+
+<h3 id="saxon-functions-netsfsaxonlibextensionfunctiondefinition">Saxon functions (<code>net.sf.saxon.lib.ExtensionFunctionDefinition</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/saxon/impl/HyphenateDefinition.html"><code>{http://liblouis.org/liblouis}hyphenate</code></a></li>
+</ul>
+
+<h3 id="calabash-steps-orgdaisycommonxproccalabashxprocstepprovider">Calabash steps (<code>org.daisy.common.xproc.calabash.XProcStepProvider</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/calabash/impl/TranslateFileStep.html"><code>{http://liblouis.org/liblouis}translate-file</code></a></li>
 </ul>
 
 <link rev="dp2:doc" href="./">

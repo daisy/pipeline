@@ -57,7 +57,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			TransformProvider.<strong class="jxr_keyword">class</strong>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		}
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.html">Provider</a> <strong class="jxr_keyword">extends</strong> AbstractTransformProvider&lt;BrailleTranslator&gt; <strong class="jxr_keyword">implements</strong> BrailleTranslatorProvider&lt;BrailleTranslator&gt; {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">Provider</a> <strong class="jxr_keyword">extends</strong> AbstractTransformProvider&lt;BrailleTranslator&gt; <strong class="jxr_keyword">implements</strong> BrailleTranslatorProvider&lt;BrailleTranslator&gt; {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">private</strong> URI href;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">return</strong> transform(
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  				translators,
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				<strong class="jxr_keyword">new</strong> Function&lt;LiblouisTranslator,BrailleTranslator&gt;() {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  					<strong class="jxr_keyword">public</strong> BrailleTranslator _apply(LiblouisTranslator translator) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  					<strong class="jxr_keyword">public</strong> BrailleTranslator _apply(<a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">LiblouisTranslator</a> translator) {
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  						<strong class="jxr_keyword">return</strong> __apply(
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  							logCreate(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.html">TransformImpl</a>(translator, htmlOut, locale))
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  						);
@@ -114,10 +114,10 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.html">TransformImpl</a> <strong class="jxr_keyword">extends</strong> AbstractBrailleTranslator {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> LiblouisTranslator translator;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">LiblouisTranslator</a> translator;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> XProc xproc;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.html">TransformImpl</a>(LiblouisTranslator translator, <strong class="jxr_keyword">boolean</strong> htmlOut, String mainLocale) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.html">TransformImpl</a>(<a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">LiblouisTranslator</a> translator, <strong class="jxr_keyword">boolean</strong> htmlOut, String mainLocale) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 				Map&lt;String,String&gt; options = ImmutableMap.of(<span class="jxr_string">"text-transform"</span>, mutableQuery().add(<span class="jxr_string">"id"</span>, translator.getIdentifier()).toString(),
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 				                                             <em class="jxr_comment">// This will omit the &lt;_ style="text-transform:none"&gt;</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 				                                             <em class="jxr_comment">// wrapper. It is assumed that if (output:html) is set, the</em>
@@ -170,6 +170,6 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

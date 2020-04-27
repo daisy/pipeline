@@ -821,6 +821,38 @@ Either a *.epub file or a *.opf file.
 
 </div>
 </li>
+<li class="synopsis-report details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-report-name">Accessibility report</div>
+<div class="synopsis-report-desc">
+If the accessibility check option is enabled, an HTML report detailing the compliance to the EPUB Accessibility specification is output on this port.
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable accessibility check</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Check the compliance to the EPUB accessibility specification using the [DAISY Ace](https://daisy.github.io/ace) tool.
+</div>
+<div class="longdesc">Check the compliance to the EPUB accessibility specification using the [DAISY Ace](https://daisy.github.io/ace) tool.
+
+<p>To use this option, check <a href="https://daisy.github.io/ace/getting-started/installation/" class="external-link" target="_blank">how to install
+Ace</a> on your system. Note that this
+option is only available for zipped EPUBs.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
 </ul>
 
   <script type="text/javascript">
@@ -868,6 +900,10 @@ Options:</pre>
 <td>--epub <span style="text-transform: uppercase">epub</span>
 </td>
 <td>Either a *.epub file or a *.opf file.</td>
+</tr>
+<tr>
+<td>--accessibility-check [<span style="text-transform: uppercase">accessibility-check</span>]</td>
+<td>Enable accessibility check (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

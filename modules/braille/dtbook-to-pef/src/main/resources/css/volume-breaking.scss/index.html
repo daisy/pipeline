@@ -34,6 +34,24 @@
  * If a level contains other levels, then volume-breaking.xsl wraps the normal content
  * (&lt;h1&gt;, &lt;p&gt;, etc.) in the level in a &lt;div class="leaf-section"&gt; element.
  */</span></span>
+<span class="tag">level1</span> {
+   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">9</span>);
+}
+<span class="tag">level2</span> {
+   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">8</span>);
+}
+<span class="tag">level3</span> {
+   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">7</span>);
+}
+<span class="tag">level4</span> {
+   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">6</span>);
+}
+<span class="tag">level5</span> {
+   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">5</span>);
+}
+<span class="tag">level6</span> {
+   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">4</span>);
+}
 <span class="tag">level1</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level2</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
 <span class="tag">level2</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level3</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
 <span class="tag">level3</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level4</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
@@ -41,7 +59,8 @@
 <span class="tag">level5</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level6</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
 <span class="tag">level6</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(<span class="tag">div</span><span class="class">.leaf-section</span>)),
 <span class="tag">div</span><span class="class">.leaf-section</span> {
-    <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">5</span>);
+    <span class="comment"><span class="delimiter">//</span><span class="content"> volume-break-inside: -obfl-keep(5);</span></span>
+    <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">3</span>);
 }
 
 <span class="comment"><span class="delimiter">/*</span><span class="content">
@@ -50,9 +69,9 @@
  * volume-breaking.xsl adds the "keep-with-next-section" class is added on small leaf
  * sections.
  */</span></span>
-<span class="class">.keep-with-next-section</span> {
-    <span class="key">-obfl-keep-with-next-sheets</span>: <span class="float">1</span>;
-}
+<span class="comment"><span class="delimiter">//</span><span class="content">.keep-with-next-section {</span></span>
+<span class="comment"><span class="delimiter">//</span><span class="content">    -obfl-keep-with-next-sheets: 1;</span></span>
+<span class="comment"><span class="delimiter">//</span><span class="content">}</span></span>
 </pre></div>
 </div>
 </div>

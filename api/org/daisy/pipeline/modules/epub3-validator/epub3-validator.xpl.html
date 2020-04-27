@@ -58,6 +58,15 @@
 [More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
 </td>
 </tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">ace-report</span><span class="details"></span>
+</td>
+<td>
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Accessibility report</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">If the accessibility check option is enabled, an HTML report detailing the compliance to the EPUB Accessibility specification is output on this port.</p>
+</td>
+</tr>
 </tbody>
 </table>
 <h3>Options</h3>
@@ -87,6 +96,21 @@
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
 <td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Temporary directory</h2></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">accessibility-check</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Enable accessibility check</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Check the compliance to the EPUB accessibility specification using the [DAISY Ace](https://daisy.github.io/ace) tool.
+
+To use this option, check [how to install
+Ace](https://daisy.github.io/ace/getting-started/installation/) on your system. Note that this
+option is only available for zipped EPUBs.</p>
+</td>
 </tr>
 </tbody>
 </table>

@@ -13,6 +13,13 @@
   <body>
     <h1 id="dotify-utils-api">dotify-utils API</h1>
 
+<h2 id="java-api">Java API</h2>
+
+<ul>
+  <li>package <a href="/pipeline/api/org/daisy/pipeline/braille/dotify/package-summary.html" class="apidoc"><code>org.daisy.pipeline.braille.dotify</code></a>
+</li>
+</ul>
+
 <h2 id="catalogxml"><a href="/pipeline/modules/braille/dotify-utils/src/main/resources/META-INF/catalog.xml" class="source">catalog.xml</a></h2>
 
 <ul>
@@ -22,9 +29,57 @@
 
 <h2 id="osgi-services">OSGi services</h2>
 
+<h3 id="calabash-steps-orgdaisycommonxproccalabashxprocstepprovider">Calabash steps (<code>org.daisy.common.xproc.calabash.XProcStepProvider</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.html"><code>{http://code.google.com/p/dotify/}obfl-to-pef</code></a></li>
+  <li><a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/FileToOBFLStep.html"><code>{http://code.google.com/p/dotify/}file-to-obfl</code></a></li>
+</ul>
+
 <h3 id="transformers-orgdaisypipelinebraillecommontransformprovider">Transformers (<a href="/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html"><code>org.daisy.pipeline.braille.common.TransformProvider</code></a>)</h3>
 
 <ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyTranslatorImpl.html"><code>(input:text-css)(output:braille)(translator:dotify)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>translator</code>: Will only match if the value is <code>dotify</code>.</li>
+      <li>
+<code>locale</code>: Required. Matches only Dotify translators for that
+  locale. An automatic fallback mechanism is used: if nothing is
+  found for language-COUNTRY-variant, then language-COUNTRY is
+  searched, then language.</li>
+      <li>
+<code>hyphenator</code>: A value <code>none</code> will disable hyphenation. <code>auto</code> is
+  the default and will match any Dotify translator, whether it
+  supports hyphenation out-of-the-box, with the help of an
+  external hyphenator, or not at all. A value not equal to <code>none</code>
+  or <code>auto</code> will match every Dotify translator that uses an
+  external hyphenator that matches this feature.</li>
+    </ul>
+
+    <p>No other features are allowed.</p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html"><code>(hyphenator:dotify)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>hyphenator</code>: Will only match if the value is <code>dotify</code>.</li>
+      <li>
+<code>locale</code>: Required. Matches only Dotify translators for that
+  locale. An automatic fallback mechanism is used: if nothing is
+  found for language-COUNTRY-variant, then language-COUNTRY is
+  searched, then language.</li>
+    </ul>
+
+    <p>No other features are allowed.</p>
+  </li>
   <li>
     <p><a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.html"><code>(input:css)(output:css)(translator:dotify)</code></a></p>
 
@@ -38,6 +93,18 @@
     </ul>
 
     <p>Other features are used for finding sub-transformers of type DotifyTranslator.</p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSStyledDocumentTransform.html"><code>(input:css)(output:pef)(formatter:dotify)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>formatter</code>: Will only match if the value is <code>dotify</code>.</li>
+    </ul>
+
+    <p>Other features are used for finding sub-transformers of type BrailleTranslator.</p>
   </li>
 </ul>
 

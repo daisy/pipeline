@@ -845,6 +845,52 @@ Pipeline components and are available online. These “official”
 snapshot always correspond to the “master” branch of their respective
 git repositories.</p>
 
+<p>You can use “official” snapshots by adding the following repositories
+in the “profiles” element of <code>~/.m2/settings.xml</code> or
+<code>/etc/maven/settings.xml</code>:</p>
+
+<div class="language-xml highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;profile&gt;</span>
+    <span class="tag">&lt;id&gt;</span>sonatype-snapshots<span class="tag">&lt;/id&gt;</span>
+    <span class="tag">&lt;activation&gt;</span>
+        <span class="tag">&lt;activeByDefault&gt;</span>true<span class="tag">&lt;/activeByDefault&gt;</span>
+    <span class="tag">&lt;/activation&gt;</span>
+    <span class="tag">&lt;repositories&gt;</span>
+        <span class="tag">&lt;repository&gt;</span>
+            <span class="tag">&lt;id&gt;</span>sonatype-snapshots<span class="tag">&lt;/id&gt;</span>
+            <span class="tag">&lt;name&gt;</span>OSS Sonatype repo (snapshots)<span class="tag">&lt;/name&gt;</span>
+            <span class="tag">&lt;url&gt;</span>https://oss.sonatype.org/content/repositories/snapshots/<span class="tag">&lt;/url&gt;</span>
+            <span class="tag">&lt;releases&gt;</span>
+                <span class="tag">&lt;enabled&gt;</span>false<span class="tag">&lt;/enabled&gt;</span>
+            <span class="tag">&lt;/releases&gt;</span>
+            <span class="tag">&lt;snapshots&gt;</span>
+                <span class="tag">&lt;enabled&gt;</span>true<span class="tag">&lt;/enabled&gt;</span>
+                <span class="tag">&lt;updatePolicy&gt;</span>always<span class="tag">&lt;/updatePolicy&gt;</span>
+                <span class="tag">&lt;checksumPolicy&gt;</span>warn<span class="tag">&lt;/checksumPolicy&gt;</span>
+            <span class="tag">&lt;/snapshots&gt;</span>
+        <span class="tag">&lt;/repository&gt;</span>
+    <span class="tag">&lt;/repositories&gt;</span>
+    <span class="tag">&lt;pluginRepositories&gt;</span>
+        <span class="tag">&lt;pluginRepository&gt;</span>
+            <span class="tag">&lt;id&gt;</span>sonatype-snapshots<span class="tag">&lt;/id&gt;</span>
+            <span class="tag">&lt;name&gt;</span>OSS Sonatype repo (snapshots)<span class="tag">&lt;/name&gt;</span>
+            <span class="tag">&lt;url&gt;</span>https://oss.sonatype.org/content/repositories/snapshots/<span class="tag">&lt;/url&gt;</span>
+            <span class="tag">&lt;releases&gt;</span>
+                <span class="tag">&lt;enabled&gt;</span>false<span class="tag">&lt;/enabled&gt;</span>
+            <span class="tag">&lt;/releases&gt;</span>
+            <span class="tag">&lt;snapshots&gt;</span>
+                <span class="tag">&lt;enabled&gt;</span>true<span class="tag">&lt;/enabled&gt;</span>
+                <span class="tag">&lt;updatePolicy&gt;</span>always<span class="tag">&lt;/updatePolicy&gt;</span>
+                <span class="tag">&lt;checksumPolicy&gt;</span>warn<span class="tag">&lt;/checksumPolicy&gt;</span>
+            <span class="tag">&lt;/snapshots&gt;</span>
+        <span class="tag">&lt;/pluginRepository&gt;</span>
+    <span class="tag">&lt;/pluginRepositories&gt;</span>
+<span class="tag">&lt;/profile&gt;</span>
+</pre></div>
+</div>
+</div>
+
 <p>As a result, a dependency only needs to be built locally when local
 changes have been made to the source code, or if the required version
 does not match what is currently on the master branch.</p>

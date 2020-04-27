@@ -13,10 +13,72 @@
   <body>
     <h1 id="texhyph-utils-api">texhyph-utils API</h1>
 
+<h2 id="java-api">Java API</h2>
+
+<ul>
+  <li>package <a href="/pipeline/api/org/daisy/pipeline/braille/tex/package-summary.html" class="apidoc"><code>org.daisy.pipeline.braille.tex</code></a>
+</li>
+</ul>
+
+<h3 id="transformers-orgdaisypipelinebraillecommontransformprovider">Transformers (<a href="/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html"><code>org.daisy.pipeline.braille.common.TransformProvider</code></a>)</h3>
+
+<ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/texhyph-utils/src/main/java/org/daisy/pipeline/braille/tex/impl/TexHyphenatorSimpleImpl.html"><code>(hyphenator:tex)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>hyphenator</code>: Will only match if the value is <code>tex</code> or <code>texhyph</code>.</li>
+      <li>
+<code>table</code>: A tex table is a URI that is either a file name, a file
+  path relative to a registered tablepath, an absolute file URI,
+  or a fully qualified table identifier. Only URIs that point to
+  LaTeX pattern files (ending with “.tex”) are matched. The
+  <code>table</code> feature is not compatible with <code>locale</code>.</li>
+      <li>
+<code>locale</code>: Matches only hyphenators with that locale.</li>
+    </ul>
+
+    <p>No other features are allowed.</p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/texhyph-utils/src/main/java/org/daisy/pipeline/braille/tex/impl/TexHyphenatorDotifyImpl.html"><code>(hyphenator:tex)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>hyphenator</code>: Will only match if the value is <code>tex</code> or <code>texhyph</code>.</li>
+      <li>
+<code>table</code>: A tex table is a URI that is be either a file name, a
+  file path relative to a registered tablepath, an absolute file
+  URI, or a fully qualified table identifier. A URI can either
+  point to a LaTeX pattern file (“.tex”) or a Java properties file
+  (“.xml” or “.properties”) that Dotify uses as the format for
+  storing hyphenator configurations. The <code>table</code> feature is not
+  compatible with <code>locale</code>.</li>
+      <li>
+<code>locale</code>: Matches only hyphenators with that locale.</li>
+    </ul>
+
+    <p>No other features are allowed.</p>
+  </li>
+</ul>
+
 <h2 id="catalogxml"><a href="/pipeline/modules/braille/texhyph-utils/src/main/resources/META-INF/catalog.xml" class="source">catalog.xml</a></h2>
 
 <ul>
   <li><a href="/pipeline/modules/braille/texhyph-utils/src/main/resources/xml/library.xsl" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/texhyph-utils/library.xsl</code></a></li>
+</ul>
+
+<h2 id="osgi-services">OSGi services</h2>
+
+<h3 id="saxon-functions-netsfsaxonlibextensionfunctiondefinition">Saxon functions (<code>net.sf.saxon.lib.ExtensionFunctionDefinition</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/texhyph-utils/src/main/java/org/daisy/pipeline/braille/tex/saxon/impl/HyphenateDefinition.html"><code>{http://code.google.com/p/texhyphj/}hyphenate</code></a></li>
 </ul>
 
 <link rev="dp2:doc" href="./">

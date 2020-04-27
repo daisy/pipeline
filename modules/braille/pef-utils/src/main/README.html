@@ -13,11 +13,41 @@
   <body>
     <h1 id="pef-utils-api">pef-utils API</h1>
 
+<h2 id="java-api">Java API</h2>
+
+<ul>
+  <li>package <a href="/pipeline/api/org/daisy/pipeline/braille/pef/package-summary.html" class="apidoc"><code>org.daisy.pipeline.braille.pef</code></a>
+</li>
+</ul>
+
 <h2 id="catalogxml"><a href="/pipeline/modules/braille/pef-utils/src/main/resources/META-INF/catalog.xml" class="source">catalog.xml</a></h2>
 
 <ul>
   <li><a href="/pipeline/modules/braille/pef-utils/src/main/resources/xml/library.xsl" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl</code></a></li>
   <li><a href="/pipeline/api/org/daisy/pipeline/modules/braille/pef-utils/library.xpl.html" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl</code></a></li>
+</ul>
+
+<h2 id="osgi-services">OSGi services</h2>
+
+<h3 id="pef-tables-orgdaisypipelinebraillepeftableprovider">PEF tables (<code>org.daisy.pipeline.braille.pef.TableProvider</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.html"><code>(id:...)</code></a></li>
+  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/LocaleBasedTableProvider.html"><code>(locale:...)</code></a></li>
+</ul>
+
+<h3 id="saxon-functions-netsfsaxonlibextensionfunctiondefinition">Saxon functions (<code>net.sf.saxon.lib.ExtensionFunctionDefinition</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/saxon/impl/EncodeDefinition.html"><code>{http://www.daisy.org/ns/2008/pef}encode</code></a></li>
+</ul>
+
+<h3 id="calabash-steps-orgdaisycommonxproccalabashxprocstepprovider">Calabash steps (<code>org.daisy.common.xproc.calabash.XProcStepProvider</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.html"><code>{http://www.daisy.org/ns/2008/pef}pef2text</code></a></li>
+  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/Text2PEFStep.html"><code>{http://www.daisy.org/ns/2008/pef}text2pef</code></a></li>
+  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/ValidateStep.html"><code>{http://www.daisy.org/ns/2008/pef}validate</code></a></li>
 </ul>
 
 <link rev="dp2:doc" href="./">
