@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">row-spacing-nested-blocks</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests row-spacing on block nested in block with border bottom and default row-spacing.</dc:description>
    </meta>
-   <layout-master name="a" page-width="40" page-height="25" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="40" page-height="25" duplex="true">
       <default-template>
          <header/>
          <footer/>

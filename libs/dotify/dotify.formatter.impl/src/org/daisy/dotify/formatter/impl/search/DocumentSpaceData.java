@@ -6,18 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provides the data needed for searching a document space.  
+ * Provides the data needed for searching a document space.
+ *
  * @author Joel Håkansson
  */
 class DocumentSpaceData {
 
-		final List<PageDetails> pageDetails;
-		final Map<Integer, View<PageDetails>> volumeViews;
-		final Map<SequenceId, View<PageDetails>> sequenceViews;
-		
-		DocumentSpaceData() {
-			this.pageDetails = new ArrayList<>();
-			this.volumeViews = new HashMap<>();
-			this.sequenceViews = new HashMap<>();		
-		}
-	}
+    final List<PageDetails> pageDetails;
+    final Map<Integer, View<PageDetails>> volumeViews;
+    final Map<SequenceId, View<PageDetails>> sequenceViews;
+
+    DocumentSpaceData() {
+        this.pageDetails = new ArrayList<>();
+        this.volumeViews = new HashMap<>();
+        this.sequenceViews = new HashMap<>();
+    }
+
+}

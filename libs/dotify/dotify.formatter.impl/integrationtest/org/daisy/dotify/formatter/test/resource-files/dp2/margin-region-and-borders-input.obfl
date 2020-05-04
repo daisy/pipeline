@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">margin-region-and-borders</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests block with border on page with left margin (using margin-region). Broken: the border extends into the left margin: see https://github.com/joeha480/dotify/issues/195.</dc:description>
    </meta>
-   <layout-master name="main" page-width="20" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="main" page-width="20" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer/>

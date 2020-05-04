@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">pre-content</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests pre-content.</dc:description>
    </meta>
-   <layout-master name="main" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="main" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer/>

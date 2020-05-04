@@ -14,6 +14,7 @@ plugins {
 	id 'signing'
 	//id 'jacoco'
 	id 'pmd'
+	id 'checkstyle'
 }
 
 apply plugin: 'biz.aQute.bnd.builder'
@@ -28,9 +29,8 @@ targetCompatibility = 1.8
 // To test with snapshots, modify the version directly in the dependencies section,
 // but don't forget to change it back when you're done.
 ext.versions = [
-	'dotifyApi'		: '5.0.0',
-	'dotifyCommon'	: '4.4.0',
-	'streamlineApi'	: '1.4.0',
+	'dotifyApi'		: '5.0.5',
+	'dotifyCommon'	: '4.4.1',
 ]
 
 sourceSets {
@@ -38,8 +38,15 @@ sourceSets {
 	test {	java { srcDir 'test' srcDir 'integrationtest'}	resources { srcDir 'test' srcDir 'integrationtest'} }
 }
 
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+}
+
 compileJava {
-    options.encoding = 'UTF-8'
+	options.encoding = 'UTF-8'
 }
 
 compileTestJava {
@@ -54,36 +61,34 @@ javadoc {
 		source = 8
 		overview = 'src/javadoc-overview.html'
 		links('https://docs.oracle.com/javase/8/docs/api/')
-		links("https://brailleapps.github.io/dotify.api/$versions.dotifyApi/javadoc/")
-		links("https://brailleapps.github.io/dotify.common/$versions.dotifyCommon/javadoc/")
-		links("https://www.ologolo.org/streamline-api/$versions.streamlineApi/javadoc/")
+		links("https://mtmse.github.io/dotify.api/$versions.dotifyApi/javadoc/")
+		links("https://mtmse.github.io/dotify.common/$versions.dotifyCommon/javadoc/")
 	}
 }
 
 repositories {
-    mavenCentral()
-    //mavenLocal()
-    maven { url "https://oss.sonatype.org/content/groups/staging" }
-    //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+	mavenCentral()
+	//mavenLocal()
+	maven { url "https://oss.sonatype.org/content/groups/staging" }
+	//maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
-    compileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
-    compile "org.daisy.dotify:dotify.api:$versions.dotifyApi"
-    compile "org.daisy.dotify:dotify.common:$versions.dotifyCommon"
-    compile "org.daisy.streamline:streamline-api:$versions.streamlineApi"
-    compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
+	compileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+	compile "org.daisy.dotify:dotify.api:$versions.dotifyApi"
+	compile "org.daisy.dotify:dotify.common:$versions.dotifyCommon"
+	compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
 	}
 
-    runtimeOnly 'com.fasterxml.woodstox:woodstox-core:5.1.0'
+	runtimeOnly 'com.fasterxml.woodstox:woodstox-core:5.1.0'
 
-    testCompileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
-    testImplementation group: "junit", name: "junit", version: "4.12"
-    testImplementation ('org.daisy.braille:braille-utils.pef-tools:6.0.0') {
+	testCompileOnly 'org.osgi:org.osgi.service.component.annotations:1.3.0'
+	testImplementation group: "junit", name: "junit", version: "4.12"
+	testImplementation ('org.daisy.braille:braille-utils.pef-tools:6.0.0') {
 		exclude module: 'Saxon-HE'
 	}
-	testImplementation "org.mockito:mockito-core:1.10.19"
+	testImplementation "org.mockito:mockito-core:3.3.3"
 	testImplementation group: group, name:'dotify.translator.impl', version:'5.0.0'
 
 	testRuntimeOnly group: group, name:'dotify.hyphenator.impl', version:'5.0.0'
@@ -150,13 +155,7 @@ jar {
 	manifest {
 		attributes(
 			'-sources': 'true',
-			'Import-Package': 'org.daisy.dotify.api.engine; provide:=true,'+
-								'org.daisy.dotify.api.formatter; provide:=true,'+
-								'org.daisy.dotify.api.obfl; provide:=true,'+
-								'org.daisy.dotify.api.writer; provide:=true,'+
-								'org.daisy.streamline.api.tasks; provide:=true,*',
-			////The split-package instruction is because a resource folder is included twice on the classpath
-			//'Private-Package': 'org.daisy.dotify.formatter.impl.*;-split-package:=merge-first,',
+			'-exportcontents': '${packages;VERSIONED}',
 			'Automatic-Module-Name': "$moduleName",
 			'Bundle-Name': "$bundleName",
 			'Bundle-SymbolicName': "$bundleName",
@@ -170,13 +169,13 @@ jar {
 }
 
 task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
+	classifier = 'javadoc'
+	from javadoc
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+	classifier = 'sources'
+	from sourceSets.main.allSource
 }
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
@@ -194,10 +193,10 @@ publishing {
 			from components.java
 			artifact sourcesJar
 			artifact javadocJar
-		/*
-            if (isReleaseVersion) {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-            }*/
+			/*
+			if (isReleaseVersion) {
+				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+			}*/
 			pom {
 				name = 'dotify.formatter.impl'
 				packaging = 'jar'
@@ -227,6 +226,10 @@ publishing {
 						id = 'kalaspuffar'
 						name = 'Daniel Persson'
 					}
+					developer {
+						id = 'paulrambags'
+						name = 'Paul Rambags'
+					}
 				}
 			}
 		}
@@ -243,6 +246,23 @@ publishing {
 		}
 	}
 }
+
+checkstyle {
+	toolVersion '7.8.1'
+	configFile file("checkstyle.xml")
+}
+checkstyleMain {
+	source = 'src'
+}
+checkstyleTest {
+	source = ['test', 'integrationtest']
+}
+
+tasks.withType(Checkstyle) {
+    exclude '**/resource-files/**'
+}
+
+checkstyleMain.dependsOn javadoc
 
 pmd.ruleSets = [
 	// New rule sets:

@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">volume-breaking-between-words</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests allowsEndingVolumeOnHyphen(false) when a volume-transition element is present. The test passes if the volume-transition element is removed from the OBFL.</dc:description>
    </meta>
-   <layout-master name="main" duplex="true" page-number-variable="page" page-width="10" page-height="5">
+   <layout-master name="main" duplex="true" page-width="10" page-height="5">
       <default-template>
          <header/>
          <footer/>

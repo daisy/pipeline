@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">page-number-reference-span</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests page-number reference to span. Broken: "Failed to complete volume division": is this a bug?</dc:description>
    </meta>
-   <layout-master name="body" page-width="14" page-height="8" duplex="true" page-number-variable="page">
+   <layout-master name="body" page-width="14" page-height="8" duplex="true">
       <default-template>
          <header/>
          <footer/>

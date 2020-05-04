@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">sheet-calculation-initial-page-number</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests that calculation of sheets is not influenced by initial-page-number.</dc:description>
    </meta>
-   <layout-master name="a" page-width="10" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="10" page-height="5" duplex="true">
       <default-template>
          <header>
             <field>

@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">table-auto-column-width-cell-wrapping</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests table with data that can wrap multiple lines in a cell. The column widths are computed so that the total table width is equal to the specified width and the table height is minimized. Cells in the first row have a bottom border to indicate the column widths and spacing.</dc:description>
    </meta>
-   <layout-master name="main" page-width="20" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="main" page-width="20" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer/>

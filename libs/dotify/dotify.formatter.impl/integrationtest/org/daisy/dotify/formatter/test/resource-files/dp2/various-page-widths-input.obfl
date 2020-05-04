@@ -4,13 +4,13 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">various-page-widths</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests two layout-masters with different page-width.</dc:description>
    </meta>
-   <layout-master name="a" page-width="30" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="30" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer/>
       </default-template>
    </layout-master>
-   <layout-master name="b" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="b" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer/>

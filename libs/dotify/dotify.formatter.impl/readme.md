@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.com/brailleapps/dotify.formatter.impl.svg?branch=master)](https://travis-ci.com/brailleapps/dotify.formatter.impl)
+[![Build Status](https://travis-ci.com/mtmse/dotify.formatter.impl.svg?branch=master)](https://travis-ci.com/mtmse/dotify.formatter.impl)
 [![Type](https://img.shields.io/badge/type-provider_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 [![License: LGPL v2.1](https://img.shields.io/badge/License-LGPL%20v2%2E1%20%28or%20later%29-blue.svg)](https://www.gnu.org/licenses/lgpl-2.1)
 
 # dotify.formatter.impl #
-dotify.formatter.impl contains an implementation of the formatter interfaces of [dotify.api](https://github.com/brailleapps/dotify.api).
+dotify.formatter.impl contains an implementation of the formatter interfaces of [dotify.api](https://github.com/mtmse/dotify.api).
 
 Many of the OBFL tests are also used as OBFL examples. The examples can be useful to study when learning about OBFL or creating OBFL-files.
 The examples are published [here](https://brailleapps.github.io/dotify.formatter.impl/tests/org.daisy.dotify.formatter.test.resource-files.tests-overview.html).
@@ -61,7 +61,7 @@ to the pattern `foo-input.obfl`/`foo-expected.pef`.
 - Compatible with SPI and OSGi
 
 ## Limitations ##
-Compared to the latest [OBFL-version](http://braillespecs.github.io/obfl/obfl-specification.html), at least the following is not yet supported:
+Compared to the latest [OBFL-version](http://mtmse.github.io/obfl/obfl-specification.html), at least the following is not yet supported:
 
 * marker-reference scope=volume and scope=document
 * the text-style attribute outside of header/footers

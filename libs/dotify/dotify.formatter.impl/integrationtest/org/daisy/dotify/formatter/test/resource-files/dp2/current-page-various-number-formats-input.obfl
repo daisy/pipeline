@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">current-page-various-number-formats</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests current-page with different number-formats.</dc:description>
    </meta>
-   <layout-master name="front" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="front" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer>
@@ -21,7 +21,7 @@
          </footer>
       </default-template>
    </layout-master>
-   <layout-master name="body" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="body" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer>
@@ -37,7 +37,7 @@
          </footer>
       </default-template>
    </layout-master>
-   <layout-master name="rear" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="rear" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer>

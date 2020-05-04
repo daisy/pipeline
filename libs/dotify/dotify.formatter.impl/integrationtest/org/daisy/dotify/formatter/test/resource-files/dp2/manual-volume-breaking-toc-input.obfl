@@ -11,12 +11,12 @@
       </default-template>
    </layout-master>
    <table-of-contents name="toc">
-      <toc-entry ref-id="a">
-         <page-number ref-id="a" number-format="default"/>
-      </toc-entry>
-      <toc-entry ref-id="b">
-         <page-number ref-id="b" number-format="default"/>
-      </toc-entry>
+      <toc-block>
+         <toc-entry ref-id="a"><page-number ref-id="a" number-format="default"/></toc-entry>
+      </toc-block>
+      <toc-block>
+         <toc-entry ref-id="b"><page-number ref-id="b" number-format="default"/></toc-entry>
+      </toc-block>
    </table-of-contents>
    <volume-template sheets-in-volume-max="10">
       <pre-content>

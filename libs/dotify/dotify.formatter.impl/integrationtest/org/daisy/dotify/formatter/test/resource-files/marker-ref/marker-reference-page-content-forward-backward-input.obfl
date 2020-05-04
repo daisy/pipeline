@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-page-content-forward-backward</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with scope page-content. Tested with both forward and backward direction. Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break.</dc:description>
    </meta>
-   <layout-master name="a" page-width="10" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="10" page-height="5" duplex="true">
       <default-template>
          <header>
             <field>

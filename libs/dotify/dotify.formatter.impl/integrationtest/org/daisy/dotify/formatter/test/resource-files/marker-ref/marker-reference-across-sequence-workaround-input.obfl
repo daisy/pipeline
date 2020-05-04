@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-across-sequence-workaround</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with multiple sequences. Currently marker-reference doesn't search across sequences. As a workaround I repeat markers at the start of a new sequence when needed.</dc:description>
    </meta>
-   <layout-master name="a" page-width="10" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="10" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer>

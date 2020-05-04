@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
-		<layout-master name="front" page-width="40" page-height="29" inner-margin="0" outer-margin="0" row-spacing="1" duplex="false">
-			<default-template>
-				<header></header>
-				<footer></footer>
-			</default-template>
-		</layout-master>
-		<sequence master="front" initial-page-number="1">
-			
-			<block>Leader space is preserved:</block>
-			<block>Leader has space <leader position="20"/>before.</block>
-			<block>Leader has space before <leader position="20"/> and after.</block>
-			<block>Leader has space after<leader position="20"/> leader.</block>
+        <layout-master name="front" page-width="40" page-height="29" inner-margin="0" outer-margin="0" row-spacing="1" duplex="false">
+            <default-template>
+                <header></header>
+                <footer></footer>
+            </default-template>
+        </layout-master>
+        <sequence master="front" initial-page-number="1">
 
-		</sequence>
+            <block>Leader space is preserved:</block>
+            <block>Leader has space <leader position="20"/>before.</block>
+            <block>Leader has space before <leader position="20"/> and after.</block>
+            <block>Leader has space after<leader position="20"/> leader.</block>
+
+        </sequence>
 </obfl>

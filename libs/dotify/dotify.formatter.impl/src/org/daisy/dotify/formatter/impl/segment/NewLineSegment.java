@@ -1,28 +1,31 @@
 package org.daisy.dotify.formatter.impl.segment;
 
+/**
+ * TODO: Write java doc.
+ */
 public class NewLineSegment implements Segment {
-	
-	public NewLineSegment() {
-	}
 
-	@Override
-	public SegmentType getSegmentType() {
-		return SegmentType.NewLine;
-	}
+    public NewLineSegment() {
+    }
 
-	@Override
-	public String peek() {
-		return "";
-	}
+    @Override
+    public SegmentType getSegmentType() {
+        return SegmentType.NewLine;
+    }
 
-	@Override
-	public String resolve() {
-		return "";
-	}
-	
-	@Override
-	public boolean isStatic() {
-		return true;
-	}
+    @Override
+    public String peek() {
+        return "";
+    }
+
+    @Override
+    public String resolve() {
+        return "";
+    }
+
+    @Override
+    public boolean isStatic() {
+        return true;
+    }
 
 }

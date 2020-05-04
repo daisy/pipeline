@@ -10,37 +10,40 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
  * Provides an expression factory implementation.
+ *
  * @author Joel Håkansson
  */
 @Component
 public class ExpressionFactoryImpl implements ExpressionFactory {
-	private Integer2TextFactoryMakerService itf;
+    private Integer2TextFactoryMakerService itf;
 
-	@Override
-	public Expression newExpression() {
-		return new ExpressionImpl(itf);
-	}
+    @Override
+    public Expression newExpression() {
+        return new ExpressionImpl(itf);
+    }
 
-	/**
-	 * Sets a factory dependency.
-	 * @param service the dependency
-	 */
-	@Reference(cardinality=ReferenceCardinality.MANDATORY)
-	public void setInteger2TextFactory(Integer2TextFactoryMakerService service) {
-		this.itf = service;
-	}
+    /**
+     * Sets a factory dependency.
+     *
+     * @param service the dependency
+     */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY)
+    public void setInteger2TextFactory(Integer2TextFactoryMakerService service) {
+        this.itf = service;
+    }
 
-	/**
-	 * Removes a factory dependency.
-	 * @param service the dependency to remove
-	 */
-	public void unsetInteger2TextFactory(Integer2TextFactoryMakerService service) {
-		this.itf = null;
-	}
+    /**
+     * Removes a factory dependency.
+     *
+     * @param service the dependency to remove
+     */
+    public void unsetInteger2TextFactory(Integer2TextFactoryMakerService service) {
+        this.itf = null;
+    }
 
-	@Override
-	public void setCreatedWithSPI() {
-		setInteger2TextFactory(Integer2TextFactoryMaker.newInstance());
-	}
+    @Override
+    public void setCreatedWithSPI() {
+        setInteger2TextFactory(Integer2TextFactoryMaker.newInstance());
+    }
 
 }

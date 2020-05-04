@@ -4,48 +4,54 @@ import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 
 /**
  * Provides immutable information about the segment processor's context.
- * 
+ *
  * @author Joel Håkansson
  */
 class SegmentProcessorContext {
-	private final FormatterCoreContext fcontext;
-	private final RowDataProperties rdp;
-	private final BlockMargin margins;
-	private final int flowWidth;
-	private final char spaceChar;
-	private final int available;
-	
-	SegmentProcessorContext(FormatterCoreContext fcontext, RowDataProperties rdp, BlockMargin margins, int flowWidth, int available) {
-		this.fcontext = fcontext;
-		this.rdp = rdp;
-		this.margins = margins;
-		this.flowWidth = flowWidth;
-		this.spaceChar = fcontext.getSpaceCharacter();
-		this.available = available;
-	}
+    private final FormatterCoreContext fcontext;
+    private final RowDataProperties rdp;
+    private final BlockMargin margins;
+    private final int flowWidth;
+    private final char spaceChar;
+    private final int available;
 
-	RowDataProperties getRdp() {
-		return rdp;
-	}
+    SegmentProcessorContext(
+        FormatterCoreContext fcontext,
+        RowDataProperties rdp,
+        BlockMargin margins,
+        int flowWidth,
+        int available
+    ) {
+        this.fcontext = fcontext;
+        this.rdp = rdp;
+        this.margins = margins;
+        this.flowWidth = flowWidth;
+        this.spaceChar = fcontext.getSpaceCharacter();
+        this.available = available;
+    }
 
-	BlockMargin getMargins() {
-		return margins;
-	}
+    RowDataProperties getRowDataProps() {
+        return rdp;
+    }
 
-	int getFlowWidth() {
-		return flowWidth;
-	}
+    BlockMargin getMargins() {
+        return margins;
+    }
 
-	char getSpaceCharacter() {
-		return spaceChar;
-	}
+    int getFlowWidth() {
+        return flowWidth;
+    }
 
-	int getAvailable() {
-		return available;
-	}
-	
-	FormatterCoreContext getFormatterContext() {
-		return fcontext;
-	}
+    char getSpaceCharacter() {
+        return spaceChar;
+    }
+
+    int getAvailable() {
+        return available;
+    }
+
+    FormatterCoreContext getFormatterContext() {
+        return fcontext;
+    }
 
 }

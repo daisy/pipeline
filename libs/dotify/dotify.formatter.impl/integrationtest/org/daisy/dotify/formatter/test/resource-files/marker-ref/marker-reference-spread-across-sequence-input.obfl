@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-spread-across-sequence</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests that marker-reference with scope spread searches beyond sequence boundaries, i.e. a search on the first page of a new sequence includes assignments made on the last page of the previous sequence if that last page is a left-hand page.</dc:description>
    </meta>
-   <layout-master name="a" page-width="10" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="10" page-height="5" duplex="true">
       <template use-when="(= (% $page 2) 1)">
          <header/>
          <footer>

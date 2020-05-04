@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">current-page-various-positions</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests current-page with different layout-masters. Sequences with different layout-masters, that each place current-page in a different position (header, footer or nowhere), follow each other. Also tests resetting page number with initial-page-number.</dc:description>
    </meta>
-   <layout-master name="a" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer>
@@ -20,13 +20,13 @@
          </footer>
       </default-template>
    </layout-master>
-   <layout-master name="b" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="b" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer/>
       </default-template>
    </layout-master>
-   <layout-master name="c" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="c" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header>
             <field>

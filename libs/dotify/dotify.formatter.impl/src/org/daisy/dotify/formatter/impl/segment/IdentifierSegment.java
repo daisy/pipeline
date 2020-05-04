@@ -1,35 +1,38 @@
 package org.daisy.dotify.formatter.impl.segment;
 
+/**
+ * TODO: Write java doc.
+ */
 public class IdentifierSegment implements Segment {
-	
-	private final String name;
-	
-	public IdentifierSegment(String name) {
-		this.name = name;
-	}
 
-	@Override
-	public SegmentType getSegmentType() {
-		return SegmentType.Identifier;
-	}
+    private final String name;
 
-	public String getName() {
-		return name;
-	}
+    public IdentifierSegment(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public String peek() {
-		return "";
-	}
+    @Override
+    public SegmentType getSegmentType() {
+        return SegmentType.Identifier;
+    }
 
-	@Override
-	public String resolve() {
-		return "";
-	}
-	
-	@Override
-	public boolean isStatic() {
-		return true;
-	}
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String peek() {
+        return "";
+    }
+
+    @Override
+    public String resolve() {
+        return "";
+    }
+
+    @Override
+    public boolean isStatic() {
+        return true;
+    }
 
 }

@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">list-of-references-document-range</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests list-of-references with range="document" and on-volume-start.</dc:description>
    </meta>
-   <layout-master name="main" page-width="10" page-height="8" duplex="true" page-number-variable="page">
+   <layout-master name="main" page-width="10" page-height="8" duplex="true">
       <default-template>
          <header/>
          <footer/>

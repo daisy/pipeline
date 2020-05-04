@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef version="2008-1" xmlns="http://www.daisy.org/ns/2008/pef" xmlns:example="http://example.com">
+<head>
+<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dc:format>application/x-pef+xml</dc:format>
+<dc:identifier>identifier?</dc:identifier>
+<dc:date>2020-05-15</dc:date>
+<dc:title>Tests external-reference element</dc:title>
+<dc:description>Tests that white space before a external-reference element not stripped.</dc:description>
+</meta>
+</head>
+<body>
+<volume cols="10" rows="5" rowgap="0" duplex="true">
+<section>
+<page>
+<row example:id2="exampleValue" example:id1="exampleValue">⠁⠁⠁⠀⠁⠁⠁</row>
+</page>
+</section>
+</volume>
+</body>
+</pef>

@@ -1,11 +1,5 @@
 package org.daisy.dotify.formatter.impl.page;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.common.splitter.DefaultSplitResult;
 import org.daisy.dotify.common.splitter.SplitPointDataSource;
@@ -18,6 +12,12 @@ import org.daisy.dotify.formatter.impl.core.BlockContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * <p>Provides a {@link SplitPointDataSource data source} for {@link RowGroup row groups}.</p>
@@ -38,213 +38,233 @@ import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
  * @author Joel Håkansson
  */
 class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataSource> {
-	private static final Supplements<RowGroup> EMPTY_SUPPLEMENTS = new Supplements<RowGroup>() {
-		@Override
-		public RowGroup get(String id) {
-			return null;
-		}
-	};
-	private final BlockProcessor blockProcessor;
-	private final LayoutMaster master;
-	private final Supplements<RowGroup> supplements;
-	private final RowGroupSequence data;
-	private BlockContext bc;
-	private Function<Integer, Integer> reservedWidths = x->0;
-	private int blockIndex;
-	private boolean allowHyphenateLastLine;
-	private int offsetInBlock;
+    private static final Supplements<RowGroup> EMPTY_SUPPLEMENTS = new Supplements<RowGroup>() {
+        @Override
+        public RowGroup get(String id) {
+            return null;
+        }
+    };
+    private final BlockProcessor blockProcessor;
+    private final LayoutMaster master;
+    private final Supplements<RowGroup> supplements;
+    private final RowGroupSequence data;
+    private BlockContext bc;
+    private Function<Integer, Integer> reservedWidths = x -> 0;
+    private int blockIndex;
+    private boolean allowHyphenateLastLine;
+    private int offsetInBlock;
 
-	RowGroupDataSource(LayoutMaster master, BlockContext bc, List<Block> blocks, BreakBefore breakBefore, VerticalSpacing vs, Supplements<RowGroup> supplements) {
-		super();
-		this.blockProcessor = new BlockProcessor();
-		this.master = master;
-		this.bc = bc;
-		this.supplements = supplements;
-		this.data = new RowGroupSequence(breakBefore, vs, blocks, null);
-		this.blockIndex = 0;
-		this.allowHyphenateLastLine = true;
-		this.offsetInBlock = 0;
-	}
+    RowGroupDataSource(
+        LayoutMaster master,
+        BlockContext bc,
+        List<Block> blocks,
+        BreakBefore breakBefore,
+        VerticalSpacing vs,
+        Supplements<RowGroup> supplements
+    ) {
+        super();
+        this.blockProcessor = new BlockProcessor();
+        this.master = master;
+        this.bc = bc;
+        this.supplements = supplements;
+        this.data = new RowGroupSequence(breakBefore, vs, blocks, null);
+        this.blockIndex = 0;
+        this.allowHyphenateLastLine = true;
+        this.offsetInBlock = 0;
+    }
 
-	RowGroupDataSource(RowGroupDataSource template) {
-		this(template, 0);
-	}
-	
-	RowGroupDataSource(RowGroupDataSource template, int offset) {
-		this.blockProcessor = new BlockProcessor(template.blockProcessor);
-		this.master = template.master;
-		this.bc = template.bc;
-		this.offsetInBlock = template.offsetInBlock;
-		this.supplements = template.supplements;
-		this.data = new RowGroupSequence(template.data, offset);
-		this.blockIndex = template.blockIndex;
-		this.allowHyphenateLastLine = template.allowHyphenateLastLine;
-		this.reservedWidths = template.reservedWidths;
-	}
-	
-	static RowGroupDataSource copyUnlessNull(RowGroupDataSource template) {
-		return template==null?null:new RowGroupDataSource(template);
-	}
-	
-	@Override
-	public Supplements<RowGroup> getSupplements() {
-		return supplements;
-	}
+    RowGroupDataSource(RowGroupDataSource template) {
+        this(template, 0);
+    }
 
-	@Override
-	public boolean hasElementAt(int index) {
-		return ensureBuffer(index+1);
-	}
+    RowGroupDataSource(RowGroupDataSource template, int offset) {
+        this.blockProcessor = new BlockProcessor(template.blockProcessor);
+        this.master = template.master;
+        this.bc = template.bc;
+        this.offsetInBlock = template.offsetInBlock;
+        this.supplements = template.supplements;
+        this.data = new RowGroupSequence(template.data, offset);
+        this.blockIndex = template.blockIndex;
+        this.allowHyphenateLastLine = template.allowHyphenateLastLine;
+        this.reservedWidths = template.reservedWidths;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return this.groupSize()==0 && blockIndex>=data.getBlocks().size() && !blockProcessor.hasNextInBlock();
-	}
+    static RowGroupDataSource copyUnlessNull(RowGroupDataSource template) {
+        return template == null ? null : new RowGroupDataSource(template);
+    }
 
-	@Override
-	public RowGroup get(int n) {
-		if (!ensureBuffer(n+1)) {
-			throw new IndexOutOfBoundsException("" + n);
-		}
-		return this.data.getGroup().get(n);
-	}
+    @Override
+    public Supplements<RowGroup> getSupplements() {
+        return supplements;
+    }
 
-	@Override
-	public List<RowGroup> getRemaining() {
-		ensureBuffer(-1);
-		if (this.data.getGroup()==null) {
-			return Collections.emptyList();
-		} else {
-			return this.data.getGroup().subList(0, groupSize());
-		}
-	}
+    @Override
+    public boolean hasElementAt(int index) {
+        return ensureBuffer(index + 1);
+    }
 
-	@Override
-	public int getSize(int limit) {
-		if (!ensureBuffer(limit))  {
-			//we have buffered all elements
-			return this.groupSize();
-		} else {
-			return limit;
-		}
-	}
+    @Override
+    public boolean isEmpty() {
+        return this.groupSize() == 0 && blockIndex >= data.getBlocks().size() && !blockProcessor.hasNextInBlock();
+    }
 
-	VerticalSpacing getVerticalSpacing() {
-		return data.getVerticalSpacing();
-	}
-	
-	BreakBefore getBreakBefore() {
-		return data.getBreakBefore();
-	}
-	
-	BlockContext getContext() {
-		return bc;
-	}
-	
-	void setContext(BlockContext c) {
-		this.bc = c;
-	}
-	
-	void setReservedWidths(Function<Integer, Integer> func) {
-		this.reservedWidths = func;
-	}
-	
-	/**
-	 * <p>Sets the hyphenate last line property.</p>
-	 * 
-	 * <p>Note that the implementation assumes that this is only used immediately before
-	 * calling split on a {@link SplitPointHandler} with a {@link SplitPointSpecification}.
-	 * Calling this method after a call to split is not necessary.</p>
-	 * @param value the value
-	 */
-	void setAllowHyphenateLastLine(boolean value) {
-		this.allowHyphenateLastLine = value;
-	}
-	
-	/**
-	 * Ensures that there are at least index elements in the buffer.
-	 * When index is -1 this method always returns false.
-	 * @param index the index (or -1 to get all remaining elements)
-	 * @return returns true if the index element was available, false otherwise
-	 */
-	private boolean ensureBuffer(int index) {
-		while (index<0 || this.groupSize()<index) {
-			if (blockIndex>=data.getBlocks().size() && !blockProcessor.hasNextInBlock()) {
-				return false;
-			}
-			if (!blockProcessor.hasNextInBlock()) {
-				//get next block
-				Block b = data.getBlocks().get(blockIndex);
-				blockIndex++;
-				offsetInBlock=0;
-				blockProcessor.loadBlock(master, b, bc, hasSequence(), hasResult(), this::newRowGroupSequence, v->{});
-			}
-			// Requesting all items implies that no special last line hyphenation processing is needed.
-			// This is reasonable: The very last line in a result would never be hyphenated, so suppressing
-			// hyphenation is unnecessary. Also, actively doing this would be difficult, because we do not know
-			// if the line produced below is the last line or not, until after the call has already been made.
-			Optional<RowGroup> added = blockProcessor.getNextRowGroup(bc, new LineProperties.Builder()
-				.suppressHyphenation(!allowHyphenateLastLine && index>-1 && groupSize()>=index-1)
-				.reservedWidth(reservedWidths.apply(countRows()))
-				.lineBlockLocation(new BlockLineLocation(blockProcessor.getBlockAddress(), offsetInBlock))
-				.build());
-			added.ifPresent(rg->data.getGroup().add(rg));
-			offsetInBlock += added.map(v->v.getRows().size()).orElse(0);
-		}
-		return true;
-	}
+    @Override
+    public RowGroup get(int n) {
+        if (!ensureBuffer(n + 1)) {
+            throw new IndexOutOfBoundsException("" + n);
+        }
+        return this.data.getGroup().get(n);
+    }
 
-	// this happens when a new page is started
-	@Override
-	public SplitResult<RowGroup, RowGroupDataSource> splitInRange(int atIndex) {
-		// TODO: rewrite this so that rendered tail data is discarded
-		if (!ensureBuffer(atIndex)) {
-			throw new IndexOutOfBoundsException("" + atIndex);
-		}
-		RowGroupDataSource tail = new RowGroupDataSource(this, atIndex);
-		tail.allowHyphenateLastLine = true;
-		if (atIndex==0) {
-			return new DefaultSplitResult<RowGroup, RowGroupDataSource>(Collections.emptyList(), tail);
-		} else {
-			return new DefaultSplitResult<RowGroup, RowGroupDataSource>(this.data.getGroup().subList(0, atIndex), tail);
-		}
-	}
+    @Override
+    public List<RowGroup> getRemaining() {
+        ensureBuffer(-1);
+        if (this.data.getGroup() == null) {
+            return Collections.emptyList();
+        } else {
+            return this.data.getGroup().subList(0, groupSize());
+        }
+    }
 
-	@Override
-	public RowGroupDataSource createEmpty() {
-		return new RowGroupDataSource(master, bc, Collections.emptyList(), data.getBreakBefore(), data.getVerticalSpacing(), EMPTY_SUPPLEMENTS);
-	}
+    @Override
+    public int getSize(int limit) {
+        if (!ensureBuffer(limit)) {
+            //we have buffered all elements
+            return this.groupSize();
+        } else {
+            return limit;
+        }
+    }
 
-	@Override
-	public RowGroupDataSource getDataSource() {
-		return this;
-	}
+    VerticalSpacing getVerticalSpacing() {
+        return data.getVerticalSpacing();
+    }
 
-	private void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
-		// Vertical spacing isn't used at this stage.
-		if (data.getGroup()!=null) {
-			// this means the return values of ScenarioData.hasSequence() and
-			// ScenarioData.hasResult() did not match those of RowGroupDataSource.hasSequence() and
-			// RowGroupDataSource.hasResult() for the same block
-			throw new IllegalStateException();
-		} else {
-			data.setGroup(new ArrayList<>());
-		}
-	}
+    BreakBefore getBreakBefore() {
+        return data.getBreakBefore();
+    }
 
-	private boolean hasSequence() {
-		return data.getGroup()!=null;
-	}
+    BlockContext getContext() {
+        return bc;
+    }
 
-	private boolean hasResult() {
-		return hasSequence() && !data.getGroup().isEmpty();
-	}
+    void setContext(BlockContext c) {
+        this.bc = c;
+    }
 
-	private int groupSize() {
-		return data.getGroup()==null?0:data.getGroup().size();
-	}
-	
-	private int countRows() {
-		return data.getGroup()==null?0:data.getGroup().stream().mapToInt(v->v.getRows().size()).sum();
-	}
+    void setReservedWidths(Function<Integer, Integer> func) {
+        this.reservedWidths = func;
+    }
+
+    /**
+     * <p>Sets the hyphenate last line property.</p>
+     *
+     * <p>Note that the implementation assumes that this is only used immediately before
+     * calling split on a {@link SplitPointHandler} with a {@link SplitPointSpecification}.
+     * Calling this method after a call to split is not necessary.</p>
+     *
+     * @param value the value
+     */
+    void setAllowHyphenateLastLine(boolean value) {
+        this.allowHyphenateLastLine = value;
+    }
+
+    /**
+     * Ensures that there are at least index elements in the buffer.
+     * When index is -1 this method always returns false.
+     *
+     * @param index the index (or -1 to get all remaining elements)
+     * @return returns true if the index element was available, false otherwise
+     */
+    private boolean ensureBuffer(int index) {
+        while (index < 0 || this.groupSize() < index) {
+            if (blockIndex >= data.getBlocks().size() && !blockProcessor.hasNextInBlock()) {
+                return false;
+            }
+            if (!blockProcessor.hasNextInBlock()) {
+                //get next block
+                Block b = data.getBlocks().get(blockIndex);
+                blockIndex++;
+                offsetInBlock = 0;
+                blockProcessor.loadBlock(master, b, bc, hasSequence(), hasResult(), this::newRowGroupSequence, v -> {
+                });
+            }
+            // Requesting all items implies that no special last line hyphenation processing is needed.
+            // This is reasonable: The very last line in a result would never be hyphenated, so suppressing
+            // hyphenation is unnecessary. Also, actively doing this would be difficult, because we do not know
+            // if the line produced below is the last line or not, until after the call has already been made.
+            Optional<RowGroup> added = blockProcessor.getNextRowGroup(bc, new LineProperties.Builder()
+                    .suppressHyphenation(!allowHyphenateLastLine && index > -1 && groupSize() >= index - 1)
+                    .reservedWidth(reservedWidths.apply(countRows()))
+                    .lineBlockLocation(new BlockLineLocation(blockProcessor.getBlockAddress(), offsetInBlock))
+                    .build());
+            added.ifPresent(rg -> data.getGroup().add(rg));
+            offsetInBlock += added.map(v -> v.getRows().size()).orElse(0);
+        }
+        return true;
+    }
+
+    // this happens when a new page is started
+    @Override
+    public SplitResult<RowGroup, RowGroupDataSource> splitInRange(int atIndex) {
+        // TODO: rewrite this so that rendered tail data is discarded
+        if (!ensureBuffer(atIndex)) {
+            throw new IndexOutOfBoundsException("" + atIndex);
+        }
+        RowGroupDataSource tail = new RowGroupDataSource(this, atIndex);
+        tail.allowHyphenateLastLine = true;
+        if (atIndex == 0) {
+            return new DefaultSplitResult<RowGroup, RowGroupDataSource>(Collections.emptyList(), tail);
+        } else {
+            return new DefaultSplitResult<RowGroup, RowGroupDataSource>(
+                this.data.getGroup().subList(0, atIndex),
+                tail
+            );
+        }
+    }
+
+    @Override
+    public RowGroupDataSource createEmpty() {
+        return new RowGroupDataSource(
+            master,
+            bc,
+            Collections.emptyList(),
+            data.getBreakBefore(),
+            data.getVerticalSpacing(),
+            EMPTY_SUPPLEMENTS
+        );
+    }
+
+    @Override
+    public RowGroupDataSource getDataSource() {
+        return this;
+    }
+
+    private void newRowGroupSequence(BreakBefore breakBefore, VerticalSpacing vs) {
+        // Vertical spacing isn't used at this stage.
+        if (data.getGroup() != null) {
+            // this means the return values of ScenarioData.hasSequence() and
+            // ScenarioData.hasResult() did not match those of RowGroupDataSource.hasSequence() and
+            // RowGroupDataSource.hasResult() for the same block
+            throw new IllegalStateException();
+        } else {
+            data.setGroup(new ArrayList<>());
+        }
+    }
+
+    private boolean hasSequence() {
+        return data.getGroup() != null;
+    }
+
+    private boolean hasResult() {
+        return hasSequence() && !data.getGroup().isEmpty();
+    }
+
+    private int groupSize() {
+        return data.getGroup() == null ? 0 : data.getGroup().size();
+    }
+
+    private int countRows() {
+        return data.getGroup() == null ? 0 : data.getGroup().stream().mapToInt(v -> v.getRows().size()).sum();
+    }
 }

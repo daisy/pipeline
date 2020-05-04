@@ -2,34 +2,37 @@ package org.daisy.dotify.formatter.impl.segment;
 
 import org.daisy.dotify.api.formatter.Leader;
 
-public class LeaderSegment extends Leader implements Segment{
-	
-	protected LeaderSegment(Builder builder) {
-		super(builder);
-	}
-	
-	public LeaderSegment(Leader leader) {
-		super(leader);
-	}
+/**
+ * TODO: Write java doc.
+ */
+public class LeaderSegment extends Leader implements Segment {
 
-	@Override
-	public SegmentType getSegmentType() {
-		return SegmentType.Leader;
-	}
+    protected LeaderSegment(Builder builder) {
+        super(builder);
+    }
 
-	@Override
-	public String peek() {
-		return "";
-	}
+    public LeaderSegment(Leader leader) {
+        super(leader);
+    }
 
-	@Override
-	public String resolve() {
-		return "";
-	}
+    @Override
+    public SegmentType getSegmentType() {
+        return SegmentType.Leader;
+    }
 
-	@Override
-	public boolean isStatic() {
-		return true;
-	}
+    @Override
+    public String peek() {
+        return getPattern();
+    }
+
+    @Override
+    public String resolve() {
+        return getPattern();
+    }
+
+    @Override
+    public boolean isStatic() {
+        return true;
+    }
 
 }

@@ -8,57 +8,59 @@ import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 
 /**
  * Provides a {@link VolumeTemplateBuilder} implementation.
- * 
+ *
  * @author Joel Håkansson
  */
 public class VolumeTemplate implements VolumeTemplateBuilder {
-	private final Condition condition;
-	private final int splitterMax;
-	private final VolumeContentBuilderImpl preVolumeContent, postVolumeContent;
+    private final Condition condition;
+    private final int splitterMax;
+    private final VolumeContentBuilderImpl preVolumeContent, postVolumeContent;
 
-	public VolumeTemplate(FormatterCoreContext fc, Condition condition, Integer splitterMax) {
-		this.condition = condition;
-		this.splitterMax = splitterMax;
-		this.preVolumeContent = new VolumeContentBuilderImpl(fc);
-		this.postVolumeContent = new VolumeContentBuilderImpl(fc);
-	}
+    public VolumeTemplate(FormatterCoreContext fc, Condition condition, Integer splitterMax) {
+        this.condition = condition;
+        this.splitterMax = splitterMax;
+        this.preVolumeContent = new VolumeContentBuilderImpl(fc);
+        this.postVolumeContent = new VolumeContentBuilderImpl(fc);
+    }
 
-	/**
-	 * Test if this Template applies to this combination of volume and volume count.
-	 * @param context the context to test
-	 * @return returns true if the Template should be applied to the volume
-	 */
-	public boolean appliesTo(Context context) {
-		if (condition==null) {
-			return true;
-		}
-		return condition.evaluate(context);
-	}
-	
-	public Iterable<VolumeSequence> getPreVolumeContent() {
-		return preVolumeContent;
-	}
+    /**
+     * Test if this Template applies to this combination of volume and volume count.
+     *
+     * @param context the context to test
+     * @return returns true if the Template should be applied to the volume
+     */
+    public boolean appliesTo(Context context) {
+        if (condition == null) {
+            return true;
+        }
+        return condition.evaluate(context);
+    }
 
-	public Iterable<VolumeSequence> getPostVolumeContent() {
-		return postVolumeContent;
-	}
+    public Iterable<VolumeSequence> getPreVolumeContent() {
+        return preVolumeContent;
+    }
 
-	/**
-	 * Gets the maximum number of sheets allowed.
-	 * @return returns the number of sheets allowed
-	 */
-	public int getVolumeMaxSize() {
-		return splitterMax;
-	}
+    public Iterable<VolumeSequence> getPostVolumeContent() {
+        return postVolumeContent;
+    }
 
-	@Override
-	public VolumeContentBuilder getPreVolumeContentBuilder() {
-		return preVolumeContent;
-	}
+    /**
+     * Gets the maximum number of sheets allowed.
+     *
+     * @return returns the number of sheets allowed
+     */
+    public int getVolumeMaxSize() {
+        return splitterMax;
+    }
 
-	@Override
-	public VolumeContentBuilder getPostVolumeContentBuilder() {
-		return postVolumeContent;
-	}
+    @Override
+    public VolumeContentBuilder getPreVolumeContentBuilder() {
+        return preVolumeContent;
+    }
+
+    @Override
+    public VolumeContentBuilder getPostVolumeContentBuilder() {
+        return postVolumeContent;
+    }
 
 }

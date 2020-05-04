@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">multi-line-footer-empty</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests creating empty two-line bottom page margin using multiple footers.</dc:description>
    </meta>
-   <layout-master name="a" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="15" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer>

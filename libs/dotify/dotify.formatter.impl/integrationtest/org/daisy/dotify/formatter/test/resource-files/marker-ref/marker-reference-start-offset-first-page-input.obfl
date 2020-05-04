@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-start-offset-first-page</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with scope page and start-offset -1 on first page of document. Expected is that the search does not return anything. See https://github.com/joeha480/dotify/issues/144.</dc:description>
    </meta>
-   <layout-master name="a" page-width="10" page-height="5" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="10" page-height="5" duplex="true">
       <default-template>
          <header/>
          <footer>

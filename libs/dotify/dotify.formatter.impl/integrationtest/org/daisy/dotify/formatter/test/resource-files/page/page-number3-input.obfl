@@ -12,7 +12,9 @@
 		</default-template>
 	</layout-master>
 	<table-of-contents name="toc">
-		<toc-entry ref-id="block-1">toc 1</toc-entry>
+		<toc-block>
+			<toc-entry ref-id="block-1">toc 1</toc-entry>
+		</toc-block>
 	</table-of-contents>
 	<volume-template sheets-in-volume-max="5">
 		<pre-content>

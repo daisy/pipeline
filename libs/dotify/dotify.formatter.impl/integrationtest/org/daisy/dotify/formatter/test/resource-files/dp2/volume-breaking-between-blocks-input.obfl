@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">volume-breaking-between-blocks</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests volume-transition element, which modifies the last sheet so that volume breaks occur between blocks.</dc:description>
    </meta>
-   <layout-master name="main" duplex="true" page-number-variable="page" page-width="10" page-height="5">
+   <layout-master name="main" duplex="true" page-width="10" page-height="5">
       <default-template>
          <header/>
          <footer/>

@@ -1,9 +1,9 @@
 package org.daisy.dotify.formatter.impl.page;
 
-import java.util.Objects;
-
 import org.daisy.dotify.api.formatter.BlockPosition;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
+
+import java.util.Objects;
 
 /**
  * A wrapper around a {@link BlockPosition}, i.e. a combination of a <code>vertical-position</code>
@@ -14,22 +14,22 @@ import org.daisy.dotify.formatter.impl.row.RowImpl;
  * current <code>layout-master</code> (which is also the unit for <code>vertical-position</code>).
  */
 class VerticalSpacing {
-	private final BlockPosition pos;
-	private final RowImpl emptyRow;
-	
-	VerticalSpacing(BlockPosition pos, RowImpl emptyRow) {
-		Objects.requireNonNull(pos);
-		Objects.requireNonNull(emptyRow);
-		this.pos = pos;
-		this.emptyRow = emptyRow;
-	}
+    private final BlockPosition pos;
+    private final RowImpl emptyRow;
 
-	public BlockPosition getBlockPosition() {
-		return pos;
-	}
+    VerticalSpacing(BlockPosition pos, RowImpl emptyRow) {
+        Objects.requireNonNull(pos);
+        Objects.requireNonNull(emptyRow);
+        this.pos = pos;
+        this.emptyRow = emptyRow;
+    }
 
-	public RowImpl getEmptyRow() {
-		return emptyRow;
-	}
+    public BlockPosition getBlockPosition() {
+        return pos;
+    }
+
+    public RowImpl getEmptyRow() {
+        return emptyRow;
+    }
 
 }

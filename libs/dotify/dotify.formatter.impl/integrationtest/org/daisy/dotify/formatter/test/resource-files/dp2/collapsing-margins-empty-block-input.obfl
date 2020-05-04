@@ -4,7 +4,7 @@
       <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">collapsing-margins-empty-block</dc:title>
       <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests collapsing of margins of three adjacent sibling blocks, the middle one being empty.</dc:description>
    </meta>
-   <layout-master name="a" page-width="40" page-height="25" duplex="true" page-number-variable="page">
+   <layout-master name="a" page-width="40" page-height="25" duplex="true">
       <default-template>
          <header/>
          <footer/>
