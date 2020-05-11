@@ -42,7 +42,7 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.acapella.impl.AcapellaService
+      org.daisy.pipeline.tts.acapela.impl.AcapelaService
     </expose-services>
   </properties>
 
