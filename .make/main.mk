@@ -127,6 +127,7 @@ $(SAXON) : | .maven-init
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # MAVEN_MODULES computed here because maven.mk may not be up to date yet
+# FIXME: the mvn command below depends on the settings.xml.in file which is not inside this directory
 $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(MVN_SETTINGS)
 	MAVEN_MODULES=$$(cat $< 2>/dev/null) && \
 	poms=($$(for m in $$MAVEN_MODULES; do echo "$$m/pom.xml"; done)) && \
@@ -151,9 +152,11 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(
 				     >$$dest; \
 			fi; \
 		done && \
-		if $(MVN) -Dworkspace="$(TARGET_DIR)/poms" \
-		          --projects $$(printf "%s\n" $$MAVEN_MODULES |paste -sd , -) \
-		          org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
+		if mvn --batch-mode --settings "$(ROOT_DIR)/settings.xml.in" \
+		       -Dworkspace="$(TARGET_DIR)/poms" \
+		       -Dcache=".maven-cache" \
+		       --projects $$(printf "%s\n" $$MAVEN_MODULES |paste -sd , -) \
+		       org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
 		then true; \
 		else \
 			rv=$$? && \
