@@ -136,7 +136,7 @@ any_atrule returns [AnyAtRule stmnt]
           if (aar.isEmpty())
               gCSSTreeParser.debug("Empty AnyAtRule was omited");
           else {
-              gCSSTreeParser.info("Create @" + name + " as with:\n{}", aar);
+              gCSSTreeParser.debug("Create @" + name + " as with:\n{}", aar);
               $stmnt = aar;
           }
         }
