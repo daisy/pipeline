@@ -90,7 +90,7 @@
       org.daisy.pipeline.script.impl.XProcScript_my_script,
       org.daisy.pipeline.datatypes.impl.Datatype_foo_choice,
       org.daisy.pipeline.datatypes.impl.Datatype_px_script_option_1,
-      org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath,
+      org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_,
       org.daisy.pipeline.modules.impl.Module_it_pipeline_module,
       org.daisy.common.xproc.calabash.impl.ConfigurationFileProvider_it_pipeline_module
     </expose-services>

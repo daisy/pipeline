@@ -185,14 +185,13 @@
         <artifactId>maven-invoker-plugin</artifactId>
         <version>1.8</version>
         <configuration>
-          <skipInstallation>true</skipInstallation>
-          <skipInvocation>true</skipInvocation>
           <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
           <settingsFile>src/it/settings.xml</settingsFile>
           <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
           <postBuildHookScript>verify</postBuildHookScript>
           <properties>
             <org.ops4j.pax.url.mvn.localRepository>${org.ops4j.pax.url.mvn.localRepository}</org.ops4j.pax.url.mvn.localRepository>
+            <org.ops4j.pax.url.mvn.settings>${org.ops4j.pax.url.mvn.settings}</org.ops4j.pax.url.mvn.settings>
             <modules-build-helper.version>${project.version}</modules-build-helper.version>
             <ds-to-spi-maven-plugin.version>${ds-to-spi-maven-plugin.version}</ds-to-spi-maven-plugin.version>
             <ds-to-spi-runtime.version>${ds-to-spi-runtime.version}</ds-to-spi-runtime.version>

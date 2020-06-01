@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:px="http://www.daisy.org/ns/pipeline"
                 xmlns:pxd="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog"
                 exclude-result-prefixes="#all"
@@ -63,30 +64,22 @@
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>
 		<xsl:variable name="id" select="concat('data-type-',parent::*/parent::*/@name)"/>
-		<span typeof="data-type" id="{$id}" resource="../{replace($input-uri,'.*/([^/]+)$','$1')}#{$id}">
-			<link rel="doc" href="#{$id}"/>
-			<xsl:if test="not(@id|child::*/@id)">
-				<xsl:if test="not($entry-in-catalog)">
-					<xsl:message terminate="yes">Error</xsl:message>
-				</xsl:if>
-				<xsl:call-template name="set-property">
-					<xsl:with-param name="property" select="'id'"/>
-					<xsl:with-param name="content" select="concat(/*/@type,'-',parent::*/parent::*/@name)"/>
-				</xsl:call-template>
-			</xsl:if>
-			<xsl:call-template name="set-property">
-				<xsl:with-param name="property" select="'definition'"/>
-				<xsl:with-param name="content" select="replace(string-join($data-type-xml/string(),''),'\\','\\\\')"/>
-			</xsl:call-template>
-		</span>
-	</xsl:template>
-	
-	<xsl:template mode="attribute-value"
-	              match="/*/p:option/p:pipeinfo/pxd:type/@id|
-	                     /*/p:option/p:pipeinfo/pxd:type/*[not(@id)]/@id">
-		<xsl:call-template name="set-property">
-			<xsl:with-param name="property" select="'id'"/>
-		</xsl:call-template>
+		<xsl:choose>
+			<xsl:when test="$entry-in-catalog[@name or @px:content-type='script']">
+				<span typeof="data-type" id="{$id}" resource="../{replace($input-uri,'.*/([^/]+)$','$1')}#{$id}">
+					<link rel="doc" href="#{$id}"/>
+					<span property="id" content="{concat(/*/@type,'-',parent::*/parent::*/@name)}">
+						<xsl:call-template name="set-property">
+							<xsl:with-param name="property" select="'definition'"/>
+							<xsl:with-param name="content" select="replace(string-join($data-type-xml/string(),''),'\\','\\\\')"/>
+						</xsl:call-template>
+					</span>
+				</span>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:next-match/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template name="set-rel">

@@ -7,10 +7,16 @@ import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import org.daisy.pipeline.junit.AbstractTest;
+import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+
+import org.ops4j.pax.exam.Configuration;
+import static org.ops4j.pax.exam.CoreOptions.composite;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import org.ops4j.pax.exam.Option;
 
 public class ServicesTest extends AbstractTest {
 	
@@ -51,7 +57,15 @@ public class ServicesTest extends AbstractTest {
 		return new String[]{
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:calabash-adapter:?",
-			"org.daisy.pipeline.modules.braille:liblouis-core:?"
+			"org.daisy.pipeline.modules.braille:liblouis-utils:?"
 		};
+	}
+
+	@Override @Configuration
+	public Option[] config() {
+		return options(
+			// FIXME: BrailleUtils (dependency of liblouis-utils) needs older version of jing
+			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
+			composite(super.config()));
 	}
 }

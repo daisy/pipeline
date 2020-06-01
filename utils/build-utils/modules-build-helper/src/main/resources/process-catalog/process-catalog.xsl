@@ -25,10 +25,25 @@
         <!--
             extract data types
         -->
-        <xsl:for-each select="cat:uri">
-            <xsl:if test="doc-available(resolve-uri(@uri,base-uri(.)))">
+        <xsl:for-each select="cat:uri[@name or @px:content-type='script']">
+            <xsl:variable name="uri" select="resolve-uri(@uri,base-uri(.))"/>
+            <xsl:if test="doc-available($uri)">
+                <xsl:variable name="xproc">
+                    <xsl:choose>
+                        <xsl:when test="@px:extends">
+                            <xsl:call-template name="extend-script">
+                                <xsl:with-param name="script-uri" select="$uri"/>
+                                <xsl:with-param name="extends-uri" select="resolve-uri(@px:extends,base-uri(.))"/>
+                                <xsl:with-param name="catalog-xml" select="/*"/>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="document($uri)[/p:*]"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <xsl:variable name="data-types" as="element()*">
-                    <xsl:apply-templates select="document(@uri)/p:*/p:option/p:pipeinfo/pxd:type/*" mode="data-type-xml"/>
+                    <xsl:apply-templates select="$xproc/p:*/p:option/p:pipeinfo/pxd:type/*" mode="data-type-xml"/>
                 </xsl:variable>
                 <xsl:for-each select="$data-types">
                     <xsl:variable name="path" select="concat('/data-types/',replace(@id,'^.*:',''),'.xml')"/>
@@ -151,11 +166,13 @@ public class <xsl:value-of select="$className"/> implements ModuleRef {
     </xsl:template>
     
     <xsl:template match="cat:uri[@px:extends]">
-        <xsl:copy>
-            <xsl:apply-templates select="@* except @uri" mode="#current"/>
-            <xsl:attribute name="uri" select="f:generated-href(@uri)"/>
-            <xsl:apply-templates mode="#current"/>
-        </xsl:copy>
+        <xsl:if test="@name">
+            <xsl:copy>
+                <xsl:apply-templates select="@* except @uri" mode="#current"/>
+                <xsl:attribute name="uri" select="f:generated-href(@uri)"/>
+                <xsl:apply-templates mode="#current"/>
+            </xsl:copy>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="cat:uri[not(@px:extends)]">
@@ -442,16 +459,19 @@ public class <xsl:value-of select="$className"/> extends org.daisy.pipeline.brai
     <xsl:template match="cat:uri[@px:extends]" mode="process-xproc">
         <xsl:result-document href="{resolve-uri(f:generated-href(@uri),concat($generatedResourcesDirectory,'/META-INF/catalog.xml'))}"
                              method="xml">
+            <xsl:variable name="uri" select="resolve-uri(@uri, base-uri(.))"/>
             <xsl:variable name="doc">
                 <xsl:call-template name="extend-script">
-                    <xsl:with-param name="script-uri" select="resolve-uri(@uri,base-uri(.))"/>
+                    <xsl:with-param name="script-uri" select="$uri"/>
                     <xsl:with-param name="extends-uri" select="resolve-uri(@px:extends,base-uri(.))"/>
                     <xsl:with-param name="catalog-xml" select="/*"/>
                 </xsl:call-template>
             </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$doc/p:*/p:option/p:pipeinfo/pxd:type">
-                    <xsl:apply-templates select="$doc" mode="finalize-script"/>
+                    <xsl:apply-templates select="$doc" mode="finalize-script">
+                        <xsl:with-param name="script-uri" select="$uri" tunnel="yes"/>
+                    </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="$doc"/>
@@ -460,14 +480,16 @@ public class <xsl:value-of select="$className"/> extends org.daisy.pipeline.brai
         </xsl:result-document>
     </xsl:template>
     
-    <xsl:template match="cat:uri[not(@px:extends)]" mode="process-xproc">
+    <xsl:template match="cat:uri[not(@px:extends)][@name or @px:content-type='script']" mode="process-xproc">
         <xsl:variable name="uri" select="resolve-uri(@uri, base-uri(.))"/>
         <xsl:if test="doc-available($uri)">
             <xsl:variable name="doc" select="document($uri)"/>
             <xsl:if test="$doc/p:*/p:option/p:pipeinfo/pxd:type">
                 <xsl:result-document href="{resolve-uri(f:generated-href(@uri),concat($generatedResourcesDirectory,'/META-INF/catalog.xml'))}"
                                      method="xml">
-                    <xsl:apply-templates select="$doc" mode="finalize-script"/>
+                    <xsl:apply-templates select="$doc" mode="finalize-script">
+                        <xsl:with-param name="script-uri" select="$uri" tunnel="yes"/>
+                    </xsl:apply-templates>
                 </xsl:result-document>
             </xsl:if>
         </xsl:if>
@@ -479,11 +501,21 @@ public class <xsl:value-of select="$className"/> extends org.daisy.pipeline.brai
     </xsl:function>
     
     <xsl:template match="/*/p:option[p:pipeinfo/pxd:type]" mode="finalize-script">
-        <xsl:copy>
-            <xsl:apply-templates select="@*" mode="#current"/>
-            <xsl:apply-templates select="p:pipeinfo/pxd:type" mode="data-type-attribute"/>
-            <xsl:apply-templates select="node()" mode="#current"/>
-        </xsl:copy>
+        <xsl:param name="script-uri" tunnel="yes" required="yes"/>
+        <xsl:variable name="catalog-xml" as="element(cat:catalog)" select="collection()[1]/*"/>
+        <xsl:choose>
+            <xsl:when test="exists($catalog-xml//cat:uri[@name or @px:content-type='script']
+                                                        [resolve-uri(@uri,base-uri(.))=$script-uri])">
+                <xsl:copy>
+                    <xsl:apply-templates select="@*" mode="#current"/>
+                    <xsl:apply-templates select="p:pipeinfo/pxd:type" mode="data-type-attribute"/>
+                    <xsl:apply-templates select="node()" mode="#current"/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template match="/*/p:option/p:pipeinfo" mode="finalize-script">

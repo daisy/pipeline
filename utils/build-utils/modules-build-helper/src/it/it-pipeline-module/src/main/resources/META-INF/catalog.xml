@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
 		 xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri uri="../xml/script.xpl" px:content-type="script" px:id="my-script"/>
+  <uri uri="../xml/script.xpl" px:content-type="script" px:id="my-script" px:extends="../xml/script-base.xpl"/>
+  <uri uri="../xml/script-base.xpl" px:extends="../xml/script-options.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/foo-utils/library.xpl" uri="../xml/library.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/foo-utils/foo.css" uri="../css/foo.css"/>
   <uri uri="../data-types/type.xml" px:content-type="data-type" px:id="foo:choice"/>

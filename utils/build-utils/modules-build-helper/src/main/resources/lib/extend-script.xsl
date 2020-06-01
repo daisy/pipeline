@@ -13,25 +13,37 @@
         <xsl:param name="extends-uri"/>
         <xsl:param name="catalog-xml" as="element()"/>
         <xsl:if test="not(doc-available($script-uri))">
-            <xsl:message terminate="yes" select="concat('Unable to resolve script: ', $script-uri)"/>
+            <xsl:message terminate="yes" select="concat('Unable to resolve: ', $script-uri)"/>
         </xsl:if>
         <xsl:variable name="script-doc" select="document($script-uri)"/>
-        <xsl:variable name="extends-uri-element" as="element()?" select="$catalog-xml//cat:uri[@name=$extends-uri]"/>
+        <xsl:variable name="extends-uri-element" as="element()?"
+                      select="$catalog-xml//cat:uri[@name=$extends-uri or
+                                                    resolve-uri(@uri,base-uri(.))=$extends-uri]"/>
         <xsl:variable name="extends-doc">
             <xsl:choose>
                 <xsl:when test="$extends-uri-element/@px:extends">
+                    <xsl:variable name="extends-uri" select="$extends-uri-element/resolve-uri(@uri,base-uri(.))"/>
                     <xsl:variable name="doc">
                         <xsl:call-template name="extend-script">
-                            <xsl:with-param name="script-uri" select="$extends-uri-element/resolve-uri(@uri,base-uri(.))"/>
+                            <xsl:with-param name="script-uri" select="$extends-uri"/>
                             <xsl:with-param name="extends-uri" select="$extends-uri-element/resolve-uri(@px:extends,base-uri(.))"/>
                             <xsl:with-param name="catalog-xml" select="$catalog-xml"/>
                         </xsl:call-template>
                     </xsl:variable>
-                    <xsl:apply-templates select="$doc" mode="finalize-script"/>
+                    <xsl:apply-templates select="$doc" mode="finalize-script">
+                        <xsl:with-param name="script-uri" tunnel="yes" select="$extends-uri"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:when test="$extends-uri-element">
+                    <xsl:variable name="extends-uri" select="$extends-uri-element/resolve-uri(@uri,base-uri(.))"/>
+                    <xsl:if test="not(doc-available($extends-uri))">
+                        <xsl:message terminate="yes" select="concat('Unable to resolve: ', $extends-uri)"/>
+                    </xsl:if>
+                    <xsl:sequence select="document($extends-uri)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:if test="not(doc-available($extends-uri))">
-                        <xsl:message terminate="yes" select="concat('Unable to resolve script extension: ', $extends-uri)"/>
+                        <xsl:message terminate="yes" select="concat('Unable to resolve: ', $extends-uri)"/>
                     </xsl:if>
                     <xsl:sequence select="document($extends-uri)"/>
                 </xsl:otherwise>
@@ -54,7 +66,7 @@
             <xsl:sequence select="$original-input-or-option/@*[not(concat('{',namespace-uri(.),'}',name(.))=$new-attributes
                                                                    or concat('{',namespace-uri(.),'}',name(.))='{}select'
                                                                       and current()/@required = 'true'
-                                                                   or concat('{',namespace-uri(.),'}',name(.))='{http://www.daisy.org/ns/pipeline/xproc}data-type'
+                                                                   or concat('{',namespace-uri(.),'}',name(.))='{http://www.daisy.org/ns/pipeline/xproc}type'
                                                                       and current()/p:pipeinfo/pxd:type)]"/>
             <xsl:if test="not(p:pipeinfo)
                           and not(@pxd:type)

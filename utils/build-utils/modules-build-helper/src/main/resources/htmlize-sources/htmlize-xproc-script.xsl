@@ -55,15 +55,20 @@
 	</xsl:template>
 	
 	<xsl:template match="/*/p:option[p:pipeinfo/pxd:type]" mode="finalize-script">
-		<xsl:copy>
-			<xsl:apply-templates select="@*" mode="#current"/>
-			<xsl:attribute name="pxd:type"
-			               select="(p:pipeinfo/pxd:type/@id,
-			                        p:pipeinfo/pxd:type/child::*/@id,
-			                        concat(/*/@type,'-',@name))[1]"/>
-			<xsl:apply-templates select="p:pipeinfo/pxd:type" mode="data-type-attribute"/>
-			<xsl:apply-templates select="node()" mode="#current"/>
-		</xsl:copy>
+		<xsl:param name="script-uri" tunnel="yes" required="yes"/>
+		<xsl:choose>
+			<xsl:when test="exists($catalog-xml//cat:uri[@name or @px:content-type='script']
+			                                            [resolve-uri(@uri,base-uri(.))=$script-uri])">
+				<xsl:copy>
+					<xsl:apply-templates select="@*" mode="#current"/>
+					<xsl:attribute name="pxd:type" select="concat(/*/@type,'-',@name)[1]"/>
+					<xsl:apply-templates select="node()" mode="#current"/>
+				</xsl:copy>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="."/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="/*/p:option/p:pipeinfo" mode="finalize-script">

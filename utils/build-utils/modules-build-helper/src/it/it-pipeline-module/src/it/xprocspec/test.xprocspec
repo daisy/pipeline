@@ -38,8 +38,8 @@
 					<c:file name="OSGI-INF/foo-choice.xml"/>
 					<c:file name="OSGI-INF/foo-service.xml"/>
 					<c:file name="OSGI-INF/java-step.xml"/>
-					<c:file name="OSGI-INF/liblouis-tables.xml"/>
 					<c:file name="OSGI-INF/my-script.xml"/>
+					<c:file name="OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml"/>
 					<c:file name="OSGI-INF/org.daisy.pipeline.modules.impl.Module_it_pipeline_module.xml"/>
 					<c:file name="OSGI-INF/px-script-option-1.xml"/>
 					<c:file name="css/foo.css"/>
@@ -54,8 +54,8 @@
 					<c:file name="org/daisy/common/xproc/calabash/impl/ConfigurationFileProvider_it_pipeline_module_SPI.class"/>
 					<c:file name="org/daisy/impl/FooImpl.class"/>
 					<c:file name="org/daisy/impl/FooImpl_SPI.class"/>
-					<c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath.class"/>
-					<c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_SPI.class"/>
+					<c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.class"/>
+					<c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis__SPI.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_foo_choice.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_foo_choice_SPI.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_px_script_option_1.class"/>
@@ -64,12 +64,15 @@
 					<c:file name="org/daisy/pipeline/modules/impl/Module_it_pipeline_module_SPI.class"/>
 					<c:file name="org/daisy/pipeline/script/impl/XProcScript_my_script.class"/>
 					<c:file name="org/daisy/pipeline/script/impl/XProcScript_my_script_SPI.class"/>
+					<c:file name="xml/__processed__script-base.xpl"/>
 					<c:file name="xml/__processed__script.xpl"/>
 					<c:file name="xml/a.xml"/>
 					<c:file name="xml/a.xml.xsl"/>
 					<c:file name="xml/foo.xpl"/>
 					<c:file name="xml/foo.xsl"/>
 					<c:file name="xml/library.xpl"/>
+					<c:file name="xml/script-base.xpl"/>
+					<c:file name="xml/script-options.xpl"/>
 					<c:file name="xml/script.xpl"/>
 				</c:zipfile>
 			</x:document>
@@ -191,13 +194,13 @@
 				</scr:component>
 			</x:document>
 		</x:expect>
-		<x:context label="The OSGI-INF/liblouis-tables.xml file">
-			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/liblouis-tables.xml"/>
+		<x:context label="The OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml file">
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml"/>
 		</x:context>
-		<x:expect label="The OSGI-INF/liblouis-tables.xml file" type="compare">
+		<x:expect label="The OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml file" type="compare">
 			<x:document type="inline">
-				<scr:component activate="activate" name="liblouis-tables">
-					<implementation class="org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath"/>
+				<scr:component activate="activate" name="org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_">
+					<implementation class="org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_"/>
 					<service>
 						<provide interface="org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
 					</service>
@@ -231,8 +234,8 @@
 					<c:file name="src/main/java/org/daisy/impl/package-summary.html"/>
 					<c:file name="src/main/java/org/daisy/package-frame.html"/>
 					<c:file name="src/main/java/org/daisy/package-summary.html"/>
-					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath.html"/>
-					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_SPI.html"/>
+					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.html"/>
+					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis__SPI.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/package-frame.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/package-summary.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_foo_choice.html"/>
@@ -259,8 +262,23 @@
 					<c:file name="src/main/resources/xml/foo.xsl/index.html"/>
 					<c:file name="src/main/resources/xml/index.md"/>
 					<c:file name="src/main/resources/xml/library.xpl/index.html"/>
+					<c:file name="src/main/resources/xml/script-base.xpl/index.html"/>
+					<c:file name="src/main/resources/xml/script-options.xpl/index.html"/>
 					<c:file name="src/main/resources/xml/script.xpl/index.html"/>
 				</c:zipfile>
+			</x:document>
+		</x:expect>
+		<x:context label="The htmlized script.xpl">
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}-doc.jar!/src/main/resources/xml/script.xpl/index.html" select="//span[@id='data-type-option-1']"/>
+		</x:context>
+		<x:expect label="The htmlized script.xpl" type="compare">
+			<x:document type="inline">
+				<span typeof="data-type" id="data-type-option-1" resource="../script.xpl#data-type-option-1"><link rel="doc" href="#data-type-option-1"/><span property="id" content="px:script-option-1"><span property="definition" content="&#xA;          &lt;choice&gt;&#xA;            &lt;value&gt;value-1&lt;/value&gt;&#xA;            &lt;value&gt;value-2&lt;/value&gt;&#xA;          &lt;/choice&gt;&#xA;        ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+          &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;value-1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;value-2&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span>
 			</x:document>
 		</x:expect>
 		<x:context label="The 'javadoc' JAR content">
@@ -297,8 +315,9 @@
 			<x:document type="inline">
 				<c:zipfile name="it-pipeline-module-${project.version}-xprocdoc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
-					<c:file name="d193e5.html"/>
-					<c:file name="d193e56.html"/>
+					<c:file name="d269e26.html"/>
+					<c:file name="d269e5.html"/>
+					<c:file name="d269e51.html"/>
 					<c:file name="index.html"/>
 					<c:file name="libraries.html"/>
 					<c:file name="org/daisy/pipeline/modules/foo-utils/library.xpl.html"/>
