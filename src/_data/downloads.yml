@@ -95,17 +95,17 @@
     - platform: windows
       package: installer
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.7.0/webui-2.7.0.msi"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.7.0/webui-2.7.0.msi"
       size: 57229644
     - platform: debian
       package: deb
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.7.0/webui-2.7.0.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.7.0/webui-2.7.0.deb"
       size: 54400812
     - platform: redhat
       package: rpm
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.7.0/webui-2.7.0.rpm"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.7.0/webui-2.7.0.rpm"
       size: 56643645
 
 - group: main
@@ -227,17 +227,17 @@
     - platform: windows
       package: installer
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.msi"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.msi"
       size: 53870872
     - platform: debian
       package: deb
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.deb"
       size: 51083004
     - platform: redhat
       package: rpm
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.rpm"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.rpm"
       size: 53274072
 
 - group: webui
@@ -249,17 +249,17 @@
     - platform: windows
       package: installer
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.msi"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.msi"
       size: 53858560
     - platform: debian
       package: deb
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.deb"
       size: 51283412
     - platform: redhat
       package: rpm
       content: webui
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.rpm"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.rpm"
       size: 53266817
 
 - group: main
@@ -416,7 +416,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.15/assembly-1.9.15-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.15/assembly-1.9.15-all.deb"
       size: 38458812
 - version: "1.9.14"
   sort: "1.09.14"
@@ -426,7 +426,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.14/assembly-1.9.14-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.14/assembly-1.9.14-all.deb"
       size: 38424522
 - version: "1.9.13"
   sort: "1.09.13"
@@ -440,7 +440,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.12/assembly-1.9.12-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.12/assembly-1.9.12-all.deb"
       size: 38297918
 - version: "1.9.11"
   sort: "1.09.11"
@@ -454,7 +454,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.10/assembly-1.9.10-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.10/assembly-1.9.10-all.deb"
       size: 38185936
 - version: "1.9.9"
   sort: "1.09.09"
@@ -464,7 +464,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.9/assembly-1.9.9-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.9/assembly-1.9.9-all.deb"
       size: 35831912
 - version: "1.9.8"
   sort: "1.09.08"
@@ -474,7 +474,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.8/assembly-1.9.8-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.8/assembly-1.9.8-all.deb"
       size: 35762856
 - version: "1.9.7"
   sort: "1.09.07"
@@ -484,7 +484,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.7/assembly-1.9.7-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.7/assembly-1.9.7-all.deb"
       size: 35615356
 - version: "1.9.6"
   sort: "1.09.06"
@@ -494,7 +494,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.6/assembly-1.9.6-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.6/assembly-1.9.6-all.deb"
       size: 35534540
 - version: "1.9.5"
   sort: "1.09.05"
@@ -504,7 +504,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.5/assembly-1.9.5-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.5/assembly-1.9.5-all.deb"
       size: 35478928
 - version: "1.9.4"
   sort: "1.09.04"
@@ -514,7 +514,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.4/assembly-1.9.4-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.4/assembly-1.9.4-all.deb"
       size: 35300126
 - version: "1.9.3"
   sort: "1.09.03"
@@ -524,7 +524,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.3/assembly-1.9.3-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.3/assembly-1.9.3-all.deb"
       size: 35260172
 - version: "1.9.2"
   sort: "1.09.02"
@@ -534,7 +534,7 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.2/assembly-1.9.2-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.2/assembly-1.9.2-all.deb"
       size: 35259096
 - version: "1.9.1"
   sort: "1.09.01"
@@ -544,5 +544,5 @@
     - platform: debian
       package: deb
       content: [server, cli]
-      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.1/assembly-1.9.1-all.deb"
+      url: "https://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.1/assembly-1.9.1-all.deb"
       size: 34906564
