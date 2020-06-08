@@ -36,13 +36,8 @@ public class ScriptsResource extends AuthenticatedResource {
 		Iterable<XProcScriptService> unfilteredScripts = scriptRegistry.getScripts();
 		Iterator<XProcScriptService> it = unfilteredScripts.iterator();
 		scripts = new ArrayList<XProcScript>();
-
 		while (it.hasNext()) {
-			XProcScriptService unfilteredScript = it.next();
-			XProcScript script = (webservice().getConfiguration().isLocalFS()) ? unfilteredScript
-					.load() : XProcScriptFilter.INSTANCE
-					.filter(unfilteredScript.load());
-					scripts.add(script);
+			scripts.add(it.next().load());
 		}
 	}
 

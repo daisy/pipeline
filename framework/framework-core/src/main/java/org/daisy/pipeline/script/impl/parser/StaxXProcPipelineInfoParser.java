@@ -220,7 +220,15 @@ public class StaxXProcPipelineInfoParser {
 			Attribute selectAttr = event.asStartElement().getAttributeByName(
 					Attributes.SELECT);
 			if (nameAttr != null) {
-				name = new QName(nameAttr.getValue());
+				String nameVal = nameAttr.getValue();
+				if (nameVal.contains(":")) {
+					String prefix = nameVal.substring(0, nameVal.indexOf(":"));
+					String namespace = event.asStartElement().getNamespaceURI(prefix);
+					String localPart = nameVal.substring(prefix.length() + 1, nameVal.length());
+					name = new QName(namespace, localPart, prefix);
+				} else {
+					name = new QName(nameVal);
+				}
 			}
 			if (requiredAttr != null) {
 				if (Values.TRUE.equals(requiredAttr.getValue())) {

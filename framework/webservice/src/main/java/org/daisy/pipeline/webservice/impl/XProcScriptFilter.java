@@ -1,5 +1,14 @@
 package org.daisy.pipeline.webservice.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import javax.xml.namespace.QName;
+
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
@@ -7,57 +16,48 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcOptionMetadata.Output;
 import org.daisy.pipeline.script.XProcScript;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class XProcScriptFilter.
- */
 public final class XProcScriptFilter {
 
-	/** The Constant INSTANCE. */
-	public static final XProcScriptFilter INSTANCE = new XProcScriptFilter();
-
-	/** The Constant ANY_URI_TYPE. */
+	/** The constant ANY_URI_TYPE. */
 	private static final String ANY_URI_TYPE = "anyURI";
 
-	/** The Constant ANY_FILE_URI_TYPE. */
+	/** The constant ANY_FILE_URI_TYPE. */
 	private static final String ANY_FILE_URI_TYPE = "anyFileURI";
 
-	/** The Constant ANY_DIR_URI_TYPE. */
+	/** The constant ANY_DIR_URI_TYPE. */
 	private static final String ANY_DIR_URI_TYPE = "anyDirURI";
 
-	/**
-	 * Instantiates a new x proc script filter.
+	/*
+	 * Not instantiatable
 	 */
-	private XProcScriptFilter() {
-		// singleton
-	}
+	private XProcScriptFilter() {}
 
-	/* (non-Javadoc)
-	 * @see org.daisy.common.base.Filter#filter(java.lang.Object)
+	/**
+	 * Filter out the outputs and options that are not relevant for the user interface, namely all
+	 * the outputs and the output options (options annotated with px:output="result|temp").
 	 */
-	public XProcScript filter(XProcScript script) {
+	public static XProcScript withoutOutputs(XProcScript script) {
 		XProcPipelineInfo xproc = script.getXProcPipelineInfo();
 		// create the script builder
 		XProcScript.Builder scriptBuilder = new XProcScript.Builder()
-				.withShortName(script.getName()).withDescription(
-						script.getDescription()).withHomepage(script.getHomepage()).withDescriptor(script.getDescriptor());
+			.withShortName(script.getName())
+			.withDescription(script.getDescription())
+			.withHomepage(script.getHomepage())
+			.withDescriptor(script.getDescriptor());
 		// create the filtered pipeline info
 		XProcPipelineInfo.Builder xprocBuilder = new XProcPipelineInfo.Builder();
 		xprocBuilder.withURI(xproc.getURI());
 		//copy filesets
-		for( String fileset: script.getInputFilesets()){
+		for (String fileset: script.getInputFilesets()) {
 			scriptBuilder.withInputFileset(fileset);
 		}
-
-		for( String fileset: script.getOutputFilesets()){
+		for (String fileset: script.getOutputFilesets()) {
 			scriptBuilder.withOutputFileset(fileset);
 		}
-
 		// copy input ports
 		for (XProcPortInfo port : xproc.getInputPorts()) {
 			xprocBuilder.withPort(port);
-			scriptBuilder.withPortMetadata(port.getName(),
-					script.getPortMetadata(port.getName()));
+			scriptBuilder.withPortMetadata(port.getName(), script.getPortMetadata(port.getName()));
 		}
 		// copy parameter ports
 		for (String port : xproc.getParameterPorts()) {
@@ -68,8 +68,7 @@ public final class XProcScriptFilter {
 		// output ports are not copied
 		// copy options
 		for (XProcOptionInfo option : xproc.getOptions()) {
-			XProcOptionMetadata metadata = script.getOptionMetadata(option
-					.getName());
+			XProcOptionMetadata metadata = script.getOptionMetadata(option.getName());
 			// filter-out options that are both OUTPUT options with type
 			// inheriting from anyURI
 			if (!(metadata.getOutput() != Output.NA &&
@@ -79,12 +78,76 @@ public final class XProcScriptFilter {
 					 ||
 					 ANY_DIR_URI_TYPE.equals(metadata.getType())))) {
 				xprocBuilder.withOption(option);
-				scriptBuilder.withOptionMetadata(option.getName(),
-						script.getOptionMetadata(option.getName()));
+				scriptBuilder.withOptionMetadata(option.getName(), metadata);
 			}
 
 		}
 		scriptBuilder.withPipelineInfo(xprocBuilder.build());
 		return scriptBuilder.build();
+	}
+
+	/**
+	 * Remove namespaces from options and rename if needed (if multiple options with the same local
+	 * part). This is required for clients that are not namespace aware.
+	 */
+	public static XProcScript renameOptions(XProcScript script) {
+		XProcPipelineInfo xproc = script.getXProcPipelineInfo();
+		XProcScript.Builder scriptBuilder = new XProcScript.Builder()
+			.withShortName(script.getName())
+			.withDescription(script.getDescription())
+			.withHomepage(script.getHomepage())
+			.withDescriptor(script.getDescriptor());
+		XProcPipelineInfo.Builder xprocBuilder = new XProcPipelineInfo.Builder();
+		xprocBuilder.withURI(xproc.getURI());
+		for (String fileset: script.getInputFilesets()) {
+			scriptBuilder.withInputFileset(fileset);
+		}
+		for (String fileset: script.getOutputFilesets()) {
+			scriptBuilder.withOutputFileset(fileset);
+		}
+		for (XProcPortInfo port : xproc.getInputPorts()) {
+			xprocBuilder.withPort(port);
+			scriptBuilder.withPortMetadata(port.getName(), script.getPortMetadata(port.getName()));
+		}
+		for (String port : xproc.getParameterPorts()) {
+			xprocBuilder.withPort(XProcPortInfo.newParameterPort(port, false));
+			scriptBuilder.withPortMetadata(port, script.getPortMetadata(port));
+		}
+		Map<QName,QName> rename = renameOptions(xproc.getOptions());
+		for (XProcOptionInfo option : xproc.getOptions()) {
+			QName oldName = option.getName();
+			QName newName = rename.get(oldName);
+			xprocBuilder.withOption(
+				XProcOptionInfo.newOption(newName, option.isRequired(), option.getSelect()));
+			scriptBuilder.withOptionMetadata(newName, script.getOptionMetadata(oldName));
+		}
+		scriptBuilder.withPipelineInfo(xprocBuilder.build());
+		return scriptBuilder.build();
+	}
+
+	public static Map<QName,QName> renameOptions(Iterable<XProcOptionInfo> options) {
+		List<QName> newNames = new ArrayList<>();
+		List<QName> collisions = new ArrayList<>();
+		for (XProcOptionInfo o : options) {
+			QName oldName = o.getName();
+			QName newName = new QName(oldName.getLocalPart());
+			if (newNames.contains(newName))
+				collisions.add(newName);
+			newNames.add(newName);
+		}
+		for (QName n : collisions) {
+			ListIterator<QName> names = newNames.listIterator();
+			int i = 1;
+			while (names.hasNext())
+				if (names.next().equals(n))
+					names.set(new QName(n.getLocalPart() + "-" + i++));
+		}
+		Map<QName,QName> map = new HashMap<>();
+		int i = 0;
+		for (XProcOptionInfo o : options) {
+			QName oldName = o.getName();
+			map.put(oldName, newNames.get(i++));
+		}
+		return map;
 	}
 }

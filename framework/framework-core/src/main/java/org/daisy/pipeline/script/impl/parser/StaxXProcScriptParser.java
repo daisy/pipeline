@@ -132,8 +132,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 				parseStep(reader);
 				for (XProcOptionMetadataBuilderHolder bHolder : mOptionBuilders) {
 					XProcOptionMetadata opt = bHolder.mBuilder.build();
-					scriptBuilder.withOptionMetadata(new QName(bHolder.mName),
-							opt);
+					scriptBuilder.withOptionMetadata(bHolder.mName, opt);
 				}
 				for (XProcPortMetadataBuilderHolder bHolder : mPortBuilders) {
 					XProcPortMetadata opt = bHolder.mBuilder.build();
@@ -272,11 +271,19 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 						&& event.asStartElement().getName()
 								.equals(Elements.P_OPTION)) {
 					XProcOptionMetadata.Builder optBuilder = new XProcOptionMetadata.Builder();
-					Attribute name = event.asStartElement().getAttributeByName(
+					Attribute nameAttr = event.asStartElement().getAttributeByName(
 							XProcScriptConstants.Attributes.NAME);
-					if (name != null) {
+					if (nameAttr != null) {
+						String name = nameAttr.getValue();
 						XProcOptionMetadataBuilderHolder bHolder = new XProcOptionMetadataBuilderHolder();
-						bHolder.mName = name.getValue();
+						if (name.contains(":")) {
+							String prefix = name.substring(0, name.indexOf(":"));
+							String namespace = event.asStartElement().getNamespaceURI(prefix);
+							String localPart = name.substring(prefix.length() + 1, name.length());
+							bHolder.mName = new QName(namespace, localPart, prefix);
+						} else {
+							bHolder.mName = new QName(name);
+						}
 						bHolder.mBuilder = optBuilder;
 						parseOption(event.asStartElement(), optBuilder);
 						mOptionBuilders.add(bHolder);
@@ -551,7 +558,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	private static class XProcOptionMetadataBuilderHolder {
 
 		/** The m name. */
-		String mName;
+		QName mName;
 
 		/** The m builder. */
 		XProcOptionMetadata.Builder mBuilder;

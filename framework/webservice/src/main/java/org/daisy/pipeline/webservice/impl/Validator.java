@@ -89,7 +89,7 @@ public class Validator {
 			return new ValidationStatus(false,message);
 		}
 
-		XProcScript script = XProcScriptFilter.INSTANCE.filter(unfilteredScript.load());
+		XProcScript script = XProcScriptFilter.withoutOutputs(unfilteredScript.load());
 
 		// inputs
 		ValidationStatus hasAllRequiredInputs = validateJobRequestInputPortData(script.getXProcPipelineInfo().getInputPorts(),
@@ -98,8 +98,9 @@ public class Validator {
                         return hasAllRequiredInputs;
                 }
 		// options
-		ValidationStatus hasAllRequiredOptions = validateJobRequestOptionData(script.getXProcPipelineInfo().getOptions(),
-				doc.getElementsByTagNameNS(NS_DAISY,"option"), script);
+		ValidationStatus hasAllRequiredOptions = validateJobRequestOptionData(
+			XProcScriptFilter.renameOptions(script),
+			doc.getElementsByTagNameNS(NS_DAISY,"option"));
 		
 		// at the moment (dec 2012), we never require outputs to be specified
 		
@@ -126,13 +127,13 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static ValidationStatus validateJobRequestOptionData(Iterable<XProcOptionInfo> options, NodeList nodes, XProcScript script) {
-		Iterator<XProcOptionInfo>it = options.iterator();
+	private static ValidationStatus validateJobRequestOptionData(XProcScript script, NodeList nodes) {
+		Iterator<XProcOptionInfo> options = script.getXProcPipelineInfo().getOptions().iterator();
 		boolean hasAllRequiredArgs = true;
 		List<String> missingArgs = new ArrayList<String>();
 		
-		while (it.hasNext()) {
-			XProcOptionInfo arg = it.next();
+		while (options.hasNext()) {
+			XProcOptionInfo arg = options.next();
 			// skip optional arguments
 			if (arg.isRequired() == false) {
 				continue;

@@ -42,8 +42,9 @@ public class ScriptResource extends AuthenticatedResource {
 				.getScript(scriptId);
 
 		if (unfilteredScript != null) {
-			script =  XProcScriptFilter.INSTANCE
-					.filter(unfilteredScript.load());
+			script = unfilteredScript.load();
+			script = XProcScriptFilter.withoutOutputs(script);
+			script = XProcScriptFilter.renameOptions(script);
 		}
 	}
 

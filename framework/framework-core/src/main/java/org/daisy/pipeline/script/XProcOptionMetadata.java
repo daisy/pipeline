@@ -8,19 +8,6 @@ package org.daisy.pipeline.script;
  */
 public class XProcOptionMetadata {
 
-        /**
-         * The Enum Direction.
-         */
-//      public enum Direction {
-//
-//              /** The INPUT. */
-//              INPUT,
-//              /** The OUTPUT. */
-//              OUTPUT,
-//              /** The NA. */
-//              NA
-//      }
-
         public enum Output {
                 RESULT,
                 TEMP,
@@ -45,9 +32,6 @@ public class XProcOptionMetadata {
         /** if the option is a primary output. */
         final private boolean primary;
 
-        /** The direction. */
-        //final private Direction direction;
-
         final private Output output;
         final private boolean isSequence;
         final private boolean isOrdered;
@@ -64,18 +48,15 @@ public class XProcOptionMetadata {
          *            the type
          * @param mediaType
          *            the media type
-         * @param direction
-         *            the direction
          */
         private XProcOptionMetadata(String niceName, String description,
-                        String type, String mediaType, /*Direction direction,*/ Output output,
+                        String type, String mediaType, Output output,
                         boolean sequence, boolean ordered, String separator, boolean primary) {
                 super();
                 this.niceName = niceName;
                 this.description = description;
                 this.type = type;
                 this.mediaType = mediaType;
-                //this.direction = direction;
                 this.output = output;
                 this.isSequence = sequence;
                 this.isOrdered = ordered;
@@ -119,15 +100,6 @@ public class XProcOptionMetadata {
                 return mediaType;
         }
 
-        /**
-         * Gets the direction, if {@link Direction} is output it should be a uri with type AnyFileURI or AnyDirURI, input may be other any c:type.
-         *
-         * @return the direction
-         */
-/*      public Direction getDirection() {
-                return direction;
-        }
-*/
         public Output getOutput() {
                 return output;
         }
@@ -163,9 +135,6 @@ public class XProcOptionMetadata {
 
                 /** The media type. */
                 private String mediaType;
-
-                /** The direction. */
-//        private Direction direction;
 
                 // specify some defaults for optional attributes
 
@@ -284,7 +253,7 @@ public class XProcOptionMetadata {
                  */
                 public XProcOptionMetadata build() {
                         return new XProcOptionMetadata(niceName, description, type,
-                                        mediaType, /*direction,*/ output, sequence, ordered, separator, primary);
+                                        mediaType, output, sequence, ordered, separator, primary);
                 }
 
 
