@@ -14,7 +14,7 @@ it from
 
 {% assign stable = all | where:'state','stable' %}
 
-## Latest official version: {{ stable.last.version }}
+## Latest version: {{ stable.last.version }}
 
 {{ stable.last.description }}
 
@@ -30,10 +30,11 @@ it from
 
 ## Latest update: {{ updates.last.version }}
 
-No downloads are available for this release, but you can get it
-through the updater tool. See the
-[installation instructions](http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation#updater)
-for more info.
+No downloads are available for this release. You can install it
+through the updater tool. See the [installation
+instructions](http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation#updater)
+for more info. Please contact us if you would like us to provide
+downloads for this update.
 
 {% endif %}
 
