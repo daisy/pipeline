@@ -1,0 +1,13 @@
+language: java
+before_install:
+- source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
+script: mvn verify
+after_success:
+- source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/after_success)
+branches:
+  only:
+  - master
+env:
+  global:
+  - secure: DBFVBFdVt2ehMW62VOYWAGkBCQjA8gVu5CKF5y3Z+atXbTSuiTvF8vp5IAKuRp9vxcYnzgQ/Vb9HMs5OEM6RLyClGRV65qXVXTRXGKwmrl4VeWWcvPDK71M4oKoQgb3WAD6b0EMY9V9r/UVxBgPS0tN80pDpmtmbJlex50YsFok=
+  - secure: cENnpd5yjwqWbTarFbdUAPqhr/p4VEm3fMsmah6+J+oOCIYWFE/lP3B1dsuAXWKHaDfJKpwhboH29XM2I0BwSomMm20KEBblS2L/5ceamj+9yemdiFO7OmmEXxcIMCT+ibgQxBNTG1kci1k2lvpWKtuF4g1HZmQdPBjE886G3e8=

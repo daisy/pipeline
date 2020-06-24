@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:liblouis/liblouis-java.git
+	branch = master
+	commit = 6f22ff1a9e48a5b5a28f8223ca33561683cc8b25
+	parent = 5a338d5ca029537686f99fb10082a7cb86a574fc
+	cmdver = 0.3.1
