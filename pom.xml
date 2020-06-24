@@ -23,6 +23,7 @@
     <module>utils/xproc-maven-plugin</module>
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
+    <module>libs/liblouis-java</module>
     <module>libs/jhyphen</module>
     <module>libs/osgi-libs</module>
     <module>framework</module>
