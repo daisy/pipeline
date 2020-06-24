@@ -106,10 +106,6 @@ public class DetailsPane extends VBox {
 		settingsLabel.getStyleClass().add("subtitle");
 		jobInfoGrid.addRow(settingsLabel);
 		
-		for (ScriptFieldAnswer answer : boundScript.getInputFields()) {
-			addScriptFieldAnswer(answer);
-		}
-		
 		for (ScriptFieldAnswer answer : boundScript.getRequiredOptionFields()) {
 			addScriptFieldAnswer(answer);
 		}

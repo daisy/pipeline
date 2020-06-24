@@ -181,9 +181,6 @@ public class NewJobPane extends VBox {
                 
                 scriptInfoBox.populate(boundScript.getScript());
                 
-                for (ScriptFieldAnswer input : boundScript.getInputFields()) {
-                        addInputField(input);
-                }
                 for (ScriptFieldAnswer option : boundScript.getRequiredOptionFields()) {
                         addOptionField(option);
                 }
@@ -202,36 +199,35 @@ public class NewJobPane extends VBox {
         }
         
         
-        private void addInputField(ScriptFieldAnswer answer) {
-                if (answer.getField().isSequence()) {
-                        scriptFormControlsGrid.addFileDirPickerSequence((ScriptFieldAnswer.ScriptFieldAnswerList)answer);
-                }
-                else {
-                        scriptFormControlsGrid.addFileDirPicker((ScriptFieldAnswer.ScriptFieldAnswerString)answer);
-                }
-        }
-
         private void addOptionField(ScriptFieldAnswer answer) {
-                DataType fieldDataType = answer.getField().getDataType();
-                if (fieldDataType == DataType.FILE || fieldDataType == DataType.DIRECTORY) {
+                switch (answer.getField().getFieldType()) {
+                case OUTPUT:
+                        throw new RuntimeException();
+                case INPUT:
                         if (answer.getField().isSequence()) {
-                                scriptFormControlsGrid.addFileDirPickerSequence((ScriptFieldAnswer.ScriptFieldAnswerList)answer);
+                            scriptFormControlsGrid.addFileDirPickerSequence((ScriptFieldAnswer.ScriptFieldAnswerList)answer);
+                        } else {
+                            scriptFormControlsGrid.addFileDirPicker((ScriptFieldAnswer.ScriptFieldAnswerString)answer);
                         }
-                        else {
-                                scriptFormControlsGrid.addFileDirPicker((ScriptFieldAnswer.ScriptFieldAnswerString)answer);
+                        break;
+                case OPTION:
+                        DataType fieldDataType = answer.getField().getDataType();
+                        if (fieldDataType == DataType.FILE || fieldDataType == DataType.DIRECTORY) {
+                                if (answer.getField().isSequence()) {
+                                        scriptFormControlsGrid.addFileDirPickerSequence((ScriptFieldAnswer.ScriptFieldAnswerList)answer);
+                                }
+                                else {
+                                        scriptFormControlsGrid.addFileDirPicker((ScriptFieldAnswer.ScriptFieldAnswerString)answer);
+                                }
+                        } else if (fieldDataType == DataType.BOOLEAN) {
+                                scriptFormControlsGrid.addCheckbox((ScriptFieldAnswer.ScriptFieldAnswerBoolean)answer);
+                        } else {
+                                if (answer.getField().isSequence()) {
+                                        scriptFormControlsGrid.addTextFieldSequence((ScriptFieldAnswer.ScriptFieldAnswerList)answer);
+                                } else {
+                                        scriptFormControlsGrid.addTextField((ScriptFieldAnswer.ScriptFieldAnswerString)answer);
+                                }
                         }
-                }
-                else if (fieldDataType == DataType.BOOLEAN) {
-                        scriptFormControlsGrid.addCheckbox((ScriptFieldAnswer.ScriptFieldAnswerBoolean)answer);
-                }
-                else {
-                        if (answer.getField().isSequence()) {
-                                scriptFormControlsGrid.addTextFieldSequence((ScriptFieldAnswer.ScriptFieldAnswerList)answer);
-                        }
-                        else {
-                                scriptFormControlsGrid.addTextField((ScriptFieldAnswer.ScriptFieldAnswerString)answer);
-                        }
-                        
                 }
         }
         

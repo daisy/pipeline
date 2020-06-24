@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.pipeline.gui.databridge.ScriptField.FieldType;
 import org.daisy.pipeline.gui.MainWindow;
 import org.daisy.pipeline.gui.ServiceRegistry;
 import org.daisy.pipeline.job.Job;
@@ -91,16 +92,16 @@ public class DataManager {
 	public BoundScript cloneBoundScript(BoundScript boundScript) {
 		BoundScript newBoundScript = new BoundScript(boundScript.getScript());
 		
-		for (ScriptFieldAnswer answer : boundScript.getInputFields()) {
-			ScriptFieldAnswer newAnswer = newBoundScript.getInputByName(answer.getField().getName());
-			copyAnswer(newAnswer, answer);
-		}
 		for (ScriptFieldAnswer answer : boundScript.getRequiredOptionFields()) {
-			ScriptFieldAnswer newAnswer = newBoundScript.getOptionByName(answer.getField().getName());
+			ScriptFieldAnswer newAnswer = answer.getField().getFieldType() == FieldType.INPUT
+				? newBoundScript.getInputByName(answer.getField().getName())
+				: newBoundScript.getOptionByName(answer.getField().getName());
 			copyAnswer(newAnswer, answer);
 		}
 		for (ScriptFieldAnswer answer : boundScript.getOptionalOptionFields()) {
-			ScriptFieldAnswer newAnswer = newBoundScript.getOptionByName(answer.getField().getName());
+			ScriptFieldAnswer newAnswer = answer.getField().getFieldType() == FieldType.INPUT
+				? newBoundScript.getInputByName(answer.getField().getName())
+				: newBoundScript.getOptionByName(answer.getField().getName());
 			copyAnswer(newAnswer, answer);
 		}
 		

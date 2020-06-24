@@ -8,26 +8,22 @@ import javafx.collections.ObservableList;
 
 import org.daisy.pipeline.gui.databridge.ScriptFieldAnswer;
 import org.daisy.pipeline.gui.databridge.ScriptField.DataType;
+import org.daisy.pipeline.gui.databridge.ScriptField.FieldType;
 
 public class BoundScript {
 	
 	private Script script;
-	private ObservableList<ScriptFieldAnswer> inputAnswers;
 	private ObservableList<ScriptFieldAnswer> requiredOptionAnswers;
 	private ObservableList<ScriptFieldAnswer> optionalOptionAnswers;
 	
 	public BoundScript(Script script) {
 		this.script = script;
-		this.inputAnswers = FXCollections.observableArrayList();
 		this.requiredOptionAnswers = FXCollections.observableArrayList();
 		this.optionalOptionAnswers = FXCollections.observableArrayList();
 		createAnswers();
 	}
 	public Script getScript() {
 		return script;
-	}
-	public Iterable<ScriptFieldAnswer> getInputFields() {
-		return inputAnswers;
 	}
 	public Iterable<ScriptFieldAnswer> getRequiredOptionFields() {
 		return requiredOptionAnswers;
@@ -37,22 +33,26 @@ public class BoundScript {
 	}
 	
 	public ScriptFieldAnswer getInputByName(String name) {
-		return findByName(inputAnswers, name);
+		ScriptFieldAnswer answer = findByNameAndType(requiredOptionAnswers, FieldType.INPUT, name);
+		if (answer == null) {
+			return findByNameAndType(optionalOptionAnswers, FieldType.INPUT, name);
+		} else {
+			return answer;
+		}
 	}
 	public ScriptFieldAnswer getOptionByName(String name) {
-		// look in both lists
-		ScriptFieldAnswer answer = findByName(requiredOptionAnswers, name);
+		ScriptFieldAnswer answer = findByNameAndType(requiredOptionAnswers, FieldType.OPTION, name);
 		if (answer == null) {
-			return findByName(optionalOptionAnswers, name);
-		}
-		else {
+			return findByNameAndType(optionalOptionAnswers, FieldType.OPTION, name);
+		} else {
 			return answer;
 		}
 	}
 	
-	private ScriptFieldAnswer findByName(Iterable<ScriptFieldAnswer> list, String name) {
+	private ScriptFieldAnswer findByNameAndType(Iterable<ScriptFieldAnswer> list, FieldType type, String name) {
 		for (ScriptFieldAnswer answer : list) {
-			if (answer.getField().getName().equals(name)) {
+			if (answer.getField().getFieldType() == type
+			    && answer.getField().getName().equals(name)) {
 				return answer;
 			}
 		}
@@ -60,11 +60,6 @@ public class BoundScript {
 	}
 	
 	private void createAnswers() {
-		for (ScriptField field : script.getInputFields()) {
-			ScriptFieldAnswer answer = createAnswer(field);
-			inputAnswers.add(answer);
-		}
-
 		for (ScriptField field : script.getRequiredOptionFields()) {
 			ScriptFieldAnswer answer = createAnswer(field);
 			requiredOptionAnswers.add(answer);

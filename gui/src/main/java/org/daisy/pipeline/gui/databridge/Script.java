@@ -17,13 +17,11 @@ public class Script {
         private String id;
         private String name;
         private String description;
-        private ArrayList<ScriptField> inputFields;
         private ArrayList<ScriptField> requiredOptionFields;
         private ArrayList<ScriptField> optionalOptionFields;
         private XProcScript xprocScript;
         
         public Script(String id, XProcScript script, DatatypeRegistry datatypeRegistry) {
-                inputFields = new ArrayList<ScriptField>();
                 requiredOptionFields = new ArrayList<ScriptField>();
                 optionalOptionFields = new ArrayList<ScriptField>();
                 xprocScript = script;
@@ -36,7 +34,11 @@ public class Script {
                 for (XProcPortInfo portInfo : scriptInfo.getInputPorts()) {
                         XProcPortMetadata metadata = script.getPortMetadata(portInfo.getName());
                         ScriptField field = new ScriptField(portInfo, metadata, ScriptField.FieldType.INPUT);
-                        inputFields.add(field);
+                        if (field.isRequired()) {
+                                requiredOptionFields.add(field);
+                        } else {
+                                optionalOptionFields.add(field);
+                        }
                 }
                 
                 for (XProcOptionInfo optionInfo : scriptInfo.getOptions()) {
@@ -60,9 +62,6 @@ public class Script {
         }
         public String getDescription() {
                 return description;
-        }
-        public Iterable<ScriptField> getInputFields() {
-                return inputFields;
         }
         public Iterable<ScriptField> getRequiredOptionFields() {
                 return requiredOptionFields;

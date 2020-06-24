@@ -89,8 +89,10 @@ public class JobExecutor {
                                         (ScriptFieldAnswer.ScriptFieldAnswerString)answer;
                         String value = answer_.answerProperty().get();
                         if (type == FieldType.INPUT) {
+                            if (!"".equals(value) || answer.getField().isRequired()) {
                                 LazySaxSourceProvider prov = new LazySaxSourceProvider(new File(value).toURI().toString());
-                    builder.withInput(name, prov);
+                                builder.withInput(name, prov);
+                            }
                         }
                         else {
                                 if (!"".equals(value) && (dataType==DataType.DIRECTORY || dataType == DataType.FILE)){

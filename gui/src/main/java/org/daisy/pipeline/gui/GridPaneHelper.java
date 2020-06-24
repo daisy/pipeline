@@ -424,7 +424,9 @@ public class GridPaneHelper extends GridPane {
                 final TextField textField = new TextField();
                 textField.textProperty().bindBidirectional(answer.answerProperty());
                 label.setLabelFor(textField);
-                textField.setTooltip(new Tooltip(answer.getField().getDescription().split("\\r?\\n")[0]));
+                String desc = answer.getField().getDescription();
+                if (desc != null)
+                    textField.setTooltip(new Tooltip(desc.split("\\r?\\n")[0]));
                 addRow(vbox, textField);
                 makeHelpText(answer,vbox);
                 

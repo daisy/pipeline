@@ -23,16 +23,12 @@ public class ScriptValidator {
 		messages = FXCollections.observableArrayList();
 	}
 	public boolean validate() {
-		boolean inputsAreValid = checkFields(boundScript.getInputFields());
 		boolean reqOptionsAreValid = checkFields(boundScript.getRequiredOptionFields());
 		// validate the optional options just to get any messages about their values
 		// for example, a file path might be expected
 		checkFields(boundScript.getOptionalOptionFields());
-                
-		
-                logger.debug("Inputs "+inputsAreValid);
-                logger.debug("reqOptionsAreValid "+reqOptionsAreValid);
-		return inputsAreValid && reqOptionsAreValid;
+		logger.debug("reqOptionsAreValid "+reqOptionsAreValid);
+		return reqOptionsAreValid;
 		
 	}
 	public ObservableList<String> getMessages() {
