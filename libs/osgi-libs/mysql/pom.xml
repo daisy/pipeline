@@ -41,7 +41,7 @@
   <properties>
     <lib.groupId>mysql</lib.groupId>
     <lib.artifactId>mysql-connector-java</lib.artifactId>
-    <lib.version>5.1.21</lib.version>
+    <lib.version>8.0.16</lib.version>
   </properties>
   <dependencies>
     <dependency>
