@@ -7,9 +7,10 @@ import java.util.Map;
 import java.util.Random;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.common.properties.PropertyPublisher;
-import org.daisy.common.properties.PropertyPublisherFactory;
-import org.daisy.common.properties.PropertyTracker;
+
+import org.daisy.common.spi.CreateOnStart;
+import org.daisy.common.spi.ServiceLoader;
+
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.Job;
@@ -22,9 +23,7 @@ import org.daisy.pipeline.webserviceutils.Properties;
 import org.daisy.pipeline.webserviceutils.Routes;
 import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.launch.Framework;
+
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
@@ -33,17 +32,24 @@ import org.restlet.data.Protocol;
 import org.restlet.routing.Router;
 import org.restlet.routing.TemplateRoute;
 import org.restlet.routing.Variable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.launch.Framework;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+// FIXME: For some reason, without OSGi, this class does not support stopping an instance and then
+// starting another.
 
 /**
  * The Class PipelineWebService.
@@ -69,11 +75,7 @@ public class PipelineWebService extends Application {
         private WebserviceStorage webserviceStorage;
         private CallbackHandler callbackHandler = null;
 
-        private PropertyPublisher propertyPublisher;
         private long shutDownKey=0L;
-
-        private BundleContext bundleCtxt;
-
 
         private Component component;
 
@@ -113,7 +115,6 @@ public class PipelineWebService extends Application {
                 router.attach(Routes.CLIENTS_ROUTE, ClientsResource.class);
                 router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
                 router.attach(Routes.HALT_ROUTE, HaltResource.class);
-                router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class  );
                 router.attach(Routes.SIZES_ROUTE, SizesResource.class  );
                 router.attach(Routes.QUEUE_ROUTE, QueueResource.class  );
                 router.attach(Routes.QUEUE_UP_ROUTE, QueueUpResource.class  );
@@ -127,14 +128,12 @@ public class PipelineWebService extends Application {
          * Inits the WS.
          */
         @Activate
-        public void init(BundleContext ctxt) {
-                bundleCtxt=ctxt;
-                this.conf.publishConfiguration(this.propertyPublisher);
+        public void init() {
                 if (!checkAuthenticationSanity()){
 
                         try {
                                 this.halt();
-                        } catch (BundleException e) {
+                        } catch (Exception e) {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
                         return;
@@ -227,7 +226,6 @@ public class PipelineWebService extends Application {
                 return true;
 
         }
-                
 
         private void generateStopKey() throws IOException {
                 shutDownKey = new Random().nextLong();
@@ -238,17 +236,23 @@ public class PipelineWebService extends Application {
                 logger.info("Shutdown key stored to: "+System.getProperty("java.io.tmpdir")+File.separator+KEY_FILE_NAME);
         }
 
-        public boolean shutDown(long key) throws BundleException{
+        public boolean shutDown(long key) {
                 if(key==shutDownKey){
                         halt();
                         return true;
                 }
                 return false;
+        }
 
+        /* FIXME: depending on how the application is invoked, this may not be the desired effect of
+         * calling halt */
+        private void halt() {
+                if (OSGiHelper.inOSGiContext())
+                        OSGiHelper.stopFramework();
+                else
+                        System.exit(0);
         }
-        private void halt() throws BundleException{
-                        ((Framework)bundleCtxt.getBundle(0)).stop();
-        }
+
         /**
          * Close.
          * @throws Exception
@@ -260,9 +264,7 @@ public class PipelineWebService extends Application {
                         this.component.stop();
                 this.stop();
                 logger.info("Webservice stopped.");
-
         }
-
 
         /**
          * Gets the job manager.
@@ -370,33 +372,6 @@ public class PipelineWebService extends Application {
         }
 
         @Reference(
-           name = "PropertyPublisherFactory",
-           unbind = "unsetPropertyPublisherFactory",
-           service = PropertyPublisherFactory.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.DYNAMIC
-        )
-        public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-                this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher(); 
-        }
-
-        public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-                this.propertyPublisher=propertyPublisherFactory.newPropertyPublisher(); 
-                this.conf.unpublishConfiguration(this.propertyPublisher);
-                this.propertyPublisher=null;
-        }
-        /**
-         * Gets the client store
-         *
-         * @return the client store
-         */
-        public PropertyTracker getPropertyTracker(){
-                if(this.propertyPublisher == null)
-                        return null;
-                return this.propertyPublisher.getTracker();
-        }
-
-        @Reference(
            name = "datatype-registry",
            unbind = "-",
            service = DatatypeRegistry.class,
@@ -410,4 +385,51 @@ public class PipelineWebService extends Application {
                 return this.datatypeRegistry;
         }
 
+        /**
+         * Main method to launch the web service.
+         */
+        public static void main(String[] args) {
+                if (args.length > 0) {
+                        logger.error("No arguments expected");
+                        System.exit(1);
+                }
+                PipelineWebService webservice = SPIHelper.createWebService();
+                if (webservice == null)
+                        System.exit(1);
+                System.err.println("Press Ctrl-C to exit");
+                // program does not exit until last thread has finished
+        }
+
+        // static nested class in order to delay class loading
+        private static abstract class OSGiHelper {
+
+                static boolean inOSGiContext() {
+                        try {
+                                return FrameworkUtil.getBundle(OSGiHelper.class) != null;
+                        } catch (NoClassDefFoundError e) {
+                                return false;
+                        }
+                }
+
+                /* Stop Felix */
+                static void stopFramework() {
+                        try {
+                                ((Framework)FrameworkUtil.getBundle(OSGiHelper.class).getBundleContext().getBundle(0)).stop();
+                        } catch (BundleException e) {
+                                throw new RuntimeException(e);
+                        }
+                }
+        }
+
+        // static nested class in order to delay class loading
+        private static abstract class SPIHelper {
+
+                static PipelineWebService createWebService() {
+                        PipelineWebService webservice = null;
+                        for (CreateOnStart o : ServiceLoader.load(CreateOnStart.class))
+                                if (webservice == null && o instanceof PipelineWebService)
+                                        webservice = (PipelineWebService)o;
+                        return webservice;
+                }
+        }
 }

@@ -21,7 +21,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "datatype-registry",
-    immediate = true,
     service = { DatatypeRegistry.class }
 )
 public class DefaultDatatypeRegistry implements DatatypeRegistry {

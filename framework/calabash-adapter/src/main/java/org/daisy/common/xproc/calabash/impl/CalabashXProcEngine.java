@@ -4,8 +4,6 @@ import java.net.URI;
 
 import javax.xml.transform.URIResolver;
 
-import org.daisy.common.properties.PropertyPublisher;
-import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcInput;
@@ -13,11 +11,12 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
+
 import org.daisy.pipeline.event.EventBusProvider;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.xml.sax.EntityResolver;
 
 import org.osgi.service.component.annotations.Activate;
@@ -163,32 +162,4 @@ public class CalabashXProcEngine implements XProcEngine {
 	public void setEventBusProvider(EventBusProvider eventBusProvider){
 		this.eventBusProvider=eventBusProvider;
 	}
-
-	@Reference(
-		name = "PropertyPublisherFactory",
-		unbind = "unsetPropertyPublisherFactory",
-		service = PropertyPublisherFactory.class,
-		cardinality = ReferenceCardinality.OPTIONAL,
-		policy = ReferencePolicy.DYNAMIC
-	)
-	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
-		//the property publishing step goes here
-		propertyPublisher.publish("org.daisy.pipeline.xproc.configuration" ,Properties.getProperty("org.daisy.pipeline.xproc.configuration" ),this.getClass());
-		propertyPublisher.publish("com.xmlcalabash.config.jar" ,System.getProperty("com.xmlcalabash.config.jar","true" ),this.getClass());
-		propertyPublisher.publish("com.xmlcalabash.config.home" ,System.getProperty("com.xmlcalabash.config.home","true" ),this.getClass());
-		propertyPublisher.publish("com.xmlcalabash.config.cwd" ,System.getProperty("com.xmlcalabash.config.cwd","true" ),this.getClass());
-
-	}
-	public void unsetPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
-		logger.debug("entering");
-		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
-		//the property unpublishing step goes here
-		propertyPublisher.unpublish("org.daisy.pipeline.xproc.configuration" , this.getClass());
-		propertyPublisher.unpublish("com.xmlcalabash.config.jar"             , this.getClass());
-		propertyPublisher.unpublish("com.xmlcalabash.config.home"            , this.getClass());
-		propertyPublisher.unpublish("com.xmlcalabash.config.cwd"             , this.getClass());
-
-	}
-
 }

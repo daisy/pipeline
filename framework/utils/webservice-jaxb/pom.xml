@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>webservice-jaxb</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>2.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Web Service JAXB Generated Classes</name>
   <dependencies>

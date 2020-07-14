@@ -58,4 +58,9 @@
         </p:otherwise>
     </p:choose>
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">progress-messages</h1>
+        <p px:role="desc">progress-messages</p>
+    </p:documentation>
+    
 </p:declare-step>

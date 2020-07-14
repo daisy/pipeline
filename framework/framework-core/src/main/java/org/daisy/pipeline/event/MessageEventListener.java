@@ -21,7 +21,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  */
 @Component(
 	name = "event-bus-listener",
-	immediate = true,
 	service = { MessageEventListener.class }
 )
 public class MessageEventListener {

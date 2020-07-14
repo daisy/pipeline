@@ -12,7 +12,9 @@ import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.event.MessageStorage;
 import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.persistence.impl.Database;
+import org.daisy.pipeline.properties.Properties;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -20,10 +22,12 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "persistent-message-storage",
-	immediate = true,
 	service = { MessageStorage.class }
 )
 public class PersistentMessageStorage implements MessageStorage {
+
+	private static final boolean PERSISTENCE_DISABLED = "false".equalsIgnoreCase(
+		Properties.getProperty("org.daisy.pipeline.persistence"));
 
 	private EntityManagerFactory emf;
 	private Database database;
@@ -40,6 +44,15 @@ public class PersistentMessageStorage implements MessageStorage {
 	public synchronized void setEntityManagerFactory(EntityManagerFactory emf) {
 		this.emf = emf;
 		this.database = new Database(emf);
+	}
+
+	/**
+	 * @throws RuntimeException if persistent storage is disabled through the org.daisy.pipeline.persistence system property.
+	 */
+	@Activate
+	protected void activate() throws RuntimeException {
+		if (PERSISTENCE_DISABLED)
+			throw new RuntimeException("Persistent storage is disabled");
 	}
 
 	@Override

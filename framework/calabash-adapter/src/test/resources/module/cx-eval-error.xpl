@@ -21,4 +21,9 @@
         </p:input>
     </cx:eval>
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">cx-eval-error</h1>
+        <p px:role="desc">cx-eval-error</p>
+    </p:documentation>
+    
 </p:declare-step>

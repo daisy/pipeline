@@ -59,7 +59,7 @@ public class URLsTest extends AbstractTest {
 				URLs.getResourceFromJAR("/unexisting", context);
 				fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("resource does not exist", e.getMessage()); }
+				assertEquals("file does not exist", e.getMessage()); }
 			try {
 				URLs.getResourceFromJAR("/dir/file1/", context);
 				fail("expected RuntimeException"); }
@@ -87,7 +87,7 @@ public class URLsTest extends AbstractTest {
 				URLs.getResourceFromJAR("/unexisting", context);
 				fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("resource does not exist", e.getMessage()); }
+				assertEquals("file does not exist", e.getMessage()); }
 			try {
 				URLs.getResourceFromJAR("/org/daisy/common/file/URLs.class/", context);
 				fail("expected RuntimeException"); }
@@ -121,7 +121,7 @@ public class URLsTest extends AbstractTest {
 				URLs.getResourceFromJAR("/unexisting", context);
 				fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("resource does not exist", e.getMessage()); }
+				assertEquals("file does not exist", e.getMessage()); }
 			try {
 				URLs.getResourceFromJAR("/com/google/common/base/Function.class/", context);
 				fail("expected RuntimeException"); }
@@ -153,7 +153,7 @@ public class URLsTest extends AbstractTest {
 				URLs.listResourcesFromJAR("/unexisting", context);
 				fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("directory does not exist", e.getMessage()); }
+				assertEquals("file does not exist", e.getMessage()); }
 			try {
 				URLs.listResourcesFromJAR("/dir/file1", context);
 				fail("expected RuntimeException"); }
@@ -174,7 +174,7 @@ public class URLsTest extends AbstractTest {
 				URLs.listResourcesFromJAR("/unexisting", context);
 				fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("directory does not exist", e.getMessage()); }
+				assertEquals("file does not exist", e.getMessage()); }
 			try {
 				URLs.listResourcesFromJAR("/org/daisy/common/file/URLs.class", context);
 				fail("expected RuntimeException"); }
@@ -196,7 +196,7 @@ public class URLsTest extends AbstractTest {
 				URLs.listResourcesFromJAR("/unexisting", context);
 				fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("directory does not exist", e.getMessage()); }
+				assertEquals("file does not exist", e.getMessage()); }
 			try {
 				URLs.listResourcesFromJAR("/com/google/common/base/Function.class", context);
 				fail("expected RuntimeException"); }

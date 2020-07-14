@@ -15,4 +15,9 @@
         </p:input>
     </p:identity>
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">xproc-warning</h1>
+        <p px:role="desc">xproc-warning</p>
+    </p:documentation>
+    
 </p:declare-step>

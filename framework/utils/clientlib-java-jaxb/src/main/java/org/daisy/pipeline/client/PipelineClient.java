@@ -28,7 +28,6 @@ import org.daisy.pipeline.webservice.jaxb.clients.Clients;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.JobSizes;
 import org.daisy.pipeline.webservice.jaxb.job.Jobs;
-import org.daisy.pipeline.webservice.jaxb.properties.Properties;
 import org.daisy.pipeline.webservice.jaxb.queue.Queue;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 import org.daisy.pipeline.webservice.jaxb.script.Scripts;
@@ -158,9 +157,6 @@ public class PipelineClient {
         }
         public Client client(String id) throws Exception{
                 return this.get(String.format("admin/clients/%s",id),Client.class);
-        }
-        public Properties properties() throws Exception{
-                return this.get("admin/properties",Properties.class);
         }
         public JobSizes sizes() throws Exception{
                 return this.get("admin/sizes",JobSizes.class);

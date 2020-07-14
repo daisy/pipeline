@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import javax.inject.Inject;
 import javax.xml.transform.Result;
 
@@ -27,7 +28,7 @@ import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.junit.AbstractTest;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
+import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -37,10 +38,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemPackage;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
@@ -51,19 +48,19 @@ import org.slf4j.LoggerFactory;
 public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	
 	@Inject
-	JobManagerFactory jobManagerFactory;
+	public JobManagerFactory jobManagerFactory;
 	
 	@Inject
-	WebserviceStorage webserviceStorage;
+	public WebserviceStorage webserviceStorage;
 	
 	@Inject
-	ScriptRegistry scriptRegistry;
+	public ScriptRegistry scriptRegistry;
 	
 	@Inject
-	EventBusProvider eventBusProvider;
+	public EventBusProvider eventBusProvider;
 	
 	@Inject
-	JobMonitorFactory jobMonitorFactory;
+	public JobMonitorFactory jobMonitorFactory;
 	
 	// Test that progress messages work also with persistent storage
 	@Test
@@ -178,10 +175,21 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		};
 	}
 	
-	static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp2");
+	static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
 	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 	
-	private static void setup() {
+	@Override
+	protected Properties systemProperties() {
+		Properties p = new Properties();
+		p.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.persistence", "true");
+		p.setProperty("derby.stream.error.file", new File(PIPELINE_DATA, "log/derby.log").getAbsolutePath());
+		return p;
+	}
+
+	@OSGiLessConfiguration
+	public void setup() {
 		try {
 			FileUtils.deleteDirectory(PIPELINE_BASE);
 			new File(PIPELINE_DATA, "log").mkdirs();
@@ -192,31 +200,8 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 
 	@Override @Configuration
 	public Option[] config() {
-		
-		// framework started once for whole class, so initialize only once
-		// calling this code from config() is the only way to achieve this (@BeforeClass does not
-		// work, nor does a static {} block)
 		setup();
-		return options(
-			composite(super.config()),
-			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()),
-			systemProperty("org.daisy.pipeline.data").value(PIPELINE_DATA.getAbsolutePath()),
-			systemProperty("derby.stream.error.file").value(new File(PIPELINE_DATA, "log/derby.log").getAbsolutePath()),
-			
-			// for derby
-			mavenBundle("org.eclipse:org.eclipse.gemini.jpa:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.derby:?"),
-			mavenBundle("org.eclipse.gemini:org.eclipse.gemini.dbaccess.util:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.asm:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.antlr:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.core:?"),
-			mavenBundle("org.eclipse.persistence:org.eclipse.persistence.jpa:?"),
-			mavenBundle("org.eclipse.persistence:javax.persistence:?"),
-			mavenBundle("org.eclipse.gemini:org.apache.derby:?"),
-			mavenBundle("org.osgi:org.osgi.enterprise:5.0.0"),
-			
-			systemPackage("javax.transaction")
-		);
+		return super.config();
 	}
 	
 	@ProbeBuilder

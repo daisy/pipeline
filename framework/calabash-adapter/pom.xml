@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>calabash-adapter</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>4.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Calabash adapter for the XProc API</name>
@@ -68,25 +68,6 @@
       <scope>runtime</scope>
     </dependency>
     <!--
-        runtime dependencies for com.xmlcalabash (OSGi) (FIXME: move to org.daisy.libs:com.xmlcalabash)
-    -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>jing</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-    <!--
         test dependencies
     -->
     <dependency>
@@ -102,7 +83,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -118,51 +98,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>persistence-derby</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>org.eclipse.gemini.jpa</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.gemini</groupId>
-      <artifactId>org.apache.derby</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.gemini</groupId>
-      <artifactId>org.eclipse.gemini.dbaccess.derby</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.gemini</groupId>
-      <artifactId>org.eclipse.gemini.dbaccess.util</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>org.eclipse.persistence.asm</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>org.eclipse.persistence.antlr</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>org.eclipse.persistence.core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>org.eclipse.persistence.jpa</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -196,11 +131,9 @@
           </execution>
         </executions>
       </plugin>
-      <!--
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
         <executions>
           <execution>
             <id>process-test-catalog</id>
@@ -211,7 +144,6 @@
           </execution>
         </executions>
       </plugin>
-      -->
       <plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
@@ -229,8 +161,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <reuseForks>false</reuseForks>
           <systemPropertyVariables>
             <pax.exam.logging>none</pax.exam.logging>
+            <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
           </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
@@ -249,6 +183,29 @@
               <includes>
                 org.daisy.common.xproc.calabash.impl.CalabashXProcEngine,
                 org.daisy.common.xproc.calabash.impl.DynamicXProcConfigurationFactory
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-spi-test-classes</id>
+            <phase>process-test-sources</phase>
+            <goals>
+              <goal>generate-spi-test-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                JavaFunction,
+                JavaStep$Provider,
+                org.daisy.pipeline.script.impl.XProcScript_catch_xproc_error,
+                org.daisy.pipeline.script.impl.XProcScript_catch_xslt_terminate_error,
+                org.daisy.pipeline.script.impl.XProcScript_cx_eval_error,
+                org.daisy.pipeline.script.impl.XProcScript_java_function_runtime_error,
+                org.daisy.pipeline.script.impl.XProcScript_java_step_runtime_error,
+                org.daisy.pipeline.script.impl.XProcScript_progress_messages,
+                org.daisy.pipeline.script.impl.XProcScript_xproc_error,
+                org.daisy.pipeline.script.impl.XProcScript_xproc_warning,
+                org.daisy.pipeline.script.impl.XProcScript_xslt_terminate_error,
+                org.daisy.pipeline.script.impl.XProcScript_xslt_warning
               </includes>
             </configuration>
           </execution>

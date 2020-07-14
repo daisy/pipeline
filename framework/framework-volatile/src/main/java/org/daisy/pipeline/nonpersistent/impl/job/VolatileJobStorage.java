@@ -15,6 +15,8 @@ import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.job.RuntimeConfigurator;
+import org.daisy.pipeline.properties.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +26,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -31,13 +34,14 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "volatile-job-storage",
-    immediate = true,
     service = { JobStorage.class }
 )
 public class VolatileJobStorage implements JobStorage {
+
+        private static final boolean VOLATILE_DISABLED = "true".equalsIgnoreCase(
+                Properties.getProperty("org.daisy.pipeline.persistence"));
         private static final Logger logger = LoggerFactory
                         .getLogger(VolatileJobStorage.class);
-
         private Map<JobId, Job> jobs = Collections
                         .synchronizedMap(new HashMap<JobId, Job>());
         private RuntimeConfigurator configurator;
@@ -45,6 +49,15 @@ public class VolatileJobStorage implements JobStorage {
         private Predicate<Job> filter = Predicates.alwaysTrue();
 
         public VolatileJobStorage(){}
+
+        /**
+         * @throws RuntimeException if volatile storage is disabled through the org.daisy.pipeline.persistence system property.
+         */
+        @Activate
+        public void activate() {
+                if (VOLATILE_DISABLED)
+                        throw new RuntimeException("Volatile storage is disabled");
+        }
 
         /**
          * @param bus

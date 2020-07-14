@@ -4,6 +4,7 @@ import javax.persistence.EntityManagerFactory;
 
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.persistence.impl.Database;
+import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.storage.JobConfigurationStorage;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
@@ -18,10 +19,12 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "webservice-storage",
-	immediate = true,
 	service = { WebserviceStorage.class }
 )
 public class PersistentWebserviceStorage implements WebserviceStorage {
+
+	private static final boolean PERSISTENCE_DISABLED = "false".equalsIgnoreCase(
+		Properties.getProperty("org.daisy.pipeline.persistence"));
 	private static final Logger logger = LoggerFactory
 			.getLogger(PersistentWebserviceStorage.class);
 	private ClientStorage clientStore;
@@ -41,9 +44,14 @@ public class PersistentWebserviceStorage implements WebserviceStorage {
 		this.database = new Database(emf);
 	}
 
+	/**
+	 * @throws RuntimeException if persistent storage is disabled through the org.daisy.pipeline.persistence system property.
+	 */
 	@Activate
 	public void activate() {
-		logger.debug("Bringing WebserviceStorage up");
+		if (PERSISTENCE_DISABLED)
+			throw new RuntimeException("Persistent storage is disabled");
+		logger.debug("Bringing PersistentWebserviceStorage up");
 		this.clientStore = new PersistentClientStorage(this.database);
 		this.requestLog = new PersistentRequestLog(this.database);
 		this.jobCnfStorage=new PersistentJobConfigurationStorage(this.database);

@@ -2,13 +2,7 @@ package org.daisy.common.stax;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,138 +26,11 @@ import static javax.xml.stream.XMLStreamConstants.SPACE;
 import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
-import org.daisy.common.transform.TransformerException;
-
-import com.google.common.util.concurrent.SettableFuture;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
 
 public final class XMLStreamWriterHelper {
-	
-	public interface XMLStreamWritable<R> {
-		/**
-		 * @return the writer
-		 */
-		public BaseURIAwareXMLStreamWriter getWriter();
-		/**
-		 * @return the result
-		 */
-		public R doneWriting();
-	}
-	
-	/**
-	 * Collect pushed documents in a list.
-	 *
-	 * @param writables The writable supplier
-	 * @param pusher The transformer
-	 * @return The collected documents
-	 * @throws TransformerException
-	 */
-	public static <R> List<R> collect(Consumer<Supplier<BaseURIAwareXMLStreamWriter>> pusher,Supplier<XMLStreamWritable<R>> writables)
-			throws TransformerException {
-		List<XMLStreamWritable<R>> supplied = new ArrayList<>();
-		pusher.accept(() -> {
-				XMLStreamWritable<R> w = writables.get();
-				supplied.add(w);
-				return w.getWriter();
-			});
-		List<R> collect = new ArrayList<>();
-		for (XMLStreamWritable<R> w : supplied)
-			collect.add(w.doneWriting());
-		return collect;
-	}
-	
-	/**
-	 * Provide a "pull" interface (Iterator) for an object that "pushes" documents.
-	 *
-	 * @param writables The writable supplier
-	 * @param pusher The transformer
-	 * @return The iterator. May throw TransformerException.
-	 */
-	public static <R> Iterator<R> pushToPull(Consumer<Supplier<BaseURIAwareXMLStreamWriter>> pusher, Supplier<XMLStreamWritable<R>> writables) {
-		SettableFuture<Queue<Future<R>>> queue = SettableFuture.create();
-		new Supplier<BaseURIAwareXMLStreamWriter>() {
-				XMLStreamWritable<R> writable;
-				SettableFuture<R> resultNode;
-				public BaseURIAwareXMLStreamWriter get() throws TransformerException {
-					if (resultNode != null)
-						resultNode.set(writable.doneWriting());
-					resultNode = SettableFuture.create();
-					writable = writables.get();
-					if (!queue.isDone()) {
-						Queue<Future<R>> q = new ConcurrentLinkedQueue<>();
-						q.add(resultNode);
-						queue.set(q);
-					} else {
-						try {
-							queue.get().add(resultNode);
-						} catch (ExecutionException | InterruptedException e) {
-							throw new RuntimeException(); // cannot happen
-						}
-					}
-					return writable.getWriter();
-				}
-				void doneWriting() {
-					resultNode.set(writable.doneWriting());
-				}
-				void setException(Throwable e) {
-					resultNode.setException(e);
-				}
-				{
-					new Thread(() -> {
-							try {
-								pusher.accept(this);
-								if (!queue.isDone())
-									queue.set(new ConcurrentLinkedQueue<>());
-								else
-									doneWriting();
-							} catch (TransformerException e) {
-								if (!queue.isDone())
-									queue.setException(e.getCause());
-								else
-									setException(e.getCause());
-							}
-					}).start();
-				}
-			};
-		return new Iterator<R>() {
-			public boolean hasNext() throws TransformerException {
-				try {
-					return !queue.get().isEmpty();
-				} catch (ExecutionException e) {
-					try {
-						throw e.getCause();
-					} catch (RuntimeException ee) {
-						throw ee;
-					} catch (Throwable ee) {
-						throw new RuntimeException(ee);
-					}
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e); // cannot happen
-				}
-			}
-			public R next() throws TransformerException {
-				try {
-					return queue.get().remove().get();
-				} catch (ExecutionException e) {
-					try {
-						throw e.getCause();
-					} catch (RuntimeException ee) {
-						throw ee;
-					} catch (Throwable ee) {
-						throw new RuntimeException(ee);
-					}
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e); // cannot happen
-				}
-			}
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
 	
 	private static QName nodeName(Node node) {
 		String prefix = node.getPrefix();
@@ -269,7 +136,7 @@ public final class XMLStreamWriterHelper {
 					writeElement(writer, reader);
 					break;
 				default:
-					writeEvent(writer, event, reader);
+					writeEvent(writer, reader);
 				}
 			} catch (NoSuchElementException e) {
 				break;
@@ -297,13 +164,13 @@ public final class XMLStreamWriterHelper {
 						return;
 					break;
 				default:
-					writeEvent(writer, event, reader); }}
+					writeEvent(writer, reader); }}
 			catch (NoSuchElementException e) {
 				throw new RuntimeException("coding error"); }
 	}
 	
-	public static void writeEvent(XMLStreamWriter writer, int event, XMLStreamReader reader) throws XMLStreamException {
-		switch (event) {
+	public static void writeEvent(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
+		switch (reader.getEventType()) {
 		case START_DOCUMENT:
 			writer.writeStartDocument();
 			break;

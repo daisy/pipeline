@@ -21,7 +21,7 @@ import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class NewDatabaseTest extends OSGiTestBase {
+public class NewDatabaseTest extends TestBase {
 	
 	@Inject
 	public JobStorage jobStorage;

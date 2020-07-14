@@ -1,7 +1,6 @@
 package org.daisy.common.xproc.calabash;
 
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
 // TODO: Auto-generated Javadoc

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <components xmlns="http://www.osgi.org/xmlns/scr/v1.1.0">
   <component name="mock-script" immediate="true" activate="activate">
-    <implementation class="org.daisy.pipeline.script.impl.XProcScript_px_mock_script"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_mock_script"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -11,7 +11,7 @@
     <property name="script.url" type="String" value="/mock-module/script.xpl"/>
   </component>
   <component name="mock-error-script" immediate="true" activate="activate">
-    <implementation class="org.daisy.pipeline.script.impl.XProcScript_px_mock_error_script"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_mock_error_script"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>
@@ -21,7 +21,7 @@
     <property name="script.url" type="String" value="/mock-module/error-script.xpl"/>
   </component>
   <component name="mock-messages-script" immediate="true" activate="activate">
-    <implementation class="org.daisy.pipeline.script.impl.XProcScript_px_mock_progress_messages"/>
+    <implementation class="org.daisy.pipeline.script.impl.XProcScript_mock_messages_script"/>
     <service>
       <provide interface="org.daisy.pipeline.script.XProcScriptService"/>
     </service>

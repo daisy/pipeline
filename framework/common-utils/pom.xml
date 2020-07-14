@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.1-SNAPSHOT</version>
+    <version>1.13.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>common-utils</artifactId>
-  <version>3.1.1-SNAPSHOT</version>
+  <version>4.0.1-SNAPSHOT</version>
 
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Common Utilities</name>
@@ -42,22 +42,8 @@
       <scope>provided</scope>
     </dependency>
     <!--
-        runtime dependencies for com.xmlcalabash (OSGi) (FIXME: move to org.daisy.libs:com.xmlcalabash)
-    -->
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>jing</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-    <!--
         test dependencies
     -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <dependency>
       <groupId>com.carrotsearch</groupId>
       <artifactId>junit-benchmarks</artifactId>
@@ -86,7 +72,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.build</groupId>
       <artifactId>modules-test-helper</artifactId>
-      <version>1.0.4</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -125,13 +110,8 @@
           <instructions>
             <Import-Package>
               net.sf.saxon.*;version="${saxon.versionRange}",
-              !org.daisy.common.spi,
               *
             </Import-Package>
-            <_dsannotations>
-              org.daisy.common.properties.PropertyPublisherFactory,
-              org.daisy.common.properties.PropertyTracker
-            </_dsannotations>
           </instructions>
         </configuration>
         <executions>
@@ -145,28 +125,10 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-spi-classes</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate-spi-classes</goal>
-            </goals>
-            <configuration>
-              <includes>
-                org.daisy.common.properties.PropertyPublisherFactory,
-                org.daisy.common.properties.PropertyTracker
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <trimStackTrace>false</trimStackTrace>
           <systemPropertyVariables>
             <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
           </systemPropertyVariables>

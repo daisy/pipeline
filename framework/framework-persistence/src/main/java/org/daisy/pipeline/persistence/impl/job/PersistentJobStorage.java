@@ -18,6 +18,7 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.job.RuntimeConfigurator;
 import org.daisy.pipeline.persistence.impl.Database;
+import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -33,10 +35,12 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "persistent-job-storage",
-    immediate = true,
     service = { JobStorage.class }
 )
 public class PersistentJobStorage implements JobStorage {
+
+        private static final boolean PERSISTENCE_DISABLED = "false".equalsIgnoreCase(
+                    Properties.getProperty("org.daisy.pipeline.persistence"));
         private final static String STORE_MODE="javax.persistence.cache.storeMode";
         private static final Logger logger = LoggerFactory
                         .getLogger(PersistentJobStorage.class);
@@ -80,6 +84,14 @@ public class PersistentJobStorage implements JobStorage {
                 PersistentJobContext.setScriptRegistry(scriptRegistry);
         }
 
+        /**
+         * @throws RuntimeException if persistent storage is disabled through the org.daisy.pipeline.persistence system property.
+         */
+        @Activate
+        protected void activate() throws RuntimeException {
+                if (PERSISTENCE_DISABLED)
+                        throw new RuntimeException("Persistent storage is disabled");
+        }
 
         private void checkDatabase() {
                 if (db == null) {

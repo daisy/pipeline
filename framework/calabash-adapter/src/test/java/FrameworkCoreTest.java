@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.xml.transform.Result;
@@ -41,6 +42,8 @@ import com.google.common.eventbus.Subscribe;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
 
+import org.apache.commons.io.FileUtils;
+
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
@@ -54,6 +57,7 @@ import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.junit.AbstractTest;
+import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -63,9 +67,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
@@ -79,19 +80,19 @@ import org.slf4j.LoggerFactory;
 public class FrameworkCoreTest extends AbstractTest {
 	
 	@Inject
-	JobManagerFactory jobManagerFactory;
+	public JobManagerFactory jobManagerFactory;
 	
 	@Inject
-	WebserviceStorage webserviceStorage;
+	public WebserviceStorage webserviceStorage;
 	
 	@Inject
-	ScriptRegistry scriptRegistry;
+	public ScriptRegistry scriptRegistry;
 	
 	@Inject
-	EventBusProvider eventBusProvider;
+	public EventBusProvider eventBusProvider;
 	
 	@Inject
-	JobMonitorFactory jobMonitorFactory;
+	public JobMonitorFactory jobMonitorFactory;
 	
 	@Test
 	public void testCaughtError() throws IOException {
@@ -113,14 +114,14 @@ public class FrameworkCoreTest extends AbstractTest {
 					"^\\Q" +
 					"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
 					"<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
-					  "<c:error code=\"FOO\" href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\"" +
+					  "<c:error code=\"FOO\" href=\"\\E.+\\Q/module/catch-xproc-error.xpl\"" +
 					          " line=\"18\" column=\"18\">" +
 					    "foobar" +
 					    "<px:location xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\">" +
-					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/error.xpl\" line=\"10\"/>" +
-					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\" line=\"19\"/>" +
-					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\" line=\"18\"/>" +
-					      "<px:file href=\"bundle://\\E[^/]+\\Q/module/catch-xproc-error.xpl\" line=\"17\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/error.xpl\" line=\"10\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"19\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"18\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"17\"/>" +
 					    "</px:location>" +
 					  "</c:error>" +
 					"</c:errors>" +
@@ -311,7 +312,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaStep.run(JavaStep.java:56)\n" +
+			                 "	at JavaStep.run(JavaStep.java:57)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
@@ -346,7 +347,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaFunction$1.call(JavaFunction.java:62)\n" +
+			                 "	at JavaFunction$1.call(JavaFunction.java:78)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
 			                 "	at xsl:value-of/@select(java-function-runtime-error.xpl:26)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +
@@ -376,8 +377,8 @@ public class FrameworkCoreTest extends AbstractTest {
 				assertMessage(next(messages), seq++, Message.Level.WARNING,
 				              Predicates.containsPattern("^\\Q" +
 				                  "err:XTDE0540:Ambiguous rule match for /hello\n" +
-				                  "Matches both \"element(Q{}hello)\" on line 21 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\n" +
-				                  "and \"element(Q{}hello)\" on line 17 of bundle://\\E[^/]+\\Q/module/xslt-warning.xpl\\E$"));
+				                  "Matches both \"element(Q{}hello)\" on line 21 of \\E.+\\Q/module/xslt-warning.xpl\n" +
+				                  "and \"element(Q{}hello)\" on line 17 of \\E.+\\Q/module/xslt-warning.xpl\\E$"));
 				Assert.assertFalse(messages.hasNext());
 			} catch (Throwable e) {
 				// print remaining messages
@@ -683,13 +684,29 @@ public class FrameworkCoreTest extends AbstractTest {
 	static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
 	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 
-	@Override @Configuration
-	public Option[] config() {
-		return options(
-			composite(super.config()),
-			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()));
+	@Override
+	protected Properties systemProperties() {
+		Properties p = new Properties();
+		p.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.persistence", "false");
+		return p;
 	}
 	
+	@OSGiLessConfiguration
+	public void setup() {
+		try {
+			FileUtils.deleteDirectory(PIPELINE_BASE);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override @Configuration
+	public Option[] config() {
+		setup();
+		return super.config();
+	}
+
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
 		probe.setHeader("Bundle-Name", "Test module");

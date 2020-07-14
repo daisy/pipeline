@@ -13,9 +13,18 @@ import net.sf.saxon.value.StringValue;
 
 import org.daisy.pipeline.event.EventBusProvider;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(
+	name = "pf:java-function",
+	service = { ExtensionFunctionDefinition.class }
+)
 public class JavaFunction extends ExtensionFunctionDefinition {
 	
 	private static final StructuredQName funcname = new StructuredQName("pf",
@@ -23,6 +32,13 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 	
 	Logger messageBus;
 	
+	@Reference(
+		name = "EventBusProvider",
+		unbind = "-",
+		service = EventBusProvider.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
 	protected void bindEventBus(EventBusProvider eventBusProvider) {
 		messageBus = eventBusProvider.getAsLogger();
 	}

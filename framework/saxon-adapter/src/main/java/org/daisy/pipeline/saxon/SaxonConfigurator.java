@@ -54,7 +54,8 @@ public class SaxonConfigurator {
 		return new ByteArrayInputStream((
 			"<configuration xmlns='http://saxon.sf.net/ns/configuration'>" +
 			"   <global expandAttributeDefaults='false'" +
-			"           lineNumbering='true'/>" +
+			"           lineNumbering='true'" +
+			"           suppressXsltNamespaceCheck='true'/>" +
 			"</configuration>\n"
 			).getBytes(StandardCharsets.UTF_8));
 	}

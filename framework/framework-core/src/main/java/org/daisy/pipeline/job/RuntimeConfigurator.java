@@ -11,7 +11,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "runtime-configurator",
-    immediate = true,
     service = { RuntimeConfigurator.class }
 )
 public class RuntimeConfigurator {

@@ -33,4 +33,9 @@
         </p:input>
     </p:xslt>
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">java-function-runtime-error</h1>
+        <p px:role="desc">java-function-runtime-error</p>
+    </p:documentation>
+    
 </p:declare-step>

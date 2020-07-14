@@ -27,5 +27,10 @@
         </p:catch>
     </p:try>
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">catch-xproc-error</h1>
+        <p px:role="desc">catch-xproc-error</p>
+    </p:documentation>
+
 </p:declare-step>
 

@@ -23,7 +23,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @org.osgi.service.component.annotations.Component(
 	name = "module-registry",
-	immediate = true,
 	service = { ModuleRegistry.class }
 )
 public class DefaultModuleRegistry implements ModuleRegistry {

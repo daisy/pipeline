@@ -100,7 +100,7 @@ public final class URLs {
 			else if (jarFile.isDirectory()) {
 				File f = new File(jarFile, resource);
 				if (!f.exists())
-					throw new RuntimeException("resource does not exist");
+					throw new RuntimeException("file does not exist");
 				else if (!f.isDirectory() && requestedDirectory)
 					throw new RuntimeException("is not a directory");
 				else
@@ -113,20 +113,12 @@ public final class URLs {
 						throw new RuntimeException(e); }}
 				try {
 					Path f = fs.getPath("/" + resource);
-					BasicFileAttributes a; {
-						try {
-							a = Files.getFileAttributeView(f, BasicFileAttributeView.class).readAttributes(); }
-						catch (NoSuchFileException e) {
-							throw new RuntimeException("resource does not exist"); }
-						catch (FileSystemNotFoundException e) {
-							throw new RuntimeException(e); }
-						catch (IOException e) {
-							throw new RuntimeException(e); }}
-					if (!a.isDirectory() && requestedDirectory)
+					boolean isDirectory = isDirectory(f);
+					if (!isDirectory && requestedDirectory)
 						throw new RuntimeException("is not a directory");
 					else
 						try {
-							return new URL("jar:" + jarFileURL + "!/" + resource + (a.isDirectory() ? "/" : "")); }
+							return new URL("jar:" + jarFileURL + "!/" + resource + (isDirectory ? "/" : "")); }
 						catch (MalformedURLException e) {
 							throw new RuntimeException(e); }}
 				finally {
@@ -157,7 +149,7 @@ public final class URLs {
 			else if (jarFile.isDirectory()) {
 				File d = new File(jarFile, directory);
 				if (!d.exists())
-					throw new RuntimeException("directory does not exist");
+					throw new RuntimeException("file does not exist");
 				else if (!d.isDirectory())
 					throw new RuntimeException("is not a directory");
 				else {
@@ -173,23 +165,17 @@ public final class URLs {
 						throw new RuntimeException(e); }}
 				try {
 					Path d = fs.getPath("/" + directory);
-					BasicFileAttributes a; {
-						try {
-							a = java.nio.file.Files.getFileAttributeView(d, BasicFileAttributeView.class).readAttributes(); }
-						catch (NoSuchFileException e) {
-							throw new RuntimeException("directory does not exist"); }
-						catch (FileSystemNotFoundException e) {
-							throw new RuntimeException(e); }
-						catch (IOException e) {
-							throw new RuntimeException(e); }}
-					if (!a.isDirectory())
+					if (!isDirectory(d))
 						throw new RuntimeException("is not a directory");
 					final ImmutableList.Builder<String> resources = ImmutableList.<String>builder();
 					final String _directory = directory;
 					try {
 						walkFileTree(d, EnumSet.noneOf(FileVisitOption.class), 1, new SimpleFileVisitor<Path>() {
 							public FileVisitResult visitFile(Path f, BasicFileAttributes _) throws IOException {
-								resources.add(_directory + "/" + f.getFileName());
+								String fileName = f.getFileName().toString();
+								if (!fileName.endsWith("/") && isDirectory(f))
+									fileName += "/";
+								resources.add(_directory + "/" + fileName);
 								return FileVisitResult.CONTINUE; }}); }
 					catch (NoSuchFileException e) {
 						throw new RuntimeException(e); }
@@ -204,6 +190,22 @@ public final class URLs {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * @throws RuntimeException if the file does not exist
+	 */
+	private static boolean isDirectory(Path p) throws RuntimeException {
+		BasicFileAttributes a; {
+			try {
+				a = java.nio.file.Files.getFileAttributeView(p, BasicFileAttributeView.class).readAttributes(); }
+			catch (NoSuchFileException e) {
+				throw new RuntimeException("file does not exist"); }
+			catch (FileSystemNotFoundException e) {
+				throw new RuntimeException(e); }
+			catch (IOException e) {
+				throw new RuntimeException(e); }}
+		return a.isDirectory();
 	}
 	
 	// static nested class in order to delay class loading
@@ -233,7 +235,7 @@ public final class URLs {
 					url = bundle.getEntry(resource + "/");
 					if (url != null)
 						return url; }
-				throw new RuntimeException("resource does not exist"); }
+				throw new RuntimeException("file does not exist"); }
 			else {
 				if (!url.toString().endsWith("/")
 				    && (resource.endsWith("/") || bundle.getEntry(resource + "/") != null))
@@ -258,7 +260,7 @@ public final class URLs {
 				if (bundle.getEntry(directory.substring(0, directory.length() - 1)) != null)
 					throw new RuntimeException("is not a directory");
 				else
-					throw new RuntimeException("directory does not exist"); }
+					throw new RuntimeException("file does not exist"); }
 			else
 				return Iterators.forEnumeration(resources);
 		}

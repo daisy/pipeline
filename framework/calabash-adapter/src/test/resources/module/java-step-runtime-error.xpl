@@ -19,4 +19,9 @@
         </p:input>
     </px:java-step>
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">java-step-runtime-error</h1>
+        <p px:role="desc">java-step-runtime-error</p>
+    </p:documentation>
+    
 </p:declare-step>

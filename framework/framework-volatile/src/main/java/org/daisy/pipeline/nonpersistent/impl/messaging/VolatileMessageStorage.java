@@ -18,6 +18,7 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.Lists;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -25,19 +26,17 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
     name = "volatile-message-storage",
-    immediate = true,
     service = { MessageStorage.class }
 )
 public class VolatileMessageStorage implements MessageStorage {
 
 	private static final VolatileMessageStorage INSTANCE = new VolatileMessageStorage();
-	private static final  String CACHE_TIMEOUT_PROPERTY="org.daisy.pipeline.messaging.cache";
+	private static final boolean VOLATILE_DISABLED = "true".equalsIgnoreCase(
+		Properties.getProperty("org.daisy.pipeline.persistence"));
+	private static final String CACHE_TIMEOUT_PROPERTY="org.daisy.pipeline.messaging.cache";
 	private LoadingCache<String, List<Message>> cache;
 	private static final Logger logger = LoggerFactory.getLogger(VolatileMessageStorage.class);
 
-	/**
-	 *
-	 */
 	public VolatileMessageStorage() {
 		int timeout = Integer.valueOf(Properties.getProperty(
 				CACHE_TIMEOUT_PROPERTY, "60"));
@@ -52,6 +51,16 @@ public class VolatileMessageStorage implements MessageStorage {
 					}
 				});
 	}
+
+	/**
+	 * @throws RuntimeException if volatile storage is disabled through the org.daisy.pipeline.persistence system property.
+	 */
+	@Activate
+	protected void activate() throws RuntimeException {
+		if (VOLATILE_DISABLED)
+			throw new RuntimeException("Volatile storage is disabled");
+	}
+
 	//just for testing don't use in production environments
 	static void setTimeOut(int secs){
 		logger.warn("Cache timeout was called. This is potentially dangerous outside testing environments!!!!");

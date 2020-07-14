@@ -18,7 +18,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "job-monitor",
-	immediate = true,
 	service = { JobMonitorFactory.class }
 )
 public class JobMonitorFactoryImpl implements JobMonitorFactory {

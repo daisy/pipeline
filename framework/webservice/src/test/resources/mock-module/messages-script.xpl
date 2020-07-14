@@ -3,6 +3,11 @@
                 type="px:mock-progress-messages"
                 version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">_</h1>
+        <p px:role="desc">_</p>
+    </p:documentation>
+    
     <p:input port="source"/>
     <p:output port="result"/>
     

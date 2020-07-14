@@ -3,7 +3,6 @@ package org.daisy.pipeline.webserviceutils.xml;
 import java.util.List;
 
 import org.daisy.common.priority.Prioritizable;
-import org.daisy.common.properties.Property;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.job.Job;
@@ -46,14 +45,6 @@ public class XmlWriterFactory {
 		return new ClientsXmlWriter(clients);
 	}
 	
-	public static PropertyXmlWriter createXmlWriterForProperty(Property property) {
-		return new PropertyXmlWriter(property);
-	}
-
-	public static PropertiesXmlWriter createXmlWriterForProperties(List<? extends Property> properties) {
-		return new PropertiesXmlWriter(properties);
-	}
-
 	public static AliveXmlWriter createXmlWriter() {
 		return new AliveXmlWriter();
 	}
@@ -61,4 +52,4 @@ public class XmlWriterFactory {
 		return new DatatypesXmlWriter(datatypes);
 	}
 	
- }
+}

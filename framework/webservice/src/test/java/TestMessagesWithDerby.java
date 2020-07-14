@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import com.google.common.base.Optional;
 
+import org.daisy.pipeline.junit.OSGiLessConfiguration;
+
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
 import org.daisy.pipeline.webservice.jaxb.job.Messages;
@@ -93,8 +95,8 @@ public class TestMessagesWithDerby extends Base {
 		Assert.assertFalse(TestMessages.next(messages).isPresent());
 	}
 	
-	@Override
-	protected void setupClass() {
+	@Override @OSGiLessConfiguration
+	public void setupClass() {
 		super.setupClass();
 		new File(PIPELINE_DATA, "log").mkdirs();
 	}

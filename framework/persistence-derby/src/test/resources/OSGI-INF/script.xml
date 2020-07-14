@@ -1,5 +1,5 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" activate="activate" name="my-script">
-	<scr:implementation class="org.daisy.pipeline.script.impl.XProcScript_px_mock_script"/>
+	<scr:implementation class="org.daisy.pipeline.script.impl.XProcScript_my_script"/>
 	<scr:service>
 		<scr:provide interface="org.daisy.pipeline.script.XProcScriptService"/>
 	</scr:service>

@@ -209,6 +209,7 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		}
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
+			boolean cleared = false;
 			for (Supplier<Source> sourceProvider : data.getInputs(name)) {
 				Source source = sourceProvider.get();
 				// TODO hack to set the entity resolver
@@ -224,6 +225,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 						}
 					}
 				}
+				// remove possible default connection
+				if (!cleared) pipeline.xpipe.clearInputs(name);
 				pipeline.xpipe.writeTo(name,
 						asXdmNode(pipeline.config.getProcessor(), source));
 			}

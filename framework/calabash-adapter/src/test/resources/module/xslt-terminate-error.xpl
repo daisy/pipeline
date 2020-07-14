@@ -23,4 +23,9 @@
         </p:input>
     </p:xslt>
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">xslt-terminate-error</h1>
+        <p px:role="desc">xslt-terminate-error</p>
+    </p:documentation>
+    
 </p:declare-step>

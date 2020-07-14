@@ -3,19 +3,12 @@ import com.google.common.base.Optional;
 import org.daisy.pipeline.webservice.jaxb.job.Job;
 import org.daisy.pipeline.webservice.jaxb.job.JobSizes;
 import org.daisy.pipeline.webservice.jaxb.job.JobStatus;
-import org.daisy.pipeline.webservice.jaxb.properties.Properties;
 import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 public class TestAdmin extends Base {
-	
-	@Test
-	public void testProperties() throws Exception {
-		Properties props = client().properties();
-		Assert.assertTrue("We have properties", 0 < props.getProperty().size());
-	}
 	
 	@Test
 	public void testSizes() throws Exception {
