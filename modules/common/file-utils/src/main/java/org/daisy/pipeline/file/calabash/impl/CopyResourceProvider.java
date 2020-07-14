@@ -11,6 +11,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.file.URIs;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.slf4j.Logger;
@@ -21,7 +22,6 @@ import com.google.common.io.ByteStreams;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
@@ -63,7 +63,7 @@ public class CopyResourceProvider implements XProcStepProvider {
 	 *
 	 *
 	 */
-	public static class CopyResource extends DefaultStep {
+	public static class CopyResource extends DefaultStep implements XProcStep {
 		private static final QName _href = new QName("href");
 		private static final QName _target = new QName("target");
 		private static final QName _fail_on_error = new QName("fail-on-error");

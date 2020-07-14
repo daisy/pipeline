@@ -16,6 +16,7 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.braille.api.table.Table;
 import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.pef.TextHandler;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
 import static org.daisy.pipeline.braille.common.Provider.util.memoize;
@@ -25,7 +26,6 @@ import org.daisy.pipeline.braille.pef.TableProvider;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Text2PEFStep extends DefaultStep {
+public class Text2PEFStep extends DefaultStep implements XProcStep {
 	
 	private ReadablePipe source = null;
 	private WritablePipe result = null;

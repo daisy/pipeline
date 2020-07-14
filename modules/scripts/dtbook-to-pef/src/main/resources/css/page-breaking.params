@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+
+    <p:option name="force-braille-page-break" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page numbers: Force braille page break</h2>
+            <p px:role="desc" xml:space="preserve">Force braille page breaks at print page breaks.
+
+Makes the variable `$force-braille-page-break` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+@if $force-braille-page-break {
+  pagenum {
+    page-break-before: always;
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`page-break-before`](http://braillespecs.github.io/braille-css/#h4_controlling-page-breaks)
+  property
+</p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

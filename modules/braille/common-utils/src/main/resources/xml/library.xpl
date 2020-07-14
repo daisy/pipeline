@@ -21,7 +21,6 @@
         <p:input port="parameters" kind="parameter" primary="false"/>
         <p:output port="result"/>
         <p:option name="query" required="true"/>
-        <p:option name="temp-dir" required="false"/>
         <!--
             implemented in Java (org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep)
         -->

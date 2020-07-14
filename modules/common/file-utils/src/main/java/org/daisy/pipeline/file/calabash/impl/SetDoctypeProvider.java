@@ -17,13 +17,14 @@ import java.nio.file.StandardCopyOption;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+
 import org.slf4j.Logger;
 
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
@@ -37,7 +38,6 @@ import org.osgi.service.component.annotations.Component;
 	service = { XProcStepProvider.class },
 	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}set-doctype" }
 )
-@SuppressWarnings("serial")
 public class SetDoctypeProvider implements XProcStepProvider {
 
 	@Override
@@ -45,7 +45,7 @@ public class SetDoctypeProvider implements XProcStepProvider {
 		return new SetDoctype(runtime, step);
 	}
 
-	public static class SetDoctype extends DefaultStep {
+	public static class SetDoctype extends DefaultStep implements XProcStep {
 		private static final QName _href = new QName("href");
 		private static final QName _doctype = new QName("doctype");
 		private static final QName _encoding = new QName("encoding");

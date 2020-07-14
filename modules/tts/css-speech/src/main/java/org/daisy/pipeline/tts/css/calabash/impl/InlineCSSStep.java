@@ -22,7 +22,9 @@ import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 import net.sf.saxon.tree.util.ProcInstParser;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.pipeline.tts.config.ConfigReader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ import com.xmlcalabash.util.TreeWriter;
 import cz.vutbr.web.css.NetworkProcessor;
 import cz.vutbr.web.csskit.DefaultNetworkProcessor;
 
-public class InlineCSSStep extends DefaultStep implements TreeWriterFactory {
+public class InlineCSSStep extends DefaultStep implements TreeWriterFactory, XProcStep {
 
 	private Logger Logger = LoggerFactory.getLogger(InlineCSSStep.class);
 

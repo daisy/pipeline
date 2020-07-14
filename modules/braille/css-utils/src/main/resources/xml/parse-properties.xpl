@@ -36,12 +36,6 @@
         </p:documentation>
     </p:output>
     
-    <!--
-        Suppress warning message "The source document is in namespace foo, but none of the template
-        rules match elements in this namespace"
-    -->
-    <p:wrap wrapper="css:wrapper" match="/*"/>
-    
     <p:xslt px:progress="1">
         <p:input port="stylesheet">
             <p:document href="parse-properties.xsl"/>

@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,14 +23,10 @@ import java.util.TreeSet;
 
 import javax.xml.namespace.QName;
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
-import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import com.google.common.collect.Iterators;
 
 import com.xmlcalabash.model.RuntimeValue;
 
@@ -44,23 +39,31 @@ import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
 
-import org.daisy.common.saxon.NodeToXMLStreamTransformer;
 import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
+import org.daisy.common.stax.DelegatingXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.getAttributes;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeCharacters;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeDocument;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeEvent;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
+
+import org.daisy.common.transform.InputValue;
+import org.daisy.common.transform.Mult;
+import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
+import org.daisy.common.transform.XMLInputValue;
+import org.daisy.common.transform.XMLOutputValue;
 
 // The transformation consists of two passes. In the first pass, the split points are computed based
 // on the provided stylesheets. In the second pass, the document is split into chunks. Because the
-// XMLStreamToXMLStreamTransformer interface does not yet support reading the input document more
-// than once, we use the Saxon specific NodeToXMLStreamTransformer interface.
-class Chunker implements NodeToXMLStreamTransformer {
+// XMLInputValue interface does not yet support reading the document more than once as a XMLStreamReader,
+// we use the SaxonInputValue interface.
+
+class Chunker extends SingleInSingleOutXMLTransformer {
 	
 	final RuntimeValue allowBreakBeforeOption;
 	final RuntimeValue allowBreakAfterOption;
@@ -97,12 +100,23 @@ class Chunker implements NodeToXMLStreamTransformer {
 	private Iterator<BreakPosition> splitPoints;
 	private Map<String,Integer> idToChunk;
 	private BreakPosition nextSplitPoint;
+
+	public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) throws IllegalArgumentException {
+		if (source == null || result == null)
+			throw new IllegalArgumentException();
+		if (!(source instanceof SaxonInputValue))
+			throw new IllegalArgumentException();
+		return () -> transform((SaxonInputValue)source.ensureSingleItem(), result.asXMLStreamWriter());
+	}
 	
-	public void transform(Iterator<XdmNode> input, Supplier<BaseURIAwareXMLStreamWriter> output) throws TransformerException {
-		XdmNode doc = Iterators.getOnlyElement(input);
-		BaseURIAwareXMLStreamReader reader;
+	void transform(SaxonInputValue input, BaseURIAwareXMLStreamWriter output) throws TransformerException {
+		Mult<SaxonInputValue> mult = input.mult(2);
+		XdmItem item = mult.get().asXdmItemIterator().next();
+		if (!(item instanceof XdmNode))
+			throw new TransformerException(new IllegalArgumentException());
+		XdmNode doc = (XdmNode)item;
+		BaseURIAwareXMLStreamReader reader = mult.get().asXMLStreamReader();
 		try {
-			reader = SaxonHelper.nodeReader(doc, config);
 			SortedSet<BreakPosition> collectSplitPoints = new TreeSet<>();
 			Map<String,Path> collectIds = new HashMap<>();
 			getSplitPoints(doc, collectSplitPoints, collectIds);
@@ -131,16 +145,15 @@ class Chunker implements NodeToXMLStreamTransformer {
 			transform(reader, output);
 		} else
 			try {
-				BaseURIAwareXMLStreamWriter writer = output.get();
 				if (doc.getBaseURI() != null)
-					writer.setBaseURI(doc.getBaseURI());
-				writeDocument(writer, reader);
+					output.setBaseURI(doc.getBaseURI());
+				writeDocument(output, reader);
 			} catch (XMLStreamException e) {
 				throw new TransformerException(e);
 			}
 	}
 	
-	void transform(BaseURIAwareXMLStreamReader reader, Supplier<BaseURIAwareXMLStreamWriter> writers) throws TransformerException {
+	void transform(BaseURIAwareXMLStreamReader reader, BaseURIAwareXMLStreamWriter writer) throws TransformerException {
 		nextSplitPoint = null;
 		if (splitPoints.hasNext())
 			nextSplitPoint = splitPoints.next();
@@ -149,20 +162,18 @@ class Chunker implements NodeToXMLStreamTransformer {
 		boolean containsSplitPoint = true;
 		Stack<Boolean> containsSplitPointStack = new Stack<Boolean>();
 		currentPath = new Path.Builder();
-		BaseURIAwareXMLStreamWriter writer = writers.get();
 		try {
 			URI sourceBaseURI = reader.getBaseURI();
-			writer.writeStartDocument();
-		  loop: while (true)
+			int event = reader.getEventType();
+			while (true)
 				try {
-					int event = reader.next();
 					switch (event) {
 					case START_ELEMENT:
 						containsSplitPointStack.push(containsSplitPoint);
 						if (!currentPath.isRoot()) {
 							currentPath.nextElement();
 							if (containsSplitPoint && isSplitPoint(currentPath, BreakPosition.Side.BEFORE, nextSplitPoint))
-								split(writer, writer = writers.get());
+								split(writer);
 							containsSplitPoint = containsSplitPoint(currentPath, nextSplitPoint);
 						}
 						writeStartElement(writer, reader);
@@ -193,59 +204,63 @@ class Chunker implements NodeToXMLStreamTransformer {
 						writer.writeEndElement();
 						containsSplitPoint = containsSplitPointStack.pop();
 						if (containsSplitPoint && isSplitPoint(currentPath, BreakPosition.Side.AFTER, nextSplitPoint))
-							split(writer, writer = writers.get());
+							split(writer);
 						currentPath.up();
 						break;
 					case CHARACTERS:
 						if (currentPath.isElement())
 							currentPath.inc();
 						if (containsSplitPoint && isSplitPoint(currentPath, BreakPosition.Side.BEFORE, nextSplitPoint))
-							split(writer, writer = writers.get());
+							split(writer);
 						writeCharacters(writer, reader);
 						if (containsSplitPoint && isSplitPoint(currentPath, BreakPosition.Side.AFTER, nextSplitPoint))
-							split(writer, writer = writers.get());
+							split(writer);
 						break;
-					case START_DOCUMENT:
-						break;
-					case END_DOCUMENT:
-						break loop;
 					default:
-						writeEvent(writer, event, reader);
-					}
+						writeEvent(writer, reader); }
+					event = reader.next();
 				} catch (NoSuchElementException e) {
 					break;
 				}
-			writer.writeEndDocument();
 		} catch (XMLStreamException e) {
 			throw new TransformerException(e);
 		}
 	}
 	
-	void split(XMLStreamWriter writer, XMLStreamWriter newWriter) throws XMLStreamException {
+	void split(XMLStreamWriter writer) throws XMLStreamException {
 		for (int i = parents.size(); i > 0; i--)
 			writer.writeEndElement();
 		writer.writeEndDocument();
-		newWriter.writeStartDocument();
+		writer.writeStartDocument();
 		for (int i = 0; i < parents.size(); i++) {
-			writeStartElement(newWriter, parents.get(i));
+			writeStartElement(writer, parents.get(i));
 			for (Map.Entry<QName,String> attr : parentAttrs.get(i).entrySet())
 				if (!(attr.getKey().equals(_ID) || attr.getKey().equals(XML_ID)))
-					writeAttribute(newWriter, attr);
+					writeAttribute(writer, attr);
 		}
 		nextSplitPoint = splitPoints.hasNext() ? splitPoints.next() : null;
 	}
 	
-	static Supplier<BaseURIAwareXMLStreamWriter> setBaseURI(Supplier<BaseURIAwareXMLStreamWriter> output, URI sourceBaseURI) {
-		return new Supplier<BaseURIAwareXMLStreamWriter>() {
+	static BaseURIAwareXMLStreamWriter setBaseURI(BaseURIAwareXMLStreamWriter output, URI sourceBaseURI) {
+		return new DelegatingXMLStreamWriter() {
 			int supplied = 0;
-			public BaseURIAwareXMLStreamWriter get() throws TransformerException {
-				BaseURIAwareXMLStreamWriter writer = output.get();
-				try {
-					writer.setBaseURI(getChunkBaseURI(sourceBaseURI, ++supplied));
-				} catch (XMLStreamException e) {
-					throw new TransformerException(e);
-				}
-				return writer;
+			protected BaseURIAwareXMLStreamWriter delegate() {
+				return output;
+			}
+			@Override
+			public void writeStartDocument() throws XMLStreamException {
+				output.setBaseURI(getChunkBaseURI(sourceBaseURI, ++supplied));
+				super.writeStartDocument();
+			}
+			@Override
+			public void writeStartDocument(String version) throws XMLStreamException {
+				output.setBaseURI(getChunkBaseURI(sourceBaseURI, ++supplied));
+				super.writeStartDocument(version);
+			}
+			@Override
+			public void writeStartDocument(String encoding, String version) throws XMLStreamException {
+				output.setBaseURI(getChunkBaseURI(sourceBaseURI, ++supplied));
+				super.writeStartDocument(encoding, version);
 			}
 		};
 	}

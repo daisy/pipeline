@@ -3,7 +3,9 @@
                xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns="http://www.w3.org/1999/xhtml"
                stylesheet="../../main/resources/xml/xslt/volume-breaking.xsl">
-	
+
+	<x:param name="avoid-volume-break-inside-leaf-section" select="true()"/>
+
 	<x:scenario label="wrap leaf sections and add classes">
 		<x:context>
 			<body>

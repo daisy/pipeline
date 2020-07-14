@@ -8,11 +8,12 @@ import java.net.URI;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
@@ -27,7 +28,6 @@ import org.osgi.service.component.annotations.Component;
 	service = { XProcStepProvider.class },
 	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}file-peek" }
 )
-@SuppressWarnings("serial")
 public class PeekProvider implements XProcStepProvider {
 
 	@Override
@@ -38,7 +38,7 @@ public class PeekProvider implements XProcStepProvider {
 	/**
 	 * Returns a base64-encoded string, skipping the first `offset` bytes, up to a number of `length` bytes, from the file `href`.
 	 */
-	public static class Peek extends DefaultStep {
+	public static class Peek extends DefaultStep implements XProcStep {
 		private static final QName _href = new QName("href");
 		private static final QName _offset = new QName("offset");
 		private static final QName _length = new QName("length");

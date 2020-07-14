@@ -78,34 +78,21 @@ even though the provided CSS is more specific.
     <p:option name="ascii-table"/>
     <p:option name="page-width"/>
     <p:option name="page-height"/>
-    <p:option name="left-margin"/>
     <p:option name="duplex"/>
     <p:option name="levels-in-footer"/>
-    <p:option name="main-document-language"/>
     <p:option name="hyphenation"/>
     <p:option name="line-spacing"/>
-    <p:option name="tab-width"/>
     <p:option name="capital-letters"/>
-    <p:option name="accented-letters"/>
-    <p:option name="polite-forms"/>
-    <p:option name="downshift-ordinal-numbers"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
-    <p:option name="include-image-groups"/>
     <p:option name="include-line-groups"/>
-    <p:option name="text-level-formatting"/>
-    <p:option name="include-note-references"/>
     <p:option name="include-production-notes"/>
     <p:option name="show-braille-page-numbers"/>
     <p:option name="show-print-page-numbers"/>
     <p:option name="force-braille-page-break"/>
     <p:option name="toc-depth"/>
-    <p:option name="footnotes-placement"/>
-    <p:option name="colophon-metadata-placement"/>
-    <p:option name="rear-cover-placement"/>
-    <p:option name="number-of-sheets"/>
     <p:option name="maximum-number-of-sheets"/>
-    <p:option name="minimum-number-of-sheets"/>
+    <p:option name="avoid-volume-break-inside-leaf-section"/>
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
@@ -178,8 +165,7 @@ even though the provided CSS is more specific.
             <p:pipe port="fileset.out" step="load"/>
         </p:input>
     </p:identity>
-    <px:epub3-to-pef name="convert" px:message="Converting from EPUB to PEF" px:progress=".90"
-                     default-stylesheet="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css">
+    <px:epub3-to-pef name="convert" px:message="Converting from EPUB to PEF" px:progress=".90">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>

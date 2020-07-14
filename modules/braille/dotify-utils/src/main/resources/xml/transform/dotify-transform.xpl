@@ -17,7 +17,6 @@
 	<p:option name="css-block-transform" required="true"/>
 	<p:option name="locale" required="true"/>
 	<p:option name="mode" required="true"/>
-	<p:option name="temp-dir" required="true"/>
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
 	<p:import href="../library.xpl">
@@ -41,7 +40,6 @@
 	                            replace($css-block-transform,'\((input|output):css\)','')}"
 	              px:progress=".12">
 		<p:with-option name="query" select="$css-block-transform"/>
-		<p:with-option name="temp-dir" select="$temp-dir"/>
 		<p:input port="parameters">
 			<p:pipe step="main" port="parameters"/>
 		</p:input>

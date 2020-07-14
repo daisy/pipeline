@@ -15,12 +15,6 @@ public interface Hyphenator extends Transform {
 	public FullHyphenator asFullHyphenator() throws UnsupportedOperationException;
 	
 	/**
-	 * Like `asFullHyphenator`, this interface can not be used for
-	 * non-standard hyphenation.
-	 */
-	public XProc asXProc() throws UnsupportedOperationException;
-	
-	/**
 	 * Hyphenate by breaking an input into lines of a preferred and maximal
 	 * length. Transformations such as non-standard hyphenation are
 	 * allowed.

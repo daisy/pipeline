@@ -1,11 +1,3 @@
-/*
- * Parameters injected by html-to-pef.convert
- */
-
-$page-width: 40 !default;
-$page-height: 25 !default;
-$maximum-number-of-sheets: 70 !default;
-$levels-in-footer: 6 !default;
 $hyphenation: true !default;
 $line-spacing: single !default;
 $capital-letters: true !default;
@@ -13,37 +5,13 @@ $include-captions: true !default;
 $include-images: true !default;
 $include-line-groups: true !default;
 $include-production-notes: false !default;
-$show-braille-page-numbers: true !default;
-$show-print-page-numbers: true !default;
-$force-braille-page-break: false !default;
 
-@page {
-	size: $page-width $page-height;
-}
+@import "page-layout.scss";
+@import "generate-toc.scss";
+@import "page-breaking.scss";
+@import "volume-breaking.scss";
 
-@volume {
-	max-length: $maximum-number-of-sheets;
-}
-
-#generated-document-toc {
-	flow: document-toc;
-	display: -obfl-toc;
-	-obfl-toc-range: document;
-}
-
-#generated-volume-toc {
-	flow: volume-toc;
-	display: -obfl-toc;
-	-obfl-toc-range: volume;
-}
-
-@for $level from 1 through 6 {
-	@if $levels-in-footer >= $level {
-		h#{$level} {
-			string-set: footer content();
-		}
-	}
-}
+@namespace epub url(http://www.idpf.org/2007/ops);
 
 @if $hyphenation {
 	:root {
@@ -77,17 +45,7 @@ caption {
 	display: if($include-line-groups, block, inline);
 }
 
-.prodnote {
+.prodnote,
+[epub|type~='z3998:production'] {
 	display: if($include-production-notes, block, none);
-}
-
-.page-front,
-.page-normal,
-.page-special {
-	@if $show-print-page-numbers {
-		string-set: print-page attr(title);
-	}
-	@if $force-braille-page-break {
-		page-break-before: always;
-	}
 }

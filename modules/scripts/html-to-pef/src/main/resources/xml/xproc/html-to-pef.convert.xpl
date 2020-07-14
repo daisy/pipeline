@@ -29,7 +29,7 @@
         </p:inline>
     </p:input>
     
-    <p:option name="default-stylesheet" select="'http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css'"/>
+    <p:option name="default-stylesheet" required="false" select="'#default'"/>
     <p:option name="stylesheet" select="''"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
     <p:option name="include-obfl" select="'false'"/>
@@ -87,16 +87,19 @@
     
     <p:xslt px:message="Generating table of contents" px:progress=".01">
         <p:input port="stylesheet">
-            <p:document href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl"/>
+            <p:document href="../xslt/generate-toc.xsl"/>
         </p:input>
-        <p:with-param name="depth" select="/*/*[@name='toc-depth']/@value">
+        <p:input port="parameters">
             <p:pipe step="parameters" port="result"/>
-        </p:with-param>
+        </p:input>
     </p:xslt>
     
     <p:group px:message="Inlining CSS" px:progress=".10">
         <p:variable name="stylesheets-to-be-inlined" select="string-join((
-                                                               $default-stylesheet,
+                                                               resolve-uri('../xslt/volume-breaking.xsl'),
+                                                               if ($default-stylesheet!='#default')
+                                                                 then $default-stylesheet
+                                                                 else resolve-uri('../../css/default.css'),
                                                                resolve-uri('../../css/default.scss'),
                                                                $stylesheet),' ')">
             <p:inline><_/></p:inline>
@@ -116,7 +119,7 @@
             <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,/*/@lang,'und')[1],')')">
                 <p:pipe step="html" port="result"/>
             </p:with-option>
-            <p:with-option name="temp-dir" select="$temp-dir"/>
+            <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
             <p:input port="parameters">
                 <!-- px:transform uses the 'duplex' parameter -->
                 <p:pipe port="result" step="parameters"/>
@@ -133,14 +136,14 @@
             </p:output>
             <px:transform name="obfl" px:message="Transforming from XML with CSS to OBFL" px:progress=".5">
                 <p:with-option name="query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
-                <p:with-option name="temp-dir" select="$temp-dir"/>
+                <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
                     <p:pipe port="result" step="parameters"/>
                 </p:input>
             </px:transform>
             <px:transform px:message="Transforming from OBFL to PEF" px:progress=".5">
                 <p:with-option name="query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
-                <p:with-option name="temp-dir" select="$temp-dir"/>
+                <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
                     <p:pipe port="result" step="parameters"/>
                 </p:input>
@@ -153,7 +156,7 @@
             </p:output>
             <px:transform px:message="Transforming from XML with inline CSS to PEF" px:progress="1">
                 <p:with-option name="query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
-                <p:with-option name="temp-dir" select="$temp-dir"/>
+                <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
                     <p:pipe port="result" step="parameters"/>
                 </p:input>

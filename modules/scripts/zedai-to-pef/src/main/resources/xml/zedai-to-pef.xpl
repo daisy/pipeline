@@ -165,7 +165,7 @@ If left blank, the locale information in the input document will be used to sele
     <!-- ZEDAI TO PEF -->
     <!-- ============ -->
     
-    <px:zedai-to-pef default-stylesheet="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/default.css">
+    <px:zedai-to-pef>
         <p:input port="source.in-memory">
             <p:pipe step="load" port="in-memory.out"/>
         </p:input>

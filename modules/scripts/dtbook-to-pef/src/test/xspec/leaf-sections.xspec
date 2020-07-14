@@ -3,7 +3,9 @@
                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                xmlns="http://www.daisy.org/z3986/2005/dtbook/"
                stylesheet="../../main/resources/xml/xslt/volume-breaking.xsl">
-	
+
+	<x:param name="avoid-volume-break-inside-leaf-section" select="true()"/>
+
 	<x:scenario label="wrap leaf sections and add classes">
 		<x:context>
 			<level1>

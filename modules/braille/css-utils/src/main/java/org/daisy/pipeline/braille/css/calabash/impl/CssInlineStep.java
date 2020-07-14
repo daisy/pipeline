@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,7 +22,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.URIResolver;
@@ -31,7 +29,6 @@ import javax.xml.transform.URIResolver;
 import com.google.common.base.Function;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.toArray;
@@ -41,7 +38,6 @@ import com.google.common.io.ByteSource;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -107,7 +103,6 @@ import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
 
-import org.daisy.common.calabash.XMLCalabashHelper;
 import org.daisy.common.file.URIs;
 import org.daisy.common.file.URLs;
 import org.daisy.common.saxon.SaxonHelper;
@@ -117,8 +112,15 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.writeCharacters;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeComment;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeProcessingInstruction;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
-import org.daisy.common.transform.DOMToXMLStreamTransformer;
+
+import org.daisy.common.transform.InputValue;
+import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
+import org.daisy.common.transform.XMLInputValue;
+import org.daisy.common.transform.XMLOutputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import static org.daisy.pipeline.braille.common.util.Strings.join;
@@ -138,7 +140,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CssInlineStep extends DefaultStep {
+public class CssInlineStep extends DefaultStep implements XProcStep {
 	
 	private ReadablePipe sourcePipe = null;
 	private ReadablePipe contextPipe = null;
@@ -313,11 +315,14 @@ public class CssInlineStep extends DefaultStep {
 			String medium = getOption(_media, DEFAULT_MEDIUM);
 			QName attributeName = getOption(_attribute_name, DEFAULT_ATTRIBUTE_NAME);
 			inMemoryResolver.setContext(contextPipe);
-			XMLCalabashHelper.transform(
-				new CssInlineTransformer(network, getOption(_default_stylesheet, ""), medium, SaxonHelper.jaxpQName(attributeName)),
-				sourcePipe,
-				resultPipe,
-				runtime); }
+			new CssInlineTransformer(network,
+			                         getOption(_default_stylesheet, ""),
+			                         medium,
+			                         SaxonHelper.jaxpQName(attributeName))
+			.transform(
+				new XMLCalabashInputValue(sourcePipe, runtime),
+				new XMLCalabashOutputValue(resultPipe, runtime)
+			).run(); }
 		catch (Exception e) {
 			logger.error("css:inline failed", e);
 			throw new XProcException(step.getNode(), e); }
@@ -445,7 +450,7 @@ public class CssInlineStep extends DefaultStep {
 	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 	
-	private static class CssInlineTransformer implements DOMToXMLStreamTransformer {
+	private static class CssInlineTransformer extends SingleInSingleOutXMLTransformer {
 		
 		private final NetworkProcessor network;
 		private final String defaultStyleSheet;
@@ -466,10 +471,18 @@ public class CssInlineStep extends DefaultStep {
 		
 		private BaseURIAwareXMLStreamWriter writer;
 		
-		public void transform(Iterator<Document> input, Supplier<BaseURIAwareXMLStreamWriter> output) throws TransformerException {
+		public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) {
+			if (source == null || result == null)
+				throw new IllegalArgumentException();
+			return () -> transform(source.ensureSingleItem().asNodeIterator().next(), result.asXMLStreamWriter());
+		}
+		
+		private void transform(Node node, BaseURIAwareXMLStreamWriter output) throws TransformerException {
 			
-			Document document = Iterators.getOnlyElement(input);
-			this.writer = output.get();
+			if (!(node instanceof Document))
+				throw new TransformerException(new IllegalArgumentException());
+			Document document = (Document)node;
+			this.writer = output;
 			
 			try {
 				URI baseURI = new URI(document.getBaseURI());

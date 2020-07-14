@@ -8,7 +8,6 @@ import javax.xml.transform.stream.StreamSource;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.runtime.XAtomicStep;
@@ -18,6 +17,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.common.shell.CommandRunner;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import static org.daisy.pipeline.file.FileUtils.cResultDocument;
 
@@ -60,7 +60,7 @@ public class AceProvider implements XProcStepProvider {
 			throw new RuntimeException("Ace was not found on your system");
 	}
 
-	public static class AceStep extends DefaultStep {
+	public static class AceStep extends DefaultStep implements XProcStep {
 
 		private final static Logger mLogger = LoggerFactory.getLogger(AceStep.class);
 

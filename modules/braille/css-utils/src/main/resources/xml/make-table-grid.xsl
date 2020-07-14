@@ -223,14 +223,4 @@
         <xsl:sequence select="."/>
     </xsl:template>
     
-    <!--
-        Suppress warning messages "The source document is in no namespace, but the template rules
-        all expect elements in a namespace" (see https://github.com/daisy/pipeline-mod-braille/issues/38),
-        as well as warning messages "The source document is in namespace http://www.daisy.org/ns/pipeline/braille-css,
-        but all the template rules match elements in no namespace".
-    -->
-    <xsl:template match="/phony | /css:phony">
-        <xsl:next-match/>
-    </xsl:template>
-    
 </xsl:stylesheet>

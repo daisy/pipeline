@@ -15,11 +15,13 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.pipeline.nlp.DummyLangDetector;
 import org.daisy.pipeline.nlp.LangDetector;
 import org.daisy.pipeline.nlp.lexing.LexService.LexerInitException;
 import org.daisy.pipeline.nlp.lexing.LexService.LexerToken;
 import org.daisy.pipeline.nlp.lexing.LexServiceRegistry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +37,7 @@ import com.xmlcalabash.util.TreeWriter;
  * XprocStep built on the top of a Lexer meant to be provided by an OSGI service
  * through BreakDetectProvider.
  */
-public class BreakDetectStep extends DefaultStep implements TreeWriterFactory,
-        InlineSectionProcessor {
+public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, InlineSectionProcessor, XProcStep {
 
 	private Logger mLogger = LoggerFactory.getLogger(BreakDetectStep.class);
 	private ReadablePipe mSource = null;

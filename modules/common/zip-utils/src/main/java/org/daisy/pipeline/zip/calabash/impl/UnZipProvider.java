@@ -36,11 +36,12 @@ package org.daisy.pipeline.zip.calabash.impl;
  *     - slightly changed the meaning of the 'overwrite' option
  */
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
@@ -89,7 +90,7 @@ public class UnZipProvider implements XProcStepProvider {
     }
     
     public static class UnZip
-            extends DefaultStep
+            extends DefaultStep implements XProcStep
     {
         public UnZip(XProcRuntime runtime, XAtomicStep step)
         {

@@ -1,13 +1,18 @@
 /**
- * CSS module with default volume breaking rules.
- *
- * In order for this style sheet to work,
- * http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/xsl/volume-breaking.xsl
- * must be included before it in the list of style sheets.
+ * Volume breaking
  */
+
+$maximum-number-of-sheets: 70 !default;
+
+@volume {
+	max-length: $maximum-number-of-sheets;
+}
 
 /*
  * Don't split "leaf sections" across volumes.
+ *
+ * In order for this part of the style sheet to work, volume-breaking.xsl must be
+ * included before volume-breaking.scss in the list of style sheets.
  *
  * A leaf section is a block of adjacent content with the same sectioning depth.
  * Which means:
@@ -17,41 +22,46 @@
  * If a level contains other levels, then volume-breaking.xsl wraps the normal content
  * (<h1>, <p>, etc.) in the level in a <div class="leaf-section"> element.
  */
-level1 {
-   volume-break-inside: -obfl-keep(9);
-}
-level2 {
-   volume-break-inside: -obfl-keep(8);
-}
-level3 {
-   volume-break-inside: -obfl-keep(7);
-}
-level4 {
-   volume-break-inside: -obfl-keep(6);
-}
-level5 {
-   volume-break-inside: -obfl-keep(5);
-}
-level6 {
-   volume-break-inside: -obfl-keep(4);
-}
-level1:not(:has(> level2, div.leaf-section)),
-level2:not(:has(> level3, div.leaf-section)),
-level3:not(:has(> level4, div.leaf-section)),
-level4:not(:has(> level5, div.leaf-section)),
-level5:not(:has(> level6, div.leaf-section)),
-level6:not(:has(div.leaf-section)),
-div.leaf-section {
-    // volume-break-inside: -obfl-keep(5);
-    volume-break-inside: -obfl-keep(3);
-}
 
-/*
- * Avoid orphaned headlines.
- *
- * volume-breaking.xsl adds the "keep-with-next-section" class is added on small leaf
- * sections.
- */
-//.keep-with-next-section {
-//    -obfl-keep-with-next-sheets: 1;
-//}
+$avoid-volume-break-inside-leaf-section: false !default;
+
+@if $avoid-volume-break-inside-leaf-section {
+    level1 {
+       volume-break-inside: -obfl-keep(9);
+    }
+    level2 {
+       volume-break-inside: -obfl-keep(8);
+    }
+    level3 {
+       volume-break-inside: -obfl-keep(7);
+    }
+    level4 {
+       volume-break-inside: -obfl-keep(6);
+    }
+    level5 {
+       volume-break-inside: -obfl-keep(5);
+    }
+    level6 {
+       volume-break-inside: -obfl-keep(4);
+    }
+    level1:not(:has(> level2, div.leaf-section)),
+    level2:not(:has(> level3, div.leaf-section)),
+    level3:not(:has(> level4, div.leaf-section)),
+    level4:not(:has(> level5, div.leaf-section)),
+    level5:not(:has(> level6, div.leaf-section)),
+    level6:not(:has(div.leaf-section)),
+    div.leaf-section {
+        // volume-break-inside: -obfl-keep(5);
+        volume-break-inside: -obfl-keep(3);
+    }
+    
+    /*
+     * Avoid orphaned headlines.
+     *
+     * volume-breaking.xsl adds the "keep-with-next-section" class is added on small leaf
+     * sections.
+     */
+    //.keep-with-next-section {
+    //    -obfl-keep-with-next-sheets: 1;
+    //}
+}

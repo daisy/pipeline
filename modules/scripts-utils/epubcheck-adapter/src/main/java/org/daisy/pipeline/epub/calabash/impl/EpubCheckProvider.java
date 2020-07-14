@@ -10,11 +10,12 @@ import java.util.HashMap;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
+
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
@@ -92,7 +93,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 		return new EpubCheckStep(runtime, step);
 	}
 
-	public static class EpubCheckStep extends DefaultStep {
+	public static class EpubCheckStep extends DefaultStep implements XProcStep {
 
 		private static final QName _epubFile = new QName("epub");
 		private static final QName _epubVersion = new QName("version");

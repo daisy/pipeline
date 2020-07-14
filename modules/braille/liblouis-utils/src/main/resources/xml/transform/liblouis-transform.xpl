@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:liblouis-transform" version="1.0"
-                xmlns:p="http://www.w3.org/ns/xproc"
-                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:louis="http://liblouis.org/liblouis"
-                exclude-inline-prefixes="#all">
-	
-	<p:input port="source"/>
-	<p:output port="result"/>
+<p:pipeline xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+            xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+            xmlns:c="http://www.w3.org/ns/xproc-step"
+            xmlns:louis="http://liblouis.org/liblouis"
+            type="px:liblouis-transform" name="main"
+            exclude-inline-prefixes="#all">
 	
 	<p:option name="block-transform" select="''"/>
-	<p:option name="temp-dir" required="true"/>
+
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:assert
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+		<p:documentation>
+			px:transform
+		</p:documentation>
+	</p:import>
+	<p:import href="../format.xpl">
+		<p:documentation>
+			louis:format
+		</p:documentation>
+	</p:import>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-	<p:import href="../format.xpl"/>
-	
+	<px:assert message="'temp-dir' parameter is required">
+		<p:with-option name="test" select="exists(//c:param[@name='temp-dir' and not(@namespace[not(.='')])])">
+			<p:pipe step="main" port="parameters"/>
+		</p:with-option>
+	</px:assert>
+
 	<p:xslt>
 		<p:input port="stylesheet">
 			<p:document href="handle-list-item.xsl"/>
@@ -25,11 +41,15 @@
 	
 	<px:transform>
 		<p:with-option name="query" select="$block-transform"/>
-		<p:with-option name="temp-dir" select="$temp-dir"/>
+		<p:input port="parameters">
+			<p:pipe step="main" port="parameters"/>
+		</p:input>
 	</px:transform>
 	
 	<louis:format>
-		<p:with-option name="temp-dir" select="$temp-dir"/>
+		<p:with-option name="temp-dir" select="//c:param[@name='temp-dir' and not(@namespace[not(.='')])][1]/@value">
+			<p:pipe step="main" port="parameters"/>
+		</p:with-option>
 	</louis:format>
 	
-</p:declare-step>
+</p:pipeline>

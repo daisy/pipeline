@@ -54,6 +54,11 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">URI to the base directory where the EPUB3-files should eventually be stored.</p:documentation>
     </p:option>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>

@@ -8,10 +8,9 @@
 
 - <a href="resources/xml/zedai-to-pef.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/zedai-to-pef.xpl`</a>
 
-### CSS
+### Style sheets
 
-- [`http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/default.css`](resources/css/default.css)
-- [`http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/reset.css`](resources/css/reset.css)
+- [`http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/reset.css`](resources/css/reset.css)
 
 ## OSGi services
 

@@ -14,7 +14,9 @@ import java.util.Set;
 
 import javax.xml.transform.stream.StreamSource;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+
 import org.daisy.streamline.api.identity.IdentityProviderService;
 import org.daisy.streamline.api.media.AnnotatedFile;
 import org.daisy.streamline.api.media.DefaultAnnotatedFile;
@@ -45,7 +47,6 @@ import org.slf4j.LoggerFactory;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -55,7 +56,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
-public class FileToOBFLStep extends DefaultStep {
+public class FileToOBFLStep extends DefaultStep implements XProcStep {
 	private static final QName _source = new QName("source");
 	
 	private static final QName _locale = new QName("locale");

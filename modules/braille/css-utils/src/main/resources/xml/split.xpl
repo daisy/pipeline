@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
-                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 name="main"
@@ -47,21 +46,8 @@
         </p:documentation>
     </p:output>
     
-    <p:declare-step type="pxi:css-split">
-        <p:input port="source"/>
-        <p:option name="split-before" required="true"/>
-        <p:option name="split-after" required="true"/>
-        <p:output port="result"/>
-        <!--
-            implemented in Java
-        -->
-    </p:declare-step>
-    
-    <pxi:css-split>
-        <p:with-option name="split-before" select="$split-before"/>
-        <p:with-option name="split-after" select="$split-after"/>
-    </pxi:css-split>
-    
-    <p:filter select="/*/*"/>
-    
+    <!--
+        implemented in Java
+    -->
+
 </p:declare-step>

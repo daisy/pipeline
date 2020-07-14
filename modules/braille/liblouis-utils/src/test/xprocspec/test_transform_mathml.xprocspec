@@ -17,7 +17,7 @@
                 </x:document>
             </x:input>
             <x:option name="query" select="'(input:mathml)(locale:nl)'"/>
-            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:param port="parameters" name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
         </x:call>
         <x:context label="result">
             <x:document type="port" port="result"/>

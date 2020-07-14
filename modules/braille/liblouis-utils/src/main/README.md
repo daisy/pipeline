@@ -48,19 +48,6 @@
   Other features are used for finding sub-transformers of type
   [BrailleTranslator](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/BrailleTranslator.html).
 
-- [`(input:css)(output:css)(translator:liblouis)`](java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSBlockTransform.java)
-  
-  Recognized features:
-  
-  - `id`: If present it must be the only feature. Will match a
-      transformer with a unique ID.
-  - `translator`: Will only match if the value is `liblouis`.
-  - `locale`: If present the value will be used instead of any
-      xml:lang attributes.
-  
-  Other features are used for finding sub-transformers of type
-  [LiblouisTranslator](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html).
-  
 - [`(input:text-css)(output:braille)(translator:liblouis)`](java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTranslatorJnaImplProvider.java)
   
   Recognized features:

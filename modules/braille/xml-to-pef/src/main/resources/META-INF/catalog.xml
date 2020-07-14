@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   
   <!-- "abstract" script (other scripts can extend this one) -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl" uri="../xml/xproc/xml-to-pef.xpl"/>
@@ -7,7 +7,7 @@
   <!-- xproc -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
   
-  <!-- other -->
+  <!-- style sheets -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl" uri="../xml/xslt/generate-toc.xsl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/volume-breaking.xsl" uri="../xml/xslt/volume-breaking.xsl"/>
   

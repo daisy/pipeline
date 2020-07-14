@@ -27,7 +27,7 @@
           <document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en-US">
             <head>
               <meta>foobar</meta>
-              <link rel="stylesheet" media="embossed" type="text/css" href="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/reset.css"/>
+              <link rel="stylesheet" media="embossed" type="text/css" href="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/reset.css"/>
             </head>
             <body>
               <section>

@@ -19,6 +19,13 @@
             px:add-xml-base
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+        </p:documentation>
+    </p:import>
 
     <p:variable name="audio-dir" select="concat($content-dir,'audio/')">
         <p:empty/>

@@ -12,7 +12,6 @@ import javax.xml.transform.TransformerFactory;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.runtime.XAtomicStep;
@@ -20,6 +19,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.pipeline.asciimathml.ASCIIMathML;
 
@@ -42,7 +42,7 @@ public class ASCIIMathMLProvider implements XProcStepProvider {
 		return new ASCIIMathMLStep(runtime, step);
 	}
 	
-	private static class ASCIIMathMLStep extends DefaultStep {
+	private static class ASCIIMathMLStep extends DefaultStep implements XProcStep {
 		
 		private static final Logger logger = LoggerFactory.getLogger(ASCIIMathMLStep.class);
 		

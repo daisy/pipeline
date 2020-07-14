@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+
+    <p:option name="hyphenation" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translation/formatting of text: Hyphenation</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, will automatically hyphenate text.
+
+Makes the variable `$hyphenation` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@if $hyphenation {
+  :root {
+    hyphens: auto;
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`hyphens`](http://braillespecs.github.io/braille-css/#the-hyphens-property) property
+</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="line-spacing" required="false" select="'single'">
+        <p:pipeinfo>
+            <px:type>
+                <choice>
+                    <value>single</value>
+                    <documentation xml:lang="en">Single</documentation>
+                    <value>double</value>
+                    <documentation xml:lang="en">Double</documentation>
+                </choice>
+            </px:type>
+        </p:pipeinfo>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translation/formatting of text: Line spacing</h2>
+            <p px:role="desc" xml:space="preserve">Single or double line spacing.
+
+Makes the variable `$line-spacing` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@if $line-spacing == double {
+  :root {
+    line-height: 2;
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
+  property
+</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="capital-letters" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translation/formatting of text: Capital letters</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, will indicate capital letters.
+
+Makes the variable `$capital-letters` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@if $capital-letters != true {
+  :root {
+    text-transform: lowercase;
+  }
+}
+~~~</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="include-captions" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Block elements: Include captions</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, will include captions for images, tables, and so on.
+
+Makes the variable `$include-captions` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+caption {
+  display: if($include-captions, block, none);
+}
+~~~</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="include-images" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Block elements: Include images</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
+
+Makes the variable `$include-images` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@if $include-images {
+  img::after {
+    content: attr(alt);
+  }
+}
+~~~</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="include-line-groups" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Block elements: Include line groups</h2>
+            <p px:role="desc" xml:space="preserve">When disabled, lines in a linegroup are joined together to form one block.
+
+Makes the variable `$include-line-groups` available in style sheets and includes the following rule
+by default:
+
+~~~sass
+.linegroup .line {
+  display: if($include-line-groups, block, inline);
+}
+~~~</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="include-production-notes" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Inline elements: Include production notes</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, production notes are included in the content.
+
+Makes the variable `$include-production-notes` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+.prodnote,
+[epub|type~='z3998:production'] {
+  display: if($include-production-notes, block, none);
+}
+~~~</p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

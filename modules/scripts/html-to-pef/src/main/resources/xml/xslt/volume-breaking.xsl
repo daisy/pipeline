@@ -4,8 +4,7 @@
                 version="2.0">
 	
 	<!--
-	    Intended to be used in combination with
-	    http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/volume-breaking.scss
+	    Intended to be used in combination with volume-breaking.scss
 	-->
 	
 	<xsl:include href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/volume-breaking.xsl"/>

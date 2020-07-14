@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+
+    <!-- ====================== -->
+    <!-- FIXME: Not implemented -->
+    <!-- ====================== -->
+    
+    <p:option name="left-margin" required="false" px:type="integer" select="'0'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page layout: Left margin</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="main-document-language" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translation/formatting of text: Main document language</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="tab-width" required="false" px:type="integer" select="'4'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translation/formatting of text: Tab width</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="include-image-groups" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Block elements: Include image groups</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="text-level-formatting" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Inline elements: Text-level formatting (emphasis, strong)</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, text that is in bold or italics in the print version will be rendered in bold or italics in the braille version as well. **Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="include-note-references" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Inline elements: Include note references</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="footnotes-placement" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Placement of content: Footnotes placement</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="colophon-metadata-placement" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Placement of content: Colophon/metadata placement</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="rear-cover-placement" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Placement of content: Rear cover placement</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="number-of-sheets" required="false" px:type="integer" select="'50'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Volumes: Number of sheets</h2>
+            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="minimum-number-of-sheets" required="false" px:type="integer" select="'30'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Volumes: Minimum number of sheets</h2>
+            <p px:role="desc" xml:space="preserve">The minimum number of sheets in a volume. **Not implemented**</p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

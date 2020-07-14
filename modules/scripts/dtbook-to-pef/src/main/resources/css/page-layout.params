@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+
+    <p:option name="page-width" required="false" px:type="integer" select="'40'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page layout: Page width</h2>
+            <p px:role="desc" xml:space="preserve">The number of columns available for printing.
+
+Makes the variable `$page-width` available in style sheets and includes the following rule by default:
+
+~~~sass
+@page {
+  size: $page-width $page-height;
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="page-height" required="false" px:type="integer" select="'25'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page layout: Page height</h2>
+            <p px:role="desc" xml:space="preserve">The number of rows available for printing.
+
+Makes the variable `$page-height` available in style sheets and includes the following rule by default:
+
+~~~sass
+@page {
+  size: $page-width $page-height;
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+</p>
+        </p:documentation>
+    </p:option>
+
+    <!-- not a CSS parameter, goes to formatter directly -->
+    <p:option name="duplex" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page layout: Duplex</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, will print on both sides of the paper.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="show-braille-page-numbers" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page numbers: Show braille page numbers</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, will number braille pages.
+
+Makes the variable `$show-braille-page-numbers` available in style sheets. In order to use the
+variable include a rule like the following in your custom style sheet:
+
+~~~sass
+@if $show-braille-page-numbers {
+  @page {
+    @top-right {
+      content: counter(page);
+    }
+  }
+}
+~~~
+
+This will create a page number in the top right corner of every braille page.
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the
+  [`counter()`](http://braillespecs.github.io/braille-css/#printing-counters-the-counter-function)
+  function
+</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="show-print-page-numbers" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Page numbers: Show print page numbers</h2>
+            <p px:role="desc" xml:space="preserve">When enabled, will indicate original page numbers.
+
+Makes the variable `$show-print-page-numbers` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+@if $show-print-page-numbers {
+  pagenum {
+    string-set: print-page content();
+  }
+}
+~~~
+
+In order to use the `print-page` string include a rule like the following in your custom style
+sheet:
+
+~~~css
+@page {
+  @bottom-right {
+    content: string(print-page);
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="levels-in-footer" required="false" px:type="integer" select="'6'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Headers/footers: Levels in footer</h2>
+            <p px:role="desc" xml:space="preserve">Specify which headings are rendered in the footer.
+              
+Makes the variable `$levels-in-footer` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@for $level from 1 through 6 {
+  @if $levels-in-footer >= $level {
+    h#{$level} {
+      string-set: footer content();
+    }
+  }
+}
+~~~
+
+In other words, the `footer` string is updated each time a heading with a level smaller than or
+equal to `levels-in-footer` is encountered. In order to use the `footer` string include a rule like
+the following in your custom style sheet:
+
+~~~css
+@page {
+  @bottom-center {
+    content: string(footer);
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+</p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

@@ -9,6 +9,7 @@
 	
 	<xsl:param name="duplex" as="xs:boolean" select="true()"/>
 	<xsl:param name="maximum-number-of-sheets" as="xs:integer" select="70"/>
+	<xsl:param name="avoid-volume-break-inside-leaf-section" as="xs:boolean" select="false()"/>
 	<!--
 	    for testing
 	-->
@@ -20,10 +21,17 @@
 	              select="xs:integer(round($maximum-number-of-pages div 3 + 0.5))"/>
 		
 	<xsl:template match="/*">
-		<xsl:variable name="leaf-sections" as="element()">
-			<xsl:apply-templates mode="leaf-sections" select="."/>
-		</xsl:variable>
-		<xsl:apply-templates mode="keep-with-next-section" select="$leaf-sections"/>
+		<xsl:choose>
+			<xsl:when test="not($avoid-volume-break-inside-leaf-section)">
+				<xsl:sequence select="."/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="leaf-sections" as="element()">
+					<xsl:apply-templates mode="leaf-sections" select="."/>
+				</xsl:variable>
+				<xsl:apply-templates mode="keep-with-next-section" select="$leaf-sections"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template mode="leaf-sections"

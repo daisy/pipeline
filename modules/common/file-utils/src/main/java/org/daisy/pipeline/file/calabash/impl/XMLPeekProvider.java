@@ -12,6 +12,7 @@ import java.net.URI;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.daisy.pipeline.file.calabash.impl.PeekProvider.Peek;
@@ -19,7 +20,6 @@ import org.daisy.pipeline.file.calabash.impl.PeekProvider.Peek;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
@@ -33,7 +33,6 @@ import org.osgi.service.component.annotations.Component;
 	service = { XProcStepProvider.class },
 	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}file-xml-peek" }
 )
-@SuppressWarnings("serial")
 public class XMLPeekProvider implements XProcStepProvider {
 
 	@Override
@@ -44,7 +43,7 @@ public class XMLPeekProvider implements XProcStepProvider {
 	/**
 	 * Returns the root element of the XML document referenced in `href`, including its attributes and namespaces.
 	 */
-	public static class XMLPeek extends DefaultStep {
+	public static class XMLPeek extends DefaultStep implements XProcStep {
 		private static final QName _href = new QName("href");
 
 		private WritablePipe result = null;

@@ -13,6 +13,21 @@
 
 ## OSGi services
 
+### Transformers ([`org.daisy.pipeline.braille.common.TransformProvider`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html))
+
+- [`(input:css)(output:css)`](java/org/daisy/pipeline/braille/css/impl/CSSBlockTransform.java)
+  
+  Recognized features:
+  
+  - `id`: If present it must be the only feature. Will match a
+      transformer with a unique ID.
+  - `locale`: If present the value will be used instead of any
+      xml:lang attributes.
+  
+  Other features are used for finding sub-transformers of type
+  [BrailleTranslator](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/BrailleTranslator.html)
+  that match `(input:text-css)`.
+  
 ### Calabash steps (`org.daisy.common.xproc.calabash.XProcStepProvider`)
 
 - [`{http://www.daisy.org/ns/pipeline/braille-css}inline`](java/org/daisy/pipeline/braille/css/calabash/impl/CssInlineStep.java)

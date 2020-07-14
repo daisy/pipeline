@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.ForwardingList;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 public interface Query extends Iterable<Query.Feature> {
 	
@@ -134,6 +135,17 @@ public interface Query extends Iterable<Query.Feature> {
 				for (Feature f : this)
 					b.append(f);
 				return b.toString();
+			}
+			
+			@Override
+			public boolean equals(Object obj) {
+				if (this == obj)
+					return true;
+				if (obj == null)
+					return false;
+				if (!(obj instanceof Query))
+					return false;
+				return Iterables.elementsEqual(this, (Query)obj);
 			}
 		}
 		

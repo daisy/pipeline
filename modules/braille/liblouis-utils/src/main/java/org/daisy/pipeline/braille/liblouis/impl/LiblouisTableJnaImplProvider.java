@@ -90,10 +90,6 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 			return toString();
 		}
 		
-		public XProc asXProc() throws UnsupportedOperationException {
-			throw new UnsupportedOperationException();
-		}
-		
 		public Normalizer.Form getUnicodeNormalizationForm() {
 			if (info != null) {
 				String form = info.get("unicode-form");

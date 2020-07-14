@@ -16,6 +16,7 @@ import com.google.common.collect.AbstractIterator;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
+import org.daisy.pipeline.braille.common.util.Function0;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +98,6 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 	}
 	
 	private java.lang.Iterable<T> rememberId(final java.lang.Iterable<T> iterable) {
-		final Map<String,T> fromId = this.fromId;
 		return new java.lang.Iterable<T>() {
 			public Iterator<T> iterator() {
 				return new Iterator<T>() {
@@ -115,6 +115,17 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 					}
 				};
 			}
+		};
+	}
+	
+	protected Function0<Void> provideTemporarily(T t) {
+		// assumes t is not in cache yet and is unique to this call
+		fromId.put(t.getIdentifier(), t);
+		return () -> {
+			fromId.remove(t.getIdentifier());
+			// also remove from transformCache
+			transformCache.remove(mutableQuery().add("id", t.getIdentifier()));
+			return null;
 		};
 	}
 	

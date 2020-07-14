@@ -1,0 +1,16 @@
+/*
+ * Page breaking
+ */
+
+$force-braille-page-break: false !default;
+
+@namespace epub url(http://www.idpf.org/2007/ops);
+
+@if $force-braille-page-break {
+	.page-front,
+	.page-normal,
+	.page-special,
+	[epub|type='pagebreak'] {
+		page-break-before: always;
+	}
+}

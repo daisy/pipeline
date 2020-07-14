@@ -1,19 +1,19 @@
 package org.daisy.pipeline.html.calabash.impl;
 
 import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
-import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
-import org.daisy.common.calabash.XMLCalabashHelper;
 import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.osgi.service.component.annotations.Component;
@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ChunkerStep extends DefaultStep {
+public class ChunkerStep extends DefaultStep implements XProcStep {
 	
 	@Component(
 		name = "px:chunker",
@@ -74,20 +74,20 @@ public class ChunkerStep extends DefaultStep {
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			Configuration configuration = runtime.getProcessor().getUnderlyingConfiguration();
-			XMLCalabashHelper.transform(
-				new Chunker(getOption(ALLOW_BREAK_BEFORE),
-				            getOption(ALLOW_BREAK_AFTER),
-				            getOption(PREFER_BREAK_BEFORE),
-				            getOption(PREFER_BREAK_AFTER),
-				            getOption(ALWAYS_BREAK_BEFORE),
-				            getOption(ALWAYS_BREAK_AFTER),
-				            getOption(MAX_CHUNK_SIZE, -1),
-				            SaxonHelper.jaxpQName(getOption(LINK_ATTRIBUTE_NAME, DEFAULT_LINK_ATTRIBUTE_NAME)),
-				            configuration),
-				sourcePipe,
-				resultPipe,
-				runtime);
+			new Chunker(
+				getOption(ALLOW_BREAK_BEFORE),
+				getOption(ALLOW_BREAK_AFTER),
+				getOption(PREFER_BREAK_BEFORE),
+				getOption(PREFER_BREAK_AFTER),
+				getOption(ALWAYS_BREAK_BEFORE),
+				getOption(ALWAYS_BREAK_AFTER),
+				getOption(MAX_CHUNK_SIZE, -1),
+				SaxonHelper.jaxpQName(getOption(LINK_ATTRIBUTE_NAME, DEFAULT_LINK_ATTRIBUTE_NAME)),
+				runtime.getProcessor().getUnderlyingConfiguration())
+			.transform(
+				new XMLCalabashInputValue(sourcePipe, runtime),
+				new XMLCalabashOutputValue(resultPipe, runtime))
+			.run();
 		} catch (Exception e) {
 			logger.error("px:chunker failed", e);
 			throw new XProcException(step.getNode(), e);

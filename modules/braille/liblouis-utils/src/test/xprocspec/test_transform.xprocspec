@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+    
+    <x:scenario label="text-transform: uncontracted">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc>
+                        <p style="display: block">foobar</p>
+                        <p style="display: block; text-transform: uncontracted">foobar</p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(translator:liblouis)(locale:foo)(contraction:full)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <_ xmlns="" style="text-transform: none">
+                    <doc>
+                        <p style="display: block">⠋⠥⠃⠁⠗</p>
+                        <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                    </doc>
+                </_>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="custom @text-transform rule">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc style="@text-transform my-uncontracted { system: braille-translator; contraction: no; }">
+                        <p style="display: block">foobar</p>
+                        <p style="display: block; text-transform: my-uncontracted">foobar</p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(translator:liblouis)(locale:foo)(contraction:full)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <_ xmlns="" style="text-transform: none">
+                    <doc style="@text-transform my-uncontracted { system: braille-translator; contraction: no }">
+                        <p style="display: block">⠋⠥⠃⠁⠗</p>
+                        <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                    </doc>
+                </_>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="relative table path">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc style="@text-transform my-uncontracted { system: braille-translator; liblouis-table: url(../resources/tables/foobar.utb); }">
+                        <p style="display: block">foobar</p>
+                        <p style="display: block; text-transform: my-uncontracted">foobar</p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(translator:liblouis)(locale:foo)(contraction:full)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <_ xmlns="" style="text-transform: none">
+                    <doc style="@text-transform my-uncontracted { system: braille-translator; liblouis-table: url('../resources/tables/foobar.utb') }">
+                        <p style="display: block">⠋⠥⠃⠁⠗</p>
+                        <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                    </doc>
+                </_>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

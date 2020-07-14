@@ -10,10 +10,9 @@
 
 ### Style sheets
 
-- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css`](resources/css/default.css)
-- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/reset.css`](resources/css/reset.css)
-- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/volume-breaking.scss`](resources/css/volume-breaking.scss)
-- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/xsl/volume-breaking.xsl`](resources/xml/xslt/volume-breaking.xsl)
+- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css`](resources/css/reset.css)
+- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/default.scss`](resources/css/default.scss)
+- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl`](resources/xml/xslt/volume-breaking.xsl)
 
 ## OSGi services
 

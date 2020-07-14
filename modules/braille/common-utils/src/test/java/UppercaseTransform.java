@@ -1,14 +1,19 @@
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Optional;
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.runtime.XAtomicStep;
 
 import static org.daisy.common.file.URIs.asURI;
+
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
+import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
 import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.TransformProvider;
@@ -19,9 +24,12 @@ import org.osgi.service.component.annotations.Component;
 
 import org.slf4j.Logger;
 
-public class UppercaseTransform extends AbstractBrailleTranslator implements BrailleTranslator {
+public class UppercaseTransform extends AbstractBrailleTranslator implements BrailleTranslator, XProcStepProvider {
 	
-	private final URI href = asURI(new File(new File(PathUtils.getBaseDir()), "target/test-classes/uppercase.xpl"));
+	private final XProcStepProvider stepProvider = new CxEvalBasedTransformer(
+			asURI(new File(new File(PathUtils.getBaseDir()), "target/test-classes/uppercase.xpl")),
+			null,
+			null);
 	
 	public FromStyledTextToBraille fromStyledTextToBraille() {
 		return fromStyledTextToBraille;
@@ -39,8 +47,8 @@ public class UppercaseTransform extends AbstractBrailleTranslator implements Bra
 	};
 	
 	@Override
-	public XProc asXProc() {
-		return new XProc(href, null, null);
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		return stepProvider.newStep(runtime, step);
 	}
 	
 	private static final Iterable<UppercaseTransform> empty = Optional.<UppercaseTransform>absent().asSet();

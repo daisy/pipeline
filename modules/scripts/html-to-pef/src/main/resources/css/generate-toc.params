@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+
+    <p:option name="toc-depth" required="false" px:type="integer" select="'0'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Table of contents: Table of contents depth</h2>
+            <p px:role="desc" xml:space="preserve">The depth of the table of contents hierarchy to include. '0' means no table of contents.
+
+A table of contents will be generated from the heading elements present in the document: from `h1`
+elements if the specified value for "depth" is 1, from `h1` and `h2` elements if the specified value
+is 2, etc. The resulting table of contents has the following nested structure:
+
+~~~xml
+&lt;ol id="generated-document-toc"&gt;
+  &lt;li&gt;
+      &lt;a href="#ch_1"&gt;Chapter 1&lt;/a&gt;
+      &lt;list&gt;
+          &lt;li&gt;
+              &lt;a href="#ch_1_1"&gt;1.1&lt;/a&gt;
+              ...
+          &lt;/li&gt;
+          &lt;li&gt;
+              &lt;a href="#ch_1_2"&gt;1.2&lt;/a&gt;
+              ...
+          &lt;/li&gt;
+          ...
+      &lt;/list&gt;
+  &lt;/li&gt;
+  ...
+&lt;/ol&gt;
+~~~
+
+Another one of these is generated but with ID `generated-volume-toc`. `ch_1`, `ch_1_2` etc. are the
+IDs of the heading elements from which the list was constructed, and the content of the links are
+exact copies of the content of the heading elements. By default the list is not rendered. The list
+should be styled and positioned with CSS. The following rules are included by default:
+
+~~~css
+#generated-document-toc {
+  flow: document-toc;
+  display: -obfl-toc;
+  -obfl-toc-range: document;
+}
+
+#generated-volume-toc {
+  flow: volume-toc;
+  display: -obfl-toc;
+  -obfl-toc-range: volume;
+}
+~~~
+
+This means that a document range table of contents is added to the named flow called "document-toc",
+and a volume range table of contents is added to the named flow called "volume-toc". In order to
+consume these named flows use the function `flow()`. For example, to position the document range
+table of contents at the beginning of the first volume, and to repeat the volume range table of
+content at the beginning of every other volume, include the following additional rules:
+
+~~~css
+@volume {
+  @begin {
+    content: flow(volume-toc);
+  }
+}
+
+@volume:first {
+  @begin {
+    content: flow(document-toc);
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`display:
+  obfl-toc`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-toc)
+  value
+- the [`flow`](http://braillespecs.github.io/braille-css/#the-flow-property) property
+- the [`flow()`](http://braillespecs.github.io/braille-css/#h4_the-flow-function) function
+- the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+- the [`@begin`](http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules) rule
+</p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

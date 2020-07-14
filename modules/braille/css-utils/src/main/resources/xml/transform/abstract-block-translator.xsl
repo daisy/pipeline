@@ -22,15 +22,11 @@
 		<xsl:message terminate="yes">Coding error</xsl:message>
 	</xsl:template>
 	
-	<xsl:template match="/css:wrapper" priority="1">
-		<xsl:apply-templates select="*" mode="identify-blocks"/>
-	</xsl:template>
-	
 	<xsl:template match="/*">
 		<xsl:apply-templates select="." mode="identify-blocks"/>
 	</xsl:template>
 	
-	<xsl:template mode="identify-blocks" match="/css:wrapper/*|/*[not(self::css:wrapper)]">
+	<xsl:template mode="identify-blocks" match="/*">
 		<xsl:variable name="source-style" as="element()*">
 			<xsl:call-template name="css:computed-properties">
 				<xsl:with-param name="properties" select="$text-properties"/>
@@ -225,7 +221,15 @@
 				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 				<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
 			</xsl:apply-templates>
-			<xsl:apply-templates mode="translate-style" select="$style[@selector and not(@selector=('&amp;::before','&amp;::after'))]">
+			<!--
+			    It does not make sense to translate @text-transform rules. Not dropping the rules
+			    because dependending on the restore-text-style parameter, text-transform values
+			    (other than none) may still be present in the output.
+			-->
+			<xsl:sequence select="$style[matches(@selector,'^@text-transform')]"/>
+			<xsl:apply-templates mode="translate-style" select="$style[@selector
+			                                                           and not(@selector=('&amp;::before','&amp;::after'))
+			                                                           and not(matches(@selector,'^@text-transform'))]">
 				<xsl:with-param name="restore-text-style" tunnel="yes" select="true()"/>
 			</xsl:apply-templates>
 		</xsl:variable>

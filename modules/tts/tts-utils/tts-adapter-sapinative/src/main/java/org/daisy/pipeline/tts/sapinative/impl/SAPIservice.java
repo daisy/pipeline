@@ -12,7 +12,6 @@ import org.daisy.pipeline.tts.TTSService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.ComponentContext;
 
 @Component(
 	name = "sapinative-tts-service",
@@ -72,9 +71,8 @@ public class SAPIservice extends AbstractTTSService {
 		super.loadSSMLadapter("/transform-ssml.xsl", SAPIservice.class);
 	}
 
-	//OSGi callback
 	@Deactivate
-	protected void deactivate(ComponentContext context) {
+	protected void deactivate() {
 		SAPILib.dispose();
 	}
 

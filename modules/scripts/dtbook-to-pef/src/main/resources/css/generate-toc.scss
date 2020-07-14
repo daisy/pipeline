@@ -1,0 +1,18 @@
+/*
+ * Generated table of contents
+ */
+
+$toc-depth: 0 !default;
+
+@if $toc-depth > 0 {
+	#generated-document-toc {
+		flow: document-toc;
+		display: -obfl-toc;
+		-obfl-toc-range: document;
+	}
+	#generated-volume-toc {
+		flow: volume-toc;
+		display: -obfl-toc;
+		-obfl-toc-range: volume;
+	}
+}

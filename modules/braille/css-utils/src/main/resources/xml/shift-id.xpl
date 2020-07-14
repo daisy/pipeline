@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 type="css:shift-id"
                 exclude-inline-prefixes="#all"
                 version="1.0">
@@ -34,16 +33,8 @@
         </p:documentation>
     </p:output>
     
-    <p:declare-step type="pxi:css-shift-id">
-        <p:input port="source"/>
-        <p:output port="result"/>
-        <!--
-            implemented in Java
-        -->
-    </p:declare-step>
-    
-    <p:wrap-sequence wrapper="_"/>
-    <pxi:css-shift-id/>
-    <p:filter select="/_/*"/>
+    <!--
+        implemented in Java
+    -->
     
 </p:declare-step>

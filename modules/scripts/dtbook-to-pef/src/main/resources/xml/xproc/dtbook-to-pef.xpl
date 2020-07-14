@@ -70,34 +70,21 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="ascii-table"/>
     <p:option name="page-width"/>
     <p:option name="page-height"/>
-    <p:option name="left-margin"/>
     <p:option name="duplex"/>
     <p:option name="levels-in-footer"/>
-    <p:option name="main-document-language"/>
     <p:option name="hyphenation"/>
     <p:option name="line-spacing"/>
-    <p:option name="tab-width"/>
     <p:option name="capital-letters"/>
-    <p:option name="accented-letters"/>
-    <p:option name="polite-forms"/>
-    <p:option name="downshift-ordinal-numbers"/>
     <p:option name="include-captions"/>
     <p:option name="include-images"/>
-    <p:option name="include-image-groups"/>
     <p:option name="include-line-groups"/>
-    <p:option name="text-level-formatting"/>
-    <p:option name="include-note-references"/>
     <p:option name="include-production-notes"/>
     <p:option name="show-braille-page-numbers"/>
     <p:option name="show-print-page-numbers"/>
     <p:option name="force-braille-page-break"/>
     <p:option name="toc-depth"/>
-    <p:option name="footnotes-placement"/>
-    <p:option name="colophon-metadata-placement"/>
-    <p:option name="rear-cover-placement"/>
-    <p:option name="number-of-sheets"/>
     <p:option name="maximum-number-of-sheets"/>
-    <p:option name="minimum-number-of-sheets"/>
+    <p:option name="avoid-volume-break-inside-leaf-section"/>
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
@@ -161,8 +148,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- ======= -->
     <!-- CONVERT -->
     <!-- ======= -->
-    <px:dtbook-to-pef name="convert" px:message="Transforming from DTBook to PEF" px:progress=".92"
-                      default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css">
+    <px:dtbook-to-pef name="convert" px:message="Transforming from DTBook to PEF" px:progress=".92">
         <p:input port="source.in-memory">
             <p:pipe step="load" port="in-memory.out"/>
         </p:input>

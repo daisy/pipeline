@@ -1,12 +1,14 @@
 package org.daisy.pipeline.common.calabash.impl;
 
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.library.Identity;
+import com.xmlcalabash.runtime.XAtomicStep;
+
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.daisy.common.xproc.calabash.XProcStepProvider;
 
-import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
-import com.xmlcalabash.runtime.XAtomicStep;
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -21,7 +23,7 @@ public class Message implements XProcStepProvider {
 		return new MessageStep(runtime, step);
 	}
 
-	public static class MessageStep extends com.xmlcalabash.library.Identity {
+	public static class MessageStep extends Identity implements XProcStep {
 
 		private static final QName _message = new QName("message");
 		private static final QName _severity = new QName("severity");

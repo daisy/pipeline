@@ -8,17 +8,17 @@
   
   <!-- stylesheet defaults to names used in HTML if no other grammar is detected -->
   
-  <xsl:param name="depth" as="xs:string"/>
+  <xsl:param name="toc-depth" as="xs:string" select="'0'"/>
   <xsl:param name="heading-names" select="''"/>
   
-  <xsl:variable name="_depth" as="xs:integer" select="if ($depth) then xs:integer($depth) else 6"/>
+  <xsl:variable name="depth" as="xs:integer" select="if ($toc-depth) then xs:integer($toc-depth) else 6"/>
   
   <xsl:variable name="root-base-uri" as="xs:anyURI" select="base-uri(/*)"/>
   
   <xsl:template match="/*">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
-      <xsl:if test="$_depth &gt; 0">
+      <xsl:if test="$depth &gt; 0">
         <xsl:variable name="list" as="element()*">
           <xsl:variable name="included-heading-names" as="xs:string*" select="if ($heading-names) then tokenize($heading-names,' ') else f:html-headers()"/>
           <xsl:for-each-group select="//*[local-name()=$included-heading-names]" group-starting-with="*:h1">
@@ -32,7 +32,7 @@
                   <xsl:apply-templates select="current-group()/self::*:h1/child::node()"/>
                 </xsl:element>
               </xsl:if>
-              <xsl:if test="$_depth &gt; 1">
+              <xsl:if test="$depth &gt; 1">
                 <xsl:variable name="list" as="element()*">
                   <xsl:for-each-group select="current-group()[not(self::*:h1)]" group-starting-with="*:h2">
                     <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
@@ -45,7 +45,7 @@
                           <xsl:apply-templates select="current-group()/self::*:h2/child::node()"/>
                         </xsl:element>
                       </xsl:if>
-                      <xsl:if test="$_depth &gt; 2">
+                      <xsl:if test="$depth &gt; 2">
                         <xsl:variable name="list" as="element()*">
                           <xsl:for-each-group select="current-group()[not(self::*:h2)]" group-starting-with="*:h3">
                             <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
@@ -58,7 +58,7 @@
                                   <xsl:apply-templates select="current-group()/self::*:h3/child::node()"/>
                                 </xsl:element>
                               </xsl:if>
-                              <xsl:if test="$_depth &gt; 3">
+                              <xsl:if test="$depth &gt; 3">
                                 <xsl:variable name="list" as="element()*">
                                   <xsl:for-each-group select="current-group()[not(self::*:h3)]" group-starting-with="*:h4">
                                     <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
@@ -71,7 +71,7 @@
                                           <xsl:apply-templates select="current-group()/self::*:h4/child::node()"/>
                                         </xsl:element>
                                       </xsl:if>
-                                      <xsl:if test="$_depth &gt; 4">
+                                      <xsl:if test="$depth &gt; 4">
                                         <xsl:variable name="list" as="element()*">
                                           <xsl:for-each-group select="current-group()[not(self::*:h4)]" group-starting-with="*:h5">
                                             <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
@@ -84,7 +84,7 @@
                                                   <xsl:apply-templates select="current-group()/self::*:h5/child::node()"/>
                                                 </xsl:element>
                                               </xsl:if>
-                                              <xsl:if test="$_depth &gt; 5">
+                                              <xsl:if test="$depth &gt; 5">
                                                 <xsl:variable name="list" as="element()*">
                                                   <xsl:for-each select="current-group()/self::*:h6">
                                                     <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
@@ -193,7 +193,7 @@
   <!-- ========================================= -->
   
   <xsl:function name="f:html-headers">
-    <xsl:sequence select="for $i in 1 to $_depth return concat('h',$i)"/>
+    <xsl:sequence select="for $i in 1 to $depth return concat('h',$i)"/>
   </xsl:function>
   
   <xsl:function name="f:list-name">

@@ -2,7 +2,6 @@ package org.daisy.pipeline.braille.css.calabash.impl;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -10,19 +9,15 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 
 import javax.xml.namespace.QName;
-import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
-import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 
 import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -33,15 +28,15 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 import net.sf.saxon.sxpath.XPathExpression;
 import net.sf.saxon.trans.XPathException;
 
-import org.daisy.common.calabash.XMLCalabashHelper;
 import org.daisy.common.saxon.SaxonHelper;
-import org.daisy.common.saxon.NodeToXMLStreamTransformer;
+import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.getAttributes;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
@@ -49,7 +44,16 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeElement;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeEvent;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
+
+import org.daisy.common.transform.InputValue;
+import org.daisy.common.transform.Mult;
+import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
+import org.daisy.common.transform.XMLInputValue;
+import org.daisy.common.transform.XMLOutputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.osgi.service.component.annotations.Component;
@@ -57,12 +61,12 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CssSplitStep extends DefaultStep {
+public class CssSplitStep extends DefaultStep implements XProcStep {
 	
 	@Component(
 		name = "css:split",
 		service = { XProcStepProvider.class },
-		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}css-split" }
+		property = { "type:String={http://www.daisy.org/ns/pipeline/braille-css}split" }
 	)
 	public static class Provider implements XProcStepProvider {
 		
@@ -105,13 +109,13 @@ public class CssSplitStep extends DefaultStep {
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			XMLCalabashHelper.transform(
-				new CssSplitTransformer(getOption(_SPLIT_BEFORE), getOption(_SPLIT_AFTER), runtime),
-				sourcePipe,
-				resultPipe,
-				runtime); }
+			new CssSplitTransformer(getOption(_SPLIT_BEFORE), getOption(_SPLIT_AFTER), runtime)
+			.transform(
+				new XMLCalabashInputValue(sourcePipe, runtime),
+				new XMLCalabashOutputValue(resultPipe, runtime))
+			.run(); }
 		catch (Exception e) {
-			logger.error("css:split", e);
+			logger.error("css:split failed", e);
 			throw new XProcException(step.getNode(), e); }
 	}
 	
@@ -165,7 +169,7 @@ public class CssSplitStep extends DefaultStep {
 		return result;
 	}
 	
-	private static class CssSplitTransformer implements NodeToXMLStreamTransformer {
+	private static class CssSplitTransformer extends SingleInSingleOutXMLTransformer {
 		
 		final Configuration config;
 		final RuntimeValue splitBefore;
@@ -182,22 +186,30 @@ public class CssSplitStep extends DefaultStep {
 		List<Integer> currentPath;
 		Iterator<SplitPoint> splitPoints;
 		SplitPoint nextSplitPoint;
+
+		public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) throws IllegalArgumentException {
+			if (source == null || result == null)
+				throw new IllegalArgumentException();
+			if (!(source instanceof SaxonInputValue))
+				throw new IllegalArgumentException();
+			return () -> transform((SaxonInputValue)source.ensureSingleItem(), result.asXMLStreamWriter());
+		}
 		
-		@Override
-		public void transform(Iterator<XdmNode> input, Supplier<BaseURIAwareXMLStreamWriter> output) throws TransformerException {
-			XdmNode doc = Iterators.getOnlyElement(input);
-			XMLStreamReader reader;
+		void transform(SaxonInputValue input, BaseURIAwareXMLStreamWriter output) throws TransformerException {
+			Mult<SaxonInputValue> mult = input.mult(2);
+			XdmItem doc = mult.get().asXdmItemIterator().next();
+			if (!(doc instanceof XdmNode))
+				throw new TransformerException(new IllegalArgumentException());
 			try {
-				reader = SaxonHelper.nodeReader(doc, config);
-				splitPoints = getSplitPoints(config, doc, splitBefore, splitAfter).iterator();
+				splitPoints = getSplitPoints(config, (XdmNode)doc, splitBefore, splitAfter).iterator();
 			} catch (XPathException e) {
 				throw new TransformerException(e);
 			}
-			transform(reader, output);
+			transform(mult.get().asXMLStreamReader(), output);
 		}
 		
-		void transform(XMLStreamReader reader, Supplier<BaseURIAwareXMLStreamWriter> output) throws TransformerException {
-			XMLStreamWriter writer = output.get();
+		void transform(XMLStreamReader reader, BaseURIAwareXMLStreamWriter output) throws TransformerException {
+			XMLStreamWriter writer = output;
 			nextSplitPoint = null;
 			if (splitPoints.hasNext())
 				nextSplitPoint = splitPoints.next();
@@ -206,21 +218,19 @@ public class CssSplitStep extends DefaultStep {
 			currentPath = new ArrayList<Integer>();
 			int childCount = 0;
 			try {
-				writer.writeStartDocument();
-				writeStartElement(writer, new QName("_"));
-			  loop: while (true)
+				while (true)
 					try {
-						int event = reader.next();
+						int event = reader.getEventType();
 						switch (event) {
 						case START_ELEMENT: {
 							if (nextSplitPoint == null) {
 								writeElement(writer, reader);
-								continue; }
+								break; }
 							currentPath.add(++childCount);
 							if (isSplitPoint(currentPath, nextSplitPoint) && nextSplitPoint.position == SplitPoint.Position.BEFORE)
 								split(writer);
 							if (containsSplitPoint(currentPath, nextSplitPoint)) {
-								writeEvent(writer, event, reader);
+								writeEvent(writer, reader);
 								if (CSS_BOX.equals(reader.getName())) {
 									for (int i = 0; i < reader.getAttributeCount(); i++) {
 										QName name = reader.getAttributeName(i);
@@ -242,7 +252,7 @@ public class CssSplitStep extends DefaultStep {
 								childCount = currentPath.remove(currentPath.size() - 1); }
 							break; }
 						case END_ELEMENT: {
-							writeEvent(writer, event, reader);
+							writeEvent(writer, reader);
 							parents.pop();
 							parentAttrs.pop();
 							if (isSplitPoint(currentPath, nextSplitPoint)) {
@@ -251,16 +261,11 @@ public class CssSplitStep extends DefaultStep {
 								split(writer); }
 							childCount = currentPath.remove(currentPath.size() - 1);
 							break; }
-						case START_DOCUMENT:
-							break;
-						case END_DOCUMENT:
-							break loop;
 						default:
-							writeEvent(writer, event, reader); }}
+							writeEvent(writer, reader); }
+						event = reader.next(); }
 					catch (NoSuchElementException e) {
 						break; }
-				writer.writeEndElement();
-				writer.writeEndDocument();
 			} catch (XMLStreamException e) {
 				throw new TransformerException(e); }
 		}
@@ -269,6 +274,8 @@ public class CssSplitStep extends DefaultStep {
 			nextSplitPoint = splitPoints.hasNext() ? splitPoints.next() : null;
 			for (int i = parents.size(); i > 0; i--)
 				writer.writeEndElement();
+			writer.writeEndDocument();
+			writer.writeStartDocument();
 			for (int i = 0; i < parents.size(); i++) {
 				writeStartElement(writer, parents.get(i));
 				if (CSS_BOX.equals(parents.get(i))) {

@@ -27,6 +27,7 @@
 	<p:import href="fileset-add-entry.xpl"/>
 	<p:import href="fileset-join.xpl"/>
 	<p:import href="fileset-intersect.xpl"/>
+	<p:import href="fileset-diff.xpl"/>
 	
 	<px:fileset-create name="base" base="/"/>
 	

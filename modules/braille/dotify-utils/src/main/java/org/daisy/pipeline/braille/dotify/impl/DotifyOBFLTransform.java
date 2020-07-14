@@ -8,11 +8,18 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
 
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.runtime.XAtomicStep;
+
 import static org.daisy.common.file.URIs.asURI;
 import org.daisy.common.file.URLs;
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
+import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
@@ -63,9 +70,9 @@ public interface DotifyOBFLTransform {
 			return empty;
 		}
 		
-		private class TransformImpl extends AbstractTransform {
+		private class TransformImpl extends AbstractTransform implements XProcStepProvider {
 			
-			private final XProc xproc;
+			private final Map<String,String> options;
 			
 			private TransformImpl(Query textTransformQuery) {
 				String locale = "und";
@@ -74,17 +81,14 @@ public interface DotifyOBFLTransform {
 					locale = q.removeOnly("locale").getValue().get();
 					textTransformQuery = q;
 				}
-				xproc = new XProc(
-					href,
-					null,
-					ImmutableMap.of(
-						"locale", locale,
-						"mode", textTransformQuery.toString()));
+				options = ImmutableMap.of(
+					"locale", locale,
+					"mode", textTransformQuery.toString());
 			}
 			
 			@Override
-			public XProc asXProc() {
-				return xproc;
+			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+				return new CxEvalBasedTransformer(href, null, options).newStep(runtime, step);
 			}
 			
 			@Override

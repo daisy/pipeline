@@ -3,7 +3,6 @@ package org.daisy.pipeline.braille.css.saxon.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.function.Supplier;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -38,7 +37,6 @@ import net.sf.saxon.om.Item;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
-import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.BooleanValue;
@@ -48,7 +46,6 @@ import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 
 import org.daisy.pipeline.braille.common.util.Strings;
-import static org.daisy.pipeline.braille.common.util.Functions.propagateException;
 import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.InlineStyle;
@@ -61,10 +58,10 @@ import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
-import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.saxon.SaxonOutputValue;
+
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
-import org.daisy.common.stax.XMLStreamWriterHelper.XMLStreamWritable;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -186,22 +183,17 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 						else
 							throw new RuntimeException("coding error");
 					}
-					try {
-						List<XMLStreamWritable<XdmNode>> rules = new ArrayList<>();
-						style.toXml(
-							propagateException(() -> {
-									XMLStreamWritable<XdmNode> w = SaxonHelper.nodeWriter(context.getConfiguration());
-									rules.add(w);
-									return w.getWriter(); },
-								RuntimeException::new),
-							deep);
-						for (XMLStreamWritable<XdmNode> w : rules)
-							result.add(((XdmNode)w.doneWriting().axisIterator(Axis.CHILD).next()).getUnderlyingNode());
-					} catch (RuntimeException e) {
-						throw e;
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
+					style.toXml(
+						new SaxonOutputValue(
+							item -> {
+								if (item instanceof XdmNode)
+									result.add(((XdmNode)item).getUnderlyingNode());
+								else
+									throw new RuntimeException(); // should not happen
+							},
+							context.getConfiguration()
+						).asXMLStreamWriter(),
+						deep);
 				} catch (Exception e) {
 					logger.error("Error happened while parsing " + arg, e);
 				}
@@ -289,13 +281,12 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 			return toString(null);
 		}
 		
-		void toXml(Supplier<XMLStreamWriter> writers, boolean deep) throws XMLStreamException {
-			toXml(writers, deep, false);
+		void toXml(XMLStreamWriter writer, boolean deep) throws XMLStreamException {
+			toXml(writer, deep, false);
 		}
 		
-		void toXml(Supplier<XMLStreamWriter> writers, boolean deep, boolean recursive) throws XMLStreamException {
+		void toXml(XMLStreamWriter w, boolean deep, boolean recursive) throws XMLStreamException {
 			if (declarations != null) {
-				XMLStreamWriter w = writers.get();
 				if (!deep || !recursive || nestedStyles != null)
 					writeStartElement(w, CSS_RULE);
 				if (!deep)
@@ -320,13 +311,12 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 			}
 			if (nestedStyles != null)
 				for (Map.Entry<String,Style> e : nestedStyles.entrySet()) {
-					XMLStreamWriter w = writers.get();
 					writeStartElement(w, CSS_RULE);
 					writeAttribute(w, SELECTOR, e.getKey());
 					if (!deep)
 						writeAttribute(w, STYLE, e.getValue().toString());
 					if (deep)
-						e.getValue().toXml(() -> w, true, true);
+						e.getValue().toXml(w, true, true);
 					w.writeEndElement();
 				}
 		}

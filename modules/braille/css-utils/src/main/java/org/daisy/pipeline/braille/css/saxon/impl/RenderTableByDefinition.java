@@ -1,11 +1,9 @@
 package org.daisy.pipeline.braille.css.saxon.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static java.util.Collections.sort;
 import java.util.Comparator;
-import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,11 +15,9 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
-import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.TransformerException;
 
@@ -30,7 +26,6 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 
 import com.xmlcalabash.core.XProcException;
 
@@ -54,7 +49,7 @@ import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
-import net.sf.saxon.s9api.Axis;
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
@@ -65,14 +60,18 @@ import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
-import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.stax.XMLStreamWriterHelper.ToStringWriter;
 import org.daisy.common.stax.XMLStreamWriterHelper.WriterEvent;
+import org.daisy.common.transform.InputValue;
+import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
+import org.daisy.common.transform.XMLInputValue;
+import org.daisy.common.transform.XMLOutputValue;
+import org.daisy.common.saxon.SaxonInputValue;
+import org.daisy.common.saxon.SaxonOutputValue;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
-import org.daisy.common.transform.XMLStreamToXMLStreamTransformer;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 
 import org.osgi.service.component.annotations.Component;
@@ -84,7 +83,6 @@ import org.slf4j.LoggerFactory;
 	name = "css:render-table-by",
 	service = { ExtensionFunctionDefinition.class }
 )
-@SuppressWarnings("serial")
 public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	
 	private static final String XMLNS_CSS = "http://www.daisy.org/ns/pipeline/braille-css";
@@ -125,14 +123,16 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 					
 					// FIXME: why does this not work?
 					// URI base = new URI(tableElement.getBaseURI());
-					XdmNode result = Iterators.getOnlyElement(
-						SaxonHelper.transform(
-							new TableAsList(axes),
-							Collections.singleton(tableElement).iterator(),
-							context.getConfiguration()));
-					result = (XdmNode)result.axisIterator(Axis.CHILD).next(); // because result is document-node
-					return result.getUnderlyingNode(); }
-				catch (TransformerException e) {
+					List<XdmItem> result = new ArrayList<>();
+					new TableAsList(axes)
+					.transform(
+						new SaxonInputValue(tableElement),
+						new SaxonOutputValue(result::add, context.getConfiguration()))
+					.run();
+					if (result.size() != 1 || !(result.get(0) instanceof XdmNode))
+						throw new TransformerException(new RuntimeException()); // should not happen
+					return ((XdmNode)result.get(0)).getUnderlyingNode();
+				} catch (TransformerException e) {
 					throw new XPathException("css:render-table-by failed", XProcException.javaError(e, 0)); }
 			}
 		};
@@ -165,7 +165,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	private static final Splitter HEADERS_SPLITTER = Splitter.on(' ').trimResults().omitEmptyStrings();
 	private static final Splitter AXIS_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 	
-	private static class TableAsList implements XMLStreamToXMLStreamTransformer {
+	private static class TableAsList extends SingleInSingleOutXMLTransformer {
 		
 		final List<String> axes;
 		
@@ -182,10 +182,13 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		Set<CellCoordinates> coveredCoordinates;
 		String ns;
 		
-		public void transform(Iterator<BaseURIAwareXMLStreamReader> input, Supplier<BaseURIAwareXMLStreamWriter> output) {
-			XMLStreamReader reader = Iterators.getOnlyElement(input);
-			XMLStreamWriter writer = output.get();
-			
+		public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) throws IllegalArgumentException {
+			if (source == null || result == null)
+				throw new IllegalArgumentException();
+			return () -> transform(source.ensureSingleItem().asXMLStreamReader(), result.asXMLStreamWriter());
+		}
+		
+		void transform(BaseURIAwareXMLStreamReader reader, BaseURIAwareXMLStreamWriter writer) {
 			try {
 			
 			writeActionsBefore = new ArrayList<WriterEvent>();
@@ -199,7 +202,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			int rowGroup = 1;
 			int row = 1;
 			int col = 1;
-		  loop: while (true)
+			while (true)
 				try {
 					switch (reader.next()) {
 					case START_ELEMENT: {
@@ -376,9 +379,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							withinCell = null;
 							writeActions = writeActionsAfter;
 							while (isCovered(row, col)) col++; }
-						break; }
-					case END_DOCUMENT:
-						break loop; }}
+						break; }}}
 				catch (NoSuchElementException e) {
 					break; }
 			
@@ -418,9 +419,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 				c.rowGroup = newRowGroup;
 				c.row = newRow; }
 			
-			writer.writeStartDocument();
 			write(writer);
-			writer.writeEndDocument();
 			
 			} catch (XMLStreamException e) {
 				throw new RuntimeException(e);

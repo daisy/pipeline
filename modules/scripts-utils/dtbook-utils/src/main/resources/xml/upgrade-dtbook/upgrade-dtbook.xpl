@@ -41,7 +41,7 @@
     </p:option>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
+    <p:import href="../validate-dtbook/dtbook-validator.select-schema.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     
     <p:variable name="version" select="(/dtb:dtbook|/dtbook)/@version"/>

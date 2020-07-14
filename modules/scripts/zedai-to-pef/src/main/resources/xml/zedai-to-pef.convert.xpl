@@ -14,7 +14,7 @@
     </p:input>
     <p:output port="result" px:media-type="application/x-pef+xml"/>
     
-    <p:option name="default-stylesheet" required="false" select="''"/>
+    <p:option name="default-stylesheet" required="false" select="'#default'"/>
     <p:option name="stylesheet" required="false" select="''"/>
     <p:option name="transform" required="false" select="''"/>
     
@@ -65,7 +65,13 @@
     <p:identity name="zedai"/>
     
     <css:inline>
-        <p:with-option name="default-stylesheet" select="concat($default-stylesheet, ' ', $stylesheet)"/>
+        <p:with-option name="default-stylesheet"
+                       select="concat(
+                                 if ($default-stylesheet!='#default')
+                                   then $default-stylesheet
+                                   else resolve-uri('../css/default.css'),
+                                 ' ',
+                                 $stylesheet)"/>
     </css:inline>
     
     <p:viewport match="math:math">
@@ -73,13 +79,13 @@
             <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,'und')[1],')')">
                 <p:pipe step="zedai" port="result"/>
             </p:with-option>
-            <p:with-option name="temp-dir" select="$temp-dir"/>
+            <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
         </px:transform>
     </p:viewport>
     
     <px:transform name="pef">
         <p:with-option name="query" select="concat('(input:css)(output:pef)',$transform,'(locale:',(/*/@xml:lang,'und')[1],')')"/>
-        <p:with-option name="temp-dir" select="$temp-dir"/>
+        <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
     </px:transform>
     <p:sink/>
 

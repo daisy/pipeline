@@ -17,13 +17,14 @@ import java.nio.file.StandardCopyOption;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+
 import org.slf4j.Logger;
 
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
@@ -44,7 +45,7 @@ public class SetXmlDeclarationProvider implements XProcStepProvider {
 		return new SetXmlDeclaration(runtime, step);
 	}
 
-	public static class SetXmlDeclaration extends DefaultStep {
+	public static class SetXmlDeclaration extends DefaultStep implements XProcStep {
 		private static final QName _href = new QName("href");
 		private static final QName _xmlDeclaration = new QName("xml-declaration");
 		private static final QName _encoding = new QName("encoding");

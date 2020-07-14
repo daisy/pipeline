@@ -1,24 +1,17 @@
 package org.daisy.pipeline.braille.css.calabash.impl;
 
 import java.util.ArrayList;
-import java.util.function.Supplier;
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
 import javax.xml.namespace.QName;
-import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.google.common.collect.Iterators;
-
 import com.xmlcalabash.core.XProcException;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -33,7 +26,6 @@ import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.braille.css.PropertyValue;
-import org.daisy.common.calabash.XMLCalabashHelper;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import org.daisy.common.stax.XMLStreamWriterHelper.BufferedXMLStreamWriter;
@@ -42,8 +34,15 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeEvent;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
+
+import org.daisy.common.transform.InputValue;
+import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
-import org.daisy.common.transform.XMLStreamToXMLStreamTransformer;
+import org.daisy.common.transform.XMLInputValue;
+import org.daisy.common.transform.XMLOutputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 
@@ -52,7 +51,7 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CssShiftStringSetStep extends DefaultStep {
+public class CssShiftStringSetStep extends DefaultStep implements XProcStep {
 	
 	@Component(
 		name = "css:shift-string-set",
@@ -100,35 +99,38 @@ public class CssShiftStringSetStep extends DefaultStep {
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			XMLCalabashHelper.transform(
-				new CssShiftStringSetTransformer(),
-				sourcePipe,
-				resultPipe,
-				runtime); }
+			new CssShiftStringSetTransformer()
+			.transform(
+				new XMLCalabashInputValue(sourcePipe, runtime),
+				new XMLCalabashOutputValue(resultPipe, runtime))
+			.run(); }
 		catch (Exception e) {
 			logger.error("css:shift-string-set failed", e);
 			throw new XProcException(step.getNode(), e); }
 	}
 	
-	private static class CssShiftStringSetTransformer implements XMLStreamToXMLStreamTransformer {
+	private static class CssShiftStringSetTransformer extends SingleInSingleOutXMLTransformer {
 		
-		public void transform(Iterator<BaseURIAwareXMLStreamReader> input, Supplier<BaseURIAwareXMLStreamWriter> output)
-				throws TransformerException {
-			XMLStreamReader reader = Iterators.getOnlyElement(input);
-			BufferedXMLStreamWriter writer = new BufferedXMLStreamWriter(output.get());
+		public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) throws IllegalArgumentException {
+			if (source == null || result == null)
+				throw new IllegalArgumentException();
+			return () -> transform(source.ensureSingleItem().asXMLStreamReader(), result.asXMLStreamWriter());
+		}
+		
+		void transform(BaseURIAwareXMLStreamReader reader, BaseURIAwareXMLStreamWriter output) throws TransformerException {
+			BufferedXMLStreamWriter writer = new BufferedXMLStreamWriter(output);
 			boolean insideInlineBox = false;
 			Stack<Boolean> blockBoxes = new Stack<Boolean>();
 			Stack<Boolean> inlineBoxes = new Stack<Boolean>();
 			List<TermPair<String,TermList>> pendingStringSet = new ArrayList<TermPair<String,TermList>>();
 			ShiftedStringSet shiftedStringSet = null;
 			try {
-				writer.writeStartDocument(); // why is this needed?
-			  loop: while (true)
+				int event = reader.getEventType();
+				while (true)
 					try {
-						int event = reader.next();
 						switch (event) {
 						case START_ELEMENT: {
-							writeEvent(writer, event, reader);
+							writeEvent(writer, reader);
 							boolean isInlineBox = false;
 							boolean isBlockBox = false;
 							if (insideInlineBox)
@@ -187,13 +189,11 @@ public class CssShiftStringSetStep extends DefaultStep {
 								writer.writeEvent(shiftedStringSet); }
 							if (isInlineBox)
 								insideInlineBox = false;
-							writeEvent(writer, event, reader);
+							writeEvent(writer, reader);
 							break; }
-						case END_DOCUMENT:
-							writeEvent(writer, event, reader);
-							break loop;
 						default:
-							writeEvent(writer, event, reader); }}
+							writeEvent(writer, reader); }
+						event = reader.next(); }
 					catch (NoSuchElementException e) {
 						break; }
 				if (!pendingStringSet.isEmpty())

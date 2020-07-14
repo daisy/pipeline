@@ -18,6 +18,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioBufferTracker;
 import org.daisy.pipeline.tts.TTSRegistry;
@@ -36,8 +37,7 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.TreeWriter;
 
-public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
-        IPipelineLogger {
+public class SynthesizeStep extends DefaultStep implements FormatSpecifications, IPipelineLogger, XProcStep {
 
 	private static QName ENCODING_ERROR = new QName("TTS01");
 	

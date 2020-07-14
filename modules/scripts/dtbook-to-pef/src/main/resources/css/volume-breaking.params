@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+
+    <p:option name="maximum-number-of-sheets" required="false" px:type="integer" select="'70'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Volumes: Maximum number of sheets</h2>
+            <p px:role="desc" xml:space="preserve">The maximum number of sheets in a volume.
+
+Makes the variable `$maximum-number-of-sheets` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+@volume {
+  max-length: $maximum-number-of-sheets;
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+- the [`max-length`](http://braillespecs.github.io/braille-css/#h3_the-length-properties) property
+</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="avoid-volume-break-inside-leaf-section" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Volumes: Prefer breaks at section boundaries.</h2>
+            <p px:role="desc" xml:space="preserve">Whether to prefer breaking volumes at section boundaries.
+
+Volume breaks are preferably made right before or after elements `level1` to `level6`. Enabling this setting results in volumes being less equal in size.
+            </p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

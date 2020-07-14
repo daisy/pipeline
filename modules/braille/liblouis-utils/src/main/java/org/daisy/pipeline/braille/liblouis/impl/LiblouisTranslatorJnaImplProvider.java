@@ -4,8 +4,6 @@ import java.net.URI;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,9 +14,10 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import static com.google.common.collect.Iterables.size;
 import static com.google.common.collect.Iterables.toArray;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -36,8 +35,6 @@ import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.SimpleInlineStyle;
 
-import org.daisy.dotify.api.translator.UnsupportedMetricException;
-
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator.util.DefaultLineBreaker;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
@@ -47,7 +44,6 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.I
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.transform;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
-import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Hyphenator;
@@ -67,7 +63,7 @@ import static org.daisy.pipeline.braille.common.util.Strings.join;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.pipeline.braille.common.WithSideEffect;
-
+import org.daisy.pipeline.braille.css.CompoundTranslator;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider.LiblouisTableJnaImpl;
@@ -1594,15 +1590,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		}
 	}
 	
-	private static class HandleTextTransformUncontracted extends AbstractBrailleTranslator implements LiblouisTranslator {
+	private static class HandleTextTransformUncontracted extends CompoundTranslator implements LiblouisTranslator {
 		
 		final LiblouisTranslator translator;
-		final LiblouisTranslator nonContractingTranslator;
 		
 		HandleTextTransformUncontracted(LiblouisTranslator translator,
 		                                LiblouisTranslator nonContractingTranslator) {
+			super(translator, ImmutableMap.of("uncontracted", () -> nonContractingTranslator,
+			                                  "contracted", () -> translator));
 			this.translator = translator;
-			this.nonContractingTranslator = nonContractingTranslator;
 		}
 		
 		@Override
@@ -1615,104 +1611,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			return translator.fromTypeformedTextToBraille();
 		}
 		
-		@Override
-		public FromStyledTextToBraille fromStyledTextToBraille() {
-			return fromStyledTextToBraille;
-		}
 		
-		private static abstract class TransformImpl<T> {
-			
-			abstract java.lang.Iterable<T> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to,
-			                                         boolean uncontracted);
-			
-			List<T> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
-				if (to < 0)
-					to = size(styledText);
-				if (from < 0 || from > to)
-					throw new IndexOutOfBoundsException();
-				List<T> transformed = new ArrayList<>();
-				if (from == to) return transformed;
-				List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
-				boolean curUncontracted = false;
-				for (CSSStyledText st : styledText) {
-					SimpleInlineStyle style = st.getStyle();
-					boolean uncontracted; {
-						uncontracted = false;
-						if (style != null) {
-							CSSProperty val = style.getProperty("text-transform");
-							if (val != null) {
-								if (val == TextTransform.list_values) {
-									TermList values = style.getValue(TermList.class, "text-transform");
-									
-									// According to the spec values should be "applied" from left to right, and
-									// values of inner elements always come before values of outer elements (see
-									// http://braillespecs.github.io/braille-css/#the-text-transform-property). This
-									// is the most logical situation in most cases. However the order in which
-									// "uncontracted" and "contracted" should overwrite each other is exactly the
-									// opposite. Therefore invert the list.
-									Iterator<Term<?>> it = Lists.reverse(values).iterator();
-									while (it.hasNext()) {
-										String tt = ((TermIdent)it.next()).getValue();
-										if (tt.equals("uncontracted")) {
-											uncontracted = true;
-											it.remove(); }
-										else if (tt.equals("contracted")) { // means "allow contracted"
-											uncontracted = false; // "contracted" overwrites "uncontracted" if it comes later in the list
-											it.remove(); }}
-									if (values.isEmpty())
-										style.removeProperty("text-transform"); }}}
-					}
-					if (uncontracted != curUncontracted && !buffer.isEmpty()) {
-						if (from < buffer.size())
-							for (T s : transform(buffer, from, to < buffer.size() ? to : -1, curUncontracted))
-								transformed.add(s);
-						from -= buffer.size();
-						if (from < 0) from = 0;
-						if (to > 0) {
-							to -= buffer.size();
-							if (to <= 0)
-								return transformed; }
-						buffer = new ArrayList<CSSStyledText>(); }
-					curUncontracted = uncontracted;
-					buffer.add(st); }
-				if (!buffer.isEmpty() && from < buffer.size())
-					for (T s : transform(buffer, from, to < buffer.size() ? to : -1, curUncontracted))
-						transformed.add(s);
-				return transformed;
-			}
-		}
-		
-		private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
-			TransformImpl<String> impl = new TransformImpl<String>() {
-				java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to,
-				                                     boolean uncontracted) {
-					return (uncontracted ? nonContractingTranslator : translator)
-					       .fromStyledTextToBraille().transform(styledText, from, to);
-				}
-			};
-			public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
-				return impl.transform(styledText, from, to);
-			}
-		};
-		
-		@Override
-		public LineBreakingFromStyledText lineBreakingFromStyledText() {
-			return lineBreakingFromStyledText;
-		}
-		
-		private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
-			TransformImpl<LineIterator> impl = new TransformImpl<LineIterator>() {
-				java.lang.Iterable<LineIterator> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to,
-				                                           boolean uncontracted) {
-					return Collections.singleton(
-						(uncontracted ? nonContractingTranslator : translator)
-						.lineBreakingFromStyledText().transform(styledText, from, to));
-				}
-			};
-			public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
-				return concatLineIterators(impl.transform(styledText, from, to));
-			}
-		};
 	}
 	
 	private static class LiblouisTranslatorHyphenatorImpl extends LiblouisTranslatorImpl {
@@ -1762,108 +1661,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		
 		public byte[] hyphenate(String text) {
 			return extractHyphens(hyphenator.transform(text), SHY, ZWSP)._2;
-		}
-	}
-	
-	private static BrailleTranslator.LineIterator concatLineIterators(List<BrailleTranslator.LineIterator> iterators) {
-		if (iterators.size() == 0)
-			return new BrailleTranslator.LineIterator() {
-				public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly) {
-					return "";
-				}
-				public String getTranslatedRemainder() {
-					return "";
-				}
-				public int countRemaining() {
-					return 0;
-				}
-				public boolean hasNext() {
-					return false;
-				}
-				public BrailleTranslator.LineIterator copy() {
-					return this;
-				}
-				public boolean supportsMetric(String metric) {
-					return false;
-				}
-				public double getMetric(String metric) {
-					throw new UnsupportedMetricException("Metric not supported: " + metric);
-				}
-			};
-		else if (iterators.size() == 1 && iterators.get(0) != null)
-			return iterators.get(0);
-		else
-			return new ConcatLineIterators(iterators);
-	}
-	
-	private static class ConcatLineIterators implements BrailleTranslator.LineIterator {
-		
-		final List<BrailleTranslator.LineIterator> iterators;
-		BrailleTranslator.LineIterator current;
-		int currentIndex = 0;
-		
-		ConcatLineIterators(List<BrailleTranslator.LineIterator> iterators) {
-			this.iterators = iterators;
-			currentIndex = -1;
-			current = null;
-			computeCurrent();
-		}
-		
-		void computeCurrent() {
-			while (current == null || !current.hasNext())
-				if (currentIndex + 1 < iterators.size())
-					current = iterators.get(++currentIndex);
-				else {
-					current = null;
-					break; }
-		}
-		
-		public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly) {
-			String row = "";
-			while (limit > row.length()) {
-				if (current == null) break;
-				row += current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
-				computeCurrent(); }
-			return row;
-		}
-		
-		public String getTranslatedRemainder() {
-			String remainder = "";
-			if (current == null) return remainder;
-			for (int i = currentIndex; i < iterators.size(); i++)
-				if (iterators.get(i) != null)
-					remainder += iterators.get(i).getTranslatedRemainder();
-			return remainder;
-		}
-		
-		public int countRemaining() {
-			int remaining = 0;
-			if (current == null) return remaining;
-			for (int i = currentIndex; i < iterators.size(); i++)
-				if (iterators.get(i) != null)
-					remaining += iterators.get(i).countRemaining();
-			return remaining;
-		}
-		
-		public boolean hasNext() {
-			computeCurrent();
-			return current != null;
-		}
-		
-		public ConcatLineIterators copy() {
-			List<BrailleTranslator.LineIterator> iteratorsCopy = new ArrayList<>(iterators.size() - currentIndex);
-			for (int i = currentIndex; i < iterators.size(); i++)
-				if (iterators.get(i) != null)
-					iteratorsCopy.add((BrailleTranslator.LineIterator)iterators.get(i).copy());
-			return new ConcatLineIterators(iteratorsCopy);
-		}
-		
-		public boolean supportsMetric(String metric) {
-			return false;
-		}
-		
-		public double getMetric(String metric) {
-			throw new UnsupportedMetricException("Metric not supported: " + metric);
 		}
 	}
 	
@@ -1924,7 +1721,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				text = text.toUpperCase();
 			else if (tt.equals("lowercase"))
 				text = text.toLowerCase();
-			else if (!tt.equals("uncontracted") && !LOUIS_TEXT_TRANSFORM.matcher(tt).matches())
+			else if (!tt.equals("uncontracted") && !tt.equals("contracted") && !LOUIS_TEXT_TRANSFORM.matcher(tt).matches())
 				logger.warn("text-transform: {} not supported", tt);
 		}
 		return text;

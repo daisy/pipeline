@@ -15,7 +15,7 @@
       <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
       <css:inline/>
       <px:transform query="(input:css)(output:pef)(locale:en-US)(grade:2)(translator:liblouis)(formatter:liblouis)">
-        <p:with-option name="temp-dir" select="$temp-dir"/>
+        <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
       </px:transform>
     </p:pipeline>
   </x:script>

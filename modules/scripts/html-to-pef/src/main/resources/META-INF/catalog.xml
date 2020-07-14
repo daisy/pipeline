@@ -2,14 +2,22 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   
   <!-- scripts -->
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl" uri="../xml/xproc/html-to-pef.xpl" px:content-type="script" px:id="html-to-pef" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl" uri="../xml/xproc/html-to-pef.xpl"
+       px:content-type="script" px:id="html-to-pef"
+       px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl
+                   ../css/default.params
+                   ../css/page-layout.params
+                   ../css/generate-toc.params
+                   ../css/page-breaking.params
+                   ../css/volume-breaking.params"/>
   
-  <!-- other -->
+  <!-- xproc library -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/reset.css" uri="../css/reset.css"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/default.css" uri="../css/default.css"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/css/volume-breaking.scss" uri="../css/volume-breaking.scss"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/xsl/volume-breaking.xsl" uri="../xml/xslt/volume-breaking.xsl"/>
+  
+  <!-- style sheets -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css" uri="../css/reset.css"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/default.scss" uri="../css/default.scss"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl" uri="../xml/xslt/volume-breaking.xsl"/>
   
   <!-- dependencies -->
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:xml-to-pef"/>

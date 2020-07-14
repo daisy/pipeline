@@ -14,6 +14,8 @@ import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.options.UrlProvisionOption;
+import org.ops4j.pax.exam.ProbeBuilder;
+import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.util.PathUtils;
 
 public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
@@ -33,6 +35,14 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			"org.daisy.pipeline:calabash-adapter:?",
 			"org.daisy.pipeline.modules.braille:libhyphen-utils:jar:" + thisPlatform() + ":?",
 		};
+	}
+	
+	@ProbeBuilder
+	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+		probe.setHeader("Bundle-Name", "test-module");
+		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
+		probe.setHeader("Service-Component", "OSGI-INF/table-path.xml");
+		return probe;
 	}
 	
 	@Override @Configuration

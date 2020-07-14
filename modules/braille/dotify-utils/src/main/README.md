@@ -49,15 +49,6 @@
   
   No other features are allowed.
 
-- [`(input:css)(output:css)(translator:dotify)`](java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.java)
-  
-  Recognized features:
-  
-  - `translator`: Will only match if the value is `dotify`.
-  - `locale`: If present the value will be used instead of any xml:lang attributes.
-  
-  Other features are used for finding sub-transformers of type DotifyTranslator.
-
 - [`(input:css)(output:pef)(formatter:dotify)`](java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSStyledDocumentTransform.java)
   
   Recognized features:

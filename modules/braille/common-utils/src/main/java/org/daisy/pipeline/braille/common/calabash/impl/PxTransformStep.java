@@ -1,32 +1,37 @@
 package org.daisy.pipeline.braille.common.calabash.impl;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
+import javax.xml.namespace.QName;
+
+import com.google.common.collect.ImmutableMap;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
-import com.xmlcalabash.extensions.Eval;
+import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.WritablePipe;
+import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
-import com.xmlcalabash.util.TreeWriter;
 
 import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.QName;
 
+import org.daisy.common.transform.XMLTransformer;
+import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+import org.daisy.common.xproc.calabash.XMLCalabashParameterInputValue;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.daisy.pipeline.braille.common.Transform;
-import org.daisy.pipeline.braille.common.Transform.XProc;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.logSelect;
+import org.daisy.pipeline.braille.common.XMLTransform;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -36,106 +41,76 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PxTransformStep extends Eval {
+public class PxTransformStep extends DefaultStep implements XProcStep {
 	
 	private final TransformProvider<Transform> provider;
-	private final ReadableDocument pipeline;
+	private ReadablePipe source = null;
+	private WritablePipe result = null;
+	private final Hashtable<net.sf.saxon.s9api.QName,RuntimeValue> params = new Hashtable<>();
 	
-	private static final QName _query = new QName("query");
-	private static final QName _temp_dir = new QName("temp-dir");
-	private static final QName _step = new QName("step");
-	private static final QName _name = new QName("name");
-	private static final QName _namespace = new QName("namespace");
-	private static final QName _value = new QName("value");
+	private static final net.sf.saxon.s9api.QName _query = new net.sf.saxon.s9api.QName("query");
 	
 	private PxTransformStep(XProcRuntime runtime, XAtomicStep step, TransformProvider<Transform> provider) {
 		super(runtime, step);
 		this.provider = provider;
-		pipeline = new ReadableDocument(runtime);
-		setInput("pipeline", pipeline);
 	}
-	
-	private static class ReadableDocument extends com.xmlcalabash.io.ReadableDocument {
-		private ReadableDocument(XProcRuntime runtime) {
-			super(runtime);
-		}
-		private URI uri;
-		private void setURI(URI uri) {
-			this.uri = uri;
-		}
-		private boolean readDoc = false;
-		@Override
-		protected void readDoc() {
-			if (readDoc) return;
-			readDoc = true;
-			documents.add(runtime.parse(uri.toASCIIString(), ""));
-		}
+
+	@Override
+	public void setInput(String port, ReadablePipe pipe) {
+		source = pipe;
 	}
-	
-	private boolean setup = false;
-	
-	private void setup() {
-		if (!setup) {
-			Query query = query(getOption(_query).getString());
-			XProc xproc = null;
-			try {
-				for (Transform t : logSelect(query, provider, logger))
-					try {
-						xproc = t.asXProc();
-						break; }
-					catch (UnsupportedOperationException e) {}}
-			catch (NoSuchElementException e) {}
-			if (xproc == null)
-				throw new RuntimeException("Could not find a Transform for query: " + query);
-			RuntimeValue tempDir = getOption(_temp_dir);
-			pipeline.setURI(xproc.getURI());
-			if (xproc.getName() != null) {
-				final QName step = new QName(xproc.getName());
-				setOption(_step, new RuntimeValue() { public QName getQName() { return step; }});
-				throw new RuntimeException("p:library not supported due to a bug in cx:eval"); }
-			if (xproc.getOptions() != null || tempDir != null) {
-				final Map<String,String> options = new HashMap<String,String>();
-				if (xproc.getOptions() != null)
-					options.putAll(xproc.getOptions());
-				if (tempDir != null)
-					options.put("temp-dir", tempDir.getString());
-				setInput("options", new com.xmlcalabash.io.ReadableDocument(runtime) {
-					private boolean readDoc = false;
-					@Override
-					protected void readDoc() {
-						if (readDoc) return;
-						readDoc = true;
-						TreeWriter optionWriter = new TreeWriter(runtime);
-						optionWriter.startDocument(step.getNode().getBaseURI());
-						optionWriter.addStartElement(cx_options);
-						optionWriter.startContent();
-						for (String option : options.keySet()) {
-							optionWriter.addStartElement(cx_option);
-							optionWriter.addAttribute(_name, option);
-							optionWriter.addAttribute(_namespace, "");
-							optionWriter.addAttribute(_value, options.get(option));
-							optionWriter.startContent();
-							optionWriter.addEndElement(); }
-						optionWriter.addEndElement();
-						optionWriter.endDocument();
-						documents.add(optionWriter.getResult()); }}); }}
-		setup = true;
+
+	@Override
+	public void setOutput(String port, WritablePipe pipe) {
+		result = pipe;
+	}
+
+	@Override
+	public void reset() {
+		source.resetReader();
+		result.resetWriter();
 	}
 	
 	@Override
-	public void setParameter(String port, QName name, RuntimeValue value) {
-		if ("parameters".equals(port))
-			setParameter(name, value);
-		else
-			throw new XProcException("No parameters allowed on port '" + port + "'");
+	public void setParameter(net.sf.saxon.s9api.QName name, RuntimeValue value) {
+		params.put(name, value);
+	}
+	
+	@Override
+	public void setParameter(String port, net.sf.saxon.s9api.QName name, RuntimeValue value) {
+		setParameter(name, value);
 	}
 	
 	@Override
 	public void run() throws SaxonApiException {
-		try { setup(); }
-		catch (Exception e) {
+		try {
+			Query query = query(getOption(_query).getString());
+			XMLTransformer xmlTransformer = null;
+			try {
+				for (Transform t : logSelect(query, provider, logger))
+					if (t instanceof XProcStepProvider) {
+						// if the transform is a XProcStepProvider, it is assumed to be declared as a p:pipeline
+						xmlTransformer = ((XProcStepProvider)t).newStep(runtime, step);
+						break; }
+					else if (t instanceof XMLTransform) {
+						// fromXmlToXml() is assumed to have only a "source", a "parameters" and a "result" port
+						// (i.e. the signature of px:transform without the "query" option)
+						xmlTransformer = ((XMLTransform)t).fromXmlToXml();
+						break; }}
+			catch (NoSuchElementException e) {}
+			if (xmlTransformer == null)
+				throw new RuntimeException("Could not find a Transform for query: " + query);
+			xmlTransformer.transform(
+				ImmutableMap.of(
+					new QName("source"), new XMLCalabashInputValue(source, runtime),
+					new QName("parameters"), new XMLCalabashParameterInputValue(params)),
+				ImmutableMap.of(
+					new QName("result"), new XMLCalabashOutputValue(result, runtime))
+			).run();
+		} catch (Exception e) {
 			logger.error("px:transform failed", e);
-			throw new XProcException(step.getNode(), e); }
+			throw new XProcException(step.getNode(), e);
+		}
 		super.run();
 	}
 	
@@ -171,7 +146,7 @@ public class PxTransformStep extends Eval {
 			logger.debug("Removing XProcTransform provider: {}", provider);
 		}
 		
-		private List<TransformProvider<Transform>> providers = new ArrayList<TransformProvider<Transform>>();
+		private List<TransformProvider<Transform>> providers = new ArrayList<>();
 		private TransformProvider<Transform> provider = dispatch(providers);
 		
 	}

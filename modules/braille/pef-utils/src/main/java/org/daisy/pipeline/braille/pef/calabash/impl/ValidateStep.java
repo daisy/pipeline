@@ -11,14 +11,16 @@ import java.net.URI;
 import javax.xml.transform.stream.StreamSource;
 
 import org.daisy.braille.pef.PEFValidator;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+
 import org.osgi.service.component.annotations.Component;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -29,7 +31,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 
-public class ValidateStep extends DefaultStep {
+public class ValidateStep extends DefaultStep implements XProcStep {
 		
 	private static final QName _assert_valid = new QName("assert-valid");
 	private static final QName _temp_dir = new QName("temp-dir");

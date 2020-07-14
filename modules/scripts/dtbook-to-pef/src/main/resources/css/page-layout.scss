@@ -1,0 +1,27 @@
+/*
+ * Page layout: dimensions, numbering, headers and footers.
+ */
+
+$page-width: 40 !default;
+$page-height: 25 !default;
+$levels-in-footer: 6 !default;
+$show-braille-page-numbers: true !default;
+$show-print-page-numbers: true !default;
+
+@page {
+	size: $page-width $page-height;
+}
+
+@if $show-print-page-numbers {
+	pagenum {
+		string-set: print-page content();
+	}
+}
+
+@for $level from 1 through 6 {
+	@if $levels-in-footer >= $level {
+		h#{$level} {
+			string-set: footer content();
+		}
+	}
+}

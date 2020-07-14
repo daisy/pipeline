@@ -12,17 +12,18 @@
             <head>
               <style media="embossed" type="text/css">
                 p {
-                  display: block;
                   font-weight: bold;
                 }
               </style>
               <style media="print" type="text/css">
                 em {
-                  display: block;
                   font-weight: bold;
                 }
               </style>
               <style media="all" type="text/css">
+                p {
+                  display: block;
+                }
                 em {
                   font-style: italic;
                 }

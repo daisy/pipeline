@@ -28,6 +28,7 @@
       </x:input>
       <x:param port="parameters" name="page-width" select="35"/>
       <x:param port="parameters" name="page-height" select="20"/>
+      <x:param port="parameters" name="toc-depth" select="0"/>
       <!--
       <x:param port="parameters" name="page-height" select="20"/>
       <x:param port="parameters" name="include-line-groups" select="true()"/>
@@ -37,7 +38,6 @@
       <x:param port="parameters" name="line-spacing" select="'single'"/>
       <x:param port="parameters" name="left-margin" select="0"/>
       <x:param port="parameters" name="footnotes-placement" select="''"/>
-      <x:param port="parameters" name="toc-depth" select="0"/>
       <x:param port="parameters" name="maximum-number-of-sheets" select="70"/>
       <x:param port="parameters" name="rear-cover-placement" select="''"/>
       <x:param port="parameters" name="duplex" select="true()"/>

@@ -8,10 +8,9 @@
 
 - <a href="resources/xml/xproc/epub3-to-pef.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl`</a>
 
-### CSS
+### Style sheets
 
-- [`http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/reset.css`](resources/css/reset.css)
-- [`http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css`](resources/css/default.css)
+- [`http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/reset.css`](resources/css/reset.css)
 
 ## OSGi services
 

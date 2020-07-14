@@ -17,6 +17,7 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
 import static org.daisy.common.file.URLs.decode;
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
@@ -24,7 +25,6 @@ import org.daisy.pipeline.braille.liblouis.Liblouisutdml;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-public class TranslateFileStep extends DefaultStep {
+public class TranslateFileStep extends DefaultStep implements XProcStep {
 	
 	@Component(
 		name = "louis:translate-file",

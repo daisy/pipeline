@@ -39,7 +39,7 @@
         </p:inline>
     </p:input>
     
-    <p:option name="default-stylesheet" select="'http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css'"/>
+    <p:option name="default-stylesheet" required="false" select="'#default'"/>
     <p:option name="stylesheet" select="''"/>
     <p:option name="apply-document-specific-stylesheets" select="'false'"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
@@ -157,11 +157,11 @@
     
     <p:xslt px:message="Generating table of contents" px:progress=".01">
         <p:input port="stylesheet">
-            <p:document href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl"/>
+            <p:document href="../xslt/generate-toc.xsl"/>
         </p:input>
-        <p:with-param name="depth" select="/*/*[@name='toc-depth']/@value">
+        <p:input port="parameters">
             <p:pipe step="parameters" port="result"/>
-        </p:with-param>
+        </p:input>
     </p:xslt>
     
     <p:group px:message="Inlining global CSS" px:progress=".10">
@@ -175,7 +175,10 @@
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
                               (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
-                              $default-stylesheet,
+                              'http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl',
+                              if ($default-stylesheet!='#default')
+                                then $default-stylesheet
+                                else resolve-uri('../../css/default.css'),
                               resolve-uri('../../css/default.scss'),
                               (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
@@ -197,7 +200,7 @@
                     match="math:math">
             <px:transform>
                 <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
-                <p:with-option name="temp-dir" select="$temp-dir"/>
+                <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
             </px:transform>
         </p:viewport>
     </p:group>
@@ -220,7 +223,7 @@
                 <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                 <px:transform px:progress="1">
                     <p:with-option name="query" select="$transform-query"/>
-                    <p:with-option name="temp-dir" select="$temp-dir"/>
+                    <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                     <p:input port="parameters">
                         <p:pipe port="result" step="parameters"/>
                     </p:input>
@@ -238,7 +241,7 @@
                     <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                     <px:transform px:progress="1">
                         <p:with-option name="query" select="$transform-query"/>
-                        <p:with-option name="temp-dir" select="$temp-dir"/>
+                        <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
                             <p:pipe port="result" step="parameters"/>
                         </p:input>
@@ -271,7 +274,7 @@
             <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
             <px:transform px:progress="1">
                 <p:with-option name="query" select="$transform-query"/>
-                <p:with-option name="temp-dir" select="$temp-dir"/>
+                <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
                     <p:pipe port="result" step="parameters"/>
                 </p:input>

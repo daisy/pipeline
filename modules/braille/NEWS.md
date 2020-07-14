@@ -6,8 +6,14 @@ Changes
 - Support for `-obfl-right-text-indent` (https://github.com/sbsdev/pipeline-mod-sbs/issues/51,
   https://github.com/nlbdev/pipeline/issues/169, https://github.com/mtmse/obfl/pull/9,
   https://github.com/mtmse/dotify.formatter.impl/pull/31)
+- Support for `@text-transform foo { system: braille-translator }` rules to let custom
+  sub-translators handle specific parts of the document
+  (https://github.com/daisy/pipeline-mod-braille/issues/196,
+  https://github.com/daisy/pipeline-mod-braille/issues/191)
 - Improved braille translation by performing Unicode normalization of text when needed
   (https://github.com/daisy/pipeline-mod-braille/issues/197)
+- New `avoid-volume-break-inside-leaf-section` setting to prefer volume breaks at section
+  boundaries.
 - Other bugfixes
 
 Components
@@ -18,6 +24,8 @@ Closed issues
 - https://github.com/mtmse/obfl/pull/9
 - https://github.com/mtmse/dotify.api/pull/12
 - https://github.com/mtmse/dotify.formatter.impl/pull/31
+- https://github.com/daisy/pipeline-mod-braille/issues/191
+- https://github.com/daisy/pipeline-mod-braille/issues/196
 - https://github.com/daisy/pipeline-mod-braille/issues/197
 
 v1.13.6
