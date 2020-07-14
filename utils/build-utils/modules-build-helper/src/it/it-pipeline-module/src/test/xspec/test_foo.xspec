@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/foo.xsl">
+  
+  <x:scenario label="test">
+    <x:context>
+      <hello>world</hello>
+    </x:context>
+    <x:expect label="result">
+      <hello>WORLD</hello>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

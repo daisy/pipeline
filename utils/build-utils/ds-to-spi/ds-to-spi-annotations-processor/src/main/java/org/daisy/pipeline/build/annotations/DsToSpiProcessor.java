@@ -44,6 +44,7 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
 import org.daisy.pipeline.build.annotations.ComponentModel.ActivateModel;
+import org.daisy.pipeline.build.annotations.ComponentModel.DeactivateModel;
 import org.daisy.pipeline.build.annotations.ComponentModel.PropertyModel;
 import org.daisy.pipeline.build.annotations.ComponentModel.ReferenceModel;
 
@@ -307,7 +308,28 @@ public class DsToSpiProcessor extends AbstractProcessor {
 				}
 			}
 			for (Element e : roundEnv.getElementsAnnotatedWith(Deactivate.class)) {
-				printWarning("No component deactivation with SPI: method '" + ((ExecutableElement)e).getSimpleName().toString() + "' will never be called", e);
+				if (e.getKind() == ElementKind.METHOD) {
+					ExecutableElement exeElement = (ExecutableElement)e;
+					TypeElement classElement = (TypeElement)exeElement.getEnclosingElement();
+					ComponentModel component = components.get(classElement.getQualifiedName().toString());
+					if (!includeClass(classElement, includes, includeClasses, excludeClasses)) {
+					} else if (component != null) {
+						DeactivateModel deactivate = new DeactivateModel(); {
+							deactivate.methodName = exeElement.getSimpleName().toString();
+							if (exeElement.getParameters().size() != 0) {
+								printError("@Deactivate method with arguments not supported", e);
+								throw new RuntimeException();
+							}
+						}
+						component.deactivate = deactivate;
+					} else {
+						printError("@Deactivate without @Component", e);
+						throw new RuntimeException();
+					}
+				} else {
+					printError("@Deactivate only applies to methods", e);
+					throw new RuntimeException();
+				}
 			}
 			for (Element e : roundEnv.getElementsAnnotatedWith(Modified.class)) {
 				printWarning("No component modification with SPI: method '" + ((ExecutableElement)e).getSimpleName().toString() + "' will never be called", e);

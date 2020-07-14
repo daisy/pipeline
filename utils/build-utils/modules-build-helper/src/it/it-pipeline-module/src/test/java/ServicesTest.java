@@ -6,7 +6,7 @@ import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.script.XProcScriptService;
 
-import org.daisy.pipeline.junit.AbstractTest;
+import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import static org.junit.Assert.assertEquals;
@@ -18,10 +18,12 @@ import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import org.ops4j.pax.exam.Option;
 
-public class ServicesTest extends AbstractTest {
+public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 	
 	@Inject
-	// public DatatypeRegistry datatypes;
+	public DatatypeRegistry datatypes;
+
+	@Inject
 	public DatatypeService datatype;
 	
 	@Test
@@ -30,14 +32,13 @@ public class ServicesTest extends AbstractTest {
 		assertTrue(id.equals("foo:choice") ||
 		           id.equals("px:script-option-1") ||
 		           id.equals("transform-query"));
-		// FIXME: DefaultDatatypeRegistry (framework-core) must support SPI
-		// Set<String> ids = new HashSet<>();
-		// for (DatatypeService datatype : datatypes.getDatatypes())
-		// 	ids.add(datatype.getId());
-		// assertTrue(ids.remove("foo:choice"));
-		// assertTrue(ids.remove("px:script-option-1"));
-		// assertTrue(ids.remove("transform-query")); // because o.d.p.modules.braille:common-utils on class path
-		// assertTrue(ids.isEmpty());
+		Set<String> ids = new HashSet<>();
+		for (DatatypeService datatype : datatypes.getDatatypes())
+			ids.add(datatype.getId());
+		assertTrue(ids.remove("foo:choice"));
+		assertTrue(ids.remove("px:script-option-1"));
+		assertTrue(ids.remove("transform-query")); // because o.d.p.modules.braille:common-utils on class path
+		assertTrue(ids.isEmpty());
 	}
 	
 	@Inject

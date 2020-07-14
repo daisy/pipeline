@@ -23,7 +23,14 @@ public class ServiceLoader<S> implements Iterable<S> {
 		ClassLoader ccl = Thread.currentThread().getContextClassLoader();
 		if (ccl != lastContextClassLoader) {
 			cache.clear();
-			Memoize.singletons.clear();
+			synchronized (Memoize.singletons) {
+				for (Object o : Memoize.singletons.values())
+					if (o instanceof ServiceWithProperties)
+						try {
+							((ServiceWithProperties)o).spi_deactivate();
+						} catch (AbstractMethodError e) {}
+				Memoize.singletons.clear();
+			}
 		}
 		lastContextClassLoader = ccl;
 		ServiceLoader<S> loader;
@@ -82,6 +89,7 @@ public class ServiceLoader<S> implements Iterable<S> {
 	}
 	
 	private static abstract class Memoize<S> implements Iterable<S> {
+		/* set of previously returned objects */
 		private static final Map<Class<?>,Object> singletons = new HashMap<Class<?>,Object>();
 		private final ArrayList<S> list = new ArrayList<S>();
 		protected abstract Iterator<S> _iterator();

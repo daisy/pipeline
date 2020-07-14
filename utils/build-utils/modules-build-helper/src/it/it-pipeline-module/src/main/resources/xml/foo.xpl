@@ -25,6 +25,11 @@
         </p:documentation>
     </p:import>
     
+    <p:declare-step type="px:java-step">
+        <p:input port="source"/>
+        <p:output port="result"/>
+    </p:declare-step>
+    
     <p:xslt>
         <p:input port="stylesheet">
             <p:document href="foo.xsl"/>
@@ -33,5 +38,7 @@
             <p:empty/>
         </p:input>
     </p:xslt>
+    
+    <px:java-step/>
     
 </p:declare-step>

@@ -20,6 +20,7 @@ public class JavaStep extends Identity {
 
 	@Override
 	public void run() throws SaxonApiException {
+		super.run();
 	}
 	
 	@Component(

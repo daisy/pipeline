@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.5</version>
+    <version>1.13.6</version>
     <relativePath/>
   </parent>
   <groupId>org.daisy.pipeline.build.modules-build-helper</groupId>
@@ -71,6 +71,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
@@ -86,6 +91,7 @@
   <properties>
     <expose-services>
       org.daisy.impl.FooImpl,
+      impl.JavaFunction,
       impl.JavaStep$Provider,
       org.daisy.pipeline.script.impl.XProcScript_my_script,
       org.daisy.pipeline.datatypes.impl.Datatype_foo_choice,
@@ -111,6 +117,11 @@
             </archive>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.daisy.pipeline.build</groupId>
+          <artifactId>ds-to-spi-maven-plugin</artifactId>
+          <version>${ds-to-spi-maven-plugin.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -119,74 +130,12 @@
         <artifactId>modules-build-helper</artifactId>
         <executions>
           <execution>
-            <id>process-catalog</id>
-            <phase>generate-sources</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <_dsannotations>${expose-services}</_dsannotations>
-            <Import-Package>!org.daisy.common.spi,*</Import-Package>
-            <Private-Package>
-              org.daisy.impl,
-              org.daisy.pipeline.modules.impl;-split-package:=first,
-              org.daisy.pipeline.script.impl;-split-package:=first,
-              org.daisy.pipeline.datatypes.impl;-split-package:=first,
-              org.daisy.pipeline.braille.liblouis.impl;-split-package:=first,
-              org.daisy.common.xproc.calabash.impl;-split-package:=first
-            </Private-Package>
-          </instructions>
-        </configuration>
-        <executions>
-          <execution>
-            <id>bundle-before-test</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <version>${ds-to-spi-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>generate-spi-classes</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>generate-spi-classes</goal>
-            </goals>
-            <configuration>
-              <includes>${expose-services}</includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>modules-build-helper</artifactId>
-        <executions>
-          <execution>
             <id>htmlize-sources</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>htmlize-sources</goal>
-            </goals>
             <configuration>
-              <sourceDirectory>${project.basedir}</sourceDirectory>
-              <outputDirectory>${project.build.directory}/doc</outputDirectory>
-              <catalogXmlFile>${project.basedir}/src/main/resources/META-INF/catalog.xml</catalogXmlFile>
               <includes>
-                src/main/resources/META-INF/catalog.xml,
                 src/main/resources/**/*.xpl,
                 src/main/resources/**/*.css,
-                src/main/resources/**/*.xml/,
+                src/main/resources/**/*.xml,
                 src/main/resources/xml,
                 src/main/resources/xml/foo.xsl
               </includes>
@@ -204,36 +153,6 @@
                 org.daisy.pipeline.*,
                 org.daisy.common.*
               </includes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>xprocdoc</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>xprocdoc</goal>
-            </goals>
-            <configuration>
-              <sourceDirectory>src/main/resources</sourceDirectory>
-              <outputDirectory>${project.build.directory}/xprocdoc</outputDirectory>
-              <catalogXmlFile>src/main/resources/META-INF/catalog.xml</catalogXmlFile>
-              <includes>xml/**/*.xpl</includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jxr-plugin</artifactId>
-        <version>2.5</version>
-        <executions>
-          <execution>
-            <id>htmlize-java</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>jxr</goal>
-            </goals>
-            <configuration>
-              <destDir>${project.build.directory}/doc/src/main/java/</destDir>
-              <linkJavadoc>false</linkJavadoc>
             </configuration>
           </execution>
         </executions>
@@ -256,19 +175,6 @@
               </resources>
               <outputDirectory>${project.build.directory}/generated-test-resources/xprocspec</outputDirectory>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <version>1.2.4</version>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
@@ -322,27 +228,18 @@
                   <location>${project.build.directory}/dependencies-package-list/</location>
                 </offlineLink>
               </offlineLinks>
-              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <version>1.0.0</version>
         <executions>
           <execution>
-            <id>package-xprocdoc-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <classifier>xprocdoc</classifier>
-              <classesDirectory>${project.build.directory}/xprocdoc</classesDirectory>
-              <archive>
-                <addMavenDescriptor>false</addMavenDescriptor>
-              </archive>
-            </configuration>
+            <id>xspecTest</id>
+            <phase>none</phase>
           </execution>
         </executions>
       </plugin>

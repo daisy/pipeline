@@ -17,6 +17,7 @@ public class ${component.spiClassName}
 	private static final org.slf4j.Logger spi_log = org.slf4j.LoggerFactory.getLogger(${component.spiClassName}.class);
 	
 	private final java.util.Map spi_props;
+	private boolean spi_deactivated = false;
 	
 	public ${component.spiClassName}() {
 		super();
@@ -98,6 +99,29 @@ public class ${component.spiClassName}
 #else
 		${component.activate.methodName}();
 #end
+#end
+	}
+#if( ${component.deactivate} )
+	
+	@Override
+	protected void finalize() throws Throwable {
+		spi_deactivate();
+		super.finalize();
+	}
+#end
+	
+	public void spi_deactivate() {
+#if( ${component.deactivate} )
+		if (!spi_deactivated) {
+			spi_log.trace("Deactivating ${component.className}");
+			try {
+				${component.deactivate.methodName}();
+			} catch (Throwable e) {
+				spi_log.error("Caught exception while deactivating ${component.className}", e);
+			} finally {
+				spi_deactivated = true;
+			}
+		}
 #end
 	}
 	

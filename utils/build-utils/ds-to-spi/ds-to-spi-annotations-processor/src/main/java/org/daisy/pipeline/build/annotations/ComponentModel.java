@@ -15,6 +15,7 @@ public class ComponentModel {
 	String qualifiedClassName;
 	String spiClassName;
 	ActivateModel activate;
+	DeactivateModel deactivate;
 	boolean immediate;
 	final List<PropertyModel> properties = new ArrayList<PropertyModel>();
 	final List<String> services = new ArrayList<String>();
@@ -46,6 +47,10 @@ public class ComponentModel {
 	
 	public ActivateModel getActivate() {
 		return activate;
+	}
+	
+	public DeactivateModel getDeactivate() {
+		return deactivate;
 	}
 	
 	public boolean getImmediate() {
@@ -80,6 +85,15 @@ public class ComponentModel {
 		}
 	}
 	
+	public static class DeactivateModel {
+		
+		String methodName;
+		
+		public String getMethodName() {
+			return methodName;
+		}
+	}
+
 	public static class ReferenceModel {
 		
 		String methodName;

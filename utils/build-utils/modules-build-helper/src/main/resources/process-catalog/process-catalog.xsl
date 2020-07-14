@@ -115,8 +115,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "org.daisy.pipeline.modules.impl.<xsl:value-of select="$className"/>",
-    service = { ModuleRef.class },
-    immediate = true
+    service = { ModuleRef.class }
 )
 public class <xsl:value-of select="$className"/> implements ModuleRef {
     
@@ -264,7 +263,6 @@ import org.osgi.service.component.annotations.Component;
 
 @Component(
 	name = "<xsl:value-of select="$id"/>",
-	immediate = true,
 	service = { XProcScriptService.class },
 	property = {
 		"script.id:String=<xsl:value-of select="$id"/>",
@@ -314,7 +312,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "<xsl:value-of select="$id"/>",
-	immediate = true,
 	service = { DatatypeService.class },
 	property = {
 		"data-type.id:String=<xsl:value-of select="$id"/>",
