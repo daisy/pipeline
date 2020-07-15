@@ -25,47 +25,17 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
-      <version>1.1.9-p1-95</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.thaiopensource</groupId>
-          <artifactId>jing</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>net.sf.saxon</groupId>
-          <artifactId>Saxon-HE</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-slf4j-impl</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>1.1.20-p4-98-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <version>9.5.1.5-1</version>
-      <exclusions>
-        <exclusion>
-          <groupId>net.sf.saxon</groupId>
-          <artifactId>Saxon-HE</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>9.8.0.8-1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
-      <version>20151127.0.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>net.sf.saxon</groupId>
-          <artifactId>saxon</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xml-apis</groupId>
-          <artifactId>xml-apis</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>20151127.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -110,4 +80,18 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <!-- for restlet (xmlcalabash dependency) -->
+    <repository>
+      <id>restlet-repo</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>

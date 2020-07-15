@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/xproc-maven-plugin
 	branch = master
-	commit = 66ae1b7e22e85b3f00df30586378b1c9b70ff439
-	parent = f4931e83377bb9fdec3fbcba77f358627a0d8f63
+	commit = aa8c3d9b62e27e6046382b007167d5c83f50bbcb
+	parent = 8a8574feca732c0522d73b9379e8ecac8ae364ce
 	cmdver = 0.3.1

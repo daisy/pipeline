@@ -1,0 +1,3 @@
+<xproc-config xmlns="http://xmlcalabash.com/ns/configuration" xmlns:ex="http://example.net/ns">
+  <implementation type="ex:throw-java-error" class-name="org.daisy.maven.xproc.xprocspec.ThrowJavaError"/>
+</xproc-config>

@@ -194,7 +194,7 @@ public class Calabash implements XProcEngine {
 						ReadablePipe rpipe = xpipeline.readFrom(port);
 						while (rpipe.moreDocuments())
 							wdoc.write(rpipe.read()); }}
-		catch (Exception e) {
+		catch (Throwable e) {
 			throw new XProcExecutionException("Calabash failed to execute XProc", e); }
 	}
 		
