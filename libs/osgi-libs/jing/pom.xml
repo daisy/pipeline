@@ -39,6 +39,10 @@
     </developer>
   </developers>
   
+  <!--
+      FIXME: make these the real dependencies, i.e. download them to sources/lib during compilation
+      FIXME: which of these dependencies are actually optional, which ones aren't?
+  -->
   <dependencies>
       <dependency>
         <groupId>isorelax</groupId>
@@ -76,11 +80,12 @@
         <version>2.10.0</version>
         <optional>true</optional>
       </dependency>
+      <!-- part of java since 1.5 --><!--
       <dependency>
         <groupId>xml-apis</groupId>
         <artifactId>xml-apis</artifactId>
         <version>1.4.01</version>
-      </dependency>
+      </dependency>-->
       <dependency>
         <groupId>xml-resolver</groupId>
         <artifactId>xml-resolver</artifactId>

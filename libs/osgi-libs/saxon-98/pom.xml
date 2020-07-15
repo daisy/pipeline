@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.libs</groupId>
   <artifactId>saxon-he</artifactId>
-  <version>9.8.0.9-SNAPSHOT</version>
+  <version>9.8.0.8-1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>Saxon HE (OSGi Bundle)</name>
@@ -65,12 +65,14 @@
       <groupId>${lib.groupId}</groupId>
       <artifactId>${lib.artifactId}</artifactId>
       <version>${lib.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>${lib.groupId}</groupId>
       <artifactId>${lib.artifactId}</artifactId>
       <version>${lib.version}</version>
       <classifier>xqj</classifier>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
