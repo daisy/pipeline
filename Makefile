@@ -130,6 +130,15 @@ run-docker : dist-docker-image
            -e PIPELINE2_WS_AUTHENTICATION=false \
 	       -p 8181:8181 daisyorg/pipeline-assembly
 
+SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES))
+
+.PHONY : $(addprefix run-,$(SCRIPTS))
+$(addprefix run-,$(SCRIPTS)) : run-% : %/.test-dependencies
+	# not using -f because that causes log file to be saved at the wrong location
+	cd $(patsubst run-%,%,$@) && \
+	mvn --settings "$(ROOT_DIR)/$(MVN_SETTINGS)" $(MVN_PROPERTIES) \
+	    clean test -Prun-script-webserver
+
 .PHONY : check
 
 .PHONY : check-clientlib/go
@@ -469,6 +478,8 @@ help :
 	echo "	Get the command for compiling and running CLI locally"                                                  >&2
 	echo "make run-docker:"                                                                                         >&2
 	echo "	Incrementally compile code and run a server inside a Docker container"                                  >&2
+	echo "make run-modules/scripts/[SCRIPT]:"                                                                       >&2
+	echo "	Incrementally compile code and run a server with a single script"                                       >&2
 	echo "make website:"                                                                                            >&2
 	echo "	Build the website"                                                                                      >&2
 	echo "make dump-maven-cmd:"                                                                                     >&2
