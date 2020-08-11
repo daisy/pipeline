@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                type="px:foo" version="1.0">
+                type="px:foo" name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>p:foo</p>
@@ -12,6 +12,8 @@
             <p>Input port "source"</p>
         </p:documentation>
     </p:input>
+    
+    <p:input port="params" kind="parameter"/>
     
     <p:output port="result">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -35,7 +37,7 @@
             <p:document href="foo.xsl"/>
         </p:input>
         <p:input port="parameters">
-            <p:empty/>
+            <p:pipe step="main" port="params"/>
         </p:input>
     </p:xslt>
     

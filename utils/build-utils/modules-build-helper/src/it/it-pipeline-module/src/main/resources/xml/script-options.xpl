@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
-                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:bar="bar">
 
     <p:option name="option-1" required="true">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -19,15 +20,11 @@ For more info see [link](http://example.org/more-info).</p>
       </p:pipeinfo>
     </p:option>
 
-    <p:option name="option-2" required="false" select="'xyz'">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Option 2</h1>
-      </p:documentation>
-    </p:option>
+    <p:input port="foo-params" kind="parameter" px:options="foo"/>
 
-    <p:option name="option-3" required="false" select="'xyz'">
+    <p:option name="bar:option-1" required="false" select="'xyz'">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Option 3</h1>
+        <h1 px:role="name">Bar option 1</h1>
       </p:documentation>
     </p:option>
 

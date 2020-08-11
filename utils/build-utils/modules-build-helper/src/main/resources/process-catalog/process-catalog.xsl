@@ -33,7 +33,8 @@
                         <xsl:when test="@px:extends">
                             <xsl:call-template name="extend-script">
                                 <xsl:with-param name="script-uri" select="$uri"/>
-                                <xsl:with-param name="extends-uri" select="resolve-uri(@px:extends,base-uri(.))"/>
+                                <xsl:with-param name="extends-uri" select="for $u in tokenize(@px:extends,'\s+')[not(.='')]
+                                                                           return resolve-uri($u,base-uri(.))"/>
                                 <xsl:with-param name="catalog-xml" select="/*"/>
                             </xsl:call-template>
                         </xsl:when>
@@ -460,7 +461,8 @@ public class <xsl:value-of select="$className"/> extends org.daisy.pipeline.brai
             <xsl:variable name="doc">
                 <xsl:call-template name="extend-script">
                     <xsl:with-param name="script-uri" select="$uri"/>
-                    <xsl:with-param name="extends-uri" select="resolve-uri(@px:extends,base-uri(.))"/>
+                    <xsl:with-param name="extends-uri" select="for $u in tokenize(@px:extends,'\s+')[not(.='')]
+                                                               return resolve-uri($u,base-uri(.))"/>
                     <xsl:with-param name="catalog-xml" select="/*"/>
                 </xsl:call-template>
             </xsl:variable>

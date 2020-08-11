@@ -1,3 +1,6 @@
+$option-1: abc !default;
+@use "foo-1.css";
+@use "foo-2.css";
 :root {
 	line-height: 2;
 }
