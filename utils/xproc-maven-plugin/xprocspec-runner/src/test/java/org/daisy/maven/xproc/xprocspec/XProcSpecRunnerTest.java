@@ -100,8 +100,8 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Failed tests:"                                                                          + "\n" +
 "  test_identity_broken"                                                                 + "\n" +
-"    Identity "                                                                          + "\n" +
-"      * FAILURE: theOptionOptionRequiredShouldHaveTheValueOptionRequiredvalue "         + "\n" +
+"    Identity"                                                                           + "\n" +
+"      * FAILURE: theOptionOptionRequiredShouldHaveTheValueOptionRequiredvalue"          + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 3, Failures: 1, Errors: 0, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_identity_broken.html").exists());
@@ -171,17 +171,17 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_non_existing"                                                                    + "\n" +
-"    * ERROR: Error loading test description "                                           + "\n" +
+"    * ERROR: Error loading test description"                                            + "\n" +
 "  non_existing_test"                                                                    + "\n" +
-"    * ERROR: Test file does not exist "                                                 + "\n" +
+"    * ERROR: Test file does not exist"                                                  + "\n" +
 "  test_throw_error_unexpected"                                                          + "\n" +
 // FIXME: should not be a "compilationError"
-"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions "               + "\n" +
+"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions"                + "\n" +
 // "    Unexpected error "                                                                  + "\n" +
 // "      * ERROR: Error evaluating assertion "                                             + "\n" +
 "  test_throw_java_error"                                                                + "\n" +
 // FIXME: should not be a "compilationError"
-"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions "               + "\n" +
+"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions"                + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 5, Failures: 0, Errors: 4, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_non_existing.html").exists());
@@ -236,7 +236,7 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_foo_catalog"                                                                     + "\n" +
-"    * ERROR: Error loading test description "                                           + "\n" +
+"    * ERROR: Error loading test description"                                            + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0"                                       + "\n"));
 		File catalog = new File(testsDir, "foo_catalog.xml");
@@ -285,7 +285,7 @@ public class XProcSpecRunnerTest {
 "Tests in error:"                                                                        + "\n" +
 "  test_foo_java"                                                                        + "\n" +
 // FIXME:
-"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions "               + "\n" +
+"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions"                + "\n" +
 // "    Foo "                                                                               + "\n" +
 // "      * ERROR: Error evaluating assertion "                                             + "\n" +
 ""                                                                                       + "\n" +

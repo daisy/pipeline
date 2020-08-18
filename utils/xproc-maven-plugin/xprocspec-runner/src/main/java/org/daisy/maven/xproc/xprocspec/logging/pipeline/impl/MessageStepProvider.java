@@ -1,12 +1,10 @@
 package org.daisy.maven.xproc.xprocspec.logging.pipeline.impl;
 
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
-import org.daisy.maven.xproc.xprocspec.logging.calabash.impl.MessageStep;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -18,5 +16,10 @@ import org.osgi.service.component.annotations.Component;
 public class MessageStepProvider implements XProcStepProvider {
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 		return new MessageStep(runtime, step);
+	}
+	private static class MessageStep extends org.daisy.maven.xproc.xprocspec.logging.calabash.impl.MessageStep implements XProcStep {
+		MessageStep(XProcRuntime runtime, XAtomicStep step) {
+			super(runtime, step);
+		}
 	}
 }

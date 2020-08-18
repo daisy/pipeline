@@ -497,32 +497,40 @@ public class XProcSpecRunner {
 	
 	private static String fillParagraph(String string, int maxColumns) {
 		String prefix = "";
+		String indent = "";
 		Matcher m = Pattern.compile("^( *[-\\*]? *)[^ -\\*].*$").matcher(string);
-		if (m.matches())
+		if (m.matches()) {
 			prefix = m.group(1);
+			indent = prefix.replaceAll("[-\\*]"," ");
+			string = string.substring(prefix.length());
+		}
 		StringBuilder b = new StringBuilder();
-		b.append(prefix);
-		string = string.substring(prefix.length());
-		prefix = prefix.replaceAll("[-\\*]"," ");
-		int col = prefix.length();
+		int col = 0;
 		boolean first = true;
 		for (String word : string.split("\\s+")) {
 			while (true) {
-				if (col == 0) {
-					if (!first)
+				boolean firstOfRow = col == 0;
+				if (firstOfRow) {
+					if (first) {
 						b.append(prefix);
+						first = false;
+					} else
+						b.append(indent);
 					col += prefix.length();
 				}
-				if (col + word.length() <= maxColumns || col == 0) {
-					b.append(word).append(" ");
-					col += (word.length() + 1);
+				if (firstOfRow || col + word.length() <= maxColumns) {
+					if (!firstOfRow) {
+						b.append(" ");
+						col += 1;
+					}
+					b.append(word);
+					col += word.length();
 					break;
 				} else {
 					b.append("\n");
 					col = 0;
 				}
 			}
-			first = false;
 		}
 		return b.toString();
 	}

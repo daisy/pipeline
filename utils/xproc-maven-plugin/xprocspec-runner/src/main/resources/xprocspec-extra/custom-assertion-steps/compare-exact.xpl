@@ -16,7 +16,7 @@
   <p:input port="parameters" kind="parameter" primary="true"/>
   <p:output port="result" primary="true"/>
   
-  <p:declare-step type="pxi:make-prefixes-and-namespaces-explicit-and-normalize-space">
+  <p:declare-step type="pxi:make-prefixes-and-namespaces-explicit">
     <p:input port="source"/>
     <p:output port="result"/>
     <p:xslt>
@@ -27,21 +27,19 @@
         <p:empty/>
       </p:input>
     </p:xslt>
-    <p:delete match="/*/@xml:space"/>
-    <p:string-replace match="text()" replace="normalize-space(.)"/>
   </p:declare-step>
   
-  <pxi:make-prefixes-and-namespaces-explicit-and-normalize-space name="normalize-context">
+  <pxi:make-prefixes-and-namespaces-explicit name="normalize-context">
     <p:input port="source">
       <p:pipe step="main" port="context"/>
     </p:input>
-  </pxi:make-prefixes-and-namespaces-explicit-and-normalize-space>
+  </pxi:make-prefixes-and-namespaces-explicit>
   
-  <pxi:make-prefixes-and-namespaces-explicit-and-normalize-space name="normalize-expect">
+  <pxi:make-prefixes-and-namespaces-explicit name="normalize-expect">
     <p:input port="source">
       <p:pipe step="main" port="expect"/>
     </p:input>
-  </pxi:make-prefixes-and-namespaces-explicit-and-normalize-space>
+  </pxi:make-prefixes-and-namespaces-explicit>
   
   <p:compare name="compare" fail-if-not-equal="false">
     <p:input port="source">
@@ -73,14 +71,14 @@
     <p:otherwise>
       <p:wrap-sequence wrapper="x:expected" name="expected">
         <p:input port="source">
-          <p:pipe step="main" port="expect"/>
-          <!-- <p:pipe step="normalize-expect" port="result"/> -->
+          <!-- <p:pipe step="main" port="expect"/> -->
+          <p:pipe step="normalize-expect" port="result"/>
         </p:input>
       </p:wrap-sequence>
       <p:wrap-sequence wrapper="x:was" name="was">
         <p:input port="source">
-          <p:pipe step="main" port="context"/>
-          <!-- <p:pipe step="normalize-context" port="result"/> -->
+          <!-- <p:pipe step="main" port="context"/> -->
+          <p:pipe step="normalize-context" port="result"/>
         </p:input>
       </p:wrap-sequence>
       <p:insert match="/*" position="last-child">

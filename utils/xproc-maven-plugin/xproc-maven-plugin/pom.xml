@@ -17,9 +17,9 @@
   <name>xproc-maven-plugin</name>
   
   <properties>
-    <it.com.xmlcalabash.version>1.1.20-p4-98-SNAPSHOT</it.com.xmlcalabash.version>
-    <it.saxon.version>9.8.0.8-1-SNAPSHOT</it.saxon.version>
-    <it.jing.version>20151127.0.1-SNAPSHOT</it.jing.version>
+    <it.com.xmlcalabash.version>1.1.20-p4-98</it.com.xmlcalabash.version>
+    <it.saxon.version>9.8.0.8-1</it.saxon.version>
+    <it.jing.version>20151127.0.1</it.jing.version>
     <it.xproc-engine-calabash.version>1.1.3</it.xproc-engine-calabash.version>
   </properties>
   
