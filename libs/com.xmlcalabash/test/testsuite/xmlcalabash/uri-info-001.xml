@@ -23,7 +23,7 @@
 
 <cx:uri-info href="http://tests.xproc.org/graphics/icon.png"/>
 <!-- Date is different every time so skip it. -->
-<p:delete match="c:uri-info/c:header[@name='Date']"/>
+<p:delete match="c:uri-info/c:header[@name=('Date','Expires')]"/>
 <!-- Keep-Alive varies a bit, so skip it too. -->
 <p:delete match="c:uri-info/c:header[@name='Keep-Alive']"/>
 
@@ -46,6 +46,8 @@
   <c:header name="ETag" value="&#34;f13-480ec8131bbc0&#34;"/>
   <c:header name="Accept-Ranges" value="bytes"/>
   <c:header name="Content-Length" value="3859"/>
+  <c:header name="Cache-Control" value="max-age=2592000"/>
+  <c:header name="Vary" value="User-Agent,Accept-Encoding"/>
   <c:header name="Content-Type" value="image/png"/>
 </c:uri-info>
 </t:output>

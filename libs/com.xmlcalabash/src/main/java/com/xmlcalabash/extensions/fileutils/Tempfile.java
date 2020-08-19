@@ -75,16 +75,17 @@ public class Tempfile extends DefaultStep {
         delete = getOption(_delete_on_exit, false);
 
         RuntimeValue href = getOption(_href);
-        URI uri = href.getBaseURI().resolve(href.getString());
-        File file;
-        if (!"file".equals(uri.getScheme())) {
-            throw new XProcException(step.getNode(), "Only file: scheme URIs are supported by the tempfile step.");
-        } else {
-            file = URIUtils.toFile(uri);
-        }
-
-        if (!file.isDirectory()) {
-            throw new XProcException(step.getNode(), "The href on tempfile must point to an existing directory.");
+        File file = null;
+        if (href != null) {
+            URI uri = href.getBaseURI().resolve(href.getString());
+            if (!"file".equals(uri.getScheme())) {
+                throw new XProcException(step.getNode(), "Only file: scheme URIs are supported by the tempfile step.");
+            } else {
+                file = URIUtils.toFile(uri);
+            }
+            if (!file.isDirectory()) {
+                throw new XProcException(step.getNode(), "The href on tempfile must point to an existing directory.");
+            }
         }
 
         TreeWriter tree = new TreeWriter(runtime);
@@ -94,9 +95,9 @@ public class Tempfile extends DefaultStep {
 
         File temp;
         try {
-            temp = File.createTempFile(prefix, suffix,file);
+            temp = File.createTempFile(prefix, suffix, file);
         } catch (IOException ioe) {
-            throw new XProcException(step.getNode(), "Failed to create temporary file in " + file.toURI().toASCIIString());
+            throw new XProcException(step.getNode(), "Failed to create temporary file" + (file != null ? (" " + file.toURI().toASCIIString()) : ""));
         }
 
         if (delete) {

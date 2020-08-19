@@ -8,10 +8,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Stack;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import org.slf4j.Logger;
 
@@ -65,15 +68,12 @@ public class Parser {
     private static QName cx_import = new QName(XProcConstants.NS_CALABASH_EX, "import");
 
     private XProcRuntime runtime = null;
-    private Stack<DeclareStep> declStack = null;
-    protected HashSet<String> topLevelImports = new HashSet<String> ();
     private boolean loadingStandardLibrary = false;
     private Logger logger = LoggerFactory.getLogger(Parser.class);
     private static int importCount = 0;
 
     public Parser(XProcRuntime runtime) {
         this.runtime = runtime;
-        declStack = new Stack<DeclareStep> ();
     }
 
     @Deprecated
@@ -118,7 +118,7 @@ public class Parser {
         if (node.getNodeKind() == XdmNodeKind.DOCUMENT) {
             node = S9apiUtils.getDocumentElement(node);
         }
-        DeclareStep decl = readDeclareStep(node);
+        DeclareStep decl = readDeclareStep(node, runtime);
         parseDeclareStepBodyPassTwo(decl);
         return decl;
     }
@@ -142,7 +142,10 @@ public class Parser {
         }
 
         loadingStandardLibrary = true;
-        PipelineLibrary library = readLibrary(null, root);
+        // only called once, no need to cache
+        // FIXME: not entirely true: it is called whenever reset() is called which can happen multiple times
+        // => instead run it lazily?
+        PipelineLibrary library = readLibrary(root, null);
         loadingStandardLibrary = false;
 
         return library;
@@ -197,14 +200,7 @@ public class Parser {
         if (!XProcConstants.p_library.equals(root.getNodeName())) {
             throw new UnsupportedOperationException("Pipelines libraries must be p:library documents");
         }
-
-        if (declStack.isEmpty()) {
-            topLevelImports.add(root.getBaseURI().toASCIIString());
-        } else {
-            declStack.peek().addImport(root.getBaseURI().toASCIIString());
-        }
-
-        return readLibrary(null, root);
+        return readLibrary(root, null);
     }
 
     private XdmNode parse(InputStream instream, URI baseURI) throws SaxonApiException {
@@ -222,7 +218,9 @@ public class Parser {
         }
     }
 
-    private PipelineLibrary readLibrary(Step parent, XdmNode node) {
+    private Map<URI,PipelineLibrary> parsedLibraries = new HashMap<>();
+
+    private PipelineLibrary readLibrary(XdmNode node, URI baseURI) {
         if (!XProcConstants.p_library.equals(node.getNodeName())
                 && !XProcConstants.p_pipeline.equals(node.getNodeName())
                 && !XProcConstants.p_declare_step.equals(node.getNodeName())) {
@@ -230,7 +228,15 @@ public class Parser {
             return null;
         }
 
+        if (baseURI != null && parsedLibraries.containsKey(baseURI))
+            return parsedLibraries.get(baseURI);
+
         PipelineLibrary library = new PipelineLibrary(runtime, node);
+        if (!loadingStandardLibrary)
+            library.addImport(runtime.getStandardLibrary());
+
+        if (baseURI != null)
+            parsedLibraries.put(baseURI, library);
 
         if (XProcConstants.p_library.equals(node.getNodeName())) {
             checkAttributes(node, new String[] { "xpath-version", "psvi-required", "version", "exclude-inline-prefixes"}, false);
@@ -242,9 +248,10 @@ public class Parser {
                 if (snode.getNodeName().equals(XProcConstants.p_import)) {
                     // skip it
                 } else {
-                    Step substep = readStep(library, snode);
+                    Step substep = readStep(library, library, snode);
 
                     if (substep instanceof DeclareStep) {
+                        ((DeclareStep)substep).setSourceImport(baseURI);
                         library.addStep((DeclareStep) substep);
                     } else {
                         throw new UnsupportedOperationException("A p:library must contain only p:pipeline and p:declare-steps.");
@@ -254,17 +261,16 @@ public class Parser {
 
             for (XdmNode snode : new AxisNodes(runtime, node, Axis.CHILD, AxisNodes.PIPELINE)) {
                 if (snode.getNodeName().equals(XProcConstants.p_import)) {
-                    Step substep = readStep(library, snode);
+                    Step substep = readStep(library, library, snode);
                     Import importElem = (Import) substep;
                     XdmNode root = importElem.getRoot();
-                    // root will be null if the library has already been imported
-                    if (root != null) {
-                        importElem.setLibrary(readLibrary(library, root));
-                    }
+                    PipelineLibrary lib = readLibrary(root, importElem.getHref());
+                    if (lib != null)
+                        library.addImport(lib);
                 }
             }
         } else {
-            Step substep = readStep(library, node);
+            Step substep = readStep(library, library, node);
 
             if (XProcConstants.NS_CALABASH_EX.equals(substep.getDeclaredType().getNamespaceURI())
                     && (substep.getDeclaredType().getLocalName().startsWith("anonymousType"))) {
@@ -272,6 +278,7 @@ public class Parser {
             }
 
             if (substep instanceof DeclareStep) {
+                ((DeclareStep)substep).setSourceImport(baseURI);
                 library.addStep((DeclareStep) substep);
             } else {
                 throw new UnsupportedOperationException("A p:library must contain only p:pipeline and p:declare-steps.");
@@ -1156,12 +1163,13 @@ public class Parser {
         return log;
     }
 
-    private Step readStep(Step parent, XdmNode node) {
+    // FIXME: parent and declScope arguments are always equal: simplify!
+    private Step readStep(Step parent, DeclarationScope declScope, XdmNode node) {
         QName stepType = node.getNodeName();
 
         if (XProcConstants.p_declare_step.equals(stepType)
                 || XProcConstants.p_pipeline.equals(stepType)) {
-            return readDeclareStep(node);
+            return readDeclareStep(node, declScope);
         } else if (XProcConstants.p_import.equals(stepType)) {
             return readImport(node);
         } else if (XProcConstants.p_for_each.equals(stepType)) {
@@ -1184,27 +1192,9 @@ public class Parser {
             return readUntilUnchanged(parent, node);
         }
 
-        DeclareStep decl= null;
-        if (parent == null) {
-            decl = runtime.getBuiltinDeclaration(stepType);
-        } else {
-            decl = ((DeclareStep) parent).getStepDeclaration(stepType);
-        }
-
-        /*
-        if (declStack.isEmpty()) {
-            decl = runtime.getBuiltinDeclaration(stepType);
-        } else {
-            try {
-                decl = declStack.peek().getStepDeclaration(stepType);
-            } catch (Exception ex) {
-                throw new XProcException(node, ex.getMessage(), ex);
-            }
-        }
-        */
-
+        DeclareStep decl = declScope.getDeclaration(stepType);
         if (decl == null) {
-            throw XProcException.staticError(44, node, "Not a step: " + stepType);
+            throw XProcException.staticError(44, node, "Unexpected step name: " + stepType);
         }
 
         // Must be an atomic step in a subpipeline
@@ -1257,7 +1247,7 @@ public class Parser {
         return step;
     }
 
-    private DeclareStep readDeclareStep(XdmNode node) {
+    private DeclareStep readDeclareStep(XdmNode node, DeclarationScope declScope) {
         QName name = node.getNodeName();
 
         if (!name.equals(XProcConstants.p_declare_step) && !name.equals(XProcConstants.p_pipeline)) {
@@ -1280,13 +1270,6 @@ public class Parser {
 
             if (!loadingStandardLibrary && XProcConstants.NS_XPROC.equals(type.getNamespaceURI())) {
                 throw XProcException.staticError(25, node, "Type cannot be in the p: namespace.");
-            }
-        }
-
-        if (XProcConstants.NS_XPROC.equals(type.getNamespaceURI())) {
-            // If declStack is empty, then this is ok.
-            if (!declStack.isEmpty()) {
-                throw XProcException.staticError(25, node, "Additional steps must not be declared in the XProc namespace.");
             }
         }
 
@@ -1322,16 +1305,13 @@ public class Parser {
         step.setXPathVersion(xpathVersion);
 
         HashSet<String> excludeURIs = S9apiUtils.excludeInlinePrefixes(node, node.getAttributeValue(_exclude_inline_prefixes));
-        if (!declStack.isEmpty()) {
-            DeclareStep parent = declStack.peek();
-            for (String uri : parent.getExcludeInlineNamespaces()) {
-                excludeURIs.add(uri);
-            }
-        }
-        // Special case: if your parent is a p:library, get the exclusions from there too...
+        // if parent is a p:library, p:declare-step or p:pipeline, get the exclusions from there too...
         if (S9apiUtils.getParent(node) != null) {
             XdmNode parent = node.getParent();
-            if (XProcConstants.p_library.equals(parent.getNodeName()) && parent.getAttributeValue(_exclude_inline_prefixes) != null) {
+            if (parent.getAttributeValue(_exclude_inline_prefixes) != null
+                && (XProcConstants.p_library.equals(parent.getNodeName())
+                    || XProcConstants.p_pipeline.equals(parent.getNodeName())
+                    || XProcConstants.p_declare_step.equals(parent.getNodeName()))) {
                 HashSet<String> pexcl = S9apiUtils.excludeInlinePrefixes(parent, parent.getAttributeValue(_exclude_inline_prefixes));
                 for (String uri : pexcl) {
                     excludeURIs.add(uri);
@@ -1365,17 +1345,8 @@ public class Parser {
         Vector<XdmNode> rest = readSignature(step);
         step.setAtomic(rest == null);
 
-        if (declStack.isEmpty()) {
-            runtime.declareStep(step.getDeclaredType(), step);
-        } else {
-            declStack.peek().declareStep(step.getDeclaredType(), step);
-        }
-
-        if (!declStack.isEmpty()) {
-            step.setParentDecl(declStack.peek());
-        }
-
-        declStack.push(step);
+        step.setParentScope(declScope);
+        declScope.declareStep(step.getDeclaredType(), step);
 
         // Check that we have legitimate bindings
         for (Input input : step.inputs()) {
@@ -1414,16 +1385,15 @@ public class Parser {
                 } else {
                     if ((XProcConstants.p_declare_step.equals(substepNode.getNodeName()))
                             || XProcConstants.p_pipeline.equals(substepNode.getNodeName())) {
-                        DeclareStep dstep = (DeclareStep) readStep(step, substepNode);
+                        DeclareStep dstep = (DeclareStep) readStep(step, step, substepNode);
                         // It's not really part of the pipeline, but we need to parse it
                         // to make sure it gets added to the available steps
                     } else if (XProcConstants.p_import.equals(substepNode.getNodeName())) {
-                        Import importElem = (Import) readStep(step, substepNode);
+                        Import importElem = (Import) readStep(step, step, substepNode);
                         XdmNode root = importElem.getRoot();
-                        // root will be null if the library has already been imported
-                        if (root != null) {
-                            importElem.setLibrary(readLibrary(step, root));
-                        }
+                        PipelineLibrary lib = readLibrary(root, importElem.getHref());
+                        if (lib != null)
+                            step.addImport(lib);
                     } else {
                         steps.add(substepNode);
                     }
@@ -1436,23 +1406,26 @@ public class Parser {
 
         step.setXmlContent(rest);
 
-        declStack.pop();
-
         return step;
     }
 
-    private void parseDeclareStepBodyPassTwo(DeclareStep step) {
-        step.setBodyParsed(true);
+    private List<DeclareStep> isDeclareStepBodyParsed = new ArrayList<>();
 
-        for (DeclareStep substep : step.getStepDeclarations()) {
-            parseDeclareStepBodyPassTwo(substep);
+    private void parseDeclareStepBodyPassTwo(DeclareStep step) {
+
+        if (isDeclareStepBodyParsed.contains(step))
+            return;
+        isDeclareStepBodyParsed.add(step);
+
+        for (QName type : step.getInScopeTypes()) {
+            parseDeclareStepBodyPassTwo(step.getDeclaration(type));
         }
 
         Vector<XdmNode> rest = step.getXmlContent();
 
         if (rest != null) {
             for (XdmNode substepNode : rest) {
-                Step substep = readStep(step, substepNode);
+                Step substep = readStep(step, step, substepNode);
                 step.addStep(substep);
             }
         }
@@ -1489,7 +1462,6 @@ public class Parser {
         }
 
         Import importElem = new Import(runtime, node);
-        importElem.setHref(importURI);
 
         XdmNode doc;
         try {
@@ -1508,27 +1480,9 @@ public class Parser {
             throw new XProcException(e);
         }
 
-        //System.err.println("BASE: " + doc.getBaseURI());
         importURI = doc.getBaseURI();
-
-        XdmNode root = S9apiUtils.getDocumentElement(doc);
-
-        boolean imported = topLevelImports.contains(importURI.toASCIIString());
-        if (!imported && !declStack.isEmpty()) {
-            imported = declStack.peek().imported(importURI.toASCIIString());
-        }
-
-        if (imported) {
-            return importElem;
-        }
-
-        if (!declStack.isEmpty()) {
-            declStack.peek().addImport(importURI.toASCIIString());
-        } else {
-            topLevelImports.add(importURI.toASCIIString());
-        }
-
-        importElem.setRoot(root);
+        importElem.setHref(importURI);
+        importElem.setRoot(S9apiUtils.getDocumentElement(doc));
         checkExtensionAttributes(node, importElem);
 
         return importElem;
@@ -1546,8 +1500,8 @@ public class Parser {
 
         ForEach step = new ForEach(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        // FIXME: Do I really need parentDecl and parent?
-        step.setParentDecl((DeclareStep) parent);
+        // FIXME: Do I really need parent?
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1557,7 +1511,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
@@ -1578,7 +1532,7 @@ public class Parser {
 
         UntilUnchanged step = new UntilUnchanged(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1588,7 +1542,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
@@ -1609,7 +1563,7 @@ public class Parser {
 
         Viewport step = new Viewport(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         step.setMatch(match);
@@ -1621,7 +1575,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
@@ -1635,7 +1589,7 @@ public class Parser {
 
         Choose step = new Choose(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1669,7 +1623,7 @@ public class Parser {
         When step = new When(runtime, node, stepName);
         checkExtensionAttributes(node, step);
         step.setTest(testExpr);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1679,7 +1633,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
@@ -1694,7 +1648,7 @@ public class Parser {
 
         Otherwise step = new Otherwise(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1704,7 +1658,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
@@ -1719,7 +1673,7 @@ public class Parser {
 
         Group step = new Group(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1729,7 +1683,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
@@ -1744,7 +1698,7 @@ public class Parser {
 
         Try step = new Try(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1754,7 +1708,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
@@ -1769,7 +1723,7 @@ public class Parser {
 
         Catch step = new Catch(runtime, node, stepName);
         checkExtensionAttributes(node, step);
-        step.setParentDecl((DeclareStep) parent);
+        step.setParentScope((DeclareStep) parent);
         step.parent = parent;
 
         Vector<XdmNode> rest = readSignature(step);
@@ -1786,7 +1740,7 @@ public class Parser {
         }
 
         for (XdmNode substepNode : rest) {
-            Step substep = readStep(step, substepNode);
+            Step substep = readStep(step, step, substepNode);
             step.addStep(substep);
         }
 
