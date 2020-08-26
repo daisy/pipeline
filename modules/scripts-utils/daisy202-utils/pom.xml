@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>daisy202-utils</artifactId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DAISY 2.02 Utils</name>
@@ -42,21 +42,13 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mediaoverlay-utils</artifactId>
+      <artifactId>smil-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>mediatype-utils</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-entities</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   

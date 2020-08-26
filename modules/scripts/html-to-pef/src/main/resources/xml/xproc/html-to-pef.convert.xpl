@@ -64,6 +64,11 @@
             pef:add-metadata
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-to-epub3/library.xpl">
+        <p:documentation>
+            px:html-to-opf-metadata
+        </p:documentation>
+    </p:import>
     
     <!-- Ensure that there's exactly one c:param-set -->
     <px:merge-parameters name="parameters" px:progress=".01">
@@ -171,14 +176,7 @@
             <p:pipe step="html" port="result"/>
         </p:input>
     </p:identity>
-    <p:xslt name="metadata" px:message="Extracting metadata from HTML" px:progress=".01">
-        <p:input port="stylesheet">
-            <p:document href="../xslt/html-to-opf-metadata.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
+    <px:html-to-opf-metadata name="metadata" px:message="Extracting metadata from HTML" px:progress=".01"/>
     <pef:add-metadata px:message="Adding metadata to PEF" px:progress=".01">
         <p:input port="source">
             <p:pipe step="pef" port="result"/>

@@ -10,7 +10,7 @@
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.1.2-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <artifactId>ssml-to-audio</artifactId>
   <packaging>bundle</packaging>
 
@@ -25,10 +25,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>tts-helpers</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -57,6 +53,10 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
     <!--
         test dependencies

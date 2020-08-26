@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="../../../main/resources/xml/mo/create-mediaoverlays.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:epub3-create-mediaoverlays">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="out/EPUB/foo.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml" xml:base="out/EPUB/foo.xhtml">
+					<html xml:lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>Chapter</title>
+						</head>
+						<body id="bodymatter" epub:type="bodymatter">
+							<section id="section-1">
+								<span epub:type="pagebreak" title="1" id="page_1"/>
+								<h1 id="chapter-1">
+									<span id="A">
+										<span role="word">Chapter</span>
+									</span>
+								</h1>
+								<p>
+									<span id="B">
+										<span role="word">Paragraph</span>
+									</span>
+								</p>
+								<span epub:type="pagebreak" title="2" id="page_2"/>
+								<p>
+									<span id="C">
+										<span role="word">Another</span> <span role="word">paragraph</span>
+									</span>
+								</p>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+			<x:input port="audio-map">
+				<x:document type="inline">
+					<d:audio-clips>
+						<d:clip idref="A" clipBegin="0:00:00.000" clipEnd="0:00:00.565" src="part_1.mp3"/>
+						<d:clip idref="B" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="part_2.mp3"/>
+						<d:clip idref="C" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="part_3.mp3"/>
+					</d:audio-clips>
+				</x:document>
+			</x:input>
+			<x:option name="audio-dir" select="resolve-uri('out/EPUB/audio/')"/>
+			<x:option name="mediaoverlay-dir" select="resolve-uri('out/EPUB/mo/')"/>
+			<x:option name="flatten" select="'true'"/>
+			<x:option name="anti-conflict-prefix" select="''"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="out/EPUB/audio/part_1.mp3" original-href="part_1.mp3" media-type="audio/mpeg"/>
+					<d:file href="out/EPUB/audio/part_2.mp3" original-href="part_2.mp3" media-type="audio/mpeg"/>
+					<d:file href="out/EPUB/audio/part_3.mp3" original-href="part_3.mp3" media-type="audio/mpeg"/>
+					<d:file href="out/EPUB/mo/foo.smil" media-type="application/smil+xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the original-audio.fileset port">
+			<x:document type="port" port="original-audio.fileset"/>
+		</x:context>
+		<x:expect label="the original-audio.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="out/EPUB/audio/part_1.mp3" original-href="part_1.mp3" to-delete="true"/>
+					<d:file href="out/EPUB/audio/part_2.mp3" original-href="part_2.mp3" to-delete="true"/>
+					<d:file href="out/EPUB/audio/part_3.mp3" original-href="part_3.mp3" to-delete="true"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the foo.smil document">
+			<x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(.),'[\\/]')[last()]='foo.smil']"/>
+		</x:context>
+		<x:expect label="the foo.smil document" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/ns/SMIL">
+				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+					<body epub:textref="../foo.xhtml#bodymatter" epub:type="bodymatter">
+						<seq epub:textref="../foo.xhtml#section-1">
+							<seq epub:textref="../foo.xhtml#chapter-1">
+								<par>
+									<text src="../foo.xhtml#A"/>
+									<audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.565"/>
+								</par>
+							</seq>
+							<par>
+								<text src="../foo.xhtml#B"/>
+								<audio src="../audio/part_2.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							</par>
+							<par>
+								<text src="../foo.xhtml#C"/>
+								<audio src="../audio/part_3.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

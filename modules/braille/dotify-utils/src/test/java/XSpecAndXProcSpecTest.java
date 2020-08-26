@@ -38,6 +38,7 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			"org.daisy.pipeline.modules.braille:liblouis-utils:jar:" + thisPlatform() + ":?",
 			brailleModule("libhyphen-utils"),
 			"org.daisy.pipeline.modules.braille:libhyphen-utils:jar:" + thisPlatform() + ":?",
+			pipelineModule("css-utils"),
 			"com.google.guava:guava:?",
 			"org.daisy.dotify:dotify.api:?",
 			"org.daisy.dotify:dotify.common:?",

@@ -6,6 +6,17 @@
   <p:input port="source" sequence="true"/>
   <p:output port="result"/>
 
+  <p:import href="fileset-join.xpl">
+    <p:documentation>
+      px:fileset-join
+    </p:documentation>
+  </p:import>
+
+  <!-- Normalize URIs -->
+  <p:for-each>
+    <px:fileset-join/>
+  </p:for-each>
+
   <p:xslt>
     <p:input port="stylesheet">
       <p:document href="../xslt/fileset-intersect.xsl"/>

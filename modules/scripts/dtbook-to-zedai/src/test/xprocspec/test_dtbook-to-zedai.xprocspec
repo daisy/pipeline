@@ -60,6 +60,100 @@
 				</body>
 			</x:document>
 		</x:expect>
+		<x:context label="the mapping port">
+			<x:document type="port" port="mapping"/>
+		</x:context>
+		<x:expect label="the mapping port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/minimal.xml" original-href="../resources/minimal.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
 	</x:scenario>
-	
+
+	<x:scenario label="two dtbooks">
+		<x:call step="px:dtbook-to-zedai">
+			<x:input port="fileset.in">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="part1.xml" original-href="../resources/minimal.xml" media-type="application/x-dtbook+xml"/>
+						<d:file href="part2.xml" original-href="../resources/minimal.xml" media-type="application/x-dtbook+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="in-memory.in"/>
+			<x:option name="opt-zedai-filename" select="'minimal.xml'"/>
+			<x:option name="opt-mods-filename" select="''"/>
+			<x:option name="opt-css-filename" select="''"/>
+			<x:option name="opt-lang" select="''"/>
+			<x:option name="opt-assert-valid" select="true()"/>
+			<x:option name="opt-copy-external-resources" select="true()"/>
+			<x:option name="opt-output-dir" select="resolve-uri('result/')"/>
+		</x:call>
+		<x:context label="the fileset.out port">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the fileset.out port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/minimal.xml" media-type="application/z3998-auth+xml"/>
+					<d:file href="result/zedai-mods.xml" media-type="application/mods+xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the ZedAI document">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/minimal.xml')]//z:body"/>
+		</x:context>
+		<x:expect label="the ZedAI document"
+		          type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+			<x:document type="inline">
+				<body xmlns="http://www.daisy.org/ns/z3998/authoring/">
+					<frontmatter>
+						<section xml:id="a">
+							<h role="title">Minimal DTBook</h>
+							<p role="author">Bert</p>
+						</section>
+					</frontmatter>
+					<bodymatter>
+						<section xml:id="b">
+							<pagebreak value="1" xml:id="page_1"/>
+							<h>Chapter</h>
+							<p>Paragraph</p>
+							<pagebreak value="2" xml:id="page_2"/>
+							<p>Another paragraph</p>
+						</section>
+						<section xml:id="c">
+							<pagebreak value="1" xml:id="page_1"/>
+							<h>Chapter</h>
+							<p>Paragraph</p>
+							<pagebreak value="2" xml:id="page_2"/>
+							<p>Another paragraph</p>
+						</section>
+					</bodymatter>
+				</body>
+			</x:document>
+		</x:expect>
+		<x:context label="the mapping port">
+			<x:document type="port" port="mapping"/>
+		</x:context>
+		<x:expect label="the mapping port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/minimal.xml" original-href="part1.xml">
+						<d:anchor id="page_1"/>
+						<d:anchor id="page_2"/>
+					</d:file>
+					<d:file href="result/minimal.xml" original-href="part2.xml">
+						<d:anchor id="page_1"/>
+						<d:anchor id="page_2"/>
+					</d:file>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 </x:description>

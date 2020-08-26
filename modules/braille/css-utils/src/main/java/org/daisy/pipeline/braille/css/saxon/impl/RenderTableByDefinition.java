@@ -1,8 +1,7 @@
 package org.daisy.pipeline.braille.css.saxon.impl;
 
 import java.util.ArrayList;
-
-import static java.util.Collections.sort;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,27 +20,19 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.TransformerException;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 import com.xmlcalabash.core.XProcException;
 
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
-import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.Selector;
-import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoClass;
-import cz.vutbr.web.css.Term;
-import cz.vutbr.web.css.TermFunction;
-import cz.vutbr.web.css.TermInteger;
-import cz.vutbr.web.css.TermList;
-import cz.vutbr.web.css.TermPair;
-import cz.vutbr.web.csskit.OutputUtil;
+import cz.vutbr.web.css.Selector.SelectorPart;
+import cz.vutbr.web.csskit.AbstractRuleBlock;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
@@ -57,6 +48,7 @@ import net.sf.saxon.value.SequenceType;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
+import org.daisy.braille.css.SelectorImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
@@ -72,12 +64,9 @@ import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
-import static org.daisy.pipeline.braille.common.util.Strings.join;
+import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 
 import org.osgi.service.component.annotations.Component;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component(
 	name = "css:render-table-by",
@@ -302,57 +291,67 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							else if (depth == 1 && _STYLE.equals(attrName)) {
 								String newStyle; {
 									InlineStyle style = new InlineStyle(attrValue);
-									String builder = null;
+									List<RuleBlock<? extends Rule<?>>> builder = new ArrayList<>();
 									for (RuleBlock<?> block : style) {
 										if (block instanceof RuleMainBlock)
-											builder = joinRuleBlocks(builder, serializeRuleBlock(style.getMainStyle()));
+											builder.add(style.getMainStyle());
 										else if (block instanceof RuleRelativeBlock) {
 											RuleRelativeBlock ruleblock = (RuleRelativeBlock)block;
 											List<Selector> selector = ruleblock.getSelector();
 											if (selector.size() > 0) { // should always be true
-												// note that in the cases "&::list-item", "&::list-header" and "&::table-by(...)" we
-												// are ignoring any following selector parts except those that are "stacked" onto the
-												// pseudo element
 												if (selector.get(0).size() > 0) { // should always be true
+													// the first part is normally a PseudoElementImpl, i.e. a pseudo element or a custom
+													// pseudo class like :-obfl-alternate-scenario
+													// other parts are possible too, but will in practice already have been processed
+													// by css:inline
 													if (selector.get(0).get(0) instanceof PseudoElementImpl) {
-														// selector.get(0).size() should always be 1
+														// selector.get(0).size() should normally always be 1
+														// pseudo classes and pseudo elements are stacked onto the first pseudo element,
+														// and for other parts (classes or attributes) it does not makes sense to come after
+														// a pseudo element
 														PseudoElementImpl pseudo = (PseudoElementImpl)selector.get(0).get(0);
-														// selector size should be 1
 														if ("list-item".equals(pseudo.getName()))
 															addListItemStyle(
 																pseudo.getPseudoClasses(),
-																new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock));
+																new ListItemStyle(rest(ruleblock)));
 														else if ("list-header".equals(pseudo.getName())) {
 															if (pseudo.getPseudoClasses().isEmpty())
 																addListHeaderStyle(
-																	new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock)); }
+																	new ListItemStyle(rest(ruleblock))); }
 														else if ("table-by".equals(pseudo.getName())) {
 															String axis = pseudo.getArguments()[0];
 															if (pseudo.getPseudoClasses().isEmpty()) {
 																if (pseudo.hasStackedPseudoElement()) {
 																	pseudo = pseudo.getStackedPseudoElement();
+																	ruleblock = (RuleRelativeBlock)rest(ruleblock);
 																	if ("list-item".equals(pseudo.getName()))
 																		getTableByStyle(axis).addListItemStyle(
 																			pseudo.getPseudoClasses(),
-																			new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock));
+																			new ListItemStyle(rest(ruleblock)));
 																	else if ("list-header".equals(pseudo.getName())) {
 																		if (pseudo.getPseudoClasses().isEmpty())
 																			getTableByStyle(axis).addListHeaderStyle(
-																				new ListItemStyle(pseudo.getStackedPseudoElement(), ruleblock)); }
+																				new ListItemStyle(rest(ruleblock))); }
 																	else
-																		getTableByStyle(axis).addRuleBlock(pseudo, ruleblock); }
+																		getTableByStyle(axis).addRuleBlock(ruleblock); }
 																else
-																	getTableByStyle(axis).addRuleBlock(ruleblock); }}
+																	getTableByStyle(axis).addRuleBlock(rest(ruleblock)); }}
 														else
-															builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }
+															// could be some other pseudo element or a custom pseudo class like
+															// :-obfl-alternate-scenario (yes, it is implemented as a PseudoElementImpl even
+															// though it is a class)
+															// in the case a ::list-item, ::list-header or ::table-by follows later in the
+															// selector, they will be handled later in a subsequent call to css:render-table-by,
+															// after the pseudo elements/classes have been handled elsewhere
+															builder.add(ruleblock); }
 													else
-														builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }
+														builder.add(ruleblock); }
 												else
-													builder = joinRuleBlocks(builder, serializeRuleBlock(ruleblock)); }}
+													builder.add(ruleblock); }}
 										else
 											throw new RuntimeException("Unexpected style " + block); }
-									newStyle = builder; }
-								if (newStyle != null)
+									newStyle = serializeRuleBlockList(builder); }
+								if (!newStyle.isEmpty())
 									writeActions.add(w -> writeAttribute(w, attrName, newStyle)); }
 							else
 								writeActions.add(w -> writeAttribute(w, attrName, attrValue)); }
@@ -404,7 +403,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			cells.addAll(moreCells);
 			
 			// rearrange row groups and order cells by row
-			sort(cells, compose(sortByRowType, sortByRow, sortByColumn));
+			Collections.sort(cells, compose(sortByRowType, sortByRow, sortByColumn));
 			rowGroup = 0;
 			row = 0;
 			int newRowGroup = rowGroup = 0;
@@ -884,18 +883,29 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		
 		private static class PseudoElementStyle {
 			
-			final protected Map<PseudoElementImpl,List<Rule<?>>> ruleBlocks = new HashMap<PseudoElementImpl,List<Rule<?>>>();
+			final protected Map<List<Selector>,RuleBlock<Rule<?>>> ruleBlocks = new HashMap<>();
 			
-			public void addRuleBlock(List<Rule<?>> ruleblock) {
-				addRuleBlock(null, ruleblock);
-			}
-			
-			public void addRuleBlock(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
-				if (!ruleblock.isEmpty())
-					if (!ruleBlocks.containsKey(pseudo))
-						ruleBlocks.put(pseudo, ruleblock);
-					else
-						ruleBlocks.put(pseudo, ImmutableList.<Rule<?>>builder().addAll(ruleBlocks.get(pseudo)).addAll(ruleblock).build());
+			public void addRuleBlock(RuleBlock<Rule<?>> ruleblock) {
+				if (!ruleblock.isEmpty()) {
+					List<Selector> selector = null;
+					if (ruleblock instanceof RuleRelativeBlock)
+						selector = ((RuleRelativeBlock)ruleblock).getSelector();
+					RuleBlock<Rule<?>> r;
+					if (ruleBlocks.containsKey(selector))
+						r = ruleBlocks.get(selector);
+					else {
+						// we make a copy so that we can modify the rule later without affecting the
+						// original which might be used in other places (it should be considered
+						// immutable)
+						r = selector != null
+							? new RuleRelativeBlock(selector)
+							: new AbstractRuleBlock<Rule<?>>();
+						r.unlock();
+					}
+					// we can modify the existing rule because it is mutable and dedicated to this class
+					r.addAll(ruleblock);
+					ruleBlocks.put(selector, r);
+				}
 			}
 			
 			public boolean isEmpty() {
@@ -904,13 +914,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			
 			@Override
 			public String toString() {
-				String style = null;
-				for (PseudoElementImpl pseudo : ruleBlocks.keySet())
-					style = joinRuleBlocks(style, serializeRuleBlock(ruleBlocks.get(pseudo), pseudo));
-				if (style != null)
-					return style;
-				else
-					return "";
+				return serializeRuleBlockList(ruleBlocks.values());
 			}
 		}
 		
@@ -920,11 +924,6 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			private ListItemStyle listHeaderStyle = new ListItemStyle();
 			
 			public TableByStyle() {}
-			
-			@SuppressWarnings("unused")
-			public TableByStyle(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
-				addRuleBlock(pseudo, ruleblock);
-			}
 			
 			public void addListItemStyle(List<PseudoClass> pseudo, ListItemStyle style) {
 				if (!listItemStyles.containsKey(pseudo))
@@ -950,29 +949,19 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			public ListItemStyle getListHeaderStyle() {
 				return listHeaderStyle;
 			}
-			
-			@SuppressWarnings("unused")
-			public TableByStyle mergeWith(TableByStyle style) {
-				for (Map.Entry<PseudoElementImpl,List<Rule<?>>> r: style.ruleBlocks.entrySet())
-					addRuleBlock(r.getKey(), r.getValue());
-				for (Map.Entry<List<PseudoClass>,ListItemStyle> s: style.listItemStyles.entrySet())
-					addListItemStyle(s.getKey(), s.getValue());
-				addListHeaderStyle(style.listHeaderStyle);
-				return this;
-			}
 		}
 		
 		private static class ListItemStyle extends PseudoElementStyle {
 			
 			public ListItemStyle() {}
 			
-			public ListItemStyle(PseudoElementImpl pseudo, List<Rule<?>> ruleblock) {
-				addRuleBlock(pseudo, ruleblock);
+			public ListItemStyle(RuleBlock<Rule<?>> ruleblock) {
+				addRuleBlock(ruleblock);
 			}
 			
 			public ListItemStyle mergeWith(ListItemStyle style) {
-				for (Map.Entry<PseudoElementImpl,List<Rule<?>>> r: style.ruleBlocks.entrySet())
-					addRuleBlock(r.getKey(), r.getValue());
+				for (RuleBlock<Rule<?>> r: style.ruleBlocks.values())
+					addRuleBlock(r);
 				return this;
 			}
 		}
@@ -1018,10 +1007,10 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 						if (h.col <= (cell.col + cell.colspan - 1) && cell.col <= (h.col + h.colspan - 1))
 							colHeaders.add(h);
 						break; }}
-			sort(rowHeaders, sortByColumnAndThenRow);
+			Collections.sort(rowHeaders, sortByColumnAndThenRow);
 			for (TableCell h : rowHeaders)
 				index = recurAddHeader(headers, index, h, firstLeftThenUpward);
-			sort(colHeaders, sortByRowAndThenColumn);
+			Collections.sort(colHeaders, sortByRowAndThenColumn);
 			for (TableCell h : colHeaders)
 				index = recurAddHeader(headers, index, h, firstLeftThenUpward);
 			
@@ -1103,7 +1092,6 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 					return c;
 			return null;
 		}
-		
 		
 		private static boolean isHeader(TableCell cell) {
 			return (cell.type == TableCell.CellType.TH || (cell.axis != null) || (cell.scope != null));
@@ -1264,108 +1252,56 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		}
 	}
 	
-	/*
-	 * The functions below have overlapping functionality with utility functions in CSSInlineStep.
-	 * TODO: move to shared component!
-	 */
-	
-	private static String serializeDeclarations(Iterable<Declaration> declarations) {
-		List<Declaration> sortedDeclarations = new ArrayList<Declaration>();
-		for (Declaration d : declarations) sortedDeclarations.add(d);
-		sort(sortedDeclarations);
-		return join(sortedDeclarations, "; ", serializeDeclaration);
-	}
-	
-	private static String serializeDeclaration(Declaration declaration) {
-		return declaration.getProperty() + ": " + join(declaration, " ", serializeTerm);
-	}
-	
-	private static Function<Object,String> serializeDeclaration = new Function<Object,String>() {
-		public String apply(Object declaration) {
-			if (declaration instanceof String) // separator
-				return (String)declaration;
-			if (declaration instanceof Declaration)
-				return serializeDeclaration((Declaration)declaration);
-			else
-				throw new IllegalArgumentException("Coding error");
+	/* Remove the first part of the selector, or the whole selector if it exists of only one part */
+	private static RuleBlock<Rule<?>> rest(RuleRelativeBlock rule) {
+		List<Selector> combinedSelector = rule.getSelector();
+		if (combinedSelector.size() == 0 || combinedSelector.get(0).size() == 0)
+			throw new RuntimeException("coding error");
+		SelectorPart first = combinedSelector.get(0).get(0);
+		if (first instanceof PseudoElementImpl) {
+			// combinedSelector.get(0).size() should normally always be 1
+			List<Selector> rest = combinedSelector.subList(1, combinedSelector.size());
+			RuleBlock<Rule<?>> newRule;
+			PseudoElementImpl pseudo = (PseudoElementImpl)first;
+			if (pseudo.hasStackedPseudoElement()) {
+				combinedSelector = new ArrayList<>();
+				Selector selector = (Selector)new SelectorImpl().unlock();
+				selector.add(pseudo.getStackedPseudoElement());
+				combinedSelector.add(selector);
+				combinedSelector.addAll(rest);
+				newRule = new RuleRelativeBlock(combinedSelector);
+			} else {
+				combinedSelector = pseudo.getCombinedSelectors();
+				newRule = combinedSelector.isEmpty()
+					? new AbstractRuleBlock<Rule<?>>()
+					: new RuleRelativeBlock(combinedSelector);
+			}
+			newRule.replaceAll(rule); // we can do this because rule is considered immutable
+			return newRule;
+		} else {
+			throw new RuntimeException("not implemented");
 		}
-	};
-	
-	private static Function<Object,String> serializeTerm = new Function<Object,String>() {
-		public String apply(Object term) {
-			if (term instanceof TermInteger) {
-				TermInteger integer = (TermInteger)term;
-				return "" + integer.getIntValue(); }
-			else if (term instanceof TermPair) {
-				TermPair pair = (TermPair)term;
-				Term.Operator op = pair.getOperator();
-				return (op != null ? op.value() : "") + pair.getKey() + " " + pair.getValue(); }
-			else if (term instanceof TermFunction)
-				return "" + term;
-			else if (term instanceof TermList) {
-				TermList list = (TermList)term;
-				return join(list, " ", serializeTerm); }
-			else
-				return "" + term;
-		}
-	};
-	
-	private static String serializeRuleBlock(List<? extends Rule<?>> declarations, PseudoElementImpl pseudo) {
-		StringBuilder b = new StringBuilder();
-		if (pseudo != null)
-			b.append("&").append(pseudo.toString()).append(" { ");
-		b.append(serializeDeclarations(Iterables.filter(declarations, Declaration.class)));
-		for (Rule<?> r : declarations)
-			if (r instanceof Declaration);
-			else if (r instanceof RulePage)
-				b.append(new ParseStylesheetDefinition.Style().add("@page",
-				                                                   ParseStylesheetDefinition.Style.of((RulePage)r)));
-			else
-				throw new RuntimeException("coding error");
-		if (pseudo != null)
-			b.append(" }");
-		return b.toString();
-	}
-
-	private static String serializeRuleBlock(RuleMainBlock rule) {
-		return serializeDeclarations(rule);
 	}
 	
-	private static String serializeRuleBlock(RuleRelativeBlock rule) {
-		StringBuilder b = new StringBuilder();
-		boolean first = true;
-		for (Selector s : rule.getSelector()) {
-			Combinator c = s.getCombinator();
-			if (first) {
-				if (c == null)
-					b.append("&");
-				else if (c != Combinator.CHILD)
-					b.append(c.value());
-				first = false;
-			} else if (c != null) // should always be true
-				b.append(c.value());
-			b = OutputUtil.appendList(b, s, OutputUtil.EMPTY_DELIM);
-		}
-		b.append(" { ");
-		b.append(serializeRuleBlock(rule, null));
-		b.append(" }");
-		return b.toString();
-	}
-	
-	private static String joinRuleBlocks(String... ruleBlocks) {
+	private static String serializeRuleBlockList(Iterable<? extends RuleBlock<? extends Rule<?>>> ruleBlocks) {
 		String b = null;
-		for (String r : ruleBlocks)
-			if (r != null && !r.isEmpty())
+		for (RuleBlock<? extends Rule<?>> r : ruleBlocks) {
+			String s;
+			if (r instanceof RuleMainBlock)
+				s = BrailleCssSerializer.toString((RuleMainBlock)r);
+			else if (r instanceof RuleRelativeBlock)
+				s = BrailleCssSerializer.toString((RuleRelativeBlock)r);
+			else
+				s = BrailleCssSerializer.toString(r);
+			if (!s.isEmpty())
 				if (b == null)
-					b = r;
+					b = s;
 				else {
 					if (!(b.endsWith("}") || b.endsWith(";")))
 						b = b + ";";
 					b += " ";
-					b += r; }
+					b += s; }}
+		if (b == null) b = "";
 		return b;
 	}
-	
-	private static final Logger logger = LoggerFactory.getLogger(RenderTableByDefinition.class);
-	
 }

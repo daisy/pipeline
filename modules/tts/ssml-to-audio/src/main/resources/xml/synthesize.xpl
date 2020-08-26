@@ -17,7 +17,7 @@
             </p>
         </p:documentation>
     </p:output>
-    <p:option name="output-dir"/>
+    <p:output port="log" sequence="true"/>
     <p:option name="temp-dir"/>
 
 </p:declare-step>

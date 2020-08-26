@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="../../../main/resources/xml/nav/epub3-nav-from-ncx.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:epub3-nav-from-ncx">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+						<head>
+							<meta content="DAISY Pipeline 2" name="dtb:generator"/>
+							<meta name="dtb:uid" content="ID"/>
+							<meta name="dtb:depth" content="01"/>
+							<meta name="dtb:totalPageCount" content="2"/>
+							<meta name="dtb:maxPageNumber" content="2"/>
+							<smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible"/>
+							<smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+							<smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible"/>
+							<smilCustomTest bookStruct="ANNOTATION" defaultState="false" id="annotation" override="visible"/>
+							<smilCustomTest bookStruct="LINE_NUMBER" defaultState="false" id="linenum" override="visible"/>
+							<smilCustomTest bookStruct="OPTIONAL_SIDEBAR" defaultState="false" id="sidebar" override="visible"/>
+							<smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE" defaultState="false" id="prodnote" override="visible"/>
+						</head>
+						<docTitle>
+							<text>Minimal DTBook</text>
+							<audio src="audio.mp3" clipBegin="00:00:00" clipEnd="00:00:04.292"/>
+						</docTitle>
+						<docAuthor>
+							<text>Bert</text>
+							<audio src="audio.mp3" clipBegin="00:00:04.292" clipEnd="00:00:08.585"/>
+						</docAuthor>
+						<navMap>
+							<navPoint playOrder="1" id="ncx-1">
+								<navLabel>
+									<text>Chapter</text>
+									<audio src="audio.mp3" clipBegin="00:00:12.878" clipEnd="00:00:17.170"/>
+								</navLabel>
+								<content src="mo.smil#chapter"/>
+							</navPoint>
+						</navMap>
+						<pageList>
+							<pageTarget type="normal" value="1" playOrder="2" id="ncx-2">
+								<navLabel>
+									<text>1</text>
+									<audio src="audio.mp3" clipBegin="00:00:08.585" clipEnd="00:00:12.878"/>
+								</navLabel>
+								<content src="mo.smil#page_1"/>
+							</pageTarget>
+							<pageTarget type="normal" value="2" playOrder="3" id="ncx-3">
+								<navLabel>
+									<text>2</text>
+									<audio src="audio.mp3" clipBegin="00:00:21.463" clipEnd="00:00:25.756"/>
+								</navLabel>
+								<content src="mo.smil#page_2"/>
+							</pageTarget>
+						</pageList>
+					</ncx>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<head>
+						<title>Minimal DTBook</title>
+					</head>
+					<body>
+						<nav epub:type="toc">
+							<h1>Table of Contents</h1>
+							<ol>
+								<li id="ncx-1">
+									<a href="mo.smil#chapter">Chapter</a>
+								</li>
+							</ol>
+						</nav>
+						<nav epub:type="page-list">
+							<h1>List of Pages</h1>
+							<ol>
+								<li id="ncx-2">
+									<a href="mo.smil#page_1">1</a>
+								</li>
+								<li id="ncx-3">
+									<a href="mo.smil#page_2">2</a>
+								</li>
+							</ol>
+						</nav>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

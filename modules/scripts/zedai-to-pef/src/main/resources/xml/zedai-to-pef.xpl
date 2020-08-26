@@ -77,7 +77,7 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
     <p:option name="ascii-table" required="false" px:type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ASCII braille table</h2>
-            <p px:role="desc">The ASCII braille table, used to render the PEF preview and the plain text version.
+            <p px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and the plain text version.
 
 If left blank, the locale information in the input document will be used to select a suitable table.</p>
         </p:documentation>

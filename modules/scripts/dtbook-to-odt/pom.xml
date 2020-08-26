@@ -43,7 +43,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>odt-utils</artifactId>
+      <artifactId>odf-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

@@ -11,35 +11,16 @@
   </parent>
 
   <artifactId>html-utils</artifactId>
-  <version>3.2.1-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: HTML Utilities</name>
   
   <dependencies>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>calabash-adapter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>saxon-adapter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>com.xmlcalabash</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -47,26 +28,20 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
     </dependency>
-    <!--
-        test dependencies
-    -->
-    <!--
-        for x:fileset-compare
-    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>zip-utils</artifactId>
-      <scope>test</scope>
+      <artifactId>mediatype-utils</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.modules.impl.Module_html_utils,
-      org.daisy.pipeline.html.calabash.impl.ChunkerStep$Provider
+      org.daisy.pipeline.modules.impl.Module_html_utils
     </expose-services>
   </properties>
   

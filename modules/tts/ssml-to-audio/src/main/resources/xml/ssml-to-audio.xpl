@@ -9,7 +9,9 @@
   <p:output port="status">
     <p:pipe step="synthesize" port="status"/>
   </p:output>
-  <p:option name="output-dir" select="''"/>
+  <p:output port="log" sequence="true">
+    <p:pipe step="synthesize" port="log"/>
+  </p:output>
   <p:option name="temp-dir" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>If not empty, this directory will be used to store audio files. The directory must not
@@ -23,9 +25,6 @@
     <p:input port="config">
       <p:pipe port="config" step="main"/>
     </p:input>
-    <p:with-option name="output-dir" select="$output-dir">
-      <p:empty/>
-    </p:with-option>
     <p:with-option name="temp-dir" select="$temp-dir">
       <p:empty/>
     </p:with-option>

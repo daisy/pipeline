@@ -37,6 +37,11 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">
+        <p:documentation>
+            px:smil-to-audio-fileset
+        </p:documentation>
+    </p:import>
 
     <p:for-each name="content-resources">
         <p:output port="result" sequence="true"/>
@@ -64,14 +69,7 @@
         <p:variable name="original-href" select="base-uri(/*)"/>
         <p:choose>
             <p:when test="$include-mediaoverlay-resources='true'">
-                <p:xslt>
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                    <p:input port="stylesheet">
-                        <p:document href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/smil-to-audio-fileset.xsl"/>
-                    </p:input>
-                </p:xslt>
+                <px:smil-to-audio-fileset/>
                 <px:message message="extracted list of audio files from $1">
                     <p:with-option name="param1" select="$original-href"/>
                 </px:message>

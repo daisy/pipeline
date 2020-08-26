@@ -3,7 +3,6 @@
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                xmlns:dc="http://purl.org/dc/elements/1.1/"
                xmlns:pef="http://www.daisy.org/ns/2008/pef">
   
@@ -11,9 +10,9 @@
     <p:pipeline type="pxi:test" version="1.0">
       <p:option name="temp-dir" required="true"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-      <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
-      <css:inline/>
+      <px:css-cascade/>
       <px:transform query="(input:css)(output:pef)(locale:en-US)(grade:2)(translator:liblouis)(formatter:liblouis)">
         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
       </px:transform>

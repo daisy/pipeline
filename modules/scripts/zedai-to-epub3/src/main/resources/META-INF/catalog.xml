@@ -2,17 +2,12 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   <uri name="http://www.daisy.org/pipeline/modules/zedai-to-epub3/zedai-to-epub3.xpl" uri="../xml/xproc/zedai-to-epub3.xpl"  px:content-type="script" px:id="zedai-to-epub3"/>
   <uri name="http://www.daisy.org/pipeline/modules/zedai-to-epub3/library.xpl" uri="../xml/xproc/library.xpl"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-pub-utils" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-html" />
   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:tts-helpers" />
   <nextCatalog catalog="org:daisy:pipeline:modules:css-speech" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-tts" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:html-to-epub3" />
 </catalog>

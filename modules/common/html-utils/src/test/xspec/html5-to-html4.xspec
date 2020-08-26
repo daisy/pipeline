@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/xslt/html5-to-html4.xsl"
+               xslt-version="2.0">
+
+    <!-- coreattrs -->
+    <x:scenario label="when processing a span element with the coreattrs attributes (id, class, title)">
+        <x:context>
+            <html:span id="myid" class="myclass" title="mytitle">
+                <html:span id="default"/>
+                <html:span id="z3998"/>
+            </html:span>
+        </x:context>
+        <x:expect label="all the attributes should be preserved">
+            <html:span id="myid" class="myclass" title="mytitle">...</html:span>
+        </x:expect>
+    </x:scenario>
+
+    <!-- i18n -->
+    <x:scenario label="when processing a html element with the i18n attributes (dir, lang)">
+        <x:context>
+            <html:div dir="ltr">
+                <html:div lang="no"/>
+            </html:div>
+        </x:context>
+        <x:expect label="the dir attribute should be preserved" test="/*/@dir='ltr'"/>
+        <x:expect label="the lang attribute should be preserved" test="/*/*/@lang='no'"/>
+    </x:scenario>
+
+    <!-- classes -->
+    <x:scenario label="when processing a span element with classes">
+        <x:context>
+            <html:span class="classA classB">...</html:span>
+        </x:context>
+        <x:expect label="the classes should be preserved">
+            <html:span class="classA classB">...</html:span>
+        </x:expect>
+    </x:scenario>
+
+    <!-- htmlcontent -->
+    <x:scenario label="htmlcontent (head, body)">
+        <x:context>
+            <html:html>
+                <html:head>...</html:head>
+                <html:body>...</html:body>
+            </html:html>
+        </x:context>
+        <x:expect label="should be allowed inside the html element">
+            <html:html>
+                <html:head>...</html:head>
+                <html:body>...</html:body>
+            </html:html>
+        </x:expect>
+    </x:scenario>
+
+    <!-- html -->
+    <x:scenario label="when processing a html element">
+        <x:context>
+            <html:html>...</html:html>
+        </x:context>
+        <x:expect label="the html element should be converted into a html element and a version attribute should be added">
+            <html:html>...</html:html>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.html -->
+    <!-- not necessary to test (attrs) -->
+
+    <!-- head -->
+    <x:scenario label="when processing a head element">
+        <x:scenario label="with no content">
+            <x:context>
+                <html:head>...</html:head>
+            </x:context>
+            <x:expect label="the head element should be converted into a head element">
+                <html:head>...</html:head>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a title element, a meta dc:title element and a h1 element">
+            <x:context>
+                <html:html>
+                    <html:head>
+                        <html:title>TITLE</html:title>
+                        <html:meta name="dc:title" content="DC:TITLE"/>
+                    </html:head>
+                    <html:body>
+                        <html:h1>H1</html:h1>
+                    </html:body>
+                </html:html>
+            </x:context>
+            <x:expect label="use the title element for meta dc:Title">
+                <html:html>
+                    <html:head>
+                        <html:title>TITLE</html:title>
+                        <html:meta name="dc:title" content="DC:TITLE"/>
+                    </html:head>
+                    <html:body>...</html:body>
+                </html:html>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- attlist.head -->
+    <x:scenario label="when processing the head element attributes">
+        <!-- nothing other than the profile link to test -->
+        <x:scenario label="with a profile link element">
+            <x:context>
+                <html:head>
+                    <html:link rel="profile" href="http://www.nlb.no/metadata-profile"/>
+                </html:head>
+            </x:context>
+            <x:expect label="the profile attribute should be converted to a link element">
+                <html:head profile="http://www.nlb.no/metadata-profile">...</html:head>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- link -->
+    <x:scenario label="when processing a link element">
+        <x:context>
+            <html:link/>
+        </x:context>
+        <x:expect label="the link element should be preserved">
+            <html:link/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.link -->
+    <x:scenario label="when processing the link element attributes">
+        <x:context>
+            <html:link href="#href" hreflang="en" type="text/css" rel="stylesheet" media="print" sizes="16x16"/>
+        </x:context>
+        <x:expect label="the sizes attribue should be removed and the other attributes should be copied over">
+            <html:link href="#href" hreflang="en" type="text/css" rel="stylesheet" media="print"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- meta -->
+    <x:scenario label="when processing a meta element">
+        <x:context>
+            <html:meta name="name" content="content"/>
+        </x:context>
+        <x:expect label="the meta element should be converted into a meta element">
+            <html:meta name="name" content="content"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.meta -->
+    <x:scenario label="when processing the meta element attributes with no @charset">
+        <x:context>
+            <html:meta http-equiv="http-equiv" name="name" content="content" />
+        </x:context>
+        <x:expect label="the http-equiv, name and content attributes should be copied but the charset attribute should be dropped">
+            <html:meta http-equiv="http-equiv" name="name" content="content"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="when processing the meta element attributes with @charset">
+        <x:context>
+            <html:meta http-equiv="http-equiv" name="name" content="content" charset="charset"/>
+        </x:context>
+        <x:expect label="the http-equiv and content attributes are generated based on @charset">
+            <html:meta http-equiv="Content-Type" name="name" content="text/html; charset=charset"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- body -->
+    <x:scenario label="when processing a body element">
+        <x:context>
+            <html:body/>
+        </x:context>
+        <x:expect label="the body element should be preserved">
+            <html:body/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.body -->
+    <!-- no point in testing (attrs) -->
+
+    <x:scenario label="when processing a section elements">
+        <x:context>
+            <html:section/>
+        </x:context>
+        <x:expect label="the result should be a div with a section class">
+            <html:div class="section"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- br -->
+    <x:scenario label="when processing a br element">
+        <x:context>
+            <html:br/>
+        </x:context>
+        <x:expect label="the resulting element should be a br element">
+            <html:br/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.br -->
+    <!-- test not needed (coreattrs) -->
+
+    <!-- address -->
+    <x:scenario label="when processing a address element">
+        <x:context>
+            <html:address/>
+        </x:context>
+        <x:expect label="the resulting element should be a p with a address class">
+            <html:p class="address"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.address -->
+    <!-- test not needed (attrs) -->
+
+    <!-- div -->
+    <x:scenario label="when processing a div element">
+        <x:context>
+            <html:div/>
+        </x:context>
+        <x:expect label="the resulting element should be a div element">
+            <html:div/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.div -->
+    <!-- test not needed (attrs) -->
+
+    <!-- a -->
+    <x:scenario label="when processing a a element">
+        <x:context>
+            <html:a/>
+        </x:context>
+        <x:expect label="the resulting element should be a a">
+            <html:a/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.a -->
+    <x:scenario label="when processing the a element attributes">
+        <x:context>
+            <html:a href="http://example.net/LICENSE.txt" hreflang="en" rel="license" target="_blank" download="#" media="#" type="text/plain">TEXT</html:a>
+        </x:context>
+        <x:expect label="the download, media and type attributes are dropped, and the rest of the attributes are copied over as is">
+            <html:a href="http://example.net/LICENSE.txt" hreflang="en" rel="license" target="_blank">TEXT</html:a>
+        </x:expect>
+    </x:scenario>
+
+    <!-- em -->
+    <x:scenario label="when processing a em element">
+        <x:context>
+            <html:em/>
+        </x:context>
+        <x:expect label="the resulting element should be a em">
+            <html:em/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.em -->
+    <!-- test not needed (attrs) -->
+
+    <!-- strong -->
+    <x:scenario label="when processing a strong element">
+        <x:context>
+            <html:strong/>
+        </x:context>
+        <x:expect label="the resulting element should be a strong">
+            <html:strong/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.strong -->
+    <!-- test not needed (attrs) -->
+
+    <!-- dfn -->
+    <x:scenario label="when processing a dfn element">
+        <x:context>
+            <html:dfn/>
+        </x:context>
+        <x:expect label="the resulting element should be a dfn">
+            <html:dfn/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.dfn -->
+    <!-- test not needed (attrs) -->
+
+    <!-- kbd -->
+    <x:scenario label="when processing a kbd element">
+        <x:context>
+            <html:kbd/>
+        </x:context>
+        <x:expect label="the resulting element should be a kbd">
+            <html:kbd/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.kbd -->
+    <!-- test not needed (attrs) -->
+
+    <!-- code -->
+    <x:scenario label="when processing a code element">
+        <x:context>
+            <html:code/>
+        </x:context>
+        <x:expect label="the resulting element should be a code">
+            <html:code/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.code -->
+    <!-- test not needed (attrs, i18n) -->
+
+    <!-- samp -->
+    <x:scenario label="when processing a samp element">
+        <x:context>
+            <html:samp/>
+        </x:context>
+        <x:expect label="the resulting element should be a samp">
+            <html:samp/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.samp -->
+    <!-- test not needed (attrs, i18n) -->
+
+    <!-- cite -->
+    <x:scenario label="when processing a cite element">
+        <x:context>
+            <html:cite/>
+        </x:context>
+        <x:expect label="the resulting element should be a cite">
+            <html:cite/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.cite -->
+    <!-- test not needed (attrs) -->
+
+    <!-- abbr -->
+    <x:scenario label="when processing a abbr element">
+        <x:context>
+            <html:abbr/>
+        </x:context>
+        <x:expect label="the resulting element should be a abbr">
+            <html:abbr/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.abbr -->
+    <!-- test not needed (attrs) -->
+
+    <!-- sub -->
+    <x:scenario label="when processing a sub element">
+        <x:context>
+            <html:sub/>
+        </x:context>
+        <x:expect label="the resulting element should be a sub">
+            <html:sub/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.sub -->
+    <!-- test not needed (attrs) -->
+
+    <!-- sup -->
+    <x:scenario label="when processing a sup element">
+        <x:context>
+            <html:sup/>
+        </x:context>
+        <x:expect label="the resulting element should be a sup">
+            <html:sup/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.sup -->
+    <!-- test not needed (attrs) -->
+
+    <!-- span -->
+    <x:scenario label="when processing a span element">
+        <x:context>
+            <html:span/>
+        </x:context>
+        <x:expect label="the resulting element should be a span">
+            <html:span/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.span -->
+    <!-- test not needed (attrs) -->
+
+    <!-- bdo -->
+    <x:scenario label="when processing a bdo element">
+        <x:context>
+            <html:bdo/>
+        </x:context>
+        <x:expect label="the resulting element should be a bdo">
+            <html:bdo/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.bdo -->
+    <!-- test not needed (coreattrs, i18n) -->
+
+    <!-- q -->
+    <x:scenario label="when processing a q element">
+        <x:context>
+            <html:q cite="#"/>
+        </x:context>
+        <x:expect label="the resulting element should be a q; the cite attribute is preserved">
+            <html:q cite="#"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.q -->
+    <!-- test not needed (attrs); cite tested in element test -->
+
+    <!-- img -->
+    <x:scenario label="when processing a img element">
+        <x:context>
+            <html:img src="images/img.jpg"/>
+        </x:context>
+        <x:expect label="the resulting element should be a img">
+            <html:img src="images/img.jpg"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.img -->
+    <x:scenario label="when processing the img element attributes">
+        <x:context>
+            <html:img src="images/img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100"/>
+        </x:context>
+        <x:expect label="the resulting element should be a img">
+            <html:img src="images/img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- figure -->
+    <x:scenario label="when processing a figure element">
+        <x:context>
+            <html:figure/>
+        </x:context>
+        <x:expect label="the resulting element should be a figure">
+            <html:div class="figure"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.figure -->
+    <!-- test not needed (attrs) -->
+
+    <!-- p -->
+    <x:scenario label="when processing a p element">
+        <x:context>
+            <html:p/>
+        </x:context>
+        <x:expect label="the resulting element should be a p">
+            <html:p/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.p -->
+    <!-- test not needed (attrs) -->
+
+    <!-- hr -->
+    <x:scenario label="when processing a hr">
+        <x:context>
+            <html:hr/>
+        </x:context>
+        <x:expect label="the element should be preserved">
+            <html:hr/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- h1-h6: rank has been previously normalized (in html-downgrade.xpl) -->
+    <x:scenario label="when processing the h1-h6 elements">
+        <x:context>
+            <html:body>
+                <html:header>
+                    <html:h1>h1</html:h1>
+                </html:header>
+                <html:section>
+                    <html:h2>h1</html:h2>
+                    <html:section>
+                        <html:h3>h2</html:h3>
+                    </html:section>
+                </html:section>
+                <html:section>
+                    <html:section>
+                        <html:h3>h2</html:h3>
+                    </html:section>
+                </html:section>
+                <html:section>
+                    <html:h2>h1</html:h2>
+                    <html:section>
+                        <html:h3>h2</html:h3>
+                        <html:section>
+                            <html:h4>h3</html:h4>
+                            <html:section>
+                                <html:h5>h4</html:h5>
+                                <html:section>
+                                    <html:h6>h5</html:h6>
+                                    <html:section>
+                                        <html:h6>h6</html:h6>
+                                    </html:section>
+                                </html:section>
+                            </html:section>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:body>
+        </x:context>
+        <x:expect label="the resulting element should be h1-h6 elements">
+            <html:body>
+                <html:div class="header">
+                    <html:h1>h1</html:h1>
+                </html:div>
+                <html:div class="section">
+                    <html:h2>h1</html:h2>
+                    <html:div class="section">
+                        <html:h3>h2</html:h3>
+                    </html:div>
+                </html:div>
+                <html:div class="section">
+                    <html:div class="section">
+                        <html:h3>h2</html:h3>
+                    </html:div>
+                </html:div>
+                <html:div class="section">
+                    <html:h2>h1</html:h2>
+                    <html:div class="section">
+                        <html:h3>h2</html:h3>
+                        <html:div class="section">
+                            <html:h4>h3</html:h4>
+                            <html:div class="section">
+                                <html:h5>h4</html:h5>
+                                <html:div class="section">
+                                    <html:h6>h5</html:h6>
+                                    <html:div class="section">
+                                        <html:h6>h6</html:h6>
+                                    </html:div>
+                                </html:div>
+                            </html:div>
+                        </html:div>
+                    </html:div>
+                </html:div>
+            </html:body>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.h1 -->
+    <!-- test not needed (attrs) -->
+
+    <!-- h2 -->
+    <!-- test not needed (covered by h1) -->
+
+    <!-- attlist.h2 -->
+    <!-- test not needed (attrs) -->
+
+    <!-- h3 -->
+    <!-- test not needed (covered by h1) -->
+
+    <!-- attlist.h3 -->
+    <!-- test not needed (attrs) -->
+
+    <!-- h4 -->
+    <!-- test not needed (covered by h1) -->
+
+    <!-- attlist.h4 -->
+    <!-- test not needed (attrs) -->
+
+    <!-- h5 -->
+    <!-- test not needed (covered by h1) -->
+
+    <!-- attlist.h5 -->
+    <!-- test not needed (attrs) -->
+
+    <!-- h6 -->
+    <!-- test not needed (covered by h1) -->
+
+    <!-- attlist.h6 -->
+    <!-- test not needed (attrs) -->
+
+    <!-- blockquote -->
+    <x:scenario label="when processing the blockquote element">
+        <x:context>
+            <html:blockquote/>
+        </x:context>
+        <x:expect label="the resulting element should be a blockquote">
+            <html:blockquote/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.blockquote -->
+    <x:scenario label="when processing the blockquote element attributes">
+        <x:context>
+            <html:blockquote cite="#reference"/>
+        </x:context>
+        <x:expect label="the cite attribute should be preserved">
+            <html:blockquote cite="#reference"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- dl -->
+    <x:scenario label="when processing the dl element">
+        <x:context>
+            <html:dl/>
+        </x:context>
+        <x:expect label="the resulting element should be a dl">
+            <html:dl/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.dl -->
+    <!-- test not needed (attrs) -->
+
+    <!-- dt -->
+    <x:scenario label="when processing the dt element">
+        <x:context>
+            <html:dt/>
+        </x:context>
+        <x:expect label="the resulting element should be a dt">
+            <html:dt/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.dt -->
+    <!-- test not needed (attrs) -->
+
+    <!-- dd -->
+    <x:scenario label="when processing the dd element">
+        <x:context>
+            <html:dd/>
+        </x:context>
+        <x:expect label="the resulting element should be a dd">
+            <html:dd/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.dd -->
+    <!-- test not needed (attrs) -->
+
+    <!-- list (ul) -->
+    <x:scenario label="when processing the ul element">
+        <x:context>
+            <html:ul/>
+        </x:context>
+        <x:expect label="the resulting element should be a preordered list (only preformatted lists are allowed in nordic html)">
+            <html:ul/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- list (ol) -->
+    <x:scenario label="when processing the ol element">
+        <x:context>
+            <html:ol/>
+        </x:context>
+        <x:expect label="the resulting element should be a preordered list (only preformatted lists are allowed in nordic html)">
+            <html:ol/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.list -->
+    <x:scenario label="when processing the ol and ul element attributes">
+        <x:context>
+            <html:ol start="3" type="1" reversed="reversed">
+                <html:li>
+                    <html:ul>
+                        <html:li>List Item</html:li>
+                    </html:ul>
+                </html:li>
+            </html:ol>
+        </x:context>
+        <x:expect label="the start and type attributes on ol should be copied as-is, the ol reversed attribute is dropped">
+            <html:ol start="3" type="1">
+                <html:li>
+                    <html:ul>
+                        <html:li>List Item</html:li>
+                    </html:ul>
+                </html:li>
+            </html:ol>
+        </x:expect>
+    </x:scenario>
+
+    <!-- li -->
+    <x:scenario label="when processing the li element">
+        <x:context>
+            <html:li/>
+        </x:context>
+        <x:expect label="the resulting element should be a li">
+            <html:li/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.li -->
+    <!-- test not needed (attrs) -->
+
+    <!-- table -->
+    <x:scenario label="when processing a table element">
+        <x:context>
+            <html:table/>
+        </x:context>
+        <x:expect label="the resulting element should be a table">
+            <html:table/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.table -->
+    <x:scenario label="when processing the table element attributes">
+        <x:context>
+            <html:table sortable="sortable"/>
+        </x:context>
+        <x:expect label="the sortable attribute should be preserved">
+            <html:table sortable="sortable"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- caption -->
+    <x:scenario label="when processing a caption">
+        <x:context>
+            <html:caption/>
+        </x:context>
+        <x:expect label="the resulting element should be a caption, but it should be removed if there isn't any non-table-summary content">
+            <html:caption/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.caption -->
+    <!-- test not needed (attrs) -->
+
+    <!-- figcaption -->
+    <x:scenario label="when processing a figcaption element">
+        <x:context>
+            <html:figcaption/>
+        </x:context>
+        <x:expect label="the resulting element should be a div with a figcaption class">
+            <html:div class="figcaption"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.figcaption -->
+    <!-- test not needed (attrs) -->
+
+    <!-- thead -->
+    <x:scenario label="when processing the thead element">
+        <x:context>
+            <html:thead/>
+        </x:context>
+        <x:expect label="the resulting element should be a thead">
+            <html:thead/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.thead -->
+    <!-- test not needed (attrs) -->
+
+    <!-- tfoot -->
+    <x:scenario label="when processing the tfoot element">
+        <x:context>
+            <html:tfoot/>
+        </x:context>
+        <x:expect label="the resulting element should be a tfoot">
+            <html:tfoot/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.tfoot -->
+    <!-- test not needed (attrs) -->
+
+    <!-- tbody -->
+    <x:scenario label="when processing the tbody element">
+        <x:context>
+            <html:tbody/>
+        </x:context>
+        <x:expect label="the resulting element should be a tbody">
+            <html:tbody/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.tbody -->
+    <!-- test not needed (attrs) -->
+
+    <!-- colgroup -->
+    <x:scenario label="when processing the colgroup element">
+        <x:context>
+            <html:colgroup/>
+        </x:context>
+        <x:expect label="the result should be a colgroup">
+            <html:colgroup/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.colgroup -->
+    <x:scenario label="when processing the colgroup element">
+        <x:context>
+            <html:colgroup span="2"/>
+        </x:context>
+        <x:expect label="the result should be a colgroup">
+            <html:colgroup span="2"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- col -->
+    <x:scenario label="when processing the col element">
+        <x:context>
+            <html:col/>
+        </x:context>
+        <x:expect label="the result should be a col">
+            <html:col/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.col -->
+    <x:scenario label="when processing the col element">
+        <x:context>
+            <html:col span="2"/>
+        </x:context>
+        <x:expect label="the result should be a col">
+            <html:col span="2"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- tr -->
+    <x:scenario label="when processing the tr element">
+        <x:context>
+            <html:tr/>
+        </x:context>
+        <x:expect label="the resulting element should be a tr">
+            <html:tr/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.tr -->
+    <!-- test not needed (attrs) -->
+
+    <!-- th -->
+    <x:scenario label="when processing the th element">
+        <x:context>
+            <html:th/>
+        </x:context>
+        <x:expect label="the resulting element should be a th">
+            <html:th/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.th -->
+    <x:scenario label="when processing the th element attributes">
+        <x:context>
+            <html:th headers="headers" scope="scope" rowspan="rowspan" colspan="colspan"/>
+        </x:context>
+        <x:expect label="the headers, scope, rowspan and colspan attributes should be copied over">
+            <html:th headers="headers" scope="scope" rowspan="rowspan" colspan="colspan"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- td -->
+    <x:scenario label="when processing the td element">
+        <x:context>
+            <html:td/>
+        </x:context>
+        <x:expect label="the resulting element should be a td">
+            <html:td/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.td -->
+    <x:scenario label="when processing the td element attributes">
+        <x:context>
+            <html:td headers="headers" scope="scope" rowspan="rowspan" colspan="colspan"/>
+        </x:context>
+        <x:expect label="the headers, scope, rowspan and colspan attributes should be copied over">
+            <html:td headers="headers" scope="scope" rowspan="rowspan" colspan="colspan"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- ########## Regression tests ########## -->
+
+    <!-- None at the moment. -->
+
+
+</x:description>

@@ -15,7 +15,6 @@
             <p:option name="not-media-types" select="''"/>
             <p:option name="fail-on-not-found" select="'false'"/>
             <p:option name="load-if-not-in-memory" select="'true'"/>
-            <p:option name="method" select="''"/>
             
             <p:output port="result"/>
             
@@ -33,7 +32,6 @@
                 <p:with-option name="not-media-types" select="$not-media-types"/>
                 <p:with-option name="fail-on-not-found" select="$fail-on-not-found"/>
                 <p:with-option name="load-if-not-in-memory" select="$load-if-not-in-memory"/>
-                <p:with-option name="method" select="$method"/>
             </px:fileset-load>
             <p:split-sequence test="position()=1"/>
             <p:delete match="/*/@xml:base"/>

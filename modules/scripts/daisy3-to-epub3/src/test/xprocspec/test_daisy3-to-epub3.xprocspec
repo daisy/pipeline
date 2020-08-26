@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:epub="http://www.idpf.org/2007/ops"
                script="../../main/resources/xml/xproc/convert.xpl">
 
 	<x:scenario label="minimal">
@@ -38,15 +38,107 @@
 					<d:file href="result/epub/EPUB/mo/book-1.smil" media-type="application/smil+xml"/>
 					<d:file href="result/epub/EPUB/mo/book-2.smil" media-type="application/smil+xml"/>
 					<d:file href="result/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="result/epub/META-INF/container.xml"/>
+					<d:file href="result/epub/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
-		<!--
-		<x:context label="the result.in-memory port">
-			<x:document type="port" port="result.in-memory"/>
+		<x:context label="the navigation document">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/epub/EPUB/nav.xhtml')]"/>
 		</x:context>
-		-->
+		<x:expect label="the navigation document" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<head>
+						<title>Minimal DTBook</title>
+					</head>
+					<body>
+						<nav epub:type="toc">
+							<h1>Table of Contents</h1>
+							<ol>
+								<li id="ncx-1">
+									<a href="book-2.xhtml#forsmil-d1386e37">Chapter</a>
+								</li>
+							</ol>
+						</nav>
+						<nav epub:type="page-list">
+							<h1>List of Pages</h1>
+							<ol>
+								<li id="ncx-2">
+									<a href="book-2.xhtml#page_1">1</a>
+								</li>
+								<li id="ncx-3">
+									<a href="book-2.xhtml#page_2">2</a>
+								</li>
+							</ol>
+						</nav>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="the book-1.smil file">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/epub/EPUB/mo/book-1.smil')]"/>
+		</x:context>
+		<x:expect label="the book-1.smil file" type="compare">
+			<x:document type="inline">
+				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+					<body epub:type="frontmatter">
+						<seq epub:textref="../book-1.xhtml#id_1">
+							<seq epub:textref="../book-1.xhtml#forsmil-d1386e16" epub:type="title">
+								<par>
+									<text src="../book-1.xhtml#std1325e17"/>
+									<audio src="../audio/30sec.mp3" clipBegin="00:00:00" clipEnd="00:00:04.292"/>
+								</par>
+							</seq>
+							<seq epub:textref="../book-1.xhtml#forsmil-d1386e24">
+								<par>
+									<text src="../book-1.xhtml#std1325e25"/>
+									<audio src="../audio/30sec.mp3" clipBegin="00:00:04.292" clipEnd="00:00:08.585"/>
+								</par>
+							</seq>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+		<x:context label="the book-2.smil file">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/epub/EPUB/mo/book-2.smil')]"/>
+		</x:context>
+		<x:expect label="the book-2.smil file" type="compare">
+			<x:document type="inline">
+				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+					<body epub:type="bodymatter">
+						<seq epub:textref="../book-2.xhtml#id_2">
+							<par epub:type="pagebreak">
+								<text src="../book-2.xhtml#page_1"/>
+								<audio src="../audio/30sec.mp3" clipBegin="00:00:08.585" clipEnd="00:00:12.878"/>
+							</par>
+							<seq epub:textref="../book-2.xhtml#forsmil-d1386e37">
+								<par>
+									<text src="../book-2.xhtml#std1325e38"/>
+									<audio src="../audio/30sec.mp3" clipBegin="00:00:12.878" clipEnd="00:00:17.170"/>
+								</par>
+							</seq>
+							<seq epub:textref="../book-2.xhtml#forsmil-d1386e42">
+								<par>
+									<text src="../book-2.xhtml#std1325e43"/>
+									<audio src="../audio/30sec.mp3" clipBegin="00:00:17.170" clipEnd="00:00:21.463"/>
+								</par>
+							</seq>
+							<par epub:type="pagebreak">
+								<text src="../book-2.xhtml#page_2"/>
+								<audio src="../audio/30sec.mp3" clipBegin="00:00:21.463" clipEnd="00:00:25.756"/>
+							</par>
+							<seq epub:textref="../book-2.xhtml#forsmil-d1386e50">
+								<par>
+									<text src="../book-2.xhtml#std1325e51"/>
+									<audio src="../audio/30sec.mp3" clipBegin="00:00:25.756" clipEnd="00:00:30.048"/>
+								</par>
+							</seq>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
 	</x:scenario>
-	
+
 </x:description>

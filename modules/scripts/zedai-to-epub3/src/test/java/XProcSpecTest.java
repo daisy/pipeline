@@ -7,15 +7,10 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 		return new String[] {
 			pipelineModule("common-utils"),
 			pipelineModule("css-speech"),
-			pipelineModule("epub3-nav-utils"),
-			pipelineModule("epub3-ocf-utils"),
-			pipelineModule("epub3-pub-utils"),
-			pipelineModule("epub3-tts"),
+			pipelineModule("epub-utils"),
+			pipelineModule("html-to-epub3"),
 			pipelineModule("fileset-utils"),
 			pipelineModule("file-utils"),
-			pipelineModule("html-utils"),
-			pipelineModule("mediaoverlay-utils"),
-			pipelineModule("tts-helpers"),
 			pipelineModule("zedai-to-html"),
 			pipelineModule("zedai-utils")
 		};

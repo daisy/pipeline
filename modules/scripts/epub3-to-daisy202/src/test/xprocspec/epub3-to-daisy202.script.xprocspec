@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:p="http://www.w3.org/ns/xproc"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               xmlns:epub="http://www.idpf.org/2007/ops"
-               xmlns:html="http://www.w3.org/1999/xhtml"
-               xmlns:opf="http://www.idpf.org/2007/opf"
-               xmlns:xs="http://www.w3.org/2001/XMLSchema"
                script="../../main/resources/xml/xproc/epub3-to-daisy202.xpl">
     
     <x:scenario label="moby-dick">

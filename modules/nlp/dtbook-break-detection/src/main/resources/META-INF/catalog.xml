@@ -3,6 +3,6 @@
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl"
        uri="../xml/library.xpl"/>
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:nlp-break-detection" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:nlp-common" />
 
 </catalog>

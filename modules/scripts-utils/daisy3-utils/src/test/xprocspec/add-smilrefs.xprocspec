@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="../../main/resources/xml/internal/smils/add-smilrefs.xpl">
+
+  <x:scenario label="test">
+    <x:call step="px:daisy3-add-smilrefs">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+            <d:file href="smil/mo0.smil" media-type="application/smil"/>
+            <d:file href="smil/mo1.smil" media-type="application/smil"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level>
+              <p id="p1">
+                <sent id="s1">test</sent>
+                <sent id="s2">test</sent>
+              </p>
+              <level>
+                <level>
+                  <sent id="s3">test</sent>
+                </level>
+                <p id="p2">
+                  <sent id="s4">test</sent>
+                  <sent id="s5">test</sent>
+                </p>
+                <level>
+                  <sent id="s6">test</sent>
+                </level>
+              </level>
+            </level>
+          </dtbook>
+        </x:document>
+        <x:document type="inline" xml:base="smil/mo0.smil">
+          <smil xmlns="http://www.w3.org/2001/SMIL20/">
+            <body>
+              <seq id="sp1" class="p" epub:textref="../dtbook.xml#p1">
+                <par id="ss1" class="sent">
+                  <text src="../dtbook.xml#s1"/>
+                  <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+                </par>
+                <par id="ss2" class="sent">
+                  <text src="../dtbook.xml#s2"/>
+                  <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+                </par>
+              </seq>
+              <par id="ss3" class="sent">
+                <text src="../dtbook.xml#s3"/>
+                <audio src="../audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
+              </par>
+            </body>
+          </smil>
+        </x:document>
+        <x:document type="inline" xml:base="smil/mo1.smil">
+          <smil xmlns="http://www.w3.org/2001/SMIL20/">
+            <body>
+              <seq id="sp2" class="p" epub:textref="../dtbook.xml#p2">
+                <par id="ss4" class="sent">
+                  <text src="../dtbook.xml#s4"/>
+                </par>
+                <par id="ss5" class="sent">
+                  <text src="../dtbook.xml#s5"/>
+                </par>
+              </seq>
+              <par id="ss6" class="sent">
+                <text src="../dtbook.xml#s6"/>
+              </par>
+            </body>
+          </smil>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result.in-memory port">
+      <x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('dtbook.xml')]"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <level>
+            <p id="p1" smilref="smil/mo0.smil#sp1">
+              <sent id="s1" smilref="smil/mo0.smil#ss1">test</sent>
+              <sent id="s2" smilref="smil/mo0.smil#ss2">test</sent>
+            </p>
+            <level>
+              <level>
+                <sent id="s3" smilref="smil/mo0.smil#ss3">test</sent>
+              </level>
+              <p id="p2" smilref="smil/mo1.smil#sp2">
+                <sent id="s4" smilref="smil/mo1.smil#ss4">test</sent>
+                <sent id="s5" smilref="smil/mo1.smil#ss5">test</sent>
+              </p>
+              <level>
+                <sent id="s6" smilref="smil/mo1.smil#ss6">test</sent>
+              </level>
+            </level>
+          </level>
+        </dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

@@ -8,4 +8,5 @@
        uri="../xml/transform/block-translator-from-text-transform.xsl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
 </catalog>

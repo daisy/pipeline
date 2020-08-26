@@ -34,23 +34,19 @@
 				</c:directory>
             </x:document>
         </x:expect>
-		<x:context label="the temp directory">
-            <x:document type="directory" base-uri="temp-dir" href="minimal/temp-dir/epub3/out/epub" recursive="true"/>
-		</x:context>
-        <x:expect label="the temp directory should contain the expanded EPUB 3" type="compare" >
+        <x:context label="the result epub">
+            <x:document type="zip" base-uri="temp-dir" href="minimal/output-dir/minimal.epub" ordered="true"/>
+        </x:context>
+        <x:expect label="the result epub" type="compare">
             <x:document type="inline">
-                <c:directory name="epub">
-                    <c:directory name="EPUB">
-                        <c:file name="minimal-1.xhtml"/>
-                        <c:file name="minimal-2.xhtml"/>
-                        <c:file name="package.opf"/>
-                        <c:file name="toc.xhtml"/>
-                    </c:directory>
-                    <c:directory name="META-INF">
-                        <c:file name="container.xml"/>
-                    </c:directory>
+                <c:zipfile name="minimal.epub">
+                    <c:file name="EPUB/minimal-1.xhtml"/>
+                    <c:file name="EPUB/minimal-2.xhtml"/>
+                    <c:file name="EPUB/package.opf"/>
+                    <c:file name="EPUB/toc.xhtml"/>
+                    <c:file name="META-INF/container.xml"/>
                     <c:file name="mimetype"/>
-                </c:directory>
+                </c:zipfile>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -261,7 +257,14 @@
             <x:input port="source">
                 <x:document type="file" href="../resources/minimal.xml"/>
             </x:input>
-            <x:option name="tts-config" select="resolve-uri('tts-config.xml')"/>
+            <x:input port="tts-config">
+                <x:document type="inline">
+                    <config>
+                        <voice engine="mock-tts" name="alex" lang="en" gender="male-adult"/>
+                        <!-- <property key="log" value="true"/> -->
+                    </config>
+                </x:document>
+            </x:input>
             <x:option name="audio" select="true()"/>
             <x:option name="output-dir" select="resolve-uri('tts/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('tts/temp-dir/',$temp-dir)"/>
@@ -282,13 +285,14 @@
                 <c:zipfile name="minimal.epub">
                     <c:file name="EPUB/audio/part0000_00_000.mp3"/>
                     <c:file name="EPUB/audio/part0000_01_000.mp3"/>
-                    <c:file name="EPUB/audio/part0000_02_000.mp3"/>
-                    <c:file name="EPUB/audio/part0000_03_000.mp3"/>
-                    <c:file name="EPUB/audio/part0000_04_000.mp3"/>
                     <c:file name="EPUB/audio/part0001_00_000.mp3"/>
                     <c:file name="EPUB/audio/part0001_01_000.mp3"/>
+                    <c:file name="EPUB/audio/part0001_02_000.mp3"/>
                     <c:file name="EPUB/audio/part0002_00_000.mp3"/>
                     <c:file name="EPUB/audio/part0002_01_000.mp3"/>
+                    <c:file name="EPUB/audio/part0002_02_000.mp3"/>
+                    <c:file name="EPUB/audio/part0002_03_000.mp3"/>
+                    <c:file name="EPUB/audio/part0002_04_000.mp3"/>
                     <c:file name="EPUB/audio/part0003_00_000.mp3"/>
                     <c:file name="EPUB/minimal-1.xhtml"/>
                     <c:file name="EPUB/minimal-2.xhtml"/>

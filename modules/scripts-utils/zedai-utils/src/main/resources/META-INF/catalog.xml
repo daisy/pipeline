@@ -3,5 +3,7 @@
     <uri name="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl"
         uri="../xml/xproc/library.xpl"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
 </catalog>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/validate/epub-validate.xpl">
+
+    <x:scenario label="moby dick">
+        <x:call step="px:epub-validate">
+            <x:option name="version" select="'3'"/>
+            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214.OK.epub')"/>
+            <x:option name="temp-dir" select="resolve-uri('moby-dick',$temp-dir)"/>
+            <x:option name="accessibility-check" select="'true'"/>
+        </x:call>
+        <x:context label="the validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the ace report output">
+            <x:document type="port" port="ace-report"/>
+        </x:context>
+        <x:expect label="there should be a html document" type="xpath" test="name(/*)" equals="'html'"/>
+    </x:scenario>
+    
+    <x:scenario label="moby dick unzipped">
+        <x:call step="px:epub-validate">
+            <x:option name="version" select="'3'"/>
+            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214/OPS/package.opf')"/>
+            <x:option name="temp-dir" select="resolve-uri('moby-dick-unzipped',$temp-dir)"/>
+        </x:call>
+        <x:context label="the validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should succeed" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

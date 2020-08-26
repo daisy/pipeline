@@ -6,6 +6,8 @@
 
     <xsl:output indent="yes" method="xml"/>
     
+    <xsl:param name="date"/>
+
     <xsl:variable name="metadata" select="collection()/*:head" as="element()?"/>
 
     <xsl:key name="pages" match="pageTarget" use="@type"/>
@@ -25,7 +27,8 @@
                 <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
                 <meta name="ncc:charset" content="utf-8"/>
                 <meta name="dc:format" content="Daisy 2.02"/>
-                <meta name="dc:date" content="{format-date(current-date(),'[Y]-[M01]-[D01]')}"/>
+                <meta name="dc:date" content="{if ($date[.!='']) then $date
+                                               else format-date(current-date(),'[Y]-[M01]-[D01]')}"/>
                 <meta name="ncc:generator" content="DAISY Pipeline 2"/>
                 <meta name="ncc:depth"
                     content="{for $depth in key('meta','dtb:depth') return
@@ -40,7 +43,8 @@
                 <meta name="ncc:maxPageNormal"
                     content="{max(key('pages','normal')/number(navLabel[1]))}"/>
                 <meta name="ncc:producedDate"
-                    content="{format-date(current-date(),'[Y]-[M01]-[D01]')}"/>
+                    content="{if ($date[.!='']) then $date
+                              else format-date(current-date(),'[Y]-[M01]-[D01]')}"/>
                 <meta name="ncc:tocItems" content="{count(//@playOrder)}"/>
             </head>
             <body>

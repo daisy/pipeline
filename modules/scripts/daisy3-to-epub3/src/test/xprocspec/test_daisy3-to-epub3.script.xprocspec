@@ -16,38 +16,28 @@
             <x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/" recursive="true"/>
 		</x:context>
         <x:expect label="the output directory should contain the EPUB 3" type="compare" >
-            <x:document>
+            <x:document type="inline">
 				<c:directory name="output-dir">
 					<c:file name="result.epub"/>
 				</c:directory>
             </x:document>
         </x:expect>
-		<x:context label="the temp directory">
-            <x:document type="directory" base-uri="temp-dir" href="minimal/temp-dir/" recursive="true"/>
+		<x:context label="the result epub">
+			<x:document type="zip" base-uri="temp-dir" href="minimal/output-dir/result.epub" ordered="true"/>
 		</x:context>
-        <x:expect label="the temp directory should contain the expanded EPUB 3" type="compare" >
-            <x:document>
-				<c:directory name="temp-dir">
-					<c:directory name="epub">
-						<c:directory name="EPUB">
-							<c:directory name="audio">
-								<c:file name="30sec.mp3"/>
-							</c:directory>
-							<c:file name="book-1.xhtml"/>
-							<c:file name="book-2.xhtml"/>
-							<c:directory name="mo">
-								<c:file name="book-1.smil"/>
-								<c:file name="book-2.smil"/>
-							</c:directory>
-							<c:file name="nav.xhtml"/>
-							<c:file name="package.opf"/>
-						</c:directory>
-						<c:directory name="META-INF">
-							<c:file name="container.xml"/>
-						</c:directory>
-						<c:file name="mimetype"/>
-					</c:directory>
-				</c:directory>
+		<x:expect label="the result epub" type="compare">
+			<x:document type="inline">
+				<c:zipfile name="result.epub">
+					<c:file name="EPUB/audio/30sec.mp3"/>
+					<c:file name="EPUB/book-1.xhtml"/>
+					<c:file name="EPUB/book-2.xhtml"/>
+					<c:file name="EPUB/mo/book-1.smil"/>
+					<c:file name="EPUB/mo/book-2.smil"/>
+					<c:file name="EPUB/nav.xhtml"/>
+					<c:file name="EPUB/package.opf"/>
+					<c:file name="META-INF/container.xml"/>
+					<c:file name="mimetype"/>
+				</c:zipfile>
             </x:document>
         </x:expect>
     </x:scenario>

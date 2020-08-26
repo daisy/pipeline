@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+               xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+  <x:script>
+    <p:declare-step version="1.0" xmlns:p="http://www.w3.org/ns/xproc" type="px:reshape-testing-wrapper">
+      <p:import href="../../main/resources/xml/reshape.xpl"/>
+      <p:input port="source" primary="true"/>
+      <p:output port="result" primary="true"/>
+      <p:output port="sentence-ids">
+	<p:pipe port="sentence-ids" step="generic"/>
+      </p:output>
+      <px:reshape name="generic">
+	<p:with-option name="can-contain-sentences" select="'address,author,notice,prodnote,sidebar,line,em,strong,dfn,kdb,code,samp,cite,abbr,acronym,sub,sup,span,bdo,q,p,doctitle,docauthor,levelhd,hd,h1,h2,h3,h4,h5,h6,dt,dd,li,lic,caption,th,td,bridgehead,byline,covertitle,epigraph,dateline'"/>
+	<p:with-option name="cannot-be-sentence-child" select="'linenum,epigraph'"/>
+	<p:with-option name="special-sentences" select="'pagenum,annoref,noteref,linenum'"/>
+	<p:with-option name="output-ns" select="'http://www.daisy.org/z3986/2005/dtbook/'"/>
+	<p:with-option name="output-word-tag" select="'w'"/>
+	<p:with-option name="output-sentence-tag" select="'sent'"/>
+	<p:with-option name="output-subsentence-tag" select="'span'"/>
+      </px:reshape>
+    </p:declare-step>
+  </x:script>
+
+  <x:scenario label="Sentence no words">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p><tmp:ss>Simple sentence</tmp:ss></p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+    	<dtbook>
+    	  <level><p><sent id="st1">Simple sentence</sent></p></level>
+    	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Sentence with lang">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p><tmp:ss xml:lang="en">Simple sentence</tmp:ss></p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+    	<dtbook>
+    	  <level><p><sent id="st1" xml:lang="en">Simple sentence</sent></p></level>
+    	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+
+  <x:scenario label="Sentence with words">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p><tmp:ss><tmp:ww>Simple sentence</tmp:ww></tmp:ss></p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+    	<dtbook>
+    	  <level><p><sent id="st1"><w>Simple sentence</w></sent></p></level>
+    	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Words in sub nodes">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p><tmp:ss><span><span><tmp:ww>word</tmp:ww></span></span></tmp:ss></p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+    	<dtbook>
+    	  <level><p><sent id="st1"><span><span><w>word</w></span></span></sent></p></level>
+    	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Words in sub nodes 2">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss><span><tmp:ww>left1</tmp:ww><tmp:ww>left2</tmp:ww></span>
+	      <tmp:ww>right1</tmp:ww><tmp:ww>right2</tmp:ww></tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1"><span><w>left1</w><w>left2</w></span><w>right1</w><w>right2</w></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="No sentence under level">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level>
+	      <tmp:ss>
+		<p><tmp:ww>Simple</tmp:ww><tmp:ww>sentence1</tmp:ww></p>
+		<p><tmp:ww>Another</tmp:ww><tmp:ww>sentence2</tmp:ww></p>
+	      </tmp:ss>
+	    </level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level>
+	    <p><sent id="st1"><w>Simple</w><w>sentence1</w></sent></p>
+	    <p><sent id="st2"><w>Another</w><w>sentence2</w></sent></p>
+	  </level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="No sentence under level (with lang)">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level>
+	      <tmp:ss xml:lang="en">
+		<p><tmp:ww>Simple</tmp:ww></p>
+		<p><tmp:ww>Sentence</tmp:ww></p>
+	      </tmp:ss>
+	    </level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level>
+	    <p><sent id="st1" xml:lang="en"><w>Simple</w></sent></p>
+	    <p><sent id="st2" xml:lang="en"><w>Sentence</w></sent></p>
+	  </level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+
+  <x:scenario label="No words in pagenum">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <pagenum>
+		<tmp:ss><tmp:ww>1</tmp:ww></tmp:ss>
+	      </pagenum>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <pagenum id="st1">1</pagenum>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Silent linefeed fragments">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss>
+		<pagenum>1</pagenum>
+	      </tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1">
+	      <pagenum>1</pagenum>
+	    </sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Silent white space fragments">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss>  <pagenum>1</pagenum>  </tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1">  <pagenum>1</pagenum>  </sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Silent punctuation marks">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss>?!:;!.{}()¡…/@<pagenum>1</pagenum></tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1">?!:;!.{}()¡…/@<pagenum>1</pagenum></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Split around skippable 1">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss>left<pagenum>1</pagenum></tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1">left<pagenum>1</pagenum></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Split around skippable 2">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss><span><tmp:ww>left</tmp:ww></span><tmp:ww>right</tmp:ww><pagenum>1</pagenum></tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1"><span><w>left</w></span><w>right</w><pagenum>1</pagenum></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Split recycling">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss><span><tmp:ww>left</tmp:ww></span><pagenum>1</pagenum></tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1"><span><w>left</w></span><pagenum>1</pagenum></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Existing sentence 1">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss><sent><tmp:ww>existing</tmp:ww> <tmp:ww>sentence</tmp:ww></sent></tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1"><w>existing</w> <w>sentence</w></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Existing sentence 2">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <tmp:ss><span><span><sent><tmp:ww>existing</tmp:ww> <tmp:ww>sentence</tmp:ww></sent></span></span></tmp:ss>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1"><span><span><w>existing</w> <w>sentence</w></span></span></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Existing sentence 3">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <level><p>
+	      <sent><tmp:ss><tmp:ww>existing</tmp:ww> <tmp:ww>sentence</tmp:ww></tmp:ss></sent>
+	    </p></level>
+	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <level><p>
+	    <sent id="st1"><w>existing</w> <w>sentence</w></sent>
+	  </p></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Existing sentence 4">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+  	<x:document type="inline">
+  	  <dtbook>
+  	    <level><p>
+  	      <sent><span><span><tmp:ss><tmp:ww>existing</tmp:ww> <tmp:ww>sentence</tmp:ww></tmp:ss></span></span></sent>
+  	    </p></level>
+  	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+  	<dtbook>
+  	  <level><p>
+	    <sent id="st1"><span><span><w>existing</w> <w>sentence</w></span></span></sent>
+  	  </p></level>
+  	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Existing word 1">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+  	<x:document type="inline">
+  	  <dtbook>
+  	    <level><p>
+  	      <tmp:ss><tmp:ww><w>existing</w></tmp:ww></tmp:ss>
+  	    </p></level>
+  	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+  	<dtbook>
+  	  <level><p>
+	    <sent id="st1"><w>existing</w></sent>
+  	  </p></level>
+  	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Existing word 2">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+  	<x:document type="inline">
+  	  <dtbook>
+  	    <level><p>
+  	      <tmp:ss><tmp:ww><w>existing</w></tmp:ww></tmp:ss>
+  	    </p></level>
+  	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+  	<dtbook>
+  	  <level><p>
+	    <sent id="st1"><w>existing</w></sent>
+  	  </p></level>
+  	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Existing word 3 (with attributes)">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+  	<x:document type="inline">
+  	  <dtbook>
+  	    <level><p>
+  	      <tmp:ss><tmp:ww><w attr="id">existing</w></tmp:ww></tmp:ss>
+  	    </p></level>
+  	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+  	<dtbook>
+  	  <level><p>
+	    <sent id="st1"><w><span attr="id">existing</span></w></sent>
+  	  </p></level>
+  	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Sentence-unfriendly element 1">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+  	<x:document type="inline">
+  	  <dtbook>
+  	    <line>
+  	      <tmp:ss><tmp:ww>before</tmp:ww> <tmp:ww>text</tmp:ww> <linenum><tmp:ww>2</tmp:ww></linenum> <tmp:ww>after</tmp:ww> <tmp:ww>text</tmp:ww></tmp:ss>
+  	    </line>
+  	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <line>
+	    <sent id="st1">
+	      <w>before</w>
+	      <w>text</w>
+	    </sent>
+	    <linenum id="st2">2</linenum>
+	    <sent id="st3">
+	      <w>after</w>
+	      <w>text</w>
+	    </sent>
+	  </line>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Sentence-unfriendly element 2">
+    <x:call step="px:reshape-testing-wrapper">
+      <x:input port="source">
+  	<x:document type="inline">
+  	  <dtbook>
+  	    <td>
+  	      <tmp:ss><tmp:ww>before</tmp:ww> <tmp:ww>text</tmp:ww> <epigraph><tmp:ww>inside</tmp:ww> <tmp:ww>epigraph</tmp:ww></epigraph> <tmp:ww>after</tmp:ww> <tmp:ww>text</tmp:ww></tmp:ss>
+  	    </td>
+  	  </dtbook>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <td>
+	    <sent id="st1">
+	      <w>before</w>
+	      <w>text</w>
+	    </sent>
+	    <epigraph>
+	      <sent id="st2">
+		<w>inside</w>
+		<w>epigraph</w>
+	      </sent>
+	    </epigraph>
+	    <sent id="st3">
+	      <w>after</w>
+	      <w>text</w>
+	    </sent>
+	  </td>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+
+</x:description>

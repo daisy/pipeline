@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>zedai-utils</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: ZedAI Utilities</name>
@@ -27,7 +27,17 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>mathml-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>mediatype-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>validation-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

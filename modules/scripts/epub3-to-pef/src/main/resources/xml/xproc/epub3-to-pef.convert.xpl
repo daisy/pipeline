@@ -56,7 +56,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
+        <p:documentation>
+            pef:add-metadata
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
@@ -287,21 +291,11 @@
             <p:pipe step="transform" port="status"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
-            <p:identity name="pef"/>
-            <p:identity>
-                <p:input port="source">
-                    <p:pipe step="pef" port="result"/>
+            <pef:add-metadata px:message="Adding metadata to PEF based on EPUB 3 package document metadata" px:progress=".01">
+                <p:input port="metadata">
                     <p:pipe step="opf" port="result"/>
                 </p:input>
-            </p:identity>
-            <p:xslt px:message="Adding metadata to PEF based on EPUB 3 package document metadata" px:progress=".01">
-                <p:input port="stylesheet">
-                    <p:document href="http://www.daisy.org/pipeline/modules/braille/pef-utils/add-opf-metadata-to-pef.xsl"/>
-                </p:input>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-            </p:xslt>
+            </pef:add-metadata>
             <px:set-base-uri>
                 <p:with-option name="base-uri" select="replace(base-uri(/*),'[^/]+$',concat(((/*/opf:metadata/dc:identifier[not(@refines)]/text()), 'pef')[1],'.pef'))">
                     <p:pipe port="result" step="opf"/>

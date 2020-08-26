@@ -9,6 +9,16 @@
     
     <p:option name="new-base" required="true"/>
     
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:assert
+        </p:documentation>
+    </p:import>
+
+    <px:assert message="new-base must not be empty">
+        <p:with-option name="test" select="not($new-base='')"/>
+    </px:assert>
+
     <p:xslt>
         <p:with-param name="new-base" select="$new-base"/>
         <p:input port="stylesheet">

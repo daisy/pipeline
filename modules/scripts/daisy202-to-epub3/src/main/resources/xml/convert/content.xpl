@@ -57,6 +57,11 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-upgrade
+        </p:documentation>
+    </p:import>
     <p:import href="resolve-links.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">Resolves SMIL-linkbacks.</p:documentation>
     </p:import>
@@ -78,14 +83,7 @@
                 <p:document href="daisy202-content-to-epub3-content.xsl"/>
             </p:input>
         </p:xslt>
-        <p:xslt>
-            <p:input port="stylesheet">
-                <p:document href="http://www.daisy.org/pipeline/modules/html-utils/html5-upgrade.xsl"/>
-            </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-        </p:xslt>
+        <px:html-upgrade/>
         <p:insert match="/*" position="first-child">
             <p:input port="insertion">
                 <p:pipe port="ncc-navigation" step="content"/>

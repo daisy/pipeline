@@ -46,6 +46,14 @@
         <p:pipe port="result" step="result.in-memory"/>
     </p:output>
 
+    <p:output port="mapping">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>A <code>d:fileset</code> document that contains a mapping from input files (DTBook)
+            to output file (ZedAI) and contained <code>id</code> attributes.</p>
+        </p:documentation>
+        <p:pipe step="choose-to-merge-dtbook-files" port="mapping"/>
+    </p:output>
+
     <p:option name="opt-output-dir" required="true" px:dir="output" px:type="anyDirURI">
         <p:documentation>
             The directory to store the generated files in.
@@ -85,50 +93,61 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+            px:assert
+        </p:documentation>
+    </p:import>
     <p:import href="dtbook2005-3-to-zedai.xpl">
         <p:documentation>
-            Converts DTBook 2005-3 to ZedAI
+            pxi:dtbook2005-3-to-zedai
         </p:documentation>
     </p:import>
     <p:import href="dtbook-to-zedai-meta.xpl">
         <p:documentation>
-            For px:dtbook-to-zedai-meta
+            px:dtbook-to-zedai-meta
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
         <p:documentation>
-            For px:dtbook-to-mods-meta
+            px:dtbook-to-mods-meta
+            px:dtbook-upgrade
+            px:dtbook-merge
+            px:dtbook-validator.select-schema
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl">
         <p:documentation>
-            Schema selector used for DTBook validation.
+            px:zedai-validate
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
-            For manipulating filesets.
+            px:fileset-load
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
         <p:documentation>
-            For determining the media type of files.
+            px:mediatype-detect
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
         <p:documentation>
-            Collection of utilities for validation and reporting.
+            px:validate-with-relax-ng-and-report
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
         <p:documentation>
-            For removing the Aural CSS attributes before validation
+            px:css-speech-clean
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
-            For px:set-base-uri
+            px:set-base-uri
         </p:documentation>
     </p:import>
 
@@ -193,14 +212,14 @@
     <p:documentation>Upgrade the DTBook document(s) to 2005-3</p:documentation>
     <p:for-each name="upgrade-dtbook">
         <p:output port="result"/>
-        <px:upgrade-dtbook>
+        <px:dtbook-upgrade>
             <p:input port="parameters">
                 <p:empty/>
             </p:input>
             <p:with-option name="assert-valid" select="'false'">
                 <p:empty/>
             </p:with-option>
-        </px:upgrade-dtbook>
+        </px:dtbook-upgrade>
     </p:for-each>
 
     <!-- =============================================================== -->
@@ -212,8 +231,11 @@
 
     <p:choose name="choose-to-merge-dtbook-files">
         <p:when test=".//c:result[. > 1]">
-            <p:output port="result"/>
-            <px:merge-dtbook>
+            <p:output port="result" primary="true"/>
+            <p:output port="mapping">
+                <p:pipe step="merge" port="mapping"/>
+            </p:output>
+            <px:dtbook-merge name="merge">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -221,15 +243,29 @@
                     <p:pipe port="result" step="upgrade-dtbook"/>
                 </p:input>
                 <p:with-option name="assert-valid" select="$opt-assert-valid"/>
-            </px:merge-dtbook>
+                <p:with-option name="output-base-uri" select="$zedai-file"/>
+            </px:dtbook-merge>
         </p:when>
         <p:otherwise>
-            <p:output port="result"/>
-            <p:identity>
-                <p:input port="source">
-                    <p:pipe port="result" step="upgrade-dtbook"/>
+            <p:output port="result" primary="true">
+                <p:pipe step="upgrade-dtbook" port="result"/>
+            </p:output>
+            <p:output port="mapping">
+                <p:pipe step="mapping" port="result" />
+            </p:output>
+            <p:template name="mapping">
+                <p:input port="template">
+                    <p:inline>
+                        <d:fileset>
+                            <d:file href="{$zedai-file}" original-href="{$dtbook-file}"/>
+                        </d:fileset>
+                    </p:inline>
                 </p:input>
-            </p:identity>
+                <p:with-param name="zedai-file" select="$zedai-file"/>
+                <p:with-param name="dtbook-file" select="base-uri(/*)">
+                    <p:pipe step="upgrade-dtbook" port="result"/>
+                </p:with-param>
+            </p:template>
         </p:otherwise>
     </p:choose>
 
@@ -238,7 +274,9 @@
     <!-- =============================================================== -->
     <p:documentation>Validate the DTBook input</p:documentation>
 
-    <px:remove-inline-css-speech name="dtbook-validation-input"/>
+    <p:documentation>Remove the Aural CSS attributes before validation</p:documentation>
+    <px:css-speech-clean name="dtbook-validation-input"/>
+    <p:documentation>Schema selector for DTBook validation</p:documentation>
     <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
     <px:validate-with-relax-ng-and-report name="validate-dtbook">
         <p:input port="source">
@@ -256,7 +294,7 @@
     <!-- CREATE ZEDAI -->
     <!-- =============================================================== -->
 
-    <p:documentation>Transform to ZedAI</p:documentation>
+    <p:documentation>Convert DTBook 2005-3 to ZedAI</p:documentation>
     <p:identity>
       <p:input port="source">
 	<p:pipe port="result" step="choose-to-merge-dtbook-files"/>
@@ -459,13 +497,7 @@
     <!-- VALIDATE FINAL OUTPUT -->
     <!-- =============================================================== -->
     <p:documentation>Validate the final ZedAI output.</p:documentation>
-    <px:message message="Validating ZedAI"/>
-    <px:validate-with-relax-ng-and-report name="validate-zedai" assert-valid="false">
-        <p:input port="schema">
-            <p:document href="./schema/z3998-book-1.0-latest/z3998-book.rng"/>
-        </p:input>
-    </px:validate-with-relax-ng-and-report>
-    <px:message message="ZedAI output is valid."/>
+    <px:zedai-validate name="validate-zedai" px:message="Validating ZedAI"/>
     <px:message message="Conversion complete."/>
     <p:sink/>
 
@@ -580,6 +612,7 @@
                 <p:pipe port="result" step="result.fileset.mods"/>
             </p:input>
         </px:fileset-join>
+        <p:documentation>Determine the media type of files</p:documentation>
         <px:mediatype-detect/>
     </p:group>
 

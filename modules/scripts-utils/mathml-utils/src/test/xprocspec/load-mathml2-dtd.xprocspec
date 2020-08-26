@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:t="test">
+    
+    <x:script>
+        <p:declare-step type="t:load" version="1.0">
+            <p:option name="href" required="true"/>
+            <p:output port="result"/>
+            <p:load>
+                <p:with-option name="href" select="$href"/>
+            </p:load>
+        </p:declare-step>
+    </x:script>
+    
+    <x:scenario label="Load MathML 2 document">
+        <x:call step="t:load">
+            <x:option name="href" select="resolve-uri('../resources/mathml2.xml')"/>
+        </x:call>
+    </x:scenario>
+    
+</x:description>

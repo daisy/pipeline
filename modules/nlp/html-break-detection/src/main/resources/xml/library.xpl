@@ -17,7 +17,11 @@
 
     <p:option name="id-prefix" required="false" select="''"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/nlp-break-detection/library.xpl" />
+    <p:import href="http://www.daisy.org/pipeline/modules/nlp-common/library.xpl">
+      <p:documentation>
+        px:break-and-reshape
+      </p:documentation>
+    </p:import>
 
     <px:break-and-reshape name="generic">
       <p:with-option name="inline-tags" select="'span,i,b,a,br,del,font,ruby,s,small,strike,strong,sup,u,q,address,abbr,em,style'"/>

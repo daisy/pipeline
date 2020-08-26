@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../../main/resources/xml/inline.xpl">
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
   <x:scenario label="test_01">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://example.com/ns/">
@@ -53,7 +53,7 @@
   </x:scenario>
   
   <x:scenario label="test_02">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://example.com/ns/">
@@ -103,7 +103,7 @@
   </x:scenario>
   
   <x:scenario label="test_03">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://example.com/ns/">
@@ -154,7 +154,7 @@
   </x:scenario>
   
   <x:scenario label="test_04">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>

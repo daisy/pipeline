@@ -85,8 +85,14 @@
     <p:import href="package.xpl">
         <p:documentation>For making the package document.</p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl">
-        <p:documentation>For putting it all into a ZIP container.</p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>For putting it all into a ZIP container.</p>
+            <ul>
+                <li>px:epub3-ocf-finalize</li>
+                <li>px:epub3-ocf-zip</li>
+            </ul>
+        </p:documentation>
     </p:import>
 
     <p:variable name="daisy-dir" select="replace($href,'[^/]+$','')"/>

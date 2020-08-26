@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-		exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                exclude-result-prefixes="#all">
 
   <!-- Prerequesite: SMIL nodes must have @ids -->
 
@@ -10,9 +10,8 @@
 
   <xsl:param name="no-smilref"/>
   <xsl:param name="mo-dir"/>
-  <xsl:param name="output-dir"/>
 
-  <xsl:variable name="mo-dir-rel" select="pf:relativize-uri($mo-dir, $output-dir)"/>
+  <xsl:variable name="mo-dir-rel" select="pf:relativize-uri($mo-dir, base-uri(/*))"/>
 
   <!-- pagenums and noterefs are also linked by the NCX but they can't
        be SMIL seq (they have no children), so there is no need to

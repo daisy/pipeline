@@ -75,13 +75,48 @@
     <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl">
+        <p:documentation>
+            
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
+        <p:documentation>
+            
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
+        <p:documentation>
+            
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-load
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-to-fileset
+        </p:documentation>
+    </p:import>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -118,9 +153,11 @@
     <!-- ========= -->
     <!-- LOAD HTML -->
     <!-- ========= -->
-    <px:html-load name="html" px:message="Loading HTML" px:progress=".03">
+    <px:fileset-create/>
+    <px:fileset-add-entry media-type="application/xhtml+xml">
         <p:with-option name="href" select="$html"/>
-    </px:html-load>
+    </px:fileset-add-entry>
+    <px:fileset-load name="html" px:message="Loading HTML" px:progress=".03"/>
     <px:html-to-fileset/>
     
     <!-- ============ -->

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-intersect.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:opf="http://www.idpf.org/2007/opf">
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/fileset-intersect.xpl">
 
     <x:scenario label="same-base">
         <x:call step="px:fileset-intersect">
@@ -26,7 +27,7 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
-                <d:fileset xml:base="file:///Users/me/dir/">
+                <d:fileset xml:base="file:/Users/me/dir/">
                     <d:file href="doc1.html"/>
                 </d:fileset>
             </x:document>
@@ -54,7 +55,7 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
-                <d:fileset xml:base="file:///Users/me/dir/"> </d:fileset>
+                <d:fileset xml:base="file:/Users/me/dir/"> </d:fileset>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -80,7 +81,7 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
-                <d:fileset xml:base="file:///Users/me/dir/">
+                <d:fileset xml:base="file:/Users/me/dir/">
                     <d:file href="../doc1.html"/>
                 </d:fileset>
             </x:document>

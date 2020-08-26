@@ -4,7 +4,7 @@
                script="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
     
     <x:scenario label="dtbook 1.1.0 to dtbook 2005-3">
-        <x:call step="px:upgrade-dtbook">
+        <x:call step="px:dtbook-upgrade">
             <x:input port="source">
                 <x:document type="inline">
                     <dtbook version="1.1.0">

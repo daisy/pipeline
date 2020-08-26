@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-validator.select-schema" type="px:dtbook-validator.select-schema"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                type="px:dtbook-validator.select-schema"
+                exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Helper step for DTBook Validator</h1>
@@ -12,9 +12,10 @@
     <!-- ***************************************************** -->
     <!-- OUTPUT and OPTIONS -->
     <!-- Note that there is NO INPUT required for this step -->
+    <!-- and that it is ignored if specified -->
     <!-- ***************************************************** -->
     
-    <p:input port="source" primary="true">
+    <p:input port="source" primary="true" sequence="true">
         <p:empty/>
     </p:input>
     
@@ -40,6 +41,7 @@
     </p:option>
     
     <!-- Based on the DTBook and MathML version, provide the correct RelaxNG schema on the output port -->
+    <p:sink/>
     <p:choose name="choose-schema">
         <p:when test="$dtbook-version = '2005-3' and $mathml-version = '3.0'">
             <p:identity>

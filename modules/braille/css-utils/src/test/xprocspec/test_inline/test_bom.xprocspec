@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-               script="../../../main/resources/xml/inline.xpl">
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
   <x:scenario label="test_01">
     <x:documentation>
       Tests that BOM (byte order mark) does not break things.
     </x:documentation>
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>

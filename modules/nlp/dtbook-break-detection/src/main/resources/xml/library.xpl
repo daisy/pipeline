@@ -15,7 +15,11 @@
       <p:pipe port="sentence-ids" step="generic"/>
     </p:output>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/nlp-break-detection/library.xpl" />
+    <p:import href="http://www.daisy.org/pipeline/modules/nlp-common/library.xpl">
+      <p:documentation>
+        px:break-and-reshape
+      </p:documentation>
+    </p:import>
 
 
     <!-- The 'can-contain-sentences' covers almost all possible

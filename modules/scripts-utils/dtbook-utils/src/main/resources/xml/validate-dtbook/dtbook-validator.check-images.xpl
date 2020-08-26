@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-validator.check-images" type="px:dtbook-validator.check-images"
-    xmlns:p="http://www.w3.org/ns/xproc" 
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"    
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" 
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:m="http://www.w3.org/1998/Math/MathML" 
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"  version="1.0"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="pxi:dtbook-validator.check-images" name="dtbook-validator.check-images"
+                exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Helper step for DTBook Validator</h1>

@@ -71,6 +71,9 @@
     <p:import href="resolve-links.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">De-references links to SMIL-files.</p:documentation>
     </p:import>
+    <p:import href="ncc-to-nav-toc.xpl"/>
+    <p:import href="ncc-to-nav-page-list.xpl"/>
+    <p:import href="ncc-to-nav-landmarks.xpl"/>
 
     <p:variable name="subdir" select="substring-after($content-dir,$publication-dir)"/>
     <pxi:daisy202-to-epub3-resolve-links>
@@ -84,69 +87,27 @@
     <px:message message="dereferenced all links in the SMIL files"/>
     <p:identity name="ncc-navigation.no-navs"/>
     <p:sink/>
-    <p:xslt name="ncc-navigation.toc">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
+    <pxi:ncc-to-epub3-nav-toc name="ncc-navigation.toc">
         <p:input port="source">
             <p:pipe port="result" step="ncc-navigation.no-navs"/>
         </p:input>
-        <p:input port="stylesheet">
-            <p:document href="ncc-to-nav-toc.xsl"/>
-        </p:input>
-    </p:xslt>
+    </pxi:ncc-to-epub3-nav-toc>
     <px:message message="created TOC from NCC"/>
     <p:sink/>
-    <p:xslt>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
+    <pxi:ncc-to-epub3-nav-page-list>
         <p:input port="source">
             <p:pipe port="result" step="ncc-navigation.no-navs"/>
         </p:input>
-        <p:input port="stylesheet">
-            <p:document href="ncc-to-nav-page-list.xsl"/>
-        </p:input>
-    </p:xslt>
+    </pxi:ncc-to-epub3-nav-page-list>
     <px:message message="created page list from NCC"/>
-    <p:choose>
-        <p:when test="count(/*/*)=0">
-            <p:identity>
-                <p:input port="source">
-                    <p:empty/>
-                </p:input>
-            </p:identity>
-        </p:when>
-        <p:otherwise>
-            <p:identity/>
-        </p:otherwise>
-    </p:choose>
     <p:identity name="ncc-navigation.page-list"/>
     <p:sink/>
-    <p:xslt>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
+    <pxi:ncc-to-epub3-nav-landmarks>
         <p:input port="source">
             <p:pipe port="result" step="ncc-navigation.no-navs"/>
         </p:input>
-        <p:input port="stylesheet">
-            <p:document href="ncc-to-nav-landmarks.xsl"/>
-        </p:input>
-    </p:xslt>
+    </pxi:ncc-to-epub3-nav-landmarks>
     <px:message message="created landmarks from NCC"/>
-    <p:choose>
-        <p:when test="count(/*/*)=0">
-            <p:identity>
-                <p:input port="source">
-                    <p:empty/>
-                </p:input>
-            </p:identity>
-        </p:when>
-        <p:otherwise>
-            <p:identity/>
-        </p:otherwise>
-    </p:choose>
     <p:identity name="ncc-navigation.landmarks"/>
     <p:sink/>
     <p:delete match="html:body/*">

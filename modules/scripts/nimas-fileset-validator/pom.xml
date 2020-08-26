@@ -32,7 +32,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-validator</artifactId>
+      <artifactId>dtbook-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -50,7 +50,7 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-entities</artifactId>
+      <artifactId>daisy3-utils</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

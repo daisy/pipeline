@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:m="http://www.w3.org/1998/Math/MathML"
-		xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-		xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/"
-		exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+                xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/"
+                exclude-result-prefixes="#all">
 
-  <xsl:param name="mathml-formulae-img" select="''"/>
+  <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
-  <!-- This script add missing elements so as to make the NCX/OPF/SMIL generation easier. -->
+  <xsl:param name="output-base-uri" required="yes"/>
+
+  <xsl:variable name="mathml-formulae-img"
+                select="collection()[2]//d:file[1]
+                        /pf:relativize-uri(resolve-uri(@href,base-uri(.)),$output-base-uri)"/>
 
   <xsl:variable name="title" select="(//meta[@name='dc:Title'])[1]"/>
   <xsl:variable name="safe-title">

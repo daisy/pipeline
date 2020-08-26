@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/audio-clips-to-fileset.xpl">
+    
+    <x:scenario label="audio-clips-to-fileset">
+        <x:call step="px:audio-clips-to-fileset">
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:audio-clips>
+                        <d:clip idref="std5512e7246"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:03.289"
+                                src="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_00_000.mp3"/>
+                        <d:clip idref="std5512e7256"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:02.856"
+                                src="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_01_000.mp3"/>
+                        <d:clip idref="std5512e8252"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:05.041"
+                                src="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_00_000.mp3"/>
+                        <d:clip idref="std5512e8263"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:04.993"
+                                src="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_01_000.mp3"/>
+                        <d:clip idref="std5512e9701"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:04.011"
+                                src="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_00_000.mp3"/>
+                        <d:clip idref="std5512e9711"
+                                clipBegin="0:00:00.000"
+                                clipEnd="0:00:01.448"
+                                src="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_01_000.mp3"/>
+                    </d:audio-clips>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result port">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_00_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_01_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_00_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0001_01_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_00_000.mp3"
+                            media-type="audio/mpeg"/>
+                    <d:file href="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0002_01_000.mp3"
+                            media-type="audio/mpeg"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

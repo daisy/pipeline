@@ -10,5 +10,5 @@
    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
 </catalog>

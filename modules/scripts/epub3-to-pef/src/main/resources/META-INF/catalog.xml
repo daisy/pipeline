@@ -26,7 +26,6 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
   
 </catalog>

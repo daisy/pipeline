@@ -47,21 +47,13 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mediaoverlay-utils</artifactId>
+      <artifactId>smil-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>mediatype-utils</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-entities</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   

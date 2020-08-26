@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-join.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:opf="http://www.idpf.org/2007/opf">
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/fileset-join.xpl">
 
     <x:scenario label="same-base">
         <x:call step="px:fileset-join">
@@ -235,7 +236,7 @@
 </d:fileset>
                 </x:document>
                 <x:document type="inline" xml:space="preserve" xml:base="file:/home/user/">
-<d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/tmp/foo/">
+<d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/bar/foo/">
     <d:file href="file:/href2">
         <d:ref href="ref2"/>
     </d:file>
@@ -258,7 +259,7 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline" xml:space="preserve">
-<d:fileset xml:base="file:/tmp/foo/">
+<d:fileset xml:base="file:/bar/foo/">
     <d:file href="../../href1">
         <d:ref href="ref1"/>
         <d:ref href="ref3"/>
@@ -276,7 +277,7 @@
         <x:call step="px:fileset-join">
             <x:input port="source">
                 <x:document type="inline" xml:space="preserve">
-<d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/tmp/foo/">
+<d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" xml:base="file:/bar/foo/">
     <d:file href="../foo/href1"/>
 </d:fileset>
                  </x:document>
@@ -287,7 +288,7 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline" xml:space="preserve">
-<d:fileset xml:base="file:/tmp/foo/">
+<d:fileset xml:base="file:/bar/foo/">
     <d:file href="href1"/>
 </d:fileset>
             </x:document>

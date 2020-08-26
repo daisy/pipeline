@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                exclude-result-prefixes="#all">
+
     <xsl:output indent="yes"/>
 
     <xsl:function name="pf:numeric-is-roman" as="xs:boolean">
@@ -66,6 +70,26 @@
     <xsl:function name="pf:numeric-alpha-to-decimal" as="xs:integer">
         <xsl:param name="alpha" as="xs:string"/>
         <xsl:sequence select="string-to-codepoints($alpha)-96"/>
+    </xsl:function>
+
+    <xsl:function name="pf:numeric-decimal-to-alpha" as="xs:string">
+        <xsl:param name="decimal" as="xs:integer"/>
+        <xsl:value-of select="string-join(f:numeric-decimal-to-alpha-part($decimal,()),'')"/>
+    </xsl:function>
+
+    <xsl:function name="f:numeric-decimal-to-alpha-part" as="xs:string*">
+        <xsl:param name="remainder" as="xs:integer"/>
+        <xsl:param name="result" as="xs:string*"/>
+        <xsl:choose>
+            <xsl:when test="$remainder &lt;= 0">
+                <xsl:sequence select="$result"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="f:numeric-decimal-to-alpha-part(
+                                        xs:integer(floor($remainder div 26)),
+                                        (codepoints-to-string(($remainder mod 26) + 96), $result))"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 
     <!--<xsl:template match="/*" name="test">

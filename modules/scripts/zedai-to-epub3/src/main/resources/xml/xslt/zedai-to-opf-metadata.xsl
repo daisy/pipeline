@@ -3,13 +3,14 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
                 xmlns:rdfa="rdfa-functions"
                 xmlns="http://www.idpf.org/2007/opf"
                 xpath-default-namespace="http://www.idpf.org/2007/opf"
                 exclude-result-prefixes="xs z">
 
-  <xsl:output method="xml" indent="yes"/>
+  <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 
   <!--TODO resolve metadata prefixes from @profile and @prefix
      * default prefixes declared in @profile
@@ -18,6 +19,20 @@
      * other prefixes are explicitly declared in @prefix
         e.g. prefix="foaf: http://xmlns.com/foaf/0.1/"
   -->
+
+  <xsl:template match="/z:document" priority="1">
+    <xsl:call-template name="pf:next-match-with-generated-ids">
+      <xsl:with-param name="prefix" select="'id_'"/>
+      <xsl:with-param name="for-elements" select="f:get-title-from-content(/)|
+                                                  //z:*[f:hasProp(.,'dcterms:title')]|
+                                                  //z:*[f:hasPropOrRole(.,('fulltitle',
+                                                                           'title',
+                                                                           'covertitle',
+                                                                           'halftitle',
+                                                                           'subtitle'))]"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="/z:document">
     <!-- TODO dynamically generate @prefix -->
     <metadata prefix="dc: http://purl.org/dc/elements/1.1/">
@@ -67,14 +82,15 @@
           </xsl:for-each-group>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="title" select="f:get-title-from-content(/)"/>
-          <dc:title id="{generate-id($title)}">
-            <xsl:copy-of select="$title/@dir"/>
-            <xsl:copy-of select="$title/@xml:lang"/>
-            <xsl:value-of
-              select="if (string($title)) then normalize-space(string($title)) else $title/@content"
-            />
-          </dc:title>
+          <xsl:variable name="title" as="element()" select="f:get-title-from-content(/)"/>
+          <xsl:for-each select="$title">
+            <dc:title>
+              <xsl:call-template name="pf:generate-id"/>
+              <xsl:copy-of select="@dir"/>
+              <xsl:copy-of select="@xml:lang"/>
+              <xsl:value-of select="if (string(.)) then normalize-space(string(.)) else @content"/>
+            </dc:title>
+          </xsl:for-each>
         </xsl:otherwise>
       </xsl:choose>
 
@@ -168,7 +184,10 @@
 
   <xsl:template match="z:*[f:hasProp(.,'dcterms:title')]" mode="title">
     <xsl:call-template name="create-title"/>
-    <meta refines="#{generate-id()}" property="title-type">main</meta>
+    <xsl:variable name="id" as="xs:string">
+      <xsl:call-template name="pf:generate-id"/>
+    </xsl:variable>
+    <meta refines="#{$id}" property="title-type">main</meta>
   </xsl:template>
 
   <xsl:template match="z:*[f:hasPropOrRole(.,'fulltitle')]" mode="title">
@@ -178,7 +197,10 @@
     <xsl:call-template name="create-title"/>
     <!--it is an 'expanded' title if it has title/subtitle descendants-->
     <xsl:if test="descendant::z:*[f:hasPropOrRole(.,'title')]">
-      <meta refines="#{generate-id()}" property="title-type">expanded</meta>
+      <xsl:variable name="id" as="xs:string">
+        <xsl:call-template name="pf:generate-id"/>
+      </xsl:variable>
+      <meta refines="#{$id}" property="title-type">expanded</meta>
     </xsl:if>
   </xsl:template>
 
@@ -188,7 +210,10 @@
   </xsl:template>
   <xsl:template match="z:*[f:hasPropOrRole(.,'subtitle')]" mode="title">
     <xsl:call-template name="create-title"/>
-    <meta refines="#{generate-id()}" property="title-type">subtitle</meta>
+    <xsl:variable name="id" as="xs:string">
+      <xsl:call-template name="pf:generate-id"/>
+    </xsl:variable>
+    <meta refines="#{$id}" property="title-type">subtitle</meta>
   </xsl:template>
 
   <xsl:template name="create-title">
@@ -197,7 +222,8 @@
         wich would lead to the creation of an empty dc:title tag
         thus making the epub invalid for epubcheck. -->
     <xsl:if test=".//text()[not(self::text()[not(normalize-space())])] != '' or @content">
-      <dc:title id="{generate-id()}">
+      <dc:title>
+        <xsl:call-template name="pf:generate-id"/>
         <xsl:copy-of select="@dir"/>
         <xsl:copy-of select="@xml:lang"/>
         <xsl:value-of select="if (string(.)) then normalize-space(string(.)) else @content"/>
@@ -215,7 +241,7 @@
     <xsl:param name="doc" as="document-node()"/>
     <xsl:sequence
       select="distinct-values((
-      $doc/z:document/z:head/z:meta[@property='dcterms:identifier']/@content))"
+      $doc/z:document/z:head/z:meta[@property='dc:identifier']/@content))"
     />
   </xsl:function>
 
@@ -229,7 +255,7 @@
     />
   </xsl:function>
 
-  <xsl:function name="f:get-title-from-content" as="node()">
+  <xsl:function name="f:get-title-from-content" as="element()">
     <xsl:param name="doc" as="document-node()"/>
     <xsl:sequence select="($doc//z:h)[1]"/>
   </xsl:function>

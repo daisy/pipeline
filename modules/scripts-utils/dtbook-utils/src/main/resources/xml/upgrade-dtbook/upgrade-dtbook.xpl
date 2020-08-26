@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="upgrade-dtbook" type="px:upgrade-dtbook"
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" 
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" 
-    xmlns:dc="http://purl.org/dc/terms/"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                exclude-inline-prefixes="#all"
+                type="px:dtbook-upgrade">
+
     <!-- 
         TODO: 
         * copy referenced resources (such as images)

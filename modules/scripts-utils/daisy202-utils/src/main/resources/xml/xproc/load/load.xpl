@@ -31,11 +31,40 @@
         <p:pipe port="in-memory.out" step="wrapper"/>
     </p:output>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:normalize-uri
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-to-fileset
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-load
+            px:fileset-join
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
+        <p:documentation>
+            px:mediatype-detect
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">
+        <p:documentation>
+            px:smil-to-audio-fileset
+            px:smil-to-text-fileset
+        </p:documentation>
+    </p:import>
 
     <px:normalize-uri name="ncc">
         <p:with-option name="href" select="$ncc"/>
@@ -56,10 +85,11 @@
         </px:message>
         <p:sink/>
 
-        <px:html-load name="in-memory.ncc">
+        <px:fileset-create/>
+        <px:fileset-add-entry media-type="application/xhtml+xml">
             <p:with-option name="href" select="$href"/>
-        </px:html-load>
-
+        </px:fileset-add-entry>
+        <px:fileset-load name="in-memory.ncc"/>
         <px:message severity="DEBUG"
             message="Making an ordered list of SMIL-files referenced from the NCC according to the flow (reading order)"/>
         <p:xslt name="fileset.smil">
@@ -86,72 +116,36 @@
                 <p:pipe port="result" step="fileset.html-and-audio.text"/>
             </p:output>
             <p:identity name="smil"/>
-            <p:xslt name="fileset.html-and-audio.audio">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document
-                        href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/smil-to-audio-fileset.xsl"
-                    />
-                </p:input>
-            </p:xslt>
+            <px:smil-to-audio-fileset name="fileset.html-and-audio.audio"/>
             <p:sink/>
-            <p:xslt name="fileset.html-and-audio.text">
+            <px:smil-to-text-fileset name="fileset.html-and-audio.text">
                 <p:input port="source">
                     <p:pipe step="smil" port="result"/>
                 </p:input>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document
-                        href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/smil-to-text-fileset.xsl"
-                    />
-                </p:input>
-            </p:xslt>
+            </px:smil-to-text-fileset>
             <p:sink/>
         </p:for-each>
         <px:fileset-join name="fileset.html-and-audio"/>
 
         <px:message severity="DEBUG" message="Loading all HTML-files"/>
-        <p:for-each>
-            <p:iteration-source
-                select="//d:file[
-            (@media-type='text/html' 
-            or @media-type='application/xhtml+xml' 
-            or matches(lower-case(@href),'\.x?html$'))
-            and not(resolve-uri(@href,base-uri())=$href)]"/>
-            <px:message severity="DEBUG">
-                <p:with-option name="message" select="concat('loading ',/*/@href,'...')"/>
-            </px:message>
-            <px:html-load>
-                <p:with-option name="href" select="p:resolve-uri(/*/@href,base-uri(/*))"/>
-            </px:html-load>
-        </p:for-each>
+        <p:delete>
+            <p:with-option name="match" select="concat('d:file[resolve-uri(@href,base-uri())=&quot;',$href,'&quot;]')"/>
+        </p:delete>
+        <p:add-attribute match="d:file[matches(lower-case(@href),'\.x?html$')]"
+                         attribute-name="media-type" attribute-value="application/xhtml+xml"/>
+        <px:fileset-filter media-types="text/html application/xhtml+xml"/>
+        <px:fileset-load/>
         <p:identity name="in-memory.html"/>
 
         <px:message severity="DEBUG" message="Listing all resources referenced from the HTML files"/>
-        <p:for-each name="fileset.html-resources.for-each">
-            <px:html-to-fileset/>
-            <!-- not using fileset-filter because we don't want to delete files references from iframes -->
-            <p:delete match="d:file[@media-type='application/xhtml+xml' and not(@kind='content')]"/>
-            <px:message severity="DEBUG">
-                <p:with-option name="message"
-                    select="concat('extracted list of resources from ',replace(base-uri(/*),'^.*/',''))">
-                    <p:pipe port="current" step="fileset.html-resources.for-each"/>
-                </p:with-option>
-            </px:message>
-            <!--<p:xslt>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-            <p:input port="stylesheet">
-                <p:document href="make-resource-fileset.xsl"/>
-            </p:input>
-        </p:xslt>-->
+        <p:for-each>
+            <p:variable name="filename" select="replace(base-uri(/*),'^.*/','')"/>
+            <px:html-to-fileset px:message="extracting list of resources from {$filename}" px:message-severity="DEBUG"/>
         </p:for-each>
-        <px:fileset-join name="fileset.html-resources"/>
+        <px:fileset-join/>
+        <!-- omit HTML files except those referenced from iframes -->
+        <p:delete match="d:file[@media-type='application/xhtml+xml' and not(@kind='content')]"
+                  name="fileset.html-resources"/>
 
         <p:identity name="in-memory">
             <p:input port="source">

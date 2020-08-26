@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-   <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.nimas.sch" 
+
+   <public publicId='-//NISO//DTD dtbook 2005-1//EN' uri='../xml/dtd/dtbook-2005-1.dtd'/>
+   <system systemId='http://www.daisy.org/z3986/2005/dtbook-2005-1.dtd' uri='../xml/dtd/dtbook-2005-1.dtd'/>
+
+   <public publicId='-//NISO//DTD dtbook 2005-2//EN' uri='../xml/dtd/dtbook-2005-2.dtd'/>
+   <system systemId='http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd' uri='../xml/dtd/dtbook-2005-2.dtd'/>
+
+   <public publicId='-//NISO//DTD dtbook 2005-3//EN' uri='../xml/dtd/dtbook-2005-3.dtd'/>
+   <system systemId='http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd' uri='../xml/dtd/dtbook-2005-3.dtd'/>
+
+   <public publicId='-//NISO//DTD dtbook v1.1.0//EN' uri='../xml/dtd/dtbook110.dtd'/>
+   <system systemId='http://www.loc.gov/nls/z3986/v100/dtbook110.dtd' uri='../xml/dtd/dtbook110.dtd'/>
+
+   <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.nimas.sch"
         uri="../xml/validate-dtbook/schema/sch/dtbook.mathml.nimas.sch"/>
-   <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.sch" 
+   <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.sch"
         uri="../xml/validate-dtbook/schema/sch/dtbook.mathml.sch"/>
+
    <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"
         uri="../xml/dtbook-utils-library.xpl"/>
+
    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
@@ -13,4 +28,5 @@
    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
    <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
    <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
 </catalog>

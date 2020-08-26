@@ -10,7 +10,7 @@
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>2.1.2-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <artifactId>dtbook-tts</artifactId>
   <packaging>bundle</packaging>
 
@@ -21,6 +21,16 @@
     <!--
         runtime dependencies
     -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>css-speech</artifactId>
@@ -38,7 +48,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-to-ssml</artifactId>
+      <artifactId>text-to-ssml</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -48,8 +58,25 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>tts-helpers</artifactId>
+      <artifactId>tts-common</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        for MessageStorage, needed by JobMonitorFactory
+        FIXME: make optional
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-volatile</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -58,5 +85,22 @@
       org.daisy.pipeline.modules.impl.Module_dtbook_tts
     </expose-services>
   </properties>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xproc-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>xprocspec</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   
 </project>

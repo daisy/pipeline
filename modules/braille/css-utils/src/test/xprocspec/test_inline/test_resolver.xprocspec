@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-               script="../../../main/resources/xml/inline.xpl">
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
   <x:scenario label="test_01">
     <x:documentation>
       Tests that spaces in file paths are handled correctly in default-stylesheet option.
     </x:documentation>
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -37,7 +37,7 @@
     <x:documentation>
       Tests that spaces in .scss file paths are handled correctly in default-stylesheet option.
     </x:documentation>
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>

@@ -6,8 +6,8 @@
                script="../../main/resources/xml/inline-css-speech.xpl">
   
   <x:scenario label="config">
-    <x:call step="px:inline-css-speech">
-      <x:input port="source">
+    <x:call step="px:css-speech-cascade">
+      <x:input port="source.in-memory">
         <x:document type="inline" xml:base="file:/tmp/dtbook.xml">
           <dtbook>
             <book>
@@ -18,7 +18,7 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:input port="fileset.in">
+      <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
             <d:file href="file:/tmp/dtbook.xml" media-type="application/x-dtbook+xml"/>
@@ -34,7 +34,7 @@
       </x:input>
     </x:call>
     <x:context label="result">
-      <x:document type="port" port="result" select="//book"/>
+      <x:document type="port" port="result.in-memory" select="//book"/>
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
@@ -48,8 +48,8 @@
   </x:scenario>
   
   <x:scenario label="config inline">
-    <x:call step="px:inline-css-speech">
-      <x:input port="source">
+    <x:call step="px:css-speech-cascade">
+      <x:input port="source.in-memory">
         <x:document type="inline" xml:base="file:/tmp/dtbook.xml">
           <dtbook>
             <book>
@@ -60,7 +60,7 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:input port="fileset.in">
+      <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
             <d:file href="file:/tmp/dtbook.xml" media-type="application/x-dtbook+xml"/>
@@ -80,7 +80,7 @@
       </x:input>
     </x:call>
     <x:context label="result">
-      <x:document type="port" port="result" select="//book"/>
+      <x:document type="port" port="result.in-memory" select="//book"/>
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
@@ -94,8 +94,8 @@
   </x:scenario>
   
   <x:scenario label="link">
-    <x:call step="px:inline-css-speech">
-      <x:input port="source">
+    <x:call step="px:css-speech-cascade">
+      <x:input port="source.in-memory">
         <x:document type="inline">
           <dtbook>
             <head>
@@ -109,7 +109,7 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:input port="fileset.in">
+      <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
             <d:file href="test_inline-css-speech.xprocspec" media-type="application/x-dtbook+xml"/>
@@ -123,7 +123,7 @@
       </x:input>
     </x:call>
     <x:context label="result">
-      <x:document type="port" port="result" select="//book"/>
+      <x:document type="port" port="result.in-memory" select="//book"/>
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">

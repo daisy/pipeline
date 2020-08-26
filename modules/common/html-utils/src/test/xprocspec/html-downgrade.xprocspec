@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="../../main/resources/xml/xproc/html-downgrade.xpl">
+    
+    <x:scenario label="when processing the h1-h6 elements">
+        <x:call step="px:html-downgrade">
+            <x:input port="source">
+                <x:document type="inline" xml:base="file:/part1.html">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                        <body id="id_1">
+                            <header>
+                                <h1 id="id_2">h1</h1>
+                            </header>
+                            <section id="id_3">
+                                <h1 id="id_4">h1</h1>
+                                <section id="id_5">
+                                    <h2 id="id_6">h2</h2>
+                                </section>
+                            </section>
+                            <section id="id_7">
+                                <section id="id_8">
+                                    <h2 id="id_9">h2</h2>
+                                </section>
+                            </section>
+                            <section id="id_10">
+                                <h1 id="id_11">h1</h1>
+                                <section id="id_12">
+                                    <h2 id="id_13">h2</h2>
+                                    <section id="id_14">
+                                        <h3 id="id_15">h3</h3>
+                                        <section id="id_16">
+                                            <h4 id="id_17">h4</h4>
+                                            <section id="id_18">
+                                                <h5 id="id_19">h5</h5>
+                                                <section id="id_20">
+                                                    <h6 id="id_21">h6</h6>
+                                                </section>
+                                            </section>
+                                        </section>
+                                    </section>
+                                </section>
+                            </section>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the result" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <body id="id_1">
+                        <div class="header">
+                            <h1 id="id_2">h1</h1>
+                        </div>
+                        <div class="section" id="id_3">
+                            <h2 id="id_4">h1</h2>
+                            <div class="section" id="id_5">
+                                <h3 id="id_6">h2</h3>
+                            </div>
+                        </div>
+                        <div class="section" id="id_7">
+                            <div class="section" id="id_8">
+                                <h3 id="id_9">h2</h3>
+                            </div>
+                        </div>
+                        <div class="section" id="id_10">
+                            <h2 id="id_11">h1</h2>
+                            <div class="section" id="id_12">
+                                <h3 id="id_13">h2</h3>
+                                <div class="section" id="id_14">
+                                    <h4 id="id_15">h3</h4>
+                                    <div class="section" id="id_16">
+                                        <h5 id="id_17">h4</h5>
+                                        <div class="section" id="id_18">
+                                            <h6 id="id_19">h5</h6>
+                                            <div class="section" id="id_20">
+                                                <h6 id="id_21">h6</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

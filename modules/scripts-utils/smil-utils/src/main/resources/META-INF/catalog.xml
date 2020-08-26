@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <uri name="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl"
+        uri="../xml/library.xpl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"
+        uri="../xml/clock-functions.xsl"/>
+   <public publicId='-//W3C//DTD SMIL 1.0//EN' uri='../xml/dtd/SMIL10.dtd'/>
+   <system systemId='http://www.w3.org/TR/REC-smil/SMIL10.dtd' uri='../xml/dtd/SMIL10.dtd'/>
+   <public publicId='-//NISO//DTD dtbsmil 2005-2//EN' uri='../xml/dtd/dtbsmil-2005-2.dtd'/>
+   <system systemId='http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd' uri='../xml/dtd/dtbsmil-2005-2.dtd'/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+</catalog>

@@ -11,9 +11,8 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-speech"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:tts-helpers"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
   
   <!--
       removed dependency in order to be able to mock it in the tests

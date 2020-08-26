@@ -1,7 +1,7 @@
-<p:declare-step type="px:isolate-daisy3-skippable" version="1.0" name="main"
-		xmlns:p="http://www.w3.org/ns/xproc"
-		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-		xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/"
+                type="px:daisy3-isolate-skippable" name="main">
 
     <p:input port="source" primary="true"/>
     <p:input port="sentence-ids"/>

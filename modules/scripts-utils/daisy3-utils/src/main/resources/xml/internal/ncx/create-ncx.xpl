@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step name="main" type="px:create-ncx" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                type="px:daisy3-create-ncx" name="main">
 
     <p:input port="content" primary="true">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -11,25 +11,13 @@
 
     <p:input port="audio-map">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	<p>List of audio clips (see ssml-to-audio documentation)</p>
+        <p><code>d:audio-clips</code> document with the locations of the audio files.</p>
       </p:documentation>
     </p:input>
 
-    <p:option name="audio-dir">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	<p>Parent directory URI of the audio files.</p>
-      </p:documentation>
-    </p:option>
-
-    <p:option name="smil-dir">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	<p>Parent directory URI of the smil files.</p>
-      </p:documentation>
-    </p:option>
-
     <p:option name="ncx-dir">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	<p>Output directory URI if the NCX file were to be stored or refered by a fileset.</p>
+        <p>Directory URI which the URI of the output NCX file will be based on.</p>
       </p:documentation>
     </p:option>
 
@@ -39,12 +27,32 @@
       </p:documentation>
     </p:option>
 
-    <p:output port="result" primary="true"/>
+    <p:option name="fail-if-missing-smilref" select="'false'">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>If this option is set, <code>h1</code>, <code>h2</code>, <code>h3</code>,
+        <code>h4</code>, <code>h5</code>, <code>h6</code>, <code>levelhd</code>, <code>hd</code> and
+        <code>pagenum</code> elements with a missing <code>smilref</code> attribute will result in
+        an error.</p>
+      </p:documentation>
+    </p:option>
+
+    <p:output port="result" primary="true">
+      <p:pipe step="ncx" port="result"/>
+    </p:output>
+    <p:output port="result.fileset">
+      <p:pipe step="fileset" port="result"/>
+    </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
         </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+      <p:documentation>
+        px:fileset-create
+        px:fileset-add-entry
+      </p:documentation>
     </p:import>
 
     <p:xslt>
@@ -55,15 +63,28 @@
       <p:input port="stylesheet">
 	<p:document href="create-ncx.xsl"/>
       </p:input>
-      <p:with-param name="mo-dir" select="$smil-dir"/>
-      <p:with-param name="audio-dir" select="$audio-dir"/>
       <p:with-param name="ncx-dir" select="$ncx-dir"/>
       <p:with-param name="uid" select="$uid"/>
+      <p:with-param name="fail-if-missing-smilref" select="$fail-if-missing-smilref"/>
     </p:xslt>
 
     <px:set-base-uri>
       <p:with-option name="base-uri" select="concat($ncx-dir, 'navigation.ncx')"/>
     </px:set-base-uri>
-    <p:add-xml-base/>
+    <p:identity name="ncx"/>
+    <p:sink/>
+
+    <px:fileset-create>
+      <p:with-option name="base" select="$ncx-dir"/>
+    </px:fileset-create>
+    <px:fileset-add-entry media-type="application/x-dtbncx+xml" name="fileset">
+      <p:input port="entry">
+        <p:pipe step="ncx" port="result"/>
+      </p:input>
+      <p:with-param port="file-attributes" name="indent" select="'true'"/>
+      <p:with-param port="file-attributes" name="doctype-public" select="'-//NISO//DTD ncx 2005-1//EN'"/>
+      <p:with-param port="file-attributes" name="doctype-system" select="'http://www.daisy.org/z3986/2005/ncx-2005-1.dtd'"/>
+    </px:fileset-add-entry>
+    <p:sink/>
 
 </p:declare-step>

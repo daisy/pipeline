@@ -2,6 +2,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   <uri name="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl" uri="../xml/library.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xsl" uri="../xml/library.xsl"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
 </catalog>

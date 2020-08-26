@@ -18,8 +18,11 @@
     
     <p:input port="metadata" primary="false" sequence="true" px:media-type="application/xhtml+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">HTML document(s)</h2>
-            <p px:role="desc">List of the HTML documents to extract metadata from.</p>
+            <h2 px:role="name">Metadata</h2>
+            <p px:role="desc" xml:space="preserve">Metadata to be included in the EPUB.
+
+If specified, the document must be a [`metadata`](http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-elem)
+element in the OPF namespace. If not specified, metadata is extracted from the HTML documents.</p>
         </p:documentation>
         <p:empty/>
     </p:input>
@@ -39,14 +42,39 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
-    <p:import href="html-to-epub3.convert.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:normalize-uri
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-load
+            px:fileset-join
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub3-store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:tokenize
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-to-fileset
+        </p:documentation>
+    </p:import>
+    <p:import href="html-to-epub3.convert.xpl">
+        <p:documentation>
+            px:html-to-epub3
+        </p:documentation>
+    </p:import>
 
     <px:normalize-uri name="output-dir-uri">
         <p:with-option name="href" select="concat($output-dir,'/')"/>
@@ -65,23 +93,25 @@
         </px:tokenize>
         <p:for-each name="html">
             <p:output port="result" sequence="true"/>
-            <px:html-load>
-                <p:with-option name="href" select="."/>
-            </px:html-load>
+            <p:variable name="single-html" select="."/>
+            <px:fileset-create/>
+            <px:fileset-add-entry media-type="application/xhtml+xml">
+                <p:with-option name="href" select="$single-html"/>
+            </px:fileset-add-entry>
+            <px:fileset-load/>
         </p:for-each>
         <p:group>
             <p:for-each>
                 <px:html-to-fileset/>
             </p:for-each>
             <px:fileset-join/>
-            <px:mediatype-detect/>
         </p:group>
 
         <px:html-to-epub3 name="convert">
             <p:input port="input.in-memory">
                 <p:pipe step="html" port="result"/>
             </p:input>
-            <p:with-option name="output-dir" select="$output-dir-uri">
+            <p:with-option name="output-dir" select="concat($output-dir-uri,'epub/')">
                 <p:empty/>
             </p:with-option>
             <p:input port="metadata">

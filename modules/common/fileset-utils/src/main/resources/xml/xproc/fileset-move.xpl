@@ -2,129 +2,87 @@
 <p:declare-step version="1.0" type="px:fileset-move" name="main"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p>Changes the xml:base of the fileset, without updating the
-        hrefs. "original-href"-attributes will be added for files that exist on disk. No files will
-        be physically moved, that's what px:fileset-store is for.</p>
+        <p>Move a fileset to a new location</p>
+        <p>Fails if the fileset contains files outside of the base directory. No files are
+        physically moved, that is done upon calling px:fileset-store and px:fileset-delete.</p>
     </p:documentation>
 
-    <p:input port="fileset.in" primary="true"/>
-    <p:input port="in-memory.in" sequence="true">
+    <p:input port="source.fileset" primary="true"/>
+    <p:input port="source.in-memory" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The input fileset</p>
+        </p:documentation>
         <p:empty/>
     </p:input>
 
-    <p:output port="fileset.out" primary="true">
-        <p:pipe port="result" step="fileset"/>
+    <p:output port="result.fileset" primary="true">
+        <p:pipe step="copy" port="result.fileset"/>
     </p:output>
-    <p:output port="in-memory.out" sequence="true">
-        <p:pipe port="result" step="in-memory"/>
+    <p:output port="result.in-memory" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The output fileset at the new location.</p>
+            <p>The xml:base is changed to "target". The hrefs are not updated, unless the "flatten"
+            option is set, in which case they are reduced to the file name. The base URI of the
+            in-memory documents are changed accordingly, and "original-href"-attributes are added
+            for files that exist on disk.</p>
+        </p:documentation>
+        <p:pipe step="copy" port="result.in-memory"/>
+    </p:output>
+    <p:output port="mapping">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>A <code>d:fileset</code> document that contains the mapping from the source files
+            (<code>@original-href</code>)to the moved files (<code>@href</code>).</p>
+            <p>Pass this output to px:fileset-delete after the "result" output has been passed to
+            px:fileset-store.</p>
+        </p:documentation>
+        <p:pipe step="mapping" port="result"/>
     </p:output>
 
-    <p:option name="new-base" required="true"/>
+    <p:option name="target" required="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target directory.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="flatten" required="false" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Move all files to a single directory.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="prefix" required="false" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Prefix to add before file names.</p>
+            <p>Only if "flatten" option is set.</p>
+        </p:documentation>
+    </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
+    <p:import href="fileset-join.xpl"/>
+    <p:import href="fileset-copy.xpl"/>
 
-    <p:label-elements match="/*/d:file" attribute="href-before-move" label="resolve-uri(@href, base-uri(.))"/>
-    <p:xslt name="moved-fileset">
-        <p:with-param name="new-base" select="$new-base"/>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/fileset-move.xsl"/>
+    <p:documentation>Copy the fileset</p:documentation>
+    <px:fileset-copy name="copy">
+        <p:input port="source.in-memory">
+            <p:pipe step="main" port="source.in-memory"/>
         </p:input>
-    </p:xslt>
+        <p:with-option name="target" select="$target"/>
+        <p:with-option name="flatten" select="$flatten"/>
+        <p:with-option name="prefix" select="$prefix"/>
+    </px:fileset-copy>
 
-    <p:viewport match="/*/d:file" name="file">
-        <p:choose>
-            <p:when test="not(/*/@original-href)">
-                <p:variable name="on-disk" select="/*/@href-before-move"/>
-                <p:try>
-                    <p:group>
-                        <px:info>
-                            <p:with-option name="href" select="replace($on-disk,'^([^!]+)(!/.+)?$','$1')"/>
-                        </px:info>
-                        <p:choose>
-                            <p:when test="contains($on-disk,'!/')">
-                                <p:sink/>
-                                <px:unzip>
-                                    <p:with-option name="href" select="replace($on-disk,'^([^!]+)!/(.+)$','$1')"/>
-                                </px:unzip>
-                                <p:filter>
-                                    <p:with-option name="select"
-                                                   select="concat(
-                                                             '/c:zipfile/c:file[@name=&quot;',
-                                                             replace($on-disk,'^([^!]+)!/(.+)$','$2'),
-                                                             '&quot;]')"/>
-                                </p:filter>
-                            </p:when>
-                            <p:otherwise>
-                                <p:identity/>
-                            </p:otherwise>
-                        </p:choose>
-                        <p:count/>
-                    </p:group>
-                    <p:catch>
-                        <!-- FIXME: catch error with code "err:FU01" -->
-                        <p:identity>
-                            <p:input port="source">
-                                <p:inline>
-                                    <c:result>0</c:result>
-                                </p:inline>
-                            </p:input>
-                        </p:identity>
-                    </p:catch>
-                </p:try>
-                <p:choose>
-                    <p:when test="/*=0">
-                        <p:identity>
-                            <p:input port="source">
-                                <p:pipe port="current" step="file"/>
-                            </p:input>
-                        </p:identity>
-                    </p:when>
-                    <p:otherwise>
-                        <p:add-attribute match="/*" attribute-name="original-href">
-                            <p:input port="source">
-                                <p:pipe port="current" step="file"/>
-                            </p:input>
-                            <p:with-option name="attribute-value" select="$on-disk"/>
-                        </p:add-attribute>
-                    </p:otherwise>
-                </p:choose>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-    </p:viewport>
-    <p:identity name="fileset.with-annotations"/>
-    <p:delete match="/*/*/@href-before-move"/>
-    <p:identity name="fileset"/>
+    <p:documentation>Mark original files for removal</p:documentation>
+    <p:delete match="d:file[not(@original-href)]|
+                     d:file/@*[not(name()=('href','original-href'))]"/>
+    <p:add-attribute match="d:file" attribute-name="to-delete" attribute-value="true" name="delete"/>
+    <p:sink/>
 
-    <p:for-each>
-        <p:iteration-source>
-            <p:pipe port="in-memory.in" step="main"/>
-        </p:iteration-source>
-        <p:variable name="base-uri" select="base-uri(/*)"/>
-        <p:choose>
-            <p:xpath-context>
-                <p:pipe port="result" step="fileset.with-annotations"/>
-            </p:xpath-context>
-            <p:when test="$base-uri=/*/d:file/@href-before-move">
-                <p:variable name="new-href" select="(/*/d:file[@href-before-move=$base-uri])[1]/resolve-uri(@href,base-uri(.))">
-                    <p:pipe port="result" step="fileset.with-annotations"/>
-                </p:variable>
-                <px:set-base-uri>
-                    <p:with-option name="base-uri" select="$new-href"/>
-                </px:set-base-uri>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-    </p:for-each>
-    <p:identity name="in-memory"/>
+    <px:fileset-join name="mapping">
+        <p:input port="source">
+            <p:pipe step="copy" port="mapping"/>
+            <p:pipe step="delete" port="result"/>
+        </p:input>
+    </px:fileset-join>
+    <p:sink/>
 
 </p:declare-step>

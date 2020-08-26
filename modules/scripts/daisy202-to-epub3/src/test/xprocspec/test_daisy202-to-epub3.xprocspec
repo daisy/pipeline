@@ -56,7 +56,7 @@
                     <d:file href="result/epub/EPUB/Content/.xhtml" original-href="../resources/input/book1/content.html" media-type="application/xhtml+xml"/>
                     <d:file href="result/epub/EPUB/Content/.smil" original-href="result/epub/EPUB/Content/.smil" media-type="application/smil+xml"/>
                     <d:file href="result/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-                    <d:file href="result/epub/META-INF/container.xml"/>
+                    <d:file href="result/epub/META-INF/container.xml" media-type="application/xml"/>
                 </d:fileset>
             </x:document>
         </x:expect>

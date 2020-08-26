@@ -3,7 +3,6 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
-                xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
                 xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
                 exclude-inline-prefixes="#all"
                 px:input-filesets="dtbook"
@@ -104,7 +103,11 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
     
     <p:import href="dtbook-to-odt.convert.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/odt-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/odf-utils/library.xpl">
+        <p:documentation>
+            px:odf-store
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     
     <!-- =============== -->
@@ -166,17 +169,17 @@ See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templatin
         <!-- STORE ODT -->
         <!-- ========= -->
         
-        <odt:store name="store">
-            <p:input port="fileset.in">
+        <px:odf-store name="store">
+            <p:input port="source.fileset">
                 <p:pipe step="odt" port="fileset.out"/>
             </p:input>
-            <p:input port="in-memory.in">
+            <p:input port="source.in-memory">
                 <p:pipe step="odt" port="in-memory.out"/>
             </p:input>
             <p:with-option name="href" select="concat($output-dir, '/', replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1'), '.odt')">
                 <p:pipe step="main" port="source"/>
             </p:with-option>
-        </odt:store>
+        </px:odf-store>
     </p:group>
     
 </p:declare-step>

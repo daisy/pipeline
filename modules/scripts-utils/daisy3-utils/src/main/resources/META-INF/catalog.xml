@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri name="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"
-        uri="../xml/daisy3-library.xpl"/>
-       <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-       <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-       <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils"/>
-       <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+
+    <public publicId='-//NISO//DTD ncx 2005-1//EN' uri='../xml/dtd/ncx-2005-1.dtd'/>
+    <system systemId='http://www.daisy.org/z3986/2005/ncx-2005-1.dtd' uri='../xml/dtd/ncx-2005-1.dtd'/>
+
+    <public publicId='+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN' uri='../xml/dtd/oebpkg12.dtd'/>
+    <system systemId='http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd' uri='../xml/dtd/oebpkg12.dtd'/>
+
+    <public publicId='+//ISBN 0-9673008-1-9//DTD OEB 1.2 Entities//EN' uri='../xml/dtd/oeb12.ent'/>
+    <system systemId='http://openebook.org/dtds/oeb-1.2/oeb12.ent' uri='../xml/dtd/oeb12.ent'/>
+
+    <uri name="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl" uri="../xml/daisy3-library.xpl"/>
+
+    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
 </catalog>

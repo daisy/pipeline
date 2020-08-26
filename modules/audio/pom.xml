@@ -19,7 +19,7 @@
   <description>Aggregator for modules providing audio-related functionality</description>
 
   <modules>
-    <module>audio-utils/audio-common</module>
-    <module>audio-utils/audio-encoder-lame</module>
+    <module>audio-common</module>
+    <module>audio-encoder-lame</module>
   </modules>
 </project>

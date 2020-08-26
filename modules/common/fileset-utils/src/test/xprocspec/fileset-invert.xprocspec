@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/fileset-invert.xpl">
+
+    <x:scenario label="test">
+        <x:call step="px:fileset-invert">
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/Users/me/">
+                        <d:file href="A.html" original-href="A1.html"/>
+                        <d:file href="A.html" original-href="A2.html">
+                            <d:anchor id="a"/>
+                            <d:anchor id="b" original-id="d"/>
+                        </d:file>
+                        <d:file href="A.html">
+                            <d:anchor id="c" original-id="e"/>
+                        </d:file>
+                        <d:file href="B1.html" original-href="B.html"/>
+                        <d:file href="B2.html" original-href="B.html">
+                            <d:anchor id="a"/>
+                            <d:anchor id="b" original-id="d"/>
+                        </d:file>
+                        <d:file href="B.html">
+                            <d:anchor id="c" original-id="e"/>
+                        </d:file>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline">
+                <d:fileset xml:base="file:/Users/me/">
+                    <d:file href="A1.html" original-href="file:/Users/me/A.html"/>
+                    <d:file href="A2.html" original-href="file:/Users/me/A.html">
+                        <d:anchor id="a"/>
+                        <d:anchor id="d" original-id="b"/>
+                    </d:file>
+                    <d:file href="A.html">
+                        <d:anchor id="e" original-id="c"/>
+                    </d:file>
+                    <d:file href="B.html" original-href="file:/Users/me/B1.html"/>
+                    <d:file href="B.html" original-href="file:/Users/me/B2.html">
+                        <d:anchor id="a"/>
+                        <d:anchor id="d" original-id="b"/>
+                    </d:file>
+                    <d:file href="B.html">
+                        <d:anchor id="e" original-id="c"/>
+                    </d:file>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

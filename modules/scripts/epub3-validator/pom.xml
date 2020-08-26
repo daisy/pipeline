@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>epub3-validator</artifactId>
-  <version>1.1.7-SNAPSHOT</version>
+  <version>2.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 Validator</name>
@@ -27,24 +27,13 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>epubcheck-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>ace-adapter</artifactId>
+      <artifactId>epub-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
 
   <properties>
     <expose-services>
-      org.daisy.pipeline.modules.impl.Module_epub3_validator,
       org.daisy.pipeline.script.impl.XProcScript_epub3_validator
     </expose-services>
   </properties>

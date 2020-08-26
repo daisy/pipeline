@@ -46,13 +46,21 @@
 		</p:documentation>
 	</p:option>
 	
-	<p:import href="library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+		<p:documentation>
+			px:css-cascade
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+		<p:documentation>
+			px:parse-xml-stylesheet-instructions
+		</p:documentation>
+	</p:import>
 	
 	<px:parse-xml-stylesheet-instructions name="xml-stylesheet-instructions"/>
 	<p:sink/>
 	
-	<css:inline>
+	<px:css-cascade>
 		<p:input port="source">
 			<p:pipe step="main" port="source"/>
 		</p:input>
@@ -66,6 +74,6 @@
 		                         /@href),' ')">
 			<p:pipe step="xml-stylesheet-instructions" port="result"/>
 		</p:with-option>
-	</css:inline>
+	</px:css-cascade>
 	
 </p:declare-step>

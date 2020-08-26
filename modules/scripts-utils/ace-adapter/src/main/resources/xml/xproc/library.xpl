@@ -82,14 +82,11 @@ step. If this is not the case, the reports will contain a message that Ace was n
         </p:declare-step>
 
         <!-- DEPENDENCIES -->
-        <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
             <p:documentation>
-                px:html-load
-            </p:documentation>
-        </p:import>
-        <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
-            <p:documentation>
-                px:data
+                px:fileset-create
+                px:fileset-add-entry
+                px:fileset-load
             </p:documentation>
         </p:import>
 
@@ -109,25 +106,32 @@ step. If this is not the case, the reports will contain a message that Ace was n
                     <p:with-option name="temp-dir" select="$temp-dir"/>
                     <p:with-option name="lang" select="$lang"/>
                 </pxi:ace>
+                <p:sink/>
                 <!-- Load the json report -->
                 <p:group name="json">
                     <p:output port="result"/>
-                    <p:variable name="json-uri" select="/c:result/text()"/>
-                    <px:data content-type="text/json">
-                        <p:with-option name="href" select="$json-uri"/>
-                    </px:data>
+                    <px:fileset-create/>
+                    <px:fileset-add-entry media-type="text/json">
+                        <p:with-option name="href" select="/c:result/text()">
+                            <p:pipe step="ace" port="json-report-uri"/>
+                        </p:with-option>
+                    </px:fileset-add-entry>
+                    <px:fileset-load/>
+                    <p:add-attribute match="/*" attribute-name="content-type" attribute-value="text/json"/>
                     <p:add-attribute match="/*" attribute-name="encoding" attribute-value="UTF-8"/>
                 </p:group>
                 <p:sink/>
                 <!-- Load the html report -->
-                <p:identity>
-                    <p:input port="source">
-                        <p:pipe step="ace" port="html-report-uri"/>
-                    </p:input>
-                </p:identity>
-                <px:html-load name="html">
-                    <p:with-option name="href" select="/c:result/text()"/>
-                </px:html-load>
+                <p:group name="html">
+                    <p:output port="result"/>
+                    <px:fileset-create/>
+                    <px:fileset-add-entry media-type="text/html">
+                        <p:with-option name="href" select="/c:result/text()">
+                            <p:pipe step="ace" port="html-report-uri"/>
+                        </p:with-option>
+                    </px:fileset-add-entry>
+                    <px:fileset-load/>
+                </p:group>
                 <p:sink/>
             </p:when>
             <p:otherwise>

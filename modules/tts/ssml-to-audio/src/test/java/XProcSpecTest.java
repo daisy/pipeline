@@ -9,7 +9,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			pipelineModule("tts-common"),
-			pipelineModule("tts-helpers"),
 			pipelineModule("nlp-omnilang-lexer"),
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:calabash-adapter:?",

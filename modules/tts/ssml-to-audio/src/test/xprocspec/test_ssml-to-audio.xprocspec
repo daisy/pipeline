@@ -31,12 +31,11 @@
 					<config>
 						<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
 						<voice engine="mock-tts" name="mock-nl" lang="nl" gender="male-adult"/>
-						<!-- log can be found in output-dir/tts-log.xml -->
+						<!-- log can be found in "log" output -->
 						<property key="log" value="true"/>
 					</config>
 				</x:document>
 			</x:input>
-			<x:option name="output-dir" select="resolve-uri('output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the error">
 			<x:document type="errors"/>
@@ -75,12 +74,11 @@
 				<x:document type="inline">
 					<config>
 						<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
-						<!-- log can be found in output-dir/tts-log.xml -->
+						<!-- log can be found in "log" output -->
 						<property key="log" value="true"/>
 					</config>
 				</x:document>
 			</x:input>
-			<x:option name="output-dir" select="resolve-uri('output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the error">
 			<x:document type="errors"/>

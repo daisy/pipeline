@@ -26,6 +26,11 @@
         px:error
       </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+      <p:documentation>
+        px:css-cascade
+      </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
       <p:documentation>
         css:adjust-boxes
@@ -35,7 +40,6 @@
         css:eval-target-text
         css:flow-from
         css:flow-into
-        css:inline
         css:label-targets
         css:make-anonymous-block-boxes
         css:make-anonymous-inline-boxes
@@ -137,7 +141,7 @@
                     <p:documentation>
                         Apply possible relative rules.
                     </p:documentation>
-                    <css:inline/>
+                    <px:css-cascade/>
                 </p:viewport>
                 <pxi:recursive-parse-stylesheet-and-make-pseudo-elements/>
             </p:when>
@@ -660,7 +664,7 @@
                         css:page-break-inside, css:volume-break-before and css:volume-break-after
                         attributes. (Needs to be done a second time because the box tree has been
                         broken up by css:split. css:page-break-before='right' will now be propagated
-                        all the wait to the root box.)
+                        all the way to the root box.)
                     </p:documentation>
                 </pxi:propagate-page-break>
                 <p:group px:progress=".05">

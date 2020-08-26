@@ -59,6 +59,7 @@
 				</x:document>
 			</x:input>
 			<x:input port="in-memory.in"/>
+			<x:option name="date" select="'2020-03-03'"/>
 			<x:option name="output-dir" select="resolve-uri('result/')"/>
 		</x:call>
 		<x:context label="the fileset.out port">
@@ -131,11 +132,87 @@
 					<body>
 						<seq dur="00:00:02.4829932">
 							<par endsync="last" id="sm_3" system-required="pagenumber-on">
-								<!--
-								    FIXME: generated ids make test brittle
-								-->
-								<text id="d4039e23" src="ncc.html#ncx_2"/>
-								<audio id="d4039e25" src="aud001.mp3" clip-begin="00:00:00" clip-end="00:00:02.4829932"/>
+								<text id="id_2" src="ncc.html#ncx_2"/>
+								<audio id="id_3" src="aud001.mp3" clip-begin="00:00:00" clip-end="00:00:02.4829932"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+		<x:context label="another SMIL file">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/0002.smil')]"/>
+		</x:context>
+		<x:expect label="another SMIL file" type="compare">
+			<x:document type="inline">
+				<smil xmlns="">
+					<head>
+						<meta name="dc:format" content="Daisy 2.02"/>
+						<meta name="ncc:generator" content="DAISY Pipeline 2"/>
+						<meta name="dc:identifier" content="ghBOOK1211212736"/>
+						<meta name="ncc:totalElapsedTime" content="00:00:02.4829932"/>
+						<meta name="ncc:timeInThisSmil" content="00:01:16.7849887"/>
+						<layout>
+							<region id="txtView"/>
+						</layout>
+					</head>
+					<body>
+						<seq dur="00:01:16.7849887">
+							<par endsync="last" id="sm_5">
+								<text id="id_2" src="ncc.html#ncx_3"/>
+								<audio id="id_3" src="aud002.mp3" clip-begin="00:00:00" clip-end="00:00:02.3460091"/>
+							</par>
+							<par endsync="last" id="sm_6">
+								<text id="id_4" src="ncc.html#ncx_3"/>
+								<audio id="id_5" src="aud002.mp3" clip-begin="00:00:02.3460091" clip-end="00:00:05.3929932"/>
+							</par>
+							<par endsync="last" id="sm_7">
+								<text id="id_6" src="ncc.html#ncx_3"/>
+								<audio id="id_7" src="aud002.mp3" clip-begin="00:00:05.3929932" clip-end="00:00:08.5849887"/>
+							</par>
+							<par endsync="last" system-required="pagenumber-on" id="sm_9">
+								<text id="id_9" src="ncc.html#ncx_4"/>
+								<audio id="id_10" src="aud002.mp3" clip-begin="00:00:08.5849887" clip-end="00:00:11.1179819"/>
+							</par>
+							<par endsync="last" id="sm_10">
+								<text id="id_11" src="ncc.html#ncx_3"/>
+								<audio id="id_12" src="aud002.mp3" clip-begin="00:00:11.1179819" clip-end="00:00:20.1039909"/>
+							</par>
+							<par endsync="last" id="sm_11">
+								<text id="id_13" src="ncc.html#ncx_3"/>
+								<audio id="id_14" src="aud002.mp3" clip-begin="00:00:20.1039909" clip-end="00:00:33.7299773"/>
+							</par>
+							<par endsync="last" id="sm_12">
+								<text id="id_15" src="ncc.html#ncx_3"/>
+								<audio id="id_16" src="aud002.mp3" clip-begin="00:00:33.7299773" clip-end="00:00:44.2579819"/>
+							</par>
+							<par endsync="last" id="sm_13">
+								<text id="id_17" src="ncc.html#ncx_3"/>
+								<audio id="id_18" src="aud002.mp3" clip-begin="00:00:44.2579819" clip-end="00:00:50.4649887"/>
+							</par>
+							<par endsync="last" id="sm_14">
+								<text id="id_19" src="ncc.html#ncx_3"/>
+								<audio id="id_20" src="aud002.mp3" clip-begin="00:00:50.4649887" clip-end="00:00:53.5409751"/>
+							</par>
+							<par endsync="last" id="sm_15">
+								<text id="id_21" src="ncc.html#ncx_3"/>
+								<audio id="id_22" src="aud002.mp3" clip-begin="00:00:53.5409751" clip-end="00:00:57.4579819"/>
+							</par>
+							<par endsync="last" id="sm_16">
+								<text id="id_23" src="ncc.html#ncx_3"/>
+								<audio id="id_24" src="aud002.mp3" clip-begin="00:00:57.4579819" clip-end="00:01:03.4769841"/>
+							</par>
+							<par endsync="last" id="sm_17">
+								<text id="id_25" src="ncc.html#ncx_3"/>
+								<audio id="id_26" src="aud002.mp3" clip-begin="00:01:03.4769841" clip-end="00:01:07.3589796"/>
+							</par>
+							<par endsync="last" id="sm_18">
+								<text id="id_27" src="ncc.html#ncx_3"/>
+								<audio id="id_28" src="aud002.mp3" clip-begin="00:01:07.3589796" clip-end="00:01:11.9359864"/>
+							</par>
+							<par endsync="last" id="sm_19">
+								<text id="id_29" src="ncc.html#ncx_3"/>
+								<audio id="id_30" src="aud002.mp3" clip-begin="00:01:11.9359864" clip-end="00:01:16.7849887"/>
 							</par>
 						</seq>
 					</body>
@@ -181,9 +258,6 @@
 						<meta name="ncc:footnotes" content="0"/>
 						<meta name="ncc:sidebars" content="0"/>
 						<meta name="ncc:maxPageNormal" content="24"/>
-						<!--
-						    FIXME: brittle test because of data
-						-->
 						<meta name="ncc:producedDate" content="2020-03-03"/>
 						<meta name="ncc:tocItems" content="44"/>
 					</head>

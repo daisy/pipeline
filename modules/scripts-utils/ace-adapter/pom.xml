@@ -38,7 +38,7 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>html-utils</artifactId>
+      <artifactId>fileset-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

@@ -13,11 +13,18 @@
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
 
-    <p:output port="fileset.out" primary="true">
-        <p:pipe port="result" step="fileset.result"/>
-    </p:output>
+    <p:output port="fileset.out" primary="true"/>
     <p:output port="in-memory.out" sequence="true">
-        <p:pipe step="zedai-to-html" port="html-files"/>
+        <p:pipe step="html" port="in-memory"/>
+        <p:pipe step="resources" port="in-memory"/>
+    </p:output>
+
+    <p:output port="mapping">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>A <code>d:fileset</code> document that contains a mapping from input file (ZedAI) to
+            output files (HTML) and contained <code>id</code> attributes.</p>
+        </p:documentation>
+        <p:pipe step="html" port="mapping"/>
     </p:output>
 
     <p:option name="output-dir" required="true"/>
@@ -29,17 +36,34 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+            px:fileset-filter
+            px:fileset-filter-in-memory
+            px:fileset-load
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:assert
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-chunker
+        </p:documentation>
+    </p:import>
 
     <!--=========================================================================-->
     <!-- GET ZEDAI FROM FILESET                                                  -->
     <!--=========================================================================-->
 
     <p:documentation>Retreive the ZedAI document from the input fileset.</p:documentation>
-    <p:group name="zedai-input">
-        <p:output port="result"/>
+    <p:group>
         <px:fileset-load media-types="application/z3998-auth+xml">
             <p:input port="in-memory">
                 <p:pipe step="main" port="in-memory.in"/>
@@ -57,164 +81,159 @@
     <!--=========================================================================-->
 
     <p:documentation>Convert the ZedAI Document into several XHTML Documents</p:documentation>
-    <p:group name="zedai-to-html">
-        <p:output port="result" primary="true" sequence="true"/>
-        <p:output port="html-files" sequence="true">
-            <p:pipe port="html-files" step="zedai-to-html.iterate"/>
+    <p:group name="html">
+        <p:output port="fileset" primary="true">
+            <p:pipe step="zedai-to-html.fileset" port="result"/>
         </p:output>
-        <p:variable name="zedai-basename"
-            select="replace(replace(//*[@media-type='application/z3998-auth+xml']/@href,'^.+/([^/]+)$','$1'),'^(.+)\.[^\.]+$','$1')">
-            <p:pipe port="fileset.in" step="main"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="zedai-to-html.html-chunks" port="result"/>
+        </p:output>
+        <p:output port="mapping">
+            <p:pipe step="compose-mapping" port="result"/>
+        </p:output>
+        <p:variable name="zedai-basename" select="base-uri(/*)">
         </p:variable>
-        <p:variable name="result-basename" select="concat($output-dir,$zedai-basename,'.xhtml')"/>
-        <p:xslt name="zedai-to-html.html-single">
-            <p:input port="source">
-                <p:pipe port="result" step="zedai-input"/>
-            </p:input>
-            <p:input port="stylesheet">
-                <p:document href="http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl"/>
-            </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-        </p:xslt>
-        <px:set-base-uri>
-            <p:with-option name="base-uri" select="$result-basename"/>
-        </px:set-base-uri>
-        <p:choose>
+        <p:variable name="result-basename" select="concat(
+                                                     $output-dir,
+                                                     replace(replace($zedai-basename,'^.+/([^/]+)$','$1'),'^(.+)\.[^\.]+$','$1'),
+                                                     '.xhtml')">
+            <p:empty/>
+        </p:variable>
+        <p:group name="zedai-to-html.html-single">
+            <p:output port="result" primary="true">
+                <p:pipe step="result" port="result"/>
+            </p:output>
+            <p:output port="mapping">
+                <p:pipe step="mapping" port="result"/>
+            </p:output>
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="../xslt/zedai-to-html.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <px:set-base-uri name="result">
+                <p:with-option name="base-uri" select="$result-basename"/>
+            </px:set-base-uri>
+            <p:template name="mapping">
+                <p:input port="template">
+                    <p:inline>
+                        <d:fileset>
+                            <d:file href="{base-uri(/*)}" original-href="{$zedai-basename}"/>
+                        </d:fileset>
+                    </p:inline>
+                </p:input>
+                <p:with-param name="zedai-basename" select="$zedai-basename"/>
+            </p:template>
+            <p:sink/>
+        </p:group>
+        <p:choose name="zedai-to-html.html-chunks">
+            <p:documentation>Split XHTML document</p:documentation>
             <p:when test="$chunk='true'">
-                <p:output port="result" sequence="true"/>
-                <px:html-chunker>
+                <p:output port="result" sequence="true" primary="true"/>
+                <p:output port="mapping">
+                    <p:pipe step="chunker" port="mapping"/>
+                </p:output>
+                <px:html-chunker name="chunker">
                     <p:with-option name="max-chunk-size" select="$chunk-size"/>
                 </px:html-chunker>
             </p:when>
             <p:otherwise>
-                <p:output port="result" sequence="true"/>
+                <p:output port="result" sequence="true" primary="true"/>
+                <p:output port="mapping">
+                    <p:inline><d:fileset/></p:inline>
+                </p:output>
                 <p:identity/>
             </p:otherwise>
         </p:choose>
-        <p:for-each name="zedai-to-html.iterate">
-            <p:output port="fileset" primary="true"/>
-            <p:output port="html-files" sequence="true">
-                <p:pipe port="result" step="zedai-to-html.iterate.html"/>
-            </p:output>
-            <p:variable name="result-uri" select="base-uri(/*)"/>
-            <p:identity name="zedai-to-html.iterate.html"/>
+        <p:for-each>
+            <p:documentation>Construct HTML fileset</p:documentation>
+            <p:identity name="chunk"/>
+            <p:sink/>
             <px:fileset-create>
                 <p:with-option name="base" select="$output-dir"/>
             </px:fileset-create>
             <px:fileset-add-entry media-type="application/xhtml+xml">
-                <p:with-option name="href" select="$result-uri"/>
+                <p:input port="entry">
+                    <p:pipe step="chunk" port="result"/>
+                </p:input>
             </px:fileset-add-entry>
         </p:for-each>
+        <px:fileset-join px:message="Converted to XHTML." name="zedai-to-html.fileset"/>
+        <p:sink/>
+        <px:fileset-compose name="compose-mapping">
+            <p:input port="source">
+                <p:pipe step="zedai-to-html.html-single" port="mapping"/>
+                <p:pipe step="zedai-to-html.html-chunks" port="mapping"/>
+            </p:input>
+        </px:fileset-compose>
+        <p:sink/>
     </p:group>
     
     <!--=========================================================================-->
     <!-- CONSOLIDATE THE OUTPUT FILESET                                          -->
     <!--=========================================================================-->
 
-    <!--Construct the resources fileset-->
     <p:identity>
         <p:input port="source">
             <p:pipe step="main" port="fileset.in"/>
         </p:input>
     </p:identity>
     <p:group name="resources">
-        <p:output port="result"/>
-        <p:variable name="fileset-base" select="base-uri(/*)"/>
-        <p:variable name="zedai-uri" select="resolve-uri(//d:file[@media-type='application/z3998-auth+xml']/@href,$fileset-base)"/>
-        <p:delete match="d:file[@media-type='application/z3998-auth+xml']"/>
-        <p:viewport match="/*/*">
-            <p:documentation>Make sure that the files in the fileset is relative to the ZedAI file.</p:documentation>
-            <p:variable name="original-uri" select="(/*/@original-href, resolve-uri(/*/@href,$fileset-base))[1]"/>
-            <p:variable name="uri" select="resolve-uri(/*/@href,$fileset-base)"/>
-            <p:variable name="base" select="$zedai-uri"/>
-            <px:assert message="The URI to be made relative should not be empty (original URI: $1 | URI: $2 | ZedAI base: $3)">
-                <p:with-option name="param1" select="$original-uri"/>
-                <p:with-option name="param2" select="$uri"/>
-                <p:with-option name="param3" select="$base"/>
-                <p:with-option name="test" select="not($uri='')"/>
-            </px:assert>
-            <px:assert message="The base URI that the resource hrefs should be relative against should not be empty (original URI: $1 | URI: $2 | ZedAI base: $3)">
-                <p:with-option name="param1" select="$original-uri"/>
-                <p:with-option name="param2" select="$uri"/>
-                <p:with-option name="param3" select="$base"/>
-                <p:with-option name="test" select="not($base='')"/>
-            </px:assert>
-            <p:xslt>
-                <p:with-param name="uri" select="$uri"/>
-                <p:with-param name="base" select="$base"/>
-                <p:input port="stylesheet">
-                    <p:inline>
-                        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" version="2.0">
-                            <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-                            <xsl:param name="uri" required="yes"/>
-                            <xsl:param name="base" required="yes"/>
-                            <xsl:template match="/*">
-                                <xsl:copy>
-                                    <xsl:copy-of select="@*"/>
-                                    <xsl:attribute name="href" select="pf:relativize-uri($uri,$base)"/>
-                                </xsl:copy>
-                            </xsl:template>
-                        </xsl:stylesheet>
-                    </p:inline>
-                </p:input>
-            </p:xslt>
-            <p:identity/>
-        </p:viewport>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$output-dir"/>
-        </p:add-attribute>
+        <p:documentation>
+            Fileset with everything except the ZedAI file, rebased from the ZedAI file to $output-dir.
+        </p:documentation>
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="in-memory" port="result"/>
+        </p:output>
+        <p:variable name="zedai-uri" select="(//d:file[@media-type='application/z3998-auth+xml'])[1]/resolve-uri(@href,base-uri(.))"/>
+        <px:fileset-filter not-media-types="application/z3998-auth+xml"/>
+        <px:fileset-rebase>
+            <p:with-option name="new-base" select="$zedai-uri"/>
+        </px:fileset-rebase>
+        <px:set-base-uri>
+            <p:with-option name="base-uri" select="$output-dir"/>
+        </px:set-base-uri>
+        <p:documentation>
+            Remove files that are neither in memory nor on disk
+        </p:documentation>
+        <p:identity name="fileset.dirty"/>
+        <!-- copy resources from in-memory.in port -->
+        <px:fileset-filter-in-memory name="fileset.in-memory">
+            <p:input port="source.in-memory">
+                <p:pipe step="main" port="in-memory.in"/>
+            </p:input>
+        </px:fileset-filter-in-memory>
+        <px:fileset-load name="in-memory">
+            <p:input port="in-memory">
+                <p:pipe step="main" port="in-memory.in"/>
+            </p:input>
+        </px:fileset-load>
+        <p:sink/>
+        <p:delete match="d:file[not(@original-href)]" name="fileset.on-disk">
+            <p:input port="source">
+                <p:pipe step="fileset.dirty" port="result"/>
+            </p:input>
+        </p:delete>
+        <p:sink/>
+        <px:fileset-join>
+            <p:input port="source">
+                <p:pipe step="fileset.in-memory" port="result"/>
+                <p:pipe step="fileset.on-disk" port="result"/>
+            </p:input>
+        </px:fileset-join>
         <!-- TODO: remove resources from fileset that are not referenced from any of the in-memory files -->
     </p:group>
-    
-    <px:fileset-join name="package-doc.join-filesets">
+    <p:sink/>
+
+    <px:fileset-join>
         <p:input port="source">
-            <p:pipe port="result" step="zedai-to-html"/>
-            <p:pipe port="result" step="resources"/>
+            <p:pipe step="html" port="fileset"/>
+            <p:pipe step="resources" port="fileset"/>
         </p:input>
     </px:fileset-join>
-    
-    <p:group name="fileset.result">
-        <p:output port="result"/>
-        <p:variable name="fileset-base" select="base-uri(/*)"/>
-        <p:identity name="fileset.dirty"/>
-        <p:wrap-sequence wrapper="wrapper">
-            <p:input port="source">
-                <p:pipe step="zedai-to-html" port="html-files"/>
-            </p:input>
-        </p:wrap-sequence>
-        <p:delete match="/*/*/*" name="wrapped-in-memory"/>
-        <p:identity>
-            <p:input port="source">
-                <p:pipe port="result" step="fileset.dirty"/>
-            </p:input>
-        </p:identity>
-        <p:viewport match="//d:file">
-            <p:variable name="file-href" select="resolve-uri(/*/@href,$fileset-base)"/>
-            <p:variable name="file-original" select="if (/*/@original-href) then resolve-uri(/*/@original-href) else ''"/>
-            <p:choose>
-                <p:xpath-context>
-                    <p:pipe port="result" step="wrapped-in-memory"/>
-                </p:xpath-context>
-                <p:when test="not($file-original) and not(/*/*[resolve-uri(base-uri(.)) = $file-href])">
-                    <!-- Fileset contains file reference to a file that is neither stored on disk nor in memory; discard it -->
-                    <p:sink/>
-                    <p:identity>
-                        <p:input port="source">
-                            <p:empty/>
-                        </p:input>
-                    </p:identity>
-                    <px:message>
-                        <p:with-option name="message" select="concat('skipping ',$file-href)"/>
-                    </px:message>
-                </p:when>
-                <p:otherwise>
-                    <!-- File refers to a document on disk or in memory; keep it -->
-                    <p:identity/>
-                </p:otherwise>
-            </p:choose>
-        </p:viewport>
-    </p:group>
 
 </p:declare-step>

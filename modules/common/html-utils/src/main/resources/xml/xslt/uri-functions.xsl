@@ -14,11 +14,16 @@
     -->
     <xsl:function name="pf:html-base-uri" as="xs:anyURI?">
         <xsl:param name="arg" as="node()?"/>
+        <xsl:sequence select="pf:html-base-uri($arg,pf:document-uri($arg))"/>
+    </xsl:function>
+    <xsl:function name="pf:html-base-uri" as="xs:anyURI?">
+        <xsl:param name="arg" as="node()?"/>
+        <xsl:param name="document-uri" as="xs:anyURI?"/>
         <xsl:sequence select="if (exists($arg/root(.)/xhtml:html/xhtml:head/xhtml:base[@href]))
                               then resolve-uri(
                                      normalize-space($arg/root(.)/xhtml:html/xhtml:head/xhtml:base/@href[1]),
-                                     pf:document-uri($arg))
-                              else pf:document-uri($arg)"/>
+                                     $document-uri)
+                              else $document-uri"/>
     </xsl:function>
     
 </xsl:stylesheet>

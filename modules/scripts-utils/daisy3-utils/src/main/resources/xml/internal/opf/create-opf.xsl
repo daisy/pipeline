@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns="http://openebook.org/namespaces/oeb-package/1.0/"
-		exclude-result-prefixes="xsl d pf xs" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns="http://openebook.org/namespaces/oeb-package/1.0/"
+                exclude-result-prefixes="xsl d pf xs">
 
   <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
@@ -12,14 +12,14 @@
   <!-- input: the fileset -->
   <!-- output: the the opf file -->
 
-  <xsl:param name="output-dir"/>
+  <xsl:param name="output-base-uri"/>
   <xsl:param name="title"/>
   <xsl:param name="uid"/>
   <xsl:param name="total-time"/>
   <xsl:param name="lang"/>
+  <xsl:param name="date"/>
   <xsl:param name="publisher"/>
   <xsl:param name="audio-only"/>
-  <xsl:param name="mathml-xslt-fallback" select="''"/>
 
   <xsl:template match="/">
     <xsl:variable name="has-audio" select="boolean(//d:file[contains(@media-type, 'audio')][1])"/>
@@ -30,7 +30,8 @@
 	<dc-metadata xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/">
 	  <dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
 	  <dc:Language><xsl:value-of select="$lang"/></dc:Language>
-	  <dc:Date><xsl:value-of select="format-date(current-date(), '[Y0001]-[M01]-[D01]')"/></dc:Date>
+	  <dc:Date><xsl:value-of select="if ($date[.!='']) then $date
+	                                 else format-date(current-date(), '[Y0001]-[M01]-[D01]')"/></dc:Date>
 	  <dc:Publisher><xsl:value-of select="$publisher"/></dc:Publisher>
 	  <dc:Title><xsl:value-of select="$title"/></dc:Title>
 	  <dc:Identifier id="uid"><xsl:value-of select="$uid"/></dc:Identifier>
@@ -44,17 +45,20 @@
 		content="{concat(
 			 if ($audio-only='true') then 'audio' else (if ($has-audio) then 'audio,text' else 'text'),
 			 if ($has-image) then ',image' else '')}"/>
-	  <xsl:if test="$mathml-xslt-fallback != ''">
+	  <xsl:if test="//d:file[@role='mathml-xslt-fallback']">
 	    <meta name="z39-86-extension-version"
 		  scheme="http://www.w3.org/1998/Math/MathML"
 		  content="1.0" />
 	    <meta name="DTBook-XSLTFallback"
 		  scheme="http://www.w3.org/1998/Math/MathML"
-		  content="{pf:relativize-uri($mathml-xslt-fallback, $output-dir)}" />
+		  content="{pf:relativize-uri(//d:file[@role='mathml-xslt-fallback']
+                                      /resolve-uri(@href,base-uri(.)), $output-base-uri)}" />
 	  </xsl:if>
 	</x-metadata>
       </metadata>
       <manifest>
+	<!-- list OPF itself -->
+	<item href="{pf:relativize-uri($output-base-uri, $output-base-uri)}" id="opf" media-type="text/xml"/>
 	<xsl:call-template name="manifest"/>
       </manifest>
       <spine>
@@ -86,7 +90,7 @@
 	  </xsl:otherwise>
 	</xsl:choose>
       </xsl:variable>
-      <item href="{pf:relativize-uri(resolve-uri(@href, base-uri(.)), $output-dir)}"
+      <item href="{pf:relativize-uri(resolve-uri(@href, base-uri(.)), $output-base-uri)}"
 	    id="{$id}" media-type="{@media-type}"/>
     </xsl:for-each>
   </xsl:template>

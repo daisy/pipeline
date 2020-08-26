@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:diagram="http://www.daisy.org/ns/z3998/authoring/features/description/"
                script="../../main/resources/xml/xproc/html-to-epub3.convert.xpl">
 
-	<x:scenario label="minimal">
+	<x:scenario label="test">
 		<x:call step="px:html-to-epub3">
 			<x:input port="input.fileset">
 				<x:document type="inline" xml:base="file:/tmp/">
 					<d:fileset>
 						<d:file href="foo.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="desc.xml" media-type="application/z3998-auth-diagram+xml" kind="description"/>
+						<d:file href="image.svg" media-type="image/svg+xml"/>
+						<d:file href="style%201.css" media-type="text/css"/>
 					</d:fileset>
 				</x:document>
 			</x:input>
@@ -19,15 +25,50 @@
 						<head>
 							<meta charset="UTF-8"/>
 							<title>Minimal HTML</title>
+							<link rel="stylesheet" type="text/css" href="style%201.css"/>
 						</head>
 						<body>
 							<section>
 								<h1>Chapter</h1>
 								<p>Paragraph</p>
 								<p>Another paragraph</p>
+								<p>
+									<img src="image.svg" alt="image"/>
+									<a href="desc.xml">image description</a>
+								</p>
+								<p><img src="missing-image.svg"/></p>
 							</section>
 						</body>
 					</html>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/desc.xml">
+					<description xmlns="http://www.daisy.org/ns/z3998/authoring/features/description/" xml:id="desc">
+						<body>
+							<summary>Summary text</summary>
+							<longdesc>Lengthier description</longdesc>
+						</body>
+					</description>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/image.svg">
+					<svg xmlns="http://www.w3.org/2000/svg" width="240" height="100" viewBox="0 0 240 100">
+						<title>Hello World</title>
+						<g><text x="10" y="50">Hello World</text></g>
+					</svg>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/style%201.css">
+					<c:data content-type="text/plain">
+						h1 { text-transform: uppercase }
+					</c:data>
+				</x:document>
+			</x:input>
+			<x:input port="metadata">
+				<x:document type="inline">
+					<metadata xmlns="http://www.idpf.org/2007/opf" prefix="dc: http://purl.org/dc/elements/1.1/">
+						<dc:title>My title</dc:title>
+						<dc:language>en</dc:language>
+						<dc:publisher>Me</dc:publisher>
+						<dc:identifier id="id-id">my-id</dc:identifier>
+					</metadata>
 				</x:document>
 			</x:input>
 			<x:option name="output-dir" select="resolve-uri('output-dir/')"/>
@@ -39,32 +80,96 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="output-dir/epub/EPUB/foo.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="output-dir/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="output-dir/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="output-dir/epub/META-INF/container.xml"/>
+					<d:file href="output-dir/EPUB/desc.xhtml" media-type="application/xhtml+xml" kind="description"/>
+					<d:file href="output-dir/EPUB/foo.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="output-dir/EPUB/image.svg" media-type="image/svg+xml"/>
+					<d:file href="output-dir/EPUB/style_1.css" media-type="text/css"/>
+					<d:file href="output-dir/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="output-dir/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="output-dir/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
-		<x:context label="the result XHTML document">
-			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('output-dir/epub/EPUB/foo.xhtml')]"/>
+		<x:context label="the result foo.xhtml XHTML document">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('output-dir/EPUB/foo.xhtml')]"/>
 		</x:context>
-		<x:expect label="the result XHTML document"
+		<x:expect label="the result foo.xhtml XHTML document"
 		          type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
 			<x:document type="inline">
 				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 					<head>
 						<meta charset="UTF-8"/>
 						<title>Minimal HTML</title>
+						<link rel="stylesheet" type="text/css" href="style_1.css"/>
 					</head>
 					<body id="a">
 						<section id="b">
 							<h1 id="c">Chapter</h1>
 							<p>Paragraph</p>
 							<p>Another paragraph</p>
+							<p>
+								<img src="image.svg" alt="image"/>
+								<a href="desc.xhtml">image description</a>
+							</p>
+							<p/>
 						</section>
 					</body>
 				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="the result desc.xhtml XHTML document">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('output-dir/EPUB/desc.xhtml')]"/>
+		</x:context>
+		<x:expect label="the result desc.xhtml XHTML document"
+		          type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+					<head>
+						<style type="text/css">body{ font-family:arial, sans-serif; font-size:1em } h1{ font-size:1.2em; } h2{ font-size:1.1em; color:rgb(0, 0, 110) } h2.about{ font-size:1em; color:rgb(0, 0, 0) } div.container{ border-top:solid 1px rgb(0, 0, 255); width:80%; padding:5px; margin-bottom:10px; background-color:rgb(255, 255, 255) } div.about, div.access{ font-size:0.9em } div.annotation{ font-size:0.8em; font-weight:bold; width:60%; border-top:1px solid rgb(0, 0, 0) } p.anno-hd{ color:rgb(0, 0, 110) } img{ color:rgb(0, 0, 255) } ul{ list-style-type:none } .center{ text-align:center }
+						</style>
+					</head>
+					<body>
+						<h1>DIAGRAM Description</h1>
+						<details>
+							<div id="" class="container">
+								<h2>Summary</h2>Summary text
+							</div>
+							<div id="" class="container">
+								<h2>Long Description</h2>Lengthier description
+							</div>
+						</details>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="the package document">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('output-dir/EPUB/package.opf')]"/>
+		</x:context>
+		<x:expect label="the result" type="custom" href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"
+		          step="x:epub3-compare-package-doc">
+			<x:document type="inline">
+				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="id-id" version="3.0" prefix="dcterms: http://purl.org/dc/terms/">
+					<metadata>
+						<dc:title>My title</dc:title>
+						<dc:identifier id="id-id">my-id</dc:identifier>
+						<dc:language>en</dc:language>
+						<meta property="dcterms:modified">2019-07-26T15:44:52Z</meta>
+						<dc:publisher>Me</dc:publisher>
+						<dc:format id="format2">EPUB3</dc:format>
+					</metadata>
+					<manifest>
+						<item href="foo.xhtml" media-type="application/xhtml+xml" id="item_1"/>
+						<item href="image.svg" media-type="image/svg+xml" id="item_2" properties="svg"/>
+						<item href="style_1.css" media-type="text/css" id="item_3"/>
+						<item href="desc.xhtml" media-type="application/xhtml+xml" id="item_4"/>
+						<item href="toc.xhtml" media-type="application/xhtml+xml" id="item_5" properties="nav"/>
+					</manifest>
+					<spine>
+						<itemref idref="item_1" id="itemref_1"/>
+						<itemref idref="item_2" id="itemref_2" linear="no"/>
+						<itemref idref="item_4" id="itemref_3" linear="no"/>
+					</spine>
+				</package>
 			</x:document>
 		</x:expect>
 	</x:scenario>

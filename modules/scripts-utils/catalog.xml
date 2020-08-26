@@ -1,15 +1,12 @@
 <?xml version="1.0"?>
 <!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-  <nextCatalog catalog="./common-entities/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./daisy202-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./daisy3-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./dtbook-utils/src/main/resources/META-INF/catalog.xml"/>
-  <nextCatalog catalog="./epub3-nav-utils/src/main/resources/META-INF/catalog.xml"/>
-  <nextCatalog catalog="./epub3-ocf-utils/src/main/resources/META-INF/catalog.xml"/>
-  <nextCatalog catalog="./epub3-pub-utils/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./epub-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./epubcheck-adapter/src/main/resources/META-INF/catalog.xml"/>
-  <nextCatalog catalog="./mediaoverlay-utils/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./smil-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./metadata-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./zedai-utils/src/main/resources/META-INF/catalog.xml"/>
 </catalog>

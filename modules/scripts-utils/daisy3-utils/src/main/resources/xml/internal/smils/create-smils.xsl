@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-    xmlns:math="http://www.w3.org/1998/Math/MathML"
-    xmlns="http://www.w3.org/2001/SMIL20/" exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
+                xmlns="http://www.w3.org/2001/SMIL20/"
+                exclude-result-prefixes="#all">
 
   <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
   <xsl:param name="mo-dir"/>
-  <xsl:param name="audio-dir"/>
-  <xsl:param name="content-dir"/>
-  <xsl:param name="content-uri"/>
   <xsl:param name="uid"/>
   <xsl:param name="audio-only"/>
 
@@ -20,8 +18,8 @@
     <xsl:value-of select="substring-before($smilref, '#')"/>
   </xsl:function>
 
-  <xsl:variable name="audio-dir-rel" select="pf:relativize-uri($audio-dir, $mo-dir)"/>
-  <xsl:variable name="content-doc-rel" select="pf:relativize-uri($content-uri, $mo-dir)"/>
+  <xsl:variable name="content-doc-uri" select="base-uri(/*)"/>
+  <xsl:variable name="content-doc-rel" select="pf:relativize-uri($content-doc-uri, $mo-dir)"/>
   <xsl:variable name="ref-targets" select="' note annotation '"/>
 
   <xsl:variable name="custom-attrs">
@@ -36,6 +34,27 @@
     </customAttributes>
   </xsl:variable>
 
+  <!-- d:audio-clips document with @src attributes relativized against $mo-dir -->
+  <xsl:variable name="audio-map">
+    <xsl:variable name="audio-map" select="collection()[/d:audio-clips]"/>
+    <xsl:variable name="audio-map-uri" select="base-uri($audio-map/*)"/>
+    <xsl:for-each select="$audio-map/*">
+      <xsl:copy>
+        <xsl:for-each-group select="*" group-by="@src">
+          <xsl:variable name="src" select="current-grouping-key()"/>
+          <xsl:variable name="src" select="resolve-uri($src,$audio-map-uri)"/>
+          <xsl:variable name="src" select="pf:relativize-uri($src,$mo-dir)"/>
+          <xsl:for-each select="current-group()">
+            <xsl:copy>
+              <xsl:sequence select="@* except @src"/>
+              <xsl:attribute name="src" select="$src"/>
+            </xsl:copy>
+          </xsl:for-each>
+        </xsl:for-each-group>
+      </xsl:copy>
+    </xsl:for-each>
+  </xsl:variable>
+
   <xsl:key name="clips" match="*[@idref]" use="@idref"/>
   <xsl:key name="targets" match="*[@id and contains($ref-targets, concat(' ', local-name(), ' '))]" use="@id"/>
 
@@ -44,7 +63,7 @@
     <xsl:variable name="root" select="/"/>
     <!-- This could be optimized by not recursing over the nodes with a @smilref. -->
     <xsl:for-each-group select="//*[@smilref]" group-by="d:smil(@smilref)">
-      <xsl:result-document href="{resolve-uri(current-grouping-key(), $content-dir)}">
+      <xsl:result-document href="{resolve-uri(current-grouping-key(), $content-doc-uri)}">
 	<smil>
 	  <head>
 	     <meta content="{$uid}" name="dtb:uid"/>
@@ -128,7 +147,7 @@
   </xsl:template>
 
   <xsl:template name="add-audio">
-    <xsl:variable name="clip" select="key('clips', @id, collection()[/d:audio-clips])"/>
+    <xsl:variable name="clip" select="key('clips', @id, $audio-map)"/>
     <xsl:if test="$audio-only='false'">
       <text src="{concat($content-doc-rel, '#', @id)}">
         <xsl:if test="self::math:*">
@@ -139,8 +158,8 @@
       </text>
     </xsl:if>
     <xsl:if test="$clip">
-      <audio src="{concat($audio-dir-rel, tokenize($clip/@src, '[/\\]')[last()])}">
-	<xsl:copy-of select="$clip/(@clipBegin|@clipEnd)"/>
+      <audio>
+        <xsl:copy-of select="$clip/(@src|@clipBegin|@clipEnd)"/>
       </audio>
     </xsl:if>
   </xsl:template>

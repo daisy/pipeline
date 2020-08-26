@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               script="../../../main/resources/xml/pub/create-package-doc.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:epub3-create-package-doc">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp/epub/EPUB/">
+						<d:file href="cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="nav.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="mo/cover.smil" media-type="application/smil+xml"/>
+						<d:file href="mo/chapter.smil" media-type="application/smil+xml"/>
+						<d:file href="audio/audio.mp3" media-type="audio/mpeg"/>
+						<d:file href="slideshow.xml" media-type="application/x-demo-slideshow"/>
+						<d:file href="images/Pict1.jpg" media-type="image/jpeg"/>
+						<d:file href="images/Pict2.jpg" media-type="image/jpeg"/>
+						<d:file href="images/Pict3.jpg" media-type="image/jpeg"/>
+						<d:file href="images/Pict4.jpg" media-type="image/jpeg"/>
+						<d:file href="images/cover.svg" media-type="image/svg+xml" role="cover-image"/>
+						<d:file href="scripts/impl.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/nav.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<head>
+							<title>Minimal DTBook</title>
+						</head>
+						<body>
+							<nav epub:type="toc">
+								<h1>Table of Contents</h1>
+								<ol>
+									<li id="ncx-1">
+										<a href="#">Chapter</a>
+									</li>
+								</ol>
+							</nav>
+							<nav epub:type="page-list">
+								<h1>List of Pages</h1>
+								<ol>
+									<li id="ncx-2">
+										<a href="#">1</a>
+									</li>
+									<li id="ncx-3">
+										<a href="#">2</a>
+									</li>
+								</ol>
+							</nav>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/cover.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>Minimal DTBook</title>
+						</head>
+						<body epub:type="frontmatter">
+							<section id="d4460e14">
+								<h1 epub:type="title" id="forsmil-d1386e16">
+									<span id="std1325e17">
+										<span>Minimal</span> <span>DTBook</span>
+									</span>
+								</h1>
+								<p id="forsmil-d1386e24">
+									<span id="std1325e25">
+										<span>Bert</span>
+									</span>
+								</p>
+							</section>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/chapter.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>Chapter</title>
+						</head>
+						<body epub:type="bodymatter">
+							<section id="d4460e32">
+								<span epub:type="pagebreak" title="1" id="page_1"/>
+								<h1 id="forsmil-d1386e37">
+									<span id="std1325e38">
+										<span>Chapter</span>
+									</span>
+								</h1>
+								<p id="forsmil-d1386e42">
+									<span id="std1325e43">
+										<span>Paragraph</span>
+									</span>
+								</p>
+								<span epub:type="pagebreak" title="2" id="page_2"/>
+								<p id="forsmil-d1386e50">
+									<span id="std1325e51">
+										<span>Another</span> <span>paragraph</span>
+									</span>
+								</p>
+								<object data="slideshow.xml" type="application/x-demo-slideshow">
+									<img src="images/Pict1.jpg"/>
+									<img src="images/Pict2.jpg"/>
+									<img src="images/Pict3.jpg"/>
+									<img src="images/Pict4.jpg"/>
+								</object>
+							</section>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/mo/cover.smil">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:type="frontmatter">
+							<seq epub:textref="../cover.xhtml#d4460e14">
+								<seq epub:textref="../cover.xhtml#forsmil-d1386e16" epub:type="title">
+									<par>
+										<text src="../cover.xhtml#std1325e17"/>
+										<audio src="../audio/audio.mp3" clipBegin="00:00:00" clipEnd="00:00:04.292"/>
+									</par>
+								</seq>
+								<seq epub:textref="../cover.xhtml#forsmil-d1386e24">
+									<par>
+										<text src="../cover.xhtml#std1325e25"/>
+										<audio src="../audio/audio.mp3" clipBegin="00:00:04.292" clipEnd="00:00:08.585"/>
+									</par>
+								</seq>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/mo/chapter.smil">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:type="bodymatter">
+							<seq epub:textref="../chapter.xhtml#d4460e32">
+								<par epub:type="pagebreak">
+									<text src="../chapter.xhtml#page_1"/>
+									<audio src="../audio/audio.mp3" clipBegin="00:00:08.585" clipEnd="00:00:12.878"/>
+								</par>
+								<seq epub:textref="../chapter.xhtml#forsmil-d1386e37">
+									<par>
+										<text src="../chapter.xhtml#std1325e38"/>
+										<audio src="../audio/audio.mp3" clipBegin="00:00:12.878" clipEnd="00:00:17.170"/>
+									</par>
+								</seq>
+								<seq epub:textref="../chapter.xhtml#forsmil-d1386e42">
+									<par>
+										<text src="../chapter.xhtml#std1325e43"/>
+										<audio src="../audio/audio.mp3" clipBegin="00:00:17.170" clipEnd="00:00:21.463"/>
+									</par>
+								</seq>
+								<par epub:type="pagebreak">
+									<text src="../chapter.xhtml#page_2"/>
+									<audio src="../audio/audio.mp3" clipBegin="00:00:21.463" clipEnd="00:00:25.756"/>
+								</par>
+								<seq epub:textref="../chapter.xhtml#forsmil-d1386e50">
+									<par>
+										<text src="../chapter.xhtml#std1325e51"/>
+										<audio src="../audio/audio.mp3" clipBegin="00:00:25.756" clipEnd="00:00:30.048"/>
+									</par>
+								</seq>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/scripts/impl.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<script type="text/javascript">
+							...
+						</script>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/slideshow.xml">
+					<slides>
+						<slide src="images/Pict1.jpg" dur="3"/>
+						<slide src="images/Pict2.jpg" dur="3"/>
+						<slide src="images/Pict3.jpg" dur="3"/>
+						<slide src="images/Pict4.jpg" dur="3"/>
+					</slides>
+				</x:document>
+				<x:document type="inline" xml:base="file:/tmp/epub/EPUB/images/cover.svg">
+					<svg xmlns="http://www.w3.org/2000/svg" width="240" height="100" viewBox="0 0 240 100">
+						<g><text x="10" y="50">Cover</text></g>
+					</svg>
+				</x:document>
+			</x:input>
+			<x:input port="spine">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp/epub/EPUB/">
+						<d:file href="chapter.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="metadata">
+				<x:document type="inline">
+					<metadata xmlns="http://www.idpf.org/2007/opf" prefix="dc: http://purl.org/dc/elements/1.1/">
+						<dc:title>Minimal DTBook</dc:title>
+						<dc:language>en</dc:language>
+						<dc:publisher>unknown</dc:publisher>
+						<dc:identifier id="pub-id">my-id</dc:identifier>
+					</metadata>
+				</x:document>
+			</x:input>
+			<x:input port="bindings">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp/epub/EPUB/">
+						<d:file media-type="application/x-demo-slideshow" href="scripts/impl.xhtml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:option name="compatibility-mode" select="'true'"/>
+			<x:option name="detect-properties" select="'true'"/>
+			<x:option name="output-base-uri" select="'file:/tmp/epub/EPUB/package.opf'"/>
+			<x:option name="reserved-prefixes" select="'dcterms: http://purl.org/dc/terms/'"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="file:/tmp/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="custom" href="../../../main/resources/xml/pub/compare-package-doc.xpl"
+		          step="x:epub3-compare-package-doc">
+			<x:document type="inline">
+				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id" version="3.0"
+				         prefix="media: http://www.idpf.org/epub/vocab/overlays/#">
+					<metadata>
+						<dc:title>Minimal DTBook</dc:title>
+						<dc:identifier id="pub-id">my-id</dc:identifier>
+						<dc:language>en</dc:language>
+						<dc:publisher>unknown</dc:publisher>
+						<meta property="dcterms:modified">2019-10-17T17:37:04Z</meta>
+						<meta name="dcterms:modified" content="2019-10-17T17:37:04Z"/>
+						<meta property="media:duration">00:00:30.048</meta>
+						<meta name="media:duration" content="00:00:30.048"/>
+						<meta property="media:duration" refines="#item_12">00:00:08.585</meta>
+						<meta property="media:duration" refines="#item_13">00:00:21.463</meta>
+					</metadata>
+					<manifest>
+						<item id="item_1" href="cover.xhtml" media-type="application/xhtml+xml" media-overlay="item_12"/>
+						<item id="item_2" href="chapter.xhtml" media-type="application/xhtml+xml" media-overlay="item_13"/>
+						<item id="item_3" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+						<item id="item_4" href="audio/audio.mp3" media-type="audio/mpeg"/>
+						<item id="item_5" href="slideshow.xml" media-type="application/x-demo-slideshow"/>
+						<item id="item_6" href="images/Pict1.jpg" media-type="image/jpeg"/>
+						<item id="item_7" href="images/Pict2.jpg" media-type="image/jpeg"/>
+						<item id="item_8" href="images/Pict3.jpg" media-type="image/jpeg"/>
+						<item id="item_9" href="images/Pict4.jpg" media-type="image/jpeg"/>
+						<item id="item_10" href="images/cover.svg" media-type="image/svg+xml" properties="cover-image svg"/>
+						<item id="item_11" href="scripts/impl.xhtml" media-type="application/xhtml+xml" properties="scripted"/>
+						<item id="item_12" href="mo/cover.smil" media-type="application/smil+xml"/>
+						<item id="item_13" href="mo/chapter.smil" media-type="application/smil+xml"/>
+					</manifest>
+					<spine>
+						<itemref idref="item_1" id="itemref_1" linear="no"/>
+						<itemref idref="item_2" id="itemref_2"/>
+						<itemref idref="item_10" id="itemref_3" linear="no"/>
+						<itemref idref="item_11" id="itemref_4" linear="no"/>
+					</spine>
+					<bindings>
+						<mediaType handler="item_11" media-type="application/x-demo-slideshow"/>
+					</bindings>
+				</package>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

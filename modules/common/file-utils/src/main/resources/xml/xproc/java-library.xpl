@@ -120,16 +120,17 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Returns a <code>&lt;c:result></code> containing the absolute URI of a temporary file. The
-            temporary file is guaranteed not to already exist when <code>pxf:tempfile</code> is
+            temporary file is guaranteed not to already exist when <code>px:tempfile</code> is
             called. The file is created in the directory specified by the <code>href</code>. The
-            step fails if the directory does not exist.</p>
+            step fails if this directory does not exist. If <code>href</code> is not specified then
+            the system-dependent default temporary-file directory will be used.</p>
         <p>If the <code>delete-on-exit</code> option (a boolean) is true, then the temporary file
             will automatically be deleted when the processor terminates.</p>
     </p:documentation>
 
     <p:declare-step type="px:tempfile">
         <p:output port="result" primary="false"/>
-        <p:option name="href" required="true"/>
+        <p:option name="href" required="false"/>
         <p:option name="delete-on-exit"/>
         <p:option name="suffix"/>
     </p:declare-step>

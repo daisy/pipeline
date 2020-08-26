@@ -16,7 +16,7 @@
               type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
       <x:document type="inline">
         <d:fileset>
-          <d:file href="../resources/simple-epub/package.opf" media-type="application/oebps-package+xml"/>
+          <d:file href="../resources/simple-epub/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
           <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml"/>
@@ -48,7 +48,7 @@
               type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
       <x:document type="inline">
         <d:fileset>
-          <d:file href="../resources/C00000.epub!/mimetype"/>
+          <d:file href="../resources/C00000.epub!/mimetype" compression-method="stored"/>
           <d:file href="../resources/C00000.epub!/EPUB/C00000-01-cover.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/C00000.epub!/EPUB/C00000-02-toc.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/C00000.epub!/EPUB/C00000-03-frontmatter.xhtml" media-type="application/xhtml+xml"/>
@@ -61,7 +61,7 @@
           <d:file href="../resources/C00000.epub!/EPUB/C00000-10-footnotes.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/C00000.epub!/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
           <d:file href="../resources/C00000.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
-          <d:file href="../resources/C00000.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+          <d:file href="../resources/C00000.epub!/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
           <d:file href="../resources/C00000.epub!/EPUB/css/accessibility.css" media-type="text/css"/>
           <d:file href="../resources/C00000.epub!/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
           <d:file href="../resources/C00000.epub!/EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>

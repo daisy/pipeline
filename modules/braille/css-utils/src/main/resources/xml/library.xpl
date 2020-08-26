@@ -13,7 +13,6 @@
     <p:import href="eval-target-text.xpl"/>
     <p:import href="flow-from.xpl"/>
     <p:import href="flow-into.xpl"/>
-    <p:import href="inline.xpl"/>
     <p:import href="label-targets.xpl"/>
     <p:import href="make-anonymous-block-boxes.xpl"/>
     <p:import href="make-anonymous-inline-boxes.xpl"/>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">
+  
+  <x:script>
+    <p:declare-step type="pxi:odf-store" name="main" version="1.0">
+      <p:input port="source.fileset" primary="true"/>
+      <p:input port="source.in-memory" sequence="true"/>
+      <p:option name="href" required="true"/>
+      <p:option name="fileset-base" required="true"/>
+      <p:output port="result">
+        <p:pipe step="store" port="result"/>
+      </p:output>
+      <p:import href="http://www.daisy.org/pipeline/modules/odf-utils/library.xpl"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+      <px:fileset-create name="base">
+        <p:with-option name="base" select="$fileset-base"/>
+      </px:fileset-create>
+      <p:sink/>
+      <p:for-each>
+        <p:iteration-source select="/*/d:file">
+          <p:pipe step="main" port="source.fileset"/>
+        </p:iteration-source>
+        <px:fileset-add-entry>
+          <p:input port="source">
+            <p:pipe step="base" port="result"/>
+          </p:input>
+          <p:with-option name="href" select="/*/@href"/>
+          <p:with-option name="original-href" select="/*/resolve-uri(@original-href,base-uri(.))"/>
+          <p:with-option name="media-type" select="/*/@media-type"/>
+        </px:fileset-add-entry>
+      </p:for-each>
+      <px:fileset-join/>
+      <px:odf-store name="store">
+        <p:input port="source.in-memory">
+          <p:pipe step="main" port="source.in-memory"/>
+        </p:input>
+        <p:with-option name="href" select="$href"/>
+      </px:odf-store>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="store">
+    <x:call step="pxi:odf-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="./" media-type="application/vnd.oasis.opendocument.text"/>
+            <d:file href="content.xml" original-href="../resources/test.odt/content.xml" media-type="text/xml"/>
+            <d:file href="styles.xml" original-href="../resources/test.odt/styles.xml" media-type="text/xml"/>
+            <d:file href="meta.xml" original-href="../resources/test.odt/meta.xml" media-type="text/xml"/>
+            <d:file href="settings.xml" original-href="../resources/test.odt/settings.xml" media-type="text/xml"/>
+            <d:file href="Thumbnails/thumbnail.png" original-href="../resources/test.odt/Thumbnails/thumbnail.png" media-type="image/png"/>
+            <d:file href="manifest.rdf" original-href="../resources/test.odt/manifest.rdf" media-type="application/rdf+xml"/>
+            <d:file href="Configurations2/accelerator/current.xml" original-href="../resources/test.odt/Configurations2/accelerator/current.xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:option name="fileset-base" select="resolve-uri('store/unzipped/',$temp-dir)"/>
+      <x:input port="source.in-memory"/>
+      <x:option name="href" select="resolve-uri('store/zipped.odt',$temp-dir)"/>
+    </x:call>
+    <x:context label="the result port">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="returns the path to the ODT file" type="xpath" test="string(/c:result)" equals="resolve-uri('store/zipped.odt',$temp-dir)"/>
+    <x:context label="the output directory">
+      <x:document type="directory" base-uri="temp-dir" href="store/" recursive="true"/>
+    </x:context>
+    <x:expect label="the output directory contains result ODT file" type="compare">
+      <x:document type="inline">
+        <c:directory name="store">
+          <c:file name="zipped.odt"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="the ODT contents">
+      <x:document type="zip" href="store/zipped.odt" base-uri="temp-dir" ordered="true"/>
+    </x:context>
+    <x:expect label="the ODT contents" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="zipped.odt">
+          <c:file name="Configurations2/accelerator/current.xml"/>
+          <c:file name="META-INF/manifest.xml"/>
+          <c:file name="Thumbnails/thumbnail.png"/>
+          <c:file name="content.xml"/>
+          <c:file name="manifest.rdf"/>
+          <c:file name="meta.xml"/>
+          <c:file name="mimetype"/>
+          <c:file name="settings.xml"/>
+          <c:file name="styles.xml"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
+    <x:context label="the ODT contents, ordered as in the ZIP">
+      <x:document type="zip" href="store/zipped.odt" base-uri="temp-dir"/>
+    </x:context>
+    <x:expect label="the mimetype should be the first entry" type="xpath" test="//c:file[1]/@name" equals="'mimetype'"/>
+    <x:context label="the mimetype file">
+      <x:document type="file" base-uri="temp-dir" href="store/zipped.odt!/mimetype" method="text"/>
+    </x:context>
+    <x:expect label="the mimetype file" type="compare">
+      <x:document type="inline" xml:space="preserved">
+        <c:body>application/vnd.oasis.opendocument.text</c:body>
+      </x:document>
+    </x:expect>
+    <x:context label="the manifest file">
+      <x:document type="file" base-uri="temp-dir" href="store/zipped.odt!/META-INF/manifest.xml"/>
+    </x:context>
+    <x:expect label="the manifest file" type="compare">
+      <x:document type="inline">
+        <manifest:manifest manifest:version="1.2">
+          <manifest:file-entry manifest:full-path="/" manifest:version="1.2" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+          <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
+          <manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>
+          <manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"/>
+          <manifest:file-entry manifest:full-path="settings.xml" manifest:media-type="text/xml"/>
+          <manifest:file-entry manifest:full-path="Thumbnails/thumbnail.png" manifest:media-type="image/png"/>
+          <manifest:file-entry manifest:full-path="manifest.rdf" manifest:media-type="application/rdf+xml"/>
+          <manifest:file-entry manifest:full-path="Configurations2/accelerator/current.xml" manifest:media-type=""/>
+          <manifest:file-entry manifest:full-path="Configurations2/" manifest:media-type="application/vnd.sun.xml.ui.configuration"/>
+        </manifest:manifest>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

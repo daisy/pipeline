@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns="http://www.idpf.org/2007/opf"
+               script="../../../main/resources/xml/pub/merge-prefix.xpl">
+
+	<x:scenario label="test px:epub3-merge-prefix">
+		<x:call step="px:epub3-merge-prefix">
+			<x:input port="source">
+				<x:document type="inline">
+					<_>
+						<metadata prefix="a: aaa C: ccc">
+							<meta property="a:xxx">yyy</meta>
+							<meta property="b:xxx">yyy</meta>
+							<meta property="C:xxx">yyy</meta>
+						</metadata>
+						<metadata prefix="A: aaa d:ddd">
+							<meta property="A:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+							<meta property="d:xxx">yyy</meta>
+						</metadata>
+					</_>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:scenario label="* if multiple prefixes map to the same uri, first occurence wins
+		                   * attributes that use undefined prefix are discarded">
+			<x:call>
+				<x:option name="implicit-input-prefixes"  select="'b: bbb'"/>
+				<x:option name="implicit-output-prefixes" select="''"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline">
+					<_ prefix="a: aaa b: bbb C: ccc d: ddd">
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="b:xxx">yyy</meta>
+							<meta property="C:xxx">yyy</meta>
+						</metadata>
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta>yyy</meta>
+							<meta property="d:xxx">yyy</meta>
+						</metadata>
+					</_>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="* a uri from a reserved prefix is never mapped to a different prefix">
+			<x:call>
+				<x:option name="implicit-input-prefixes"  select="'b: bbb c: ccc D:ddd'"/>
+				<x:option name="implicit-output-prefixes" select="''"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline">
+					<_ prefix="a: aaa b: bbb c: ccc D: ddd">
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="b:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+						</metadata>
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+							<meta property="D:xxx">yyy</meta>
+						</metadata>
+					</_>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="* a reserved prefix is never mapped to a different URI">
+			<x:call>
+				<x:option name="implicit-input-prefixes"  select="'a: AAA b: bbb c: ccc'"/>
+				<x:option name="implicit-output-prefixes" select="''"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline">
+					<_ prefix="b: bbb c: ccc A: aaa d: ddd">
+						<metadata>
+							<meta property="A:xxx">yyy</meta>
+							<meta property="b:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+						</metadata>
+						<metadata>
+							<meta property="A:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+							<meta property="d:xxx">yyy</meta>
+						</metadata>
+					</_>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="* reserved prefixes (according to $implicit-output-prefixes) are discarded">
+			<x:call>
+				<x:option name="implicit-input-prefixes"  select="'a: AAA b: bbb c: ccc'"/>
+				<x:option name="implicit-output-prefixes" select="'a: aaa        c: ccc'"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline">
+					<_ prefix="b: bbb d: ddd">
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="b:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+						</metadata>
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+							<meta property="d:xxx">yyy</meta>
+						</metadata>
+					</_>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="* in case of conflicts between $implicit-output-prefixes and $implicit-input-prefixes,
+		                     $implicit-output-prefixes wins">
+			<x:call>
+				<x:option name="implicit-input-prefixes"  select="'b: bbb c: ccc'"/>
+				<x:option name="implicit-output-prefixes" select="'       C: ccc'"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline">
+					<_ prefix="a: aaa b: bbb d: ddd">
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="b:xxx">yyy</meta>
+							<meta property="C:xxx">yyy</meta>
+						</metadata>
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="C:xxx">yyy</meta>
+							<meta property="d:xxx">yyy</meta>
+						</metadata>
+					</_>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="* by default, prefixes that are declared in the input are also declared in the output,
+		                     also if preserved">
+			<x:call>
+				<x:option name="implicit-input-prefixes"  select="'a: aaa b: bbb c: ccc d: ddd'"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline">
+					<_ prefix="a: aaa d: ddd">
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="b:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+						</metadata>
+						<metadata>
+							<meta property="a:xxx">yyy</meta>
+							<meta property="c:xxx">yyy</meta>
+							<meta property="d:xxx">yyy</meta>
+						</metadata>
+					</_>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+</x:description>

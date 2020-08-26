@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:m="http://www.w3.org/1998/Math/MathML"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
                script="../../main/resources/xml/dtbook-to-daisy3.convert.xpl">
 	
 	<x:scenario label="shuffled_7019_xmldtbook_1">
@@ -39,7 +41,8 @@
 					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
 					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
 					<d:file href="result/shuffled_7019_xmldtbook_1.xml" media-type="application/x-dtbook+xml"
-					        doctype="&lt;!DOCTYPE dtbook PUBLIC &quot;-//NISO//DTD dtbook 2005-3//EN&quot; &quot;http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd&quot;&gt;"/>
+					        doctype-public="-//NISO//DTD dtbook 2005-3//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
 					<d:file href="result/navigation.ncx" media-type="application/x-dtbncx+xml"
 					        indent="true"
 					        doctype-public="-//NISO//DTD ncx 2005-1//EN"
@@ -128,12 +131,287 @@
 				</d:fileset>
 			</x:document>
 		</x:expect>
-		<x:context label="the audio-map port">
-			<x:document type="port" port="audio-map"/>
+		<x:context label="the temp-audio-files port">
+			<x:document type="port" port="temp-audio-files"/>
 		</x:context>
-		<x:expect label="audio-map port" type="compare">
+		<x:expect label="the temp-audio-files port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
-				<d:audio-clips/>
+				<d:fileset/>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="minimal book with mathml">
+		<x:call step="px:dtbook-to-daisy3">
+			<x:input port="fileset.in">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="in-memory.in">
+				<x:document type="inline" xml:base="dtbook.xml">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+						<head>
+							<meta name="dtb:uid" content="uid"/>
+							<meta name="dc:Title" content="title"/>
+						</head>
+						<book>
+							<frontmatter>
+								<doctitle id="doctitle">title</doctitle>
+							</frontmatter>
+							<bodymatter>
+								<level1>
+									<h1 id="ch1">chapter</h1>
+									<p id="p1">
+										<m:math id="m1">
+											<m:mrow>
+												<m:mo>a &lt; b</m:mo>
+											</m:mrow>
+										</m:math>
+									</p>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+			</x:input>
+			<x:option name="audio" select="false()"/>
+			<x:option name="audio-only" select="false()"/>
+			<x:option name="date" select="'2020-02-27'"/>
+			<x:option name="output-fileset-base" select="resolve-uri('result/')"/>
+		</x:call>
+		<x:context label="the fileset.out port">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the fileset.out port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/book.opf" media-type="text/xml"
+					        indent="true"
+					        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"
+					        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"/>
+					<d:file href="result/dtbook.xml" media-type="application/x-dtbook+xml"
+					        doctype="&lt;!DOCTYPE dtbook PUBLIC &quot;-//NISO//DTD dtbook 2005-3//EN&quot; &quot;http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd&quot; [           &lt;!ENTITY % MATHML.prefixed &quot;INCLUDE&quot;&gt;           &lt;!ENTITY % MATHML.prefix &quot;m&quot;&gt;           &lt;!ENTITY % MATHML.Common.attrib           &quot;xlink:href    CDATA       #IMPLIED           xlink:type     CDATA       #IMPLIED           class          CDATA       #IMPLIED           style          CDATA       #IMPLIED           id             ID          #IMPLIED           xref           IDREF       #IMPLIED           other          CDATA       #IMPLIED           xmlns:ns0   CDATA       #FIXED 'http://www.daisy.org/z3986/2005/dtbook/'           ns0:smilref CDATA       #IMPLIED&quot;&gt;           &lt;!ENTITY % mathML3 PUBLIC &quot;-//W3C//DTD MathML 3.0//EN&quot;           &quot;http://www.w3.org/Math/DTD/mathml3/mathml3.dtd&quot;&gt;           %mathML3;           &lt;!ENTITY % externalFlow &quot;| m:math&quot;&gt;           &lt;!ENTITY % externalNamespaces &quot;xmlns:m CDATA #FIXED           'http://www.w3.org/1998/Math/MathML'&quot;&gt;]&gt;"/>
+					<d:file href="result/mathml-fallback.xsl" media-type="application/xslt+xml"
+					        role="mathml-xslt-fallback"
+					        original-href="../../main/resources/xml/mathml-fallback.xsl"/>
+					<d:file href="result/math-formulae.png" media-type="image/png"
+					        original-href="../../main/resources/images/math_formulae.png"/>
+					<d:file href="result/mo0.smil" media-type="application/smil"
+					        indent="true"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+					<d:file href="result/navigation.ncx" media-type="application/x-dtbncx+xml"
+					        indent="true"
+					        doctype-public="-//NISO//DTD ncx 2005-1//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"/>
+					<d:file href="result/resources.res" media-type="application/x-dtbresource+xml"
+					        indent="true"
+					        doctype-public="-//NISO//DTD resource 2005-1//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the result DTBook">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/dtbook.xml')]"/>
+		</x:context>
+		<x:expect label="the result DTBook" type="compare">
+			<x:document type="inline">
+				<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+					<head>
+						<meta name="dtb:uid" content="uid-packaged"/>
+						<meta name="dc:Title" content="title"/>
+					</head>
+					<book>
+						<frontmatter>
+							<doctitle smilref="mo0.smil#sdoctitle" id="doctitle">title</doctitle>
+						</frontmatter>
+						<bodymatter>
+							<level1>
+								<h1 smilref="mo0.smil#sch1" id="ch1">chapter</h1>
+								<p smilref="mo0.smil#sp1" id="p1">
+									<m:math dtb:smilref="mo0.smil#sm1" id="m1" alttext="Math Formulae" altimg="math-formulae.png">
+										<m:mrow>
+											<m:mo>a &lt; b</m:mo>
+										</m:mrow>
+									</m:math>
+								</p>
+							</level1>
+						</bodymatter>
+					</book>
+				</dtbook>
+			</x:document>
+		</x:expect>
+		<x:context label="the SMIL">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/mo0.smil')]"/>
+		</x:context>
+		<x:expect label="the SMIL" type="compare">
+			<x:document type="inline">
+				<smil xmlns="http://www.w3.org/2001/SMIL20/">
+					<head>
+						<meta name="dtb:uid" content="uid-packaged"/>
+						<meta name="dtb:totalElapsedTime" content="0:00:00"/>
+						<meta name="dtb:generator" content="DAISY Pipeline 2"/>
+						<customAttributes>
+							<customTest defaultState="false" id="pagenum" override="visible"/>
+							<customTest defaultState="false" id="note" override="visible"/>
+							<customTest defaultState="false" id="noteref" override="visible"/>
+							<customTest defaultState="false" id="annotation" override="visible"/>
+							<customTest defaultState="false" id="linenum" override="visible"/>
+							<customTest defaultState="false" id="sidebar" override="visible"/>
+							<customTest defaultState="false" id="prodnote" override="visible"/>
+						</customAttributes>
+					</head>
+					<body>
+						<par id="sdoctitle" class="doctitle">
+							<text src="dtbook.xml#doctitle"/>
+						</par>
+						<par id="sch1" class="h1">
+							<text src="dtbook.xml#ch1"/>
+						</par>
+						<seq id="sp1" class="p">
+							<seq id="sm1" class="math" end="DTBuserEscape;sm1-par.end">
+								<par id="sm1-par" class="math">
+									<text src="dtbook.xml#m1" type="http://www.w3.org/1998/Math/MathML"/>
+								</par>
+							</seq>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+		<x:context label="the OPF file">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/book.opf')]"/>
+		</x:context>
+		<x:expect label="the OPF file" type="compare">
+			<x:document type="inline">
+				<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+					<metadata>
+						<dc-metadata>
+							<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+							<dc:Language>en</dc:Language>
+							<dc:Date>2020-02-27</dc:Date>
+							<dc:Publisher>unknown</dc:Publisher>
+							<dc:Title>title</dc:Title>
+							<dc:Identifier id="uid">uid-packaged</dc:Identifier>
+						</dc-metadata>
+						<x-metadata>
+							<meta name="dtb:multimediaType" content="textNCX"/>
+							<meta name="dtb:totalTime" content="0:00:00"/>
+							<meta name="dtb:multimediaContent" content="text,image"/>
+							<meta name="z39-86-extension-version" scheme="http://www.w3.org/1998/Math/MathML" content="1.0"/>
+							<meta name="DTBook-XSLTFallback" scheme="http://www.w3.org/1998/Math/MathML" content="mathml-fallback.xsl"/>
+						</x-metadata>
+					</metadata>
+					<manifest>
+						<item href="book.opf" id="opf" media-type="text/xml"/>
+						<item href="dtbook.xml" id="opf-1" media-type="application/x-dtbook+xml"/>
+						<item href="math-formulae.png" id="opf-2" media-type="image/png"/>
+						<item href="mo0.smil" id="mo0" media-type="application/smil"/>
+						<item href="mathml-fallback.xsl" id="opf-4" media-type="application/xslt+xml"/>
+						<item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+						<item href="resources.res" id="resource" media-type="application/x-dtbresource+xml"/>
+					</manifest>
+					<spine>
+						<itemref idref="mo0"/>
+					</spine>
+				</package>
+			</x:document>
+		</x:expect>
+		<x:context label="the NCX file">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/navigation.ncx')]"/>
+		</x:context>
+		<x:expect label="the NCX file" type="compare">
+			<x:document type="inline">
+				<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+					<head>
+						<meta name="dtb:generator" content="DAISY Pipeline 2"/>
+						<meta name="dtb:uid" content="uid-packaged"/>
+						<meta name="dtb:depth" content="01"/>
+						<meta name="dtb:totalPageCount" content="0"/>
+						<meta name="dtb:maxPageNumber" content="0"/>
+						<smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible"/>
+						<smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+						<smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible"/>
+						<smilCustomTest bookStruct="ANNOTATION" defaultState="false" id="annotation" override="visible"/>
+						<smilCustomTest bookStruct="LINE_NUMBER" defaultState="false" id="linenum" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_SIDEBAR" defaultState="false" id="sidebar" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE" defaultState="false" id="prodnote" override="visible"/>
+					</head>
+					<docTitle>
+						<text>title</text>
+					</docTitle>
+					<navMap>
+						<navPoint playOrder="1" id="ncx-1">
+							<navLabel>
+								<text>chapter</text>
+							</navLabel>
+							<content src="mo0.smil#sch1"/>
+						</navPoint>
+					</navMap>
+				</ncx>
+			</x:document>
+		</x:expect>
+		<x:context label="the RES file">
+			<x:document type="port" port="in-memory.out" select="/*[base-uri()=resolve-uri('result/resources.res')]"/>
+		</x:context>
+		<x:expect label="the RES file" type="compare">
+			<x:document type="inline">
+				<resources xmlns="http://www.daisy.org/z3986/2005/resource/" version="2005-1">
+					<scope nsuri="http://www.daisy.org/z3986/2005/ncx/">
+						<nodeSet id="page-set" select="//smilCustomTest[@bookStruct='PAGE_NUMBER']">
+							<resource xml:lang="en">
+								<text>page</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="note-set" select="//smilCustomTest[@bookStruct='NOTE']">
+							<resource xml:lang="en">
+								<text>note</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="notref-set" select="//smilCustomTest[@bookStruct='NOTE_REFERENCE']">
+							<resource xml:lang="en">
+								<text>note</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="annot-set" select="//smilCustomTest[@bookStruct='ANNOTATION']">
+							<resource xml:lang="en">
+								<text>annotation</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="line-set" select="//smilCustomTest[@bookStruct='LINE_NUMBER']">
+							<resource xml:lang="en">
+								<text>line</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="sidebar-set" select="//smilCustomTest[@bookStruct='OPTIONAL_SIDEBAR']">
+							<resource xml:lang="en">
+								<text>sidebar</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="prodnote-set" select="//smilCustomTest[@bookStruct='OPTIONAL_PRODUCER_NOTE']">
+							<resource xml:lang="en">
+								<text>note</text>
+							</resource>
+						</nodeSet>
+					</scope>
+					<scope nsuri="http://www.w3.org/2001/SMIL20/">
+						<nodeSet id="math-seq-set" select="//seq[@class='math']">
+							<resource xml:lang="en">
+								<text>mathematical formula</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="math-par-set" select="//par[@class='math']">
+							<resource xml:lang="en">
+								<text>mathematical formula</text>
+							</resource>
+						</nodeSet>
+					</scope>
+				</resources>
 			</x:document>
 		</x:expect>
 	</x:scenario>

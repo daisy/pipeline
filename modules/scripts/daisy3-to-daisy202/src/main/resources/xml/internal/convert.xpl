@@ -25,6 +25,14 @@
         <p:pipe port="result" step="result-docs"/>
     </p:output>
 
+    <p:option name="date" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Date of publication of the result DAISY 2.02 DTB.</p>
+            <p>Must be a ISO8601 date - recommended format is YYYY-MM-DD.</p>
+            <p>Defaults to the current date.</p>
+        </p:documentation>
+    </p:option>
+
     <p:option name="output-dir" required="true"/>
 
     <p:serialization port="fileset.out" indent="true"/>
@@ -34,16 +42,36 @@
     <!-- IMPORTS                                                                 -->
     <!--=========================================================================-->
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <!--    <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>-->
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <!--    <p:import href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+            px:assert
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+            px:fileset-rebase
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
         </p:documentation>
     </p:import>
-    <p:import href="convert-smils.xpl"/>
+    <p:import href="convert-smils.xpl">
+        <p:documentation>
+            pxi:daisy3-to-daisy202-smils
+        </p:documentation>
+    </p:import>
+    <p:import href="oebps-to-ncc-metadata.xpl">
+        <p:documentation>
+            px:oebps-to-ncc-metadata
+        </p:documentation>
+    </p:import>
 
     <!--=========================================================================-->
     <!-- LOAD THE DAISY 3 FILESET                                                -->
@@ -69,40 +97,16 @@
     </px:fileset-rebase>
     <p:identity name="fileset.in"/>
 
-    <px:fileset-load media-types="application/x-dtbncx+xml">
-        <p:input port="fileset">
-            <p:pipe step="fileset.in" port="result"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe port="in-memory.in" step="main"/>
-        </p:input>
-    </px:fileset-load>
-    <px:assert error-code="XXXX" message="The input DTB must contain exactly one NCX file (media-type 'application/x-dtbncx+xml')"
-               test-count-min="1" test-count-max="1" name="ncx"/>
-    <px:fileset-load media-types="application/smil+xml" name="input-smils">
-        <p:input port="fileset">
-            <p:pipe step="fileset.in" port="result"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe port="in-memory.in" step="main"/>
-        </p:input>
-    </px:fileset-load>
 
     <!--=========================================================================-->
     <!-- CONVERT METADATA                                                        -->
     <!--=========================================================================-->
     <p:documentation>Convert OPF metadata to NCC metadata</p:documentation>
-    <p:xslt name="metadata">
+    <px:oebps-to-ncc-metadata name="metadata">
         <p:input port="source">
             <p:pipe port="result" step="opf"/>
         </p:input>
-        <p:input port="stylesheet">
-            <p:document href="opf-to-metadata.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
+    </px:oebps-to-ncc-metadata>
 
 
     <!--=========================================================================-->
@@ -113,14 +117,21 @@
         <p:output port="fileset" primary="true">
             <p:pipe port="result" step="ncc.fileset"/>
         </p:output>
-        <p:output port="doc">
+        <p:output port="in-memory">
             <p:pipe port="result" step="ncc.doc"/>
         </p:output>
 
-        <p:variable name="ncc-uri" select="concat($output-dir,'ncc.html')">
-            <p:empty/>
-        </p:variable>
-
+        <px:fileset-load media-types="application/x-dtbncx+xml">
+            <p:input port="fileset">
+                <p:pipe step="fileset.in" port="result"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe step="main" port="in-memory.in"/>
+            </p:input>
+        </px:fileset-load>
+        <px:assert error-code="XXXX" test-count-min="1" test-count-max="1" name="ncx"
+                   message="The input DTB must contain exactly one NCX file (media-type 'application/x-dtbncx+xml')"/>
+        <p:sink/>
         <p:xslt name="ncx-to-ncc">
             <p:input port="source">
                 <p:pipe port="result" step="ncx"/>
@@ -129,12 +140,10 @@
             <p:input port="stylesheet">
                 <p:document href="ncx-to-ncc.xsl"/>
             </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
+            <p:with-param name="date" select="$date"/>
         </p:xslt>
         <px:set-base-uri name="ncc.doc">
-            <p:with-option name="base-uri" select="$ncc-uri"/>
+            <p:with-option name="base-uri" select="concat($output-dir,'ncc.html')"/>
         </px:set-base-uri>
 
         <p:group name="ncc.fileset">
@@ -143,7 +152,9 @@
                 <p:with-option name="base" select="$output-dir"/>
             </px:fileset-create>
             <px:fileset-add-entry media-type="application/xhtml+xml">
-                <p:with-option name="href" select="$ncc-uri"/>
+                <p:input port="entry">
+                    <p:pipe step="ncc.doc" port="result"/>
+                </p:input>
             </px:fileset-add-entry>
             <px:message message="NCC document created."/>
         </p:group>
@@ -155,11 +166,11 @@
     <!--=========================================================================-->
 
     <pxi:daisy3-to-daisy202-smils name="smils">
-        <p:input port="smils">
-            <p:pipe port="result" step="input-smils"/>
+        <p:input port="source.fileset">
+            <p:pipe step="fileset.in" port="result"/>
         </p:input>
-        <p:input port="ncx">
-            <p:pipe port="result" step="ncx"/>
+        <p:input port="source.in-memory">
+            <p:pipe step="main" port="in-memory.in"/>
         </p:input>
         <p:with-option name="input-dir" select="base-uri(/*)">
             <p:pipe step="fileset.in" port="result"/>
@@ -169,40 +180,19 @@
 
 
     <!--=========================================================================-->
-    <!-- METADATA                                                                -->
-    <!--=========================================================================-->
-
-    <!--<p:documentation>Extract metadata from the DAISY 3 OPF document</p:documentation>
-            <p:group name="metadata">
-                <p:output port="result"/>
-                <p:xslt>
-                    <p:input port="source">
-                        <p:pipe port="source" step="main"/>
-                    </p:input>
-                    <p:input port="stylesheet">
-                        <p:document href="../internal/opf-to-metadata.xsl"/>
-                    </p:input>
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                </p:xslt>
-            </p:group>
-            <p:sink/>-->
-
-    <!--=========================================================================-->
     <!-- CONSOLIDATE THE OUTPUT                                                  -->
     <!--=========================================================================-->
 
     <px:fileset-join name="result-fileset">
         <p:input port="source">
-            <p:pipe port="fileset" step="ncc"/>
-            <p:pipe port="fileset" step="smils"/>
+            <p:pipe step="ncc" port="fileset"/>
+            <p:pipe step="smils" port="result.fileset"/>
         </p:input>
     </px:fileset-join>
     <p:identity name="result-docs">
         <p:input port="source">
-            <p:pipe port="doc" step="ncc"/>
-            <p:pipe port="docs" step="smils"/>
+            <p:pipe step="ncc" port="in-memory"/>
+            <p:pipe step="smils" port="result.in-memory"/>
         </p:input>
     </p:identity>
 

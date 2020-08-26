@@ -13,11 +13,12 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			brailleModule("common-utils"),
-			brailleModule("css-utils"),
 			brailleModule("pef-utils"),
+			brailleModule("css-utils"),
 			pipelineModule("common-utils"),
 			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),
+			pipelineModule("css-utils"),
 		};
 	}
 	

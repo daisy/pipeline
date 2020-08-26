@@ -2,6 +2,7 @@ package org.daisy.pipeline.file.saxon.impl;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URL;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
@@ -67,20 +68,29 @@ public class Expand83 extends ExtensionFunctionDefinition {
 		if (uri == null || !uri.startsWith("file:/")) {
 			return uri;
 		}
-
 		try {
 			URI u = new URI(uri);
-			File file = new File(new URI(u.getScheme(), u.getSchemeSpecificPart(), null));
-			if (!file.exists()) {
-				return uri;
+			URL url = new URL(u.toString());
+			String protocol = "file";
+			String path = url.getPath();
+			String zipPath = null;
+			if (path.contains("!/")) {
+				// it is a path to a ZIP entry
+				zipPath = path.substring(path.indexOf("!/")+1);
+				path = path.substring(0, path.indexOf("!/"));
 			}
-			URI expandedUri = expand83(file);
+			String query = url.getQuery();
+			String fragment = url.getRef();
+			File file = new File(new URI(protocol, null, path, null, null));
+			URI expandedUri = expand83(file, path.endsWith("/"));
 			if (expandedUri == null) {
 				return uri;
 			} else {
-				return new URI(expandedUri.getScheme(), expandedUri.getSchemeSpecificPart(), u.getFragment()).toString();
+				path = expandedUri.getPath();
+				if (zipPath != null)
+					path = path + "!" + URI.create(zipPath).getPath();
+				return new URI(protocol, null, path, query, fragment).toString();
 			}
-
 		} catch (Exception e) {
 			throw new XPathException("pf:file-expand83("+uri+") failed", e);
 		}
@@ -91,10 +101,25 @@ public class Expand83 extends ExtensionFunctionDefinition {
 	 * with a custom File implementation.
 	 */
 	public static URI expand83(File file) throws XPathException {
+		return expand83(file, false);
+	}
+	
+	public static URI expand83(File file, boolean isDir) throws XPathException {
 		try {
 			if (file.exists()) {
 				return file.getCanonicalFile().toURI();
 			} else {
+				// if the file does not exist a parent directory may exist which can be canonicalized
+				String relPath = file.getName();
+				if (isDir)
+					relPath += "/";
+				File dir = file.getParentFile();
+				while (dir != null) {
+					if (dir.exists())
+						return dir.getCanonicalFile().toURI().resolve(relPath);
+					relPath = dir.getName() + "/" + relPath;
+					dir = dir.getParentFile();
+				}
 				return file.toURI();
 			}
 		} catch (Exception e) {

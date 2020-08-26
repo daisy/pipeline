@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../../main/resources/xml/nav/nav-to-ncx.xsl">
+
+    <x:param name="lang" select="'en'"/>
+    <x:param name="doc-base" select="'example.xhtml'"/>
+
+    <x:scenario label="Elements ::">
+        <x:scenario label="An HTML document">
+            <x:context>
+                <html/>
+            </x:context>
+            <x:expect label="should be converted into an NCX document">
+                <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Links ::">
+        <x:context>
+            <html>
+                <body>
+                    <ol>
+                        <li>
+                            <a epub:type="toc" href="#toc">Table of Contents</a>
+                        </li>
+                    </ol>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="are resolved to their base URI"
+                  test="//ncx:content/@src='example.xhtml#toc'"/>
+    </x:scenario>
+
+    <x:scenario label="IDs ::">
+        <x:context>
+            <html>
+                <body>
+                    <nav>
+                        <ol>
+                            <li>
+                                <a href="#foo">foo</a>
+                            </li>
+                        </ol>
+                    </nav>
+                    <nav>
+                        <ol>
+                            <li>
+                                <a href="#bar">bar</a>
+                                <ol>
+                                    <li><a href="#baz">baz</a></li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </nav>
+                </body>
+            </html>
+        </x:context>
+        <x:expect label="are generated for each navTarget"
+                  test="count(distinct-values(//ncx:navTarget/string(@id)))=3"/>
+    </x:scenario>
+
+    <x:scenario label="Metadata ::">
+        <x:scenario label="'dc:identifier'" pending="fails">
+            <x:context>
+                <html>
+                    <head>
+                        <meta name="dc:identifier">identifier</meta>
+                    </head>
+                </html>
+            </x:context>
+            <x:expect label="is copied to 'dtb:uid'"
+                      test="exists(//ncx:meta[@name='dtb:uid' and @content='identifier'])"/>
+        </x:scenario>
+        <x:scenario label="the real ToC depth">
+            <x:context>
+                <html>
+                    <head/>
+                    <body>
+                        <nav epub:type="toc" id="toc">
+                            <h1>Table of contents</h1>
+                            <ol>
+                                <li>
+                                    <a href="chap1.xhtml#ch_1">Chapter 1</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="is copied to 'dtb:depth'"
+                      test="//ncx:meta[@name='dtb:depth']/@content='1'"/>
+        </x:scenario>
+        <x:scenario label="the size of the page list and the max value">
+            <x:context>
+                <html>
+                    <head/>
+                    <body>
+                        <nav epub:type="page-list" hidden="">
+                            <h2>Pagebreaks of the print version, third edition</h2>
+                            <ol>
+                                <li>
+                                    <a href="frontmatter.xhtml#pi">I</a>
+                                </li>
+                                <li>
+                                    <a href="frontmatter.xhtml#pii">II</a>
+                                </li>
+                                <li>
+                                    <a href="chap1.xhtml#p1">1</a>
+                                </li>
+                                <li>
+                                    <a href="chap1.xhtml#p2">2</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="are copied to 'dtb:totalPageCount'"
+                      test="//ncx:meta[@name='dtb:totalPageCount'][1]/@content='4'"/>
+            <x:expect label="and 'dtb:macPageNumber'"
+                      test="//ncx:meta[@name='dtb:maxPageNumber'][1]/@content='2'"/>
+        </x:scenario>
+        <x:scenario label="a 'title' element in the HTML head">
+            <x:context>
+                <html>
+                    <head>
+                        <title>Title</title>
+                    </head>
+                </html>
+            </x:context>
+            <x:expect label="is converted to the NCX 'docTitle'" test="/ncx:ncx/ncx:docTitle">
+                <docTitle xmlns="http://www.daisy.org/z3986/2005/ncx/">
+                    <text>Title</text>
+                </docTitle>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Labels :: ">
+        <x:scenario label="If the nav has a heading">
+            <x:context>
+                <html>
+                    <body>
+                        <nav epub:type="toc" id="toc">
+                            <h1>Headline #1</h1>
+                            <ol>
+                                <li>
+                                    <a href="#foo">bar</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="the heading is used as the navLabel" test="//ncx:navMap/ncx:navLabel">
+                <navLabel xmlns="http://www.daisy.org/z3986/2005/ncx/">
+                    <text>Headline #1</text>
+                </navLabel>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="If the nav has no heading but a span child">
+            <x:context>
+                <html>
+                    <body>
+                        <nav epub:type="toc">
+                            <span>Headline #1</span>
+                            <ol>
+                                <li>
+                                    <a href="#foo">bar</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="the span content is used as the navLabel"
+                      test="//ncx:navMap/ncx:navLabel">
+                <navLabel xmlns="http://www.daisy.org/z3986/2005/ncx/">
+                    <text>Headline #1</text>
+                </navLabel>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Generic nav ::">
+        <x:scenario label="An empty nav">
+            <x:context>
+                <nav/>
+            </x:context>
+            <x:expect label="generates no navList"/>
+        </x:scenario>
+        <x:scenario label="a generic nav">
+            <x:context>
+                <html>
+                    <body>
+                        <nav>
+                            <ol>
+                                <li>
+                                    <a href="#foo">Foo</a>
+                                    <ol>
+                                        <li>
+                                            <a href="#bar">Bar</a>
+                                        </li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </nav>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="is converted to a navList" test="exists(//ncx:navList)"/>
+            <x:expect label="is flattened in a navList structure"
+                      test="exists(//ncx:navTarget[normalize-space()=('Foo')][following-sibling::ncx:navTarget[normalize-space()=('Bar')]])"
+                      />
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="toc nav ::">
+        <x:scenario label="a toc nav">
+            <x:context>
+                <html>
+                    <body>
+                        <nav epub:type="toc">
+                            <ol>
+                                <li>
+                                    <a href="#foo">Foo</a>
+                                    <ol>
+                                        <li>
+                                            <a href="#bar">Bar</a>
+                                        </li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </nav>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="is converted to a navMap" test="exists(//ncx:navMap)"/>
+            <x:expect label="isn't flattenned"
+                      test="exists(//ncx:navPoint[normalize-space(ncx:navLabel)=('Foo')]/ncx:navPoint[normalize-space(ncx:navLabel)=('Bar')])"
+                      />
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="page-list nav ::">
+        <x:scenario label="a page-list nav">
+            <x:context>
+                <html>
+                    <body>
+                        <nav epub:type="page-list" hidden="">
+                            <h2>Pagebreaks of the print version, third edition</h2>
+                            <ol>
+                                <li>
+                                    <a href="frontmatter.xhtml#pi">I</a>
+                                </li>
+                                <li>
+                                    <a href="frontmatter.xhtml#pii">II</a>
+                                </li>
+                                <li>
+                                    <a href="chap1.xhtml#p1">1</a>
+                                </li>
+                                <li>
+                                    <a href="chap1.xhtml#p2">2</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="is converted to a pageList" test="exists(//ncx:pageList)"/>
+            <x:expect label="links are converted as pageTargets" test="count(//ncx:pageList/ncx:pageTarget)=4"/>
+            <!--TODO test pageTarget's content model-->
+        </x:scenario>
+    </x:scenario>
+
+    <!--TODO test play order-->
+    <!--TODO test Guide-->
+
+</x:description>

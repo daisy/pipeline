@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
-  xmlns:f="http://www.daisy.org/ns/functions-internal" xmlns:its="http://www.w3.org/2005/11/its"
-  xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
-  xmlns:pf="http://www.daisy.org/ns/functions" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xpath-default-namespace="http://www.daisy.org/ns/z3998/authoring/"
-  exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:f="http://www.daisy.org/ns/functions-internal"
+                xmlns:pf="http://www.daisy.org/ns/functions"
+                xmlns:diagram="http://www.daisy.org/ns/z3998/authoring/features/description/"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:its="http://www.w3.org/2005/11/its"
+                xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xpath-default-namespace="http://www.daisy.org/ns/z3998/authoring/"
+                exclude-result-prefixes="#all">
 
   <xsl:import href="zedai-vocab-utils.xsl"/>
 
@@ -1067,7 +1073,29 @@
   <!-- Feature :: DIAGRAM Descriptions                           -->
   <!--===========================================================-->
 
-  <xsl:include href="diagram-to-html.xsl"/>
+  <xsl:template match="diagram:description">
+    <aside>
+      <xsl:apply-templates select="@*|node()"/>
+    </aside>
+  </xsl:template>
+
+  <xsl:template match="diagram:body">
+    <details>
+      <xsl:apply-templates select="@*|node()"/>
+    </details>
+  </xsl:template>
+
+  <xsl:template match="diagram:summary">
+    <summary>
+      <xsl:apply-templates select="@*|node()"/>
+    </summary>
+  </xsl:template>
+
+  <xsl:template match="diagram:longdesc[not(*)]">
+    <p>
+      <xsl:value-of select="."/>
+    </p>
+  </xsl:template>
 
   <!--===========================================================-->
   <!-- Identity templates                                        -->

@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step name="main" type="px:create-daisy3-opf" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                type="px:daisy3-create-opf" name="main">
 
     <p:input port="source" primary="true">
-      <p:documentation>The fileset.</p:documentation>
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>The DAISY 3 fileset.</p>
+        <p>It the fileset contains a file marked with a <code>role</code> attribute with value
+        <code>mathml-xslt-fallback</code>, it will be used as the "DTBook-XSLTFallback" for
+        MathML.</p>
+      </p:documentation>
     </p:input>
 
     <p:output port="result" primary="true">
-      <p:documentation>The OPF file.</p:documentation>
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>The <a
+        href="http://web.archive.org/web/20101221093536/http://www.idpf.org/oebps/oebps1.2/download/oeb12-xhtml.htm">OEBPS</a>
+        package document</p>
+      </p:documentation>
+      <p:pipe step="opf" port="result"/>
     </p:output>
 
-    <p:option name="output-dir">
+    <p:output port="result.fileset">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	<p>Root directory URI common to all the files to package (NCX, smil etc.)</p>
+        <p>Result fileset with a single file, the package document.</p>
       </p:documentation>
-    </p:option>
+      <p:pipe step="fileset" port="result"/>
+    </p:output>
 
     <p:option name="title">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -47,6 +58,14 @@
       </p:documentation>
     </p:option>
 
+    <p:option name="date" required="false" select="''">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Date of publication of the DTB</p>
+        <p>Format must be YYYY[-MM[-DD]]</p>
+        <p>Defaults to the current date.</p>
+      </p:documentation>
+    </p:option>
+
     <p:option name="audio-only" required="false" select="'false'">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>No reference to DTBook in SMIL files</p>
@@ -55,15 +74,15 @@
 
     <p:option name="publisher"/>
 
-    <p:option name="mathml-xslt-fallback" select="''">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p>Fallback stylesheet for DAISY players (see DAISY specifications). Empty if no MathML</p>
-      </p:documentation>
-    </p:option>
-
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
         </p:documentation>
     </p:import>
 
@@ -72,18 +91,32 @@
 	<p:document href="create-opf.xsl"/>
       </p:input>
       <p:with-param name="lang" select="$lang"/>
+      <p:with-param name="date" select="$date"/>
       <p:with-param name="publisher" select="$publisher"/>
-      <p:with-param name="output-dir" select="$output-dir"/>
+      <p:with-param name="output-base-uri" select="$opf-uri"/>
       <p:with-param name="uid" select="$uid"/>
       <p:with-param name="title" select="$title"/>
       <p:with-param name="total-time" select="$total-time"/>
       <p:with-param name="audio-only" select="$audio-only"/>
-      <p:with-param name="mathml-xslt-fallback" select="$mathml-xslt-fallback"/>
     </p:xslt>
 
     <px:set-base-uri>
       <p:with-option name="base-uri" select="$opf-uri"/>
     </px:set-base-uri>
-    <p:add-xml-base/>
+    <p:identity name="opf"/>
+    <p:sink/>
+
+    <px:fileset-create>
+      <p:with-option name="base" select="resolve-uri('./',$opf-uri)"/>
+    </px:fileset-create>
+    <px:fileset-add-entry media-type="text/xml" name="fileset">
+      <p:input port="entry">
+        <p:pipe step="opf" port="result"/>
+      </p:input>
+      <p:with-param port="file-attributes" name="indent" select="'true'"/>
+      <p:with-param port="file-attributes" name="doctype-public" select="'+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN'"/>
+      <p:with-param port="file-attributes" name="doctype-system" select="'http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd'"/>
+    </px:fileset-add-entry>
+    <p:sink/>
 
 </p:declare-step>

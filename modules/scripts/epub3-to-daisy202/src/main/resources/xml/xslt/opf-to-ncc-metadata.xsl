@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:opf="http://www.idpf.org/2007/opf"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns="http://www.w3.org/1999/xhtml"
                 xpath-default-namespace=""
                 exclude-result-prefixes="#all">
 
@@ -13,7 +13,7 @@
     <!--     adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')), -->
     <!--     '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"/> -->
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/clock-functions.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"/>
 
     <xsl:variable name="ncc.body" select="collection()[position()=2]/*"/>
     <xsl:variable name="smil" select="collection()[position()&gt;2]/*"/>

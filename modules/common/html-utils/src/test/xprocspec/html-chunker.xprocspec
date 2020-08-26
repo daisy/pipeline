@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:epub="http://www.idpf.org/2007/ops"
                xmlns="http://www.w3.org/1999/xhtml"
                script="../../main/resources/xml/xproc/html-chunker.xpl">
@@ -90,6 +91,14 @@
                 </html>
             </x:document>
         </x:expect>
+        <x:context label="the mapping output">
+            <x:document type="port" port="mapping"/>
+        </x:context>
+        <x:expect label="should be empty" type="compare">
+            <x:document type="inline">
+                <d:fileset/>
+            </x:document>
+        </x:expect>
     </x:scenario>
     
     <x:scenario label="title">
@@ -151,7 +160,7 @@
     <x:scenario label="link correction">
         <x:call step="px:html-chunker">
             <x:input port="source">
-                <x:document type="inline">
+                <x:document type="inline" xml:base="file:/Users/me/file.html">
                     <html>
                         <body>
                             <section>
@@ -171,14 +180,14 @@
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect label="the base uris of the chunks"
-                  type="xpath" test="collection()/replace(base-uri(.),'.*?([^/]+)$','$1')" equals="('html-chunker-1.xprocspec',
-                                                                                                    'html-chunker-2.xprocspec')"/>
+                  type="xpath" test="collection()/base-uri(.)" equals="('file:/Users/me/file-1.html',
+                                                                        'file:/Users/me/file-2.html')"/>
         <x:expect label="links between chunks are corrected" type="compare">
             <x:document type="inline">
                 <html>
                     <body>
                         <h1>a</h1>
-                        <a href="html-chunker-2.xprocspec#x"/>
+                        <a href="file-2.html#x"/>
                     </body>
                 </html>
             </x:document>
@@ -189,6 +198,19 @@
                         <p id="x"/>
                     </body>
                 </html>
+            </x:document>
+        </x:expect>
+        <x:context label="the mapping output">
+            <x:document type="port" port="mapping"/>
+        </x:context>
+        <x:expect label="should be as expected" type="compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="file:/Users/me/file-1.html" original-href="file:/Users/me/file.html"/>
+                    <d:file href="file:/Users/me/file-2.html" original-href="file:/Users/me/file.html">
+                        <d:anchor id="x"/>
+                    </d:file>
+                </d:fileset>
             </x:document>
         </x:expect>
     </x:scenario>

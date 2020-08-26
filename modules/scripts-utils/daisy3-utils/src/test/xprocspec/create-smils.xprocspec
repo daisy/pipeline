@@ -1,0 +1,973 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:s="http://www.w3.org/2001/SMIL20/"
+               script="../../main/resources/xml/internal/smils/create-daisy3-smils.xpl">
+
+  <x:scenario label="Scenario for testing the smil and @smilref generation">
+    <x:call step="px:daisy3-create-smils">
+      <x:input port="audio-map">
+  	<x:document type="inline">
+  	  <d:audio-clips>
+	    <d:clip idref="s1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+	    <d:clip idref="s2" src="audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+	    <d:clip idref="s3" src="audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
+	    <d:clip idref="h1" src="audio/part_2.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
+  	  </d:audio-clips>
+  	</x:document>
+      </x:input>
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:option name="smil-dir" select="resolve-uri('smil/')"/>
+      <x:option name="uid" select="'uid'"/>
+    </x:call>
+
+    <x:scenario label="simple sentence">
+      <x:call>
+  	<x:input port="source.in-memory">
+  	  <x:document type="inline" xml:base="dtbook.xml">
+	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	      <sent id="s1">test</sent>
+	    </dtbook>
+	  </x:document>
+  	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <sent smilref="smil/mo0.smil#ss1" id="s1">test</sent>
+	  </dtbook>
+	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss1" class="sent">
+              <text src="../dtbook.xml#s1"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+      <x:context label="result.fileset port">
+        <x:document type="port" port="result.fileset"/>
+      </x:context>
+      <x:expect label="the result fileset"
+                type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+            <d:file href="smil/mo0.smil" media-type="application/smil"
+                    indent="true"
+                    doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+                    doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+          </d:fileset>
+        </x:document>
+      </x:expect>
+      <x:context label="duration port">
+        <x:document type="port" port="duration"/>
+      </x:context>
+      <x:expect label="the duration" type="compare">
+        <x:document type="inline">
+          <d:durations>
+            <d:total duration="0:00:01.5"/>
+          </d:durations>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="headings without audio">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <h1 id="i1"><sent id="i2">test</sent></h1>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	    <h1 id="i1" smilref="smil/mo0.smil#si1">
+    	      <sent id="i2" smilref="smil/mo0.smil#si2">test</sent>
+            </h1>
+    	  </dtbook>
+    	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <seq id="si1" class="h1">
+              <par id="si2" class="sent">
+                <text src="../dtbook.xml#i2"/>
+              </par>
+            </seq>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="headings with audio">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <h1 id="h1"><sent id="i2">test</sent></h1>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	    <h1 smilref="smil/mo0.smil#sh1" id="h1">
+    	      <sent id="i2">test</sent>
+            </h1>
+    	  </dtbook>
+    	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="sh1" class="h1">
+              <text src="../dtbook.xml#h1"/>
+              <audio src="../audio/part_2.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="two levels">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+    		<sent id="s1">test</sent>
+    	      </level>
+    	      <level>
+    		<sent id="s2">test</sent>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level>
+              <sent smilref="smil/mo0.smil#ss1" id="s1">test</sent>
+            </level>
+            <level>
+              <sent smilref="smil/mo1.smil#ss2" id="s2">test</sent>
+            </level>
+          </dtbook>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss1" class="sent">
+              <text src="../dtbook.xml#s1"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+            </par>
+          </body>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss2" class="sent">
+              <text src="../dtbook.xml#s2"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="level separator">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+    		<sent id="s1">test</sent>
+    		<level>
+    		  <sent id="s2">test</sent>
+    		</level>
+    		<sent id="s3">test</sent>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level>
+              <sent smilref="smil/mo0.smil#ss1" id="s1">test</sent>
+              <level>
+                <sent smilref="smil/mo0.smil#ss2" id="s2">test</sent>
+              </level>
+              <sent smilref="smil/mo2.smil#ss3" id="s3">test</sent>
+            </level>
+          </dtbook>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss1" class="sent">
+              <text src="../dtbook.xml#s1"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+            </par>
+            <par id="ss2" class="sent">
+              <text src="../dtbook.xml#s2"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+            </par>
+          </body>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss3" class="sent">
+              <text src="../dtbook.xml#s3"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="nested levels">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level1>
+    		<sent id="s1">test</sent>
+    		<level2>
+    		  <sent id="s2">test</sent>
+    		  <sent id="s3">test</sent>
+    		  <level3>
+    		    <level4>
+    		      <level5>
+    			<sent id="s4">test</sent>
+    		      </level5>
+    		      <sent id="s5">test</sent>
+    		    </level4>
+    		  </level3>
+    		</level2>
+    		<sent id="s6">test</sent>
+    	      </level1>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level1>
+              <sent smilref="smil/mo0.smil#ss1" id="s1">test</sent>
+              <level2>
+                <sent smilref="smil/mo0.smil#ss2" id="s2">test</sent>
+                <sent smilref="smil/mo0.smil#ss3" id="s3">test</sent>
+                <level3>
+                  <level4>
+                    <level5>
+                      <sent smilref="smil/mo0.smil#ss4" id="s4">test</sent>
+                    </level5>
+                    <sent smilref="smil/mo5.smil#ss5" id="s5">test</sent>
+                  </level4>
+                </level3>
+              </level2>
+              <sent smilref="smil/mo5.smil#ss6" id="s6">test</sent>
+            </level1>
+          </dtbook>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss1" class="sent">
+              <text src="../dtbook.xml#s1"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+            </par>
+            <par id="ss2" class="sent">
+              <text src="../dtbook.xml#s2"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+            </par>
+            <par id="ss3" class="sent">
+              <text src="../dtbook.xml#s3"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
+            </par>
+            <par id="ss4" class="sent">
+              <text src="../dtbook.xml#s4"/>
+            </par>
+          </body>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss5" class="sent">
+              <text src="../dtbook.xml#s5"/>
+            </par>
+            <par id="ss6" class="sent">
+              <text src="../dtbook.xml#s6"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+
+    <x:scenario label="mixed levels">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+    		<p id="p1">
+    		  <sent id="s1">test</sent>
+    		  <sent id="s2">test</sent>
+    		</p>
+    		<level>
+    		  <level>
+    		    <sent id="s3">test</sent>
+    		  </level>
+    		  <p id="p2">
+    		    <sent id="s4">test</sent>
+    		    <sent id="s5">test</sent>
+    		  </p>
+    		  <level>
+    		    <sent id="s6">test</sent>
+    		  </level>
+    		</level>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level>
+              <p smilref="smil/mo0.smil#sp1" id="p1">
+                <sent smilref="smil/mo0.smil#ss1" id="s1">test</sent>
+              <sent smilref="smil/mo0.smil#ss2" id="s2">test</sent></p>
+              <level>
+                <level>
+                  <sent smilref="smil/mo0.smil#ss3" id="s3">test</sent>
+                </level>
+                <p smilref="smil/mo3.smil#sp2" id="p2">
+                  <sent smilref="smil/mo3.smil#ss4" id="s4">test</sent>
+                  <sent smilref="smil/mo3.smil#ss5" id="s5">test</sent>
+                </p>
+                <level>
+                  <sent smilref="smil/mo3.smil#ss6" id="s6">test</sent>
+                </level>
+              </level>
+            </level>
+          </dtbook>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <seq id="sp1" class="p">
+              <par id="ss1" class="sent">
+                <text src="../dtbook.xml#s1"/>
+                <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+              </par>
+              <par id="ss2" class="sent">
+                <text src="../dtbook.xml#s2"/>
+                <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+              </par>
+            </seq>
+            <par id="ss3" class="sent">
+              <text src="../dtbook.xml#s3"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
+            </par>
+          </body>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <seq id="sp2" class="p">
+              <par id="ss4" class="sent">
+              <text src="../dtbook.xml#s4"/></par>
+              <par id="ss5" class="sent">
+              <text src="../dtbook.xml#s5"/></par>
+            </seq>
+            <par id="ss6" class="sent">
+              <text src="../dtbook.xml#s6"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="noteref outside sentence">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+    		<noteref id="ref1" idref="#n1">ref</noteref>
+    	      </level>
+    	      <level>
+    		<note id="n1"><sent id="s1">note</sent></note>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	    <level>
+    	      <noteref smilref="smil/mo0.smil#sref1" id="ref1" idref="#n1">ref</noteref>
+    	    </level>
+            <level>
+    	      <note smilref="smil/mo0.smil#sn1" id="n1">
+    		<sent smilref="smil/mo0.smil#ss1" id="s1">note</sent>
+    	      </note>
+            </level>
+    	  </dtbook>
+    	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="sref1" class="noteref" customTest="noteref">
+              <a external="false" href="mo0.smil#sn1">
+                <text src="../dtbook.xml#ref1"/>
+              </a>
+            </par>
+            <seq id="sn1" class="note" customTest="note">
+              <par id="ss1" class="sent">
+                <text src="../dtbook.xml#s1"/>
+                <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+              </par>
+            </seq>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="noteref inside sentence">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+    		<sent id="s8">
+    		  <noteref id="ref1" idref="#n1">ref</noteref>
+    		</sent>
+    	      </level>
+    	      <level>
+    		<note id="n1">note</note>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <level>
+    	      <sent smilref="smil/mo0.smil#ss8" id="s8">
+    		<noteref smilref="smil/mo0.smil#sref1" id="ref1" idref="#n1">ref</noteref>
+    	      </sent>
+            </level>
+            <level>
+    	      <note smilref="smil/mo0.smil#sn1" id="n1">note</note>
+            </level>
+        </dtbook>
+    	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <seq id="ss8" class="sent">
+              <par id="sref1" class="noteref" customTest="noteref">
+                <a external="false" href="mo0.smil#sn1">
+                  <text src="../dtbook.xml#ref1"/>
+                </a>
+              </par>
+              <par id="sn1" class="note" customTest="note">
+                <text src="../dtbook.xml#n1"/>
+              </par>
+            </seq>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="deep content note">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+    		<noteref id="ref1" idref="#n1">ref</noteref>
+    	      </level>
+    	      <level>
+    		<note id="n1">
+    		  <p id="p1"><p id="p2">
+    		    <p id="p3">test</p>
+    		    <sent id="s1">note</sent>
+    		  </p></p>
+    		  </note>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	    <level>
+    	      <noteref smilref="smil/mo0.smil#sref1" id="ref1" idref="#n1">ref</noteref>
+    	    </level>
+    	    <level>
+    	      <note smilref="smil/mo0.smil#sn1" id="n1">
+    		<p smilref="smil/mo0.smil#sp1" id="p1"><p id="p2" smilref="smil/mo0.smil#sp2">
+    		  <p smilref="smil/mo0.smil#sp3" id="p3">test</p>
+    		  <sent smilref="smil/mo0.smil#ss1" id="s1">note</sent>
+    		</p></p>
+    	      </note>
+    	    </level>
+    	  </dtbook>
+    	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="sref1" class="noteref" customTest="noteref">
+              <a external="false" href="mo0.smil#sn1">
+                <text src="../dtbook.xml#ref1"/>
+              </a>
+            </par>
+            <seq id="sn1" class="note" customTest="note">
+              <seq id="sp1" class="p">
+                <seq id="sp2" class="p">
+                  <par id="sp3" class="p">
+                    <text src="../dtbook.xml#p3"/>
+                  </par>
+                  <par id="ss1" class="sent">
+                    <text src="../dtbook.xml#s1"/>
+                    <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+                  </par>
+                </seq>
+              </seq>
+            </seq>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="noteref inside note">
+      <x:call>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+    		<noteref id="ref1" idref="#n1">ref</noteref>
+    	      </level>
+    	      <level>
+    		<note id="n1">
+    		  <noteref id="ref2" idref="#n2"/>
+    		</note>
+    	      </level>
+    	      <level>
+    		<note id="n2">note</note>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	    <level>
+    	      <noteref smilref="smil/mo0.smil#sref1" id="ref1" idref="#n1">ref</noteref>
+    	    </level>
+    	    <level>
+    	      <note smilref="smil/mo0.smil#sn1" id="n1">
+    		<noteref smilref="smil/mo0.smil#sref2" id="ref2" idref="#n2"/>
+    	      </note>
+    	    </level>
+    	    <level>
+    	      <note smilref="smil/mo0.smil#sn2" id="n2">note</note>
+    	    </level>
+    	  </dtbook>
+    	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="sref1" class="noteref" customTest="noteref">
+              <a external="false" href="mo0.smil#sn1">
+                <text src="../dtbook.xml#ref1"/>
+              </a>
+            </par>
+            <seq id="sn1" class="note" customTest="note">
+              <par id="sref2" class="noteref" customTest="noteref">
+                <a external="false" href="mo0.smil#sn2">
+                  <text src="../dtbook.xml#ref2"/>
+                </a>
+              </par>
+              <par id="sn2" class="note" customTest="note">
+                <text src="../dtbook.xml#n2"/>
+              </par>
+            </seq>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="three smils">
+      <x:call>
+  	<x:input port="source.in-memory">
+  	  <x:document type="inline" xml:base="dtbook.xml">
+	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	      <level>
+		<sent id="s1">test</sent>
+	      </level>
+	      <level>
+		<sent id="s2">test</sent>
+	      </level>
+	      <level>
+		<sent id="s3">test</sent>
+	      </level>
+	    </dtbook>
+	  </x:document>
+  	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <level>
+	      <sent smilref="smil/mo0.smil#ss1" id="s1">test</sent>
+	    </level>
+	    <level>
+	      <sent smilref="smil/mo1.smil#ss2" id="s2">test</sent>
+	    </level>
+	    <level>
+	      <sent smilref="smil/mo2.smil#ss3" id="s3">test</sent>
+	    </level>
+	  </dtbook>
+	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss1" class="sent">
+              <text src="../dtbook.xml#s1"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+            </par>
+          </body>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss2" class="sent">
+              <text src="../dtbook.xml#s2"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+            </par>
+          </body>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss3" class="sent">
+              <text src="../dtbook.xml#s3"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="no smilref for top elements">
+      <x:call>
+  	<x:input port="source.in-memory">
+  	  <x:document type="inline" xml:base="dtbook.xml">
+	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	      <level>
+		<sent id="s1">test</sent>
+	      </level>
+	      <bodymatter id="top">
+		<level>
+		  <sent id="s2">test</sent>
+		</level>
+	      </bodymatter>
+	    </dtbook>
+	  </x:document>
+  	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <level>
+	      <sent smilref="smil/mo0.smil#ss1" id="s1">test</sent>
+	    </level>
+	    <bodymatter id="top">
+	      <level>
+		<sent smilref="smil/mo1.smil#ss2" id="s2">test</sent>
+	      </level>
+	    </bodymatter>
+	  </dtbook>
+	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss1" class="sent">
+              <text src="../dtbook.xml#s1"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+            </par>
+          </body>
+        </x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss2" class="sent">
+              <text src="../dtbook.xml#s2"/>
+              <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="duplicate noteref">
+      <x:call>
+  	<x:input port="source.in-memory">
+  	  <x:document type="inline" xml:base="dtbook.xml">
+	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	      <level>
+		<noteref id="n1" idref="#n"/>
+		<noteref id="n2" idref="#n"/>
+	      </level>
+	      <level>
+		<note id="n">text</note>
+	      </level>
+	    </dtbook>
+	  </x:document>
+  	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <level>
+	      <noteref id="n1" smilref="smil/mo0.smil#sn1" idref="#n"/>
+	      <noteref id="n2" smilref="smil/mo0.smil#sn2" idref="#n"/>
+	    </level>
+	    <level>
+	      <note id="n" smilref="smil/mo0.smil#sn">text</note>
+	    </level>
+	  </dtbook>
+	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="sn1" class="noteref" customTest="noteref">
+              <a external="false" href="mo0.smil#sn">
+                <text src="../dtbook.xml#n1"/>
+              </a>
+            </par>
+            <par id="sn" class="note" customTest="note">
+              <text src="../dtbook.xml#n"/>
+            </par>
+            <par id="sn2" class="noteref" customTest="noteref">
+              <a external="false" href="mo0.smil#sn">
+                <text src="../dtbook.xml#n2"/>
+              </a>
+            </par>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="audio only [simple]">
+      <x:call>
+	<x:option name="audio-only" select="'true'"/>
+  	<x:input port="source.in-memory">
+  	  <x:document type="inline" xml:base="dtbook.xml">
+	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	      <level>
+		<span id="s1">text</span>
+		<noteref id="n1" idref="#n"/>
+	      </level>
+	      <level>
+		<note id="n"><span id="s1">text</span><span id="s2">text</span></note>
+	      </level>
+	    </dtbook>
+	  </x:document>
+  	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory" select="//s:body|dtb:dtbook"/>
+      </x:context>
+      <x:expect type="compare" label="result">
+	<x:document type="inline">
+	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <level>
+              <span smilref="smil/mo1.smil#ss1" id="s1">text</span>
+              <noteref id="n1" idref="#n"/>
+	    </level>
+	    <level>
+              <note smilref="smil/mo1.smil#sn" id="n">
+		<span smilref="smil/mo1.smil#ss1" id="s1">text</span>
+		<span smilref="smil/mo1.smil#ss2" id="s2">text</span>
+              </note>
+	    </level>
+	  </dtbook>
+	</x:document>
+        <x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+          <body>
+            <par id="ss1" class="span">
+            <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/></par>
+            <seq id="sn" class="note" customTest="note">
+              <par id="ss1" class="span">
+                <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+              </par>
+              <par id="ss2" class="span">
+                <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+              </par>
+            </seq>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="audio only: noteref in heading">
+      <x:call>
+    	<x:option name="audio-only" select="'true'"/>
+    	<x:input port="source.in-memory">
+    	  <x:document type="inline" xml:base="dtbook.xml">
+    	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    	      <level>
+		<h1 id="header">
+		  <span id="s1">text</span>
+    		  <noteref id="n1" idref="#n"/>
+		</h1>
+    	      </level>
+    	      <level>
+    		<note id="n"><span id="s2">text</span></note>
+    	      </level>
+    	    </dtbook>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result.in-memory port">
+        <x:document type="port" port="result.in-memory"/>
+      </x:context>
+      <x:expect type="compare" label="result">
+    	<x:document type="inline">
+    	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <level>
+              <h1 smilref="smil/mo1.smil#sheader" id="header">
+		<span smilref="smil/mo1.smil#ss1" id="s1">text</span>
+		<noteref id="n1" idref="#n"/>
+              </h1>
+	    </level>
+	    <level>
+              <note smilref="smil/mo1.smil#sn" id="n">
+		<span smilref="smil/mo1.smil#ss2" id="s2">text</span>
+              </note>
+	    </level>
+    	  </dtbook>
+        </x:document>
+    	<x:document type="inline">
+	  <smil xmlns="http://www.w3.org/2001/SMIL20/">
+	    <head>
+              <meta content="uid" name="dtb:uid"/>
+              <meta content="0:00:00" name="dtb:totalElapsedTime"/>
+              <meta content="DAISY Pipeline 2" name="dtb:generator"/>
+              <customAttributes>
+		<customTest defaultState="false" id="pagenum" override="visible"/>
+		<customTest defaultState="false" id="note" override="visible"/>
+		<customTest defaultState="false" id="noteref" override="visible"/>
+		<customTest defaultState="false" id="annotation" override="visible"/>
+		<customTest defaultState="false" id="linenum" override="visible"/>
+		<customTest defaultState="false" id="sidebar" override="visible"/>
+		<customTest defaultState="false" id="prodnote" override="visible"/>
+              </customAttributes>
+	    </head>
+	    <body>
+              <seq id="sheader" class="h1">
+		<par id="ss1" class="span">
+                  <audio src="../audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+		</par>
+		<seq id="sn" class="note" customTest="note">
+                  <par id="ss2" class="span">
+                    <audio src="../audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+                  </par>
+		</seq>
+              </seq>
+	    </body>
+	  </smil>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+
+    <!-- TODO: test notes without noterefs -->
+
+    <!-- Depending on the implementation: -->
+    <!-- <x:scenario label="empty list: no smilref"> -->
+    <!--   <x:call> -->
+    <!-- 	<x:input port="source.in-memory"> -->
+    <!-- 	  <x:document type="inline" xml:base="dtbook.xml"> -->
+    <!-- 	    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/"> -->
+    <!-- 	      <level> -->
+    <!-- 		text1 -->
+    <!-- 		<list id="l1"> -->
+    <!-- 		  <note id="n1">text2</note> -->
+    <!-- 		</list> -->
+    <!-- 	      </level> -->
+    <!-- 	    </dtbook> -->
+    <!-- 	  </x:document> -->
+    <!-- 	</x:input> -->
+    <!--   </x:call> -->
+    <!--   <x:context label="result.in-memory port"> -->
+    <!-- 	<x:document type="port" port="result.in-memory"/> -->
+    <!--   </x:context> -->
+    <!--   <x:expect label="result" type="compare"> -->
+    <!-- 	<x:document type="inline"> -->
+    <!-- 	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/"> -->
+    <!-- 	    <level> -->
+    <!-- 	      text1 -->
+    <!-- 	      <list id="l1"> -->
+    <!-- 		<note id="n1">text2</note> -->
+    <!-- 	      </list> -->
+    <!-- 	    </level> -->
+    <!-- 	  </dtbook> -->
+    <!-- 	</x:document> -->
+    <!--   </x:expect> -->
+    <!-- </x:scenario> -->
+
+  </x:scenario>
+
+</x:description>

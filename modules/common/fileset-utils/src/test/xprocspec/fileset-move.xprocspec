@@ -7,112 +7,166 @@
   
     <x:scenario label="move">
         <x:call step="px:fileset-move">
-            <x:input port="fileset.in">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="samples/fileset2/">
-                        <d:file href="c.gif" media-type="image/gif"/>
-                        <d:file href="a/a.html" media-type="text/html"/>
-                        <d:file href="a/MimeDetector.java" media-type="application/octet-stream"/>
+                        <d:file href="c.gif"/>
+                        <d:file href="a/a.html"/>
+                        <d:file href="a/MimeDetector.java"/>
                     </d:fileset>
                 </x:document>
             </x:input>
-            <x:input port="in-memory.in">
+            <x:input port="source.in-memory">
                 <x:document type="inline" xml:base="samples/fileset2/a/a.html">
                     <html/>
                 </x:document>
             </x:input>
-            <x:option name="new-base" select="resolve-uri('output-dir/')"/>
+            <x:option name="target" select="resolve-uri('output-dir/')"/>
         </x:call>
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset.out"/>
+        <x:context label="the result.fileset port">
+            <x:document type="port" port="result.fileset"/>
         </x:context>
-        <x:expect label="the result should be as expected" type="custom"
+        <x:expect label="should be as expected" type="custom"
                   href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
             <x:document type="inline">
                 <d:fileset>
-                    <d:file href="output-dir/c.gif" media-type="image/gif"
+                    <d:file href="output-dir/c.gif"
                             original-href="samples/fileset2/c.gif"/>
-                    <d:file href="output-dir/a/a.html" media-type="text/html"
-                            original-href="samples/fileset2/a/a.html"/>
-                    <d:file href="output-dir/a/MimeDetector.java" media-type="application/octet-stream"
+                    <d:file href="output-dir/a/a.html"/>
+                    <d:file href="output-dir/a/MimeDetector.java"
                             original-href="samples/fileset2/a/MimeDetector.java"/>
                 </d:fileset>
             </x:document>
         </x:expect>
-        <x:context label="the in-memory port">
-            <x:document type="port" port="in-memory.out"/>
+        <x:context label="the result.in-memory port">
+            <x:document type="port" port="result.in-memory"/>
         </x:context>
-        <x:expect type="xpath" label="the result should have the expected base-uri" test="base-uri(/)"
+        <x:expect type="xpath" label="should have the expected base-uri" test="base-uri(/)"
                   equals="resolve-uri('output-dir/a/a.html',$test-base-uri)"/>
+        <x:context label="the mapping port">
+            <x:document type="port" port="mapping"/>
+        </x:context>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="output-dir/c.gif"
+                            original-href="samples/fileset2/c.gif"
+                            to-delete="true"/>
+                    <d:file href="output-dir/a/a.html"
+                            original-href="samples/fileset2/a/a.html"/>
+                    <d:file href="output-dir/a/MimeDetector.java"
+                            original-href="samples/fileset2/a/MimeDetector.java"
+                            to-delete="true"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
     </x:scenario>
 
     <x:scenario label="move fileset with files not on disk">
         <x:call step="px:fileset-move">
-            <x:input port="fileset.in">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="samples/fileset2/">
-                        <d:file href="c.gif" media-type="image/gif"/>
-                        <d:file href="a/b.html" media-type="text/html"/>
-                        <d:file href="a/MimeDetector.java" media-type="application/octet-stream"/>
+                        <d:file href="c.gif"/>
+                        <d:file href="a/b.html"/>
+                        <d:file href="a/MimeDetector.java"/>
                     </d:fileset>
                 </x:document>
             </x:input>
-            <x:input port="in-memory.in">
+            <x:input port="source.in-memory">
                 <x:document type="inline" xml:base="samples/fileset2/a/b.html">
                     <html/>
                 </x:document>
             </x:input>
-            <x:option name="new-base" select="resolve-uri('output-dir/')"/>
+            <x:option name="target" select="resolve-uri('output-dir/')"/>
         </x:call>
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset.out"/>
+        <x:context label="the result.fileset port">
+            <x:document type="port" port="result.fileset"/>
         </x:context>
-        <x:expect label="the result should be as expected" type="custom"
+        <x:expect label="should be as expected" type="custom"
                   href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
             <x:document type="inline">
                 <d:fileset>
-                    <d:file href="output-dir/c.gif" media-type="image/gif"
+                    <d:file href="output-dir/c.gif"
                             original-href="samples/fileset2/c.gif"/>
-                    <d:file href="output-dir/a/b.html" media-type="text/html"/>
-                    <d:file href="output-dir/a/MimeDetector.java" media-type="application/octet-stream"
+                    <d:file href="output-dir/a/b.html"/>
+                    <d:file href="output-dir/a/MimeDetector.java"
                             original-href="samples/fileset2/a/MimeDetector.java"/>
                 </d:fileset>
             </x:document>
         </x:expect>
-        <x:context label="the in-memory port">
-            <x:document type="port" port="in-memory.out"/>
+        <x:context label="the result.in-memory port">
+            <x:document type="port" port="result.in-memory"/>
         </x:context>
-        <x:expect type="xpath" label="the result should have the expected base-uri" test="base-uri(/)"
+        <x:expect type="xpath" label="should have the expected base-uri" test="base-uri(/)"
                   equals="resolve-uri('output-dir/a/b.html',$test-base-uri)"/>
+        <x:context label="the mapping port">
+            <x:document type="port" port="mapping"/>
+        </x:context>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="output-dir/c.gif"
+                            original-href="samples/fileset2/c.gif"
+                            to-delete="true"/>
+                    <d:file href="output-dir/a/b.html"
+                            original-href="samples/fileset2/a/b.html"/>
+                    <d:file href="output-dir/a/MimeDetector.java"
+                            original-href="samples/fileset2/a/MimeDetector.java"
+                            to-delete="true"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
     </x:scenario>
     
     <x:scenario label="move fileset with files inside ZIP">
         <x:call step="px:fileset-move">
-            <x:input port="fileset.in">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="samples/fileset2/">
-                        <d:file href="c.gif" media-type="image/gif"/>
-                        <d:file href="a.zip!/a.html" media-type="text/html"/>
-                        <d:file href="a/MimeDetector.java" media-type="application/octet-stream"/>
+                        <d:file href="c.gif"/>
+                        <d:file href="a.zip!/a.html"/>
+                        <d:file href="a/MimeDetector.java"/>
                     </d:fileset>
                 </x:document>
             </x:input>
-            <x:input port="in-memory.in"/>
-            <x:option name="new-base" select="resolve-uri('output-dir/')"/>
+            <x:input port="source.in-memory"/>
+            <x:option name="target" select="resolve-uri('output-dir/')"/>
         </x:call>
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset.out"/>
+        <x:context label="the result.fileset port">
+            <x:document type="port" port="result.fileset"/>
         </x:context>
-        <x:expect label="the result should be as expected" type="custom"
+        <x:expect label="should be as expected" type="custom"
                   href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
             <x:document type="inline">
                 <d:fileset>
-                    <d:file href="output-dir/c.gif" media-type="image/gif"
+                    <d:file href="output-dir/c.gif"
                             original-href="samples/fileset2/c.gif"/>
-                    <d:file href="output-dir/a.zip!/a.html" media-type="text/html"
+                    <d:file href="output-dir/a.zip!/a.html"
                             original-href="samples/fileset2/a.zip!/a.html"/>
-                    <d:file href="output-dir/a/MimeDetector.java" media-type="application/octet-stream"
+                    <d:file href="output-dir/a/MimeDetector.java"
                             original-href="samples/fileset2/a/MimeDetector.java"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+        <x:context label="the mapping port">
+            <x:document type="port" port="mapping"/>
+        </x:context>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="output-dir/c.gif"
+                            original-href="samples/fileset2/c.gif"
+                            to-delete="true"/>
+                    <d:file href="output-dir/a.zip!/a.html"
+                            original-href="samples/fileset2/a.zip!/a.html"
+                            to-delete="true"/>
+                    <d:file href="output-dir/a/MimeDetector.java"
+                            original-href="samples/fileset2/a/MimeDetector.java"
+                            to-delete="true"/>
                 </d:fileset>
             </x:document>
         </x:expect>

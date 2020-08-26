@@ -4,21 +4,11 @@
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-validator/daisy202-validator.xpl" uri="../xml/xproc/daisy202-validator.xpl" px:content-type="script" px:id="daisy202-validator"/>
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-validator/library.xpl" uri="../xml/xproc/library.xpl"/>
     
-    <public publicId="-//DAISY//DTD content v2.02//EN" uri="../xml/schemas/d202/xhtml1-transitional-bodyref.dtd" />
-    <public publicId="-//DAISY//DTD ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.dtd" />
-    <public publicId="-//DAISY//RNG ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.rng" />
-    <public publicId="-//DAISY//DTD nccmulti v2.02//EN" uri="../xml/schemas/d202/d202nccmulti.dtd" />
-    <public publicId="-//DAISY//DTD smil v2.02//EN" uri="../xml/schemas/d202/d202smil.dtd" />
-    <public publicId="-//DAISY//RNG smil v2.02//EN" uri="../xml/schemas/d202/d202smil.rng" />
-    <public publicId="-//DAISY//DTD msmil v2.02//EN" uri="../xml/schemas/d202/d202msmil.dtd" />
-    <public publicId="-//DAISY//RNG msmil v2.02//EN" uri="../xml/schemas/d202/d202msmil.rng" />
-    <public publicId="-//DAISY//DTD discinfo v2.02//EN" uri="../xml/schemas/d202/d202discinfo.dtd" />
-    
     <nextCatalog catalog="org:daisy:pipeline:modules:daisy202-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
     
 </catalog>

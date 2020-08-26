@@ -61,6 +61,17 @@
 				</html>
 			</x:document>
 		</x:expect>
+		<x:context label="the mapping port">
+			<x:document type="port" port="mapping"/>
+		</x:context>
+		<x:expect label="the mapping port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/minimal.xhtml" original-href="../resources/minimal.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
 	</x:scenario>
 	
 </x:description>

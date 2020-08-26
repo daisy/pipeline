@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+	
+	<public publicId='-//W3C//DTD MathML 2.0//EN' uri='../xml/mathml2/dtd/mathml2.dtd'/>
+	<system systemId='http://www.w3.org/Math/DTD/mathml2/mathml2.dtd' uri='../xml/mathml2/dtd/mathml2.dtd'/>
+	
+	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/mathml2.rng" uri="../xml/mathml2/rng/mathml2.rng"/>
+	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3.rng" uri="../xml/mathml3/mathml3.rng"/>
+	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3-common.rng" uri="../xml/mathml3/mathml3-common.rng"/>
+	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3-content.rng" uri="../xml/mathml3/mathml3-content.rng"/>
+	<uri name="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3-presentation.rng" uri="../xml/mathml3/mathml3-presentation.rng"/>
+
+</catalog>
+

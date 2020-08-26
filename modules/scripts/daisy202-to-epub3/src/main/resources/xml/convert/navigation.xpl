@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:epub="http://www.idpf.org/2007/ops"
@@ -76,12 +77,13 @@
             px:fileset-create
             px:fileset-add-entry
             px:fileset-join
+            px:fileset-rebase
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation>
-            px:epub3-nav-create-toc
-            px:epub3-nav-aggregate
+            px:epub3-add-navigation-doc
+            px:epub3-nav-to-ncx
         </p:documentation>
     </p:import>
 
@@ -135,49 +137,41 @@
     </p:identity>
     <p:sink/>
 
-    <px:epub3-nav-aggregate>
-        <p:input port="source">
+    <px:epub3-add-navigation-doc name="nav-doc">
+        <p:input port="toc">
             <p:pipe step="toc" port="result"/>
+        </p:input>
+        <p:input port="page-list">
             <p:pipe step="ncc-nav-page-list" port="result"/>
+        </p:input>
+        <p:input port="landmarks">
             <p:pipe step="ncc-nav-landmarks" port="result"/>
         </p:input>
-    </px:epub3-nav-aggregate>
+        <p:with-option name="title" select="/*/html:head/html:title">
+            <p:pipe port="ncc-navigation" step="main"/>
+        </p:with-option>
+        <p:with-option name="language" select="(/*/@lang,
+                                                /*/@xml:lang,
+                                                /*/html:head/html:meta[lower-case(@name)='dc:language']/@content)[1]">
+            <p:pipe port="ncc-navigation" step="main"/>
+        </p:with-option>
+        <p:with-option name="output-base-uri" select="concat($content-dir,'ncc.xhtml')"/>
+    </px:epub3-add-navigation-doc>
+    <p:sink/>
     <p:xslt>
-        <!-- TODO: This XSLT is here temporarily until px:epub3-nav-aggregate supports title and language customization -->
-        <p:with-param name="title" select="/*/html:head/html:title">
-            <p:pipe port="ncc-navigation" step="main"/>
-        </p:with-param>
-        <p:with-param name="lang" select="(/*/@lang, /*/@xml:lang, /*/html:head/html:meta[lower-case(@name)='dc:language']/@content)[1]">
-            <p:pipe port="ncc-navigation" step="main"/>
-        </p:with-param>
+        <p:input port="source">
+            <p:pipe step="nav-doc" port="nav"/>
+        </p:input>
         <p:with-param name="identifier" select="(/*/html:head/html:meta[lower-case(@name)='dc:identifier']/@content)[1]">
             <p:pipe port="ncc-navigation" step="main"/>
         </p:with-param>
         <p:input port="stylesheet">
             <p:inline>
                 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-                    <xsl:output indent="yes" method="xml"/>
-                    <xsl:param name="title" required="yes"/>
                     <xsl:param name="identifier" required="yes"/>
-                    <xsl:param name="lang" select="''"/>
                     <xsl:template match="@*|node()">
                         <xsl:copy>
                             <xsl:apply-templates select="@*|node()"/>
-                        </xsl:copy>
-                    </xsl:template>
-                    <xsl:template match="/*">
-                        <xsl:copy>
-                            <xsl:apply-templates select="@*"/>
-                            <xsl:if test="$lang">
-                                <xsl:attribute name="lang" select="$lang"/>
-                                <xsl:attribute name="xml:lang" select="$lang"/>
-                            </xsl:if>
-                            <xsl:apply-templates select="node()"/>
-                        </xsl:copy>
-                    </xsl:template>
-                    <xsl:template match="html:title">
-                        <xsl:copy>
-                            <xsl:value-of select="$title"/>
                         </xsl:copy>
                     </xsl:template>
                     <xsl:template match="html:head">
@@ -207,9 +201,6 @@
             <p:pipe port="ncc-navigation" step="main"/>
         </p:with-option>
     </p:add-attribute>
-    <px:set-base-uri>
-        <p:with-option name="base-uri" select="concat($content-dir,'ncc.xhtml')"/>
-    </px:set-base-uri>
     <px:message message="Successfully created navigation document (ncc.xhtml)"/>
     <p:identity name="result.navigation"/>
     <p:sink/>
@@ -240,14 +231,7 @@
                 </p:input>
             </p:insert>
             <px:message message="Creating NCX..."/>
-            <p:xslt name="ncx.ncx-without-docauthors">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/nav-to-ncx.xsl"/>
-                </p:input>
-            </p:xslt>
+            <px:epub3-nav-to-ncx name="ncx.ncx-without-docauthors"/>
             <p:for-each>
                 <p:iteration-source select="//html:meta[@name='dc:creator']">
                     <p:pipe port="ncc-navigation" step="main"/>
@@ -289,9 +273,12 @@
     </p:choose>
     <p:identity name="result.ncx"/>
 
-    <px:fileset-create>
-        <p:with-option name="base" select="$content-dir"/>
-    </px:fileset-create>
+    <px:fileset-rebase>
+        <p:input port="source">
+            <p:pipe step="nav-doc" port="nav.fileset"/>
+        </p:input>
+        <p:with-option name="new-base" select="$content-dir"/>
+    </px:fileset-rebase>
     <p:choose>
         <p:when test="$compatibility-mode='true'">
             <px:fileset-add-entry>
@@ -306,12 +293,6 @@
             <p:identity/>
         </p:otherwise>
     </p:choose>
-    <px:fileset-add-entry>
-        <p:with-option name="href" select="base-uri(/*)">
-            <p:pipe port="result" step="result.navigation"/>
-        </p:with-option>
-        <p:with-option name="media-type" select="'application/xhtml+xml'"/>
-    </px:fileset-add-entry>
     <px:message message="Navigation Document added to the fileset"/>
     <p:identity name="result.fileset"/>
     <p:sink/>

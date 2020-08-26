@@ -2,6 +2,8 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
                script="../../main/resources/xml/epub3-to-epub3.convert.xpl">
 	
 	<x:scenario label="valentin">
@@ -9,7 +11,7 @@
 			<x:input port="epub.in.fileset">
 				<x:document type="inline">
 					<d:fileset>
-						<d:file href="../resources/valentin.epub!/mimetype"/>
+						<d:file href="../resources/valentin.epub!/mimetype" compression-method="stored"/>
 						<d:file href="../resources/valentin.epub!/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="../resources/valentin.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 						<d:file href="../resources/valentin.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
@@ -48,7 +50,7 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="result/mimetype" original-href="../resources/valentin.epub!/mimetype"/>
+					<d:file href="result/mimetype" original-href="../resources/valentin.epub!/mimetype" compression-method="stored"/>
 					<d:file href="result/EPUB/C00000-1-cover.xhtml" original-href="../resources/valentin.epub!/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="result/EPUB/package.opf" original-href="../resources/valentin.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="result/EPUB/nav.xhtml" original-href="../resources/valentin.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
@@ -91,9 +93,79 @@
 					<d:file href="result/EPUB/C00000-9-footnotes_braille.css" media-type="text/plain"/>
 					<d:file href="result/EPUB/nav_braille.css" media-type="text/plain"/>
 					<d:file href="result/META-INF/metadata.xml"/>
-					<d:file href="result/EPUB/package-braille.opf"/>
+					<d:file href="result/EPUB/package-braille.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="result/EPUB/renditionMapping.html" indent="true"/>
 				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:expect label="mimetype is first entry" type="xpath" test="contains(/*/d:file[1]/@href,'mimetype')"/>
+		<x:context label="the package document">
+			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package-braille.opf')]"/>
+		</x:context>
+		<x:expect label="the package document" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
+			<x:document type="inline">
+				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-identifier" version="3.0"
+				         prefix="nordic: http://www.mtm.se/epub/">
+					<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+						<dc:identifier id="pub-identifier">C00000</dc:identifier>
+						<dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
+						<dc:creator>Beatrice Christensen Sköld</dc:creator>
+						<dc:source>urn:isbn:123456789</dc:source>
+						<dc:format>EPUB3</dc:format>
+						<dc:publisher>MTM</dc:publisher>
+						<dc:date>2006-03-23</dc:date>
+						<meta property="dcterms:modified">2020-03-09T15:37:52Z</meta>
+						<meta name="dcterms:modified" content="2020-03-09T15:37:52Z"/>
+						<meta property="nordic:guidelines">2015-1</meta>
+						<meta name="nordic:guidelines" content="2015-1"/>
+						<meta property="nordic:supplier">MTM</meta>
+						<meta name="nordic:supplier" content="MTM"/>
+						<dc:language>en-Brai</dc:language>
+					</metadata>
+					<manifest>
+						<item id="item_1" href="css/accessibility.css" media-type="text/css"/>
+						<item id="item_2" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf" media-type="application/x-font-opentype"/>
+						<item id="item_3" href="css/fonts/opendyslexic/OpenDyslexic-Italic.otf" media-type="application/x-font-opentype"/>
+						<item id="item_4" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf" media-type="application/x-font-opentype"/>
+						<item id="item_5" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" media-type="application/x-font-opentype"/>
+						<item id="item_6" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
+						<item id="item_7" href="css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
+						<item id="item_8" href="images/valentin.jpg" media-type="image/jpeg"/>
+						<item id="item_9" href="nav.ncx" media-type="application/x-dtbncx+xml"/>
+						<item id="item_10" href="C00000-1-cover_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_11" href="C00000-2-frontmatter_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_12" href="C00000-3-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_13" href="C00000-4-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_14" href="C00000-5-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_15" href="C00000-6-rearnotes_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_16" href="C00000-7-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_17" href="C00000-8-conclusion_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_18" href="C00000-9-footnotes_braille.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_19" href="nav_braille.xhtml" properties="nav" media-type="application/xhtml+xml"/>
+						<item id="item_20" href="C00000-1-cover_braille.css" media-type="text/css"/>
+						<item id="item_21" href="nav_braille.css" media-type="text/css"/>
+						<item id="item_22" href="C00000-9-footnotes_braille.css" media-type="text/css"/>
+						<item id="item_23" href="C00000-5-chapter_braille.css" media-type="text/css"/>
+						<item id="item_24" href="C00000-6-rearnotes_braille.css" media-type="text/css"/>
+						<item id="item_25" href="C00000-7-chapter_braille.css" media-type="text/css"/>
+						<item id="item_26" href="C00000-8-conclusion_braille.css" media-type="text/css"/>
+						<item id="item_27" href="C00000-4-chapter_braille.css" media-type="text/css"/>
+						<item id="item_28" href="C00000-2-frontmatter_braille.css" media-type="text/css"/>
+						<item id="item_29" href="C00000-3-chapter_braille.css" media-type="text/css"/>
+					</manifest>
+					<spine toc="item_9">
+						<itemref id="itemref_1" idref="item_10" linear="no"/>
+						<itemref id="itemref_2" idref="item_11"/>
+						<itemref id="itemref_3" idref="item_12"/>
+						<itemref id="itemref_4" idref="item_13"/>
+						<itemref id="itemref_5" idref="item_14"/>
+						<itemref id="itemref_6" idref="item_15" linear="no"/>
+						<itemref id="itemref_7" idref="item_16"/>
+						<itemref id="itemref_8" idref="item_17"/>
+						<itemref id="itemref_9" idref="item_18"/>
+					</spine>
+				</package>
 			</x:document>
 		</x:expect>
 		<x:context label="the container document">
@@ -111,6 +183,99 @@
 					</rootfiles>
 					<link href="EPUB/renditionMapping.html" rel="mapping" media-type="application/xhtml+xml"/>
 				</container>
+			</x:document>
+		</x:expect>
+		<x:context label="the first content document">
+			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/C00000-1-cover_braille.xhtml')]"/>
+		</x:context>
+		<x:expect label="cross-references should be correct" type="xpath"
+		          test="/html:html/html:head/html:link[@rel='next']/@href" equals="'C00000-2-frontmatter_braille.xhtml'"/>
+		<x:context label="the renditionMapping document">
+			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/renditionMapping.html')]"/>
+		</x:context>
+		<x:expect label="the renditionMapping document should be as expected" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<head>
+						<meta charset="utf-8"/>
+					</head>
+					<body>
+						<nav epub:type="resource-map">
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/2[itemref_1])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/2[itemref_1])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/18[itemref_9])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/18[itemref_9])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/10[itemref_5])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/10[itemref_5])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/12[itemref_6])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/12[itemref_6])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/14[itemref_7])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/14[itemref_7])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/16[itemref_8])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/16[itemref_8])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/8[itemref_4])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/8[itemref_4])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/4[itemref_2])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/4[itemref_2])"/>
+								</li>
+							</ul>
+							<ul>
+								<li>
+									<a href="package.opf#epubcfi(/6/6[itemref_3])"/>
+								</li>
+								<li>
+									<a href="package-braille.opf#epubcfi(/6/6[itemref_3])"/>
+								</li>
+							</ul>
+						</nav>
+					</body>
+				</html>
 			</x:document>
 		</x:expect>
 	</x:scenario>

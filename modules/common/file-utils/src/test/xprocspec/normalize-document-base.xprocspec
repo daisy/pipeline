@@ -8,21 +8,21 @@
         <x:call step="px:normalize-document-base">
             <x:input port="source">
                 <x:document type="inline">
-                    <doc xml:base="file:/tmp//dir/file.xml"/>
+                    <doc xml:base="file:/foo//dir/file.xml"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/tmp/dir/file.xml'"/>
-        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/file.xml'"/>
+        <x:expect label="the document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/foo/dir/file.xml'"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/foo/dir/file.xml'"/>
     </x:scenario>
     
     <x:scenario label="Scenario for testing px:normalize-document-base - document #2">
         <x:call step="px:normalize-document-base">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp//dir/file.xml">
+                <x:document type="inline" xml:base="file:/foo//dir/file.xml">
                     <doc/>
                 </x:document>
             </x:input>
@@ -31,13 +31,13 @@
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect label="the document must not have a @xml:base attribute" type="xpath" test="boolean(/*/@xml:base)" equals="false()"/>
-        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/file.xml'"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/foo/dir/file.xml'"/>
     </x:scenario>
     
     <x:scenario label="Scenario for testing px:normalize-document-base - document #3">
         <x:call step="px:normalize-document-base">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp//dir/">
+                <x:document type="inline" xml:base="file:/foo//dir/">
                     <doc/>
                 </x:document>
             </x:input>
@@ -46,13 +46,13 @@
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect label="the document must not have a @xml:base attribute" type="xpath" test="boolean(/*/@xml:base)" equals="false()"/>
-        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/'"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/foo/dir/'"/>
     </x:scenario>
     
     <x:scenario label="Scenario for testing px:normalize-document-base - document #4">
         <x:call step="px:normalize-document-base">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/tmp//dir//">
+                <x:document type="inline" xml:base="file:/foo//dir//">
                     <doc xml:base="subdir//file.xml"/>
                 </x:document>
             </x:input>
@@ -60,8 +60,8 @@
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="the document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/tmp/dir/subdir/file.xml'"/>
-        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/tmp/dir/subdir/file.xml'"/>
+        <x:expect label="the document must have a normalized @xml:base attribute" type="xpath" test="/*/@xml:base" equals="'file:/foo/dir/subdir/file.xml'"/>
+        <x:expect label="the document must have a normalized base URI" type="xpath" test="base-uri(/*)" equals="'file:/foo/dir/subdir/file.xml'"/>
     </x:scenario>
     
 </x:description>

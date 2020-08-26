@@ -15,7 +15,11 @@
       <p:pipe port="sentence-ids" step="generic"/>
     </p:output>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/nlp-break-detection/library.xpl" />
+    <p:import href="http://www.daisy.org/pipeline/modules/nlp-common/library.xpl">
+      <p:documentation>
+        px:break-and-reshape
+      </p:documentation>
+    </p:import>
     <px:break-and-reshape name="generic">
       <p:with-option name="inline-tags" select="'emph,span,ref,char,term,sub,sup,pagebreak,name,time,noteref,annoref,lnum,num,w,wpart,abbr'"/>
       <p:with-option name="ensure-word-before" select="'span'"/>

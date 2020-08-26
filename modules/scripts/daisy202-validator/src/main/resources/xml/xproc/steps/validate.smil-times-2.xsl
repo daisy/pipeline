@@ -3,7 +3,7 @@
     xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-function/daisy202-validator" xmlns:c="http://www.w3.org/ns/xproc-step"
     xpath-default-namespace="">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/clock-functions.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"/>
 
     <xsl:param name="ncc-totalTime"/>
 

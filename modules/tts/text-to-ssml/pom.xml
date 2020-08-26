@@ -38,7 +38,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>tts-helpers</artifactId>
+      <artifactId>tts-common</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--

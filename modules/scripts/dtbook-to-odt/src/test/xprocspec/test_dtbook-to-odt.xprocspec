@@ -43,13 +43,13 @@
             <x:document type="inline" base-uri="temp-dir">
                 <d:fileset>
                     <d:file href="minimal.odt/" media-type="application/vnd.oasis.opendocument.text"/>
-                    <d:file href="minimal.odt/meta.xml" original-href="default.ott!/meta.xml" media-type="text/xml"/>
+                    <d:file href="minimal.odt/meta.xml" media-type="text/xml"/>
                     <d:file href="minimal.odt/settings.xml" original-href="default.ott!/settings.xml" media-type="text/xml"/>
-                    <d:file href="minimal.odt/content.xml" original-href="default.ott!/content.xml" media-type="text/xml"/>
+                    <d:file href="minimal.odt/content.xml" media-type="text/xml"/>
                     <d:file href="minimal.odt/Thumbnails/thumbnail.png" original-href="default.ott!/Thumbnails/thumbnail.png" media-type="image/png"/>
                     <d:file href="minimal.odt/manifest.rdf" original-href="default.ott!/manifest.rdf" media-type="application/rdf+xml"/>
                     <d:file href="minimal.odt/Configurations2/accelerator/current.xml" original-href="default.ott!/Configurations2/accelerator/current.xml"/>
-                    <d:file href="minimal.odt/styles.xml" original-href="default.ott!/styles.xml" media-type="text/xml"/>
+                    <d:file href="minimal.odt/styles.xml" media-type="text/xml"/>
                 </d:fileset>
             </x:document>
         </x:expect>

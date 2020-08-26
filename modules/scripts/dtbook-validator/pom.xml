@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>dtbook-validator</artifactId>
-  <version>2.0.2-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook Validator</name>
@@ -40,24 +40,10 @@
       <artifactId>fileset-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>validation-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-entities</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <properties>
     <expose-services>
-      org.daisy.pipeline.modules.impl.Module_dtbook_validator,
       org.daisy.pipeline.script.impl.XProcScript_dtbook_validator,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_validator_script_mathml_version
     </expose-services>

@@ -9,7 +9,7 @@
 	
 	<p:documentation>
 		Extract inlined CSS (defined in attributes) into an external stylesheet. This is the inverse
-		of css:inline.
+		of px:css-cascade.
 	</p:documentation>
 	
 	<p:input port="source">

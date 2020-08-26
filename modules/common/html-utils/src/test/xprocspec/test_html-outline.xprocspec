@@ -1,68 +1,756 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:epub="http://www.idpf.org/2007/ops"
                script="../../main/resources/xml/xproc/html-outline.xpl">
-	
-	<x:scenario label="Outline">
+
+	<x:scenario label="empty headings">
 		<x:call step="px:html-outline">
 			<x:input port="source">
 				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
 					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
-						<head><meta charset="UTF-8" /><title></title></head>
-						<body xmlns:epub="http://www.idpf.org/2007/ops" id="d862273e7-0" epub:type="frontmatter">
-							<section id="d861827e19">
-								<h1 id="d862273e9-0" epub:type="title"><span class="ftit"></span></h1>
-								<p><span class="auteur"><span class="pc">LOREM IPSUM</span> <span class="pc">LOREM IPSUM</span></span></p>
-								<aside id="d862273e18-0" epub:type="annotation">Lorem ipsum dolor sit amet</aside>
+						<head>
+							<meta charset="UTF-8"/>
+							<title/>
+						</head>
+						<body epub:type="frontmatter">
+							<section>
+								<h1 epub:type="title"><span class="ftit"/></h1>
+								<p>
+									<span class="auteur">
+										<span class="pc">LOREM IPSUM</span> <span class="pc">LOREM IPSUM</span>
+									</span>
+								</p>
+								<aside epub:type="annotation">Lorem ipsum dolor sit amet</aside>
 							</section>
-							<section id="d861827e29"><p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
-								<aside id="d862273e51-0" epub:type="annotation">Lorem ipsum</aside>
+							<section>
+								<p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+								<aside epub:type="annotation">Lorem ipsum</aside>
 							</section>
-							<section id="d861827e87">
-								<h1 id="d862273e78-0"><em>Table des matières</em></h1>
+							<section>
+								<h1>
+									<em>Table des matières</em>
+								</h1>
 								<p>Lorem ipsum dolor sit amet</p>
 							</section>
-							</body>
-						</html>
+						</body>
+					</html>
 				</x:document>
 			</x:input>
 			<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
 		</x:call>
-		<x:context label="result-context">
+		<x:context label="the result port">
 			<x:document type="port" port="result"/>
 		</x:context>
-		<x:expect label="result" type="compare">
-			<x:document type="inline">
-				<ol xmlns="http://www.w3.org/1999/xhtml">
-					<li data-generated="true">
-						<a href="foo.xhtml#d862273e7-0">Untitled document</a>
+		<x:expect label="the result" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<ol>
+					<li>
+						<a href="foo.xhtml#id_1">Frontmatter</a>
 						<ol>
-							<li data-generated="true">
-								<a href="foo.xhtml#d861827e19">Untitled section</a>
+							<li>
+								<a href="foo.xhtml#id_2">Untitled section</a>
 								<ol>
-									<li data-generated="true">
-										<a href="foo.xhtml#d862273e18-0">Sidebar</a>
-									</li>
-								</ol>
-							</li>
-							<li data-generated="true">
-								<a href="foo.xhtml#d861827e29">Untitled section</a>
-								<ol>
-									<li data-generated="true">
-										<a href="foo.xhtml#d862273e51-0">Sidebar</a>
+									<li>
+										<a href="foo.xhtml#id_4">Sidebar</a>
 									</li>
 								</ol>
 							</li>
 							<li>
-							  <a href="foo.xhtml#d861827e87">
-								<em xmlns:epub="http://www.idpf.org/2007/ops">Table des matières</em>
-							  </a>
+								<a href="foo.xhtml#id_5">Untitled section</a>
+								<ol>
+									<li>
+										<a href="foo.xhtml#id_6">Sidebar</a>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<a href="foo.xhtml#id_7">
+									<em>Table des matières</em>
+								</a>
 							</li>
 						</ol>
 					</li>
 				</ol>
 			</x:document>
 		</x:expect>
+		<x:context label="the outline port">
+			<x:document type="port" port="outline"/>
+		</x:context>
+		<x:expect label="the raw outline" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<d:outline>
+					<d:section owner="id_1">
+						<d:section owner="id_2" heading="id_3">
+							<d:section owner="id_4"/>
+						</d:section>
+						<d:section owner="id_5">
+							<d:section owner="id_6"/>
+						</d:section>
+						<d:section owner="id_7" heading="id_8"/>
+					</d:section>
+				</d:outline>
+			</x:document>
+		</x:expect>
+		<x:context label="the content-doc port">
+			<x:document type="port" port="content-doc"/>
+		</x:context>
+		<x:expect label="the content doc with ID attributes" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+					<head>
+						<meta charset="UTF-8"/>
+						<title/>
+					</head>
+					<body epub:type="frontmatter" id="id_1">
+						<section id="id_2">
+							<h1 epub:type="title" id="id_3">
+								<span class="ftit"/>
+							</h1>
+							<p>
+								<span class="auteur">
+									<span class="pc">LOREM IPSUM</span> <span class="pc">LOREM IPSUM</span>
+								</span>
+							</p>
+							<aside epub:type="annotation" id="id_4">Lorem ipsum dolor sit amet</aside>
+						</section>
+						<section id="id_5">
+							<p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+							<aside epub:type="annotation" id="id_6">Lorem ipsum</aside>
+						</section>
+						<section id="id_7">
+							<h1 id="id_8">
+								<em>Table des matières</em>
+							</h1>
+							<p>Lorem ipsum dolor sit amet</p>
+						</section>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
 	</x:scenario>
-	
+
+	<x:scenario label="flat html">
+		<x:call step="px:html-outline">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<h1/>
+							<h2/>
+							<h3/>
+							<h2/>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+			<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+		</x:call>
+		<x:context label="the outline port">
+			<x:document type="port" port="outline"/>
+		</x:context>
+		<x:expect label="the raw outline" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<d:outline>
+					<d:section owner="id_1" heading="id_2">
+						<d:section heading="id_3">
+							<d:section heading="id_4"/>
+						</d:section>
+						<d:section heading="id_5"/>
+					</d:section>
+				</d:outline>
+			</x:document>
+		</x:expect>
+		<x:context label="the content-doc port">
+			<x:document type="port" port="content-doc"/>
+		</x:context>
+		<x:expect label="the content doc with ID attributes" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<body id="id_1">
+						<h1 id="id_2"/>
+						<h2 id="id_3"/>
+						<h3 id="id_4"/>
+						<h2 id="id_5"/>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="fix-sectioning option">
+		<x:call step="px:html-outline"/>
+		<x:scenario label="outline-depth (1)">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body>
+								<h1/>
+								<h2/>
+								<h3/>
+								<h2/>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'outline-depth'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<h1 id="id_2"/>
+							<section>
+								<h2 id="id_3"/>
+								<section>
+									<h3 id="id_4"/>
+								</section>
+							</section>
+							<section>
+								<h2 id="id_5"/>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="outline-depth (2)">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body>
+								<p/>
+								<h1/>
+								<section/>
+								<p/>
+								<h2/>
+								<h1/>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'outline-depth'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<p/>
+							<h1 id="id_2"/>
+							<section id="id_3"/>
+							<p/>
+							<section>
+								<h2 id="id_4"/>
+							</section>
+							<h1 id="id_5"/>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="outline-depth (3)">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body>
+								<section>
+									<h2/>
+									<h3/>
+									<h2/>
+								</section>
+								<h1/>
+								<h2/>
+								<h1/>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'outline-depth'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<section id="id_2">
+								<h2 id="id_3"/>
+								<section>
+									<h3 id="id_4"/>
+								</section>
+								<h2 id="id_5"/>
+							</section>
+							<h1 id="id_6"/>
+							<section>
+								<h2 id="id_7"/>
+							</section>
+							<h1 id="id_8"/>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="outline-depth (4)">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body>
+								<section id="level1">
+									<section id="prodnote">
+										...
+									</section>
+								</section>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'outline-depth'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<section id="level1">
+								<section id="prodnote">
+									...
+								</section>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="no-implied">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body>
+								<section>
+									<h2/>
+									<h3/>
+									<h2/>
+								</section>
+								<h1/>
+								<h2/>
+								<h1/>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'no-implied'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<section id="id_2">
+								<h2 id="id_3"/>
+								<section>
+									<h3 id="id_4"/>
+								</section>
+							</section>
+							<section>
+								<h2 id="id_5"/>
+							</section>
+						</body>
+						<body>
+							<h1 id="id_6"/>
+							<section>
+								<h2 id="id_7"/>
+							</section>
+						</body>
+						<body>
+							<h1 id="id_8"/>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="no-implied, input contains divs">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body>
+								<div id="div1">
+									<div id="div2">
+										<h1>...</h1>
+										<h1>...</h1>
+										<p>...</p>
+									</div>
+								</div>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'no-implied'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<div id="div1">
+								<div id="div2">
+									<h1 id="id_2">...</h1>
+								</div>
+							</div>
+						</body>
+						<body>
+							<div>
+								<div>
+									<h1 id="id_3">...</h1>
+									<p>...</p>
+								</div>
+							</div>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="outline-depth, input contains divs (1)">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body id="id_1">
+								<h1 id="id_2">...</h1>
+								<div id="section_1">
+									...
+									<h2 id="id_3">...</h2>
+									<div id="section_2">
+										<h3 id="id_4">...</h3>
+										...
+									</div>
+									...
+								</div>
+								<div id="section_3">
+									...
+									<h2 id="id_5">...</h2>
+								</div>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'outline-depth'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<h1 id="id_2">...</h1>
+							<div id="section_1">
+								<section>
+									...
+									<h2 id="id_3">...</h2>
+									<section>
+										<div id="section_2">
+											<h3 id="id_4">...</h3>
+											...
+										</div>
+										...
+									</section>
+								</section>
+							</div>
+							<div id="section_3">
+								<section>
+									...
+									<h2 id="id_5">...</h2>
+								</section>
+							</div>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="outline-depth, input contains divs (2)">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+							<body>
+								<h1>...</h1>
+								<div id="div1">
+									...
+									<section>
+										<h2>...</h2>
+									</section>
+									<div id="div2">
+										...
+										<h2>...</h2>
+									</div>
+								</div>
+								<div id="div3">
+									...
+									<div id="div4">
+										<h3>...</h3>
+										...
+									</div>
+								</div>
+								...
+								<h1>...</h1>
+							</body>
+						</html>
+					</x:document>
+				</x:input>
+				<x:option name="fix-sectioning" select="'outline-depth'"/>
+				<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+			</x:call>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with added sections" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<h1 id="id_2">...</h1>
+							<div id="div1">
+								...
+								<section id="id_3">
+									<h2 id="id_4">...</h2>
+								</section>
+							</div>
+							<section>
+								<div>
+									<div id="div2">
+										...
+										<h2 id="id_5">...</h2>
+									</div>
+								</div>
+								<section>
+									<div id="div3">
+										...
+										<div id="div4">
+											<h3 id="id_6">...</h3>
+											...
+										</div>
+									</div>
+									...
+								</section>
+							</section>
+							<h1 id="id_7">...</h1>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+	<x:scenario label="fix-heading-ranks option">
+		<x:call step="px:html-outline">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<h2/>
+							<h4/>
+							<h3/>
+							<section>
+								<h3/>
+							</section>
+							<h1/>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+			<x:option name="fix-heading-ranks" select="'outline-depth'"/>
+			<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+		</x:call>
+		<x:context label="the content-doc port">
+			<x:document type="port" port="content-doc"/>
+		</x:context>
+		<x:expect label="the content doc with added sections" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<body id="id_1">
+						<h1 id="id_2"/>
+						<h2 id="id_3"/>
+						<h2 id="id_4"/>
+						<section id="id_5">
+							<h2 id="id_6"/>
+						</section>
+						<h1 id="id_7"/>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="heading-links-only option">
+		<x:call step="px:html-outline">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<section>
+								<h1>Part 1</h1>
+								<h2>Chapter 1</h2>
+								<h2>Chapter 2</h2>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+			<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+		</x:call>
+		<x:scenario label="false (default)">
+			<x:call>
+				<x:option name="heading-links-only" select="'false'"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<ol xmlns="http://www.w3.org/1999/xhtml">
+						<li>
+							<a href="foo.xhtml#id_1">Untitled document</a>
+							<ol>
+								<li>
+									<a href="foo.xhtml#id_2">Part 1</a>
+									<ol>
+										<li>
+											<a href="foo.xhtml#id_4">Chapter 1</a>
+										</li>
+										<li>
+											<a href="foo.xhtml#id_5">Chapter 2</a>
+										</li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+					</ol>
+				</x:document>
+			</x:expect>
+			<x:context label="the content-doc port">
+				<x:document type="port" port="content-doc"/>
+			</x:context>
+			<x:expect label="the content doc with ID attributes" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body id="id_1">
+							<section id="id_2">
+								<h1 id="id_3">Part 1</h1>
+								<h2 id="id_4">Chapter 1</h2>
+								<h2 id="id_5">Chapter 2</h2>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="true">
+			<x:call>
+				<x:option name="heading-links-only" select="'true'"/>
+			</x:call>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="the result" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<ol xmlns="http://www.w3.org/1999/xhtml">
+						<li>
+							<span>Untitled document</span>
+							<ol>
+								<li>
+									<a href="foo.xhtml#id_3">Part 1</a>
+									<ol>
+										<li>
+											<a href="foo.xhtml#id_4">Chapter 1</a>
+										</li>
+										<li>
+											<a href="foo.xhtml#id_5">Chapter 2</a>
+										</li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+					</ol>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+	<x:scenario label="fix-untitled-sections option">
+		<x:call step="px:html-outline">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/tmp/foo.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<section>
+								<p/>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+			<x:option name="fix-untitled-sections" select="'imply-heading'"/>
+			<x:option name="output-base-uri" select="'file:/tmp/toc.xhtml'"/>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the outline" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<ol xmlns="http://www.w3.org/1999/xhtml">
+					<li>
+						<a href="foo.xhtml#id_1">Untitled document</a>
+						<ol>
+							<li>
+								<a href="foo.xhtml#id_2">Untitled section</a>
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</x:document>
+		</x:expect>
+		<x:context label="the content-doc port">
+			<x:document type="port" port="content-doc"/>
+		</x:context>
+		<x:expect label="the content doc" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<body id="id_1">
+						<h1>Untitled document</h1>
+						<section id="id_2">
+							<h2>Untitled section</h2>
+							<p/>
+						</section>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 </x:description>

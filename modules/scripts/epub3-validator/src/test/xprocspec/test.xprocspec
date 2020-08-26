@@ -7,9 +7,10 @@
     <x:scenario label="moby dick">
         <x:call step="px:epub3-validator">
             <!--
-                reusing test data from epub3-to-daisy202
+                reusing test data from epub-utils
             -->
-            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214.OK.epub')"/>
+            <x:option name="epub"
+                      select="resolve-uri('../../../../../scripts-utils/epub-utils/src/test/resources/moby-dick-mo-20120214.OK.epub')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick',$temp-dir)"/>
             <x:option name="accessibility-check" select="'true'"/>
         </x:call>
@@ -30,9 +31,10 @@
     <x:scenario label="moby dick unzipped">
         <x:call step="px:epub3-validator">
             <!--
-                reusing test data from epub3-to-daisy202
+                reusing test data from epub-utils
             -->
-            <x:option name="epub" select="resolve-uri('../resources/moby-dick-mo-20120214/OPS/package.opf')"/>
+            <x:option name="epub"
+                      select="resolve-uri('../../../../../scripts-utils/epub-utils/src/test/resources/moby-dick-mo-20120214/OPS/package.opf')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick-unzipped',$temp-dir)"/>
         </x:call>
         <x:context label="the validation status">

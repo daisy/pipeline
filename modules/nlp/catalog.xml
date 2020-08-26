@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-  <nextCatalog catalog="./nlp-utils/break-detection/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./zedai-break-detection/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./html-break-detection/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./dtbook-break-detection/src/main/resources/META-INF/catalog.xml"/>

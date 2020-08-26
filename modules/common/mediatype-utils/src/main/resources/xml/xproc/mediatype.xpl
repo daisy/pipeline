@@ -33,7 +33,12 @@
 
     <p:option name="load-if-not-in-memory" select="'false'"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-filter
+            px:fileset-load
+        </p:documentation>
+    </p:import>
 
     <p:declare-step type="pxi:mediatype-detect-from-extension">
         <p:input port="source"/>
@@ -111,13 +116,15 @@
 
                         <p:choose>
                             <p:when test="/*/@is-xml='true' and $load-if-not-in-memory='true'">
-                                <!-- try to load from disk -->
-                                <px:fileset-load method="xml" name="file-from-disk">
-                                    <p:with-option name="load-if-not-in-memory" select="$load-if-not-in-memory"/>
+                                <!-- try to load from disk as xml -->
+                                <px:fileset-filter>
                                     <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                                    <p:input port="fileset">
-                                        <p:pipe port="source" step="main"/>
+                                    <p:input port="source">
+                                        <p:pipe step="main" port="source"/>
                                     </p:input>
+                                </px:fileset-filter>
+                                <p:add-attribute match="/*" attribute-name="media-type" attribute-value="application/xml"/>
+                                <px:fileset-load name="file-from-disk" load-if-not-in-memory="true">
                                     <p:input port="in-memory">
                                         <p:pipe port="in-memory" step="main"/>
                                     </p:input>

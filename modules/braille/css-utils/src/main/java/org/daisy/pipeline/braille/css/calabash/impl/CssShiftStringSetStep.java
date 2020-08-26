@@ -44,7 +44,8 @@ import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-import static org.daisy.pipeline.braille.common.util.Strings.join;
+import org.daisy.pipeline.braille.common.util.Strings;
+import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -266,7 +267,7 @@ public class CssShiftStringSetStep extends DefaultStep implements XProcStep {
 	private static String serializeStringSet(List<TermPair<String,TermList>> stringSet) {
 		if (stringSet.isEmpty())
 			return null;
-		return join(stringSet, ", ", CssInlineStep.termToString);
+		return Strings.join(stringSet, ", ", BrailleCssSerializer::toString);
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(CssShiftStringSetStep.class);

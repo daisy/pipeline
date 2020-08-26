@@ -15,7 +15,7 @@
     <x:call step="px:text-to-ssml">
       <x:input port="fileset.in">
 	<x:document type="inline">
-	  <tmp:nothing/>
+	  <d:fileset/>
 	</x:document>
       </x:input>
       <x:input port="user-lexicons">

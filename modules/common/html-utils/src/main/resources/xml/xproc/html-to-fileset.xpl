@@ -39,6 +39,12 @@
 	</p:output>
 	
 	<p:serialization port="fileset.out" indent="true"/>
+
+	<p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
+		<p:documentation>
+			px:mediatype-detect
+		</p:documentation>
+	</p:import>
 	
 	<p:add-attribute match="/*" attribute-name="xml:base">
 		<p:with-option name="attribute-value" select="base-uri(/*)"/>
@@ -52,5 +58,7 @@
 			<p:empty/>
 		</p:input>
 	</p:xslt>
+	
+	<px:mediatype-detect/>
 	
 </p:declare-step>

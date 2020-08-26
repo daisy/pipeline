@@ -6,7 +6,11 @@
     
     <include href="mod/smilref-attr.rng"/>
     
-    <include href="mathml/mathml2/mathml2.rng" ns="http://www.w3.org/1998/Math/MathML">
+    <include href="http://www.daisy.org/pipeline/modules/mathml-utils/mathml2.rng" ns="http://www.w3.org/1998/Math/MathML">
+        <start combine="choice">
+            <notAllowed/>
+        </start>
+        
         <!-- Refine the datatypes used for IDs and IDREFs  -->
         <define name="math.id.type">
             <data type="NCName"></data>

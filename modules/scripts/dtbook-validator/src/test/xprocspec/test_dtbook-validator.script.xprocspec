@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
                script="../../main/resources/xml/dtbook-validator.xpl">
 
     <x:scenario label="dtbook_valid_2005-2">
@@ -12,10 +13,14 @@
             <x:document type="port" port="validation-status"/>
         </x:context>
         <x:expect label="the validation should succeed" type="compare">
-            <x:document>
+            <x:document type="inline">
                 <d:validation-status result="ok"/>
             </x:document>
         </x:expect>
+        <x:context label="the html-report port">
+            <x:document type="port" port="html-report"/>
+        </x:context>
+        <x:expect label="should contain a HTML document" type="xpath" test="/html:html"/>
     </x:scenario>
     
     <x:scenario label="dtbook_valid_2005-3.xml">
@@ -26,7 +31,7 @@
             <x:document type="port" port="validation-status"/>
         </x:context>
         <x:expect label="the validation should succeed" type="compare">
-            <x:document>
+            <x:document type="inline">
                 <d:validation-status result="ok"/>
             </x:document>
         </x:expect>
@@ -40,7 +45,7 @@
             <x:document type="port" port="validation-status"/>
         </x:context>
         <x:expect label="the validation should succeed" type="compare">
-            <x:document>
+            <x:document type="inline">
                 <d:validation-status result="ok"/>
             </x:document>
         </x:expect>
@@ -54,7 +59,7 @@
             <x:document type="port" port="validation-status"/>
         </x:context>
         <x:expect label="the validation should fail" type="compare">
-            <x:document>
+            <x:document type="inline">
                 <d:validation-status result="error"/>
             </x:document>
         </x:expect>

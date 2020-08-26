@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-   <uri name="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"
-        uri="../xml/xproc/epub3-ocf-library.xpl"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-</catalog>

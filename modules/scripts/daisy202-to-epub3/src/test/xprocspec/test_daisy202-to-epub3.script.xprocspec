@@ -24,17 +24,17 @@
                 </c:directory>
             </x:document>
         </x:expect>
-		<x:context label="the temp directory">
-            <x:document type="directory" base-uri="temp-dir" href="scenario1/temp-dir/" recursive="true"/>
+		<x:context label="the result epub">
+            <x:document type="zip" base-uri="temp-dir" href="scenario1/output/F00000.epub" ordered="true" select="/*/c:file"/>
 		</x:context>
-        <x:expect label="the temp-dir directory should contain 15 files, including the media overlay and mp3 files"
-				  type="xpath" test="count(//c:file)" equals="15"/>
         <x:expect type="compare"
-				  label="the temp directory">
-            <x:document type="directory" href="../resources/expected/scenario1/temp-dir/" recursive="true"/>
+				  label="the expected epub">
+            <x:document type="zip" ordered="true"
+                        href="../resources/expected/scenario1/output/F00000%20-%20Don%27t%20Worry%2C%20Be%20Happy%20Lyrics.epub"
+                        select="/*/c:file"/>
 		</x:expect>
 		<x:context label="the package.opf file">
-            <x:document type="file" base-uri="temp-dir" href="scenario1/temp-dir/epub/EPUB/package.opf" method="xml"/>
+            <x:document type="file" base-uri="temp-dir" href="scenario1/output/F00000.epub!/EPUB/package.opf" method="xml"/>
 		</x:context>
         <x:expect label="the OPF 2.0 meta elements should be present"
 				  type="xpath"
@@ -52,16 +52,17 @@
             <x:option name="mediaoverlay" select="'false'"/>
             <x:option name="compatibility-mode" select="'false'"/>
         </x:call>
-		<x:context label="the temp directory">
-            <x:document type="directory" base-uri="temp-dir" href="scenario2/temp-dir/" recursive="true"/>
+		<x:context label="the result epub">
+            <x:document type="zip" base-uri="temp-dir" href="scenario2/output/F00000.epub" ordered="true" select="/*/c:file"/>
 		</x:context>
-        <x:expect label="the temp-dir directory should only contain 6 files" type="xpath" test="count(//c:file)" equals="6"/>
         <x:expect type="compare"
-				  label="the temp directory">
-            <x:document type="directory" href="../resources/expected/scenario2/temp-dir/" recursive="true"/>
+				  label="the expected epub">
+            <x:document type="zip" ordered="true"
+                        href="../resources/expected/scenario2/output/F00000%20-%20Don%27t%20Worry%2C%20Be%20Happy%20Lyrics.epub"
+                        select="/*/c:file"/>
 		</x:expect>
 		<x:context label="the package.opf file">
-            <x:document type="file" base-uri="temp-dir" href="scenario2/temp-dir/epub/EPUB/package.opf" method="xml"/>
+            <x:document type="file" base-uri="temp-dir" href="scenario2/output/F00000.epub!/EPUB/package.opf" method="xml"/>
 		</x:context>
         <x:expect label="the OPF 2.0 meta elements should not be present"
 				  type="xpath"
@@ -70,7 +71,7 @@
 															  and (@name or @content)]) = 0"/>
 		
 		<x:context label="the mimetype file">
-            <x:document type="file" base-uri="temp-dir" href="scenario2/temp-dir/epub/mimetype" method="text"/>
+            <x:document type="file" base-uri="temp-dir" href="scenario2/output/F00000.epub!/mimetype" method="text"/>
 		</x:context>
         <x:expect type="compare"
 				  label="the mimetype file should contain the string 'application/epub+zip'">

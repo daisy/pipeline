@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-               script="../../../main/resources/xml/inline.xpl">
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
   <!--
       Custom properties
   -->
   <x:scenario label="test_01">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -43,7 +43,7 @@
       Custom values
   -->
   <x:scenario label="test_02">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -78,7 +78,7 @@
       Custom functions
   -->
   <x:scenario label="test_03">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -116,7 +116,7 @@
       Custom pseudo elements
   -->
   <x:scenario label="test_04">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>

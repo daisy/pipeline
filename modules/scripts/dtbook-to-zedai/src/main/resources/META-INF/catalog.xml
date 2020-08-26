@@ -3,11 +3,11 @@
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl" uri="../xml/dtbook-to-zedai.xpl" px:content-type="script" px:id="dtbook-to-zedai"/>
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/library.xpl" uri="../xml/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-validator"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:css-speech" />
 </catalog>

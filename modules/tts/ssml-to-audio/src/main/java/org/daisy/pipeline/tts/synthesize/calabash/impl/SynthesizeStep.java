@@ -1,8 +1,6 @@
 package org.daisy.pipeline.tts.synthesize.calabash.impl;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -37,7 +35,12 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.TreeWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SynthesizeStep extends DefaultStep implements FormatSpecifications, IPipelineLogger, XProcStep {
+
+	private static final Logger logger = LoggerFactory.getLogger(SynthesizeStep.class);
 
 	private static QName ENCODING_ERROR = new QName("TTS01");
 	
@@ -45,6 +48,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	private ReadablePipe config = null;
 	private WritablePipe result = null;
 	private WritablePipe status = null;
+	private WritablePipe logOutput = null;
 	private XProcRuntime mRuntime;
 	private TTSRegistry mTTSRegistry;
 	private Random mRandGenerator;
@@ -52,7 +56,6 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	private Semaphore mStartSemaphore;
 	private AudioBufferTracker mAudioBufferTracker;
 	private URIResolver mURIresolver;
-	private String mOutputDirOpt;
 	private String mTempDirOpt;
 	private int mSentenceCounter = 0;
 	private int mErrorCounter = 0;
@@ -88,14 +91,12 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 
 	@Override
 	synchronized public void printInfo(String message) {
-		mRuntime.info(this, null, message);
+		logger.info(message);
 	}
 
 	@Override
 	synchronized public void printDebug(String message) {
-		if (mRuntime.getDebug()) {
-			mRuntime.info(this, null, message);
-		}
+		logger.debug(message);
 	}
 
 	public void setInput(String port, ReadablePipe pipe) {
@@ -111,14 +112,14 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			result = pipe;
 		} else if ("status".equals(port)) {
 			status = pipe;
+		} else if ("log".equals(port)) {
+			logOutput = pipe;
 		}
 	}
 
 	@Override
 	public void setOption(QName name, RuntimeValue value) {
-		if ("output-dir".equals(name.getLocalName())) {
-			mOutputDirOpt = value.getString();
-		} else if ("temp-dir".equals(name.getLocalName())) {
+		if ("temp-dir".equals(name.getLocalName())) {
 			mTempDirOpt = value.getString();
 		} else
 			super.setOption(name, value);
@@ -129,6 +130,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		config.resetReader();
 		result.resetWriter();
 		status.resetWriter();
+		logOutput.resetWriter();
 	}
 
 	public void traverse(XdmNode node, SSMLtoAudio pool) throws SynthesisException {
@@ -151,7 +153,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		try {
 			mStartSemaphore.acquire();
 		} catch (InterruptedException e) {
-			mRuntime.error(e);
+			logger.error("Interrupted", e);
 			return;
 		}
 
@@ -161,8 +163,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		String logEnabledProp = cr.getDynamicProperties().get("org.daisy.pipeline.tts.log");
 		if (logEnabledProp == null)
 			logEnabledProp = cr.getStaticProperties().get("org.daisy.pipeline.tts.log");
-		boolean logEnabled = "true".equalsIgnoreCase(logEnabledProp) && mOutputDirOpt != null
-		        && !mOutputDirOpt.isEmpty();
+		boolean logEnabled = "true".equalsIgnoreCase(logEnabledProp);
 		TTSLog log;
 		if (logEnabled) {
 			log = new TTSLogImpl();
@@ -207,12 +208,12 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			mErrorCounter += ssmltoaudio.getErrorCount();
 			soundFragments = Iterables.concat(soundFragments, newfrags);
 		} catch (SynthesisException e) {
-			mRuntime.error(e);
+			logger.error("Synthesis failed", e);
 			return;
 		} catch (EncodingException e) {
 			throw new XProcException(ENCODING_ERROR, step.getNode(), e, e.getMessage());
 		} catch (InterruptedException e) {
-			mRuntime.error(e);
+			logger.error("Interrupted", e);
 			return;
 		} finally {
 			mStartSemaphore.release();
@@ -329,41 +330,8 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 
 			xmlLog.addEndElement(); //root
 			xmlLog.endDocument();
-			String content = xmlLog.getResult().toString();
-
-			FileWriter fw = null;
-
-			File outputdir;
-			try {
-				outputdir = new File(new URI(mOutputDirOpt).getPath());
-				if (!outputdir.exists()) {
-					outputdir.mkdirs();
-				}
-				File output = new File(outputdir, "tts-log.xml");
-				try {
-
-					fw = new FileWriter(output);
-				} catch (IOException e) {
-					printInfo("Cannot open log file " + output.getAbsolutePath());
-				}
-				if (fw != null) {
-					try {
-						fw.write(content);
-					} catch (IOException e) {
-						printInfo("Cannot write in log file " + output.getAbsolutePath());
-					}
-					try {
-						fw.close();
-					} catch (IOException e) {
-						//ignore
-					}
-				}
-
-			} catch (URISyntaxException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
+			
+			logOutput.write(xmlLog.getResult());
 		}
 	}
 

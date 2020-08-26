@@ -3,9 +3,8 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                exclude-inline-prefixes="px pxi css"
+                exclude-inline-prefixes="px pxi"
                 name="main">
 	
 	<p:documentation>
@@ -76,9 +75,21 @@
 		</p:choose>
 	</p:declare-step>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:error
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+		<p:documentation>
+			px:css-cascade
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+		<p:documentation>
+			px:parse-xml-stylesheet-instructions
+		</p:documentation>
+	</p:import>
 	
 	<p:variable name="xslt-stylesheets" select="string-join(tokenize($stylesheets,'\s+')[matches(.,'\.xslt?$')],' ')"/>
 	<p:variable name="css-stylesheets" select="string-join(tokenize($stylesheets,'\s+')[matches(.,'\.s?css$')],' ')"/>
@@ -118,15 +129,15 @@
 				<p:pipe step="main" port="parameters"/>
 			</p:input>
 		</pxi:recursive-xslt>
-		<css:inline px:message="Applying CSS{if (exists(tokenize($all-css-stylesheets,'\s+')[not(.='')]))
-		                                     then concat(':',string-join(('',tokenize($all-css-stylesheets,'\s+')[not(.='')]),'&#x0A;- '))
-		                                     else ''}"
+		<px:css-cascade px:message="Applying CSS{if (exists(tokenize($all-css-stylesheets,'\s+')[not(.='')]))
+		                                         then concat(':',string-join(('',tokenize($all-css-stylesheets,'\s+')[not(.='')]),'&#x0A;- '))
+		                                         else ''}"
 		            px:progress=".50">
 			<p:with-option name="default-stylesheet" select="$all-css-stylesheets"/>
 			<p:input port="sass-variables">
 				<p:pipe step="main" port="parameters"/>
 			</p:input>
-		</css:inline>
+		</px:css-cascade>
 	</p:group>
 	
 </p:declare-step>

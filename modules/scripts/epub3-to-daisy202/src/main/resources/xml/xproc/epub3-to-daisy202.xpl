@@ -74,10 +74,26 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         <p:pipe step="status" port="result"/>
     </p:output>
     
-    <p:import href="step/epub3-to-daisy202.load.xpl"/>
-    <p:import href="step/epub3-to-daisy202.convert.xpl"/>
-    <p:import href="step/epub3-to-daisy202.store.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="step/epub3-to-daisy202.convert.xpl">
+        <p:documentation>
+            px:epub3-to-daisy202
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub-load
+        </p:documentation>
+    </p:import>
 
     <p:variable name="epub-href" select="resolve-uri($epub,base-uri(/*))">
         <p:inline>
@@ -85,15 +101,15 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         </p:inline>
     </p:variable>
 
-    <px:epub3-to-daisy202.load name="load">
-        <p:with-option name="epub" select="$epub-href"/>
+    <px:epub-load name="load" version="3" store-to-disk="true">
+        <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
         <p:with-option name="validation" select="$validation"/>
-    </px:epub3-to-daisy202.load>
-
+    </px:epub-load>
+    
     <p:identity>
         <p:input port="source">
-            <p:pipe step="load" port="status"/>
+            <p:pipe step="load" port="validation-status"/>
         </p:input>
     </p:identity>
     <p:choose name="status">
@@ -116,21 +132,21 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
                         <p:input port="source.in-memory">
                             <p:pipe step="load" port="result.in-memory"/>
                         </p:input>
+                        <p:with-option name="output-dir" select="$output-dir"/>
                     </px:epub3-to-daisy202>
-        
-                    <px:epub3-to-daisy202.store name="store">
-                        <p:input port="source.fileset">
+
+                    <px:fileset-store name="store" fail-on-error="true">
+                        <p:input port="fileset.in">
                             <p:pipe step="convert" port="result.fileset"/>
                         </p:input>
-                        <p:input port="source.in-memory">
+                        <p:input port="in-memory.in">
                             <p:pipe step="convert" port="result.in-memory"/>
                         </p:input>
-                        <p:with-option name="output-dir" select="$output-dir"/>
-                    </px:epub3-to-daisy202.store>
-                    
+                    </px:fileset-store>
+
                     <p:identity cx:depends-on="store">
                         <p:input port="source">
-                            <p:pipe step="load" port="status"/>
+                            <p:pipe step="load" port="validation-status"/>
                         </p:input>
                     </p:identity>
                 </p:group>

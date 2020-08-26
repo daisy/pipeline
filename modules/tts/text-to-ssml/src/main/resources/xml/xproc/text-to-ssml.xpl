@@ -47,15 +47,41 @@
     <p:documentation>Default language.</p:documentation>
   </p:option>
 
-  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/mathml-to-ssml/library.xpl"/>
-  <p:import href="annotate.xpl" />
-  <p:import href="css-to-ssml.xpl" />
-  <p:import href="apply-lexicons.xpl" />
-  <p:import href="extract-skippable.xpl" />
-  <p:import href="extract-mathml.xpl" />
-  <p:import href="reorder-sentences.xpl" />
+  <p:import href="http://www.daisy.org/pipeline/modules/mathml-to-ssml/library.xpl">
+    <p:documentation>
+      px:mathml-to-ssml
+    </p:documentation>
+  </p:import>
+  <p:import href="annotate.xpl">
+    <p:documentation>
+      px:annotate
+    </p:documentation>
+  </p:import>
+  <p:import href="css-to-ssml.xpl">
+    <p:documentation>
+      pxi:css-to-ssml
+    </p:documentation>
+  </p:import>
+  <p:import href="apply-lexicons.xpl">
+    <p:documentation>
+      pxi:apply-lexicons
+    </p:documentation>
+  </p:import>
+  <p:import href="extract-skippable.xpl">
+    <p:documentation>
+      pxi:extract-skippable
+    </p:documentation>
+  </p:import>
+  <p:import href="extract-mathml.xpl">
+    <p:documentation>
+      pxi:extract-mathml
+    </p:documentation>
+  </p:import>
+  <p:import href="reorder-sentences.xpl">
+    <p:documentation>
+      pxi:reorder-sentences
+    </p:documentation>
+  </p:import>
 
   <p:variable name="style-ns" select="'http://www.daisy.org/ns/pipeline/tts'"/>
 

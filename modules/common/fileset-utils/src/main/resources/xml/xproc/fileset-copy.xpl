@@ -1,122 +1,139 @@
-<p:declare-step version="1.0" name="main" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:err="http://www.w3.org/ns/xproc-error"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" type="px:fileset-copy" exclude-inline-prefixes="#all">
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                exclude-inline-prefixes="#all"
+                type="px:fileset-copy" name="main">
 
-    <p:input port="source"/>
-    <p:output port="result" primary="true"/>
-    <p:option name="target" required="true"/>
-    <p:option name="fail-on-error" select="'false'"/>
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Copy a fileset to a new location</p>
+        <p>Fails if the fileset contains files outside of the base directory. No files are
+        physically copied, that is done upon calling px:fileset-store.</p>
+    </p:documentation>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:input port="source.fileset" primary="true"/>
+    <p:input port="source.in-memory" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The input fileset</p>
+        </p:documentation>
+        <p:empty/>
+    </p:input>
 
-    <p:try>
-        <p:group>
-            <p:output port="result" primary="true"/>
+    <p:output port="result.fileset" primary="true"/>
+    <p:output port="result.in-memory" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The output fileset at the new location.</p>
+            <p>The xml:base is changed to "target". The hrefs are not updated, unless the "flatten"
+            option is set, in which case they are reduced to the file name. The base URI of the
+            in-memory documents are changed accordingly, and "original-href"-attributes are added
+            for files that exist on disk.</p>
+        </p:documentation>
+        <p:pipe step="apply" port="result.in-memory"/>
+    </p:output>
+    <p:output port="mapping">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>A <code>d:fileset</code> document that contains the mapping from the source files
+            (<code>@original-href</code>) to the copied files (<code>@href</code>).</p>
+        </p:documentation>
+        <p:pipe step="mapping" port="result"/>
+    </p:output>
 
-            <!-- Check the existence of the directory -->
-            <p:group name="checkdir">
-                <!--Get file system info on the directory-->
-                <!--Note: we wrap the result since an empty sequence is returned when the file does not exist-->
-                <p:try>
-                    <p:group>
-                        <px:info>
-                            <p:with-option name="href" select="$target"/>
-                        </px:info>
-                    </p:group>
-                    <p:catch>
-                        <!-- err:FU01 - Occurs if the file named in href cannot be read (i.e. the directory does not exist). -->
-                        <p:identity>
-                            <p:input port="source">
-                                <p:empty/>
-                            </p:input>
-                        </p:identity>
-                    </p:catch>
-                </p:try>
-                <p:wrap-sequence wrapper="info"/>
-                <p:choose>
-                    <p:when test="empty(/info/*)">
-                        <px:mkdir>
-                            <p:with-option name="href" select="$target"/>
-                        </px:mkdir>
-                    </p:when>
-                    <p:when test="not(/info/c:directory)">
-                        <!--TODO rename the error-->
-                        <p:error code="err:file">
-                            <p:input port="source">
-                                <p:inline exclude-inline-prefixes="d">
-                                    <c:message>The target is not a directory.</c:message>
-                                </p:inline>
-                            </p:input>
-                        </p:error>
-                        <p:sink/>
-                    </p:when>
-                    <p:otherwise>
-                        <p:identity/>
-                        <p:sink/>
-                    </p:otherwise>
-                </p:choose>
-            </p:group>
+    <p:option name="target" required="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The target directory.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="flatten" required="false" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Move all files to a single directory.</p>
+            <p>Renames files when needed to avoid that files would overwrite each other.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="prefix" required="false" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Prefix to add before file names.</p>
+            <p>Only if "flatten" option is set.</p>
+        </p:documentation>
+    </p:option>
 
-            <p:group cx:depends-on="checkdir">
-                <p:identity>
-                    <p:input port="source">
-                        <p:pipe port="source" step="main"/>
-                    </p:input>
-                </p:identity>
-                <!-- Handle relative resources outside of the base directory -->
-                <p:viewport name="handle-outer-file" match="/d:fileset/d:file[not(matches(@href,'^[^/]+:')) and starts-with(@href,'..')]">
-                    <!--TODO: extract XPath functions in uri-utils -->
-                    <p:label-elements attribute="href" label="@href"/>
-                </p:viewport>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:error
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
+    <p:import href="fileset-join.xpl"/>
+    <p:import href="fileset-apply.xpl"/>
 
-                <!-- Handle relative resources in the base directory -->
-                <p:viewport name="handle-inner-file" match="//d:file[not(matches(@href,'^[^/]+:')) and not(starts-with(@href,'..'))]">
-                    <p:variable name="href" select="*/resolve-uri(@href, base-uri(.))"/>
-                    <p:variable name="target-file" select="resolve-uri(*/@href, concat($target,'/'))"/>
-                    <px:mkdir name="mkdir">
-                        <p:with-option name="href" select="replace($target-file,'[^/]+$','')"/>
-                    </px:mkdir>
-                    <px:copy name="copy" cx:depends-on="mkdir">
-                        <p:with-option name="href" select="$href"/>
-                        <p:with-option name="target" select="$target-file"/>
-                        <p:with-option name="fail-on-error" select="$fail-on-error"/>
-                    </px:copy>
-                    <p:identity cx:depends-on="copy">
-                        <p:input port="source">
-                            <p:pipe port="current" step="handle-inner-file"/>
-                        </p:input>
-                    </p:identity>
-                </p:viewport>
-            </p:group>
+    <p:documentation>Add xml:base and normalize fileset</p:documentation>
+    <p:add-xml-base/>
+    <px:fileset-join/>
 
-            <!--Set the base directory to the target directory-->
-            <p:add-attribute attribute-name="xml:base" match="/*">
-                <p:with-option name="attribute-value" select="$target"/>
-            </p:add-attribute>
+    <p:label-elements match="/*/d:file" attribute="href-before-move" label="resolve-uri(@href, base-uri(.))"/>
 
-        </p:group>
-        <p:catch name="catch">
-            <p:output port="result" primary="true"/>
-            <!--Rethrows the error if $fail-on-error is true, or issue a c:errors document-->
-            <p:identity>
-                <p:input port="source">
-                    <p:pipe port="error" step="catch"/>
+    <p:documentation>Flatten fileset</p:documentation>
+    <p:choose>
+        <p:when test="$flatten='true'">
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="../xslt/fileset-flatten.xsl"/>
                 </p:input>
-            </p:identity>
-            <p:choose>
-                <p:when test="$fail-on-error = 'true'">
-                    <p:variable name="code" select="/c:errors/c:error[1]/@code"/>
-                    <p:error xmlns:err="http://www.w3.org/ns/xproc-error">
-                        <p:with-option name="code" select="if ($code) then $code else 'err:XD0030'"/>
-                        <p:input port="source">
-                            <p:pipe port="error" step="catch"/>
-                        </p:input>
-                    </p:error>
-                </p:when>
-                <p:otherwise>
-                    <p:identity/>
-                </p:otherwise>
-            </p:choose>
-        </p:catch>
-    </p:try>
+                <p:with-param name="prefix" select="$prefix"/>
+            </p:xslt>
+            <p:label-elements match="d:file[@href=preceding-sibling::d:file/@href]" attribute="href" replace="true"
+                              label="for $href in @href
+                                     return replace($href,
+                                                    '^(.+?)(\.[^\.]+)?$',
+                                                    concat('$1_',1+count(preceding-sibling::d:file[@href=$href]),'$2'))">
+                <p:documentation>Because the renaming may have resulted in duplicate file names</p:documentation>
+            </p:label-elements>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
+
+    <p:viewport match="d:file" name="add-original-href">
+        <p:documentation>Fail if the file is outside of the base directory (URI is absolute or
+        starts with "..")</p:documentation>
+        <p:choose>
+            <p:when test="/*/@href[matches(.,'^[^/]+:') or starts-with(.,'..')]">
+                <px:error code="XXXX" message="File outside base directory $1: $2">
+                    <p:with-option name="param1" select="base-uri(/*)">
+                        <p:pipe step="main" port="source.fileset"/>
+                    </p:with-option>
+                    <p:with-option name="param2" select="/*/@href"/>
+                </px:error>
+            </p:when>
+            <p:otherwise>
+                <p:identity/>
+            </p:otherwise>
+        </p:choose>
+    </p:viewport>
+
+    <p:documentation>Set the base directory to the target directory</p:documentation>
+    <px:set-base-uri>
+        <p:with-option name="base-uri" select="$target"/>
+    </px:set-base-uri>
+    <p:label-elements match="d:file" attribute="original-href" label="@href-before-move" replace="true"/>
+    <p:delete match="/*/*[not(self::d:file)]"/>
+    <p:delete match="d:file/@*[not(name()=('href','original-href'))]" name="mapping"/>
+    <p:sink/>
+
+    <px:fileset-apply name="apply">
+        <p:input port="source.fileset">
+            <p:pipe step="main" port="source.fileset"/>
+        </p:input>
+        <p:input port="source.in-memory">
+            <p:pipe step="main" port="source.in-memory"/>
+        </p:input>
+        <p:input port="mapping">
+            <p:pipe step="mapping" port="result"/>
+        </p:input>
+    </px:fileset-apply>
 
 </p:declare-step>

@@ -59,7 +59,7 @@
             provided as input. It does not work if the node was retrieved via doc(), or
             created within the current XSLT transformation.
         -->
-        <xsl:sequence select="collection()[. is $root]"/>
+        <xsl:sequence select="collection()[. is $root][1]"/>
     </xsl:function>
     
     <!--
@@ -316,7 +316,7 @@
                 <xsl:variable name="main-uri" select="for $part in tokenize(replace(pf:normalize-uri(replace($uris[1],'[#\?].*$','')),'/+','SLASH|/'),'/') return replace($part,'SLASH\|$','/')"/>
                 <xsl:variable name="count-common" as="xs:integer*">
                     <xsl:for-each select="$uris[position() &gt; 1]">
-                        <xsl:variable name="compare-uri" select="for $part in tokenize(replace(pf:normalize-uri($uris[2]),'/+','SLASH|/'),'/') return replace($part,'SLASH\|$','/')"/>
+                        <xsl:variable name="compare-uri" select="for $part in tokenize(replace(pf:normalize-uri(.),'/+','SLASH|/'),'/') return replace($part,'SLASH\|$','/')"/>
                         <xsl:sequence select="min(for $i in 1 to count($main-uri) return if ($main-uri[$i]=$compare-uri[$i]) then () else $i)"/>
                     </xsl:for-each>
                 </xsl:variable>

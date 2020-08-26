@@ -49,6 +49,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-epub3/library.xpl">
+        <p:documentation>
+            px:dtbook-to-opf-metadata
+        </p:documentation>
+    </p:import>
     
     <!-- Ensure that there's exactly one c:param-set -->
     <px:merge-parameters name="parameters">
@@ -204,17 +209,11 @@
             <p:pipe step="transform" port="status"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
-            <p:xslt name="metadata" px:message="Extracting metadata from DTBook" px:progress="1/2">
+            <px:dtbook-to-opf-metadata name="metadata" px:message="Extracting metadata from DTBook" px:progress="1/2">
                 <p:input port="source">
                     <p:pipe step="dtbook" port="result"/>
                 </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../xslt/dtbook-to-metadata.xsl"/>
-                </p:input>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-            </p:xslt>
+            </px:dtbook-to-opf-metadata>
             <pef:add-metadata px:message="Adding metadata to PEF" px:progress="1/2">
                 <p:input port="source">
                     <p:pipe step="transform" port="pef"/>

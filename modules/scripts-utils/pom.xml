@@ -22,18 +22,16 @@
   <modules>
     <module>ace-adapter</module>
     <module>asciimath-utils</module>
-    <module>common-entities</module>
     <module>css-utils</module>
     <module>daisy202-utils</module>
     <module>daisy3-utils</module>
     <module>dtbook-utils</module>
-    <module>epub3-nav-utils</module>
-    <module>epub3-ocf-utils</module>
-    <module>epub3-pub-utils</module>
+    <module>epub-utils</module>
     <module>epubcheck-adapter</module>
-    <module>mediaoverlay-utils</module>
+    <module>mathml-utils</module>
+    <module>smil-utils</module>
     <module>metadata-utils</module>
-    <module>odt-utils</module>
+    <module>odf-utils</module>
     <module>zedai-utils</module>
   </modules>
   

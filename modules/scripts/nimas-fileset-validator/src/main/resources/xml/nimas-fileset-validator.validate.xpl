@@ -60,20 +60,35 @@
     <p:option name="check-images"/>
     <p:option name="base-uri"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-
-    <p:import
-        href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation>Collection of utilities for validation and reporting. </p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
     </p:import>
-
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/library.xpl">
-        <p:documentation>DTBook + MathML validator</p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-rebase
+            px:fileset-load
+            px:fileset-add-entry
+        </p:documentation>
     </p:import>
-
+    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
+        <p:documentation>
+            px:check-files-wellformed
+            px:combine-validation-reports
+            px:validation-report-to-html
+            px:validation-status
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>
+            px:dtbook-validate
+        </p:documentation>
+    </p:import>
     <p:import href="nimas-fileset-validator.validate-package-doc.xpl">
-        <p:documentation>Package doc validation step.</p:documentation>
+        <p:documentation>
+            pxi:nimas-fileset-validator.validate-package-doc
+        </p:documentation>
     </p:import>
 
     <p:import href="nimas-fileset-validator.fileset-filter.xpl"/>
@@ -152,12 +167,11 @@
                         </p:input>
                     </px:fileset-add-entry>
 
-                    <px:dtbook-validator name="validate-dtbook">
-                        <p:with-option name="base-uri" select="$dtbook-href"/>
+                    <px:dtbook-validate name="validate-dtbook">
                         <p:with-option name="check-images" select="$check-images"/>
                         <p:with-option name="mathml-version" select="$mathml-version"/>
                         <p:with-option name="nimas" select="'true'"/>
-                    </px:dtbook-validator>
+                    </px:dtbook-validate>
 
                     <!-- add the report path -->
                     <p:insert position="last-child" match="//d:document-info">

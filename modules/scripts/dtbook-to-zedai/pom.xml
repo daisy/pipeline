@@ -42,7 +42,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-validator</artifactId>
+      <artifactId>zedai-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -64,14 +64,6 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>validation-utils</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-entities</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

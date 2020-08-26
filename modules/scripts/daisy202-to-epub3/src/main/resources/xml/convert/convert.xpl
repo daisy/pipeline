@@ -40,7 +40,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub3-ocf-finalize
+        </p:documentation>
+    </p:import>
 
     <p:import href="resolve-links.create-mapping.xpl"/>
     <p:import href="ncc-navigation.xpl"/>

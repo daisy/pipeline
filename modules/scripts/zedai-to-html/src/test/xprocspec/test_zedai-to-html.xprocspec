@@ -16,7 +16,7 @@
 			<x:input port="in-memory.in">
 				<x:document type="file" href="../resources/resources/alice.xml"/>
 			</x:input>
-			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
+			<x:option name="output-dir" select="resolve-uri('output-dir/')"/>
 		</x:call>
 		<x:scenario label="without chunking">
 			<x:call>
@@ -27,9 +27,9 @@
 			</x:context>
 			<x:expect label="the fileset.out port"
 			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
-				<x:document type="inline" base-uri="temp-dir">
+				<x:document type="inline">
 					<d:fileset>
-						<d:file href="alice/output-dir/alice.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="output-dir/alice.xhtml" media-type="application/xhtml+xml"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -38,7 +38,18 @@
 			</x:context>
 			<x:expect label="there should be one document" type="count" min="1" max="1"/>
 			<x:expect label="the base uri" type="xpath"
-			          test="base-uri(/*)" equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+			          test="base-uri(/*)" equals="resolve-uri('output-dir/alice.xhtml')"/>
+			<x:context label="the mapping port">
+				<x:document type="port" port="mapping"/>
+			</x:context>
+			<x:expect label="the mapping port"
+			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="output-dir/alice.xhtml" original-href="../resources/resources/alice.xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
 		</x:scenario>
 		<x:scenario label="with chunking">
 			<x:call>
@@ -49,18 +60,74 @@
 			</x:context>
 			<x:expect label="the fileset.out port"
 			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
-				<x:document type="inline" base-uri="temp-dir">
+				<x:document type="inline">
 					<d:fileset>
-						<d:file href="alice/output-dir/alice.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="output-dir/alice-1.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="output-dir/alice-2.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="output-dir/alice-3.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="output-dir/alice-4.xhtml" media-type="application/xhtml+xml"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
 			<x:context label="the in-memory.out port">
 				<x:document type="port" port="in-memory.out"/>
 			</x:context>
-			<x:expect label="there should be one document" type="count" min="1" max="1"/>
-			<x:expect label="the base uri" type="xpath"
-			          test="base-uri(/*)" equals="resolve-uri('alice/output-dir/alice.xhtml',$temp-dir)"/>
+			<x:expect label="there should be 4 documents" type="count" min="4" max="4"/>
+			<x:context label="the mapping port">
+				<x:document type="port" port="mapping"/>
+			</x:context>
+			<x:expect label="the mapping port"
+			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+				<x:document type="inline">
+					<d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data">
+						<d:file href="output-dir/alice-1.xhtml" original-href="../resources/resources/alice.xml">
+							<d:anchor id="img_1"/>
+						</d:file>
+						<d:file href="output-dir/alice-2.xhtml" original-href="../resources/resources/alice.xml">
+							<d:anchor id="p1"/>
+							<d:anchor id="img_4"/>
+							<d:anchor id="img_2"/>
+							<d:anchor id="img_3"/>
+							<d:anchor id="p14"/>
+							<d:anchor id="p13"/>
+						</d:file>
+						<d:file href="output-dir/alice-3.xhtml" original-href="../resources/resources/alice.xml">
+							<d:anchor id="img_6"/>
+							<d:anchor id="img_7"/>
+							<d:anchor id="img_5"/>
+							<d:anchor id="img_8"/>
+							<d:anchor id="p16"/>
+							<d:anchor id="p15"/>
+							<d:anchor id="p18"/>
+							<d:anchor id="p17"/>
+							<d:anchor id="p19"/>
+							<d:anchor id="p21"/>
+							<d:anchor id="p20"/>
+							<d:anchor id="p23"/>
+							<d:anchor id="p22"/>
+							<d:anchor id="p25"/>
+							<d:anchor id="p24"/>
+							<d:anchor id="p27"/>
+							<d:anchor id="p26"/>
+						</d:file>
+						<d:file href="output-dir/alice-4.xhtml" original-href="../resources/resources/alice.xml">
+							<d:anchor id="img_10"/>
+							<d:anchor id="img_9"/>
+							<d:anchor id="p32"/>
+							<d:anchor id="p31"/>
+							<d:anchor id="p34"/>
+							<d:anchor id="p33"/>
+							<d:anchor id="p36"/>
+							<d:anchor id="p35"/>
+							<d:anchor id="p38"/>
+							<d:anchor id="p37"/>
+							<d:anchor id="p39"/>
+							<d:anchor id="p40"/>
+							<d:anchor id="p29"/>
+						</d:file>
+					</d:fileset>
+				</x:document>
+			</x:expect>
 		</x:scenario>
 	</x:scenario>
 	

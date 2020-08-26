@@ -47,8 +47,21 @@
     <p:option name="temp-dir" required="true"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/odt-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+            px:fileset-join
+            px:fileset-update
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/odf-utils/library.xpl">
+        <p:documentation>
+            odt:load
+            odt:get-file
+            odt:embed-images
+            odt:separate-mathml
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/asciimath-utils/library.xpl"/>
     
     <!-- =========== -->
@@ -119,6 +132,15 @@
             <p:pipe step="template" port="in-memory.out"/>
         </p:input>
     </odt:get-file>
+    <p:sink/>
+    
+    <px:fileset-join name="template-content-styles-meta-fileset">
+        <p:input port="source">
+            <p:pipe step="template-content" port="result.fileset"/>
+            <p:pipe step="template-styles" port="result.fileset"/>
+            <p:pipe step="template-meta" port="result.fileset"/>
+        </p:input>
+    </px:fileset-join>
     <p:sink/>
     
     <!-- =================== -->
@@ -210,7 +232,10 @@
     </p:xslt>
     
     <px:fileset-update name="update-files">
-        <p:input port="update">
+        <p:input port="update.fileset">
+            <p:pipe step="template-content-styles-meta-fileset" port="result"/>
+        </p:input>
+        <p:input port="update.in-memory">
             <p:pipe step="content" port="result"/>
             <p:pipe step="styles" port="result"/>
             <p:pipe step="meta" port="result"/>

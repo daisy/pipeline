@@ -25,5 +25,6 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-epub3"/>
   
 </catalog>

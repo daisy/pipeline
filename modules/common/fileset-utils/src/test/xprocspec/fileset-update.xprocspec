@@ -10,8 +10,8 @@
             <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/tmp/">
-                        <d:file href="file_1.xml"/>
-                        <d:file href="file_2.xml"/>
+                        <d:file href="file_1.xml" original-href="foo.xml"/>
+                        <d:file href="file_2.xml" original-href="foo.xml"/>
                     </d:fileset>
                 </x:document>
             </x:input>
@@ -23,16 +23,34 @@
                     <file_2/>
                 </x:document>
             </x:input>
-            <x:input port="update">
+            <x:input port="update.fileset">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/tmp/">
+                        <d:file href="file_2.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="update.in-memory">
                 <x:document type="inline" xml:base="file:/tmp/file_2.xml">
                     <file_2_updated/>
                 </x:document>
             </x:input>
         </x:call>
+        <x:context label="the result.fileset port">
+            <x:document type="port" port="result.fileset"/>
+        </x:context>
+        <x:expect label="should be as expected" type="compare">
+            <x:document type="inline">
+                <d:fileset xml:base="file:/tmp/">
+                    <d:file href="file_1.xml" original-href="foo.xml"/>
+                    <d:file href="file_2.xml"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
         <x:context label="the result.in-memory port">
             <x:document type="port" port="result.in-memory"/>
         </x:context>
-        <x:expect label="the result should be as expected" type="compare">
+        <x:expect label="should be as expected" type="compare">
             <x:document type="inline" xml:base="file:/tmp/file_1.xml">
                 <file_1/>
             </x:document>
@@ -46,31 +64,34 @@
         <x:call step="px:fileset-update">
             <x:input port="source.fileset">
                 <x:document type="inline">
-                    <d:fileset xml:base="file:/tmp/">
+                    <d:fileset xml:base="file:/foo/">
                         <d:file href="file_1.xml"/>
                         <d:file href="file_2.xml"/>
                     </d:fileset>
                 </x:document>
             </x:input>
             <x:input port="source.in-memory">
-                <x:document type="inline" xml:base="file:/tmp/file_1.xml">
+                <x:document type="inline" xml:base="file:/foo/file_1.xml">
                     <file_1/>
                 </x:document>
-                <x:document type="inline" xml:base="file:/tmp/file_2.xml">
+                <x:document type="inline" xml:base="file:/foo/file_2.xml">
                     <file_2/>
                 </x:document>
             </x:input>
-            <x:input port="update">
-                <x:document type="inline" xml:base="file:/tmp/file_3.xml">
-                    <file_3/>
+            <x:input port="update.fileset">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/foo/">
+                        <d:file href="file_3.xml"/>
+                    </d:fileset>
                 </x:document>
             </x:input>
+            <x:input port="update.in-memory"/>
         </x:call>
         <x:context label="the error">
             <x:document type="errors"/>
         </x:context>
         <x:expect label="error expected" type="xpath" test="/c:errors/c:error/normalize-space(string())"
-                  equals="'Trying to update a fileset with a document that is not in the manifest: file:/tmp/file_3.xml'"/>
+                  equals="'Trying to update a fileset with a file that is not in the source manifest: file:/foo/file_3.xml'"/>
     </x:scenario>
     
 </x:description>

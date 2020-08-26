@@ -4,6 +4,8 @@
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:opf="http://www.idpf.org/2007/opf"
                xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
                script="../../main/resources/xml/xproc/zedai-to-epub3.convert.xpl">
 
 	<x:scenario label="alice">
@@ -46,9 +48,8 @@
 					<d:file href="temp-dir/epub/EPUB/alice-2.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="temp-dir/epub/EPUB/alice-3.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="temp-dir/epub/EPUB/alice-4.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="temp-dir/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="temp-dir/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="temp-dir/epub/META-INF/container.xml"/>
+					<d:file href="temp-dir/epub/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
@@ -56,8 +57,59 @@
 			<x:document type="port" port="in-memory.out"
 			            select="/*[base-uri()=resolve-uri('temp-dir/epub/EPUB/package.opf',$test-base-uri)]"/>
 		</x:context>
-		<x:expect label="the package document" type="xpath"
-		          test="/opf:package/opf:metadata/dc:title/string(.)" equals='"Alice&apos;s Adventures In Wonderland"'/>
+		<x:expect label="the package document" type="custom" href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"
+		          step="x:epub3-compare-package-doc">
+			<x:document type="inline">
+				<package xmlns="http://www.idpf.org/2007/opf"
+				         prefix="dcterms: http://purl.org/dc/terms/" unique-identifier="xpub-id" version="3.0">
+					<metadata>
+						<dc:title id="id_1">Alice's Adventures In Wonderland</dc:title>
+						<dc:identifier id="xpub-id">com.googlecode.zednext.alice</dc:identifier>
+						<dc:language>en</dc:language>
+						<meta property="dcterms:modified">2020-03-25T18:01:20Z</meta>
+						<dc:format id="format2">EPUB3</dc:format>
+						<meta property="dc:publisher">CSU</meta>
+						<meta property="dc:date">2010-03-27T15:50:05Z</meta>
+						<meta property="dc:creator">Lewis Carroll</meta>
+					</metadata>
+					<manifest>
+						<item href="alice-1.xhtml" media-type="application/xhtml+xml" id="item_1" properties="nav"/>
+						<item href="alice-2.xhtml" media-type="application/xhtml+xml" id="item_2"/>
+						<item href="alice-3.xhtml" media-type="application/xhtml+xml" id="item_3"/>
+						<item href="alice-4.xhtml" media-type="application/xhtml+xml" id="item_4"/>
+					</manifest>
+					<spine>
+						<itemref idref="item_1" id="itemref_1"/>
+						<itemref idref="item_2" id="itemref_2"/>
+						<itemref idref="item_3" id="itemref_3"/>
+						<itemref idref="item_4" id="itemref_4"/>
+					</spine>
+				</package>
+			</x:document>
+		</x:expect>
+		<x:context label="the toc in the alice-1.xhtml file">
+			<x:document type="port" port="in-memory.out"
+			            select="/*[base-uri()=resolve-uri('temp-dir/epub/EPUB/alice-1.xhtml',$test-base-uri)]
+			                    //html:nav[@epub:type='toc']"/>
+		</x:context>
+		<x:expect label="the toc in the alice-1.xhtml file" type="compare">
+			<x:document type="inline">
+				<nav xmlns="http://www.w3.org/1999/xhtml" epub:type="toc">
+					<h1>Contents</h1>
+					<ul>
+						<li>
+							I. Down the Rabbit-Hole <a href="alice-2.xhtml#p1">1</a>
+						</li>
+						<li>
+							II. The Pool of Tears <a href="alice-3.xhtml#p15">15</a>
+						</li>
+						<li>
+							III. A Caucus-Race and a Long Tale <a href="alice-4.xhtml#p29">29</a>
+						</li>
+					</ul>
+				</nav>
+			</x:document>
+		</x:expect>
 	</x:scenario>
 	
 </x:description>

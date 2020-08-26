@@ -12,23 +12,30 @@
 
   <p:option name="lang" required="true"/>
 
-  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+    <p:documentation>
+      px:message
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+    <p:documentation>
+      px:fileset-load
+    </p:documentation>
+  </p:import>
 
-  <!-- iterate over the fileset to extract the lexicons URI, then load them -->
-  <!-- from the disk -->
-  <p:for-each name="doc-lexicons">
-    <p:iteration-source select="//*[@media-type = 'application/pls+xml']">
-      <p:pipe port="fileset" step="main"/>
-    </p:iteration-source>
+  <!-- load lexicons from disk -->
+  <p:group name="doc-lexicons">
     <p:output port="result" sequence="true"/>
-    <p:variable name="lexicon-loc" select="resolve-uri(/*/@href, base-uri(.))"/>
-    <p:load>
-      <p:with-option name="href" select="$lexicon-loc"/>
-    </p:load>
-    <px:message>
-      <p:with-option name="message" select="concat('load lexicon ', $lexicon-loc)"/>
-    </px:message>
-  </p:for-each>
+    <px:fileset-load media-types="application/pls+xml">
+      <p:input port="fileset">
+	<p:pipe step="main" port="fileset"/>
+      </p:input>
+    </px:fileset-load>
+    <p:for-each>
+      <p:variable name="base" select="base-uri(/*)"/>
+      <p:identity px:message="load lexicon {$base}"/>
+    </p:for-each>
+  </p:group>
 
   <!-- find all the languages actually used -->
   <p:xslt name="list-lang">

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/internal/opf/create-daisy3-opf.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:daisy3-create-opf">
+			<x:input port="source">
+				<x:document type="inline" xml:base="result/">
+					<d:fileset>
+						<d:file href="content.xml" media-type="application/x-dtbook+xml"
+						        doctype-public="-//NISO//DTD dtbook 2005-3//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
+						<d:file href="mo0.smil" media-type="application/smil"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd" indent="true"/>
+						<d:file href="mo1.smil" media-type="application/smil"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd" indent="true"/>
+						<d:file href="navigation.ncx" media-type="application/x-dtbncx+xml"
+						        doctype-public="-//NISO//DTD ncx 2005-1//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd" indent="true"/>
+						<d:file href="resources.res" media-type="application/x-dtbresource+xml"
+						        doctype-public="-//NISO//DTD resource 2005-1//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd" indent="true"/>
+						<d:file href="EPUB/audio/part0000_00_000.mp3" media-type="audio/mpeg"/>
+						<d:file href="EPUB/audio/part0001_00_000.mp3" media-type="audio/mpeg"/>
+						<d:file href="EPUB/audio/part0002_00_000.mp3" media-type="audio/mpeg"/>
+						<d:file href="EPUB/audio/part0003_00_000.mp3" media-type="audio/mpeg"/>
+						<d:file href="EPUB/audio/part0004_00_000.mp3" media-type="audio/mpeg"/>
+						<d:file href="EPUB/audio/part0005_00_000.mp3" media-type="audio/mpeg"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:option name="audio-only" select="false()"/>
+			<x:option name="opf-uri" select="resolve-uri('result/book.opf')"/>
+			<x:option name="uid" select="'urn:uuid:123'"/>
+			<x:option name="lang" select="'en'"/>
+			<x:option name="date" select="'2020-06-29'"/>
+			<x:option name="title" select="'Title'"/>
+			<x:option name="publisher" select="'Publisher'"/>
+			<x:option name="total-time" select="'0:15:30.176'"/>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+					<metadata>
+						<dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+							<dc:Language>en</dc:Language>
+							<dc:Date>2020-06-29</dc:Date>
+							<dc:Publisher>Publisher</dc:Publisher>
+							<dc:Title>Title</dc:Title>
+							<dc:Identifier id="uid">urn:uuid:123</dc:Identifier>
+						</dc-metadata>
+						<x-metadata>
+							<meta name="dtb:multimediaType" content="audioFullText"/>
+							<meta name="dtb:totalTime" content="0:15:30.176"/>
+							<meta name="dtb:multimediaContent" content="audio,text"/>
+						</x-metadata>
+					</metadata>
+					<manifest>
+						<item href="book.opf" id="opf" media-type="text/xml"/>
+						<item href="content.xml" id="opf-1" media-type="application/x-dtbook+xml"/>
+						<item href="mo0.smil" id="mo0" media-type="application/smil"/>
+						<item href="mo1.smil" id="mo1" media-type="application/smil"/>
+						<item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+						<item href="resources.res" id="resource" media-type="application/x-dtbresource+xml"/>
+						<item href="EPUB/audio/part0000_00_000.mp3" id="opf-6" media-type="audio/mpeg"/>
+						<item href="EPUB/audio/part0001_00_000.mp3" id="opf-7" media-type="audio/mpeg"/>
+						<item href="EPUB/audio/part0002_00_000.mp3" id="opf-8" media-type="audio/mpeg"/>
+						<item href="EPUB/audio/part0003_00_000.mp3" id="opf-9" media-type="audio/mpeg"/>
+						<item href="EPUB/audio/part0004_00_000.mp3" id="opf-10" media-type="audio/mpeg"/>
+						<item href="EPUB/audio/part0005_00_000.mp3" id="opf-11" media-type="audio/mpeg"/>
+					</manifest>
+					<spine>
+						<itemref idref="mo0"/>
+						<itemref idref="mo1"/>
+					</spine>
+				</package>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

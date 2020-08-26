@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-               script="../../../main/resources/xml/inline.xpl">
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
 
   <x:scenario label="test_01">
     <x:documentation>
       From within embedded style sheet import external style sheet stored locally.
     </x:documentation>
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -43,7 +43,7 @@
     <x:documentation>
       From within embedded style sheet import external style sheet stored in module.
     </x:documentation>
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -77,7 +77,7 @@
     <x:documentation>
       From within (linked) style sheet stored in module import style sheet that is private to that module.
     </x:documentation>
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>

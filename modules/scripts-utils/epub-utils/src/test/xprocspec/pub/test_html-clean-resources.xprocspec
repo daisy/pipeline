@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:svg="http://www.w3.org/2000/svg"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               xmlns:h="http://www.w3.org/1999/xhtml"
+               xmlns="http://www.w3.org/1999/xhtml">
+
+    <x:script>
+        <p:declare-step type="x:test" version="1.0" name="main">
+            <p:input port="source" primary="true"/>
+            <p:input port="fileset" primary="false"/>
+            <p:output port="result"/>
+            <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
+            <px:html-update-links name="update-links">
+                <p:input port="mapping">
+                    <p:pipe step="main" port="fileset"/>
+                </p:input>
+            </px:html-update-links>
+            <p:xslt>
+                <p:input port="source">
+                    <p:pipe step="update-links" port="result"/>
+                    <p:pipe step="main" port="fileset"/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../../main/resources/xml/pub/html-clean-resources.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+        </p:declare-step>
+    </x:script>
+
+    <x:scenario label="test">
+        <x:call step="x:test">
+            <x:input port="fileset">
+                <x:document type="inline" xml:base="file:/example/">
+                    <d:fileset>
+                        <d:file href="audio.mp3" original-href="file:/example/audio.mp3"/>
+                        <d:file href="image.png" original-href="file:/example/image.png"/>
+                        <d:file href="otherimage.png" original-href="file:/example/otherimage.png"/>
+                        <d:file href="my_image.png" original-href="file:/example/my%20image.png"/>
+                        <d:file href="video.mp4" original-href="file:/example/video.mp4"/>
+                        <d:file href="sub.srt" original-href="file:/example/sub.srt"/>
+                        <d:file href="desc.xhtml" original-href="file:/example/desc.xml"/>
+                        <d:file href="otherdesc.xhtml" original-href="file:/example/otherdesc.xml"/>
+                        <d:file href="nohtml.xml" original-href="file:/example/nohtml.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:scenario label="An 'img' element">
+            <x:call/>
+            <x:scenario label="with no @src">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <img/>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <img/>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a relative image">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <img src="image.png"/>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <img src="image.png"/>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a non-existing image">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <img src="unkown.png"/>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is discarded" type="compare">
+                    <x:document type="inline">
+                        <div/>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a relative image with an unsafe URI">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <img src="my%20image.png"/>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted with a safe URI" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <img src="my_image.png"/>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a remote image">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <img src="http://www.example.com/image.png" alt="alt text"/>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as a span, with alt-text as content" type="compare">
+                    <x:document type="inline">
+                        <span>alt text</span>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a non-supported image format">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <img src="image.tiff" alt="alt text"/>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as a span, with alt-text as content" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <span>alt text</span>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="inlined as a 'data:' URI">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <img src="data:image/png;base64,ABCDEFG"/>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is kept as-is" type="compare">
+                    <x:document type="inline">
+                        <img src="data:image/png;base64,ABCDEFG"/>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    
+        <x:scenario label="An 'embed' element">
+            <x:call/>
+            <x:scenario label="representing an audio">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <embed src="audio.mp3" width="100" height="100"/>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted to audio" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <audio src="audio.mp3"/>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    
+        <x:scenario label="An 'video' element">
+            <x:call/>
+            <x:scenario label="with alternative child content">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <video src="video.mp4">
+                                    <track src="sub.srt"/>
+                                    <span>alt text</span>
+                                </video>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <video src="video.mp4">
+                                <track src="sub.srt"/>
+                                <span>alt text</span>
+                            </video>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    
+        <x:scenario label="SVG">
+            <x:call/>
+            <x:scenario label="pointing to a relative image">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <svg:svg>
+                                <svg:image xlink:href="image.png"/>
+                            </svg:svg>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <svg:svg>
+                            <svg:image xlink:href="image.png"/>
+                        </svg:svg>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a non-existing image">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <svg:svg>
+                                <svg:image xlink:href="unknown.png"/>
+                            </svg:svg>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is discarded" type="compare">
+                    <x:document type="inline">
+                        <svg:svg/>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    
+        <x:scenario label="longdesc">
+            <x:call/>
+            <x:scenario label="pointing to local element">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" longdesc="#foo"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as aria-describedby" type="compare">
+                    <x:document type="inline">
+                        <body>
+                            <img src="image.png" aria-describedby="foo"/>
+                        </body>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a remote description">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" longdesc="http://www.example.com/desc.xhtml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <body>
+                            <img src="image.png" longdesc="http://www.example.com/desc.xhtml"/>
+                        </body>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a compatible external resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" longdesc="desc.xml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <!--
+                    Expected result:
+                <body>
+                    <img src="image.png" longdesc="desc.xhtml" aria-describedby="#d11e2a2012"/>
+                    <aside class="dp2-invisible">
+                        <iframe id="d11e2a2012" src="desc.xhtml"/>
+                    </aside>
+                </body>
+                -->
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is kept" type="xpath" test="exists(/h:body/h:img/@longdesc[.='desc.xhtml'])"/>
+                <x:expect label="an aria-describedby is also added" type="xpath"
+                          test="exists(/h:body/h:img/@aria-describedby)"/>
+                <x:expect label="a hidden aside is created as the last child of body" type="xpath"
+                          test="exists(/h:body/*[last()]/self::h:aside[@class='dp2-invisible'])"/>
+                <x:expect label="the hidden aside contains an iframe with a proper ID" type="xpath"
+                          test="exists(//h:aside/h:iframe[@id=//h:img/@aria-describedby])"/>
+                <x:expect label="the iframe includes the proper resource" type="xpath"
+                          test="//h:iframe/@src='desc.xhtml'"/>
+            </x:scenario>
+            <x:scenario
+                label="pointing to a compatible external resource but with an existing
+                aria-describedby">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" longdesc="desc.xml" aria-describedby="foo"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is kept as-is, no iframe is created" type="compare">
+                    <x:document type="inline">
+                        <body>
+                            <img src="image.png" longdesc="desc.xhtml" aria-describedby="foo"/>
+                        </body>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a non-existing resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" longdesc="unknown.xhtml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is discarded" type="compare">
+                    <x:document type="inline">
+                        <body>
+                            <img src="image.png"/>
+                        </body>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a non-HTML resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" longdesc="nohtml.xml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is kept" type="xpath" test="exists(/h:body/h:img/@longdesc[.='nohtml.xml'])"/>
+                <x:expect label="no aria-describedby is added" type="xpath"
+                          test="empty(/h:body/h:img/@aria-describedby)"/>
+                <x:expect label="no hidden aside is created" type="xpath"
+                          test="empty(//h:aside[@class='dp2-invisible'])"/>
+            </x:scenario>
+        </x:scenario>
+    
+    
+        <x:scenario label="aria-describedat">
+            <x:call/>
+            <x:scenario label="pointing to local element">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" aria-describedat="#foo"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as aria-describedby" type="compare">
+                    <x:document type="inline">
+                        <body>
+                            <img src="image.png" aria-describedby="foo"/>
+                        </body>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a remote description">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" aria-describedat="http://www.example.com/desc.xhtml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is itself discarded" type="xpath" test="empty(//h:img/@aria-describedat)"/>
+                <x:expect label="is converted as a longdesc" type="xpath"
+                          test="exists(//h:img/@longdesc[.='http://www.example.com/desc.xhtml'])"/>
+                <x:expect label="is also converted as an aria-describedby" type="xpath"
+                          test="exists(//h:img/@aria-describedby)"/>
+                <x:expect label="a hidden aside is created as the last child of body" type="xpath"
+                          test="exists(/h:body/*[last()]/self::h:aside[@class='dp2-invisible'])"/>
+                <x:expect label="the hidden aside contains an iframe with a proper ID" type="xpath"
+                          test="exists(//h:aside/h:iframe[@id=//h:img/@aria-describedby])"/>
+                <x:expect label="the iframe includes the proper resource" type="xpath"
+                          test="//h:iframe/@src='http://www.example.com/desc.xhtml'"/>
+            </x:scenario>
+            <x:scenario label="pointing to a compatible external resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" aria-describedat="desc.xml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <!--
+                    Expected result:
+                <body>
+                    <img src="image.png" aria-describedby="#d11e2a2012"/>
+                    <aside class="dp2-invisible">
+                        <iframe id="d11e2a2012" src="desc.xhtml"/>
+                    </aside>
+                </body>
+                -->
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is itself discarded" type="xpath" test="empty(//h:img/@aria-describedat)"/>
+                <x:expect label="is converted to an aria-describedby" type="xpath"
+                          test="exists(/h:body/h:img/@aria-describedby)"/>
+                <x:expect label="a hidden aside is created as the last child of body" type="xpath"
+                          test="exists(/h:body/*[last()]/self::h:aside[@class='dp2-invisible'])"/>
+                <x:expect label="the hidden aside contains an iframe with a proper ID" type="xpath"
+                          test="exists(//h:aside/h:iframe[@id=//h:img/@aria-describedby])"/>
+                <x:expect label="the iframe includes the proper resource" type="xpath"
+                          test="//h:iframe/@src='desc.xhtml'"/>
+            </x:scenario>
+            <x:scenario label="pointing to a non-existing resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" aria-describedat="unknown.xhtml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is discarded" type="compare">
+                    <x:document type="inline">
+                        <body>
+                            <img src="image.png"/>
+                        </body>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a non-HTML resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" aria-describedat="nohtml.xml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is kept" type="xpath" test="exists(/h:body/h:img/@aria-describedat[.='nohtml.xml'])"/>
+                <x:expect label="no aria-describedby is added" type="xpath"
+                          test="empty(/h:body/h:img/@aria-describedby)"/>
+                <x:expect label="no hidden aside is created" type="xpath"
+                          test="empty(//h:aside[@class='dp2-invisible'])"/>
+            </x:scenario>
+            <x:scenario label="when two descriptions point to the same resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <body>
+                                <img src="image.png" aria-describedat="desc.xml"/>
+                                <img src="otherimage.png" aria-describedat="desc.xml"/>
+                            </body>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <!--
+                    Expected result:
+                <body>
+                    <img src="image.png" aria-describedby="#d11e2a2012"/>
+                    <img src="other.png" aria-describedby="#d11e2a2012"/>
+                    <aside class="dp2-invisible">
+                        <iframe id="d11e2a2012" src="desc.xhtml"/>
+                    </aside>
+                </body>
+                -->
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="both are converted to a aria-describedby" type="xpath"
+                          test="count(//@aria-describedby)=2"/>
+                <x:expect label="a single hidden aside is created as the last child of body" type="xpath"
+                          test="count(/h:body/h:aside[@class='dp2-invisible'])=1"/>
+                <x:expect label="aria-describedby points to the same hidden iframe" type="xpath"
+                          test="every $id in //@aria-describedby satisfies $id =(//h:iframe)[1]/@id"/>
+            </x:scenario>
+        </x:scenario>
+    </x:scenario>
+
+</x:description>

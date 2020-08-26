@@ -1,0 +1,64 @@
+<!-- d202discinfo.dtd m gylling version 2002-12-22 -->
+
+<!ENTITY % HTMLlat1 PUBLIC
+   "-//W3C//ENTITIES Latin 1 for XHTML//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent">
+%HTMLlat1;
+
+<!ENTITY % HTMLsymbol PUBLIC
+   "-//W3C//ENTITIES Symbols for XHTML//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent">
+%HTMLsymbol;
+
+<!ENTITY % HTMLspecial PUBLIC
+   "-//W3C//ENTITIES Special for XHTML//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent">
+%HTMLspecial;
+
+<!ENTITY % LanguageCode "NMTOKEN"> <!-- [RFC1766] -->
+
+<!ENTITY % URI "CDATA"> <!-- [RFC2396] -->
+
+<!ELEMENT html (head, body)>
+
+<!ATTLIST html
+  xmlns		%URI;          #FIXED 'http://www.w3.org/1999/xhtml'
+  lang		%LanguageCode; #IMPLIED
+  xml:lang	%LanguageCode; #IMPLIED
+>
+
+<!-- ============ h e a d ============ -->
+
+<!ENTITY % head.misc "(style|meta|link)*">
+
+<!ELEMENT head  (%head.misc;,((title), %head.misc;))?>
+
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT meta EMPTY>
+
+<!ATTLIST meta
+  http-equiv 	CDATA 		#IMPLIED
+  name 		CDATA 		#IMPLIED
+  content 	CDATA 		#REQUIRED
+  scheme 	CDATA 		#IMPLIED
+>
+
+<!ELEMENT link EMPTY>
+
+<!ATTLIST link
+  rel 		CDATA 		#REQUIRED
+  type 		CDATA 		#REQUIRED
+  href 		%URI; 		#REQUIRED
+>
+
+<!-- ============ b o d y ============ -->
+
+<!ELEMENT body (a+)>
+
+<!ELEMENT a (#PCDATA)>
+
+<!ATTLIST a 
+ id		ID		#IMPLIED
+ href 		%URI; 		#REQUIRED
+>

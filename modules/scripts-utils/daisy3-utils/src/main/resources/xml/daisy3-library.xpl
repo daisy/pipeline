@@ -13,9 +13,11 @@
 
     <p:import href="internal/load/load.xpl"/>
     <p:import href="internal/smils/create-daisy3-smils.xpl"/>
+    <p:import href="internal/smils/add-smilrefs.xpl"/>
     <p:import href="internal/ncx/create-ncx.xpl"/>
+    <p:import href="internal/ncx/update-links.xpl"/>
     <p:import href="internal/opf/create-daisy3-opf.xpl"/>
-    <p:import href="internal/dtbook/fix-dtbook-structure.xpl"/>
+    <p:import href="internal/dtbook/prepare-dtbook.xpl"/>
     <p:import href="internal/dtbook/isolate-daisy3-skippable.xpl"/>
     <p:import href="internal/resources/create-res-file.xpl"/>
 </p:library>

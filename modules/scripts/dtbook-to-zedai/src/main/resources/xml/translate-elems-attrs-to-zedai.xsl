@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0"
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/"
-    xmlns:its="http://www.w3.org/2005/11/its" xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
-    xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
-    xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
-    xmlns:m="http://www.w3.org/1998/Math/MathML"
-    xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
-    xmlns="http://www.daisy.org/ns/z3998/authoring/" exclude-result-prefixes="#all">
+                xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/"
+                xmlns:its="http://www.w3.org/2005/11/its"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+                xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
+                xmlns="http://www.daisy.org/ns/z3998/authoring/"
+                exclude-result-prefixes="#all">
 
     <xsl:import href="translate-mathml-to-zedai.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>Direct translation element and attribute names from DTBook to ZedAI. Most of the work
@@ -20,10 +24,7 @@
 
     <xsl:param name="css-filename"/>
 
-    <xsl:output indent="yes" method="xml"/>
-
     <xsl:key name="ids" match="*" use="@id"/>
-
 
     <xsl:template match="/">
         <xsl:message>Translate to ZedAI</xsl:message>
@@ -33,8 +34,52 @@
             <xsl:text>RNGSchema="/Users/marisa/Projects/pipeline2/daisy-pipeline-modules/schemas/zedai/z3998-book-1.0/z3998-book.rng" type="xml"</xsl:text>
         </xsl:processing-instruction>
         -->
-
         <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="dtb:dtbook" priority="1">
+        <xsl:call-template name="pf:next-match-with-generated-ids">
+            <xsl:with-param name="prefix" select="'id_'"/>
+            <xsl:with-param name="for-elements" select="//dtb:frontmatter|
+                                                        //dtb:level[not(@id)]|
+                                                        //dtb:level1[not(@id)]|
+                                                        //dtb:level2[not(@id)]|
+                                                        //dtb:level3[not(@id)]|
+                                                        //dtb:level4[not(@id)]|
+                                                        //dtb:level5[not(@id)]|
+                                                        //dtb:level6[not(@id)]|
+                                                        //dtb:img[not(@id)]|
+                                                        //dtb:blockquote[not(@id)]|
+                                                        //dtb:q[not(@id)]|
+                                                        //dtb:table[not(@id)]|
+                                                        //dtb:col[not(@id)]|
+                                                        //dtb:thead[not(@id)]|
+                                                        //dtb:tfoot[not(@id)]|
+                                                        //dtb:tbody[not(@id)]|
+                                                        //dtb:tr[not(@id)]|
+                                                        //dtb:th[not(@id)]|
+                                                        //dtb:td[not(@id)]|
+                                                        //dtb:author[not(@id)]|
+                                                        //*[not(self::dtb:q)]/dtb:cite[not(@id)]|
+                                                        //dtb:poem[not(@id)]
+                                                        "/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template name="generate-id">
+        <xsl:param name="f:generated-ids" tunnel="yes" select="()"/>
+        <xsl:choose>
+            <xsl:when test="@id">
+                <xsl:attribute name="xml:id" select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- rename id to xml:id -->
+                <xsl:variable name="id" as="xs:string">
+                    <xsl:call-template name="pf:generate-id"/>
+                </xsl:variable>
+                <xsl:attribute name="xml:id" select="$id"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="comment() | text()">
@@ -141,7 +186,8 @@
         <frontmatter>
             <xsl:call-template name="attrs"/>
             <!-- all sections must have IDs in case we need to anchor floating annotations to them -->
-            <section xml:id="{generate-id()}">
+            <section>
+                <xsl:call-template name="generate-id"/>
                 <xsl:apply-templates select="dtb:doctitle"/>
                 <xsl:apply-templates select="dtb:covertitle"/>
                 <xsl:apply-templates select="dtb:docauthor"/>
@@ -177,7 +223,7 @@
             <xsl:call-template name="attrs"/>
             <!-- all sections must have IDs in case we need to anchor floating annotations to them -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </section>
@@ -277,8 +323,6 @@
 
     <xsl:template match="dtb:img">
 
-        <!-- generate an ID in case we need it -->
-        <xsl:variable name="imgID" select="generate-id()"/>
         <!--TODO add @media-type-->
         <object>
             <xsl:call-template name="attrs"/>
@@ -292,9 +336,8 @@
                 <xsl:attribute name="tmp:width" select="@width"/>
             </xsl:if>
 
-
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="$imgID"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:choose>
                 <!-- when we're using longdesc, just point to it with @desc.
@@ -304,7 +347,10 @@
                 </xsl:when>
                 <!-- if there's no longdesc, then use zedai's description element for the alt text -->
                 <xsl:otherwise>
-                    <description ref="{if (@id) then @id else $imgID}">
+                    <xsl:variable name="id" as="xs:string">
+                        <xsl:call-template name="generate-id"/>
+                    </xsl:variable>
+                    <description ref="{$id}">
                         <xsl:value-of select="@alt"/>
                     </description>
                 </xsl:otherwise>
@@ -344,8 +390,12 @@
                 <xsl:when test="parent::dtb:imggroup">
                     <!-- get the id of the image in the imggroup and use it as a ref -->
                     <!-- we know that images with no IDs had them generated in the img template, so re-use that ID. -->
-                    <xsl:attribute name="ref"
-                        select="../dtb:img/(if (@id) then @id else generate-id())"/>
+                    <xsl:variable name="img-id" as="xs:string">
+                        <xsl:for-each select="../dtb:img">
+                            <xsl:call-template name="generate-id"/>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:attribute name="ref" select="$img-id"/>
                 </xsl:when>
             </xsl:choose>
             <xsl:call-template name="attrs"/>
@@ -490,7 +540,7 @@
 
             <!-- if no ID, then give a new ID if needed to anchor the citation -->
             <xsl:if test="not(@id) and (dtb:cite or dtb:author or dtb:title)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:choose>
                 <!-- for internal references, use @ref; otherwise use @xlink:ref -->
@@ -507,7 +557,12 @@
                     <xsl:for-each-group select="*" group-adjacent="boolean(self::dtb:author|self::dtb:title)">
                         <xsl:choose>
                             <xsl:when test="current-grouping-key()">
-                                <citation about="{concat('#',if (../@id) then ../@id else ../generate-id())}">
+                                <xsl:variable name="blockquote-id" as="xs:string">
+                                    <xsl:for-each select="..">
+                                        <xsl:call-template name="generate-id"/>
+                                    </xsl:for-each>
+                                </xsl:variable>
+                                <citation about="#{$blockquote-id}">
                                     <xsl:apply-templates select="current-group()"/>
                                 </citation>
                             </xsl:when>
@@ -536,13 +591,23 @@
             </name>
     </xsl:template>
     <xsl:template match="dtb:q/dtb:title">
-        <span property="title" about="{concat('#',if (../@id) then ../@id else ../generate-id())}">
+        <xsl:variable name="quote-id" as="xs:string">
+            <xsl:for-each select="..">
+                <xsl:call-template name="generate-id"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <span property="title" about="#{$quote-id}">
             <xsl:call-template name="attrs"/>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="dtb:q/dtb:author">
-        <name property="author" about="{concat('#',if (../@id) then ../@id else ../generate-id())}">
+        <xsl:variable name="quote-id" as="xs:string">
+            <xsl:for-each select="..">
+                <xsl:call-template name="generate-id"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <name property="author" about="#{$quote-id}">
             <xsl:call-template name="attrs"/>
             <xsl:apply-templates/>
         </name>
@@ -559,8 +624,11 @@
 
         <!-- in ZedAI, captions don't live inside tables as in DTBook -->
         <xsl:if test="dtb:caption">
+            <xsl:variable name="id" as="xs:string">
+                <xsl:call-template name="generate-id"/>
+            </xsl:variable>
             <xsl:apply-templates mode="table-caption" select="dtb:caption">
-                <xsl:with-param name="refValue" select="if (@id) then @id else generate-id()"/>
+                <xsl:with-param name="refValue" select="$id"/>
             </xsl:apply-templates>
         </xsl:if>
 
@@ -592,7 +660,7 @@
 
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
 
             <!--
@@ -641,7 +709,7 @@
 
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </col>
@@ -668,7 +736,7 @@
             </xsl:if>
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </colgroup>
@@ -687,7 +755,7 @@
             </xsl:if>
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </thead>
@@ -706,7 +774,7 @@
             </xsl:if>
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </tfoot>
@@ -725,7 +793,7 @@
             </xsl:if>
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </tbody>
@@ -744,7 +812,7 @@
             </xsl:if>
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </tr>
@@ -768,7 +836,7 @@
             </xsl:if>
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
 
             <xsl:apply-templates/>
@@ -793,7 +861,7 @@
             </xsl:if>
             <!-- generate an ID for use by CSS -->
             <xsl:if test="not(@id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
             <xsl:apply-templates/>
         </td>
@@ -849,10 +917,13 @@
 
 
     <xsl:template match="dtb:author">
+        <xsl:variable name="id" as="xs:string">
+            <xsl:call-template name="generate-id"/>
+        </xsl:variable>
         <!--if standalone author, wrap it in a citation.-->
-        <citation xml:id="{if (@id) then @id else generate-id()}">
+        <citation xml:id="{$id}">
             <xsl:call-template name="attrs"/>
-            <name property="author" about="{if (@id) then @id else generate-id()}">
+            <name property="author" about="{$id}">
                 <xsl:apply-templates/>
             </name>
         </citation>
@@ -863,26 +934,50 @@
 
             <!-- if no ID and one is needed to anchor title|author properties, then give a new ID -->
             <xsl:if test="not(parent::dtb:q or @id)">
-                <xsl:attribute name="xml:id" select="generate-id()"/>
+                <xsl:call-template name="generate-id"/>
             </xsl:if>
 
             <xsl:apply-templates/>
         </citation>
     </xsl:template>
     <xsl:template match="dtb:cite/dtb:title">
+        <xsl:variable name="about" as="xs:string">
+            <xsl:choose>
+                <xsl:when test="../parent::dtb:q">
+                    <xsl:for-each select="../..">
+                        <xsl:call-template name="generate-id"/>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:for-each select="..">
+                        <xsl:call-template name="generate-id"/>
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <!-- Anchor to the ancestor quote if it exists, else to the parent cite -->
-        <span property="title" about="{concat('#',if (../parent::dtb:q) then
-                if (../../@id) then ../../@id else ../../generate-id()
-            else if (../@id) then ../@id else ../generate-id())}">
+        <span property="title" about="#{$about}">
             <xsl:call-template name="attrs"/>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="dtb:cite/dtb:author">
+        <xsl:variable name="about" as="xs:string">
+            <xsl:choose>
+                <xsl:when test="../parent::dtb:q">
+                    <xsl:for-each select="../..">
+                        <xsl:call-template name="generate-id"/>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:for-each select="..">
+                        <xsl:call-template name="generate-id"/>
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <!-- Anchor to the ancestor quote if it exists, else to the parent cite -->
-        <name property="author" about="{concat('#',if (../parent::dtb:q) then
-            if (../../@id) then ../../@id else ../../generate-id()
-            else if (../@id) then ../@id else ../generate-id())}">
+        <name property="author" about="#{$about}">
             <xsl:call-template name="attrs"/>
             <xsl:apply-templates/>
         </name>
@@ -1100,7 +1195,11 @@
     </xsl:template>
 
     <xsl:template match="dtb:poem">
-        <block role="poem" xml:id="{if (@id) then @id else generate-id()}">
+        <xsl:variable name="id" as="xs:string">
+            <xsl:call-template name="generate-id"/>
+        </xsl:variable>
+        <!--if standalone author, wrap it in a citation.-->
+        <block role="poem" xml:id="{$id}">
             <xsl:call-template name="attrs"/>
             <!-- if no ID, then give a new ID -->
 
@@ -1120,16 +1219,25 @@
         </block>
     </xsl:template>
     <xsl:template match="dtb:poem/dtb:title">
+        <xsl:variable name="poem-id" as="xs:string">
+            <xsl:for-each select="..">
+                <xsl:call-template name="generate-id"/>
+            </xsl:for-each>
+        </xsl:variable>
         <!--TODO add @about-->
-        <p property="title" about="{concat('#',if (../@id) then ../@id else ../generate-id())}">
+        <p property="title" about="#{$poem-id}">
             <xsl:call-template name="attrs"/>
             <xsl:apply-templates/>
         </p>
     </xsl:template>
     <xsl:template match="dtb:poem/dtb:author">
+        <xsl:variable name="poem-id" as="xs:string">
+            <xsl:for-each select="..">
+                <xsl:call-template name="generate-id"/>
+            </xsl:for-each>
+        </xsl:variable>
         <p>
-            <name property="author"
-                about="{concat('#',if (../@id) then ../@id else ../generate-id())}">
+            <name property="author" about="#{$poem-id}">
                 <xsl:call-template name="attrs"/>
                 <xsl:apply-templates/>
             </name>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/numeral-conversion.xsl" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               stylesheet="../../main/resources/xml/xslt/numeral-conversion.xsl">
 	
 	<x:scenario label="testing pf:numeric-is-roman with valid roman numerals">
 		<x:call function="pf:numeric-is-roman">
@@ -52,4 +55,20 @@
 		</x:call>
 		<x:expect label="result should be 165206" select="165206"/>
 	</x:scenario>
+	
+	<!-- PENDING - IN PROGRESS -->
+	<x:scenario label="testing of pf:numeric-alpha-to-decimal" pending="true">
+		<x:call function="pf:numeric-alpha-to-decimal">
+			<x:param name="alpha" select="'ijjb'" as="xs:string"/>
+		</x:call>
+		<x:expect label="result should be 165206" select="165206"/>
+	</x:scenario>
+
+	<x:scenario label="testing pf:numeric-decimal-to-alpha">
+		<x:call function="pf:numeric-decimal-to-alpha">
+			<x:param name="decimal" select="165206" as="xs:integer"/>
+		</x:call>
+		<x:expect label="result should be ijjb" select="'ijjb'"/>
+	</x:scenario>
+	
 </x:description>

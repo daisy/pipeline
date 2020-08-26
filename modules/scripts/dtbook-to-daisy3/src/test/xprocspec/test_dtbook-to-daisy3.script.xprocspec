@@ -10,7 +10,14 @@
 			<x:input port="source">
 				<x:document type="file" href="../resources/samples/shuffled_7019_xmldtbook_1.xml"/>
 			</x:input>
-			<x:option name="tts-config" select="resolve-uri('tts-config.xml')"/>
+			<x:input port="tts-config">
+				<x:document type="inline">
+					<config>
+						<voice engine="mock-tts" name="mock" lang="fr" gender="male-adult"/>
+						<property key="log" value="true"/>
+					</config>
+				</x:document>
+			</x:input>
 		</x:call>
 		<x:scenario label="without-audio">
 			<x:call>

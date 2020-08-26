@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               script="../../../main/resources/xml/pub/opf-spine-to-fileset.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:opf-spine-to-fileset">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="audio/audio.mp3" media-type="audio/mpeg"/>
+						<d:file href="chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="images/Pict1.jpg" media-type="image/jpeg"/>
+						<d:file href="images/Pict2.jpg" media-type="image/jpeg"/>
+						<d:file href="images/Pict3.jpg" media-type="image/jpeg"/>
+						<d:file href="images/Pict4.jpg" media-type="image/jpeg"/>
+						<d:file href="images/cover.jpg" media-type="image/jpeg"/>
+						<d:file href="mo/chapter.smil" media-type="application/smil+xml"/>
+						<d:file href="mo/cover.smil" media-type="application/smil+xml"/>
+						<d:file href="nav.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="package.opf" media-type="application/oebps-package+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="package.opf">
+					<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id" version="3.0"
+					         prefix="media: http://www.idpf.org/epub/vocab/overlays/#">
+						<metadata>
+							<dc:title>Minimal DTBook</dc:title>
+							<dc:identifier id="pub-id">my-id</dc:identifier>
+							<dc:language>en</dc:language>
+							<dc:publisher>unknown</dc:publisher>
+							<meta property="dcterms:modified">2019-10-17T17:37:04Z</meta>
+							<meta name="dcterms:modified" content="2019-10-17T17:37:04Z"/>
+							<meta property="media:duration">00:00:30.048</meta>
+							<meta name="media:duration" content="00:00:30.048"/>
+							<meta property="media:duration" refines="#item_12">00:00:08.585</meta>
+							<meta property="media:duration" refines="#item_13">00:00:21.463</meta>
+						</metadata>
+						<manifest>
+							<item id="item_1" href="cover.xhtml" media-type="application/xhtml+xml" media-overlay="item_12"/>
+							<item id="item_2" href="chapter.xhtml" media-type="application/xhtml+xml" media-overlay="item_13"/>
+							<item id="item_3" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+							<item id="item_4" href="audio/audio.mp3" media-type="audio/mpeg"/>
+							<item id="item_6" href="images/Pict1.jpg" media-type="image/jpeg"/>
+							<item id="item_7" href="images/Pict2.jpg" media-type="image/jpeg"/>
+							<item id="item_8" href="images/Pict3.jpg" media-type="image/jpeg"/>
+							<item id="item_9" href="images/Pict4.jpg" media-type="image/jpeg"/>
+							<item id="item_10" href="images/cover.jpg" media-type="image/jpeg" properties="cover-image"/>
+							<item id="item_12" href="mo/cover.smil" media-type="application/smil+xml"/>
+							<item id="item_13" href="mo/chapter.smil" media-type="application/smil+xml"/>
+						</manifest>
+						<spine>
+							<itemref idref="item_1" id="itemref_1" linear="no"/>
+							<itemref idref="item_2" id="itemref_2"/>
+						</spine>
+					</package>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="cover.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="chapter.xhtml" media-type="application/xhtml+xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

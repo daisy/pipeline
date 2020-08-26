@@ -12,9 +12,8 @@
 		zip files. Each of the c:zip-manifest documents have a @href attribute which can be passed
 		as the value of the "href" option. The hrefs of the input d:fileset must be of the form
 		`<path/to/zip/file>!/<path/within/zip>`. The paths may be relative (to @xml:base) or
-		absolute. A second d:fileset defines which of the files in the first d:fileset are present
-		in memory. Files that are not in memory must be present on disk (at the path indicated by
-		@original-href).
+		absolute. Files that are present on disk but not in memory must have a @original-href
+		attribute. Files that are present in memory must not have a @original-href attribute.
 	-->
 	
 	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
@@ -22,7 +21,6 @@
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" name="zip-manifest"/>
 	
 	<xsl:variable name="fileset.zip" select="collection()[1]"/>
-	<xsl:variable name="fileset.in-memory" select="collection()[2]"/>
 	
 	<xsl:template match="/">
 		<xsl:for-each select="distinct-values(//d:file/substring-before(resolve-uri(@href,base-uri(.)),'!/'))">
@@ -41,20 +39,22 @@
 		<xsl:element name="c:entry">
 			<xsl:variable name="target" select="resolve-uri(@href, base-uri(.))"/>
 			<xsl:attribute name="name" select="pf:unescape-uri(substring-after($target,'!/'))"/>
-			<xsl:choose>
-				<xsl:when test="$fileset.in-memory//d:file[resolve-uri(@href,base-uri(.))=$target]">
-					<xsl:attribute name="href" select="@href"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:attribute name="href" select="(@original-href,@href)[1]"/>
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:sequence select="@compression-method|       @encoding|                @normalization-form|
-			                      @compression-level|        @escape-uri-attributes|   @omit-xml-declaration|
-			                      @byte-order-mark|          @include-content-type|    @standalone|
-			                      @cdata-section-elements|   @indent|                  @undeclare-prefixes|
-			                      @doctype-public|           @media-type|              @version|
-			                      @doctype-system|           @method"/>
+			<xsl:attribute name="href" select="(@original-href,@href)[1]"/>
+			<!--
+				serialization attributes
+				
+				Note that px:zip ignores these when the c:entry does not point to a document in
+				memory (i.e. when @original-href exists).
+			-->
+			<xsl:sequence select="@byte-order-mark        | @escape-uri-attributes | @normalization-form   |
+			                      @cdata-section-elements | @include-content-type  | @omit-xml-declaration |
+			                      @doctype-public         | @indent                | @standalone           |
+			                      @doctype-system         | @media-type            | @undeclare-prefixes   |
+			                      @encoding               | @method                | @version"/>
+			<!--
+			    attributes specific for px:zip
+			-->
+			<xsl:sequence select="@compression-method | @compression-level"/>
 		</xsl:element>
 	</xsl:template>
 	

@@ -32,41 +32,6 @@
 				</c:directory>
 			</x:document>
 		</x:expect>
-		<x:context label="the temp directory">
-			<x:document type="directory" base-uri="temp-dir" href="alice/temp-dir/" recursive="true"/>
-		</x:context>
-		<x:expect label="the temp directory should contain the expanded EPUB 3" type="compare" >
-			<x:document type="inline">
-				<c:directory name="temp-dir">
-					<c:directory name="epub">
-						<c:directory name="EPUB">
-							<c:file name="alice-1.xhtml"/>
-							<c:file name="alice-2.xhtml"/>
-							<c:file name="alice-3.xhtml"/>
-							<c:file name="alice-4.xhtml"/>
-							<c:directory name="images">
-								<c:file name="alice01a.png"/>
-								<c:file name="alice02a.png"/>
-								<c:file name="alice03a.png"/>
-								<c:file name="alice04a.png"/>
-								<c:file name="alice05a.png"/>
-								<c:file name="alice06a.png"/>
-								<c:file name="alice07a.png"/>
-								<c:file name="alice08a.png"/>
-								<c:file name="alice09a.png"/>
-								<c:file name="alice10a.png"/>
-							</c:directory>
-							<c:file name="package.opf"/>
-							<c:file name="toc.xhtml"/>
-						</c:directory>
-						<c:directory name="META-INF">
-							<c:file name="container.xml"/>
-						</c:directory>
-						<c:file name="mimetype"/>
-					</c:directory>
-				</c:directory>
-			</x:document>
-		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="preserve significant white space (issue #94)">

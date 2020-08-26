@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/ocf/epub3-safe-uris.xpl">
+	
+	<x:scenario label="test">
+		<x:call step="px:epub3-safe-uris">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="package.opf" media-type="application/oebps-package+xml"/>
+						<d:file href="foo.xml"/>
+						<d:file href="foo_bar.xml"/>
+						<d:file href="foo@bar.xml"/>
+						<d:file href="foo_bar"/>
+						<d:file href="foo@bar"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="package.opf">
+					<package xmlns="http://www.idpf.org/2007/opf">
+						<manifest>
+							<item href="foo.xml"/>
+							<item href="foo_bar.xml"/>
+							<item href="foo@bar.xml"/>
+							<item href="foo_bar"/>
+							<item href="foo@bar"/>
+						</manifest>
+					</package>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="should be as expected" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="foo.xml"/>
+					<d:file href="foo_bar.xml"/>
+					<d:file href="foo_bar_2.xml"/>
+					<d:file href="foo_bar"/>
+					<d:file href="foo_bar_2"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the mapping port">
+			<x:document type="port" port="mapping"/>
+		</x:context>
+		<x:expect label="should be as expected" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="package.opf" original-href="package.opf"/>
+					<d:file href="foo.xml" original-href="foo.xml"/>
+					<d:file href="foo_bar.xml" original-href="foo_bar.xml"/>
+					<d:file href="foo_bar_2.xml" original-href="foo@bar.xml"/>
+					<d:file href="foo_bar" original-href="foo_bar"/>
+					<d:file href="foo_bar_2" original-href="foo@bar"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the result.in-memory port">
+			<x:document type="port" port="result.in-memory"/>
+		</x:context>
+		<x:expect label="should be as expected" type="compare">
+			<x:document type="inline">
+				<package xmlns="http://www.idpf.org/2007/opf">
+					<manifest>
+						<item href="foo.xml"/>
+						<item href="foo_bar.xml"/>
+						<item href="foo_bar_2.xml"/>
+						<item href="foo_bar"/>
+						<item href="foo_bar_2"/>
+					</manifest>
+				</package>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

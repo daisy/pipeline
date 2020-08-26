@@ -111,14 +111,26 @@
         </p:documentation>
     </p:option>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
-        <p:documentation>Utilities for representing a fileset.</p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
     </p:import>
-
-    <p:import href="dtbook-validator.validate.xpl"/>
-    <p:import href="dtbook-validator.store.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-add-entry
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>
+            px:dtbook-validate
+        </p:documentation>
+    </p:import>
+    <p:import href="dtbook-validator.store.xpl">
+        <p:documentation>
+            pxi:dtbook-validator.store
+        </p:documentation>
+    </p:import>
     
     <px:message>
         <p:with-option name="message" select="concat('DTBook validator: ', $input-dtbook)"/>
@@ -137,12 +149,11 @@
         </p:input>
     </px:fileset-add-entry>
     
-    <px:dtbook-validator name="validate-dtbook">
+    <px:dtbook-validate name="validate-dtbook">
         <p:with-option name="mathml-version" select="$mathml-version"/>
         <p:with-option name="check-images" select="$check-images"/>
-        <p:with-option name="base-uri" select="$input-dtbook"/>
         <p:with-option name="nimas" select="$nimas"/>
-    </px:dtbook-validator>
+    </px:dtbook-validate>
     
     <pxi:dtbook-validator.store>
         <p:input port="xml-report">

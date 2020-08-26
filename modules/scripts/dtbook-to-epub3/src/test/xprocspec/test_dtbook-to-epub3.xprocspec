@@ -53,20 +53,175 @@
 					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0000_00_000.mp3" original-href="epub3/temp/audio/part0000_00_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0000_01_000.mp3" original-href="epub3/temp/audio/part0000_01_000.mp3" media-type="audio/mpeg"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0000_02_000.mp3" original-href="epub3/temp/audio/part0000_02_000.mp3" media-type="audio/mpeg"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0000_03_000.mp3" original-href="epub3/temp/audio/part0000_03_000.mp3" media-type="audio/mpeg"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0000_04_000.mp3" original-href="epub3/temp/audio/part0000_04_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0001_00_000.mp3" original-href="epub3/temp/audio/part0001_00_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0001_01_000.mp3" original-href="epub3/temp/audio/part0001_01_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0001_02_000.mp3" original-href="epub3/temp/audio/part0001_02_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_00_000.mp3" original-href="epub3/temp/audio/part0002_00_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_01_000.mp3" original-href="epub3/temp/audio/part0002_01_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0002_02_000.mp3" original-href="epub3/temp/audio/part0002_02_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0002_03_000.mp3" original-href="epub3/temp/audio/part0002_03_000.mp3" media-type="audio/mpeg"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0002_04_000.mp3" original-href="epub3/temp/audio/part0002_04_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0003_00_000.mp3" original-href="epub3/temp/audio/part0003_00_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml"/>
 					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="epub3/out/epub/META-INF/container.xml"/>
+					<d:file href="epub3/out/epub/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the toc.xhtml document">
+			<x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(.),'[\\/]')[last()]='toc.xhtml']"/>
+		</x:context>
+		<x:expect label="the toc.xhtml document" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+				      xmlns:epub="http://www.idpf.org/2007/ops">
+					<head>
+						<meta charset="UTF-8"/>
+						<title>Table of contents</title>
+					</head>
+					<body>
+						<nav epub:type="toc">
+							<h1>
+								<span id="st3-1">
+									<span role="word">Table</span>
+									<span role="word">of</span>
+									<span role="word">contents</span>
+								</span>
+							</h1>
+							<ol>
+								<li>
+									<a href="minimal-1.xhtml#id_1">
+										<span id="st3-2">
+											<span role="word">Minimal</span>
+											<span role="word">DTBook</span>
+										</span>
+									</a>
+								</li>
+								<li>
+									<a href="minimal-2.xhtml#id_2">
+										<span id="st3-3">
+											<span role="word">Chapter</span>
+										</span>
+									</a>
+								</li>
+							</ol>
+						</nav>
+						<nav epub:type="page-list" hidden="">
+							<h1>
+								<span id="st3-4">
+									<span role="word">List</span>
+									<span role="word">of</span>
+									<span role="word">pages</span>
+								</span>
+							</h1>
+							<ol>
+								<li>
+									<a href="minimal-2.xhtml#page_1">
+										<span id="st3-5">
+											<span role="word">1</span>
+										</span>
+									</a>
+								</li>
+								<li>
+									<a href="minimal-2.xhtml#page_2">
+										<span id="st3-6">
+											<span role="word">2</span>
+										</span>
+									</a>
+								</li>
+							</ol>
+						</nav>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="the toc.smil document">
+			<x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(.),'[\\/]')[last()]='toc.smil']"/>
+		</x:context>
+		<x:expect label="the toc.smil document" type="compare">
+			<x:document type="inline">
+				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+					<body>
+						<par>
+							<text src="../toc.xhtml#st3-1"/>
+							<audio src="../audio/part0002_00_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+						</par>
+						<par>
+							<text src="../toc.xhtml#st3-2"/>
+							<audio src="../audio/part0002_01_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+						</par>
+						<par>
+							<text src="../toc.xhtml#st3-3"/>
+							<audio src="../audio/part0002_02_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.565"/>
+						</par>
+						<par>
+							<text src="../toc.xhtml#st3-4"/>
+							<audio src="../audio/part0002_03_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+						</par>
+						<par>
+							<text src="../toc.xhtml#st3-5"/>
+							<audio src="../audio/part0002_04_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+						</par>
+						<par>
+							<text src="../toc.xhtml#st3-6"/>
+							<audio src="../audio/part0003_00_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+						</par>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+		<x:context label="the minimal-1.smil document">
+			<x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(.),'[\\/]')[last()]='minimal-1.smil']"/>
+		</x:context>
+		<x:expect label="the minimal-1.smil document" type="compare">
+			<x:document type="inline">
+				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0"
+				      xmlns:epub="http://www.idpf.org/2007/ops">
+					<body epub:textref="../minimal-1.xhtml#id_2" epub:type="frontmatter">
+						<seq epub:textref="../minimal-1.xhtml#id_1">
+							<seq epub:textref="../minimal-1.xhtml#id_3" epub:type="title">
+								<par>
+									<text src="../minimal-1.xhtml#st1-1"/>
+									<audio src="../audio/part0000_00_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+								</par>
+							</seq>
+							<par>
+								<text src="../minimal-1.xhtml#st1-2"/>
+								<audio src="../audio/part0000_01_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+		<x:context label="the minimal-2.smil document">
+			<x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(.),'[\\/]')[last()]='minimal-2.smil']"/>
+		</x:context>
+		<x:expect label="the minimal-2.smil document" type="compare">
+			<x:document type="inline">
+				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0"
+				      xmlns:epub="http://www.idpf.org/2007/ops">
+					<body epub:textref="../minimal-2.xhtml#id_1" epub:type="bodymatter">
+						<seq epub:textref="../minimal-2.xhtml#id_2">
+							<seq epub:textref="../minimal-2.xhtml#id_3">
+								<par>
+									<text src="../minimal-2.xhtml#st2-1"/>
+									<audio src="../audio/part0001_00_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.565"/>
+								</par>
+							</seq>
+							<par>
+								<text src="../minimal-2.xhtml#st2-2"/>
+								<audio src="../audio/part0001_01_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							</par>
+							<par>
+								<text src="../minimal-2.xhtml#st2-3"/>
+								<audio src="../audio/part0001_02_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
 			</x:document>
 		</x:expect>
 		<!--

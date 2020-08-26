@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/"
-		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-		exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/"
+                exclude-result-prefixes="#all">
 
   <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
@@ -15,9 +15,8 @@
 
   <xsl:param name="no-smilref"/>
   <xsl:param name="mo-dir"/>
-  <xsl:param name="output-dir"/>
 
-  <xsl:variable name="mo-dir-rel" select="pf:relativize-uri($mo-dir, $output-dir)"/>
+  <xsl:variable name="mo-dir-rel" select="pf:relativize-uri($mo-dir, base-uri(/*))"/>
 
   <xsl:key name="struct" match="*[@node]" use="@node"/>
   <xsl:key name="clips" match="*[@idref]" use="@idref"/>

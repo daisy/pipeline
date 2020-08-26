@@ -32,22 +32,22 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>daisy3-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-to-zedai</artifactId>
+      <artifactId>dtbook-to-html</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>epub3-ocf-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>epub3-pub-utils</artifactId>
+      <artifactId>epub-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -62,21 +62,8 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mediaoverlay-utils</artifactId>
+      <artifactId>smil-utils</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>zedai-to-html</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-entities</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:d="http://www.daisy.org/ns/pipeline/data"
-		xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-		xmlns="http://www.daisy.org/z3986/2005/ncx/"
-		exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns="http://www.daisy.org/z3986/2005/ncx/"
+                exclude-result-prefixes="#all">
 
   <!-- inputs: -->
   <!-- main: dtbook content document -->
@@ -13,16 +13,35 @@
   <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
   <xsl:output indent="yes"/>
 
-  <xsl:param name="mo-dir"/>
-  <xsl:param name="audio-dir"/>
   <xsl:param name="ncx-dir"/>
   <xsl:param name="uid"/>
+  <xsl:param name="fail-if-missing-smilref"/>
 
   <xsl:variable name="titles" select="' levelhd hd h1 h2 h3 h4 h5 h6 '"/>
   <xsl:variable name="navPoints" select="' level level1 level2 level3 level4 level5 level6 '"/>
   <xsl:variable name="pageTargets" select="' pagenum '"/>
-  <xsl:variable name="audio-dir-rel" select="pf:relativize-uri($audio-dir, $ncx-dir)"/>
-  <xsl:variable name="mo-dir-rel" select="pf:relativize-uri($mo-dir, $ncx-dir)"/>
+  <xsl:variable name="content-doc-uri" select="base-uri(/*)"/>
+
+  <!-- d:audio-clips document with @src attributes relativized against $ncx-dir -->
+  <xsl:variable name="audio-map">
+    <xsl:variable name="audio-map" select="collection()[/d:audio-clips]"/>
+    <xsl:variable name="audio-map-uri" select="base-uri($audio-map/*)"/>
+    <xsl:for-each select="$audio-map/*">
+      <xsl:copy>
+        <xsl:for-each-group select="*" group-by="@src">
+          <xsl:variable name="src" select="current-grouping-key()"/>
+          <xsl:variable name="src" select="resolve-uri($src,$audio-map-uri)"/>
+          <xsl:variable name="src" select="pf:relativize-uri($src,$ncx-dir)"/>
+          <xsl:for-each select="current-group()">
+            <xsl:copy>
+              <xsl:sequence select="@* except @src"/>
+              <xsl:attribute name="src" select="$src"/>
+            </xsl:copy>
+          </xsl:for-each>
+        </xsl:for-each-group>
+      </xsl:copy>
+    </xsl:for-each>
+  </xsl:variable>
 
   <xsl:variable name="navTargets">
     <targets>
@@ -199,24 +218,30 @@
   </xsl:template>
 
   <xsl:template match="*" mode="add-content-link">
-    <xsl:if test="@smilref">
-      <content src="{concat($mo-dir-rel, tokenize(@smilref, '[/\\]')[last()])}"/>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="@smilref">
+	<content src="{pf:relativize-uri(resolve-uri(@smilref,$content-doc-uri),$ncx-dir)}"/>
+      </xsl:when>
+      <xsl:when test="$fail-if-missing-smilref='true'">
+	<xsl:message terminate="yes">ERROR: NCX contains entry without content link</xsl:message>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="*" mode="add-text">
     <text>
       <xsl:value-of select="d:getText(.)"/>
     </text> <!-- TODO: check if text != ''? -->
-    <xsl:variable name="all-clips" select="descendant-or-self::*[@id and key('clips', @id, collection()[/d:audio-clips])]"/>
+    <xsl:variable name="all-clips" select="descendant-or-self::*[@id and key('clips', @id, $audio-map)]"/>
     <xsl:if test="count($all-clips) > 0">
       <!-- The audio information are added only if the text has been synthesized into one single sound file, -->
       <!-- because the specifications do not allow multiple <audio> nodes. -->
-      <xsl:variable name="first-clip" select="key('clips', $all-clips[1]/@id, collection()[/d:audio-clips])"/>
-      <xsl:variable name="last-clip" select="key('clips', $all-clips[last()]/@id, collection()[/d:audio-clips])"/>
+      <xsl:variable name="first-clip" select="key('clips', $all-clips[1]/@id, $audio-map)"/>
+      <xsl:variable name="last-clip" select="key('clips', $all-clips[last()]/@id, $audio-map)"/>
       <xsl:if test="$first-clip/@src = $last-clip/@src">
-	<audio src="{concat($audio-dir-rel, tokenize($first-clip/@src, '[/\\]')[last()])}"
-	       clipBegin="{$first-clip/@clipBegin}" clipEnd="{$last-clip/@clipEnd}"/>
+        <audio>
+          <xsl:sequence select="$first-clip/(@src|@clipBegin|@clipEnd)"/>
+        </audio>
       </xsl:if>
     </xsl:if>
   </xsl:template>

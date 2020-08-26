@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step name="main" type="px:create-res-file" version="1.0"
-                xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                type="px:daisy3-create-res-file" name="main"
                 exclude-inline-prefixes="#all">
 
   <p:output port="result" primary="true">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>DAISY 3 resource file.</p>
     </p:documentation>
+	<p:pipe step="res-file" port="result"/>
+  </p:output>
+
+  <p:output port="result.fileset">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Result fileset with single file.</p>
+    </p:documentation>
+	<p:pipe step="fileset" port="result"/>
   </p:output>
 
   <p:option name="output-dir">
@@ -25,6 +33,12 @@
   <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
     <p:documentation>
       px:set-base-uri
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+    <p:documentation>
+      px:fileset-create
+      px:fileset-add-entry
     </p:documentation>
   </p:import>
 
@@ -98,6 +112,18 @@
     </p:input>
     <p:with-option name="base-uri" select="concat($output-dir, 'resources.res')"/>
   </px:set-base-uri>
-  <p:add-xml-base/>
+  <p:identity name="res-file"/>
+
+  <px:fileset-create>
+    <p:with-option name="base" select="$output-dir"/>
+  </px:fileset-create>
+  <px:fileset-add-entry media-type="application/x-dtbresource+xml" name="fileset">
+    <p:input port="entry">
+      <p:pipe step="res-file" port="result"/>
+    </p:input>
+    <p:with-param port="file-attributes" name="indent" select="'true'"/>
+    <p:with-param port="file-attributes" name="doctype-public" select="'-//NISO//DTD resource 2005-1//EN'"/>
+    <p:with-param port="file-attributes" name="doctype-system" select="'http://www.daisy.org/z3986/2005/resource-2005-1.dtd'"/>
+  </px:fileset-add-entry>
 
 </p:declare-step>

@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>dtbook-to-daisy3</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook to DAISY 3</name>
@@ -28,11 +28,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>css-speech</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -72,7 +67,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>tts-helpers</artifactId>
+      <artifactId>smil-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--
@@ -113,11 +108,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-omnilang-lexer</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-entities</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

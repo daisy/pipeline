@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step name="main" type="px:daisy3-load" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                name="main" type="px:daisy3-load">
 
     <p:documentation>
         <p px:role="desc">Creates a fileset document based on a DAISY 3 package file.</p>
@@ -37,6 +38,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">For manipulating
             filesets.</p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">
+        <p:documentation>
+            px:smil-to-text-fileset
+        </p:documentation>
     </p:import>
 
     <p:xslt name="fileset">
@@ -76,16 +82,7 @@
                     <p:iteration-source>
                         <p:pipe port="result" step="load-smils"/>
                     </p:iteration-source>
-                    <p:xslt>
-                        <p:input port="stylesheet">
-                            <p:document
-                                href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/smil-to-text-fileset.xsl"
-                            />
-                        </p:input>
-                        <p:input port="parameters">
-                            <p:empty/>
-                        </p:input>
-                    </p:xslt>
+                    <px:smil-to-text-fileset/>
                     <p:add-attribute attribute-name="media-type"
                         attribute-value="application/x-dtbook+xml" match="d:file"/>
                 </p:for-each>

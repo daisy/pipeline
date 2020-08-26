@@ -5,11 +5,10 @@
   <uri name="http://www.daisy.org/pipeline/modules/daisy3-to-epub3/library.xpl" uri="../xml/xproc/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:daisy3-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-pub-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-zedai"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-html"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-html"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
 </catalog>

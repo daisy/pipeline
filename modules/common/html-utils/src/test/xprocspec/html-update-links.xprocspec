@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/html-update-links.xpl">
+
+    <x:scenario label="merge document and rename ids">
+        <x:call step="px:html-update-links">
+            <x:input port="source">
+                <x:document type="inline" xml:base="part1.html">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                        <body>
+                            <section>
+                                <h1 id="h_1"/>
+                                <a href="part2.html#h_1"/>
+                                <a href="other.html#h_1"/>
+                                <a href="#h_1"/>
+                            </section>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+            <x:input port="mapping">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="merged.html" original-href="part1.html"/>
+                        <d:file href="merged.html" original-href="part2.html">
+                            <d:anchor id="id_1" original-id="h_1"/>
+                        </d:file>
+                        <d:file href="other.html">
+                            <d:anchor id="id_2" original-id="h_1"/>
+                        </d:file>
+                    </d:fileset>
+            </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the result" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <body>
+                        <section>
+                            <h1 id="h_1"/>
+                            <a href="#id_1"/>
+                            <a href="other.html#id_2"/>
+                            <a href="#h_1"/>
+                        </section>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="split document">
+        <x:call step="px:html-update-links">
+            <x:option name="source-renamed" select="true()"/>
+            <x:input port="source">
+                <x:document type="inline" xml:base="chunk1.html">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                        <body>
+                            <section>
+                                <a href="#id_1"/>
+                                <a href="#id_2"/>
+                            </section>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+            <x:input port="mapping">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="chunk1.html" original-href="input.html">
+                            <d:anchor id="id_1"/>
+                        </d:file>
+                        <d:file href="chunk2.html" original-href="input.html">
+                            <d:anchor id="id_2"/>
+                        </d:file>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the result" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <body>
+                        <section>
+                            <a href="#id_1"/>
+                            <a href="chunk2.html#id_2"/>
+                        </section>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

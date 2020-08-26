@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns="http://www.idpf.org/2007/opf"
+               stylesheet="../../../main/resources/xml/pub/merge-prefix.xsl">
+
+    <x:param name="implicit-input-prefixes"  select="'a11y:      http://www.idpf.org/epub/vocab/package/a11y/#
+                                                      dcterms:   http://purl.org/dc/terms/
+                                                      epubsc:    http://idpf.org/epub/vocab/sc/#
+                                                      marc:      http://id.loc.gov/vocabulary/
+                                                      media:     http://www.idpf.org/epub/vocab/overlays/#
+                                                      onix:      http://www.editeur.org/ONIX/book/codelists/current.html#
+                                                      rendition: http://www.idpf.org/vocab/rendition/#
+                                                      schema:    http://schema.org/
+                                                      xsd:       http://www.w3.org/2001/XMLSchema#'"/>
+    <x:param name="implicit-output-prefixes" select="'a11y:      http://www.idpf.org/epub/vocab/package/a11y/#
+                                                      dcterms:   http://purl.org/dc/terms/
+                                                      epubsc:    http://idpf.org/epub/vocab/sc/#
+                                                      marc:      http://id.loc.gov/vocabulary/
+                                                      media:     http://www.idpf.org/epub/vocab/overlays/#
+                                                      onix:      http://www.editeur.org/ONIX/book/codelists/current.html#
+                                                      rendition: http://www.idpf.org/vocab/rendition/#
+                                                      schema:    http://schema.org/
+                                                      xsd:       http://www.w3.org/2001/XMLSchema#'"/>
+
+    <x:scenario label="when a property uses a non-default prefix">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo">
+                    <meta property="foo:foo">foo</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declaration is preserved"
+                  test="/*/@prefix = 'foo: http://example.org/foo'"/>
+    </x:scenario>
+
+    <x:scenario label="when two sets use different prefixes for the same vocab">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo">
+                    <meta property="foo:foo">foo</meta>
+                </metadata>
+                <metadata prefix="fooz: http://example.org/foo">
+                    <meta property="fooz:fooz">fooz</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declarations are unified"
+                  test="/*/@prefix = 'foo: http://example.org/foo'"/>
+        <x:expect label="the prefix is renamed where needed"
+                  test="//opf:meta/@property = 'foo:fooz'"/>
+    </x:scenario>
+
+    <x:scenario label="when two properties from two sets use non-default prefixes">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo">
+                    <meta property="foo:foo">foo</meta>
+                </metadata>
+                <metadata prefix="bar: http://example.org/bar">
+                    <meta property="bar:bar">bar</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declarations are merged"
+                  test="/*/@prefix = 'foo: http://example.org/foo bar: http://example.org/bar'"/>
+    </x:scenario>
+
+    <x:scenario label="when a set re-declares a reserved prefix">
+        <x:context>
+            <wrapper>
+                <metadata
+                    prefix="dcterms: http://purl.org/dc/terms/
+                            foo: http://example.org/foo
+                            marc: http://id.loc.gov/vocabulary/
+                            media: http://www.idpf.org/epub/vocab/overlays/#
+                            onix: http://www.editeur.org/ONIX/book/codelists/current.html#
+                            xsd: http://www.w3.org/2001/XMLSchema#">
+                    <meta property="marc:foo">foo</meta>
+                    <meta property="foo:foo">foo</meta>
+                    <meta property="media:foo">foo</meta>
+                    <meta property="onix:foo">foo</meta>
+                    <meta property="xsd:foo">foo</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the reserved prefix declarations are discarded"
+                  test="/*/@prefix = 'foo: http://example.org/foo'"/>
+    </x:scenario>
+
+    <x:scenario label="when a set declares a custom prefix for a reserved vocab">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://purl.org/dc/terms/">
+                    <meta property="foo:subject">foo</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declaration is removed" test="empty(/*/@prefix)"/>
+        <x:expect label="the prefix is set to the reserved prefix"
+                  test="//opf:meta[.='foo']/@property = 'dcterms:subject'"/>
+    </x:scenario>
+
+    <x:scenario label="when a set uses a reserved prefix for a custom vocab">
+        <x:context>
+            <wrapper>
+                <metadata prefix="dcterms: http://example.org/terms/">
+                    <meta property="dcterms:subject">foo</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declaration is kept"
+                  test="tokenize(/*/@prefix,'\s+')='http://example.org/terms/'"/>
+        <x:expect label="the prefix is changed to an unreserved prefix"
+                  test="not(tokenize(//opf:meta[.='foo']/@property,':')[1] = 'dcterms')"/>
+    </x:scenario>
+
+    <x:scenario label="when different sets uses a reserved prefix for different custom vocabs">
+        <x:context>
+            <wrapper>
+                <metadata prefix="dcterms: http://example.org/terms/">
+                    <meta property="dcterms:subject">foo</meta>
+                </metadata>
+                <metadata prefix="dcterms: http://example.com/terms/">
+                    <meta property="dcterms:subject">bar</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declarations are kept"
+                  test="contains(/*/@prefix,
+                        concat(tokenize(//opf:meta[.='foo']/@property,':')[1],': http://example.org/terms/'))
+                        and
+                        contains(/*/@prefix,
+                        concat(tokenize(//opf:meta[.='bar']/@property,':')[1],': http://example.com/terms/'))"/>
+        <x:expect label="the prefixes are changed to unreserved prefixes"
+                  test="not(contains(/*/@prefix,'dcterms:'))"/>
+    </x:scenario>
+
+    <x:scenario label="when a set declares an unused prefix">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo bar: http://example.org/bar">
+                    <meta property="foo:foo">foo</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the unused prefix declaration is discarded"
+                  test="/*/@prefix = 'foo: http://example.org/foo'"/>
+    </x:scenario>
+
+    <x:scenario label="when none of the declared prefixes are used">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo"> </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declaration is discarded"
+                  test="empty(/*/@prefix)"/>
+    </x:scenario>
+
+    <x:scenario label="when there is a 'scheme' attribute in a non-default prefix">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo">
+                    <meta property="dcterms:creator" scheme="foo:bar">foo</meta>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declaration is preserved"
+                  test="/*/@prefix = 'foo: http://example.org/foo'"/>
+    </x:scenario>
+
+    <x:scenario label="when @rel is not in the default vocab and doesn't have a valid prefix">
+        <x:context>
+            <wrapper>
+                <metadata>
+                    <link rel="foo" href="http://example.org/foo"/>
+                    <link rel="foo:foo" href="http://example.org/foo"/>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the rel attribute is discarded">
+            <wrapper>
+                <metadata>
+                    <link rel="foo" href="http://example.org/foo"/>
+                    <link href="http://example.org/foo"/>
+                </metadata>
+            </wrapper>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="when @rel uses a custom prefix">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo">
+                    <link rel="foo:foo" href="http://example.org/foo"/>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="the prefix declaration is preserved"
+                  test="/*/@prefix = 'foo: http://example.org/foo'"/>
+    </x:scenario>
+
+    <x:scenario label="when @rel uses a custom prefix and other prefixes are also declared">
+        <x:context>
+            <wrapper>
+                <metadata prefix="foo: http://example.org/foo">
+                    <meta property="foo:foo">foo</meta>
+                </metadata>
+                <metadata prefix="bar: http://example.org/bar">
+                    <link rel="bar:bar" href="http://example.org/bar"/>
+                </metadata>
+            </wrapper>
+        </x:context>
+        <x:expect label="prefix declarations are merged"
+                  test="/*/@prefix = 'foo: http://example.org/foo bar: http://example.org/bar'"/>
+    </x:scenario>
+
+</x:description>

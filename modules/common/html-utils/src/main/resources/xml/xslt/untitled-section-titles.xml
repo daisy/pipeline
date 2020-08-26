@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	FIXME: this should probably go to epub-utils
+-->
+<titles xmlns:epub="http://www.idpf.org/2007/ops">
+	<!--
+	    Document partitions
+	-->
+	<title usage="body section"                   epub:type="cover"                     >Cover</title>
+	<title usage="body section"                   epub:type="frontmatter"               >Frontmatter</title>
+	<title usage="body section"                   epub:type="bodymatter"                >Chapter</title>
+	<title usage="body section"                   epub:type="backmatter"                >Backmatter</title>
+	<!--
+	    Document divisions
+	-->
+	<title usage="body section"                   epub:type="volume"                    >Volume</title>
+	<title usage="body section"                   epub:type="part"                      >Part</title>
+	<title usage="body section"                   epub:type="chapter"                   >Chapter</title>
+	<title usage="body section"                   epub:type="subchapter"                >Subchapter</title>
+	<title usage="body section"                   epub:type="division"                  >Division</title>
+	<!--
+	    Document sections and components
+	-->
+	<title usage="     section"                   epub:type="abstract"                  ></title>
+	<title usage="     section"                   epub:type="foreword"                  ></title>
+	<title usage="     section"                   epub:type="preface"                   ></title>
+	<title usage="     section"                   epub:type="prologue"                  ></title>
+	<title usage="     section"                   epub:type="introduction"              ></title>
+	<title usage="     section"                   epub:type="preamble"                  ></title>
+	<title usage="     section"                   epub:type="conclusion"                ></title>
+	<title usage="     section"                   epub:type="epilogue"                  ></title>
+	<title usage="     section"                   epub:type="afterword"                 ></title>
+	<title usage="     section"                   epub:type="epigraph"                  ></title>
+	<!--
+	    Document navigation
+	-->
+	<title usage="     section article aside nav" epub:type="toc"                       ></title>
+	<title usage="     section article aside nav" epub:type="toc-brief"                 ></title>
+	<title usage="     section article aside nav" epub:type="landmarks"                 ></title>
+	<title usage="     section article aside nav" epub:type="loa"                       ></title>
+	<title usage="     section article aside nav" epub:type="loi"                       ></title>
+	<title usage="     section article aside nav" epub:type="lot"                       ></title>
+	<title usage="     section article aside nav" epub:type="lov"                       ></title>
+	<!--
+	    Document reference sections
+	-->
+	<title usage="     section article aside nav" epub:type="appendix"                  ></title>
+	<title usage="     section article aside nav" epub:type="colophon"                  ></title>
+	<title usage="     section article aside nav" epub:type="credits"                   ></title>
+	<title usage="     section article aside nav" epub:type="keywords"                  ></title>
+	<!--
+	    Document reference sections - Indexes
+	-->
+	<title usage="body section article aside nav" epub:type="index"                     ></title>
+	<title usage="     section article aside nav" epub:type="index-headnotes"           ></title>
+	<title usage="     section article aside nav" epub:type="index-legend"              ></title>
+	<title usage="     section article aside nav" epub:type="index-group"               ></title>
+	<!--
+	    Document reference sections - Glossaries
+	-->
+	<title usage="     section article aside nav" epub:type="glossary"                  ></title>
+	<!--
+	    Document reference sections - Bibliographies
+	-->
+	<title usage="     section article aside nav" epub:type="bibliography"              ></title>
+	<!--
+	    Preliminary sections and components
+	-->
+	<title usage="     section"                   epub:type="titlepage"                 ></title>
+	<title usage="     section"                   epub:type="halftitlepage"             ></title>
+	<title usage="     section"                   epub:type="copyright-page"            ></title>
+	<title usage="     section"                   epub:type="seriespage"                ></title>
+	<title usage="     section"                   epub:type="acknowledgments"           ></title>
+	<title usage="     section"                   epub:type="imprint"                   ></title>
+	<title usage="     section"                   epub:type="imprimatur"                ></title>
+	<title usage="     section"                   epub:type="contributors"              ></title>
+	<title usage="     section"                   epub:type="other-credits"             ></title>
+	<title usage="     section aside"             epub:type="errata"                    ></title>
+	<title usage="     section"                   epub:type="dedication"                ></title>
+	<title usage="     section"                   epub:type="revision-history"          ></title>
+	<!--
+	    Complementary content
+	-->
+	<title usage="     section article aside nav" epub:type="case-study"                ></title>
+	<title usage="                     aside"     epub:type="help"                      ></title>
+	<title usage="                     aside"     epub:type="marginalia"                ></title>
+	<title usage="     section"                   epub:type="notice"                    ></title>
+	<title usage="                     aside"     epub:type="pullquote"                 ></title>
+	<title usage="                     aside"     epub:type="sidebar"                   ></title>
+	<title usage="                     aside"     epub:type="tip"                       ></title>
+	<title usage="     section"                   epub:type="warning"                   ></title>
+	<!--
+	    Educational content - Learning objectives
+	-->
+	<title usage="     section article aside nav" epub:type="learning-objectives"       ></title>
+	<title usage="     section article aside nav" epub:type="learning-outcomes"         ></title>
+	<title usage="     section article aside nav" epub:type="learning-resources"        ></title>
+	<title usage="     section article aside nav" epub:type="learning-standard"         ></title>
+	<title usage="     section article aside nav" epub:type="learning-standards"        ></title>
+	<!--
+	    Educational content - Testing
+	-->
+	<title usage="     aside"                     epub:type="answer"                    ></title>
+	<title usage="     section article aside nav" epub:type="answers"                   ></title>
+	<title usage="     section article aside nav" epub:type="assessment"                ></title>
+	<title usage="     section article aside nav" epub:type="assessments"               ></title>
+	<title usage="     aside"                     epub:type="fill-in-the-blank-problem" ></title>
+	<title usage="     aside"                     epub:type="general-problem"           ></title>
+	<title usage="     section article aside nav" epub:type="qna"                       ></title>
+	<title usage="     aside"                     epub:type="match-problem"             ></title>
+	<title usage="     aside"                     epub:type="multiple-choice-problem"   ></title>
+	<title usage="     aside"                     epub:type="practice"                  ></title>
+	<title usage="     section article aside nav" epub:type="practices"                 ></title>
+	<title usage="     aside"                     epub:type="true-false-problem"        ></title>
+	<!--
+	    Notes and annotations
+	-->
+	<title usage="     aside"                     epub:type="annotation"                ></title>
+	<title usage="     aside"                     epub:type="note"                      ></title>
+	<title usage="     aside"                     epub:type="footnote"                  ></title>
+	<title usage="     aside"                     epub:type="endnote"                   ></title>
+	<title usage="     aside"                     epub:type="rearnote"                  ></title>
+	<title usage="     section article aside nav" epub:type="footnotes"                 ></title>
+	<title usage="     section article aside nav" epub:type="endnotes"                  ></title>
+	<title usage="     section article aside nav" epub:type="rearnotes"                 ></title>
+	<!--
+	    Pagination
+	-->
+	<title usage="     section article aside nav" epub:type="page-list"                 ></title>
+</titles>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:epub3-validator" version="1.0"
-    px:input-filesets="epub3"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                px:input-filesets="epub3"
+                type="px:epub3-validator">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 Validator</h1>
@@ -26,7 +27,7 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation report</h1>
         </p:documentation>
-        <p:pipe port="result" step="html-report"/>
+        <p:pipe step="validate" port="html-report"/>
     </p:output>
 
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
@@ -36,7 +37,7 @@
 
 [More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="result" step="status"/>
+        <p:pipe step="validate" port="validation-status"/>
     </p:output>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
@@ -61,116 +62,19 @@ option is only available for zipped EPUBs.</p>
             <h1 px:role="name">Accessibility report</h1>
             <p px:role="desc" xml:space="preserve">If the accessibility check option is enabled, an HTML report detailing the compliance to the EPUB Accessibility specification is output on this port.</p>
         </p:documentation>
-        <p:pipe port="result" step="ace-report"/>
+        <p:pipe step="validate" port="ace-report"/>
     </p:output>
-    
-    <p:import href="http://www.daisy.org/pipeline/modules/ace-adapter/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
 
-    <px:epubcheck px:message="Running EPUBCheck" px:progress=".8">
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub-validate
+        </p:documentation>
+    </p:import>
+
+    <px:epub-validate px:progress="1" version="3" name="validate">
         <p:with-option name="epub" select="$epub"/>
-        <p:with-option name="mode" select="if (ends-with(lower-case($epub),'.epub')) then 'epub' else 'expanded'"/>
-        <p:with-option name="version" select="'3'"/>
-        <p:with-option name="temp-dir" select="concat($temp-dir,'/epubcheck')"/>
-    </px:epubcheck>
-    
-    <p:xslt name="xml-report.not-wrapped">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/epubcheck-report-to-pipeline-report.xsl"/>
-        </p:input>
-    </p:xslt>
-    <p:for-each>
-        <p:iteration-source select="//d:warn">
-            <p:pipe port="result" step="xml-report.not-wrapped"/>
-        </p:iteration-source>
-        <p:identity/>
-    </p:for-each>
-    <p:wrap-sequence wrapper="d:warnings" name="warnings"/>
-    <p:for-each>
-        <p:iteration-source select="//d:error">
-            <p:pipe port="result" step="xml-report.not-wrapped"/>
-        </p:iteration-source>
-        <p:identity/>
-    </p:for-each>
-    <p:wrap-sequence wrapper="d:errors" name="errors"/>
-    <p:for-each name="exception">
-        <p:iteration-source select="//d:exception">
-            <p:pipe port="result" step="xml-report.not-wrapped"/>
-        </p:iteration-source>
-        <p:identity/>
-    </p:for-each>
-    <p:wrap-sequence wrapper="d:exceptions" name="exceptions"/>
-    <p:for-each name="hint">
-        <p:iteration-source select="//d:hint">
-            <p:pipe port="result" step="xml-report.not-wrapped"/>
-        </p:iteration-source>
-        <p:identity/>
-    </p:for-each>
-    <p:wrap-sequence wrapper="d:hints" name="hints"/>
-    <p:delete match="//d:report/*">
-        <p:input port="source">
-            <p:pipe port="result" step="xml-report.not-wrapped"/>
-        </p:input>
-    </p:delete>
-    <p:insert match="//d:report" position="first-child">
-        <p:input port="insertion">
-            <p:pipe port="result" step="exceptions"/>
-            <p:pipe port="result" step="errors"/>
-            <p:pipe port="result" step="warnings"/>
-            <p:pipe port="result" step="hints"/>
-        </p:input>
-    </p:insert>
-    <p:delete match="//d:report/*[not(*)]"/>
-    <p:identity name="xml-report"/>
+        <p:with-option name="temp-dir" select="$temp-dir"/>
+        <p:with-option name="accessibility-check" select="$accessibility-check"/>
+    </px:epub-validate>
 
-    <p:xslt name="html-report">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/epubcheck-pipeline-report-to-html-report.xsl"/>
-        </p:input>
-    </p:xslt>
-
-    <p:group name="status">
-        <p:output port="result"/>
-        <p:for-each>
-            <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
-                <p:pipe port="result" step="xml-report"/>
-            </p:iteration-source>
-            <p:identity/>
-        </p:for-each>
-        <p:wrap-sequence wrapper="d:validation-status"/>
-        <p:add-attribute attribute-name="result" match="/*">
-            <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
-        </p:add-attribute>
-        <p:delete match="/*/node()"/>
-    </p:group>
-    <p:sink/>
-
-    <p:choose name="ace-report">
-        <p:when test="$accessibility-check = 'true' and not(ends-with($epub,'.opf'))">
-            <p:output port="result">
-                <p:pipe step="ace-check" port="html-report" />
-            </p:output>
-            <px:ace name="ace-check" px:message="Running Ace">
-                <p:with-option name="epub" select="$epub"/>
-            </px:ace>
-            <p:sink/>
-        </p:when>
-        <p:otherwise>
-            <p:output port="result" />
-            <p:identity>
-                <p:input port="source">
-                    <p:inline>
-                        <html />
-                    </p:inline>
-                </p:input>
-            </p:identity>
-        </p:otherwise>
-    </p:choose>
 </p:declare-step>

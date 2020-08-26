@@ -3,10 +3,7 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:opf="http://www.idpf.org/2007/opf"
-                exclude-inline-prefixes="p px xsl"
+                exclude-inline-prefixes="#all"
                 name="main">
     
     <p:documentation>

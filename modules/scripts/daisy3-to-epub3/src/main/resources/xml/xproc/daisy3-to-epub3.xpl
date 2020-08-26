@@ -77,9 +77,12 @@ split up if they exceed the given maximum size.</p>
     </p:option>-->
 
     <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="desc">For putting it all into a ZIP container.</p>
+            <ul>
+                <li>px:epub3-store</li>
+            </ul>
         </p:documentation>
     </p:import>
     <p:import href="convert.xpl"/>

@@ -8,15 +8,32 @@
 	<x:scenario label="zip">
 		<x:call step="px:zip">
 			<x:input port="source">
-				<x:document type="inline" xml:base="a.html">
-					<a/>
+				<x:document type="inline" xml:base="b.html">
+					<html/>
 				</x:document>
 			</x:input>
 			<x:input port="manifest">
 				<x:document type="inline">
 					<c:zip-manifest>
-						<c:entry href="../../../../fileset-utils/src/test/xprocspec/samples/fileset2/c.gif" name="c.gif"/>
-						<c:entry href="a.html" name="a.html"/>
+						<c:entry name="a.html"
+						         href="../../../../fileset-utils/src/test/xprocspec/samples/fileset2/a.html"
+						         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+						         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+						<c:entry name="b.html"
+						         href="b.html"
+						         media-type="application/xml"
+						         doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+						         doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+						         encoding="us-ascii"
+						         version="1.1"/>
+						<c:entry name="c.gif"
+						         href="../../../../fileset-utils/src/test/xprocspec/samples/fileset2/c.gif"/>
+						<c:entry name="e.xml"
+						         href="../../../../fileset-utils/src/test/xprocspec/samples/fileset2/e.xml"
+						         media-type="application/xml"
+						         method="xml"
+						         encoding="us-ascii"
+						         version="1.1"/>
 					</c:zip-manifest>
 				</x:document>
 			</x:input>
@@ -33,22 +50,57 @@
 			</x:document>
 		</x:expect>
 		<x:context label="The zip content">
-			<x:document type="zip" base-uri="temp-dir" href="1/result.zip" ordered="true"/>
+			<x:document type="zip" base-uri="temp-dir" href="1/result.zip"/>
 		</x:context>
 		<x:expect label="The zip content" type="compare">
 			<x:document type="inline">
 				<c:zipfile name="result.zip">
 					<c:file name="a.html"/>
+					<c:file name="b.html"/>
 					<c:file name="c.gif"/>
+					<c:file name="e.xml"/>
 				</c:zipfile>
 			</x:document>
 		</x:expect>
 		<x:context label="The a.html document inside the zip">
-			<x:document type="file" base-uri="temp-dir" href="1/result.zip!/a.html"/>
+			<x:document type="file" base-uri="temp-dir" href="1/result.zip!/a.html" method="text"/>
 		</x:context>
-		<x:expect label="The a.html document" type="compare">
-			<x:document type="inline">
-				<a/>
+		<x:expect label="is HTML (and the serialization parameters have no effect)" type="compare">
+			<x:document type="inline" xml:space="preserve">
+				<c:body>&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt;
+&lt;title&gt;This is a test basic html file&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</c:body>
+			</x:document>
+		</x:expect>
+		<x:context label="The b.html document inside the zip">
+			<x:document type="file" base-uri="temp-dir" href="1/result.zip!/b.html" method="text"/>
+		</x:context>
+		<x:expect label="is XML and the serialization parameters have effect" type="compare">
+			<x:document type="inline" xml:space="preserve">
+				<c:body>&lt;?xml version="1.1" encoding="us-ascii"?&gt;
+&lt;!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"/&gt;</c:body>
+			</x:document>
+		</x:expect>
+		<x:context label="The e.xml document inside the zip">
+			<x:document type="file" base-uri="temp-dir" href="1/result.zip!/e.xml" method="text"/>
+		</x:context>
+		<x:expect label="is XML but the serialization parameters have no effect (because the file is not provided on the source port)"
+		          type="compare">
+			<x:document type="inline" xml:space="preserve">
+				<c:body>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;root&gt;
+	&lt;node&gt;
+	&lt;/node&gt;
+&lt;/root&gt;
+</c:body>
 			</x:document>
 		</x:expect>
 	</x:scenario>

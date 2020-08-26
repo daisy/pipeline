@@ -40,9 +40,7 @@
     
     <p:string-replace match="/*/text()" name="message">
         <p:input port="source">
-            <p:inline>
-                <message>MESSAGE</message>
-            </p:inline>
+            <p:inline><message>MESSAGE</message></p:inline>
         </p:input>
         <p:with-option name="replace" use-when="p:system-property('p:xpath-version')='1.0'" select="concat('&quot;',$message,'&quot;')">
             <!-- replace(...) not supported in XPath 1.0 -->

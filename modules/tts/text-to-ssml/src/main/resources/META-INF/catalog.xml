@@ -4,11 +4,8 @@
   <uri name="http://www.daisy.org/pipeline/modules/text-to-ssml/library.xpl"
        uri="../xml/xproc/library.xpl"/>
 
-  <uri name="http://www.daisy.org/pipeline/modules/text-to-ssml/dtbook-annotating.xsl"
-       uri="../xml/xslt/dtbook-annotating.xsl"/>
-
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:tts-helpers"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:tts-common"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:mathml-to-ssml"/>
 </catalog>

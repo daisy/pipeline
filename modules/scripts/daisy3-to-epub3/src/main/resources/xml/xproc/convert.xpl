@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-epub3"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:daisy3-to-epub3" version="1.0" name="main">
 
     <p:input port="source.fileset" primary="true"/>
@@ -22,14 +23,46 @@
     <!-- IMPORTS                                                                 -->
     <!--=========================================================================-->
 
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/library.xpl"/>
-    <p:import href="../internal/ncx-to-nav.xpl"/>
-    <p:import href="../internal/dtbook-to-html.xpl"/>
-    <p:import href="../internal/list-audio-clips.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-html/library.xpl">
+        <p:documentation>
+            px:dtbook-to-html
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub3-create-mediaoverlays
+            px:epub3-create-package-doc
+            px:epub3-ocf-finalize
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-join
+            px:fileset-load
+            px:fileset-rebase
+            px:fileset-create
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">
+        <p:documentation>
+            px:smil-to-audio-clips
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="../internal/ncx-to-nav.xpl">
+        <p:documentation>
+            pxi:ncx-to-nav
+        </p:documentation>
+    </p:import>
+    <p:import href="../internal/oebps-to-opf-metadata.xpl">
+        <p:documentation>
+            px:oebps-to-opf-metadata
+        </p:documentation>
+    </p:import>
 
 
     <!--=========================================================================-->
@@ -120,30 +153,22 @@
     <!--TODO conditionally, if the MO option is set-->
     <p:choose name="audio-clips">
         <p:when test="$mediaoverlays and $type='text+mo'">
-            <p:output port="fileset.out" primary="true"/>
-            <p:output port="audio-clips" sequence="true">
-                <p:pipe port="audio-clips" step="audio-clips.inner"/>
-            </p:output>
-            <pxi:list-audio-clips name="audio-clips.inner">
-                <p:input port="fileset.in">
+            <p:output port="result"/>
+            <px:smil-to-audio-clips>
+                <p:input port="source">
+                    <p:pipe step="smils" port="result"/>
+                </p:input>
+                <p:with-option name="output-base-uri" select="base-uri(/*)">
                     <p:pipe step="source.fileset" port="result"/>
-                </p:input>
-                <p:input port="dtbooks">
-                    <p:pipe port="result" step="dtbooks"/>
-                </p:input>
-                <p:input port="smils">
-                    <p:pipe port="result" step="smils"/>
-                </p:input>
-                <p:with-option name="content-dir" select="$content-dir"/>
-            </pxi:list-audio-clips>
+                </p:with-option>
+            </px:smil-to-audio-clips>
         </p:when>
         <p:otherwise>
-            <p:output port="fileset.out" primary="true"/>
-            <p:output port="audio-clips" sequence="true">
-                <p:empty/>
-            </p:output>
+            <p:output port="result"/>
             <p:identity>
-                <p:input port="source"><p:empty/></p:input>
+                <p:input port="source">
+                    <p:inline><d:audio-clips/></p:inline>
+                </p:input>
             </p:identity>
         </p:otherwise>
     </p:choose>
@@ -153,11 +178,11 @@
     <!-- CONVERT DTBOOK TO XHTML                                                 -->
     <!--=========================================================================-->
 
-    <pxi:dtbook-to-html name="content-docs">
-        <p:input port="fileset.in">
+    <px:dtbook-to-html name="content-docs" chunk="true">
+        <p:input port="source.fileset">
             <p:pipe step="source.fileset" port="result"/>
         </p:input>
-        <p:input port="in-memory.in">
+        <p:input port="source.in-memory">
             <p:pipe port="result" step="dtbooks"/>
         </p:input>
         <p:with-option name="output-dir" select="$content-dir"/>
@@ -167,7 +192,7 @@
                        select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')">
             <p:pipe step="opf" port="result"/>
         </p:with-option>
-    </pxi:dtbook-to-html>
+    </px:dtbook-to-html>
     <p:sink/>
 
     <!--=========================================================================-->
@@ -183,8 +208,8 @@
         <p:input port="dtbooks">
             <p:pipe port="result" step="dtbooks"/>
         </p:input>
-        <p:input port="htmls">
-            <p:pipe port="in-memory.out" step="content-docs"/>
+        <p:input port="dtbook-html-mapping">
+            <p:pipe step="content-docs" port="mapping"/>
         </p:input>
         <p:with-option name="result-uri" select="concat($content-dir,'nav.xhtml')"/>
         <!--TODO make sure that the name is unused-->
@@ -195,22 +220,25 @@
     <!-- GENERATE MEDIA OVERLAYS                                                 -->
     <!--=========================================================================-->
 
-    <!--TODO conditionally, if the MO option is set-->
     <p:choose name="media-overlays">
         <p:when test="$mediaoverlays and $type='text+mo'">
             <p:output port="fileset.out" primary="true"/>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="in-memory.out" step="media-overlays.inner"/>
+                <p:pipe port="result.in-memory" step="media-overlays.inner"/>
             </p:output>
-            <px:create-mediaoverlays name="media-overlays.inner">
-                <p:input port="content-docs">
-                    <p:pipe port="in-memory.out" step="content-docs"/>
+            <px:epub3-create-mediaoverlays flatten="false" name="media-overlays.inner">
+                <p:input port="source.fileset">
+                    <p:pipe step="content-docs" port="result.fileset"/>
+                </p:input>
+                <p:input port="source.in-memory">
+                    <p:pipe step="content-docs" port="result.in-memory"/>
                 </p:input>
                 <p:input port="audio-map">
-                    <p:pipe port="audio-clips" step="audio-clips"/>
+                    <p:pipe step="audio-clips" port="result"/>
                 </p:input>
-                <p:with-option name="content-dir" select="$content-dir"/>
-            </px:create-mediaoverlays>
+                <p:with-option name="audio-dir" select="concat($content-dir,'audio/')"/>
+                <p:with-option name="mediaoverlay-dir" select="concat($content-dir,'mo/')"/>
+            </px:epub3-create-mediaoverlays>
         </p:when>
         <p:otherwise>
             <p:output port="fileset.out" primary="true"/>
@@ -218,7 +246,9 @@
                 <p:empty/>
             </p:output>
             <p:identity>
-                <p:input port="source"><p:empty/></p:input>
+                <p:input port="source">
+                    <p:inline><d:fileset/></p:inline>
+                </p:input>
             </p:identity>
         </p:otherwise>
     </p:choose>
@@ -229,20 +259,11 @@
     <!--=========================================================================-->
 
     <p:documentation>Extract metadata from the DAISY 3 OPF document</p:documentation>
-    <p:group name="metadata">
-        <p:output port="result"/>
-        <p:xslt>
-            <p:input port="source">
-                <p:pipe port="result" step="opf"/>
-            </p:input>
-            <p:input port="stylesheet">
-                <p:document href="../internal/opf-to-metadata.xsl"/>
-            </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-        </p:xslt>
-    </p:group>
+    <px:oebps-to-opf-metadata name="metadata">
+        <p:input port="source">
+            <p:pipe step="opf" port="result"/>
+        </p:input>
+    </px:oebps-to-opf-metadata>
     <p:sink/>
 
 
@@ -260,42 +281,40 @@
 
         <px:fileset-join name="package-doc.join-filesets">
             <p:input port="source">
-                <p:pipe port="fileset.out" step="content-docs"/>
-                <p:pipe port="fileset.out" step="nav-doc"/>
-                <p:pipe port="fileset.out" step="media-overlays"/>
-                <p:pipe port="fileset.out" step="audio-clips"/>
+                <p:pipe step="content-docs" port="result.fileset"/>
+                <p:pipe step="nav-doc" port="fileset.out"/>
+                <p:pipe step="media-overlays" port="fileset.out"/>
             </p:input>
         </px:fileset-join>
         <p:sink/>
 
-        <px:epub3-pub-create-package-doc name="package-doc.create">
-            <p:input port="spine-filesets">
-                <p:pipe port="fileset.out" step="content-docs"/>
+        <px:epub3-create-package-doc name="package-doc.create">
+            <p:input port="source.fileset">
+                <p:pipe step="package-doc.join-filesets" port="result"/>
             </p:input>
-            <p:input port="publication-resources">
-                <p:pipe port="result" step="package-doc.join-filesets"/>
+            <p:input port="source.in-memory">
+                <p:pipe step="nav-doc" port="in-memory.out"/>
+                <p:pipe step="content-docs" port="result.in-memory"/>
+                <p:pipe step="media-overlays" port="in-memory.out"/>
+            </p:input>
+            <p:input port="spine">
+                <p:pipe step="content-docs" port="result.fileset"/>
             </p:input>
             <p:input port="metadata">
-                <p:pipe port="result" step="metadata"/>
+                <p:pipe step="metadata" port="result"/>
             </p:input>
-            <p:input port="content-docs">
-                <p:pipe port="in-memory.out" step="nav-doc"/>
-                <p:pipe port="in-memory.out" step="content-docs"/>
-            </p:input>
-            <p:input port="mediaoverlays">
-                <p:pipe port="in-memory.out" step="media-overlays"/>
-            </p:input>
-            <p:with-option name="result-uri" select="$opf-uri"/>
+            <p:with-option name="output-base-uri" select="$opf-uri"/>
             <p:with-option name="compatibility-mode" select="'false'"/>
             <!--TODO configurability for other META-INF files ?-->
-        </px:epub3-pub-create-package-doc>
+        </px:epub3-create-package-doc>
+        <p:sink/>
 
-        <px:fileset-add-entry media-type="application/oebps-package+xml">
+        <px:fileset-join>
             <p:input port="source">
                 <p:pipe port="result" step="package-doc.join-filesets"/>
+                <p:pipe step="package-doc.create" port="result.fileset"/>
             </p:input>
-            <p:with-option name="href" select="$opf-uri"/>
-        </px:fileset-add-entry>
+        </px:fileset-join>
 
         <px:message message="Package Document Created."/>
     </p:group>
@@ -332,7 +351,7 @@
         <p:identity name="finalize.in-memory">
             <p:input port="source">
                 <p:pipe port="in-memory.out" step="nav-doc"/>
-                <p:pipe port="in-memory.out" step="content-docs"/>
+                <p:pipe port="result.in-memory" step="content-docs"/>
                 <p:pipe port="in-memory.out" step="package-doc"/>
                 <p:pipe port="in-memory.out" step="media-overlays"/>
                 <p:pipe port="in-memory.out" step="finalize.ocf"/>

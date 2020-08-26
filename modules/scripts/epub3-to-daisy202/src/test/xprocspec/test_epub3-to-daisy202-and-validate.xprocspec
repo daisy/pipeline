@@ -14,9 +14,7 @@
             </p:input>
             <p:option name="epub"/>
             <p:option name="temp-dir" required="true"/>
-            <p:output port="daisy202.fileset">
-                <p:pipe step="store" port="result.fileset"/>
-            </p:output>
+            <p:output port="daisy202.fileset" primary="true"/>
             <p:output port="daisy202.in-memory" sequence="true">
                 <p:pipe step="convert" port="result.in-memory"/>
             </p:output>
@@ -24,8 +22,8 @@
                 <p:pipe step="validate" port="validation-status"/>
             </p:output>
             <p:import href="../../main/resources/xml/xproc/library.xpl"/>
-            <p:import href="../../main/resources/xml/xproc/step/epub3-to-daisy202.load.xpl"/>
-            <p:import href="../../main/resources/xml/xproc/step/epub3-to-daisy202.store.xpl"/>
+            <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+            <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"/>
             <p:import href="http://www.daisy.org/pipeline/modules/daisy202-validator/library.xpl"/>
             <p:choose name="source">
                 <p:when test="p:value-available('epub')">
@@ -33,10 +31,10 @@
                     <p:output port="result.in-memory" sequence="true">
                         <p:pipe step="load" port="result.in-memory"/>
                     </p:output>
-                    <px:epub3-to-daisy202.load name="load" validation="off">
-                        <p:with-option name="epub" select="$epub"/>
+                    <px:epub-load name="load" version="3.0" validation="off" store-to-disk="true">
+                        <p:with-option name="href" select="$epub"/>
                         <p:with-option name="temp-dir" select="concat($temp-dir,'load/')"/>
-                    </px:epub3-to-daisy202.load>
+                    </px:epub-load>
                 </p:when>
                 <p:otherwise>
                     <p:output port="result.fileset" primary="true"/>
@@ -54,6 +52,7 @@
                 <p:input port="source.in-memory">
                     <p:pipe step="source" port="result.in-memory"/>
                 </p:input>
+                <p:with-option name="output-dir" select="concat($temp-dir,'store/')"/>
             </px:epub3-to-daisy202>
             <px:daisy202-validator name="validate" ncc="file:/foo" px:message="Validate">
                 <p:input port="in-memory.in">
@@ -67,15 +66,20 @@
                 </p:input>
                 <p:with-option name="href" select="concat($temp-dir,'validation-report/daisy202-validation.html')"/>
             </p:store>
-            <px:epub3-to-daisy202.store name="store" px:message="Store">
-                <p:input port="source.fileset">
+            <px:fileset-store name="store" px:message="Store">
+                <p:input port="fileset.in">
                     <p:pipe step="convert" port="result.fileset"/>
                 </p:input>
-                <p:input port="source.in-memory">
+                <p:input port="in-memory.in">
                     <p:pipe step="convert" port="result.in-memory"/>
                 </p:input>
-                <p:with-option name="output-dir" select="concat($temp-dir,'store/')"/>
-            </px:epub3-to-daisy202.store>
+            </px:fileset-store>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="store" port="fileset.out"/>
+                </p:input>
+            </p:identity>
+            <p:delete match="@original-href"/>
         </p:declare-step>
     </x:script>
     
@@ -122,8 +126,7 @@
             </x:document>
         </x:expect>
         <x:context label="The NCC">
-            <x:document type="port" port="daisy202.in-memory"
-                        select="/*[base-uri()=resolve-uri('hefty-water/EPUB/ncc.html',$test-base-uri)]/html:body"/>
+            <x:document type="port" port="daisy202.in-memory" select="/*[ends-with(base-uri(),'ncc.html')]/html:body"/>
         </x:context>
         <x:expect label="The NCC" type="compare">
             <x:document type="inline" select="/*/html:body">

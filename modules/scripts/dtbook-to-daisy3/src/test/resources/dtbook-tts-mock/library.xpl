@@ -5,16 +5,17 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-inline-prefixes="#all">
 
-    <p:input port="content.in" primary="true" sequence="true"/>
-    <p:input port="fileset.in"/>
+    <p:input port="source.fileset" primary="true"/>
+    <p:input port="source.in-memory" sequence="true"/>
     <p:input port="config"/>
 
     <p:output port="audio-map">
       <p:pipe port="clips" step="build-audio-map"/>
     </p:output>
 
-    <p:output port="content.out" primary="true" sequence="true">
-      <p:pipe port="content" step="build-audio-map"/>
+    <p:output port="result.fileset" primary="true"/>
+    <p:output port="result.in-memory" sequence="true">
+      <p:pipe step="update-fileset" port="result.in-memory"/>
     </p:output>
 
     <p:output port="sentence-ids" sequence="true">
@@ -27,12 +28,25 @@
       </p:inline>
     </p:output>
 	
+    <p:output port="log" sequence="true">
+      <p:empty/>
+    </p:output>
+
     <p:option name="audio" required="false" px:type="boolean" select="'true'"/>
-    <p:option name="output-dir" required="false" select="''"/>
+    <p:option name="process-css" required="false" px:type="boolean" select="'true'">
+      <!-- ignored -->
+    </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>
+
+    <px:fileset-load media-types="application/x-dtbook+xml" name="dtbook">
+      <p:input port="in-memory">
+	<p:pipe step="main" port="source.in-memory"/>
+      </p:input>
+    </px:fileset-load>
 
     <p:choose name="build-audio-map">
       <p:when test="$audio = 'false'">
@@ -42,7 +56,7 @@
 	  </p:inline>
 	</p:output>
 	<p:output port="content">
-	  <p:pipe port="content.in" step="main"/>
+	  <p:pipe step="dtbook" port="result"/>
 	</p:output>
 	<p:sink/>
       </p:when>
@@ -67,15 +81,15 @@
 	     specs. -->
 	<px:dtbook-break-detect name="break">
 	  <p:input port="source">
-	    <!-- we are assuming that there is only the DTBook in content.in -->
-	    <p:pipe port="content.in" step="main"/>
+	    <!-- we are assuming that there is only the DTBook -->
+	    <p:pipe step="dtbook" port="result"/>
 	  </p:input>
 	</px:dtbook-break-detect>
-	<px:isolate-daisy3-skippable name="isolate">
+	<px:daisy3-isolate-skippable name="isolate">
 	  <p:input port="sentence-ids">
 	    <p:pipe port="sentence-ids" step="break"/>
 	  </p:input>
-	</px:isolate-daisy3-skippable>
+	</px:daisy3-isolate-skippable>
 	<p:xslt name="audio-map">
 	  <p:with-param port="parameters" name="mp3-path" select="string(.)">
 	    <p:pipe step="copy-mp3" port="result"/>
@@ -86,6 +100,22 @@
 	</p:xslt>
       </p:otherwise>
     </p:choose>
+    <p:sink/>
+
+    <px:fileset-update name="update-fileset">
+      <p:input port="source.fileset">
+	<p:pipe step="main" port="source.fileset"/>
+      </p:input>
+      <p:input port="source.in-memory">
+	<p:pipe step="main" port="source.in-memory"/>
+      </p:input>
+      <p:input port="update.fileset">
+	<p:pipe step="dtbook" port="result.fileset"/>
+      </p:input>
+      <p:input port="update.in-memory">
+	<p:pipe step="build-audio-map" port="content"/>
+      </p:input>
+    </px:fileset-update>
 
   </p:declare-step>
 

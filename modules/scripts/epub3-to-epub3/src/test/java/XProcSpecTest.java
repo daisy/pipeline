@@ -17,14 +17,11 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			brailleModule("css-utils"),
 			brailleModule("liblouis-utils"),
 			"org.daisy.pipeline.modules.braille:liblouis-utils:jar:" + thisPlatform() + ":?",
+			pipelineModule("css-utils"),
 			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),
 			pipelineModule("common-utils"),
-			pipelineModule("zip-utils"),
-			// for fileset-utils and zip-utils
-			pipelineModule("html-utils"),
-			pipelineModule("mediatype-utils"),
-			pipelineModule("epub3-ocf-utils"),
+			pipelineModule("epub-utils"),
 			"org.daisy.pipeline:calabash-adapter:?"
 		};
 	}

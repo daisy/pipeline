@@ -18,7 +18,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 @Component(
 	name = "css-speech-inliner",
 	service = { XProcStepProvider.class },
-	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}inline-css" }
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}inline-css" }
 )
 public class InlineCSSProvider implements XProcStepProvider {
 

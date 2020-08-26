@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:h="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../../main/resources/xml/nav/html5-to-page-list.xsl">
+
+    <x:param name="base-ref" select="'test.xhtml#'"/>
+
+    <x:scenario label="a simple page break">
+        <x:context>
+            <body>
+                <span id="page1" epub:type="pagebreak">1</span>
+            </body>
+        </x:context>
+        <x:expect label="is converted to a link in an ordered list item">
+            <ol>
+                <li>
+                    <a href="test.xhtml#page1">1</a>
+                </li>
+            </ol>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="when the page break has no ID">
+        <x:context>
+            <body>
+                <span epub:type="pagebreak">1</span>
+            </body>
+        </x:context>
+        <x:expect label="it is not included in the page list">
+            <ol/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="when a page break has both a title attribute and text content">
+        <x:context>
+            <body>
+                <span id="page1" epub:type="pagebreak" title="1">some text</span>
+            </body>
+        </x:context>
+        <x:expect label="the title attribute is used as the page value" test="string(//h:a)='1'"/>
+    </x:scenario>
+    <x:scenario label="when a page break is empty and has a title attribute ">
+        <x:context>
+            <body>
+                <span id="page1" epub:type="pagebreak" title="1"/>
+            </body>
+        </x:context>
+        <x:expect label="the title attribute is used as the page value" test="string(//h:a)='1'"/>
+    </x:scenario>
+    <x:scenario label="when a page break is empty and has no title attribute ">
+        <x:context>
+            <body>
+                <span id="page1" epub:type="pagebreak"/>
+                <div>
+                    <span id="page2" epub:type="pagebreak"/>
+                </div>
+            </body>
+        </x:context>
+        <x:expect label="the page is empty and will be represented in the navdoc using a hyphen" test="string((//h:a)[1])='-' and string((//h:a)[2])='-'"/>
+    </x:scenario>
+    <x:scenario label="when the document has several page breaks">
+        <x:context>
+            <body>
+                <span id="page1" epub:type="pagebreak" title="1"/>
+                <div>
+                    <span id="page2" epub:type="pagebreak" title="2"/>
+                </div>
+            </body>
+        </x:context>
+        <x:expect label="the list contains as many items as page breaks" test="count(/h:ol/h:li)=2"/>
+        <x:expect label="all pages values are present"
+            test="string((//h:a)[1])='1' and string((//h:a)[2])='2' "/>
+    </x:scenario>
+    <x:scenario label="when a page is nested within another (unlikely)">
+        <x:context>
+            <body>
+                <div id="page1" epub:type="pagebreak" title="1">
+                    <span id="page2" epub:type="pagebreak" title="2"/>
+                </div>
+            </body>
+        </x:context>
+        <x:expect label="the nested page is not ignored" test="count(/h:ol/h:li)=2"/>
+    </x:scenario>
+    <x:scenario label="when a page  break's text contains rich content">
+        <x:context>
+            <body>
+                <span id="page1" epub:type="pagebreak">page <em>1</em>
+                </span>
+            </body>
+        </x:context>
+        <x:expect label="the rich content is used the page link's content" test="//h:a">
+            <a href="test.xhtml#page1">page <em>1</em></a>
+        </x:expect>
+        <x:expect label="the rich content is used the page link's content" test="//h:a/node()" xml:space="preserve">page <em>1</em></x:expect>
+    </x:scenario>
+</x:description>

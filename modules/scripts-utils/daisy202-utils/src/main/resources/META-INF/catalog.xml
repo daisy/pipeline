@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"
-        uri="../xml/xproc/daisy202-library.xpl"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+         uri="../xml/xproc/daisy202-library.xpl"/>
+
+    <public publicId="-//DAISY//DTD content v2.02//EN" uri="../xml/schemas/d202/xhtml1-transitional-bodyref.dtd" />
+    <public publicId="-//DAISY//DTD ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.dtd" />
+    <public publicId="-//DAISY//RNG ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.rng" />
+    <public publicId="-//DAISY//DTD nccmulti v2.02//EN" uri="../xml/schemas/d202/d202nccmulti.dtd" />
+    <public publicId="-//DAISY//DTD smil v2.02//EN" uri="../xml/schemas/d202/d202smil.dtd" />
+    <public publicId="-//DAISY//RNG smil v2.02//EN" uri="../xml/schemas/d202/d202smil.rng" />
+    <public publicId="-//DAISY//DTD msmil v2.02//EN" uri="../xml/schemas/d202/d202msmil.dtd" />
+    <public publicId="-//DAISY//RNG msmil v2.02//EN" uri="../xml/schemas/d202/d202msmil.rng" />
+    <public publicId="-//DAISY//DTD discinfo v2.02//EN" uri="../xml/schemas/d202/d202discinfo.dtd" />
+
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/d202msmil.rng"
+         uri="../xml/schemas/d202/d202msmil.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/d202smil.rng"
+         uri="../xml/schemas/d202/d202smil.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/d202ncc.rng"
+         uri="../xml/schemas/d202/d202ncc.rng"/>
+
+    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+
 </catalog>

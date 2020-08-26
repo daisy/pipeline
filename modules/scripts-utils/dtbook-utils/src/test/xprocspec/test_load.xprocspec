@@ -69,9 +69,9 @@
 		<x:expect label="this results in a xml:base with only one slash after file:" type="compare"> <!-- not using x:fileset-compare -->
 			<x:document type="inline">
 				<d:fileset xml:base="file:/">
-					<d:file href="style.css" media-type="text/css"/>
 					<d:file href="foo.xml" original-href="file:/foo.xml" media-type="application/x-dtbook+xml"/>
 					<d:file href="image.png" original-href="file:/image.png" media-type="image/png"/>
+					<d:file href="style.css" media-type="text/css"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>

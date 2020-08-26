@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="px:fileset-load" name="main" xmlns:p="http://www.w3.org/ns/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" exclude-inline-prefixes="px">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                type="px:fileset-load" name="main"
+                exclude-inline-prefixes="px">
 
   <p:input port="fileset" primary="true"/>
-  <p:input port="in-memory" sequence="true"/>
-  <p:output port="result" sequence="true">
-    <p:pipe port="result" step="load"/>
+  <p:input port="in-memory" sequence="true">
+    <p:empty/>
+  </p:input>
+
+  <p:output port="result.fileset">
+    <p:pipe step="result.fileset" port="result"/>
+  </p:output>
+  <p:output port="result" sequence="true" primary="true">
+    <p:pipe step="load" port="result"/>
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The filtered and loaded fileset.</p>
+      <p>All files are loaded into memory, unless if the "load-if-not-in-memory" option is set, then
+      the "result" port will only contain documents that were already present in the "in-memory"
+      input.</p>
+      <p>"original-href" attributes are removed from the manifest.</p>
+    </p:documentation>
   </p:output>
 
   <p:option name="href" select="''"/>
@@ -12,19 +32,38 @@
   <p:option name="not-media-types" select="''"/>
   <p:option name="fail-on-not-found" select="'false'"/>
   <p:option name="load-if-not-in-memory" select="'true'"/>
-  <p:option name="method" select="''"/>
 
-  <p:import href="fileset-library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
+  <p:import href="fileset-library.xpl">
+    <p:documentation>
+      px:fileset-filter
+      px:fileset-create
+      px:fileset-add-entry
+      px:fileset-join
+    </p:documentation>
+  </p:import>
+  <p:import href="load-html.xpl">
+    <p:documentation>
+      pxi:load-html
+    </p:documentation>
+  </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
     <p:documentation>
       px:info
       px:set-base-uri
+      px:normalize-uri
       px:data
     </p:documentation>
   </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
-  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl">
+    <p:documentation>
+      px:unzip
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+    <p:documentation>
+      px:message
+    </p:documentation>
+  </p:import>
 
   <p:add-attribute match="/*" attribute-name="href">
     <p:with-option name="attribute-value" select="$href"/>
@@ -48,7 +87,11 @@
       </px:fileset-filter>
     </p:otherwise>
   </p:choose>
-  <p:identity name="filtered"/>
+  <px:fileset-join>
+    <p:documentation>Normalize @href</p:documentation>
+  </px:fileset-join>
+  <p:identity name="filtered-normalized"/>
+  <p:delete match="@original-href" name="result.fileset"/>
   <p:for-each>
     <p:iteration-source select="/*/*"/>
     <p:identity/>
@@ -56,7 +99,7 @@
   <p:count limit="1" name="filtered.count"/>
   <p:identity>
     <p:input port="source">
-      <p:pipe port="result" step="filtered"/>
+      <p:pipe port="result" step="filtered-normalized"/>
     </p:input>
   </p:identity>
 
@@ -72,6 +115,7 @@
         <p:variable name="target" select="/*/resolve-uri(@href, base-uri(.))"/>
         <p:variable name="on-disk" select="/*/resolve-uri((@original-href,@href)[1], base-uri(.))"/>
         <p:variable name="media-type" select="/*/@media-type"/>
+        <p:variable name="method" select="/*/@method"/>
 
         <p:choose>
           <p:xpath-context>
@@ -80,24 +124,16 @@
 
           <!-- from memory -->
           <p:when test="$target = //d:file/resolve-uri(@href,base-uri(.))">
-            <p:for-each name="for-each-in-memory"
-                        px:message="processing file from memory: {$target}" px:message-severity="DEBUG">
-              <p:iteration-source>
+            <p:split-sequence px:message="processing file from memory: {$target}" px:message-severity="DEBUG">
+              <p:input port="source">
                 <p:pipe port="in-memory" step="normalized"/>
-              </p:iteration-source>
-              <p:choose>
-                <p:when test="base-uri(/*)=$target">
-                  <p:identity/>
-                </p:when>
-                <p:otherwise>
-                  <p:identity>
-                    <p:input port="source">
-                      <p:empty/>
-                    </p:input>
-                  </p:identity>
-                </p:otherwise>
-              </p:choose>
-            </p:for-each>
+              </p:input>
+              <p:with-option name="test" select="concat('base-uri(/*)=&quot;',$target,'&quot;')">
+                <p:empty/>
+              </p:with-option>
+            </p:split-sequence>
+            <!-- take only the first -->
+            <p:split-sequence test="position()=1"/>
           </p:when>
 
           <!-- not in memory, but don't load it from disk -->
@@ -152,28 +188,67 @@
 
                   <!-- Load from ZIP -->
                   <p:when test="contains($on-disk, '!/')">
-                    <px:message severity="DEBUG">
+                    <p:variable name="file" select="replace($on-disk, '^(jar:)?([^!]+)!/(.+)$', '$2')"/>
+                    <p:variable name="path-in-zip" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
+                    <p:sink/>
+                    <p:xslt template-name="main">
                       <p:input port="source">
                         <p:empty/>
                       </p:input>
-                      <p:with-option name="message" select="replace($on-disk, '^([^!]+)!/(.+)$', 'Loading $2 from ZIP $1')"/>
-                    </px:message>
-                    <p:sink/>
-                    <px:unzip>
-                      <p:with-option name="href" select="replace($on-disk, '^([^!]+)!/(.+)$', '$1')"/>
-                      <p:with-option name="file" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
-                      <p:with-option name="content-type" select="$media-type"/>
-                    </px:unzip>
-                    <px:set-base-uri>
-                      <p:with-option name="base-uri" select="$target"/>
-                    </px:set-base-uri>
+                      <p:input port="stylesheet">
+                        <p:inline>
+                          <xsl:stylesheet version="2.0" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
+                            <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+                            <xsl:param name="uri" required="yes"/>
+                            <xsl:template name="main">
+                              <c:result>
+                                <xsl:value-of select="pf:unescape-uri($uri)"/>
+                              </c:result>
+                            </xsl:template>
+                          </xsl:stylesheet>
+                        </p:inline>
+                      </p:input>
+                      <p:with-param name="uri" select="$path-in-zip"/>
+                    </p:xslt>
+                    <p:group>
+                      <p:variable name="escaped-path-in-zip" select="."/>
+                      <p:sink/>
+                      <p:choose px:message="Loading {$escaped-path-in-zip} from ZIP {$file}" px:message-severity="DEBUG">
+                        <p:when test="$method='html' or ($method='' and $media-type='text/html')">
+                          <!-- can not use px:unzip; use workaround instead -->
+                          <pxi:load-html>
+                            <p:with-option name="href" select="concat('jar:',$on-disk)"/>
+                          </pxi:load-html>
+                        </p:when>
+                        <p:when test="$method='text' or ($method=''
+                                                         and matches($media-type,'^text/')
+                                                         and not(matches($media-type,'.*/xml$') or matches($media-type,'.*\+xml$')))">
+                          <!-- can not use px:unzip; use workaround instead -->
+                          <px:data content-type="text/plain; charset=utf-8">
+                            <p:with-option name="href" select="concat('jar:',$on-disk)"/>
+                          </px:data>
+                        </p:when>
+                        <p:otherwise>
+                          <px:unzip>
+                            <p:with-option name="href" select="$file"/>
+                            <p:with-option name="file" select="$escaped-path-in-zip"/>
+                            <p:with-option name="content-type" select="if ($method='xml') then 'application/xml'
+                                                                       else if ($method='binary') then 'binary/octet-stream'
+                                                                       else $media-type"/>
+                          </px:unzip>
+                          <px:set-base-uri>
+                            <p:with-option name="base-uri" select="$target"/>
+                          </px:set-base-uri>
+                        </p:otherwise>
+                      </p:choose>
+                    </p:group>
                   </p:when>
 
                   <!-- Force HTML -->
                   <p:when test="$method='html'">
-                    <px:html-load>
+                    <pxi:load-html>
                       <p:with-option name="href" select="$on-disk"/>
-                    </px:html-load>
+                    </pxi:load-html>
                   </p:when>
 
                   <!-- Force XML -->
@@ -211,13 +286,13 @@
 
                   <!-- HTML -->
                   <p:when test="$media-type='text/html' or $media-type='application/xhtml+xml'">
-                    <px:html-load>
+                    <pxi:load-html>
                       <p:with-option name="href" select="$on-disk"/>
-                    </px:html-load>
+                    </pxi:load-html>
                   </p:when>
 
                   <!-- XML -->
-                  <p:when test="$media-type='application/xml' or matches($media-type,'.*\+xml$')">
+                  <p:when test="matches($media-type,'.*(/|\+)xml$')">
                     <p:try>
                       <p:group>
                         <p:load>
@@ -367,11 +442,9 @@
   <p:sink/>
   <p:for-each name="normalized">
     <p:output port="in-memory" sequence="true">
-      <p:pipe port="result" step="normalized.in-memory"/>
+        <p:pipe step="normalized.group" port="in-memory"/>
     </p:output>
-    <p:output port="filesets" sequence="true" primary="true">
-      <p:pipe port="result" step="normalized.fileset"/>
-    </p:output>
+    <p:output port="filesets" sequence="true" primary="true"/>
 
     <p:iteration-source>
       <p:pipe port="in-memory" step="main"/>
@@ -380,46 +453,56 @@
     <!--
         - The base URI is computed based on the xml:base attribute if present. If it is a relative
           URI, it is resolved against the original base URI.
-        - Normalize file:/// to file:/
-          FIXME: use pf:normalize-uri from http://www.daisy.org/pipeline/modules/file-utils/library.xsl
+        - Normalize URI (e.g. "file:///" to "file:/")
     -->
-    <p:variable name="base-uri" select="replace(resolve-uri(base-uri(/*)),'^file:///','file:/')"/>
-    <p:variable name="base-uri-changed" select="not($base-uri=base-uri(/))"/>
+    <px:normalize-uri name="normalize-uri">
+      <p:with-option name="href" select="resolve-uri(base-uri(/*))"/>
+    </px:normalize-uri>
+    <p:group name="normalized.group">
+      <p:output port="in-memory" sequence="true">
+        <p:pipe step="normalized.in-memory" port="result"/>
+      </p:output>
+      <p:output port="filesets" sequence="true" primary="true">
+        <p:pipe step="normalized.fileset" port="result"/>
+      </p:output>
+      <p:variable name="base-uri" select="string(/*)">
+        <p:pipe step="normalize-uri" port="normalized"/>
+      </p:variable>
+      <p:variable name="base-uri-changed" select="not($base-uri=base-uri(/))"/>
+  
+      <px:fileset-add-entry name="normalized.fileset">
+        <p:with-option name="href" select="$base-uri"/>
+        <p:input port="source">
+          <p:pipe port="result" step="fileset.in-memory-base"/>
+        </p:input>
+      </px:fileset-add-entry>
 
-    <px:fileset-add-entry name="normalized.fileset">
-      <p:with-option name="href" select="$base-uri"/>
-      <p:input port="source">
-        <p:pipe port="result" step="fileset.in-memory-base"/>
-      </p:input>
-    </px:fileset-add-entry>
-
-    <p:choose>
-      <!--
-          If URI was normalized in px:fileset-add-entry, adapt the actual base URI of the
-          document. Also adapt the actual base URI if the value passed to px:fileset-add-entry was
-          computed based on the xml:base attribute.
-      -->
-      <p:when test="/d:fileset/d:file/resolve-uri(@href, base-uri()) != $base-uri
-                    or $base-uri-changed='true'">
-        <px:set-base-uri>
-          <p:input port="source">
-            <p:pipe port="current" step="normalized"/>
-          </p:input>
-          <p:with-option name="base-uri" select="$base-uri"/>
-        </px:set-base-uri>
-      </p:when>
-      <p:otherwise>
-        <p:identity>
-          <p:input port="source">
-            <p:pipe port="current" step="normalized"/>
-          </p:input>
-        </p:identity>
-
-      </p:otherwise>
-    </p:choose>
-    <p:identity name="normalized.in-memory"/>
-    <p:sink/>
-
+      <p:choose>
+        <!--
+            If URI was normalized in px:fileset-add-entry, adapt the actual base URI of the
+            document. Also adapt the actual base URI if the value passed to px:fileset-add-entry was
+            computed based on the xml:base attribute.
+        -->
+        <p:when test="/d:fileset/d:file/resolve-uri(@href, base-uri()) != $base-uri
+                      or $base-uri-changed='true'">
+          <px:set-base-uri>
+            <p:input port="source">
+              <p:pipe port="current" step="normalized"/>
+            </p:input>
+            <p:with-option name="base-uri" select="$base-uri"/>
+          </px:set-base-uri>
+        </p:when>
+        <p:otherwise>
+          <p:identity>
+            <p:input port="source">
+              <p:pipe port="current" step="normalized"/>
+            </p:input>
+          </p:identity>
+        </p:otherwise>
+      </p:choose>
+      <p:identity name="normalized.in-memory"/>
+      <p:sink/>
+    </p:group>
   </p:for-each>
 
   <p:wrap-sequence wrapper="d:fileset"/>

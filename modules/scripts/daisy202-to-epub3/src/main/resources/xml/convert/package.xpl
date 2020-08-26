@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:d="http://www.daisy.org/ns/pipeline/data" type="pxi:daisy202-to-epub3-package"
-    name="package" exclude-inline-prefixes="#all" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                exclude-inline-prefixes="#all"
+                type="pxi:daisy202-to-epub3-package" name="package">
 
     <p:documentation>Compile the OPF.</p:documentation>
 
@@ -61,78 +64,74 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub3-create-package-doc
+        </p:documentation>
+    </p:import>
+    <p:import href="ncc-to-opf-metadata.xpl">
+        <p:documentation>
+            px:ncc-to-opf-metadata
+        </p:documentation>
+    </p:import>
 
     <p:variable name="result-uri" select="concat($publication-dir,'package.opf')"/>
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">Compile OPF metadata.</p:documentation>
-    <p:identity>
+    <px:ncc-to-opf-metadata px:message="Extracting metadata from NCC...">
         <p:input port="source">
-            <p:pipe port="ncc" step="package"/>
+            <p:pipe step="package" port="ncc"/>
         </p:input>
-    </p:identity>
-    <px:message message="Extracting metadata from NCC..."/>
-    <p:xslt>
-        <p:with-param name="pub-id" select="$pub-id"/>
-        <p:input port="stylesheet">
-            <p:document href="ncc-metadata-to-opf-metadata.xsl"/>
-        </p:input>
-    </p:xslt>
-    <px:message message="Metadata successfully extracted and converted to OPF"/>
-    <p:identity name="opf-metadata"/>
+        <p:with-option name="pub-id" select="$pub-id"/>
+    </px:ncc-to-opf-metadata>
+    <p:identity name="opf-metadata" px:message="Metadata successfully extracted and converted to OPF"/>
     <p:sink/>
 
-    <p:group name="spine">
-        <p:output port="result" sequence="true"/>
-        <p:variable name="base" select="base-uri(/*)">
-            <p:pipe port="spine" step="package"/>
-        </p:variable>
-        <p:for-each>
-            <p:output port="result" sequence="true"/>
-            <p:iteration-source select="/*/d:file">
-                <p:pipe port="spine" step="package"/>
+    <p:group name="manifest">
+        <p:output port="result"/>
+        <p:for-each name="manifest-without-resources">
+            <p:iteration-source>
+                <p:pipe step="package" port="navigation"/>
+                <p:pipe step="package" port="content-docs"/>
+                <p:pipe step="package" port="mediaoverlay"/>
             </p:iteration-source>
-            <p:wrap-sequence wrapper="d:fileset"/>
-            <p:add-attribute match="/*" attribute-name="xml:base">
-                <p:with-option name="attribute-value" select="$base"/>
-            </p:add-attribute>
-            <px:fileset-join/>
+            <p:output port="result"/>
+            <px:fileset-create/>
+            <px:fileset-add-entry>
+                <p:input port="entry">
+                    <p:pipe step="manifest-without-resources" port="current"/>
+                </p:input>
+            </px:fileset-add-entry>
         </p:for-each>
-        <px:message message="Created filesets for each spine item"/>
+        <px:fileset-join>
+            <p:input port="source">
+                <p:pipe step="manifest-without-resources" port="result"/>
+                <p:pipe step="package" port="resources"/>
+            </p:input>
+        </px:fileset-join>
+        <px:message message="Created manifest fileset"/>
     </p:group>
     <p:sink/>
 
-    <px:fileset-join>
-        <p:input port="source">
-            <p:pipe port="spine" step="package"/>
-            <p:pipe port="resources" step="package"/>
-        </p:input>
-    </px:fileset-join>
-    <px:message message="Created manifest fileset"/>
-    <p:identity name="manifest"/>
-    <p:sink/>
-
-    <px:epub3-pub-create-package-doc>
-        <p:with-option name="result-uri" select="$result-uri"/>
+    <px:epub3-create-package-doc>
+        <p:with-option name="output-base-uri" select="$result-uri"/>
         <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
         <p:with-option name="detect-properties" select="'false'"/>
-        <p:input port="spine-filesets">
-            <p:pipe port="result" step="spine"/>
+        <p:input port="source.fileset">
+            <p:pipe step="manifest" port="result"/>
         </p:input>
-        <p:input port="publication-resources">
-            <p:pipe port="result" step="manifest"/>
+        <p:input port="source.in-memory">
+            <p:pipe step="package" port="navigation"/>
+            <p:pipe step="package" port="content-docs"/>
+            <p:pipe step="package" port="mediaoverlay"/>
+        </p:input>
+        <p:input port="spine">
+            <p:pipe step="package" port="spine"/>
         </p:input>
         <p:input port="metadata">
-            <p:pipe port="result" step="opf-metadata"/>
+            <p:pipe step="opf-metadata" port="result"/>
         </p:input>
-        <p:input port="content-docs">
-            <p:pipe port="navigation" step="package"/>
-            <p:pipe port="content-docs" step="package"/>
-        </p:input>
-        <p:input port="mediaoverlays">
-            <p:pipe port="mediaoverlay" step="package"/>
-        </p:input>
-    </px:epub3-pub-create-package-doc>
+    </px:epub3-create-package-doc>
     <px:message message="Package document created successfully"/>
     <p:identity name="opf-package"/>
 

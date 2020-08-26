@@ -32,6 +32,17 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
       <p:pipe step="load-convert-store" port="validation-status"/>
     </p:output>
 
+    <p:output port="tts-log" sequence="true">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h2 px:role="name">TTS log</h2>
+        <p px:role="desc" xml:space="preserve">Log file with information about text-to-speech process.
+
+Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html#common-settings) property.
+        </p>
+      </p:documentation>
+      <p:pipe step="load-convert-store" port="tts-log"/>
+    </p:output>
+
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB</h2>
@@ -46,14 +57,15 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
         </p:documentation>
     </p:option>
 
-    <p:option name="tts-config" required="false" px:type="anyFileURI" select="''">
+    <p:input port="tts-config">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	<h2 px:role="name">Text-To-Speech configuration file</h2>
-	<p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
+        <h2 px:role="name">Text-To-Speech configuration file</h2>
+        <p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
 
 [More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).</p>
       </p:documentation>
-    </p:option>
+      <p:inline><d:config/></p:inline>
+    </p:input>
 
     <p:option name="audio" required="false" px:type="boolean" select="'false'">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -74,11 +86,17 @@ split up if they exceed the given maximum size.</p>
 
     <p:import href="zedai-to-epub3.convert.xpl"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+      <p:documentation>
+        px:epub3-store
+      </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+      <p:documentation>
+        px:fileset-delete
+      </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl"/>
 
@@ -93,6 +111,9 @@ split up if they exceed the given maximum size.</p>
         <p:output port="validation-status">
           <p:pipe step="convert" port="validation-status"/>
         </p:output>
+        <p:output port="tts-log">
+          <p:pipe step="convert" port="tts-log"/>
+        </p:output>
         <p:variable name="output-dir-uri" select="/c:result/string()">
           <p:pipe step="output-dir-uri" port="normalized"/>
         </p:variable>
@@ -104,33 +125,13 @@ split up if they exceed the given maximum size.</p>
             </p:input>
         </px:zedai-load>
 
-	<p:choose name="tts-config">
-	  <p:when test="$tts-config != ''">
-	    <p:output port="result"/>
-	    <p:load>
-	      <p:with-option name="href" select="$tts-config"/>
-	    </p:load>
-	  </p:when>
-	  <p:otherwise>
-	    <p:output port="result">
-	      <p:inline>
-		<d:config/>
-	      </p:inline>
-	    </p:output>
-	    <p:sink/>
-	  </p:otherwise>
-	</p:choose>
-	
         <px:zedai-to-epub3 name="convert">
-	    <p:input port="fileset.in">
-	        <p:pipe step="load" port="fileset.out"/>
-	    </p:input>
             <p:input port="in-memory.in">
                 <p:pipe step="load" port="in-memory.out"/>
             </p:input>
-	    <p:input port="tts-config">
-	      <p:pipe step="tts-config" port="result"/>
-	    </p:input>
+            <p:input port="tts-config">
+              <p:pipe step="main" port="tts-config"/>
+            </p:input>
             <p:with-option name="output-dir" select="$temp-dir"/>
 	    <p:with-option name="audio" select="$audio"/>
         </px:zedai-to-epub3>
@@ -141,6 +142,12 @@ split up if they exceed the given maximum size.</p>
                 <p:pipe port="in-memory.out" step="convert"/>
             </p:input>
         </px:epub3-store>
+
+        <px:fileset-delete>
+          <p:input port="source">
+            <p:pipe step="convert" port="temp-audio-files"/>
+          </p:input>
+        </px:fileset-delete>
     </p:group>
 
 </p:declare-step>

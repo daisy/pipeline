@@ -6,10 +6,10 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			pipelineModule("common-utils"),
-			pipelineModule("dtbook-validator"),
+			pipelineModule("dtbook-utils"),
 			pipelineModule("fileset-utils"),
 			pipelineModule("validation-utils"),
-			pipelineModule("common-entities"),
+			pipelineModule("daisy3-utils"),
 		};
 	}
 }

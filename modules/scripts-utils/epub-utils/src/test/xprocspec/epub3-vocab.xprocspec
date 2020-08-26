@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
+	
+	<x:script>
+		<p:declare-step version="1.0" type="pf:epub3-vocab-add-prefix">
+			<p:input port="source"/>
+			<p:output port="result"/>
+			<p:option name="prefix"/>
+			<p:option name="uri"/>
+			<p:xslt>
+				<p:with-param name="prefix" select="$prefix"/>
+				<p:with-param name="uri" select="$uri"/>
+				<p:input port="stylesheet">
+					<p:inline>
+						<xsl:stylesheet version="2.0">
+							<xsl:import href="../../main/resources/xml/pub/epub3-vocab.xsl"/>
+							<xsl:param name="prefix"/>
+							<xsl:param name="uri"/>
+							<xsl:template match="metadata">
+								<xsl:copy>
+									<xsl:variable name="prefix" select="pf:epub3-vocab-add-prefix(@prefix,$prefix,$uri)"/>
+									<xsl:if test="$prefix">
+										<xsl:attribute name="prefix" select="$prefix"/>
+									</xsl:if>
+								</xsl:copy>
+							</xsl:template>
+						</xsl:stylesheet>
+					</p:inline>
+				</p:input>
+			</p:xslt>
+		</p:declare-step>
+	</x:script>
+	
+	<x:scenario label="add new prefix">
+		<x:call step="pf:epub3-vocab-add-prefix">
+			<x:input port="source">
+				<x:document type="inline">
+					<metadata prefix="dc: http://purl.org/dc/elements/1.1/"/>
+				</x:document>
+			</x:input>
+			<x:option name="prefix" select="'nordic'"/>
+			<x:option name="uri" select="'http://www.mtm.se/epub/'"/>
+		</x:call>
+		<x:context label="the result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="new prefix should be added" type="compare">
+			<x:document type="inline">
+				<metadata prefix="nordic: http://www.mtm.se/epub/ dc: http://purl.org/dc/elements/1.1/"/>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="add existing prefix">
+		<x:call step="pf:epub3-vocab-add-prefix">
+			<x:input port="source">
+				<x:document type="inline">
+					<metadata prefix="dc: http://purl.org/dc/elements/1.1/"/>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:scenario label="with same uri">
+			<x:call>
+				<x:option name="prefix" select="'dc'"/>
+				<x:option name="uri" select="'http://purl.org/dc/elements/1.1/'"/>
+			</x:call>
+			<x:context label="the result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="new prefix should be added" type="compare">
+				<x:document type="inline">
+					<metadata prefix="dc: http://purl.org/dc/elements/1.1/"/>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="with different uri">
+			<x:call>
+				<x:option name="prefix" select="'dc'"/>
+				<x:option name="uri" select="'http://www.mtm.se/epub/'"/>
+			</x:call>
+			<x:context label="the result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="prefix should be renamed" type="compare">
+				<x:document type="inline">
+					<metadata prefix="dc: http://purl.org/dc/elements/1.1/ dc_: http://www.mtm.se/epub/"/>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+	
+	<x:scenario label="add reserved prefix">
+		<x:call step="pf:epub3-vocab-add-prefix">
+			<x:input port="source">
+				<x:document type="inline">
+					<metadata/>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:scenario label="with correct uri">
+			<x:call>
+				<x:option name="prefix" select="'dcterms'"/>
+				<x:option name="uri" select="'http://purl.org/dc/terms/'"/>
+			</x:call>
+			<x:context label="the result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="new prefix should be added" type="compare">
+				<x:document type="inline">
+					<metadata prefix="dcterms: http://purl.org/dc/terms/"/>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="with wrong uri">
+			<x:call>
+				<x:option name="prefix" select="'dcterms'"/>
+				<x:option name="uri" select="'http://purl.org/dc/elements/1.1/'"/>
+			</x:call>
+			<x:context label="the result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="prefix should be renamed" type="compare">
+				<x:document type="inline">
+					<metadata prefix="dcterms_: http://purl.org/dc/elements/1.1/"/>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+	
+	<x:scenario label="add prefix for default vocabulary">
+		<x:documentation>Results in a warning</x:documentation>
+		<x:call step="pf:epub3-vocab-add-prefix">
+			<x:input port="source">
+				<x:document type="inline">
+					<metadata/>
+				</x:document>
+			</x:input>
+			<x:option name="prefix" select="'foo'"/>
+			<x:option name="uri" select="'http://idpf.org/epub/vocab/package/#'"/>
+		</x:call>
+		<x:context label="the result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the prefix should not be added" type="compare">
+			<x:document type="inline">
+				<metadata/>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

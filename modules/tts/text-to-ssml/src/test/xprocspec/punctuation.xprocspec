@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-	       xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
-	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="../../main/resources/xml/xproc/text-to-ssml.xpl">
 
 
@@ -11,7 +11,7 @@
     <x:call step="px:text-to-ssml">
       <x:input port="fileset.in">
 	<x:document type="inline">
-	  <d:nothing/>
+	  <d:fileset/>
 	</x:document>
       </x:input>
       <x:input port="user-lexicons">
@@ -87,8 +87,6 @@
 
     <x:scenario label="Filter characters">
       <x:call step="px:text-to-ssml">
-	<x:input port="fileset.in">
-	</x:input>
 	<x:input port="content.in">
 	  <x:document type="inline">
 	    <dtbook xml:lang="en">

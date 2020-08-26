@@ -44,9 +44,9 @@
             px:transform
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
         <p:documentation>
-            css:inline
+            px:css-cascade
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
@@ -64,7 +64,7 @@
     <px:assert message="More than one ZedAI document found in the fileset." test-count-max="1" error-code="PEZE00"/>
     <p:identity name="zedai"/>
     
-    <css:inline>
+    <px:css-cascade media="embossed">
         <p:with-option name="default-stylesheet"
                        select="concat(
                                  if ($default-stylesheet!='#default')
@@ -72,7 +72,7 @@
                                    else resolve-uri('../css/default.css'),
                                  ' ',
                                  $stylesheet)"/>
-    </css:inline>
+    </px:css-cascade>
     
     <p:viewport match="math:math">
         <px:transform>

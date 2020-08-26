@@ -14,7 +14,7 @@
             <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
             <l:relax-ng-report name="report">
                 <p:input port="schema">
-                    <p:document href="../../main/resources/xml/schemas/d202/d202ncc.rng"/>
+                    <p:document href="http://www.daisy.org/pipeline/modules/daisy202-utils/d202ncc.rng"/>
                 </p:input>
             </l:relax-ng-report>
             <p:sink/>

@@ -96,7 +96,7 @@
             </x:document>
         </x:expect>
         <x:context label="The resulting NCC">
-            <x:document type="port" port="result.in-memory" select="/*[base-uri()='file:/tmp/EPUB/ncc.html']"/>
+            <x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(),'[\\/]')[last()]='ncc.html']"/>
         </x:context>
         <x:expect label="The resulting NCC" type="compare">
             <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
@@ -119,7 +119,7 @@
             </x:document>
         </x:expect>
         <x:context label="The resulting chapter_001.xhtml file">
-            <x:document type="port" port="result.in-memory" select="/*[base-uri()='file:/tmp/EPUB/chapter_001.xhtml']"/>
+            <x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(),'[\\/]')[last()]='chapter_001.xhtml']"/>
         </x:context>
         <x:expect label="The resulting chapter_001.xhtml file" type="compare">
             <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
@@ -149,7 +149,7 @@
             </x:document>
         </x:expect>
         <x:context label="The resulting chapter_002.xhtml file">
-            <x:document type="port" port="result.in-memory" select="/*[base-uri()='file:/tmp/EPUB/chapter_002.xhtml']"/>
+            <x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(),'[\\/]')[last()]='chapter_002.xhtml']"/>
         </x:context>
         <x:expect label="The resulting chapter_002.xhtml file" type="compare">
             <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
@@ -166,7 +166,7 @@
             </x:document>
         </x:expect>
         <x:context label="The resulting chapter_001.smil file">
-            <x:document type="port" port="result.in-memory" select="/*[base-uri()='file:/tmp/EPUB/chapter_001.smil']"/>
+            <x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(),'[\\/]')[last()]='chapter_001.smil']"/>
         </x:context>
         <x:expect label="The resulting chapter_001.smil file" type="compare">
             <x:document type="inline">
@@ -197,7 +197,7 @@
             </x:document>
         </x:expect>
         <x:context label="The resulting chapter_002.smil file">
-            <x:document type="port" port="result.in-memory" select="/*[base-uri()='file:/tmp/EPUB/chapter_002.smil']"/>
+            <x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(),'[\\/]')[last()]='chapter_002.smil']"/>
         </x:context>
         <x:expect label="The resulting chapter_002.smil file" type="compare">
             <x:document type="inline">

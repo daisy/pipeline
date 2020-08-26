@@ -9,31 +9,22 @@
   
   <x:script>
     <p:declare-step type="pxi:fileset-store" name="main" version="1.0">
-      <p:input port="fileset" primary="true"/>
-      <p:input port="in-memory" sequence="true"/>
+      <p:input port="source.fileset" primary="true"/>
+      <p:input port="source.in-memory" sequence="true"/>
+      <p:output port="result.fileset">
+        <p:pipe step="store" port="fileset.out"/>
+      </p:output>
       <p:option name="target-base" required="true"/>
       <p:import href="../../main/resources/xml/xproc/fileset-library.xpl"/>
-      <px:fileset-create name="target-base">
-        <p:with-option name="base" select="$target-base"/>
-      </px:fileset-create>
-      <p:sink/>
-      <p:for-each>
-        <p:iteration-source select="/*/d:file">
-          <p:pipe step="main" port="fileset"/>
-        </p:iteration-source>
-        <px:fileset-add-entry>
-          <p:input port="source">
-            <p:pipe step="target-base" port="result"/>
-          </p:input>
-          <p:with-option name="href" select="/*/@href"/>
-          <p:with-option name="original-href" select="/*/resolve-uri(@original-href,base-uri(.))"/>
-          <p:with-option name="media-type" select="/*/@media-type"/>
-        </px:fileset-add-entry>
-      </p:for-each>
-      <px:fileset-join/>
-      <px:fileset-store>
+      <px:fileset-copy name="copy">
+        <p:input port="source.in-memory">
+          <p:pipe step="main" port="source.in-memory"/>
+        </p:input>
+        <p:with-option name="target" select="$target-base"/>
+      </px:fileset-copy>
+      <px:fileset-store name="store">
         <p:input port="in-memory.in">
-          <p:pipe step="main" port="in-memory"/>
+          <p:pipe step="copy" port="result.in-memory"/>
         </p:input>
       </px:fileset-store>
     </p:declare-step>
@@ -41,17 +32,28 @@
   
   <x:scenario label="store">
     <x:call step="pxi:fileset-store">
-      <x:input port="fileset">
+      <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
             <d:file href="c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
           </d:fileset>
         </x:document>
       </x:input>
-      <x:input port="in-memory"/>
+      <x:input port="source.in-memory"/>
       <x:option name="target-base" select="resolve-uri('1/',$temp-dir)"/>
     </x:call>
-    <x:context label="result fileset">
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="1/c.gif" original-href="1/c.gif" media-type="image/gif"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
       <x:document type="directory" base-uri="temp-dir" href="1/" recursive="true"/>
     </x:context>
     <x:expect label="The directory content" type="compare">
@@ -65,19 +67,34 @@
   
   <x:scenario label="store from zip">
     <x:call step="pxi:fileset-store">
-      <x:input port="fileset">
+      <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
             <d:file href="c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
+            <d:file href="e.xml" original-href="samples/fileset2/a.zip!/e%5Bxml%5D" media-type="application/xml"/>
             <d:file href="a/a.html" original-href="samples/fileset2/a.zip!/a.html" media-type="text/html"/>
             <d:file href="a/MimeDetector.java" original-href="samples/fileset2/a.zip!/MimeDetector.java" media-type="application/octet-stream"/>
           </d:fileset>
         </x:document>
       </x:input>
-      <x:input port="in-memory"/>
+      <x:input port="source.in-memory"/>
       <x:option name="target-base" select="resolve-uri('2/', $temp-dir)"/>
     </x:call>
-    <x:context label="result fileset">
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="2/c.gif" original-href="2/c.gif" media-type="image/gif"/>
+          <d:file href="2/e.xml" original-href="2/e.xml" media-type="application/xml"/>
+          <d:file href="2/a/a.html" original-href="2/a/a.html" media-type="text/html"/>
+          <d:file href="2/a/MimeDetector.java" original-href="2/a/MimeDetector.java" media-type="application/octet-stream"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
       <x:document type="directory" base-uri="temp-dir" href="2/" recursive="true"/>
     </x:context>
     <x:expect label="The directory content" type="compare">
@@ -88,6 +105,7 @@
             <c:file name="a.html"/>
           </c:directory>
           <c:file name="c.gif"/>
+          <c:file name="e.xml"/>
         </c:directory>
       </x:document>
     </x:expect>
@@ -95,17 +113,28 @@
   
   <x:scenario label="store to zip">
     <x:call step="pxi:fileset-store">
-      <x:input port="fileset">
+      <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
             <d:file href="c.zip!/c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
           </d:fileset>
         </x:document>
       </x:input>
-      <x:input port="in-memory"/>
+      <x:input port="source.in-memory"/>
       <x:option name="target-base" select="resolve-uri('3/', $temp-dir)"/>
     </x:call>
-    <x:context label="result fileset">
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="3/c.zip!/c.gif" original-href="3/c.zip!/c.gif" media-type="image/gif"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
       <x:document type="directory" base-uri="temp-dir" href="3/" recursive="true"/>
     </x:context>
     <x:expect label="The directory content" type="compare">
@@ -129,7 +158,7 @@
   
   <x:scenario label="store from zip to zip">
     <x:call step="pxi:fileset-store">
-      <x:input port="fileset">
+      <x:input port="source.fileset">
         <x:document type="inline">
           <d:fileset>
             <d:file href="c.zip!/c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
@@ -138,10 +167,23 @@
           </d:fileset>
         </x:document>
       </x:input>
-      <x:input port="in-memory"/>
+      <x:input port="source.in-memory"/>
       <x:option name="target-base" select="resolve-uri('4/', $temp-dir)"/>
     </x:call>
-    <x:context label="result fileset">
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="4/c.zip!/c.gif" original-href="4/c.zip!/c.gif" media-type="image/gif"/>
+          <d:file href="4/c.zip!/a.html" original-href="4/c.zip!/a.html" media-type="text/html"/>
+          <d:file href="4/a/MimeDetector.java" original-href="4/a/MimeDetector.java" media-type="application/octet-stream"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
       <x:document type="directory" base-uri="temp-dir" href="4/" recursive="true"/>
     </x:context>
     <x:expect label="The directory content" type="compare">
@@ -163,6 +205,388 @@
           <c:file name="a.html"/>
           <c:file name="c.gif"/>
         </c:zipfile>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="store with doctype and xml declaration from memory">
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="e.xml" media-type="application/xml"
+                    doctype="&lt;!DOCTYPE foo&gt;" xml-declaration="&lt;?xml version=&quot;1.0&quot; encoding=&quot;bar&quot;?&gt;"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:space="preserve" xml:base="e.xml"><root>
+	<node>
+	</node>
+</root></x:document>
+      </x:input>
+      <x:option name="target-base" select="resolve-uri('5/',$temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="5/e.xml" original-href="5/e.xml" media-type="application/xml"
+                  doctype="&lt;!DOCTYPE foo&gt;" xml-declaration="&lt;?xml version=&quot;1.0&quot; encoding=&quot;bar&quot;?&gt;"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="5/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="5">
+          <c:file name="e.xml"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="5/e.xml" method="text"/>
+    </x:context>
+    <x:expect label="The stored file" type="compare">
+      <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="bar"?&gt;&lt;!DOCTYPE foo&gt;
+&lt;root xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"&gt;
+	&lt;node&gt;
+	&lt;/node&gt;
+&lt;/root&gt;</body></x:document>
+        </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="store with doctype from zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="e.xml" original-href="samples/fileset2/a.zip!/e%5Bxml%5D" media-type="application/xml"
+                    doctype="&lt;!DOCTYPE foo&gt;" omit-xml-declaration="true"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory"/>
+      <x:option name="target-base" select="resolve-uri('6/',$temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="6/e.xml" original-href="6/e.xml" media-type="application/xml"
+                  doctype="&lt;!DOCTYPE foo&gt;" omit-xml-declaration="true"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="6/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="6">
+          <c:file name="e.xml"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="6/e.xml" method="text"/>
+    </x:context>
+    <x:expect label="The stored file should be identical to the file in the zip; it should not have the specified doctype"
+              type="compare">
+      <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;root&gt;
+	&lt;node&gt;
+	&lt;/node&gt;
+&lt;/root&gt;</body></x:document>
+        </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="store with doctype from file">
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="e.xml" original-href="samples/fileset2/e.xml" media-type="application/xml" doctype="&lt;!DOCTYPE foo&gt;"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory"/>
+      <x:option name="target-base" select="resolve-uri('7/',$temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="7/e.xml" original-href="7/e.xml" media-type="application/xml" doctype="&lt;!DOCTYPE foo&gt;"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="7/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="7">
+          <c:file name="e.xml"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="7/e.xml" method="text"/>
+    </x:context>
+    <x:expect label="The stored file should be identical to the original file; it should not have the specified doctype"
+              type="compare">
+      <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;root&gt;
+	&lt;node&gt;
+	&lt;/node&gt;
+&lt;/root&gt;</body></x:document>
+        </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="store with encoding from memory to zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.zip!/e.xml" media-type="application/xml" encoding="us-ascii"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:space="preserve" xml:base="c.zip!/e.xml"><root>
+	<node>
+	</node>
+</root></x:document>
+      </x:input>
+      <x:option name="target-base" select="resolve-uri('8/',$temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="8/c.zip!/e.xml" original-href="8/c.zip!/e.xml" media-type="application/xml"
+                  encoding="us-ascii"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="8/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="8">
+          <c:file name="c.zip"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The zip content">
+      <x:document type="zip" base-uri="temp-dir" href="8/c.zip"/>
+    </x:context>
+    <x:expect label="The zip content" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="c.zip">
+          <c:file name="e.xml"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="8/c.zip!/e.xml" method="text"/>
+    </x:context>
+    <x:expect label="The stored file" type="compare">
+      <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="us-ascii"?&gt;&lt;root xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"&gt;
+	&lt;node&gt;
+	&lt;/node&gt;
+&lt;/root&gt;</body></x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="store with doctype from memory to zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.zip!/e.xml" media-type="application/xml"
+                    doctype="&lt;!DOCTYPE foo&gt;" omit-xml-declaration="true"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:space="preserve" xml:base="c.zip!/e.xml"><root>
+	<node>
+	</node>
+</root></x:document>
+      </x:input>
+      <x:option name="target-base" select="resolve-uri('9/',$temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="9/c.zip!/e.xml" original-href="9/c.zip!/e.xml" media-type="application/xml"
+                  doctype="&lt;!DOCTYPE foo&gt;" omit-xml-declaration="true"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="9/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="9">
+          <c:file name="c.zip"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The zip content">
+      <x:document type="zip" base-uri="temp-dir" href="9/c.zip"/>
+    </x:context>
+    <x:expect label="The zip content" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="c.zip">
+          <c:file name="e.xml"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="9/c.zip!/e.xml" method="text"/>
+    </x:context>
+    <x:expect label="The stored file" type="compare">
+      <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;!DOCTYPE foo&gt;
+&lt;root xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"&gt;
+	&lt;node&gt;
+	&lt;/node&gt;
+&lt;/root&gt;</body></x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="store text from memory to zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.epub!/mimetype" media-type="text/plain"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:space="preserve" xml:base="c.epub!/mimetype">
+          <c:data content-type="text/plain">application/epub+zip</c:data>
+        </x:document>
+      </x:input>
+      <x:option name="target-base" select="resolve-uri('10/', $temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="10/c.epub!/mimetype" original-href="10/c.epub!/mimetype" media-type="text/plain"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="10/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="10">
+          <c:file name="c.epub"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The zip content">
+      <x:document type="zip" base-uri="temp-dir" href="10/c.epub"/>
+    </x:context>
+    <x:expect label="The zip content" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="c.epub">
+          <c:file name="mimetype"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="10/c.epub!/mimetype" method="text"/>
+    </x:context>
+    <x:expect label="The stored file" type="compare">
+      <x:document type="inline" xml:space="preserve">
+        <c:body>application/epub+zip</c:body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="store binary from memory to zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.epub!/mimetype" media-type="text/plain"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:space="preserve" xml:base="c.epub!/mimetype">
+          <c:data content-type="binary/octet-stream" encoding="base64">YXBwbGljYXRpb24vZXB1Yit6aXANCg==</c:data>
+        </x:document>
+      </x:input>
+      <x:option name="target-base" select="resolve-uri('11/', $temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="11/c.epub!/mimetype" original-href="11/c.epub!/mimetype" media-type="text/plain"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="11/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="11">
+          <c:file name="c.epub"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The zip content">
+      <x:document type="zip" base-uri="temp-dir" href="11/c.epub"/>
+    </x:context>
+    <x:expect label="The zip content" type="compare">
+      <x:document type="inline">
+        <c:zipfile name="c.epub">
+          <c:file name="mimetype"/>
+        </c:zipfile>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="11/c.epub!/mimetype" method="text"/>
+    </x:context>
+    <x:expect label="The stored file" type="compare">
+      <x:document type="inline" xml:space="preserve">
+        <c:body>application/epub+zip</c:body>
       </x:document>
     </x:expect>
   </x:scenario>

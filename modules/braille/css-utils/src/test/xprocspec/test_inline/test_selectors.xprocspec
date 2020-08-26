@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-               script="../../../main/resources/xml/inline.xpl">
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
   <!--
       Universal selector
   -->
   <x:scenario label="test_01">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -42,7 +42,7 @@
       Type selector
   -->
   <x:scenario label="test_02">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -74,7 +74,7 @@
       Descendant selector
   -->
   <x:scenario label="test_03">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -112,7 +112,7 @@
       Child selector
   -->
   <x:scenario label="test_04">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -154,7 +154,7 @@
       Adjacent selector
   -->
   <x:scenario label="test_05">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -190,7 +190,7 @@
       Attribute selectors
   -->
   <x:scenario label="test_06">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -238,7 +238,7 @@
       Class selectors
   -->
   <x:scenario label="test_07">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -277,7 +277,7 @@
       ID selectors
   -->
   <x:scenario label="test_08">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -315,7 +315,7 @@
       Pseudo classes
   -->
   <x:scenario label="test_09">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -368,7 +368,7 @@
       Pseudo elements (including stacking and functions)
   -->
   <x:scenario label="test_10">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -404,7 +404,7 @@
       Bringing pseudo-classes in the mix
   -->
   <x:scenario label="test_10b">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -450,7 +450,7 @@
       Root selector
   -->
   <x:scenario label="test_11">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -489,7 +489,7 @@
       Descendant selector inside pseudo class
   -->
   <x:scenario label="test_12">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
@@ -529,7 +529,7 @@
       This does not select the C that have multiple B ancestors (bug).
   -->
   <x:scenario label="test_13" xfail="jstyleparser bug">
-    <x:call step="css:inline">
+    <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
