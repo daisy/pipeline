@@ -30,7 +30,7 @@
         org.daisy.pipeline.job.Job=OFF
         org.daisy.pipeline.job.impl.DefaultJobExecutionService=OFF
         org.daisy.pipeline.persistence.impl.job.PersistentJob=OFF
-        org.daisy.common.xproc.calabash.steps.Message=OFF
+        org.daisy.pipeline.common.calabash.impl.Message=OFF
         com.xmlcalabash.runtime=OFF
       </loggerLevels>
     </filter>
