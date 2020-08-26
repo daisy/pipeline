@@ -101,7 +101,7 @@ public class XProcSpecRunnerTest {
 "Failed tests:"                                                                          + "\n" +
 "  test_identity_broken"                                                                 + "\n" +
 "    Identity"                                                                           + "\n" +
-"      * FAILURE: theOptionOptionRequiredShouldHaveTheValueOptionRequiredvalue"          + "\n" +
+"      * FAILURE: the option 'option.required' should have the value 'option.required-value'" + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 3, Failures: 1, Errors: 0, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_identity_broken.html").exists());
@@ -145,7 +145,7 @@ public class XProcSpecRunnerTest {
 "Running test_throw_error_unexpected"                                                    + "\n" +
 "Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error evaluating assertion"                                                             + "\n" +
-"line: 67"                                                                               + "\n" +
+"line: 68"                                                                               + "\n" +
 "column: 43"                                                                             + "\n" +
 ""                                                                                       + "\n" +
 "                       * port not found: result"                                        + "\n" +
@@ -157,7 +157,7 @@ public class XProcSpecRunnerTest {
 "Running test_throw_java_error"                                                          + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error evaluating assertion"                                                             + "\n" +
-"line: 67"                                                                               + "\n" +
+"line: 68"                                                                               + "\n" +
 "column: 43"                                                                             + "\n" +
 ""                                                                                       + "\n" +
 "                       * port not found: result"                                        + "\n" +
@@ -176,12 +176,12 @@ public class XProcSpecRunnerTest {
 "    * ERROR: Test file does not exist"                                                  + "\n" +
 "  test_throw_error_unexpected"                                                          + "\n" +
 // FIXME: should not be a "compilationError"
-"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions"                + "\n" +
-// "    Unexpected error "                                                                  + "\n" +
-// "      * ERROR: Error evaluating assertion "                                             + "\n" +
+"    Unexpected error"                                                                   + "\n" +
+"      * ERROR: Error evaluating assertion"                                              + "\n" +
 "  test_throw_java_error"                                                                + "\n" +
 // FIXME: should not be a "compilationError"
-"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions"                + "\n" +
+"    Unexpected Java error"                                                              + "\n" +
+"      * ERROR: Error evaluating assertion"                                              + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 5, Failures: 0, Errors: 4, Skipped: 0"                                       + "\n"));
 		assertTrue(new File(reportsDir, "test_non_existing.html").exists());
@@ -270,7 +270,7 @@ public class XProcSpecRunnerTest {
 "Running test_foo_java"                                                                  + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error evaluating assertion"                                                             + "\n" +
-"line: 67"                                                                               + "\n" +
+"line: 68"                                                                               + "\n" +
 "column: 43"                                                                             + "\n" +
 ""                                                                                       + "\n" +
 "                       * port not found: result"                                        + "\n" +
@@ -284,10 +284,8 @@ public class XProcSpecRunnerTest {
 ""                                                                                       + "\n" +
 "Tests in error:"                                                                        + "\n" +
 "  test_foo_java"                                                                        + "\n" +
-// FIXME:
-"    * ERROR: XProcSpec error in evaluate.xpl - evaluation of assertions"                + "\n" +
-// "    Foo "                                                                               + "\n" +
-// "      * ERROR: Error evaluating assertion "                                             + "\n" +
+"    Foo"                                                                                + "\n" +
+"      * ERROR: Error evaluating assertion"                                              + "\n" +
 ""                                                                                       + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0"                                       + "\n"));
 		stream.reset();
