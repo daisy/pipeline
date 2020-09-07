@@ -28,11 +28,6 @@
     </x:context>
     <x:expect label="in-memory" type="compare">
       <x:document type="file" href="../resources/simple-epub/package.opf"/>
-      <!--
-      <x:document type="file" href="../resources/simple-epub/content-1.xhtml"/>
-      <x:document type="file" href="../resources/simple-epub/content-2.xhtml"/>
-      <x:document type="file" href="../resources/simple-epub/nav.xhtml"/>
-      -->
     </x:expect>
   </x:scenario>
   
@@ -79,6 +74,29 @@
     </x:context>
     <x:expect label="in-memory" type="compare">
       <x:document type="file" href="../resources/C00000.epub!/EPUB/package.opf"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="load with preamble">
+    <x:call step="px:epub3-to-pef.load">
+      <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
+      <x:option name="preamble" select="resolve-uri('../resources/preamble.html')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'with-preamble')"/>
+    </x:call>
+    <x:context label="fileset">
+      <x:document type="port"  port="fileset.out"/>
+    </x:context>
+    <x:expect label="the fileset"
+              type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+      <x:document type="inline">
+        <d:fileset>
+          <d:file href="../resources/simple-epub/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
+          <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml"/>
+          <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml"/>
+          <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml"/>
+		  <d:file href="../resources/preamble.html" media-type="application/xhtml+xml" role="preamble"/>
+        </d:fileset>
+      </x:document>
     </x:expect>
   </x:scenario>
   

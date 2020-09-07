@@ -111,7 +111,7 @@
                  re:exact(re:or(('inner','middle','outer'))),
                  re:exact($css:INTEGER_RE),
                  re:exact(re:or(($css:IDENT_RE,$css:BRAILLE_STRING_RE,$css:SYMBOLS_FN_RE))),
-                 re:exact(re:or(('center','justify','left','right'))),
+                 re:exact(re:or(('center','left','right'))),
                  re:exact(re:or(('always','auto','avoid','left','right'))),
                  re:exact(re:or(('always','auto','avoid','left','right'))),
                  re:exact(re:or(('auto','avoid'))),

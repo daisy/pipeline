@@ -97,6 +97,12 @@ For MacOS users,
 
 - [say][].
 
+The following online text-to-speech processor can also be used for
+all users, given they have an account for the service 
+and the appropriate plan or license :
+
+- [Google Cloud Text-To-Speech][]
+
 It is strongly recommended to install eSpeak anyway, as it can handle
 almost any language out there.
 <!-- Just as Lame’s directory must be in the system PATH if it were
@@ -264,6 +270,22 @@ tts-adapter-attbin:
   if this one has a higher priority.
 : Defaults to "2"
 
+### Google Cloud Text-to-speech
+
+`org.daisy.pipeline.tts.google.apikey`
+: (Mandatory) API key to connect to Google Text-To-Speech service
+: See [Google API key page](https://cloud.google.com/docs/authentication/api-keys)
+  for more information.
+
+`org.daisy.pipeline.tts.google.samplerate`
+: Sample rate (in Hz)
+: Defaults to 22050
+
+`org.daisy.pipeline.tts.google.priority`
+: This engine is chosen over another engine that serves the same voice
+  if this one has a higher priority.
+: Defaults to "15"
+
 ### LAME encoder
 
 `org.daisy.pipeline.tts.lame.path`
@@ -273,7 +295,6 @@ tts-adapter-attbin:
 
 `org.daisy.pipeline.tts.lame.cli.options`
 : Additional command line options passed to lame
-
 
 ## CSS
 
@@ -520,3 +541,4 @@ appear in the lexicons.
 [eSpeak]: http://espeak.sourceforge.net/
 [SAPI]: https://en.wikipedia.org/wiki/Microsoft_Speech_API
 [say]: https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man1/say.1.html
+[Google Cloud Text-To-Speech]: https://cloud.google.com/text-to-speech

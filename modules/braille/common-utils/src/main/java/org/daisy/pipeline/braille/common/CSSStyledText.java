@@ -62,6 +62,13 @@ public class CSSStyledText implements Cloneable {
 			return style.properties;
 	}
 	
+	public RuleTextTransform getDefaultTextTransformDefinition() {
+		if (style == null)
+			return null;
+		else
+			return style.defaultTextTransformDef;
+	}
+	
 	public RuleTextTransform getTextTransformDefinition(String name) {
 		if (style == null || style.textTransformDefs == null)
 			return null;
@@ -107,10 +114,14 @@ public class CSSStyledText implements Cloneable {
 			for (RuleBlock<?> b : inlineStyle)
 				if (b instanceof RuleMainBlock) {} // already handled
 				else if (b instanceof RuleTextTransform) {
-					if (s.textTransformDefs == null)
-						s.textTransformDefs = new HashMap<String,RuleTextTransform>();
 					RuleTextTransform def = (RuleTextTransform)b;
-					s.textTransformDefs.put(def.getName(), def);
+					String name = def.getName();
+					if (name != null) {
+						if (s.textTransformDefs == null)
+							s.textTransformDefs = new HashMap<String,RuleTextTransform>();
+						s.textTransformDefs.put(name, def);
+					} else
+						s.defaultTextTransformDef = def;
 				} else
 					throw new RuntimeException("Unexpected style: " + b);
 			return s;
@@ -119,6 +130,7 @@ public class CSSStyledText implements Cloneable {
 	
 	private static class Style implements Cloneable {
 		SimpleInlineStyle properties;
+		RuleTextTransform defaultTextTransformDef;
 		Map<String,RuleTextTransform> textTransformDefs;
 		@Override
 		public Object clone() {

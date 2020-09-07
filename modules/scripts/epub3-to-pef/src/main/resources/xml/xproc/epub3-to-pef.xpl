@@ -28,6 +28,13 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         </p:documentation>
     </p:option>
     
+    <p:option name="preamble" required="false" select="''" px:type="anyFileURI" px:sequence="false" px:media-type="application/xhtml+xml text/html">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Preamble HTML</h2>
+            <p px:role="desc">An HTML file to be prepended to the EPUB spine.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Status</h2>
@@ -141,11 +148,12 @@ even though the provided CSS is more specific.
         <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
     </px:tempdir>
     
-    <!-- =========== -->
-    <!-- LOAD EPUB 3 -->
-    <!-- =========== -->
+    <!-- ============================= -->
+    <!-- LOAD EPUB 3 and PREAMBLE HTML -->
+    <!-- ============================= -->
     <px:epub3-to-pef.load name="load" px:message="Loading EPUB" px:progress=".03">
         <p:with-option name="epub" select="$epub"/>
+        <p:with-option name="preamble" select="$preamble"/>
         <p:with-option name="temp-dir" select="concat(string(/c:result),'load/')">
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>

@@ -118,7 +118,7 @@ public interface CSSBlockTransform {
 				new Function<BrailleTranslator,BrailleTranslator>() {
 					public BrailleTranslator _apply(BrailleTranslator translator) {
 						return __apply(
-							logCreate(new TransformImpl(translator, htmlOut, locale, q))
+							logCreate(new TransformImpl(translator, false, htmlOut, locale, q))
 						);
 					}
 				}
@@ -134,16 +134,26 @@ public interface CSSBlockTransform {
 			
 			private final Query mainQuery;
 			private final BrailleTranslator mainTranslator;
+			private final boolean forceMainTranslator;
 			private final Map<String,String> options;
 			
-			private TransformImpl(BrailleTranslator translator, boolean htmlOut, String mainLocale, Query query) {
+			/**
+			 * @param mainTranslator translator to be used for the parts of the document that do
+			 *                       not have their own sub-translator
+			 * @param forceMainTranslator if true, the main translator is used even if a default
+			 *                            translator has been defined in CSS
+			 */
+			// FIXME: mainTranslator is optional if default translator has been defined in CSS (which we can not know in advance)
+			private TransformImpl(BrailleTranslator mainTranslator, boolean forceMainTranslator,
+			                      boolean htmlOut, String mainLocale, Query query) {
 				options = ImmutableMap.of(// This will omit the <_ style="text-transform:none">
 				                          // wrapper. It is assumed that if (output:html) is set, the
 				                          // result is known to be braille (which is the case if
 				                          // (output:braille) is also set).
 				                          "no-wrap", String.valueOf(htmlOut),
 				                          "main-locale", mainLocale != null ? mainLocale : "");
-				mainTranslator = translator;
+				this.mainTranslator = mainTranslator;
+				this.forceMainTranslator = forceMainTranslator;
 				mainQuery = query;
 			}
 			
@@ -164,8 +174,12 @@ public interface CSSBlockTransform {
 								BrailleTranslator compoundTranslator;
 								Function0<Void> evictTempTranslator; {
 									if (subTranslators != null) {
+										BrailleTranslator defaultTranslator = mainTranslator;
+										Query defaultQuery = subTranslators.remove("auto");
+										if (!forceMainTranslator && defaultQuery != null && !defaultQuery.equals(mainQuery))
+											defaultTranslator = translatorProvider.get(defaultQuery).iterator().next();
 										compoundTranslator = new CompoundTranslator(
-											mainTranslator,
+											defaultTranslator,
 											Maps.transformValues(
 												subTranslators,
 												q -> () -> translatorProvider.get(q).iterator().next()));
@@ -258,7 +272,8 @@ public interface CSSBlockTransform {
 								}
 							if (query != null) {
 								if (queries == null) queries = new HashMap<>();
-								queries.put(rule.getName(), query);
+								String name = rule.getName();
+								queries.put(name == null ? "auto" : name, query);
 							}
 							break;
 						}

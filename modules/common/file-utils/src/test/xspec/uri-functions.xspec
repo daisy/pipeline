@@ -197,6 +197,12 @@
             </x:call>
             <x:expect label="Decoding percent-encoded octets of unreserved characters" select="'http://www.example.com/~username/'"/>
         </x:scenario>
+        <x:scenario label="pf:file-expand83 should not mess up percent-encoding in fragments">
+            <x:call>
+                <x:param name="uri" select="'file:/a/path.xml#%23x'"/>
+            </x:call>
+            <x:expect label="Fragment should be same" select="'file:/a/path.xml#%23x'"/>
+        </x:scenario>
         <x:scenario label="The default port (port 80 for the “http” scheme) may be removed from (or added to) a URL">
             <x:call>
                 <x:param name="uri" select="'http://www.example.com:80/bar.html'"/>

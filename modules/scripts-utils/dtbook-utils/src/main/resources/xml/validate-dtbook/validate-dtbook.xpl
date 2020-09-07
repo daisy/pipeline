@@ -61,9 +61,9 @@
         <p:pipe step="validation-status" port="result"/>
     </p:output>
     
-    <p:option name="mathml-version"/>
-    <p:option name="check-images"/>
-    <p:option name="nimas"/>
+    <p:option name="mathml-version" select="'3.0'"/>
+    <p:option name="check-images" select="'false'"/>
+    <p:option name="nimas" select="'false'"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>

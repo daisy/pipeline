@@ -15,7 +15,9 @@
                 exclude-inline-prefixes="#all"
                 name="main">
     
-    <p:option name="epub" required="true"/>
+    <p:option name="epub" required="true">
+      <p:documentation>Base URI to resolve style sheets against</p:documentation>
+    </p:option>
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
     <p:output port="fileset.out" primary="true">
@@ -54,6 +56,11 @@
     <p:option name="temp-dir" required="true"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:opf-spine-to-fileset
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
@@ -67,7 +74,13 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+            px:fileset-create
+            px:fileset-add-entry
+        </p:documentation>
+    </p:import>
     
     <!-- Ensure that there's exactly one c:param-set -->
     <px:merge-parameters name="parameters" px:progress=".01">
@@ -77,28 +90,43 @@
     </px:merge-parameters>
     
     <!-- Load XHTML documents in spine order. -->
-    <px:fileset-load px:message="Load XHTML documents in spine order" px:progress=".04">
-        <p:input port="fileset">
-            <p:pipe port="fileset.in" step="main"/>
+    <px:opf-spine-to-fileset ignore-missing="true">
+        <p:input port="source.fileset">
+            <p:pipe step="main" port="fileset.in"/>
         </p:input>
+        <p:input port="source.in-memory">
+            <p:pipe step="main" port="in-memory.in"/>
+        </p:input>
+    </px:opf-spine-to-fileset>
+    <px:fileset-load px:message="Load XHTML documents in spine order" px:progress=".04">
         <p:input port="in-memory">
-            <p:pipe port="in-memory.in" step="main"/>
+            <p:pipe step="main" port="in-memory.in"/>
         </p:input>
         <p:with-option name="media-types" select="string-join(('application/oebps-package+xml',$content-media-types),' ')"/>
     </px:fileset-load>
+    <!-- Prepend preamble -->
+    <p:identity name="spine"/>
+    <p:sink/>
+    <p:delete match="/*/d:file[not(@role='preamble')]">
+        <p:input port="source">
+            <p:pipe step="main" port="fileset.in"/>
+        </p:input>
+    </p:delete>
+    <px:fileset-load name="preamble">
+        <p:input port="in-memory">
+            <p:pipe port="in-memory.in" step="main"/>
+        </p:input>
+    </px:fileset-load>
+    <p:sink/>
+    <p:identity>
+        <p:input port="source">
+            <p:pipe step="preamble" port="result"/>
+            <p:pipe step="spine" port="result"/>
+        </p:input>
+    </p:identity>
     <p:for-each>
         <p:add-xml-base/>
     </p:for-each>
-    <p:wrap-sequence wrapper="wrapper"/>
-    <p:xslt px:progress=".01">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/get-epub3-spine.xsl"/>
-        </p:input>
-    </p:xslt>
-    <p:filter select="/*/*"/>
     
     <!-- In case there exists any CSS in the EPUB already, and $apply-document-specific-stylesheets = 'true',  then inline that CSS. -->
     <p:for-each px:message="Processing CSS that is already present in the EPUB" px:progress=".09">

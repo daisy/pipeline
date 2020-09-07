@@ -412,7 +412,10 @@ public class BrailleCssCascader implements CssCascader {
 	}
 
 	private static void insertTextTransformDefinition(StringBuilder builder, RuleTextTransform rule) {
-		builder.append("@text-transform ").append(rule.getName()).append(" { ");
+		builder.append("@text-transform");
+		String name = rule.getName();
+		if (name != null) builder.append(' ').append(name);
+		builder.append(" { ");
 		for (Declaration decl : rule)
 			insertDeclaration(builder, decl);
 		builder.append("} ");

@@ -590,16 +590,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <pax.exam.logging>none</pax.exam.logging>
-            <org.daisy.pipeline.junit.runners>OSGiLessRunner,PaxExam</org.daisy.pipeline.junit.runners>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
         <executions>

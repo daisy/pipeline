@@ -161,9 +161,10 @@ public final class BrailleCssTreeBuilder {
 					style.add("@page", Style.of((RulePage)rule));
 				else if (rule instanceof RuleVolume)
 					style.add("@volume", Style.of((RuleVolume)rule));
-				else if (rule instanceof RuleTextTransform)
-					style.add("@text-transform " + ((RuleTextTransform)rule).getName(),
-					          new Style().add((List<Declaration>)rule));
+				else if (rule instanceof RuleTextTransform) {
+					String name = ((RuleTextTransform)rule).getName();
+					style.add(name == null ? "@text-transform" : "@text-transform " + name,
+					          new Style().add((List<Declaration>)rule)); }
 				else if (rule instanceof RuleMargin)
 					style.add("@" + ((RuleMargin)rule).getMarginArea(),
 					          new Style().add((List<Declaration>)rule));

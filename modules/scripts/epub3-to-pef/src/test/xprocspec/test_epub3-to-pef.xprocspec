@@ -16,6 +16,7 @@
             <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml"/>
             <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml"/>
             <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml"/>
+            <d:file href="../resources/preamble.html" media-type="application/xhtml+xml" role="preamble"/>
           </d:fileset>
         </x:document>
       </x:input>
@@ -89,6 +90,7 @@
             <volume cols="35" rows="20" rowgap="0" duplex="true">
               <section>
                 <page>
+                  <row>⠄⠄⠄</row>
                   <row>⠋⠕⠕</row>
                   <row>⠃⠜</row>
                 </page>

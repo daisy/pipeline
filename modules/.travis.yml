@@ -16,6 +16,9 @@ matrix:
     - env: SUBDIRS="nlp audio tts"
     - env: SUBDIRS=braille
     - env: SUBDIRS=scripts
+    - env:
+      - TEST_WITH_PAXEXAM=true
+      - SUBDIRS=scripts
 
 install:
   - mvn install --projects bom,parent
@@ -40,15 +43,26 @@ install:
 
 # main task, run the verify goal
 script:
-  - for d in $SUBDIRS; do
-      mvn -f $d -B verify
-          -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
-          -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
-    done
+  - if [ "$TEST_WITH_PAXEXAM" == "true" ]; then
+      for d in $SUBDIRS; do
+        mvn -f $d -B verify
+            -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
+            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
+      done
+    else
+      for d in $SUBDIRS; do
+        mvn -f $d -B verify
+            -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn
+            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+            -Ptest-with-paxexam;
+      done
+    fi
 
 # if the build succeeds, deploy the artifact (tests are skipped)
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ] || [[ "$TRAVIS_BRANCH" == super/* ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  - if [ "$TRAVIS_BRANCH" == "master" ] || [[ "$TRAVIS_BRANCH" == super/* ]]
+        && [ "$TRAVIS_PULL_REQUEST" == "false" ]
+        && [ "$TEST_WITH_PAXEXAM" != "true" ]; then
       for d in $SUBDIRS; do
         mvn -f $d deploy -B -DskipTests -Dinvoker.skip=true
             -Dorg.slf4j.simpleLogger.log.com.xmlcalabash.core.XProcRuntime=warn

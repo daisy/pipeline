@@ -31,6 +31,8 @@ public class CompoundTranslator extends AbstractBrailleTranslator {
 	private final Map<String,Supplier<BrailleTranslator>> translators;
 
 	public CompoundTranslator(BrailleTranslator mainTranslator, Map<String,Supplier<BrailleTranslator>> subTranslators) {
+		if (subTranslators.containsKey("auto") || mainTranslator == null)
+			throw new IllegalArgumentException();
 		translators = ImmutableMap.<String,Supplier<BrailleTranslator>>builder()
 		                          .put("auto", () -> mainTranslator)
 		                          .putAll(subTranslators)

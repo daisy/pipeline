@@ -17,6 +17,8 @@ import net.sf.saxon.type.BuiltInAtomicType;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
+import org.daisy.common.file.URLs;
+
 import org.osgi.service.component.annotations.Component;
 
 @Component(
@@ -81,6 +83,7 @@ public class Expand83 extends ExtensionFunctionDefinition {
 			}
 			String query = url.getQuery();
 			String fragment = url.getRef();
+			if (fragment != null) fragment = URLs.decode(fragment);
 			File file = new File(new URI(protocol, null, path, null, null));
 			URI expandedUri = expand83(file, path.endsWith("/"));
 			if (expandedUri == null) {

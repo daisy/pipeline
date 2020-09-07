@@ -19,21 +19,24 @@
     </xsl:template>
     
     <xsl:template match="pef:volume|
-                         pef:section[@duplex]">
+                         pef:section[@duplex]"
+                  priority="0.9">
         <xsl:next-match>
             <xsl:with-param name="duplex" tunnel="yes" select="xs:boolean(@duplex)"/>
         </xsl:next-match>
     </xsl:template>
     
     <xsl:template match="pef:volume|
-                         pef:section[@rows]">
+                         pef:section[@rows]"
+                  priority="0.8">
         <xsl:next-match>
             <xsl:with-param name="rows" tunnel="yes" select="xs:integer(number(@rows))"/>
         </xsl:next-match>
     </xsl:template>
     
     <xsl:template match="pef:volume|
-                         pef:section[@cols]">
+                         pef:section[@cols]"
+                  priority="0.7">
         <xsl:next-match>
             <xsl:with-param name="cols" tunnel="yes" select="xs:integer(number(@cols))"/>
         </xsl:next-match>
@@ -42,7 +45,8 @@
     <xsl:template match="pef:volume|
                          pef:section[@rowgap]|
                          pef:page[@rowgap]|
-                         pef:row[@rowgap]">
+                         pef:row[@rowgap]"
+                  priority="0.6">
         <xsl:next-match>
             <xsl:with-param name="rowgap" tunnel="yes" select="xs:integer(number(@rowgap))"/>
         </xsl:next-match>

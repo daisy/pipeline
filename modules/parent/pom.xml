@@ -422,7 +422,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.2</version>
+        <version>1.13.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -801,9 +801,9 @@
               <systemPropertyVariables>
                 <pax.exam.logging>none</pax.exam.logging>
                 <!--
-                    set this to "OSGiLessRunner" to test without OSGi, or to "PaxExam,OSGiLessRunner" to test both
+                    set this to "PaxExam" to test with OSGi, or to "PaxExam,OSGiLessRunner" to test both
                 -->
-                <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
+                <org.daisy.pipeline.junit.runners>OSGiLessRunner</org.daisy.pipeline.junit.runners>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -818,11 +818,6 @@
         <dependency>
           <groupId>org.daisy.pipeline</groupId>
           <artifactId>webservice</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.daisy.pipeline</groupId>
-          <artifactId>push-notifier</artifactId>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -899,6 +894,23 @@
                 </configuration>
               </execution>
             </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>test-with-paxexam</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <systemPropertyVariables>
+                <org.daisy.pipeline.junit.runners>PaxExam</org.daisy.pipeline.junit.runners>
+              </systemPropertyVariables>
+            </configuration>
           </plugin>
         </plugins>
       </build>

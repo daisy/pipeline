@@ -5770,7 +5770,12 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none;
-                      @page { size: 15 5; margin-left: 2; @left { content: -obfl-marker-indicator(pagenum, '⠿') }}">
+                      @page {
+                        size: 15 5;
+                        margin-left: 2;
+                        @left {
+                          content: -obfl-marker-indicator(pagenum, '⠿');
+                          text-transform: none; }}">
             <body style="display: block">
               <pagenum style="display: none; -obfl-marker: pagenum">1</pagenum>
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤

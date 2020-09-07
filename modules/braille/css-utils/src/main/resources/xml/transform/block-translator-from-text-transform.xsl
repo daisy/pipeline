@@ -9,19 +9,14 @@
 	<xsl:import href="abstract-block-translator.xsl"/>
 	
 	<xsl:param name="text-transform"/>
-	<xsl:param name="main-locale"/>
 	
 	<xsl:template match="css:block" mode="#default before after">
 		<xsl:variable name="text" as="text()*" select="//text()"/>
 		<xsl:variable name="style" as="xs:string*">
 			<xsl:apply-templates mode="style"/>
 		</xsl:variable>
-		<xsl:variable name="lang" select="ancestor-or-self::*[@xml:lang][1]/string(@xml:lang)"/>
 		<xsl:apply-templates select="node()[1]" mode="treewalk">
-			<xsl:with-param name="new-text-nodes" select="if (string($lang)=$main-locale)
-			                                              then pf:text-transform($text-transform, $text, $style)
-			                                              else pf:text-transform($text-transform, $text, $style,
-			                                                                     for $_ in 1 to count($text) return string($lang))"/>
+			<xsl:with-param name="new-text-nodes" select="pf:text-transform($text-transform, $text, $style)"/>
 		</xsl:apply-templates>
 	</xsl:template>
 	

@@ -377,8 +377,13 @@
         <xsl:param name="properties" as="element()*"/> <!-- css:property* -->
         <xsl:param name="side" as="xs:string" required="yes"/>
         <xsl:param name="min-width" as="xs:integer" required="yes"/>
+        <xsl:variable name="white-space" as="xs:string" select="($properties[@name='white-space']/@value,'normal')[1]"/>
+        <xsl:variable name="text-transform" as="xs:string" select="($properties[@name='text-transform']/@value,'auto')[1]"/>
         <xsl:variable name="indicators" as="element()*">
-            <xsl:apply-templates select="$properties[@name='content'][1]/*" mode="eval-content-list-left-right"/>
+            <xsl:apply-templates select="$properties[@name='content'][1]/*" mode="eval-content-list-left-right">
+                <xsl:with-param name="white-space" select="$white-space"/>
+                <xsl:with-param name="text-transform" select="$text-transform"/>
+            </xsl:apply-templates>
         </xsl:variable>
         <xsl:if test="exists($indicators) or $min-width &gt; 0">
             <margin-region align="{$side}" width="{max((count($indicators),$min-width))}">
@@ -505,6 +510,25 @@
     
     <xsl:template match="css:custom-func[@name='-obfl-marker-indicator'][matches(@arg2,$css:STRING_RE) and not(@arg3)]"
                   mode="eval-content-list-left-right" priority="1">
+        <xsl:param name="white-space" as="xs:string" select="'normal'"/>
+        <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
+        <!--
+            FIXME: marker-indicator does not have a text-style attribute
+            (https://github.com/braillespecs/obfl/issues/90). The locale option passed to Dotify
+            will be used to translate the indicator string.
+        -->
+        <xsl:if test="$white-space!='normal'">
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">white-space:{} could not be applied to -obfl-marker-indicator({}, {})</xsl:with-param>
+                <xsl:with-param name="args" select="($white-space,@arg1,@arg2)"/>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="$text-transform!='normal'">
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">text-transform:{} could not be applied to -obfl-marker-indicator({}, {})</xsl:with-param>
+                <xsl:with-param name="args" select="($text-transform,@arg1,@arg2)"/>
+            </xsl:call-template>
+        </xsl:if>
         <marker-indicator markers="indicator/{@arg1}" indicator="{substring(@arg2,2,string-length(@arg2)-2)}"/>
     </xsl:template>
     
