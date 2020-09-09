@@ -9,6 +9,11 @@ public class RuleTextTransform extends AbstractRuleBlock<Declaration> implements
 	
 	private final String name;
 	
+	public RuleTextTransform() {
+		super();
+		this.name = null;
+	}
+	
 	public RuleTextTransform(String name) {
 		super();
 		this.name = name;
@@ -26,7 +31,9 @@ public class RuleTextTransform extends AbstractRuleBlock<Declaration> implements
 	public String toString(int depth) {
 		StringBuilder sb = new StringBuilder();
 		sb = OutputUtil.appendTimes(sb, OutputUtil.DEPTH_DELIM, depth);
-		sb.append("@text-transform ").append(name);
+		sb.append("@text-transform");
+		if (name != null)
+			sb.append(' ').append(name);
 		sb.append(OutputUtil.RULE_OPENING);
 		sb = OutputUtil.appendList(sb, list, OutputUtil.RULE_DELIM, depth + 1);
 		sb.append(OutputUtil.RULE_CLOSING);

@@ -119,6 +119,9 @@ text_transform_def returns [RuleTextTransform def]
     : ^( TEXT_TRANSFORM n=IDENT decl=declarations ) {
           $def = preparator.prepareRuleTextTransform(n.getText(), decl);
       }
+    | ^( TEXT_TRANSFORM decl=declarations ) {
+          $def = preparator.prepareRuleTextTransform(decl);
+      }
     ;
 
 any_atrule returns [AnyAtRule stmnt]

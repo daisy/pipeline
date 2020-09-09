@@ -40,8 +40,8 @@ volume_area
     ;
 
 text_transform_def
-    : TEXT_TRANSFORM S+ IDENT S* LCURLY S* declarations RCURLY
-        -> ^(TEXT_TRANSFORM IDENT declarations)
+    : TEXT_TRANSFORM S* (IDENT S*) ? LCURLY S* declarations RCURLY
+        -> ^(TEXT_TRANSFORM IDENT? declarations)
     ;
 
 vendor_atrule
