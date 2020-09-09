@@ -69,7 +69,6 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:webservice-utils:?",
 			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
-			"org.daisy.pipeline:push-notifier:?",
 		};
 	}
 	

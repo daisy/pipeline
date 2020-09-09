@@ -26,6 +26,7 @@ import static javax.xml.stream.XMLStreamConstants.SPACE;
 import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
@@ -88,6 +89,7 @@ public final class XMLStreamWriterHelper {
 		NamedNodeMap attributes = element.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
 			Node attr = attributes.item(i);
+			if (attr.getLocalName() == null) continue; // when is this the case?
 			writeAttribute(writer, attr, copyNamespaceNodes);
 		}
 	}
@@ -167,6 +169,43 @@ public final class XMLStreamWriterHelper {
 					writeEvent(writer, reader); }}
 			catch (NoSuchElementException e) {
 				throw new RuntimeException("coding error"); }
+	}
+	
+	public static void writeElement(XMLStreamWriter writer, Element element) throws XMLStreamException {
+		writeStartElement(writer, element, true, false, false);
+		for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
+			writeNode(writer, child);
+		writer.writeEndElement();
+	}
+	
+	public static void writeDocument(XMLStreamWriter writer, Document document) throws XMLStreamException {
+		writeDocument(writer, document, false);
+	}
+	
+	public static void writeDocument(XMLStreamWriter writer, Document document, boolean copyBaseURI) throws XMLStreamException {
+		if (copyBaseURI) {
+			if (writer instanceof BaseURIAwareXMLStreamWriter) {
+				String baseURI = document.getBaseURI();
+				((BaseURIAwareXMLStreamWriter)writer).setBaseURI(baseURI == null ? null : URI.create(baseURI));
+			} else
+				throw new IllegalArgumentException();
+		}
+		writer.writeStartDocument();
+		writeElement(writer, document.getDocumentElement());
+		writer.writeEndDocument();
+	}
+	
+	public static void writeNode(XMLStreamWriter writer, Node node) throws XMLStreamException {
+		if (node.getNodeType() == Node.ELEMENT_NODE)
+			writeElement(writer, (Element)node);
+		else if (node.getNodeType() == Node.COMMENT_NODE)
+			writeComment(writer, node);
+		else if (node.getNodeType() == Node.TEXT_NODE)
+			writeCharacters(writer, node);
+		else if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE)
+			writeProcessingInstruction(writer, node);
+		else
+			throw new UnsupportedOperationException("Unexpected node type");
 	}
 	
 	public static void writeEvent(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {

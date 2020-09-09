@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 
-public class DatatypeResource extends AdminResource {
+public class DatatypeResource extends AuthenticatedResource {
 
 
         private static final Logger logger = LoggerFactory.getLogger(DatatypeResource.class);
@@ -20,7 +20,7 @@ public class DatatypeResource extends AdminResource {
         @Override
         public void doInit() {
                 super.doInit();
-                if (!isAuthorized()) {
+                if (!isAuthenticated()) {
                         return;
                 }
                 idParam = (String) getRequestAttributes().get("id");
@@ -35,7 +35,7 @@ public class DatatypeResource extends AdminResource {
         @Get("xml")
         public Representation getResource() {
                 logRequest();
-                if (!isAuthorized()) {
+                if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
                 }

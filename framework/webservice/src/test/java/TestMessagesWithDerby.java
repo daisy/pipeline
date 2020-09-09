@@ -130,7 +130,6 @@ public class TestMessagesWithDerby extends Base {
 			"org.daisy.pipeline:framework-persistence:?",
 			"org.daisy.pipeline:persistence-derby:?",
 			"org.daisy.pipeline:calabash-adapter:?",
-			"org.daisy.pipeline:push-notifier:?",
 		};
 	}
 }

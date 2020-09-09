@@ -10,14 +10,14 @@ import org.restlet.resource.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DatatypesResource extends AdminResource {
+public class DatatypesResource extends AuthenticatedResource {
 
 
         private static final Logger logger = LoggerFactory.getLogger(DatatypeResource.class);
         @Override
         public void doInit() {
                 super.doInit();
-                if (!isAuthorized()) {
+                if (!isAuthenticated()) {
                         return;
                 }
         }
@@ -30,7 +30,7 @@ public class DatatypesResource extends AdminResource {
         @Get("xml")
         public Representation getResource() {
                 logRequest();
-                if (!isAuthorized()) {
+                if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
                 }

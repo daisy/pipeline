@@ -43,7 +43,6 @@
     <module>modules-registry</module>
     <module>persistence-derby</module>
     <module>persistence-mysql</module>
-    <module>push-notifier</module>
     <module>updater-wrapper</module>
     <module>webservice</module>
     <module>webservice-utils</module>
