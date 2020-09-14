@@ -34,6 +34,7 @@
     <module>tts-adapters/tts-adapter-osx</module>
     <module>tts-adapters/tts-adapter-sapinative</module>
     <module>tts-adapters/tts-adapter-qfrency</module>
+    <module>tts-adapters/tts-adapter-google</module>
     <module>zedai-to-ssml</module>
     <module>mathml-to-ssml</module>
   </modules>
