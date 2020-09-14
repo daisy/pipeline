@@ -1086,6 +1086,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-adapter-google</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-osx</artifactId>
                 </artifactItem>
                 <artifactItem>
