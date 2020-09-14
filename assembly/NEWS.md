@@ -1,3 +1,10 @@
+Changes in release v1.13.6
+==========================
+
+### Modules
+
+- **NEW** Adapter for Google Cloud Text-To-Speech
+
 Changes in release v1.13.5
 ==========================
 
