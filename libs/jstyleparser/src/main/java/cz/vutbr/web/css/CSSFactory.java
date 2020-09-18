@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.fit.net.DataURLHandler;
@@ -17,11 +18,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 import org.w3c.dom.traversal.NodeFilter;
 
-import cz.vutbr.web.csskit.DefaultNetworkProcessor;
 import cz.vutbr.web.csskit.ElementUtil;
 import cz.vutbr.web.csskit.MatchConditionImpl;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
+import cz.vutbr.web.csskit.antlr.CSSSource;
+import cz.vutbr.web.csskit.antlr.CSSSourceReader;
+import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 import cz.vutbr.web.domassign.Analyzer;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.StyleMap;
@@ -385,10 +387,9 @@ public final class CSSFactory {
 	 * @throws IOException
 	 *             When file not found
 	 */
-	public static final StyleSheet parse(URL url, String encoding)
+	public static final StyleSheet parse(URL url, Charset encoding)
 			throws CSSException, IOException {
-		return getCSSParserFactory().parse((Object) url, new DefaultNetworkProcessor(),
-		        encoding, SourceType.URL, url);
+		return getCSSParserFactory().parse(new CSSSource(url, encoding, (String)null), new DefaultCSSSourceReader());
 	}
 
     /**
@@ -396,8 +397,7 @@ public final class CSSFactory {
      * 
      * @param url
      *            URL of file to be parsed
-     * @param network
-     *            Network processor used for handling the URL connections
+     * @param cssReader
      * @param encoding
      *            Encoding of file
      * @return Parsed StyleSheet
@@ -406,9 +406,9 @@ public final class CSSFactory {
      * @throws IOException
      *             When file not found
      */
-    public static final StyleSheet parse(URL url, NetworkProcessor network, String encoding)
+    public static final StyleSheet parse(URL url, CSSSourceReader cssReader, Charset encoding)
             throws CSSException, IOException {
-        return getCSSParserFactory().parse((Object) url, network, encoding, SourceType.URL, url);
+        return getCSSParserFactory().parse(new CSSSource(url, encoding, (String)null), cssReader);
     }
 
 	/**
@@ -419,7 +419,7 @@ public final class CSSFactory {
 	 * @throws CSSException In case that parsing error occurs 
 	 * @throws IOException If file is not found or not readable
 	 */
-	public static final StyleSheet parse(String fileName, String encoding)
+	public static final StyleSheet parse(String fileName, Charset encoding)
 			throws CSSException, IOException {
 
 		try {
@@ -451,9 +451,7 @@ public final class CSSFactory {
 	@Deprecated
 	public static final StyleSheet parse(String css) throws IOException,
 			CSSException {
-	    URL base = new URL("file:///base/url/is/not/specified"); //Cannot determine the base URI in this method but we need some base URI for relative URLs
-		return getCSSParserFactory().parse(css, new DefaultNetworkProcessor(),
-		        null, SourceType.EMBEDDED, base);
+		return parseString(css, null);
 	}
 
     /**
@@ -473,7 +471,7 @@ public final class CSSFactory {
      */
 	public static final StyleSheet parseString(String css, URL base) throws IOException,
             CSSException {
-	    return parseString(css, base, new DefaultNetworkProcessor());
+	    return parseString(css, base, new DefaultCSSSourceReader());
     }
     
     /**
@@ -485,20 +483,18 @@ public final class CSSFactory {
      *            The URL to be used as a base for loading external resources. Base URL may
      *            be {@code null} if there are no external resources in the CSS string
      *            referenced by relative URLs.
-     * @param network
-     *            Network processor for retrieving the URL resources 
+     * @param cssReader
      * @return Parsed StyleSheet
      * @throws IOException
      *             When exception during read occurs
      * @throws CSSException
      *             When exception during parse occurs
      */
-    public static final StyleSheet parseString(String css, URL base, NetworkProcessor network) throws IOException,
+    public static final StyleSheet parseString(String css, URL base, CSSSourceReader cssReader) throws IOException,
             CSSException {
-        URL baseurl = base;
-        if (baseurl == null)
-            baseurl = new URL("file:///base/url/is/not/specified"); //prevent errors if there are still some relative URLs used
-        return getCSSParserFactory().parse(css, network, null, SourceType.EMBEDDED, baseurl);
+        if (base == null)
+            base = new URL("file:///base/url/is/not/specified"); //prevent errors if there are still some relative URLs used
+        return getCSSParserFactory().parse(new CSSSource(css, (String)null, base), cssReader);
     }
     
     /**
@@ -524,9 +520,9 @@ public final class CSSFactory {
      *            Style sheet to be modified
      * @return the rules of all the style sheets used in the document including the inline styles
      */
-    public static final StyleSheet getUsedStyles(Document doc, String encoding, URL base, MediaSpec media, NetworkProcessor network, StyleSheet style)
+    public static final StyleSheet getUsedStyles(Document doc, Charset encoding, URL base, MediaSpec media, CSSSourceReader cssReader, StyleSheet style)
     {
-        SourceData pair = new SourceData(base, network, media);
+        SourceData pair = new SourceData(base, cssReader, media);
 
         Traversal<StyleSheet> traversal = new CSSAssignTraversal(doc, encoding,
                 (Object) pair, NodeFilter.SHOW_ELEMENT);
@@ -536,7 +532,7 @@ public final class CSSFactory {
     }
     
     /**
-     * This is the same as {@link CSSFactory#getUsedStyles(Document, String, URL, MediaSpec, NetworkProcessor, Stylesheet)}
+     * This is the same as {@link CSSFactory#getUsedStyles(Document, String, URL, MediaSpec, CSSSourceReader, Stylesheet)}
      * but a new StyleSheet is created instead of appending to one.
      * 
      * @param doc
@@ -547,19 +543,18 @@ public final class CSSFactory {
      *            Base URL against which all files are searched
      * @param media
      *            Selected media for style sheet
-     * @param network
-     *            The network processor used for accessing the URL resources
+     * @param cssReader
      * @return the rules of all the style sheets used in the document including the inline styles
      */
-	public static final StyleSheet getUsedStyles(Document doc, String encoding, URL base, MediaSpec media, NetworkProcessor network)
+	public static final StyleSheet getUsedStyles(Document doc, Charset encoding, URL base, MediaSpec media, CSSSourceReader cssReader)
     {
         StyleSheet style = (StyleSheet) getRuleFactory().createStyleSheet().unlock();
-        return getUsedStyles(doc, encoding, base, media, network, style);
+        return getUsedStyles(doc, encoding, base, media, cssReader, style);
     }
     
     /**
-     * This is the same as {@link CSSFactory#getUsedStyles(Document, String, URL, MediaSpec)} with
-     * the possibility of specifying a custom network processor.
+     * This is the same as {@link CSSFactory#getUsedStyles(Document, String, URL, MediaSpec)} without
+     * the possibility of specifying a custom CSSSourceReader.
      * 
      * @param doc
      *            DOM tree
@@ -569,13 +564,11 @@ public final class CSSFactory {
      *            Base URL against which all files are searched
      * @param media
      *            Selected media for style sheet
-     * @param network
-     *            The network processor used for accessing the URL resources
      * @return the rules of all the style sheets used in the document including the inline styles
      */
-    public static final StyleSheet getUsedStyles(Document doc, String encoding, URL base, MediaSpec media)
+    public static final StyleSheet getUsedStyles(Document doc, Charset encoding, URL base, MediaSpec media)
     {
-        return getUsedStyles(doc, encoding, base, media, new DefaultNetworkProcessor());
+        return getUsedStyles(doc, encoding, base, media, new DefaultCSSSourceReader());
     }
     
     /**
@@ -592,9 +585,9 @@ public final class CSSFactory {
      *            Selected media for style sheet
      * @return the rules of all the style sheets used in the document including the inline styles
      */
-    public static final StyleSheet getUsedStyles(Document doc, String encoding, URL base, String media)
+    public static final StyleSheet getUsedStyles(Document doc, Charset encoding, URL base, String media)
     {
-        return getUsedStyles(doc, encoding, base, new MediaSpec(media), new DefaultNetworkProcessor());
+        return getUsedStyles(doc, encoding, base, new MediaSpec(media), new DefaultCSSSourceReader());
     }
     
     @Deprecated
@@ -627,7 +620,7 @@ public final class CSSFactory {
 	 * @return Map between DOM element nodes and data structure containing CSS
 	 *         information
 	 */
-	public static final StyleMap assignDOM(Document doc, String encoding,
+	public static final StyleMap assignDOM(Document doc, Charset encoding,
 			URL base, MediaSpec media, boolean useInheritance) {
 		return assignDOM(doc, encoding, base, media, useInheritance, null);
 	}
@@ -649,7 +642,7 @@ public final class CSSFactory {
      * @return Map between DOM element nodes and data structure containing CSS
      *         information
      */
-    public static final StyleMap assignDOM(Document doc, String encoding,
+    public static final StyleMap assignDOM(Document doc, Charset encoding,
             URL base, String media, boolean useInheritance) {
         return assignDOM(doc, encoding, base, new MediaSpec(media), useInheritance);
     }
@@ -680,24 +673,22 @@ public final class CSSFactory {
      * @return Map between DOM element nodes and data structure containing CSS
      *         information
      */
-	public static final StyleMap assignDOM(Document doc, String encoding,
+	public static final StyleMap assignDOM(Document doc, Charset encoding,
 			URL base, MediaSpec media, boolean useInheritance, final MatchCondition matchCond) {
 	    
-	    return assignDOM(doc, encoding, new DefaultNetworkProcessor(),
+	    return assignDOM(doc, encoding, new DefaultCSSSourceReader(),
 	            base, media, useInheritance, matchCond);
 	}
 
     /**
      * This is the same as {@link CSSFactory#assignDOM(Document, String, URL, MediaSpec, boolean)} 
-     * with the possibility of specifying a custom network processor for obtaining data from URL
-     * resources.
+     * with the possibility of specifying a custom CSSSourceReader.
      * 
      * @param doc
      *            DOM tree
      * @param encoding
      *            The default encoding used for the referenced style sheets
-     * @param network
-     *            Custom network processor
+     * @param cssReader
      * @param base
      *            Base URL against which all files are searched
      * @param media
@@ -709,10 +700,10 @@ public final class CSSFactory {
      * @return Map between DOM element nodes and data structure containing CSS
      *         information
      */ 
-    public static final StyleMap assignDOM(Document doc, String encoding, NetworkProcessor network,
+    public static final StyleMap assignDOM(Document doc, Charset encoding, CSSSourceReader cssReader,
             URL base, MediaSpec media, boolean useInheritance, final MatchCondition matchCond) {
 
-        SourceData pair = new SourceData(base, network, media);
+        SourceData pair = new SourceData(base, cssReader, media);
 
         Traversal<StyleSheet> traversal = new CSSAssignTraversal(doc, encoding,
                 (Object) pair, NodeFilter.SHOW_ELEMENT);
@@ -747,7 +738,7 @@ public final class CSSFactory {
      * @return Map between DOM element nodes and data structure containing CSS
      *         information
      */
-    public static final StyleMap assignDOM(Document doc, String encoding,
+    public static final StyleMap assignDOM(Document doc, Charset encoding,
             URL base, String media, boolean useInheritance, final MatchCondition matchCond) {
         
         return assignDOM(doc, encoding, base, new MediaSpec(media), useInheritance, matchCond);
@@ -770,9 +761,9 @@ public final class CSSFactory {
 	private static final class CSSAssignTraversal extends Traversal<StyleSheet> {
 
 		private CSSParserFactory pf = getCSSParserFactory();
-	    private String encoding;
+	    private Charset encoding;
 	    
-		public CSSAssignTraversal(Document doc, String encoding, Object source, int whatToShow) {
+		public CSSAssignTraversal(Document doc, Charset encoding, Object source, int whatToShow) {
 			super(doc, source, whatToShow);
 			this.encoding = encoding;
 		}
@@ -784,38 +775,49 @@ public final class CSSFactory {
 			URL base = ((SourceData) source).base;
 			// allowed media
 			MediaSpec media = ((SourceData) source).media;
-			// network processor
-			NetworkProcessor network = ((SourceData) source).network;
+			CSSSourceReader cssReader = ((SourceData) source).cssReader;
 			Element elem = (Element) current;
 
 			try {
 				// embedded style-sheet
 				if (isEmbeddedStyleSheet(elem, media)) {
-					result = pf.append(extractElementText(elem), network, null,
-							SourceType.EMBEDDED, result, base);
-					log.debug("Matched embedded CSS style");
+					String mediaType = getMediaType(elem);
+					if (cssReader.supportsMediaType(mediaType)) {
+						result = pf.append(
+							new CSSSource(extractElementText(elem), mediaType, base),
+							cssReader,
+							result);
+						log.debug("Matched embedded CSS style");
+					}
 				}
 				// linked style-sheet
 				else if (isLinkedStyleSheet(elem, media)) {
 				    URL uri = DataURLHandler.createURL(base, ElementUtil.getAttribute(elem, "href"));
-					result = pf.append(uri, network, encoding, SourceType.URL,
-							result, uri);
-					log.debug("Matched linked CSS style");
+					String mediaType = getMediaType(elem);
+					if (cssReader.supportsMediaType(mediaType)) {
+						result = pf.append(
+							new CSSSource(uri, encoding, getMediaType(elem)),
+							cssReader,
+							result);
+						log.debug("Matched linked CSS style");
+					}
 				}
 				// in-line style and default style
 				else {
     				    if (elem.getAttribute("style") != null && elem.getAttribute("style").length() > 0) {
         					result = pf.append(
-        							elem.getAttribute("style"), network,
-        							null, SourceType.INLINE,
-        							elem, true, result, base);
+        						new CSSSource(elem.getAttribute("style"), elem, base),
+        						cssReader,
+        						true,
+        						result);
         					log.debug("Matched inline CSS style");
     				    }
                         if (elem.getAttribute("XDefaultStyle") != null && elem.getAttribute("XDefaultStyle").length() > 0) {
                             result = pf.append(
-                                    elem.getAttribute("XDefaultStyle"), network,
-                                    null, SourceType.INLINE,
-                                    elem, false, result, base);
+                            		new CSSSource(elem.getAttribute("XDefaultStyle"), elem, base),
+                                 cssReader,
+                                 false,
+                                 result);
                             log.debug("Matched default CSS style");
                         }
 				}
@@ -835,8 +837,20 @@ public final class CSSFactory {
 		private boolean isLinkedStyleSheet(Element e, MediaSpec media) {
 			return e.getNodeName().equalsIgnoreCase("link")
 			        && (ElementUtil.getAttribute(e, "rel").toLowerCase().contains("stylesheet"))
-					&& (ElementUtil.getAttribute(e, "type").isEmpty() || "text/css".equalsIgnoreCase(ElementUtil.getAttribute(e, "type")))
 					&& isAllowedMedia(e, media);
+		}
+
+		/*
+		 * @param e style or link element
+		 */
+		private String getMediaType(Element e) {
+			String type = ElementUtil.getAttribute(e, "type");
+			if (type != null) {
+				if (type.isEmpty())
+					return null;
+				return type.toLowerCase();
+			}
+			return null;
 		}
 
 		/**
@@ -891,15 +905,15 @@ public final class CSSFactory {
 		}
 	}
 
-	// holds source description containing the URL base, network processor and the required media
+	// holds source description containing the URL base, CSSSourceReader and the required media
 	private static final class SourceData {
 		public URL base;
-		public NetworkProcessor network;
+		public CSSSourceReader cssReader;
 		public MediaSpec media;
 
-		public SourceData(URL base, NetworkProcessor network, MediaSpec media) {
+		public SourceData(URL base, CSSSourceReader cssReader, MediaSpec media) {
 			this.base = base;
-			this.network = network;
+			this.cssReader = cssReader;
 			this.media = media;
 		}
 	}

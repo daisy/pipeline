@@ -11,17 +11,14 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.fit.net.DataURLHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
 
 import cz.vutbr.web.css.CSSException;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.MediaQuery;
-import cz.vutbr.web.css.NetworkProcessor;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleList;
-import cz.vutbr.web.css.RuleMedia;
-import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.StyleSheet;
+import cz.vutbr.web.csskit.antlr.CSSSource.SourceType;
 
 /**
  * Handles construction of parser
@@ -33,31 +30,21 @@ public class CSSParserFactory {
 	private static final Logger log = LoggerFactory
 			.getLogger(CSSParserFactory.class);
 
-	/**
-	 * Source types.
-	 */
-	public static enum SourceType {
-		INLINE,
-		EMBEDDED,
-		URL
-	}
 	
 	/**
 	 * Creates input for CSSLexer
 	 * 
-	 * @param source
-	 *            Source, either raw data (String) or URL 
 	 * @return Created stream
 	 * @throws IOException
 	 *             When file is not found or other IO exception occurs
 	 */
-	protected static CSSInputStream getInput(Object source, NetworkProcessor network, String encoding, SourceType type) throws IOException {
-		switch (type) {
+	protected static CSSInputStream getInput(CSSSource source, CSSSourceReader cssReader) throws IOException {
+		switch (source.type) {
 		case INLINE:
 		case EMBEDDED:
-			return CSSInputStream.stringStream((String) source);
+			return CSSInputStream.newInstance(cssReader.read(source), null);
 		case URL:
-			return CSSInputStream.urlStream((URL) source, network, encoding);
+			return CSSInputStream.newInstance(() -> cssReader.read(source), (URL)source.source);
 		default:
 			throw new RuntimeException("Coding error");
 		}
@@ -189,12 +176,6 @@ public class CSSParserFactory {
 	/**
 	 * Parses source of given type
 	 * 
-	 * @param source
-	 *            Source, interpretation depends on {@code type}
-	 * @param type
-	 *            Type of source provided
-	 * @param inline
-	 *            InlineElement
      * @param inlinePriority
      *            True when the rule should have an 'inline' (greater) priority
 	 * @return Created StyleSheet
@@ -203,26 +184,20 @@ public class CSSParserFactory {
 	 * @throws CSSException
 	 *             When unrecoverable exception during parsing occurs
 	 */
-	public StyleSheet parse(Object source, NetworkProcessor network, String encoding, SourceType type,
-			Element inline, boolean inlinePriority, URL base) throws IOException, CSSException {
+	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority)
+			throws IOException, CSSException {
 
 		StyleSheet sheet = (StyleSheet) CSSFactory.getRuleFactory()
 				.createStyleSheet().unlock();
 
-		Preparator preparator = new SimplePreparator(inline, inlinePriority);
-        StyleSheet ret = parseAndImport(source, network, encoding, type, sheet, preparator, base, null);
+		Preparator preparator = new SimplePreparator(source.inlineElement, inlinePriority);
+        StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
 		return ret;
 	}
 
 	/**
-	 * Parses source of given type. Uses no element.
+	 * Parses source of given type. Uses no inlinePriority.
 	 * 
-	 * @param source
-	 *            Source, interpretation depends on {@code type}
-	 * @param type
-	 *            Type of source provided
-	 * @param base
-	 *            The base URL
 	 * @return Created StyleSheet
 	 * @throws IOException
 	 *             When problem with input stream occurs
@@ -231,25 +206,19 @@ public class CSSParserFactory {
 	 * @throws IllegalArgumentException
 	 *             When type of source is INLINE
 	 */
-	public StyleSheet parse(Object source, NetworkProcessor network, String encoding, SourceType type, URL base)
+	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader)
 			throws IOException, CSSException {
-		if (type == SourceType.INLINE)
+		if (source.type == SourceType.INLINE)
 			throw new IllegalArgumentException(
-					"Missing element for INLINE input");
+					"Missing inlinePriority for INLINE input");
 
-		return parse(source, network, encoding, type, null, false, base);
+		return parse(source, cssReader, false);
 	}
 
 	/**
 	 * Appends parsed source to passed style sheet. This style sheet must be
 	 * IMPERATIVELY parsed by this factory to guarantee proper appending
 	 * 
-	 * @param source
-	 *            Source, interpretation depends on {@code type}
-	 * @param type
-	 *            Type of source provided
-	 * @param inline
-	 *            Inline element
 	 * @param inlinePriority
 	 *            True when the rule should have an 'inline' (greater) priority
 	 * @param sheet
@@ -260,25 +229,19 @@ public class CSSParserFactory {
 	 * @throws CSSException
 	 *             When unrecoverable exception during parsing occurs
 	 */
-	public StyleSheet append(Object source, NetworkProcessor network, String encoding, SourceType type,
-			Element inline, boolean inlinePriority, StyleSheet sheet, URL base) throws IOException, CSSException {
+	public StyleSheet append(CSSSource source, CSSSourceReader cssReader,
+			boolean inlinePriority, StyleSheet sheet) throws IOException, CSSException {
 
-		Preparator preparator = new SimplePreparator(inline, inlinePriority);
-		StyleSheet ret = parseAndImport(source, network, encoding, type, sheet, preparator, base, null);
+		Preparator preparator = new SimplePreparator(source.inlineElement, inlinePriority);
+		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
 		return ret;
 	}
 
 	/**
 	 * Appends parsed source to passed style sheet. This style sheet must be
 	 * IMPERATIVELY parsed by this factory to guarantee proper appending. Uses
-	 * no inline element
+	 * no inlinePriority
 	 * 
-	 * @param source
-	 *            Source, interpretation depends on {@code type}
-	 * @param type
-	 *            Type of source provided
-	 * @param base
-	 *            Base url
 	 * @param sheet
 	 *            StyleSheet to be modified
 	 * @return Modified StyleSheet
@@ -289,25 +252,25 @@ public class CSSParserFactory {
 	 * @throws IllegalArgumentException
 	 *             When type of source is INLINE
 	 */
-	public StyleSheet append(Object source, NetworkProcessor network, String encoding, SourceType type,
-			StyleSheet sheet, URL base) throws IOException, CSSException {
-		if (type == SourceType.INLINE)
+	public StyleSheet append(CSSSource source, CSSSourceReader cssReader, StyleSheet sheet)
+			throws IOException, CSSException {
+		if (source.type == SourceType.INLINE)
 			throw new IllegalArgumentException(
-					"Missing element for INLINE input");
+					"Missing inlinePriority for INLINE input");
 
-		return append(source, network, encoding, type, null, false, sheet, base);
+		return append(source, cssReader, false, sheet);
 	}
 	
 	/**
 	 * Parses the source using the given infrastructure and returns the resulting style sheet.
 	 * The imports are handled recursively.
 	 */
-	protected StyleSheet parseAndImport(Object source, NetworkProcessor network, String encoding, SourceType type,
-	        StyleSheet sheet, Preparator preparator, URL base, List<MediaQuery> media)
+	protected StyleSheet parseAndImport(CSSSource source, CSSSourceReader cssReader,
+	        StyleSheet sheet, Preparator preparator, List<MediaQuery> media)
 	        throws CSSException, IOException
 	{
-        CSSTreeParser parser = createTreeParser(source, network, encoding, type, preparator, base, media);
-        parse(parser, type);
+        CSSTreeParser parser = createTreeParser(source, cssReader, preparator, media);
+        parse(parser, source.type);
         
         for (int i = 0; i < parser.getImportPaths().size(); i++)
         {
@@ -317,9 +280,10 @@ public class CSSParserFactory {
             if (((imedia == null || imedia.isEmpty()) && CSSFactory.getAutoImportMedia().matchesEmpty()) //no media query specified
                  || CSSFactory.getAutoImportMedia().matchesOneOf(imedia)) //or some media query matches to the autoload media spec
             {    
-                URL url = DataURLHandler.createURL(base, path);
+                URL url = DataURLHandler.createURL(source.base, path);
                 try {
-                    parseAndImport(url, network, encoding, SourceType.URL, sheet, preparator, url, imedia);
+                    parseAndImport(new CSSSource(url, source.encoding, (String)null),
+                                   cssReader, sheet, preparator, imedia);
                 } catch (IOException e) {
                     log.warn("Couldn't read imported style sheet: {}", e.getMessage());
                 }
@@ -343,13 +307,13 @@ public class CSSParserFactory {
 	}
 	
 	// creates the tree parser
-	private static CSSTreeParser createTreeParser(Object source, NetworkProcessor network, String encoding, SourceType type,
-			Preparator preparator, URL base, List<MediaQuery> media) throws IOException, CSSException {
+	private static CSSTreeParser createTreeParser(CSSSource source, CSSSourceReader cssReader,
+			Preparator preparator, List<MediaQuery> media) throws IOException, CSSException {
 
-		CSSInputStream input = getInput(source, network, encoding, type);
-		input.setBase(base);
+		CSSInputStream input = getInput(source, cssReader);
+		input.setBase(source.base);
 		CommonTokenStream tokens = feedLexer(input);
-		CommonTree ast = feedParser(tokens, type);
+		CommonTree ast = feedParser(tokens, source.type);
 		return feedAST(tokens, ast, preparator, media);
 	}
 
@@ -412,7 +376,7 @@ public class CSSParserFactory {
 	    try
         {
 	        //input from string
-            CSSInputStream input = CSSInputStream.stringStream(query);
+            CSSInputStream input = CSSInputStream.newInstance(query, null);
             input.setBase(new URL("file://media/query/url")); //this URL should not be used, just for safety
             //lexer
             CommonTokenStream tokens = feedLexer(input);

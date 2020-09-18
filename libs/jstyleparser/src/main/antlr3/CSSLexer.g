@@ -167,7 +167,7 @@ CHARSET
 	    {
 			    try {
 			           log.warn("Changing charset to {}", enc);
-			          ((cz.vutbr.web.csskit.antlr.CSSInputStream) input).setEncoding(enc);
+			          ((cz.vutbr.web.csskit.antlr.CSSInputStream) input).setEncoding(java.nio.charset.Charset.forName(enc));
 			          //input = setCharStream(new ANTLFileStream(input.getSourceName(), enc));
 			        }
 			        catch(java.nio.charset.IllegalCharsetNameException icne) {

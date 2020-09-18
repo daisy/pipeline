@@ -15,8 +15,6 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.CharStream;
 
-import cz.vutbr.web.css.NetworkProcessor;
-
 /**
  * Wraps ANTLR stream with useful decorations,
  * mainly to allow switching encoding on lexer
@@ -28,67 +26,67 @@ public class CSSInputStream implements CharStream {
 	/**
 	 * ANTLR input
 	 */
-	private CharStream input;	
+	private CharStream input;
 	
 	/**
-	 * Raw data of string passed, if any
-	 */
-	private String rawData;
-	
-	/**
-	 * Base location of this input stream
+	 * Base URL
 	 */
 	private URL base = null;
 	
-    /**
-     * Source URL for URL streams, null for string streams
-     */
-    private URL url;
-    
-    /**
-     * Network processor used for obtaining data from URLs
-     */
-    private NetworkProcessor network;
-    
 	/**
-	 * Source input stream for URL streams, null for string streams
+	 * For resetting input stream to read with different encoding.
 	 */
-	private InputStream source = null;
+	private InputStreamSupplier streamSupplier = null;
+	
+	interface InputStreamSupplier {
+		public CSSSourceReader.CSSInputStream get() throws IOException;
+	}
 	
 	/**
-	 * Encoding of file or string. If <code>null</code>
+	 * Input stream to be closed before new input stream is requested.
 	 */
-	private String encoding;
+	private InputStream is = null;
 	
+	/**
+	 * Encoding of input stream. Null means that the encoding is unknown and the default encoding is
+	 * used.
+	 */
+	private Charset encoding;
 	
-	public static CSSInputStream stringStream(String source) throws IOException {
+	public static CSSInputStream newInstance(String input, URL base) throws IOException {
+		Charset enc = Charset.defaultCharset();
+		return newInstance(new ByteArrayInputStream(input.getBytes(enc)), enc, base);
+	}
+	
+	public static CSSInputStream newInstance(CSSSourceReader.CSSInputStream input, URL base) throws IOException {
+		return newInstance(input.stream, input.encoding, base);
+	}
+	
+	public static CSSInputStream newInstance(InputStream input, Charset encoding, URL base) throws IOException {
 		CSSInputStream stream = new CSSInputStream();
-		
-		stream.rawData = source;
-		stream.encoding = Charset.defaultCharset().name();
-		
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(new ByteArrayInputStream(source.getBytes()), stream.encoding));
+		if (encoding == null)
+			encoding = Charset.defaultCharset();
+		stream.encoding = encoding;
+		BufferedReader br = new BufferedReader(new InputStreamReader(input, encoding));
 		stream.input = new ANTLRReaderStream(br);
-		
+		stream.base = base;
 		return stream;
 	}
 	
-	public static CSSInputStream urlStream(URL source, NetworkProcessor network, String encoding) throws IOException {
+	public static CSSInputStream newInstance(InputStreamSupplier input, URL base) throws IOException {
 		CSSInputStream stream = new CSSInputStream();
-		
-		stream.base = source;
-		if (encoding != null)
-            stream.encoding = encoding;
-		else
-            stream.encoding = Charset.defaultCharset().name();
-		
-        InputStream is = network.fetch(source);
-        stream.input = new ANTLRInputStream(is, stream.encoding);
-        stream.source = is;
-        stream.url = source;
-        stream.network = network;
-		
+		CSSSourceReader.CSSInputStream in = input.get();
+		InputStream is = in.stream;
+		stream.encoding = in.encoding;
+		if (stream.encoding == null) {
+			// store input stream supplier so that we can reset stream when @charset is encountered
+			stream.input = new ANTLRInputStream(is, Charset.defaultCharset().name());
+			stream.streamSupplier = input;
+			stream.is = is;
+		} else {
+			stream.input = new ANTLRInputStream(is, stream.encoding.name());
+		}
+		stream.base = base;
 		return stream;
 	}
 
@@ -227,10 +225,9 @@ public class CSSInputStream implements CharStream {
 	
 	/**
 	 * Obtains current character encoding used for processing the style sheets.
-	 * @return The charset name.
+	 * @return The charset.
 	 */
-	public String getEncoding()
-	{
+	public Charset getEncoding() {
 	    return encoding;
 	}
 	
@@ -240,30 +237,12 @@ public class CSSInputStream implements CharStream {
 	 * @param enc The new encoding name.
 	 * @throws IOException
 	 */
-	public void setEncoding(String enc) throws IOException
-	{
-	    if (source != null) //applicapble to URL streams only
-	    {
-    	    String current = encoding;
-    	    if (current == null)
-    	        current = Charset.defaultCharset().name();
-    	    if (!current.equalsIgnoreCase(enc))
-    	    {
-                source.close();
-    	        encoding = enc;
-                CSSInputStream newstream = urlStream(url, network, encoding);
-    	        input = newstream.input;
-    	    }
-	    }
+	public void setEncoding(Charset encoding) throws IOException {
+		if (this.encoding == null) { //applicapble to URL streams only
+			this.encoding = encoding;
+			is.close();
+			is = streamSupplier.get().stream;
+			input = new ANTLRInputStream(is, encoding.name());
+		}
 	}
-	
-	/**
-	 * 
-	 * @return the raw data
-	 */
-	public String getRawData() {
-		return rawData;
-	}
-	
-	
 }
