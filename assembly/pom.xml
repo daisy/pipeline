@@ -78,7 +78,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.2</version>
+        <version>1.13.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -577,6 +577,32 @@
                   <artifactId>jing</artifactId>
                   <version>20120724.0.0</version>
                 </artifactItem>
+                <!--
+                    for epubcheck-adapter
+                -->
+                <artifactItem>
+                  <groupId>org.w3c</groupId>
+                  <artifactId>epubcheck</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.commons</groupId>
+                  <artifactId>commons-compress</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-core-asl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-mapper-asl</artifactId>
+                </artifactItem>
+                <!--
+                    for tts-adapter-google
+                -->
+                <artifactItem>
+                  <groupId>org.json</groupId>
+                  <artifactId>json</artifactId>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
@@ -958,8 +984,6 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-to-epub3</artifactId>
                 </artifactItem>
-                
-                <!-- epub3-validator + dependencies -->
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-validator</artifactId>
@@ -972,24 +996,6 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epubcheck-adapter</artifactId>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.w3c</groupId>
-                  <artifactId>epubcheck</artifactId>
-                  <version>4.2.0</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.commons</groupId>
-                  <artifactId>commons-compress</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.jackson</groupId>
-                  <artifactId>jackson-core-asl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.jackson</groupId>
-                  <artifactId>jackson-mapper-asl</artifactId>
-                </artifactItem>
-                
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-to-daisy202</artifactId>
