@@ -159,7 +159,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>ds-to-spi-maven-plugin</artifactId>
-          <version>1.1.0</version>
+          <version>1.1.1-SNAPSHOT</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
@@ -429,7 +429,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>ds-to-spi-runtime</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1-SNAPSHOT</version>
       </dependency>
       <!--
           test dependencies
