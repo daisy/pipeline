@@ -142,6 +142,20 @@
               <goal>process-test-catalog</goal>
             </goals>
           </execution>
+          <execution>
+            <id>package-list</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>dependencies-package-list</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+              <includes>
+                org.daisy.pipeline.*,
+                org.daisy.common.*
+              </includes>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -207,6 +221,30 @@
                 org.daisy.pipeline.script.impl.XProcScript_xslt_terminate_error,
                 org.daisy.pipeline.script.impl.XProcScript_xslt_warning
               </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <offlineLinks>
+                <offlineLink>
+                  <url>http://daisy.github.io/pipeline/api/</url>
+                  <location>${project.build.directory}/dependencies-package-list/</location>
+                </offlineLink>
+              </offlineLinks>
+              <links>
+                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+              </links>
+              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
             </configuration>
           </execution>
         </executions>

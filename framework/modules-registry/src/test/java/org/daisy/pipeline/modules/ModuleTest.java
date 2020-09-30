@@ -19,13 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class ModuleBuilderTest {
-	
-	class MyModuleBuilder extends AbstractModuleBuilder<MyModuleBuilder> {
-		public MyModuleBuilder self() {
-			return this;
-		}
-	}
+public class ModuleTest {
 	
 	@Test
 	public void testBuildModule() {
@@ -46,7 +40,8 @@ public class ModuleBuilderTest {
 				throw new UnsupportedOperationException("not implemented");
 			}
 		};
-		Module module = new MyModuleBuilder().withLoader(resourceLoader).withCatalog(catalog).build();
+		Module module = new Module("name", "version", "title") {};
+		module.parseCatalog(catalog, resourceLoader);
 		Iterator<Component> components = module.getComponents().iterator();
 		assertTrue(components.hasNext());
 		Component c = components.next();

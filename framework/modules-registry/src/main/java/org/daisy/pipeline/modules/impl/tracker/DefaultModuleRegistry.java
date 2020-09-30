@@ -10,7 +10,6 @@ import java.util.Iterator;
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
-import org.daisy.pipeline.modules.ModuleRef;
 import org.daisy.pipeline.modules.ModuleRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,12 +69,11 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	@Reference(
 		name = "Module",
 		unbind = "removeModule",
-		service = ModuleRef.class,
+		service = Module.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC
 	)
-	public void addModule(ModuleRef ref) {
-		Module module = ref.get();
+	public void addModule(Module module) {
 		logger.debug("Registring module {}", module.getName());
 		modules.add(module);
 		for (Component component : module.getComponents()) {
@@ -88,7 +86,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		}
 	}
 
-	public void removeModule(ModuleRef ref) {
+	public void removeModule(Module module) {
 		// FIXME: remove module
 	}
 
