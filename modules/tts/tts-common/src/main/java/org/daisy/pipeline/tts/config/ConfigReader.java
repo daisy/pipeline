@@ -32,7 +32,7 @@ public class ConfigReader implements ConfigProperties {
 
 	public interface Extension {
 		/**
-		 * @node has a non-null local name
+		 * @param node has a non-null local name
 		 * @return false is the parsing can keep going with other extensions
 		 *         (most likely if @node is not related to the extension)
 		 */
@@ -48,7 +48,7 @@ public class ConfigReader implements ConfigProperties {
 	public ConfigReader(Processor saxonproc, XdmNode doc, Extension... extensions) {
 		String staticConfigPath = System.getProperty(ttsConfigProperty);
 		if (staticConfigPath != null) {
-			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, null);
+			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, URIs.asURI(new File("./")));
 			if (content != null)
 				readConfig(null, content, extensions);
 		}

@@ -213,6 +213,14 @@ public class LiblouisCoreTest extends AbstractTest {
 	}
 	
 	@Test
+	public void testUndefinedChar() {
+		FromStyledTextToBraille translator = provider.withContext(messageBus)
+		                                             .get(query("(locale:foo)(contraction:full)(dots-for-undefined-char:'⣀')")).iterator().next()
+		                                             .fromStyledTextToBraille();
+		assertEquals(braille("⣀"), translator.transform(text("€")));
+	}
+	
+	@Test
 	public void testHyphenate() {
 		assertEquals("foo\u00ADbar",
 		             hyphenatorProvider.withContext(messageBus)
@@ -228,6 +236,33 @@ public class LiblouisCoreTest extends AbstractTest {
 		                 .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
 		                 .asFullHyphenator()
 		                 .transform("foo-bar"));
+	}
+	
+	@Test
+	public void testManualWordBreak() {
+		assertEquals("foo\u00ADbar foo\u00ADbar foob\u00ADar",
+		             hyphenatorProvider.withContext(messageBus)
+		                 .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
+		                 .asFullHyphenator()
+		                 .transform("foobar foo\u00ADbar foob\u00ADar"));
+		assertEquals(braille("⠋⠕⠕\u00AD⠃⠁⠗ ⠋⠕⠕\u00AD⠃⠁⠗ ⠋⠕⠕⠃\u00AD⠁⠗"),
+		             provider.withContext(messageBus)
+		                     .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
+		                     .fromStyledTextToBraille()
+		                     .transform(styledText("foobar foo\u00ADbar foob\u00ADar", "hyphens:auto")));
+		assertEquals(
+			"⠋⠕⠕⠤\n" +
+			"⠃⠁⠗\n" +
+			"⠋⠕⠕⠤\n" +
+			"⠃⠁⠗\n" +
+			"⠋⠕⠕⠃⠤\n" +
+			"⠁⠗",
+			fillLines(
+				provider.withContext(messageBus)
+		                .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
+				        .lineBreakingFromStyledText()
+				        .transform(styledText("foobar foo\u00ADbar foob\u00ADar", "hyphens:auto")),
+				5));
 	}
 	
 	@Test

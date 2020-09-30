@@ -19,7 +19,7 @@
           <d:file href="../resources/simple-epub/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
           <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml"/>
-          <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml"/>
+          <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
         </d:fileset>
       </x:document>
     </x:expect>
@@ -55,7 +55,7 @@
           <d:file href="../resources/C00000.epub!/EPUB/C00000-09-conclusion.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/C00000.epub!/EPUB/C00000-10-footnotes.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/C00000.epub!/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
-          <d:file href="../resources/C00000.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+          <d:file href="../resources/C00000.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
           <d:file href="../resources/C00000.epub!/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
           <d:file href="../resources/C00000.epub!/EPUB/css/accessibility.css" media-type="text/css"/>
           <d:file href="../resources/C00000.epub!/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"/>
@@ -93,7 +93,7 @@
           <d:file href="../resources/simple-epub/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
           <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml"/>
           <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml"/>
-          <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml"/>
+          <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
 		  <d:file href="../resources/preamble.html" media-type="application/xhtml+xml" role="preamble"/>
         </d:fileset>
       </x:document>

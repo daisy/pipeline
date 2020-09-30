@@ -36,13 +36,7 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
   </p:output>
 
   <p:output port="tts-log" sequence="true">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">TTS log</h2>
-      <p px:role="desc" xml:space="preserve">Log file with information about text-to-speech process.
-
-      Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html#common-settings) property.
-      </p>
-    </p:documentation>
+    <!-- defined in common-options.xpl -->
     <p:pipe step="convert" port="tts-log"/>
   </p:output>
 
@@ -63,20 +57,12 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
   </p:option>
 
   <p:input port="tts-config">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Text-To-Speech configuration file</h2>
-      <p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
-
-[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).</p>
-    </p:documentation>
+    <!-- defined in common-options.xpl -->
     <p:inline><d:config/></p:inline>
   </p:input>
 
-  <p:option name="audio" required="false" px:type="boolean" select="'false'">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Enable Text-To-Speech</h2>
-      <p px:role="desc">Whether to use a speech synthesizer to produce audio files.</p>
-    </p:documentation>
+  <p:option name="audio" select="'false'">
+    <!-- defined in common-options.xpl -->
   </p:option>
 
   <p:option name="with-text" required="false" px:type="boolean" select="'true'">

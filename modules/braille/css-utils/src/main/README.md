@@ -28,9 +28,19 @@
   [BrailleTranslator](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/BrailleTranslator.html)
   that match `(input:text-css)`.
   
-### Calabash steps (`org.daisy.common.xproc.calabash.XProcStepProvider`)
+### CSS cascaders [`org.daisy.pipeline.css.CssCascader`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/css/CssCascader.html)
 
-- [`{http://www.daisy.org/ns/pipeline/braille-css}inline`](java/org/daisy/pipeline/braille/css/calabash/impl/CssInlineStep.java)
+- [`media="embossed"`](java/org/daisy/pipeline/braille/css/impl/BrailleCssCascader.java)
+
+### Calabash steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
+
+- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-id`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.java)
+- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-string-set`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.java)
+
+### Saxon functions (`net.sf.saxon.lib.ExtensionFunctionDefinition`)
+
+- [`{http://www.daisy.org/ns/pipeline/braille-css}parse-stylesheet`](java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java)
+- [`{http://www.daisy.org/ns/pipeline/braille-css}render-table-by`](java/org/daisy/pipeline/braille/css/saxon/impl/RenderTableByDefinition.java)
 
 
 

@@ -49,7 +49,15 @@
             href="http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-default-vocab">reserved
             prefix mappings</a> of the resulting package document. By default, prefixes that are
             used but not declared in the input are also not declared in the output, and if "media"
-            is not used in the input, it is declared in the output.</p>
+            is not used in the input, the "declare-media-prefix" setting determines whether it is
+            declared in the output.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="declare-media-prefix" required="false" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Determines whether the "media" prefix is declared in the output when it is not used
+            in the input.</p>
+            <p>Has no effect if the "reserved-prefixes" option is set.</p>
         </p:documentation>
     </p:option>
 
@@ -67,6 +75,11 @@
     <p:import href="merge-metadata.xpl">
         <p:documentation>
             pxi:merge-metadata
+        </p:documentation>
+    </p:import>
+    <p:import href="opf3-to-opf2-metadata.xpl">
+        <p:documentation>
+            pxi:opf3-to-opf2-metadata
         </p:documentation>
     </p:import>
 
@@ -198,10 +211,17 @@
                     </p:input>
                 </p:insert>
                 <p:choose>
-                    <p:when test="$reserved-prefixes='#default'">
+                    <p:when test="$reserved-prefixes='#default' and $declare-media-prefix='true'">
                         <p:add-attribute match="/*"
                                          attribute-name="prefix"
-                                         attribute-value="media: http://www.idpf.org/epub/vocab/overlays/#"/>
+                                         attribute-value="media: http://www.idpf.org/epub/vocab/overlays/#">
+                            <!--
+                                note that if there was already "media" metadata present in the
+                                input, and the "media" prefix was not declared, pxi:merge-metadata
+                                will make sure that the prefix will not be declared in the output
+                                either
+                            -->
+                        </p:add-attribute>
                     </p:when>
                     <p:otherwise>
                         <p:identity/>
@@ -221,14 +241,7 @@
             </pxi:merge-metadata>
             <p:choose>
                 <p:when test="$compatibility-mode='true'">
-                    <p:xslt>
-                        <p:input port="stylesheet">
-                            <p:document href="create-package-doc.backwards-compatible-metadata.xsl"/>
-                        </p:input>
-                        <p:input port="parameters">
-                            <p:empty/>
-                        </p:input>
-                    </p:xslt>
+                    <pxi:opf3-to-opf2-metadata compatibility-mode="true"/>
                 </p:when>
                 <p:otherwise>
                     <p:identity/>

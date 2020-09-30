@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/internal"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    version="2.0" xpath-default-namespace="http://www.w3.org/1999/xhtml"
-    exclude-result-prefixes="#all">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:svg="http://www.w3.org/2000/svg"
+                xmlns:mml="http://www.w3.org/1998/Math/MathML"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xpath-default-namespace="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="#all">
 
     <xsl:output indent="yes" method="xml"/>
 
@@ -663,6 +665,16 @@
         <pre><xsl:apply-templates select="@*"/><code>
             <xsl:apply-templates select="node()" mode="serialize"/>
         </code></pre>
+    </xsl:template>
+
+    <!--====== SVG ======-->
+    <xsl:template match="svg:*">
+        <xsl:sequence select="."/>
+    </xsl:template>
+
+    <!--====== MathML ======-->
+    <xsl:template match="mml:*">
+        <xsl:sequence select="."/>
     </xsl:template>
 
 </xsl:stylesheet>

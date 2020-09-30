@@ -3,10 +3,12 @@
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns="" xpath-default-namespace=""
                 exclude-result-prefixes="#all">
     
     <xsl:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
     
     <!--
         the smil
@@ -15,10 +17,15 @@
     <!--
         the corresponding content document(s) in spine order
     -->
-    <xsl:variable name="html" select="collection()[position()&gt;1]/*"/>
+    <xsl:variable name="html" select="collection()[position()&gt;2]/*"/>
+    <!--
+        the list of pagebreak elements
+    -->
+    <xsl:variable name="page-list" select="collection()[2]"/>
     
     <xsl:variable name="smil-base-uri" select="pf:base-uri($smil)"/>
     
+    <xsl:key name="id" match="*[@id]" use="@id"/>
     <xsl:key name="absolute-id" match="*[@id]" use="concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id)"/>
     
     <xsl:variable name="referenced-html-elements" as="element()*">
@@ -38,20 +45,47 @@
         </xsl:for-each>
     </xsl:variable>
     
+    <xsl:variable name="page-number-elements" as="element()*">
+      <xsl:for-each select="$html">
+        <xsl:variable name="content-doc" select="."/>
+        <xsl:variable name="content-doc-uri" select="pf:normalize-uri(base-uri(.))"/>
+        <xsl:for-each select="$page-list//d:file[pf:normalize-uri(resolve-uri(@href,base-uri(.)))=$content-doc-uri]/d:anchor">
+          <xsl:sequence select="key('id',@id,$content-doc)"/>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:variable>
+    
+    <xsl:template match="/smil/body/seq" priority="1">
+        <xsl:call-template name="pf:next-match-with-generated-ids">
+            <xsl:with-param name="prefix" select="'par_'"/>
+            <xsl:with-param name="for-elements"
+                            select="($html//*[self::html:h1 or
+                                              self::html:h2 or
+                                              self::html:h3 or
+                                              self::html:h4 or
+                                              self::html:h5 or
+                                              self::html:h6],
+                                     $page-number-elements)
+                                    except $referenced-html-elements"/>
+            <xsl:with-param name="in-use" select="//*/@id[matches(.,'^(par|text|audio)_')]"/>
+        </xsl:call-template>
+    </xsl:template>
+    
     <xsl:template match="/smil/body/seq">
+        <xsl:variable name="seq" select="."/>
         <xsl:variable name="seq-base-uri" select="pf:base-uri(.)"/>
         <xsl:variable name="missing-pars" as="element()*">
             <xsl:for-each select="$html">
                 <xsl:variable name="html-base-uri" select="pf:html-base-uri(.)"/>
-                <xsl:for-each select="//*[self::html:h1 or
-                                          self::html:h2 or
-                                          self::html:h3 or
-                                          self::html:h4 or
-                                          self::html:h5 or
-                                          self::html:h6 or
-                                          self::html:span[matches(@class,'(^|\s)page-(front|normal|special)(\s|$)')]]">
+                <xsl:for-each select="(//*[self::html:h1 or
+                                           self::html:h2 or
+                                           self::html:h3 or
+                                           self::html:h4 or
+                                           self::html:h5 or
+                                           self::html:h6],
+                                       //* intersect $page-number-elements)">
                     <!--
-                        we are sure these elements have an id attribute, thanks to add-missing-ids.xsl
+                        we know these elements have an id attribute (added in create-ncc.xpl)
                     -->
                     <xsl:variable name="id" as="xs:string" select="@id"/>
                     <xsl:choose>
@@ -66,23 +100,9 @@
                             <xsl:message terminate="yes">FIXME</xsl:message>
                         </xsl:when>
                         <xsl:otherwise>
-                            <!-- in case there are multiple html files and colliding ids, add a suffix -->
-                            <!-- FIXME: check that id does not exist yet -->
-                            <xsl:variable name="par-id" as="xs:string"
-                                          select="concat(
-                                                    'par_',$id,
-                                                    if (
-                                                      count(
-                                                        $html//*[self::html:h1 or self::html:h2 or
-                                                                 self::html:h3 or self::html:h4 or
-                                                                 self::html:h5 or self::html:h6 or
-                                                                 self::html:span[
-                                                                   matches(@class,'(^|\s)page-(front|normal|special)(\s|$)')]]
-                                                                [@id=$id]
-                                                      )&gt;1
-                                                    ) then concat('_',generate-id(.))
-                                                      else '')"/>
-                            <!-- FIXME: check that id does not exist yet -->
+                            <xsl:variable name="par-id" as="xs:string">
+                                <xsl:call-template name="pf:generate-id"/>
+                            </xsl:variable>
                             <xsl:variable name="text-id" as="xs:string" select="replace($par-id,'par_','text_')"/>
                             <xsl:choose>
                                 <xsl:when test="$referenced-html-elements/ancestor::* intersect .">
@@ -94,30 +114,44 @@
                                     <xsl:variable name="segments" as="element()*"
                                                   select="$referenced-html-elements[ancestor::* intersect current()]"/>
                                     <xsl:choose>
-                                        <xsl:when test="replace(string-join($segments/string(.),''),'\s+','')=replace(string(.),'\s+','')">
-                                            <xsl:variable name="audio-segments" as="element()*"
+                                        <xsl:when test="replace(string-join($segments/string(.),''),'[\s\p{Z}]+','')
+                                                        =replace(string(.),'[\s\p{Z}]+','')">
+                                            <xsl:variable name="smil-segments" as="element()*"
                                                           select="for $s in $segments return
                                                                   for $id in $s/concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id) return
-                                                                  $smil//text[pf:normalize-uri(pf:resolve-uri(@src,.))=$id]/parent::*/audio"/>
+                                                                  $smil//text[pf:normalize-uri(pf:resolve-uri(@src,.))=$id]/parent::*"/>
+                                            <xsl:variable name="audio-segments" as="element()*" select="$smil-segments/audio"/>
                                             <xsl:choose>
                                                 <xsl:when test="every $i in 1 to count($audio-segments) - 1
                                                                 satisfies ($audio-segments[$i]/@src=$audio-segments[$i + 1]/@src and
                                                                            $audio-segments[$i]/@clip-end=$audio-segments[$i + 1]/@clip-begin)">
+                                                    <xsl:variable name="audio-id" as="xs:string" select="replace($par-id,'par_','audio_')"/>
                                                     <par id="{$par-id}" endsync="last">
                                                         <text id="{$text-id}" src="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}"/>
-                                                        <audio src="{pf:relativize-uri($audio-segments[1]/pf:resolve-uri(@src,.),$seq-base-uri)}"
+                                                        <audio id="{$audio-id}"
+                                                               src="{pf:relativize-uri($audio-segments[1]/pf:resolve-uri(@src,.),$seq-base-uri)}"
                                                                clip-begin="{$audio-segments[1]/@clip-begin}"
                                                                clip-end="{$audio-segments[last()]/@clip-end}"/>
                                                     </par>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                  <xsl:message terminate="yes"
-                                                               select="concat(
+                                                  <!--
+                                                      Not terminating here because we can recover from it in create-linkbacks.xsl,
+                                                      by linking to the first segment.
+                                                  -->
+                                                  <xsl:message select="concat(
                                                                          'SMIL &quot;',replace($smil-base-uri,'^.*/([^/]+)^','$1'),
                                                                          '&quot; references one or more segments inside a ',
                                                                          if (starts-with(local-name(),'h')) then 'heading' else 'page number',
                                                                          ' but the corresponding audio clips can not be combined: ',
                                                                          string-join($audio-segments/concat(@src,' (',@clip-begin,'-',@clip-end,')'),', '))"/>
+                                                  <!--
+                                                      Create an intermediary par that contains a seq with all the segments. Later it will be
+                                                      replaced with the pars in the seq.
+                                                  -->
+                                                  <seq textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
+                                                      <xsl:sequence select="$smil-segments"/>
+                                                  </seq>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                       </xsl:when>
@@ -147,12 +181,12 @@
             <xsl:apply-templates select="@*"/>
             <xsl:apply-templates select="(par,$missing-pars)">
                 <!-- pf:base-uri will return empty sequence for $missing-pars -->
-                <xsl:sort select="index-of($html[pf:base-uri(.)=current()/pf:resolve-uri(substring-before(text/@src,'#'),
+                <xsl:sort select="index-of($html[pf:base-uri(.)=current()/pf:resolve-uri(substring-before(@textref|text/@src,'#'),
                                                                                          (pf:base-uri(.),$seq-base-uri)[1])],
                                            $html)"/>
-                <xsl:sort select="$html[pf:html-base-uri(.)=current()/pf:resolve-uri(substring-before(text/@src,'#'),
+                <xsl:sort select="$html[pf:html-base-uri(.)=current()/pf:resolve-uri(substring-before(@textref|text/@src,'#'),
                                                                                      (pf:base-uri(.),$seq-base-uri)[1])]
-                                  //*[@id=substring-after(current()/text/@src,'#')][1]/count(preceding::*|ancestor::*)"/>
+                                  //*[@id=substring-after(current()/(@textref|text/@src),'#')][1]/count(preceding::*|ancestor::*)"/>
             </xsl:apply-templates>
         </xsl:copy>
     </xsl:template>
@@ -165,12 +199,12 @@
                                                           self::html:h3 or
                                                           self::html:h4 or
                                                           self::html:h5 or
-                                                          self::html:h6 or
-                                                          self::html:span[matches(@class,'(^|\s)page-(front|normal|special)(\s|$)')]])">
+                                                          self::html:h6]
+                          or $referenced-element/ancestor::* intersect $page-number-elements)">
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>
-    
+
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>

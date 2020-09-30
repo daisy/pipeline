@@ -9,42 +9,74 @@
             <x:input port="source.fileset">
                 <x:document type="inline" xml:base="file:/tmp/EPUB/">
                     <d:fileset>
+                        <d:file href="cover.xhtml" media-type="application/xhtml+xml"/>
                         <d:file href="chapter_001.xhtml" media-type="application/xhtml+xml"/>
                         <d:file href="chapter_002.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="cover.smil" media-type="application/smil+xml"/>
                         <d:file href="chapter_001.smil" media-type="application/smil+xml"/>
                     </d:fileset>
                 </x:document>
             </x:input>
             <x:input port="source.in-memory">
+                <x:document type="inline" xml:base="file:/tmp/EPUB/cover.xhtml" xmlns="http://www.w3.org/1999/xhtml">
+                    <html>
+                        <body>
+                            <p id="cover">...</p>
+                        </body>
+                    </html>
+                </x:document>
                 <x:document type="inline" xml:base="file:/tmp/EPUB/chapter_001.xhtml" xmlns="http://www.w3.org/1999/xhtml">
                     <html>
                         <body>
-                            <section>
-                                <h1 id="c1">Chapter 1</h1>
-                                <p id="c1_p1">...</p>
-                                <section>
-                                    <h2 id="c1-1">Chapter 1.1</h2>
-                                </section>
-                                <span id="page1" class="page-normal">1</span>
-                                <p id="c1_p2">...</p>
-                            </section>
+                            <h1 id="c1">Chapter 1</h1>
+                            <p id="c1_p1">
+                                <a href="http://www.example.com">Some link</a>
+                                ...
+                            </p>
+                            <h2 id="c1-1">Chapter 1.1</h2>
+                            <span id="page1" class="page-normal">1</span>
+                            <p id="c1_p2">...</p>
+                            <h2 id="c1-2">
+                                <span class="word" id="c1-2_w1">Chapter</span>
+                                <span class="word" id="c1-2_w2">1.2</span>
+                            </h2>
                         </body>
                     </html>
                 </x:document>
                 <x:document type="inline" xml:base="file:/tmp/EPUB/chapter_002.xhtml" xmlns="http://www.w3.org/1999/xhtml">
                     <html>
                         <body>
-                            <section>
-                                <h1 id="c2">Chapter 2</h1>
-                                <p id="c2_p1">...</p>
-                            </section>
+                            <h1 id="c2">Chapter 2</h1>
+                            <p id="c2_p1">...</p>
                         </body>
                     </html>
                 </x:document>
+                <x:document type="inline" xml:base="file:/tmp/EPUB/cover.smil">
+                    <smil>
+                        <head>
+                            <layout>
+                                <region id="txtView"/>
+                            </layout>
+                        </head>
+                        <body>
+                            <seq id="seq1" dur="1s">
+                                <par id="paragraph1">
+                                    <text src="cover.xhtml#cover"/>
+                                    <audio src="audio/cover.mp4" clip-begin="0:00:00.000" clip-end="0:00:01.000"/>
+                                </par>
+                            </seq>
+                        </body>
+                    </smil>
+                </x:document>
                 <x:document type="inline" xml:base="file:/tmp/EPUB/chapter_001.smil">
                     <smil>
+                        <head>
+                            <layout>
+                                <region id="txtView"/>
+                            </layout>
+                        </head>
                         <body>
-                            <seq id="seq1">
+                            <seq id="seq1" dur="5s">
                                 <par id="heading1">
                                     <text src="chapter_001.xhtml#c1"/>
                                     <audio src="audio/chapter_001_002.mp4" clip-begin="0:00:00.000" clip-end="0:00:01.000"/>
@@ -57,6 +89,14 @@
                                     <text src="chapter_001.xhtml#c1_p2"/>
                                     <audio src="audio/chapter_001_002.mp4" clip-begin="0:00:03.000" clip-end="0:00:04.000"/>
                                 </par>
+                                <par>
+                                    <text src="chapter_001.xhtml#c1-2_w1"/>
+                                    <audio src="audio/chapter_001_002.mp4" clip-begin="0:00:04.000" clip-end="0:00:04.500"/>
+                                </par>
+                                <par>
+                                    <text src="chapter_001.xhtml#c1-2_w2"/>
+                                    <audio src="audio/chapter_001_003.mp4" clip-begin="0:00:00.000" clip-end="0:00:00.500"/>
+                                </par>
                             </seq>
                         </body>
                     </smil>
@@ -64,19 +104,38 @@
             </x:input>
             <x:input port="opf">
                 <x:document type="inline" xml:base="file:/tmp/EPUB/package.opf">
-                    <package xmlns="http://www.idpf.org/2007/opf" version="3.0">
+                    <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="PrimaryID">
+                        <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+                            <dc:date>2020-07-02</dc:date>
+                            <dc:identifier id="PrimaryID">primary-id</dc:identifier>
+                            <dc:identifier id="ISBN">abcdefg</dc:identifier>
+                        </metadata>
                         <manifest>
+                            <item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"
+                                  media-overlay="cover_overlay"/>
                             <item id="chapter_001" href="chapter_001.xhtml" media-type="application/xhtml+xml"
                                   media-overlay="chapter_001_overlay"/>
                             <item id="chapter_002" href="chapter_002.xhtml" media-type="application/xhtml+xml"/>
                             <item id="chapter_001_overlay" href="chapter_001.smil" media-type="application/smil+xml"/>
+                            <item id="cover_overlay" href="cover.smil" media-type="application/smil+xml"/>
                             <item id="chapter_001_audio" href="audio/chapter_001_002.mp4" media-type="audio/mp4"/>
+                            <item id="cover_audio" href="audio/cover.mp4" media-type="audio/mp4"/>
                         </manifest>
                         <spine>
+                            <itemref idref="cover"/>
                             <itemref idref="chapter_001"/>
                             <itemref idref="chapter_002"/>
                         </spine>
                     </package>
+                </x:document>
+            </x:input>
+            <x:input port="page-list">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="file:/tmp/EPUB/chapter_001.xhtml">
+                            <d:anchor id="page1"/>
+                        </d:file>
+                    </d:fileset>
                 </x:document>
             </x:input>
         </x:call>
@@ -88,8 +147,10 @@
             <x:document type="inline" xml:base="file:/tmp/EPUB/">
                 <d:fileset>
                     <d:file href="ncc.html" media-type="application/xhtml+xml"/>
+                    <d:file href="cover.xhtml" media-type="application/xhtml+xml"/>
                     <d:file href="chapter_001.xhtml" media-type="application/xhtml+xml"/>
                     <d:file href="chapter_002.xhtml" media-type="application/xhtml+xml"/>
+                    <d:file href="cover.smil" media-type="application/smil+xml"/>
                     <d:file href="chapter_001.smil" media-type="application/smil+xml"/>
                     <d:file href="chapter_002.smil" media-type="application/smil+xml"/>
                 </d:fileset>
@@ -101,19 +162,55 @@
         <x:expect label="The resulting NCC" type="compare">
             <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
                 <html lang="">
+                    <head>
+                        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                        <title/>
+                        <meta name="dc:format" content="Daisy 2.02"/>
+                        <meta name="dc:identifier" content="primary-id"/>
+                        <meta name="dc:date" content="2020-07-02"/>
+                        <meta name="ncc:charset" content="utf-8"/>
+                        <meta name="ncc:tocItems" content="6"/>
+                        <meta name="ncc:pageFront" content="0"/>
+                        <meta name="ncc:pageNormal" content="1"/>
+                        <meta name="ncc:pageSpecial" content="0"/>
+                        <meta name="ncc:sidebars" content="0"/>
+                        <meta name="ncc:prodNotes" content="0"/>
+                        <meta name="ncc:footnotes" content="0"/>
+                        <meta name="ncc:totalTime" content="00:00:06"/>
+                    </head>
                     <body>
-                        <h1 id="_1" class="title">
+                        <h1 id="h_1" class="title">
+                            <a href="cover.smil#paragraph1">Untitled section</a>
+                        </h1>
+                        <h1 id="h_2">
                             <a href="chapter_001.smil#heading1">Chapter 1</a>
                         </h1>
-                        <h2 id="_2">
-                            <a href="chapter_001.smil#par_c1-1">Chapter 1.1</a>
+                        <h2 id="h_3">
+                            <a href="chapter_001.smil#par_1">Chapter 1.1</a>
                         </h2>
-                        <span id="_3" class="page-normal">
-                            <a href="chapter_001.smil#par_page1">1</a>
+                        <span id="p_1" class="page-normal">
+                            <a href="chapter_001.smil#par_2">1</a>
                         </span>
-                        <h1 id="_4">
-                            <a href="chapter_002.smil#par_c2">Chapter 2</a>
+                        <h2 id="h_4">
+                            <a href="chapter_001.smil#id_1">Chapter 1.2</a>
+                        </h2>
+                        <h1 id="h_5">
+                            <a href="chapter_002.smil#par_1">Chapter 2</a>
                         </h1>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+        <x:context label="The resulting cover.xhtml file">
+            <x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(),'[\\/]')[last()]='cover.xhtml']"/>
+        </x:context>
+        <x:expect label="The resulting cover.xhtml file" type="compare">
+            <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+                <html>
+                    <body>
+                        <p id="cover">
+                            <a href="cover.smil#paragraph1">...</a>
+                        </p>
                     </body>
                 </html>
             </x:document>
@@ -125,25 +222,32 @@
             <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
                 <html>
                     <body>
-                        <section>
-                            <h1 id="c1">
-                                <a href="chapter_001.smil#heading1">Chapter 1</a>
-                            </h1>
-                            <p id="c1_p1">
-                                <a href="chapter_001.smil#paragraph1">...</a>
-                            </p>
-                            <section>
-                                <h2 id="c1-1">
-                                    <a href="chapter_001.smil#par_c1-1">Chapter 1.1</a>
-                                </h2>
-                            </section>
-                            <span id="page1" class="page-normal">
-                                <a href="chapter_001.smil#par_page1">1</a>
+                        <h1 id="c1">
+                            <a href="chapter_001.smil#heading1">Chapter 1</a>
+                        </h1>
+                        <p id="c1_p1">
+                            <a href="chapter_001.smil#paragraph1">
+                                <span class="anchor">Some link</span>
+                                ...
+                            </a>
+                        </p>
+                        <h2 id="c1-1">
+                            <a href="chapter_001.smil#par_1">Chapter 1.1</a>
+                        </h2>
+                        <span id="page1" class="page-normal">
+                            <a href="chapter_001.smil#par_2">1</a>
+                        </span>
+                        <p id="c1_p2">
+                            <a href="chapter_001.smil#paragraph2">...</a>
+                        </p>
+                        <h2 id="c1-2">
+                            <span class="word" id="c1-2_w1">
+                                <a href="chapter_001.smil#id_1">Chapter</a>
                             </span>
-                            <p id="c1_p2">
-                                <a href="chapter_001.smil#paragraph2">...</a>
-                            </p>
-                        </section>
+                            <span class="word" id="c1-2_w2">
+                                <a href="chapter_001.smil#id_2">1.2</a>
+                            </span>
+                        </h2>
                     </body>
                 </html>
             </x:document>
@@ -155,14 +259,36 @@
             <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
                 <html>
                     <body>
-                        <section>
-                            <h1 id="c2">
-                                <a href="chapter_002.smil#par_c2">Chapter 2</a>
-                            </h1>
-                            <p id="c2_p1">...</p>
-                        </section>
+                        <h1 id="c2">
+                            <a href="chapter_002.smil#par_1">Chapter 2</a>
+                        </h1>
+                        <p id="c2_p1">...</p>
                     </body>
                 </html>
+            </x:document>
+        </x:expect>
+        <x:context label="The resulting cover.smil file">
+            <x:document type="port" port="result.in-memory" select="/*[tokenize(base-uri(),'[\\/]')[last()]='cover.smil']"/>
+        </x:context>
+        <x:expect label="The resulting cover.smil file" type="compare">
+            <x:document type="inline">
+                <smil>
+                    <head>
+                        <meta name="dc:format" content="Daisy 2.02"/>
+                        <meta name="ncc:timeInThisSmil" content="00:00:01"/>
+                        <layout>
+                            <region id="txtView"/>
+                        </layout>
+                    </head>
+                    <body>
+                        <seq id="seq1" dur="1s">
+                            <par id="paragraph1">
+                                <text src="cover.xhtml#cover"/>
+                                <audio src="audio/cover.mp4" clip-begin="0:00:00.000" clip-end="0:00:01.000"/>
+                            </par>
+                        </seq>
+                    </body>
+                </smil>
             </x:document>
         </x:expect>
         <x:context label="The resulting chapter_001.smil file">
@@ -171,8 +297,15 @@
         <x:expect label="The resulting chapter_001.smil file" type="compare">
             <x:document type="inline">
                 <smil>
+                    <head>
+                        <meta name="dc:format" content="Daisy 2.02"/>
+                        <meta name="ncc:timeInThisSmil" content="00:00:05"/>
+                        <layout>
+                            <region id="txtView"/>
+                        </layout>
+                    </head>
                     <body>
-                        <seq id="seq1">
+                        <seq id="seq1" dur="5s">
                             <par id="heading1">
                                 <text src="chapter_001.xhtml#c1"/>
                                 <audio src="audio/chapter_001_002.mp4" clip-begin="0:00:00.000" clip-end="0:00:01.000"/>
@@ -181,15 +314,23 @@
                                 <text src="chapter_001.xhtml#c1_p1"/>
                                 <audio src="audio/chapter_001_002.mp4" clip-begin="0:00:01.000" clip-end="0:00:02.000"/>
                             </par>
-                            <par id="par_c1-1" endsync="last">
-                                <text id="text_c1-1" src="chapter_001.xhtml#c1-1"/>
+                            <par id="par_1" endsync="last">
+                                <text id="text_1" src="chapter_001.xhtml#c1-1"/>
                             </par>
-                            <par id="par_page1" endsync="last">
-                                <text id="text_page1" src="chapter_001.xhtml#page1"/>
+                            <par id="par_2" endsync="last">
+                                <text id="text_2" src="chapter_001.xhtml#page1"/>
                             </par>
                             <par id="paragraph2">
                                 <text src="chapter_001.xhtml#c1_p2"/>
                                 <audio src="audio/chapter_001_002.mp4" clip-begin="0:00:03.000" clip-end="0:00:04.000"/>
+                            </par>
+                            <par id="id_1">
+                                <text src="chapter_001.xhtml#c1-2_w1"/>
+                                <audio src="audio/chapter_001_002.mp4" clip-begin="0:00:04.000" clip-end="0:00:04.500"/>
+                            </par>
+                            <par id="id_2">
+                                <text src="chapter_001.xhtml#c1-2_w2"/>
+                                <audio src="audio/chapter_001_003.mp4" clip-begin="0:00:00.000" clip-end="0:00:00.500"/>
                             </par>
                         </seq>
                     </body>
@@ -204,16 +345,16 @@
                 <smil>
                     <head>
                         <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:generator" content="DAISY Pipeline 2"/>
                         <meta name="ncc:timeInThisSmil" content="00:00:00"/>
+                        <meta name="ncc:generator" content="DAISY Pipeline 2"/>
                         <layout>
                             <region id="txtView"/>
                         </layout>
                     </head>
                     <body>
                         <seq dur="0.0s">
-                            <par id="par_c2" endsync="last">
-                                <text id="text_c2" src="chapter_002.xhtml#c2"/>
+                            <par id="par_1" endsync="last">
+                                <text id="text_1" src="chapter_002.xhtml#c2"/>
                             </par>
                         </seq>
                     </body>

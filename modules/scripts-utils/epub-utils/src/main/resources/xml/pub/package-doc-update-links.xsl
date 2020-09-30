@@ -31,8 +31,9 @@
                                                [resolve-uri(@original-href,base-uri(.))=base-uri(current())][1]/@href,
                                 base-uri(/))[1]"/>
 
-    <xsl:template match="link/@href    |
-                         item/@href    ">
+    <xsl:template match="link/@href            |
+                         item/@href            |
+                         guide/reference/@href ">
         <xsl:variable name="uri" as="xs:string" select="pf:normalize-uri(.)"/>
         <xsl:variable name="uri" as="xs:string*" select="pf:tokenize-uri($uri)"/>
         <xsl:variable name="fragment" as="xs:string?" select="$uri[5]"/>

@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               script="../../main/resources/xml/epub2-to-epub3.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:epub2-to-epub3">
+			<x:option name="result-base" select="resolve-uri('result.epub!/')"/>
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="mimetype" media-type="text/plain" compression-method="stored"/>
+						<d:file href="META-INF/container.xml" media-type="application/xml"/>
+						<d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+						<d:file href="EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
+						<d:file href="EPUB/cover.html" media-type="application/xhtml+xml"/>
+						<d:file href="EPUB/front.html" media-type="application/xhtml+xml"/>
+						<d:file href="EPUB/chapter.html" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="mimetype">
+					<c:data content-type="text/plain">application/epub+zip</c:data>
+				</x:document>
+				<x:document type="inline" xml:base="META-INF/container.xml">
+					<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+						<rootfiles>
+							<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+						</rootfiles>
+					</container>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/package.opf">
+					<package xmlns="http://www.idpf.org/2007/opf" version="2.0" xml:lang="en" unique-identifier="pub-id"
+					         xmlns:opf="http://www.idpf.org/2007/opf">
+						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:title id="title">minimal</dc:title>
+							<dc:identifier id="pub-id">id</dc:identifier>
+							<dc:date opf:event="modification">2020-03-06T12:00:00Z</dc:date>
+							<dc:date>2020-03-06</dc:date>
+							<dc:language>en</dc:language>
+						</metadata>
+						<manifest>
+							<item id="toc" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+							<item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
+							<item id="front" href="front.html" media-type="application/xhtml+xml"/>
+							<item id="chapter" href="chapter.html" media-type="application/xhtml+xml"/>
+						</manifest>
+						<spine toc="toc">
+							<itemref idref="cover"/>
+							<itemref idref="front"/>
+							<itemref idref="chapter"/>
+						</spine>
+						<guide>
+							<reference href="cover.html" type="cover" title="Cover"/>
+							<reference href="front.html#h_1_1" type="toc" title="List of contents"/>
+							<reference href="front.html#h_1_2" type="preface"/>
+							<reference href="chapter.html" type="text"/>
+						</guide>
+					</package>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/toc.ncx">
+					<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+						<head>
+							<meta name="dtb:uid" content="id"/>
+						</head>
+						<docTitle>
+							<text>minimal</text>
+						</docTitle>
+						<navMap>
+							<navPoint playOrder="1" id="navPoint-1">
+								<navLabel>
+									<text>Title</text>
+								</navLabel>
+								<content src="front.html#h_1"/>
+								<navPoint playOrder="2" id="navPoint-2">
+									<navLabel>
+										<text>List of contents</text>
+									</navLabel>
+									<content src="front.html#h_1_1"/>
+								</navPoint>
+								<navPoint playOrder="3" id="navPoint-3">
+									<navLabel>
+										<text>Preface</text>
+									</navLabel>
+									<content src="front.html#h_1_2"/>
+								</navPoint>
+							</navPoint>
+							<navPoint playOrder="4" id="navPoint-4">
+								<navLabel>
+									<text>Chapter 1</text>
+								</navLabel>
+								<content src="chapter.html#h_1"/>
+							</navPoint>
+						</navMap>
+						<pageList>
+							<pageTarget type="front" value="4" playOrder="5" id="pageTarget-1">
+								<navLabel>
+									<text>iv</text>
+								</navLabel>
+								<content src="front.html#page_front_4"/>
+							</pageTarget>
+							<pageTarget type="front" value="5" playOrder="6" id="pageTarget-2">
+								<navLabel>
+									<text>v</text>
+								</navLabel>
+								<content src="front.html#page_front_4"/>
+							</pageTarget>
+							<pageTarget type="normal" value="5" playOrder="7" id="pageTarget-3">
+								<navLabel>
+									<text>5</text>
+								</navLabel>
+								<content src="chapter.html#page_5"/>
+							</pageTarget>
+						</pageList>
+					</ncx>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/cover.html">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8" />
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="next" href="front.html" />
+						</head>
+						<body id="cover">
+							<p>...</p>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/front.html">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8" />
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="prev" href="cover.html"/>
+							<link rel="next" href="chapter.html"/>
+						</head>
+						<body id="front">
+							<h1 id="h_1">Title</h1>
+							<p>...</p>
+							<h2 id="h_1_1">List of contents</h2>
+							<table>...</table>
+							<div id="page_front_4" class="page-front" title="iv"/>
+							<h2 id="h_1_2">Preface</h2>
+							<p>...</p>
+							<div id="page_front_5" class="page-front" title="v"/>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/chapter.html">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="prev" href="front.html"/>
+						</head>
+						<body id="chap_1">
+							<div id="page_5" class="page-normal" title="5"/>
+							<h1 id="h_1">Chapter 1</h1>
+							<p>...</p>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="result.fileset port" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result.epub!/mimetype" media-type="text/plain" compression-method="stored"/>
+					<d:file href="result.epub!/META-INF/container.xml" media-type="application/xml"/>
+					<d:file href="result.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="result.epub!/EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
+					<d:file href="result.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result.epub!/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result.epub!/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result.epub!/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:expect label="mimetype is first entry" type="xpath" test="contains(/*/d:file[1]/@href,'mimetype')"/>
+		<x:context label="package.opf">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result.epub!/EPUB/package.opf')]"/>
+		</x:context>
+		<x:expect label="package.opf" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
+			<x:document type="inline">
+				<package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="pub-id">
+					<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+						<dc:title id="title">minimal</dc:title>
+						<dc:identifier id="pub-id">id</dc:identifier>
+						<meta property="dcterms:modified">2020-03-06T12:00:00Z</meta>
+						<meta name="dcterms:modified" content="2020-03-06T12:00:00Z"/>
+						<dc:date>2020-03-06</dc:date>
+						<dc:language>en</dc:language>
+					</metadata>
+					<manifest>
+						<item id="toc" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+						<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
+						<item id="front" href="front.xhtml" media-type="application/xhtml+xml"/>
+						<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/>
+						<item id="item_1" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
+					</manifest>
+					<spine toc="toc">
+						<itemref idref="cover"/>
+						<itemref idref="front"/>
+						<itemref idref="chapter"/>
+					</spine>
+					<guide>
+						<reference href="cover.xhtml" type="cover" title="Cover"/>
+						<reference href="front.xhtml#h_1_1" type="toc" title="List of contents"/>
+						<reference href="front.xhtml#h_1_2" type="preface"/>
+						<reference href="chapter.xhtml" type="text"/>
+					</guide>
+				</package>
+			</x:document>
+		</x:expect>
+		<x:context label="nav.xhtml">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result.epub!/EPUB/nav.xhtml')]"/>
+		</x:context>
+		<x:expect label="nav.xhtml" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+					<head>
+						<meta charset="UTF-8"/>
+						<title>Table of contents</title>
+					</head>
+					<body>
+						<nav epub:type="toc">
+							<h1>Table of contents</h1>
+							<ol>
+								<li>
+									<a href="front.xhtml#front">Title</a>
+									<ol>
+										<li>
+											<a href="front.xhtml#h_1_1">List of contents</a>
+										</li>
+										<li>
+											<a href="front.xhtml#h_1_2">Preface</a>
+										</li>
+									</ol>
+								</li>
+								<li>
+									<a href="chapter.xhtml#chap_1">Chapter 1</a>
+								</li>
+							</ol>
+						</nav>
+						<nav epub:type="page-list">
+							<h1>List of Pages</h1>
+							<ol>
+								<li id="pageTarget-1">
+									<a href="front.xhtml#page_front_4">iv</a>
+								</li>
+								<li id="pageTarget-2">
+									<a href="front.xhtml#page_front_4">v</a>
+								</li>
+								<li id="pageTarget-3">
+									<a href="chapter.xhtml#page_5">5</a>
+								</li>
+							</ol>
+						</nav>
+						<nav epub:type="landmarks">
+							<h1>Guide</h1>
+							<ol>
+								<li>
+									<a href="cover.xhtml" epub:type="cover">Cover</a>
+								</li>
+								<li>
+									<a href="front.xhtml#h_1_1" epub:type="toc">List of contents</a>
+								</li>
+								<li>
+									<a href="front.xhtml#h_1_2" epub:type="preface">Preface</a>
+								</li>
+								<li>
+									<a href="chapter.xhtml" epub:type="text">Start of content</a>
+								</li>
+							</ol>
+						</nav>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="cover.xhtml">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result.epub!/EPUB/cover.xhtml')]"/>
+		</x:context>
+		<x:expect label="cover.xhtml" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+					<head>
+						<meta charset="UTF-8"/>
+						<title>minimal</title>
+						<meta name="dc:identifier" content="id"/>
+					</head>
+					<body id="cover">
+						<p>...</p>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="front.xhtml">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result.epub!/EPUB/front.xhtml')]"/>
+		</x:context>
+		<x:expect label="front.xhtml" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+					<head>
+						<meta charset="UTF-8" />
+						<title>minimal</title>
+						<meta name="dc:identifier" content="id"/>
+					</head>
+					<body id="front">
+						<h1 id="h_1">Title</h1>
+						<p>...</p>
+						<h2 id="h_1_1">List of contents</h2>
+						<table>...</table>
+						<div id="page_front_4" class="page-front" title="iv"/>
+						<h2 id="h_1_2">Preface</h2>
+						<p>...</p>
+						<div id="page_front_5" class="page-front" title="v"/>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="chapter.xhtml">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result.epub!/EPUB/chapter.xhtml')]"/>
+		</x:context>
+		<x:expect label="chapter.xhtml" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+					<head>
+						<meta charset="UTF-8"/>
+						<title>minimal</title>
+						<meta name="dc:identifier" content="id"/>
+					</head>
+					<body id="chap_1">
+						<div id="page_5" class="page-normal" title="5"/>
+						<h1 id="h_1">Chapter 1</h1>
+						<p>...</p>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

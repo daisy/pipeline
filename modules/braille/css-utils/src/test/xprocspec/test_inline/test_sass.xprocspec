@@ -397,4 +397,43 @@
     </x:expect>
   </x:scenario>
 
+  <x:scenario label="test_13">
+    <x:documentation>
+      Embedded SASS.
+    </x:documentation>
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/x-scss" media="embossed">
+                body {
+                  h1 {
+                    display: block;
+                    margin-left: 4;
+                  }
+                }
+              </style>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1 style="display: block; margin-left: 4;"/>
+          <p/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
 </x:description>

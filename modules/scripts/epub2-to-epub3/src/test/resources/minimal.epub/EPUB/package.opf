@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" xml:lang="en" unique-identifier="pub-id">
+	<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title id="title">minimal</dc:title>
+		<dc:identifier id="pub-id">id</dc:identifier>
+		<meta name="dcterms:modified" content="2020-03-06T12:00:00Z"/>
+		<dc:date>2020-03-06</dc:date>
+		<dc:language>en</dc:language>
+	</metadata>
+	<manifest>
+		<item id="toc" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+		<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
+		<item id="front" href="front.xhtml" media-type="application/xhtml+xml"/>
+		<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/>
+	</manifest>
+	<spine toc="toc">
+		<itemref idref="cover"/>
+		<itemref idref="front"/>
+		<itemref idref="chapter"/>
+	</spine>
+	<guide>
+		<reference href="cover.xhtml" type="cover" title="Cover"/>
+		<reference href="front.xhtml#h_1_1" type="toc" title="List of contents"/>
+		<reference href="front.xhtml#h_1_2" type="preface"/>
+		<reference href="chapter.xhtml" type="text"/>
+	</guide>
+</package>

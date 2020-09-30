@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.liblouis.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URI;
@@ -39,6 +40,7 @@ import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.varyLocale;
 import static org.daisy.pipeline.braille.common.util.Files.unpack;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
+import static org.daisy.pipeline.braille.common.util.Files.normalize;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import org.daisy.pipeline.braille.common.WithSideEffect;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
@@ -208,7 +210,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 				throw new RuntimeException("Could not create temporary directory", e); }
 			tmpDirectory.deleteOnExit();
 		}
-		return tmpDirectory;
+		return normalize(tmpDirectory);
 	}
 	
 	private static File createTempFile(String prefix, String suffix) throws IOException {
@@ -270,6 +272,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 							TableInfo tableInfo = null;
 							boolean unicode = false;
 							boolean whiteSpace = false;
+							String dotsForUndefinedChar = null;
 							boolean display = false;
 							if (q.containsKey("unicode")) {
 								q.removeOnly("unicode");
@@ -277,6 +280,13 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 							if (q.containsKey("white-space")) {
 								q.removeOnly("white-space");
 								whiteSpace = true; }
+							if (q.containsKey("dots-for-undefined-char")) {
+								dotsForUndefinedChar = q.removeOnly("dots-for-undefined-char").getValue().get();
+								if (!dotsForUndefinedChar.matches("[\u2800-\u28FF]+")) {
+									logger.warn(dotsForUndefinedChar + " is not a valid dot pattern string.");
+									throw new NoSuchElementException();
+								}
+							}
 							if (q.containsKey("display")) {
 								q.removeOnly("display");
 								if (unicode) {
@@ -329,6 +339,33 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 									table = asURI(spacesFile) + "," + table;
 								if (unicode)
 									table = asURI(unicodeDisFile) + "," + table;
+								if (dotsForUndefinedChar != null) {
+									try {
+										File undefinedFile = createTempFile("undefined-", ".uti");
+										undefinedFile.createNewFile();
+										FileOutputStream writer = new FileOutputStream(undefinedFile);
+										String dotPattern; {
+											StringBuilder b = new StringBuilder();
+											for (char c : dotsForUndefinedChar.toCharArray()) {
+												b.append("-");
+												c &= (char)0xFF;
+												if (c == 0)
+													b.append("0");
+												else
+													for (int k = 1; k <= 8; k++) {
+														if ((c & (char)1) != 0)
+															b.append(k);
+														c = (char)(c >> 1); }}
+											dotPattern = b.toString().substring(1); }
+										writer.write(("undefined " + dotPattern + "\n").getBytes());
+										writer.flush();
+										writer.close();
+										// adding the "undefined" rule to the end overwrites any previous rules
+										table = table + "," + asURI(undefinedFile);
+									} catch (IOException e) {
+										throw new RuntimeException(e);
+									}
+								}
 								try {
 									return new LiblouisTableJnaImpl(table, tableInfo); }
 								catch (CompilationException e) {

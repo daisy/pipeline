@@ -22,29 +22,14 @@
             <h2 px:role="name">EPUB 3 Publication</h2>
             <p px:role="desc" xml:space="preserve">The EPUB 3 you want to convert to DAISY 2.02.
 
-You may alternatively use the EPUB package document (the OPF-file) if your input is a unzipped/"exploded" version of an EPUB.</p>
+You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.</p>
         </p:documentation>
     </p:option>
 
-    <p:option name="validation" required="false" select="'off'">
-        <p:pipeinfo>
-            <px:type>
-                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-                    <value>off</value>
-                    <a:documentation xml:lang="en">No validation</a:documentation>
-                    <value>report</value>
-                    <a:documentation xml:lang="en">Report validation issues</a:documentation>
-                    <value>abort</value>
-                    <a:documentation xml:lang="en">Abort on validation issues</a:documentation>
-                </choice>
-            </px:type>
-        </p:pipeinfo>
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Validation</h2>
-            <p px:role="desc">Whether to abort on validation issues.</p>
-        </p:documentation>
+    <p:option name="validation" select="'off'">
+        <!-- defined in common-options.xpl -->
     </p:option>
-    
+
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Temporary directory</h2>
@@ -57,19 +42,17 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         </p:documentation>
     </p:option>
 
-    <p:output port="validation-report" sequence="true" px:media-type="application/vnd.pipeline.report+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">Input validation report</h1>
-        </p:documentation>
+    <p:output port="validation-report" sequence="true">
+        <!-- defined in common-options.xpl -->
         <p:pipe step="load" port="validation-report"/>
     </p:output>
 
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+    <p:output port="validation-status">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Input validation status</h1>
             <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the input validation was successful.
 
-[More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
+[More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
         </p:documentation>
         <p:pipe step="status" port="result"/>
     </p:output>
@@ -101,7 +84,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         </p:inline>
     </p:variable>
 
-    <px:epub-load name="load" version="3" store-to-disk="true">
+    <px:epub-load name="load" version="3" store-to-disk="true" px:progress="0.1">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
         <p:with-option name="validation" select="$validation"/>
@@ -112,7 +95,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
             <p:pipe step="load" port="validation-status"/>
         </p:input>
     </p:identity>
-    <p:choose name="status">
+    <p:choose name="status" px:progress="0.9">
         <p:when test="/d:validation-status[@result='error']">
             <p:output port="result"/>
             <p:identity/>
@@ -121,11 +104,11 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
             <p:output port="result">
                 <p:pipe step="try-convert" port="status"/>
             </p:output>
-            <p:try name="try-convert">
+            <p:try name="try-convert" px:progress="1">
                 <p:group>
                     <p:output port="status"/>
                     
-                    <px:epub3-to-daisy202 name="convert">
+                    <px:epub3-to-daisy202 name="convert" px:progress="9/10">
                         <p:input port="source.fileset">
                             <p:pipe step="load" port="result.fileset"/>
                         </p:input>
@@ -135,7 +118,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
                         <p:with-option name="output-dir" select="$output-dir"/>
                     </px:epub3-to-daisy202>
 
-                    <px:fileset-store name="store" fail-on-error="true">
+                    <px:fileset-store name="store" fail-on-error="true" px:progress="1/10">
                         <p:input port="fileset.in">
                             <p:pipe step="convert" port="result.fileset"/>
                         </p:input>

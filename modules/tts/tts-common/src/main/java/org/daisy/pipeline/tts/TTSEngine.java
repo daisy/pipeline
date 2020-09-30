@@ -121,7 +121,6 @@ public abstract class TTSEngine {
 	 * exploiting @param resources.
 	 * 
 	 * @param resources is the object returned by allocateThreadResource()
-	 * @return
 	 */
 	public void releaseThreadResources(TTSResource resources) throws SynthesisException,
 	        InterruptedException {

@@ -222,7 +222,7 @@
                     <p:documentation>Set language</p:documentation>
                     <p:group>
                         <p:variable name="lang"
-                                    select="/*/(if (@lang|@xml:lang) then (@lang|@xml:lang)
+                                    select="/*/(if (@lang|@xml:lang) then (@lang|@xml:lang)[1]
                                             else p:system-property('p:language'))"/>
                         <p:add-attribute match="/*" attribute-name="lang">
                             <p:with-option name="attribute-value" select="$lang"/>

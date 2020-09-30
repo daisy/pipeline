@@ -9,7 +9,8 @@
 	
 	<xsl:param name="duplex" as="xs:boolean" select="true()"/>
 	<xsl:param name="maximum-number-of-sheets" as="xs:integer" select="70"/>
-	<xsl:param name="avoid-volume-break-inside-leaf-section" as="xs:boolean" select="false()"/>
+	<xsl:param name="allow-volume-break-inside-leaf-section-factor" as="xs:integer" select="10"/>
+	<xsl:param name="prefer-volume-break-before-higher-level-factor" as="xs:double" select="0"/>
 	<!--
 	    for testing
 	-->
@@ -22,7 +23,7 @@
 		
 	<xsl:template match="/*">
 		<xsl:choose>
-			<xsl:when test="not($avoid-volume-break-inside-leaf-section)">
+			<xsl:when test="$allow-volume-break-inside-leaf-section-factor=10">
 				<xsl:sequence select="."/>
 			</xsl:when>
 			<xsl:otherwise>

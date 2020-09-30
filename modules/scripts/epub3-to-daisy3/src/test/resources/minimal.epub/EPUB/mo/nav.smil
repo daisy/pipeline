@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+	<body>
+		<par>
+			<text src="../nav.xhtml#st1-1"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-2"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-3"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-4"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-5"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-6"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-7"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-8"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+		</par>
+		<par>
+			<text src="../nav.xhtml#st1-9"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
+		</par>
+	</body>
+</smil>

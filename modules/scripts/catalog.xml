@@ -19,4 +19,6 @@
   <nextCatalog catalog="./dtbook-to-pef/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./zedai-to-pef/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./epub3-to-epub3/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./epub2-to-epub3/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./epub-to-daisy/src/main/resources/META-INF/catalog.xml"/>
 </catalog>

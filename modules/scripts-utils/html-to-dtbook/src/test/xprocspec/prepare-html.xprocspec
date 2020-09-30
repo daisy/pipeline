@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:p="http://www.w3.org/ns/xproc">
+
+    <x:script>
+        <p:pipeline version="1.0" type="x:prepare-html">
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="../../main/resources/xml/xslt/prepare-html.xsl"/>
+                </p:input>
+            </p:xslt>
+        </p:pipeline>
+    </x:script>
+
+    <x:scenario label="test">
+        <x:call step="x:prepare-html">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                        <body>
+                            <header>
+                                <h1/>
+                            </header>
+                            <div id="section_1">
+                                <section>
+                                    ...
+                                    <h2/>
+                                    <section>
+                                        <div id="section_2">
+                                            <h3/>
+                                            ...
+                                        </div>
+                                        ...
+                                    </section>
+                                </section>
+                            </div>
+                            <div id="section_3">
+                                <section>
+                                    ...
+                                    <h2/>
+                                </section>
+                            </div>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <body>
+                        <header>
+                            <h1/>
+                        </header>
+                        <section>
+                            <div id="section_1">
+                                ...
+                            </div>
+                            <h2/>
+                            <section>
+                                <h3/>
+                                <div>
+                                    <div id="section_2">
+                                        ...
+                                    </div>
+                                    ...
+                                </div>
+                            </section>
+                        </section>
+                        <section>
+                            <div id="section_3">
+                                ...
+                            </div>
+                            <h2/>
+                        </section>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

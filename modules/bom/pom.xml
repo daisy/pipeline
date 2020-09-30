@@ -26,7 +26,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-common</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -142,7 +142,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>image-utils</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -157,7 +157,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>validation-utils</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -249,13 +249,23 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub3-to-html</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>html-to-dtbook</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>smil-utils</artifactId>
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>metadata-utils</artifactId>
-        <version>2.0.0</version>
+        <version>2.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -319,7 +329,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-rtf</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -333,13 +343,28 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub-to-daisy</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub2-to-epub3</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-daisy202</artifactId>
         <version>2.0.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub3-to-daisy3</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-epub3</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -465,7 +490,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>mathml-to-ssml</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
       </dependency>
       
       <!--
@@ -518,7 +543,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>jstyleparser</artifactId>
-        <version>1.20-p14</version>
+        <version>1.20-p15-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.unbescape</groupId>

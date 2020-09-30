@@ -985,23 +985,19 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				}
 				
 				private String addHyphensAndLetterSpacing(String segment, String segmentInBraille, int letterSpacing) {
-					
-					byte[] autoHyphens = fullHyphenator.hyphenate(segment);
+					byte[] hyphens = fullHyphenator.hyphenate(
+						// insert manual hyphens first so that hyphenator knows which words to skip
+						insertHyphens(segment, manualHyphens, SHY, ZWSP));
 					// FIXME: don't hard-code the number 4
-					byte[] autoHyphensAndLetterBoundaries
-						= (letterSpacing > 0) ? detectLetterBoundaries(autoHyphens, segment, (byte)4) : autoHyphens;
-					if (autoHyphensAndLetterBoundaries == null && manualHyphens == null)
+					byte[] hyphensAndLetterBoundaries
+						= (letterSpacing > 0) ? detectLetterBoundaries(hyphens, segment, (byte)4) : hyphens;
+					if (hyphensAndLetterBoundaries == null && manualHyphens == null)
 						return segment;
 					byte[] hyphensAndLetterBoundariesInBraille = new byte[segmentInBraille.length() - 1];
-					if (autoHyphensAndLetterBoundaries != null)
+					if (hyphensAndLetterBoundaries != null)
 						for (int i = 0; i < hyphensAndLetterBoundariesInBraille.length; i++)
 							hyphensAndLetterBoundariesInBraille[i]
-								= autoHyphensAndLetterBoundaries[interCharacterIndicesInBraille[curPosInBraille + i] - curPos];
-					if (manualHyphens != null)
-						for (int i = 0; i < hyphensAndLetterBoundariesInBraille.length; i++)
-							hyphensAndLetterBoundariesInBraille[i]
-								= manualHyphens[interCharacterIndicesInBraille[curPosInBraille + i]];
-					
+								= hyphensAndLetterBoundaries[interCharacterIndicesInBraille[curPosInBraille + i] - curPos];
 					String r = insertHyphens(segmentInBraille, hyphensAndLetterBoundariesInBraille, SHY, ZWSP, US);
 					return (letterSpacing > 0) ? applyLetterSpacing(r, letterSpacing) : r;
 				}
@@ -1318,14 +1314,16 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (hyphenate[i]) someHyphenate = true;
 					else someNotHyphenate = true;
 				if (someHyphenate) {
-					byte[] autoHyphens = null;
+					byte[] hyphens = null;
 					try {
 						if (fullHyphenator == null) {
 							logger.warn("hyphens:auto not supported");
 							if (lineBreaker != null)
 								throw new RuntimeException(); }
-						else
-							autoHyphens = fullHyphenator.hyphenate(joinedText); }
+						else {
+							hyphens = fullHyphenator.hyphenate(
+								// insert manual hyphens so that hyphenator knows which words to skip
+								insertHyphens(joinedText, inputAttrs, SHY, ZWSP)); }}
 					catch (Exception e) {
 						if (failWhenNonStandardHyphenation)
 							throw e;
@@ -1345,19 +1343,20 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								
 								// TODO: split up text in words and only defer the words with non-standard hyphenation
 								return text; }}
-					if (autoHyphens != null) {
+					if (hyphens != null) {
 						if (someNotHyphenate) {
 							int i = 0;
 							for (int j = 0; j < text.length; j++) {
 								if (hyphenate[j])
-									while (i < autoHyphens.length && textWithWsMapping[joinedTextMapping[i]] < j + 1) i++;
+									while (i < hyphens.length && textWithWsMapping[joinedTextMapping[i]] < j + 1) i++;
 								else {
 									if (i > 0)
-										autoHyphens[i - 1] = 0;
-									while (i < autoHyphens.length && textWithWsMapping[joinedTextMapping[i]] < j + 1)
-										autoHyphens[i++] = 0; }}}
-						for (int i = 0; i < autoHyphens.length; i++)
-							inputAttrs[i] += autoHyphens[i]; }}
+										hyphens[i - 1] = 0;
+									while (i < hyphens.length && textWithWsMapping[joinedTextMapping[i]] < j + 1)
+										hyphens[i++] = 0; }}}
+						for (int i = 0; i < hyphens.length; i++)
+							// this re-adds manual SHY and ZWSP
+							inputAttrs[i] |= hyphens[i]; }}
 			}
 			
 			// add letter information to inputAttrs array
@@ -1639,15 +1638,59 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	private static class LiblouisTranslatorAsFullHyphenator implements FullHyphenator {
 		
 		private final Translator translator;
+		private final static Pattern ON_SPACE_SPLITTER = Pattern.compile("\\s+");
 		
 		private LiblouisTranslatorAsFullHyphenator(Translator translator) {
 			this.translator = translator;
 		}
 		
+		// FIXME: code duplication with LiblouisHyphenatorJnaImplProvider
 		public byte[] hyphenate(String text) {
-			try { return translator.hyphenate(text); }
-			catch (TranslationException e) {
-				throw new RuntimeException(e); }
+			if (text.length() == 0)
+				return null;
+			Tuple2<String,byte[]> t = extractHyphens(text, SHY, ZWSP);
+			if (t._1.length() == 0)
+				return null;
+			String textWithoutManualHyphens = t._1;
+			byte[] manualHyphens = t._2;
+			boolean hasManualHyphens = false; {
+				if (manualHyphens != null)
+					for (byte b : manualHyphens)
+						if (b == (byte)1 || b == (byte)2) {
+							hasManualHyphens = true;
+							break; }}
+			if (hasManualHyphens) {
+				// input contains SHY or ZWSP; hyphenate only the words without SHY or ZWSP
+				byte[] hyphens = Arrays.copyOf(manualHyphens, manualHyphens.length);
+				boolean word = true;
+				int pos = 0;
+				for (String segment : splitInclDelimiter(textWithoutManualHyphens, ON_SPACE_SPLITTER)) {
+					if (word && segment.length() > 0) {
+						int len = segment.length();
+						boolean wordHasManualHyphens = false; {
+							for (int k = 0; k < len - 1; k++)
+								if (hyphens[pos + k] != 0) {
+									wordHasManualHyphens = true;
+									break; }}
+						if (!wordHasManualHyphens) {
+							byte[] wordHyphens; {
+								try {
+									wordHyphens = translator.hyphenate(segment); }
+								catch (TranslationException e) {
+									throw new RuntimeException(e); }}
+							for (int k = 0; k < len - 1; k++)
+								hyphens[pos + k] |= wordHyphens[k];
+						}
+					}
+					pos += segment.length();
+					word = !word;
+				}
+				return hyphens;
+			} else
+				try {
+					return translator.hyphenate(textWithoutManualHyphens); }
+				catch (TranslationException e) {
+					throw new RuntimeException(e); }
 		}
 	}
 	

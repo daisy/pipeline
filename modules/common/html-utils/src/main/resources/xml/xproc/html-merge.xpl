@@ -187,8 +187,8 @@
 				</p:input>
 			</p:xslt>
 			<p:wrap match="/*/html:body[preceding-sibling::html:body|following-sibling::html:body]"
-			        group-adjacent="true()" wrapper="html:body"/>
-			<p:rename match="/*/html:body/html:body" new-name="html:section"/>
+			        group-adjacent="true()" wrapper="body" wrapper-namespace="http://www.w3.org/1999/xhtml"/>
+			<p:rename match="/*/html:body/html:body" new-name="section" new-namespace="http://www.w3.org/1999/xhtml"/>
 		</p:otherwise>
 	</p:choose>
 	<px:set-base-uri>

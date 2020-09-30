@@ -72,9 +72,11 @@
 	     <xsl:copy-of select="$custom-attrs"/>
 	  </head>
 	  <body>
-	    <xsl:apply-templates select="$root/*" mode="find-ref">
-	      <xsl:with-param name="smilfile" select="current-grouping-key()"/>
-	    </xsl:apply-templates>
+	    <seq id="root-seq">
+	      <xsl:apply-templates select="$root/*" mode="find-ref">
+	        <xsl:with-param name="smilfile" select="current-grouping-key()"/>
+	      </xsl:apply-templates>
+	    </seq>
 	  </body>
 	</smil>
       </xsl:result-document>

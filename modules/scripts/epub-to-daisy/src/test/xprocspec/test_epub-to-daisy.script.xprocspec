@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/epub-to-daisy.script.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:epub-to-daisy.script">
+			<x:option name="source" select="resolve-uri('../../../../epub2-to-epub3/src/test/resources/minimal.epub/mimetype')"/>
+			<x:option name="tts" select="true()"/>
+			<x:input port="tts-config">
+				<x:document type="inline">
+					<config>
+						<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
+						<!-- log can be found in "log" output -->
+						<property key="log" value="true"/>
+					</config>
+				</x:document>
+			</x:input>
+			<x:option name="validation" select="'off'"/>
+			<x:option name="epub3-output-dir" select="resolve-uri('out/epub3/',$temp-dir)"/>
+			<x:option name="daisy202-output-dir" select="resolve-uri('out/daisy202/',$temp-dir)"/>
+			<x:option name="daisy3-output-dir" select="resolve-uri('out/daisy3/',$temp-dir)"/>
+			<x:option name="temp-dir" select="resolve-uri('tmp/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the status">
+			<x:document type="port" port="status"/>
+		</x:context>
+		<x:expect label="the convertion must succeed" type="compare">
+			<x:document type="inline">
+				<d:validation-status result="ok"/>
+			</x:document>
+		</x:expect>
+		<x:context label="The output directory">
+			<x:document type="directory" base-uri="temp-dir" href="out/" recursive="true"/>
+		</x:context>
+		<x:expect label="The output directory contains the EPUB 3, the DAISY 2.02 and the DAISY 3" type="compare">
+			<x:document type="inline">
+				<c:directory name="out">
+					<c:directory name="daisy202">
+						<c:directory name="id">
+							<c:file name="chapter.smil"/>
+							<c:file name="content.html"/>
+							<c:file name="cover.smil"/>
+							<c:file name="front.smil"/>
+							<c:file name="mock.mp3"/>
+							<c:file name="ncc.html"/>
+						</c:directory>
+					</c:directory>
+					<c:directory name="daisy3">
+						<c:directory name="EPUB">
+							<c:directory name="audio">
+								<c:file name="mock.mp3"/>
+							</c:directory>
+						</c:directory>
+						<c:file name="book.opf"/>
+						<c:file name="content.xml"/>
+						<c:file name="mo0.smil"/>
+						<c:file name="mo1.smil"/>
+						<c:file name="mo3.smil"/>
+						<c:file name="mo4.smil"/>
+						<c:file name="navigation.ncx"/>
+						<c:file name="resources.res"/>
+					</c:directory>
+					<c:directory name="epub3">
+						<c:directory name="EPUB">
+							<c:directory name="audio">
+								<c:file name="mock.mp3"/>
+							</c:directory>
+							<c:file name="chapter.xhtml"/>
+							<c:file name="cover.xhtml"/>
+							<c:file name="front.xhtml"/>
+							<c:directory name="mo">
+								<c:file name="chapter.smil"/>
+								<c:file name="cover.smil"/>
+								<c:file name="front.smil"/>
+							</c:directory>
+							<c:file name="nav.xhtml"/>
+							<c:file name="package.opf"/>
+							<c:file name="toc.ncx"/>
+						</c:directory>
+						<c:directory name="META-INF">
+							<c:file name="container.xml"/>
+						</c:directory>
+						<c:file name="mimetype"/>
+					</c:directory>
+				</c:directory>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

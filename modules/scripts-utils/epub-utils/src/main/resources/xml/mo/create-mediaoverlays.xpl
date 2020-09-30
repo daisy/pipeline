@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:s="http://www.w3.org/ns/SMIL"
                 type="px:epub3-create-mediaoverlays" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -134,8 +135,7 @@
                     <p:pipe step="main" port="source.in-memory"/>
                 </p:input>
             </px:fileset-load>
-            <p:for-each name="smil.in-memory">
-                <p:output port="result" sequence="true"/>
+            <p:for-each>
                 <p:variable name="mo-uri"
                             select="concat($mediaoverlay-dir,replace(base-uri(/*),'.*?([^/]*)\.x?html$','$1.smil'))"/>
                 <p:identity name="content-doc"/>
@@ -167,6 +167,8 @@
                     -->
                 </px:add-xml-base>
             </p:for-each>
+            <p:split-sequence test="/*/s:body/*"/>
+            <p:identity name="smil.in-memory"/>
 
             <p:for-each>
                 <p:variable name="mo-uri" select="base-uri(/*)"/>

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xpath-default-namespace="http://www.w3.org/1999/xhtml"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
-    xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:svg="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Math/MathML"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0" exclude-result-prefixes="#all">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:svg="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xpath-default-namespace="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="#all">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
-    <!--<xsl:import href="../../../../test/xspec/mock-functions.xsl"/>-->
 
     <xsl:strip-space elements="*"/>
     <xsl:output indent="yes"/>
@@ -295,18 +297,26 @@
             <xsl:matching-substring>
                 <xsl:variable name="url"
                     select="f:parse-css-url(replace(regex-group(1),'^url\(\s*(.*?)\s*\)$','$1'))"/>
-                <!--TODO remove query fragments, check that URL is relative-->
-                <xsl:sequence
-                    select="if ($url and unparsed-text-available(resolve-uri($url,$css-base))) 
-                    then f:get-css-resources(unparsed-text(resolve-uri($url,$css-base)),resolve-uri($url,$css-base))
-                    else ()"
-                />
+                <xsl:if test="$url">
+                    <!--TODO remove query fragments, check that URL is relative-->
+                    <xsl:sequence select="resolve-uri($url,$css-base)"/>
+                    <xsl:if test="unparsed-text-available(resolve-uri($url,$css-base))">
+                        <xsl:sequence select="f:get-css-resources(unparsed-text(resolve-uri($url,$css-base)),
+                                                                  resolve-uri($url,$css-base))"/>
+                    </xsl:if>
+                </xsl:if>
             </xsl:matching-substring>
             <xsl:non-matching-substring>
                 <xsl:analyze-string select="." regex="url\(\s*(.*?)\s*\)">
                     <xsl:matching-substring>
                         <xsl:variable name="url" select="f:parse-css-url(regex-group(1))"/>
-                        <xsl:sequence select="if ($url) then resolve-uri($url,$css-base) else ()"/>
+                        <xsl:if test="$url">
+                            <xsl:sequence select="resolve-uri($url,$css-base)"/>
+                            <xsl:if test="unparsed-text-available(resolve-uri($url,$css-base))">
+                                <xsl:sequence select="f:get-css-resources(unparsed-text(resolve-uri($url,$css-base)),
+                                                      resolve-uri($url,$css-base))"/>
+                            </xsl:if>
+                        </xsl:if>
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </xsl:non-matching-substring>

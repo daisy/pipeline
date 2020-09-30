@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0"
+      xmlns:epub="http://www.idpf.org/2007/ops">
+	<body epub:textref="../front.xhtml#front" epub:type="frontmatter">
+		<seq epub:textref="../front.xhtml#h_1">
+			<par>
+				<text src="../front.xhtml#st3-1"/>
+				<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+			</par>
+		</seq>
+		<par>
+			<text src="../front.xhtml#st3-2"/>
+			<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+		</par>
+		<seq epub:textref="../front.xhtml#contents">
+			<seq epub:textref="../front.xhtml#h_1_1">
+				<par>
+					<text src="../front.xhtml#st3-3"/>
+					<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+				</par>
+			</seq>
+		</seq>
+		<seq epub:textref="../front.xhtml#preface">
+			<seq epub:textref="../front.xhtml#h_1_2">
+				<par>
+					<text src="../front.xhtml#st3-4"/>
+					<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+				</par>
+			</seq>
+			<par>
+				<text src="../front.xhtml#st3-5"/>
+				<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+			</par>
+		</seq>
+	</body>
+</smil>

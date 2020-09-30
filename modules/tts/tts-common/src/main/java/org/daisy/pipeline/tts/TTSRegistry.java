@@ -108,9 +108,6 @@ public class TTSRegistry {
 	 * Return the list of available voices. The SSML adapters and the engines
 	 * are not checked, so it might be the case that some of the returned voices
 	 * are actually not usable.
-	 * 
-	 * @param params include TTS properties such as server IPs.
-	 * @return
 	 */
 	public Collection<Voice> getAllAvaibleVoices(Processor saxonProcessor) {
 		ConfigReader cr = new ConfigReader(saxonProcessor);

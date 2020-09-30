@@ -7,6 +7,8 @@ import org.ops4j.pax.exam.Configuration;
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.ProbeBuilder;
+import org.ops4j.pax.exam.TestProbeBuilder;
 
 public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	
@@ -22,6 +24,10 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("fileset-utils"),
 			pipelineModule("common-utils"),
 			pipelineModule("epub-utils"),
+			pipelineModule("epub3-tts"),
+			pipelineModule("nlp-omnilang-lexer"),
+			pipelineModule("tts-common"),
+			pipelineModule("audio-common"),
 			"org.daisy.pipeline:calabash-adapter:?"
 		};
 	}
@@ -32,5 +38,12 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			// FIXME: BrailleUtils needs older version of jing
 			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
 			composite(super.config()));
+	}
+	
+	@ProbeBuilder
+	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
+		probe.setHeader("Service-Component", "OSGI-INF/mock-tts.xml,OSGI-INF/mock-encoder.xml");
+		return probe;
 	}
 }

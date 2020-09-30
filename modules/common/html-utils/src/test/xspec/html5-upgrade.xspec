@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
-    stylesheet="../../main/resources/xml/xslt/html5-upgrade.xsl">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:h="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/xslt/html5-upgrade.xsl">
 
     <x:scenario label="Attributes :: Globals">
         <x:scenario label="Global attributes">
@@ -2353,6 +2356,58 @@
             </x:context>
             <x:expect label="are translated as-is">
                 <wbr id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="SVG">
+        <x:scenario label="svg">
+            <x:context>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     height="100%"
+                     preserveAspectRatio="xMidYMid meet"
+                     version="1.1"
+                     viewBox="0 0 726 1122"
+                     width="100%">
+                    <image width="726" height="1122" xlink:href="../Images/9781771601962_FC.jpg"/>
+                </svg>
+            </x:context>
+            <x:expect label="is translated as-is">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     height="100%"
+                     preserveAspectRatio="xMidYMid meet"
+                     version="1.1"
+                     viewBox="0 0 726 1122"
+                     width="100%">
+                    <image width="726" height="1122" xlink:href="../Images/9781771601962_FC.jpg"/>
+                </svg>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="MathML">
+        <x:scenario label="math">
+            <x:context>
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mrow>
+                        <msup><mi>a</mi><mn>2</mn></msup>
+                        <mo>+</mo>
+                        <msup><mi>b</mi><mn>2</mn></msup>
+                        <mo> = </mo>
+                        <msup><mi>c</mi><mn>2</mn></msup>
+                    </mrow>
+                </math>
+            </x:context>
+            <x:expect label="is translated as-is">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mrow>
+                        <msup><mi>a</mi><mn>2</mn></msup>
+                        <mo>+</mo>
+                        <msup><mi>b</mi><mn>2</mn></msup>
+                        <mo> = </mo>
+                        <msup><mi>c</mi><mn>2</mn></msup>
+                    </mrow>
+                </math>
             </x:expect>
         </x:scenario>
     </x:scenario>

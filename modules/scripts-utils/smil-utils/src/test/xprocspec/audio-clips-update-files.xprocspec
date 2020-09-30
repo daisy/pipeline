@@ -12,7 +12,8 @@
                     <d:audio-clips>
                         <d:clip idref="A" clipBegin="0:00:00.000" clipEnd="0:00:00.565" src="part_1.mp3"/>
                         <d:clip idref="B" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="part_2.mp3"/>
-                        <d:clip idref="C" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="part_3.mp3"/>
+                        <d:clip idref="C" clipBegin="0:00:00.000" clipEnd="0:00:00.500" src="part_3.mp3"/>
+                        <d:clip idref="C2" clipBegin="0:00:00.500" clipEnd="0:00:01.000" src="part_3.mp3"/>
                     </d:audio-clips>
                 </x:document>
             </x:input>
@@ -22,6 +23,9 @@
                         <d:file href="audio/part_1.mp3" original-href="file:/temp/part_1.mp3"/>
                         <d:file href="audio/part_2.mp3" original-href="file:/temp/part_2.mp3"/>
                         <d:file href="audio/part_3.mp3" original-href="file:/temp/part_3.mp3"/>
+                        <d:file href="irrelevant">
+                            <d:anchor id="C" original-id="C2"/>
+                        </d:file>
                     </d:fileset>
                 </x:document>
             </x:input>
@@ -34,7 +38,7 @@
                 <d:audio-clips>
                     <d:clip idref="A" clipBegin="0:00:00.000" clipEnd="0:00:00.565" src="audio/part_1.mp3"/>
                     <d:clip idref="B" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="audio/part_2.mp3"/>
-                    <d:clip idref="C" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="audio/part_3.mp3"/>
+                    <d:clip idref="C" clipBegin="0:00:00.000" clipEnd="0:00:01.000" src="audio/part_3.mp3"/>
                 </d:audio-clips>
             </x:document>
         </x:expect>

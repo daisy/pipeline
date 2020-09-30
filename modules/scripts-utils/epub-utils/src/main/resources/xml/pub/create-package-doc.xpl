@@ -180,9 +180,9 @@
             px:message
         </p:documentation>
     </p:import>
-    <p:import href="../nav/epub3-nav-to-guide.xpl">
+    <p:import href="../nav/landmarks-to-guide.xpl">
         <p:documentation>
-            px:epub3-nav-to-guide
+            px:epub-landmarks-to-guide
         </p:documentation>
     </p:import>
     <p:import href="../nav/epub3-nav-create-navigation-doc.xpl">
@@ -198,6 +198,16 @@
     <p:import href="merge-metadata.xpl">
         <p:documentation>
             pxi:merge-metadata
+        </p:documentation>
+    </p:import>
+    <p:import href="opf3-to-opf2-metadata.xpl">
+        <p:documentation>
+            pxi:opf3-to-opf2-metadata
+        </p:documentation>
+    </p:import>
+    <p:import href="detect-properties.xpl">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            pxi:epub3-detect-properties
         </p:documentation>
     </p:import>
 
@@ -315,14 +325,7 @@
         "content" attributes for every meta element.</p:documentation>
         <p:choose>
             <p:when test="$compatibility-mode='true'">
-                <p:xslt>
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                    <p:input port="stylesheet">
-                        <p:document href="create-package-doc.backwards-compatible-metadata.xsl"/>
-                    </p:input>
-                </p:xslt>
+                <pxi:opf3-to-opf2-metadata compatibility-mode="true"/>
             </p:when>
             <p:otherwise>
                 <p:identity/>
@@ -431,97 +434,6 @@
                 </p:otherwise>
             </p:choose>
         </p:group>
-        <p:sink/>
-
-        <p:documentation>Add properties of content documents</p:documentation>
-        <p:group name="manifest-with-content-doc-properties">
-            <p:output port="result" sequence="true"/>
-            <p:viewport match="/*/d:file">
-                <p:viewport-source>
-                    <p:pipe step="content-docs" port="result.fileset"/>
-                </p:viewport-source>
-                <p:variable name="href" select="/*/@href"/>
-                <p:identity name="file"/>
-                <p:sink/>
-                <px:fileset-filter>
-                    <p:input port="source">
-                        <p:pipe step="content-docs" port="result.fileset"/>
-                    </p:input>
-                    <p:with-option name="href" select="$href"/>
-                </px:fileset-filter>
-                <px:fileset-load name="doc">
-                    <p:input port="in-memory">
-                        <p:pipe step="content-docs" port="result"/>
-                    </p:input>
-                </px:fileset-load>
-                <p:sink/>
-                <p:identity>
-                    <p:input port="source">
-                        <p:pipe step="file" port="result"/>
-                    </p:input>
-                </p:identity>
-                <p:choose>
-                    <p:when test="$detect-properties='true'">
-                        <p:add-attribute attribute-name="mathml" match="/*">
-                            <p:with-option name="attribute-value" select="distinct-values(//namespace::*)='http://www.w3.org/1998/Math/MathML'">
-                                <p:pipe step="doc" port="result"/>
-                            </p:with-option>
-                        </p:add-attribute>
-                        <p:add-attribute attribute-name="svg" match="/*">
-                            <p:with-option name="attribute-value"
-                                           select="(//html:embed|//html:iframe)/@src/ends-with(.,'.svg') or
-                                                   (//html:embed|//html:object)/@type='image/svg+xml' or
-                                                   distinct-values(//namespace::*)='http://www.w3.org/2000/svg'">
-                                <p:pipe step="doc" port="result"/>
-                            </p:with-option>
-                        </p:add-attribute>
-                        <p:add-attribute attribute-name="scripted" match="/*">
-                            <p:with-option name="attribute-value"
-                                           select="count(//*/@href[starts-with(.,'javascript:')]) &gt; 0 or
-                                                   //html:script/@type=('',
-                                                   'text/javascript','text/ecmascript','text/javascript1.0','text/javascript1.1',
-                                                   'text/javascript1.2','text/javascript1.3','text/javascript1.4','text/javascript1.5',
-                                                   'text/jscript','text/livescript','text/x-javascript','text/x-ecmascript',
-                                                   'application/x-javascript','application/x-ecmascript','application/javascript',
-                                                   'application/ecmascript') or
-                                                   //*/@*/name()=('onabort','onafterprint','onbeforeprint','onbeforeunload','onblur','oncanplay',
-                                                   'oncanplaythrough','onchange','onclick','oncontextmenu','oncuechange','ondblclick','ondrag',
-                                                   'ondragend','ondragenter','ondragleave','ondragover','ondragstart','ondrop','ondurationchange',
-                                                   'onemptied','onended','onerror','onfocus','onhashchange','oninput','oninvalid','onkeydown',
-                                                   'onkeypress','onkeyup','onload','onloadeddata','onloadedmetadata','onloadstart','onmessage',
-                                                   'onmousedown','onmousemove','onmouseout','onmouseover','onmouseup','onmousewheel','onoffline',
-                                                   'ononline','onpagehide','onpageshow','onpause','onplay','onplaying','onpopstate','onprogress',
-                                                   'onratechange','onreset','onresize','onscroll','onseeked','onseeking','onselect','onshow',
-                                                   'onstalled','onstorage','onsubmit','onsuspend','ontimeupdate','onunload','onvolumechange',
-                                                   'onwaiting')
-                                                   ">
-                                <p:pipe step="doc" port="result"/>
-                            </p:with-option>
-                        </p:add-attribute>
-                        <p:add-attribute attribute-name="switch" match="/*">
-                            <p:with-option name="attribute-value" select="count(//epub:switch) &gt; 0">
-                                <p:pipe step="doc" port="result"/>
-                            </p:with-option>
-                        </p:add-attribute>
-                        <p:add-attribute attribute-name="remote-resources" match="/*">
-                            <p:with-option name="attribute-value" select="count(//*/@src[contains(tokenize(.,'/')[1],':')][1]) &gt; 0">
-                                <p:pipe step="doc" port="result"/>
-                            </p:with-option>
-                        </p:add-attribute>
-                    </p:when>
-                    <p:otherwise>
-                        <p:identity/>
-                    </p:otherwise>
-                </p:choose>
-            </p:viewport>
-            <p:identity name="content-docs-with-properties"/>
-            <px:fileset-join>
-                <p:input port="source">
-                    <p:pipe step="manifest-with-bindings" port="result"/>
-                    <p:pipe step="content-docs-with-properties" port="result"/>
-                </p:input>
-            </px:fileset-join>
-        </p:group>
 
         <p:documentation>Add id attributes</p:documentation>
         <p:label-elements name="manifest-with-ids"
@@ -627,14 +539,14 @@
                 </p:identity>
             </p:when>
             <p:otherwise>
-                <px:epub3-nav-to-guide px:message="Creating guide element for package document" px:message-severity="DEBUG">
+                <px:epub-landmarks-to-guide px:message="Creating guide element for package document" px:message-severity="DEBUG">
                     <p:input port="source">
                         <p:pipe step="guide.landmarks" port="result"/>
                     </p:input>
-                    <p:with-option name="opf-base" select="string(/*)">
+                    <p:with-option name="output-base-uri" select="string(/*)">
                         <p:pipe step="output-base-uri" port="normalized"/>
                     </p:with-option>
-                </px:epub3-nav-to-guide>
+                </px:epub-landmarks-to-guide>
                 <px:message severity="DEBUG" message="guide element created successfully"/>
             </p:otherwise>
         </p:choose>
@@ -751,6 +663,20 @@
             </p:input>
         </px:fileset-load>
     </p:group>
+
+    <p:documentation>Add properties of content documents</p:documentation>
+    <p:choose>
+        <p:when test="$detect-properties='true'">
+            <pxi:epub3-detect-properties>
+                <p:input port="content-docs">
+                    <p:pipe step="content-docs" port="result"/>
+                </p:input>
+            </pxi:epub3-detect-properties>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
 
     <p:documentation>Add mediaoverlays</p:documentation>
     <p:group name="result">

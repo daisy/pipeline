@@ -28,7 +28,7 @@
             in-memory documents are changed accordingly, and "original-href"-attributes are added
             for files that exist on disk.</p>
         </p:documentation>
-        <p:pipe step="apply" port="result.in-memory"/>
+        <p:pipe step="maybe-apply" port="in-memory"/>
     </p:output>
     <p:output port="mapping">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -53,6 +53,12 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Prefix to add before file names.</p>
             <p>Only if "flatten" option is set.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="dry-run" required="false" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Don't actually perform the copy operation, only return the list of intended rename
+            actions on the "mapping" port.</p>
         </p:documentation>
     </p:option>
 
@@ -124,16 +130,35 @@
     <p:delete match="d:file/@*[not(name()=('href','original-href'))]" name="mapping"/>
     <p:sink/>
 
-    <px:fileset-apply name="apply">
-        <p:input port="source.fileset">
-            <p:pipe step="main" port="source.fileset"/>
-        </p:input>
-        <p:input port="source.in-memory">
-            <p:pipe step="main" port="source.in-memory"/>
-        </p:input>
-        <p:input port="mapping">
-            <p:pipe step="mapping" port="result"/>
-        </p:input>
-    </px:fileset-apply>
+    <p:choose name="maybe-apply">
+        <p:when test="$dry-run='true'">
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="main" port="source.in-memory"/>
+            </p:output>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="main" port="source.fileset"/>
+                </p:input>
+            </p:identity>
+        </p:when>
+        <p:otherwise>
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="apply" port="result.in-memory"/>
+            </p:output>
+            <px:fileset-apply name="apply">
+                <p:input port="source.fileset">
+                    <p:pipe step="main" port="source.fileset"/>
+                </p:input>
+                <p:input port="source.in-memory">
+                    <p:pipe step="main" port="source.in-memory"/>
+                </p:input>
+                <p:input port="mapping">
+                    <p:pipe step="mapping" port="result"/>
+                </p:input>
+            </px:fileset-apply>
+        </p:otherwise>
+    </p:choose>
 
 </p:declare-step>

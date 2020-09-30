@@ -55,7 +55,8 @@
 	<p:output port="result.fileset" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The result fileset. If a .opf file was specified for the <code>href</code> option,
-			the fileset does not contain the "mimetype" and "META-INF/container.xml" files.</p>
+			the fileset does not contain the "mimetype" and "META-INF/container.xml" files. The
+			navigation document is marked with a <code>role="nav"</code> attribute.</p>
 		</p:documentation>
 		<p:pipe step="result" port="result.fileset"/>
 	</p:output>
@@ -72,7 +73,7 @@
 	</p:output>
 	<p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>The <a href="http://daisy.github.io/pipeline/ValidationStatusXML">validation
+			<p>The <a href="http://daisy.github.io/pipeline/StatusXML">validation
 			status</a> document</p>
 			<p>'ok' if the <code>validation</code> option not 'abort' or if the input is a valid
 			EPUB, 'error' otherwise.</p>

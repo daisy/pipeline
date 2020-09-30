@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:smil="http://www.w3.org/2001/SMIL20/"
+               script="../../main/resources/xml/epub3-to-daisy3.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:epub3-to-daisy3">
+			<x:option name="date" select="'2020-03-06'"/>
+			<x:option name="output-dir" select="resolve-uri('result/')"/>
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="mimetype" media-type="text/plain"/>
+						<d:file href="META-INF/container.xml" media-type="application/xml"/>
+						<d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+						<d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
+						<d:file href="EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="EPUB/front.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="EPUB/mo/nav.smil" media-type="application/smil+xml"/>
+						<d:file href="EPUB/mo/cover.smil" media-type="application/smil+xml"/>
+						<d:file href="EPUB/mo/front.smil" media-type="application/smil+xml"/>
+						<d:file href="EPUB/mo/chapter.smil" media-type="application/smil+xml"/>
+						<d:file href="EPUB/audio/mock.mp3" media-type="audio/mpeg"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="mimetype">
+					<c:data content-type="text/plain">application/epub+zip</c:data>
+				</x:document>
+				<x:document type="inline" xml:base="META-INF/container.xml">
+					<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+						<rootfiles>
+							<rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+						</rootfiles>
+					</container>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/package.opf">
+					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en"
+					         prefix="media: http://www.idpf.org/epub/vocab/overlays/#">
+						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:title id="title">minimal</dc:title>
+							<dc:identifier id="pub-id">id</dc:identifier>
+							<dc:language>en</dc:language>
+							<dc:date>2020-03-06</dc:date>
+							<dc:creator>bert</dc:creator>
+							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
+							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
+							<meta property="media:duration">00:00:20.791</meta>
+							<meta name="media:duration" content="00:00:20.791"/>
+							<meta property="media:duration" refines="#item_1">00:00:11.007</meta>
+							<meta property="media:duration" refines="#item_2">00:00:01.223</meta>
+							<meta property="media:duration" refines="#item_3">00:00:06.115</meta>
+							<meta property="media:duration" refines="#item_4">00:00:02.446</meta>
+						</metadata>
+						<manifest>
+							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml" media-overlay="item_1"/>
+							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" media-overlay="item_2"/>
+							<item id="front" href="front.xhtml" media-type="application/xhtml+xml" media-overlay="item_3"/>
+							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml" media-overlay="item_4"/>
+							<item id="item_1" href="mo/nav.smil" media-type="application/smil+xml"/>
+							<item id="item_2" href="mo/cover.smil" media-type="application/smil+xml"/>
+							<item id="item_3" href="mo/front.smil" media-type="application/smil+xml"/>
+							<item id="item_4" href="mo/chapter.smil" media-type="application/smil+xml"/>
+						</manifest>
+						<spine>
+							<itemref idref="cover"/>
+							<itemref idref="front"/>
+							<itemref idref="chapter"/>
+						</spine>
+					</package>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/nav.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+						</head>
+						<body>
+							<nav epub:type="toc">
+								<h1>
+									<span id="st1-1">
+										<span role="word">Table</span>
+										<span role="word">of</span>
+										<span role="word">contents</span>
+									</span>
+								</h1>
+								<ol>
+									<li>
+										<a href="cover.xhtml#cover">
+											<span id="st1-2">
+												<span role="word">Cover</span>
+											</span>
+										</a>
+									</li>
+									<li>
+										<a href="front.xhtml#contents">
+											<span id="st1-3">
+												<span role="word">List</span>
+												<span role="word">of</span>
+												<span role="word">contents</span>
+											</span>
+										</a>
+									</li>
+									<li>
+										<a href="front.xhtml#preface">
+											<span id="st1-4">
+												<span role="word">Preface</span>
+											</span>
+										</a>
+									</li>
+									<li>
+										<a href="chapter.xhtml#chap_1">
+											<span id="st1-5">
+												<span role="word">Chapter</span>
+												<span role="word">1</span>
+											</span>
+										</a>
+									</li>
+								</ol>
+							</nav>
+							<nav epub:type="page-list" hidden="">
+								<h1>
+									<span id="st1-6">
+										<span role="word">List</span>
+										<span role="word">of</span>
+										<span role="word">pages</span>
+									</span>
+								</h1>
+								<ol>
+									<li>
+										<a href="front.xhtml#page_front_4">
+											<span id="st1-7">
+												<span role="word">vi</span>
+											</span>
+										</a>
+									</li>
+									<li>
+										<a href="front.xhtml#page_front_5">
+											<span id="st1-8">
+												<span role="word">v</span>
+											</span>
+										</a>
+									</li>
+									<li>
+										<a href="chapter.xhtml#page_5">
+											<span id="st1-9">
+												<span role="word">5</span>
+											</span>
+										</a>
+									</li>
+								</ol>
+							</nav>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/cover.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="next" href="front.xhtml"/>
+						</head>
+						<body id="cover" epub:type="cover">
+							<p>
+								<span id="st2-1">...</span>
+							</p>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/front.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="prev" href="cover.xhtml"/>
+							<link rel="next" href="chapter.xhtml"/>
+						</head>
+						<body id="front" epub:type="frontmatter">
+							<h1 id="h_1">
+								<span id="st3-1">
+									<span role="word">Title</span>
+								</span>
+							</h1>
+							<p>
+								<span id="st3-2">...</span>
+							</p>
+							<section id="contents">
+								<h2 id="h_1_1">
+									<span id="st3-3">
+										<span role="word">List</span>
+										<span role="word">of</span>
+										<span role="word">contents</span>
+									</span>
+								</h2>
+								<table>...</table>
+								<a href="#page_5">5</a>
+								<div id="page_front_4" class="page-front" title="iv"/>
+							</section>
+							<section id="preface">
+								<h2 id="h_1_2">
+									<span id="st3-4">
+										<span role="word">Preface</span>
+									</span>
+								</h2>
+								<p>
+									<span id="st3-5">...</span>
+								</p>
+								<div id="page_front_5" class="page-front" title="v"/>
+							</section>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/chapter.xhtml">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="prev" href="front.xhtml"/>
+						</head>
+						<body id="chap_1" epub:type="bodymatter chapter">
+							<h1 id="h_1">
+								<div id="page_5" class="page-normal" title="5"/>
+								<span id="st4-1">
+									<span role="word">Chapter</span>
+									<span role="word">1</span>
+								</span>
+							</h1>
+							<p>
+								<span id="st4-2">...</span>
+							</p>
+						</body>
+					</html>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/mo/nav.smil">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body>
+							<par>
+								<text src="../nav.xhtml#st1-1"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-2"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-3"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-4"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-5"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-6"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-7"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-8"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+							</par>
+							<par>
+								<text src="../nav.xhtml#st1-9"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
+							</par>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/mo/cover.smil">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:textref="../cover.xhtml#cover" epub:type="cover">
+							<par>
+								<text src="../cover.xhtml#st2-1"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/mo/front.smil">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:textref="../front.xhtml#front" epub:type="frontmatter">
+							<seq epub:textref="../front.xhtml#h_1">
+								<par>
+									<text src="../front.xhtml#st3-1"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+							</seq>
+							<par>
+								<text src="../front.xhtml#st3-2"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+							</par>
+							<seq epub:textref="../front.xhtml#contents">
+								<seq epub:textref="../front.xhtml#h_1_1">
+									<par>
+										<text src="../front.xhtml#st3-3"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+									</par>
+								</seq>
+							</seq>
+							<seq epub:textref="../front.xhtml#preface">
+								<seq epub:textref="../front.xhtml#h_1_2">
+									<par>
+										<text src="../front.xhtml#st3-4"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+									</par>
+								</seq>
+								<par>
+									<text src="../front.xhtml#st3-5"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+								</par>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/mo/chapter.smil">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:textref="../chapter.xhtml#chap_1" epub:type="bodymatter chapter">
+							<seq epub:textref="../chapter.xhtml#h_1">
+								<par>
+									<text src="../chapter.xhtml#st4-1"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+							</seq>
+							<par>
+								<text src="../chapter.xhtml#st4-2"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/audio/mock.mp3">
+					<c:data content-type="binary/octet-stream" encoding="base64">...</c:data>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="The DAISY 3 fileset">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="The DAISY 3 fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/book.opf" media-type="text/xml"
+					        indent="true"
+					        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"
+					        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"/>
+					<d:file href="result/content.xml" media-type="application/x-dtbook+xml"
+					        doctype-public="-//NISO//DTD dtbook 2005-3//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
+					<d:file href="result/mo0.smil" media-type="application/smil"
+					        indent="true"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+					<d:file href="result/mo1.smil" media-type="application/smil"
+					        indent="true"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+					<d:file href="result/mo3.smil" media-type="application/smil"
+					        indent="true"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+					<d:file href="result/mo4.smil" media-type="application/smil"
+					        indent="true"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+					<d:file href="result/navigation.ncx" media-type="application/x-dtbncx+xml"
+					        indent="true"
+					        doctype-public="-//NISO//DTD ncx 2005-1//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"/>
+					<d:file href="result/resources.res" media-type="application/x-dtbresource+xml"
+					        indent="true"
+					        doctype-public="-//NISO//DTD resource 2005-1//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd"/>
+					<d:file href="result/EPUB/audio/mock.mp3" media-type="audio/mpeg"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="book.opf">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/book.opf')]"/>
+		</x:context>
+		<x:expect label="book.opf" type="compare">
+			<x:document type="inline">
+				<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+					<metadata>
+						<dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+							<dc:Language>en</dc:Language>
+							<dc:Date>2020-03-06</dc:Date>
+							<dc:Publisher>unknown</dc:Publisher>
+							<dc:Title>minimal</dc:Title>
+							<dc:Identifier id="uid">id</dc:Identifier>
+							<dc:Creator>bert</dc:Creator>
+						</dc-metadata>
+						<x-metadata>
+							<meta name="dtb:multimediaType" content="audioFullText"/>
+							<meta name="dtb:totalTime" content="0:00:09.784"/>
+							<meta name="dtb:multimediaContent" content="audio,text"/>
+						</x-metadata>
+					</metadata>
+					<manifest>
+						<item id="opf" href="book.opf" media-type="text/xml"/>
+						<item id="opf-1" href="content.xml" media-type="application/x-dtbook+xml"/>
+						<item id="mo0" href="mo0.smil" media-type="application/smil"/>
+						<item id="mo1" href="mo1.smil" media-type="application/smil"/>
+						<item id="mo3" href="mo3.smil" media-type="application/smil"/>
+						<item id="mo4" href="mo4.smil" media-type="application/smil"/>
+						<item id="ncx" href="navigation.ncx" media-type="application/x-dtbncx+xml"/>
+						<item id="resource" href="resources.res" media-type="application/x-dtbresource+xml"/>
+						<item id="opf-8" href="EPUB/audio/mock.mp3" media-type="audio/mpeg"/>
+					</manifest>
+					<spine>
+						<itemref idref="mo0"/>
+						<itemref idref="mo1"/>
+						<itemref idref="mo3"/>
+						<itemref idref="mo4"/>
+					</spine>
+				</package>
+			</x:document>
+		</x:expect>
+		<x:context label="content.xml">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/content.xml')]/dtb:book"/>
+		</x:context>
+		<x:expect label="content.xml" type="compare">
+			<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+				<book>
+					<frontmatter>
+						<doctitle smilref="mo0.smil#sforsmil-1" id="forsmil-1">Untitled document</doctitle>
+						<level1 id="cover" class="jacketcopy">
+							<h1 smilref="mo0.smil#sheading_1" id="heading_1">Cover</h1>
+							<p smilref="mo0.smil#sforsmil-2" id="forsmil-2">
+								<span smilref="mo0.smil#sst2-1" id="st2-1">...</span>
+							</p>
+						</level1>
+						<level1 id="front">
+							<h1 smilref="mo1.smil#sh_1" id="h_1">Title</h1>
+							<p smilref="mo1.smil#sforsmil-3" id="forsmil-3">
+								<span smilref="mo1.smil#sst3-2" id="st3-2">...</span>
+							</p>
+							<level2 id="contents">
+								<h2 smilref="mo1.smil#sh_1_1" id="h_1_1">List of contents</h2>
+								<table smilref="mo1.smil#sforsmil-4" id="forsmil-4"/>
+								<a smilref="mo1.smil#sforsmil-5" id="forsmil-5" href="#id_1">5</a>
+								<pagenum smilref="mo1.smil#spage_front_4" id="page_front_4" page="front">iv</pagenum>
+							</level2>
+							<level2 id="preface">
+								<h2 smilref="mo3.smil#sh_1_2" id="h_1_2">Preface</h2>
+								<p smilref="mo3.smil#sforsmil-6" id="forsmil-6">
+									<span smilref="mo3.smil#sst3-5" id="st3-5">...</span>
+								</p>
+								<pagenum smilref="mo3.smil#spage_front_5" id="page_front_5" page="front">v</pagenum>
+							</level2>
+						</level1>
+					</frontmatter>
+					<bodymatter>
+						<level1 id="chap_1" class="chapter">
+							<h1 smilref="mo4.smil#sid_1" id="id_1">5 Chapter 1</h1>
+							<p smilref="mo4.smil#sforsmil-7" id="forsmil-7">
+								<span smilref="mo4.smil#sst4-2" id="st4-2">...</span>
+							</p>
+						</level1>
+					</bodymatter>
+				</book>
+			</x:document>
+		</x:expect>
+		<x:context label="mo0.smil">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/mo0.smil')]/smil:body"/>
+		</x:context>
+		<x:expect label="mo0.smil" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+				<body>
+					<seq id="root-seq">
+						<par id="sforsmil-1" class="doctitle">
+							<text src="content.xml#forsmil-1"/>
+						</par>
+						<par id="sheading_1" class="h1">
+							<text src="content.xml#heading_1"/>
+						</par>
+						<seq id="sforsmil-2" class="p">
+							<par id="sst2-1" class="span">
+								<text src="content.xml#st2-1"/>
+								<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+							</par>
+						</seq>
+					</seq>
+				</body>
+			</x:document>
+		</x:expect>
+		<x:context label="mo1.smil">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/mo1.smil')]/smil:body"/>
+		</x:context>
+		<x:expect label="mo1.smil" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+				<body>
+					<seq id="root-seq">
+						<par id="sh_1" class="h1">
+							<text src="content.xml#h_1"/>
+							<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+						</par>
+						<seq id="sforsmil-3" class="p">
+							<par id="sst3-2" class="span">
+								<text src="content.xml#st3-2"/>
+								<audio clipBegin="0:00:01.223" clipEnd="0:00:02.446" src="EPUB/audio/mock.mp3"/>
+							</par>
+						</seq>
+						<par id="sh_1_1" class="h2">
+							<text src="content.xml#h_1_1"/>
+							<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+						</par>
+						<par id="sforsmil-4" class="table">
+							<text src="content.xml#forsmil-4"/>
+						</par>
+						<par id="sforsmil-5" class="a">
+							<text src="content.xml#forsmil-5"/>
+						</par>
+						<par id="spage_front_4" class="pagenum" customTest="pagenum">
+							<text src="content.xml#page_front_4"/>
+						</par>
+					</seq>
+				</body>
+			</x:document>
+		</x:expect>
+		<x:context label="mo3.smil">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/mo3.smil')]/smil:body"/>
+		</x:context>
+		<x:expect label="mo3.smil" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+				<body>
+					<seq id="root-seq">
+						<par id="sh_1_2" class="h2">
+							<text src="content.xml#h_1_2"/>
+							<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+						</par>
+						<seq id="sforsmil-6" class="p">
+							<par id="sst3-5" class="span">
+								<text src="content.xml#st3-5"/>
+								<audio clipBegin="0:00:01.223" clipEnd="0:00:02.446" src="EPUB/audio/mock.mp3"/>
+							</par>
+						</seq>
+						<par id="spage_front_5" class="pagenum" customTest="pagenum">
+							<text src="content.xml#page_front_5"/>
+						</par>
+					</seq>
+				</body>
+			</x:document>
+		</x:expect>
+		<x:context label="mo4.smil">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/mo4.smil')]"/>
+		</x:context>
+		<x:expect label="mo4.smil" type="compare">
+			<x:document type="inline">
+				<smil xmlns="http://www.w3.org/2001/SMIL20/">
+					<head>
+						<meta name="dtb:uid" content="id"/>
+						<meta name="dtb:totalElapsedTime" content="0:00:07.338"/>
+						<meta name="dtb:generator" content="DAISY Pipeline 2"/>
+						<customAttributes>
+							<customTest defaultState="false" id="pagenum" override="visible"/>
+							<customTest defaultState="false" id="note" override="visible"/>
+							<customTest defaultState="false" id="noteref" override="visible"/>
+							<customTest defaultState="false" id="annotation" override="visible"/>
+							<customTest defaultState="false" id="linenum" override="visible"/>
+							<customTest defaultState="false" id="sidebar" override="visible"/>
+							<customTest defaultState="false" id="prodnote" override="visible"/>
+						</customAttributes>
+					</head>
+					<body>
+						<seq id="root-seq">
+							<par id="sid_1" class="h1">
+								<text src="content.xml#id_1"/>
+								<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+							</par>
+							<seq id="sforsmil-7" class="p">
+								<par id="sst4-2" class="span">
+									<text src="content.xml#st4-2"/>
+									<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+								</par>
+							</seq>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+		<x:context label="navigation.ncx">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/navigation.ncx')]"/>
+		</x:context>
+		<x:expect label="navigation.ncx" type="compare">
+			<x:document type="inline">
+				<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+					<head>
+						<meta content="DAISY Pipeline 2" name="dtb:generator"/>
+						<meta name="dtb:uid" content="id"/>
+						<meta name="dtb:depth" content="02"/>
+						<meta name="dtb:totalPageCount" content="2"/>
+						<meta name="dtb:maxPageNumber" content="2"/>
+						<smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible"/>
+						<smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+						<smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible"/>
+						<smilCustomTest bookStruct="ANNOTATION" defaultState="false" id="annotation" override="visible"/>
+						<smilCustomTest bookStruct="LINE_NUMBER" defaultState="false" id="linenum" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_SIDEBAR" defaultState="false" id="sidebar" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE" defaultState="false" id="prodnote" override="visible"/>
+					</head>
+					<docTitle>
+						<text>Untitled document</text>
+					</docTitle>
+					<navMap>
+						<navPoint playOrder="1" id="ncx-1">
+							<navLabel>
+								<text>Cover</text>
+							</navLabel>
+							<content src="mo0.smil#sheading_1"/>
+						</navPoint>
+						<navPoint playOrder="2" id="ncx-2">
+							<navLabel>
+								<text>Title</text>
+								<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+							</navLabel>
+							<content src="mo1.smil#sh_1"/>
+							<navPoint playOrder="3" id="ncx-3">
+								<navLabel>
+									<text>List of contents</text>
+									<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+								</navLabel>
+								<content src="mo1.smil#sh_1_1"/>
+							</navPoint>
+							<navPoint playOrder="5" id="ncx-5">
+								<navLabel>
+									<text>Preface</text>
+									<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+								</navLabel>
+								<content src="mo3.smil#sh_1_2"/>
+							</navPoint>
+						</navPoint>
+						<navPoint playOrder="7" id="ncx-7">
+							<navLabel>
+								<text>5 Chapter 1</text>
+								<audio clipBegin="0:00:00.000" clipEnd="0:00:01.223" src="EPUB/audio/mock.mp3"/>
+							</navLabel>
+							<content src="mo4.smil#sid_1"/>
+						</navPoint>
+					</navMap>
+					<pageList>
+						<pageTarget type="front" value="1" playOrder="4" id="ncx-4">
+							<navLabel>
+								<text>iv</text>
+							</navLabel>
+							<content src="mo1.smil#spage_front_4"/>
+						</pageTarget>
+						<pageTarget type="front" value="2" playOrder="6" id="ncx-6">
+							<navLabel>
+								<text>v</text>
+							</navLabel>
+							<content src="mo3.smil#spage_front_5"/>
+						</pageTarget>
+					</pageList>
+				</ncx>
+			</x:document>
+		</x:expect>
+		<x:context label="resources.res">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/resources.res')]"/>
+		</x:context>
+		<x:expect label="resources.res" type="compare">
+			<x:document type="inline">
+				<resources xmlns="http://www.daisy.org/z3986/2005/resource/" version="2005-1">
+					<scope nsuri="http://www.daisy.org/z3986/2005/ncx/">
+						<nodeSet id="page-set" select="//smilCustomTest[@bookStruct='PAGE_NUMBER']">
+							<resource xml:lang="en">
+								<text>page</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="note-set" select="//smilCustomTest[@bookStruct='NOTE']">
+							<resource xml:lang="en">
+								<text>note</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="notref-set" select="//smilCustomTest[@bookStruct='NOTE_REFERENCE']">
+							<resource xml:lang="en">
+								<text>note</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="annot-set" select="//smilCustomTest[@bookStruct='ANNOTATION']">
+							<resource xml:lang="en">
+								<text>annotation</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="line-set" select="//smilCustomTest[@bookStruct='LINE_NUMBER']">
+							<resource xml:lang="en">
+								<text>line</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="sidebar-set" select="//smilCustomTest[@bookStruct='OPTIONAL_SIDEBAR']">
+							<resource xml:lang="en">
+								<text>sidebar</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="prodnote-set" select="//smilCustomTest[@bookStruct='OPTIONAL_PRODUCER_NOTE']">
+							<resource xml:lang="en">
+								<text>note</text>
+							</resource>
+						</nodeSet>
+					</scope>
+					<scope nsuri="http://www.w3.org/2001/SMIL20/">
+						<nodeSet id="math-seq-set" select="//seq[@class='math']">
+							<resource xml:lang="en">
+								<text>mathematical formula</text>
+							</resource>
+						</nodeSet>
+						<nodeSet id="math-par-set" select="//par[@class='math']">
+							<resource xml:lang="en">
+								<text>mathematical formula</text>
+							</resource>
+						</nodeSet>
+					</scope>
+				</resources>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

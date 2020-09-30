@@ -6,11 +6,11 @@ package org.daisy.pipeline.braille.common;
 public interface Hyphenator extends Transform {
 	
 	/**
-	 * Hyphenate by inserting soft hyphens and zero width spaces in order to
-	 * indicate all the break opportunities within words. Apart from the
-	 * insertion of these characters no other transformations are
-	 * allowed. This means that non-standard hyphenation can not be supported
-	 * through this interface.
+	 * Hyphenate by inserting soft hyphens and zero width spaces in order to indicate all
+	 * the break opportunities within words. Don't add new break opportunities to words
+	 * that already have a soft hyphen or zero width space it them. Apart from the
+	 * insertion of these special characters no other transformations are allowed. This
+	 * means that non-standard hyphenation can not be supported through this interface.
 	 */
 	public FullHyphenator asFullHyphenator() throws UnsupportedOperationException;
 	

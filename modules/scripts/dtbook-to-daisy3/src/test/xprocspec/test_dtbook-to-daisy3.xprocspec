@@ -267,17 +267,19 @@
 						</customAttributes>
 					</head>
 					<body>
-						<par id="sdoctitle" class="doctitle">
-							<text src="dtbook.xml#doctitle"/>
-						</par>
-						<par id="sch1" class="h1">
-							<text src="dtbook.xml#ch1"/>
-						</par>
-						<seq id="sp1" class="p">
-							<seq id="sm1" class="math" end="DTBuserEscape;sm1-par.end">
-								<par id="sm1-par" class="math">
-									<text src="dtbook.xml#m1" type="http://www.w3.org/1998/Math/MathML"/>
-								</par>
+						<seq id="root-seq">
+							<par id="sdoctitle" class="doctitle">
+								<text src="dtbook.xml#doctitle"/>
+							</par>
+							<par id="sch1" class="h1">
+								<text src="dtbook.xml#ch1"/>
+							</par>
+							<seq id="sp1" class="p">
+								<seq id="sm1" class="math" end="DTBuserEscape;sm1-par.end">
+									<par id="sm1-par" class="math">
+										<text src="dtbook.xml#m1" type="http://www.w3.org/1998/Math/MathML"/>
+									</par>
+								</seq>
 							</seq>
 						</seq>
 					</body>

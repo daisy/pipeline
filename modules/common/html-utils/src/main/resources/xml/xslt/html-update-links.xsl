@@ -42,6 +42,7 @@
                                 pf:html-base-uri(/))[1]"/>
 
     <xsl:template match="@aria-describedat  |
+                         @aria-describedby  |
                          @longdesc          |
                          link/@href         |
                          a/@href            |

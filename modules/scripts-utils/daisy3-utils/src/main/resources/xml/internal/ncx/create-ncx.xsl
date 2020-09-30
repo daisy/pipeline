@@ -6,21 +6,24 @@
                 xmlns="http://www.daisy.org/z3986/2005/ncx/"
                 exclude-result-prefixes="#all">
 
-  <!-- inputs: -->
-  <!-- main: dtbook content document -->
-  <!-- collection(): audio map -->
+  <!-- inputs:
+       1: dtbook content document
+       2: audio map
+       3: (optional) page list -->
 
   <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
-  <xsl:output indent="yes"/>
 
   <xsl:param name="ncx-dir"/>
   <xsl:param name="uid"/>
   <xsl:param name="fail-if-missing-smilref"/>
 
+  <xsl:key name="id" match="*[@id]" use="@id"/>
+
   <xsl:variable name="titles" select="' levelhd hd h1 h2 h3 h4 h5 h6 '"/>
   <xsl:variable name="navPoints" select="' level level1 level2 level3 level4 level5 level6 '"/>
   <xsl:variable name="pageTargets" select="' pagenum '"/>
-  <xsl:variable name="content-doc-uri" select="base-uri(/*)"/>
+  <xsl:variable name="content-doc" select="/*"/>
+  <xsl:variable name="content-doc-uri" select="pf:normalize-uri(base-uri($content-doc))"/>
 
   <!-- d:audio-clips document with @src attributes relativized against $ncx-dir -->
   <xsl:variable name="audio-map">
@@ -52,7 +55,19 @@
   <xsl:variable name="all-but-headings"
 		select="concat(' ', string-join($navTargets//@type, ' '), ' ', $pageTargets)"/>
 
-  <xsl:variable name="pages" select="//dtbook:pagenum"/>
+  <xsl:variable name="pages" as="element()*">
+    <xsl:variable name="page-list" as="document-node(element(d:fileset))?" select="collection()[3]"/>
+    <xsl:choose>
+      <xsl:when test="exists($page-list)">
+	<xsl:for-each select="$page-list//d:file[pf:normalize-uri(resolve-uri(@href,base-uri(.)))=$content-doc-uri]/d:anchor">
+	  <xsl:sequence select="key('id',@id,$content-doc)"/>
+	</xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:sequence select="//dtbook:pagenum"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
   <xsl:key name="clips" use="@idref" match="*[@idref]"/>
   <xsl:key name="headings" use="generate-id()"

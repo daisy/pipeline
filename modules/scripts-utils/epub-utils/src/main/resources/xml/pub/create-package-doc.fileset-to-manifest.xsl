@@ -42,16 +42,8 @@
                                        select="f:relative-to(tokenize(concat($output-base-uri-head,'/',$output-base-uri-tail),'/+'),
                                                              tokenize(concat($item-uri-head,'/',$item-uri-tail),'/+'),'')"/>
                     </xsl:if>
-                    <xsl:variable name="properties" as="xs:string*"
-                                  select="(if (@role='cover-image')      then 'cover-image'      else (),
-                                           if (@mathml='true')           then 'mathml'           else (),
-                                           if (@remote-resources='true') then 'remote-resources' else (),
-                                           if (@scripted='true')         then 'scripted'         else (),
-                                           if (@svg='true')              then 'svg'              else (),
-                                           if (@switch='true')           then 'switch'           else ()
-                                           )"/>
-                    <xsl:if test="exists($properties)">
-                        <xsl:attribute name="properties" select="string-join($properties,' ')"/>
+                    <xsl:if test="@role='cover-image'">
+                        <xsl:attribute name="properties" select="'cover-image'"/>
                     </xsl:if>
                 </item>
             </xsl:for-each>

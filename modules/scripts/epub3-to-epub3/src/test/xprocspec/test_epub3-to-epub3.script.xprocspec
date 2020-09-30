@@ -14,6 +14,7 @@
 			<x:option name="source" select="resolve-uri('../resources/valentin.epub',base-uri(.))"/>
 			<x:option name="braille-translator" select="'(translator:liblouis)(contraction:full)'"/>
 			<x:option name="output-dir" select="concat($temp-dir,'valentin/')"/>
+			<x:option name="temp-dir" select="concat($temp-dir,'tmp/valentin/')"/>
 		</x:call>
 		<x:context label="The output directory">
 			<x:document type="directory" base-uri="temp-dir" href="valentin/" recursive="true"/>

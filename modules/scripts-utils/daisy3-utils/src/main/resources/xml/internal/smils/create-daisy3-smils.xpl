@@ -56,15 +56,6 @@
       <p:pipe step="smil-with-durations" port="result"/>
     </p:output>
 
-    <p:output port="duration">
-      <p:pipe port="result" step="total-duration"/>
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p>Total duration</p>
-        <p>A <code>d:durations</code> document with a <code>d:total</code> child element with a
-        <code>duration</code> attribute.</p>
-      </p:documentation>
-    </p:output>
-
     <p:option name="smil-dir">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
 	<p>Directory URI which the URI of the output SMIL files will be based on.</p>
@@ -196,13 +187,12 @@
 	<p:pipe port="result" step="all-smils"/>
       </p:input>
       <p:input port="stylesheet">
-	<p:document href="compute-durations.xsl"/>
+	<p:document href="compute-elapsed-time.xsl"/>
       </p:input>
       <p:input port="parameters">
 	<p:empty/>
       </p:input>
     </p:xslt>
-    <p:delete match="d:duration" name="total-duration"/>
     <px:message severity="DEBUG" message="Durations computed."/><p:sink/>
 
     <p:for-each name="smil-with-durations">

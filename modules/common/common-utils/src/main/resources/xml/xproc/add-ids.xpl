@@ -15,10 +15,11 @@
 			<p>The input documents</p>
 		</p:documentation>
 	</p:input>
-	<p:option name="match" required="true">
+	<p:option name="match" required="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Elements that need an <code>id</code> attribute.</p>
 			<p>Should be a XSLTMatchPattern that matches only elements.</p>
+			<p>If omitted, no IDs are added, only duplicates fixed.</p>
 		</p:documentation>
 	</p:option>
 	<p:output port="result" sequence="true" primary="true">
@@ -42,9 +43,16 @@
 		<p:add-xml-base/>
 	</p:for-each>
 	<p:wrap-sequence wrapper="pxi:wrapper"/>
-	<p:add-attribute attribute-name="pxi:need-id" attribute-value="">
-		<p:with-option name="match" select="$match"/>
-	</p:add-attribute>
+	<p:choose>
+		<p:when test="p:value-available('match')">
+			<p:add-attribute attribute-name="pxi:need-id" attribute-value="">
+				<p:with-option name="match" select="$match"/>
+			</p:add-attribute>
+		</p:when>
+		<p:otherwise>
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
 	<p:xslt name="xslt">
 		<p:input port="stylesheet">
 			<p:document href="add-ids.xsl"/>

@@ -12,6 +12,7 @@ public interface CssCascader {
 	public SingleInSingleOutXMLTransformer newInstance(String medium,
 	                                                   String defaultStylesheet,
 	                                                   URIResolver uriResolver,
+	                                                   SassCompiler sassCompiler,
 	                                                   QName attributeName);
 
 }

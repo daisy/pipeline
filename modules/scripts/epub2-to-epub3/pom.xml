@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.13.7-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
+  </parent>
+
+  <groupId>org.daisy.pipeline.modules</groupId>
+  <artifactId>epub2-to-epub3</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: EPUB 2 to EPUB 3 Upgrader</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_epub2_to_epub3,
+      org.daisy.pipeline.script.impl.XProcScript_epub2_to_epub3,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub2_to_epub3_script_validation
+    </expose-services>
+  </properties>
+
+</project>

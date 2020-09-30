@@ -44,14 +44,8 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="chunk-size" required="false" px:type="integer" select="'-1'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Chunk size</h2>
-            <p px:role="desc" xml:space="preserve">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-Top-level sections in the DTBook become separate HTML files, and are further split up if they exceed
-the given maximum size.</p>
-        </p:documentation>
+    <p:option xmlns:_="dtbook" name="_:chunk-size" select="'-1'">
+        <!-- defined in common-options.xpl -->
     </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
@@ -91,7 +85,7 @@ the given maximum size.</p>
             </p:input>
             <p:with-option name="language" select="$language"/>
             <p:with-option name="assert-valid" select="$assert-valid"/>
-            <p:with-option name="chunk-size" select="$chunk-size"/>
+            <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>
             <p:with-option name="output-dir" select="$output-dir-uri"/>
             <p:with-option name="filename" select="$encoded-title"/>
         </px:dtbook-to-html>

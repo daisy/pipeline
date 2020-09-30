@@ -25,8 +25,8 @@
 	<p:input port="content" sequence="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Fileset from which to generate the navigation document.</p>
-			<p>Defaults to all the "application/xhtml+xml" documents found in the "source"
-			fileset.</p>
+			<p>Defaults to all the "application/xhtml+xml" documents found in spine, or in the
+			"source" fileset if the input does not contain a package document.</p>
 		</p:documentation>
 		<p:empty/>
 	</p:input>
@@ -139,6 +139,11 @@
 	<p:import href="epub3-nav-aggregate.xpl">
 		<p:documentation>
 			pxi:epub3-nav-aggregate
+		</p:documentation>
+	</p:import>
+	<p:import href="../pub/opf-spine-to-fileset.xpl">
+		<p:documentation>
+			px:opf-spine-to-fileset
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
@@ -312,14 +317,49 @@
 				<p:otherwise>
 					<p:output port="in-memory" primary="true" sequence="true"/>
 					<p:output port="fileset">
-						<p:pipe step="all-content-docs" port="result.fileset"/>
+						<p:pipe step="spine-or-all-content-docs" port="fileset"/>
 					</p:output>
 					<p:sink/>
-					<p:identity>
+					<px:fileset-filter media-types="application/oebps-package+xml">
 						<p:input port="source">
-							<p:pipe step="all-content-docs" port="result"/>
+							<p:pipe step="main" port="source.fileset"/>
 						</p:input>
-					</p:identity>
+					</px:fileset-filter>
+					<p:choose name="spine-or-all-content-docs">
+						<p:documentation>If there is a package document, select the spine only</p:documentation>
+						<p:when test="//d:file">
+							<p:output port="in-memory" primary="true" sequence="true"/>
+							<p:output port="fileset">
+								<p:pipe step="spine" port="result"/>
+							</p:output>
+							<p:sink/>
+							<px:opf-spine-to-fileset name="spine">
+								<p:input port="source.fileset">
+									<p:pipe step="main" port="source.fileset"/>
+								</p:input>
+								<p:input port="source.in-memory">
+									<p:pipe step="main" port="source.in-memory"/>
+								</p:input>
+							</px:opf-spine-to-fileset>
+							<px:fileset-load>
+								<p:input port="in-memory">
+									<p:pipe step="all-content-docs" port="result"/>
+								</p:input>
+							</px:fileset-load>
+						</p:when>
+						<p:otherwise>
+							<p:output port="in-memory" primary="true" sequence="true"/>
+							<p:output port="fileset">
+								<p:pipe step="all-content-docs" port="result.fileset"/>
+							</p:output>
+							<p:sink/>
+							<p:identity>
+								<p:input port="source">
+									<p:pipe step="all-content-docs" port="result"/>
+								</p:input>
+							</p:identity>
+						</p:otherwise>
+					</p:choose>
 				</p:otherwise>
 			</p:choose>
 
@@ -367,7 +407,7 @@
 	
 			<p:documentation>Create page list</p:documentation>
 			<p:group name="page-list">
-				<p:output port="result" primary="true"/>
+				<p:output port="result" primary="true" sequence="true"/>
 				<p:output port="content-docs" sequence="true">
 					<p:pipe step="skip-if-provided" port="content-docs"/>
 				</p:output>
@@ -407,6 +447,9 @@
 						</px:epub3-create-page-list>
 					</p:otherwise>
 				</p:choose>
+				<p:split-sequence test="/html:nav[html:ol/html:li]">
+					<p:documentation>Omit page list if empty</p:documentation>
+				</p:split-sequence>
 			</p:group>
 			<p:sink/>
 

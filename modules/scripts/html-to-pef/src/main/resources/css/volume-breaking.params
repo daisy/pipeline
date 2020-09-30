@@ -24,13 +24,23 @@ See the CSS specification for more info:
         </p:documentation>
     </p:option>
 
-    <p:option name="avoid-volume-break-inside-leaf-section" required="false" px:type="boolean" select="'false'">
+    <p:option name="allow-volume-break-inside-leaf-section-factor" required="false" px:type="integer" select="'10'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Volumes: Prefer breaks at section boundaries.</h2>
-            <p px:role="desc" xml:space="preserve">Whether to prefer breaking volumes at section boundaries.
+            <h2 px:role="name">Volumes: Allow breaks within sections.</h2>
+            <p px:role="desc" xml:space="preserve">Amount with which volume breaks are allowed within sections.
 
-Volume breaks are preferably made right before or after `section` elements. Enabling this setting results in volumes being less equal in size.
-            </p>
+The value can range from 1 to 10. The lower the value, the more preference is given to volume breaks
+right before or `section` elements. The higher the value, the more equal the volumes will be in size.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="prefer-volume-break-before-higher-level-factor" required="false" select="'0'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Volumes: Prefer breaks at higher level sections.</h2>
+            <p px:role="desc" xml:space="preserve">Amount with which preference is given to volume breaks before higher level sections.
+
+The value must be greater or equal to 0. It can be a non-integer. A value of 0 means no preference
+is given. A higher value results in volumes that are less equal in size.</p>
         </p:documentation>
     </p:option>
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-epub3/epub3-to-epub3.xpl" uri="../xml/epub3-to-epub3.xpl" px:content-type="script" px:id="epub3-to-epub3"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-epub3/library.xpl" uri="../xml/library.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/epub3-to-epub3/epub3-to-epub3.xpl" uri="../xml/epub3-to-epub3.xpl"
+	   px:content-type="script" px:id="epub3-to-epub3" px:extends="../../../../../common-options.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/epub3-to-epub3/library.xpl" uri="../xml/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
@@ -9,4 +10,5 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-tts"/>
 </catalog>

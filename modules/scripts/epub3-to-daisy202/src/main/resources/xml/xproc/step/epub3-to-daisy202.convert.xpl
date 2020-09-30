@@ -4,6 +4,7 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:opf="http://www.idpf.org/2007/opf"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 type="px:epub3-to-daisy202" name="main">
@@ -24,6 +25,12 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:assert
+            px:error
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -31,22 +38,30 @@
             px:fileset-filter
             px:fileset-load
             px:fileset-rebase
+            px:fileset-copy
+            px:fileset-update
+            px:fileset-join
+            px:fileset-add-entry
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation>
             px:opf-spine-to-fileset
+            px:epub3-label-pagebreaks-from-nav
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
             px:html-upgrade
             px:html-downgrade
+            px:html-outline
+            px:html-merge
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl">
         <p:documentation>
             px:daisy202-rename-files
+            px:daisy202-update-links
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">
@@ -78,116 +93,346 @@
     <p:documentation>
         Convert from EPUB 3 SMIL to DAISY 2.02 SMIL.
     </p:documentation>
-    <px:fileset-load media-types="application/smil+xml" name="epub3.smil.in-memory">
-        <p:documentation>
-            Load SMIL files.
-        </p:documentation>
-        <p:input port="fileset">
-            <p:pipe step="main" port="source.fileset"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe step="main" port="source.in-memory"/>
-        </p:input>
-    </px:fileset-load>
-    <p:for-each px:message="Converting SMIL-file from 3.0 (EPUB3 MO profile) to 1.0 (DAISY 2.02 profile)">
-        <p:variable name="smil-original-base" select="base-uri(/*)"/>
-        <px:smil-downgrade version="1.0" px:message="- {$smil-original-base}" px:message-severity="DEBUG"/>
-    </p:for-each>
-    <p:identity name="daisy202.smil.in-memory"/>
-    <p:sink/>
-
-    <p:documentation>
-        Convert from EPUB 3 HTML to DAISY 2.02 HTML.
-    </p:documentation>
-    <px:opf-spine-to-fileset>
-        <p:documentation>
-            Get spine.
-        </p:documentation>
-        <p:input port="source.fileset">
-            <p:pipe step="main" port="source.fileset"/>
-        </p:input>
-        <p:input port="source.in-memory">
-            <p:pipe step="opf" port="result"/>
-        </p:input>
-    </px:opf-spine-to-fileset>
-    <px:fileset-load>
-        <p:documentation>
-            Load content documents.
-        </p:documentation>
-        <p:input port="in-memory">
-            <p:pipe step="main" port="source.in-memory"/>
-        </p:input>
-    </px:fileset-load>
-    <p:for-each px:message="Converting HTML5 to HTML4">
-        <p:variable name="base-uri" select="base-uri()"/>
-        <p:identity px:message="- {$base-uri}" px:message-severity="DEBUG"/>
-        <px:html-upgrade>
-            <p:documentation>Normalize HTML5.</p:documentation>
-            <!-- hopefully this preserves all IDs -->
-        </px:html-upgrade>
-        <px:html-downgrade>
-            <p:documentation>Downgrade to HTML4. This preserves all ID.</p:documentation>
-        </px:html-downgrade>
-    </p:for-each>
-    <p:identity name="daisy202.xhtml.in-memory"/>
-    <p:sink/>
-
-    <p:documentation>
-        Create DAISY 2.02 fileset manifest.
-    </p:documentation>
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="main" port="source.fileset"/>
-        </p:input>
-    </p:identity>
-    <px:fileset-rebase>
-        <p:with-option name="new-base" select="replace(base-uri(/*),'[^/]+$','')">
-            <p:pipe step="opf" port="result"/>
-        </p:with-option>
-    </px:fileset-rebase>
-    <p:group>
-        <p:documentation>
-            - Delete package document (OPF).
-            - Delete table of contents (NCX).
-            - Delete original navigation document. It will be replaced with the generated NCC.
-            - Delete mimetype and META-INF/.
-            - Delete files outside of the directory that contains the OPF.
-        </p:documentation>
-        <p:variable name="nav" select="(//opf:item[tokenize(@properties,'\s+')='nav']/resolve-uri(@href,base-uri()))[1]">
-            <p:pipe step="opf" port="result"/>
-        </p:variable>
-        <p:delete>
-            <p:with-option name="match"
-                           select="concat('
-                                     //d:file[@media-type=(&quot;application/oebps-package+xml&quot;,
-                                                           &quot;application/x-dtbncx+xml&quot;)
-                                              or (&quot;',$nav,'&quot;!=&quot;&quot;
-                                                  and @media-type=&quot;application/xhtml+xml&quot;
-                                                  and &quot;',$nav,'&quot;=resolve-uri(@href,base-uri()))
-                                              or starts-with(@href,&quot;..&quot;)
-                                              or starts-with(@href,&quot;META-INF/&quot;)
-                                              or @href=&quot;mimetype&quot;]
-                                   ')"/>
-        </p:delete>
+    <p:group name="convert-smil" px:progress="1/5">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="update" port="result.in-memory"/>
+        </p:output>
+        <px:fileset-load media-types="application/smil+xml" name="epub3.smil">
+            <p:documentation>
+                Load SMIL files.
+            </p:documentation>
+            <p:input port="fileset">
+                <p:pipe step="main" port="source.fileset"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe step="main" port="source.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <p:for-each px:message="Converting SMIL 3.0 to SMIL 1.0" px:progress="1">
+            <p:variable name="smil-base" select="base-uri(/*)"/>
+            <p:variable name="smil-href" select="//d:file[resolve-uri(@href,base-uri(.))=$smil-base]/@href">
+                <p:pipe step="epub3.smil" port="result.fileset"/>
+            </p:variable>
+            <px:smil-downgrade version="1.0" px:message="Processing {$smil-href}"/>
+        </p:for-each>
+        <p:identity name="daisy202.smil.in-memory"/>
+        <p:sink/>
+        <px:fileset-update name="update">
+            <p:input port="source.fileset">
+                <p:pipe step="main" port="source.fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="main" port="source.in-memory"/>
+            </p:input>
+            <p:input port="update.fileset">
+                <p:pipe step="epub3.smil" port="result.fileset"/>
+            </p:input>
+            <p:input port="update.in-memory">
+                <p:pipe port="result" step="daisy202.smil.in-memory"/>
+            </p:input>
+        </px:fileset-update>
     </p:group>
 
     <p:documentation>
+        Read the "page-list" navigation and label page break elements with epub:type="pagebreak".
+    </p:documentation>
+    <px:epub3-label-pagebreaks-from-nav name="label-pagebreaks-from-nav">
+        <p:input port="source.in-memory">
+            <p:pipe step="convert-smil" port="in-memory"/>
+        </p:input>
+    </px:epub3-label-pagebreaks-from-nav>
+
+    <p:documentation>
+        Sort HTML files by spine order and delete HTML files that are not in spine. Note that the
+        navigation document may be part of the spine, in which case there will be the original
+        navigation document as well as the generated NCC.
+    </p:documentation>
+    <p:group name="filter-spine">
+        <p:output port="result"/>
+        <px:opf-spine-to-fileset name="epub3.spine">
+            <p:documentation>
+                Get spine.
+            </p:documentation>
+            <p:input port="source.in-memory">
+                <p:pipe step="opf" port="result"/>
+            </p:input>
+        </px:opf-spine-to-fileset>
+        <px:fileset-filter media-types="application/xhtml+xml" name="epub3.spine.xhtml"/>
+        <p:sink/>
+        <px:fileset-filter media-types="application/xhtml+xml" name="epub3.xhtml">
+            <p:input port="source">
+                <p:pipe step="main" port="source.fileset"/>
+            </p:input>
+        </px:fileset-filter>
+        <p:sink/>
+        <px:fileset-join>
+            <p:input port="source">
+                <p:pipe step="epub3.spine.xhtml" port="result"/>
+                <p:pipe step="epub3.xhtml" port="not-matched"/>
+            </p:input>
+        </px:fileset-join>
+    </p:group>
+
+    <p:documentation>
+        Convert from EPUB 3 HTML to DAISY 2.02 HTML and identify page break elements.
+    </p:documentation>
+    <p:group name="convert-html" px:progress="1/5">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="update" port="result.in-memory"/>
+        </p:output>
+        <p:output port="page-list">
+            <p:pipe step="identify-pagebreaks" port="page-list"/>
+        </p:output>
+        <px:fileset-load media-types="application/xhtml+xml" name="epub3.xhtml">
+            <p:documentation>
+                Load content documents.
+            </p:documentation>
+            <p:input port="in-memory">
+                <p:pipe step="label-pagebreaks-from-nav" port="result.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <p:group name="identify-pagebreaks">
+            <p:documentation>Identify page break elements</p:documentation>
+            <p:output port="content-docs" primary="true" sequence="true">
+                <p:pipe step="content-docs" port="result"/>
+            </p:output>
+            <p:output port="page-list">
+                <p:pipe step="page-list" port="result"/>
+            </p:output>
+            <p:for-each name="content-docs">
+                <p:output port="result" primary="true"/>
+                <p:output port="page-lists" sequence="true">
+                    <p:pipe step="xslt" port="secondary"/>
+                </p:output>
+                <p:label-elements match="*[@role='doc-pagebreak']" attribute="epub:type" replace="true"
+                                  label="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"
+                                  name="handle-dpub-aria">
+                    <!-- Convert DPUB-ARIA roles to epub:type -->
+                </p:label-elements>
+                <p:sink/>
+                <p:xslt name="xslt">
+                    <p:input port="source">
+                        <p:pipe step="handle-dpub-aria" port="result"/>
+                        <p:pipe step="label-pagebreaks-from-nav" port="page-list"/>
+                    </p:input>
+                    <p:input port="stylesheet">
+                        <p:document href="../../xslt/identify-pagebreaks.xsl"/>
+                    </p:input>
+                    <p:input port="parameters">
+                        <p:empty/>
+                    </p:input>
+                </p:xslt>
+                <px:set-base-uri>
+                    <p:with-option name="base-uri" select="base-uri(/*)">
+                        <p:pipe step="content-docs" port="current"/>
+                    </p:with-option>
+                </px:set-base-uri>
+            </p:for-each>
+            <p:sink/>
+            <p:count>
+                <p:input port="source">
+                    <p:pipe step="label-pagebreaks-from-nav" port="page-list"/>
+                </p:input>
+            </p:count>
+            <p:choose name="page-list">
+                <p:when test="/*=1">
+                    <p:documentation>Get them from the navigation document.</p:documentation>
+                    <p:output port="result"/>
+                    <p:sink/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe step="label-pagebreaks-from-nav" port="page-list"/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <p:documentation>Get them from epub:type="pagebreak" markup.</p:documentation>
+                    <p:output port="result"/>
+                    <p:sink/>
+                    <p:wrap-sequence wrapper="d:fileset">
+                        <p:input port="source">
+                            <p:pipe step="content-docs" port="page-lists"/>
+                        </p:input>
+                    </p:wrap-sequence>
+                </p:otherwise>
+            </p:choose>
+            <p:sink/>
+        </p:group>
+        <p:for-each px:message="Converting HTML5 to HTML4" px:progress="1">
+            <p:variable name="base" select="base-uri()"/>
+            <p:variable name="href" select="//d:file[resolve-uri(@href,base-uri(.))=$base]/@href">
+                <p:pipe step="epub3.xhtml" port="result.fileset"/>
+            </p:variable>
+            <p:identity px:message="Processing {$href}"/>
+            <px:html-upgrade>
+                <p:documentation>Normalize HTML5.</p:documentation>
+                <!-- hopefully this preserves all IDs -->
+            </px:html-upgrade>
+            <px:html-downgrade>
+                <p:documentation>Downgrade to HTML4. This preserves all ID.</p:documentation>
+            </px:html-downgrade>
+            <px:html-outline name="fix-heading-ranks" fix-heading-ranks="outline-depth" output-base-uri="file:/irrelevant">
+                <p:documentation>Make sure heading hierarchy is correct in output</p:documentation>
+                <!-- Note that this is already done once in px:html-downgrade but we do it a second time
+                     after the sectioning elements have been converted, so that if the first heading is
+                     a h2 everything shifts up one level. -->
+            </px:html-outline>
+            <p:sink/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="fix-heading-ranks" port="content-doc"/>
+                </p:input>
+            </p:identity>
+        </p:for-each>
+        <p:identity name="daisy202.xhtml.in-memory"/>
+        <p:sink/>
+        <px:fileset-update name="update">
+            <p:input port="source.fileset">
+                <p:pipe step="filter-spine" port="result"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="convert-smil" port="in-memory"/>
+            </p:input>
+            <p:input port="update.fileset">
+                <p:pipe step="epub3.xhtml" port="result.fileset"/>
+            </p:input>
+            <p:input port="update.in-memory">
+                <p:pipe port="result" step="daisy202.xhtml.in-memory"/>
+            </p:input>
+        </px:fileset-update>
+    </p:group>
+
+    <p:documentation>
+        Create DAISY 2.02 fileset
+    </p:documentation>
+    <p:choose>
+        <p:when test="//d:file[matches(@href,'^(.+/)?mimetype$')]">
+            <p:documentation>
+                Make the base URI the directory containing the mimetype file.
+            </p:documentation>
+            <px:fileset-rebase>
+                <p:with-option name="new-base"
+                               select="//d:file[matches(@href,'^(.+/)?mimetype$')][1]
+                                       /replace(resolve-uri(@href,base-uri(.)),'mimetype$','')"/>
+            </px:fileset-rebase>
+        </p:when>
+        <p:otherwise>
+            <px:error code="XXXXX" message="Fileset must contain a 'mimetype' file"/>
+        </p:otherwise>
+    </p:choose>
+    <p:delete match="//d:file[@media-type=('application/oebps-package+xml',
+                                           'application/x-dtbncx+xml')
+                              or starts-with(@href,'..')
+                              or starts-with(@href,'META-INF/')
+                              or @href='mimetype']">
+        <p:documentation>
+            - Delete package document (OPF).
+            - Delete table of contents (NCX).
+            - Delete mimetype and META-INF/.
+            - Delete files outside of the directory that contains the mimetype.
+        </p:documentation>
+    </p:delete>
+    <p:documentation>
         Create NCC file.
     </p:documentation>
-    <pxi:create-ncc name="create-ncc" px:message="Creating NCC">
+    <pxi:create-ncc name="create-ncc" px:message="Creating NCC" px:progress="2/5">
         <p:input port="source.in-memory">
-            <p:pipe port="result" step="daisy202.xhtml.in-memory"/>
-            <p:pipe port="result" step="daisy202.smil.in-memory"/>
+            <p:pipe step="convert-html" port="in-memory"/>
         </p:input>
         <p:input port="opf">
             <p:pipe step="opf" port="result"/>
         </p:input>
+        <p:input port="page-list">
+            <p:pipe step="convert-html" port="page-list"/>
+        </p:input>
     </pxi:create-ncc>
+
+    <p:documentation>
+        Merge into single HTML document (workaround for Voice Dream Reader)
+    </p:documentation>
+    <p:group name="voice-dream-workaround" px:message="Merging HTML documents" px:progress="1/5">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="choose" port="in-memory"/>
+        </p:output>
+        <px:fileset-filter href="*/ncc.html" name="ncc">
+            <p:input port="source.in-memory">
+                <p:pipe step="create-ncc" port="result.in-memory"/>
+            </p:input>
+        </px:fileset-filter>
+        <p:sink/>
+        <px:fileset-filter media-types="application/xhtml+xml" name="daisy202.html">
+            <p:input port="source">
+                <p:pipe step="ncc" port="not-matched"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="ncc" port="not-matched.in-memory"/>
+            </p:input>
+        </px:fileset-filter>
+        <p:choose name="choose">
+            <p:when test="count(//d:file)&gt;1">
+                <p:output port="fileset" primary="true"/>
+                <p:output port="in-memory" sequence="true">
+                    <p:pipe step="add-entry" port="result.in-memory"/>
+                </p:output>
+                <px:fileset-load>
+                    <p:input port="in-memory">
+                        <p:pipe step="create-ncc" port="result.in-memory"/>
+                    </p:input>
+                </px:fileset-load>
+                <px:html-merge name="merge">
+                    <p:with-option name="output-base-uri" select="resolve-uri('content.html',base-uri(/*))">
+                        <p:pipe step="opf" port="result"/>
+                    </p:with-option>
+                </px:html-merge>
+                <p:unwrap match="html:section" name="html4">
+                    <!-- added by px:html-merge -->
+                </p:unwrap>
+                <p:sink/>
+                <px:fileset-join>
+                    <p:input port="source">
+                        <p:pipe step="ncc" port="result"/>
+                        <p:pipe step="daisy202.html" port="not-matched"/>
+                    </p:input>
+                </px:fileset-join>
+                <px:daisy202-update-links name="update-links">
+                    <p:input port="source.in-memory">
+                        <p:pipe step="ncc" port="result.in-memory"/>
+                        <p:pipe step="daisy202.html" port="not-matched.in-memory"/>
+                    </p:input>
+                    <p:input port="mapping">
+                        <p:pipe step="merge" port="mapping"/>
+                    </p:input>
+                </px:daisy202-update-links>
+                <px:fileset-add-entry media-type="application/xhtml+xml" name="add-entry">
+                    <p:input port="source.in-memory">
+                        <p:pipe step="update-links" port="result.in-memory"/>
+                    </p:input>
+                    <p:input port="entry">
+                        <p:pipe step="html4" port="result"/>
+                    </p:input>
+                </px:fileset-add-entry>
+            </p:when>
+            <p:otherwise>
+                <p:output port="fileset" primary="true"/>
+                <p:output port="in-memory" sequence="true">
+                    <p:pipe step="create-ncc" port="result.in-memory"/>
+                </p:output>
+                <p:identity>
+                    <p:input port="source">
+                        <p:pipe step="create-ncc" port="result.fileset"/>
+                    </p:input>
+                </p:identity>
+            </p:otherwise>
+        </p:choose>
+    </p:group>
 
     <p:documentation>
         Rename content documents to .html.
     </p:documentation>
-    <p:group name="rename-xhtml" px:message="Renaming content documents to .html">
+    <p:group name="rename-xhtml" px:message="Renaming content documents to .html" px:progress="1/5">
         <p:output port="fileset" primary="true"/>
         <p:output port="in-memory" sequence="true">
             <p:pipe step="rename" port="result.in-memory"/>
@@ -202,13 +447,43 @@
         <p:sink/>
         <px:daisy202-rename-files name="rename">
             <p:input port="source.fileset">
-                <p:pipe step="create-ncc" port="result.fileset"/>
+                <p:pipe step="voice-dream-workaround" port="fileset"/>
             </p:input>
             <p:input port="source.in-memory">
-                <p:pipe step="create-ncc" port="result.in-memory"/>
+                <p:pipe step="voice-dream-workaround" port="in-memory"/>
             </p:input>
             <p:input port="mapping">
                 <p:pipe step="rename-xhtml-mapping" port="result"/>
+            </p:input>
+        </px:daisy202-rename-files>
+    </p:group>
+
+    <p:documentation>
+        Flatten DAISY 2.02 directory structure.
+        Don't rename CSS, images and font files because that could break links in CSS.
+    </p:documentation>
+    <p:group name="flatten-daisy202">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="rename" port="result.in-memory"/>
+        </p:output>
+        <px:fileset-filter media-types="application/xhtml+xml
+                                        application/smil+xml
+                                        audio/mpeg
+                                        audio/mp4"/>
+        <px:fileset-copy flatten="true" dry-run="true" name="flatten">
+            <p:with-option name="target" select="base-uri(/*)"/>
+        </px:fileset-copy>
+        <p:sink/>
+        <px:daisy202-rename-files name="rename">
+            <p:input port="source.fileset">
+                <p:pipe step="rename-xhtml" port="fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="rename-xhtml" port="in-memory"/>
+            </p:input>
+            <p:input port="mapping">
+                <p:pipe step="flatten" port="mapping"/>
             </p:input>
         </px:daisy202-rename-files>
     </p:group>
@@ -237,7 +512,7 @@
             <p:pipe step="identifier" port="result"/>
         </p:with-option>
         <p:input port="source.in-memory">
-            <p:pipe step="rename-xhtml" port="in-memory"/>
+            <p:pipe step="flatten-daisy202" port="in-memory"/>
         </p:input>
     </px:fileset-copy>
     <p:sink/>

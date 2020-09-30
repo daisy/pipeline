@@ -2,12 +2,14 @@
 <p:declare-step type="px:epub3-to-epub3.script" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 exclude-inline-prefixes="#all"
                 name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Braille in EPUB 3</h1>
-        <p px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with a braille rendition.</p>
+        <h1 px:role="name">EPUB 3 Enhancer</h1>
+        <p px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with audio and/or a braille rendition.</p>
         <dl px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Bert Frees</dd>
@@ -19,7 +21,37 @@
     <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/epub+zip text/plain">
         <p:documentation>
             <h2 px:role="name">Input EPUB 3</h2>
-            <p px:role="desc" xml:space="preserve">The EPUB you want to convert. You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.</p>
+            <p px:role="desc" xml:space="preserve">The EPUB you want to convert.
+
+You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.</p>
+        </p:documentation>
+    </p:option>
+    
+    <p:option name="braille" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translate to braille</h2>
+            <p px:role="desc">Whether to produce a braille rendition.</p>
+        </p:documentation>
+    </p:option>
+    
+    <p:option name="tts" required="false" px:type="boolean" select="'default'">
+        <p:pipeinfo>
+            <px:type>
+                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+                    <value>true</value>
+                    <a:documentation xml:lang="en">Yes</a:documentation>
+                    <value>false</value>
+                    <a:documentation xml:lang="en">No</a:documentation>
+                    <value>default</value>
+                    <a:documentation xml:lang="en">If publication has no media overlays yet</a:documentation>
+                </choice>
+            </px:type>
+        </p:pipeinfo>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Perform text-to-speech</h2>
+            <p px:role="desc" xml:space="preserve">Whether to use a speech synthesizer to produce media overlays.
+
+This will remove any existing media overlays in the EPUB.</p>
         </p:documentation>
     </p:option>
     
@@ -69,24 +101,46 @@ specific.
         </p:documentation>
     </p:option>
     
+    <p:input port="tts-config" primary="false">
+        <!-- defined in common-options.xpl -->
+        <p:inline><d:config/></p:inline>
+    </p:input>
+    
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation>
             <h2 px:role="name">Output EPUB 3</h2>
         </p:documentation>
     </p:option>
     
-    <p:import href="epub3-to-epub3.load.xpl"/>
-    <p:import href="epub3-to-epub3.convert.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Temporary directory</h2>
+            <p px:role="desc">Directory used for temporary files.</p>
+        </p:documentation>
+    </p:option>
     
-    <px:epub3-to-epub3.load name="load">
+    <p:import href="epub3-to-epub3.load.xpl">
+        <p:documentation>
+            px:epub3-to-epub3.load
+        </p:documentation>
+    </p:import>
+    <p:import href="epub3-to-epub3.convert.xpl">
+        <p:documentation>
+            px:epub3-to-epub3
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-store
+            px:fileset-delete
+        </p:documentation>
+    </p:import>
+
+    <px:epub3-to-epub3.load name="load" px:progress="0.1">
         <p:with-option name="epub" select="$source"/>
     </px:epub3-to-epub3.load>
     
-    <px:epub3-to-epub3 name="convert">
-        <p:input port="epub.in.fileset">
-            <p:pipe step="load" port="fileset"/>
-        </p:input>
+    <px:epub3-to-epub3 name="convert" px:progress="0.8">
         <p:input port="epub.in.in-memory">
             <p:pipe step="load" port="in-memory"/>
         </p:input>
@@ -96,15 +150,24 @@ specific.
         <p:with-option name="stylesheet" select="$stylesheet"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="set-default-rendition-to-braille" select="$set-default-rendition-to-braille"/>
+        <p:with-option name="braille" select="$braille"/>
+        <p:with-option name="tts" select="$tts"/>
+        <p:input port="tts-config">
+            <p:pipe step="main" port="tts-config"/>
+        </p:input>
+        <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:epub3-to-epub3>
     
-    <px:fileset-store>
-        <p:input port="fileset.in">
-            <p:pipe step="convert" port="epub.out.fileset"/>
-        </p:input>
+    <px:fileset-store name="store" px:progress="0.1">
         <p:input port="in-memory.in">
             <p:pipe step="convert" port="epub.out.in-memory"/>
         </p:input>
     </px:fileset-store>
+    
+    <px:fileset-delete cx:depends-on="store">
+        <p:input port="source">
+            <p:pipe step="convert" port="temp-audio-files"/>
+        </p:input>
+    </px:fileset-delete>
     
 </p:declare-step>

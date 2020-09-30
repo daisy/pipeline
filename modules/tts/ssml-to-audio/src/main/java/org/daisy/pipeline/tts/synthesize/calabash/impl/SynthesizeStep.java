@@ -43,6 +43,11 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	private static final Logger logger = LoggerFactory.getLogger(SynthesizeStep.class);
 
 	private static QName ENCODING_ERROR = new QName("TTS01");
+
+	/*
+	 * The maximum number of sentences that a section (ContiguousText) can contain.
+	 */
+	private static int MAX_SENTENCES_PER_SECTION = 100;
 	
 	private ReadablePipe source = null;
 	private ReadablePipe config = null;
@@ -137,7 +142,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		if (SentenceTag.equals(node.getNodeName())) {
 			if (!pool.dispatchSSML(node))
 				mErrorCounter++;
-			if (++mSentenceCounter % 10 == 0)
+			if (++mSentenceCounter % MAX_SENTENCES_PER_SECTION == 0)
 				pool.endSection();
 		} else {
 			XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);

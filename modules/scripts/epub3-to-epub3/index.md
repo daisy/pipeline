@@ -4,7 +4,7 @@
 
 # EPUB 3 Enhancer
 
-Transforms an EPUB 3 publication into an EPUB 3 publication with a braille rendition.
+Transforms an EPUB 3 publication into an EPUB 3 publication with audio and/or a braille rendition.
 
 ## Synopsis
 

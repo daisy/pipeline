@@ -24,11 +24,12 @@
     </p:documentation>
   </p:option>
 
-  <p:option name="lang">
+  <!--<p:option name="lang">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Main language of the DTBook document which the resource file refers to.</p>
+      <p>Used for localization of the resource file.</p>
     </p:documentation>
-  </p:option>
+  </p:option>-->
 
   <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
     <p:documentation>

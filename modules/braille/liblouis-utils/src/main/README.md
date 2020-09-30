@@ -74,6 +74,8 @@
   - `handle-non-standard-hyphenation`: Specifies how non-standard
       hyphenation is handled in pre-translation mode. Can be `ignore`,
       `defer` or `fail`.
+  - `dots-for-undefined-char`: The fixed dot pattern to insert for
+    unknown characters. Must be a Unicode braille string.
   
   Other features are passed on to
   [`lou_findTable`](http://liblouis.org/documentation/liblouis.html#lou_005ffindTable). All

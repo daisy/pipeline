@@ -47,7 +47,7 @@ public interface TTSService {
 	/**
 	 * Allocate a new TTSEngine (e.g. eSpeak or SAPI).
 	 * 
-	 * @params contains various key-value pairs. Some of them might be options
+	 * @param params contains various key-value pairs. Some of them might be options
 	 *         for the TTS processor under consideration, e.g. server IPs,
 	 *         priorities or sound quality. It can also contain options which
 	 *         have nothing to do with the returned TTSEngine. Such options must

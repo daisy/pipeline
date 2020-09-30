@@ -10,11 +10,23 @@
 			<x:input port="source.fileset">
 				<x:document type="inline">
 					<d:fileset>
+						<d:file href="out/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="out/EPUB/foo.xhtml" media-type="application/xhtml+xml"/>
 					</d:fileset>
 				</x:document>
 			</x:input>
 			<x:input port="source.in-memory">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml" xml:base="out/EPUB/cover.xhtml">
+					<html xml:lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>Cover</title>
+						</head>
+						<body>
+							<img/>
+						</body>
+					</html>
+				</x:document>
 				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml" xml:base="out/EPUB/foo.xhtml">
 					<html xml:lang="en">
 						<head>

@@ -28,6 +28,8 @@
     <module>dtbook-utils</module>
     <module>epub-utils</module>
     <module>epubcheck-adapter</module>
+    <module>epub3-to-html</module>
+    <module>html-to-dtbook</module>
     <module>mathml-utils</module>
     <module>smil-utils</module>
     <module>metadata-utils</module>

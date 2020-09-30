@@ -20,7 +20,7 @@
 					<d:file href="../resources/valentin.epub!/mimetype" compression-method="stored"/>
 					<d:file href="../resources/valentin.epub!/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="../resources/valentin.epub!/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
-					<d:file href="../resources/valentin.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
 					<d:file href="../resources/valentin.epub!/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
 					<d:file href="../resources/valentin.epub!/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="../resources/valentin.epub!/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
@@ -84,7 +84,7 @@
 					<d:file href="../resources/valentin/EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" media-type="application/x-font-opentype"/>
 					<d:file href="../resources/valentin/EPUB/images/valentin.jpg" media-type="image/jpeg"/>
 					<d:file href="../resources/valentin/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
-					<d:file href="../resources/valentin/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/valentin/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
 					<d:file href="../resources/valentin/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
 					<d:file href="../resources/valentin/META-INF/container.xml" media-type="application/xml"/>
 					<d:file href="../resources/valentin/mimetype" compression-method="stored"/>

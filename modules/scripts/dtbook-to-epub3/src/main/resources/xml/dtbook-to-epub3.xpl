@@ -34,13 +34,7 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
     </p:output>
 
     <p:output port="tts-log" sequence="true">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h2 px:role="name">TTS log</h2>
-        <p px:role="desc" xml:space="preserve">Log file with information about text-to-speech process.
-
-Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html#common-settings) property.
-        </p>
-      </p:documentation>
+      <!-- defined in common-options.xpl -->
       <p:pipe step="convert-and-store" port="tts-log"/>
     </p:output>
 
@@ -73,30 +67,16 @@ Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.
     </p:option>
 
     <p:input port="tts-config">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h2 px:role="name">Text-To-Speech configuration file</h2>
-        <p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
-
-[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).</p>
-      </p:documentation>
+      <!-- defined in common-options.xpl -->
       <p:inline><d:config/></p:inline>
     </p:input>
 
-    <p:option name="chunk-size" required="false" px:type="integer" select="'-1'">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h2 px:role="name">Chunk size</h2>
-        <p px:role="desc" xml:space="preserve">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
-      </p:documentation>
+    <p:option xmlns:_="dtbook" name="_:chunk-size" select="'-1'">
+      <!-- defined in common-options.xpl -->
     </p:option>
 
-    <p:option name="audio" required="false" px:type="boolean" select="'false'">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	<h2 px:role="name">Enable Text-To-Speech</h2>
-	<p px:role="desc">Whether to use a speech synthesizer to produce audio files.</p>
-      </p:documentation>
+    <p:option name="audio" select="'false'">
+      <!-- defined in common-options.xpl -->
     </p:option>
 
     <p:import href="convert.xpl"/>
@@ -149,7 +129,7 @@ split up if they exceed the given maximum size.</p>
 	  <p:with-option name="audio" select="$audio"/>
 	  <p:with-option name="language" select="$language"/>
 	  <p:with-option name="assert-valid" select="$assert-valid"/>
-	  <p:with-option name="chunk-size" select="$chunk-size"/>
+	  <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>
 	  <p:with-option name="output-name" select="$output-name"/>
 	  <p:with-option name="output-dir" select="$output-dir-uri"/>
 	  <p:with-option name="temp-dir" select="$temp-dir"/>

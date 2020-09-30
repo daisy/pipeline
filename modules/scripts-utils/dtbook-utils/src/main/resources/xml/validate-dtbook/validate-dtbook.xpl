@@ -56,7 +56,7 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc">Validation status (http://daisy.github.io/pipeline/ValidationStatusXML).</p>
+            <p px:role="desc">Validation status (http://daisy.github.io/pipeline/StatusXML).</p>
         </p:documentation>
         <p:pipe step="validation-status" port="result"/>
     </p:output>

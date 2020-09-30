@@ -9,6 +9,16 @@
       </p:documentation>
     </p:input>
 
+    <p:input port="page-list" sequence="true">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p><code>d:fileset</code> document from which the <code>pageList</code> element is to be
+        constructed.</p>
+        <p>If not provided, the <code>pageList</code> element will reference all the
+        <code>pagenum</code> elements in the DTBook.</p>
+      </p:documentation>
+      <p:empty/>
+    </p:input>
+
     <p:input port="audio-map">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p><code>d:audio-clips</code> document with the locations of the audio files.</p>
@@ -57,8 +67,9 @@
 
     <p:xslt>
       <p:input port="source">
-	<p:pipe port="content" step="main"/>
-	<p:pipe port="audio-map" step="main"/>
+	<p:pipe step="main" port="content"/>
+	<p:pipe step="main" port="audio-map"/>
+	<p:pipe step="main" port="page-list"/>
       </p:input>
       <p:input port="stylesheet">
 	<p:document href="create-ncx.xsl"/>

@@ -29,6 +29,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.pipeline.css.CssCascader;
+import org.daisy.pipeline.css.SassCompiler;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -46,6 +47,7 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	private Map<String,String> sassVariables = new HashMap<String,String>();
 	private final InMemoryURIResolver inMemoryResolver;
 	private final URIResolver cssURIResolver;
+	private final SassCompiler sassCompiler;
 	private final Iterable<CssCascader> inliners;
 
 	private static final QName _default_stylesheet = new QName("default-stylesheet");
@@ -61,10 +63,9 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 		// URI resolver that can resolve in-memory documents
 		inMemoryResolver = new InMemoryURIResolver();
 		// URI resolver for CSS files
-		cssURIResolver = new CssURIResolver(
-			// first check memory and fall back to the resolver from module-registry
-			fallback(inMemoryResolver, resolver),
-			Collections.unmodifiableMap(sassVariables));
+		// first check memory and fall back to the resolver from module-registry
+		cssURIResolver = fallback(inMemoryResolver, resolver);
+		sassCompiler = new SassCompiler(cssURIResolver, Collections.unmodifiableMap(sassVariables));
 	}
 
 	@Override
@@ -115,6 +116,7 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 						medium,
 						getOption(_default_stylesheet, ""),
 						cssURIResolver,
+						sassCompiler,
 						SaxonHelper.jaxpQName(attributeName)
 					).transform(
 						new XMLCalabashInputValue(sourcePipe, runtime),

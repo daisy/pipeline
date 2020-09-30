@@ -9,11 +9,11 @@
                 xpath-default-namespace=""
                 exclude-result-prefixes="#all">
 
+    <xsl:import href="http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"/>
+
     <!-- <xsl:param name="modified" select="format-dateTime( -->
     <!--     adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')), -->
     <!--     '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"/> -->
-
-    <xsl:import href="http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"/>
 
     <xsl:variable name="ncc.body" select="collection()[position()=2]/*"/>
     <xsl:variable name="smil" select="collection()[position()&gt;2]/*"/>
@@ -38,12 +38,17 @@
             <!-- mandatory metadata -->
             <meta name="dc:format" content="Daisy 2.02"/>
             <!-- dc:title mandatory in EPUB -->
-            <!-- dc:identifier mandatory in EPUB -->
+            <!-- dc:identifier mandatory in EPUB, but multiple allowed whereas exactly one needed in DAISY -->
+            <xsl:for-each select="dc:identifier[@id=/*/@unique-identifier]">
+                <xsl:call-template name="meta">
+                    <xsl:with-param name="name" select="name()"/>
+                </xsl:call-template>
+            </xsl:for-each>
             <!-- dc:language mandatory in EPUB -->
             <!-- dc:creator is not strictly mandatory in EPUB, but we can't include a sensible value if it is not provided -->
             <!-- dc:publisher is not strictly mandatory in EPUB, but we can't include a sensible value if it is not provided -->
-            <!-- dc:date is not strictly mandatory in EPUB, but we can't include a sensible value if it is not provided -->
-
+            <!-- dc:date is not strictly mandatory in EPUB; if it is not provided, use the current date -->
+            <meta name="dc:date" content="{(dc:date,format-date(current-date(),'[Y0001]-[M01]-[D01]'))[1]}"/>
             <meta name="ncc:charset" content="utf-8"/>
             <meta name="ncc:tocItems" content="{count($ncc.body/*)}"/>
             <meta name="ncc:pageFront" content="{count($ncc.body/html:span['page-front'=tokenize(@class,'\s+')])}"/>
@@ -55,7 +60,10 @@
             <meta name="ncc:totalTime" content="{pf:mediaoverlay-seconds-to-full-clock-value(
                                                    sum($smil/body/seq/@dur/xs:decimal(replace(.,'^(.+)s$','$1'))))}"/>
 
-            <xsl:for-each select="*[not(self::opf:*) and not(self::dc:format)]">
+            <xsl:for-each select="*[not(self::opf:*|
+                                        self::dc:format|
+                                        self::dc:date|
+                                        self::dc:identifier)]">
                 <xsl:call-template name="meta">
                     <xsl:with-param name="name" select="name()"/>
                 </xsl:call-template>

@@ -1,9 +1,11 @@
 package org.daisy.pipeline.css;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -28,7 +30,8 @@ import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
+import cz.vutbr.web.csskit.antlr.CSSSource;
+import cz.vutbr.web.csskit.antlr.CSSSourceReader;
 import cz.vutbr.web.csskit.DefaultNetworkProcessor;
 import cz.vutbr.web.domassign.Analyzer;
 import cz.vutbr.web.domassign.DeclarationTransformer;
@@ -67,11 +70,12 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 	private final RuleFactory ruleFactory;
 	private final SupportedCSS supportedCSS;
 	private final DeclarationTransformer declarationTransformer;
-	private final NetworkProcessor network;
+	private final CSSSourceReader cssReader;
 
 	private static final Logger logger = LoggerFactory.getLogger(JStyleParserCssCascader.class);
 
 	public JStyleParserCssCascader(URIResolver uriResolver,
+	                               SassCompiler sassCompiler,
 	                               String defaultStyleSheet,
 	                               String medium,
 	                               QName attributeName,
@@ -86,26 +90,57 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 		this.ruleFactory = ruleFactory;
 		this.supportedCSS = supportedCSS;
 		this.declarationTransformer = declarationTransformer;
-		this.network = new DefaultNetworkProcessor() {
-				@Override
-				public InputStream fetch(URL url) throws IOException {
-					logger.debug("Fetching CSS style sheet: " + url);
+		NetworkProcessor defaultNetwork = new DefaultNetworkProcessor();
+		/*
+		 * CSSSourceReader that handles media type "text/x-scss". Throws a IOException if something
+		 * goes wrong when resolving the source or if the SASS compilation fails.
+		 */
+		this.cssReader = new CSSSourceReader() {
+				public boolean supportsMediaType(String mediaType) {
+					return mediaType == null || "text/css".equals(mediaType) || "text/x-scss".equals(mediaType);
+				}
+				public CSSInputStream read(CSSSource source) throws IOException {
+					if (!supportsMediaType(source.mediaType))
+						throw new IllegalArgumentException();
+					URL url = null;
 					InputStream is; {
-						Source resolved; {
-							try {
-								resolved = uriResolver.resolve(URIs.asURI(url).toString(), ""); }
-							catch (javax.xml.transform.TransformerException e) {
-								throw new IOException(e); }}
-						if (resolved != null && resolved instanceof StreamSource)
-							is = ((StreamSource)resolved).getInputStream();
-						else {
+						switch (source.type) {
+						case INLINE:
+						case EMBEDDED:
+							is = new ByteArrayInputStream(((String)source.source).getBytes());
+							break;
+						case URL:
+							url = (URL)source.source;
+							logger.debug("Fetching style sheet: " + url);
+							Source resolved; {
+								try {
+									resolved = uriResolver.resolve(URIs.asURI(url).toString(), ""); }
+								catch (javax.xml.transform.TransformerException e) {
+									throw new IOException(e); }}
 							if (resolved != null) {
 								url = new URL(resolved.getSystemId());
 								logger.debug("Resolved to :" + url); }
-							is = super.fetch(url); }}
-					// skip BOM
-					is = new BOMInputStream(is);
-					return is;
+							if (resolved != null && resolved instanceof StreamSource)
+								is = ((StreamSource)resolved).getInputStream();
+							else
+								is = defaultNetwork.fetch(url);
+							// skip BOM
+							is = new BOMInputStream(is);
+							break;
+						default:
+							throw new RuntimeException("coding error");
+						}
+					}
+					if ("text/x-scss".equals(source.mediaType) || (url != null && url.toString().endsWith(".scss"))) {
+						try {
+							is = sassCompiler.compile(is, url != null ? url : source.base, source.encoding);
+						} catch (RuntimeException e) {
+							throw new IOException("SASS compilation failed", e);
+						}
+					}
+					// FIXME: there should be a way to pass the resolved URL to the CSSInputStream
+					// so that relative imports can be handled correctly
+					return new CSSInputStream(is, source.encoding);
 				}
 			};
 	}
@@ -153,10 +188,10 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 					StringTokenizer t = new StringTokenizer(defaultStyleSheet);
 					while (t.hasMoreTokens()) {
 						URL u = URLs.asURL(baseURI.resolve(URIs.asURI(t.nextToken())));
-						styleSheet = parserFactory.append(u, network, null, SourceType.URL, styleSheet, u);
+						styleSheet = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, styleSheet);
 					}
 				}
-				styleSheet = CSSFactory.getUsedStyles(document, null, baseURL, new MediaSpec(medium), network, styleSheet);
+				styleSheet = CSSFactory.getUsedStyles(document, null, baseURL, new MediaSpec(medium), cssReader, styleSheet);
 				styleMap = new Analyzer(styleSheet).evaluateDOM(document, medium, false);
 			}
 			writer.setBaseURI(baseURI);

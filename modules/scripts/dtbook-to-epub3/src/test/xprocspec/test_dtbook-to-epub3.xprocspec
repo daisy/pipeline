@@ -61,7 +61,6 @@
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_02_000.mp3" original-href="epub3/temp/audio/part0002_02_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_03_000.mp3" original-href="epub3/temp/audio/part0002_03_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_04_000.mp3" original-href="epub3/temp/audio/part0002_04_000.mp3" media-type="audio/mpeg"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0003_00_000.mp3" original-href="epub3/temp/audio/part0003_00_000.mp3" media-type="audio/mpeg"/>
 					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml"/>
@@ -84,51 +83,34 @@
 					<body>
 						<nav epub:type="toc">
 							<h1>
-								<span id="st3-1">
-									<span role="word">Table</span>
-									<span role="word">of</span>
-									<span role="word">contents</span>
-								</span>
+								<span id="st3-1">Table of contents</span>
 							</h1>
 							<ol>
 								<li>
 									<a href="minimal-1.xhtml#id_1">
-										<span id="st3-2">
-											<span role="word">Minimal</span>
-											<span role="word">DTBook</span>
-										</span>
+										<span id="st3-2">Minimal DTBook</span>
 									</a>
 								</li>
 								<li>
 									<a href="minimal-2.xhtml#id_2">
-										<span id="st3-3">
-											<span role="word">Chapter</span>
-										</span>
+										<span id="st3-3">Chapter</span>
 									</a>
 								</li>
 							</ol>
 						</nav>
 						<nav epub:type="page-list" hidden="">
 							<h1>
-								<span id="st3-4">
-									<span role="word">List</span>
-									<span role="word">of</span>
-									<span role="word">pages</span>
-								</span>
+								<span id="st3-4">List of pages</span>
 							</h1>
 							<ol>
 								<li>
 									<a href="minimal-2.xhtml#page_1">
-										<span id="st3-5">
-											<span role="word">1</span>
-										</span>
+										<span id="st3-5">1</span>
 									</a>
 								</li>
 								<li>
 									<a href="minimal-2.xhtml#page_2">
-										<span id="st3-6">
-											<span role="word">2</span>
-										</span>
+										<span id="st3-6">2</span>
 									</a>
 								</li>
 							</ol>
@@ -166,7 +148,7 @@
 						</par>
 						<par>
 							<text src="../toc.xhtml#st3-6"/>
-							<audio src="../audio/part0003_00_000.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							<audio src="../audio/part0002_04_000.mp3" clipBegin="0:00:00.578" clipEnd="0:00:01.157"/>
 						</par>
 					</body>
 				</smil>

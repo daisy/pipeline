@@ -125,7 +125,6 @@
 
     <xsl:template mode="normalize"
                   match="/d:fileset/d:file[@href]">
-        <xsl:param name="base" tunnel="yes" required="yes"/>
         <xsl:variable name="normalized-file" as="element(d:file)">
             <xsl:copy>
                 <xsl:variable name="normalized-attrs" as="attribute()*">

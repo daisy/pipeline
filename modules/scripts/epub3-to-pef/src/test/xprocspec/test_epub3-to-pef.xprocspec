@@ -23,8 +23,9 @@
       <x:input port="in-memory.in"/>
       <x:param port="parameters" name="page-width" select="35"/>
       <x:param port="parameters" name="page-height" select="20"/>
+      <x:param port="parameters" name="allow-volume-break-inside-leaf-section-factor" select="3"/>
+      <x:param port="parameters" name="prefer-volume-break-before-higher-level-factor" select="1"/>
       <!--
-      <x:param port="parameters" name="page-height" select="20"/>
       <x:param port="parameters" name="include-line-groups" select="true()"/>
       <x:param port="parameters" name="include-captions" select="true()"/>
       <x:param port="parameters" name="accented-letters" select="true()"/>

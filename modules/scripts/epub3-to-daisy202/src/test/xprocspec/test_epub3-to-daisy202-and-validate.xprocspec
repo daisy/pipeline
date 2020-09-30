@@ -132,17 +132,17 @@
             <x:document type="inline" select="/*/html:body">
                 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
                     <body>
-                        <h1 id="_1" class="title">
-                            <a href="heftywater.smil#par_title">Hefty Water</a>
+                        <h1 id="h_1" class="title">
+                            <a href="heftywater.smil#par_1">Hefty Water</a>
                         </h1>
-                        <h2 id="_2">
-                            <a href="heftywater.smil#par_h2-switch">The Switch</a>
+                        <h2 id="h_2">
+                            <a href="heftywater.smil#par_2">The Switch</a>
                         </h2>
-                        <h2 id="_3">
-                            <a href="heftywater.smil#par_h2-source">The Source</a>
+                        <h2 id="h_3">
+                            <a href="heftywater.smil#par_3">The Source</a>
                         </h2>
-                        <h2 id="_4">
-                            <a href="heftywater.smil#par_h2-ruby">Hefty Ruby Water</a>
+                        <h2 id="h_4">
+                            <a href="heftywater.smil#par_4">Hefty Ruby Water</a>
                         </h2>
                     </body>
                 </html>

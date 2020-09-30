@@ -4,7 +4,7 @@
                 type="px:audio-clips-update-files" name="main">
 
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-    <p>Update the file references in a d:audio-clips document according to a mapping provided
+    <p>Update file and id references in a d:audio-clips document according to a mapping provided
     through a d:fileset document.</p>
   </p:documentation>
 
@@ -13,18 +13,22 @@
       <p>The input d:audio-clips document</p>
     </p:documentation>
   </p:input>
+
   <p:input port="mapping">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>The d:fileset document</p>
     </p:documentation>
   </p:input>
+
   <p:output port="result">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>The output d:audio-clips document</p>
-      <p>The references to audio files (<code>src</code> attributes) are updated according to the
+      <p>References to audio files (<code>src</code> attributes) are updated according to the
       mapping from <code>@original-href</code> to <code>@href</code> in the "mapping" document. All
       references are relative to the base URI of the output document, which gets inherited from the
-      mapping document.</p>
+      mapping document. References to content documents (<code>idref</code> attributes) are updated
+      according to the mapping from <code>@original-id</code> to <code>@id</code> in the mapping
+      document. It is assumed that ID attributes are unique across all content documents.</p>
     </p:documentation>
   </p:output>
 

@@ -99,7 +99,7 @@ public class DefaultLineBreakerTest {
 			= translator.lineBreakingFromStyledText().transform(text("abc­def abc­def abc­def abc­def"));
 		assertEquals("ABCDEF ABC-", i.nextTranslatedRow(12, true, false));
 		assertEquals("DEF",         i.nextTranslatedRow(6,  true, false));
-		assertEquals("ABCDEF",      i.nextTranslatedRow(12, true, true));
+		assertEquals("ABCDEF",      i.nextTranslatedRow(12, true, true)); // wholeWordsOnly = true
 		assertEquals("ABC-",        i.nextTranslatedRow(5,  true, false));
 		assertEquals("DEF",         i.nextTranslatedRow(5,  true, false));
 		assertFalse(i.hasNext());

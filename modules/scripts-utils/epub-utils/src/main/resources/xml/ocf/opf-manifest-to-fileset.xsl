@@ -24,6 +24,9 @@
     <xsl:template match="opf:item">
         <d:file>
             <xsl:copy-of select="@href | @media-type"/>
+            <xsl:if test="tokenize(@properties,'\s+')='nav'">
+                <xsl:attribute name="role" select="'nav'"/>
+            </xsl:if>
         </d:file>
     </xsl:template>
 

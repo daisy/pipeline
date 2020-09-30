@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+	<head>
+		<meta name="dtb:uid" content="id"/>
+	</head>
+	<docTitle>
+		<text>minimal</text>
+	</docTitle>
+	<navMap>
+		<navPoint playOrder="1" id="navPoint-1">
+			<navLabel>
+				<text>Title</text>
+			</navLabel>
+			<content src="front.xhtml#h_1"/>
+			<navPoint playOrder="2" id="navPoint-2">
+				<navLabel>
+					<text>List of contents</text>
+				</navLabel>
+				<content src="front.xhtml#h_1_1"/>
+			</navPoint>
+			<navPoint playOrder="3" id="navPoint-3">
+				<navLabel>
+					<text>Preface</text>
+				</navLabel>
+				<content src="front.xhtml#h_1_2"/>
+			</navPoint>
+		</navPoint>
+		<navPoint playOrder="4" id="navPoint-4">
+			<navLabel>
+				<text>Chapter 1</text>
+			</navLabel>
+			<content src="chapter.xhtml#h_1"/>
+		</navPoint>
+	</navMap>
+	<pageList>
+		<pageTarget type="front" value="4" playOrder="5" id="pageTarget-1">
+			<navLabel>
+				<text>iv</text>
+			</navLabel>
+			<content src="front.xhtml#page_front_4"/>
+		</pageTarget>
+		<pageTarget type="front" value="5" playOrder="6" id="pageTarget-2">
+			<navLabel>
+				<text>v</text>
+			</navLabel>
+			<content src="front.xhtml#page_front_4"/>
+		</pageTarget>
+		<pageTarget type="normal" value="5" playOrder="7" id="pageTarget-3">
+			<navLabel>
+				<text>5</text>
+			</navLabel>
+			<content src="chapter.xhtml#page_5"/>
+		</pageTarget>
+	</pageList>
+</ncx>

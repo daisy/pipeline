@@ -33,10 +33,10 @@ public class Request<ContentType> {
 	 *
 	 * @param httpMethod possible values: "GET", "POST", "PUT", "DELETE", "HEAD", "CONNECT", "OPTIONS", "TRACE", "PATCH"
 	 * @param url a string of the complete request URL (including URL parameters like "?voice=smtg)"
-	 * @param headers HTTP headers of the request <br/>
-	 *                Use {@code null} to unset all headers.
-	 * @param content content to send with the request (often associated with POST requests) <br/>
-	 *                Use {@code null} for requests without content
+	 * @param headers HTTP headers of the request
+	 *                <p>Use {@code null} to unset all headers.</p>
+	 * @param content content to send with the request (often associated with POST requests)
+	 *                <p>Use {@code null} for requests without content</p>
 	 * @throws Exception if the http method is not one of the list above
 	 * @throws MalformedURLException if the url is not valid
 	 */
@@ -70,8 +70,6 @@ public class Request<ContentType> {
 	 * Set the request URL.
 	 *
 	 * <p>If a previous connection was opened for the current request, close and destroy it.</p>
-	 *
-	 * @param requestUrl
 	 */
 	public void setRequestUrl(String url) throws MalformedURLException {
 		this.requestURL = new URL(url);

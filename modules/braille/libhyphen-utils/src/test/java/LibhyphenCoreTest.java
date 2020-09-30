@@ -48,6 +48,7 @@ public class LibhyphenCoreTest extends AbstractTest {
 		                                   .asFullHyphenator();
 		assertEquals("foo\u00ADbar", hyphenator.transform("foobar"));
 		assertEquals("foo-\u200Bbar", hyphenator.transform("foo-bar"));
+		assertEquals("foo\u00ADbar foob\u00ADar", hyphenator.transform("foobar foob\u00ADar"));
 	}
 	
 	@Test(expected=RuntimeException.class)

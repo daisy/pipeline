@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/epub2-to-epub3.script.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:epub2-to-epub3.script">
+			<x:option name="source" select="resolve-uri('../resources/minimal.epub/mimetype')"/>
+			<x:option name="validation" select="'off'"/>
+			<x:option name="output-dir" select="resolve-uri('out/',$temp-dir)"/>
+			<x:option name="temp-dir" select="resolve-uri('tmp/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the status">
+			<x:document type="port" port="status"/>
+		</x:context>
+		<x:expect label="the convertion must succeed" type="compare">
+			<x:document type="inline">
+				<d:validation-status result="ok"/>
+			</x:document>
+		</x:expect>
+		<x:context label="The EPUB 3 content">
+			<x:document type="zip" base-uri="temp-dir" href="out/minimal.epub.epub" ordered="true"/>
+		</x:context>
+		<x:expect label="The EPUB 3 content" type="compare">
+			<x:document type="inline">
+				<c:zipfile name="minimal.epub.epub">
+					<c:file name="EPUB/chapter.xhtml"/>
+					<c:file name="EPUB/cover.xhtml"/>
+					<c:file name="EPUB/front.xhtml"/>
+					<c:file name="EPUB/nav.xhtml"/>
+					<c:file name="EPUB/package.opf"/>
+					<c:file name="EPUB/toc.ncx"/>
+					<c:file name="META-INF/container.xml"/>
+					<c:file name="mimetype"/>
+				</c:zipfile>
+			</x:document>
+		</x:expect>
+		<x:context label="The EPUB 3 content, ZIP order">
+			<x:document type="zip" base-uri="temp-dir" href="out/minimal.epub.epub"/>
+		</x:context>
+		<x:expect label="mimetype must be the first file" type="xpath" test="//c:file[1]/@name" equals="'mimetype'"/>
+	</x:scenario>
+
+</x:description>

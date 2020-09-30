@@ -7,7 +7,7 @@
 	<x:param name="duplex" select="false()"/>
 	<x:param name="maximum-number-of-sheets" select="5"/>
 	<x:param name="minimum-number-of-leaf-section-pages" select="1"/>
-	<x:param name="avoid-volume-break-inside-leaf-section" select="true()"/>
+	<x:param name="allow-volume-break-inside-leaf-section-factor" select="3"/>
 
 	<x:scenario label="create multiple leaf-nodes if too big">
 		<x:context>

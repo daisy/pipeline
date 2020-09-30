@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/extract-svg.xpl">
+
+    <x:scenario label="test">
+        <x:call step="pxi:html-extract-svg">
+            <x:input port="source.fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="foo.html" media-type="application/xhtml+xml"/>
+                        <d:file href="foo_img_1.svg" media-type="image/svg+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="source.in-memory">
+                <x:document type="inline" xml:base="foo.html">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                        <body>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" stroke="red" fill="grey">
+                                <circle cx="50" cy="50" r="40" />
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <image xlink:href="image.jpg"/>
+                            </svg>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="result.fileset">
+            <x:document type="port" port="result.fileset"/>
+        </x:context>
+        <x:expect label="result.fileset" type="custom"
+                  href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="foo.html" media-type="application/xhtml+xml"/>
+                    <d:file href="foo_img_1.svg" media-type="image/svg+xml"/>
+                    <d:file href="foo_img_2.svg" media-type="image/svg+xml"/>
+                    <d:file href="foo_img_3.svg" media-type="image/svg+xml"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+        <x:context label="result.in-memory">
+            <x:document type="port" port="result.in-memory"/>
+        </x:context>
+        <x:expect label="result.in-memory" type="compare">
+            <x:document type="inline">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" stroke="red" fill="grey">
+                    <circle cx="50" cy="50" r="40" />
+                </svg>
+            </x:document>
+            <x:document type="inline">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <image xlink:href="image.jpg"/>
+                </svg>
+            </x:document>
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <body>
+                        <img src="foo_img_2.svg" alt="image"/>
+                        <img src="foo_img_3.svg" alt="image"/>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

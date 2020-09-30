@@ -2,12 +2,13 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
                script="../../main/resources/xml/internal/opf/create-daisy3-opf.xpl">
 
 	<x:scenario label="test">
 		<x:call step="px:daisy3-create-opf">
 			<x:input port="source">
-				<x:document type="inline" xml:base="result/">
+				<x:document type="inline">
 					<d:fileset>
 						<d:file href="content.xml" media-type="application/x-dtbook+xml"
 						        doctype-public="-//NISO//DTD dtbook 2005-3//EN"
@@ -24,23 +25,62 @@
 						<d:file href="resources.res" media-type="application/x-dtbresource+xml"
 						        doctype-public="-//NISO//DTD resource 2005-1//EN"
 						        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd" indent="true"/>
-						<d:file href="EPUB/audio/part0000_00_000.mp3" media-type="audio/mpeg"/>
-						<d:file href="EPUB/audio/part0001_00_000.mp3" media-type="audio/mpeg"/>
-						<d:file href="EPUB/audio/part0002_00_000.mp3" media-type="audio/mpeg"/>
-						<d:file href="EPUB/audio/part0003_00_000.mp3" media-type="audio/mpeg"/>
-						<d:file href="EPUB/audio/part0004_00_000.mp3" media-type="audio/mpeg"/>
-						<d:file href="EPUB/audio/part0005_00_000.mp3" media-type="audio/mpeg"/>
+						<d:file href="audio/part_1.mp3" media-type="audio/mpeg"/>
+						<d:file href="audio/part_2.mp3" media-type="audio/mpeg"/>
 					</d:fileset>
 				</x:document>
 			</x:input>
-			<x:option name="audio-only" select="false()"/>
-			<x:option name="opf-uri" select="resolve-uri('result/book.opf')"/>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="mo0.smil" xmlns="http://www.w3.org/2001/SMIL20/">
+					<smil>
+						<head>
+							<meta name="dtb:totalElapsedTime" content="0:00:00"/>
+						</head>
+						<body>
+							<seq id="root-seq">
+								<par id="s1" class="sent">
+									<text src="content.xml#s1"/>
+									<audio src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+								</par>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="mo1.smil" xmlns="http://www.w3.org/2001/SMIL20/">
+					<smil>
+						<head>
+							<meta name="dtb:totalElapsedTime" content="0:00:01.500"/>
+						</head>
+						<body>
+							<seq id="root-seq">
+								<par id="s2" class="sent">
+									<text src="content.xml#s2"/>
+									<audio src="audio/part_2.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+								</par>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+				<x:document type="inline" xml:base="content.xml">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+						<head>
+							<meta name="dtb:uid" content="urn:uuid:123"/>
+							<meta name="dc:Title" content="Title"/>
+							<meta name="dc:Author" content="Author"/>
+							<meta name="dc:Language" content="en"/>
+							<meta name="dc:Date" content="2020-06-29"/>
+						</head>
+						<book>
+							...
+						</book>
+					</dtbook>
+				</x:document>
+			</x:input>
+			<x:option name="output-base-uri" select="resolve-uri('book.opf')"/>
 			<x:option name="uid" select="'urn:uuid:123'"/>
-			<x:option name="lang" select="'en'"/>
-			<x:option name="date" select="'2020-06-29'"/>
-			<x:option name="title" select="'Title'"/>
-			<x:option name="publisher" select="'Publisher'"/>
-			<x:option name="total-time" select="'0:15:30.176'"/>
+			<!-- depends on https://github.com/daisy/xprocspec/pull/77 -->
+			<!-- <x:param port="dc-metadata" name="dc:Publisher" select="'Publisher'"/> -->
+			<x:input port="dc-metadata"/>
 		</x:call>
 		<x:context label="result">
 			<x:document type="port" port="result"/>
@@ -53,13 +93,15 @@
 							<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
 							<dc:Language>en</dc:Language>
 							<dc:Date>2020-06-29</dc:Date>
-							<dc:Publisher>Publisher</dc:Publisher>
+							<!-- <dc:Publisher>Publisher</dc:Publisher> -->
+							<dc:Publisher>unknown</dc:Publisher>
 							<dc:Title>Title</dc:Title>
 							<dc:Identifier id="uid">urn:uuid:123</dc:Identifier>
+							<dc:Author>Author</dc:Author>
 						</dc-metadata>
 						<x-metadata>
 							<meta name="dtb:multimediaType" content="audioFullText"/>
-							<meta name="dtb:totalTime" content="0:15:30.176"/>
+							<meta name="dtb:totalTime" content="0:00:04"/>
 							<meta name="dtb:multimediaContent" content="audio,text"/>
 						</x-metadata>
 					</metadata>
@@ -70,12 +112,8 @@
 						<item href="mo1.smil" id="mo1" media-type="application/smil"/>
 						<item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
 						<item href="resources.res" id="resource" media-type="application/x-dtbresource+xml"/>
-						<item href="EPUB/audio/part0000_00_000.mp3" id="opf-6" media-type="audio/mpeg"/>
-						<item href="EPUB/audio/part0001_00_000.mp3" id="opf-7" media-type="audio/mpeg"/>
-						<item href="EPUB/audio/part0002_00_000.mp3" id="opf-8" media-type="audio/mpeg"/>
-						<item href="EPUB/audio/part0003_00_000.mp3" id="opf-9" media-type="audio/mpeg"/>
-						<item href="EPUB/audio/part0004_00_000.mp3" id="opf-10" media-type="audio/mpeg"/>
-						<item href="EPUB/audio/part0005_00_000.mp3" id="opf-11" media-type="audio/mpeg"/>
+						<item href="audio/part_1.mp3" id="opf-6" media-type="audio/mpeg"/>
+						<item href="audio/part_2.mp3" id="opf-7" media-type="audio/mpeg"/>
 					</manifest>
 					<spine>
 						<itemref idref="mo0"/>

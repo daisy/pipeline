@@ -53,6 +53,7 @@ import org.daisy.pipeline.braille.css.SupportedPrintCSS;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 import org.daisy.pipeline.css.CssCascader;
 import org.daisy.pipeline.css.JStyleParserCssCascader;
+import org.daisy.pipeline.css.SassCompiler;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -78,12 +79,13 @@ public class BrailleCssCascader implements CssCascader {
 	public SingleInSingleOutXMLTransformer newInstance(String medium,
 	                                                   String defaultStylesheet,
 	                                                   URIResolver uriResolver,
+	                                                   SassCompiler sassCompiler,
 	                                                   QName attributeName) {
 		if ("embossed".equals(medium)) {
-			return new Transformer(uriResolver, defaultStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, sassCompiler, defaultStylesheet, medium, attributeName,
 			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
 		} else if ("print".equals(medium)) {
-			return new Transformer(uriResolver, defaultStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, sassCompiler, defaultStylesheet, medium, attributeName,
 			                       printParserFactory, printRuleFactory, printCSS, printDeclarationTransformer);
 		} else {
 			throw new IllegalArgumentException("medium not supported: " + medium);
@@ -112,10 +114,11 @@ public class BrailleCssCascader implements CssCascader {
 
 		private final boolean isBrailleCss;
 
-		private Transformer(URIResolver resolver, String defaultStyleSheet, String medium, QName attributeName,
-		                    CSSParserFactory parserFactory, RuleFactory ruleFactory,
+		private Transformer(URIResolver resolver, SassCompiler sassCompiler, String defaultStyleSheet, String medium,
+		                    QName attributeName, CSSParserFactory parserFactory, RuleFactory ruleFactory,
 		                    SupportedCSS supportedCss, DeclarationTransformer declarationTransformer) {
-			super(resolver, defaultStyleSheet, medium, attributeName, parserFactory, ruleFactory, supportedCss, declarationTransformer);
+			super(resolver, sassCompiler, defaultStyleSheet, medium, attributeName, parserFactory, ruleFactory,
+			      supportedCss, declarationTransformer);
 			this.isBrailleCss = "embossed".equals(medium);
 		}
 

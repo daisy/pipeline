@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="mock-tts" activate="activate">
+   <implementation class="MockTTS"/>
+   <service>
+      <provide interface="org.daisy.pipeline.tts.TTSService"/>
+   </service>
+</scr:component>

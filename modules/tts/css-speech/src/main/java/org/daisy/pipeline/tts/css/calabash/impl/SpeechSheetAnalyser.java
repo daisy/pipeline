@@ -20,7 +20,8 @@ import cz.vutbr.web.css.NetworkProcessor;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
+import cz.vutbr.web.csskit.antlr.CSSSource;
+import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 import cz.vutbr.web.domassign.Analyzer;
 import cz.vutbr.web.domassign.StyleMap;
 import cz.vutbr.web.domassign.SupportedCSS21;
@@ -64,8 +65,8 @@ public class SpeechSheetAnalyser {
 		for (int k = 0; k < csscode.size(); ++k) {
 			String basePath = alluris.get(k).resolve(".").toString();
 			String withAbsURL = makeURLabsolute(csscode.get(k), basePath);
-			styleSheets.add(parserFactory.parse(withAbsURL, network, null, SourceType.EMBEDDED,
-			        new URL("http://base")));
+			styleSheets.add(parserFactory.parse(new CSSSource(withAbsURL, (String)null, new URL("http://base")),
+			                                    new DefaultCSSSourceReader(network)));
 			/*
 			 * we cannot use CSSFactory.parse(withAbsURL) because it tries to
 			 * convert the null base URL into a String

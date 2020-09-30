@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:html="http://www.w3.org/1999/xhtml"
                 exclude-inline-prefixes="#all"
                 type="px:tts-for-epub3" name="main">
 
@@ -136,7 +137,7 @@
     <p:pipe step="main" port="source.fileset"/>
   </p:variable>
 
-  <p:choose name="process-css">
+  <p:choose name="process-css" px:progress="1/10">
     <p:when test="$audio='true' and $process-css='true'">
       <p:output port="fileset" primary="true"/>
       <p:output port="in-memory" sequence="true">
@@ -166,7 +167,7 @@
     </p:input>
   </px:fileset-load>
 
-  <p:choose name="synthesize">
+  <p:choose name="synthesize" px:progress="9/10">
     <!-- ====== TTS OFF ====== -->
     <p:when test="$audio = 'false'">
       <p:xpath-context>
@@ -209,23 +210,20 @@
       <p:output port="log" sequence="true">
         <p:pipe step="to-audio" port="log"/>
       </p:output>
-      <p:for-each name="loop">
+      <p:for-each name="loop" px:progress="1/9">
         <p:output port="ssml" primary="true" sequence="true">
           <p:pipe step="ssml" port="result"/>
         </p:output>
         <p:output port="html">
-          <p:pipe port="result" step="rm-css"/>
+          <p:pipe port="result" step="rm-words"/>
         </p:output>
         <p:output port="sentence-ids">
           <p:pipe port="sentence-ids" step="lexing"/>
         </p:output>
-        <px:html-break-detect name="lexing">
+        <px:html-break-detect name="lexing" px:progress="1/2">
           <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
         </px:html-break-detect>
-        <px:epub3-to-ssml name="ssml">
-          <p:input port="content.in">
-            <p:pipe port="result" step="lexing"/>
-          </p:input>
+        <px:epub3-to-ssml name="ssml" px:progress="1/2">
           <p:input port="sentence-ids">
             <p:pipe port="sentence-ids" step="lexing"/>
           </p:input>
@@ -238,11 +236,22 @@
         </px:epub3-to-ssml>
         <px:css-speech-clean name="rm-css">
           <p:input port="source">
-            <p:pipe port="result" step="lexing"/>
+            <p:pipe step="lexing" port="result"/>
           </p:input>
         </px:css-speech-clean>
+        <p:unwrap match="html:span[not(@id) and @role='word']" name="rm-words">
+          <p:documentation>
+            Remove the word tags because this info is not used in the synthesize step (it depends on
+            it for some reason, but it does not synchronize on words) and because it results in
+            invalid EPUB.
+            
+            FIXME: Better to not detect words in html-break-detect in the first place but I don't
+            think it is possible to disable at the moment. Also the synthesize step seems to require
+            the words to be there.
+          </p:documentation>
+        </p:unwrap>
       </p:for-each>
-      <px:ssml-to-audio name="to-audio">
+      <px:ssml-to-audio name="to-audio" px:progress="8/9">
         <p:input port="config">
           <p:pipe port="config" step="main"/>
         </p:input>
