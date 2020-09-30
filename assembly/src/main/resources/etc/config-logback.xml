@@ -32,6 +32,7 @@
         org.daisy.pipeline.persistence.impl.job.PersistentJob=OFF
         org.daisy.pipeline.common.calabash.impl.Message=OFF
         com.xmlcalabash.runtime=OFF
+        com.xmlcalabash.library.XSLT=ERROR
       </loggerLevels>
     </filter>
   </appender>

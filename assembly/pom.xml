@@ -982,6 +982,14 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>epub-to-daisy</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>epub2-to-epub3</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-to-epub3</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -1002,6 +1010,14 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>epub3-to-daisy3</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>epub3-to-html</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>file-utils</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -1011,6 +1027,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>html-break-detection</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>html-to-dtbook</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -1909,10 +1929,6 @@
                         <fx:icon href="${project.basedir}/src/main/mac/pipeline-logo.icns" />
                       </fx:info>
                       <fx:platform j2se="8.0+">
-                        <fx:jvmarg value="-Xms256M" />
-                        <fx:jvmarg value="-Xmx1G" />
-                        <fx:jvmarg value="-XX:PermSize=16M" />
-                        <fx:jvmarg value="-XX:MaxPermSize=256M" />
                         <fx:property name="org.daisy.pipeline.main.mode" value="gui" />
                         <fx:property name="org.daisy.pipeline.home" value="." />
                         <fx:property name="org.daisy.pipeline.data" value="data" />
