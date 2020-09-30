@@ -80,15 +80,16 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 		File baseDir = new File(PathUtils.getBaseDir());
 		File xspecDir = new File(baseDir, "src/test/xspec");
 		File xprocspecDir = new File(baseDir, "src/test/xprocspec");
+		boolean xspecHasFocus = xspecRunner.hasFocus(xspecDir);
 		boolean xprocspecHasFocus = xprocspecRunner.hasFocus(xprocspecDir);
 		List<AssertionError> errors = new ArrayList<AssertionError>();
-		if (xspecDir.exists() && !xprocspecHasFocus)
+		if (xspecDir.exists() && (xspecHasFocus || !xprocspecHasFocus))
 			try {
 				runXSpec();
 			} catch (AssertionError e) {
 				errors.add(e);
 			}
-		if (xprocspecDir.exists())
+		if (xprocspecDir.exists() && (xprocspecHasFocus || !xspecHasFocus))
 			try {
 				runXProcSpec();
 			} catch (AssertionError e) {

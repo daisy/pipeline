@@ -3,6 +3,7 @@ package org.daisy.common.spi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -57,7 +58,7 @@ public class ServiceLoader<S> implements Iterable<S> {
 				if (serviceIterator == null) {
 					try {
 						if (serviceLoader == null) {
-							serviceLoader = memoize(java.util.ServiceLoader.load(serviceType));
+							serviceLoader = memoize(serviceType, java.util.ServiceLoader.load(serviceType));
 						}
 						serviceIterator = serviceLoader.iterator();
 					} catch (Throwable e) {
@@ -80,8 +81,8 @@ public class ServiceLoader<S> implements Iterable<S> {
 	/*
 	 * No two Iterables returned by this function contain multiple instances of the same class
 	 */
-	private static <S> Iterable<S> memoize(final Iterable<S> iterable) {
-		return new Memoize<S>() {
+	private static <S> Iterable<S> memoize(Class<S> serviceType, final Iterable<S> iterable) {
+		return new Memoize<S>(serviceType) {
 			protected Iterator<S> _iterator() {
 				return iterable.iterator();
 			}
@@ -91,9 +92,13 @@ public class ServiceLoader<S> implements Iterable<S> {
 	private static abstract class Memoize<S> implements Iterable<S> {
 		/* set of previously returned objects */
 		private static final Map<Class<?>,Object> singletons = new HashMap<Class<?>,Object>();
-		private final ArrayList<S> list = new ArrayList<S>();
+		private final Class<S> serviceType;
+		private final List<S> list = new ArrayList<S>();
 		protected abstract Iterator<S> _iterator();
 		private Iterator<S> _iterator;
+		protected Memoize(Class<S> serviceType) {
+			this.serviceType = serviceType;
+		}
 		public final Iterator<S> iterator() {
 			return new Iterator<S>() {
 				private int index = 0;
@@ -103,9 +108,13 @@ public class ServiceLoader<S> implements Iterable<S> {
 							return true;
 						if (_iterator == null)
 							_iterator = _iterator();
-						return _iterator.hasNext();
+						return _iterator.hasNext(); // this does not try to instantiate any objects yet
 					}
 				}
+				// Note that it could happen that this call recursively calls itself, in a different
+				// Iterator object but with the same underlying Iterable
+				// (java.util.ServiceLoader). java.util.ServiceLoader can cope with that just fine,
+				// and we are taking the necessary precautions to handle it here as well.
 				public S next() throws NoSuchElementException {
 					synchronized(list) {
 						if (index < list.size())
@@ -114,14 +123,15 @@ public class ServiceLoader<S> implements Iterable<S> {
 							_iterator = _iterator();
 						S next = _iterator.next();
 						synchronized(singletons) {
-							if (singletons.containsKey(next.getClass()))
+							if (singletons.containsKey(next.getClass())) {
+								logger.trace("Object of type " + next.getClass() + " already loaded. Returning same object.");
 								next = (S)singletons.get(next.getClass());
-							else
+							} else
 								singletons.put(next.getClass(), next);
 						}
 						list.add(next);
-						index++;
-						return next;
+						return list.get(index++); // not returning next because next items may have
+						                          // been added to the list in the meantime
 					}
 				}
 				public void remove() {

@@ -16,7 +16,7 @@
   <packaging>maven-plugin</packaging>
 
   <properties>
-    <ds-to-spi-annotations-processor.version>1.1.0</ds-to-spi-annotations-processor.version>
+    <ds-to-spi-annotations-processor.version>1.1.1-SNAPSHOT</ds-to-spi-annotations-processor.version>
   </properties>
 
   <dependencies>

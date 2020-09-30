@@ -69,6 +69,9 @@ public class ${component.spiClassName}
 #else
 						${reference.methodName}(service);
 #end
+						spi_log.trace("Bound ${reference.service} service: "
+						              + service.getClass().getName() + "@"
+						              + Integer.toHexString(System.identityHashCode(service)));
 						refCount++;
 						if (maxRef > 0 && refCount == maxRef)
 							break;

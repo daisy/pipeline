@@ -100,15 +100,10 @@
         <xsl:variable name="className" select="concat('Module_',replace($moduleName,'-','_'))"/>
         <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/modules/impl/{$className}.java" method="text" xml:space="preserve"><c:data>package org.daisy.pipeline.modules.impl;
 
-import java.io.File;
-import java.net.URI;
-
-import org.daisy.pipeline.modules.AbstractModuleBuilder;
-import org.daisy.pipeline.modules.JarModuleBuilder;
 import org.daisy.pipeline.modules.Module;
-import org.daisy.pipeline.modules.ModuleRef;
 import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -116,29 +111,23 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
     name = "org.daisy.pipeline.modules.impl.<xsl:value-of select="$className"/>",
-    service = { ModuleRef.class }
+    service = { Module.class }
 )
-public class <xsl:value-of select="$className"/> implements ModuleRef {
-    
-    private Module instance;
+public class <xsl:value-of select="$className"/> extends Module {
+
     private XmlCatalogParser catalogParser;
-    
-    public Module get() {
-        if (instance == null) {
-            AbstractModuleBuilder builder
-            = AbstractModuleBuilder.fromContainedClass(<xsl:value-of select="$className"/>.class)
-                                   .withCatalogParser(catalogParser);
-            if (builder instanceof JarModuleBuilder) {
-                // name, version and title not set yet
-                builder.withName("<xsl:value-of select="$moduleName"/>")
-                       .withVersion("<xsl:value-of select="$moduleVersion"/>")
-                       .withTitle("<xsl:value-of select="replace(replace($moduleTitle,'&quot;','\\&quot;'),'\\','\\\\')"/>");
-            }
-            instance = builder.build();
-        }
-        return instance;
+
+    public <xsl:value-of select="$className"/>() {
+        super("<xsl:value-of select="$moduleName"/>",
+              "<xsl:value-of select="$moduleVersion"/>",
+              "<xsl:value-of select="replace(replace($moduleTitle,'&quot;','\\&quot;'),'\\','\\\\')"/>");
     }
-    
+
+    @Activate
+    public void activate() {
+        super.init(catalogParser);
+    }
+
     @Reference(
         name = "XmlCatalogParser",
         unbind = "-",
