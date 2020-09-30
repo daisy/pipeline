@@ -8,13 +8,14 @@ import cz.vutbr.web.css.CSSException;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.MediaQuery;
-import cz.vutbr.web.css.NetworkProcessor;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.StyleSheet;
-import cz.vutbr.web.css.Term;
 import cz.vutbr.web.csskit.antlr.CSSInputStream;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
+import cz.vutbr.web.csskit.antlr.CSSSource;
+import cz.vutbr.web.csskit.antlr.CSSSource.SourceType;
+import cz.vutbr.web.csskit.antlr.CSSSourceReader;
 import cz.vutbr.web.csskit.antlr.TreeUtil;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -27,42 +28,41 @@ import org.fit.net.DataURLHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.w3c.dom.Element;
-
 public class BrailleCSSParserFactory extends CSSParserFactory {
 	
 	private static final RuleFactory ruleFactory = new BrailleCSSRuleFactory();
 	
 	@Override
-	public StyleSheet parse(Object source, NetworkProcessor network, String encoding, SourceType type,
-	                        Element inline, boolean inlinePriority, URL base) throws IOException, CSSException {
+	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority)
+			throws IOException, CSSException {
 		StyleSheet sheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-		Preparator preparator = new Preparator(inline, inlinePriority, null);
-		StyleSheet ret = parseAndImport(source, network, encoding, type, sheet, preparator, base, null);
+		Preparator preparator = new Preparator(source.inlineElement, inlinePriority, null);
+		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
 		return ret;
 	}
 	
 	@Override
-	public StyleSheet append(Object source, NetworkProcessor network, String encoding, SourceType type,
-	                         Element inline, boolean inlinePriority, StyleSheet sheet, URL base) throws IOException, CSSException {
-		Preparator preparator = new Preparator(inline, inlinePriority, null);
-		StyleSheet ret = parseAndImport(source, network, encoding, type, sheet, preparator, base, null);
+	public StyleSheet append(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority, StyleSheet sheet)
+			throws IOException, CSSException {
+		Preparator preparator = new Preparator(source.inlineElement, inlinePriority, null);
+		StyleSheet ret = parseAndImport(source, cssReader, sheet, preparator, null);
 		return ret;
 	}
 	
-	private StyleSheet parseAndImport(Object source, NetworkProcessor network, String encoding, SourceType type,
-	                                  StyleSheet sheet, Preparator preparator, URL base, List<MediaQuery> media)
+	private StyleSheet parseAndImport(CSSSource source, CSSSourceReader cssReader,
+	                                  StyleSheet sheet, Preparator preparator, List<MediaQuery> media)
 			throws CSSException, IOException {
-		BrailleCSSTreeParser parser = createTreeParser(source, network, encoding, type, preparator, base, media);
-		parse(parser, type);
+		BrailleCSSTreeParser parser = createTreeParser(source, cssReader, preparator, media);
+		parse(parser, source.type);
 		for (int i = 0; i < parser.getImportPaths().size(); i++) {
 			String path = parser.getImportPaths().get(i);
 			List<MediaQuery> imedia = parser.getImportMedia().get(i);
 			if (((imedia == null || imedia.isEmpty()) && CSSFactory.getAutoImportMedia().matchesEmpty()) //no media query specified
 			    || CSSFactory.getAutoImportMedia().matchesOneOf(imedia)) { //or some media query matches to the autoload media spec
-				URL url = DataURLHandler.createURL(base, path);
+				URL url = DataURLHandler.createURL(source.base, path);
 				try {
-					parseAndImport(url, network, encoding, SourceType.URL, sheet, preparator, url, imedia); }
+					parseAndImport(new CSSSource(url, source.encoding, (String)null),
+					               cssReader, sheet, preparator, imedia); }
 				catch (IOException e) {
 					log.warn("Couldn't read imported style sheet: {}", e.getMessage()); }}
 			else
@@ -73,7 +73,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	@Override
 	public List<MediaQuery> parseMediaQuery(String query) {
 		try {
-			CSSInputStream input = CSSInputStream.stringStream(query);
+			CSSInputStream input = CSSInputStream.newInstance(query, null);
 			input.setBase(new URL("file://media/query/url"));
 			CommonTokenStream tokens = feedLexer(input);
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
@@ -101,7 +101,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	
 	public RuleList parseInlineStyle(String style, Context context) {
 		try {
-			CSSInputStream input = CSSInputStream.stringStream(style);
+			CSSInputStream input = CSSInputStream.newInstance(style, null);
 			CommonTokenStream tokens = feedLexer(input);
 			CommonTree ast = feedParser(tokens, SourceType.INLINE, context);
 			// OK to pass null for context element because it is only used in Analyzer.evaluateDOM()
@@ -137,7 +137,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	
 	public List<Declaration> parseSimpleInlineStyle(String style) {
 		try {
-			CSSInputStream input = CSSInputStream.stringStream(style);
+			CSSInputStream input = CSSInputStream.newInstance(style, null);
 			CommonTokenStream tokens = feedLexer(input);
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
 			parser.init();
@@ -157,7 +157,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	
 	public Declaration parseDeclaration(String declaration) {
 		try {
-			CSSInputStream input = CSSInputStream.stringStream(declaration);
+			CSSInputStream input = CSSInputStream.newInstance(declaration, null);
 			CommonTokenStream tokens = feedLexer(input);
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
 			parser.init();
@@ -175,13 +175,13 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			return null; }
 	}
 	
-	private static BrailleCSSTreeParser createTreeParser(Object source, NetworkProcessor network, String encoding, SourceType type,
-	                                                     Preparator preparator, URL base, List<MediaQuery> media)
+	private static BrailleCSSTreeParser createTreeParser(CSSSource source, CSSSourceReader cssReader,
+	                                                     Preparator preparator, List<MediaQuery> media)
 			throws IOException, CSSException {
-		CSSInputStream input = getInput(source, network, encoding, type);
-		input.setBase(base);
+		CSSInputStream input = getInput(source, cssReader);
+		input.setBase(source.base);
 		CommonTokenStream tokens = feedLexer(input);
-		CommonTree ast = feedParser(tokens, type, Context.ELEMENT);
+		CommonTree ast = feedParser(tokens, source.type, Context.ELEMENT);
 		return feedAST(tokens, ast, preparator, media);
 	}
 	

@@ -17,7 +17,8 @@ import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.StyleSheet;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
+import cz.vutbr.web.csskit.antlr.CSSSource;
+import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 import cz.vutbr.web.csskit.CombinedSelectorImpl.SpecificityImpl;
 import cz.vutbr.web.csskit.DefaultNetworkProcessor;
 
@@ -54,8 +55,10 @@ public class PseudoClassTest {
 	@Test
 	public void testNegationPseudoClass() throws CSSException, IOException, SAXException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
-			":not(.foo,.bar) { display: none }",
-			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+			new CSSSource(":not(.foo,.bar) { display: none }",
+			              (String)null,
+			              new URL("file:///base/url/is/not/specified")),
+			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
 		List<CombinedSelector> cslist = new ArrayList<CombinedSelector>();
@@ -90,8 +93,10 @@ public class PseudoClassTest {
 	@Test
 	public void testRelationalPseudoClass() throws CSSException, IOException, SAXException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
-			":has(.foo,.bar) { display: none }",
-			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+			new CSSSource(":has(.foo,.bar) { display: none }",
+			              (String)null,
+			              new URL("file:///base/url/is/not/specified")),
+			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
 		List<CombinedSelector> cslist = new ArrayList<CombinedSelector>();
@@ -131,8 +136,10 @@ public class PseudoClassTest {
 	@Test
 	public void testNegationCombinedWithRelationalPseudoClass() throws CSSException, IOException, SAXException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
-			":not(:has(:not(.foo, .bar))) { display: none }",
-			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+			new CSSSource(":not(:has(:not(.foo, .bar))) { display: none }",
+			              (String)null,
+			              new URL("file:///base/url/is/not/specified")),
+			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
 		List<CombinedSelector> cslist = rule.getSelectors();

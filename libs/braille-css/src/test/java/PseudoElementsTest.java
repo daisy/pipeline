@@ -12,8 +12,8 @@ import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.StyleSheet;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
-import cz.vutbr.web.csskit.DefaultNetworkProcessor;
+import cz.vutbr.web.csskit.antlr.CSSSource;
+import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 
 import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
@@ -37,16 +37,20 @@ public class PseudoElementsTest {
 	@Test
 	public void testPseudoElement() throws CSSException, IOException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
-			"body p::after { content: 'foo' }",
-			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+			new CSSSource("body p::after { content: 'foo' }",
+			              (String)null,
+			              new URL("file:///base/url/is/not/specified")),
+			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 	}
 	
 	@Test
 	public void testStackedPseudoElements() throws CSSException, IOException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
-			"p::after::before { content: 'foo' }",
-			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+			new CSSSource("p::after::before { content: 'foo' }",
+			              (String)null,
+			              new URL("file:///base/url/is/not/specified")),
+			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
 		List<CombinedSelector> cslist = new ArrayList<CombinedSelector>();
@@ -70,8 +74,10 @@ public class PseudoElementsTest {
 	@Test
 	public void testPseudoElementWithPseudoClass() throws CSSException, IOException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
-			"table::table-by(row)::list-item:last-child::after { display: none }",
-			new DefaultNetworkProcessor(), null, SourceType.EMBEDDED, new URL("file:///base/url/is/not/specified"));
+			new CSSSource("table::table-by(row)::list-item:last-child::after { display: none }",
+			              (String)null,
+			              new URL("file:///base/url/is/not/specified")),
+			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
 		List<CombinedSelector> cslist = new ArrayList<CombinedSelector>();
