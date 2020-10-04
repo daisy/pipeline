@@ -116,7 +116,8 @@
 		<p:variable name="all-css-stylesheets"
 		            select="string-join((
 		                      $css-stylesheets,
-		                      /d:xml-stylesheets/d:xml-stylesheet[@type='text/css' or (not(@type[not(.='text/css')]) and matches(@href,'\.s?css$'))]
+		                      /d:xml-stylesheets/d:xml-stylesheet
+		                        [@type=('text/css','text/x-scss') or (not(@type) and matches(@href,'\.s?css$'))]
 		                      /@href),' ')"/>
 		<p:identity>
 			<p:input port="source">
