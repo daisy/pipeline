@@ -44,8 +44,8 @@
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
-            px:message
             px:assert
+            px:log-error
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -57,10 +57,6 @@
         <p:documentation>
             px:transform
             px:merge-parameters
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
-        <p:documentation>
             px:apply-stylesheets
         </p:documentation>
     </p:import>

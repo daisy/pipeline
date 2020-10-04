@@ -87,34 +87,27 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-        <p:documentation>
-            
-        </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
-            
+            px:delete-parameters
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl">
+        <!-- FIXME: we cannot use a relative url to import px:html-to-pef directly here because this
+             script uses px:extends-script in the XML catalog which changes the base URI of the
+             script at build time. -->
         <p:documentation>
-            
+            px:html-to-pef
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
         <p:documentation>
-            
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
-        <p:documentation>
-            
+            px:xml-to-pef.store
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
-            
+            px:tempdir
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">

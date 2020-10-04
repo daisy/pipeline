@@ -110,11 +110,31 @@ even though the provided CSS is more specific.
     <!-- ======= -->
     <!-- Imports -->
     <!-- ======= -->
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl">
+        <!-- FIXME: we cannot use a relative url to import px:epub3-to-pef.load, etc. directly here
+             because this script uses px:extends-script in the XML catalog which changes the base URI of
+             the script at build time. -->
+        <p:documentation>
+            px:epub3-to-pef.load
+            px:epub3-to-pef
+            px:epub3-to-pef.store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            px:delete-parameters
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:tempdir
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+        </p:documentation>
+    </p:import>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->

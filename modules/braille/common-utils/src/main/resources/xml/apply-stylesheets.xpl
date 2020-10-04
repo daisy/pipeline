@@ -85,7 +85,7 @@
 			px:css-cascade
 		</p:documentation>
 	</p:import>
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+	<p:import href="parse-xml-stylesheet-instructions.xpl">
 		<p:documentation>
 			px:parse-xml-stylesheet-instructions
 		</p:documentation>

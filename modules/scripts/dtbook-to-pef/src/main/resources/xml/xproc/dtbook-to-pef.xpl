@@ -96,13 +96,29 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- Imports -->
     <!-- ======= -->
     <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl">
-        <!-- FIXME: we cannot use a relative url to import dtbook-to-pef.convert.xpl directly here
-                   because this script uses px:extends-script in the XML catalog which
-                   changes the base URI of the script at build time. -->
+        <!-- FIXME: we cannot use a relative url to import px:dtbook-to-pef.load and
+             px:dtbook-to-pef directly here because this script uses px:extends-script in the XML
+             catalog which changes the base URI of the script at build time. -->
+        <p:documentation>
+            px:dtbook-to-pef
+            px:dtbook-to-pef.store
+        </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            px:delete-parameters
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:tempdir
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>
+            px:dtbook-load
+        </p:documentation>
+    </p:import>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->

@@ -10,7 +10,9 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 		return new String[] {
 			"org.daisy.braille:braille-css:?",
 			"org.daisy.dotify:dotify.api:?",
-			"org.daisy.pipeline:calabash-adapter:?"
+			"org.daisy.pipeline:calabash-adapter:?",
+			pipelineModule("common-utils"),
+			pipelineModule("css-utils"),
 		};
 	}
 	
