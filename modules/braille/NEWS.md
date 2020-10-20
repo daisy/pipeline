@@ -1,4 +1,4 @@
-v1.13.7-SNAPSHOT
+v1.13.8-SNAPSHOT
 ================
 
 Changes
@@ -6,27 +6,44 @@ Changes
 - Support for `-obfl-right-text-indent` (https://github.com/sbsdev/pipeline-mod-sbs/issues/51,
   https://github.com/nlbdev/pipeline/issues/169, https://github.com/mtmse/obfl/pull/9,
   https://github.com/mtmse/dotify.formatter.impl/pull/31)
-- Support for `@text-transform foo { system: braille-translator }` rules to let custom
-  sub-translators handle specific parts of the document
-  (https://github.com/daisy/pipeline-mod-braille/issues/196,
-  https://github.com/daisy/pipeline-mod-braille/issues/191)
-- Improved braille translation by performing Unicode normalization of text when needed
-  (https://github.com/daisy/pipeline-mod-braille/issues/197)
-- New `avoid-volume-break-inside-leaf-section` setting to prefer volume breaks at section
-  boundaries.
-- Other bugfixes
-
-Components
-----------
 
 Closed issues
 -------------
 - https://github.com/mtmse/obfl/pull/9
 - https://github.com/mtmse/dotify.api/pull/12
 - https://github.com/mtmse/dotify.formatter.impl/pull/31
+
+v1.13.7
+=======
+
+Changes
+-------
+- Support for `@text-transform foo { system: braille-translator }` rules to let custom
+  sub-translators handle specific parts of the document
+  (https://github.com/daisy/pipeline-mod-braille/issues/196,
+  https://github.com/daisy/pipeline-mod-braille/issues/191)
+- Improved braille translation by performing Unicode normalization of text when needed
+  (https://github.com/daisy/pipeline-mod-braille/issues/197)
+- New `allow-volume-break-inside-leaf-section-factor` and
+  `prefer-volume-break-before-higher-level-factor` settings for more fine-grained control over
+  volume breaking (https://github.com/daisy/pipeline-mod-braille/issues/205)
+- Support for `(dots-for-undefined-char:'...')` in translator query
+  (https://github.com/daisy/pipeline-mod-braille/issues/206)
+- Various other improvements and bugfixes (https://github.com/daisy/pipeline-modules/issues/24,
+  https://github.com/daisy/pipeline-mod-braille/issues/204, ...)
+
+Components
+----------
+
+Closed issues
+-------------
 - https://github.com/daisy/pipeline-mod-braille/issues/191
 - https://github.com/daisy/pipeline-mod-braille/issues/196
 - https://github.com/daisy/pipeline-mod-braille/issues/197
+- https://github.com/daisy/pipeline-mod-braille/issues/200
+- https://github.com/daisy/pipeline-mod-braille/issues/204
+- https://github.com/daisy/pipeline-mod-braille/issues/205
+- https://github.com/daisy/pipeline-mod-braille/issues/206
 
 v1.13.6
 =======

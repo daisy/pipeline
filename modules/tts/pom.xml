@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>tts-modules-aggregator</artifactId>
-  <version>1.13.7-SNAPSHOT</version>
+  <version>1.13.8-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: TTS Modules Aggregator POM</name>
@@ -38,4 +38,9 @@
     <module>zedai-to-ssml</module>
     <module>mathml-to-ssml</module>
   </modules>
+
+  <!-- don't publish aggregator -->
+  <properties>
+    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+  </properties>
 </project>

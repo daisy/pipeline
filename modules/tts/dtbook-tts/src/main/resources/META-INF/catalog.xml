@@ -6,7 +6,6 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-break-detection"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:ssml-to-audio"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:css-speech"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:daisy3-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:tts-common"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:text-to-ssml" />

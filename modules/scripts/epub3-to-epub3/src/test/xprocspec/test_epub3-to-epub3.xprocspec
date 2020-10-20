@@ -163,9 +163,12 @@
 							<link rel="prev" href="front.xhtml"/>
 						</head>
 						<body id="chap_1" epub:type="bodymatter chapter">
-							<div id="page_5" class="page-normal" epub:type="pagebreak" title="5"/>
 							<h1 id="h_1">Chapter 1</h1>
-							<p>...</p>
+							<p>
+								This paragraph contains
+								<span id="page_5" class="page-normal" epub:type="pagebreak" title="5"/>
+								a page break.
+							</p>
 						</body>
 					</html>
 				</x:document>
@@ -208,11 +211,11 @@
 						<dc:date xmlns:dc="http://purl.org/dc/elements/1.1/">2020-03-06</dc:date>
 						<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 						<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
-						<meta property="media:duration">00:00:09.784</meta>
-						<meta name="media:duration" content="00:00:09.784"/>
+						<meta property="media:duration">00:00:12.23</meta>
+						<meta name="media:duration" content="00:00:12.23"/>
 						<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
 						<meta property="media:duration" refines="#item_2">00:00:06.115</meta>
-						<meta property="media:duration" refines="#item_3">00:00:02.446</meta>
+						<meta property="media:duration" refines="#item_3">00:00:04.892</meta>
 					</metadata>
 					<manifest>
 						<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
@@ -366,12 +369,15 @@
 						<link rel="prev" href="front.xhtml"/>
 					</head>
 					<body id="chap_1" epub:type="bodymatter chapter">
-						<div id="page_5" class="page-normal" epub:type="pagebreak" title="5"/>
 						<h1 id="h_1">
 							<span id="st3-1">Chapter 1</span>
 						</h1>
 						<p>
-							<span id="st3-2">...</span>
+							<span id="st3-2">
+								<span id="i3st3-2-no-skippable">This paragraph contains</span>
+								<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
+								<span id="i3st3-2-page_5">a page break.</span>
+							</span>
 						</p>
 					</body>
 				</html>
@@ -407,13 +413,13 @@
 						</seq>
 						<par>
 							<text src="../front.xhtml#st2-2"/>
-							<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 						</par>
 						<seq epub:textref="../front.xhtml#contents">
 							<seq epub:textref="../front.xhtml#h_1_1">
 								<par>
 									<text src="../front.xhtml#st2-3"/>
-									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 							</seq>
 						</seq>
@@ -446,10 +452,20 @@
 								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 						</seq>
-						<par>
-							<text src="../chapter.xhtml#st3-2"/>
-							<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-						</par>
+						<seq epub:textref="../chapter.xhtml#st3-2">
+							<par>
+								<text src="../chapter.xhtml#i3st3-2-no-skippable"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+							<par epub:type="pagebreak">
+								<text src="../chapter.xhtml#page_5"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
+							<par>
+								<text src="../chapter.xhtml#i3st3-2-page_5"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+							</par>
+						</seq>
 					</body>
 				</smil>
 			</x:document>

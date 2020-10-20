@@ -3,6 +3,8 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
                 exclude-inline-prefixes="#all">
 
     <p:input port="source.fileset" primary="true"/>
@@ -40,7 +42,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl"/>
 
     <px:fileset-load media-types="application/x-dtbook+xml" name="dtbook">
       <p:input port="in-memory">
@@ -74,7 +76,7 @@
 	  <p:with-option name="target" select="'file:${java.io.tmpdir}/30sec.mp3'"/>
 	</px:copy-resource>
 	<p:sink/>
-	<!-- It is necessary to apply NLP and daisy3-utils to split the content around the
+	<!-- It is necessary to apply NLP and px:isolate-skippable to split the content around the
 	     skippable elements (pagenums and noterefs) so they can be attached to a
 	     smilref attribute that won't be the descendant of any audio clip. Otherwise
 	     we risk having pagenums without @smilref, which is not allowed by the
@@ -85,11 +87,12 @@
 	    <p:pipe step="dtbook" port="result"/>
 	  </p:input>
 	</px:dtbook-break-detect>
-	<px:daisy3-isolate-skippable name="isolate">
+	<px:isolate-skippable name="isolate"
+						  match="dtb:pagenum|dtb:noteref|dtb:annoref|dtb:linenum|math:math">
 	  <p:input port="sentence-ids">
 	    <p:pipe port="sentence-ids" step="break"/>
 	  </p:input>
-	</px:daisy3-isolate-skippable>
+	</px:isolate-skippable>
 	<p:xslt name="audio-map">
 	  <p:with-param port="parameters" name="mp3-path" select="string(.)">
 	    <p:pipe step="copy-mp3" port="result"/>

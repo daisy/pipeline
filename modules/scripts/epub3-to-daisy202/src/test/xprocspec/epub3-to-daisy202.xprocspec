@@ -196,7 +196,7 @@
                             <a href="content.smil#par_1">...</a>
                         </h1>
                         <span id="page1" title="1" class="page-normal">
-                            <a href="content.smil#par_2">1</a>
+                            <a href="content.smil#par_2"/>
                         </span>
                     </body>
                 </html>
@@ -371,7 +371,7 @@
                             <a href="content.smil#par_1">...</a>
                         </h1>
                         <span id="page1" title="1" class="page-normal">
-                            <a href="content.smil#par_2">1</a>
+                            <a href="content.smil#par_2"/>
                         </span>
                     </body>
                 </html>

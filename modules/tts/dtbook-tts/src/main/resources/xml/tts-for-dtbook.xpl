@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
                 type="px:tts-for-dtbook" name="main"
                 exclude-inline-prefixes="#all">
 
@@ -81,14 +83,14 @@
       px:dtbook-break-detect
     </p:documentation>
   </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl">
+  <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
     <p:documentation>
-      px:daisy3-isolate-skippable
+      px:isolate-skippable
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
     <p:documentation>
-	  px:css-speech-cascade
+      px:css-speech-cascade
       px:css-speech-clean
     </p:documentation>
   </p:import>
@@ -130,6 +132,11 @@
   </px:fileset-load>
 
   <!-- Find the sentences and the words, even if the Text-To-Speech is off. -->
+  <!-- It is necessary to apply px:dtbook-break-detect and px:isolate-skippable to
+       split the content around the skippable elements (pagenums and noterefs) so
+       they can be attached to a smilref attribute that won't be the descendant of
+       any audio clip. Otherwise we risk having pagenums without @smilref, which
+       is not allowed by the specs. -->
   <p:for-each name="lexing">
     <p:output port="result" primary="true"/>
     <p:output port="sentence-ids">
@@ -139,12 +146,13 @@
       <p:pipe port="skippable-ids" step="isolate-skippable"/>
     </p:output>
     <px:dtbook-break-detect name="break"/>
-    <px:daisy3-isolate-skippable name="isolate-skippable">
+    <px:isolate-skippable name="isolate-skippable"
+			  match="dtb:pagenum|dtb:noteref|dtb:annoref|dtb:linenum|math:math">
       <p:input port="sentence-ids">
 	<p:pipe port="sentence-ids" step="break"/>
       </p:input>
       <p:with-option name="id-prefix" select="concat('i', p:iteration-position())"/>
-    </px:daisy3-isolate-skippable>
+    </px:isolate-skippable>
   </p:for-each>
 
   <p:choose name="synthesize" px:progress="1">

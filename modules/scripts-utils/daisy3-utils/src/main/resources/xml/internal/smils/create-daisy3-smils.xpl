@@ -30,7 +30,10 @@
     <p:output port="result.in-memory" sequence="true">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Copy of the input fileset with the SMIL files added, and the modified DTBook with smilref
-        attributes and possibly an updated DOCTYPE.</p>
+        attributes added, and possibly an updated DOCTYPE.</p>
+        <!-- This step does not ensure that *all* heading and pagenum elements get a smilref. For
+             instance, if a pagenum element is contained in another element with an associated audio
+             fragment, the pagenum element does not get a smilref attribute. -->
       </p:documentation>
       <p:pipe step="copy-smilrefs" port="result"/>
       <p:pipe step="smil-with-durations" port="result"/>

@@ -12726,7 +12726,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_111">
+  <x:scenario label="test_111" pending="temporarily disabled">
     <x:documentation>
       Tests negative text indent on the last line on the right side.
     </x:documentation>

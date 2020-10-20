@@ -26,6 +26,12 @@
     <p:pipe port="secondary" step="create-valid"/>
   </p:output>
 
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+    <p:documentation>
+      px:set-base-uri
+    </p:documentation>
+  </p:import>
+
   <!-- Distribute some sentences to prevent them from having parents
        not compliant with the format. -->
   <p:xslt name="distribute">
@@ -63,5 +69,11 @@
       <p:document href="create-valid-breaks.xsl"/>
     </p:input>
   </p:xslt>
+  <px:set-base-uri>
+    <!-- not sure why this is needed -->
+    <p:with-option name="base-uri" select="base-uri(/*)">
+      <p:pipe step="main" port="source"/>
+    </p:with-option>
+  </px:set-base-uri>
 
 </p:declare-step>

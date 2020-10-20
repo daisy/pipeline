@@ -27,6 +27,7 @@
     
     <xsl:key name="id" match="*[@id]" use="@id"/>
     <xsl:key name="absolute-id" match="*[@id]" use="concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id)"/>
+    <xsl:key name="absolute-src" match="text" use="pf:normalize-uri(pf:resolve-uri(@src,.))"/>
     
     <xsl:variable name="referenced-html-elements" as="element()*">
         <xsl:for-each select="//text">
@@ -77,13 +78,15 @@
         <xsl:variable name="missing-pars" as="element()*">
             <xsl:for-each select="$html">
                 <xsl:variable name="html-base-uri" select="pf:html-base-uri(.)"/>
-                <xsl:for-each select="(//*[self::html:h1 or
+                <xsl:variable name="heading-and-pagenum-elements" as="element()*"
+                              select="(//*[self::html:h1 or
                                            self::html:h2 or
                                            self::html:h3 or
                                            self::html:h4 or
                                            self::html:h5 or
                                            self::html:h6],
-                                       //* intersect $page-number-elements)">
+                                       //* intersect $page-number-elements)"/>
+                <xsl:for-each select="$heading-and-pagenum-elements">
                     <!--
                         we know these elements have an id attribute (added in create-ncc.xpl)
                     -->
@@ -92,12 +95,49 @@
                         <xsl:when test="$referenced-html-elements intersect .">
                             <!-- The SMIL already references the element. No need to do anything. -->
                         </xsl:when>
-                        <xsl:when test="$referenced-html-elements/descendant::* intersect .">
+                        <xsl:when test="$referenced-html-elements/descendant::* intersect .
+                                        or $heading-and-pagenum-elements/descendant::* intersect .">
                             <!--
-                                The SMIL already references a containing element. FIXME: Unlikely to
-                                happen for headings, but less unlikely for page numbers.
+                                The SMIL already references, or will reference, a containing element.
+                                Unlikely to happen for headings, but less unlikely for page numbers.
                             -->
-                            <xsl:message terminate="yes">FIXME</xsl:message>
+                            <xsl:choose>
+                                <xsl:when test=". intersect $page-number-elements">
+                                    <!--
+                                        If it's a page number element, we can point from the NCC to the par
+                                        that contains it (this happens in create-linkbacks.xsl)
+                                    -->
+                                    <xsl:message select="concat(
+                                                           'SMIL references an element that contains a page number. ',
+                                                           'NCC will point to the containing element instead of the page number.')"/>
+                                    <!--
+                                        Create a temporary seq that points to the par of the containing element.
+                                        Later it will be removed.
+                                    -->
+                                    <seq textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
+                                        <xsl:attribute name="contained-in">
+                                            <xsl:variable name="contained-in" as="attribute(id)">
+                                                <xsl:for-each select="($heading-and-pagenum-elements,$referenced-html-elements)
+                                                                      [descendant::* intersect current()][1]">
+                                                    <xsl:choose>
+                                                        <xsl:when test="$referenced-html-elements intersect .">
+                                                            <xsl:variable name="absolute-id" select="concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id)"/>
+                                                            <xsl:sequence select="$smil/key('absolute-src',$absolute-id)/parent::par/@id"/>
+                                                        </xsl:when>
+                                                        <xsl:otherwise>
+                                                            <xsl:call-template name="pf:generate-id"/>
+                                                        </xsl:otherwise>
+                                                    </xsl:choose>
+                                                </xsl:for-each>
+                                            </xsl:variable>
+                                            <xsl:sequence select="string($contained-in)"/>
+                                        </xsl:attribute>
+                                    </seq>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:message terminate="yes">FIXME</xsl:message>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:variable name="par-id" as="xs:string">
@@ -146,10 +186,10 @@
                                                                          ' but the corresponding audio clips can not be combined: ',
                                                                          string-join($audio-segments/concat(@src,' (',@clip-begin,'-',@clip-end,')'),', '))"/>
                                                   <!--
-                                                      Create an intermediary par that contains a seq with all the segments. Later it will be
+                                                      Create an intermediary seq that contains all the segments. Later it will be
                                                       replaced with the pars in the seq.
                                                   -->
-                                                  <seq textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
+                                                  <seq id="{$par-id}" textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
                                                       <xsl:sequence select="$smil-segments"/>
                                                   </seq>
                                                 </xsl:otherwise>

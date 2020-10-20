@@ -3,6 +3,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:epub="http://www.idpf.org/2007/ops"
                 exclude-inline-prefixes="#all"
                 type="px:tts-for-epub3" name="main">
 
@@ -115,6 +116,11 @@
       px:ssml-to-audio
     </p:documentation>
   </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
+    <p:documentation>
+      px:isolate-skippable
+    </p:documentation>
+  </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/html-break-detection/library.xpl">
     <p:documentation>
       px:html-break-detect
@@ -223,9 +229,20 @@
         <px:html-break-detect name="lexing" px:progress="1/2">
           <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
         </px:html-break-detect>
+        <px:isolate-skippable name="isolate-skippable"
+                              match="*[@epub:type/tokenize(.,'\s+')='pagebreak']|
+                                     *[@role='doc-pagebreak']">
+          <p:input port="sentence-ids">
+            <p:pipe step="lexing" port="sentence-ids"/>
+          </p:input>
+          <p:with-option name="id-prefix" select="concat('i', p:iteration-position())"/>
+        </px:isolate-skippable>
         <px:epub3-to-ssml name="ssml" px:progress="1/2">
           <p:input port="sentence-ids">
             <p:pipe port="sentence-ids" step="lexing"/>
+          </p:input>
+          <p:input port="skippable-ids">
+            <p:pipe step="isolate-skippable" port="skippable-ids"/>
           </p:input>
           <p:input port="fileset.in">
             <p:pipe step="process-css" port="fileset"/>
@@ -236,7 +253,7 @@
         </px:epub3-to-ssml>
         <px:css-speech-clean name="rm-css">
           <p:input port="source">
-            <p:pipe step="lexing" port="result"/>
+            <p:pipe step="isolate-skippable" port="result"/>
           </p:input>
         </px:css-speech-clean>
         <p:unwrap match="html:span[not(@id) and @role='word']" name="rm-words">

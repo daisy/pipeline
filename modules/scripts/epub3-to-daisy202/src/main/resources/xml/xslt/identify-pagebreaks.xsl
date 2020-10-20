@@ -15,7 +15,7 @@
 	<xsl:template match="/*" priority="1">
 		<xsl:call-template name="pf:next-match-with-generated-ids">
 			<xsl:with-param name="prefix" select="'page_'"/>
-			<xsl:with-param name="for-elements" select="//*[self::span|self::div|self::a|self::hr]
+			<xsl:with-param name="for-elements" select="//*[self::span|self::div|self::a|self::hr|self::br]
 			                                               [@epub:type/tokenize(.,'\s+')='pagebreak']
 			                                               [not(*)]
 			                                               [not(@id)]"/>
@@ -38,10 +38,9 @@
 	<!--
 	    Convert to span with class page-normal|page-front|page-special, and make sure it has a text value.
 	    This step is not strictly needed, but done to give page numbers the same format as in the NCC.
-	    Also, the element should have a text value for it to be converted to speech.
 	-->
 	<xsl:template mode="convert"
-	              match="*[self::span|self::div|self::a|self::hr]
+	              match="*[self::span|self::div|self::a|self::hr|self::br]
 	                      [@epub:type/tokenize(.,'\s+')='pagebreak']
 	                      [not(*)]">
 		<span>
@@ -79,7 +78,13 @@
 			<xsl:if test="count($types) &gt; 1">
 				<xsl:attribute name="epub:type" select="string-join($types[not(.='pagebreak')],' ')"/>
 			</xsl:if>
-			<xsl:sequence select="$value"/>
+			<!--
+			    Not creating a child text node if there wasn't one in the source HTML, because this
+			    could result in an error in augment-smil.xsl if the the page number element is
+			    inside a heading element.
+			-->
+			<!-- <xsl:sequence select="$value"/> -->
+			<xsl:apply-templates mode="#current"/>
 		</span>
 	</xsl:template>
 
@@ -90,7 +95,7 @@
 	</xsl:template>
 
 	<xsl:template mode="list"
-	              match="*[self::span|self::div]
+	              match="*[self::span|self::div|self::a|self::hr|self::br]
 	                      [@epub:type/tokenize(.,'\s+')='pagebreak']
 	                      [not(*)]">
 		<d:anchor>
@@ -98,7 +103,16 @@
 			<xsl:if test="not(@id)">
 				<xsl:call-template name="pf:generate-id"/>
 			</xsl:if>
-			<xsl:variable name="classes" as="xs:string*" select="@class/tokenize(.,'\s+')[not(.='')]"/>
+			<xsl:attribute name="title">
+				<xsl:choose>
+					<xsl:when test="normalize-space(string(.))">
+						<xsl:sequence select="normalize-space(string(.))"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:sequence select="@title"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
 		</d:anchor>
 	</xsl:template>
 

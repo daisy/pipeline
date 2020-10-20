@@ -18,6 +18,5 @@
     <p:import href="internal/ncx/update-links.xpl"/>
     <p:import href="internal/opf/create-daisy3-opf.xpl"/>
     <p:import href="internal/dtbook/prepare-dtbook.xpl"/>
-    <p:import href="internal/dtbook/isolate-daisy3-skippable.xpl"/>
     <p:import href="internal/resources/create-res-file.xpl"/>
 </p:library>

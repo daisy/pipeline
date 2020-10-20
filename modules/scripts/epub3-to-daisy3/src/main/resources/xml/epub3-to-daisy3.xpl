@@ -352,6 +352,9 @@
         <!--
             First unwrap all child elements within heading elements. This is workaround for a Voice
             Dream Reader bug.
+
+            FIXME: if we'd do this after the NCX has been created, page numbers inside headings
+            would still be in the page list (but the page list would link to the heading).
         -->
         <p:group name="voice-dream-workaround">
             <p:output port="dtbook" primary="true"/>
@@ -434,7 +437,12 @@
         <p:documentation>
             Create NCX document
         </p:documentation>
-        <px:daisy3-create-ncx name="ncx" px:message="Creating NCX file" px:progress="1/5">
+        <!--
+            FIXME: Instead of failing when a heading or pagenum element has no smilref attribute,
+            ensure that it has one when it leaves px:daisy3-create-smils. We're currently depending
+            on the input EPUB to not have page break elements within narrated sentences.
+        -->
+        <px:daisy3-create-ncx name="ncx" fail-if-missing-smilref="true" px:message="Creating NCX file" px:progress="1/5">
             <p:with-option name="uid" select="$uid"/>
             <p:with-option name="ncx-dir" select="$output-dir"/>
             <p:input port="content">

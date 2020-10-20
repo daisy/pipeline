@@ -44,6 +44,8 @@
 	      <span>left</span><ssml:mark name="left___right"/><span>right</span>
 	    </ssml:s>
 	  </ssml:speak>
+	</x:document>
+	<x:document type="inline">
 	  <ssml:speak version="1.1">
 	    <ssml:s id="holder-of-pnum" tmp:css="something">
 	      <pagenum id="pnum">1</pagenum>
@@ -82,6 +84,8 @@
 	      <span>left</span><ssml:mark name="left___right"/><span>right</span>
 	    </ssml:s>
 	  </ssml:speak>
+	</x:document>
+	<x:document type="inline">
 	  <ssml:speak version="1.1">
 	    <ssml:s id="holder-of-pnum" tmp:css="something">
 	      <p>
@@ -118,6 +122,8 @@
 	      <span>left</span>
 	    </ssml:s>
 	  </ssml:speak>
+	</x:document>
+	<x:document type="inline">
 	  <ssml:speak version="1.1">
 	    <ssml:s id="holder-of-pnum">
 	      <pagenum id="pnum">1</pagenum>

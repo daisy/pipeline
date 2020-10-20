@@ -21,8 +21,6 @@
       <p:pipe port="result" step="ssml-gen" />
     </p:output>
 
-    <p:option name="separate-skippable" required="false" select="'true'"/>
-
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
       <p:documentation>
 	px:message

@@ -16,6 +16,17 @@
 
 	<xsl:key name="id" match="*[@id]" use="@id"/>
 
+	<xsl:template match="/">
+		<xsl:choose>
+			<xsl:when test="exists($pagebreaks-from-nav-in-doc)">
+				<xsl:apply-templates select="/*"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="/*"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 	<xsl:template match="*[@id][exists(key('id',@id,$pagebreaks-from-nav-in-doc))]">
 		<xsl:variable name="from-nav" as="element(d:anchor)?" select="key('id',@id,$pagebreaks-from-nav-in-doc)"/>
 		<xsl:copy>

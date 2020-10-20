@@ -84,11 +84,26 @@
                             Check if there is a seq that references the heading/pagenum using a @textref
                         -->
                         <xsl:variable name="seq" select="($smil//seq[@textref][resolve-uri(@textref,base-uri())=$href])[1]"/>
+                        <xsl:variable name="smil-href" as="xs:string"
+                                      select="if ($smil-href[1]) then $smil-href[1]
+                                              else pf:relativize-uri(base-uri($seq/root()),$base-uri)"/>
                         <xsl:choose>
+                            <!--
+                                Check if the referenced element is a page number that is contained
+                                in an element that is referenced by a par.
+                            -->
+                            <xsl:when test="$seq/@contained-in">
+                                <xsl:variable name="par" select="$seq/root()//*[@id=$seq/@contained-in]/(self::par|self::seq/par[1])"/>
+                                <xsl:if test="not(exists($par))">
+                                    <xsl:message terminate="yes">coding error</xsl:message>
+                                </xsl:if>
+                                <xsl:copy>
+                                    <xsl:apply-templates select="@* except @href"/>
+                                    <xsl:attribute name="href" select="concat($smil-href,'#',$par/@id)"/>
+                                    <xsl:apply-templates/>
+                                </xsl:copy>
+                            </xsl:when>
                             <xsl:when test="$seq">
-                                <xsl:variable name="smil-href" as="xs:string"
-                                              select="if ($smil-href[1]) then $smil-href[1]
-                                                      else pf:relativize-uri(base-uri($seq/root()),$base-uri)"/>
                                 <xsl:copy>
                                     <xsl:apply-templates select="@* except @href"/>
                                     <xsl:attribute name="href" select="concat($smil-href,'#',$seq/par[1]/@id)"/>

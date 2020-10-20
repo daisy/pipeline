@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-aggregator</artifactId>
-  <version>1.13.7-SNAPSHOT</version>
+  <version>1.13.8-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for the Default Scripts</name>
@@ -48,6 +48,10 @@
   </modules>
   
   <!-- don't publish aggregator -->
+  <properties>
+    <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+  </properties>
+  
   <build>
     <plugins>
       <plugin>

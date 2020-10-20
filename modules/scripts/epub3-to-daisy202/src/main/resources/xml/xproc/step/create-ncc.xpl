@@ -214,14 +214,21 @@
                         <p:pipe step="xhtml-with-ids" port="result"/>
                     </p:input>
                 </px:fileset-load>
-                <p:documentation>Augment the SMIL.</p:documentation>
                 <p:group>
                     <p:variable name="smil-href" select="//d:file[resolve-uri(@href,base-uri(.))=$smil-base]/@href">
                         <p:pipe step="load-smil" port="result.fileset"/>
                     </p:variable>
-                    <p:xslt px:message="Processing {$smil-href}" px:message-severity="DEBUG">
+                    <p:sink/>
+                    <p:documentation>Make sure pars have an id attribute (needed for augment-smils.xsl and create-linkbacks.xsl)</p:documentation>
+                    <px:add-ids match="par" name="smil-with-ids">
                         <p:input port="source">
                             <p:pipe step="augment-smils" port="current"/>
+                        </p:input>
+                    </px:add-ids>
+                    <p:documentation>Augment the SMIL.</p:documentation>
+                    <p:xslt px:message="Processing {$smil-href}" px:message-severity="DEBUG">
+                        <p:input port="source">
+                            <p:pipe step="smil-with-ids" port="result"/>
                             <p:pipe step="main" port="page-list"/>
                             <p:pipe step="associated-xhtml" port="result"/>
                         </p:input>
@@ -233,10 +240,6 @@
                         </p:input>
                     </p:xslt>
                 </p:group>
-                <p:documentation>Make sure pars have an id attribute (needed for create-linkbacks.xsl)</p:documentation>
-                <p:for-each>
-                    <px:add-ids match="par"/>
-                </p:for-each>
                 <p:identity name="smil-with-textref"/>
                 <p:unwrap match="*[@textref]"/>
                 <p:documentation>Fix metadata</p:documentation>

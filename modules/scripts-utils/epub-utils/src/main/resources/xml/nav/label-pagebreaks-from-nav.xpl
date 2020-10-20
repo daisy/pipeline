@@ -66,6 +66,10 @@
 					</p:input>
 					<p:with-option name="href" select="//d:file[@role='nav'][1]/@href"/>
 				</px:fileset-load>
+				<p:add-xml-base>
+					<!-- Not sure why this is needed. Omitted this could trigger a base URI error in
+					     list-pagebreaks-from-nav.xsl. Bug? -->
+				</p:add-xml-base>
 				<p:filter select="//html:nav[tokenize(@epub:type,'\s+')='page-list'][1]" name="nav"/>
 				<p:count/>
 				<p:choose>
