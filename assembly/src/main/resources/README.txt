@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.13.5 - July 9, 2020
+              DAISY Pipeline 2 - 1.13.6 - November 13, 2020
 ==============================================================================
 
 
@@ -72,10 +72,10 @@ The package includes:
 3. Release Notes
 ------------------------------------------------------------------------------
 
-The package includes the 1.13.5 version of the project.
+The package includes the 1.13.6 version of the project.
 
 See the release notes on the release page:
-  https://github.com/daisy/pipeline-assembly/releases/tag/v1.13.5
+  https://github.com/daisy/pipeline-assembly/releases/tag/v1.13.6
 
 4. Prerequisites
 ------------------------------------------------------------------------------

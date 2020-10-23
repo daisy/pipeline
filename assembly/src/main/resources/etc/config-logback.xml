@@ -70,4 +70,6 @@
   <logger name="com.xmlcalabash" level="INFO"/>
   <logger name="org.eclipse.jetty.util.log" level="INFO" />
   <logger name="cz.vutbr.web" level="WARN"/>
+  <logger name="org.daisy.braille.css" level="WARN"/>
+
 </configuration>

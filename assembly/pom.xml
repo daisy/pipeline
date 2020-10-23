@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.13.6-SNAPSHOT</version>
+  <version>1.13.7-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -58,7 +58,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.2.3-SNAPSHOT</version>
+        <version>1.2.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -78,14 +78,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.3-SNAPSHOT</version>
+        <version>1.13.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.13.7-SNAPSHOT</version>
+        <version>1.13.7</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

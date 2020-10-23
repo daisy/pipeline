@@ -1,9 +1,41 @@
 Changes in release v1.13.6
 ==========================
 
+### Framework
+
+- **FIX** Bug in web server: datatypes could not be retreived by non-admin clients.
+- The web server can now be run outside the OSGi framework.
+- Speed/performance improvements
+
 ### Modules
 
 - **NEW** Adapter for Google Cloud Text-To-Speech
+- **NEW** New option to create media overlays with TTS in EPUB 3 enhancer script
+- **NEW** EPUB 3 to DAISY 3 script
+- **NEW** EPUB 2 to EPUB 3 updater script
+- **NEW** EPUB to DAISY convenience script which produces both DAISY 3 and DAISY 2.02.
+- **FIX** A lot of bug fixes and improvements to EPUB 3 to DAISY 2.02
+- Changes to braille production scripts, see [release notes of Braille modules v1.13.7](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1137)
+- **FIX** Bug in DAISY 3 to DAISY 2.02 SMIL conversion
+- **FIX** Validation issue in DTBook to DAISY 3
+- Major XProc code cleanup
+
+### Details
+
+- [Closed issues in braille-css](https://github.com/issues?q=repo%3Adaisy%2Fbraille-css+milestone%3Av1.13.6)
+- [Closed issues in jStyleParser](https://github.com/issues?q=repo%3Adaisy%2FjStyleParser+milestone%3Av1.13.6)
+- [Closed issues in osgi-libs](https://github.com/issues?q=repo%3Adaisy%2Fosgi-libs+milestone%3Av1.13.6)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.13.6)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.13.6)
+- [Closed issues in pipeline-build-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-build-utils+milestone%3Av1.13.6)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.13.6)
+- [Closed issues in pipeline-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.13.6)
+- [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.13.6)
+- [Closed issues in pipeline-mod-tts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-tts+milestone%3Av1.13.6)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.13.6)
+- [Closed issues in pipeline-tasks](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.13.6)
+- [Closed issues in xmlcalabash1](https://github.com/issues?q=repo%3Adaisy%2Fxmlcalabash1+milestone%3Av1.13.6)
+- [Closed issues in xproc-maven-plugin](https://github.com/issues?q=repo%3Adaisy%2Fxproc-maven-plugin+milestone%3Av1.13.6)
 
 Changes in release v1.13.5
 ==========================
