@@ -70,7 +70,7 @@
   artifact: texhyph-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: obfl-utils
-  version: 1.1.4
+  version: 2.0.1
 - group: org.daisy.pipeline.modules
   artifact: common-utils
 - group: org.daisy.pipeline.modules
