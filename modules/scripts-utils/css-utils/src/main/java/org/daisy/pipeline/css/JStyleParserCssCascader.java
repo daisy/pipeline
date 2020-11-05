@@ -39,7 +39,6 @@ import cz.vutbr.web.domassign.StyleMap;
 
 import org.apache.commons.io.input.BOMInputStream;
 
-import org.daisy.common.file.URIs;
 import org.daisy.common.file.URLs;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
@@ -114,7 +113,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							logger.debug("Fetching style sheet: " + url);
 							Source resolved; {
 								try {
-									resolved = uriResolver.resolve(URIs.asURI(url).toString(), ""); }
+									resolved = uriResolver.resolve(URLs.asURI(url).toASCIIString(), ""); }
 								catch (javax.xml.transform.TransformerException e) {
 									throw new IOException(e); }}
 							if (resolved != null) {
@@ -187,7 +186,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				if (defaultStyleSheet != null) {
 					StringTokenizer t = new StringTokenizer(defaultStyleSheet);
 					while (t.hasMoreTokens()) {
-						URL u = URLs.asURL(baseURI.resolve(URIs.asURI(t.nextToken())));
+						URL u = URLs.asURL(URLs.resolve(baseURI, URLs.asURI(t.nextToken())));
 						styleSheet = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, styleSheet);
 					}
 				}

@@ -18,8 +18,7 @@ import com.google.common.base.Splitter;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URLs.asURL;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.AbstractHyphenator.util.DefaultLineBreaker;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
@@ -137,7 +136,7 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 				if (h != null)
 					ret = fromNullable(h);
 				else
-					ret = of(get(asURI(v)));
+					ret = of(get(URLs.asURI(v)));
 				if (q.isEmpty())
 					return ret;
 				else
@@ -156,7 +155,7 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 				logger.warn("A query with both 'table' or 'libhyphen-table' and '"
 				            + q.iterator().next().getKey() + "' never matches anything");
 				return empty; }
-			return of(get(asURI(table))); }
+			return of(get(URLs.asURI(table))); }
 		if (tableProvider != null) {
 			Locale locale; {
 				String loc = "und";
@@ -333,7 +332,7 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 	}
 	
 	private File resolveTable(URI table) {
-		URL resolvedTable = isAbsoluteFile(table) ? asURL(table) : tableResolver.resolve(table);
+		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableResolver.resolve(table);
 		if (resolvedTable == null)
 			throw new RuntimeException("Hyphenation table " + table + " could not be resolved");
 		return asFile(resolvedTable);

@@ -35,7 +35,6 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.primitives.Bytes;
 
-import org.daisy.common.file.URIs;
 import org.daisy.common.file.URLs;
 
 import org.slf4j.Logger;
@@ -530,11 +529,11 @@ public abstract class util {
 				return null;
 			try {
 				if (o instanceof String)
-					return asFile(URIs.asURI(o));
+					return asFile(URLs.asURI((String)o));
 				if (o instanceof File)
 					return (File)o;
 				if (o instanceof URL)
-					return asFile(URIs.asURI(o));
+					return asFile(URLs.asURI((URL)o));
 				if (o instanceof URI)
 					return new File((URI)o); }
 			catch (Exception e) {}
@@ -549,10 +548,12 @@ public abstract class util {
 			return true;
 		}
 		
-		public static String fileName(Object o) {
-			if (o instanceof File)
-				return ((File)o).getName();
-			String file = URLs.asURL(o).getFile();
+		public static String fileName(File file) {
+			return file.getName();
+		}
+		
+		public static String fileName(URL url) {
+			String file = url.getFile();
 			return file.substring(file.lastIndexOf('/')+1);
 		}
 		

@@ -16,8 +16,7 @@ import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
 import org.daisy.common.file.URLs;
-import org.daisy.common.file.URIs;
-import org.daisy.pipeline.properties.Properties;
+import org.daisy.common.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +47,7 @@ public class ConfigReader implements ConfigProperties {
 	public ConfigReader(Processor saxonproc, XdmNode doc, Extension... extensions) {
 		String staticConfigPath = System.getProperty(ttsConfigProperty);
 		if (staticConfigPath != null) {
-			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, URIs.asURI(new File("./")));
+			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, URLs.asURI(new File("./")));
 			if (content != null)
 				readConfig(null, content, extensions);
 		}
@@ -72,10 +71,10 @@ public class ConfigReader implements ConfigProperties {
 	static public URL URIinsideConfig(String pathOrURI, URI relativeTo) {
 		URI uri= null;
 		if (pathOrURI.startsWith("/")) {
-			uri = URIs.asURI(new File(pathOrURI));
+			uri = URLs.asURI(new File(pathOrURI));
 		} else {
 			try {
-				uri = URIs.asURI(pathOrURI);
+				uri = URLs.asURI(pathOrURI);
 			} catch (Exception e) {
 				Logger.debug("URI " + uri + ": wrong format " + e);
 				return null;

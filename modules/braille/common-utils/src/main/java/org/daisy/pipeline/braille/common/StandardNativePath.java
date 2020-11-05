@@ -10,7 +10,7 @@ import static com.google.common.collect.Iterables.find;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 
-import static org.daisy.common.file.URIs.asURI;
+import static org.daisy.common.file.URLs.asURI;
 import static org.daisy.pipeline.braille.common.util.OS;
 
 /**

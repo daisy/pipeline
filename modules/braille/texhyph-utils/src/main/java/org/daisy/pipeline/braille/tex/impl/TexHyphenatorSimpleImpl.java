@@ -9,8 +9,7 @@ import java.util.Locale;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URLs.asURL;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Function;
@@ -86,7 +85,7 @@ public class TexHyphenatorSimpleImpl extends AbstractTransformProvider<TexHyphen
 			if (!q.isEmpty()) {
 				logger.warn("A query with both 'table' and '" + q.iterator().next().getKey() + "' never matches anything");
 				return empty; }
-			return fromNullable(get(asURI(v))); }
+			return fromNullable(get(URLs.asURI(v))); }
 		Locale locale; {
 			String loc;
 			if (q.containsKey("locale"))
@@ -169,7 +168,7 @@ public class TexHyphenatorSimpleImpl extends AbstractTransformProvider<TexHyphen
 	}
 	
 	private URL resolveTable(URI table) {
-		URL resolvedTable = isAbsoluteFile(table) ? asURL(table) : tableRegistry.resolve(table);
+		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableRegistry.resolve(table);
 		if (resolvedTable == null)
 			throw new RuntimeException("Hyphenation table " + table + " could not be resolved");
 		return resolvedTable;

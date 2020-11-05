@@ -12,8 +12,7 @@ import com.google.common.base.Predicate;
 import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.transform;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URLs.asURL;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.ResourcePath;
 import org.daisy.pipeline.braille.common.ResourceRegistry;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
@@ -73,7 +72,7 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 		for (int i = 0; i < subTables.length; i++) {
 			URI subTable = subTables[i];
 			if (base != null)
-				subTable = asURI(base).resolve(subTable);
+				subTable = URLs.resolve(URLs.asURI(base), subTable);
 			for (ResourcePath path : paths) {
 				tableFiles[i] = asFile(path.resolve(subTable));
 				if (tableFiles[i] != null) {
@@ -91,7 +90,7 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 	
 	private static class LiblouisFileSystem implements ResourcePath {
 
-		private static final URI identifier = asURI("file:/");
+		private static final URI identifier = URLs.asURI("file:/");
 		
 		private static final Predicate<String> isLiblouisTable = matchesGlobPattern("*.{dis,ctb,cti,uti,utb,dic,tbl}");
 		
@@ -105,13 +104,13 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 				resource = identifier.resolve(resource);
 				File file = asFile(resource);
 				if (file.exists() && isLiblouisTable.apply(fileName(file)))
-					return asURL(resource); }
+					return URLs.asURL(resource); }
 			catch (Exception e) {}
 			return null;
 		}
 		
 		public URI canonicalize(URI resource) {
-			return asURI(resolve(resource));
+			return URLs.asURI(resolve(resource));
 		}
 		
 		@Override

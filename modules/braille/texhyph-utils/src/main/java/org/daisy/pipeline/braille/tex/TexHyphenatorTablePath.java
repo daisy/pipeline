@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.daisy.common.file.URIs.asURI;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.BundledResourcePath;
 import org.daisy.pipeline.braille.common.Provider;
@@ -40,7 +39,7 @@ public class TexHyphenatorTablePath extends BundledResourcePath implements Provi
 				return parseLocale(locale);
 			}
 			public URI parseValue(String table) {
-				return canonicalize(asURI(table));
+				return canonicalize(URLs.asURI(table));
 			}
 		};
 	}

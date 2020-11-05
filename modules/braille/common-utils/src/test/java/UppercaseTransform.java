@@ -6,7 +6,7 @@ import com.google.common.base.Optional;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
 
-import static org.daisy.common.file.URIs.asURI;
+import static org.daisy.common.file.URLs.asURI;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;

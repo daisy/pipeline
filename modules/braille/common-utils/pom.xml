@@ -147,6 +147,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -164,12 +165,20 @@
                   <url>http://javadoc.io/doc/org.slf4j/slf4j-api/1.7.2</url>
                   <location>https://www.slf4j.org/apidocs</location>
                 </offlineLink>
+                <offlineLink>
+                <!-- for some reason link does not work -->
+                  <url>https://docs.osgi.org/javadoc/r5/core</url>
+                  <location>https://docs.osgi.org/javadoc/r5/core</location>
+                </offlineLink>
+                <offlineLink>
+                <!-- for some reason link does not work -->
+                  <url>https://docs.osgi.org/javadoc/r5/cmpn</url>
+                  <location>https://docs.osgi.org/javadoc/r5/cmpn</location>
+                </offlineLink>
               </offlineLinks>
               <links>
                 <link>https://google.github.io/guava/releases/15.0/api/docs</link>
                 <link>http://brailleapps.github.io/dotify.api/4.1.0/javadoc</link>
-                <link>https://osgi.org/javadoc/r5/core</link>
-                <link>https://osgi.org/javadoc/r5/cmpn</link>
               </links>
             </configuration>
           </execution>
