@@ -8,6 +8,7 @@
   <uri name="http://www.daisy.org/pipeline/modules/foo-utils/foo.css" uri="../css/foo.css"/>
   <uri name="http://www.daisy.org/pipeline/modules/foo-utils/foo.xpl" uri="../css/foo.xpl" px:extends="../css/foo-1.xpl
                                                                                                        ../css/foo-2.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/foo-utils/bar-2.xpl" uri="../css/bar-2.xpl" px:content-type="params"/>
   <uri uri="../data-types/type.xml" px:content-type="data-type" px:id="foo:choice"/>
   <uri name="http://www.daisy.org/pipeline/modules/foo-utils/liblouis/" uri="../liblouis/"
        px:content-type="liblouis-tables" px:include="*"/>

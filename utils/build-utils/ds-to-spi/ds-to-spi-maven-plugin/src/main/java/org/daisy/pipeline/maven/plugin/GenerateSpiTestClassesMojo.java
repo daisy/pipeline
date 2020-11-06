@@ -94,6 +94,11 @@ public class GenerateSpiTestClassesMojo extends AbstractMojo {
 	)
 	private MavenSession mavenSession;
 	
+	@Parameter(
+		defaultValue = "${maven.test.skip}"
+	)
+	private boolean skip;
+
 	@Component
 	private CompilerManager compilerManager;
 	
@@ -107,6 +112,9 @@ public class GenerateSpiTestClassesMojo extends AbstractMojo {
 	private RepositorySystem repositorySystem;
 	
 	public void execute() throws MojoFailureException {
+		if (skip) {
+			getLog().info("Tests are skipped.");
+			return; }
 		try {
 			Set<String> compileSourceRoots = new HashSet<String>(); {
 				for (Object dir : mavenProject.getTestCompileSourceRoots())

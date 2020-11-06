@@ -12,19 +12,19 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>modules-build-helper</artifactId>
-  <version>2.5.1-SNAPSHOT</version>
+  <version>2.6.0</version>
   <packaging>maven-plugin</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Build Helper</name>
   <description>Resources for the Pipeline 2 modules build system.</description>
 
   <properties>
-    <ds-to-spi-maven-plugin.version>1.1.0</ds-to-spi-maven-plugin.version>
-    <ds-to-spi-runtime.version>1.1.0</ds-to-spi-runtime.version>
+    <ds-to-spi-maven-plugin.version>1.1.1</ds-to-spi-maven-plugin.version>
+    <ds-to-spi-runtime.version>1.1.1</ds-to-spi-runtime.version>
     <xprocspec.version>1.3.0</xprocspec.version>
     <framework.version>1.13.3</framework.version>
-    <modules.version>1.13.6</modules.version>
-    <modules-test-helper.version>2.0.0</modules-test-helper.version>
+    <modules.version>1.13.7</modules.version>
+    <modules-test-helper.version>2.1.0</modules-test-helper.version>
   </properties>
 
   <dependencyManagement>
@@ -183,7 +183,6 @@
           <tagNameFormat>@{project.artifactId}-@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
-      <!--
       <plugin>
         <artifactId>maven-invoker-plugin</artifactId>
         <version>1.8</version>
@@ -204,7 +203,7 @@
             <modules-test-helper.version>${modules-test-helper.version}</modules-test-helper.version>
           </properties>
           <extraArtifacts>
-            <!- - test dependencies are not automatically installed - ->
+            <!-- test dependencies are not automatically installed -->
             <extraArtifact>org.daisy.pipeline:framework-bom:${framework.version}:pom</extraArtifact>
             <extraArtifact>org.daisy.xprocspec:xprocspec:${xprocspec.version}</extraArtifact>
             <extraArtifact>org.daisy.pipeline:ds-to-spi-runtime:${ds-to-spi-runtime.version}</extraArtifact>
@@ -226,7 +225,10 @@
           </execution>
         </executions>
       </plugin>
-      -->
     </plugins>
   </build>
+
+  <scm>
+    <tag>modules-build-helper-2.6.0</tag>
+  </scm>
 </project>

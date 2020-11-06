@@ -18,7 +18,7 @@ import org.daisy.maven.xproc.calabash.Calabash;
 
 import org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver;
 
-import static org.daisy.pipeline.maven.plugin.utils.URIs.asURI;
+import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
 import org.xml.sax.InputSource;
 

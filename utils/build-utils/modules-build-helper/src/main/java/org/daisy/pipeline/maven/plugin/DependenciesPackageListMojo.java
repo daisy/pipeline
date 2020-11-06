@@ -47,6 +47,8 @@ public class DependenciesPackageListMojo extends AbstractMojo {
 			Set<String> packages = new HashSet<String>(); {
 				for (String p : mavenProject.getCompileClasspathElements()) {
 					File f = new File(p);
+					if (!f.exists())
+						continue;
 					if (f.isDirectory()) {
 						// this is probably the target/classes directory, which is not a dependency
 					} else {

@@ -66,9 +66,22 @@
 		<xsl:variable name="id" select="concat('data-type-',parent::*/parent::*/@name)"/>
 		<xsl:choose>
 			<xsl:when test="$entry-in-catalog[@name or @px:content-type='script']">
-				<span typeof="data-type" id="{$id}" resource="../{replace($input-uri,'.*/([^/]+)$','$1')}#{$id}">
+				<!--
+				    The (possibly inherited) type is defined in a script or a public
+				    file. process-catalog will move the definition into a separate file and generate
+				    the ID "[root type]-[option name]" for it. Use the same ID to attach the
+				    definition to it in the RDF metadata. Also serialize the definition.
+				-->
+				<span typeof="data-type" id="{$id}" resource="{pf:relativize-uri($source-uri,$output-uri)}#{$id}">
 					<link rel="doc" href="#{$id}"/>
-					<span property="id" content="{concat(/*/@type,'-',parent::*/parent::*/@name)}">
+					<!-- FIXME: make @type optional -->
+					<xsl:if test="not(/*/@type)">
+						<xsl:message terminate="yes">missing @type: <xsl:sequence select="/*"/></xsl:message>
+					</xsl:if>
+					<span property="id"
+					      content="{concat(/*/@type,'-',
+					                       for $name in parent::*/parent::*/@name return
+					                       if (contains($name,':')) then substring-after($name,':') else $name)}">
 						<xsl:call-template name="set-property">
 							<xsl:with-param name="property" select="'definition'"/>
 							<xsl:with-param name="content" select="replace(string-join($data-type-xml/string(),''),'\\','\\\\')"/>

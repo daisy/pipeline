@@ -56,17 +56,35 @@
 	</xsl:template>
 	
 	<xsl:template match="/*/p:option[p:pipeinfo/pxd:type]" mode="finalize-script">
+		<!--
+		    the URI of the script that is being HTMLized, or one of the XProc files it extends
+		-->
 		<xsl:param name="script-uri" tunnel="yes" required="yes"/>
 		<xsl:choose>
 			<xsl:when test="exists($catalog-xml//cat:uri[@name or @px:content-type='script']
 			                                            [resolve-uri(@uri,base-uri(.))=$script-uri])">
+				<!--
+				    The (possibly inherited) type is defined in a script or a public
+				    file. process-catalog will move the definition into a separate file and generate
+				    the ID "[root type]-[option name]" for it. Add a px:type attribute with that
+				    same ID to the p:option and drop the px:type element.
+				-->
 				<xsl:copy>
 					<xsl:apply-templates select="@*" mode="#current"/>
-					<xsl:attribute name="pxd:type" select="concat(/*/@type,'-',@name)[1]"/>
+					<!-- FIXME: make @type optional -->
+					<xsl:if test="not(/*/@type)">
+						<xsl:message terminate="yes">missing @type: <xsl:sequence select="/*"/></xsl:message>
+					</xsl:if>
+					<xsl:attribute name="pxd:type"
+					               select="concat(/*/@type,'-',
+					                              if (contains(@name,':')) then substring-after(@name,':') else @name)"/>
 					<xsl:apply-templates select="node()" mode="#current"/>
 				</xsl:copy>
 			</xsl:when>
 			<xsl:otherwise>
+				<!--
+				    Otherwise keep the type definition.
+				-->
 				<xsl:sequence select="."/>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -80,7 +98,7 @@
 	
 	<xsl:template match="/*/p:option/p:pipeinfo/pxd:type" mode="finalize-script"/>
 	
-	<xsl:template match="/*/p:option/@pxd:data" mode="serialize" priority="1.1">
+	<xsl:template match="/*/p:option/@pxd:type" mode="serialize" priority="1.1">
 		<xsl:if test="not(parent::*/p:pipeinfo/pxd:type)">
 			<xsl:next-match/>
 		</xsl:if>
@@ -193,8 +211,7 @@
 		</xsl:call-template>
 	</xsl:template>
 	
-	<xsl:template mode="attribute-value" match="/*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI')]/@pxd:type|
-	                                            /*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI' or @pxd:type or p:pipeinfo/pxd:type)]/@pxd:type">
+	<xsl:template mode="attribute-value" match="/*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI')]/@pxd:type">
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'data-type'"/>
 			<xsl:with-param name="content" select="replace(.,'^xsd?:','')"/>

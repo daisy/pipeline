@@ -50,7 +50,7 @@
 									<xsl:sequence select="@px:id"/>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:variable name="type" select="string(document(@uri,.)/*/@type)"/>
+									<xsl:variable name="type" select="string(document(@uri,.)/*/@type)"/> <!-- FIXME: @type is not mandatory for top-level step -->
 									<xsl:sequence select="if (namespace-uri-for-prefix(substring-before($type,':'),document(@uri,.)/*)
 									                          ='http://www.daisy.org/ns/pipeline/xproc')
 									                      then substring-after($type,':')

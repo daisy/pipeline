@@ -30,12 +30,14 @@ public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 	public void testDatatype() {
 		String id = datatype.getId();
 		assertTrue(id.equals("foo:choice") ||
+		           id.equals("px:bar-2.params-option-2") ||
 		           id.equals("px:script-option-1") ||
 		           id.equals("transform-query"));
 		Set<String> ids = new HashSet<>();
 		for (DatatypeService datatype : datatypes.getDatatypes())
 			ids.add(datatype.getId());
 		assertTrue(ids.remove("foo:choice"));
+		assertTrue(ids.remove("px:bar-2.params-option-2"));
 		assertTrue(ids.remove("px:script-option-1"));
 		assertTrue(ids.remove("transform-query")); // because o.d.p.modules.braille:common-utils on class path
 		assertTrue(ids.isEmpty());

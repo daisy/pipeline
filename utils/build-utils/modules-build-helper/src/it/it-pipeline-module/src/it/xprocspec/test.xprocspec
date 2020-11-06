@@ -32,7 +32,7 @@
 					<c:file name="META-INF/services/org.daisy.common.xproc.calabash.XProcStepProvider"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.datatypes.DatatypeService"/>
-					<c:file name="META-INF/services/org.daisy.pipeline.modules.ModuleRef"/>
+					<c:file name="META-INF/services/org.daisy.pipeline.modules.Module"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.script.XProcScriptService"/>
 					<c:file name="OSGI-INF/calabash-config-it-pipeline-module.xml"/>
 					<c:file name="OSGI-INF/foo-choice.xml"/>
@@ -42,14 +42,18 @@
 					<c:file name="OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml"/>
 					<c:file name="OSGI-INF/org.daisy.pipeline.modules.impl.Module_it_pipeline_module.xml"/>
 					<c:file name="OSGI-INF/pf-java-function.xml"/>
+					<c:file name="OSGI-INF/px-bar-2.params-option-2.xml"/>
 					<c:file name="OSGI-INF/px-script-option-1.xml"/>
+					<c:file name="css/__processed__bar-2.xpl"/>
 					<c:file name="css/__processed__foo.xpl"/>
+					<c:file name="css/bar-2.xpl"/>
 					<c:file name="css/foo-1.css"/>
 					<c:file name="css/foo-1.xpl"/>
 					<c:file name="css/foo-2.css"/>
 					<c:file name="css/foo-2.xpl"/>
 					<c:file name="css/foo.css"/>
 					<c:file name="css/foo.xpl"/>
+					<c:file name="data-types/bar-2.params-option-2.xml"/>
 					<c:file name="data-types/script-option-1.xml"/>
 					<c:file name="data-types/type.xml"/>
 					<c:file name="impl/JavaFunction$1.class"/>
@@ -68,6 +72,8 @@
 					<c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis__SPI.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_foo_choice.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_foo_choice_SPI.class"/>
+					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_px_bar_2_params_option_2.class"/>
+					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_px_bar_2_params_option_2_SPI.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_px_script_option_1.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_px_script_option_1_SPI.class"/>
 					<c:file name="org/daisy/pipeline/modules/impl/Module_it_pipeline_module.class"/>
@@ -97,6 +103,7 @@
 					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/library.xpl" uri="../xml/library.xpl"/>
 					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/foo.css" uri="../css/foo.css"/>
 					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/foo.xpl" uri="../css/__processed__foo.xpl"/>
+					<uri name="http://www.daisy.org/pipeline/modules/foo-utils/bar-2.xpl" uri="../css/__processed__bar-2.xpl"/>
 				</catalog>
 			</x:document>
 		</x:expect>
@@ -268,6 +275,7 @@
 			<x:document type="inline">
 				<c:zipfile name="it-pipeline-module-${project.version}-doc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
+					<c:file name="index.md"/>
 					<c:file name="src/main/java/allclasses-frame.html"/>
 					<c:file name="src/main/java/impl/JavaFunction.html"/>
 					<c:file name="src/main/java/impl/JavaFunction_SPI.html"/>
@@ -293,6 +301,8 @@
 					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/package-summary.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_foo_choice.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_foo_choice_SPI.html"/>
+					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_px_bar_2_params_option_2.html"/>
+					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_px_bar_2_params_option_2_SPI.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_px_script_option_1.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_px_script_option_1_SPI.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/package-frame.html"/>
@@ -309,6 +319,7 @@
 					<c:file name="src/main/java/overview-summary.html"/>
 					<c:file name="src/main/java/stylesheet.css"/>
 					<c:file name="src/main/resources/META-INF/catalog.xml/index.html"/>
+					<c:file name="src/main/resources/css/bar-2.xpl/index.html"/>
 					<c:file name="src/main/resources/css/foo-1.css/index.md"/>
 					<c:file name="src/main/resources/css/foo-1.xpl/index.html"/>
 					<c:file name="src/main/resources/css/foo-2.css/index.md"/>
@@ -332,12 +343,64 @@
 		</x:context>
 		<x:expect label="The htmlized script.xpl" type="compare">
 			<x:document type="inline">
-				<span typeof="data-type" id="data-type-option-1" resource="../script.xpl#data-type-option-1"><link rel="doc" href="#data-type-option-1"/><span property="id" content="px:script-option-1"><span property="definition" content="&#xA;          &lt;choice&gt;&#xA;            &lt;value&gt;value-1&lt;/value&gt;&#xA;            &lt;value&gt;value-2&lt;/value&gt;&#xA;          &lt;/choice&gt;&#xA;        ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+				<span typeof="data-type" id="data-type-option-1" resource="../script.xpl#data-type-option-1"><link rel="doc" href="#data-type-option-1"/><span property="id" content="px:script-option-1"><span property="definition" content="&#xA;          &lt;choice&gt;&#xA;            &lt;value&gt;value-1&lt;/value&gt;&#xA;            &lt;value&gt;value-2&lt;/value&gt;&#xA;          &lt;/choice&gt;&#xA;        ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>
+				<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">foo</span>=<span class="code-xml-attribute-value">"foo"</span>
+				<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">bar</span>=<span class="code-xml-attribute-value">"bar"</span>&gt;
 				&lt;<span class="code-xml-element-local-name">choice</span>&gt;
 				&lt;<span class="code-xml-element-local-name">value</span>&gt;value-1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
 				&lt;<span class="code-xml-element-local-name">value</span>&gt;value-2&lt;/<span class="code-xml-element-local-name">value</span>&gt;
 				&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
 				&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span>
+			</x:document>
+		</x:expect>
+		<x:context label="The htmlized bar-2.xpl">
+			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}-doc.jar!/src/main/resources/css/bar-2.xpl/index.html" select="//body"/>
+		</x:context>
+		<x:expect label="The htmlized bar-2.xpl" type="compare">
+			<x:document type="inline">
+				<body>
+					<div class="code" about="../bar-2.xpl">
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>
+						<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span>
+						<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span>
+						<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">_</span>=<span class="code-xml-attribute-value">"bar"</span>
+						<span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>
+						<span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:bar-2.params"</span>&gt;
+						<span about="../bar-2.xpl#option-2">
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>
+						<span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">_:option-2</span>"</span>
+						<span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="X">'X'</span>"</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>
+						<span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+						<span property="name" content="Bar option 2">
+							&lt;<span class="code-xml-element-local-name">h1</span>
+							<span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span
+							>&gt;Bar option 2&lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+						</span>
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
+						<span rel="data-type">
+							<span typeof="data-type" id="data-type-_:option-2" resource="../bar-2.xpl#data-type-_:option-2">
+								<link rel="doc" href="#data-type-_:option-2"/>
+								<span property="id" content="px:bar-2.params-option-2">
+									<span property="definition"
+									      content="&#xA;        &lt;choice&gt;&#xA;          &lt;value&gt;A&lt;/value&gt;&#xA;          &lt;value&gt;B&lt;/value&gt;&#xA;          &lt;value&gt;C&lt;/value&gt;&#xA;        &lt;/choice&gt;&#xA;      ">
+										&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+										&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+										&lt;<span class="code-xml-element-local-name">value</span>&gt;A&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+										&lt;<span class="code-xml-element-local-name">value</span>&gt;B&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+										&lt;<span class="code-xml-element-local-name">value</span>&gt;C&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+										&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+										&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+									</span>
+								</span>
+							</span>
+						</span>
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+						</span>
+					&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div>
+				</body>
 			</x:document>
 		</x:expect>
 		<x:context label="The 'javadoc' JAR content">
@@ -374,10 +437,10 @@
 			<x:document type="inline">
 				<c:zipfile name="it-pipeline-module-${project.version}-xprocdoc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
-					<c:file name="d427e26.html"/>
-					<c:file name="d427e5.html"/>
-					<c:file name="d427e54.html"/>
-					<c:file name="d427e87.html"/>
+					<c:file name="d433e26.html"/>
+					<c:file name="d433e5.html"/>
+					<c:file name="d433e54.html"/>
+					<c:file name="d433e87.html"/>
 					<c:file name="index.html"/>
 					<c:file name="libraries.html"/>
 					<c:file name="org/daisy/pipeline/modules/foo-utils/foo.xpl.html"/>
