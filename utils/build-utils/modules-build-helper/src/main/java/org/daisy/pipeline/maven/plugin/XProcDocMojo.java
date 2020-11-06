@@ -16,7 +16,7 @@ import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.api.XProcExecutionException;
 import org.daisy.maven.xproc.calabash.Calabash;
 
-import static org.daisy.pipeline.maven.plugin.utils.URIs.asURI;
+import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
 /**
  * @goal xprocdoc

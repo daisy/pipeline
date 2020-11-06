@@ -31,28 +31,26 @@ import org.xml.sax.InputSource;
 
 abstract class utils {
 	
-	static abstract class URIs {
+	static abstract class URLs {
 		
-		static URI asURI(Object o) {
-			if (o == null)
-				return null;
+		static URI asURI(File file) {
+			return file.toURI();
+		}
+		
+		static URI asURI(URL url) {
 			try {
-				if (o instanceof String)
-					return new URI((String)o);
-				if (o instanceof File)
-					return ((File)o).toURI();
-				if (o instanceof URL) {
-					URL url = (URL)o;
-					if (url.getProtocol().equals("jar"))
-						return new URI("jar:" + new URI(null, url.getAuthority(), url.getPath(), url.getQuery(), url.getRef()).toASCIIString());
-					String authority = (url.getPort() != -1) ?
-						url.getHost() + ":" + url.getPort() :
-						url.getHost();
-					return new URI(url.getProtocol(), authority, url.getPath(), url.getQuery(), url.getRef()); }
-				if (o instanceof URI)
-					return (URI)o; }
-			catch (Exception e) {}
-			throw new RuntimeException("Object can not be converted to URI: " + o);
+				return url.toURI();
+			} catch (URISyntaxException e) {
+				throw new IllegalArgumentException(e);
+			}
+		}
+		
+		static URI asURI(String url) {
+			try {
+				return new URI(url);
+			} catch (URISyntaxException e) {
+				throw new IllegalArgumentException(e);
+			}
 		}
 		
 		static URI relativize(URI base, URI child) {
@@ -94,24 +92,6 @@ abstract class utils {
 		}
 	}
 	
-	static abstract class URLs {
-		
-		static URL resolve(URI base, String url) {
-			try {
-				return new URL(new URL(decode(base.toString())), url); }
-			catch (MalformedURLException e) {
-				throw new RuntimeException(e); }
-		}
-		
-		@SuppressWarnings(
-			"deprecation" // URLDecode.decode is deprecated
-		)
-		private static String decode(String uri) {
-			// URIs treat the + symbol as is, but URLDecoder will decode both + and %20 into a space
-			return URLDecoder.decode(uri.replace("+", "%2B"));
-		}
-	}
-	
 	static abstract class XML {
 		
 		private static XPath xpath;
@@ -127,7 +107,7 @@ abstract class utils {
 		}
 		
 		static Object evaluateXPath(File context, String expression, final Map<String,String> namespaces, Class<?> type) {
-			return evaluateXPath(URIs.asURI(context), expression, namespaces, type);
+			return evaluateXPath(URLs.asURI(context), expression, namespaces, type);
 		}
 		
 		static Object evaluateXPath(URI context, String expression, final Map<String,String> namespaces, Class<?> type) {

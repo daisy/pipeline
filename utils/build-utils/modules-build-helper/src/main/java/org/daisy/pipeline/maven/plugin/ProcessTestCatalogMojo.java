@@ -20,7 +20,7 @@ import org.apache.maven.project.MavenProject;
 
 import org.daisy.maven.xproc.api.XProcEngine;
 
-import static org.daisy.pipeline.maven.plugin.utils.URIs.asURI;
+import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
 @Mojo(
 	name = "process-test-catalog",
