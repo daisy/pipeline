@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
@@ -439,22 +440,16 @@ public class XProcSpecRunner {
 		return builder.build();
 	}
 	
-	public static URI asURI(Object o) {
+	public static URI asURI(File file) {
+		return file.toURI();
+	}
+	
+	public static URI asURI(URL url) {
 		try {
-			if (o instanceof URI)
-				return (URI)o;
-			if (o instanceof File)
-				return asURI(((File)o).toURI());
-			if (o instanceof URL) {
-				URL url = (URL)o;
-				if (url.getProtocol().equals("jar"))
-					return new URI("jar:" + new URI(null, url.getAuthority(), url.getPath(), url.getQuery(), url.getRef()).toASCIIString());
-				String authority = (url.getPort() != -1) ?
-					url.getHost() + ":" + url.getPort() :
-					url.getHost();
-				return new URI(url.getProtocol(), authority, url.getPath(), url.getQuery(), url.getRef()); }}
-		catch (Exception e) {}
-		throw new RuntimeException("Object can not be converted to URI: " + o);
+			return url.toURI();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 	
 	private static XPath xpath = new XPathFactoryImpl().newXPath();
