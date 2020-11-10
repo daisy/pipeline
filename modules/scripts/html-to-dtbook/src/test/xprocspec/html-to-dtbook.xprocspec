@@ -19,6 +19,7 @@
             <x:input port="source.in-memory">
                 <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
+            <x:option name="skip-upgrade" select="'true'"/>
         </x:call>
         <x:context label="result fileset">
             <x:document type="port" port="result.fileset"/>

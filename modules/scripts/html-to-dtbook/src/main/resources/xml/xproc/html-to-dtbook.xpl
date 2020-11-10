@@ -27,6 +27,11 @@
             <p>Whether to generate headings for untitled levels.</p>
         </p:documentation>
     </p:option>
+    <p:option name="skip-upgrade" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Set this option if the input is already XHTML 5.</p>
+        </p:documentation>
+    </p:option>
 
     <p:output port="mapping">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -46,6 +51,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
             px:html-outline
+            px:html-upgrade
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
@@ -81,6 +87,14 @@
     <px:assert message="The HTML file must have a file extension." error-code="XXXXX">
         <p:with-option name="test" select="$dtbook-file-name!='' or matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
     </px:assert>
+    <p:choose>
+        <p:when test="$skip-upgrade='true'">
+            <p:identity/>
+        </p:when>
+        <p:otherwise>
+            <px:html-upgrade/>
+        </p:otherwise>
+    </p:choose>
     <p:identity name="html"/>
 
     <!--

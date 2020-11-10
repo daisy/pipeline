@@ -257,7 +257,8 @@
     <p:documentation>
         Convert HTML to DTBook
     </p:documentation>
-    <px:html-to-dtbook name="dtbook-and-resources" imply-headings="true" px:message="Converting HTML to DTBook" px:progress="3/10">
+    <px:html-to-dtbook name="dtbook-and-resources" px:message="Converting HTML to DTBook" px:progress="3/10"
+                       imply-headings="true" skip-upgrade="true">
         <p:input port="source.in-memory">
             <p:pipe step="copy" port="result.in-memory"/>
         </p:input>
