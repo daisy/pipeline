@@ -14,15 +14,10 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component(
-	name = "cereproc-tts-service",
-	service = { TTSService.class }
-)
-public class CereProcService extends AbstractTTSService {
+public abstract class CereProcService extends AbstractTTSService {
 
 	private final static Logger logger = LoggerFactory.getLogger(CereProcService.class);
 
-	@Activate
 	protected void loadSSMLadapter() {
 		super.loadSSMLadapter("/transform-ssml.xsl", CereProcService.class);
 	}
@@ -37,20 +32,6 @@ public class CereProcService extends AbstractTTSService {
 			} else {
 				server = "localhost";
 				logger.warn(prop + " property not set. Defaulting to " + server);
-			}
-		}
-		int port; {
-			String prop = "org.daisy.pipeline.tts.cereproc.port";
-			String val = params.get(prop);
-			if (val != null) {
-				try {
-					port = Integer.valueOf(val);
-				} catch (NumberFormatException e) {
-					throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
-				}
-			} else {
-				port = 8989;
-				logger.warn(prop + " property not set. Defaulting to " + port);
 			}
 		}
 		File clientDir; {
@@ -76,16 +57,113 @@ public class CereProcService extends AbstractTTSService {
 				priority = 15;
 			}
 		}
-		return new CereProcEngine(this, server, port, clientDir, priority);
+		return newEngine(server, clientDir, priority, params);
 	}
+
+	protected abstract CereProcEngine newEngine(
+		String server, File clientDir, int priority, Map<String,String> params) throws Throwable;
 
 	@Override
 	public String getName() {
 		return "cereproc";
 	}
 
-	@Override
-	public String getVersion() {
-		return "jni";
+	@Component(
+		name = "cereproc-tts-service",
+		service = { TTSService.class }
+	)
+	public static class CereProcStandardService extends CereProcService {
+
+		@Override
+		public String getVersion() {
+			return "standard";
+		}
+
+		@Override
+		@Activate
+		protected void loadSSMLadapter() {
+			super.loadSSMLadapter();
+		}
+
+		@Override
+		protected CereProcEngine newEngine(
+				String server, File clientDir, int priority, Map<String,String> params) throws Throwable {
+
+			int port; {
+				String prop = "org.daisy.pipeline.tts.cereproc.port";
+				String val = params.get(prop);
+				if (val != null) {
+					try {
+						port = Integer.valueOf(val);
+					} catch (NumberFormatException e) {
+						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
+					}
+				} else {
+					port = 8991;
+					logger.warn(prop + " property not set. Defaulting to " + port);
+				}
+			}
+			return new CereProcEngine(this, server, port, clientDir, priority);
+		}
+	}
+
+	@Component(
+		name = "cereproc-dnn-tts-service",
+		service = { TTSService.class }
+	)
+	public static class CereProcDNNService extends CereProcService {
+
+		// The DNN version is given another name because:
+		// a) currently engines with the same name will not fall back to each other
+		// b) it is not possible to specify the version when selecting voices through configuration (including CSS)
+		@Override
+		public String getName() {
+			return "cereproc-dnn";
+		}
+
+		@Override
+		public String getVersion() {
+			return "dnn";
+		}
+
+		@Override
+		@Activate
+		protected void loadSSMLadapter() {
+			super.loadSSMLadapter();
+		}
+
+		@Override
+		protected CereProcEngine newEngine(
+				String server, File clientDir, int priority, Map<String,String> params) throws Throwable {
+
+			int port; {
+				String prop = "org.daisy.pipeline.tts.cereproc.dnn.port";
+				String val = params.get(prop);
+				if (val != null) {
+					try {
+						port = Integer.valueOf(val);
+					} catch (NumberFormatException e) {
+						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
+					}
+				} else {
+					port = 8992;
+					logger.warn(prop + " property not set. Defaulting to " + port);
+				}
+			}
+			{
+				String prop = "org.daisy.pipeline.tts.cereproc.dnn.priority";
+				String val = params.get(prop);
+				if (val != null) {
+					try {
+						priority = Integer.valueOf(val);
+					} catch (NumberFormatException e) {
+						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
+					}
+				} else {
+					priority = 15;
+				}
+			}
+			return new CereProcEngine(this, server, port, clientDir, priority);
+		}
 	}
 }

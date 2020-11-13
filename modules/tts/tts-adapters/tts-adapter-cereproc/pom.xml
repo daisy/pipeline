@@ -41,7 +41,8 @@
 
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.cereproc.impl.CereProcService
+      org.daisy.pipeline.tts.cereproc.impl.CereProcService$CereProcStandardService,
+      org.daisy.pipeline.tts.cereproc.impl.CereProcService$CereProcDNNService
     </expose-services>
   </properties>
 
@@ -66,7 +67,8 @@
         <configuration>
           <systemPropertyVariables>
             <org.daisy.pipeline.tts.cereproc.server>52.138.143.183</org.daisy.pipeline.tts.cereproc.server>
-            <org.daisy.pipeline.tts.cereproc.port>8989</org.daisy.pipeline.tts.cereproc.port>
+            <org.daisy.pipeline.tts.cereproc.port>8991</org.daisy.pipeline.tts.cereproc.port>
+            <org.daisy.pipeline.tts.cereproc.dnn.port>8992</org.daisy.pipeline.tts.cereproc.dnn.port>
           </systemPropertyVariables>
         </configuration>
       </plugin>

@@ -29,6 +29,7 @@ public class CereProcTest extends AbstractTest {
 	static {
 		params.put("org.daisy.pipeline.tts.cereproc.server", System.getProperty("org.daisy.pipeline.tts.cereproc.server"));
 		params.put("org.daisy.pipeline.tts.cereproc.port", System.getProperty("org.daisy.pipeline.tts.cereproc.port"));
+		params.put("org.daisy.pipeline.tts.cereproc.dnn.port", System.getProperty("org.daisy.pipeline.tts.cereproc.dnn.port"));
 	}
 
 	@Test
@@ -43,7 +44,8 @@ public class CereProcTest extends AbstractTest {
 	@Test
 	public void testSpeak() throws Throwable {
 		TTSEngine engine = ttsService.newEngine(params);
-		Assert.assertEquals("cereproc", ttsService.getName());
+		Assert.assertTrue("cereproc".equals(ttsService.getName())
+		                  || "cereproc-dnn".equals(ttsService.getName()));
 		TTSResource resource = engine.allocateThreadResources();
 		try {
 			Collection<AudioBuffer> audio = engine.synthesize("<s>Hi, my name is William</s>",
