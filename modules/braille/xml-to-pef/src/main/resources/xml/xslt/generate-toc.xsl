@@ -204,7 +204,7 @@
   <!-- ========================================= -->
   
   <xsl:function name="f:html-headers">
-    <xsl:sequence select="for $i in 1 to $depth return concat('h',$i)"/>
+    <xsl:sequence select="for $i in 1 to 6 return concat('h',$i)"/>
   </xsl:function>
   
   <xsl:function name="f:list-name">

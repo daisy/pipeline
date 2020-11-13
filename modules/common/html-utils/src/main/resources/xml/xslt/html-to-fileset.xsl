@@ -100,71 +100,63 @@
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template match="script[@src]">
+    <xsl:template match="script/@src">
         <xsl:sequence
-            select="f:fileset-entry(@src,if (@type) then @type else 'text/javascript','script')"/>
+            select="f:fileset-entry(.,if (../@type) then ../@type else 'text/javascript','script')"/>
     </xsl:template>
 
-    <xsl:template match="a[@href]">
+    <xsl:template match="a/@href">
         <!--FIXME add out-of-spine local XHTML resources-->
     </xsl:template>
 
 
-    <xsl:template match="img[@src]">
-        <xsl:if test="not(pf:get-scheme(@src)='data')">
-            <xsl:sequence
-                select="f:fileset-entry(@src,
-            if (matches(@src,'.*\.png$','i')) then 'image/png'
-            else if (matches(@src,'.*\.jpe?g$','i')) then 'image/jpeg'
-            else if (matches(@src,'.*\.gif$','i')) then 'image/gif'
-            else if (matches(@src,'.*\.svg$','i')) then 'image/svg+xml'
-            else (),'image')"
-            />
+    <xsl:template match="img/@src">
+        <xsl:if test="not(pf:get-scheme(.)='data')">
+            <xsl:sequence select="f:fileset-entry(., f:image-type-from-filename(.), 'image')"/>
         </xsl:if>
-        <xsl:apply-templates select="@*"/>
     </xsl:template>
 
     <xsl:template match="img/@longdesc[not(starts-with(.,'#'))]">
         <xsl:sequence select="f:fileset-entry(.,(),'description')"/>
     </xsl:template>
 
-    <xsl:template match="iframe[@src]">
+    <xsl:template match="iframe/@src">
         <!--TODO support iframe/@srcdoc -->
-        <xsl:sequence select="f:fileset-entry(@src,'application/xhtml+xml','content')"/>
+        <xsl:sequence select="f:fileset-entry(.,'application/xhtml+xml','content')"/>
     </xsl:template>
 
-    <xsl:template match="embed[@src]">
-        <xsl:sequence select="f:fileset-entry(@src,@type,'')"/>
+    <xsl:template match="embed/@src">
+        <xsl:sequence select="f:fileset-entry(., ../@type, '')"/>
     </xsl:template>
 
-    <xsl:template match="object[@data]">
+    <xsl:template match="object/@data">
         <xsl:sequence
-            select="f:fileset-entry(@data,@type,if (f:is-audio(@data,@type)) then 'audio' 
-                                                else if (f:is-image(@data,@type)) then 'image'
-                                                else if (f:is-video(@data,@type)) then 'video'
-                                                else '')"
+            select="f:fileset-entry(., ../@type, if (f:is-audio(., ../@type)) then 'audio'
+                                                 else if (f:is-image(., ../@type)) then 'image'
+                                                 else if (f:is-video(., ../@type)) then 'video'
+                                                 else '')"
         />
     </xsl:template>
 
 
-    <xsl:template match="audio[@src]">
-        <xsl:sequence select="f:fileset-entry(@src,(),'audio')"/>
+    <xsl:template match="audio/@src">
+        <xsl:sequence select="f:fileset-entry(.,(),'audio')"/>
     </xsl:template>
 
-    <xsl:template match="video[@src]">
-        <xsl:sequence select="f:fileset-entry(@src,(),'video')"/>
+    <xsl:template match="video/@src">
+        <xsl:sequence select="f:fileset-entry(.,(),'video')"/>
     </xsl:template>
 
-    <xsl:template match="source">
+    <xsl:template match="source/@src">
         <xsl:sequence
-            select="f:fileset-entry(@src,@type,if (parent::audio) then 'audio' 
-                                               else if (parent::video) then 'video'
-                                               else '')"
+            select="f:fileset-entry(., ../@type, if (../../audio) then 'audio'
+                                                 else if (../../video) then 'video'
+                                                 else '')"
         />
     </xsl:template>
 
-    <xsl:template match="track">
-        <xsl:sequence select="f:fileset-entry(@src,(),'text-track')"/>
+    <xsl:template match="track/@src">
+        <xsl:sequence select="f:fileset-entry(.,(),'text-track')"/>
     </xsl:template>
 
 
@@ -174,53 +166,53 @@
 
     <!--See http://www.w3.org/TR/SVGTiny12/linking.html-->
 
-    <xsl:template match="svg:animation">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,'application/svg+xml','image animation')"
+    <xsl:template match="svg:animation/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(.,'application/svg+xml','image animation')"
         />
     </xsl:template>
 
-    <xsl:template match="svg:audio">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,@type,'audio')"/>
+    <xsl:template match="svg:audio/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(., ../@type, 'audio')"/>
     </xsl:template>
 
-    <xsl:template match="svg:foreignObject[@xlink:href]">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,(),'')"/>
+    <xsl:template match="svg:foreignObject/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(.,(),'')"/>
     </xsl:template>
 
-    <xsl:template match="svg:font-face-uri">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,(),'font')"/>
+    <xsl:template match="svg:font-face-uri/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(.,(),'font')"/>
     </xsl:template>
 
-    <xsl:template match="svg:handler[@xlink:href]">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,@type,'')"/>
+    <xsl:template match="svg:handler/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(., ../@type, '')"/>
     </xsl:template>
 
-    <xsl:template match="svg:image">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,@type,'image')"/>
+    <xsl:template match="svg:image/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(., ../@type, 'image')"/>
     </xsl:template>
 
-    <xsl:template match="svg:script[@xlink:href]">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,@type,'script')"/>
+    <xsl:template match="svg:script/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(., ../@type, 'script')"/>
     </xsl:template>
 
-    <xsl:template match="svg:video">
-        <xsl:sequence select="f:fileset-entry(@xlink:href,@type,'video')"/>
+    <xsl:template match="svg:video/@xlink:href">
+        <xsl:sequence select="f:fileset-entry(., ../@type, 'video')"/>
     </xsl:template>
 
     <!--–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––>
      |  MathML                                                                     |
     <|–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––-->
 
-    <xsl:template match="m:annotation[@src]">
-        <xsl:sequence select="f:fileset-entry(@src,@encoding,'description')"/>
+    <xsl:template match="m:annotation/@src">
+        <xsl:sequence select="f:fileset-entry(., ../@encoding, 'description')"/>
     </xsl:template>
 
-    <xsl:template match="m:math[@altimg]">
-        <xsl:sequence select="f:fileset-entry(@altimg,(),'image')"/>
+    <xsl:template match="m:math/@altimg">
+        <xsl:sequence select="f:fileset-entry(., f:image-type-from-filename(.), 'image')"/>
     </xsl:template>
 
-    <xsl:template match="m:mglyph[@src]">
-        <xsl:sequence select="f:fileset-entry(@src,(),'image')"/>
+    <xsl:template match="m:mglyph/@src">
+        <xsl:sequence select="f:fileset-entry(.,(),'image')"/>
     </xsl:template>
 
     <!--–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––>
@@ -265,7 +257,7 @@
         <xsl:param name="uri" as="item()?"/>
         <xsl:param name="type" as="item()?"/>
         <xsl:sequence
-            select="starts-with($type,'audio/') 
+            select="starts-with($type,'audio/')
             or pf:get-extension($uri)=('m4a','mp3','aac','aiff','ogg','wav','wvma','flac','mpa','spx','oga','3gp')"
         />
     </xsl:function>
@@ -273,7 +265,7 @@
         <xsl:param name="uri" as="item()?"/>
         <xsl:param name="type" as="item()?"/>
         <xsl:sequence
-            select="starts-with($type,'image/') 
+            select="starts-with($type,'image/')
             or pf:get-extension($uri)=('jpg','jpeg','png','gif','svg')"
         />
     </xsl:function>
@@ -281,9 +273,17 @@
         <xsl:param name="uri" as="item()?"/>
         <xsl:param name="type" as="item()?"/>
         <xsl:sequence
-            select="starts-with($type,'video/') 
+            select="starts-with($type,'video/')
             or pf:get-extension($uri)=('mp4','mpeg','m4v','mp4','flv','wmv','mov','ogv')"
         />
+    </xsl:function>
+    <xsl:function name="f:image-type-from-filename" as="xs:string?">
+        <xsl:param name="src" as="item()?"/>
+        <xsl:sequence select="if (matches($src,'.*\.png$','i')) then 'image/png'
+                              else if (matches($src,'.*\.jpe?g$','i')) then 'image/jpeg'
+                              else if (matches($src,'.*\.gif$','i')) then 'image/gif'
+                              else if (matches($src,'.*\.svg$','i')) then 'image/svg+xml'
+                              else ()"/>
     </xsl:function>
 
 
@@ -327,7 +327,7 @@
         <xsl:param name="url" as="xs:string"/>
         <xsl:sequence
             select="
-            if (matches($url,'''(.*?)''')) then replace($url,'''(.*?)''','$1') 
+            if (matches($url,'''(.*?)''')) then replace($url,'''(.*?)''','$1')
             else if  (matches($url,'&quot;(.*?)&quot;')) then replace($url,'&quot;(.*?)&quot;','$1')
             else if (matches($url,'^[^''&quot;]')) then $url
             else ()"

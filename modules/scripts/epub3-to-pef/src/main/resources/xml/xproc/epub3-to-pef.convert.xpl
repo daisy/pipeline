@@ -187,16 +187,7 @@
         </p:with-option>
     </p:add-attribute>
     
-    <p:xslt px:message="Generating table of contents" px:progress=".01">
-        <p:input port="stylesheet">
-            <p:document href="../xslt/generate-toc.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:pipe step="parameters" port="result"/>
-        </p:input>
-    </p:xslt>
-    
-    <p:group px:message="Inlining global CSS" px:progress=".10">
+    <p:group px:message="Inlining global CSS" px:progress=".11">
         <p:variable name="abs-stylesheet"
                     select="string-join(for $s in tokenize($stylesheet,'\s+')[not(.='')]
                                         return resolve-uri($s,$epub),' ')"/>
@@ -206,6 +197,10 @@
                     select="(index-of(tokenize($abs-stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
+                              if (tokenize($stylesheet,'\s+')
+                                  ='http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl')
+                                then ()
+                                else resolve-uri('../xslt/generate-toc.xsl'),
                               (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
                               'http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl',
                               if ($default-stylesheet!='#default')
@@ -263,10 +258,10 @@
             </p:group>
             <p:try name="try-pef">
                 <p:group px:message="Transforming from OBFL to PEF" px:progress=".60">
-                   <p:output port="pef" primary="true"/>
+                    <p:output port="pef" primary="true"/>
                     <p:output port="status">
                         <p:inline>
-                            <d:validation-status result="ok"/>
+                            <d:status result="ok"/>
                         </p:inline>
                     </p:output>
                     <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
@@ -285,21 +280,21 @@
                     </p:output>
                     <p:output port="status">
                         <p:inline>
-                            <d:validation-status result="error"/>
+                            <d:status result="error"/>
                         </p:inline>
                     </p:output>
                     <p:sink/>
                 </p:catch>
             </p:try>
         </p:when>
-        <p:otherwise px:message="Transforming from XML with inline CSS to PEF" >
+        <p:otherwise px:message="Transforming from XML with inline CSS to PEF">
             <p:output port="pef" primary="true"/>
             <p:output port="obfl">
                 <p:empty/>
             </p:output>
             <p:output port="status">
                 <p:inline>
-                    <d:validation-status result="ok"/>
+                    <d:status result="ok"/>
                 </p:inline>
             </p:output>
             <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>

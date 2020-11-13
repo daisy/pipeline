@@ -20,7 +20,7 @@
         <html>
             <head>
                 <title>
-                    <xsl:value-of select="$metadata/meta[@name='dc:title']"/>
+                    <xsl:value-of select="$metadata/*[local-name()='meta'][@name='dc:title']/@content"/>
                 </title>
                 <xsl:copy-of select="$metadata/*"/>
                 

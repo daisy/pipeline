@@ -43,7 +43,7 @@
         </p:input>
     </p:xslt>
     
-    <p:wrap match="css:box[@type='block'][not(descendant::css:box)]/node()" group-adjacent="true" wrapper="css:box"/>
+    <p:wrap match="css:box[@type='block'][not(descendant::css:box)]/node()" group-adjacent="true()" wrapper="css:box"/>
     <p:add-attribute match="css:box[not(@type)]" attribute-name="type" attribute-value="inline"/>
     <p:insert match="css:box[@type='block'][not(node())]" position="first-child">
         <p:input port="insertion">

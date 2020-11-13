@@ -76,8 +76,9 @@ public class CompoundTranslator extends AbstractBrailleTranslator {
 									if (supports(tt)) {
 										textTransform = tt;
 										it.remove();
-										while (it.hasNext())
-											it.remove();
+										while (it.hasNext()) {
+											it.next();
+											it.remove(); }
 										break; }}
 								if (values.isEmpty())
 									style.removeProperty("text-transform"); }}}

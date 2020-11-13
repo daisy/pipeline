@@ -10,6 +10,10 @@
 		outline algorithm</a>.</p>
 		<p>Returns the outline of a HTML document and optionally transforms the document in a
 		certain way in relation to the outline.</p>
+		<p>Note that the outline algorithm was never implemented in web browsers nor assistive
+		technology. Therefore it should not be used by authors to convey document structure. The
+		algorithm is however useful in the context of transformations, for example to generate a
+		table of contents, or to rename heading elements according to their outline depth.</p>
 	</p:documentation>
 	
 	<p:input port="source">

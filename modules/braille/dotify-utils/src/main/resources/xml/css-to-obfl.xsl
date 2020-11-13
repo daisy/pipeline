@@ -1210,7 +1210,7 @@
     <!--
         Rendering scenarios
     -->
-    <xsl:template priority="0.591"
+    <xsl:template priority="0.592"
                   mode="block"
                   match="css:box[@type='block'][@css:_obfl-scenarios]">
         <xml-data renderer="{pxi:renderer-name(.)}">
@@ -1232,7 +1232,7 @@
                          css:box[@type='block'][@css:_obfl-scenarios]/css:box[@type=('block','table')]/@css:_obfl-scenario|
                          css:box[@type='block'][@css:_obfl-scenarios]/css:box[@type=('block','table')]/@css:_obfl-scenario-cost"/>
     
-    <xsl:template priority="0.7"
+    <xsl:template priority="0.592"
                   mode="toc-block"
                   match="css:box[@type='block']">
         <xsl:apply-templates mode="assert-nil-attr" select="@css:_obfl-scenarios"/>

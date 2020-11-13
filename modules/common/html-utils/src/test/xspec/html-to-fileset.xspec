@@ -138,4 +138,17 @@
             </x:expect>
         </x:scenario>
     </x:scenario>
+    
+    <x:scenario label="nested structure">
+        <x:context>
+            <html>
+                <a href="#">
+                    <img src="my-image.png" xml:base="file:/example/images/"/>
+                </a>
+            </html>
+        </x:context>
+        <x:expect label="produces a fileset entry for my-image.png" test="//d:file">
+            <d:file href="images/my-image.png" media-type="image/png" original-href="file:/example/images/my-image.png" kind="image"/>
+        </x:expect>
+    </x:scenario>
 </x:description>
