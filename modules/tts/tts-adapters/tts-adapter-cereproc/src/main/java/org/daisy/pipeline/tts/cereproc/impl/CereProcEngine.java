@@ -44,8 +44,14 @@ public class CereProcEngine extends MarklessTTSEngine {
 	private AudioFormat audioFormat;
 	private final int priority;
 	private final String[] cmd;
+	private final int expectedMillisecPerWord;
 
-	public CereProcEngine(CereProcService service, String server, int port, File clientDir, int priority)
+	enum Variant {
+		STANDARD,
+		DNN
+	}
+
+	public CereProcEngine(Variant variant, CereProcService service, String server, int port, File clientDir, int priority)
 			throws SynthesisException {
 		super(service);
 		this.priority = priority;
@@ -58,6 +64,14 @@ public class CereProcEngine extends MarklessTTSEngine {
 		                        ""+new File(clientDir, "cserver-client-java.jar"),
 		                        server,
 		                        ""+port};
+		switch (variant) {
+		case DNN:
+			this.expectedMillisecPerWord = 500;
+			break;
+		case STANDARD:
+		default:
+			this.expectedMillisecPerWord = 200;
+		}
 	}
 
 	@Override
@@ -68,6 +82,11 @@ public class CereProcEngine extends MarklessTTSEngine {
 	@Override
 	public AudioFormat getAudioOutputFormat() {
 		return audioFormat;
+	}
+
+	@Override
+	public int expectedMillisecPerWord() {
+		return expectedMillisecPerWord;
 	}
 
 	@Override

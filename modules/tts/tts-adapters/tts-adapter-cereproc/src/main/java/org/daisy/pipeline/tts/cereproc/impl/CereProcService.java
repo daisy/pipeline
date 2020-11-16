@@ -103,7 +103,7 @@ public abstract class CereProcService extends AbstractTTSService {
 					logger.warn(prop + " property not set. Defaulting to " + port);
 				}
 			}
-			return new CereProcEngine(this, server, port, clientDir, priority);
+			return new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, clientDir, priority);
 		}
 	}
 
@@ -163,7 +163,7 @@ public abstract class CereProcService extends AbstractTTSService {
 					priority = 15;
 				}
 			}
-			return new CereProcEngine(this, server, port, clientDir, priority);
+			return new CereProcEngine(CereProcEngine.Variant.DNN, this, server, port, clientDir, priority);
 		}
 	}
 }
