@@ -40,7 +40,7 @@ help :
 	echo "	Tests the Docker image"                                             >&2
 
 # FIXME: don't hard-code
-assembly/VERSION     := 1.13.6-SNAPSHOT
+assembly/VERSION     := 1.13.7-SNAPSHOT
 assembly/BASEDIR     := .
 MVN_LOCAL_REPOSITORY ?= $(HOME)/.m2/repository
 

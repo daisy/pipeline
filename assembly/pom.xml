@@ -58,7 +58,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.2.3</version>
+        <version>1.2.4-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -78,14 +78,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.3</version>
+        <version>1.13.4-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.13.7</version>
+        <version>1.13.8-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -732,11 +732,10 @@
                 <!--
                     3rd-party dependencies
                 -->
-                <artifactItem>
-                  <groupId>de.codecentric.centerdevice</groupId>
-                  <artifactId>centerdevice-nsmenufx</artifactId>
-                  <version>2.1.5</version>
-                </artifactItem>
+                <dependency>
+                  <groupId>de.jangassen</groupId>
+                  <artifactId>nsmenufx</artifactId>
+                </dependency>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>pegdown</artifactId>
