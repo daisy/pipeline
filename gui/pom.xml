@@ -30,7 +30,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.2</version>
+        <version>1.13.4-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -42,8 +42,8 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
-      <groupId>de.codecentric.centerdevice</groupId>
-      <artifactId>centerdevice-nsmenufx</artifactId>
+      <groupId>de.jangassen</groupId>
+      <artifactId>nsmenufx</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>

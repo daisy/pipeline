@@ -95,10 +95,6 @@ public class AppMenu extends MenuBar {
                     MenuToolkit toolkit = MenuToolkit.toolkit();
                     Menu toolkitMenu = toolkit.createDefaultApplicationMenu("DAISY Pipeline 2");
                     toolkit.setApplicationMenu(toolkitMenu);
-                    // the application menu title still reads "java" on OSX; this
-                    // has to be changed in Info.plist when the application is bundled
-                    
-                	
                 }  else {
                         MenuItem exit = new MenuItem("Exit");
                         exit.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN));
