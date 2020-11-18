@@ -29,12 +29,16 @@ import org.ops4j.pax.exam.util.PathUtils;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component(
 	name = "mock-tts",
 	service = { TTSService.class }
 )
 public class MockTTS implements TTSService {
 	
+	final static Logger logger = LoggerFactory.getLogger(MockTTS.class);
 	final static File waveOut = new File(PathUtils.getBaseDir(), "src/test/resources/mock-tts/mock.wav");
 	URL ssmlTransformer;
 	
@@ -54,6 +58,7 @@ public class MockTTS implements TTSService {
 			                                          Voice voice, TTSResource threadResources,
 			                                          AudioBufferAllocator bufferAllocator, boolean retry)
 					throws SynthesisException, InterruptedException, MemoryException {
+				logger.info("Synthesizing sentence: " + sentence);
 				try {
 					Collection<AudioBuffer> result = new ArrayList<AudioBuffer>();
 					BufferedInputStream in = new BufferedInputStream(new FileInputStream(MockTTS.waveOut));
