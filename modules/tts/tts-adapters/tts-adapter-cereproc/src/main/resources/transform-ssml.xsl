@@ -33,7 +33,17 @@
     <xsl:apply-templates mode="serialize" select="$content"/>
   </xsl:template>
 
-  <xsl:template mode="serialize" match="ssml:*" priority="1">
+  <xsl:template mode="serialize" match="ssml:audio|
+                                        ssml:break|
+                                        ssml:emphasis|
+                                        ssml:lexicon|
+                                        ssml:p|
+                                        ssml:phoneme|
+                                        ssml:prosody|
+                                        ssml:say-as|
+                                        ssml:sub|
+                                        ssml:s|
+                                        ssml:voice">
     <xsl:value-of select="concat('&lt;',local-name())"/>
     <xsl:apply-templates mode="#current" select="@*"/>
     <xsl:value-of select="'>'"/>
@@ -41,12 +51,14 @@
     <xsl:value-of select="concat('&lt;/',local-name(),'>')"/>
   </xsl:template>
 
-  <xsl:template mode="serialize" match="ssml:token" priority="2">
+  <xsl:template mode="serialize" match="ssml:token">
     <xsl:apply-templates mode="#current"/>
   </xsl:template>
 
-  <xsl:template mode="serialize" match="ssml:mark" priority="2"/>
-
+  <xsl:template mode="serialize" match="ssml:mark|
+                                        ssml:meta|
+                                        ssml:metadata"/>
+  
   <xsl:template mode="serialize" match="*">
     <xsl:apply-templates mode="#current"/>
   </xsl:template>
@@ -57,6 +69,22 @@
 
   <xsl:template mode="serialize" match="@*">
     <xsl:value-of select="concat(' ',local-name(),'=&quot;',replace(replace(.,'&amp;','&amp;amp;'),'&quot;','&amp;quot;'),'&quot;')"/>
+  </xsl:template>
+
+  <xsl:template mode="serialize" priority="1" match="ssml:phoneme[@alphabet[not(.=('ipa','cprc'))]]">
+    <xsl:apply-templates mode="#current"/>
+  </xsl:template>
+
+  <xsl:template mode="serialize" priority="1"
+                match="ssml:say-as[@interpret-as[not(.=('vxml:boolean',
+                                                        'vxml:date',
+                                                        'vxml:digits',
+                                                        'vxml:currency',
+                                                        'vxml:number',
+                                                        'vxml:phone',
+                                                        'vxml:time'))]]">
+    <!-- FIXME: show warning or error instead of silently ignoring the attribute -->
+    <xsl:apply-templates mode="#current"/>
   </xsl:template>
 
   <xsl:template mode="serialize" match="ssml:s/@*"/>
