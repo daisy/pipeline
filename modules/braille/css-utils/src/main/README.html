@@ -32,10 +32,48 @@
 
 <h2 id="osgi-services">OSGi services</h2>
 
-<h3 id="calabash-steps-orgdaisycommonxproccalabashxprocstepprovider">Calabash steps (<code>org.daisy.common.xproc.calabash.XProcStepProvider</code>)</h3>
+<h3 id="transformers-orgdaisypipelinebraillecommontransformprovider">Transformers (<a href="/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html"><code>org.daisy.pipeline.braille.common.TransformProvider</code></a>)</h3>
 
 <ul>
-  <li><a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssInlineStep.html"><code>{http://www.daisy.org/ns/pipeline/braille-css}inline</code></a></li>
+  <li>
+    <p><a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/impl/CSSBlockTransform.html"><code>(input:css)(output:css)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>id</code>: If present it must be the only feature. Will match a
+  transformer with a unique ID.</li>
+      <li>
+<code>locale</code>: If present the value will be used instead of any
+  xml:lang attributes.</li>
+    </ul>
+
+    <p>Other features are used for finding sub-transformers of type
+<a href="/pipeline/api/org/daisy/pipeline/braille/common/BrailleTranslator.html">BrailleTranslator</a>
+that match <code>(input:text-css)</code>.</p>
+  </li>
+</ul>
+
+<h3 id="css-cascaders-orgdaisypipelinecsscsscascader">CSS cascaders <a href="/pipeline/api/org/daisy/pipeline/css/CssCascader.html"><code>org.daisy.pipeline.css.CssCascader</code></a>
+</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/impl/BrailleCssCascader.html"><code>media="embossed"</code></a></li>
+</ul>
+
+<h3 id="calabash-steps-orgdaisycommonxproccalabashxprocstepprovider">Calabash steps (<a href="/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html"><code>org.daisy.common.xproc.calabash.XProcStepProvider</code></a>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.html"><code>{http://www.daisy.org/ns/pipeline/braille-css}shift-id</code></a></li>
+  <li><a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.html"><code>{http://www.daisy.org/ns/pipeline/braille-css}shift-string-set</code></a></li>
+</ul>
+
+<h3 id="saxon-functions-netsfsaxonlibextensionfunctiondefinition">Saxon functions (<code>net.sf.saxon.lib.ExtensionFunctionDefinition</code>)</h3>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.html"><code>{http://www.daisy.org/ns/pipeline/braille-css}parse-stylesheet</code></a></li>
+  <li><a href="/pipeline/modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/saxon/impl/RenderTableByDefinition.html"><code>{http://www.daisy.org/ns/pipeline/braille-css}render-table-by</code></a></li>
 </ul>
 
 <link rev="dp2:doc" href="./">

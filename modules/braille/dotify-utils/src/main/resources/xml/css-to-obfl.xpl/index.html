@@ -26,6 +26,11 @@
         px:error
       &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/css-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/css-utils/library.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        px:css-cascade
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/css-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl</a>"</span>&gt;
       &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         css:adjust-boxes
@@ -35,7 +40,6 @@
         css:eval-target-text
         css:flow-from
         css:flow-into
-        css:inline
         css:label-targets
         css:make-anonymous-block-boxes
         css:make-anonymous-inline-boxes
@@ -126,7 +130,7 @@
                     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                         Apply possible relative rules.
                     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">inline</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-cascade</span>/&gt;
                 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">viewport</span>&gt;
                 &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">recursive-parse-stylesheet-and-make-pseudo-elements</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
@@ -518,7 +522,7 @@
                         css:page-break-inside, css:volume-break-before and css:volume-break-after
                         attributes. (Needs to be done a second time because the box tree has been
                         broken up by css:split. css:page-break-before='right' will now be propagated
-                        all the wait to the root box.)
+                        all the way to the root box.)
                     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">propagate-page-break</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span>&gt;

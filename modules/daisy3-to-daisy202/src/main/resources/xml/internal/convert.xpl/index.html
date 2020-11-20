@@ -31,6 +31,14 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"result-docs"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
 
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"date"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Date of publication of the result DAISY 2.02 DTB.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Must be a ISO8601 date - recommended format is YYYY-MM-DD.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Defaults to the current date.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-dir"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">serialization</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset.out"</span> <span class="code-xml-attribute-local-name">indent</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
@@ -40,16 +48,36 @@
     
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xproc/library.xpl" class="source">http://www.daisy.org/pipeline/modules/common-utils/library.xpl</a>"</span>/&gt;
-    
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl" class="source">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a>"</span>/&gt;
-    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xproc/library.xpl" class="source">http://www.daisy.org/pipeline/modules/common-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:message
+            px:assert
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl" class="source">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:fileset-load
+            px:fileset-rebase
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xproc/library.xpl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xpl</a>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             px:set-base-uri
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy3-to-daisy202/src/main/resources/xml/internal/convert-smils.xpl" class="source">convert-smils.xpl</a>"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy3-to-daisy202/src/main/resources/xml/internal/convert-smils.xpl" class="source">convert-smils.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            pxi:daisy3-to-daisy202-smils
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy3-to-daisy202/src/main/resources/xml/internal/oebps-to-ncc-metadata.xpl" class="source">oebps-to-ncc-metadata.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:oebps-to-ncc-metadata
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
 
     
     
@@ -71,38 +99,16 @@
     &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-rebase</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fileset.in"</span>/&gt;
 
-    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/x-dtbncx+xml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncx"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fileset.in"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.in"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
-    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/smil"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-smils"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fileset.in"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.in"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
 
     
     
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Convert OPF metadata to NCC metadata&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">oebps-to-ncc-metadata</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"opf"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy3-to-daisy202/src/main/resources/xml/internal/opf-to-metadata.xsl" class="source">opf-to-metadata.xsl</a>"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">oebps-to-ncc-metadata</span>&gt;
 
 
     
@@ -113,14 +119,20 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncc.fileset"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"doc"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncc.doc"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
 
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncc-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($output-dir,'ncc.html')"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span>&gt;
-
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/x-dtbncx+xml"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fileset.in"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.in"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">error-code</span>=<span class="code-xml-attribute-value">"XXXX"</span> <span class="code-xml-attribute-local-name">test-count-min</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-local-name">test-count-max</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncx"</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"The input DTB must contain exactly one NCX file (media-type 'application/x-dtbncx+xml')"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncx-to-ncc"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncx"</span>/&gt;
@@ -129,12 +141,10 @@
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy3-to-daisy202/src/main/resources/xml/internal/ncx-to-ncc.xsl" class="source">ncx-to-ncc.xsl</a>"</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
-            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"date"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$date"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
         &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">set-base-uri</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncc.doc"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ncc-uri"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($output-dir,'ncc.html')"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">set-base-uri</span>&gt;
 
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncc.fileset"</span>&gt;
@@ -143,7 +153,9 @@
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$output-dir"</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-create</span>&gt;
             &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-add-entry</span> <span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"application/xhtml+xml"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ncc-uri"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"entry"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncc.doc"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
             &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-add-entry</span>&gt;
             &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"NCC document created."</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
@@ -155,11 +167,11 @@
     
 
     &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">daisy3-to-daisy202-smils</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smils"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"smils"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"input-smils"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fileset.in"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"ncx"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncx"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.in"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(/*)"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fileset.in"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
@@ -172,22 +184,16 @@
     
     
 
-    
-
-    
-    
-    
-
     &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-join</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"result-fileset"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncc"</span>/&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"smils"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncc"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"smils"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
     &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-join</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"result-docs"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"doc"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncc"</span>/&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"docs"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"smils"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncc"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"smils"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
 

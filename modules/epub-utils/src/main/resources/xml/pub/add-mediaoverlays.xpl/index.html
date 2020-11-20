@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../add-mediaoverlays.xpl">
+</head>
+<body><div class="code" about="../add-mediaoverlays.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:epub3-add-mediaoverlays"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Add media overlays to a EPUB publication&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;The source fileset&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Must include the package document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mo.fileset"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mo.in-memory"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;The media overlays fileset with the SMIL and audio files&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;The result fileset&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;A copy of the source fileset with the media overlay files added and the package
+            document updated.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"update-metadata"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"filter-package-doc"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched.in-memory"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mo.in-memory"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compatibility-mode"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"boolean"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Whether to be backward compatible with &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://idpf.org/epub/20/spec/OPF_2.0.1_draft.htm"</span>&gt;Open Package Format
+            2.0.1&lt;/<span class="code-xml-element-local-name">a</span>&gt;.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reserved-prefixes"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'#default'"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;The &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-default-vocab"</span>&gt;reserved
+            prefix mappings&lt;/<span class="code-xml-element-local-name">a</span>&gt; of the resulting package document. By default, prefixes that are
+            used but not declared in the input are also not declared in the output, and if "media"
+            is not used in the input, the "declare-media-prefix" setting determines whether it is
+            declared in the output.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"declare-media-prefix"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Determines whether the "media" prefix is declared in the output when it is not used
+            in the input.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Has no effect if the "reserved-prefixes" option is set.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xproc/library.xpl" class="source">http://www.daisy.org/pipeline/modules/common-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:assert
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl" class="source">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:fileset-filter
+            px:fileset-load
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/merge-metadata.xpl" class="source">merge-metadata.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            pxi:merge-metadata
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/opf3-to-opf2-metadata.xpl" class="source">opf3-to-opf2-metadata.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            pxi:opf3-to-opf2-metadata
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Load package document&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/oebps-package+xml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"filter-package-doc"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"load-package-doc"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"There must be exactly one package document in the fileset"</span> <span class="code-xml-attribute-local-name">test-count-min</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-local-name">test-count-max</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-local-name">error-code</span>=<span class="code-xml-attribute-value">"XXXXX"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"package-doc"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Load SMIL files&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/smil+xml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mo.fileset"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mo.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Update manifest&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"update-manifest"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Assigning media overlays to their corresponding content documents..."</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message-severity</span>=<span class="code-xml-attribute-value">"DEBUG"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"package-doc"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mo.fileset"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"smil"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/assign-media-overlays.xsl" class="source">assign-media-overlays.xsl</a>"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Update metadata with duration information&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"update-metadata"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"opf:meta[@property='media:duration']"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*[@prefix]/opf:metadata"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"../@prefix"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">viewport</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/opf:metadata"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"duration-metadata"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Extract "duration" metadata from media overlay documents.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata.durations"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"smil"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(/*)"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/create-package-doc.estimate-mediaoverlay-duration.xsl" class="source">create-package-doc.estimate-mediaoverlay-duration.xsl</a>"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"refines"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute-value"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('#',/*/opf:manifest/opf:item[resolve-uri(@href,base-uri(.))=$base]/@id)"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"update-manifest"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata.total-duration"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">count</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"metadata.durations"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">count</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"/*=0"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"_"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"metadata.durations"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/create-package-doc.sum-mediaoverlay-durations.xsl" class="source">create-package-doc.sum-mediaoverlay-durations.xsl</a>"</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"last-child"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">opf:</span><span class="code-xml-element-local-name">metadata</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"metadata.durations"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"metadata.total-duration"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$reserved-prefixes='#default' and $declare-media-prefix='true'"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">attribute-value</span>=<span class="code-xml-attribute-value">"media: http://www.idpf.org/epub/vocab/overlays/#"</span>&gt;
+                            
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">merge-metadata</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"metadata"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"duration-metadata"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"manifest"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/*/opf:manifest"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"update-manifest"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reserved-prefixes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$reserved-prefixes"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">merge-metadata</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$compatibility-mode='true'"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">opf3-to-opf2-metadata</span> <span class="code-xml-attribute-local-name">compatibility-mode</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">viewport</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"/*/opf:metadata/@prefix"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute-value"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/*/opf:metadata/@prefix"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/opf:metadata/@prefix"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/@prefix"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-join</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"filter-package-doc"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"load-package-doc"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mo.fileset"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-join</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

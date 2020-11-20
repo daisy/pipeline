@@ -41,6 +41,11 @@
             px:set-base-uri
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/smil-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/smil-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:smil-to-audio-fileset
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content-resources"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
@@ -68,14 +73,7 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"original-href"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(/*)"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$include-mediaoverlay-resources='true'"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
-                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/mediaoverlay-utils/src/main/resources/xml/smil-to-audio-fileset.xsl" class="source">http://www.daisy.org/pipeline/modules/mediaoverlay-utils/smil-to-audio-fileset.xsl</a>"</span>/&gt;
-                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+                &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">smil-to-audio-fileset</span>/&gt;
                 &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"extracted list of audio files from $1"</span>&gt;
                     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"param1"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$original-href"</span>/&gt;
                 &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">message</span>&gt;

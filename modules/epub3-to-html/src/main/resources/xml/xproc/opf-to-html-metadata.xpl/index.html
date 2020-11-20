@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../opf-to-html-metadata.xpl">
+</head>
+<body><div class="code" about="../opf-to-html-metadata.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:opf-to-html-metadata"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">p</span>&gt;Convert &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://w3c.github.io/publ-epub-revision/epub32/spec/epub-packages.html#sec-pkg-metadata"</span>&gt;OPF
+		metadata&lt;/<span class="code-xml-element-local-name">a</span>&gt; to a HTML metadata.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			A OPF &lt;<span class="code-xml-element-local-name">code</span>&gt;package&lt;/<span class="code-xml-element-local-name">code</span>&gt; or &lt;<span class="code-xml-element-local-name">code</span>&gt;metadata&lt;/<span class="code-xml-element-local-name">code</span>&gt; document.
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			A HTML &lt;<span class="code-xml-element-local-name">code</span>&gt;head&lt;/<span class="code-xml-element-local-name">code</span>&gt; document.
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span> <span class="code-xml-attribute-local-name">kind</span>=<span class="code-xml-attribute-value">"parameter"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/epub-utils/library.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:epub3-merge-prefix
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub3-to-html/src/main/resources/xml/xslt/opf-to-html-metadata.xsl" class="source">../xslt/opf-to-html-metadata.xsl</a>"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+
+	
+	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-merge-prefix</span> <span class="code-xml-attribute-local-name">implicit-output-prefixes</span>=<span class="code-xml-attribute-value">"dc: http://purl.org/dc/elements/1.1/"</span>/&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

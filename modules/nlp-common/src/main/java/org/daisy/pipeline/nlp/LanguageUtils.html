@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>LanguageUtils xref</title>
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/nlp-common/src/main/java/stylesheet.css">
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.nlp;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.HashSet;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.Locale;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.util.Set;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Matcher;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/LanguageUtils.html">LanguageUtils</a> {
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Pattern localePattern = Pattern
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  	        .compile(<span class="jxr_string">"(\\p{Alpha}{2})(?:[-_](\\p{Alpha}{2}))?(?:[-_](\\p{Alnum}{1,8}))*"</span>);
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Locale stringToLanguage(String lang) {
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  		<em class="jxr_comment">//TODO: in Java7 we would use:</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  		<em class="jxr_comment">//return Locale.forLanguageTag(lang)</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  		<em class="jxr_comment">//=&gt; this works with BCP47 tags, and should work with old tags from RFC 3066</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  		Locale locale = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  		<strong class="jxr_keyword">if</strong> (lang != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  			Matcher m = localePattern.matcher(lang.toLowerCase());
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  			<strong class="jxr_keyword">if</strong> (m.matches()) {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  				locale = <strong class="jxr_keyword">new</strong> Locale(m.group(1), m.group(2) != <strong class="jxr_keyword">null</strong> ? m.group(2) : <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  			}
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		}
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  		<strong class="jxr_keyword">return</strong> locale;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	}
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<em class="jxr_comment">//lowercase ISO 639-2/T language codes (www.loc.gov/standards/iso639-2/php/English_list.php)</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; RightToLeft = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(Arrays.asList(<span class="jxr_string">"yid"</span>, <span class="jxr_string">"ara"</span>,
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	        <span class="jxr_string">"jpr"</span>, <span class="jxr_string">"per"</span>, <span class="jxr_string">"fas"</span>, <span class="jxr_string">"peo"</span>, <span class="jxr_string">"heb"</span>));
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRightToLeft(Locale l) {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">return</strong> RightToLeft.contains(l.getISO3Language());
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	}
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<em class="jxr_comment">// one can customize the punctuation/space symbols depending on the</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<em class="jxr_comment">// given language.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String getFullStopSymbol(Locale lang) {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"! "</span>;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String getCommaSymbol(Locale lang) {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">", "</span>;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String getWhiteSpaceSymbol(Locale lang) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">" "</span>;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  }
+</pre>
+<hr>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+</body>
+</html>

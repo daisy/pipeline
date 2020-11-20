@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../epub-update-links.xpl">
+</head>
+<body><div class="code" about="../epub-update-links.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:epub-update-links"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Update cross-references in HTML and SMIL documents and package document&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;EPUB fileset before the relocation of files.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;A &lt;<span class="code-xml-element-local-name">code</span>&gt;d:fileset&lt;/<span class="code-xml-element-local-name">code</span>&gt; document that defines the relocation of files in the EPUB
+            fileset.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-smil"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl" class="source">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:fileset-filter
+            px:fileset-load
+            px:fileset-update
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xproc/html-library.xpl" class="source">http://www.daisy.org/pipeline/modules/html-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:html-update-links
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/smil-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/smil-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:smil-update-links
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy3-utils/src/main/resources/xml/daisy3-library.xpl" class="source">http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:ncx-update-links
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/package-doc-update-links.xpl" class="source">pub/package-doc-update-links.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            pxi:epub-package-doc-update-links
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Update cross-references in package document&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/oebps-package+xml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"opf"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-opf.in-memory"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">epub-package-doc-update-links</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">epub-package-doc-update-links</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-opf"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"opf"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-opf.in-memory"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Update cross-references in NCX document&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/x-dtbncx+xml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncx"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"opf"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"opf"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"opf"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-ncx.in-memory"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">ncx-update-links</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">ncx-update-links</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-ncx"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-opf"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-opf"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncx"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-ncx.in-memory"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Update cross-references in HTML and SVG documents&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/xhtml+xml image/svg+xml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"html"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncx"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncx"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"ncx"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-html.in-memory"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-update-links</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-update-links</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-html"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-ncx"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-ncx"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"html"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-html.in-memory"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Update cross-references in SMIL documents&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span> <span class="code-xml-attribute-local-name">media-types</span>=<span class="code-xml-attribute-value">"application/smil+xml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"html"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"html"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-filter</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"html"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"not-matched.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-load</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-smil.in-memory"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">smil-update-links</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">smil-update-links</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"updated-links-in-smil"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-html"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-html"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.fileset"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"smil"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"update.in-memory"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"updated-links-in-smil.in-memory"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-update</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

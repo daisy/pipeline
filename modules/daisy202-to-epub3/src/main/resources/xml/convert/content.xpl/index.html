@@ -62,6 +62,11 @@
             px:set-base-uri
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xproc/html-library.xpl" class="source">http://www.daisy.org/pipeline/modules/html-utils/library.xpl</a>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            px:html-upgrade
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy202-to-epub3/src/main/resources/xml/convert/resolve-links.xpl" class="source">resolve-links.xpl</a>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Resolves SMIL-linkbacks.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
@@ -83,14 +88,7 @@
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy202-to-epub3/src/main/resources/xml/convert/daisy202-content-to-epub3-content.xsl" class="source">daisy202-content-to-epub3-content.xsl</a>"</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/html5-upgrade.xsl" class="source">http://www.daisy.org/pipeline/modules/html-utils/html5-upgrade.xsl</a>"</span>/&gt;
-            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
-            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-upgrade</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"first-child"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"ncc-navigation"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"content"</span>/&gt;

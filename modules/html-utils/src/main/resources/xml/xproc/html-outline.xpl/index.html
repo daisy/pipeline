@@ -8,24 +8,50 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../html-outline.xpl">
 </head>
-<body><div class="code" about="../html-outline.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:html-outline"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+<body><div class="code" about="../html-outline.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:html-outline"</span>&gt;
 
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-		&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Return an outline (ol element) from an (x)html page&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;<span class="code-xml-element-local-name">p</span>&gt;Apply the &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/sections.html#headings-and-sections"</span>&gt;HTML5
+		outline algorithm&lt;/<span class="code-xml-element-local-name">a</span>&gt;.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;<span class="code-xml-element-local-name">p</span>&gt;Returns the outline of a HTML document and optionally transforms the document in a
+		certain way in relation to the outline.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
 	
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-			&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Input (X)HTML stream&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
-			&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;The (X)HTML document from which the outline must be extracted&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;HTML document&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;The HTML document from which the outline must be extracted.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
 
-	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-			&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Outline&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
-			&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;This steps output the outline of the html as a hierarchy of ordered lists&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;The outline&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;The outline of the HTML document as a &lt;<span class="code-xml-element-local-name">code</span>&gt;ol&lt;/<span class="code-xml-element-local-name">code</span>&gt; element. Can be
+			used directly as a table of contents.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"outline"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;The raw outline&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;The unformatted outline of the HTML document as a
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;d:outline&lt;/<span class="code-xml-element-local-name">code</span>&gt; document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"raw-outline"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"content-doc"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;The modified HTML document.&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Depending on the values of the "fix-heading-ranks", "fix-sectioning"
+			and "fix-untitled-sections" options, heading elements may be inserted or renamed and
+			section elements may be inserted, but the outline is guaranteed to be unchanged.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;All &lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;article&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;aside&lt;/<span class="code-xml-element-local-name">code</span>&gt;,
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;nav&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;section&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h1&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h2&lt;/<span class="code-xml-element-local-name">code</span>&gt;,
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;h3&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h4&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h5&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h6&lt;/<span class="code-xml-element-local-name">code</span>&gt; and
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;hgroup&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements get an &lt;<span class="code-xml-element-local-name">code</span>&gt;id&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"normalize"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
 
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
@@ -33,15 +59,141 @@
 			&lt;<span class="code-xml-element-local-name">p</span>&gt;The base URI of the resulting outline.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"heading-links-only"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'false'"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Whether the &lt;<span class="code-xml-element-local-name">code</span>&gt;a&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements in the "result" output should only reference
+			heading elements (&lt;<span class="code-xml-element-local-name">code</span>&gt;h1&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h2&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h3&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h4&lt;/<span class="code-xml-element-local-name">code</span>&gt;,
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;h5&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;h6&lt;/<span class="code-xml-element-local-name">code</span>&gt; or &lt;<span class="code-xml-element-local-name">code</span>&gt;hgroup&lt;/<span class="code-xml-element-local-name">code</span>&gt;) or whether they may also
+			reference sectioning elements (&lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;article&lt;/<span class="code-xml-element-local-name">code</span>&gt;,
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;aside&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;nav&lt;/<span class="code-xml-element-local-name">code</span>&gt; or &lt;<span class="code-xml-element-local-name">code</span>&gt;section&lt;/<span class="code-xml-element-local-name">code</span>&gt;). If this option is set to
+			"true" and the "fix-untitled-sections-in-outline" option is set to "imply-heading", the
+			outline will contain generated section titles but they will be &lt;<span class="code-xml-element-local-name">code</span>&gt;span&lt;/<span class="code-xml-element-local-name">code</span>&gt;s, not
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;a&lt;/<span class="code-xml-element-local-name">code</span>&gt;s.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-heading-ranks"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'keep'"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Whether to change the &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/sections.html#rank"</span>&gt;rank&lt;/<span class="code-xml-element-local-name">a</span>&gt; of &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/dom.html#heading-content-2"</span>&gt;heading content
+			elements&lt;/<span class="code-xml-element-local-name">a</span>&gt; in the HTML document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">dl</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;outline-depth&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;The rank must match the &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/sections.html#outline-depth"</span>&gt;outline
+				depth&lt;/<span class="code-xml-element-local-name">a</span>&gt; of the heading (or 6 if the depth is higher).&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;keep&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Don't rename heading elements. Default value.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">dl</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-sectioning"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'keep'"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Whether to insert &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/dom.html#sectioning-content-2"</span>&gt;sectioning
+			content elements&lt;/<span class="code-xml-element-local-name">a</span>&gt;.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">dl</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;outline-depth&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;For all nodes, the number of ancestor sectioning content and &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/sections.html#sectioning-root"</span>&gt;sectioning
+				root&lt;/<span class="code-xml-element-local-name">a</span>&gt; elements must match the &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/sections.html#outline-depth"</span>&gt;outline
+				depth&lt;/<span class="code-xml-element-local-name">a</span>&gt;. All nodes that belong to a certain section have a single common ancestor
+				element that wraps that section, or the outline containing that section. This means
+				that elements in the source that span multiple sections may have to split up in the
+				result.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;no-implied&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Like outline-depth, but in addition create new sections as needed to get rid of
+				implied sections. Note that this may result in multiple &lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements,
+				so a cleanup step may be required.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;keep&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Do nothing. Default value.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">dl</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-untitled-sections"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'keep'"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Whether to generate a &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/dom.html#heading-content-2"</span>&gt;heading content
+			element&lt;/<span class="code-xml-element-local-name">a</span>&gt; for sections that don't have one.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">dl</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;imply-heading&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Insert heading elements. The rank is determined by the outline depth.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;keep&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Don't insert heading elements. Default value.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">dl</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-untitled-sections-in-outline"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'imply-heading'"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;How to handle sections in the outline without an associated &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://html.spec.whatwg.org/multipage/dom.html#heading-content-2"</span>&gt;heading content
+			element&lt;/<span class="code-xml-element-local-name">a</span>&gt;. Setting this option has no effect if "fix-untitled-sections" is set to
+			"imply-heading".&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">dl</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;imply-heading&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Generate a heading text for a such sections. This is the default value.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dt</span>&gt;unwrap&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Replace the sections with their subsections.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">dl</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
 
-	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
-		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Creating the outline&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xproc/html-add-ids.xpl" class="source">html-add-ids.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:html-add-ids
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Add ID attributes&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-add-ids</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"html-with-ids"</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Create the outline&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
-			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/html5-outliner.xsl" class="source">../xslt/html5-outliner.xsl</a>"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/html5-outline.xsl" class="source">../xslt/html5-outline.xsl</a>"</span>/&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"heading-links-only"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$heading-links-only"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-untitled-sections-in-outline"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"($fix-untitled-sections[.='imply-heading'],$fix-untitled-sections-in-outline)[1]"</span>/&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$output-base-uri"</span>/&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$output-base-uri"</span>/&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$fix-sectioning=('outline-depth','no-implied')                 or $fix-heading-ranks='outline-depth'                 or $fix-untitled-sections='imply-heading'"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"html-with-ids"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"secondary"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/html5-normalize-sections-headings.xsl" class="source">../xslt/html5-normalize-sections-headings.xsl</a>"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-heading-ranks"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$fix-heading-ranks"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-sectioning"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$fix-sectioning"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-untitled-sections"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$fix-untitled-sections"</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+				
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/remove-duplicate-ids.xsl" class="source">../xslt/remove-duplicate-ids.xsl</a>"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"html-with-ids"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"normalize"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">unwrap</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*//d:outline"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"secondary"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">unwrap</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/d:outline/@owner"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"raw-outline"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
 
 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
 </html>

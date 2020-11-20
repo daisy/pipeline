@@ -8,7 +8,7 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../add-smilrefs-audio-only.xsl">
 </head>
-<body><div class="code" about="../add-smilrefs-audio-only.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+<body><div class="code" about="../add-smilrefs-audio-only.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
 
   
 
@@ -16,9 +16,8 @@
 
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"no-smilref"</span>/&gt;
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mo-dir"</span>/&gt;
-  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-dir"</span>/&gt;
 
-  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mo-dir-rel"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:relativize-uri($mo-dir, $output-dir)"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mo-dir-rel"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:relativize-uri($mo-dir, base-uri(/*))"</span>/&gt;
 
   
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncx-linked"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"('levelhd', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'note')"</span>/&gt;

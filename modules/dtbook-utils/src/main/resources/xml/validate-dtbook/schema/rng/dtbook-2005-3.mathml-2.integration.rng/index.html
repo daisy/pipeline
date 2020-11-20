@@ -12,7 +12,11 @@
     
     &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mod/smilref-attr.rng"</span>/&gt;
     
-    &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mathml/mathml2/mathml2.rng"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1998/Math/MathML"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/pipeline/modules/mathml-utils/mathml2.rng"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1998/Math/MathML"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">start</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">notAllowed</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">start</span>&gt;
+        
         
         &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"math.id.type"</span>&gt;
             &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"NCName"</span>/&gt;

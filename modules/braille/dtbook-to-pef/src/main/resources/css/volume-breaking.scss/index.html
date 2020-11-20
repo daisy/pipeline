@@ -16,15 +16,21 @@
 <div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
- * CSS module with default volume breaking rules.
- *
- * In order for this style sheet to work,
- * http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/xsl/volume-breaking.xsl
- * must be included before it in the list of style sheets.
+ * Volume breaking
  */</span></span>
 
-<span class="comment"><span class="delimiter">/*</span><span class="content">
- * Don't split "leaf sections" across volumes.
+<span class="variable">$maximum-number-of-sheets</span>: <span class="float">70</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@volume</span> {
+        <span class="key">max-length</span>: <span class="variable">$maximum-number-of-sheets</span>;
+}
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * Amount with which volume breaks are allowed within "leaf sections", meaning that a
+ * volume is not broken right before a heading.
+ *
+ * In order for this part of the style sheet to work, volume-breaking.xsl must be
+ * included before volume-breaking.scss in the list of style sheets.
  *
  * A leaf section is a block of adjacent content with the same sectioning depth.
  * Which means:
@@ -33,45 +39,49 @@
  *
  * If a level contains other levels, then volume-breaking.xsl wraps the normal content
  * (&lt;h1&gt;, &lt;p&gt;, etc.) in the level in a &lt;div class="leaf-section"&gt; element.
- */</span></span>
-<span class="tag">level1</span> {
-   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">9</span>);
-}
-<span class="tag">level2</span> {
-   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">8</span>);
-}
-<span class="tag">level3</span> {
-   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">7</span>);
-}
-<span class="tag">level4</span> {
-   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">6</span>);
-}
-<span class="tag">level5</span> {
-   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">5</span>);
-}
-<span class="tag">level6</span> {
-   <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">4</span>);
-}
-<span class="tag">level1</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level2</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
-<span class="tag">level2</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level3</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
-<span class="tag">level3</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level4</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
-<span class="tag">level4</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level5</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
-<span class="tag">level5</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(&gt; <span class="tag">level6</span>, <span class="tag">div</span><span class="class">.leaf-section</span>)),
-<span class="tag">level6</span><span class="pseudo-class">:not</span>(<span class="pseudo-class">:has</span>(<span class="tag">div</span><span class="class">.leaf-section</span>)),
-<span class="tag">div</span><span class="class">.leaf-section</span> {
-    <span class="comment"><span class="delimiter">//</span><span class="content"> volume-break-inside: -obfl-keep(5);</span></span>
-    <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="float">3</span>);
-}
-
-<span class="comment"><span class="delimiter">/*</span><span class="content">
- * Avoid orphaned headlines.
  *
- * volume-breaking.xsl adds the "keep-with-next-section" class is added on small leaf
- * sections.
+ * The value of $allow-volume-break-inside-leaf-section-factor can range from 1 to 10.
+ * Setting a higher value results in volumes that are more equal in size.
  */</span></span>
-<span class="comment"><span class="delimiter">//</span><span class="content">.keep-with-next-section {</span></span>
-<span class="comment"><span class="delimiter">//</span><span class="content">    -obfl-keep-with-next-sheets: 1;</span></span>
-<span class="comment"><span class="delimiter">//</span><span class="content">}</span></span>
+<span class="variable">$allow-volume-break-inside-leaf-section-factor</span>: <span class="float">10</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * Amount with which preference is given to volume breaks before higher level sections
+ * (level1 is the highest level) in comparison to lower level sections.
+ *
+ * The value can range from 0 to ? and can be a non-integer. A value of 0 (the default) means
+ * no preference is given. A higher value results in volumes that are less equal in
+ * size. Depending on the value of $allow-volume-break-inside-leaf-section-factor,
+ * increasing $prefer-volume-break-before-higher-level-factor beyond a certain value does
+ * not have an effect anymore.
+ */</span></span>
+<span class="variable">$prefer-volume-break-before-higher-level-factor</span>: <span class="float">0</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="variable">$min-volume-keep-priority</span>: <span class="predefined">min</span>(<span class="float">10</span>, <span class="predefined">max</span>(<span class="float">1</span>, <span class="predefined">round</span>(<span class="variable">$allow-volume-break-inside-leaf-section-factor</span>)));
+
+<span class="directive">@if</span> <span class="variable">$min-volume-keep-priority</span> <span class="error">&lt;</span> <span class="float">10</span> {
+
+    <span class="directive">@if</span> <span class="variable">$prefer-volume-break-before-higher-level-factor</span> &gt; <span class="float">0</span> {
+        <span class="directive">@for</span> <span class="variable">$level</span> <span class="value">from</span> <span class="float">1</span> <span class="value">through</span> <span class="float">6</span> {
+            <span class="variable">$volume-keep-priority</span>: <span class="predefined">min</span>(<span class="float">10</span>, <span class="predefined">max</span>(<span class="variable">$min-volume-keep-priority</span>, <span class="predefined">round</span>(<span class="float">10</span> - <span class="variable">$level</span> * <span class="variable">$prefer-volume-break-before-higher-level-factor</span>)));
+            <span class="directive">@if</span> <span class="variable">$volume-keep-priority</span> <span class="error">&lt;</span> <span class="float">10</span> {
+                <span class="key">level</span><span class="inline"><span class="inline-delimiter">#{</span><span class="variable">$level</span><span class="inline-delimiter">}</span></span> {
+                    <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="variable">$volume-keep-priority</span>);
+                }
+            }
+        }
+    }
+    
+    <span class="key">level1</span>:<span class="predefined">not</span>(:<span class="predefined">has</span>(&gt; <span class="value">level2</span>, <span class="value">div</span>.<span class="value">leaf-section</span>)),
+    <span class="key">level2</span>:<span class="predefined">not</span>(:<span class="predefined">has</span>(&gt; <span class="value">level3</span>, <span class="value">div</span>.<span class="value">leaf-section</span>)),
+    <span class="key">level3</span>:<span class="predefined">not</span>(:<span class="predefined">has</span>(&gt; <span class="value">level4</span>, <span class="value">div</span>.<span class="value">leaf-section</span>)),
+    <span class="key">level4</span>:<span class="predefined">not</span>(:<span class="predefined">has</span>(&gt; <span class="value">level5</span>, <span class="value">div</span>.<span class="value">leaf-section</span>)),
+    <span class="key">level5</span>:<span class="predefined">not</span>(:<span class="predefined">has</span>(&gt; <span class="value">level6</span>, <span class="value">div</span>.<span class="value">leaf-section</span>)),
+    <span class="key">level6</span>:<span class="predefined">not</span>(:<span class="predefined">has</span>(<span class="value">div</span>.<span class="value">leaf-section</span>)),
+    <span class="key">div</span>.<span class="key">leaf-section</span> {
+        <span class="key">volume-break-inside</span>: -<span class="predefined">obfl-keep</span>(<span class="variable">$min-volume-keep-priority</span>);
+    }
+}
 </pre></div>
 </div>
 </div>

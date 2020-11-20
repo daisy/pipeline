@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../html5-outline.xsl">
+</head>
+<body><div class="code" about="../html5-outline.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">xpath-default-namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/library.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xsl</a>"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/untitled-section-titles.xsl" class="source">untitled-section-titles.xsl</a>"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"heading-links-only"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-untitled-sections-in-outline"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:outline)"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"get-outline"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"format-outline"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$outline"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">result-document</span> <span class="code-xml-attribute-local-name">method</span>=<span class="code-xml-attribute-value">"xml"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"outline"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$outline"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">result-document</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"get-outline"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:outline)"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"filtered"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(body)"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"filter"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/html/body"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$filtered"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"format-outline"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:outline)"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-base-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(/*)"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"relative-path"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:relativize-uri($input-base-uri, $output-base-uri)"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ol"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(ol)"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ol</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$outline"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"html-doc"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"root()"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"relative-path"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$relative-path"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">ol</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$fix-untitled-sections-in-outline='unwrap'"</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"clean"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ol"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ol"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"html"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:outline)"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"get-outline"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"format-outline"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$outline"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    
+    
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"filter"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"body"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"filter"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"blockquote|details|fieldset|figure|td"</span>/&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"filter"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"article|aside|nav|section"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"filter"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"h1|h2|h3|h4|h5|h6|hgroup"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"filter"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    
+    
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"body|                                         article|aside|nav|section"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">outline</span> <span class="code-xml-attribute-local-name">owner</span>=<span class="code-xml-attribute-value">"{@id}"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sections"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline-owner"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">outline</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sections"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:section)*"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline-owner"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"()"</span>/&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$outline-owner/*"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(exists($outline-owner)) and not(exists($content) and f:is-heading($content[1]))"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">terminate</span>=<span class="code-xml-attribute-value">"yes"</span>&gt;coding error&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(exists($content))"</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">section</span> <span class="code-xml-attribute-local-name">owner</span>=<span class="code-xml-attribute-value">"{$outline-owner/@id}"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"first-heading"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$content[f:is-heading(.)][1]                                               [not(preceding-sibling::*[f:is-section(.)] intersect $content)]"</span>/&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$content"</span> <span class="code-xml-attribute-local-name">group-starting-with</span>=<span class="code-xml-attribute-value">"*[f:is-heading(.)]                                                           [f:rank(.) &gt;= max((0,(preceding-sibling::* intersect $content)/f:rank(.)))]"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                        
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"position()=1"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">section</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($outline-owner)"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"owner"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$outline-owner/@id"</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($first-heading)"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"heading"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"($first-heading/@id,                                                             $first-heading[not(preceding-sibling::*)]/parent::*/@id)[1]"</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                                
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group() except $first-heading"</span> <span class="code-xml-attribute-local-name">group-adjacent</span>=<span class="code-xml-attribute-value">"f:is-section(.)"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"f:is-section(.)"</span>&gt;
+                                            
+                                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>/&gt;
+                                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                            
+                                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sections"</span>&gt;
+                                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>/&gt;
+                                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+                                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">section</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                            
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sections"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>/&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    
+    
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:outline"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:section"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"html-doc"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"document-node()"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"relative-path"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@owner) and not(@heading)"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">terminate</span>=<span class="code-xml-attribute-value">"yes"</span>&gt;coding error&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"heading"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"key('id',@heading,$html-doc)"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"heading"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"for $h in $heading return                                                              if (f:is-heading($h))                                                                then $h                                                                else $h/*[f:is-heading(.)][1]"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not($heading/descendant-or-self::text())                             and $fix-untitled-sections-in-outline='unwrap'"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;<span class="code-xml-element-local-name">li</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{if ($heading-links-only='true' and not(@heading))                                         then 'span'                                         else 'a'}"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$heading-links-only='true'"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@heading"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($relative-path,'#',@heading)"</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($relative-path,'#',(@owner,@heading)[1])"</span>/&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                        
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$heading/ancestor-or-self::*/@tts:*"</span>/&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$heading/descendant-or-self::text()"</span>&gt;
+                                
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$heading[self::h1 or                                                              self::h2 or                                                              self::h3 or                                                              self::h4 or                                                              self::h5 or                                                              self::h6]"</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$heading/(*|text())"</span>/&gt;
+                                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$heading[self::hgroup]"</span>&gt;
+                                        
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rank"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:rank($heading)"</span>/&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"heading"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$heading/*[f:rank(.)=$rank][1]"</span>/&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$heading/(*|text())"</span>/&gt;
+                                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@owner"</span>&gt;
+                                
+                                
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"get-untitled-section-title"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sectioning-element"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"key('id',@owner,$html-doc)"</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'Untitled section'"</span>/&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists(*)"</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">ol</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span>/&gt;
+                        &lt;/<span class="code-xml-element-local-name">ol</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">li</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"a"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"node()*"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($content)"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">span</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@class|@dir|@lang|@title"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">span</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*|node()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    
+    
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"clean"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"ol[.. and not(li)]"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"clean"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*|node()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    
+    
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:is-heading"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:boolean"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"node"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"boolean($node[self::h1 or                                             self::h2 or                                             self::h3 or                                             self::h4 or                                             self::h5 or                                             self::h6 or                                             self::hgroup])"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:is-section"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:boolean"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"node"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"boolean($node[self::article or                                             self::aside or                                             self::nav or                                             self::section])"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:rank"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"node"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$node[self::h1 or                                   self::h2 or                                   self::h3 or                                   self::h4 or                                   self::h5 or                                   self::h6]"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"7-xs:integer(substring-after(name($node),'h'))"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$node[self::hgroup]"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"max($node/*/f:rank(.))"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"0"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

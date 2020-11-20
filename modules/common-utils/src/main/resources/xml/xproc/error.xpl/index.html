@@ -48,9 +48,7 @@
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/text()"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"message"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
-                &lt;<span class="code-xml-element-local-name">message</span>&gt;MESSAGE&lt;/<span class="code-xml-element-local-name">message</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;&lt;<span class="code-xml-element-local-name">message</span>&gt;MESSAGE&lt;/<span class="code-xml-element-local-name">message</span>&gt;&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">use-when</span>=<span class="code-xml-attribute-value">"p:system-property('p:xpath-version')='1.0'"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"',$message,'"')"</span>&gt;
             

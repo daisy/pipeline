@@ -36,7 +36,8 @@
 <td>Port</td>
 <td>Description</td>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td width="150px" class="nowrap name">
 <span class="primary">source</span><span class="details"> primary</span>
 </td>
@@ -44,7 +45,14 @@
 <h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">DTBook file</h2>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The 2005-3 DTBook file to be transformed.</p>
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">tts-config</span><span class="details"></span>
+</td>
+<td></td>
+</tr>
+</tbody>
 </table>
 <h3>Output Ports</h3>
 <table border="1">
@@ -52,9 +60,10 @@
 <td>Port</td>
 <td>Description</td>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td width="150px" class="nowrap name">
-<span class="primary">validation-status</span><span class="details"> primary</span>
+<span class="">validation-status</span><span class="details"></span>
 </td>
 <td>
 <h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Status</h2>
@@ -62,7 +71,14 @@
 
 When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3 even if the text-to-speech process has errors.</p>
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">tts-log</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+</tbody>
 </table>
 <h3>Options</h3>
 <table border="1">
@@ -99,27 +115,11 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">tts-config</span><span class="details"></span>
-</td>
-<td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">''</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Text-To-Speech configuration file</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
-
-[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).</p>
-</td>
-</tr>
-<tr>
-<td width="150px;" class="nowrap name">
 <span class="">audio</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'false'</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Enable Text-To-Speech</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether to use a speech synthesizer to produce audio files.</p>
-</td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">

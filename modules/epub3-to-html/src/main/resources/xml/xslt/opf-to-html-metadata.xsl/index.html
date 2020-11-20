@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../opf-to-html-metadata.xsl">
+</head>
+<body><div class="code" about="../opf-to-html-metadata.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"modified"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"format-dateTime(                          adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')),                          '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"text()"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"opf:metadata"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+        &lt;<span class="code-xml-element-local-name">head</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"namespace::*[not(.=('http://www.w3.org/1999/xhtml',                                                      'http://www.idpf.org/2007/opf'))]"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(ancestor-or-self::*/@prefix)"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"epub:prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(ancestor-or-self::*/@prefix, ' ')"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+            &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">charset</span>=<span class="code-xml-attribute-value">"UTF-8"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+            &lt;<span class="code-xml-element-local-name">title</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"dc:title[1]/(@scheme|                                                   @http-equiv|                                                   @xml:lang|                                                   @dir|                                                   namespace::*[not(.=('http://www.w3.org/1999/xhtml',                                                                       'http://www.idpf.org/2007/opf'))]|                                                   node())"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">title</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+            &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:identifier"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{dc:identifier}"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*[not(self::opf:*) and not(self::dc:title) and not(self::dc:identifier)]"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{name()}"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{normalize-space(.)}"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@scheme|                                          @http-equiv|                                          @xml:lang|                                          @dir|                                          namespace::*[not(.=('http://www.w3.org/1999/xhtml',                                                              'http://www.idpf.org/2007/opf'))]"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">meta</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"opf:meta[@property                                            and not(@refines)                                            and not(@property=('dcterms:modified'))]"</span>&gt;
+                
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{@property}"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{normalize-space(.)}"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@scheme|                                          @http-equiv|                                          @xml:lang|                                          @dir|                                          namespace::*[not(.=('http://www.w3.org/1999/xhtml',                                                              'http://www.idpf.org/2007/opf'))]"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">meta</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+            &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcterms:modified"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{$modified}"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">head</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

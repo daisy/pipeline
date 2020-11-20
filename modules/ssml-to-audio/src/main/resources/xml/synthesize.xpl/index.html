@@ -17,7 +17,7 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             &lt;<span class="code-xml-element-local-name">p</span>&gt;
                 Status document expressing the success rate of the text-to-speech process. The
-                format is an extension of the "&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://daisy.github.io/pipeline/ValidationStatusXML"</span>&gt;application/vnd.pipeline.status+xml&lt;/<span class="code-xml-element-local-name">a</span>&gt;"
+                format is an extension of the "&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://daisy.github.io/pipeline/StatusXML"</span>&gt;application/vnd.pipeline.status+xml&lt;/<span class="code-xml-element-local-name">a</span>&gt;"
                 format: a &lt;<span class="code-xml-element-local-name">code</span>&gt;d:status&lt;/<span class="code-xml-element-local-name">code</span>&gt; element with a &lt;<span class="code-xml-element-local-name">code</span>&gt;result&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute that
                 has the value "ok" if there were no errors, or "error" when there was at least one
                 error. A &lt;<span class="code-xml-element-local-name">code</span>&gt;success-rate&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute contains the percentage of the SSML
@@ -25,7 +25,7 @@
             &lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-dir"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"log"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"temp-dir"</span>/&gt;
 
 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>

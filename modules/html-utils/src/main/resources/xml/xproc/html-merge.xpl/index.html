@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../html-merge.xpl">
+</head>
+<body><div class="code" about="../html-merge.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:html-merge"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">p</span>&gt;Merge multiple HTML documents into a single document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;The base URI of the result document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Before merging, the sectioning hierarchy of each document is normalized. A sequence
+			is then created of all the &lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements. The merging process then consists
+			of (recursively) joining consecutive sections whenever they were originally in separate
+			documents and the second section has no associated heading. If after this step there are
+			multiple &lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements, they are renamed to &lt;<span class="code-xml-element-local-name">code</span>&gt;section&lt;/<span class="code-xml-element-local-name">code</span>&gt; and
+			wrapped in a &lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt;.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;The first document's &lt;<span class="code-xml-element-local-name">code</span>&gt;head&lt;/<span class="code-xml-element-local-name">code</span>&gt; element and &lt;<span class="code-xml-element-local-name">code</span>&gt;xml:lang&lt;/<span class="code-xml-element-local-name">code</span>&gt; and
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;lang&lt;/<span class="code-xml-element-local-name">code</span>&gt; attributes are used, those of the other documents are discarded.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;&lt;<span class="code-xml-element-local-name">code</span>&gt;d:fileset&lt;/<span class="code-xml-element-local-name">code</span>&gt; document that contains a mapping from input to output files
+			and contained &lt;<span class="code-xml-element-local-name">code</span>&gt;id&lt;/<span class="code-xml-element-local-name">code</span>&gt; attributes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"mapping"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xproc/library.xpl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:set-base-uri
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl" class="source">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:fileset-compose
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xproc/html-update-links.xpl" class="source">html-update-links.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:html-update-links
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xproc/html-add-ids.xpl" class="source">html-add-ids.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:html-add-ids
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xproc/html-outline.xpl" class="source">html-outline.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:html-outline
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+
+	
+	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-add-ids</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fix-ids"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">count</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"html-count"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"file-mapping"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-base-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(/*)"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//*[@id|@xml:id]"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">template</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"template"</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+							&lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">anchor</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"{/*/(@xml:id,@id)[1]}"</span>/&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+					&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+					&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">template</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"d:file"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"href"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute-value"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$output-base-uri"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"original-href"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute-value"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$input-base-uri"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"d:fileset"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+	
+	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-compose</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fix-ids"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"file-mapping"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-compose</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"update-links"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fix-ids"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+		
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"update-links"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"current"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"fix-ids"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/add-link-fragments.xsl" class="source">../xslt/add-link-fragments.xsl</a>"</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+		
+		&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-update-links</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"mapping"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-update-links</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+
+	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xpath-context</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"html-count"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xpath-context</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"/*=1"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"update-links"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"content-doc"</span>/&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"outline"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+				&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">html-outline</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">fix-sectioning</span>=<span class="code-xml-attribute-value">"outline-depth"</span> <span class="code-xml-attribute-local-name">output-base-uri</span>=<span class="code-xml-attribute-value">"file:/tmp/irrelevant.html"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/html-utils/src/main/resources/xml/xslt/html-merge.xsl" class="source">../xslt/html-merge.xsl</a>"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/html:body[preceding-sibling::html:body|following-sibling::html:body]"</span> <span class="code-xml-attribute-local-name">group-adjacent</span>=<span class="code-xml-attribute-value">"true()"</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"body"</span> <span class="code-xml-attribute-local-name">wrapper-namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">rename</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/html:body/html:body"</span> <span class="code-xml-attribute-local-name">new-name</span>=<span class="code-xml-attribute-value">"section"</span> <span class="code-xml-attribute-local-name">new-namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">set-base-uri</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$output-base-uri"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">set-base-uri</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

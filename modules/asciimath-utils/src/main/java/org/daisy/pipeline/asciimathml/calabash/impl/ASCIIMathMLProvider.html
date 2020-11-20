@@ -21,14 +21,14 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcException;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcRuntime;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcStep;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.asciimathml.ASCIIMathML;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/asciimath-utils/src/main/java/org/daisy/pipeline/asciimathml/calabash/impl/ASCIIMathMLProvider.html">ASCIIMathMLStep</a>(runtime, step);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/asciimath-utils/src/main/java/org/daisy/pipeline/asciimathml/calabash/impl/ASCIIMathMLProvider.html">ASCIIMathMLStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/asciimath-utils/src/main/java/org/daisy/pipeline/asciimathml/calabash/impl/ASCIIMathMLProvider.html">ASCIIMathMLStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(ASCIIMathMLStep.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		
@@ -104,6 +104,6 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

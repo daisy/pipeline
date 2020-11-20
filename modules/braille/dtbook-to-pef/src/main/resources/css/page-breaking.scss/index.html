@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>page breaking.scss</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../page-breaking.scss">
+
+<div class="language-sass highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">
+ * Page breaking
+ */</span></span>
+
+<span class="variable">$force-braille-page-break</span>: <span class="value">false</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@if</span> <span class="variable">$force-braille-page-break</span> {
+        <span class="key">pagenum</span> {
+                <span class="key">page-break-before</span>: <span class="value">always</span>;
+        }
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

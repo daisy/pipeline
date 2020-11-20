@@ -8,7 +8,7 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../remove-inline-css-speech.xpl">
 </head>
-<body><div class="code" about="../remove-inline-css-speech.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:remove-inline-css-speech"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+<body><div class="code" about="../remove-inline-css-speech.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:css-speech-clean"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
 
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     Delete the attributes added by the CSS speech inlining step.
@@ -20,7 +20,7 @@
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/css-speech/src/main/resources/xml/clean-up-namespaces.xpl" class="source">clean-up-namespaces.xpl</a>"</span>/&gt;
 
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@tts:*"</span>/&gt;
-  &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">clean-up-namespaces</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">clean-up-namespaces</span>/&gt;
 
 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
 </html>

@@ -22,7 +22,11 @@
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id-prefix"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>/&gt;
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/nlp-break-detection/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/nlp-break-detection/library.xpl</a>"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/nlp-common/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/nlp-common/library.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        px:break-and-reshape
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
 
     &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">break-and-reshape</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"generic"</span>&gt;
       &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"inline-tags"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'span,i,b,a,br,del,font,ruby,s,small,strike,strong,sup,u,q,address,abbr,em,style'"</span>/&gt;

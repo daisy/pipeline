@@ -127,16 +127,17 @@
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of a temporary file. The
-            temporary file is guaranteed not to already exist when &lt;<span class="code-xml-element-local-name">code</span>&gt;pxf:tempfile&lt;/<span class="code-xml-element-local-name">code</span>&gt; is
+            temporary file is guaranteed not to already exist when &lt;<span class="code-xml-element-local-name">code</span>&gt;px:tempfile&lt;/<span class="code-xml-element-local-name">code</span>&gt; is
             called. The file is created in the directory specified by the &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt;. The
-            step fails if the directory does not exist.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            step fails if this directory does not exist. If &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt; is not specified then
+            the system-dependent default temporary-file directory will be used.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;If the &lt;<span class="code-xml-element-local-name">code</span>&gt;delete-on-exit&lt;/<span class="code-xml-element-local-name">code</span>&gt; option (a boolean) is true, then the temporary file
             will automatically be deleted when the processor terminates.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:tempfile"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"delete-on-exit"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"suffix"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;

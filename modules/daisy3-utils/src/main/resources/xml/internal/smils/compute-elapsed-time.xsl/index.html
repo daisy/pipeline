@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../compute-elapsed-time.xsl">
+</head>
+<body><div class="code" about="../compute-elapsed-time.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/daisy3-utils/src/main/resources/xml/internal/smils/compute-time-in-smil.xsl" class="source">compute-time-in-smil.xsl</a>"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">durations</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"accu"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">durations</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"accu"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"elapsed-time"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:dayTimeDuration"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"xs:dayTimeDuration('PT0S')"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil-number"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"1"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$smil-number le count(collection()[/s:smil])"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"collection()[/s:smil][$smil-number]"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">duration</span> <span class="code-xml-attribute-local-name">doc</span>=<span class="code-xml-attribute-value">"{base-uri($smil)}"</span> <span class="code-xml-attribute-local-name">duration</span>=<span class="code-xml-attribute-value">"{d:format-duration($elapsed-time)}"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"time-in-this-smil"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:dayTimeDuration"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"time-in-smil"</span>&gt;
+          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$smil"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"accu"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"elapsed-time"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$elapsed-time + $time-in-this-smil"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil-number"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$smil-number + 1"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"d:format-duration"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dur"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:dayTimeDuration"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"hours"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"24 * days-from-duration($dur) + hours-from-duration($dur)"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mins"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:two-digits(minutes-from-duration($dur))"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"secs"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:two-digits(seconds-from-duration($dur))"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($hours, ':', $mins, ':', $secs)"</span>/&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"d:two-digits"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"str"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"replace(xs:string($str),'^([0-9])(\.|:|$)','0$1$2')"</span>/&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

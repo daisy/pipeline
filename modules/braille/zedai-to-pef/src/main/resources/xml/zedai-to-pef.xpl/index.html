@@ -36,16 +36,7 @@
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">stylesheet</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"text/css application/xslt+xml"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
             <span rel="data-type"><span typeof="data-type" id="data-type-stylesheet" resource="../zedai-to-pef.xpl#data-type-stylesheet"><link rel="doc" href="#data-type-stylesheet">
-<span property="id" content="px:zedai-to-pef.script-stylesheet">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
-                &lt;<span class="code-xml-element-local-name">choice</span>&gt;
-                    &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyFileURI"</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span>&gt;
-                        &lt;<span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;File path relative to input ZedAI.&lt;/<span class="code-xml-element-local-name">documentation</span>&gt;
-                    &lt;/<span class="code-xml-element-local-name">data</span>&gt;
-                    &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyURI"</span>&gt;
-                        &lt;<span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Any other absolute URI&lt;/<span class="code-xml-element-local-name">documentation</span>&gt;
-                    &lt;/<span class="code-xml-element-local-name">data</span>&gt;
-                &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span><span property="definition" content='
+<span property="id" content="px:zedai-to-pef.script-stylesheet"><span property="definition" content='
                 &lt;choice&gt;
                     &lt;data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc"&gt;
                         &lt;documentation xml:lang="en"&gt;File path relative to input ZedAI.&lt;/documentation&gt;
@@ -63,7 +54,7 @@
                         &lt;<span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Any other absolute URI&lt;/<span class="code-xml-element-local-name">documentation</span>&gt;
                     &lt;/<span class="code-xml-element-local-name">data</span>&gt;
                 &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span>
+            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             <span property="name" content="Style sheets">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Style sheets&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -115,7 +106,9 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).&lt;/<span 
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">ascii-table</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">transform-query</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             <span property="name" content="ASCII braille table">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;ASCII braille table&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-            <span property="desc" content="The ASCII braille table, used to render the PEF preview and the plain text version. If left blank, the locale information in the input document will be used to select a suitable table.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;The ASCII braille table, used to render the PEF preview and the plain text version.
+            <span property="desc" content="The ASCII braille table, used to render the PEF preview and the plain text version.
+
+If left blank, the locale information in the input document will be used to select a suitable table.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The ASCII braille table, used to render the PEF preview and the plain text version.
 
 If left blank, the locale information in the input document will be used to select a suitable table.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
@@ -198,7 +191,7 @@ If left blank, the locale information in the input document will be used to sele
     
     
     
-    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">zedai-to-pef</span> <span class="code-xml-attribute-local-name">default-stylesheet</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/default.css"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">zedai-to-pef</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"load"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.out"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>generate toc.scss</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../generate-toc.scss">
+
+<div class="language-sass highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">
+ * Generated table of contents
+ */</span></span>
+
+<span class="variable">$toc-depth</span>: <span class="float">0</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@if</span> <span class="variable">$toc-depth</span> &gt; <span class="float">0</span> {
+        <span class="error">#</span><span class="key">generated-document-toc</span> {
+                <span class="key">flow</span>: <span class="value">document-toc</span>;
+                <span class="key">display</span>: <span class="value">-obfl-toc</span>;
+                <span class="key">-obfl-toc-range</span>: <span class="value">document</span>;
+        }
+        <span class="error">#</span><span class="key">generated-volume-toc</span> {
+                <span class="key">flow</span>: <span class="value">volume-toc</span>;
+                <span class="key">display</span>: <span class="value">-obfl-toc</span>;
+                <span class="key">-obfl-toc-range</span>: <span class="value">volume</span>;
+        }
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">epub-load {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="../../src/main/resources/xml/ocf/load.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">epub-load</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Create a fileset from a zipped or unzipped EPUB.</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/epub-utils/library.xpl.html" target="detail">http://www.daisy.org/pipeline/modules/epub-utils/library.xpl</a></span>
+</div>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result.fileset</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The result fileset. If a .opf file was specified for the <code>href</code> option,
+			the fileset does not contain the "mimetype" and "META-INF/container.xml" files. The
+			navigation document is marked with a <code>role="nav"</code> attribute.</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">result.in-memory</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">validation-report</span><span class="details"> sequence</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The validation report</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The port is empty if the <code>validation</code> option is 'off' or if the input is a
+			valid EPUB.</p>
+</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">validation-status</span><span class="details"></span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The <a href="/pipeline/StatusXML">validation
+			status</a> document</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">'ok' if the <code>validation</code> option not 'abort' or if the input is a valid
+			EPUB, 'error' otherwise.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">href</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">A zipped EPUB (.epub file), an EPUB package document (.opf file) or the mimetype file
+			of an EPUB.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">version</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">EPUB version: "2" or "3"</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If not specified, the version will be detected automatically.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">store-to-disk</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Ensure that all files from the result fileset exist on disk. It is an error if this
+			option is true and the value of the <code>temp-dir</code> option does not identify a
+			directory.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">validation</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'off'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether to perform validation of the input:</p>
+<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+				<dt>off</dt>
+				<dd>No validation</dd>
+				<dt>report</dt>
+				<dd>Report validation issues</dd>
+				<dt>abort</dt>
+				<dd>Abort on validation issues</dd>
+			</dl>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">temp-dir</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Empty directory dedicated to this step. Mandatory when <code>store-to-disk</code>
+			option is 'true' or when <code>validation</code> option is not 'off'.</p></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

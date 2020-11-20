@@ -17,16 +17,16 @@
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcException;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcRuntime;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcStep;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.shell.BinaryFinder;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.shell.CommandRunner;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.shell.BinaryFinder;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.shell.CommandRunner;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.file.FileUtils.cResultDocument;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Ace was not found on your system"</span>);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/ace-adapter/src/main/java/org/daisy/pipeline/epub/ace/impl/AceProvider.html">AceStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/ace-adapter/src/main/java/org/daisy/pipeline/epub/ace/impl/AceProvider.html">AceStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Logger mLogger = LoggerFactory.getLogger(AceStep.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
@@ -151,6 +151,6 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2019 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

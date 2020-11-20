@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../landmarks-to-guide.xsl">
+</head>
+<body><div class="code" about="../landmarks-to-guide.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/library.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xsl</a>"</span>/&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">guide</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//html:nav[@*[name()='epub:type']='landmarks']"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"landmarks-nav"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">guide</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"landmarks-nav"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nav-base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:base-uri(.)"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"descendant::html:a"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">reference</span> <span class="code-xml-attribute-local-name">title</span>=<span class="code-xml-attribute-value">"{.}"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{pf:relativize-uri(resolve-uri(@href,$nav-base),$output-base-uri)}"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"type"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@epub:type='titlepage'"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'title-page'"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@epub:type=('rearnotes','footnotes')"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'notes'"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@epub:type=('acknowledgements',                                               'bibliography',                                               'colophon',                                               'copyright-page',                                               'cover',                                               'dedication',                                               'epigraph',                                               'foreword',                                               'glossary',                                               'index',                                               'loi',                                               'lot',                                               'preface',                                               'toc')"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@epub:type"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('other.',@epub:type)"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">reference</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

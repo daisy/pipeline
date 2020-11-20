@@ -31,29 +31,55 @@
 </tr></thead>
 <tbody>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d312e28.html" target="detail">html-chunker</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e473.html" target="detail">html-add-ids</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
-<td>Break a HTML document into smaller parts based on
-			its structure.</td>
+<td>Add missing IDs to HTML documents and fix duplicate IDs.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d312e17.html" target="detail">html-load</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e28.html" target="detail">html-chunker</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
-<td>Tries first to p:load the HTML-file. An exception will be thrown if the file is
-        not well formed XML, in which case the file will be loaded using p:http-request and
-        p:unescape-markup. As the xproc-step ('c:') namespace is still attached to the elements
-        after unwrapping, an [...]</td>
+<td>Break a HTML document into smaller parts based on its structure.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d312e121.html" target="detail">html-outline</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e617.html" target="detail">html-downgrade</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
-<td>Return an outline (ol element) from an (x)html page</td>
+<td>Downgrade a HTML 5 document to HTML 4</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d312e44.html" target="detail">html-to-fileset</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e455.html" target="detail">html-fixer</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Fix structure of HTML document.
+		Make all elements' contents match the content models.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e706.html" target="detail">html-merge</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Merge multiple HTML documents into a single document.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e145.html" target="detail">html-outline</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Apply the HTML5
+		outline algorithm.
+		Returns the outline of a HTML document and optionally transforms the document in a
+		certain way in relation to the outline.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e68.html" target="detail">html-to-fileset</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Creates a fileset document for an XHTML document.
 		The fileset entries are ordered as the resources appear in the input document</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e645.html" target="detail">html-update-links</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Update the links in a HTML document after resources have been relocated.
+		Can also be used to process an SVG document.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d871e589.html" target="detail">html-upgrade</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Upgrade a HTML document to HTML 5</td>
 </tr>
 </tbody>
 </table>

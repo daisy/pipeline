@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../epub-to-daisy.script.xpl">
+</head>
+<body><div class="code" about="../epub-to-daisy.script.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:epub-to-daisy.script"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		<span property="name" content="EPUB to DAISY">&lt;<span class="code-xml-element-local-name">h1</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;EPUB to DAISY&lt;/<span class="code-xml-element-local-name">h1</span>&gt;</span>
+		<span property="desc" content="Transforms an EPUB 2 or EPUB 3 publication into DAISY 2.02 and DAISY 3.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Transforms an EPUB 2 or EPUB 3 publication into DAISY 2.02 and DAISY 3.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"homepage"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://daisy.github.io/pipeline/modules/epub-to-daisy"</span>&gt;
+			Online documentation
+		&lt;/<span class="code-xml-element-local-name">a</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+	<span rel="input">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">source</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyFileURI"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/epub+zip application/oebps-package+xml</span>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="EPUB Publication">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;EPUB Publication&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content='The EPUB 2 or EPUB 3 you want to transform.
+
+You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The EPUB 2 or EPUB 3 you want to transform.
+
+You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+	<span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">validation</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="off">'off'</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;<span rel="data-type"><span typeof="data-type" id="data-type-validation" resource="../epub-to-daisy.script.xpl#data-type-validation"><link rel="doc" href="#data-type-validation">
+<span property="id" content="px:epub-to-daisy.script-validation"><span property="definition" content='
+				&lt;choice&gt;
+					&lt;value&gt;off&lt;/value&gt;
+					&lt;a:documentation xml:lang="en"&gt;No validation&lt;/a:documentation&gt;
+					&lt;value&gt;report&lt;/value&gt;
+					&lt;a:documentation xml:lang="en"&gt;Report validation issues&lt;/a:documentation&gt;
+					&lt;value&gt;abort&lt;/value&gt;
+					&lt;a:documentation xml:lang="en"&gt;Abort on validation issues&lt;/a:documentation&gt;
+				&lt;/choice&gt;
+			'>&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+				&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+					&lt;<span class="code-xml-element-local-name">value</span>&gt;off&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+					&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;No validation&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+					&lt;<span class="code-xml-element-local-name">value</span>&gt;report&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+					&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Report validation issues&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+					&lt;<span class="code-xml-element-local-name">value</span>&gt;abort&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+					&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Abort on validation issues&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;</span><span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="Validation">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Validation&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content="Whether to abort on validation issues.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Whether to abort on validation issues.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
+		
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+	<span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">tts</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="default">'default'</span>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
+			<span rel="data-type"><span typeof="data-type" id="data-type-tts" resource="../epub-to-daisy.script.xpl#data-type-tts"><link rel="doc" href="#data-type-tts">
+<span property="id" content="px:epub-to-daisy.script-tts"><span property="definition" content='
+				&lt;choice&gt;
+					&lt;value&gt;true&lt;/value&gt;
+					&lt;a:documentation xml:lang="en"&gt;Yes&lt;/a:documentation&gt;
+					&lt;value&gt;false&lt;/value&gt;
+					&lt;a:documentation xml:lang="en"&gt;No&lt;/a:documentation&gt;
+					&lt;value&gt;default&lt;/value&gt;
+					&lt;a:documentation xml:lang="en"&gt;If publication has no media overlays yet&lt;/a:documentation&gt;
+				&lt;/choice&gt;
+			'>&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+				&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+					&lt;<span class="code-xml-element-local-name">value</span>&gt;true&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+					&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Yes&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+					&lt;<span class="code-xml-element-local-name">value</span>&gt;false&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+					&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;No&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+					&lt;<span class="code-xml-element-local-name">value</span>&gt;default&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+					&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;If publication has no media overlays yet&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="Perform text-to-speech">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Perform text-to-speech&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content="Whether to use a speech synthesizer to produce media overlays.
+
+This will remove any existing media overlays in the EPUB.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to use a speech synthesizer to produce media overlays.
+
+This will remove any existing media overlays in the EPUB.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+	<span rel="input">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">tts-config</span>"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="Text-to-speech configuration file">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Text-to-speech configuration file&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content="Configuration file for the text-to-speech.
+
+[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Configuration file for the text-to-speech.
+
+[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
+		
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;&lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">config</span>/&gt;&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;</span>
+
+	
+
+	<span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">epub3-output-dir</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">output</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyDirURI"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="Intermediary EPUB 3 with media-overlays">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Intermediary EPUB 3 with media-overlays&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Note that the conversion may fail but still output a EPUB 3 document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+	<span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">daisy202-output-dir</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">output</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyDirURI"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="DAISY 2.02">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;DAISY 2.02&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+	<span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">daisy3-output-dir</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">output</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyDirURI"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="DAISY 3">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;DAISY 3&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+	<span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">validation-report</span>"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/vnd.pipeline.report+xml</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="Input validation report">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Input validation report&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
+		
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"load"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"validation-report"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;</span>
+
+	<span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">status</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/vnd.pipeline.status+xml</span>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			<span property="name" content="Conversion status">&lt;<span class="code-xml-element-local-name">h1</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Conversion status&lt;/<span class="code-xml-element-local-name">h1</span>&gt;</span>
+			<span property="desc" content="An XML document describing whether the conversion was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/StatusXML).">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;An XML document describing whether the conversion was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/StatusXML).&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"status"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;</span>
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/epub-utils/library.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:epub-load
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl" class="source">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:fileset-store
+			px:fileset-delete
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-to-daisy/src/main/resources/xml/epub-to-daisy.xpl" class="source">epub-to-daisy.xpl</a>"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			px:epub-to-daisy
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub-load</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"load"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Loading EPUB"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1/20"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$source"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"validation"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$validation"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"temp-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$temp-dir"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub-load</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"load"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"validation-status"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"status"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"19/20"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"/d:validation-status[@result='error']"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+
+			&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub-to-daisy</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Converting to DAISY"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"15/19"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.fileset"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"load"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.fileset"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source.in-memory"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"load"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result.in-memory"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"epub3-output-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$epub3-output-dir"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"daisy202-output-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$daisy202-output-dir"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"daisy3-output-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$daisy3-output-dir"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tts"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$tts"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"tts-config"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"tts-config"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"temp-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$temp-dir"</span>/&gt;
+			&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub-to-daisy</span>&gt;
+
+			&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-store</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"store-epub3"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Storing intermediary EPUB 3"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1/19"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset.in"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"epub3.fileset"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.in"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"epub3.in-memory"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-store</span>&gt;
+
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"store-daisy202"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1/19"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xpath-context</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy202.fileset"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xpath-context</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//d:file"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"store"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset.out"</span>/&gt;
+					&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+					&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-store</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"store"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Storing DAISY 2.02"</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset.in"</span>&gt;
+							&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy202.fileset"</span>/&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.in"</span>&gt;
+							&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy202.in-memory"</span>/&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+					&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-store</span>&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+							&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy202.fileset"</span>/&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+					&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"store-daisy3"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1/19"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xpath-context</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy3.fileset"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xpath-context</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//d:file"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"store"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset.out"</span>/&gt;
+					&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+					&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-store</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"store"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Storing DAISY 3"</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"fileset.in"</span>&gt;
+							&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy3.fileset"</span>/&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory.in"</span>&gt;
+							&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy3.in-memory"</span>/&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+					&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-store</span>&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+							&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"daisy3.fileset"</span>/&gt;
+						&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+					&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">depends-on</span>=<span class="code-xml-attribute-value">"store-epub3"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"temp-audio-files"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">depends-on</span>=<span class="code-xml-attribute-value">"store-daisy3"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-delete</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">depends-on</span>=<span class="code-xml-attribute-value">"store-daisy202"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"delete-temp-files"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1/19"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Cleaning up temporary files"</span>/&gt;
+
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">depends-on</span>=<span class="code-xml-attribute-value">"delete-temp-files"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"status"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

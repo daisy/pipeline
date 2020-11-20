@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">html-outline {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="../../src/main/resources/xml/xproc/html-outline.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">html-outline</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Apply the <a href="https://html.spec.whatwg.org/multipage/sections.html#headings-and-sections" class="external-link" target="_blank">HTML5
+		outline algorithm</a>.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Returns the outline of a HTML document and optionally transforms the document in a
+		certain way in relation to the outline.</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/html-utils/library.xpl.html" target="detail">http://www.daisy.org/pipeline/modules/html-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">HTML document</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The HTML document from which the outline must be extracted.</p>
+</td>
+</tr></tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">The outline</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The outline of the HTML document as a <code>ol</code> element. Can be
+			used directly as a table of contents.</p>
+</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">outline</span><span class="details"></span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">The raw outline</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The unformatted outline of the HTML document as a
+			<code>d:outline</code> document.</p>
+</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">content-doc</span><span class="details"></span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">The modified HTML document.</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Depending on the values of the "fix-heading-ranks", "fix-sectioning"
+			and "fix-untitled-sections" options, heading elements may be inserted or renamed and
+			section elements may be inserted, but the outline is guaranteed to be unchanged.</p>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">All <code>body</code>, <code>article</code>, <code>aside</code>,
+			<code>nav</code>, <code>section</code>, <code>h1</code>, <code>h2</code>,
+			<code>h3</code>, <code>h4</code>, <code>h5</code>, <code>h6</code> and
+			<code>hgroup</code> elements get an <code>id</code> attribute.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">output-base-uri</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The base URI of the resulting outline.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">heading-links-only</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether the <code>a</code> elements in the "result" output should only reference
+			heading elements (<code>h1</code>, <code>h2</code>, <code>h3</code>, <code>h4</code>,
+			<code>h5</code>, <code>h6</code> or <code>hgroup</code>) or whether they may also
+			reference sectioning elements (<code>body</code>, <code>article</code>,
+			<code>aside</code>, <code>nav</code> or <code>section</code>). If this option is set to
+			"true" and the "fix-untitled-sections-in-outline" option is set to "imply-heading", the
+			outline will contain generated section titles but they will be <code>span</code>s, not
+			<code>a</code>s.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">fix-heading-ranks</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'keep'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether to change the <a href="https://html.spec.whatwg.org/multipage/sections.html#rank" class="external-link" target="_blank">rank</a> of <a href="https://html.spec.whatwg.org/multipage/dom.html#heading-content-2" class="external-link" target="_blank">heading content
+			elements</a> in the HTML document.</p>
+<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+				<dt>outline-depth</dt>
+				<dd>The rank must match the <a href="https://html.spec.whatwg.org/multipage/sections.html#outline-depth" class="external-link" target="_blank">outline
+				depth</a> of the heading (or 6 if the depth is higher).</dd>
+				<dt>keep</dt>
+				<dd>Don't rename heading elements. Default value.</dd>
+			</dl>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">fix-sectioning</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'keep'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether to insert <a href="https://html.spec.whatwg.org/multipage/dom.html#sectioning-content-2" class="external-link" target="_blank">sectioning
+			content elements</a>.</p>
+<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+				<dt>outline-depth</dt>
+				<dd>For all nodes, the number of ancestor sectioning content and <a href="https://html.spec.whatwg.org/multipage/sections.html#sectioning-root" class="external-link" target="_blank">sectioning
+				root</a> elements must match the <a href="https://html.spec.whatwg.org/multipage/sections.html#outline-depth" class="external-link" target="_blank">outline
+				depth</a>. All nodes that belong to a certain section have a single common ancestor
+				element that wraps that section, or the outline containing that section. This means
+				that elements in the source that span multiple sections may have to split up in the
+				result.</dd>
+				<dt>no-implied</dt>
+				<dd>Like outline-depth, but in addition create new sections as needed to get rid of
+				implied sections. Note that this may result in multiple <code>body</code> elements,
+				so a cleanup step may be required.</dd>
+				<dt>keep</dt>
+				<dd>Do nothing. Default value.</dd>
+			</dl>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">fix-untitled-sections</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'keep'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether to generate a <a href="https://html.spec.whatwg.org/multipage/dom.html#heading-content-2" class="external-link" target="_blank">heading content
+			element</a> for sections that don't have one.</p>
+<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+				<dt>imply-heading</dt>
+				<dd>Insert heading elements. The rank is determined by the outline depth.</dd>
+				<dt>keep</dt>
+				<dd>Don't insert heading elements. Default value.</dd>
+			</dl>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">fix-untitled-sections-in-outline</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'imply-heading'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">How to handle sections in the outline without an associated <a href="https://html.spec.whatwg.org/multipage/dom.html#heading-content-2" class="external-link" target="_blank">heading content
+			element</a>. Setting this option has no effect if "fix-untitled-sections" is set to
+			"imply-heading".</p>
+<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+				<dt>imply-heading</dt>
+				<dd>Generate a heading text for a such sections. This is the default value.</dd>
+				<dt>unwrap</dt>
+				<dd>Replace the sections with their subsections.</dd>
+			</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

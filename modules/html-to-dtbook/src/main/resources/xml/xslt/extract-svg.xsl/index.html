@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../extract-svg.xsl">
+</head>
+<body><div class="code" about="../extract-svg.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"3.0"</span> <span class="code-xml-attribute-local-name">xpath-default-namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/library.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xsl</a>"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xslt/generate-id.xsl" class="source">http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl</a>"</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(/*)"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"filename"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"replace(replace($base,'^.+/([^/]+)$','$1'),'\.[^\.]+$','')"</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fileset"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:fileset)"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">fileset</span>&gt;
+				&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"collection()[2]/*/*"</span>&gt;
+					&lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{pf:relativize-uri(resolve-uri(@href,base-uri(.)),$base)}"</span>/&gt;
+				&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+			&lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">fileset</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:next-match-with-generated-ids"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'_img_'"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"for-elements"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">".//svg:svg"</span>/&gt;
+			&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in-use"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$fileset/d:file/@href[starts-with(.,$filename)]                                                 [ends-with(.,'.svg')]                                           /substring(substring(.,1,string-length(.) - 4),                                                      string-length($filename) + 1)                                            [matches(.,'^_img_\d+$')]"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"svg:svg"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:generate-id"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"relative-path"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($filename,$id,'.svg')"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">result-document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{resolve-uri($relative-path,$base)}"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">result-document</span>&gt;
+		&lt;<span class="code-xml-element-local-name">img</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"{$relative-path}"</span> <span class="code-xml-attribute-local-name">alt</span>=<span class="code-xml-attribute-value">"{(svg:title/string(),svg:desc/string(),@aria-label,'image')[1]}"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*|node()"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+			&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

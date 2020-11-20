@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../audio-clips-update-files.xsl">
+</head>
+<body><div class="code" about="../audio-clips-update-files.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/library.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xsl</a>"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"original-href"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:file"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"string(@original-href)"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"original-id"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:anchor"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"string(@original-id)"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mapping"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"document-node(element(d:fileset))"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">document</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"normalize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"collection()[2]"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">document</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"normalize"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:file/@href|                          d:file/@original-href"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{name()}"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:normalize-uri(resolve-uri(.,base-uri(.)))"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/d:audio-clips"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio-clips"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:audio-clips)"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio-clips"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:audio-clips)"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$audio-clips"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:clip"</span> <span class="code-xml-attribute-local-name">group-by</span>=<span class="code-xml-attribute-value">"@idref"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"clips"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:clip)*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>/&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count($clips)=1"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$clips"</span>/&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"clips"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:clip)*"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">perform-sort</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$clips"</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sort</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@clipBegin"</span>/&gt;
+                                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">perform-sort</span>&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"every $i in 1 to count($clips) - 1                                                     satisfies $clips[$i]/@src=$clips[$i + 1]/@src                                                     and $clips[$i]/@clipEnd=$clips[$i + 1]/@clipBegin"</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">clip</span> <span class="code-xml-attribute-local-name">idref</span>=<span class="code-xml-attribute-value">"{$clips[1]/@idref}"</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"{$clips[1]/@src}"</span> <span class="code-xml-attribute-local-name">clipBegin</span>=<span class="code-xml-attribute-value">"{$clips[1]/@clipBegin}"</span> <span class="code-xml-attribute-local-name">clipEnd</span>=<span class="code-xml-attribute-value">"{$clips[last()]/@clipEnd}"</span>/&gt;
+                                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">terminate</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat(                                                                'Audio clips can not be combined: ',                                                                string-join($clips/concat(@src,' (',@clipBegin,'-',@clipEnd,')'),', '))"</span>/&gt;
+                                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$audio-clips"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:clip"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:normalize-uri(resolve-uri(@src,pf:base-uri(.)))"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"file"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:file)?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"key('original-href',$src,$mapping)"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"anchor"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(d:anchor)?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"key('original-id',@idref,$mapping)"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@* except (@src|@idref)"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:relativize-uri(($file/@href,$src)[1],$output-base-uri)"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($anchor)"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"idref"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$anchor/@id"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@idref"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#default normalize"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*|node()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../isolate-skippable.xpl">
+</head>
+<body><div class="code" about="../isolate-skippable.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:isolate-skippable"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+      &lt;<span class="code-xml-element-local-name">p</span>&gt;Break up sentences into sub-sentences that do not contain skippable elements.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;The input document&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"sentence-ids"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;List of sentences as a &lt;<span class="code-xml-element-local-name">code</span>&gt;d:sentences&lt;/<span class="code-xml-element-local-name">code</span>&gt; document with a &lt;<span class="code-xml-element-local-name">code</span>&gt;d:sentence&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+        child for each sentence. The &lt;<span class="code-xml-element-local-name">code</span>&gt;d:sentence&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements point to the respective DTBook
+        elements with an &lt;<span class="code-xml-element-local-name">code</span>&gt;id&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"match"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        XSLT match pattern to select the skippable elements.
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;The result document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;For every sentence element that contains one or more skippable elements, that is
+        &lt;<span class="code-xml-element-local-name">code</span>&gt;pagenum&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;noteref&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;annoref&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;linenum&lt;/<span class="code-xml-element-local-name">code</span>&gt; or
+        &lt;<span class="code-xml-element-local-name">code</span>&gt;math&lt;/<span class="code-xml-element-local-name">code</span>&gt;,&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ul</span>&gt;
+          &lt;<span class="code-xml-element-local-name">li</span>&gt;the skippable elements do not share any ancestors with other nodes in the sentence
+          (nodes that are not themselves ancestors of the skippables), and&lt;/<span class="code-xml-element-local-name">li</span>&gt;
+          &lt;<span class="code-xml-element-local-name">li</span>&gt;the sentence element has no (non-whitespace-only) child text nodes.&lt;/<span class="code-xml-element-local-name">li</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">ul</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;The reading order is preserved, and apart from elements that are broken up and wrapper
+        &lt;<span class="code-xml-element-local-name">code</span>&gt;span&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements that are inserted, the structure of the DTBook is preserved.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"skippable-ids"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;List of skippable elements as a &lt;<span class="code-xml-element-local-name">code</span>&gt;d:skippables&lt;/<span class="code-xml-element-local-name">code</span>&gt; document with a
+        &lt;<span class="code-xml-element-local-name">code</span>&gt;d:skippable&lt;/<span class="code-xml-element-local-name">code</span>&gt; child for each skippable element. The &lt;<span class="code-xml-element-local-name">code</span>&gt;d:skippable&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+        elements point to the respective DTBook elements with an &lt;<span class="code-xml-element-local-name">code</span>&gt;id&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"skippables"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id-prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xproc/library.xpl" class="source">http://www.daisy.org/pipeline/modules/common-utils/library.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        px:add-ids
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"skippable"</span> <span class="code-xml-attribute-local-name">attribute-value</span>=<span class="code-xml-attribute-value">"skippable"</span>&gt;
+      
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"match"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$match"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">add-ids</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"add-ids-for-skippables"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@skippable]"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Make sure that skippable elements have an id attribute.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">add-ids</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//*[@skippable]"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"id"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+          &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;&lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">skippable</span>/&gt;&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute-value"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/*/@id"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"d:skippables"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"skippables"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"add-ids-for-skippables"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"sentence-ids"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/tts-common/src/main/resources/xml/xproc/isolate-skippable.xsl" class="source">isolate-skippable.xsl</a>"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id-prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$id-prefix"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

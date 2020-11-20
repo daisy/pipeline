@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>page layout.scss</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../page-layout.scss">
+
+<div class="language-sass highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">
+ * Page layout: dimensions, numbering, headers and footers.
+ */</span></span>
+
+<span class="variable">$page-width</span>: <span class="float">40</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$page-height</span>: <span class="float">25</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$levels-in-footer</span>: <span class="float">6</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$show-braille-page-numbers</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$show-print-page-numbers</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@namespace</span> <span class="value">epub</span> <span class="function"><span class="delimiter">url(</span><span class="content">http://www.idpf.org/2007/ops</span><span class="delimiter">)</span></span>;
+
+<span class="directive">@page</span> {
+        <span class="key">size</span>: <span class="variable">$page-width</span> <span class="variable">$page-height</span>;
+}
+
+<span class="directive">@if</span> <span class="variable">$show-print-page-numbers</span> {
+        .<span class="key">page-front</span>,
+        .<span class="key">page-normal</span>,
+        .<span class="key">page-special</span>,
+        <span class="error">[</span><span class="key">epub</span><span class="error">|</span><span class="key">type</span>=<span class="string"><span class="delimiter">'</span><span class="content">pagebreak</span><span class="delimiter">'</span></span><span class="error">]</span> {
+                <span class="key">string-set</span>: <span class="value">print-page</span> <span class="function"><span class="delimiter">attr(</span><span class="content">title</span><span class="delimiter">)</span></span>;
+        }
+}
+
+<span class="directive">@for</span> <span class="variable">$level</span> <span class="value">from</span> <span class="float">1</span> <span class="value">through</span> <span class="float">6</span> {
+        <span class="directive">@if</span> <span class="variable">$levels-in-footer</span> &gt;= <span class="variable">$level</span> {
+                <span class="key">h</span><span class="inline"><span class="inline-delimiter">#{</span><span class="variable">$level</span><span class="inline-delimiter">}</span></span> {
+                        <span class="key">string-set</span>: <span class="value">footer</span> <span class="predefined">content</span>();
+                }
+        }
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

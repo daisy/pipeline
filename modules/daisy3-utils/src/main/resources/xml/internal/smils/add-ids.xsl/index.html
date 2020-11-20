@@ -13,11 +13,18 @@
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"no-smilref"</span>/&gt;
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stop-recursion"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>/&gt;
 
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xslt/generate-id.xsl" class="source">http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl</a>"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:next-match-with-generated-ids"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'forsmil-'"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"for-elements"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//*[not(@id) and not(contains($no-smilref, concat(' ', local-name(), ' ')))]"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[not(@id) and not(contains($no-smilref, concat(' ', local-name(), ' ')))]"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"2"</span>&gt;
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
-      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span>&gt;
-	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('forsmil-', generate-id())"</span>/&gt;
-      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:generate-id"</span>/&gt;
       &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
   &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
@@ -25,9 +32,7 @@
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[contains($stop-recursion, concat(' ', local-name(), ' '))]"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"3"</span>&gt;
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
       &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@id) and not(contains($no-smilref, concat(' ', local-name(), ' ')))"</span>&gt;
-	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span>&gt;
-	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('forsmil-', generate-id())"</span>/&gt;
-	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:generate-id"</span>/&gt;
       &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
       &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;

@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../guide-to-landmarks.xsl">
+</head>
+<body><div class="code" about="../guide-to-landmarks.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">xpath-default-namespace</span>=<span class="code-xml-attribute-value">"http://www.idpf.org/2007/opf"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/library.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xsl</a>"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-base-uri"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"opf-base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pf:base-uri(.)"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//guide[1]"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">nav</span> <span class="code-xml-attribute-prefix">epub:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"landmarks"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">h1</span>&gt;Guide&lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ol</span>&gt;
+          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"descendant::reference"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">li</span>&gt;
+              &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{pf:relativize-uri(resolve-uri(@href,$opf-base),$output-base-uri)}"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"epub:type"</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@type='title-page'"</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'titlepage'"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@type=('acknowledgements',   'glossary',                                            'bibliography',       'index',                                            'colophon',           'loi',                                            'copyright-page',     'lot',                                            'cover',              'notes',                                            'dedication',         'preface',                                            'epigraph',           'text',                                            'foreword',           'toc'                                            )"</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@type"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"starts-with(@type,'other.')"</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"substring-after(@type,'other.')"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>/&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"type"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"replace(@type,'^other\.','')"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@title"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@title"</span>/&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$type='toc'"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;Table of contents&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$type='loi'"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;List of illustrations&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$type='lot'"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;List of tables&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$type='text'"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;Start of content&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat(upper-case(substring($type,1,1)),                                                  replace(substring($type,2),'-',' '))"</span>/&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+              &lt;/<span class="code-xml-element-local-name">a</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">li</span>&gt;
+          &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">ol</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">nav</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

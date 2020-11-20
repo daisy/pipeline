@@ -10,6 +10,17 @@
 </head>
 <body><div class="code" about="../set-base-uri.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:set-base-uri"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"px"</span>&gt;
 	
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">p</span>&gt;Changes the base URI of the document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;<span class="code-xml-element-local-name">p</span>&gt;px:set-base-uri has an effect on all elements that do not have an ancestor with an
+		absolute xml:base, unless that element is the root element. Whether an element has a
+		different base URI than its parent does not matter as long as this is not made explicit with
+		an xml:base attribute. Elements with a relative xml:base are also affected by the
+		px:set-base-uri in that their absolute base URI changes accordingly, but the xml:base
+		attribute is not changed. Elements with an absolute xml:base, and their descendants, are not
+		affected by the px:set-base-uri.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>/&gt;
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base-uri"</span>/&gt;

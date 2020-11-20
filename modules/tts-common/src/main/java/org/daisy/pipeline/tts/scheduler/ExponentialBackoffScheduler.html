@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>ExponentialBackoffScheduler xref</title>
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/tts-common/src/main/java/stylesheet.css">
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.tts.scheduler;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.UUID;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.tts.scheduler.FatalError;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.tts.scheduler.RecoverableError;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.tts.scheduler.Schedulable;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.tts.scheduler.Scheduler;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_javadoccomment"> * Scheduler that increases the delay between actions launch, using a number of seconds equals to</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_javadoccomment"> * apower of 2 times retries and a random number of milliseconds.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This scheduler implementation is based on &lt;a</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * href="https://cloud.google.com/storage/docs/exponential-backoff"&gt;Google&lt;/a&gt; and &lt;a</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * href="https://docs.aws.amazon.com/general/latest/gr/api-retries.html"&gt;Amazon&lt;/a&gt; recommendations.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * @author Louis Caille @ braillenet.org</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * @param &lt;Action&gt; class of request objects to handle</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ExponentialBackoffScheduler&lt;Action <strong class="jxr_keyword">extends</strong> Schedulable&gt; <strong class="jxr_keyword">implements</strong> Scheduler&lt;Action&gt; {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">	 *  maximum waiting time in millisecond</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAXIMUM_BACKOFF = 64000;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">	 * Waiting time computed following &lt;a</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 * href="https://cloud.google.com/storage/docs/exponential-backoff"&gt;Google&lt;/a&gt; and &lt;a</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 * href="https://docs.aws.amazon.com/general/latest/gr/api-retries.html"&gt;Amazon&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 * recommendations.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * @return the waiting time in milliseconds</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> waitingTime(<strong class="jxr_keyword">int</strong> attemptCounter){
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">long</strong> random_number_milliseconds = (<strong class="jxr_keyword">long</strong>)(Math.random() * 1000);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">long</strong> waitingTime = (<strong class="jxr_keyword">long</strong>)Math.min(Math.pow(2, attemptCounter) * 1000L + random_number_milliseconds, MAXIMUM_BACKOFF);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">return</strong> waitingTime;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 * When a recoverable error is thrown, the scheduler keep the action in its queue and delays all</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * launches by sleeping the thread while in locked state</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> launch(Action action) <strong class="jxr_keyword">throws</strong> InterruptedException, FatalError {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">int</strong> attempt = 0;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">boolean</strong> retry = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">while</strong> (retry) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  				action.launch();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  				retry = false;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			} <strong class="jxr_keyword">catch</strong> (RecoverableError e){
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  				Thread.sleep(waitingTime(attempt));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  				attempt++;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		}
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
+</pre>
+<hr>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+</body>
+</html>

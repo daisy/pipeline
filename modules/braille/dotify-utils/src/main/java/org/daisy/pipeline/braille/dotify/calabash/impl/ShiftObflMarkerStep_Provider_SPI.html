@@ -21,19 +21,23 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> org.slf4j.Logger spi_log = org.slf4j.LoggerFactory.getLogger(ShiftObflMarkerStep_Provider_SPI.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  	
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> java.util.Map spi_props;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  	
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep_Provider_SPI.html">ShiftObflMarkerStep_Provider_SPI</a>() {
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  		<strong class="jxr_keyword">super</strong>();
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  		spi_log.trace(<span class="jxr_string">"Creating ShiftObflMarkerStep.Provider"</span>);
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  		spi_props = <strong class="jxr_keyword">new</strong> java.util.HashMap();
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  		spi_props.put(<span class="jxr_string">"component.name"</span>, <span class="jxr_string">"pxi:shift-obfl-marker"</span>);
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  		spi_props.put(<span class="jxr_string">"type"</span>, <span class="jxr_string">"{http://www.daisy.org/ns/pipeline/xproc/internal}shift-obfl-marker"</span>);
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  	}
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  	<strong class="jxr_keyword">public</strong> java.util.Map spi_getProperties() {
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		<strong class="jxr_keyword">return</strong> spi_props;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> spi_deactivated = false;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  	
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep_Provider_SPI.html">ShiftObflMarkerStep_Provider_SPI</a>() {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  		<strong class="jxr_keyword">super</strong>();
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  		spi_log.trace(<span class="jxr_string">"Creating ShiftObflMarkerStep.Provider"</span>);
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  		spi_props = <strong class="jxr_keyword">new</strong> java.util.HashMap();
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  		spi_props.put(<span class="jxr_string">"component.name"</span>, <span class="jxr_string">"pxi:shift-obfl-marker"</span>);
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  		spi_props.put(<span class="jxr_string">"type"</span>, <span class="jxr_string">"{http://www.daisy.org/ns/pipeline/xproc/internal}shift-obfl-marker"</span>);
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	}
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  	
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> spi_deactivate() {
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  	}
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  }
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">public</strong> java.util.Map spi_getProperties() {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">return</strong> spi_props;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	}
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

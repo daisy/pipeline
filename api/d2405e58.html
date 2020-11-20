@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">fileset-add-entry {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="../../src/main/resources/xml/xproc/fileset-add-entry.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">fileset-add-entry</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Add a new entry to a fileset.</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/fileset-utils/library.xpl.html" target="detail">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">source.in-memory</span><span class="details"> sequence</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The input fileset</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">entry</span><span class="details"> sequence</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The document to add to the fileset (at most one)</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Must be empty if the href option is specified.</p>
+</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">file-attributes</span><span class="details"> parameter</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Additional attributes to add to the new d:file entry, or to the existing entry if the
+      fileset already contained a file with the same URI as the provided entry and if
+      <code>replace-attributes</code> is set to <code>true</code>.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Attributes named <code>href</code>, <code>original-href</code> or <code>media-type</code>
+      are not allowed.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">result.in-memory</span><span class="details"> sequence</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The fileset with the new entry added</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The result.in-memory port contains all the documents from the source.in-memory port, and if
+      the new entry was provided via de "entry" port, that document is appended (or prepended,
+      depending on the "first" option).</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If the input fileset already contained a file with the same URI as the new entry, it is not
+      added, unless when the 'replace' option is set, in which case the old entry is removed and the
+      new one is added to the beginning or the end. If the 'replace-attributes' option is set,
+      attributes of the existing entry may be added or replaced.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">href</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The URI of the new entry</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If the entry is provided via a document on the entry port, the href option must not be
+      specified. In this case the entry gets the base URI of the document.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">media-type</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ref</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">original-href</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">first</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">replace</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">replace-attributes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
