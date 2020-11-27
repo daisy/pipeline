@@ -32,7 +32,7 @@
 					<c:file name="META-INF/services/org.daisy.common.xproc.calabash.XProcStepProvider"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.datatypes.DatatypeService"/>
-					<c:file name="META-INF/services/org.daisy.pipeline.modules.ModuleRef"/>
+					<c:file name="META-INF/services/org.daisy.pipeline.modules.Module"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.script.XProcScriptService"/>
 					<c:file name="OSGI-INF/calabash-config-it-pipeline-module.xml"/>
 					<c:file name="OSGI-INF/foo-choice.xml"/>
