@@ -114,7 +114,7 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 				htmlizers.put(
 					new FilenameFilter() {
 						public boolean accept(File dir, String name) {
-							return name.endsWith(".xpl"); }},
+							return name.endsWith(".xpl") || name.endsWith(".params"); }},
 					new Htmlizer() {
 						public void run(Iterable<File> sources, File sourceDirectory, File outputDirectory) throws XProcExecutionException {
 							List<String> sourcesAsURIs = new ArrayList<String>();
@@ -184,7 +184,10 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 				htmlizers.put(
 					new FilenameFilter() {
 						public boolean accept(File dir, String name) {
-							if (name.endsWith(".xpl") || name.endsWith(".xsl") || (name.equals("catalog.xml") && dir.getName().equals("META-INF")))
+							if (name.endsWith(".xpl") ||
+							    name.endsWith(".params") ||
+							    name.endsWith(".xsl") ||
+							    (name.equals("catalog.xml") && dir.getName().equals("META-INF")))
 								return false;
 							File f = new File(dir, name);
 							boolean isXml; {

@@ -45,6 +45,27 @@
                 </p:xslt>
                 <p:sink/>
             </p:when>
+            <p:when test="exists(//cat:uri[@px:content-type='params' and resolve-uri(@uri,base-uri(.))=$input-uri])">
+                <!--
+                    XProc file that contains option declarations and that is not necessarily
+                    'px:extended' by a script, yet needs to be converted to documentation because
+                    scripts may accept parameters to provide these settings.
+                -->
+                <p:output port="result" primary="true">
+                    <p:pipe step="xslt" port="secondary"/>
+                </p:output>
+                <p:xslt name="xslt">
+                    <p:input port="stylesheet">
+                        <p:document href="htmlize-params-file.xsl"/>
+                    </p:input>
+                    <p:with-param name="input-base-uri" select="$input-base-uri"/>
+                    <p:with-param name="output-base-uri" select="$output-base-uri"/>
+                    <p:input port="parameters">
+                        <p:pipe step="main" port="parameters"/>
+                    </p:input>
+                </p:xslt>
+                <p:sink/>
+            </p:when>
             <p:otherwise>
                 <p:output port="result" primary="true">
                     <p:pipe step="xslt" port="secondary"/>

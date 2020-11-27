@@ -154,6 +154,16 @@ public class <xsl:value-of select="$className"/> extends Module {
         </xsl:if>
     </xsl:template>
     
+    <xsl:template match="cat:uri[@px:content-type='params']" priority="1">
+        <xsl:if test="@px:extends">
+            <xsl:message terminate="yes">unexpected @px:extends: <xsl:sequence select="."/></xsl:message>
+        </xsl:if>
+        <xsl:if test="not(@name)">
+            <xsl:message terminate="yes">missing @name: <xsl:sequence select="."/></xsl:message>
+        </xsl:if>
+        <xsl:next-match/>
+    </xsl:template>
+    
     <xsl:template match="cat:uri[@px:extends]">
         <xsl:if test="@name">
             <xsl:copy>
@@ -192,6 +202,7 @@ public class <xsl:value-of select="$className"/> extends Module {
                                                    'libhyphen-tables')]|
                          cat:uri/@px:content-type[.=('script',
                                                      'data-type',
+                                                     'params',
                                                      'calabash-config',
                                                      'liblouis-tables',
                                                      'libhyphen-tables')]|
@@ -531,7 +542,13 @@ public class <xsl:value-of select="$className"/> extends org.daisy.pipeline.brai
     </xsl:template>
     
     <xsl:template match="/*/p:option/p:pipeinfo/pxd:type" mode="data-type-id" as="xs:string">
-        <xsl:sequence select="concat(/*/@type,'-',parent::*/parent::*/@name)"/>
+        <!-- FIXME: make @type optional -->
+        <xsl:if test="not(/*/@type)">
+            <xsl:message terminate="yes">missing @type: <xsl:sequence select="/*"/></xsl:message>
+        </xsl:if>
+        <xsl:sequence select="concat(/*/@type,'-',
+                                     for $name in parent::*/parent::*/@name return
+                                     if (contains($name,':')) then substring-after($name,':') else $name)"/>
     </xsl:template>
     
     <xsl:template match="@*|node()" mode="data-type-xml">

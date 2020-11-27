@@ -1,6 +1,7 @@
 <p:declare-step version="1.0"
             xmlns:p="http://www.w3.org/ns/xproc"
             xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+            xmlns:px2="http://www.daisy.org/ns/pipeline"
             xmlns:catalog="urn:oasis:names:tc:entity:xmlns:xml:catalog"
             xmlns:xd="http://github.com/vojtechtoman/xprocdoc"
             type="px:catalog-to-xprocdoc"
@@ -18,7 +19,7 @@
 			<p:pipe step="main" port="source"/>
 		</p:iteration-source>
 		<p:choose>
-			<p:when test="/*[ends-with(@uri,'.xpl')]">
+			<p:when test="/*[ends-with(@uri,'.xpl') and not(@px2:content-type='params')]">
 				<p:load>
 					<p:with-option name="href" select="/*/resolve-uri(@uri,base-uri(.))"/>
 				</p:load>
