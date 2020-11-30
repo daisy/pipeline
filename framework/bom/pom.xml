@@ -436,9 +436,9 @@
 
       <!-- Third-Party Libraries required by GUI -->
       <dependency>
-        <groupId>de.codecentric.centerdevice</groupId>
-        <artifactId>centerdevice-nsmenufx</artifactId>
-        <version>2.1.0</version>
+        <groupId>de.jangassen</groupId>
+        <artifactId>nsmenufx</artifactId>
+        <version>2.1.8</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.libs</groupId>
