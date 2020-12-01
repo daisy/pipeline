@@ -8,6 +8,7 @@ require 'rdf/rdfa'
 require 'kramdown'
 require 'yaml'
 require 'nokogiri'
+require 'cgi'
 require "#{File.expand_path(File.dirname(__FILE__))}/../src/_plugins/lib/relativize"
 
 meta_file = ARGV[1]
@@ -264,10 +265,7 @@ Dir.glob(ARGV[0]).each do |f|
       pattern [ :option, DESC, :desc ], optional: true
     end
     options_solutions = graph.query(options_query)
-    if not options_solutions.empty?
-      options = Hash.new
-      page_view['options'] = options
-      options['all'] = options_solutions.map { |solution|
+    process_option = lambda { |solution|
         id = solution.id.to_s
         sequence = solution.bound?('sequence') ? solution.sequence.true? : false
         if solution.bound?('data_type')
@@ -338,10 +336,18 @@ Dir.glob(ARGV[0]).each do |f|
           'desc' => desc,
           'required' => solution.bound?('required') ? solution.required.true? : false,
           'sequence' => sequence,
-          'default' => default ? (default.include?(' ') ? "<code class='contains-space'>#{default}</code>" : "<code>#{default}</code>") : nil,
+          'default' => default ?
+                         (default.include?(' ') ?
+                            "<code class='contains-space'>#{CGI::escapeHTML(default)}</code>" :
+                            "<code>#{CGI::escapeHTML(default)}</code>") :
+                         nil,
           'data-type' => data_type
         }
-      }
+    }
+    if not options_solutions.empty?
+      options = Hash.new
+      page_view['options'] = options
+      options['all'] = options_solutions.map(&process_option)
       options['all'].each do |option|
         options[option['id']] = option
       end
@@ -456,6 +462,40 @@ Dir.glob(ARGV[0]).each do |f|
         end
       end
     end
+    page_view['render_option'] = lambda { |uri|
+      abs_uri = page_url.join(uri.strip())
+      query = RDF::Query.new do
+        pattern [ abs_uri, ID, :id ]
+        pattern [ abs_uri, NAME, :name ], optional: true
+        pattern [ abs_uri, DESC, :desc ], optional: true
+        pattern [ abs_uri, DEFAULT, :default ], optional: true
+        pattern [ abs_uri, DATA_TYPE, :data_type ], optional: true
+      end
+      solutions = query.execute(graph)
+      if solutions.empty?
+        raise "ERROR: option does not exist: #{abs_uri}"
+      end
+      option = process_option.call(solutions[0])
+      render = '<div class="synopsis-option">'
+      if option['name']
+        render << "<div class=\"synopsis-option-name\">#{CGI::escapeHTML(option['name'])}</div>"
+      end
+      if option['desc']
+        render << '<div class="synopsis-option-desc">'
+        if (option['desc']['long'])
+          render << "#{option['desc']['long']}"
+        else
+          render << "#{CGI::escapeHTML(option['desc']['short'])}"
+        end
+        render << '</div>'
+      end
+      render << "<div class=\"synopsis-option-data-type\"><b>Possible values</b>: #{option['data-type']}</div>"
+      if option['default']
+        render << "<div class=\"synopsis-option-default\"><b>Default value</b>: #{option['default']}</div>"
+      end
+      render << '</div>'
+      render
+    }
     page_view.template_file = f
     file_rendered = page_view.render
     File.open(f, 'w') { |f| f.write(file_rendered) }

@@ -323,19 +323,48 @@ body {
 	list-style-type: none;
 	padding-left: 1rem;
 	margin: 0;
+	.synopsis-input,
+	.synopsis-output,
+	.synopsis-report,
+	.synopsis-option {
+		position: relative;
+		border-top: 1px solid $color-complement-3;
+		border-left: 1px solid $color-complement-3;
+		border-bottom: 1px solid white;
+		border-radius: .2rem;
+		&.details-off {
+			&:hover {
+				background-color: lighten($color-complement-4, 11%);
+				cursor: pointer; }
+			.synopsis-input-desc .longdesc,
+			.synopsis-input-media-type,
+			.synopsis-input-sequence,
+			.synopsis-output-desc .longdesc,
+			.synopsis-output-media-type,
+			.synopsis-report-desc .longdesc,
+			.synopsis-option-desc .longdesc,
+			.synopsis-option-data-type,
+			.synopsis-option-default,
+			.synopsis-option-required {
+				display: none; }}
+		&.details-on {
+			background-color: lighten($color-complement-4, 5%);
+			border-right: 1px solid $color-complement-3;
+			border-bottom: 1px solid $color-complement-3;
+			.synopsis-input-desc .shortdesc,
+			.synopsis-output-desc .shortdesc,
+			.synopsis-report-desc .shortdesc,
+			.synopsis-option-desc .shortdesc {
+				display: none; }}
+	}
 }
 
 .synopsis-input,
 .synopsis-output,
 .synopsis-report,
 .synopsis-option {
-	position: relative;
 	margin: .5rem 0 .3rem 1rem;
 	padding: .5rem 1rem 0 1rem;
-	border-top: 1px solid $color-complement-3;
-	border-left: 1px solid $color-complement-3;
-	border-bottom: 1px solid white;
-	border-radius: .2rem;
 	.synopsis-option-default code:empty {
 		padding: 0;
 		border: none;
@@ -347,30 +376,6 @@ body {
 		line-height: 1.5em;
 		&::after {
 			content: "(empty)"; }}
-	&.details-off {
-		&:hover {
-			background-color: lighten($color-complement-4, 11%);
-			cursor: pointer; }
-		.synopsis-input-desc .longdesc,
-		.synopsis-input-media-type,
-		.synopsis-input-sequence,
-		.synopsis-output-desc .longdesc,
-		.synopsis-output-media-type,
-		.synopsis-report-desc .longdesc,
-		.synopsis-option-desc .longdesc,
-		.synopsis-option-data-type,
-		.synopsis-option-default,
-		.synopsis-option-required {
-			display: none; }}
-	&.details-on {
-		background-color: lighten($color-complement-4, 5%);
-		border-right: 1px solid $color-complement-3;
-		border-bottom: 1px solid $color-complement-3;
-		.synopsis-input-desc .shortdesc,
-		.synopsis-output-desc .shortdesc,
-		.synopsis-report-desc .shortdesc,
-		.synopsis-option-desc .shortdesc {
-			display: none; }}
 	p > code:only-child {
 		white-space: pre; }
 	.synopsis-input-name,
