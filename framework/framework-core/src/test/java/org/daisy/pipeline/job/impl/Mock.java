@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,11 +29,11 @@ import org.daisy.pipeline.script.XProcScript;
 import com.google.common.base.Supplier;
 
 class Mock   {
-        public static JobContext mockContext(JobId id){
-                return new AbstractJobContext(null,id,null,"",null,null){
-
-
-                };
+        public static JobContext mockContext(JobId jobId) {
+                return new AbstractJobContext() {{
+                        this.id = jobId;
+                        this.niceName = "";
+                }};
         }
 
         public static class MockSource implements Source,Supplier<Source>{

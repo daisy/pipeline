@@ -5,10 +5,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
 
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.JobSize;
-import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -35,18 +31,18 @@ public class JobSizeTest   {
                 id=JobIdFactory.newId();
                 //create fake data
                 //log
-                File log = new File(JobURIUtils.getLogFile(id));
+                File log = JobURIUtils.getLogFile(id.toString());
                 Files.createParentDirs(log);
                 Files.write(logTxt.getBytes(),log);
                 //input
-                contextDir= JobURIUtils.getJobContextDir(id);
+                contextDir= JobURIUtils.getJobContextDir(id.toString());
                 File input1=new File(contextDir,"input1.txt");
                 File input2=new File(new File(contextDir,"folder"),"input2.txt");
                 Files.createParentDirs(input2);
                 Files.write(inputTxt.getBytes(),input1);
                 Files.write(inputTxt.getBytes(),input2);
                 //output
-                outputDir= JobURIUtils.getJobOutputDir(id);
+                outputDir= JobURIUtils.getJobOutputDir(id.toString());
                 File output=new File(new File(outputDir,"folder"),"outout.txt");
                 Files.createParentDirs(output);
                 Files.write(inputTxt.getBytes(),output);

@@ -7,11 +7,9 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.IdentifiableType;
 import javax.persistence.metamodel.SingularAttribute;
 
-import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.AbstractJob;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobContext;
-import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 
 public class BatchFilter extends QueryDecorator<PersistentJob> {
 
@@ -28,7 +26,7 @@ public class BatchFilter extends QueryDecorator<PersistentJob> {
 
         @Override
         Predicate getPredicate(QueryDecorator<PersistentJob>.QueryHolder holder) {
-                Join<Job,JobContext> joinContext=holder.root.join(PersistentJob.MODEL_JOB_CONTEXT);
+                Join<AbstractJob,AbstractJobContext> joinContext = holder.root.join(PersistentJob.MODEL_JOB_CONTEXT);
                 Predicate pred=holder.cb.equal(joinContext.get("stringBatchId"),this.id.toString());
 
                 return pred;

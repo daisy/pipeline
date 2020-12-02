@@ -21,7 +21,6 @@ import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -57,9 +56,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	public ScriptRegistry scriptRegistry;
 	
 	@Inject
-	public EventBusProvider eventBusProvider;
-	
-	@Inject
 	public JobMonitorFactory jobMonitorFactory;
 	
 	// Test that progress messages work also with persistent storage
@@ -85,7 +81,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 			                                                          catch (IOException e) {
 			                                                              throw new RuntimeException(e); }})
 			                                          .build());
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			final MessageAccessor accessor = monitor.getMessageAccessor();
 			Runnable poller = new FrameworkCoreTest.JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;

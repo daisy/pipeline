@@ -31,10 +31,6 @@ public class PersistentClientStorage implements ClientStorage {
                 this.database = database;
         }
 
-        public void setDatabase(Database database) {
-                this.database = database;
-        }
-
         @Override
         public List<? extends Client> getAll() {
                 //ignore default

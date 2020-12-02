@@ -24,7 +24,6 @@ public class PersistentOptionResultTest {
 	JobId id1;
 	@Before	
 	public void setUp(){
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		result= new JobResult.Builder().withPath(path).withIdx(idx).build();
 		db=DatabaseProvider.getDatabase();
 		id1= new JobUUIDGenerator().generateId();

@@ -23,12 +23,14 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
-import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,8 +48,6 @@ import org.slf4j.LoggerFactory;
 @Access(AccessType.FIELD)
 public final class PersistentJobContext extends AbstractJobContext {
         public static final long serialVersionUID=1L;
-        public static final String MODEL_CLIENT="client";
-        public static final String MODEL_BATCH_ID="batch_id";
         private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
 
 
@@ -55,7 +55,8 @@ public final class PersistentJobContext extends AbstractJobContext {
         @Embedded
         private PersistentMapper pMapper;
         @ManyToOne
-        private PersistentClient client;
+        private PersistentClient pClient;
+        public static final String MODEL_CLIENT = "pClient";
 
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         @MapsId("job_id")
@@ -81,33 +82,23 @@ public final class PersistentJobContext extends AbstractJobContext {
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
         private List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
 
-        public PersistentJobContext(AbstractJobContext ctxt) {
-                super(ctxt.getClient(),ctxt.getId(),ctxt.getBatchId(),ctxt.getName(),BoundXProcScript.from(ctxt.getScript(),ctxt.getInputs(),ctxt.getOutputs()),ctxt.getMapper());
-                this.setResults(ctxt.getResults());
-                this.load();
-        }
-
-        /**
-         * Constructs a new instance.
-         */
-        private PersistentJobContext() {
-                super(null,null,null,"",null,null);
-        }
-
-        /**
-         * Maps complex objects to their Persistent representation
-         */
-        private void load(){
+        PersistentJobContext(AbstractJobContext ctxt) {
+                super(ctxt);
+                // Map complex objects to their Persistent representation
                 logger.debug("coping the objects to the model ");
-                this.pMapper=new PersistentMapper(this.getMapper());
-                this.inputPorts=ContextHydrator.dehydrateInputPorts(this);
-                this.options=ContextHydrator.dehydrateOptions(this);
-                this.parameters=ContextHydrator.dehydrateParameters(this);
-                this.client=(PersistentClient)this.getClient();
+                this.pMapper = new PersistentMapper(this.resultMapper);
+                this.inputPorts = ContextHydrator.dehydrateInputPorts(this.getId(), this.getScript(), this.input);
+                this.options = ContextHydrator.dehydrateOptions(this.getId(), this.input);
+                this.parameters = ContextHydrator.dehydrateParameters(this.getId(), this.getScript(), this.input);
+                this.pClient = (PersistentClient)this.getClient();
                 //everything is inmutable but this
-                this.updateResults();   
+                this.updateResults();
         }
 
+        @SuppressWarnings("unused") // used by jpa
+        private PersistentJobContext() {
+                super();
+        }
 
         /**
          * Although we could delegate the actual hydration
@@ -123,15 +114,15 @@ public final class PersistentJobContext extends AbstractJobContext {
                 ContextHydrator.hydrateInputPorts(builder,inputPorts);
                 ContextHydrator.hydrateOptions(builder,options);
                 ContextHydrator.hydrateParams(builder,parameters);
-                this.setInput(builder.build());
+                this.input = builder.build();
 
-                this.setMapper(this.pMapper.getMapper());
-                this.setClient(this.client);
+                this.resultMapper = this.pMapper.getMapper();
+                this.client = this.pClient;
 
                 JobResultSet.Builder rBuilder=new JobResultSet.Builder();
                 ContextHydrator.hydrateResultPorts(rBuilder,portResults);
                 ContextHydrator.hydrateResultOptions(rBuilder,optionResults);
-                this.setResults(rBuilder.build());
+                this.results = rBuilder.build();
         }
 
         private void updateResults(){
@@ -141,43 +132,32 @@ public final class PersistentJobContext extends AbstractJobContext {
                         this.optionResults=ContextHydrator.dehydrateOptionResults(this);
         }
 
-        /**
-         * @return the sId
-         */
         @Column(name="job_id")
         @Id
         @Access(AccessType.PROPERTY)
         private String getStringId() {
                 return this.getId().toString();
         }
+
         @SuppressWarnings("unused") //used by jpa
         private void setStringId(String sId) {
-                super.setId(JobIdFactory.newIdFromString(sId));
+                this.id = JobIdFactory.newIdFromString(sId);
         }
 
-        /**
-         * @return the sId
-         */
-        @Column(name="batch_id")
+        public static final String MODEL_BATCH_ID = "batch_id";
+        @Column(name=MODEL_BATCH_ID)
         @Access(AccessType.PROPERTY)
         private String getStringBatchId() {
-                if (this.getBatchId()!=null){
-                        return this.getBatchId().toString();
-                }else{
-                        return null;
-                }
+                return batchId != null ? batchId.toString() : null;
         }
+
         @SuppressWarnings("unused") //used by jpa
         private void setStringBatchId(String batchId) {
                 if(batchId!=null){
-                        super.setBatchId(JobIdFactory.newBatchIdFromString(batchId));
+                        this.batchId = JobIdFactory.newBatchIdFromString(batchId);
                 }
         }
 
-
-        /**
-         * @return the logFile
-         */
         @Column(name="log_file")
         @Access(AccessType.PROPERTY)
         private String getStringLogFile() {
@@ -186,19 +166,11 @@ public final class PersistentJobContext extends AbstractJobContext {
                 return super.getLogFile().toString();
         }
 
-        /**
-         * @param logFile the logFile to set
-         */
         @SuppressWarnings("unused") //used by jpa
         private void setStringLogFile(String logFile) {
-                super.setLogFile(URI.create(logFile));
+                this.logFile = URI.create(logFile);
         }
 
-        /**
-         * Gets the script for this instance.
-         *
-         * @return The script.
-         */
         @Column(name="script_id")
         @Access(AccessType.PROPERTY)
         private String getScriptId() {
@@ -208,9 +180,7 @@ public final class PersistentJobContext extends AbstractJobContext {
                         //throw new IllegalStateException("Script is null");
                         return "";
                 }
-
         }
-
 
         @SuppressWarnings("unused") //used by jpa
         private void setScriptId(String id) {
@@ -219,7 +189,7 @@ public final class PersistentJobContext extends AbstractJobContext {
                         if (service!=null){
                                 XProcScript xcript=service.load();
                                 logger.debug(String.format("load script %s",xcript));
-                                this.setScript(xcript);//getScriptService(URI.create(this.scriptUri)).getScript();
+                                this.script = xcript;
                                 return;
                         }
                 }
@@ -228,9 +198,6 @@ public final class PersistentJobContext extends AbstractJobContext {
                                         ,this.getScript(),registry));
         }
 
-        /**
-         * @return the sNiceName
-         */
         @Column(name="nice_name")
         @Access(AccessType.PROPERTY)
         @Override
@@ -238,27 +205,37 @@ public final class PersistentJobContext extends AbstractJobContext {
                 return super.getName();
         }
 
-        /**
-         * @param sNiceName the sNiceName to set
-         */
-        @Override
-        public void setName(String Name) {
-                super.setName(Name);
+        @SuppressWarnings("unused") // used by jpa
+        private void setName(String Name) {
+                this.niceName = Name;
         }
 
-
         @Override
-        public void writeResult(XProcResult result) {
+        protected boolean collectResults(XProcResult result) {
                 //build the result set
-                super.writeResult(result);
+                boolean status = super.collectResults(result);
                 //and make sure that the new values get stored
                 this.updateResults();
-                                
+                return status;
         }
 
         @Transient
-        static ScriptRegistry registry;
-        public static void setScriptRegistry(ScriptRegistry sregistry){
+        private static ScriptRegistry registry;
+        static void setScriptRegistry(ScriptRegistry sregistry) {
                 registry=sregistry;
+        }
+
+        void setMonitor(JobMonitorFactory monitorFactory) {
+                this.monitor = monitorFactory.newJobMonitor(id);
+        }
+
+        // for unit tests
+
+        XProcInput getInputs() {
+                return input;
+        }
+
+        URIMapper getResultMapper() {
+                return resultMapper;
         }
 }

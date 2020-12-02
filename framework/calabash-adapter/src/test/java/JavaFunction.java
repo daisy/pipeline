@@ -9,14 +9,10 @@ import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
-import net.sf.saxon.value.StringValue;
 
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.common.messaging.MessageAppender;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,19 +25,6 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 	
 	private static final StructuredQName funcname = new StructuredQName("pf",
 			"http://www.daisy.org/ns/pipeline/functions", "java-function");
-	
-	Logger messageBus;
-	
-	@Reference(
-		name = "EventBusProvider",
-		unbind = "-",
-		service = EventBusProvider.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	protected void bindEventBus(EventBusProvider eventBusProvider) {
-		messageBus = eventBusProvider.getAsLogger();
-	}
 	
 	@Override
 	public StructuredQName getFunctionQName() {
@@ -73,8 +56,11 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 		return new ExtensionFunctionCall() {
 			public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
 				try {
-					messageBus.info("inside pf:java-function");
-					logger.info("going to throw an exception");
+					MessageAppender activeBlock = MessageAppender.getActiveBlock();
+					if (activeBlock != null) {
+						activeBlock.asLogger().info("inside pf:java-function");
+						logger.info("going to throw an exception");
+					}
 					throw new RuntimeException("foobar");
 				} catch (Throwable e) {
 					throw new XPathException(

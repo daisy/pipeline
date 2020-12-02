@@ -87,7 +87,7 @@ public class VolatileMessageStorage implements MessageStorage {
 			return false;
 		}
 		try {
-			this.cache.get(msg.getJobId()).add(msg);
+			this.cache.get(msg.getOwnerId()).add(msg);
 			return true;
 		} catch (ExecutionException e) {
 			logger.warn("Error while adding message" , e);

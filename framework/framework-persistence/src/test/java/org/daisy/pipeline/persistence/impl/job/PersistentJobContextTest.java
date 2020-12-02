@@ -34,7 +34,6 @@ public class PersistentJobContextTest  {
 	@Before	
 	public void setUp(){
 		//script setup
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
 		ctxt=new PersistentJobContext(Mocks.buildContext(null,JobIdFactory.newBatchId()));
 		logFile=ctxt.getLogFile();
@@ -97,7 +96,7 @@ public class PersistentJobContextTest  {
 	@Test
 	public void mapperTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		Assert.assertEquals(jCtxt.getMapper(),new URIMapper(Mocks.in,Mocks.out));
+		Assert.assertEquals(jCtxt.getResultMapper(), new URIMapper(Mocks.in, Mocks.out));
 	}
 	
 	@Test

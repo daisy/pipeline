@@ -10,7 +10,7 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 
-import org.daisy.pipeline.event.ProgressMessageBuilder;
+import org.daisy.common.messaging.MessageBuilder;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRunnable;
@@ -147,8 +147,8 @@ public class XprocMessageHelper {
 	 * @param code the code
 	 * @return the string
 	 */
-	public static ProgressMessageBuilder message(XProcRunnable step, XdmNode node,
-			String message, QName code, ProgressMessageBuilder builder) {
+	public static MessageBuilder message(XProcRunnable step, XdmNode node,
+			String message, QName code, MessageBuilder builder) {
 
 		if (node != null) {
 			builder.withFile(node.getBaseURI().toASCIIString());
@@ -160,12 +160,12 @@ public class XprocMessageHelper {
 		return builder;
 	}
 
-	public static ProgressMessageBuilder message(XProcRunnable step, XdmNode node,
-			String message, ProgressMessageBuilder builder) {
+	public static MessageBuilder message(XProcRunnable step, XdmNode node,
+			String message, MessageBuilder builder) {
 		return message(step, node, message, null,builder);
 	}
 
-	public static ProgressMessageBuilder errorMessage(Throwable exception, ProgressMessageBuilder builder) {
+	public static MessageBuilder errorMessage(Throwable exception, MessageBuilder builder) {
 		StructuredQName qCode = null;
 		SourceLocator loc = null;
 		String message = "";

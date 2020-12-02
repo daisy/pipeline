@@ -122,8 +122,9 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 return new ThreadWrapper(new Runnable() {
                         @Override
                         public void run() {
-                                logger.info("Starting to log to job's log file too:" + job.getId().toString());
+                                // used in JobLogFileAppender
                                 MDC.put("jobid", job.getId().toString());
+                                logger.info("Starting to log to job's log file too:" + job.getId().toString());
                                 job.run(xprocEngine);
                                 logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
                                 MDC.remove("jobid");

@@ -12,8 +12,6 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 
-import org.daisy.pipeline.event.EventBusProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,25 +33,12 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class CalabashXProcEngine implements XProcEngine {
 
-	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
 			.getLogger(CalabashXProcEngine.class);
 
-
-	/** The uri resolver. */
 	private URIResolver uriResolver = null;
-
-	/** The entity resolver. */
 	private EntityResolver entityResolver = null;
-
-	/** The config factory. */
 	private XProcConfigurationFactory configFactory = null;
-
-	/** The event bus provider. */
-	private EventBusProvider eventBusProvider;
-
-
-
 
 	/**
 	 * Instantiates a new calabash x proc engine.
@@ -80,7 +65,7 @@ public class CalabashXProcEngine implements XProcEngine {
 					"Calabash configuration factory unavailable");
 		}
 
-		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver,eventBusProvider);
+		return new CalabashXProcPipeline(uri, configFactory, uriResolver, entityResolver);
 	}
 
 	/* (non-Javadoc)
@@ -145,21 +130,5 @@ public class CalabashXProcEngine implements XProcEngine {
 	)
 	public void setUriResolver(URIResolver uriResolver) {
 		this.uriResolver = uriResolver;
-	}
-
-	/**
-	 * Sets the message listener factory used to create new message listeners to catch and process the messages thrown while executing pipelines
-	 *
-	 * @param factory the new message listener factory
-	 */
-	@Reference(
-		name = "event-bus-provider",
-		unbind = "-",
-		service = EventBusProvider.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	public void setEventBusProvider(EventBusProvider eventBusProvider){
-		this.eventBusProvider=eventBusProvider;
 	}
 }

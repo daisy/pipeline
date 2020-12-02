@@ -5,24 +5,15 @@ import org.daisy.pipeline.script.BoundXProcScript;
 
 import com.google.common.base.Optional;
 
-
-
 /**
  * The Interface JobManager offers a simple way of managing jobs.
  */
 public interface JobManager {
 
-
 	/**
-	 * creates a job attached to the resource collection that will be used as context to the job.
-	 *
-	 * @param context the context for the new job
-	 * @return the job
-	 * @throws IllegalArgumentException if the jobId inside the context already exists in the manager
+	 * Creates a job for the given script
 	 */
-//	public Job newJob(JobContext ctxt);
-
-	public JobManager.JobBuilder newJob(BoundXProcScript boundScript);
+	public JobBuilder newJob(BoundXProcScript boundScript);
 
 	/**
 	 * Gets the jobs.
@@ -53,14 +44,14 @@ public interface JobManager {
 	 */
 	public Optional<Job> getJob(JobId id);
 
-        public interface JobBuilder{
-                public JobBuilder isMapping(boolean mapping);
-                public JobBuilder withResources(JobResources resources);
-                public JobBuilder withNiceName(String niceName);
-                public JobBuilder withPriority(Priority priority);
-                public JobBuilder withBatchId(JobBatchId id);
-                public Optional<Job> build();
-        }
+	public JobQueue getExecutionQueue();
 
-        public JobQueue getExecutionQueue();
+	public interface JobBuilder {
+		public JobBuilder isMapping(boolean mapping);
+		public JobBuilder withResources(JobResources resources);
+		public JobBuilder withNiceName(String niceName);
+		public JobBuilder withPriority(Priority priority);
+		public JobBuilder withBatchId(JobBatchId id);
+		public Optional<Job> build();
+	}
 }

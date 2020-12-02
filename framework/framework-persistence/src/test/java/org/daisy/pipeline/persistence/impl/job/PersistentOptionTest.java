@@ -20,7 +20,6 @@ public class PersistentOptionTest   {
 	JobId id1;
 	@Before	
 	public void setUp(){
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		db=DatabaseProvider.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
 		qn1=new QName("http://daisy.org","test");

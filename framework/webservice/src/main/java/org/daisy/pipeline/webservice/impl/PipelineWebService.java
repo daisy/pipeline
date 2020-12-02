@@ -356,17 +356,6 @@ public class PipelineWebService extends Application {
                 this.webserviceStorage = webserviceStorage;
         }
 
-        /**
-         * @param ExecutionQueue 
-         */
-        public void setExecutionQueue(JobExecutionService executionQueue) {
-                this.executionQueue= executionQueue;
-        }
-
-        public JobExecutionService getExecutionQueue() {
-                return this.executionQueue;
-        }
-
         public CallbackHandler getCallbackHandler() {
                 return callbackHandler;
         }

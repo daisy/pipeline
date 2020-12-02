@@ -9,15 +9,17 @@ import javax.xml.namespace.QName;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webserviceutils.Routes;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

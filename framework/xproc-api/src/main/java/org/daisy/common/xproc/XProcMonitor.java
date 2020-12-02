@@ -1,11 +1,15 @@
 package org.daisy.common.xproc;
 
-import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.MessageAppender;
 
-
-
+/**
+ * Observer object to monitor a pipeline execution
+ */
 public interface XProcMonitor {
 
-	public MessageAccessor getMessageAccessor();
+	/**
+	 * {@link MessageAppender} to which the pipeline should append messages.
+	 */
+	public MessageAppender getMessageAppender();
 
 }

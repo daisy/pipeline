@@ -1,4 +1,4 @@
-package org.daisy.pipeline.event;
+package org.daisy.common.messaging;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -7,22 +7,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.StreamSupport;
 
-import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.pipeline.properties.Properties;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
-abstract class AbstractMessageAccessor extends MessageAccessor {
+public abstract class AbstractMessageAccessor extends MessageAccessor {
 
-	final String id;
+	private final Set<Level> allLevels;
 
-	public AbstractMessageAccessor(String id) {
-		this.id = id;
+	public AbstractMessageAccessor(Level threshold) {
+		this.allLevels = new HashSet<>();
+		for (Level l : Level.values())
+			if (!threshold.isMoreSevereThan(l))
+				allLevels.add(l);
 	}
 
 	/**
@@ -35,19 +35,6 @@ abstract class AbstractMessageAccessor extends MessageAccessor {
 	@Override
 	public List<Message> getAll() {
 		return createFilter().getMessages();
-	}
-
-	@Override
-	protected List<Message> getMessagesFrom(final Level level) {
-		return createFilter().filterLevels(fromLevel(level)).getMessages();
-	}
-
-	private Set<Level> fromLevel(Level level) {
-		ImmutableSet.Builder<Level> b = new ImmutableSet.Builder();
-		for (Level l : Level.values())
-			if (l.compareTo(level) <= 0)
-				b.add(l);
-		return b.build();
 	}
 
 	@Override
@@ -75,20 +62,6 @@ abstract class AbstractMessageAccessor extends MessageAccessor {
 	@Override
 	public MessageFilter createFilter() {
 		return new MessageFilterImpl();
-	}
-
-	private static final Set<Level> allLevels;
-	static {
-		Level threshold;
-		try {
-			threshold = Level.valueOf(Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
-		} catch (IllegalArgumentException e) {
-			threshold = Level.INFO;
-		}
-		allLevels = new HashSet<>();
-		for (Level l : Level.values())
-			if (l.ordinal() <= threshold.ordinal())
-				allLevels.add(l);
 	}
 
 	private class MessageFilterImpl implements MessageFilter {
@@ -140,7 +113,7 @@ abstract class AbstractMessageAccessor extends MessageAccessor {
 								messages,
 								(Message m) -> {
 									if (m instanceof ProgressMessage) {
-										MessageFilter f = ((ProgressMessage)m).asMessageFilter();
+										MessageFilter f = (ProgressMessage)m;
 										if (greaterThan != null)
 											f = f.greaterThan(greaterThan);
 										if (rangeStart != null)

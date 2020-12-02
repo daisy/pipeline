@@ -1,31 +1,29 @@
-package org.daisy.pipeline.event;
+package org.daisy.common.messaging;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor.MessageFilter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class MessageFilterImpl implements MessageFilter {
 
 	private static final Set<Level> allLevels = ImmutableSet.copyOf(Level.values());
-	private static final Logger logger = LoggerFactory.getLogger(MessageFilterImpl.class);
 
 	private final ProgressMessage message;
 	private final boolean excludeSelf;
@@ -34,6 +32,7 @@ class MessageFilterImpl implements MessageFilter {
 	private Integer start = null;
 	private Integer end = null;
 	private boolean onlyWithText = false;
+	private Integer maxRepeat = null;
 
 	MessageFilterImpl(ProgressMessage message, boolean excludeSelf) {
 		this.message = message;
@@ -81,6 +80,16 @@ class MessageFilterImpl implements MessageFilter {
 		return this;
 	}
 
+	MessageFilterImpl skipRepeated(int maxRepeat) {
+		if (maxRepeat < 2)
+			throw new IllegalArgumentException();
+		if (this.maxRepeat == null || maxRepeat < this.maxRepeat) {
+			this.maxRepeat = maxRepeat;
+			filter = null;
+		}
+		return this;
+	}
+
 	/**
 	 * Returns an immutable list of immutable messages (read-only deep copies).
 	 */
@@ -88,12 +97,14 @@ class MessageFilterImpl implements MessageFilter {
 		if (filter == null) {
 			if (excludeSelf)
 				filter = compose(getChildren, filter);
-			if (start != null || end != null) {
-				if (end == null)
-					filter = compose(sequenceFilter(start), filter);
-				else
-					filter = compose(sequenceFilter(start, end), filter);
-			}
+			Filter repetitionFilter = maxRepeat != null ? repetitionFilter(maxRepeat) : null;
+			if (start != null) {
+				filter = compose(end == null
+				                     ? sequenceFilter(start, repetitionFilter)
+				                     : sequenceFilter(start, end, repetitionFilter),
+				                 filter);
+			} else if (repetitionFilter != null)
+				filter = compose(repetitionFilter, filter);
 			if (levels.size() < allLevels.size()) {
 				filter = compose(levelFilter(levels), filter);
 			}
@@ -153,7 +164,6 @@ class MessageFilterImpl implements MessageFilter {
 	 *
 	 * @param shallowFilter is applied on the message itself and recursively on the children
 	 */
-	@SuppressWarnings("unused")
 	private static Filter deepFilterTopDown(final Filter shallowFilter) {
 		return new Filter() {
 			private final Filter recur = compose(this, getChildren);
@@ -188,21 +198,42 @@ class MessageFilterImpl implements MessageFilter {
 		};
 	}
 	
-	private static Filter sequenceFilter(final int start) {
-		return sequenceFilter(start, Integer.MAX_VALUE);
+	private static Filter sequenceFilter(final int start, Filter repetitionFilter) {
+		return sequenceFilter(start, Integer.MAX_VALUE, repetitionFilter);
 	}
 	
 	/**
 	 * Hide messages that are not within the given range and that have no descendants within that range.
 	 */
-	private static Filter sequenceFilter(final int start, final int end) {
-		return deepFilterBottomUp(
+	private static Filter sequenceFilter(final int start, final int end, Filter repetitionFilter) {
+		// the main filter (applied last)
+		Filter sequenceFilter = deepFilterBottomUp(
 			m -> isLessOrEqual(start, m.getSequence(), end)
 			     || (!m.isOpen() && isLessOrEqual(start, m.getCloseSequence(), end))
 			     || !m.isEmpty()
 				? m.selfIterate()
-				: empty
-		);
+				: empty);
+		if (repetitionFilter != null)
+			// repetitionFilter needs to be applied before sequenceFilter because all repetitions
+			// need to be count, also the hidden ones
+			sequenceFilter = compose(sequenceFilter, repetitionFilter);
+		// apply a pre-filter that uses the fact that a closed message which falls out of the range
+		// completely (also the closing message) can not have descendant messages that fall in the
+		// range
+		return compose(
+			sequenceFilter,
+			deepFilterTopDown(
+				m -> m.isOpen()
+				     || (isLessOrEqual(m.getSequence(), end) && isLessOrEqual(start, m.getCloseSequence()))
+					? m.selfIterate()
+					: repetitionFilter != null
+						// don't hide messages unless all their siblings are hidden too, so that
+						// repetitionFilter can count all repetitions
+						? new ProgressMessage.UnmodifiableProgressMessage(m) {
+								public Iterator<ProgressMessage> __iterator() {
+									return emptyIterator; }
+							}.selfIterate()
+						: empty));
 	}
 
 	/**
@@ -216,6 +247,60 @@ class MessageFilterImpl implements MessageFilter {
 		);
 	}
 
+	/**
+	 * Hide repeated messages (sibling messages with the same text) as of the <code>maxRepeat +
+	 * 1</code>'th repetition, and announce this in the <code>maxRepeat</code>'th repetition.
+	 *
+	 * Note that this does not affect top level messages because the counting is done within
+	 * messages.
+	 */
+	private static Filter repetitionFilter(int maxRepeated) {
+		return deepFilterBottomUp(
+			m -> new ProgressMessage.UnmodifiableProgressMessage(m) {
+					@Override
+					public Iterator<ProgressMessage> __iterator() {
+						return new AbstractIterator<ProgressMessage>() {
+							Map<String,Integer> repetitions = null;
+							Iterator<ProgressMessage> i = null;
+							protected ProgressMessage computeNext() {
+								if (i == null)
+									i = m.__iterator();
+								if (!i.hasNext())
+									return endOfData();
+								ProgressMessage mm = i.next();
+								String text = mm.getText();
+								if (text != null) {
+									Integer repeated;
+									if (repetitions == null) {
+										repetitions = new HashMap<>();
+										repeated = 1;
+									} else {
+										repeated = repetitions.get(text);
+										if (repeated == null)
+											repeated = 1;
+										else {
+											repeated++;
+											if (repeated > maxRepeated)
+												// make the message empty so that it will be hidden later by textFilter
+												mm = new ProgressMessage.UnmodifiableProgressMessage(mm) {
+													public String getText() {
+														return null; }};
+											else if (repeated == maxRepeated)
+												mm = new ProgressMessage.UnmodifiableProgressMessage(mm) {
+													public String getText() {
+														return text + " (further repetitions of this message will be omitted)"; }};
+										}
+									}
+									repetitions.put(text, repeated);
+								}
+								return mm;
+							}
+						};
+					}
+				}.selfIterate()
+		);
+	}
+	
 	/**
 	 * Hide messages without text and promote their children.
 	 */
@@ -233,6 +318,7 @@ class MessageFilterImpl implements MessageFilter {
 	);
 
 	private static final Iterable<ProgressMessage> empty = Optional.<ProgressMessage>absent().asSet();
+	private static final Iterator<ProgressMessage> emptyIterator = Collections.<ProgressMessage>emptyIterator();
 
 	/** Apply the first filter after the second */
 	private static Filter compose(final Filter g, final Filter f) {

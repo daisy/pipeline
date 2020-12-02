@@ -1,12 +1,8 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.job;
 
 import java.io.File;
 import java.net.URI;
 
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.URIMapper;
-import org.daisy.pipeline.job.impl.JobURIUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +30,7 @@ public class JobURIUtilsTest   {
 
 	@Test
 	public void outputUriMapper() throws Exception{
-		URIMapper mapper = JobURIUtils.newOutputURIMapper(id);
+		URIMapper mapper = JobURIUtils.newOutputURIMapper(id.toString());
 		Assert.assertEquals(URI.create(""),mapper.getInputBase());
 		String commonBase=tmpdir.toURI().toString()+id.toString()+"/";
 		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_OUTPUT_SUBDIR+"/"),mapper.getOutputBase());
@@ -43,7 +39,7 @@ public class JobURIUtilsTest   {
 	
 	@Test
 	public void idBasedUriMapper() throws Exception{
-		URIMapper mapper = JobURIUtils.newURIMapper(id);
+		URIMapper mapper = JobURIUtils.newURIMapper(id.toString());
 		String commonBase=tmpdir.toURI().toString()+id.toString()+"/";
 		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_DATA_SUBDIR+"/"),mapper.getInputBase());
 		Assert.assertEquals(URI.create(commonBase+JobURIUtils.IO_OUTPUT_SUBDIR+"/"),mapper.getOutputBase());
@@ -53,30 +49,30 @@ public class JobURIUtilsTest   {
 	@Test
 	public void getLogFile() throws Exception{
 		URI expected= tmpdir.toURI().resolve(URI.create(String.format("%s/%s.log",id.toString(),id.toString())));
-		Assert.assertEquals(JobURIUtils.getLogFile(id),expected);
+		Assert.assertEquals(JobURIUtils.getLogFile(id.toString()).toURI(), expected);
 
 	}
 	@Test
 	public void getLogFileExsists() throws Exception{
-		Assert.assertTrue(new File(JobURIUtils.getLogFile(id)).exists());
+		Assert.assertTrue(JobURIUtils.getLogFile(id.toString()).exists());
 
 	}
 
 	@Test
 	public void getJobBase() throws Exception{
 		URI expected= tmpdir.toURI().resolve(URI.create(String.format("%s/",id.toString())));
-		Assert.assertEquals(JobURIUtils.getJobBase(id),expected);
+		Assert.assertEquals(JobURIUtils.getJobBase(id.toString()), expected);
 	}
 
 	@Test
 	public void getJobContextDir() throws Exception{
-                File context=JobURIUtils.getJobContextDir(id);
-		Assert.assertEquals(new File(JobURIUtils.getJobBaseFile(id),JobURIUtils.IO_DATA_SUBDIR).getAbsolutePath(),context.getAbsolutePath());
+		File context = JobURIUtils.getJobContextDir(id.toString());
+		Assert.assertEquals(new File(JobURIUtils.getJobBaseFile(id.toString()), JobURIUtils.IO_DATA_SUBDIR).getAbsolutePath(), context.getAbsolutePath());
 	}
 
 	@Test
 	public void getJobOutputDir() throws Exception{
-                File output=JobURIUtils.getJobOutputDir(id);
-		Assert.assertEquals(new File(JobURIUtils.getJobBaseFile(id),JobURIUtils.IO_OUTPUT_SUBDIR).getAbsolutePath(),output.getAbsolutePath());
+		File output=JobURIUtils.getJobOutputDir(id.toString());
+		Assert.assertEquals(new File(JobURIUtils.getJobBaseFile(id.toString()), JobURIUtils.IO_OUTPUT_SUBDIR).getAbsolutePath(), output.getAbsolutePath());
 	}
 }

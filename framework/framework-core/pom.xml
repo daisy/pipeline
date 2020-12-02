@@ -8,7 +8,7 @@
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>framework-core</artifactId>
-  <version>4.2.2-SNAPSHOT</version>
+  <version>5.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Framework Core</name>
   <dependencies>
@@ -118,7 +118,6 @@
               org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
               org.daisy.pipeline.event.EventBusProvider,
               org.daisy.pipeline.event.JobMonitorFactoryImpl,
-              org.daisy.pipeline.event.MessageEventListener,
               org.daisy.pipeline.job.impl.DefaultJobExecutionService,
               org.daisy.pipeline.job.JobManagerFactory,
               org.daisy.pipeline.job.RuntimeConfigurator,

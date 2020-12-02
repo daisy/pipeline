@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import org.daisy.pipeline.job.impl.JobURIUtils;
-
 import com.google.common.io.Files;
 
 public final class JobSize {
@@ -94,16 +92,16 @@ public final class JobSize {
                 return size;
         }
         protected static long getLogSize(JobId id) {
-                File f = new File(JobURIUtils.getLogFile(id));
+                File f = JobURIUtils.getLogFile(id.toString());
                 return f.length();
         }
 
         protected static long getContextSize(JobId id) throws IOException {
-                return JobSize.getDirSize(JobURIUtils.getJobContextDir(id));
+                return JobSize.getDirSize(JobURIUtils.getJobContextDir(id.toString()));
         }
 
         protected static long getOutputSize(JobId id) throws IOException {
-                return JobSize.getDirSize(JobURIUtils.getJobOutputDir(id));
+                return JobSize.getDirSize(JobURIUtils.getJobOutputDir(id.toString()));
         }
 
         /**Computes the size of the directory by recursively walking through 

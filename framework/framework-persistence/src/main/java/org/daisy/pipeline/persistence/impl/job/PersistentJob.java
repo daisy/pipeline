@@ -19,9 +19,9 @@ import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
 import org.daisy.common.priority.Priority;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,26 +30,7 @@ import org.slf4j.LoggerFactory;
 @Table(name="jobs")
 @NamedQuery ( name="Job.getAll", query="select j from PersistentJob j")
 @Access(value=AccessType.FIELD)
-public class PersistentJob  extends Job implements Serializable {
-
-        public static final String MODEL_JOB_CONTEXT="context";
-	public static class PersistentJobBuilder extends JobBuilder{
-		private Database db;
-
-		/**
-		 * @param db
-		 */
-		public PersistentJobBuilder(Database db) {
-			this.db = db;
-		}
-
-		@Override
-		protected Job initJob(){
-			Job pjob=new PersistentJob(this.ctxt,this.priority,this.db);
-			this.db.addObject(pjob);	
-			return pjob;
-		}
-	}
+public class PersistentJob  extends AbstractJob implements Serializable {
 
 	private static final Logger logger = LoggerFactory.getLogger(PersistentJob.class);
 	public static final long serialVersionUID=1L;
@@ -69,13 +50,17 @@ public class PersistentJob  extends Job implements Serializable {
 	@Transient
 	Database db=null;
 
-
-	private PersistentJob(JobContext ctxt,Priority priority,Database db) {
-		super(new PersistentJobContext((AbstractJobContext)ctxt),priority);
-		this.db=db;
-		this.sJobId=ctxt.getId().toString();
+	PersistentJob(Database db, AbstractJobContext ctxt) {
+		this(db, ctxt, null);
 	}
 
+	PersistentJob(Database db, AbstractJobContext ctxt, Priority priority) {
+		super(new PersistentJobContext(ctxt), priority);
+		this.db=db;
+		this.sJobId=ctxt.getId().toString();
+		this.db.addObject(this);
+		changeStatus(Status.IDLE);
+	}
 
 	/**
 	 * Constructs a new instance.
@@ -84,9 +69,6 @@ public class PersistentJob  extends Job implements Serializable {
 		super(null,null);
 	}
 
-	/**
-	 * @return the currentStatus
-	 */
 	@Enumerated(EnumType.ORDINAL)
 	@Access(value=AccessType.PROPERTY)
 	@Override
@@ -94,17 +76,12 @@ public class PersistentJob  extends Job implements Serializable {
 		return super.getStatus();
 	}
 
-	/**
-	 * @param currentStatus the currentStatus to set
-	 */
+	// public for unit test
 	@Override
-	public void setStatus(Status currentStatus) {
-		super.setStatus(currentStatus);
+	public void setStatus(Status status) {
+		super.setStatus(status);
 	}
 
-	/**
-	 * @return the currentStatus
-	 */
 	@Enumerated(EnumType.ORDINAL)
 	@Access(value=AccessType.PROPERTY)
 	@Override
@@ -112,37 +89,30 @@ public class PersistentJob  extends Job implements Serializable {
 		return super.getPriority();
 	}
 
-	/**
-	 * @param currentStatus the currentStatus to set
-	 */
-	@Override
-	public void setPriority(Priority priority) {
-		super.setPriority(priority);
+	@SuppressWarnings("unused") // used by jpa
+	private void setPriority(Priority priority) {
+		this.priority = priority;
 	}
 
-	/**
-	 * @return the pCtxt
-	 */
-        //@Column(name="job_contexts")
+	public static final String MODEL_JOB_CONTEXT = "context";
+
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	//@MapsId("job_id")
 	@Access(value=AccessType.PROPERTY)
+	@Override
 	public PersistentJobContext getContext() {
 		return (PersistentJobContext)super.getContext();
 	}
 
-	/**
-	 * @param pCtxt the pCtxt to set
-	 */
-	public void setContext(PersistentJobContext pCtxt) {
+	@SuppressWarnings("unused") // used by jpa
+	private void setContext(PersistentJobContext pCtxt) {
 		super.ctxt= pCtxt;
 	}
 
 
-	public static List<Job> getAllJobs(Database db){
-		TypedQuery<Job> query =
-			      db.getEntityManager().createNamedQuery("Job.getAll", Job.class);
-		List<Job> jobs=query.getResultList();
+	public static List<AbstractJob> getAllJobs(Database db){
+		TypedQuery<AbstractJob> query =
+			      db.getEntityManager().createNamedQuery("Job.getAll", AbstractJob.class);
+		List<AbstractJob> jobs=query.getResultList();
 		return jobs;
 		
 
@@ -164,8 +134,7 @@ public class PersistentJob  extends Job implements Serializable {
 		}
 	}
 
-	protected void setDatabase(Database db){
+	void setDatabase(Database db){
 		this.db=db;
 	}
-
 }

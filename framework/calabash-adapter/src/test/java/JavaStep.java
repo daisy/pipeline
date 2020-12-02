@@ -3,17 +3,15 @@ import java.math.BigDecimal;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
-import org.daisy.common.xproc.calabash.XProcStep;
-import org.daisy.common.xproc.calabash.XProcStepProvider;
-
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.library.Identity;
 import com.xmlcalabash.runtime.XAtomicStep;
 
 import org.daisy.common.messaging.Message.Level;
-
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessageBuilder;
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,11 +31,11 @@ public class JavaStep extends Identity implements XProcStep {
 	@Override
 	public void run() throws SaxonApiException {
 		if (getOption(_show_progress, "false").equals("true")) {
-			ProgressMessage activeBlock = ProgressMessage.getActiveBlock();
-			activeBlock.post(
-				new ProgressMessageBuilder().withLevel(Level.INFO)
-				                            .withText("px:java-step (1)")
-				                            .withProgress(new BigDecimal(.5))
+			MessageAppender activeBlock = MessageAppender.getActiveBlock();
+			activeBlock.append(
+				new MessageBuilder().withLevel(Level.INFO)
+				                    .withText("px:java-step (1)")
+				                    .withProgress(new BigDecimal(.5))
 			).close();
 			
 			// sleep so that there is enough time to get an intermediate state
@@ -46,10 +44,10 @@ public class JavaStep extends Identity implements XProcStep {
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
-			activeBlock.post(
-				new ProgressMessageBuilder().withLevel(Level.INFO)
-				                            .withText("px:java-step (2)")
-				                            .withProgress(new BigDecimal(.5))
+			activeBlock.append(
+				new MessageBuilder().withLevel(Level.INFO)
+				                    .withText("px:java-step (2)")
+				                    .withProgress(new BigDecimal(.5))
 			).close();
 		}
 		if (getOption(_throw_error, "false").equals("true")) {

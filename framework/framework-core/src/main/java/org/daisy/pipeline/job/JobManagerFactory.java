@@ -17,18 +17,19 @@ public class JobManagerFactory {
         private JobStorage storage;
         private MessageStorage messageStorage;
         private JobExecutionService executionService;
-        
+        private JobMonitorFactory monitorFactory;
+
         public JobManager createFor(Client client){
                 return new DefaultJobManager(this.storage.filterBy(client),
                                 messageStorage,
                                 this.executionService.filterBy(client),
-                                new JobContextFactory(client));
+                                new JobContextFactory(client, monitorFactory));
         }
         public JobManager createFor(Client client,JobBatchId batchId){
                 return new DefaultJobManager(this.storage.filterBy(client).filterBy(batchId),
                                 messageStorage,
                                 this.executionService.filterBy(client),
-                                new JobContextFactory(client));
+                                new JobContextFactory(client, monitorFactory));
         }
 
         /**
@@ -70,5 +71,16 @@ public class JobManagerFactory {
         public void setExecutionService(JobExecutionService executionService) {
                 //TODO:check null
                 this.executionService = executionService;
+        }
+
+        @Reference(
+                name = "monitor",
+                unbind = "-",
+                service = JobMonitorFactory.class,
+                cardinality = ReferenceCardinality.MANDATORY,
+                policy = ReferencePolicy.STATIC
+        )
+        public void setJobMonitorFactory(JobMonitorFactory factory){
+                this.monitorFactory = factory;
         }
 }

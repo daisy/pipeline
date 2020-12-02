@@ -1,7 +1,19 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.xproc.XProcMonitor;
+import java.util.function.Consumer;
 
+import org.daisy.common.messaging.MessageAccessor;
 
-public interface JobMonitor extends XProcMonitor{
+public interface JobMonitor {
+
+	/**
+	 * Job messages may be accessed through this {@link MessageAccessor}.
+	 */
+	public MessageAccessor getMessageAccessor();
+
+	/**
+	 * Get notified when the job status changes.
+	 */
+	public StatusNotifier getStatusUpdates();
+
 }

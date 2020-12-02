@@ -11,7 +11,6 @@ import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.Index;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
@@ -25,18 +24,18 @@ import com.google.common.collect.Lists;
 public class JobResultSetBuilder {
 
 
-	public static JobResultSet newResultSet(JobContext ctxt,URIMapper mapper){
+	public static JobResultSet newResultSet(XProcScript script, XProcInput inputs, XProcOutput outputs, URIMapper mapper){
 		JobResultSet.Builder builder = new JobResultSet.Builder();
 		//go through the outputs write them add the uri's to the 
 		//result object
 
-		JobResultSetBuilder.collectOutputs(ctxt.getScript(),ctxt.getOutputs(), mapper,builder);
+		JobResultSetBuilder.collectOutputs(script, outputs, mapper,builder);
 
 		//go through the output options and add them, this is a bit more tricky 
 		//as you have to check if the files exist
 		//if your working with an anyURIDir then scan the directory to 
 		//get all the files inside.
-		JobResultSetBuilder.collectOptions(ctxt.getScript(), ctxt.getInputs(), mapper,builder);
+		JobResultSetBuilder.collectOptions(script, inputs, mapper,builder);
 		return builder.build();
 	}
 

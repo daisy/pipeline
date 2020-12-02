@@ -1,31 +1,37 @@
 package org.daisy.pipeline.nonpersistent.impl.job;
 
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobContext;
-import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
-import org.daisy.pipeline.job.URIMapper;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.job.JobMonitor;
+import org.daisy.pipeline.job.StatusNotifier;
 
 public class Mock {
 
 	static class MockedJobContext extends AbstractJobContext {
 
-		public MockedJobContext(Client cl,JobId id, JobBatchId batchId,String niceName,
-				BoundXProcScript boundScript, URIMapper mapper) {
-			super(cl,id, batchId,niceName, boundScript, mapper);
-			// TODO Auto-generated constructor stub
+		public MockedJobContext(Client client) {
+			this(client, null);
+		}
+
+		public MockedJobContext(Client client, JobBatchId batchId) {
+			super();
+			this.client = client;
+			this.id = JobIdFactory.newId();
+			this.batchId = batchId;
+			this.niceName = "";
+			this.monitor = new JobMonitor() {
+					@Override
+					public MessageAccessor getMessageAccessor() {
+						return null;
+					}
+					@Override
+					public StatusNotifier getStatusUpdates() {
+						return null;
+					}
+				};
 		}
 	}
-
-
-	public static JobContext newJobContext(Client cl){
-		return new MockedJobContext(cl,JobIdFactory.newId(),null,null,null,null);
-	}
-	public static JobContext newJobContext(Client cl,JobBatchId batchId){
-		return new MockedJobContext(cl,JobIdFactory.newId(),batchId,null,null,null);
-	}
-	
 }

@@ -1,10 +1,11 @@
 package org.daisy.pipeline.job.impl;
+
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.event.MessageStorage;
-import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.AbstractJob;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -12,6 +13,7 @@ import org.daisy.pipeline.job.JobManager.JobBuilder;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.script.BoundXProcScript;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +31,8 @@ public class DefaultJobManagerTest{
         @Mock JobContextFactory factory;
         @Mock Client client;
         @Mock BoundXProcScript script;
-        @Mock JobContext ctxt;
-        @Mock Optional<Job> job;
+        @Mock AbstractJobContext ctxt;
+        @Mock Optional<AbstractJob> job;
         @Mock JobResources resources;
 
 
@@ -55,7 +57,7 @@ public class DefaultJobManagerTest{
                 Mockito.when(
                         storage.add(
                                 Mockito.any(Priority.class),
-                                Mockito.any(JobContext.class)))
+                                Mockito.any(AbstractJobContext.class)))
                         .thenReturn(job);
 
                 //by default

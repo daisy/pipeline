@@ -13,15 +13,10 @@ import javax.xml.transform.Result;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.job.URIMapper;
-import org.daisy.pipeline.job.impl.DynamicResultProvider;
-import org.daisy.pipeline.job.impl.IOHelper;
-import org.daisy.pipeline.job.impl.JobURIUtils;
-import org.daisy.pipeline.job.impl.XProcDecorator;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.junit.After;
@@ -208,8 +203,7 @@ public class JobResultSetBuilderTest {
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 Supplier<Result> res=output.getResultProvider(outName);
                 res.get();
-                AbstractJobContext ctxt= new AbstractJobContext(null,JobIdFactory.newId(),null,"name",bound,mapper){};
-                JobResultSet rSet=JobResultSetBuilder.newResultSet(ctxt,mapper);
+                JobResultSet rSet=JobResultSetBuilder.newResultSet(script, input, output, mapper);
                 Assert.assertEquals(5,rSet.getResults().size());
         }
         @Test

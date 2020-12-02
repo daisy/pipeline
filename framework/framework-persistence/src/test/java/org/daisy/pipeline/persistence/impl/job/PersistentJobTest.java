@@ -4,13 +4,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.daisy.common.priority.Priority;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.Job.JobBuilder;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob;
-import org.daisy.pipeline.persistence.impl.job.PersistentJobContext;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob.PersistentJobBuilder;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,14 +25,11 @@ public class PersistentJobTest   {
 		//script setup
 			
 		db=DatabaseProvider.getDatabase();
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		JobBuilder builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
-		job =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
+		job = new PersistentJob(db, Mocks.buildContext());
 		id=job.getContext().getId();
-                //high priority
-                builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
-		jobHigh =(PersistentJob) builder.withPriority(Priority.HIGH).build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
+		// high priority
+		jobHigh = new PersistentJob(db, Mocks.buildContext(), Priority.HIGH);
 		idHigh=jobHigh.getContext().getId();
 	}
 	@After
@@ -71,7 +65,7 @@ public class PersistentJobTest   {
         }
 	@Test 
 	public void getJobsTest(){
-		List<Job> jobs=PersistentJob.getAllJobs(db);
+		List<AbstractJob> jobs=PersistentJob.getAllJobs(db);
                 Assert.assertEquals("2 jobs",2,jobs.size());
                 HashSet<JobId> ids=new HashSet<JobId>();
                 ids.add(id);

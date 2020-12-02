@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.event.MessageStorage;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobContextFactory;
 import org.daisy.pipeline.job.JobExecutionService;
+import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobQueue;
@@ -51,14 +51,16 @@ public class DefaultJobManager implements JobManager {
                 this.jobContextFactory= jobContextFactory;
         }
 
-        protected Optional<Job> newJob(Priority priority, JobContext ctxt) {
+        // package private for unit tests
+        @SuppressWarnings("unchecked") // safe cast to Optional<Job>
+        Optional<Job> newJob(Priority priority, AbstractJobContext ctxt) {
                 //store it
-                Optional<Job> job = this.storage.add(priority,ctxt);
+                Optional<AbstractJob> job = this.storage.add(priority,ctxt);
                 if(job.isPresent()){
                         //execute it
                         executionService.submit(job.get());
                 }
-                return job;
+                return (Optional<Job>)(Optional<?>)job;
         }
 
 
@@ -67,12 +69,10 @@ public class DefaultJobManager implements JobManager {
          */
         //protected abstract void onNewJob(Job job);
 
-        /* (non-Javadoc)
-         * @see org.daisy.pipeline.job.JobManager#getJobIds()
-         */
+        @SuppressWarnings("unchecked") // safe cast to Iterable<Job>
         @Override
         public Iterable<Job> getJobs() {
-                return this.storage;
+                return (Iterable<Job>)(Iterable<?>)this.storage;
         }
 
         /**
@@ -81,27 +81,24 @@ public class DefaultJobManager implements JobManager {
          * make a custom deletion, otherwise the context won't be cleared out.
          * @see org.daisy.pipeline.job.JobManager#deleteJob(org.daisy.pipeline.job.JobId)
          */
+        @SuppressWarnings("unchecked") // safe cast to Optional<Job>
         @Override
         public Optional<Job> deleteJob(JobId id) {
-                Optional<Job> job = this.getJob(id);
+                Optional<AbstractJob> job = this.storage.get(id);
                 if(!job.isPresent()){
                         return Optional.absent();
                 }
                 this.storage.remove(id);
-                if ( job.get().getContext() instanceof AbstractJobContext) {
-                        //clean the context
-                        ((AbstractJobContext) job.get().getContext()).cleanUp();
-                }
+                job.get().getContext().cleanUp();
                 messageStorage.remove(id.toString());
-                return job;
+                return (Optional<Job>)(Optional<?>)job;
         }
 
-        /* (non-Javadoc)
-         * @see org.daisy.pipeline.job.JobManager#getJob(org.daisy.pipeline.job.JobId)
-         */
+        @SuppressWarnings("unchecked") // safe cast to Optional<Job>
         @Override
         public Optional<Job> getJob(JobId id) {
-                return this.storage.get(id);
+                Optional<AbstractJob> job = this.storage.get(id);
+                return (Optional<Job>)(Optional<?>)job;
         }
 
         @Override
@@ -170,7 +167,7 @@ public class DefaultJobManager implements JobManager {
 
                 public Optional<Job> build(){
                         //use the context factory
-                        JobContext ctxt=DefaultJobManager.this.jobContextFactory.
+                        AbstractJobContext ctxt = DefaultJobManager.this.jobContextFactory.
                                 newJobContext(this.isMapping,this.niceName,this.batchId,this.script,this.resources);
                         //send to the JobManager
                         return DefaultJobManager.this.newJob(this.priority,ctxt);

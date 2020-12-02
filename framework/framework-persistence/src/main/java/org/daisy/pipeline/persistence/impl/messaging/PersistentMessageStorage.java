@@ -9,8 +9,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import org.daisy.common.messaging.Message;
+import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.pipeline.event.MessageStorage;
-import org.daisy.pipeline.event.ProgressMessage;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.properties.Properties;
 
