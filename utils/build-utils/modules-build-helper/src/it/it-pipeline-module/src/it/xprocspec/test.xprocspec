@@ -343,7 +343,9 @@
 		</x:context>
 		<x:expect label="The htmlized script.xpl" type="compare">
 			<x:document type="inline">
-				<span typeof="data-type" id="data-type-option-1" resource="../script.xpl#data-type-option-1"><link rel="doc" href="#data-type-option-1"/><span property="id" content="px:script-option-1"><span property="definition" content="&#xA;          &lt;choice&gt;&#xA;            &lt;value&gt;value-1&lt;/value&gt;&#xA;            &lt;value&gt;value-2&lt;/value&gt;&#xA;          &lt;/choice&gt;&#xA;        ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+				<span typeof="data-type" id="data-type-option-1" resource="../script.xpl#data-type-option-1"><link rel="doc" href="#data-type-option-1"/><span property="id" content="px:script-option-1"><span property="definition" content="&#xA;          &lt;choice&gt;&#xA;            &lt;value&gt;value-1&lt;/value&gt;&#xA;            &lt;value&gt;value-2&lt;/value&gt;&#xA;          &lt;/choice&gt;&#xA;        ">&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>
+				<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">foo</span>=<span class="code-xml-attribute-value">"foo"</span>
+				<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">bar</span>=<span class="code-xml-attribute-value">"bar"</span>&gt;
 				&lt;<span class="code-xml-element-local-name">choice</span>&gt;
 				&lt;<span class="code-xml-element-local-name">value</span>&gt;value-1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
 				&lt;<span class="code-xml-element-local-name">value</span>&gt;value-2&lt;/<span class="code-xml-element-local-name">value</span>&gt;
@@ -359,13 +361,17 @@
 				<body>
 					<div class="code" about="../bar-2.xpl">
 						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>
+						<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span>
+						<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span>
+						<span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">_</span>=<span class="code-xml-attribute-value">"bar"</span>
 						<span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>
 						<span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:bar-2.params"</span>&gt;
 						<span about="../bar-2.xpl#option-2">
 						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>
 						<span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">_:option-2</span>"</span>
 						<span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="X">'X'</span>"</span>&gt;
-						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+						&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>
+						<span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 						<span property="name" content="Bar option 2">
 							&lt;<span class="code-xml-element-local-name">h1</span>
 							<span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span
