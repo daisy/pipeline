@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.3-SNAPSHOT</version>
+    <version>1.14.0-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
@@ -12,26 +12,6 @@
   <version>2.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Web Service JAXB Generated Classes</name>
-  <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>webservice-utils</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!--
-        add transitive dependencies to help Maven to correctly determine the build order
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>common-utils</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
   <build>
     <pluginManagement>
       <plugins>
@@ -68,26 +48,6 @@
       </plugin>
       <!-- get rnc files from webservice-utils -->
       <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>download-rnc</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>webservice-utils</artifactId>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
@@ -100,7 +60,7 @@
               <outputDirectory>target/generated-resources/rnc</outputDirectory>
               <resources>
                 <resource>
-                  <directory>target/dependency/org/daisy/pipeline/webservice-utils/resources</directory>
+                  <directory>../../webservice/src/main/resources/org/daisy/pipeline/webservice/resources</directory>
                 </resource>
               </resources>
             </configuration>

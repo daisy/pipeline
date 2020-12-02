@@ -1,11 +1,13 @@
 package org.daisy.common.messaging;
 
 import java.math.BigDecimal;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.List;
 import java.util.Set;
 
 import org.daisy.common.messaging.Message.Level;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Gives access to the stored messages.
@@ -57,6 +59,18 @@ public abstract class MessageAccessor {
 		return getMessagesFrom(Level.TRACE);
 	}
 
+	private List<Message> getMessagesFrom(Level level) {
+		return createFilter().filterLevels(fromLevel(level)).getMessages();
+	}
+
+	private Set<Level> fromLevel(Level level) {
+		ImmutableSet.Builder<Level> b = new ImmutableSet.Builder<>();
+		for (Level l : Level.values())
+			if (l.compareTo(level) <= 0)
+				b.add(l);
+		return b.build();
+	}
+
 	/**
 	 * Gets the messgages from a set of levels
 	 *
@@ -64,21 +78,20 @@ public abstract class MessageAccessor {
 	 * @return the messages
 	 */
 	public abstract List<Message> getAll();
-	protected abstract List<Message> getMessagesFrom(Level level);
 
 	/**
 	 * Register a callback that is called whenever a new (top-level) message arrives, a message is
 	 * updated with descendant messages, or the progress of a message changes.
 	 *
-	 * The argument must be a function that accepts a MessageAccessor, which is always this object,
-	 * and a sequence number representing the event. This sequence number can then be used to get
-	 * the list of all messages affected by the change, via createFilter().inRange(...).getMessages().
+	 * The argument must be a function that accepts a sequence number representing the event. This
+	 * sequence number can then be used to get the list of all messages affected by the change, via
+	 * createFilter().inRange(...).getMessages().
 	 *
 	 * A sequence number is never lower than the sequence numbers previously received, but the same
 	 * sequence number may occur more than once.
 	 */
-	public abstract void listen(BiConsumer<MessageAccessor,Integer> callback);
-	public abstract void unlisten(BiConsumer<MessageAccessor,Integer> callback);
+	public abstract void listen(Consumer<Integer> callback);
+	public abstract void unlisten(Consumer<Integer> callback);
 
 	public abstract BigDecimal getProgress();
 
@@ -88,10 +101,10 @@ public abstract class MessageAccessor {
 		public MessageFilter filterLevels(Set<Level> levels);
 		public MessageFilter greaterThan(int sequence);
 		/**
-		 * Get all the top-level messages affected by the events between "start" en "end". A
-		 * top-level message may have been added, or a message may have been changed by a progress
-		 * update or a new child message, or by a change of any of its already contained child
-		 * messages.
+		 * Get all the top-level messages affected by the events between (and including) "start" en
+		 * "end". A top-level message may have been added, or a message may have been changed by a
+		 * progress update or a new child message, or by a change of any of its already contained
+		 * child messages.
 		 */
 		public MessageFilter inRange(int start, int end);
 		public List<Message> getMessages();

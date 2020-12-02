@@ -19,7 +19,7 @@ public class StringWithNamespaceContext extends InputValue<String> implements Na
 	public StringWithNamespaceContext(String value, Map<String,String> bindings) {
 		super(value);
 		this.value = value;
-		namespaces = Collections.unmodifiableMap(bindings);
+		namespaces = bindings == null ? null : Collections.unmodifiableMap(bindings);
 	}
 
 	@Override

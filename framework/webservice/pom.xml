@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.3-SNAPSHOT</version>
+    <version>1.14.0</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>webservice</artifactId>
-  <version>2.4.1-SNAPSHOT</version>
+  <version>2.4.1</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Web Service</name>
@@ -20,6 +20,10 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jing</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -69,10 +73,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>webservice-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
@@ -147,6 +147,14 @@
   </dependencies>
 
   <build>
+    <testResources>
+      <testResource>
+        <directory>doc</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
     <plugins>
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
@@ -161,7 +169,7 @@
             <configuration>
               <includes>
                 org.daisy.pipeline.webservice.impl.PipelineWebService,
-                org.daisy.pipeline.push.impl.PushNotifier
+                org.daisy.pipeline.webservice.impl.PushNotifier
               </includes>
             </configuration>
           </execution>
@@ -189,10 +197,15 @@
           <instructions>
             <_dsannotations>
               org.daisy.pipeline.webservice.impl.PipelineWebService,
-              org.daisy.pipeline.push.impl.PushNotifier
+              org.daisy.pipeline.webservice.impl.PushNotifier
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
+          <archive>
+            <manifest>
+              <mainClass>org.daisy.pipeline.webservice.impl.PipelineWebService</mainClass>
+            </manifest>
+          </archive>
         </configuration>
         <executions>
           <execution>

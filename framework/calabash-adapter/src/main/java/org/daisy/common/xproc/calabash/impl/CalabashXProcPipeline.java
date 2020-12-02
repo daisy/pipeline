@@ -24,7 +24,6 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -34,6 +33,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.model.DeclareStep;
 import com.xmlcalabash.model.Input;
@@ -60,10 +60,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	/** The entity resolver. */
 	private final EntityResolver entityResolver;
 
-	/** The message listener factory. */
-	private final EventBusProvider eventBusProvider;
-
-
+	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
+		org.daisy.common.properties.Properties.getProperty(
+			"org.daisy.pipeline.calabash.autonamesteps", "false"));
 
 	/**
 	 * The pipeline supplier returns a ready-to-go pipeline instance based on
@@ -164,14 +163,11 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 */
 	public CalabashXProcPipeline(URI uri,
 			XProcConfigurationFactory configFactory, URIResolver uriResolver,
-			EntityResolver entityResolver,
-			EventBusProvider eventBusProvider) {
+			EntityResolver entityResolver) {
 		this.uri = uri;
 		this.configFactory = configFactory;
 		this.uriResolver = uriResolver;
 		this.entityResolver = entityResolver;
-		this.eventBusProvider=eventBusProvider;
-
 	}
 
 	/*
@@ -197,16 +193,24 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 * )
 	 */
 	@Override
-	public XProcResult run(XProcInput data, XProcMonitor monitor,Properties props) throws XProcErrorException {
-		PipelineInstance pipeline = pipelineSupplier.get();
-		// monitor.setMessageAccessor(pipeline.messageAccessor);
-		if (props != null) {
-			String jobId = props.getProperty("JOB_ID");
-			if (jobId != null) {
-				((XProcMessageListenerAggregator) pipeline.xpipe.getStep().getXProc()
-						.getMessageListener()).add(new EventBusMessageListener(eventBusProvider, jobId));
+	public XProcResult run(XProcInput data, XProcMonitor monitor, Properties props) throws XProcErrorException {
+		if (monitor != null) {
+			MessageListenerImpl messageListener = new MessageListenerImpl(monitor.getMessageAppender(), AUTO_NAME_STEPS);
+			try {
+				return run(data, messageListener);
+			} finally {
+				messageListener.clean();
 			}
+		} else {
+			return run(data, null);
 		}
+	}
+
+	private XProcResult run(XProcInput data, XProcMessageListener messageListener) throws XProcErrorException {
+		PipelineInstance pipeline = pipelineSupplier.get();
+		if (messageListener != null)
+			((XProcMessageListenerAggregator)pipeline.xpipe.getStep().getXProc().getMessageListener())
+				.add(messageListener);
 		// bind inputs
 		for (String name : pipeline.xpipe.getInputs()) {
 			boolean cleared = false;

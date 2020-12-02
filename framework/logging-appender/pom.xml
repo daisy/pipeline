@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.3-SNAPSHOT</version>
+    <version>1.14.0</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>logging-appender</artifactId>
-  <version>1.2.2-SNAPSHOT</version>
+  <version>2.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Logging Appender</name>
@@ -21,14 +21,9 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
-    <dependency>
+     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -44,12 +39,10 @@
         <configuration>
           <instructions>
             <Fragment-Host>ch.qos.logback.classic</Fragment-Host>
-           <!--<Export-Package>org.daisy.pipeline.logging</Export-Package> -->
           </instructions>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
 
 </project>

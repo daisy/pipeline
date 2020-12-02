@@ -4,17 +4,17 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.3-SNAPSHOT</version>
+    <version>1.14.0</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>updater-wrapper</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.0.4</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Updater</name>
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-core</artifactId>
+      <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

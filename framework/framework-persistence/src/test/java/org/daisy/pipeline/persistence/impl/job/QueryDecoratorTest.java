@@ -1,21 +1,16 @@
 package org.daisy.pipeline.persistence.impl.job;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.Job.JobBuilder;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob;
-import org.daisy.pipeline.persistence.impl.job.PersistentJobContext;
-import org.daisy.pipeline.persistence.impl.job.QueryDecorator;
-import org.daisy.pipeline.persistence.impl.job.PersistentJob.PersistentJobBuilder;
 import org.daisy.pipeline.persistence.impl.job.QueryDecorator.QueryHolder;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -46,7 +41,7 @@ public class QueryDecoratorTest {
         @Mock Root<PersistentJob> root;
         @Mock CriteriaQuery<PersistentJob> cq;
         @Mock Predicate pred;
-        Job job; 
+        AbstractJob job;
         Database db;
         @Before
         public void setUp(){
@@ -54,10 +49,8 @@ public class QueryDecoratorTest {
                 dec1=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
                 dec2=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
 
-		System.setProperty("org.daisy.pipeline.iobase",System.getProperty("java.io.tmpdir"));
 		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		JobBuilder builder= new PersistentJobBuilder(db).withContext(Mocks.buildContext());
-		job =(PersistentJob) builder.build();//new PersistentJob(Job.newJob(Mocks.buildContext()),db);
+		job = new PersistentJob(db, Mocks.buildContext());
 
         }
 	@After

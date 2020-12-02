@@ -7,9 +7,11 @@ import javax.xml.transform.Source;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.job.JobContext;
+import org.daisy.pipeline.job.AbstractJobContext;
+import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
@@ -48,11 +50,11 @@ class ContextHydrator {
 		}
 	}
 	
-	static List<PersistentInputPort> dehydrateInputPorts(JobContext ctxt){
+	static List<PersistentInputPort> dehydrateInputPorts(JobId id, XProcScript script, XProcInput input) {
 		List<PersistentInputPort> inputPorts = Lists.newLinkedList();
-		for( XProcPortInfo portName:ctxt.getScript().getXProcPipelineInfo().getInputPorts()){
-			PersistentInputPort anon=new PersistentInputPort(ctxt.getId(),portName.getName());
-			for (Supplier<Source> src:ctxt.getInputs().getInputs(portName.getName())){
+		for (XProcPortInfo portName : script.getXProcPipelineInfo().getInputPorts()) {
+			PersistentInputPort anon = new PersistentInputPort(id, portName.getName());
+			for (Supplier<Source> src: input.getInputs(portName.getName())) {
 				anon.addSource(new PersistentSource(src.get().getSystemId()));
 			}
 			inputPorts.add(anon);
@@ -60,25 +62,25 @@ class ContextHydrator {
 		return inputPorts;
 	}
 
-	static List<PersistentOption> dehydrateOptions(JobContext ctxt){
+	static List<PersistentOption> dehydrateOptions(JobId id, XProcInput input) {
 		List<PersistentOption> options = Lists.newLinkedList();
-		for(QName option:ctxt.getInputs().getOptions().keySet()){
-			options.add(new PersistentOption(ctxt.getId(),option,ctxt.getInputs().getOptions().get(option)));
+		for (QName option : input.getOptions().keySet()) {
+			options.add(new PersistentOption(id, option, input.getOptions().get(option)));
 		}
 		return options;
 	}
 
-	static List<PersistentParameter> dehydrateParameters(JobContext ctxt){
+	static List<PersistentParameter> dehydrateParameters(JobId id, XProcScript script, XProcInput input) {
 		List<PersistentParameter> parameters = Lists.newLinkedList();
-		for( String portName:ctxt.getScript().getXProcPipelineInfo().getParameterPorts()){
-			for (QName paramName :ctxt.getInputs().getParameters(portName).keySet()){
-				parameters.add(new PersistentParameter(ctxt.getId(),portName,paramName,ctxt.getInputs().getParameters(portName).get(paramName)));
+		for (String portName : script.getXProcPipelineInfo().getParameterPorts()) {
+			for (QName paramName : input.getParameters(portName).keySet()){
+				parameters.add(new PersistentParameter(id, portName, paramName, input.getParameters(portName).get(paramName)));
 			}
 		}
 		return parameters;
 	}
 
-	static List<PersistentPortResult> dehydratePortResults(JobContext ctxt){
+	static List<PersistentPortResult> dehydratePortResults(AbstractJobContext ctxt){
 		List<PersistentPortResult> portResults= Lists.newLinkedList();
 		JobResultSet rSet= ctxt.getResults();
 		for(String port:rSet.getPorts()){
@@ -89,7 +91,7 @@ class ContextHydrator {
 		return portResults;
 	}
 
-	static List<PersistentOptionResult> dehydrateOptionResults(JobContext ctxt){
+	static List<PersistentOptionResult> dehydrateOptionResults(AbstractJobContext ctxt){
 		List<PersistentOptionResult> optionResults= Lists.newLinkedList();
 		JobResultSet rSet= ctxt.getResults();
 		for(QName option:rSet.getOptions()){

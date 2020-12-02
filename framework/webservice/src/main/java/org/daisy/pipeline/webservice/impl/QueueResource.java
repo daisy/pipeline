@@ -1,20 +1,17 @@
-
 package org.daisy.pipeline.webservice.impl;
-
-
 
 import java.util.Collection;
 
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.webserviceutils.xml.QueueXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
+import org.daisy.pipeline.webservice.xml.QueueXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
-
 
 public class QueueResource extends AuthenticatedResource {
 

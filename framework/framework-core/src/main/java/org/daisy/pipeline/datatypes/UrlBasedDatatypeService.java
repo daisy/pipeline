@@ -238,7 +238,7 @@ public class UrlBasedDatatypeService implements DatatypeService{
         }
 
         /*
-         * The following functions and classes are copied from org.daisy.pipeline.webserviceutils.xml.XmlValidator
+         * The following functions and classes are copied from org.daisy.pipeline.webservice.xml.XmlValidator
          * TODO: move to common package(s)
          */
 
@@ -310,14 +310,14 @@ public class UrlBasedDatatypeService implements DatatypeService{
                         }
                         URI uri;
                         try {
-                                uri = new URI(input.getUri());
-                        } catch (URISyntaxException e) {
+                                uri = URLs.asURI(input.getUri());
+                        } catch (IllegalArgumentException e) {
                                 throw new ResolverException(e);
                         }
                         if (!uri.isAbsolute()) {
                                 throw new ResolverException("cannot open relative URI: " + uri);
                         }
-                        URL url = new URL(uri.toASCIIString());
+                        URL url = URLs.asURL(uri);
                         // XXX should set the encoding properly
                         // XXX if this is HTTP and we've been redirected, should do
                         // input.setURI with the new URI

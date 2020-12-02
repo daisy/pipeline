@@ -1,7 +1,8 @@
 package org.daisy.pipeline.nonpersistent.impl.webservice;
 
 import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.webserviceutils.storage.JobConfigurationStorage;
+import org.daisy.pipeline.clients.JobConfigurationStorage;
+
 /** in dbless mode no configuration is stored */
 public class VolatileJobConfigurationStorage implements JobConfigurationStorage {
 

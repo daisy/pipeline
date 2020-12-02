@@ -5,6 +5,7 @@ import org.daisy.common.priority.PrioritizableRunnable;
 import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.common.priority.timetracking.TimeFunctions;
 import org.daisy.common.priority.timetracking.TimeTrackerFactory;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
@@ -12,7 +13,6 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,8 +122,9 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 return new ThreadWrapper(new Runnable() {
                         @Override
                         public void run() {
-                                logger.info("Starting to log to job's log file too:" + job.getId().toString());
+                                // used in JobLogFileAppender
                                 MDC.put("jobid", job.getId().toString());
+                                logger.info("Starting to log to job's log file too:" + job.getId().toString());
                                 job.run(xprocEngine);
                                 logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
                                 MDC.remove("jobid");

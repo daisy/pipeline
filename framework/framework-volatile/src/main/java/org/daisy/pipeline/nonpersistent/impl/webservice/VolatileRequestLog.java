@@ -1,7 +1,7 @@
 package org.daisy.pipeline.nonpersistent.impl.webservice;
 
-import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
-import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
+import org.daisy.pipeline.clients.RequestLog;
+import org.daisy.pipeline.clients.RequestLogEntry;
 /**
  * In dbless mode no request log is stored whatsoever */
 public class VolatileRequestLog implements RequestLog {

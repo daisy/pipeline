@@ -12,6 +12,7 @@ import org.daisy.common.spi.CreateOnStart;
 import org.daisy.common.spi.ServiceLoader;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
@@ -19,10 +20,9 @@ import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.webserviceutils.Properties;
-import org.daisy.pipeline.webserviceutils.Routes;
-import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
+import org.daisy.pipeline.webservice.CallbackHandler;
+import org.daisy.pipeline.webservice.Properties;
+import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Application;
 import org.restlet.Component;
@@ -207,7 +207,7 @@ public class PipelineWebService extends Application {
                                         +"\n"
                                         +"************************************************************\n"
                                         +"WS mode authenticated but the client store is empty, exiting\n"
-                                        +"please provide values for the following properties in etc/system.properties: \n"
+                                        +"please provide values for the following properties:\n"
                                         +"-org.daisy.pipeline.ws.authentication.key    \n"
                                         +"-org.daisy.pipeline.ws.authentication.secret \n"
                                         +"************************************************************\n"
@@ -356,17 +356,6 @@ public class PipelineWebService extends Application {
                 this.webserviceStorage = webserviceStorage;
         }
 
-        /**
-         * @param ExecutionQueue 
-         */
-        public void setExecutionQueue(JobExecutionService executionQueue) {
-                this.executionQueue= executionQueue;
-        }
-
-        public JobExecutionService getExecutionQueue() {
-                return this.executionQueue;
-        }
-
         public CallbackHandler getCallbackHandler() {
                 return callbackHandler;
         }
@@ -390,7 +379,7 @@ public class PipelineWebService extends Application {
          */
         public static void main(String[] args) {
                 if (args.length > 0) {
-                        logger.error("No arguments expected");
+                        logger.error("No arguments expected (got '" + String.join(" ", args) + "')");
                         System.exit(1);
                 }
                 PipelineWebService webservice = SPIHelper.createWebService();

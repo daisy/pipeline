@@ -2,7 +2,7 @@ package org.daisy.pipeline.webservice.impl;
 
 import java.io.StringWriter;
 
-import org.daisy.pipeline.webserviceutils.xml.ErrorWriter;
+import org.daisy.pipeline.webservice.xml.ErrorWriter;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;

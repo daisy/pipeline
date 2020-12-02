@@ -20,12 +20,12 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.properties.Properties;
+import org.daisy.common.saxon.SaxonConfigurator;
 import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XProcStepRegistry;
-
-import org.daisy.pipeline.saxon.SaxonConfigurator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +79,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcConfiguration newConfiguration() {
+		System.setProperty("com.xmlcalabash.config.user", ""); // skip loading configuration from ~/.calabash
 		XProcConfiguration config = new DynamicXProcConfiguration(
 			new Input(null, null, Input.Type.XML) {
 				@Override
@@ -111,6 +112,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcConfiguration newConfiguration(boolean schemaAware) {
+		System.setProperty("com.xmlcalabash.config.user", "");
 		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware,
 				this);
 		loadMainConfigurationFile(config);
@@ -132,6 +134,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	@Override
 	public XProcConfiguration newConfiguration(Processor processor) {
+		System.setProperty("com.xmlcalabash.config.user", "");
 		XProcConfiguration config = new DynamicXProcConfiguration(processor,
 				this);
 		loadMainConfigurationFile(config);
@@ -237,7 +240,7 @@ public class DynamicXProcConfigurationFactory implements
 	 */
 	private void loadMainConfigurationFile(XProcConfiguration conf) {
 		// TODO cleanup and cache
-		String prop = System.getProperty(CONFIG_PATH);
+		String prop = Properties.getProperty(CONFIG_PATH);
 		if (prop != null) {
 			File configPath; {
 				if (prop.startsWith("file:")) {

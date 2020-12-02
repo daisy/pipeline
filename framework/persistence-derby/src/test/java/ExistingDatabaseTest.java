@@ -7,7 +7,7 @@ import com.google.common.base.Optional;
 import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
+import org.daisy.pipeline.clients.WebserviceStorage;
 
 import org.junit.Assert;
 import org.junit.Test;

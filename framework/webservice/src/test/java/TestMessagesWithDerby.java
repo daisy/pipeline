@@ -105,7 +105,7 @@ public class TestMessagesWithDerby extends Base {
 	protected Properties systemProperties() {
 		Properties p = super.systemProperties();
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
-		p.setProperty("derby.stream.error.file", new File(PIPELINE_DATA, "log/derby.log").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.logdir", new File(PIPELINE_DATA, "log").getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.messaging.cache.buffer", "5");
 		return p;
 	}
@@ -126,7 +126,6 @@ public class TestMessagesWithDerby extends Base {
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:webservice-utils:?",
 			"org.daisy.pipeline:framework-persistence:?",
 			"org.daisy.pipeline:persistence-derby:?",
 			"org.daisy.pipeline:calabash-adapter:?",

@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-   
+
   <appender name="TEST_LOG" class="ch.qos.logback.core.FileAppender">
     <file>target/test.log</file>
     <encoder>
@@ -18,7 +12,7 @@
       Note that this appender is only started within the OSGi container. Within the test runner the
       appender will fail to start.
   -->
-  <appender name="EVENTBUS" class="org.daisy.pipeline.logging.EventBusAppender">
+  <appender name="JOB" class="org.daisy.pipeline.logging.JobProgressAppender">
     <filter class="org.daisy.pipeline.logging.ThresholdFilter">
       <rootLevel>INFO</rootLevel>
       <loggerLevels>
@@ -31,7 +25,7 @@
 
   <root level="DEBUG">
     <appender-ref ref="TEST_LOG"/>
-    <appender-ref ref="EVENTBUS"/>
+    <appender-ref ref="JOB"/>
   </root>
 
 </configuration>

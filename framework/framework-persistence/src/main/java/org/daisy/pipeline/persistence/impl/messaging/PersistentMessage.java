@@ -31,7 +31,7 @@ public class PersistentMessage extends Message{
 		this.level = other.getLevel();
 		this.timeStamp = other.getTimeStamp();
 		this.sequence = other.getSequence();
-		this.jobId = other.getJobId();
+		this.ownerId = other.getOwnerId();
 		this.line = other.getLine();
 		this.column = other.getColumn();
 		this.file =trim( other.getFile(),FILE_LEN-1);
@@ -130,20 +130,19 @@ public class PersistentMessage extends Message{
 	}
 
 	/**
-	 * @return the jobId
+	 * @return the owner id
 	 */
 	@Id
 	@Column(name="jobId")
-	@Override
 	public String getJobId() {
-		return jobId;
+		return ownerId;
 	}
 	/**
-	 * @param jobId the jobId to set
+	 * @param jobId the owner id to set
 	 */
 	@SuppressWarnings("unused") //jpa
 	private void setJobId(String jobId) {
-		this.jobId = jobId;
+		this.ownerId = jobId;
 	}
 
 	/**

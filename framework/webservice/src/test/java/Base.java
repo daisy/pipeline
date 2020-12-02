@@ -66,7 +66,6 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:webservice-utils:?",
 			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 		};
@@ -109,7 +108,7 @@ public abstract class Base extends AbstractTest {
 	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
-		p.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.ws.authentication", "false");
 		p.setProperty("org.daisy.pipeline.ws.localfs", "true");
 		p.setProperty("org.daisy.pipeline.version", "SNAPSHOT");

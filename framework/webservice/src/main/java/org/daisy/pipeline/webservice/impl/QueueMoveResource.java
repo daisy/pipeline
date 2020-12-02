@@ -1,7 +1,5 @@
 package org.daisy.pipeline.webservice.impl;
 
-
-
 import java.util.Collection;
 
 import org.daisy.common.priority.Prioritizable;
@@ -10,8 +8,9 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.webserviceutils.xml.QueueXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
+import org.daisy.pipeline.webservice.xml.QueueXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -19,7 +18,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
 import com.google.common.base.Optional;
-
 
 public abstract class QueueMoveResource extends AuthenticatedResource {
         JobQueue queue;

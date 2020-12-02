@@ -8,7 +8,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
@@ -16,6 +15,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Supplier;
 
+import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.MessageBus;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcEngine;
@@ -28,14 +30,10 @@ import org.daisy.common.xproc.XProcResult;
 
 import org.daisy.maven.xproc.api.XProcExecutionException;
 
-import org.daisy.pipeline.job.JobMonitorFactory;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-
-import org.slf4j.MDC;
 
 @Component(
 	name = "org.daisy.maven.xproc.pipeline.DaisyPipeline2",
@@ -44,7 +42,17 @@ import org.slf4j.MDC;
 public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	
 	private XProcEngine engine;
-	private JobMonitorFactory jobMonitorFactory;
+	private static Level messagesThreshold;
+	static {
+		try {
+			messagesThreshold = Level.valueOf(
+				Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+		} catch (IllegalArgumentException e) {
+			messagesThreshold = Level.INFO;
+		}
+	}
+	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
+		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
 	
 	@Reference(
 		name = "XProcEngine",
@@ -55,17 +63,6 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	)
 	protected void setXProcEngine(XProcEngine engine) {
 		this.engine = engine;
-	}
-	
-	@Reference(
-		name = "JobMonitorFactory",
-		unbind = "-",
-		service = JobMonitorFactory.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	public void setJobMonitorFactory(final JobMonitorFactory jobMonitorFactory) {
-		this.jobMonitorFactory = jobMonitorFactory;
 	}
 	
 	public void setCatalog(URL catalog) {
@@ -116,16 +113,13 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 			XProcResult results; {
 				String jobId = context == null ? null : (String)context.get("XPROCSPEC_TEST_ID");
 				if (jobId != null) {
-					MessageEventListener listener = new MessageEventListener(jobId, jobMonitorFactory);
+					MessageBus messageBus = new MessageBus(jobId, messagesThreshold);
+					MessageEventListener listener = new MessageEventListener(messageBus);
 					try {
-						Properties props = new Properties();
-						props.setProperty("JOB_ID", jobId); // this is used in EventBusMessageListener
-						MDC.put("jobid", jobId); // this is used in EventBusAppender
-						results = xprocPipeline.run(inputBuilder.build(), null, props);
-						MDC.remove("jobid");
+						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, null);
 						// store messages XML
 						try {
-							Class.forName("org.daisy.pipeline.webserviceutils.xml.JobXmlWriter");
+							Class.forName("org.daisy.pipeline.webservice.xml.JobXmlWriter");
 							PrintWriter writer = new PrintWriter(
 								new File(
 									// hack to get hold of directory to store message
@@ -134,7 +128,7 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 							writer.print(MessagesXmlWriter.serializeMessages(listener.messages));
 							writer.close();
 						} catch (ClassNotFoundException e) {
-							// webservice-utils is an optional dependency
+							// webservice is an optional dependency
 						}
 					} finally {
 						listener.close();

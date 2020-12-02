@@ -1,7 +1,6 @@
 package org.daisy.maven.xproc.pipeline;
 
 import java.math.BigDecimal;
-import java.util.function.BiConsumer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -9,34 +8,28 @@ import java.util.Set;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.ProgressMessage;
+import org.daisy.common.properties.Properties;
 import org.daisy.maven.xproc.pipeline.logging.FlattenedProgressMessage;
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.job.JobId;
-import org.daisy.pipeline.job.JobMonitorFactory;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class MessageEventListener implements BiConsumer<MessageAccessor,Integer> {
+class MessageEventListener {
 	
 	final MessageAccessor messages;
 	
-	MessageEventListener(final String jobId, JobMonitorFactory jobMonitorFactory) {
-		// support any string (unlike JobUUIDGenerator)
-		JobId id = new JobId() {
-			@Override
-			public String toString() {
-				return jobId; }};
-		messages = jobMonitorFactory.newJobMonitor(id, true).getMessageAccessor();
-		messages.listen(this);
+	MessageEventListener(MessageAccessor messages) {
+		this.messages = messages;
+		messages.listen(this::update);
 	}
 	
 	void close() {
-		messages.unlisten(this);
+		messages.unlisten(this::update);
 	}
 	
-	public void accept(MessageAccessor messages, Integer sequenceNumber) {
+	// notify of message updates
+	private void update(Integer sequenceNumber) {
 		if (sequenceNumber != null) {
 			flattenMessages(messages.createFilter()
 			                        .filterLevels(levels)

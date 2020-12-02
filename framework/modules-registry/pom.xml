@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.13.3-SNAPSHOT</version>
+    <version>1.14.0</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>modules-registry</artifactId>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>4.0.1</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Module Registry</name>
@@ -81,51 +81,85 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>modules-build-helper</artifactId>
-        <executions>
-          <execution>
-            <id>package-list</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>dependencies-package-list</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
-              <includes>
-                org.daisy.pipeline.*,
-                org.daisy.common.*
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <offlineLinks>
-                <offlineLink>
-                  <url>http://daisy.github.io/pipeline/api/</url>
-                  <location>${project.build.directory}/dependencies-package-list/</location>
-                </offlineLink>
-              </offlineLinks>
-              <links>
-                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
-              </links>
-              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>javadoc</id>
+      <activation>
+        <property>
+          <name>documentation</name>
+        </property>
+      </activation>
+      <properties>
+        <maven.main.skip>true</maven.main.skip>
+        <maven.resources.skip>true</maven.resources.skip>
+        <maven.test.skip>true</maven.test.skip>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>bundle-before-test</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>package-list</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>dependencies-package-list</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+                  <includes>
+                    org.daisy.pipeline.*,
+                    org.daisy.common.*
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <offlineLinks>
+                    <offlineLink>
+                      <url>http://daisy.github.io/pipeline/api/</url>
+                      <location>${project.build.directory}/dependencies-package-list/</location>
+                    </offlineLink>
+                  </offlineLinks>
+                  <links>
+                    <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+                  </links>
+                  <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

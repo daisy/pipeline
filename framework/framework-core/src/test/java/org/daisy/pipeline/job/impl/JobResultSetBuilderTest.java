@@ -13,15 +13,10 @@ import javax.xml.transform.Result;
 
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.job.URIMapper;
-import org.daisy.pipeline.job.impl.DynamicResultProvider;
-import org.daisy.pipeline.job.impl.IOHelper;
-import org.daisy.pipeline.job.impl.JobURIUtils;
-import org.daisy.pipeline.job.impl.XProcDecorator;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
 import org.junit.After;
@@ -46,8 +41,8 @@ public class JobResultSetBuilderTest {
         public void setUp() throws IOException{
                 script= new Mock.ScriptGenerator.Builder().withOutputPorts(2).withOptionOutputsFile(1).withOptionOutputsDir(1).build().generate();
                 URI tmp=new File(System.getProperty("java.io.tmpdir")).toURI();
-                oldIoBase=System.getProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE);    
-                System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,new File(tmp).toString());     
+                oldIoBase=System.getProperty("org.daisy.pipeline.data");
+                System.setProperty("org.daisy.pipeline.data", new File(tmp).toString());
                 mapper = new URIMapper(tmp.resolve("inputs/"),tmp.resolve("outputs/"));
                 builder = new JobResultSet.Builder();
 
@@ -70,7 +65,7 @@ public class JobResultSetBuilderTest {
                 QName optDir=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 IOHelper.deleteDir(new File(input.getOptions().get(optDir)));
                 if(oldIoBase!=null)
-                        System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,oldIoBase);    
+                        System.setProperty("org.daisy.pipeline.data", oldIoBase);
                                 
         }
 
@@ -208,8 +203,7 @@ public class JobResultSetBuilderTest {
                 String outName = Mock.ScriptGenerator.getOutputName(0);
                 Supplier<Result> res=output.getResultProvider(outName);
                 res.get();
-                AbstractJobContext ctxt= new AbstractJobContext(null,JobIdFactory.newId(),null,"name",bound,mapper){};
-                JobResultSet rSet=JobResultSetBuilder.newResultSet(ctxt,mapper);
+                JobResultSet rSet=JobResultSetBuilder.newResultSet(script, input, output, mapper);
                 Assert.assertEquals(5,rSet.getResults().size());
         }
         @Test

@@ -6,12 +6,13 @@ import java.util.Set;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.pipeline.event.MessageAccessorFromStorage;
 import org.daisy.pipeline.event.MessageStorage;
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.nonpersistent.impl.messaging.VolatileMessageStorage;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,29 +23,30 @@ import com.google.common.collect.Sets;
 public class VolatileMessageAccessorTest   {
 
 	MessageStorage storage = VolatileMessageStorage.getInstance();
-	ProgressMessage m1;
 
-	ProgressMessage m2;
-
-	ProgressMessage m3;
+	Message m1, m2, m3;
 
 	MessageAccessor accessor;
+
 	@Before
 	public void setUp() {
 		String id = JobIdFactory.newId().toString();
-		m1 = new ProgressMessageBuilder().withText("message1")
-				.withLevel(Level.INFO).withJobId(id)
+		MessageAppender m;
+		m = new MessageBuilder().withText("message1")
+				.withLevel(Level.INFO).withOwnerId(id)
 				.build();
-		m1.close();
-		m2 = new ProgressMessageBuilder().withText("message2")
-				.withLevel(Level.ERROR).withJobId(id)
+		m.close();
+		m1 = (Message)m;
+		m = new MessageBuilder().withText("message2")
+				.withLevel(Level.ERROR).withOwnerId(id)
 				.build();
-		m2.close();
-		m3 = new ProgressMessageBuilder().withText("message3")
-				.withLevel(Level.WARNING).withJobId(id)
+		m.close();
+		m2 = (Message)m;
+		m = new MessageBuilder().withText("message3")
+				.withLevel(Level.WARNING).withOwnerId(id)
 				.build();
-		m3.close();
-
+		m.close();
+		m3 = (Message)m;
 		storage.add(m1);
 		storage.add(m2);
 		storage.add(m3);

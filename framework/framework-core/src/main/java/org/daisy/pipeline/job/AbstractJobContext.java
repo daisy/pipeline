@@ -1,16 +1,21 @@
 package org.daisy.pipeline.job;
 
 import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
 
+import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.messaging.MessageBus;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.job.impl.JobURIUtils;
+import org.daisy.pipeline.job.impl.JobUtils;
 import org.daisy.pipeline.job.impl.JobResultSetBuilder;
-import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScript;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,205 +25,157 @@ import org.slf4j.LoggerFactory;
  * input,output,option redirections.
  */
 public abstract class AbstractJobContext implements JobContext{
+
         private static final Logger logger = LoggerFactory.getLogger(AbstractJobContext.class);
-        /** The input. */
-        private XProcInput input;
-
-        /** The output. */
-        private XProcOutput output;
-
-        /**Script details*/
-        private XProcScript script;
-
-        private JobId id;
-
-        private JobBatchId batchId;
-        /** monitor */
-        private XProcMonitor monitor;
-
-        private URI logFile;
-
-        private URIMapper mapper;  
-
-        private JobResultSet results;
-                
-        private String niceName;
-
-        private Client client;
-        
-
-        public AbstractJobContext(Client client,JobId id,JobBatchId batchId, String niceName,BoundXProcScript boundScript,URIMapper mapper){
-                if(boundScript!=null){
-                        this.input=boundScript.getInput();
-                        this.script=boundScript.getScript();
-                        this.output=boundScript.getOutput();            
+        private static Level messagesThreshold;
+        static {
+                try {
+                        messagesThreshold = Level.valueOf(
+                                Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+                } catch (IllegalArgumentException e) {
+                        messagesThreshold = Level.INFO;
                 }
-
-                this.client=client;
-                this.id=id;
-                this.batchId=batchId;
-                this.niceName=niceName;
-                this.mapper=mapper;
-
-                if(id!=null)
-                        this.logFile=JobURIUtils.getLogFile(id);
-                else
-                        this.logFile=URI.create("");
-
-                this.results=new JobResultSet.Builder().build();
-                
         }
 
+        protected XProcInput input;
+        private XProcOutput output;
+        protected XProcScript script;
+        protected JobId id;
+        protected JobBatchId batchId;
+        MessageBus messageBus;
+        protected JobMonitor monitor;
+        protected URI logFile;
+        protected URIMapper resultMapper;
+        protected JobResultSet results;
+        protected String niceName;
+        protected Client client;
+        private List<Consumer<Job.Status>> statusListeners;
 
-        @Override
-        public XProcInput getInputs() {
-                return this.input;
+        // used by JobContextFactory
+        AbstractJobContext(Client client, JobId id, JobBatchId batchId, String niceName,
+                           XProcScript script, XProcInput input, XProcOutput output,
+                           URIMapper resultMapper, JobMonitorFactory monitorFactory) {
+                if (client == null ||
+                    id == null ||
+                    niceName == null ||
+                    script == null ||
+                    input == null ||
+                    output == null ||
+                    resultMapper == null ||
+                    monitorFactory == null)
+                        throw new IllegalArgumentException("id must not be null");
+                this.client = client;
+                this.id = id;
+                this.batchId = batchId;
+                this.niceName = niceName;
+                this.logFile = JobURIUtils.getLogFile(id.toString()).toURI();
+                this.results = new JobResultSet.Builder().build();
+                this.script = script;
+                this.input = input;
+                this.output = output;
+                this.resultMapper = resultMapper;
+                this.messageBus = new MessageBus(id.toString(), messagesThreshold);
+                statusListeners = new LinkedList<>();
+                StatusNotifier statusNotifier = new StatusNotifier() {
+                        public void listen(Consumer<Job.Status> listener) {
+                            synchronized (statusListeners) {
+                                statusListeners.add(listener); }}
+                        public void unlisten(Consumer<Job.Status> listener) {
+                            synchronized (statusListeners) {
+                                statusListeners.remove(listener); }}};
+                this.monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
         }
 
-        @Override
-        public XProcOutput getOutputs() {
-                return this.output;
+        // used by PersistentJobContext
+        protected AbstractJobContext() {
         }
 
+        // used by PersistentJobContext and VolatileContext
+        protected AbstractJobContext(AbstractJobContext from) {
+                if (from == null)
+                        throw new IllegalArgumentException();
+                this.client = from.client;
+                this.id = from.id;
+                this.batchId = from.batchId;
+                this.niceName = from.niceName;
+                this.logFile = from.logFile;
+                this.results = from.results;
+                this.script = from.script;
+                this.input = from.input;
+                this.output = from.output;
+                this.resultMapper = from.resultMapper;
+                this.monitor = from.monitor;
+                this.messageBus = from.messageBus;
+                this.statusListeners = from.statusListeners;
+        }
 
         @Override
         public URI getLogFile() {
-                return this.logFile;
-        }
-
-        protected void setLogFile(URI logFile) {
-                this.logFile=logFile;
-        }
-
-
-        /**
-         * Gets the mapper for this instance.
-         *
-         * @return The mapper.
-         */
-        public URIMapper getMapper() {
-                return this.mapper;
-        }
-
-        /**
-         * Sets the mapper for this instance.
-         *
-         * @param mapper The mapper.
-         */
-        protected void setMapper(URIMapper mapper) {
-                this.mapper = mapper;
-        }
-
-        /**
-         * Sets the results for this instance.
-         *
-         * @param results The results.
-         */
-        protected void setResults(JobResultSet results) {
-                this.results = results;
-        }
-
-
-        /**
-         * Sets the id for this instance.
-         *
-         * @param id The id.
-         */
-        protected void setId(JobId id) {
-                this.id = id;
+                return logFile;
         }
 
         @Override
-        public XProcMonitor getMonitor() {
-                return this.monitor;
-        }
-
-        /**
-         * Sets the input for this instance.
-         *
-         * @param input The input.
-         */
-        protected void setInput(XProcInput input) {
-                this.input = input;
-        }
-
-        /**
-         * Sets the output for this instance.
-         *
-         * @param output The output.
-         */
-        protected void setOutput(XProcOutput output)
-        {
-                this.output = output;
+        public JobMonitor getMonitor() {
+                return monitor;
         }
 
         @Override
         public XProcScript getScript() {
-                return this.script;
-        }
-
-        /**
-         * Sets the script for this instance.
-         *
-         * @param script The script.
-         */
-        protected void setScript(XProcScript script) {
-                this.script = script;
+                return script;
         }
 
         @Override
         public JobId getId() {
-                return this.id;
+                return id;
         }
 
         @Override
         public JobResultSet getResults() {
-                return this.results;
+                return results;
         }
 
-        @Override
-        public void writeResult(XProcResult result) {
-                result.writeTo(this.output);
-                this.results=JobResultSetBuilder.newResultSet(this,this.mapper);
-                                
+        /**
+         * @return the status: true if the job succeeded, false if the job failed
+         */
+        protected boolean collectResults(XProcResult result) {
+                if (output == null)
+                        // This means we've tried to execute a PersistentJob (which does not persist
+                        // output) that was read from the database. This should not happen because
+                        // upon creation jobs are immediately submitted to
+                        // DefaultJobExecutionService, which keeps them in memory, and old idle jobs
+                        // (created but not executed before a shutdown) are not added to the
+                        // execution queue upon launching Pipeline.
+                        throw new UnsupportedOperationException();
+                result.writeTo(output);
+                this.results = JobResultSetBuilder.newResultSet(script, input, output, resultMapper);
+                return JobUtils.checkStatusPort(script, output);
         }
 
-        public void cleanUp(){
-                logger.info(String.format( "Deleting context for job %s" ,this.id));
-                JobURIUtils.cleanJobBase(this.id);
+        public void cleanUp() {
+                logger.info(String.format("Deleting context for job %s", this.id));
+                JobURIUtils.cleanJobBase(this.id.toString());
         }
-
 
         @Override
         public String getName() {
                 return niceName;
         }
 
-        protected void setName(String name) {
-                this.niceName=name;
-        }
-
-
         @Override
         public Client getClient() {
-                return this.client;
-        }
-
-        protected void setClient(Client client) {
-                this.client=client;
-        }
-
-        @Override
-        public void setMonitor(XProcMonitor monitor) {
-                this.monitor=monitor;
+                return client;
         }
 
         @Override
         public JobBatchId getBatchId() {
-                return this.batchId;
-        }
-        public void setBatchId(JobBatchId id) {
-                this.batchId=id;
+                return batchId;
         }
 
+        void changeStatus(Job.Status status) {
+            if (statusListeners != null)
+                synchronized (statusListeners) {
+                    for (Consumer<Job.Status> l : statusListeners)
+                        l.accept(status);
+                }
+        }
 }

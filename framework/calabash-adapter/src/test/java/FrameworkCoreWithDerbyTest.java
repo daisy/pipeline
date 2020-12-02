@@ -21,7 +21,7 @@ import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -32,7 +32,6 @@ import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,9 +54,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	
 	@Inject
 	public ScriptRegistry scriptRegistry;
-	
-	@Inject
-	public EventBusProvider eventBusProvider;
 	
 	@Inject
 	public JobMonitorFactory jobMonitorFactory;
@@ -85,7 +81,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 			                                                          catch (IOException e) {
 			                                                              throw new RuntimeException(e); }})
 			                                          .build());
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			final MessageAccessor accessor = monitor.getMessageAccessor();
 			Runnable poller = new FrameworkCoreTest.JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
@@ -181,10 +177,9 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
-		p.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.persistence", "true");
-		p.setProperty("derby.stream.error.file", new File(PIPELINE_DATA, "log/derby.log").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.logdir", new File(PIPELINE_DATA, "log").getAbsolutePath());
 		return p;
 	}
 

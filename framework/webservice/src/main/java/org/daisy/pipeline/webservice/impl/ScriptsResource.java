@@ -7,8 +7,9 @@ import java.util.List;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.xml.ScriptsXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
+import org.daisy.pipeline.webservice.xml.ScriptsXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;

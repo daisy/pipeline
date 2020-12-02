@@ -8,16 +8,19 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
+import org.daisy.pipeline.webservice.xml.JobXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 
 import com.google.common.base.Optional;

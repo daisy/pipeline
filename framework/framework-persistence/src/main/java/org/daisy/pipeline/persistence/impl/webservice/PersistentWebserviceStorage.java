@@ -2,12 +2,13 @@ package org.daisy.pipeline.persistence.impl.webservice;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.clients.ClientStorage;
+import org.daisy.pipeline.clients.JobConfigurationStorage;
+import org.daisy.pipeline.clients.RequestLog;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.properties.Properties;
-import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
-import org.daisy.pipeline.webserviceutils.storage.JobConfigurationStorage;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

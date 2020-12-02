@@ -38,7 +38,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.eventbus.Subscribe;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
 
@@ -46,11 +45,11 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.event.EventBusProvider;
-import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -61,7 +60,6 @@ import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -87,9 +85,6 @@ public class FrameworkCoreTest extends AbstractTest {
 	
 	@Inject
 	public ScriptRegistry scriptRegistry;
-	
-	@Inject
-	public EventBusProvider eventBusProvider;
 	
 	@Inject
 	public JobMonitorFactory jobMonitorFactory;
@@ -128,7 +123,7 @@ public class FrameworkCoreTest extends AbstractTest {
 					"\\E$"
 				).apply(errorXml));
 			Assert.assertFalse(results.hasNext());
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -153,7 +148,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xproc-error");
 			waitForStatus(Job.Status.ERROR, job, 2000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -187,7 +182,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("cx-eval-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -236,7 +231,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			                    "</c:errors>",
 			                    CharStreams.toString(results.next()));
 			Assert.assertFalse(results.hasNext());
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -261,7 +256,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xslt-terminate-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -294,7 +289,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("java-step-runtime-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -312,7 +307,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaStep.run(JavaStep.java:57)\n" +
+			                 "	at JavaStep.run(JavaStep.java:55)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
@@ -328,7 +323,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("java-function-runtime-error");
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -347,7 +342,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaFunction$1.call(JavaFunction.java:78)\n" +
+			                 "	at JavaFunction$1.call(JavaFunction.java:64)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
 			                 "	at xsl:value-of/@select(java-function-runtime-error.xpl:26)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +
@@ -368,7 +363,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xslt-warning");
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -400,7 +395,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		try {
 			Job job = newJob("xproc-warning");
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
@@ -426,7 +421,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		logger.addAppender(collectLog);
 		try {
 			Job job = newJob("progress-messages");
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId(), true);
+			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			final MessageAccessor accessor = monitor.getMessageAccessor();
 			Runnable poller = new JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
@@ -491,10 +486,22 @@ public class FrameworkCoreTest extends AbstractTest {
 				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:foo (2)");
 				                  Assert.assertFalse(msgs.hasNext()); });
 				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (3)");
-				assertMessage(next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (4)",
-				              msgs -> {
-				                  assertMessage(next(msgs), seq.get(), Message.Level.INFO, "px:progress-messages (4a)");
-				                  Assert.assertFalse(msgs.hasNext()); });
+				assertMessage(
+					next(messages), seq.get(), Message.Level.INFO, "px:progress-messages (4)",
+					submsgs -> {
+						assertMessage(
+							next(submsgs), seq.get(), Message.Level.INFO, "px:progress-messages (4a)",
+							subsubmsgs -> {
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "other message");
+								assertMessage(next(subsubmsgs), seq.get(), Message.Level.INFO, "same message");
+								assertMessage(
+									next(subsubmsgs), seq.get(), Message.Level.INFO,
+									"same message (further repetitions of this message will be omitted)");
+								Assert.assertFalse(subsubmsgs.hasNext()); });
+						Assert.assertFalse(submsgs.hasNext()); });
 				Assert.assertFalse(messages.hasNext());
 				Iterator<ILoggingEvent> log = collectLog.get();
 				Assert.assertFalse(log.hasNext());
@@ -660,7 +667,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			throwable.getThrowable().printStackTrace(out);
 	}
 	
-	// FIXME: can dependencies on modules-registry, webservice-utils and framework-volatile be eliminated?
+	// FIXME: can dependencies on modules-registry, framework-volatile be eliminated?
 	@Override
 	public String[] testDependencies() {
 		return new String[]{
@@ -687,7 +694,7 @@ public class FrameworkCoreTest extends AbstractTest {
 	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
-		p.setProperty("org.daisy.pipeline.iobase", new File(PIPELINE_DATA, "jobs").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.persistence", "false");
 		return p;
 	}
@@ -759,26 +766,6 @@ public class FrameworkCoreTest extends AbstractTest {
 					throw new RuntimeException("waitForStatus " + expectedStatus + " timed out (last status was " + status + ")");
 				}
 			}
-		}
-	}
-	
-	static class CollectMessages {
-		final Map<String,List<Message>> messages = new HashMap<String,List<Message>>();
-		@Subscribe
-		public void add(ProgressMessage msg) {
-			String jobid = msg.getJobId();
-			List<Message> list = messages.get(jobid);
-			if (list == null) {
-				list = new ArrayList<Message>();
-				messages.put(jobid, list);
-			}
-			list.add(msg);
-		}
-		public Iterator<Message> get(String jobId) {
-			if (messages.containsKey(jobId))
-				return messages.get(jobId).iterator();
-			else
-				return Collections.<Message>emptyIterator();
 		}
 	}
 	

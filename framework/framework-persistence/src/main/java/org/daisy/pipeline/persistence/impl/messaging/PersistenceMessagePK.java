@@ -1,6 +1,5 @@
 package org.daisy.pipeline.persistence.impl.messaging;
 
-
 public class PersistenceMessagePK {
 
 	int sequence;
@@ -11,5 +10,4 @@ public class PersistenceMessagePK {
 		this.sequence = sequence;
 		this.jobId = jobId;
 	}
-	
 }

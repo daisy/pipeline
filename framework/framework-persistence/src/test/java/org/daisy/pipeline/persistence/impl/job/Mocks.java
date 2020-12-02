@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcPipelineInfo;
@@ -17,11 +18,12 @@ import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobMonitor;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.job.StatusNotifier;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
-import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -148,11 +150,27 @@ public class Mocks   {
 
 	static class MyHiddenContext extends AbstractJobContext{
 			public MyHiddenContext(JobResultSet set,XProcScript script,XProcInput input,URIMapper mapper, Client client,JobId id,JobBatchId batchId){
-				super(client,id,batchId,"hidden",BoundXProcScript.from(script,input,null),mapper);
-				this.setResults(set);
+				super();
+				this.client = client;
+				this.id = id;
+				this.logFile = URI.create("/tmp/job.log");
+				this.batchId = batchId;
+				this.niceName = "hidden";
+				this.script = script;
+				this.input = input;
+				this.resultMapper = mapper;
+				this.results = set;
+				this.monitor = new JobMonitor() {
+						@Override
+						public MessageAccessor getMessageAccessor() {
+							return null;
+						}
+						@Override
+						public StatusNotifier getStatusUpdates() {
+							return null;
+						}
+					};
 			}
-
-
 		};
 
 }

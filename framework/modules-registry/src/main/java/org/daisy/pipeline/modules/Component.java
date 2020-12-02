@@ -3,7 +3,7 @@ package org.daisy.pipeline.modules;
 import java.net.URI;
 import java.net.URL;
 
-import org.daisy.common.file.URIs;
+import org.daisy.common.file.URLs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public class Component {
 			mLogger.trace("Getting resource from component " + this + ": " + path);
 			URL url= loader.loadResource(path);
 			if(url!=null) {
-				return URIs.asURI(url);
+				return URLs.asURI(url);
 			} else {
 				return null;
 			}

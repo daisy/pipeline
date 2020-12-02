@@ -19,6 +19,7 @@ import javax.xml.transform.sax.SAXSource;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+
 import org.daisy.common.priority.Priority;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
@@ -36,13 +37,14 @@ import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.callback.Callback;
-import org.daisy.pipeline.webserviceutils.callback.Callback.CallbackType;
-import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
-import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.JobsXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
-import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
+import org.daisy.pipeline.webservice.Callback;
+import org.daisy.pipeline.webservice.Callback.CallbackType;
+import org.daisy.pipeline.webservice.CallbackHandler;
+import org.daisy.pipeline.webservice.xml.JobXmlWriter;
+import org.daisy.pipeline.webservice.xml.JobsXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlUtils;
+import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
+
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -51,8 +53,10 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

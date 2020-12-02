@@ -51,7 +51,13 @@
     <p:choose px:message="px:progress-messages (4)">
         <p:when px:message="px:progress-messages (4a)"
                 test="1>0">
-            <p:identity/>
+            <p:identity px:message="same message"/>
+            <p:identity px:message="same message"/>
+            <p:identity px:message="same message"/>
+            <p:identity px:message="other message"/>
+            <p:identity px:message="same message"/>
+            <p:identity px:message="same message"/>
+            <p:identity px:message="same message"/>
         </p:when>
         <p:otherwise px:message="px:progress-messages (4b)">
             <p:identity/>
