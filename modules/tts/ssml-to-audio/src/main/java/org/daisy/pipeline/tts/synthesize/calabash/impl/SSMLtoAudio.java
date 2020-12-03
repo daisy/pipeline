@@ -26,12 +26,12 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.xslt.CompiledStylesheet;
 import org.daisy.common.xslt.XslTransformCompiler;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.audio.AudioServices;
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.tts.AudioBufferTracker;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
 import org.daisy.pipeline.tts.StraightBufferAllocator;
@@ -462,12 +462,12 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		mCurrentSection = null;
 	}
 
-	private ProgressMessage progress;
+	private MessageAppender progress;
 
 	public Iterable<SoundFileLink> blockingRun(AudioServices audioServices)
 	        throws SynthesisException, InterruptedException, EncodingException {
 
-		progress = ProgressMessage.getActiveBlock().post(new ProgressMessageBuilder().withProgress(BigDecimal.ONE));
+		progress = MessageAppender.getActiveBlock().append(new MessageBuilder().withProgress(BigDecimal.ONE));
 		try {
 
 		//SSML mark splitter shared by the threads:
@@ -582,8 +582,8 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 	@Override
 	synchronized public void notifyFinished(ContiguousText section) {
-		progress.post(
-			new ProgressMessageBuilder()
+		progress.append(
+			new MessageBuilder()
 				.withProgress(
 					new BigDecimal(section.getStringSize()).divide(new BigDecimal(mTotalTextSize), MathContext.DECIMAL128))
 		).close();

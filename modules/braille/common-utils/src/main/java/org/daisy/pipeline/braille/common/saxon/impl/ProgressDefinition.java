@@ -14,18 +14,10 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.EmptySequence;
 import net.sf.saxon.value.SequenceType;
 
-import org.daisy.pipeline.event.EventBusProvider;
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessageBuilder;
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 @Component(
 	name = "pf:progress",
@@ -33,19 +25,6 @@ import org.slf4j.MDC;
 )
 @SuppressWarnings("serial")
 public class ProgressDefinition extends ExtensionFunctionDefinition {
-	
-	private EventBusProvider eventBus;
-	
-	@Reference(
-		name = "EventBusProvider",
-		unbind = "-",
-		service = EventBusProvider.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	public void setEventBusProvider(EventBusProvider provider) {
-		eventBus = provider;
-	}
 	
 	private static final StructuredQName funcname = new StructuredQName("pf",
 			"http://www.daisy.org/ns/pipeline/functions", "progress");
@@ -71,20 +50,11 @@ public class ProgressDefinition extends ExtensionFunctionDefinition {
 			public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
 				try {
 					BigDecimal portion = parseNumber(arguments[0].head().getStringValue());
-					ProgressMessage activeBlock = ProgressMessage.getActiveBlock();
-					ProgressMessageBuilder m = new ProgressMessageBuilder().withProgress(portion);
+					MessageAppender activeBlock = MessageAppender.getActiveBlock();
+					MessageBuilder m = new MessageBuilder().withProgress(portion);
+					// we need an active block otherwise we have no place to send the progress info to
 					if (activeBlock != null)
-						activeBlock.post(m).close();
-					else {
-						String jobId = MDC.get("jobid");
-						if (jobId != null && !"default".equals(jobId)) {
-							m.withJobId(jobId);
-							eventBus.post(m).close();
-						} else {
-							// not in job context
-							logger.debug("progress: " + portion);
-						}
-					}
+						activeBlock.append(m).close();
 					return VOID; }
 				catch (ArithmeticException e) {
 					// probably divided by null, ignore progress info
@@ -94,7 +64,4 @@ public class ProgressDefinition extends ExtensionFunctionDefinition {
 			}
 		};
 	}
-	
-	private static final Logger logger = LoggerFactory.getLogger(ProgressDefinition.class);
-	
 }
