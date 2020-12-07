@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.liblouis</groupId>
   <artifactId>liblouis-java</artifactId>
-  <version>4.3.0-SNAPSHOT</version>
+  <version>4.3.1</version>
   <packaging>bundle</packaging>
   <name>liblouis-java</name>
   <description>JNA based Java bindings to liblouis, an open-source braille translator and back-translator.</description>
@@ -15,6 +13,7 @@
     <connection>scm:git:git@github.com:bertfrees/liblouis-java.git</connection>
     <developerConnection>scm:git:git@github.com:bertfrees/liblouis-java.git</developerConnection>
     <url>git@github.com:bertfrees/liblouis-java.git</url>
+    <tag>4.3.1</tag>
   </scm>
   <licenses>
     <license>
@@ -269,7 +268,7 @@
   </build>
   <profiles>
     <profile>
-      <id>sonatype-deploy</id>
+      <id>sonatype-oss-release</id>
       <build>
         <plugins>
           <plugin>

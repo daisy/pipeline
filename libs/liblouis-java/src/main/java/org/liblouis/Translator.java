@@ -258,31 +258,40 @@ public class Translator {
 	 */
 	private static final int OUTLEN_MULTIPLIER = WideChar.SIZE * 2 + 4;
 	
-	private static Map<String,WideString> WIDECHAR_BUFFERS = new HashMap<String,WideString>();
-	private static Map<String,byte[]> BYTE_BUFFERS = new HashMap<String,byte[]>();
-	private static Map<String,int[]> INT_BUFFERS = new HashMap<String,int[]>();
+	private static class Buffers {
+		Map<String,WideString> WIDECHAR_BUFFERS = new HashMap<String,WideString>();
+		Map<String,byte[]> BYTE_BUFFERS = new HashMap<String,byte[]>();
+		Map<String,int[]> INT_BUFFERS = new HashMap<String,int[]>();
+	}
+	
+	private static ThreadLocal<Buffers> buffers = new ThreadLocal<Buffers>() {
+			@Override
+			protected Buffers initialValue() {
+				return new Buffers();
+			}
+		};
 	
 	private static WideString getWideCharBuffer(String id, int minCapacity) {
-		WideString buffer = WIDECHAR_BUFFERS.get(id);
+		WideString buffer = buffers.get().WIDECHAR_BUFFERS.get(id);
 		if (buffer == null || buffer.length() < minCapacity) {
 			buffer = new WideString(minCapacity * 2);
-			WIDECHAR_BUFFERS.put(id, buffer); }
+			buffers.get().WIDECHAR_BUFFERS.put(id, buffer); }
 		return buffer;
 	}
 		
 	private static byte[] getByteBuffer(String id, int minCapacity) {
-		byte[] buffer = BYTE_BUFFERS.get(id);
+		byte[] buffer = buffers.get().BYTE_BUFFERS.get(id);
 		if (buffer == null || buffer.length < minCapacity) {
 			buffer = new byte[minCapacity * 2];
-			BYTE_BUFFERS.put(id, buffer); }
+			buffers.get().BYTE_BUFFERS.put(id, buffer); }
 		return buffer;
 	}
 	
 	private static int[] getIntegerBuffer(String id, int minCapacity) {
-		int[] buffer = INT_BUFFERS.get(id);
+		int[] buffer = buffers.get().INT_BUFFERS.get(id);
 		if (buffer == null || buffer.length < minCapacity) {
 			buffer = new int[minCapacity * 2];
-			INT_BUFFERS.put(id, buffer); }
+			buffers.get().INT_BUFFERS.put(id, buffer); }
 		return buffer;
 	}
 
