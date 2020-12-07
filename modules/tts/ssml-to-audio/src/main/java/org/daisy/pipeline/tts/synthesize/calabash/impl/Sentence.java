@@ -21,7 +21,7 @@ class Sentence implements FormatSpecifications {
 	int getSize() {
 		if (mSize == -1) {
 			mSize = 0;
-			computeSize(mText);
+			mSize = computeSize(mText);
 		}
 		return mSize;
 	}
@@ -42,15 +42,17 @@ class Sentence implements FormatSpecifications {
 		return mText.getAttributeValue(Sentence_attr_id);
 	}
 
-	private void computeSize(XdmNode node) {
+	static int computeSize(XdmNode node) {
+		int size = 0;
 		if (node.getNodeKind() == XdmNodeKind.TEXT) {
-			mSize += CharMatcher.WHITESPACE.removeFrom(node.getStringValue()).length();
+			size += CharMatcher.WHITESPACE.removeFrom(node.getStringValue()).length();
 		} else {
 			XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
 			while (iter.hasNext()) {
-				computeSize((XdmNode) iter.next());
+				size += computeSize((XdmNode) iter.next());
 			}
 		}
+		return size;
 	}
 
 	private int mSize;
