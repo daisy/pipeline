@@ -60,6 +60,9 @@ class SegmentProcessor {
     private int segmentIndex;
     /**
      * The active (not completed) row, as a mutable object (builder).
+     *
+     * Is only non-null if the previous getNext() call returned an empty result, or if the next
+     * result is being created in getNext().
      */
     private RowImpl.Builder currentRow;
     /*
@@ -455,6 +458,10 @@ class SegmentProcessor {
         return significantContent;
     }
 
+    /*
+     * If the previous getNext() call returned an empty result, the lineProps argument is expected
+     * to be the same as the lineProps argument that was called the previous time.
+     */
     Optional<RowImpl> getNext(LineProperties lineProps) {
         return getNext(true, lineProps);
     }
@@ -977,8 +984,6 @@ class SegmentProcessor {
                         "",
                         processorContext.getRowDataProps().getBlockIndent()
                             + processorContext.getRowDataProps().getTextIndent(),
-                        processorContext.getRowDataProps().getBlockIndent()
-                            + processorContext.getRowDataProps().getTextIndent(),
                         processorContext.getRowDataProps().getRightTextIndent(),
                         mode,
                         lineProps
@@ -1016,8 +1021,6 @@ class SegmentProcessor {
                                 btr,
                                 listLabel,
                                 processorContext.getRowDataProps().getBlockIndentParent(),
-                                processorContext.getRowDataProps().getBlockIndentParent()
-                                    + processorContext.getRowDataProps().getTextIndent(),
                                 processorContext.getRowDataProps().getRightTextIndent(),
                                 mode,
                                 lineProps
@@ -1028,8 +1031,6 @@ class SegmentProcessor {
                                 listLabel,
                                 processorContext.getRowDataProps().getBlockIndent()
                                     + processorContext.getRowDataProps().getFirstLineIndent(),
-                                processorContext.getRowDataProps().getBlockIndent()
-                                    + processorContext.getRowDataProps().getTextIndent(),
                                 processorContext.getRowDataProps().getRightTextIndent(),
                                 mode,
                                 lineProps
@@ -1044,8 +1045,6 @@ class SegmentProcessor {
                         "",
                         processorContext.getRowDataProps().getBlockIndent()
                             + processorContext.getRowDataProps().getFirstLineIndent(),
-                        processorContext.getRowDataProps().getBlockIndent()
-                            + processorContext.getRowDataProps().getTextIndent(),
                         processorContext.getRowDataProps().getRightTextIndent(),
                         mode,
                         lineProps
@@ -1055,8 +1054,6 @@ class SegmentProcessor {
                 return continueRow(
                     new RowInfo("", processorContext.getAvailable() - lineProps.getReservedWidth()),
                     btr,
-                    processorContext.getRowDataProps().getBlockIndent()
-                        + processorContext.getRowDataProps().getTextIndent(),
                     processorContext.getRowDataProps().getRightTextIndent(),
                     mode,
                     lineProps
@@ -1072,7 +1069,6 @@ class SegmentProcessor {
             BrailleTranslatorResult btr,
             String listLabel,
             int leftIndent,
-            int nextRowLeftIndent,
             int rightIndentIfNotLastRow,
             String mode,
             LineProperties lineProps
@@ -1088,7 +1084,6 @@ class SegmentProcessor {
                     processorContext.getAvailable() - lineProps.getReservedWidth()
                 ),
                 btr,
-                nextRowLeftIndent,
                 rightIndentIfNotLastRow,
                 mode,
                 lineProps
@@ -1115,12 +1110,13 @@ class SegmentProcessor {
         private Optional<RowImpl> continueRow(
             RowInfo row,
             BrailleTranslatorResult btr,
-            int nextRowIndent,
             int rightIndentIfNotLastRow,
             String mode,
             LineProperties lineProps
         ) {
-            RowImpl ret = null;
+            if (!hasCurrentRow()) {
+                throw new RuntimeException("Error in code.");
+            }
             // [margin][preContent][preTabText][tab][postTabText]
             //      preContentPos ^
             String tabSpace = "";
@@ -1140,17 +1136,7 @@ class SegmentProcessor {
                     preTabPos > leaderPos ||
                     offset - align < 0
                 ) { // if tab position has been passed or if text does not fit within row, try on a new row
-                    MarginProperties leftMargin = currentRow.getLeftMargin();
-                    if (hasCurrentRow()) {
-                        ret = flushCurrentRow();
-                    }
-                    newCurrentRow(leftMargin, processorContext.getMargins().getRightMargin());
-                    row = new RowInfo(
-                        getLeftIndent(nextRowIndent),
-                        processorContext.getAvailable() - lineProps.getReservedWidth()
-                    );
-                    //update offset
-                    offset = leaderPos - row.getPreTabPosition(currentRow);
+                    return Optional.ofNullable(flushCurrentRow());
                 }
                 try {
                     tabSpace = leaderManager.getLeaderPattern(
@@ -1205,7 +1191,7 @@ class SegmentProcessor {
                 currentRow.addIdentifiers(abtr.getIdentifiers());
                 abtr.clearPending();
             }
-            return Optional.ofNullable(ret);
+            return Optional.empty();
         }
     }
 
