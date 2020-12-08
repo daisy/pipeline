@@ -717,6 +717,8 @@ class SegmentProcessor {
             }
             layoutOrApplyAfterLeader.add(result);
         } else {
+            // layoutAfterLeader() should only be called after having checked that there is a
+            // leader.
             throw new RuntimeException("Error in code.");
         }
     }
@@ -1074,6 +1076,8 @@ class SegmentProcessor {
             LineProperties lineProps
         ) {
             if (hasCurrentRow()) {
+                // startNewRow() should only be called after having flushed the current row, or
+                // after having checked that there is none.
                 throw new RuntimeException("Error in code.");
             }
             newCurrentRow(processorContext.getMargins().getLeftMargin(),
@@ -1115,6 +1119,8 @@ class SegmentProcessor {
             LineProperties lineProps
         ) {
             if (!hasCurrentRow()) {
+                // continueRow() should only be called after having checked that there is a current
+                // row, or after having created a new one.
                 throw new RuntimeException("Error in code.");
             }
             // [margin][preContent][preTabText][tab][postTabText]
