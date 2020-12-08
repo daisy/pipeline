@@ -29,7 +29,7 @@ targetCompatibility = 1.8
 // To test with snapshots, modify the version directly in the dependencies section,
 // but don't forget to change it back when you're done.
 ext.versions = [
-	'dotifyApi'		: '5.0.5',
+	'dotifyApi'		: '5.0.7',
 	'dotifyCommon'	: '4.4.1',
 ]
 

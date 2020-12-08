@@ -26,6 +26,7 @@ public final class RowImpl implements Row {
     private final boolean allowsBreakAfter;
     private final int leaderSpace;
     private final Object externalReference;
+    private final boolean invisible;
 
     /**
      * TODO: Write java doc.
@@ -44,6 +45,7 @@ public final class RowImpl implements Row {
         private int leaderSpace = 0;
         private boolean built = false;
         private Object externalReference;
+        private boolean invisible;
 
         public Builder(String chars) {
             this.chars = chars;
@@ -62,6 +64,7 @@ public final class RowImpl implements Row {
             this.allowsBreakAfter = template.allowsBreakAfter;
             this.leaderSpace = template.leaderSpace;
             this.externalReference = template.externalReference;
+            this.invisible = template.invisible;
         }
 
         Builder(RowImpl.Builder template) {
@@ -77,6 +80,7 @@ public final class RowImpl implements Row {
             this.allowsBreakAfter = template.allowsBreakAfter;
             this.leaderSpace = template.leaderSpace;
             this.externalReference = template.externalReference;
+            this.invisible = template.invisible;
         }
 
         public Builder text(String value) {
@@ -249,6 +253,11 @@ public final class RowImpl implements Row {
             }
         }
 
+        public Builder invisible(boolean b) {
+            this.invisible = b;
+            return this;
+        }
+
         public RowImpl build() {
             assertNotBuilt();
             built = true;
@@ -269,6 +278,7 @@ public final class RowImpl implements Row {
         this.allowsBreakAfter = builder.allowsBreakAfter;
         this.leaderSpace = builder.leaderSpace;
         this.externalReference = builder.externalReference;
+        this.invisible = builder.invisible;
     }
 
     /**
@@ -293,6 +303,7 @@ public final class RowImpl implements Row {
         this.allowsBreakAfter = true;
         this.leaderSpace = 0;
         this.externalReference = null;
+        this.invisible = false;
     }
 
     /**
@@ -389,6 +400,10 @@ public final class RowImpl implements Row {
 
     public boolean allowsBreakAfter() {
         return allowsBreakAfter;
+    }
+
+    public boolean isInvisible() {
+        return invisible;
     }
 
     /**

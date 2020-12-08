@@ -8,7 +8,6 @@ package org.daisy.dotify.formatter.impl.sheet;
  */
 public class SheetGroup {
     private SheetDataSource units;
-    private VolumeSplitter splitter;
     private int overheadCount;
     private int sheetCount;
 
@@ -79,24 +78,6 @@ public class SheetGroup {
      */
     public void setUnits(SheetDataSource units) {
         this.units = units;
-    }
-
-    /**
-     * Sets the volume splitter used for this sheet group.
-     *
-     * @param splitter the splitter to use
-     */
-    void setSplitter(VolumeSplitter splitter) {
-        this.splitter = splitter;
-    }
-
-    /**
-     * Gets the volume splitter used for this sheet group.
-     *
-     * @return returns the splitter
-     */
-    public VolumeSplitter getSplitter() {
-        return splitter;
     }
 
     /**

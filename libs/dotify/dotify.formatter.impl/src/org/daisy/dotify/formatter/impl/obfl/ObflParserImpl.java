@@ -416,7 +416,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         TextProperties tp
     ) throws XMLStreamException {
         tp = getTextProperties(event, tp);
-        fc.startBlock(blockBuilder(event.asStartElement()));
+        fc.startBlock(displayWhenNotAllowed(blockBuilder(event.asStartElement())));
         while (input.hasNext()) {
             event = input.nextEvent();
             if (event.isCharacters()) {
@@ -432,6 +432,13 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                 report(event);
             }
         }
+    }
+
+    private BlockProperties displayWhenNotAllowed(BlockProperties blockProperties) {
+        if (blockProperties.getDisplayWhen() != null) {
+            throw new IllegalArgumentException("The display-when attribute is not allowed in this context.");
+        }
+        return blockProperties;
     }
 
     private void parseTemplate(
@@ -1115,6 +1122,22 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                 builder.verticalAlignment(VerticalAlignment.valueOf(att.getValue().toUpperCase()));
             } else if ("row-spacing".equals(name)) {
                 builder.rowSpacing(Float.parseFloat(att.getValue()));
+            } else if ("display-when".equals(name)) {
+                if (!att.getValue().replaceAll(" ", "")
+                        .equalsIgnoreCase("(!$starts-at-top-of-page)")
+                ) {
+                    throw new IllegalArgumentException(
+                        "At the moment we only support the condition '(! $starts-at-top-of-page)'"
+                    );
+                }
+
+                final OBFLCondition condition = new OBFLCondition(
+                    att.getValue(),
+                    fm.getExpressionFactory(),
+                    OBFLVariable.STARTS_AT_TOP_OF_PAGE
+                );
+
+                builder.displayWhen(condition);
             } else if (name.startsWith("border")) {
                 border.put(name, att.getValue());
             } else if ("underline-pattern".equals(name)) {
@@ -1148,7 +1171,15 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         if (underlinePattern != null && !underlinePattern.isEmpty()) {
             builder.underlineStyle(underlinePattern);
         }
-        return builder.build();
+
+        BlockProperties bp = builder.build();
+        if (bp.getDisplayWhen() != null && bp.getKeepType() != FormattingTypes.Keep.PAGE) {
+            throw new IllegalArgumentException(
+                "When a display-when condition is supplied you need to use the keep='page' attribute as well."
+            );
+        }
+
+        return bp;
     }
 
     private Border borderBuilder(Iterator<?> atts) {
@@ -1208,7 +1239,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         int tableColSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_COL_SPACING), 0);
         int tableRowSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_ROW_SPACING), 0);
         int preferredEmptySpace = toInt(getAttr(event, ObflQName.ATTR_TABLE_PREFERRED_EMPTY_SPACE), 2);
-        BlockProperties bp = blockBuilder(event.asStartElement());
+        BlockProperties bp = displayWhenNotAllowed(blockBuilder(event.asStartElement()));
         Border b = borderBuilder(event.asStartElement().getAttributes());
         TableProperties.Builder tableProps = new TableProperties.Builder()
                 .tableColSpacing(tableColSpacing)
@@ -1293,7 +1324,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         tp = getTextProperties(event, tp);
         int colSpan = toInt(getAttr(event, ObflQName.ATTR_COL_SPAN), 1);
         int rowSpan = toInt(getAttr(event, ObflQName.ATTR_ROW_SPAN), 1);
-        BlockProperties bp = blockBuilder(event.asStartElement());
+        BlockProperties bp = displayWhenNotAllowed(blockBuilder(event.asStartElement()));
         Border b = borderBuilder(event.asStartElement().getAttributes());
         TableCellProperties tcp = new TableCellProperties.Builder()
                 .colSpan(colSpan)
@@ -1364,7 +1395,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         TableOfContents toc,
         TextProperties tp
     ) throws XMLStreamException, ObflParserException {
-        toc.startBlock(blockBuilder(event.asStartElement()));
+        toc.startBlock(displayWhenNotAllowed(blockBuilder(event.asStartElement())));
         tp = getTextProperties(event, tp);
         while (input.hasNext()) {
             event = input.nextEvent();
@@ -1438,7 +1469,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         TextProperties tp
     ) throws XMLStreamException {
         tp = getTextProperties(event, tp);
-        coll.startItem(blockBuilder(event.asStartElement()));
+        coll.startItem(displayWhenNotAllowed(blockBuilder(event.asStartElement())));
         while (input.hasNext()) {
             event = input.nextEvent();
             if (event.isCharacters()) {

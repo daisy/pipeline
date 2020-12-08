@@ -1,5 +1,6 @@
 package org.daisy.dotify.formatter.impl.row;
 
+import org.daisy.dotify.api.formatter.Condition;
 import org.daisy.dotify.api.formatter.FormattingTypes;
 import org.daisy.dotify.api.formatter.FormattingTypes.Alignment;
 import org.daisy.dotify.formatter.impl.row.Margin.Type;
@@ -31,6 +32,7 @@ public final class RowDataProperties {
     private final SingleLineDecoration trailingDecoration;
     private final String underlineStyle;
     private final Object externalReference;
+    private final Condition displayWhen;
 
 
     /**
@@ -62,6 +64,7 @@ public final class RowDataProperties {
 
         private ListItem listProps = null;
         private Object externalReference = null;
+        private Condition displayWhen = null;
 
         public Builder() {
         }
@@ -85,6 +88,7 @@ public final class RowDataProperties {
             this.orphans = template.orphans;
             this.widows = template.widows;
             this.underlineStyle = template.underlineStyle;
+            this.displayWhen = template.displayWhen;
             this.externalReference = template.externalReference;
         }
 
@@ -188,6 +192,11 @@ public final class RowDataProperties {
             return this;
         }
 
+        public Builder displayWhen(Condition value) {
+            this.displayWhen = value;
+            return this;
+        }
+
         public RowDataProperties build() {
             return new RowDataProperties(this);
         }
@@ -212,6 +221,7 @@ public final class RowDataProperties {
         this.orphans = builder.orphans;
         this.widows = builder.widows;
         this.underlineStyle = builder.underlineStyle;
+        this.displayWhen = builder.displayWhen;
         this.externalReference = builder.externalReference;
     }
 
@@ -301,6 +311,10 @@ public final class RowDataProperties {
 
     public String getUnderlineStyle() {
         return underlineStyle;
+    }
+
+    public Condition getDisplayWhen() {
+        return displayWhen;
     }
 
     @Override

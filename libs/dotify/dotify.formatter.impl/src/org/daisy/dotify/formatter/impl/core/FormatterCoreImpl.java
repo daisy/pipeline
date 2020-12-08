@@ -142,7 +142,8 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
                     )
                 )
                 .outerSpaceBefore(p.getMargin().getTopSpacing())
-                .underlineStyle(p.getUnderlineStyle());
+                .underlineStyle(p.getUnderlineStyle())
+                .displayWhen(p.getDisplayWhen());
         // We don't get the volume keep priority from block properties,
         // because it could have been inherited from an ancestor
         AncestorContext ac = new AncestorContext(p, inheritVolumeKeepPriority(p.getVolumeKeepPriority()));
@@ -293,7 +294,8 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
                             new Margin(Type.RIGHT, rightMarginComps),
                             fc.getSpaceCharacter()
                     )).
-                    underlineStyle(p.getUnderlineStyle());
+                    underlineStyle(p.getUnderlineStyle()).
+                    displayWhen(p.getDisplayWhen());
             Block c = newBlock(null, rdp.build());
             c.setKeepType(keep);
             c.setKeepWithNext(next);

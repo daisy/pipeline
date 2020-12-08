@@ -47,5 +47,16 @@ public class TocEntryOnResumedTest extends AbstractFormatterEngineTest {
             false
         );
     }
+    @Test
+    public void testTocEntryOnResumedWithLongChapter() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/toc-entry-on-resumed/toc-entry-on-resumed-long-chapter-input.obfl",
+            "resource-files/toc-entry-on-resumed/toc-entry-on-resumed-long-chapter-expected.pef",
+            false
+        );
+    }
 
 }

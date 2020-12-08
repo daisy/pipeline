@@ -50,12 +50,19 @@ class SegmentProcessor {
     private final AttributeWithContext attr;
 
     private DefaultContext context;
-    private final boolean significantContent;
+    private final boolean hasSignificantContent;
+    /*
+     * Whether some segments are PageNumberReference or Evaluate
+     */
+    private final boolean hasDynamicContent;
     private final SegmentProcessorContext processorContext;
 
     private int segmentIndex;
     /**
      * The active (not completed) row, as a mutable object (builder).
+     *
+     * Is only non-null if the previous getNext() call returned an empty result, or if the next
+     * result is being created in getNext().
      */
     private RowImpl.Builder currentRow;
     /*
@@ -132,7 +139,10 @@ class SegmentProcessor {
         this.groupIdentifiers = new ArrayList<>();
         this.externalReference = null;
         this.leaderManager = new LeaderManager();
-        this.significantContent = calculateSignificantContent(this.segments, context, rdp);
+        this.hasSignificantContent = calculateSignificantContent(this.segments, context, rdp);
+        this.hasDynamicContent = this.segments.stream().anyMatch(
+            s -> s.getSegmentType() == SegmentType.Evaluate ||
+                 s.getSegmentType() == SegmentType.PageReference);
         this.processorContext = new SegmentProcessorContext(fcontext, rdp, margins, flowWidth, available);
         this.blockId = blockId;
         this.pagenumResolver = (rs) -> {
@@ -176,7 +186,8 @@ class SegmentProcessor {
         this.segmentIndex = template.segmentIndex;
         this.current = template.current != null ? copy(template.current) : null;
         this.closed = template.closed;
-        this.significantContent = template.significantContent;
+        this.hasSignificantContent = template.hasSignificantContent;
+        this.hasDynamicContent = template.hasDynamicContent;
         this.blockId = template.blockId;
         this.pagenumResolver = template.pagenumResolver;
         // can't simply copy because getContext() of template would be used
@@ -444,9 +455,13 @@ class SegmentProcessor {
     }
 
     public boolean hasSignificantContent() {
-        return significantContent;
+        return hasSignificantContent;
     }
 
+    /*
+     * If the previous getNext() call returned an empty result, the lineProps argument is expected
+     * to be the same as the lineProps argument that was called the previous time.
+     */
     Optional<RowImpl> getNext(LineProperties lineProps) {
         return getNext(true, lineProps);
     }
@@ -575,7 +590,12 @@ class SegmentProcessor {
                     .attributes(attr)
                     .build();
             btr = toResult(spec, mode);
-            ts.storeResult(btr);
+            // Do not cache the braille translation of this text segment if there are preceding or
+            // following segments whose values can change, because this may influence the
+            // translation of the text segment.
+            if (!hasDynamicContent) {
+                ts.storeResult(btr);
+            }
         } else {
             btr = ts.newResult();
         }
@@ -697,6 +717,8 @@ class SegmentProcessor {
             }
             layoutOrApplyAfterLeader.add(result);
         } else {
+            // layoutAfterLeader() should only be called after having checked that there is a
+            // leader.
             throw new RuntimeException("Error in code.");
         }
     }
@@ -964,8 +986,6 @@ class SegmentProcessor {
                         "",
                         processorContext.getRowDataProps().getBlockIndent()
                             + processorContext.getRowDataProps().getTextIndent(),
-                        processorContext.getRowDataProps().getBlockIndent()
-                            + processorContext.getRowDataProps().getTextIndent(),
                         processorContext.getRowDataProps().getRightTextIndent(),
                         mode,
                         lineProps
@@ -1003,8 +1023,6 @@ class SegmentProcessor {
                                 btr,
                                 listLabel,
                                 processorContext.getRowDataProps().getBlockIndentParent(),
-                                processorContext.getRowDataProps().getBlockIndentParent()
-                                    + processorContext.getRowDataProps().getTextIndent(),
                                 processorContext.getRowDataProps().getRightTextIndent(),
                                 mode,
                                 lineProps
@@ -1015,8 +1033,6 @@ class SegmentProcessor {
                                 listLabel,
                                 processorContext.getRowDataProps().getBlockIndent()
                                     + processorContext.getRowDataProps().getFirstLineIndent(),
-                                processorContext.getRowDataProps().getBlockIndent()
-                                    + processorContext.getRowDataProps().getTextIndent(),
                                 processorContext.getRowDataProps().getRightTextIndent(),
                                 mode,
                                 lineProps
@@ -1031,8 +1047,6 @@ class SegmentProcessor {
                         "",
                         processorContext.getRowDataProps().getBlockIndent()
                             + processorContext.getRowDataProps().getFirstLineIndent(),
-                        processorContext.getRowDataProps().getBlockIndent()
-                            + processorContext.getRowDataProps().getTextIndent(),
                         processorContext.getRowDataProps().getRightTextIndent(),
                         mode,
                         lineProps
@@ -1042,8 +1056,6 @@ class SegmentProcessor {
                 return continueRow(
                     new RowInfo("", processorContext.getAvailable() - lineProps.getReservedWidth()),
                     btr,
-                    processorContext.getRowDataProps().getBlockIndent()
-                        + processorContext.getRowDataProps().getTextIndent(),
                     processorContext.getRowDataProps().getRightTextIndent(),
                     mode,
                     lineProps
@@ -1059,12 +1071,13 @@ class SegmentProcessor {
             BrailleTranslatorResult btr,
             String listLabel,
             int leftIndent,
-            int nextRowLeftIndent,
             int rightIndentIfNotLastRow,
             String mode,
             LineProperties lineProps
         ) {
             if (hasCurrentRow()) {
+                // startNewRow() should only be called after having flushed the current row, or
+                // after having checked that there is none.
                 throw new RuntimeException("Error in code.");
             }
             newCurrentRow(processorContext.getMargins().getLeftMargin(),
@@ -1075,7 +1088,6 @@ class SegmentProcessor {
                     processorContext.getAvailable() - lineProps.getReservedWidth()
                 ),
                 btr,
-                nextRowLeftIndent,
                 rightIndentIfNotLastRow,
                 mode,
                 lineProps
@@ -1102,51 +1114,38 @@ class SegmentProcessor {
         private Optional<RowImpl> continueRow(
             RowInfo row,
             BrailleTranslatorResult btr,
-            int nextRowIndent,
             int rightIndentIfNotLastRow,
             String mode,
             LineProperties lineProps
         ) {
-            RowImpl ret = null;
+            if (!hasCurrentRow()) {
+                // continueRow() should only be called after having checked that there is a current
+                // row, or after having created a new one.
+                throw new RuntimeException("Error in code.");
+            }
             // [margin][preContent][preTabText][tab][postTabText]
             //      preContentPos ^
             String tabSpace = "";
-            boolean rightAlignedLeader = false;
+            boolean hasLeader = leaderManager.hasLeader();
 
             // if a leader is pending lay it out first
-            if (leaderManager.hasLeader()) {
-                rightAlignedLeader = leaderManager.getCurrentLeader().getAlignment() == Leader.Alignment.RIGHT;
+            if (hasLeader) {
                 int preTabPos = row.getPreTabPosition(currentRow);
                 int leaderPos = leaderManager.getLeaderPosition(
                     processorContext.getAvailable() - lineProps.getReservedWidth()
                 );
                 int offset = leaderPos - preTabPos;
                 int align = leaderManager.getLeaderAlign(btr.countRemaining());
-
                 if (
                     preTabPos > leaderPos ||
                     offset - align < 0
                 ) { // if tab position has been passed or if text does not fit within row, try on a new row
-                    MarginProperties leftMargin = currentRow.getLeftMargin();
-                    if (hasCurrentRow()) {
-                        ret = flushCurrentRow();
-                    }
-                    newCurrentRow(leftMargin, processorContext.getMargins().getRightMargin());
-                    row = new RowInfo(
-                        getLeftIndent(nextRowIndent),
-                        processorContext.getAvailable() - lineProps.getReservedWidth()
-                    );
-                    //update offset
-                    offset = leaderPos - row.getPreTabPosition(currentRow);
-                }
-                try {
+                    return Optional.ofNullable(flushCurrentRow());
+                } else {
                     tabSpace = leaderManager.getLeaderPattern(
                         processorContext.getFormatterContext().getTranslator(mode),
                         offset - align
                     );
-                } finally {
-                    // always discard leader
-                    leaderManager.removeLeader();
                 }
             }
 
@@ -1155,19 +1154,40 @@ class SegmentProcessor {
             boolean force = contentLen == 0;
             int availableIfLastRow = row.getMaxLength(currentRow) - contentLen;
             String next = null;
+            // check whether we are on the last row of the block (only matters if there is a
+            // right-text-indent)
             boolean onLastRow = false;
-            // This implementation does not make use the full available space for the last line
-            // unless a right aligned leader is present.
-            if (rightAlignedLeader
-                // If a right aligned leader is present and there are more segments, they are either:
-                // - newlines: this means we can not be on the last line
-                // - leaders: we may be on last line but this function will be called again
-                // - external references: may be on last line; currently not supported
-                && !hasMoreSegments()) {
-                BrailleTranslatorResult btrCopy = btr.copy();
-                btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
-                if (!btrCopy.hasNext()) {
-                    onLastRow = true;
+            if (rightIndentIfNotLastRow > 0) {
+                // We only support the following cases:
+                // - The current result starts with a leader and fits on the last row and there are
+                //   no following segments. All text, page number reference, marker reference,
+                //   evaluate, marker, anchor and identifier segments after a leader are combined
+                //   with the leader into a single CurrentResult, so only new line, leader or
+                //   external reference segments can immediately follow. Only in case of the two
+                //   latter we may be incorrectly assuming we are not on the last row (and therefore
+                //   may be using less space than is available).
+                if (hasLeader) {
+                    if (!hasMoreSegments()) {
+                        BrailleTranslatorResult btrCopy = btr.copy();
+                        btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
+                        if (!btrCopy.hasNext()) {
+                            onLastRow = true;
+                        }
+                    }
+                // - The current result fits on the row regardless of whether it is the last row or
+                //   not. We assume that we are on the last row because it doesn't matter. Only in
+                //   the case the current result does not fit on a row with right text indent
+                //   applied, but does fit together with all the following content on a row without
+                //   right text indent applied we are incorrectly assuming we are not on the last
+                //   row. This only becomes a problem as soon as right-text-indent exceeds the
+                //   distance between the right end of the leader and the right edge of the box.
+                } else {
+                    BrailleTranslatorResult btrCopy = btr.copy();
+                    String remainder = btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
+                    if (!btrCopy.hasNext()
+                        && remainder.length() <= availableIfLastRow - rightIndentIfNotLastRow) {
+                        onLastRow = true;
+                    }
                 }
             }
             int available = availableIfLastRow;
@@ -1178,12 +1198,21 @@ class SegmentProcessor {
             next = btr.nextTranslatedRow(available, force, lineProps.suppressHyphenation());
             // don't know if soft hyphens need to be replaced, but we'll keep it for now
             next = softHyphenPattern.matcher(next).replaceAll("");
-            if ("".equals(next) && "".equals(tabSpace)) {
+            // If there is a leader, insert it if the content that follows it fits on the line or if
+            // there is no following content. If there is no leader, just insert any content that
+            // fits on the line.
+            if (!next.isEmpty() || (!tabSpace.isEmpty() && !btr.hasNext())) {
+                currentRow.text(row.getLeftIndent() + currentRow.getText() + tabSpace + next);
+                if (hasLeader) {
+                    if (!tabSpace.isEmpty()) {
+                        currentRow.leaderSpace(currentRow.getLeaderSpace() + tabSpace.length());
+                    }
+                    // tabSpace has been inserted, discard the leader now
+                    leaderManager.removeLeader();
+                }
+            } else {
                 currentRow.text(
                     row.getLeftIndent() + trailingWsBraillePattern.matcher(currentRow.getText()).replaceAll(""));
-            } else {
-                currentRow.text(row.getLeftIndent() + currentRow.getText() + tabSpace + next);
-                currentRow.leaderSpace(currentRow.getLeaderSpace() + tabSpace.length());
             }
             if (btr instanceof AggregatedBrailleTranslatorResult) {
                 AggregatedBrailleTranslatorResult abtr = ((AggregatedBrailleTranslatorResult) btr);
@@ -1192,7 +1221,18 @@ class SegmentProcessor {
                 currentRow.addIdentifiers(abtr.getIdentifiers());
                 abtr.clearPending();
             }
-            return Optional.ofNullable(ret);
+            // When right-text-indent was applied and the current result fitted exactly on the row
+            // and trailing spaces were discarded, we don't want more content to be added to it
+            // (which is possible because by cutting the trailing spaces and not applying
+            // right-text-indent we could have created just enough room to fit all remaining
+            // content). Hence we flush the row.
+            if (rightIndentIfNotLastRow > 0
+                && !onLastRow
+                && !btr.hasNext()
+            ) {
+                return Optional.ofNullable(flushCurrentRow());
+            }
+            return Optional.empty();
         }
     }
 

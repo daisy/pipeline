@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <dc:title>Leader flowing in footer test</dc:title>
+      <dc:description>Tests leader on a footer line with reduced width. It should work also if there is a soft wrap before the leader.</dc:description>
+   </meta>
+   <layout-master name="master" duplex="false" page-width="10" page-height="2">
+      <default-template>
+         <header/>
+         <footer>
+            <field allow-text-flow="true"/>
+            <field>
+               <string value="⠉⠉⠉"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <sequence master="master">
+      <block padding-top="1">
+         <leader pattern="⠁" position="100%" align="right"/>⠿⠿
+      </block>
+      <block break-before="page">
+         ⠤⠤⠤⠤⠤⠤⠤⠤ <leader pattern="⠁" position="100%" align="right"/>⠿⠿
+      </block>
+   </sequence>
+</obfl>

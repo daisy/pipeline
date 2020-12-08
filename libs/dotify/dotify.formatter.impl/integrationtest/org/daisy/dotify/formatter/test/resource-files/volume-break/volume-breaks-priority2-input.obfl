@@ -1,10 +1,9 @@
 <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
 	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
 		<dc:title>Volume keep priority test</dc:title>
-		<dc:description>Tests that volume keep priority works. In this test, 7 sheets in each volume is optimal.
-		The maximum is set to 10 sheets in each volume, which (by the current configuration of the implementation)
-		allows for 2 pages deviation. This is sufficient to shift the balance by 1 page to accommodate the
-		volume-keep-priority.</dc:description>
+		<dc:description>Tests that volume keep priority works.
+		Without priorities, the first volume would be 10 sheets (the target size) and the second would be 4 sheets.
+		With the volume-keep-priority, the first volume is 5 sheets and the second 9 sheets.</dc:description>
 	</meta>
 	<layout-master name="body" page-width="10" page-height="6" duplex="false">
 		<default-template>
@@ -21,11 +20,16 @@
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
-		<block volume-keep-priority="7">⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
-		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
-		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
-		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
+		<block volume-keep-priority="7">
+			⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤
+			⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤
+			⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤
+			⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤
+			⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤
+			⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤
+			⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿
+		</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 	</sequence>

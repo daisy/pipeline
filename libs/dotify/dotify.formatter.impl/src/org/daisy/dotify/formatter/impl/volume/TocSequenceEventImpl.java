@@ -8,6 +8,7 @@ import org.daisy.dotify.api.formatter.TocEntryOnResumedRange;
 import org.daisy.dotify.api.formatter.TocProperties;
 import org.daisy.dotify.formatter.impl.common.FormatterCoreContext;
 import org.daisy.dotify.formatter.impl.core.Block;
+import org.daisy.dotify.formatter.impl.core.BlockCloner;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
 import org.daisy.dotify.formatter.impl.core.FormatterCoreImpl;
 import org.daisy.dotify.formatter.impl.core.TableOfContentsImpl;
@@ -25,7 +26,7 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class TocSequenceEventImpl implements VolumeSequence {
+class TocSequenceEventImpl implements VolumeSequence, BlockCloner {
     private final TocProperties props;
 
     private final ArrayList<ConditionalBlock> tocStartEvents;
@@ -83,19 +84,24 @@ class TocSequenceEventImpl implements VolumeSequence {
                 Iterable<Block> tmp = ev.getSequence();
                 for (Block b : tmp) {
                     //always clone these blocks, as they may be placed in multiple contexts
-                    Block bl = b.copy();
-                    currentBlockAddress = new BlockAddress(
-                        groupNumber,
-                        currentBlockAddress.getBlockNumber() + 1
-                    );
-                    bl.setBlockAddress(currentBlockAddress);
-                    it.add(bl);
+                    it.add(clone(b));
                 }
             }
         }
         return it;
     }
 
+    @Override
+    public Block clone(Block b) {
+        Block bl = b.copy();
+        currentBlockAddress = new BlockAddress(
+            groupNumber,
+            currentBlockAddress.getBlockNumber() + 1
+        );
+        bl.setBlockAddress(currentBlockAddress);
+        return bl;
+    }
+    
     private Iterable<Block> getVolumeStart(Context vars) throws IOException {
         return getCompoundIterableB(volumeStartEvents, vars);
     }
@@ -138,7 +144,8 @@ class TocSequenceEventImpl implements VolumeSequence {
                             // no content pages, in which case the variable would have no value,
                             // which would result in the CrossReferenceHandler becoming dirty for no
                             // reason, which could in turn result in endless iterations.
-                            () -> crh.getPageNumberOfFirstContentPageOfVolume(currentVolume)
+                            () -> crh.getPageNumberOfFirstContentPageOfVolume(currentVolume),
+                            null
                     );
                     if (volumeToc.isEmpty()) {
                         return null;
@@ -152,7 +159,8 @@ class TocSequenceEventImpl implements VolumeSequence {
                         final int v = vol;
                         Collection<Block> volumeToc = data.filter(
                                 refToVolume(vol, crh), rangeToVolume(vol, crh),
-                                () -> crh.getPageNumberOfFirstContentPageOfVolume(v)
+                                () -> crh.getPageNumberOfFirstContentPageOfVolume(v),
+                                this
                         );
                         if (!volumeToc.isEmpty()) {
                             Context varsWithVolume = DefaultContext
@@ -172,7 +180,9 @@ class TocSequenceEventImpl implements VolumeSequence {
                             fsm.appendGroup(volumeEnd);
                         }
                     }
-                    Collection<Block> volumeToc = data.filter(refToVolume(null, crh), range -> false, () -> 0);
+                    Collection<Block> volumeToc = data.filter(
+                            refToVolume(null, crh), range -> false, () -> 0, this
+                    );
                     if (!volumeToc.isEmpty()) {
                         fsm.appendGroup(volumeToc);
                     }

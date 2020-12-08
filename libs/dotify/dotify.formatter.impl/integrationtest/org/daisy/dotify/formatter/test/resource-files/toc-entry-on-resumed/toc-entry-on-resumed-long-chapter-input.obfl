@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">toc-entry-on-resumed-long-chapter</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests toc-entry-on-resumed with a chapter that covers three volumes.</dc:description>
+   </meta>
+   <layout-master name="main" duplex="false" page-width="10" page-height="5">
+      <default-template>
+          <header>
+              <field>
+                  <current-page/>
+              </field>
+          </header>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <table-of-contents name="toc">
+      <toc-block>
+         <toc-entry ref-id="chapter">⠿ ⠄⠄⠄⠄⠄ <page-number ref-id="chapter" number-format="default"/></toc-entry>
+      </toc-block>
+      <toc-block>
+         <toc-entry-on-resumed range="[chapter,)">⠶ ⠄⠄⠄⠄⠄ <evaluate expression="$started-volume-first-content-page"/></toc-entry-on-resumed>
+      </toc-block>
+   </table-of-contents>
+   <volume-template sheets-in-volume-max="4" use-when="(! (= $volume $volumes))">
+      <pre-content>
+         <toc-sequence toc="toc" master="main" range="volume" page-number-counter="pcn"/>
+      </pre-content>
+   </volume-template>
+   <volume-template sheets-in-volume-max="4" use-when="(= $volume $volumes)">
+      <pre-content>
+         <toc-sequence toc="toc" master="main" range="volume" page-number-counter="pcn"/>
+      </pre-content>
+      <post-content>
+         <toc-sequence toc="toc" master="main" range="document" page-number-counter="pcn"/>
+      </post-content>
+   </volume-template>
+   <sequence master="main" page-number-counter="pcn">
+      <block id="chapter"/>
+      <block translate="">⠿ </block>
+      <block>⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤ ⠤⠤⠤⠤
+              ⠤⠤⠤⠤ ⠤⠤⠤⠤
+            </block>
+   </sequence>
+</obfl>

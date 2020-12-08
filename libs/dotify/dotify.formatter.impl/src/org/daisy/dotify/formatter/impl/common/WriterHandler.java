@@ -2,6 +2,7 @@ package org.daisy.dotify.formatter.impl.common;
 
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.Row;
+import org.daisy.dotify.formatter.impl.row.RowImpl;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -55,6 +56,13 @@ public class WriterHandler implements Closeable {
     private void writePage(Page p) {
         writer.newPage();
         for (Row r : p.getRows()) {
+            /*
+            This implementation is specific for the RowImpl. If someone would create an another
+            implementation of Row it's not likely that they would implement this function.
+            */
+            if (r instanceof RowImpl && ((RowImpl) r).isInvisible()) {
+                continue;
+            }
             writer.newRow(r);
         }
     }

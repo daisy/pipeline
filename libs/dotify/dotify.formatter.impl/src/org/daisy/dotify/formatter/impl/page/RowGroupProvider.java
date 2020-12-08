@@ -121,18 +121,23 @@ class RowGroupProvider {
             return new RowGroup.Builder(master.getRowSpacing()).add(new RowImpl())
                     .mergeable(false)
                     .lineProperties(lineProps)
-                    .collapsible(false).skippable(false).breakable(false).build();
+                    .collapsible(false)
+                    .skippable(false)
+                    .breakable(false)
+                    .build();
         }
         if (phase == 0) {
             phase++;
             //if there is a row group, return it (otherwise, try next phase)
             if (bcm.hasCollapsiblePreContentRows()) {
                 return setPropertiesThatDependOnHasNext(
-                        new RowGroup.Builder(master.getRowSpacing(), bcm.getCollapsiblePreContentRows()
-                    )
-                    .mergeable(true)
-                    .lineProperties(lineProps)
-                    .collapsible(true).skippable(false).breakable(false), hasNext(), g).build();
+                    new RowGroup.Builder(master.getRowSpacing(), bcm.getCollapsiblePreContentRows())
+                        .mergeable(true)
+                        .lineProperties(lineProps)
+                        .collapsible(true).skippable(false).breakable(false)
+                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
+                    hasNext(),
+                    g).build();
             }
         }
         if (phase == 1) {
@@ -145,7 +150,8 @@ class RowGroupProvider {
                         .lineProperties(lineProps)
                         .collapsible(false)
                         .skippable(false)
-                        .breakable(false),
+                        .breakable(false)
+                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
                     hasNext(),
                     g
                 ).build();
@@ -156,10 +162,11 @@ class RowGroupProvider {
             //TODO: Does this interfere with collapsing margins?
             if (shouldAddGroupForEmptyContent()) {
                 RowGroup.Builder rgb = setPropertiesForFirstContentRowGroup(
-                    new RowGroup.Builder(
-                        master.getRowSpacing(),
-                        new ArrayList<RowImpl>()
-                    ).mergeable(true).lineProperties(lineProps).skippable(true),
+                    new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>())
+                        .mergeable(true)
+                        .lineProperties(lineProps)
+                        .skippable(true)
+                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
                     bc.getRefs(),
                     g
                 );
@@ -186,7 +193,8 @@ class RowGroupProvider {
                             keepWithNext <= 0 &&
                             (Keep.AUTO == g.getKeepType() || !hasNext) &&
                             (hasNext || !bcm.hasPostContentRows())
-                        );
+                        )
+                        .displayWhen(g.getRowDataProperties().getDisplayWhen());
                 if (rowIndex == 1) { //First item
                     setPropertiesForFirstContentRowGroup(rgb, bc.getRefs(), g);
                 }
@@ -205,7 +213,8 @@ class RowGroupProvider {
                         .lineProperties(lineProps)
                         .collapsible(false)
                         .skippable(false)
-                        .breakable(keepWithNext < 0),
+                        .breakable(keepWithNext < 0)
+                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
                     hasNext(),
                     g
                 ).build();
@@ -220,7 +229,8 @@ class RowGroupProvider {
                         .lineProperties(lineProps)
                         .collapsible(true)
                         .skippable(true)
-                        .breakable(keepWithNext < 0),
+                        .breakable(keepWithNext < 0)
+                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
                     hasNext(),
                     g
                 ).build();

@@ -22,7 +22,6 @@ public class DefaultContext implements Context {
         private Space space = null;
         private final CrossReferenceHandler crh;
 
-
         public Builder(CrossReferenceHandler crh) {
             this.crh = crh;
         }

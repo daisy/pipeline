@@ -142,12 +142,15 @@ public class TableOfContentsImpl extends FormatterCoreImpl implements TableOfCon
      * @param rangeMetaPage meta page number of range blocks. Provided as a lazy value ({@link
      *     Supplier} object) so that it is not computed when not needed (when there are no matching
      *     toc-entry-on-resumed).
+     * @param blockCloner block cloner. Range blocks in a document TOC must be cloned as
+     *     they can be placed in multiple contexts.
      * @return collection of blocks
      */
     public Collection<Block> filter(
             Predicate<String> refIdFilter,
             Predicate<TocEntryOnResumedRange> rangeFilter,
-            Supplier<Integer> rangeMetaPage
+            Supplier<Integer> rangeMetaPage,
+            BlockCloner blockCloner
     ) {
         List<Block> filtered = new ArrayList<>();
         Set<TocBlock> tocBlocksWithDescendantTocEntry = new HashSet<>();
@@ -170,9 +173,9 @@ public class TableOfContentsImpl extends FormatterCoreImpl implements TableOfCon
             }
             filtered.add(b);
         }
-        Iterator<Block> i = filtered.iterator();
-        while (i.hasNext()) {
-            Block b = i.next();
+        Iterator<Block> it = filtered.iterator();
+        while (it.hasNext()) {
+            Block b = it.next();
             if (refIdForBlock.containsKey(b)) {
                 continue;
             }
@@ -184,7 +187,16 @@ public class TableOfContentsImpl extends FormatterCoreImpl implements TableOfCon
                     && tocBlocksWithDescendantTocEntry.contains(tocBlockForBlock.get(b))) {
                 continue;
             }
-            i.remove();
+            it.remove();
+        }
+        if (blockCloner != null) {
+            for (int i = 0; i < filtered.size(); ++i) {
+                Block b = filtered.get(i);
+                if (rangeForBlock.containsKey(b)) {
+                    // clone these blocks, as they may be placed in multiple contexts
+                    filtered.set(i, blockCloner.clone(b));
+                }
+            }
         }
         return filtered;
     }

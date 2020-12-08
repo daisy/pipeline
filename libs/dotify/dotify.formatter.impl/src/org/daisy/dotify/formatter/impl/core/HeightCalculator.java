@@ -1,6 +1,7 @@
 package org.daisy.dotify.formatter.impl.core;
 
 import org.daisy.dotify.api.writer.Row;
+import org.daisy.dotify.formatter.impl.row.RowImpl;
 
 import java.util.Collection;
 
@@ -29,12 +30,17 @@ public class HeightCalculator {
         }
     }
 
-    void addRow(Row r) {
+    void addRow(RowImpl r) {
+        if (r.isInvisible()) {
+            return;
+        }
         ret += getRowSpacing(r);
     }
 
     public void addRows(Collection<? extends Row> rows) {
-        ret += rows.stream().mapToDouble(this::getRowSpacing).sum();
+        ret += rows.stream()
+                .filter(row -> !(row instanceof RowImpl && ((RowImpl) row).isInvisible()))
+                .mapToDouble(this::getRowSpacing).sum();
     }
 
     public float getCurrentHeight() {

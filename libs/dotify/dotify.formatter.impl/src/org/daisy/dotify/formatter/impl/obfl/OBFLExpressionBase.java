@@ -2,6 +2,7 @@ package org.daisy.dotify.formatter.impl.obfl;
 
 import org.daisy.dotify.api.formatter.Context;
 import org.daisy.dotify.api.obfl.ExpressionFactory;
+import org.daisy.dotify.formatter.impl.core.BlockContext;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ public abstract class OBFLExpressionBase {
             VOLUME_COUNT_VARIABLE_NAME = "volumes",
             STARTED_VOLUME_NUMBER_VARIABLE_NAME = "started-volume-number",
             STARTED_PAGE_NUMBER_VARIABLE_NAME = "started-page-number",
+            STARTS_AT_TOP_OF_PAGE_VARIABLE_NAME = "starts-at-top-of-page",
             STARTED_VOLUME_FIRST_CONTENT_PAGE_NUMBER_VARIABLE_NAME = "started-volume-first-content-page",
             SHEET_COUNT_VARIABLE_NAME = "sheets-in-document",
             VOLUME_SHEET_COUNT_VARIABLE_NAME = "sheets-in-volume";
@@ -33,6 +35,7 @@ public abstract class OBFLExpressionBase {
             volumeCountVariableName = null,
             metaVolumeNumberVariableName = null,
             metaPageNumberVariableName = null,
+            startsAtTopOfPageName = null,
             sheetCountVariableName = null,
             volumeSheetCountVariableName = null;
 
@@ -76,6 +79,9 @@ public abstract class OBFLExpressionBase {
                         "may not both be used in the same expression.");
                 }
                 this.metaPageNumberVariableName = STARTED_PAGE_NUMBER_VARIABLE_NAME;
+                break;
+            case STARTS_AT_TOP_OF_PAGE:
+                this.startsAtTopOfPageName = STARTS_AT_TOP_OF_PAGE_VARIABLE_NAME;
                 break;
             case STARTED_VOLUME_FIRST_CONTENT_PAGE_NUMBER:
                 if (variablesSeen.contains(OBFLVariable.STARTED_PAGE_NUMBER)) {
@@ -128,6 +134,14 @@ public abstract class OBFLExpressionBase {
         }
         if (metaPageNumberVariableName != null) {
             variables.put(metaPageNumberVariableName, "" + context.getMetaPage());
+        }
+        if (startsAtTopOfPageName != null) {
+            if (!(context instanceof BlockContext)) {
+                throw new IllegalArgumentException(
+                    "Use of starts-at-top-of-page in a none block context is not allowed."
+                );
+            }
+            variables.put(startsAtTopOfPageName, "" + ((BlockContext) context).isTopOfPage());
         }
         if (sheetCountVariableName != null) {
             variables.put(sheetCountVariableName, "" + context.getSheetsInDocument());

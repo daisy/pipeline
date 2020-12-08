@@ -82,6 +82,7 @@ class ScenarioData {
             blockProcessor.getNextRowGroup(bc, LineProperties.DEFAULT)
                     .ifPresent(rg -> dataGroups.peek().getGroup().add(rg));
         }
+
         dataGroups.peek().getBlocks().add(g);
     }
 

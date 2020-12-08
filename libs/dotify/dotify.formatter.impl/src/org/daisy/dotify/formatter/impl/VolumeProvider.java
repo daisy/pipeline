@@ -44,13 +44,12 @@ import java.util.logging.Logger;
  * <p>The input is a list of {@link BlockSequence}s, which are first converted to a sequence of
  * "volume groups", where every group is a list of {@link BlockSequence}s, of which the first one
  * has a hard volume break (<code>break-before="volume"</code>). For every volume group a {@link
- * SheetDataSource} is then created, which is wrapped in a {@link SheetGroup} together with its
- * respective {@link org.daisy.dotify.formatter.impl.sheet.VolumeSplitter}, which determines the
- * number of required volumes and their target sizes. All groups are managed in a {@link
- * SheetGroupManager}. {@link SheetDataSource}s that do not fit in a volume are broken, using {@link
- * SplitPointHandler}. The cost function takes into account how much the total size of a volume
- * deviates from the target size, the <code>volume-break-priority</code> of the last sheet, and
- * whether the {@link Sheet#isBreakable() isBreakable} constraint of the last sheet is violated.</p>
+ * SheetDataSource} is then created, which is wrapped in a {@link SheetGroup}. All groups are
+ * managed in a {@link SheetGroupManager}. {@link SheetDataSource}s that do not fit in a volume are
+ * broken, using {@link SplitPointHandler}. The cost function takes into account how much the total
+ * size of a volume deviates from the target size, the <code>volume-break-priority</code> of the
+ * last sheet, and whether the {@link Sheet#isBreakable() isBreakable} constraint of the last sheet
+ * is violated.</p>
  *
  * <p>Pre- and post-content is added to every volume based on the provided {@link
  * VolumeTemplate}s.</p>
@@ -111,18 +110,17 @@ public class VolumeProvider {
      */
     void prepare() {
         if (!init) {
-            groups = new SheetGroupManager(splitterLimit);
+            groups = new SheetGroupManager();
             // make a preliminary calculation based on a contents only
             Iterable<SheetDataSource> allUnits = prepareToPaginateWithVolumeGroups(
                 blocks,
                 new DefaultContext.Builder(crh).space(Space.BODY).build()
             );
-            int volCount = 0;
+            int volCount = 0; // initial estimate of volume count
             for (SheetDataSource data : allUnits) {
-                SheetGroup g = groups.add();
-                g.setUnits(data);
-                g.getSplitter().updateSheetCount(data.getRemaining().size(), data.getRemaining().size());
-                volCount += g.getSplitter().getVolumeCount();
+                groups.add().setUnits(data);
+                volCount += (1 + (data.getRemaining().size() - 1)
+                                 / splitterLimit.getSplitterLimit(volCount + 1));
             }
             crh.setVolumeCount(volCount);
             //if there is an error, we won't have a proper initialization and have to retry from the beginning
@@ -177,8 +175,7 @@ public class VolumeProvider {
      */
     private SectionBuilder nextBodyContents(int volumeNumber, final int overhead, ArrayList<AnchorData> ad) {
         groups.currentGroup().setOverheadCount(groups.currentGroup().getOverheadCount() + overhead);
-        final int splitterMax = splitterLimit.getSplitterLimit(volumeNumber);
-        final int targetSheetsInVolume = (groups.lastInGroup() ? splitterMax : groups.sheetsInCurrentVolume());
+        final int targetSheetsInVolume = splitterLimit.getSplitterLimit(volumeNumber);
         //Not using lambda for now, because it's noticeably slower.
         SplitPointCost<Sheet> cost = new SplitPointCost<Sheet>() {
             @Override
@@ -188,7 +185,7 @@ public class VolumeProvider {
                 double priorityPenalty = 0;
                 int sheetCount = index + 1;
                 // Calculates a maximum offset based on the maximum possible number of sheets
-                double range = splitterMax * 0.4;
+                double range = targetSheetsInVolume * 0.4;
                 if (!units.isEmpty()) {
                     VolumeKeepPriority avoid = lastSheet.getAvoidVolumeBreakAfterPriority();
                     if (avoid.hasValue()) {
@@ -217,13 +214,13 @@ public class VolumeProvider {
         SheetDataSource data = groups.currentGroup().getUnits();
         data.setCurrentVolumeNumber(volumeNumber);
         SheetDataSource copySource = new SheetDataSource(data);
-        SplitPointSpecification spec = volSplitter.find(splitterMax - overhead,
+        SplitPointSpecification spec = volSplitter.find(targetSheetsInVolume - overhead,
                 copySource,
                 cost, StandardSplitOption.ALLOW_FORCE);
         crh.setReadWrite();
         sp = volSplitter.split(spec, data);
         /*
-            sp = volSplitter.split(splitterMax-overhead,
+            sp = volSplitter.split(targetSheetsInVolume-overhead,
                     groups.currentGroup().getUnits(),
                     cost, StandardSplitOption.ALLOW_FORCE);
         */
@@ -295,7 +292,7 @@ public class VolumeProvider {
             }
             return sb;
         } catch (PaginatorException e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -380,21 +377,13 @@ public class VolumeProvider {
      * @return returns true if the volumes can be accepted, false otherwise
      */
     boolean done() {
-        if (groups.hasNext() && logger.isLoggable(Level.FINE)) {
-            logger.fine("There is more content (sheets: " +
-                    groups.countRemainingSheets() + ", pages: " +
-                    groups.countRemainingPages() + ")");
-        }
-        // this changes the value of groups.getVolumeCount() to the newly computed
-        // required number of volume based on groups.countTotalSheets()
-        groups.updateAll();
         crh.commitBreakable();
         crh.commitTransitionProperties();
         crh.trimPageDetails();
         crh.setVolumeCount(groups.getVolumeCount());
         crh.setSheetsInDocument(groups.countTotalSheets());
         //crh.setPagesInDocument(value);
-        if (!crh.isDirty() && !groups.hasNext()) {
+        if (!crh.isDirty()) {
             return true;
         } else {
             crh.setDirty(false);
@@ -404,8 +393,8 @@ public class VolumeProvider {
         return false;
     }
 
-    int getVolumeCount() {
-        return crh.getVolumeCount();
+    boolean hasNext() {
+        return groups.hasNext();
     }
 
 }

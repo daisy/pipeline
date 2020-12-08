@@ -6,16 +6,36 @@
 			<dc:identifier>identifier?</dc:identifier>
 			<dc:date>2020-06-04</dc:date>
 			<dc:title>Right text indent</dc:title>
-			<dc:description>Tests a right-aligned leader on the last line of a block which is indented on the right side for all the other lines.</dc:description>
+			<dc:description>Tests a leader on the last line of a block that is indented on the right side for all the other lines. Tests both right alignment and left aligment. Tests both with a leader that is aligned to the right edge of the page and with a leader that is aligned to a position that is further than 'right-text-indent' cells away from the right edge of the page.</dc:description>
 		</meta>
 	</head>
 	<body>
-		<volume cols="20" rows="10" rowgap="0" duplex="false">
+		<volume cols="20" rows="20" rowgap="0" duplex="false">
 			<section>
 				<page>
 					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
 					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
-					<row>⠿⠿⠿⠀⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠀⠿⠿</row>
+					<row>⠿⠿⠿⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠤⠤⠤⠤⠤⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠤⠤⠤⠤⠤⠤⠤⠤⠿⠿</row>
+				</page>
+				<page>
+					<row>⠿⠿⠿⠿⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
+					<row>⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠿⠿</row>
 				</page>
 			</section>
 		</volume>

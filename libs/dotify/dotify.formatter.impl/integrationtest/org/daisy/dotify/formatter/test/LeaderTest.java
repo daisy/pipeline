@@ -59,4 +59,16 @@ public class LeaderTest extends AbstractFormatterEngineTest {
             false
         );
     }
+
+    @Test
+    public void testLeaderFlowInFooter() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/leader-flow-in-footer-input.obfl",
+            "resource-files/leader-flow-in-footer-expected.pef",
+            false
+        );
+    }
 }

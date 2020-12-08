@@ -199,7 +199,7 @@ public class BorderManager {
         }
     }
 
-    private void addRowInner(Row r) {
+    private void addRowInner(RowImpl r) {
         ret2.add(r);
         hc.addRow(r);
     }
@@ -238,7 +238,9 @@ public class BorderManager {
                 "Row is too long (" + rowWidth + "/" + master.getPageWidth() + ") '" + res + "'"
             );
         }
-        return new RowImpl.Builder(res).addExternalReference(row.getExternalReference());
+        return new RowImpl.Builder(res)
+                .invisible(row.isInvisible())
+                .addExternalReference(row.getExternalReference());
     }
 
 }

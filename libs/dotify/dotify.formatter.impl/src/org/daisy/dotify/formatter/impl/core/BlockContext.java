@@ -10,6 +10,7 @@ import org.daisy.dotify.formatter.impl.search.Space;
 public class BlockContext extends DefaultContext {
     private final int flowWidth;
     private final FormatterContext fcontext;
+    private final boolean topOfPage;
 
     /**
      * TODO: Write java doc.
@@ -17,11 +18,13 @@ public class BlockContext extends DefaultContext {
     public static class Builder extends DefaultContext.Builder {
         private int flowWidth = 0;
         private FormatterContext fcontext = null;
+        private boolean topOfPage;
 
         public Builder(BlockContext base) {
             super(base);
             this.flowWidth = base.flowWidth;
             this.fcontext = base.fcontext;
+            this.topOfPage = base.topOfPage;
         }
 
         protected Builder(DefaultContext base) {
@@ -35,6 +38,11 @@ public class BlockContext extends DefaultContext {
 
         public Builder formatterContext(FormatterContext value) {
             this.fcontext = value;
+            return this;
+        }
+
+        public Builder topOfPage(boolean value) {
+            this.topOfPage = value;
             return this;
         }
 
@@ -83,6 +91,7 @@ public class BlockContext extends DefaultContext {
         super(builder);
         this.flowWidth = builder.flowWidth;
         this.fcontext = builder.fcontext;
+        this.topOfPage = builder.topOfPage;
     }
 
     public static BlockContext.Builder from(DefaultContext base) {
@@ -99,6 +108,17 @@ public class BlockContext extends DefaultContext {
 
     public FormatterContext getFcontext() {
         return fcontext;
+    }
+
+    /**
+     * This is the top of page boolean. It will be set to true during the rendering to signify that you
+     * are currently at the top of the page in this context. When you try to write the first data to the
+     * page you are no longer at the top of the page and this value will be changed to false.
+     *
+     * @return  boolean     Will be true if you are at the top of the page during rendering.
+     */
+    public boolean isTopOfPage() {
+        return topOfPage;
     }
 
     @Override
