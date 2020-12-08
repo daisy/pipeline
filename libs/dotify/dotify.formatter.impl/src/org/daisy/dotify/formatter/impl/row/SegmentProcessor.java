@@ -51,6 +51,10 @@ class SegmentProcessor {
 
     private DefaultContext context;
     private final boolean significantContent;
+    /**
+     * Whether some segments are PageNumberReference or Evaluate
+     */
+    private final boolean dynamicContent;
     private final SegmentProcessorContext processorContext;
 
     private int segmentIndex;
@@ -133,6 +137,9 @@ class SegmentProcessor {
         this.externalReference = null;
         this.leaderManager = new LeaderManager();
         this.significantContent = calculateSignificantContent(this.segments, context, rdp);
+        this.dynamicContent = this.segments.stream().anyMatch(
+            s -> s.getSegmentType() == SegmentType.Evaluate ||
+                 s.getSegmentType() == SegmentType.PageReference);
         this.processorContext = new SegmentProcessorContext(fcontext, rdp, margins, flowWidth, available);
         this.blockId = blockId;
         this.pagenumResolver = (rs) -> {
@@ -177,6 +184,7 @@ class SegmentProcessor {
         this.current = template.current != null ? copy(template.current) : null;
         this.closed = template.closed;
         this.significantContent = template.significantContent;
+        this.dynamicContent = template.dynamicContent;
         this.blockId = template.blockId;
         this.pagenumResolver = template.pagenumResolver;
         // can't simply copy because getContext() of template would be used
@@ -575,7 +583,12 @@ class SegmentProcessor {
                     .attributes(attr)
                     .build();
             btr = toResult(spec, mode);
-            ts.storeResult(btr);
+            // Do not cache the braille translation of this text segment if there are preceding or
+            // following segments whos values can change, because this may influence the translation
+            // of the text segment.
+            if (!dynamicContent) {
+                ts.storeResult(btr);
+            }
         } else {
             btr = ts.newResult();
         }
