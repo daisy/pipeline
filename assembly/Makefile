@@ -213,7 +213,7 @@ PROFILES :=                 \
 mvn :
 ifndef DUMP_PROFILES
 	set -o pipefail; \
-	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS)) | $(MVN_LOG)
+	$(MVN) clean install -DskipTests $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS)) | $(MVN_LOG)
 endif
 
 .PHONY : $(addprefix -P,$(PROFILES))

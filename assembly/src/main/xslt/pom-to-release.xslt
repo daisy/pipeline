@@ -81,15 +81,15 @@
                                         <xsl:with-param name="deployPath" select="$deployPath"/>
                                 </xsl:apply-templates>
                         </xsl:for-each>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='linux']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-linux']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='unpack-cli-linux']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-linux']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">linux_386</xsl:with-param>
                         </xsl:apply-templates>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='mac']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-mac']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='unpack-cli-mac']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-mac']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">darwin_386</xsl:with-param>
                         </xsl:apply-templates>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='win']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-win']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='unpack-cli-win']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-win']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">windows_386</xsl:with-param>
                         </xsl:apply-templates>
@@ -139,12 +139,6 @@
                                                         if ($classifier) then concat('-',$classifier) else '',
                                                         '.jar')"/>
                 <xsl:variable name="id" select="string-join(($groupId,$artifactId,$version,$classifier),'/')"/>
-                <!--
-                    This is a hack, real solution is to do this in the POM
-                -->
-                <xsl:variable name="deployPath" select="if (starts-with($artifactId,'org.apache.felix.gogo.'))
-                                                        then concat($deployPath,'/gogo')
-                                                        else $deployPath"/>
                 <xsl:variable name="finalPath" select="if (pom:destFileName) then concat($deployPath,'/',string(pom:destFileName)) else
                                                        concat($deployPath,'/',$groupId,'.',$artifactId,'-',$version,
                                                         if ($classifier) then concat('-',$classifier) else '',

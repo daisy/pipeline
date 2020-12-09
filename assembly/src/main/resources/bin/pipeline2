@@ -359,7 +359,7 @@ run() {
     MAIN=org.apache.felix.main.Main
     MODE=" -Dorg.daisy.pipeline.main.mode=webservice"
 
-    while [ "$1" != "" ]; do
+    while [ "$#" -gt 0 ]; do
       case "$1" in
         # 'stop')
         #     MAIN=org.apache.karaf.main.Stop
@@ -402,6 +402,9 @@ run() {
             MODE=" -Dorg.daisy.pipeline.main.mode=gui"
             shift
             ;;
+        '*')
+            die "Unexpected argument: $1"
+            ;;
       esac
     done
 
@@ -428,11 +431,13 @@ run() {
     if [ $JAVA_VERSION -lt 9 ]; then
         # java 8
         eval exec "\"$JAVA"\" "$JAVA_OPTS" \
+             -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" \
+             -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\" \
              -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" \
              -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
              -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
              -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
-             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
+             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN
     else
         # java >= 9
         eval exec "\"$JAVA"\" "$JAVA_OPTS" \
@@ -452,7 +457,7 @@ run() {
              -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
              -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
              -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
-             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
+             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN
     fi
 }
 
