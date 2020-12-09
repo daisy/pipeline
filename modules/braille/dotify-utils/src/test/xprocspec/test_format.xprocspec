@@ -6643,10 +6643,6 @@
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                 </page>
-              </section>
-            </volume>
-            <volume cols="10" rows="6" rowgap="0" duplex="true">
-              <section>
                 <page>
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
@@ -6663,15 +6659,19 @@
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                 </page>
-                <page>
-                  <row>⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤</row>
-                </page>
               </section>
               <section>
                 <page>
                   <row>⠭⠭⠭</row>
                   <row>⠿⠿⠿⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="6" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
                 </page>
               </section>
             </volume>
@@ -13184,6 +13184,20 @@
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
                   <row>⠒⠒⠒⠀⠼⠁⠀⠒⠒⠒</row>
                 </page>
               </section>
@@ -13192,20 +13206,6 @@
               <section>
                 <page>
                   <row>⠒⠒⠒⠀⠼⠃⠀⠒⠒⠒</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                </page>
-                <page>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                </page>
-                <page>
-                  <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>

@@ -325,10 +325,6 @@
                     <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                     <row>⠿⠿</row>
                 </page>
-            </section>
-        </volume>
-        <volume cols="15" rows="6" rowgap="0" duplex="false">
-            <section>
                 <page>
                     <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
                     <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
@@ -337,6 +333,10 @@
                     <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
                     <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
                 </page>
+            </section>
+        </volume>
+        <volume cols="15" rows="6" rowgap="0" duplex="false">
+            <section>
                 <page>
                     <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
                     <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
