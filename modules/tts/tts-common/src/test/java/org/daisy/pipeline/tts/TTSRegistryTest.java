@@ -442,7 +442,7 @@ public class TTSRegistryTest {
 		        exactMatch);
 		Assert.assertFalse(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, vendor);
+		Assert.assertEquals(vendor, v.engine);
 		Assert.assertEquals(voiceName, v.name);
 	}
 }

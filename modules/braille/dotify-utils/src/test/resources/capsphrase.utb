@@ -36,6 +36,7 @@ digit 7 2356
 digit 8 236
 digit 9 35
 
+noback correct "0" "ZERO" # FIXME: this should not be needed! (Dotify issue)
 noback correct "2" "TWO"
 
 sign ⠠ 6
@@ -46,5 +47,4 @@ begcapsword 6-6
 endcapsword 6-3
 lencapsphrase 3
 begcapsphrase 6-6-6
-begcaps 6-6-6
-endcaps 6-3
+endcapsphrase after 6-3

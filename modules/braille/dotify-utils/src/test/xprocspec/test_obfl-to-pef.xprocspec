@@ -706,7 +706,7 @@
                 ONE TWO <marker class="x" value="y"/> THREE
               </block>
               <block>
-                ONE <evaluate expression="(round 2)"/> THREE
+                ONE <evaluate expression="2"/> THREE
               </block>
               <block>
                 ONE <evaluate expression="TWO"/> THREE

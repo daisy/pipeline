@@ -166,15 +166,28 @@
                         </p:input>
                     </px:transform>
                 </p:group>
-                <p:catch>
+                <p:catch name="catch">
                     <p:output port="pef" primary="true">
                         <p:empty/>
                     </p:output>
                     <p:output port="status">
-                        <p:inline>
-                            <d:status result="error"/>
-                        </p:inline>
+                        <p:pipe step="status" port="result"/>
                     </p:output>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:inline>
+                                <d:status result="error"/>
+                            </p:inline>
+                        </p:input>
+                    </p:identity>
+                    <px:log-error severity="ERROR">
+                        <p:input port="error">
+                            <p:pipe step="catch" port="error"/>
+                        </p:input>
+                    </px:log-error>
+                    <p:identity px:message="Failed to convert OBFL to PEF (Please see detailed log for more info.)"
+                                px:message-severity="ERROR"/>
+                    <p:identity name="status"/>
                     <p:sink/>
                 </p:catch>
             </p:try>

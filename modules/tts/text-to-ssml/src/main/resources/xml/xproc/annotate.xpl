@@ -1,6 +1,6 @@
-<p:declare-step type="px:annotate" version="1.0" name="main"
+<p:declare-step type="pxi:annotate" version="1.0" name="main"
 		xmlns:p="http://www.w3.org/ns/xproc"
-		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+		xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
 		exclude-inline-prefixes="#all">
 
   <p:input port="source" primary="true"/>

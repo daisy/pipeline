@@ -119,6 +119,11 @@ specific.
         </p:documentation>
     </p:option>
     
+    <p:output port="tts-log" sequence="true">
+        <!-- defined in common-options.xpl -->
+        <p:pipe step="convert" port="tts-log"/>
+    </p:output>
+    
     <p:import href="epub3-to-epub3.load.xpl">
         <p:documentation>
             px:epub3-to-epub3.load
