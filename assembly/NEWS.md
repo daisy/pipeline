@@ -1,3 +1,47 @@
+Changes in release v1.14.1
+==========================
+
+### Distribution/Installation
+
+- By default the system is now run without OSGi. An option was provided to run the system within an
+  OSGi framework (Apache Felix) like before.
+- Configuration was simplified.
+- The location of the user properties configuration file was changed. See the [Help
+  pages](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service/#configuration-files)
+  for more information.
+
+### Framework
+
+- Repetitive log messages are hidden.
+- Some improvements were made to the Java API. The long-term goal is to make Pipeline usable as Java
+  library.
+
+### Graphical User Interface
+
+- Made compatible with MacOS Big Sur.
+
+### Modules
+
+- Changes to braille production scripts, see [release notes of Braille modules v1.14.0](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1140)
+- **NEW** Support for ssml:ph and ssml:alphabet attributes in EPUB 3 (for Text-To-Speech)
+- **NEW** TTS log output for EPUB 3 Enhancer script
+- **FIX** Improvements to TTS voice selection logic
+- **FIX** Timeout issues in TTS process
+- **FIX** Bug in DAISY 3 to DAISY 2.02 (empty title field in NCC)
+- Various other bugfixes and improvements
+
+### Details
+
+- [Closed issues in braille-css](https://github.com/issues?q=repo%3Adaisy%2Fbraille-css+milestone%3Av1.14.1)
+- [Closed issues in jStyleParser](https://github.com/issues?q=repo%3Adaisy%2FjStyleParser+milestone%3Av1.14.1)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.14.1)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.1)
+- [Closed issues in pipeline-build-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-build-utils+milestone%3Av1.14.1)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.1)
+- [Closed issues in pipeline-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.14.1)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.1)
+- [Closed issues in pipeline-updater-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-updater-gui+milestone%3Av1.14.1)
+
 Changes in release v1.13.6
 ==========================
 

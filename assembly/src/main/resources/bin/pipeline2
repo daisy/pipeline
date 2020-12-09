@@ -121,7 +121,7 @@ unlimitFD() {
 
 locateHome() {
     if [ "x$PIPELINE2_HOME" != "x" ]; then
-        warn "Ignoring predefined value for PIPELINE2_HOME"
+        warn "Ignoring value for PIPELINE2_HOME"
     fi
     
     # In POSIX shells, CDPATH may cause cd to write to stdout
@@ -133,36 +133,36 @@ locateHome() {
     fi
 }
 
-locateBase() {
-    if [ "x$PIPELINE2_BASE" != "x" ]; then
-        if [ ! -d "$PIPELINE2_BASE" ]; then
-            die "PIPELINE2_BASE is not valid: $PIPELINE2_BASE"
-        fi
-    else
-        PIPELINE2_BASE=$PIPELINE2_HOME
-    fi
-}
-
 locateData() {
     if [ "x$PIPELINE2_DATA" != "x" ]; then
         if [ ! -d "$PIPELINE2_DATA" ]; then
                 mkdir -p $PIPELINE2_DATA
         fi
     else
-        PIPELINE2_DATA=$PIPELINE2_BASE/data
+        PIPELINE2_DATA=$PIPELINE2_HOME/data
+    fi
+}
+
+locateLog() {
+    if [ "x$PIPELINE2_LOGDIR" != "x" ]; then
+        if [ ! -d "$PIPELINE2_LOGDIR" ]; then
+                mkdir -p $PIPELINE2_LOG
+        fi
+    else
+        PIPELINE2_LOGDIR=$PIPELINE2_DATA/log
     fi
 }
 
 locateConfig() {
     if [ "x$PIPELINE2_CONFIG" != "x" ]; then
-        warn "Ignoring predefined value for PIPELINE2_CONFIG"
+        warn "Ignoring value for PIPELINE2_CONFIG"
     fi
     PIPELINE2_CONFIG=$PIPELINE2_HOME/etc
 }
 
 setupNativePath() {
     # Support for loading native libraries
-    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$PIPELINE2_BASE/lib:$PIPELINE2_HOME/lib"
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$PIPELINE2_HOME/lib"
 
     # For Cygwin, set PATH from LD_LIBRARY_PATH
     if $cygwin; then
@@ -276,6 +276,21 @@ setupDebugOptions() {
     fi
 }
 
+listJars() {
+    local var=$1
+    shift
+    local IFS=$'\n'
+    read -d '' -r -a $var < <(cd "$PIPELINE2_HOME" && find $@ -name '*.jar' -d 1 2>/dev/null)
+}
+
+join() {
+    local d=$1
+    shift
+    local f=$1
+    shift
+    printf %s "$f" "${@/#/$d}"
+}
+
 setupDefaults() {
     # add startOnFirstThread for the GUI
     DEFAULT_JAVA_OPTS=""
@@ -293,15 +308,6 @@ setupDefaults() {
         fi
     fi
 
-    # Add the jars in the lib dir
-    for file in "$PIPELINE2_HOME"/system/bootstrap/*.jar
-    do
-        if [ -z "$CLASSPATH" ]; then
-            CLASSPATH="$file"
-        else
-            CLASSPATH="$CLASSPATH:$file"
-        fi
-    done
     DEFAULT_JAVA_DEBUG_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 
     ##
@@ -322,16 +328,10 @@ init() {
     if [ -e "$DIRNAME/debian.cfg" ]; then
         . "$DIRNAME/debian.cfg"
     else
-        # Locate the Karaf home directory
+        # Locate directories
         locateHome
-        
-        # Locate the Karaf base directory
-        locateBase
-    
-        # Locate the Karaf data directory
         locateData
-
-        # Locate the directory where Pipeline2 configuration files are stored
+        locateLog
         locateConfig
     fi
     
@@ -356,18 +356,17 @@ init() {
 }
 
 run() {
-    MAIN=org.apache.felix.main.Main
-    MODE=" -Dorg.daisy.pipeline.main.mode=webservice"
+    MODE=webservice
+    ENABLE_OSGI=false
+    ENABLE_PERSISTENCE=true
+    ENABLE_SHELL=false
 
-    while [ "$1" != "" ]; do
+    while [ "$#" -gt 0 ]; do
       case "$1" in
-        # 'stop')
-        #     MAIN=org.apache.karaf.main.Stop
-        #     shift
-        #     ;;
-        # 'console')
-        #     shift
-        #     ;;
+        'osgi')
+            ENABLE_OSGI=true
+            shift
+            ;;
         'remote')
             PIPELINE2_WS_LOCALFS=false
             PIPELINE2_WS_AUTHENTICATION=true
@@ -390,49 +389,121 @@ run() {
             shift
             ;;
         'shell')
-            GOGO_BUNDLES=$(cd "$PIPELINE2_BASE" && echo $(find system/felix/gogo -name '*.jar' 2>/dev/null | while read f; do echo "file:$f"; done))
-            if [ -z "$GOGO_BUNDLES" ]; then
-                warn "Shell could not be enabled"
-            else
-                FELIX_OPTS="${FELIX_OPTS} -Dfelix.auto.start.1=\"$GOGO_BUNDLES\""
-            fi
+            ENABLE_SHELL=true
             shift
             ;;
         'gui')
-            MODE=" -Dorg.daisy.pipeline.main.mode=gui"
+            MODE=gui
+            ENABLE_PERSISTENCE=false
             shift
+            ;;
+        '*')
+            die "Unexpected argument: $1"
             ;;
       esac
     done
+
+    if [ "$ENABLE_OSGI" = "true" ]; then
+        PATHS="$PATHS system/osgi/bundles"
+    else
+        PATHS="$PATHS system/no-osgi"
+    fi
+    PATHS="$PATHS system/$MODE"
+    if [ "$ENABLE_SHELL" = "true" ]; then
+        if [ "$ENABLE_OSGI" = "true" ]; then
+            PATHS="$PATHS system/osgi/gogo"
+        else
+            warn "Shell can only be enabled under OSGi"
+        fi
+    fi
+    if [ "$ENABLE_PERSISTENCE" = "true" ]; then
+        PATHS="$PATHS system/persistence"
+        if [ "$ENABLE_OSGI" = "true" ]; then
+            PATHS="$PATHS system/osgi/persistence"
+        else
+            PATHS="$PATHS system/no-osgi/persistence"
+        fi
+    else
+        PATHS="$PATHS system/volatile"
+    fi
+    if [ "$ENABLE_OSGI" = "true" ]; then
+        if [ "$MODE" = "gui" ]; then
+            listJars OSGI_BOOTSTRAP_JARS system/osgi/bootstrap system/gui/bootstrap
+        else
+            listJars OSGI_BOOTSTRAP_JARS system/osgi/bootstrap
+        fi
+        CLASSPATH="$(join : ${OSGI_BOOTSTRAP_JARS[@]})"
+        MAIN=org.apache.felix.main.Main
+        eval listJars AUTO_START_BUNDLES $PATHS
+        # system/common is included through felix.auto.deploy.dir setting
+        #  (see felix.properties)
+        # modules is included through felix.fileinstall.dir settings
+        #  (see felix.properties and org.apache.felix.fileinstall-modules.cfg)
+        OSGI_OPTS="-Dfelix.config.properties=\"file:$PIPELINE2_HOME/etc/felix.properties\" \
+                   -Dfelix.auto.start.1=\"$(join ' ' ${AUTO_START_BUNDLES[@]/#/file:})\""
+    else
+        if [ "$MODE" = "gui" ]; then
+            PATHS="system/gui/bootstrap $PATHS"
+        fi
+        eval listJars JARS system/common $PATHS modules
+        CLASSPATH="$(join : ${JARS[@]})"
+        if [ "$MODE" = "webservice" ]; then
+            MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
+        else
+            MAIN=org.daisy.pipeline.gui.GUIService
+        fi
+    fi
 
     JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${PIPELINE2_HOME}/lib/endorsed"
     JAVA_EXT_DIRS="${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext:${PIPELINE2_HOME}/lib/ext"
     if $cygwin; then
         PIPELINE2_HOME=`cygpath --path --windows "$PIPELINE2_HOME"`
-        PIPELINE2_BASE=`cygpath --path --windows "$PIPELINE2_BASE"`
         PIPELINE2_DATA=`cygpath --path --windows "$PIPELINE2_DATA"`
+        PIPELINE2_LOGDIR=`cygpath --path --windows "$PIPELINE2_LOGDIR"`
         PIPELINE2_CONFIG=`cygpath --path --windows "$PIPELINE2_CONFIG"`
         CLASSPATH=`cygpath --path --windows "$CLASSPATH"`
         JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
         JAVA_ENDORSED_DIRS=`cygpath --path --windows "$JAVA_ENDORSED_DIRS"`
         JAVA_EXT_DIRS=`cygpath --path --windows "$JAVA_EXT_DIRS"`
     fi
-    cd "$PIPELINE2_BASE"
+    cd "$PIPELINE2_HOME"
 
-    export PIPELINE2_HOME # also available as org.daisy.pipeline.home in system.properties
-    export PIPELINE2_BASE # also available as org.daisy.pipeline.data in system.properties
+    export PIPELINE2_HOME
     export PIPELINE2_DATA
+    export PIPELINE2_LOGDIR
     export PIPELINE2_WS_LOCALFS
     export PIPELINE2_WS_AUTHENTICATION
     
+    # Logback configuration file
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dlogback.configurationFile=\"file:${PIPELINE2_CONFIG}/config-logback.xml\""
+    # XMLCalabash base configuration file
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.xproc.configuration=\"${PIPELINE2_HOME}/etc/config-calabash.xml\""
+    # Version number as returned by "alive" call
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.version=${project.version}"
+    # Updater configuration
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.updater.bin=\"${PIPELINE2_HOME}/updater/${pipeline.updater}\"
+                                  -Dorg.daisy.pipeline.updater.deployPath=\"${PIPELINE2_HOME}/\"
+                                  -Dorg.daisy.pipeline.updater.releaseDescriptor=\"${PIPELINE2_HOME}/etc/releaseDescriptor.xml\""
+    # Workaround for encoding bugs on Windows
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dfile.encoding=UTF8"
+
+    # to make ${org.daisy.pipeline.data}, ${org.daisy.pipeline.logdir} and ${org.daisy.pipeline.mode}
+    # available in config-logback.xml and felix.properties
+    # note that config-logback.xml is the only place where ${org.daisy.pipeline.mode} is used
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.data=\"$PIPELINE2_DATA\"
+                                  -Dorg.daisy.pipeline.logdir=\"$PIPELINE2_LOGDIR\"
+                                  -Dorg.daisy.pipeline.mode=$MODE"
+
     if [ $JAVA_VERSION -lt 9 ]; then
         # java 8
         eval exec "\"$JAVA"\" "$JAVA_OPTS" \
-             -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" \
-             -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
-             -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
-             -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
-             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
+             -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" \
+             -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\" \
+             $OSGI_OPTS \
+             -Dorg.daisy.pipeline.properties="\"$PIPELINE2_CONFIG/pipeline.properties\"" \
+             $SYSTEM_PROPS \
+             -classpath "\"$CLASSPATH"\" \
+             $MAIN
     else
         # java >= 9
         eval exec "\"$JAVA"\" "$JAVA_OPTS" \
@@ -448,11 +519,11 @@ run() {
              --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED \
              --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED \
              --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED \
-             -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" \
-             -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" \
-             -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" \
-             -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" \
-             $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@\""
+             $OSGI_OPTS \
+             -Dorg.daisy.pipeline.properties="\"$PIPELINE2_CONFIG/pipeline.properties\"" \
+             $SYSTEM_PROPS \
+             -classpath "\"$CLASSPATH"\" \
+             $MAIN
     fi
 }
 

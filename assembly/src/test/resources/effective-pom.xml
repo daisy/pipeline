@@ -1119,21 +1119,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <profiles>
+    <profile>
+    <id>copy-artifacts</id>
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>1.0.1</version>
-                <executions>
-                    <execution>
-                        <id>enforce-maven</id>
-                        <configuration/>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.7</version>
                 <executions>
                     <execution>
                         <id>copy-felix-launcher</id>
@@ -1151,31 +1143,6 @@
                         <id>copy-felix-bundles</id>
                         <configuration>
                             <artifactItems>
-                                <artifactItem>
-                                    <groupId>ch.qos.logback</groupId>
-                                    <artifactId>logback-classic</artifactId>
-                                    <version>1.0.11</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>ch.qos.logback</groupId>
-                                    <artifactId>logback-core</artifactId>
-                                    <version>1.0.11</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.felix</groupId>
-                                    <artifactId>org.apache.felix.gogo.command</artifactId>
-                                    <version>0.14.0</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.felix</groupId>
-                                    <artifactId>org.apache.felix.gogo.runtime</artifactId>
-                                    <version>0.12.1</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.felix</groupId>
-                                    <artifactId>org.apache.felix.gogo.shell</artifactId>
-                                    <version>0.10.0</version>
-                                </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.felix</groupId>
                                     <artifactId>org.apache.felix.configadmin</artifactId>
@@ -1215,25 +1182,43 @@
                                     <groupId>org.osgi</groupId>
                                     <artifactId>org.osgi.enterprise</artifactId>
                                 </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-felix-gogo</id>
+                        <configuration>
+                            <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.slf4j</groupId>
-                                    <artifactId>slf4j-api</artifactId>
+                                    <groupId>org.apache.felix</groupId>
+                                    <artifactId>org.apache.felix.gogo.command</artifactId>
+                                    <version>0.14.0</version>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.slf4j</groupId>
-                                    <artifactId>jul-to-slf4j</artifactId>
+                                    <groupId>org.apache.felix</groupId>
+                                    <artifactId>org.apache.felix.gogo.runtime</artifactId>
+                                    <version>0.12.1</version>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.slf4j</groupId>
-                                    <artifactId>jcl-over-slf4j</artifactId>
+                                    <groupId>org.apache.felix</groupId>
+                                    <artifactId>org.apache.felix.gogo.shell</artifactId>
+                                    <version>0.10.0</version>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-persistence-libs-bundles</id>
+                        <id>copy-persistence</id>
                         <configuration>
                             <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>persistence-derby</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>framework-persistence</artifactId>
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>org.eclipse</groupId>
                                     <artifactId>org.eclipse.gemini.jpa</artifactId>
@@ -1274,9 +1259,60 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-framework-libs-bundles</id>
+                        <id>copy-volatile</id>
                         <configuration>
                             <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>framework-volatile</artifactId>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-framework</id>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>common-utils</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>framework-core</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>logging-appender</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>xproc-api</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>calabash-adapter</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>modules-registry</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>push-notifier</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>webservice-utils</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>xmlcatalog</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>xpath-registry</artifactId>
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>javax.xml.crypto</groupId>
                                     <artifactId>jsr105-api</artifactId>
@@ -1307,10 +1343,6 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.daisy.libs</groupId>
-                                    <artifactId>logback-osgi-adapter</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.libs</groupId>
                                     <artifactId>saxon-he</artifactId>
                                 </artifactItem>
                                 <artifactItem>
@@ -1332,6 +1364,66 @@
                                 <artifactItem>
                                     <groupId>commons-io</groupId>
                                     <artifactId>commons-io</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.codehaus.woodstox</groupId>
+                                    <artifactId>woodstox-core-lgpl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.codehaus.woodstox</groupId>
+                                    <artifactId>stax2-api</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.mysql.jdbc</groupId>
+                                    <artifactId>com.springsource.com.mysql.jdbc</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>ch.qos.logback</groupId>
+                                    <artifactId>logback-classic</artifactId>
+                                    <version>1.0.11</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>ch.qos.logback</groupId>
+                                    <artifactId>logback-core</artifactId>
+                                    <version>1.0.11</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>slf4j-api</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>jul-to-slf4j</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>jcl-over-slf4j</artifactId>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-framework-osgi</id>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>woodstox-osgi-adapter</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.libs</groupId>
+                                    <artifactId>logback-osgi-adapter</artifactId>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-webservice</id>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.daisy.pipeline</groupId>
+                                    <artifactId>webservice</artifactId>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.restlet.osgi</groupId>
@@ -1381,211 +1473,11 @@
                                     <groupId>org.daisy.libs</groupId>
                                     <artifactId>jsslutils</artifactId>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.codehaus.woodstox</groupId>
-                                    <artifactId>woodstox-core-lgpl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.codehaus.woodstox</groupId>
-                                    <artifactId>stax2-api</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.mysql.jdbc</groupId>
-                                    <artifactId>com.springsource.com.mysql.jdbc</artifactId>
-                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-modules-libs-bundles</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>net.java.dev.jna</groupId>
-                                    <artifactId>jna</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.libs</groupId>
-                                    <artifactId>jnaerator</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.servicemix.bundles</groupId>
-                                    <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.libs</groupId>
-                                    <artifactId>jstyleparser</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.commons</groupId>
-                                    <artifactId>commons-lang3</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.googlecode.texhyphj</groupId>
-                                    <artifactId>texhyphj</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.bindings</groupId>
-                                    <artifactId>jhyphen</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.braille</groupId>
-                                    <artifactId>braille-css</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.braille</groupId>
-                                    <artifactId>braille-utils.api</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.braille</groupId>
-                                    <artifactId>braille-utils.impl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.braille</groupId>
-                                    <artifactId>braille-utils.pef-tools</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.dotify</groupId>
-                                    <artifactId>dotify.api</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.dotify</groupId>
-                                    <artifactId>dotify.common</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.dotify</groupId>
-                                    <artifactId>dotify.formatter.impl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.dotify</groupId>
-                                    <artifactId>dotify.hyphenator.impl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.dotify</groupId>
-                                    <artifactId>dotify.task.impl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.dotify</groupId>
-                                    <artifactId>dotify.text.impl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.dotify</groupId>
-                                    <artifactId>dotify.translator.impl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.streamline</groupId>
-                                    <artifactId>streamline-api</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.streamline</groupId>
-                                    <artifactId>streamline-engine</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.libs</groupId>
-                                    <artifactId>io.bit3.jsass</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.liblouis</groupId>
-                                    <artifactId>liblouis-java</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.unbescape</groupId>
-                                    <artifactId>unbescape</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.libs</groupId>
-                                    <artifactId>jing</artifactId>
-                                    <version>20120724.0.0</version>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-persistence-pipeline-bundles</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>persistence-derby</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>framework-persistence</artifactId>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-volatile-bundles</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>framework-volatile</artifactId>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-framework-pipeline-bundles</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>common-utils</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>framework-core</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>logging-appender</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>xproc-api</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>calabash-adapter</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>modules-registry</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>push-notifier</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>woodstox-osgi-adapter</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>xmlcatalog</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>xpath-registry</artifactId>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-webservice-bundles</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>webservice</artifactId>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-gui-bundles</id>
+                        <id>copy-gui</id>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -1595,10 +1487,6 @@
                                 <artifactItem>
                                     <groupId>org.daisy.pipeline</groupId>
                                     <artifactId>updater-wrapper</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>webservice-utils</artifactId>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>de.codecentric.centerdevice</groupId>
@@ -1636,7 +1524,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-modules-pipeline-bundles</id>
+                        <id>copy-modules</id>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -1766,27 +1654,6 @@
                                 <artifactItem>
                                     <groupId>org.daisy.pipeline.modules</groupId>
                                     <artifactId>epubcheck-adapter</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.idpf</groupId>
-                                    <artifactId>epubcheck</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.google.guava</groupId>
-                                    <artifactId>guava</artifactId>
-                                    <version>14.0.1</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.commons</groupId>
-                                    <artifactId>commons-compress</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.codehaus.jackson</groupId>
-                                    <artifactId>jackson-core-asl</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.codehaus.jackson</groupId>
-                                    <artifactId>jackson-mapper-asl</artifactId>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.daisy.pipeline.modules</groupId>
@@ -2044,11 +1911,129 @@
                                     <groupId>org.daisy.pipeline.modules.braille</groupId>
                                     <artifactId>zedai-to-pef</artifactId>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>net.java.dev.jna</groupId>
+                                    <artifactId>jna</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.libs</groupId>
+                                    <artifactId>jnaerator</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.servicemix.bundles</groupId>
+                                    <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.libs</groupId>
+                                    <artifactId>jstyleparser</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.commons</groupId>
+                                    <artifactId>commons-lang3</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.googlecode.texhyphj</groupId>
+                                    <artifactId>texhyphj</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.bindings</groupId>
+                                    <artifactId>jhyphen</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.braille</groupId>
+                                    <artifactId>braille-css</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.braille</groupId>
+                                    <artifactId>braille-utils.api</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.braille</groupId>
+                                    <artifactId>braille-utils.impl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.braille</groupId>
+                                    <artifactId>braille-utils.pef-tools</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.dotify</groupId>
+                                    <artifactId>dotify.api</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.dotify</groupId>
+                                    <artifactId>dotify.common</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.dotify</groupId>
+                                    <artifactId>dotify.formatter.impl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.dotify</groupId>
+                                    <artifactId>dotify.hyphenator.impl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.dotify</groupId>
+                                    <artifactId>dotify.task.impl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.dotify</groupId>
+                                    <artifactId>dotify.text.impl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.dotify</groupId>
+                                    <artifactId>dotify.translator.impl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.streamline</groupId>
+                                    <artifactId>streamline-api</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.streamline</groupId>
+                                    <artifactId>streamline-engine</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.libs</groupId>
+                                    <artifactId>io.bit3.jsass</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.liblouis</groupId>
+                                    <artifactId>liblouis-java</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.unbescape</groupId>
+                                    <artifactId>unbescape</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.daisy.libs</groupId>
+                                    <artifactId>jing</artifactId>
+                                    <version>20120724.0.0</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.idpf</groupId>
+                                    <artifactId>epubcheck</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.commons</groupId>
+                                    <artifactId>commons-compress</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.codehaus.jackson</groupId>
+                                    <artifactId>jackson-core-asl</artifactId>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.codehaus.jackson</groupId>
+                                    <artifactId>jackson-mapper-asl</artifactId>
+                                </artifactItem>
+                                 <artifactItem>
+                                    <groupId>com.google.guava</groupId>
+                                    <artifactId>guava</artifactId>
+                                    <version>14.0.1</version>
+                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-modules-linux-bundles</id>
+                        <id>copy-modules-linux</id>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -2065,7 +2050,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-modules-mac-bundles</id>
+                        <id>copy-modules-mac</id>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -2082,7 +2067,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-modules-win-bundles</id>
+                        <id>copy-modules-win</id>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -2098,230 +2083,13 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>unpack-cli-linux</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>cli</artifactId>
-                                    <classifier>linux_386</classifier>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>unpack-updater-linux</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>updater</artifactId>
-                                    <classifier>linux_386</classifier>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
                 </executions>
-                <configuration/>
-            </plugin>
-            <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.2</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.9.1</version>
-                    </dependency>
-                </dependencies>
-                <configuration/>
-            </plugin>
-            <plugin>
-                <artifactId>maven-help-plugin</artifactId>
-                <version>2.1.1</version>
-                <executions>
-                    <execution>
-                        <id>generate-effective-pom</id>
-                        <configuration/>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <id>dist-linux</id>
-                        <configuration/>
-                    </execution>
-                    <execution>
-                        <id>dist-mac</id>
-                    </execution>
-                    <execution>
-                        <id>dist-win</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>generate-release-descriptor</id>
-                        <configuration/>
-                    </execution>
-                    <execution>
-                        <id>generate-app-package</id>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sf.saxon</groupId>
-                        <artifactId>Saxon-HE</artifactId>
-                        <version>9.5.1-5</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.sun</groupId>
-                        <artifactId>tools</artifactId>
-                        <version>1.5.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>install-node</id>
-                    </execution>
-                    <execution>
-                        <id>install-appdmg</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <id>exec-appdmg</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <id>default-clean</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.3.1</version>
-                <executions>
-                    <execution>
-                        <id>default-install</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.7</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.1</version>
-                <executions>
-                    <execution>
-                        <id>default-site</id>
-                        <configuration>
-                            <reportPlugins>
-                                <reportPlugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                                </reportPlugin>
-                            </reportPlugins>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default-deploy</id>
-                        <configuration>
-                            <reportPlugins>
-                                <reportPlugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                                </reportPlugin>
-                            </reportPlugins>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <reportPlugins>
-                        <reportPlugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
-                        </reportPlugin>
-                    </reportPlugins>
-                </configuration>
             </plugin>
         </plugins>
     </build>
-    <profiles>
+    </profile>
         <profile>
-            <id>minimal</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack-updater-all</id>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>updater</artifactId>
-                                            <classifier>linux_386</classifier>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>updater</artifactId>
-                                            <classifier>darwin_386</classifier>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>updater</artifactId>
-                                            <classifier>windows_386</classifier>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>dist-minimal</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>mac</id>
+            <id>unpack-cli-mac</id>
             <build>
                 <plugins>
                     <plugin>
@@ -2334,77 +2102,11 @@
                                         <artifactItem>
                                             <groupId>org.daisy.pipeline</groupId>
                                             <artifactId>cli</artifactId>
-                                            <classifier>darwin_386</classifier>
+                                            <type>zip</type>
+                                            <classifier>darwin_amd64</classifier>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
-                            </execution>
-                            <execution>
-                                <id>unpack-updater-mac</id>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>updater</artifactId>
-                                            <classifier>darwin_386</classifier>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>dist-mac</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>1.12</version>
-                        <executions>
-                            <execution>
-                                <id>parse-version</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-app-package</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <version>1.3</version>
-                        <executions>
-                            <execution>
-                                <id>install-node</id>
-                                <configuration/>
-                            </execution>
-                            <execution>
-                                <id>install-appdmg</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                        <configuration/>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.5.0</version>
-                        <executions>
-                            <execution>
-                                <id>exec-appdmg</id>
-                                <configuration/>
                             </execution>
                         </executions>
                     </plugin>
@@ -2412,7 +2114,7 @@
             </build>
         </profile>
         <profile>
-            <id>linux</id>
+            <id>unpack-cli-linux</id>
             <build>
                 <plugins>
                     <plugin>
@@ -2425,66 +2127,11 @@
                                         <artifactItem>
                                             <groupId>org.daisy.pipeline</groupId>
                                             <artifactId>cli</artifactId>
+                                            <type>zip</type>
                                             <classifier>linux_386</classifier>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
-                            </execution>
-                            <execution>
-                                <id>unpack-updater-linux</id>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>updater</artifactId>
-                                            <classifier>linux_386</classifier>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>dist-linux</id>
-                                <configuration/>
-                            </execution>
-                            <execution>
-                                <id>dist-mac</id>
-                            </execution>
-                            <execution>
-                                <id>dist-win</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-app-package</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-node</id>
-                            </execution>
-                            <execution>
-                                <id>install-appdmg</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>exec-appdmg</id>
                             </execution>
                         </executions>
                     </plugin>
@@ -2492,7 +2139,7 @@
             </build>
         </profile>
         <profile>
-            <id>win</id>
+            <id>unpack-cli-win</id>
             <build>
                 <plugins>
                     <plugin>
@@ -2505,366 +2152,130 @@
                                         <artifactItem>
                                             <groupId>org.daisy.pipeline</groupId>
                                             <artifactId>cli</artifactId>
+                                            <type>zip</type>
                                             <version>2.0.0</version>
                                             <classifier>windows_386</classifier>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>unpack-updater-mac</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
                             <execution>
-                                <id>unpack-updater-win</id>
+                                <id>unpack-updater-mac</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>org.daisy.pipeline</groupId>
                                             <artifactId>updater</artifactId>
+                                            <type>zip</type>
+                                            <classifier>darwin_amd64</classifier>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>unpack-updater-linux</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-updater-linux</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.daisy.pipeline</groupId>
+                                            <artifactId>updater</artifactId>
+                                            <type>zip</type>
+                                            <classifier>linux_386</classifier>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>unpack-updater-win</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-updater-win</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.daisy.pipeline</groupId>
+                                            <artifactId>updater</artifactId>
+                                            <type>zip</type>
                                             <classifier>windows_386</classifier>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>unpack-updater-gui-win</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
                             <execution>
                                 <id>unpack-updater-gui-win</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>org.daisy.pipeline</groupId>
                                             <artifactId>updater-gui</artifactId>
+                                            <type>zip</type>
                                             <classifier>windows_386</classifier>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>dist-win</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-resources</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>nsis-maven-plugin</artifactId>
-                        <version>1.0-alpha-1</version>
-                        <executions>
-                            <execution>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.gmaven</groupId>
-                        <artifactId>groovy-maven-plugin</artifactId>
-                        <version>2.0</version>
-                        <executions>
-                            <execution>
-                                <id>detach-exe</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-app-package</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-node</id>
-                            </execution>
-                            <execution>
-                                <id>install-appdmg</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>exec-appdmg</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>dev-launcher</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-fileinstall-cfg-files</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>net.sf.saxon</groupId>
-                                <artifactId>Saxon-HE</artifactId>
-                                <version>9.5.1-5</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>dist-mac</id>
-                            </execution>
-                            <execution>
-                                <id>dist-linux</id>
-                            </execution>
-                            <execution>
-                                <id>dist-win</id>
-                            </execution>
-                            <execution>
-                                <id>dev-launcher-assembly</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>nsis-maven-plugin</artifactId>
-                        <executions>
-                            <execution/>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.gmaven</groupId>
-                        <artifactId>groovy-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>detach-exe</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-app-package</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-node</id>
-                            </execution>
-                            <execution>
-                                <id>install-appdmg</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>exec-appdmg</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>deb</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack-cli-linux</id>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>cli</artifactId>
-                                            <classifier>linux_386</classifier>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>unpack-updater-linux</id>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>updater</artifactId>
-                                            <classifier>linux_386</classifier>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>filter-debian-resources</id>
-                                <configuration/>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.vafer</groupId>
-                        <artifactId>jdeb</artifactId>
-                        <version>1.0</version>
-                        <executions>
-                            <execution>
-                                <id>package-deb</id>
-                                <configuration>
-                                    <classifier>all</classifier>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>package-deb-cli</id>
-                                <configuration>
-                                    <classifier>cli_all</classifier>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>dist-mac</id>
-                            </execution>
-                            <execution>
-                                <id>dist-linux</id>
-                            </execution>
-                            <execution>
-                                <id>dist-win</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>generate-app-package</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-node</id>
-                            </execution>
-                            <execution>
-                                <id>install-appdmg</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>exec-appdmg</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>rpm</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>dist-linux</id>
-                                <configuration/>
-                            </execution>
-                            <execution>
-                                <id>dist-mac</id>
-                            </execution>
-                            <execution>
-                                <id>dist-win</id>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>rpm-maven-plugin</artifactId>
-                        <version>2.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>generate-rpm</id>
-                            </execution>
-                        </executions>
-                        <configuration/>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>rpm-cli</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack-cli-linux</id>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>cli</artifactId>
-                                            <classifier>linux_386</classifier>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>rpm-maven-plugin</artifactId>
-                        <version>2.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>generate-rpm</id>
-                            </execution>
-                        </executions>
-                        <configuration/>
                     </plugin>
                 </plugins>
             </build>

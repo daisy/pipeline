@@ -40,7 +40,7 @@ help :
 	echo "	Tests the Docker image"                                             >&2
 
 # FIXME: don't hard-code
-assembly/VERSION     := 1.13.7-SNAPSHOT
+assembly/VERSION     := 1.14.1
 assembly/BASEDIR     := .
 MVN_LOCAL_REPOSITORY ?= $(HOME)/.m2/repository
 
@@ -65,34 +65,56 @@ zip-minimal : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VER
 deb-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb
 rpm-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe         : mvn -Punpack-cli-win \
+release-descriptor : mvn -Pgenerate-release-descriptor
+
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe         : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-cli-win \
                                                                                                                        -Punpack-updater-win \
                                                                                                                        -Punpack-updater-gui-win \
                                                                                                                        -Passemble-win-dir \
                                                                                                                        -Ppackage-exe
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb         : mvn -Punpack-updater-linux \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb         : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-updater-linux \
                                                                                                                        -Ppackage-deb
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip   : mvn -Punpack-cli-linux \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip   : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-cli-linux \
                                                                                                                        -Punpack-updater-linux \
                                                                                                                        -Passemble-linux-zip
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.zip     : mvn -Punpack-cli-mac \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.zip     : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-cli-mac \
                                                                                                                        -Punpack-updater-mac \
                                                                                                                        -Passemble-mac-zip
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip     : mvn -Punpack-cli-win \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip     : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-cli-win \
                                                                                                                        -Punpack-updater-win \
                                                                                                                        -Punpack-updater-gui-win \
                                                                                                                        -Passemble-win-zip
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip : mvn -Punpack-updater-mac \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-updater-mac \
                                                                                                                        -Punpack-updater-linux \
                                                                                                                        -Punpack-updater-win \
                                                                                                                        -Passemble-minimal-zip
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb     : mvn -Punpack-cli-linux \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb     : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-cli-linux \
                                                                                                                        -Ppackage-deb-cli
 ifeq ($(shell uname), Darwin)
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         : mvn -Punpack-cli-mac \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-cli-mac \
                                                                                                                        -Punpack-updater-mac \
                                                                                                                        -Passemble-mac-dir \
-                                                                                                                       -Ppackage-dmg
+                                                                                                                       -Ppackage-mac-app
+	# we run package-dmg in a subsequent mvn call to avoid execution
+	# order issues when the package-mac-app and package-dmg profiles
+	# are activated together
+	$(MVN) package -Ppackage-dmg | $(MVN_LOG)
 	test -e $@
 else
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         :
@@ -159,54 +181,80 @@ check-docker :
 .PHONY : --without-persistence
 --without-persistence : -Pwithout-persistence
 
-#                          generate-resources      process-resources      prepare-package       package
-#                          ---------------         -----------------      ---------------       -------
-# unpack-cli-mac           unpack-cli-mac
-# unpack-cli-linux         unpack-cli-linux
-# unpack-cli-win           unpack-cli-win
-# unpack-updater-mac       unpack-updater-mac
-# unpack-updater-linux     unpack-updater-linux
-# unpack-updater-win       unpack-updater-win
-# unpack-updater-gui-win   unpack-updater-gui-win
-# assemble-mac-dir                                                        assemble-mac-dir
-# assemble-linux-dir                                                      assemble-linux-dir
-# assemble-win-dir                                                        assemble-win-dir
-# assemble-mac-zip                                                                              assemble-mac-zip
-# assemble-linux-zip                                                                            assemble-linux-zip
-# assemble-win-zip                                                                              assemble-win-zip
-# assemble-minimal-zip                                                                          assemble-minimal-zip
-# package-dmg                                                             install-node          javapackager
-#                                                                         install-appdmg        package-appdmg
-#                                                                         parse-version         attach-dmg
-# package-exe                                                             copy-nsis-resources   package-exe
-# package-deb                                      filter-deb-resources                         package-deb
-# package-deb-cli                                                                               package-deb-cli
-# package-rpm                                                                                   package-rpm
-# package-rpm-cli                                                                               package-rpm-cli
-# dev-launcher             generate-fileinstall-cfg-files                 assemble-dev-dir
+#                         process-sources      generate-resources      process-resources      prepare-package       package
+#                         ---------------      ---------------         -----------------      ---------------       -------
+# copy-artifacts          copy-felix-launcher
+#                         copy-felix-bundles
+#                         copy-felix-gogo
+#                         copy-framework
+#                         copy-framework-osgi
+#                         copy-framework-no-osgi
+#                         copy-volatile
+#                         copy-persistence
+#                         copy-persistence-osgi
+#                         copy-persistence-no-osgi
+#                         copy-webservice
+#                         copy-gui
+#                         copy-javafx-linux
+#                         copy-javafx-mac
+#                         copy-javafx-win
+#                         copy-modules
+#                         copy-modules-osgi
+#                         copy-modules-linux
+#                         copy-modules-mac
+#                         copy-modules-win
+# generate-release-descriptor                  generate-effective-pom
+#                                              generate-release-descriptor
+# unpack-cli-mac                               unpack-cli-mac
+# unpack-cli-linux                             unpack-cli-linux
+# unpack-cli-win                               unpack-cli-win
+# unpack-updater-mac                           unpack-updater-mac
+# unpack-updater-linux                         unpack-updater-linux
+# unpack-updater-win                           unpack-updater-win
+# unpack-updater-gui-win                       unpack-updater-gui-win
+# assemble-mac-dir                                                                            assemble-mac-dir
+# assemble-linux-dir                                                                          assemble-linux-dir
+# assemble-win-dir                                                                            assemble-win-dir
+# assemble-mac-zip                                                                                                  assemble-mac-zip
+# assemble-linux-zip                                                                                                assemble-linux-zip
+# assemble-win-zip                                                                                                  assemble-win-zip
+# assemble-minimal-zip                                                                                              assemble-minimal-zip
+# package-mac-app                                                                                                   javapackager
+# package-dmg                                                                                 install-node
+#                                                                                             install-appdmg        package-appdmg
+#                                                                                             parse-version         attach-dmg
+# package-exe                                                                                 copy-nsis-resources   package-exe
+# package-deb                                                          filter-deb-resources                         package-deb
+# package-deb-cli                                                                                                   package-deb-cli
+# package-rpm                                                                                                       package-rpm
+# package-rpm-cli                                                                                                   package-rpm-cli
+# dev-launcher                                 generate-fileinstall-cfg-files                 assemble-dev-dir
 
-PROFILES :=                 \
-	assemble-linux-dir      \
-	assemble-linux-zip      \
-	assemble-mac-dir        \
-	assemble-mac-zip        \
-	assemble-win-dir        \
-	assemble-win-zip        \
-	assemble-minimal-zip    \
-	package-deb             \
-	package-deb-cli         \
-	package-dmg             \
-	package-exe             \
-	package-rpm             \
-	package-rpm-cli         \
-	unpack-cli-linux        \
-	unpack-cli-mac          \
-	unpack-cli-win          \
-	unpack-updater-linux    \
-	unpack-updater-mac      \
-	unpack-updater-win      \
-	unpack-updater-gui-win  \
-	without-persistence     \
+PROFILES :=                     \
+	copy-artifacts              \
+	generate-release-descriptor \
+	assemble-linux-dir          \
+	assemble-linux-zip          \
+	assemble-mac-dir            \
+	assemble-mac-zip            \
+	assemble-win-dir            \
+	assemble-win-zip            \
+	assemble-minimal-zip        \
+	package-deb                 \
+	package-deb-cli             \
+	package-mac-app             \
+	package-dmg                 \
+	package-exe                 \
+	package-rpm                 \
+	package-rpm-cli             \
+	unpack-cli-linux            \
+	unpack-cli-mac              \
+	unpack-cli-win              \
+	unpack-updater-linux        \
+	unpack-updater-mac          \
+	unpack-updater-win          \
+	unpack-updater-gui-win      \
+	without-persistence         \
 	dev-launcher
 
 .PHONY : mvn

@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<component>
-  <fileSets>
-    <fileSet>
-      <directory>target/bundles/felix/mac</directory>
-      <outputDirectory>system/felix</outputDirectory>
-    </fileSet>
-  </fileSets>
-</component>

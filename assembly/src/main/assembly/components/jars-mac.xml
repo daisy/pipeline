@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/jars/gui/bootstrap/mac</directory>
+      <outputDirectory>system/gui/bootstrap</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/jars/common/mac</directory>
+      <outputDirectory>system/common</outputDirectory>
+    </fileSet>
+  </fileSets>
+</component>

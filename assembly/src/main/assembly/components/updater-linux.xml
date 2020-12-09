@@ -11,10 +11,10 @@
     </fileSet>
   </fileSets>
   <files>
-          <file>
-                  <source>target/release-descriptor/releaseDescriptor.xml</source>
-                  <outputDirectory>etc</outputDirectory>
-                  <destName>releaseDescriptor.xml</destName>
-          </file>
+    <file>
+      <source>target/release-descriptor/releaseDescriptor.xml</source>
+      <outputDirectory>etc</outputDirectory>
+      <destName>releaseDescriptor.xml</destName>
+    </file>
   </files>
 </component>

@@ -1,28 +1,21 @@
 <configuration debug="false">
 
+  <!--
+      Variables that may be used in this file:
+      - ${org.daisy.pipeline.logdir}
+      - ${org.daisy.pipeline.mode} ("gui" or "webservice")
+  -->
+
   <!-- see http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
 
-  <appender name="JOB" class="org.daisy.pipeline.logging.IgnoreSiftAppender">
-    <!-- in the absence of the class attribute, it is assumed that the
-         desired discriminator type is
-         ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
-    <discriminator>
-      <key>jobid</key>
-      <defaultValue>default</defaultValue>
-    </discriminator>
-    <sift>
-      <appender name="FILE-${jobid}" class="ch.qos.logback.core.FileAppender">
-        <file>${org.daisy.pipeline.iobase}/${jobid}/${jobid}.log</file>
-        <append>false</append>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-     		<Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
-        </layout>
-      </appender>
-    </sift>
+  <appender name="JOB_FILE" class="org.daisy.pipeline.logging.JobLogFileAppender">
+    <encoder>
+      <Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
+    </encoder>
   </appender>
 
-  <appender name="EVENTBUS" class="org.daisy.pipeline.logging.EventBusAppender">
+  <appender name="JOB" class="org.daisy.pipeline.logging.JobProgressAppender">
     <filter class="org.daisy.pipeline.logging.ThresholdFilter">
       <rootLevel>INFO</rootLevel>
       <loggerLevels>
@@ -39,9 +32,9 @@
   
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <filter class="org.daisy.pipeline.logging.OSGIFilter"/>   
-    <file>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.main.mode}.log</file>
+    <file>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.mode}.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.main.mode}.%i.log.zip</fileNamePattern>
+      <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.mode}.%i.log.zip</fileNamePattern>
       <minIndex>1</minIndex>
       <maxIndex>4</maxIndex>
     </rollingPolicy>
@@ -64,8 +57,8 @@
   <root level="DEBUG">
     <appender-ref ref="FILE"/>
     <appender-ref ref="STDOUT"/>
+    <appender-ref ref="JOB_FILE"/>
     <appender-ref ref="JOB"/>
-    <appender-ref ref="EVENTBUS"/>
   </root>
   <logger name="com.xmlcalabash" level="INFO"/>
   <logger name="org.eclipse.jetty.util.log" level="INFO" />

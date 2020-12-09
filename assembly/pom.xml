@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.13.7-SNAPSHOT</version>
+  <version>1.14.1</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,7 +17,7 @@
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.14.1</tag>
   </scm>
   <properties>
     <cli.version>2.1.4</cli.version>
@@ -58,7 +58,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.2.4-SNAPSHOT</version>
+        <version>1.3.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -68,7 +68,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>updater-gui</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
@@ -77,15 +77,20 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
+        <artifactId>ds-to-spi-runtime</artifactId>
+        <version>1.1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.13.4-SNAPSHOT</version>
+        <version>1.14.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.13.8-SNAPSHOT</version>
+        <version>1.14.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -141,6 +146,131 @@
     </extensions>
     <plugins>
       <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <id>xspecTest</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xspec-runner</artifactId>
+            <version>1.0.2</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+            <prependGroupId>true</prependGroupId>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.2</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.scm</groupId>
+              <artifactId>maven-scm-provider-gitexe</artifactId>
+              <version>1.9.1</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <tagNameFormat>v@{project.version}</tagNameFormat>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-help-plugin</artifactId>
+          <version>2.1.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <version>1.7.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>nsis-maven-plugin</artifactId>
+          <version>1.0-alpha-1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.vafer</groupId>
+          <artifactId>jdeb</artifactId>
+          <version>1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>rpm-maven-plugin</artifactId>
+          <version>2.0.1</version>
+        </plugin>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <versionRange>[2.4,)</versionRange>
+                    <goals>
+                      <goal>copy</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>wagon-maven-plugin</artifactId>
+                    <versionRange>[1.0-beta-4,)</versionRange>
+                    <goals>
+                      <goal>download</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  <profiles>
+    <profile>
+      <id>copy-artifacts</id>
+      <build>
+      <plugins>
+      <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
@@ -149,19 +279,13 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/bootstrap</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/osgi/bootstrap</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.main</artifactId>
                   <destFileName>felix.jar</destFileName>
                 </artifactItem>
-                <!--<artifactItem>-->
-                <!--<groupId>org.daisy.pipeline</groupId>-->
-                <!--<artifactId>launcher</artifactId>-->
-                <!--<version>1.0.0</version>-->
-                <!--<destFileName>custom-launcher.jar</destFileName>-->
-                <!--</artifactItem>-->
               </artifactItems>
             </configuration>
           </execution>
@@ -171,18 +295,8 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/osgi/bundles</outputDirectory>
               <artifactItems>
-                <artifactItem>
-                  <groupId>ch.qos.logback</groupId>
-                  <artifactId>logback-classic</artifactId>
-                  <version>1.0.11</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>ch.qos.logback</groupId>
-                  <artifactId>logback-core</artifactId>
-                  <version>1.0.11</version>
-                </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.configadmin</artifactId>
@@ -218,33 +332,20 @@
                   <artifactId>org.apache.felix.scr</artifactId>
                   <version>2.0.14</version> <!-- does not work with 2.1.0 -->
                 </artifactItem>
-                <!-- From managed dependencies -->
                 <artifactItem>
                   <groupId>org.osgi</groupId>
                   <artifactId>org.osgi.enterprise</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>slf4j-api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>jul-to-slf4j</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>jcl-over-slf4j</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
           <execution>
-            <id>copy-felix-gogo-bundles</id>
+            <id>copy-felix-gogo</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix/gogo</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/osgi/gogo</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
@@ -265,13 +366,222 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-persistence-libs-bundles</id>
+            <id>copy-framework</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/framework/persistence</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/common</outputDirectory>
               <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>common-utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>calabash-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>framework-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>logging-appender</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>modules-registry</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>saxon-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>xmlcatalog</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>xproc-api</artifactId>
+                </artifactItem>
+                <!--
+                    3rd-party dependencies
+                -->
+                <artifactItem>
+                  <groupId>javax.xml.crypto</groupId>
+                  <artifactId>jsr105-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>javax.xml.parsers</groupId>
+                  <artifactId>jaxp-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.httpcomponents</groupId>
+                  <artifactId>httpclient-osgi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.httpcomponents</groupId>
+                  <artifactId>httpcore-osgi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jing</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>nu.validator.htmlparser</groupId>
+                  <artifactId>htmlparser</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>com.xmlcalabash</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>saxon-he</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>servlet-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.google.guava</groupId>
+                  <artifactId>guava</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>commons-codec</groupId>
+                  <artifactId>commons-codec</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>commons-fileupload</groupId>
+                  <artifactId>commons-fileupload</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>commons-io</groupId>
+                  <artifactId>commons-io</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.woodstox</groupId>
+                  <artifactId>woodstox-core-lgpl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.woodstox</groupId>
+                  <artifactId>stax2-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-classic</artifactId>
+                  <version>1.0.11</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-core</artifactId>
+                  <version>1.0.11</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>slf4j-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>jul-to-slf4j</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.slf4j</groupId>
+                  <artifactId>jcl-over-slf4j</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-framework-osgi</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/osgi/bundles</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>woodstox-osgi-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>logback-osgi-adapter</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-framework-no-osgi</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/no-osgi</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>ds-to-spi-runtime</artifactId>
+                </artifactItem>
+                <!-- dependency of ds-to-spi-runtime -->
+                <dependency>
+                  <groupId>org.osgi</groupId>
+                  <artifactId>org.osgi.core</artifactId>
+                </dependency>
+                <!-- dependencies of XMLCalabash (the first two are embedded with Bundle-ClassPath) -->
+                <artifactItem>
+                  <groupId>com.nwalsh</groupId>
+                  <artifactId>nwalsh-annotations</artifactId>
+                  <version>1.0.0</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.xmlresolver</groupId>
+                  <artifactId>xmlresolver</artifactId>
+                  <version>0.13.1</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.atteo.classindex</groupId>
+                  <artifactId>classindex</artifactId>
+                  <version>3.3</version>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-volatile</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/volatile</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>framework-volatile</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-persistence</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/persistence</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>persistence-derby</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>framework-persistence</artifactId>
+                </artifactItem>
+                <!--
+                    3rd-party dependencies
+                -->
                 <artifactItem>
                   <groupId>javax.el</groupId>
                   <artifactId>javax.el-api</artifactId>
@@ -322,84 +632,56 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.persistence</groupId>
-                  <artifactId>javax.persistence</artifactId>
+                  <artifactId>org.eclipse.persistence.jpa.jpql</artifactId>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.eclipse.gemini</groupId>
-                  <artifactId>org.apache.derby</artifactId>
+                  <groupId>org.eclipse.persistence</groupId>
+                  <artifactId>javax.persistence</artifactId>
                 </artifactItem>
-                <!--<artifactItem>-->
-                <!--<groupId>org.daisy.pipeline</groupId>-->
-                <!--<artifactId>persistence-derby</artifactId>-->
-                <!--</artifactItem>-->
               </artifactItems>
             </configuration>
           </execution>
           <execution>
-            <id>copy-framework-libs-bundles</id>
+            <id>copy-persistence-osgi</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/osgi/persistence</outputDirectory>
               <artifactItems>
                 <artifactItem>
-                  <groupId>javax.xml.crypto</groupId>
-                  <artifactId>jsr105-api</artifactId>
+                  <groupId>org.eclipse.gemini</groupId>
+                  <artifactId>org.apache.derby</artifactId>
                 </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-persistence-no-osgi</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/no-osgi/persistence</outputDirectory>
+              <artifactItems>
                 <artifactItem>
-                  <groupId>javax.xml.parsers</groupId>
-                  <artifactId>jaxp-api</artifactId>
+                  <groupId>org.apache.derby</groupId>
+                  <artifactId>derby</artifactId>
                 </artifactItem>
-                <!-- Runtime dependencies -->
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-webservice</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/webservice</outputDirectory>
+              <artifactItems>
                 <artifactItem>
-                  <groupId>org.apache.httpcomponents</groupId>
-                  <artifactId>httpclient-osgi</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.httpcomponents</groupId>
-                  <artifactId>httpcore-osgi</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jing</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>nu.validator.htmlparser</groupId>
-                  <artifactId>htmlparser</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>com.xmlcalabash</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>logback-osgi-adapter</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>saxon-he</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>servlet-api</artifactId>
-                </artifactItem>
-                <!-- From dependencies used at compile time in the Framework parent POM -->
-                <artifactItem>
-                  <groupId>com.google.guava</groupId>
-                  <artifactId>guava</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>commons-codec</groupId>
-                  <artifactId>commons-codec</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>commons-fileupload</groupId>
-                  <artifactId>commons-fileupload</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>commons-io</groupId>
-                  <artifactId>commons-io</artifactId>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>webservice</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.restlet.osgi</groupId>
@@ -449,270 +731,16 @@
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>jsslutils</artifactId>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.woodstox</groupId>
-                  <artifactId>woodstox-core-lgpl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.woodstox</groupId>
-                  <artifactId>stax2-api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>com.mysql.jdbc</groupId>
-                  <artifactId>com.springsource.com.mysql.jdbc</artifactId>
-                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
           <execution>
-            <id>copy-modules-libs-bundles</id>
+            <id>copy-gui</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>net.java.dev.jna</groupId>
-                  <artifactId>jna</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jnaerator</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <!-- required by jstyleparser -->
-                  <!-- TODO build our own bundle ? -->
-                  <groupId>org.apache.servicemix.bundles</groupId>
-                  <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jstyleparser</artifactId>
-                </artifactItem>
-                <!--
-                    for braille modules
-                -->
-                <artifactItem>
-                  <groupId>org.apache.commons</groupId>
-                  <artifactId>commons-lang3</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>com.googlecode.texhyphj</groupId>
-                  <artifactId>texhyphj</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.bindings</groupId>
-                  <artifactId>jhyphen</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.braille</groupId>
-                  <artifactId>braille-css</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.braille</groupId>
-                  <artifactId>braille-utils.api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.braille</groupId>
-                  <artifactId>braille-utils.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.braille</groupId>
-                  <artifactId>braille-utils.pef-tools</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.common</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.formatter.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.hyphenator.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.task.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.text.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.translator.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.streamline</groupId>
-                  <artifactId>streamline-api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.streamline</groupId>
-                  <artifactId>streamline-engine</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>io.bit3.jsass</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.liblouis</groupId>
-                  <artifactId>liblouis-java</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.unbescape</groupId>
-                  <artifactId>unbescape</artifactId>
-                </artifactItem>
-                <!--
-                    Dotify and epubcheck require older version of Jing
-                -->
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jing</artifactId>
-                  <version>20120724.0.0</version>
-                </artifactItem>
-                <!--
-                    for epubcheck-adapter
-                -->
-                <artifactItem>
-                  <groupId>org.w3c</groupId>
-                  <artifactId>epubcheck</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.commons</groupId>
-                  <artifactId>commons-compress</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.jackson</groupId>
-                  <artifactId>jackson-core-asl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.jackson</groupId>
-                  <artifactId>jackson-mapper-asl</artifactId>
-                </artifactItem>
-                <!--
-                    for tts-adapter-google
-                -->
-                <artifactItem>
-                  <groupId>org.json</groupId>
-                  <artifactId>json</artifactId>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-persistence-pipeline-bundles</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/bundles/framework/persistence</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>persistence-derby</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>framework-persistence</artifactId>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-volatile-bundles</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/bundles/framework/volatile</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>framework-volatile</artifactId>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-framework-pipeline-bundles</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>common-utils</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>calabash-adapter</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>framework-core</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>logging-appender</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>modules-registry</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>saxon-adapter</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>woodstox-osgi-adapter</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>xmlcatalog</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>xproc-api</artifactId>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-webservice-bundles</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/bundles/frontend</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>webservice</artifactId>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-gui-bundles</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <!--
-                  gui needs to be installed and started as early on as possible
-                  so that we can display a splash screen
-              -->
-              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/gui</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -724,10 +752,6 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>updater-wrapper</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>webservice-utils</artifactId>
                 </artifactItem>
                 <!--
                     3rd-party dependencies
@@ -773,7 +797,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/bootstrap/linux</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/gui/bootstrap/linux</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.openjfx</groupId>
@@ -809,7 +833,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/bootstrap/mac</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/gui/bootstrap/mac</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.openjfx</groupId>
@@ -845,7 +869,7 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/bootstrap/win</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/gui/bootstrap/win</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.openjfx</groupId>
@@ -876,12 +900,12 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-modules-pipeline-bundles</id>
+            <id>copy-modules</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/common</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -1095,12 +1119,6 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-acapela</artifactId>
                 </artifactItem>
-                <!--
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>tts-adapter-attbin</artifactId>
-                </artifactItem>
-                -->
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-espeak</artifactId>
@@ -1108,14 +1126,6 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-google</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>tts-adapter-osx</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules</groupId>
-                  <artifactId>tts-adapter-sapinative</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -1193,16 +1203,161 @@
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>zedai-to-pef</artifactId>
                 </artifactItem>
+                <!--
+                    3rd-party dependencies
+                -->
+                <artifactItem>
+                  <groupId>net.java.dev.jna</groupId>
+                  <artifactId>jna</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jnaerator</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <!-- required by jstyleparser -->
+                  <!-- TODO build our own bundle ? -->
+                  <groupId>org.apache.servicemix.bundles</groupId>
+                  <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jstyleparser</artifactId>
+                </artifactItem>
+                <!--
+                    for braille modules
+                -->
+                <artifactItem>
+                  <groupId>org.apache.commons</groupId>
+                  <artifactId>commons-lang3</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.googlecode.texhyphj</groupId>
+                  <artifactId>texhyphj</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.bindings</groupId>
+                  <artifactId>jhyphen</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.braille</groupId>
+                  <artifactId>braille-css</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.braille</groupId>
+                  <artifactId>braille-utils.api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.braille</groupId>
+                  <artifactId>braille-utils.impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.braille</groupId>
+                  <artifactId>braille-utils.pef-tools</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.dotify</groupId>
+                  <artifactId>dotify.api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.dotify</groupId>
+                  <artifactId>dotify.common</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.dotify</groupId>
+                  <artifactId>dotify.formatter.impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.dotify</groupId>
+                  <artifactId>dotify.hyphenator.impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.dotify</groupId>
+                  <artifactId>dotify.task.impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.dotify</groupId>
+                  <artifactId>dotify.text.impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.dotify</groupId>
+                  <artifactId>dotify.translator.impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.streamline</groupId>
+                  <artifactId>streamline-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.streamline</groupId>
+                  <artifactId>streamline-engine</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>io.bit3.jsass</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>liblouis-java</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.unbescape</groupId>
+                  <artifactId>unbescape</artifactId>
+                </artifactItem>
+                <!--
+                    for epubcheck-adapter
+                -->
+                <artifactItem>
+                  <groupId>org.w3c</groupId>
+                  <artifactId>epubcheck</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.commons</groupId>
+                  <artifactId>commons-compress</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-core-asl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-mapper-asl</artifactId>
+                </artifactItem>
+                <!--
+                    for tts-adapter-google
+                -->
+                <artifactItem>
+                  <groupId>org.json</groupId>
+                  <artifactId>json</artifactId>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
           <execution>
-            <id>copy-modules-linux-bundles</id>
+            <id>copy-modules-osgi</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix/linux</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/osgi/bundles</outputDirectory>
+              <artifactItems>
+                <!--
+                    Dotify and epubcheck require older version of Jing
+                -->
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jing</artifactId>
+                  <version>20120724.0.0</version>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-modules-linux</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/common/linux</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -1218,12 +1373,12 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-modules-mac-bundles</id>
+            <id>copy-modules-mac</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix/mac</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/common/mac</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -1234,17 +1389,21 @@
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>liblouis-utils</artifactId>
                   <classifier>mac</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-adapter-osx</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
           <execution>
-            <id>copy-modules-win-bundles</id>
+            <id>copy-modules-win</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/felix/win</outputDirectory>
+              <outputDirectory>${project.build.directory}/jars/common/win</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -1255,18 +1414,23 @@
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>libhyphen-utils</artifactId>
                   <classifier>windows</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-adapter-sapinative</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <configuration>
-          <tagNameFormat>v@{project.version}</tagNameFormat>
-        </configuration>
-      </plugin>
+      </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>generate-release-descriptor</id>
+      <build>
+        <plugins>
           <plugin>
             <artifactId>maven-help-plugin</artifactId>
             <executions>
@@ -1311,124 +1475,9 @@
               </dependency>
             </dependencies>
           </plugin>
-      <plugin>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xspec-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <executions>
-          <execution>
-            <id>xspecTest</id>
-            <phase>test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.daisy.maven</groupId>
-            <artifactId>xspec-runner</artifactId>
-            <version>1.0.2</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-    </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.7</version>
-          <configuration>
-            <prependGroupId>true</prependGroupId>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.5.2</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.9.1</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
-          <artifactId>maven-help-plugin</artifactId>
-          <version>2.1.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>1.5.0</version>
-        </plugin>
-        <plugin>
-          <groupId>com.github.eirslett</groupId>
-          <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.7.5</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>build-helper-maven-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>nsis-maven-plugin</artifactId>
-          <version>1.0-alpha-1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.vafer</groupId>
-          <artifactId>jdeb</artifactId>
-          <version>1.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>rpm-maven-plugin</artifactId>
-          <version>2.0.1</version>
-        </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <versionRange>[2.4,)</versionRange>
-                    <goals>
-                      <goal>copy</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>wagon-maven-plugin</artifactId>
-                    <versionRange>[1.0-beta-4,)</versionRange>
-                    <goals>
-                      <goal>download</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  <profiles>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>unpack-cli-mac</id>
       <build>
@@ -1662,7 +1711,7 @@
                   </descriptors>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
+                    <filter>src/main/assembly/dist-mac.properties</filter>
                   </filters>
                   <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
@@ -1695,7 +1744,7 @@
                   </descriptors>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
+                    <filter>src/main/assembly/dist-linux.properties</filter>
                   </filters>
                   <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
@@ -1761,7 +1810,7 @@
                   </descriptors>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
+                    <filter>src/main/assembly/dist-mac.properties</filter>
                   </filters>
                   <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
@@ -1794,7 +1843,7 @@
                   </descriptors>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
+                    <filter>src/main/assembly/dist-linux.properties</filter>
                   </filters>
                   <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
@@ -1860,9 +1909,120 @@
                   </descriptors>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
+                    <filter>src/main/assembly/dist-linux.properties</filter>
                   </filters>
                   <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>package-mac-app</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>parse-version</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>parse-version</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <!--
+                    Note that this will include JRE 8. In order to include JRE 9 we have to set
+                    j2se="9.0+". Note however that the reason we depend on Java 9 is to avoid JAWS
+                    crashes, so it is only really required for Windows.
+                -->
+                <id>javapackager</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <!-- requires Ant 1.7+ -->
+                  <target xmlns:fx="javafx:com.sun.javafx.tools.ant">
+                    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${env.JAVA_HOME}/lib/ant-javafx.jar" />
+                    <path id="main.jar">
+                      <fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline/system">
+                        <include name="gui/org.daisy.pipeline.gui-*.jar" />
+                      </fileset>
+                    </path>
+                    <path id="classpath">
+                      <fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline/system">
+                        <include name="common/**/*" />
+                        <include name="no-osgi/**/*" />
+                        <include name="gui/**/*" />
+                        <include name="volatile/**/*" />
+                        <exclude name="osgi/**/*" />
+                        <exclude name="webservice/**/*" />
+                        <exclude name="persistence/**/*" />
+                        <exclude name="no-osgi/persistence/**/*" />
+                        <exclude name="gui/org.daisy.pipeline.gui-*.jar" />
+                      </fileset>
+                    </path>
+                    <manifestclasspath property="classpath" jarfile="${toString:main.jar}">
+                      <classpath refid="classpath" />
+                    </manifestclasspath>
+                    <jar update="true" file="${toString:main.jar}">
+                      <manifest>
+                        <attribute name="Class-Path" value="${classpath}" />
+                      </manifest>
+                    </jar>
+                    <fx:deploy outdir="${project.build.directory}/javapackager" outfile="dp2" nativeBundles="image">
+                      <fx:application id="org.daisy.pipeline2" name="DAISY Pipeline 2" version="${project.version}" mainClass="org.daisy.pipeline.gui.GUIService" />
+                      <fx:info description="A tool for automated production of accessible digital publication" title="DAISY Pipeline 2" vendor="DAISY Consortium">
+                        <fx:icon href="${project.basedir}/src/main/mac/pipeline-logo.icns" />
+                      </fx:info>
+                      <fx:platform j2se="8.0+">
+                        <fx:property name="org.daisy.pipeline.mode" value="gui" />
+                        <fx:property name="org.daisy.pipeline.home" value="." />
+                        <fx:property name="org.daisy.pipeline.data" value="data" />
+                        <fx:property name="org.daisy.pipeline.logdir" value="data/log" />
+                        <fx:property name="org.daisy.pipeline.ws.localfs" value="true" />
+                        <fx:property name="org.daisy.pipeline.ws.authentication" value="false" />
+                        <fx:property name="org.daisy.pipeline.properties" value="etc/pipeline.properties" />
+                        <fx:property name="logback.configurationFile" value="file:etc/config-logback.xml" />
+                        <fx:property name="org.daisy.pipeline.updater.bin" value="updater/pipeline-updater" />
+                        <fx:property name="org.daisy.pipeline.updater.deployPath" value="./" />
+                        <fx:property name="org.daisy.pipeline.updater.releaseDescriptor" value="etc/releaseDescriptor.xml" />
+                      </fx:platform>
+                      <fx:resources>
+                        <fx:fileset type="license" os="osx" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
+                          <include name="NOTICE.txt" />
+                        </fx:fileset>
+                        <fx:fileset type="jar" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
+                          <include name="system/common/**/*" />
+                          <include name="system/no-osgi/**/*" />
+                          <include name="system/gui/**/*" />
+                          <include name="system/volatile/**/*" />
+                          <exclude name="system/osgi/**/*" />
+                          <exclude name="system/webservice/**/*" />
+                          <exclude name="system/persistence/**/*" />
+                          <exclude name="system/no-osgi/persistence/**/*" />
+                        </fx:fileset>
+                        <fx:fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
+                          <include name="**/*" />
+                          <exclude name="system/**/*" />
+                          <exclude name="NOTICE.txt" />
+                          <exclude name="etc/felix.properties" />
+                        </fx:fileset>
+                      </fx:resources>
+                      <fx:bundleArgument arg="mac.CFBundleIdentifier" value="org.daisy.pipeline2" />
+                      <fx:bundleArgument arg="mac.CFBundleVersion" value="${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}" />
+                    </fx:deploy>
+                  </target>
                 </configuration>
               </execution>
             </executions>
@@ -1905,54 +2065,6 @@
             </configuration>
           </plugin>
           <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <!--
-                    Note that this will include JRE 8. In order to include JRE 9 we have to set
-                    j2se="9.0+". Note however that the reason we depend on Java 9 is to avoid JAWS
-                    crashes, so it is only really required for Windows.
-                -->
-                <id>javapackager</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target xmlns:fx="javafx:com.sun.javafx.tools.ant">
-                    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${env.JAVA_HOME}/lib/ant-javafx.jar" />
-                    <fx:deploy outdir="${project.build.directory}/javapackager" outfile="dp2" nativeBundles="image">
-                      <fx:application id="org.daisy.pipeline2" mainClass="org.apache.felix.main.Main" name="DAISY Pipeline 2" version="${project.version}">
-                      </fx:application>
-                      <fx:info description="A tool for automated production of accessible digital publication" title="DAISY Pipeline 2" vendor="DAISY Consortium">
-                        <fx:icon href="${project.basedir}/src/main/mac/pipeline-logo.icns" />
-                      </fx:info>
-                      <fx:platform j2se="8.0+">
-                        <fx:property name="org.daisy.pipeline.main.mode" value="gui" />
-                        <fx:property name="org.daisy.pipeline.home" value="." />
-                        <fx:property name="org.daisy.pipeline.data" value="data" />
-                        <fx:property name="org.daisy.pipeline.base" value="." />
-                        <fx:property name="org.daisy.pipeline.ws.localfs" value="true" />
-                        <fx:property name="org.daisy.pipeline.ws.authentication" value="false" />
-                        <fx:property name="felix.config.properties" value="file:etc/config.properties" />
-                        <fx:property name="felix.system.properties" value="file:etc/system.properties" />
-                      </fx:platform>
-                      <fx:resources>
-                        <fx:fileset type="jar" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline" includes="system/bootstrap/felix.jar" />
-                        <fx:fileset type="license" os="osx" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline" includes="NOTICE.txt" />
-                        <fx:fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
-                          <include name="**/*" />
-                        </fx:fileset>
-                      </fx:resources>
-                      <fx:bundleArgument arg="mac.CFBundleIdentifier" value="org.daisy.pipeline2" />
-                      <fx:bundleArgument arg="mac.CFBundleVersion" value="${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}" />
-                    </fx:deploy>
-                  </target>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
             <executions>
@@ -1981,13 +2093,6 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>build-helper-maven-plugin</artifactId>
             <executions>
-              <execution>
-                <id>parse-version</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>parse-version</goal>
-                </goals>
-              </execution>
               <execution>
                 <!--
                     this execution must come after package-appdmg
@@ -2087,12 +2192,9 @@
                       <targetPath>resources</targetPath>
                       <filtering>true</filtering>
                       <includes>
-                        <!--
-                            note that only system.properties really needs filtering
-                        -->
                         <include>bin/pipeline2</include>
-                        <include>etc/config.properties</include>
-                        <include>etc/system.properties</include>
+                        <include>etc/felix.properties</include>
+                        <include>etc/pipeline.properties</include>
                         <include>etc/config-logback.xml</include>
                       </includes>
                     </resource>
@@ -2168,9 +2270,9 @@
                       <type>directory</type>
                       <src>src/main/resources/etc</src>
                       <excludes>
-                        config.properties,
+                        felix.properties,
                         config-logback.xml,
-                        system.properties
+                        pipeline.properties
                       </excludes>
                       <mapper>
                         <prefix>${deb.pipeline.home}/etc</prefix>
@@ -2181,8 +2283,8 @@
                       <type>directory</type>
                       <src>${project.build.directory}/filtered-resources/resources/etc</src>
                       <includes>
-                        config.properties,
-                        system.properties
+                        felix.properties,
+                        pipeline.properties
                       </includes>
                       <mapper>
                         <prefix>${deb.pipeline.home}/etc</prefix>
@@ -2197,8 +2299,8 @@
                     <data>
                       <type>link</type>
                       <symlink>true</symlink>
-                      <linkName>${deb.pipeline.config}/system.properties</linkName>
-                      <linkTarget>${deb.pipeline.home}/etc/system.properties</linkTarget>
+                      <linkName>${deb.pipeline.config}/pipeline.properties</linkName>
+                      <linkTarget>${deb.pipeline.home}/etc/pipeline.properties</linkTarget>
                     </data>
                     <data>
                       <type>link</type>
@@ -2212,24 +2314,24 @@
                       <dst>/etc/default/daisy-pipeline2</dst>
                     </data>
                     <!-- ======= -->
-                    <!-- bundles -->
+                    <!-- jars -->
                     <!-- ======= -->
                     <data>
                       <type>directory</type>
-                      <src>${project.build.directory}/bundles</src>
+                      <src>${project.build.directory}/jars</src>
                       <excludes>
-                        bootstrap/linux,
-                        bootstrap/linux/*,
-                        bootstrap/win,
-                        bootstrap/win/*,
-                        bootstrap/mac,
-                        bootstrap/mac/*
-                        felix/linux,
-                        felix/linux/*,
-                        felix/win,
-                        felix/win/*,
-                        felix/mac,
-                        felix/mac/*
+                        gui/bootstrap/linux,
+                        gui/bootstrap/linux/*,
+                        gui/bootstrap/win,
+                        gui/bootstrap/win/*,
+                        gui/bootstrap/mac,
+                        gui/bootstrap/mac/*
+                        common/linux,
+                        common/linux/*,
+                        common/win,
+                        common/win/*,
+                        common/mac,
+                        common/mac/*
                       </excludes>
                       <mapper>
                         <prefix>${deb.pipeline.home}/system</prefix>
@@ -2238,17 +2340,17 @@
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>${project.build.directory}/bundles/bootstrap/linux</src>
+                      <src>${project.build.directory}/jars/gui/bootstrap/linux</src>
                       <mapper>
-                        <prefix>${deb.pipeline.home}/system/bootstrap</prefix>
+                        <prefix>${deb.pipeline.home}/system/gui/bootstrap</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
                     <data>
                       <type>directory</type>
-                      <src>${project.build.directory}/bundles/felix/linux</src>
+                      <src>${project.build.directory}/jars/common/linux</src>
                       <mapper>
-                        <prefix>${deb.pipeline.home}/system/felix</prefix>
+                        <prefix>${deb.pipeline.home}/system/common</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
@@ -2397,8 +2499,8 @@
                             <include>README.txt</include>
                           </includes>
                           <excludes>
-                            <exclude>etc/system.properties</exclude>
-                            <exclude>etc/config.properties</exclude>
+                            <exclude>etc/pipeline.properties</exclude>
+                            <exclude>etc/felix.properties</exclude>
                           </excludes>
                         </source>
                       </sources>
@@ -2412,8 +2514,8 @@
                         <source>
                           <location>src/main/resources</location>
                           <includes>
-                            <include>etc/system.properties</include>
-                            <include>etc/config.properties</include>
+                            <include>etc/pipeline.properties</include>
+                            <include>etc/felix.properties</include>
                             <include>etc/config-logback.xml</include>
                           </includes>
                           <filter>true</filter>
@@ -2445,50 +2547,50 @@
                       <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
-                          <location>${project.build.directory}/bundles</location>
+                          <location>${project.build.directory}/jars</location>
                           <excludes>
-                            <exclude>bootstrap/linux</exclude>
-                            <exclude>bootstrap/linux/*</exclude>
-                            <exclude>bootstrap/win</exclude>
-                            <exclude>bootstrap/win/*</exclude>
-                            <exclude>bootstrap/mac</exclude>
-                            <exclude>bootstrap/mac/*</exclude>
-                            <exclude>felix/linux</exclude>
-                            <exclude>felix/linux/*</exclude>
-                            <exclude>felix/win</exclude>
-                            <exclude>felix/win/*</exclude>
-                            <exclude>felix/mac</exclude>
-                            <exclude>felix/mac/*</exclude>
+                            <exclude>gui/bootstrap/linux</exclude>
+                            <exclude>gui/bootstrap/linux/*</exclude>
+                            <exclude>gui/bootstrap/win</exclude>
+                            <exclude>gui/bootstrap/win/*</exclude>
+                            <exclude>gui/bootstrap/mac</exclude>
+                            <exclude>gui/bootstrap/mac/*</exclude>
+                            <exclude>common/linux</exclude>
+                            <exclude>common/linux/*</exclude>
+                            <exclude>common/win</exclude>
+                            <exclude>common/win/*</exclude>
+                            <exclude>common/mac</exclude>
+                            <exclude>common/mac/*</exclude>
                           </excludes>
                         </source>
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${rpm.pipeline.home}/system/bootstrap</directory>
+                      <directory>${rpm.pipeline.home}/system/gui/bootstrap</directory>
                       <filemode>0644</filemode>
                       <username>${rpm.user}</username>
                       <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
-                          <location>${project.build.directory}/bundles/bootstrap/linux</location>
+                          <location>${project.build.directory}/jars/gui/bootstrap/linux</location>
                         </source>
                       </sources>
                     </mapping>
                     <mapping>
-                      <directory>${rpm.pipeline.home}/system/felix</directory>
+                      <directory>${rpm.pipeline.home}/system/common</directory>
                       <filemode>0644</filemode>
                       <username>${rpm.user}</username>
                       <groupname>${rpm.group}</groupname>
                       <sources>
                         <source>
-                          <location>${project.build.directory}/bundles/felix/linux</location>
+                          <location>${project.build.directory}/jars/common/linux</location>
                         </source>
                       </sources>
                     </mapping>
                   </mappings>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
+                    <filter>src/main/assembly/dist-linux.properties</filter>
                   </filters>
                   <postremoveScriptlet>
                     <script>
@@ -2566,9 +2668,6 @@
       </build>
     </profile>
     <profile>
-      <!--
-          replace framework-persistance bundle with framework-volatile
-      -->
       <id>without-persistence</id>
       <build>
         <plugins>
@@ -2576,23 +2675,8 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
               <execution>
-                <id>copy-persistence-libs-bundles</id>
+                <id>copy-persistence</id>
                 <phase>none</phase>
-              </execution>
-              <execution>
-                <id>copy-persistence-pipeline-bundles</id>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}/bundles/framework/persistence</outputDirectory>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>framework-volatile</artifactId>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
               </execution>
             </executions>
           </plugin>

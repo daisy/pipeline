@@ -13,7 +13,8 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-SYSTEM_PROPERTIES=${deb.pipeline.home}/etc/system.properties
+SYSTEM_PROPERTIES=${deb.pipeline.home}/etc/pipeline.properties
+SYSTEM_PROPERTIES_2=${deb.pipeline.home}/etc/system.properties # how it used to be called
 
 case "$1" in
     
@@ -25,9 +26,16 @@ case "$1" in
         
         # backup and delete old configuration file
         
-        [ -e $SYSTEM_PROPERTIES ] && mv $SYSTEM_PROPERTIES $SYSTEM_PROPERTIES.old
-        [ -e $SYSTEM_PROPERTIES.bak ] && mv $SYSTEM_PROPERTIES.bak $SYSTEM_PROPERTIES.bak.old
-        
+        if [ -e $SYSTEM_PROPERTIES ]; then
+            mv $SYSTEM_PROPERTIES $SYSTEM_PROPERTIES.old
+        elif [ -e $SYSTEM_PROPERTIES_2 ]; then
+            mv $SYSTEM_PROPERTIES_2 $SYSTEM_PROPERTIES.old
+        fi
+        if [ -e $SYSTEM_PROPERTIES.bak ]; then
+            $SYSTEM_PROPERTIES.bak $SYSTEM_PROPERTIES.bak.old
+        elif [ -e $SYSTEM_PROPERTIES_2.bak ]; then
+            $SYSTEM_PROPERTIES_2.bak $SYSTEM_PROPERTIES.bak.old
+        fi
     ;;
    
     abort-upgrade)

@@ -15,62 +15,68 @@
         <xsl:template match="/*">
                 <xsl:variable name="version" select="/pom:project/pom:version/text()"/>
                 <xsl:variable name="artifacts" as="element()*">
-                        <xsl:for-each select="/pom:project/pom:build/pom:plugins/pom:plugin[pom:artifactId='maven-dependency-plugin']/pom:executions/pom:execution[starts-with(pom:id/text(),'copy-')]">
+                        <xsl:for-each select="/pom:project/pom:profiles/pom:profile[pom:id='copy-artifacts']/pom:build/pom:plugins/pom:plugin[pom:artifactId='maven-dependency-plugin']/pom:executions/pom:execution[starts-with(pom:id/text(),'copy-')]">
                                 <xsl:variable name="deployPath">
                                         <xsl:choose>
                                                 <xsl:when test="pom:id = 'copy-felix-launcher'">
-                                                        <xsl:value-of select="'system/bootstrap'"/>
+                                                        <xsl:value-of select="'system/osgi/bootstrap'"/>
                                                 </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-felix-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                        <xsl:value-of select="'system/osgi/bundles'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-felix-gogo-bundles'">
-                                                        <xsl:value-of select="'system/felix/gogo'"/>
+                                                <xsl:when test="pom:id = 'copy-felix-gogo'">
+                                                        <xsl:value-of select="'system/gogo'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-framework-libs-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-framework'">
+                                                        <xsl:value-of select="'system/common'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-framework-pipeline-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-framework-osgi'">
+                                                        <xsl:value-of select="'system/osgi/bundles'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-webservice-bundles'">
-                                                        <xsl:value-of select="'system/frontend'"/>
+                                                <xsl:when test="pom:id = 'copy-framework-no-osgi'">
+                                                        <xsl:value-of select="'system/no-osgi'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-modules-libs-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-webservice'">
+                                                        <xsl:value-of select="'system/webservice'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-modules-pipeline-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-modules'">
+                                                        <xsl:value-of select="'system/common'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-modules-linux-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-modules-osgi'">
+                                                        <xsl:value-of select="'system/osgi/bundles'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-modules-mac-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-modules-linux'">
+                                                        <xsl:value-of select="'system/common'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-modules-win-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-modules-mac'">
+                                                        <xsl:value-of select="'system/common'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-persistence-libs-bundles'">
-                                                        <xsl:value-of select="'system/framework/persistence'"/>
+                                                <xsl:when test="pom:id = 'copy-modules-win'">
+                                                        <xsl:value-of select="'system/common'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-persistence-pipeline-bundles'">
-                                                        <xsl:value-of select="'system/framework/persistence'"/>
+                                                <xsl:when test="pom:id = 'copy-persistence'">
+                                                        <xsl:value-of select="'system/persistence'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-volatile-bundles'">
-                                                        <xsl:value-of select="'system/framework/volatile'"/>
+                                                <xsl:when test="pom:id = 'copy-persistence-osgi'">
+                                                        <xsl:value-of select="'system/osgi/persistence'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-gui-bundles'">
-                                                        <xsl:value-of select="'system/felix'"/>
+                                                <xsl:when test="pom:id = 'copy-persistence-no-osgi'">
+                                                        <xsl:value-of select="'system/no-osgi/persistence'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-volatile'">
+                                                        <xsl:value-of select="'system/common'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-gui'">
+                                                        <xsl:value-of select="'system/gui'"/>
                                                 </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-javafx-linux'">
-                                                        <xsl:value-of select="'system/bootstrap'"/>
+                                                        <xsl:value-of select="'system/gui/bootstrap'"/>
                                                 </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-javafx-mac'">
-                                                        <xsl:value-of select="'system/bootstrap'"/>
+                                                        <xsl:value-of select="'system/gui/bootstrap'"/>
                                                 </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-javafx-win'">
-                                                        <xsl:value-of select="'system/bootstrap'"/>
+                                                        <xsl:value-of select="'system/gui/bootstrap'"/>
                                                 </xsl:when>
                                                 <xsl:otherwise>
                                                         <xsl:message terminate="yes" select="concat('the build plugin maven-dependency-plugin has an an execution without an associated deployPath in ',replace(base-uri(),'^.*/',''),': ',pom:id/text())"/>
@@ -81,15 +87,15 @@
                                         <xsl:with-param name="deployPath" select="$deployPath"/>
                                 </xsl:apply-templates>
                         </xsl:for-each>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='linux']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-linux']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='unpack-cli-linux']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-linux']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">linux_386</xsl:with-param>
                         </xsl:apply-templates>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='mac']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-mac']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='unpack-cli-mac']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-mac']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">darwin_386</xsl:with-param>
                         </xsl:apply-templates>
-                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='win']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-win']/pom:configuration/pom:artifactItems/pom:artifactItem">
+                        <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile[pom:id='unpack-cli-win']/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-win']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">cli</xsl:with-param>
                                 <xsl:with-param name="classifier">windows_386</xsl:with-param>
                         </xsl:apply-templates>
@@ -139,12 +145,6 @@
                                                         if ($classifier) then concat('-',$classifier) else '',
                                                         '.jar')"/>
                 <xsl:variable name="id" select="string-join(($groupId,$artifactId,$version,$classifier),'/')"/>
-                <!--
-                    This is a hack, real solution is to do this in the POM
-                -->
-                <xsl:variable name="deployPath" select="if (starts-with($artifactId,'org.apache.felix.gogo.'))
-                                                        then concat($deployPath,'/gogo')
-                                                        else $deployPath"/>
                 <xsl:variable name="finalPath" select="if (pom:destFileName) then concat($deployPath,'/',string(pom:destFileName)) else
                                                        concat($deployPath,'/',$groupId,'.',$artifactId,'-',$version,
                                                         if ($classifier) then concat('-',$classifier) else '',
