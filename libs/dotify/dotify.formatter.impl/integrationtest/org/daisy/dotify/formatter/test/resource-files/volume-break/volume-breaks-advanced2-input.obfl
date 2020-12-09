@@ -1,7 +1,7 @@
 <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
 	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
-		<dc:title>Several break before volume test</dc:title>
-		<dc:description>Tests that break-before volume works when the number of volumes is increased.</dc:description>
+		<dc:title>???</dc:title>
+		<dc:description>???</dc:description>
 	</meta>
 	<layout-master name="body" page-width="10" page-height="6" duplex="false">
 		<default-template>

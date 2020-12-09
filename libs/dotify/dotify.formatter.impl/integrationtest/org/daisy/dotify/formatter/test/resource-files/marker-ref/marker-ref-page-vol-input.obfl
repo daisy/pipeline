@@ -17,7 +17,7 @@
 			<footer/>
 		</default-template>
 	</layout-master>
-	<volume-template sheets-in-volume-max="10" use-when="(= $volume 1)">
+	<volume-template sheets-in-volume-max="1000" use-when="(= $volume 1)">
 		<pre-content>
 			<sequence master="main" initial-page-number="1">
 				<block>⠿⠿<marker class="pagenum" value="1"/>⠿⠿<marker class="pagenum" value="2"/>⠿⠿<marker class="pagenum" value="3"/></block>
@@ -25,7 +25,7 @@
 		</pre-content>
 		<post-content/>
 	</volume-template>
-	<volume-template sheets-in-volume-max="10" use-when="(&gt; $volume 1)">
+	<volume-template sheets-in-volume-max="1000" use-when="(&gt; $volume 1)">
 		<pre-content>
 			<sequence master="main" initial-page-number="1">
 				<block>⠤⠤<marker class="pagenum" value="4"/>⠤⠤<marker class="pagenum" value="5"/>⠤⠤<marker class="pagenum" value="6"/></block>
@@ -41,6 +41,8 @@
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
+	</sequence>
+	<sequence master="main" break-before="volume">
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>
 		<block>⠿⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠤ ⠤⠿</block>

@@ -187,7 +187,7 @@ class FormatterImpl implements Formatter {
             try {
                 ret = new ArrayList<>();
                 volumeProvider.prepare();
-                for (int i = 1; i <= volumeProvider.getVolumeCount(); i++) {
+                while (volumeProvider.hasNext()) {
                     ret.add(volumeProvider.nextVolume());
                 }
 

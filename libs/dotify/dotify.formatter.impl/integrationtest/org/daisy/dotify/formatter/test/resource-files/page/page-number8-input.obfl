@@ -17,7 +17,7 @@
 			<footer/>
 		</default-template>
 	</layout-master>
-	<volume-template sheets-in-volume-max="5">
+	<volume-template sheets-in-volume-max="1000">
 		<pre-content>
 			<sequence master="front"><block>⠞⠊⠞⠇⠑</block></sequence>
 		</pre-content>
@@ -29,11 +29,17 @@
 		<block break-before="page">⠤⠤⠤</block>
 		<block break-before="page">⠤⠤⠤</block>
 		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+	<sequence master="body" page-number-counter="A" break-before="volume">
 		<block break-before="page">⠤⠤⠤</block>
 		<block break-before="page">⠤⠤⠤</block>
 		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+	<sequence master="body" page-number-counter="A" break-before="volume">
 		<block break-before="page">⠤⠤⠤</block>
 		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+	<sequence master="body" page-number-counter="A" break-before="volume">
 		<block break-before="page">⠤⠤⠤</block>
 		<block break-before="page">⠤⠤⠤</block>
 	</sequence>
