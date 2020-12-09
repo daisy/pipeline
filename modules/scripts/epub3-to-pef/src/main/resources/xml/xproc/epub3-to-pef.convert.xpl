@@ -55,20 +55,34 @@
     <!-- Empty temporary directory dedicated to this conversion -->
     <p:option name="temp-dir" required="true"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+            px:log-error
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation>
             px:opf-spine-to-fileset
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            px:merge-parameters
+            px:apply-stylesheets
+            px:transform
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
         <p:documentation>
             pef:add-metadata
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
+        <p:documentation>
+            css:delete-stylesheets
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
@@ -137,6 +151,15 @@
                     <p:with-option name="message" select="concat('Inlining document-specific CSS for ',replace(base-uri(/*),'.*/',''),'')"/>
                 </px:message>
                 <px:apply-stylesheets px:progress="1">
+                    <p:with-option name="media"
+                                   select="concat(
+                                             'embossed AND (width: ',
+                                             (//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1],
+                                             ') AND (height: ',
+                                             (//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1],
+                                             ')')">
+                        <p:pipe step="parameters" port="result"/>
+                    </p:with-option>
                     <p:input port="parameters">
                         <p:pipe step="parameters" port="result"/>
                     </p:input>
@@ -216,6 +239,15 @@
             <p:input port="parameters">
                 <p:pipe port="result" step="parameters"/>
             </p:input>
+            <p:with-option name="media"
+                           select="concat(
+                                     'embossed AND (width: ',
+                                     (//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1],
+                                     ') AND (height: ',
+                                     (//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1],
+                                     ')')">
+                <p:pipe port="result" step="parameters"/>
+            </p:with-option>
         </px:apply-stylesheets>
     </p:group>
     
@@ -256,8 +288,8 @@
                     </p:input>
                 </px:transform>
             </p:group>
-            <p:try name="try-pef">
-                <p:group px:message="Transforming from OBFL to PEF" px:progress=".60">
+            <p:try name="try-pef" px:message="Transforming from OBFL to PEF" px:progress=".60">
+                <p:group>
                     <p:output port="pef" primary="true"/>
                     <p:output port="status">
                         <p:inline>
@@ -274,15 +306,28 @@
                         </p:input>
                     </px:transform>
                 </p:group>
-                <p:catch>
+                <p:catch name="catch">
                     <p:output port="pef" primary="true">
                         <p:empty/>
                     </p:output>
                     <p:output port="status">
-                        <p:inline>
-                            <d:status result="error"/>
-                        </p:inline>
+                        <p:pipe step="status" port="result"/>
                     </p:output>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:inline>
+                                <d:status result="error"/>
+                            </p:inline>
+                        </p:input>
+                    </p:identity>
+                    <px:log-error severity="ERROR">
+                        <p:input port="error">
+                            <p:pipe step="catch" port="error"/>
+                        </p:input>
+                    </px:log-error>
+                    <p:identity px:message="Failed to convert OBFL to PEF (Please see detailed log for more info.)"
+                                px:message-severity="ERROR"/>
+                    <p:identity name="status"/>
                     <p:sink/>
                 </p:catch>
             </p:try>

@@ -94,6 +94,13 @@ public interface TTSLog {
 		float getTimeout();
 
 		/**
+		 * @param secs is the actual time elapsed while synthesizing the entry in seconds
+		 */
+		void setTimeElapsed(float secs);
+
+		float getTimeElapsed();
+
+		/**
 		 * @param begin offset in seconds
 		 * @param end offset in seconds
 		 */

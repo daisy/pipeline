@@ -23,8 +23,7 @@
 						</xsl:analyze-string>
 					</_>
 				</xsl:variable>
-				<xsl:if test="not($parsed[@type='text/css'
-				              or (not($parsed/@type[not(.='text/css')]) and matches($parsed/@href,'\.s?css$'))])">
+				<xsl:if test="not($parsed[@type=('text/css','text/x-scss') or (not(@type) and matches(@href,'\.s?css$'))])">
 					<xsl:sequence select="."/>
 				</xsl:if>
 			</xsl:when>
@@ -34,9 +33,11 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	<xsl:template match="*[local-name()='style'][not(@type[not(.='text/css')])]"/>
+	<xsl:template match="*[local-name()='style']
+	                      [@type=('text/css','text/x-scss') or not(@type)]"/>
 	
-	<xsl:template match="*[local-name()='link'][@rel='stylesheet' and not(@type[not(.='text/css')]) and matches(@href,'\.s?css$')]"/>
+	<xsl:template match="*[local-name()='link' and @rel='stylesheet']
+	                      [@type=('text/css','text/x-scss') or (not(@type) and matches(@href,'\.s?css$'))]"/>
 	
 	<xsl:template match="@*|node()">
 		<xsl:copy>

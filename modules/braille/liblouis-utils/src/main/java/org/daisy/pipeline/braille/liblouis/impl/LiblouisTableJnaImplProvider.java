@@ -23,8 +23,6 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Sets.newHashSet;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URLs.asURL;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
@@ -122,7 +120,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 					if (resolved != null) {
 						logger.debug("Resolved to " + join(resolved, ","));
 						if (resolved.length == 1)
-							return asURL(resolved[0]);
+							return URLs.asURL(resolved[0]);
 						else {
 							// if it is a comma separated table list, create a single file that includes all the sub-tables
 							if (aggregatorTables.containsKey(table)) {
@@ -133,13 +131,13 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 							try {
 								StringBuilder b = new StringBuilder();
 								for (File f : resolved)
-									b.append("include ").append(asURI(f.getCanonicalFile()).toASCIIString()).append('\n');
+									b.append("include ").append(URLs.asURI(f.getCanonicalFile()).toASCIIString()).append('\n');
 								InputStream in = new ByteArrayInputStream(b.toString().getBytes(StandardCharsets.UTF_8));
 								File f = createTempFile("aggregator-", ".tbl");
 								f.delete();
 								Files.copy(in, f.toPath());
 								f = f.getCanonicalFile();
-								URL u = asURL(f);
+								URL u = URLs.asURL(f);
 								aggregatorTables.put(table, u);
 								logger.debug("... aggregated into " + u);
 								return u;
@@ -336,9 +334,9 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								catch (CompilationException e) {}}
 							if (table != null) {
 								if (whiteSpace)
-									table = asURI(spacesFile) + "," + table;
+									table = URLs.asURI(spacesFile) + "," + table;
 								if (unicode)
-									table = asURI(unicodeDisFile) + "," + table;
+									table = URLs.asURI(unicodeDisFile) + "," + table;
 								if (dotsForUndefinedChar != null) {
 									try {
 										File undefinedFile = createTempFile("undefined-", ".uti");
@@ -361,7 +359,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 										writer.flush();
 										writer.close();
 										// adding the "undefined" rule to the end overwrites any previous rules
-										table = table + "," + asURI(undefinedFile);
+										table = table + "," + URLs.asURI(undefinedFile);
 									} catch (IOException e) {
 										throw new RuntimeException(e);
 									}

@@ -7,8 +7,7 @@ import java.util.Locale;
 
 import com.google.common.base.Predicate;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URLs.asURL;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.Provider;
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
 import static org.daisy.pipeline.braille.common.Provider.util.memoize;
@@ -80,7 +79,7 @@ public class LibhyphenTableRegistry extends ResourceRegistry<LibhyphenTablePath>
 	
 	private static class LibhyphenFileSystem implements ResourcePath {
 
-		private static final URI identifier = asURI("file:/");
+		private static final URI identifier = URLs.asURI("file:/");
 		
 		private static final Predicate<String> isLibhyphenTable = matchesGlobPattern("hyph_*.dic");
 		
@@ -91,16 +90,16 @@ public class LibhyphenTableRegistry extends ResourceRegistry<LibhyphenTablePath>
 		public URL resolve(URI resource) {
 			try {
 				resource = resource.normalize();
-				resource = identifier.resolve(resource);
+				resource = URLs.resolve(identifier, resource);
 				File file = asFile(resource);
 				if (file.exists() && isLibhyphenTable.apply(fileName(file)))
-					return asURL(resource); }
+					return URLs.asURL(resource); }
 			catch (Exception e) {}
 			return null;
 		}
 		
 		public URI canonicalize(URI resource) {
-			return asURI(resolve(resource));
+			return URLs.asURI(resolve(resource));
 		}
 	}
 }

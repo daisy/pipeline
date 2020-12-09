@@ -70,20 +70,21 @@ public class Expand83 extends ExtensionFunctionDefinition {
 		if (uri == null || !uri.startsWith("file:/")) {
 			return uri;
 		}
+		return expand83(URLs.asURI(uri)).toASCIIString();
+	}
+	
+	private static URI expand83(URI uri) throws XPathException {
 		try {
-			URI u = new URI(uri);
-			URL url = new URL(u.toString());
 			String protocol = "file";
-			String path = url.getPath();
+			String path = uri.getPath();
 			String zipPath = null;
 			if (path.contains("!/")) {
 				// it is a path to a ZIP entry
 				zipPath = path.substring(path.indexOf("!/")+1);
 				path = path.substring(0, path.indexOf("!/"));
 			}
-			String query = url.getQuery();
-			String fragment = url.getRef();
-			if (fragment != null) fragment = URLs.decode(fragment);
+			String query = uri.getQuery();
+			String fragment = uri.getFragment();
 			File file = new File(new URI(protocol, null, path, null, null));
 			URI expandedUri = expand83(file, path.endsWith("/"));
 			if (expandedUri == null) {
@@ -91,8 +92,8 @@ public class Expand83 extends ExtensionFunctionDefinition {
 			} else {
 				path = expandedUri.getPath();
 				if (zipPath != null)
-					path = path + "!" + URI.create(zipPath).getPath();
-				return new URI(protocol, null, path, query, fragment).toString();
+					path = path + "!" + new URI(null, null, zipPath, null, null).getPath();
+				return new URI(protocol, null, path, query, fragment);
 			}
 		} catch (Exception e) {
 			throw new XPathException("pf:file-expand83("+uri+") failed", e);
@@ -110,7 +111,7 @@ public class Expand83 extends ExtensionFunctionDefinition {
 	public static URI expand83(File file, boolean isDir) throws XPathException {
 		try {
 			if (file.exists()) {
-				return file.getCanonicalFile().toURI();
+				return URLs.asURI(file.getCanonicalFile());
 			} else {
 				// if the file does not exist a parent directory may exist which can be canonicalized
 				String relPath = file.getName();
@@ -119,11 +120,11 @@ public class Expand83 extends ExtensionFunctionDefinition {
 				File dir = file.getParentFile();
 				while (dir != null) {
 					if (dir.exists())
-						return dir.getCanonicalFile().toURI().resolve(relPath);
+						return URLs.resolve(URLs.asURI(dir.getCanonicalFile()), new URI(null, null, relPath, null, null));
 					relPath = dir.getName() + "/" + relPath;
 					dir = dir.getParentFile();
 				}
-				return file.toURI();
+				return URLs.asURI(file);
 			}
 		} catch (Exception e) {
 			throw new XPathException("pf:file-expand83("+file+") failed", e);

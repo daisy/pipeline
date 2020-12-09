@@ -14,18 +14,18 @@ is 2, etc. The resulting table of contents has the following nested structure:
 ~~~xml
 &lt;ol id="generated-document-toc"&gt;
   &lt;li&gt;
-      &lt;a href="#ch_1"&gt;Chapter 1&lt;/a&gt;
-      &lt;list&gt;
+      &lt;a href="#ch_1" title="Chapter 1"&gt;Chapter 1&lt;/a&gt;
+      &lt;ol&gt;
           &lt;li&gt;
-              &lt;a href="#ch_1_1"&gt;1.1&lt;/a&gt;
+              &lt;a href="#ch_1_1" title="1.1"&gt;1.1&lt;/a&gt;
               ...
           &lt;/li&gt;
           &lt;li&gt;
-              &lt;a href="#ch_1_2"&gt;1.2&lt;/a&gt;
+              &lt;a href="#ch_1_2" title="1.2"&gt;1.2&lt;/a&gt;
               ...
           &lt;/li&gt;
           ...
-      &lt;/list&gt;
+      &lt;/ol&gt;
   &lt;/li&gt;
   ...
 &lt;/ol&gt;

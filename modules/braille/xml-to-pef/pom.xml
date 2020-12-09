@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.13.8-SNAPSHOT</version>
+    <version>1.14.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>xml-to-pef</artifactId>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>5.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: XML to PEF</name>
@@ -32,21 +32,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>common-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>pef-utils</artifactId>
       <scope>runtime</scope>
@@ -54,11 +39,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>file-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>fileset-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--
@@ -77,4 +57,21 @@
     </expose-services>
   </properties>
   
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>xprocdoc</id>
+            <configuration>
+              <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>

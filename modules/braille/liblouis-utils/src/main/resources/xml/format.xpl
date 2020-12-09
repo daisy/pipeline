@@ -90,8 +90,11 @@
                     <xsl:stylesheet version="2.0">
                         <xsl:template match="/*">
                             <xsl:copy>
-                                <xsl:copy-of select="document('')/*/namespace::*[name()='louis']"/>
-                                <xsl:copy-of select="document('')/*/namespace::*[name()='css']"/>
+                                <!-- document('') should point to the document node of the
+                                     format.xpl file but for some reason does not always work, so
+                                     changed it to document('format.xpl') -->
+                                <xsl:copy-of select="document('format.xpl')/*/namespace::*[name()='louis']"/>
+                                <xsl:copy-of select="document('format.xpl')/*/namespace::*[name()='css']"/>
                                 <xsl:sequence select="@*|node()"/>
                             </xsl:copy>
                         </xsl:template>

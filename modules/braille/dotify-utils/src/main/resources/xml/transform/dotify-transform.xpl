@@ -27,6 +27,14 @@
 	<p:import href="../css-to-obfl.xpl"/>
 	<p:import href="../obfl-normalize-space.xpl"/>
 	
+	<p:variable name="page-width"
+	               select="(//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1]">
+		<p:pipe step="main" port="parameters"/>
+	</p:variable>
+	<p:variable name="page-height"
+	               select="(//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1]">
+		<p:pipe step="main" port="parameters"/>
+	</p:variable>
 	<p:variable name="duplex"
 	            select="(//c:param[@name='duplex' and not(@namespace[not(.='')])]/@value,'true')[.=('true','false')][1]">
 		<p:pipe step="main" port="parameters"/>
@@ -47,6 +55,8 @@
 	
 	<pxi:css-to-obfl px:message="Transforming from CSS to OBFL" px:progress=".83">
 		<p:with-option name="locale" select="$locale"/>
+		<p:with-option name="page-width" select="$page-width"/>
+		<p:with-option name="page-height" select="$page-height"/>
 		<p:with-option name="duplex" select="$duplex"/>
 		<p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
 	</pxi:css-to-obfl>

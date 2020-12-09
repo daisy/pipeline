@@ -18,6 +18,8 @@
     <p:output port="result"/>
     
     <p:option name="locale" select="'und'"/>
+    <p:option name="page-width" select="'40'"/>
+    <p:option name="page-height" select="'25'"/>
     <p:option name="duplex" select="'true'"/>
     <p:option name="skip-margin-top-of-page" select="'false'"/>
     
@@ -90,9 +92,10 @@
         <css:parse-stylesheet>
             <p:documentation>
                 Make css:page, css:volume, css:after, css:before, css:footnote-call, css:duplicate,
-                css:alternate, css:_obfl-alternate-scenario, css:_obfl-on-toc-start,
-                css:_obfl-on-volume-start, css:_obfl-on-volume-end, css:_obfl-on-toc-end,
-                css:_obfl-volume-transition and css:_obfl-on-resumed attributes.
+                css:alternate, css:top-of-page, css:_obfl-alternate-scenario,
+                css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
+                css:_obfl-on-toc-end, css:_obfl-volume-transition and css:_obfl-on-resumed
+                attributes.
             </p:documentation>
         </css:parse-stylesheet>
         <p:delete match="@css:*[matches(local-name(),'^text-transform-')]">
@@ -186,10 +189,11 @@
     
     <pxi:recursive-parse-stylesheet-and-make-pseudo-elements px:progress=".04">
         <p:documentation>
-            Make css:page and css:volume and css:_obfl-volume-transition attributes, css:after,
-            css:before, css:duplicate, css:alternate, css:footnote-call, css:_obfl-on-toc-start,
-            css:_obfl-on-volume-start, css:_obfl-on-volume-end, css:_obfl-on-toc-end,
-            css:_obfl-on-resumed and css:_obfl-alternate-scenario pseudo-elements.
+            Make css:page, css:volume, css:top-of-page and css:_obfl-volume-transition attributes,
+            css:after, css:before, css:duplicate, css:alternate, css:footnote-call,
+            css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
+            css:_obfl-on-toc-end, css:_obfl-on-resumed and css:_obfl-alternate-scenario
+            pseudo-elements.
         </p:documentation>
     </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
     
@@ -498,6 +502,11 @@
                               label="(ancestor::*[@css:volume])[last()]/@css:volume"/>
             <p:delete match="css:_/@css:volume"/>
         </p:group>
+        <p:delete match="css:box[@type='box']/@css:top-of-page">
+            <p:documentation>
+                :top-of-page is only supported on block elements.
+            </p:documentation>
+        </p:delete>
         <css:shift-string-set px:progress=".15">
             <p:documentation>
                 Move css:string-set attributes to inline css:box elements. <!-- depends on
@@ -795,6 +804,12 @@
         <p:input port="stylesheet">
             <p:document href="generate-obfl-layout-master.xsl"/>
         </p:input>
+        <p:with-param name="page-width" select="$page-width">
+            <p:empty/>
+        </p:with-param>
+        <p:with-param name="page-height" select="$page-height">
+            <p:empty/>
+        </p:with-param>
         <p:with-param name="duplex" select="$duplex">
             <p:empty/>
         </p:with-param>
@@ -867,5 +882,10 @@
         </p:insert>
         <p:delete match="obfl:toc-sequence/obfl:table-of-contents"/>
     </p:group>
+    
+    <!--
+        display-when="..." also requires keep="page"
+    -->
+    <p:add-attribute match="obfl:block[@display-when]" attribute-name="keep" attribute-value="page"/>
     
 </p:declare-step>

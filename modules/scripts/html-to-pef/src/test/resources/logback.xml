@@ -14,7 +14,7 @@
     </encoder>
   </appender>
   
-  <appender name="EVENTBUS" class="org.daisy.pipeline.logging.EventBusAppender">
+  <appender name="JOB" class="org.daisy.pipeline.logging.JobProgressAppender">
     <filter class="org.daisy.pipeline.logging.ThresholdFilter">
       <rootLevel>WARN</rootLevel>
       <loggerLevels>

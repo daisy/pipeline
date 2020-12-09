@@ -173,29 +173,4 @@
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <id>notester</id>
-      <build>
-	<plugins>
-	  <plugin>
-	    <artifactId>maven-surefire-plugin</artifactId>
-	    <configuration>
-	      <excludes>
-		<exclude>**/ATTNativeTest.java</exclude>
-		<exclude>**/ATTEngineTest.java</exclude>
-	      </excludes>
-	    </configuration>
-	  </plugin>
-	</plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>tester</id>
-    </profile>
-  </profiles>
-
 </project>

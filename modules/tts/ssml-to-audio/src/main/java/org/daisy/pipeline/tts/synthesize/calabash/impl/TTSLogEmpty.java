@@ -96,6 +96,14 @@ public class TTSLogEmpty implements TTSLog {
 			return 0;
 		}
 
+		@Override
+		public void setTimeElapsed(float secs) {
+		}
+
+		@Override
+		public float getTimeElapsed() {
+			return 0;
+		}
 	};
 
 	@Override

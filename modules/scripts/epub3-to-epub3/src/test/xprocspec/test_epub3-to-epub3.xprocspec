@@ -6,6 +6,7 @@
                xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns:epub="http://www.idpf.org/2007/ops"
                xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:ssml="http://www.w3.org/2001/10/synthesis"
                script="../../main/resources/xml/epub3-to-epub3.convert.xpl">
 	
 	<x:scenario label="minimal">
@@ -58,6 +59,7 @@
 							<meta property="dcterms:modified">2020-03-06T12:00:00Z</meta>
 							<dc:date>2020-03-06</dc:date>
 							<dc:language>en</dc:language>
+							<meta property="schema:accessibilityFeature">ttsMarkup</meta>
 						</metadata>
 						<manifest>
 							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
@@ -155,7 +157,7 @@
 					</html>
 				</x:document>
 				<x:document type="inline" xml:base="EPUB/chapter.xhtml">
-					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ssml:alphabet="ipa">
 						<head>
 							<meta charset="UTF-8"/>
 							<title>minimal</title>
@@ -163,7 +165,7 @@
 							<link rel="prev" href="front.xhtml"/>
 						</head>
 						<body id="chap_1" epub:type="bodymatter chapter">
-							<h1 id="h_1">Chapter 1</h1>
+							<h1 id="h_1">Chapter <span ssml:ph="wʌn">I</span></h1>
 							<p>
 								This paragraph contains
 								<span id="page_5" class="page-normal" epub:type="pagebreak" title="5"/>
@@ -211,6 +213,8 @@
 						<dc:date xmlns:dc="http://purl.org/dc/elements/1.1/">2020-03-06</dc:date>
 						<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 						<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
+						<meta property="schema:accessibilityFeature">ttsMarkup</meta>
+						<meta name="schema:accessibilityFeature" content="ttsMarkup"/>
 						<meta property="media:duration">00:00:12.23</meta>
 						<meta name="media:duration" content="00:00:12.23"/>
 						<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
@@ -361,7 +365,7 @@
 		</x:context>
 		<x:expect label="chapter.xhtml" type="compare">
 			<x:document type="inline">
-				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ssml:alphabet="ipa">
 					<head>
 						<meta charset="UTF-8"/>
 						<title>minimal</title>
@@ -370,7 +374,7 @@
 					</head>
 					<body id="chap_1" epub:type="bodymatter chapter">
 						<h1 id="h_1">
-							<span id="st3-1">Chapter 1</span>
+							<span id="st3-1">Chapter <span ssml:ph="wʌn">I</span></span>
 						</h1>
 						<p>
 							<span id="st3-2">

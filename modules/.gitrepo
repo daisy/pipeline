@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-modules.git
 	branch = master
 	commit = aec26b7fbcf3f72681e85e4807b98112c59cb505
-	parent = 69c7b8a75561348bb1ccd14228a190d2db7d5cef
+	parent = f1b874a17332b030c56921d7deab96d8000729a3
 	cmdver = 0.3.1

@@ -7,9 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.common.file.URIs;
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URLs.asURL;
+import org.daisy.common.file.URLs;
 import static org.daisy.pipeline.braille.common.util.Files;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import static org.daisy.pipeline.braille.common.util.OS;
@@ -51,7 +49,7 @@ public abstract class AbstractResourcePath implements ResourcePath {
 				if (isUnpacking())
 					try {
 						// try to unpack whole path
-						return asURL(maybeUnpack(asURI("."))); }
+						return URLs.asURL(maybeUnpack(URLs.asURI("."))); }
 					catch (UnsupportedOperationException e) {
 						return null; }
 				else
@@ -60,16 +58,16 @@ public abstract class AbstractResourcePath implements ResourcePath {
 			if (relativePath.isAbsolute()) {
 				relativePath = getIdentifier().relativize(resource);
 				if (relativePath.isAbsolute()) {
-					relativePath = asURI(getBasePath()).relativize(resource);
+					relativePath = URLs.relativize(URLs.asURI(getBasePath()), resource);
 					if (relativePath.isAbsolute() && unpackDir != null) {
-						relativePath = asURI(unpackDir).relativize(resource); }}}
+						relativePath = URLs.relativize(URLs.asURI(unpackDir), resource); }}}
 			if (containsResource(relativePath))
 				if (isUnpacking())
-					return asURL(maybeUnpack(relativePath));
+					return URLs.asURL(maybeUnpack(relativePath));
 				else
-					return asURL(URIs.resolve(getBasePath(), relativePath));
+					return URLs.asURL(URLs.resolve(URLs.asURI(getBasePath()), relativePath));
 			if (!resource.toString().endsWith("/"))
-				return resolve(asURI(resource.toString() + "/"));
+				return resolve(URLs.asURI(resource.toString() + "/"));
 			return null;
 		}
 	};
@@ -93,7 +91,10 @@ public abstract class AbstractResourcePath implements ResourcePath {
 		URL resolved = resolve(resource);
 		if (resolved == null)
 			return null;
-		return getIdentifier().resolve(URIs.relativize(unpackDir != null ? unpackDir : getBasePath(), resolved));
+		return URLs.resolve(getIdentifier(),
+		                    unpackDir != null
+		                        ? URLs.relativize(URLs.asURI(unpackDir), URLs.asURI(resolved))
+		                        : URLs.relativize(URLs.asURI(getBasePath()), URLs.asURI(resolved)));
 	}
 	
 	private Map<URI,File> unpacked = new HashMap<URI,File>();
@@ -111,8 +112,8 @@ public abstract class AbstractResourcePath implements ResourcePath {
 					maybeUnpack(r);
 				file = unpackDir; }
 			else
-				file = asFile(URIs.resolve(unpackDir, resource));
-			Files.unpack(asURL(URIs.resolve(getBasePath(), resource)), file);
+				file = asFile(URLs.resolve(URLs.asURI(unpackDir), resource));
+			Files.unpack(URLs.asURL(URLs.resolve(URLs.asURI(getBasePath()), resource)), file);
 			if (isExecutable(resource) && !OS.isWindows())
 				Files.chmod775(file);
 			unpacked.put(resource, file); }

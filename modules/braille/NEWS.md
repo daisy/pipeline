@@ -1,19 +1,42 @@
-v1.13.8-SNAPSHOT
-================
+v1.14.0
+=======
 
 Changes
 -------
+- Update to Liblouis [3.16.0](https://github.com/liblouis/liblouis/releases/tag/v3.16.0)
 - Support for `-obfl-right-text-indent` (https://github.com/sbsdev/pipeline-mod-sbs/issues/51,
   https://github.com/nlbdev/pipeline/issues/169, https://github.com/mtmse/obfl/pull/9,
   https://github.com/mtmse/dotify.formatter.impl/pull/31)
-- Support for `volume-break-after` (https://github.com/daisy/pipeline-mod-braille/issues/207)
+- Support for `volume-break-after` (https://github.com/daisy/pipeline-modules/issues/32)
+- Support for `:top-of-page` pseudo-class (limited to `display: none`)
+- Support for media queries ([`width` and
+  `height`](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions))
+  (https://github.com/daisy/pipeline-modules/issues/31)
+- Allow XSLT style sheets to be applied before TOC is generated
+- Add `stylesheet-parameters` option for specifying values for XSLT parameters and SASS variables
+  used in style sheets that were provided through the `stylesheets` option.
+- HTML to PEF: add features that were already present on other braille scripts
+  - Support for XSLT in `stylesheet` option
+  - Make `include-obfl` output OBFL even when conversion to PEF fails
+- Improved support for `text/x-scss` media type
+- Support for integer values in `@text-transform` rules
+- `title` attributes in generated TOC
+- Bugs fixed in generated TOC
+- Fixed concurrency issue (mixed up braille output due to multiple concurrent Liblouis threads)
+- Fixed bug causing double application of `text-transform` on pseudo-elements
+- Various other bugfixes
 
 Closed issues
 -------------
-- https://github.com/daisy/pipeline-mod-braille/issues/207
+- https://github.com/daisy/pipeline-modules/issues/31
+- https://github.com/daisy/pipeline-modules/issues/32
 - https://github.com/mtmse/obfl/pull/9
+- https://github.com/mtmse/obfl/issues/29
 - https://github.com/mtmse/dotify.api/pull/12
+- https://github.com/mtmse/dotify.api/pull/15
 - https://github.com/mtmse/dotify.formatter.impl/pull/31
+- https://github.com/mtmse/dotify.formatter.impl/issues/34
+- https://github.com/mtmse/dotify.formatter.impl/issues/35
 
 v1.13.7
 =======
@@ -33,6 +56,7 @@ Changes
   (https://github.com/daisy/pipeline-mod-braille/issues/206)
 - New "preamble" option in EPUB 3 to PEF to add boilerplate text
   (https://github.com/daisy/pipeline-mod-braille/issues/194)
+- Support for embedded SCSS stylesheets (with media type `text/x-scss`)
 - Various other improvements and bugfixes (https://github.com/daisy/pipeline-modules/issues/24,
   https://github.com/daisy/pipeline-mod-braille/issues/204, ...)
 
@@ -81,11 +105,11 @@ Components
 - **liblouis** ([**3.13.0**](https://github.com/liblouis/liblouis/releases/tag/v3.13.0)),
   liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
   liblouis-java ([4.2.0](https://github.com/liblouis/liblouis-java/releases/tag/4.2.0))
-- **dotify** (**api** [**5.0.5**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv5.0.4), **common**
-  [**4.4.1**](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv4.4.1), hyphenator.impl
+- **dotify** (**api** **5.0.5**, **common**
+  [**4.4.1**](https://github.com/mtmse/dotify.common/releases/tag/releases%2Fv4.4.1), hyphenator.impl
   [5.0.0](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv5.0.0), translator.impl
   [5.0.0](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv5.0.0), **formatter.impl**
-  [**5.0.6**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv5.0.5), text.impl
+  [**5.0.6**](https://github.com/mtmse/dotify.formatter.impl/releases/tag/releases%2Fv5.0.6), text.impl
   [5.0.0](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv5.0.0), streamline-api
   [1.5.0](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.5.0), streamline-engine
   [1.3.0](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.3.0), task.impl
@@ -97,7 +121,7 @@ Components
 - **braille-css** ([**1.16.0**](https://github.com/daisy/braille-css/releases/tag/1.16.0))
 - jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
 - libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
-  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/v1.0.2))
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
 v1.13.4
@@ -120,11 +144,11 @@ Components
 - liblouis ([3.11.0](https://github.com/liblouis/liblouis/releases/tag/v3.11.0)), liblouisutdml
   ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)), liblouis-java
   ([4.2.0](https://github.com/liblouis/liblouis-java/releases/tag/4.2.0))
-- **dotify** (**api** [**5.0.2**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv5.0.2), common
+- **dotify** (**api** **5.0.2**, common
   [4.4.0](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv4.4.0), hyphenator.impl
   [5.0.0](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv5.0.0), translator.impl
   [5.0.0](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv5.0.0), **formatter.impl**
-  [**5.0.4**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv5.0.4), text.impl
+  [**5.0.4**](https://github.com/mtmse/dotify.formatter.impl/releases/tag/releases%2Fv5.0.4), text.impl
   [5.0.0](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv5.0.0), streamline-api
   [1.5.0](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.5.0), streamline-engine
   [1.3.0](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.3.0), task.impl
@@ -136,7 +160,7 @@ Components
 - braille-css ([1.15.0](https://github.com/daisy/braille-css/releases/tag/1.15.0))
 - jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
 - libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
-  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/v1.0.2))
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
 v1.13.2
@@ -166,7 +190,7 @@ Changes
   (https://github.com/daisy/pipeline-mod-braille/issues/190)
 - Update to latest Dotify which includes many improvements, notably some important bugfixes in the
   formatter (see [release notes of
-  v5.0.2-RC2](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv5.0.2-RC2))
+  v5.0.2](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv5.0.2))
 - Support for flowing of text into the page header or footer area (set `margin-top: 0` or
   `margin-bottom: 0` on a `@page` rule that has content in the margin)
   (https://github.com/sbsdev/pipeline-mod-sbs/issues/37,
@@ -204,7 +228,7 @@ Components
   [**4.4.0**](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv4.4.0), **hyphenator.impl**
   [**5.0.0**](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv5.0.0), **translator.impl**
   [**5.0.0**](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv5.0.0), **formatter.impl**
-  [**5.0.2-RC2**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv5.0.2-RC2), **text.impl**
+  **5.0.2-RC2**, **text.impl**
   [**5.0.0**](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv5.0.0), **streamline-api**
   [**1.5.0**](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.5.0), **streamline-engine**
   [**1.3.0**](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.3.0), **task.impl**
@@ -216,7 +240,7 @@ Components
 - **braille-css** ([**1.15.0**](https://github.com/daisy/braille-css/releases/tag/1.15.0))
 - jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
 - libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), **jhyphen**
-  ([**1.0.2**](https://github.com/daisy/jhyphen/releases/tag/v1.0.2))
+  ([**1.0.2**](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
 v1.12.0

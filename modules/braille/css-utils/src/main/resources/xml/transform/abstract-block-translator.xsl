@@ -213,11 +213,6 @@
 		<xsl:variable name="translated-style" as="element()*">
 			<xsl:sequence select="$translated-main-style"/>
 			<xsl:apply-templates mode="translate-style" select="$style[@selector=('&amp;::before','&amp;::after')]">
-				<!--
-				    Text style is restored because only strings and attr() values are translated,
-				    not counter() values etc. This may lead to certain text being translated twice.
-				-->
-				<xsl:with-param name="restore-text-style" tunnel="yes" select="true()"/>
 				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 				<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
 			</xsl:apply-templates>
@@ -234,6 +229,21 @@
 			</xsl:apply-templates>
 		</xsl:variable>
 		<xsl:apply-templates mode="insert-style" select="$translated-style"/>
+	</xsl:template>
+	
+	<xsl:template mode="translate-style"
+	              match="css:rule[@selector=('&amp;::before','&amp;::after')]|
+	                     css:rule[@selector=('&amp;::before','&amp;::after')]/css:rule[not(@selector)]">
+		<xsl:param name="restore-text-style" as="xs:boolean" tunnel="yes" select="false()"/>
+		<xsl:next-match>
+			<!--
+			    Don't pre-translate when the content property has other values that strings or
+			    attr() values.
+			-->
+			<xsl:with-param name="restore-text-style" tunnel="yes"
+			                select="$restore-text-style
+			                        or css:property[@name='content']/*[not(self::css:string[@value]|self::css:attr)]"/>
+		</xsl:next-match>
 	</xsl:template>
 	
 	<xsl:template mode="translate-style" match="css:rule">
@@ -268,7 +278,8 @@
 								<xsl:apply-templates mode="restore-text-style-and-translate-other-style"
 								                     select="($properties,$source-style[not(@name=$properties/@name)])">
 									<xsl:with-param name="mode" tunnel="yes" select="$mode"/>
-									<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
+									<xsl:with-param name="source-style" tunnel="yes"
+									                select="($source-style,$properties[@name='content'])"/>
 								</xsl:apply-templates>
 							</xsl:when>
 							<xsl:otherwise>
@@ -289,7 +300,7 @@
 		<xsl:apply-templates mode="translate-style" select="."/>
 	</xsl:template>
 	
-	<xsl:template mode="restore-text-style-and-translate-other-style" match="css:property[@name=$text-properties]">
+	<xsl:template mode="restore-text-style-and-translate-other-style" match="css:property[@name=($text-properties,'content')]">
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
 		<xsl:variable name="name" as="xs:string" select="@name"/>
 		<xsl:sequence select="$source-style[@name=$name]"/>

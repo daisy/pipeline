@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-		<version>1.13.8-SNAPSHOT</version>
+		<version>1.14.2-SNAPSHOT</version>
 		<relativePath>../../../parent</relativePath>
   </parent>
 
@@ -114,7 +114,7 @@
               <tasks>
                 <copy todir="target/generated-resources/">
                   <fileset dir="target/dependency">
-                    <include name="**/*.dll" />
+                    <include name="**/*.dll"/>
                   </fileset>
                 </copy>
               </tasks>
@@ -165,29 +165,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <id>notester</id>
-      <build>
-	<plugins>
-	  <plugin>
-	    <artifactId>maven-surefire-plugin</artifactId>
-	    <configuration>
-	      <excludes>
-		<exclude>**/SAPINativeTest.java</exclude>
-	      </excludes>
-	    </configuration>
-	  </plugin>
-	</plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>tester</id>
-    </profile>
-  </profiles>
 
 </project>

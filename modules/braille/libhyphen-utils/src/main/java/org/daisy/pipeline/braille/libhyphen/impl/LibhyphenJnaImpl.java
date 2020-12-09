@@ -18,8 +18,7 @@ import com.google.common.base.Splitter;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterables.transform;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URLs.asURL;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.AbstractHyphenator.util.DefaultLineBreaker;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
@@ -60,6 +59,12 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Provides a <a href="http://hunspell.github.io/">Hyphen</a> based {@link
+ * org.daisy.pipeline.braille.common.Hyphenator} implementation.
+ *
+ * @see <a href="../../../../../../../../../doc/">User documentation</a>.
+ */
 @Component(
 	name = "org.daisy.pipeline.braille.libhyphen.LibhyphenJnaImpl",
 	service = {
@@ -131,13 +136,13 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 		MutableQuery q = mutableQuery(query);
 		if (q.containsKey("hyphenator")) {
 			String v = q.removeOnly("hyphenator").getValue().get();
-			if (!"hyphen".equals(v)) {
+			if (!("hyphen".equals(v) || "libhyphen".equals(v))) {
 				Iterable<LibhyphenHyphenator> ret;
 				LibhyphenHyphenator h = fromId(v);
 				if (h != null)
 					ret = fromNullable(h);
 				else
-					ret = of(get(asURI(v)));
+					ret = of(get(URLs.asURI(v)));
 				if (q.isEmpty())
 					return ret;
 				else
@@ -145,18 +150,24 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 		String table = null;
 		if (q.containsKey("libhyphen-table"))
 			table = q.removeOnly("libhyphen-table").getValue().get();
+		if (q.containsKey("hyphen-table"))
+			if (table != null) {
+				logger.warn("A query with both 'libhyphen-table' and 'hyphen-table' never matches anything");
+				return empty; }
+			else
+				table = q.removeOnly("hyphen-table").getValue().get();
 		if (q.containsKey("table"))
 			if (table != null) {
-				logger.warn("A query with both 'table' and 'libhyphen-table' never matches anything");
+				logger.warn("A query with both 'table' and '(lib)hyphen-table' never matches anything");
 				return empty; }
 			else
 				table = q.removeOnly("table").getValue().get();
 		if (table != null) {
 			if (!q.isEmpty()) {
-				logger.warn("A query with both 'table' or 'libhyphen-table' and '"
+				logger.warn("A query with both 'table' or '(lib)hyphen-table' and '"
 				            + q.iterator().next().getKey() + "' never matches anything");
 				return empty; }
-			return of(get(asURI(table))); }
+			return of(get(URLs.asURI(table))); }
 		if (tableProvider != null) {
 			Locale locale; {
 				String loc = "und";
@@ -333,7 +344,7 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 	}
 	
 	private File resolveTable(URI table) {
-		URL resolvedTable = isAbsoluteFile(table) ? asURL(table) : tableResolver.resolve(table);
+		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableResolver.resolve(table);
 		if (resolvedTable == null)
 			throw new RuntimeException("Hyphenation table " + table + " could not be resolved");
 		return asFile(resolvedTable);

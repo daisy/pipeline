@@ -1,13 +1,24 @@
-# css-utils API
+# css-utils
 
-- package <a href="java/org/daisy/pipeline/css/" class="apidoc"><code>org.daisy.pipeline.css</code></a>
+- package [`org.daisy.pipeline.css`](java/org/daisy/pipeline/css/)
 
-## <a href="resources/META-INF/catalog.xml" class="source">catalog.xml</a>
+## [catalog.xml](resources/META-INF/catalog.xml)
 
-- <a href="resources/xml/library.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/css-utils/library.xpl`</a>
+- [`http://www.daisy.org/pipeline/modules/css-utils/library.xpl`](resources/xml/library.xpl)
+- [`http://www.daisy.org/pipeline/modules/css-utils/library.xsl`](resources/xml/library.xsl)
 
-## OSGi services
+## Saxon XPath functions ([`net.sf.saxon.lib.ExtensionFunctionDefinition`](https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html))
 
-### Calabash steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
+- [`{http://www.daisy.org/ns/pipeline/functions}media-query-matches`](java/org/daisy/pipeline/css/saxon/impl/MediaQueryMatchesDefinition.java)
+
+  Test whether a media query matches a medium, see [XSLT documentation](resources/xml/library.xsl)
+
+## XMLCalabash XProc steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
 
 - [`{http://www.daisy.org/ns/pipeline/xproc/internal}css-cascade`](java/org/daisy/pipeline/css/calabash/impl/CssCascadeStep.java)
+
+  Used in [`{http://www.daisy.org/ns/pipeline/xproc}css-cascade`](resources/xml/css-cascade.xpl)
+
+
+<link rev="dp2:doc" href="./"/>
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>

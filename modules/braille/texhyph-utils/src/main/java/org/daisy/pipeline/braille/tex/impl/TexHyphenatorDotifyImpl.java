@@ -14,9 +14,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 
 import net.davidashen.text.Utf8TexParser.TexParserException;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URIs.resolve;
-import static org.daisy.common.file.URLs.asURL;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Function;
@@ -92,7 +90,7 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 			if (!q.isEmpty()) {
 				logger.warn("A query with both 'table' and '" + q.iterator().next().getKey() + "' never matches anything");
 				return empty; }
-			return fromNullable(get(asURI(v))); }
+			return fromNullable(get(URLs.asURI(v))); }
 		Locale locale; {
 			String loc;
 			if (q.containsKey("locale"))
@@ -123,15 +121,15 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 			Properties properties = new Properties();
 			URI base = null;
 			if (table.toString().endsWith(".tex")) {
-				properties.setProperty(TexHyphenatorImpl.PATTERN_PATH_KEY, asURI(resolved).toASCIIString());
+				properties.setProperty(TexHyphenatorImpl.PATTERN_PATH_KEY, URLs.asURI(resolved).toASCIIString());
 				properties.setProperty(TexHyphenatorImpl.MODE_KEY, TexHyphenatorImpl.BYTE_MODE); }
 			else if (table.toString().endsWith(".properties")) {
-				base = asURI(resolved);
+				base = URLs.asURI(resolved);
 				InputStream stream = resolved.openStream();
 				properties.load(stream);
 				stream.close(); }
 			else if (table.toString().endsWith(".xml")) {
-				base = asURI(resolved);
+				base = URLs.asURI(resolved);
 				InputStream stream = resolved.openStream();
 				properties.loadFromXML(stream);
 				stream.close(); }
@@ -147,7 +145,7 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 	}
 	
 	private URL resolveTable(URI table) {
-		URL resolvedTable = isAbsoluteFile(table) ? asURL(table) : tableRegistry.resolve(table);
+		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableRegistry.resolve(table);
 		if (resolvedTable == null)
 			throw new RuntimeException("Hyphenation table " + table + " could not be resolved");
 		return resolvedTable;
@@ -175,7 +173,7 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 			String patternPath = props.getProperty(PATTERN_PATH_KEY);
 			if (patternPath == null)
 				throw new RuntimeException("Required property named '" + PATTERN_PATH_KEY + "' missing.");
-			table = base == null ? asURI(patternPath) : resolve(base, patternPath);
+			table = base == null ? URLs.asURI(patternPath) : URLs.resolve(base, URLs.asURI(patternPath));
 			hyphenator = new net.davidashen.text.Hyphenator();
 			String leftHyphenMinStr = props.getProperty(LEFT_HYPHEN_MIN_KEY);
 			if (leftHyphenMinStr != null)
@@ -194,11 +192,11 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 			else if (modeStr.equals(BYTE_MODE)) {
 				if (encoding != null)
 					logger.warn("Configuration problem: Encoding has no effect in byte mode.");
-				hyphenator.loadTable(asURL(table).openStream()); }
+				hyphenator.loadTable(URLs.asURL(table).openStream()); }
 			else if (modeStr.equals(CHARACTER_MODE)) {
 				if (encoding == null)
 					logger.warn("Configuration problem: Encoding should be set in character mode.");
-				hyphenator.loadTable(new InputStreamReader(asURL(table).openStream(), Charset.forName(encoding))); }
+				hyphenator.loadTable(new InputStreamReader(URLs.asURL(table).openStream(), Charset.forName(encoding))); }
 			else
 				throw new RuntimeException("Unrecognized mode. Allowed values are " + BYTE_MODE + " and " + CHARACTER_MODE);
 		}

@@ -10,7 +10,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">ZedAI to HTML</h1>
         <p px:role="desc">Transforms ZedAI XML (ANSI/NISO Z39.98-2012 Authoring and Interchange) into HTML.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/zedai-to-html">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-html/">
             Online documentation
         </a>
     </p:documentation>

@@ -5,6 +5,8 @@
                stylesheet="../../main/resources/xml/generate-obfl-layout-master.xsl">
   
   <x:param name="duplex" select="'true'"/>
+  <x:param name="page-width" select="'40'"/>
+  <x:param name="page-height" select="'25'"/>
   
   <x:scenario label="test_01">
     <x:call template="obfl:generate-layout-master">

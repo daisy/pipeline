@@ -11,8 +11,8 @@ public class QueryTest {
 		q.add("locale", "en-US");
 		q.add("grade", "2");
 		q.add("foo");
-		q.add("bar", "ds<:;dsqf");
-		assertEquals("(locale:en-US)(grade:2)(foo)(bar:'ds<:;dsqf')",
+		q.add("bar", "ds<:;'\"dsqf");
+		assertEquals("(locale:en-US)(grade:2)(foo)(bar:\"ds<:;'\\22dsqf\")",
 		             q.toString());
 	}
 	
@@ -22,13 +22,8 @@ public class QueryTest {
 		q.add("locale", "en-US");
 		q.add("grade", "2");
 		q.add("foo");
+		q.add("bar", "ds<:;'\"dsqf");
 		q.add("locale", "fr");
-		assertEquals(q, Query.util.query(" (locale:en-US ) ( grade: 2)(foo) (locale:fr)"));
-	}
-	
-	@Test
-	public void testParseAndSerializeQuery() {
-		assertEquals("(locale:en-US)(grade:2)(foo)(locale:fr)",
-		             Query.util.query(" (locale:en-US ) ( grade: 2)(foo) (locale:fr)").toString());
+		assertEquals(q, Query.util.query(" (locale:en-US ) ( grade: 2)(foo)(bar:\"ds<:;'\\22dsqf\") (locale:fr)"));
 	}
 }

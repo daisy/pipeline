@@ -80,4 +80,4 @@ _(via the [Package Doc Validator](https://github.com/daisy-consortium/pipeline-s
 * [Math in DAISY](http://www.daisy.org/projects/mathml/mathml-in-daisy-spec.html)
 * [MathML 2](http://www.w3.org/TR/MathML2/)
 * [MathML 3](http://www.w3.org/TR/MathML/)
-* [DTBookValidator](https://daisy.github.io/pipeline/modules/dtbook-validator/)
+* [DTBookValidator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/)

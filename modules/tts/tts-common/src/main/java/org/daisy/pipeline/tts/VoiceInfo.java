@@ -65,7 +65,7 @@ public class VoiceInfo {
 	}
 
 	public static Locale tagToLocale(String langtag) throws UnknownLanguage {
-		if ("*".equals(langtag) || langtag == null)
+		if (langtag == null || "*".equals(langtag) || "mul".equals(langtag))
 			return NO_DEFINITE_LANG;
 		
 		//TODO: in Java7 we would use:
@@ -104,7 +104,7 @@ public class VoiceInfo {
 		this(v, language, gender, -1);
 	}
 
-	private VoiceInfo(Voice v, Locale locale, Gender gender, float priority) {
+	VoiceInfo(Voice v, Locale locale, Gender gender, float priority) {
 		Preconditions.checkNotNull(v);
 		Preconditions.checkNotNull(gender);
 		this.voice = v;
@@ -133,5 +133,5 @@ public class VoiceInfo {
 	public Locale language;
 	public float priority;
 	
-	public static Locale NO_DEFINITE_LANG = null;
+	public static Locale NO_DEFINITE_LANG = new Locale("mul");
 }

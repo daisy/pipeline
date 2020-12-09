@@ -42,6 +42,7 @@ import org.daisy.pipeline.tts.TTSTimeout.ThreadFreeInterrupter;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.Voice.MarkSupport;
 import org.daisy.pipeline.tts.VoiceManager;
+import org.daisy.pipeline.tts.synthesize.calabash.impl.TimedTTSExecutor.TimeoutException;
 import org.daisy.pipeline.tts.synthesize.calabash.impl.TTSLog.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,7 @@ public class TextToPcmThread implements FormatSpecifications {
 	private int mOffsetInFile; // reset after every flush
 	private int mMemFootprint; //reset after every flush
 	private Thread mThread;
+	private TimedTTSExecutor mExecutor;
 	private TTSRegistry mTTSRegistry;
 	private IPipelineLogger mPipelineLogger;
 	private AudioFormat mLastFormat; //used for knowing if a flush is necessary
@@ -86,14 +88,15 @@ public class TextToPcmThread implements FormatSpecifications {
 	private int mErrorCounter;
 
 	void start(final ConcurrentLinkedQueue<ContiguousText> input,
-	        final BlockingQueue<ContiguousPCM> pcmOutput, TTSRegistry ttsregistry,
-	        VoiceManager voiceManager, SSMLMarkSplitter ssmlSplitter,
+	        final BlockingQueue<ContiguousPCM> pcmOutput, TimedTTSExecutor executor,
+	        TTSRegistry ttsregistry, VoiceManager voiceManager, SSMLMarkSplitter ssmlSplitter,
 	        final IProgressListener progressListener, IPipelineLogger pLogger,
 	        AudioBufferTracker AudioBufferTracker, final int maxQueueEltSize,
 	        Map<TTSService, CompiledStylesheet> ssmlTransformers, TTSLog ttsLog) {
 		mSSMLTransformers = ssmlTransformers;
 		mSSMLSplitter = ssmlSplitter;
 		mSoundFileLinks = new ArrayList<SoundFileLink>();
+		mExecutor = executor;
 		mTTSRegistry = ttsregistry;
 		mPipelineLogger = pLogger;
 		mAudioBufferTracker = AudioBufferTracker;
@@ -230,45 +233,49 @@ public class TextToPcmThread implements FormatSpecifications {
 	/**
 	 * Wrapper around TTSService.synthesize() to transform the SSML into string
 	 */
-	public Collection<AudioBuffer> synthesizeSSML(TTSEngine tts, XdmNode ssml,
-	        String sentenceId, Voice voice, TTSResource threadResources, List<Mark> marks,
-	        List<String> expectedMarks)
-	        throws SaxonApiException, SynthesisException, InterruptedException,
-	        MemoryException {
+	private Collection<AudioBuffer> synthesizeSSML(
+			TTSTimeout timeout, TTSTimeout.ThreadFreeInterrupter interrupter, TTSLog.Entry logEntry,
+			XdmNode ssml, String sentenceId, int sentenceSize, TTSEngine tts, Voice voice,
+			TTSResource threadResources, List<Mark> marks, List<String> expectedMarks
+	) throws SaxonApiException, SynthesisException, TimeoutException, MemoryException {
 		String transformed = transformSSML(ssml, tts, voice);
-		TTSLog.Entry logEntry = mTTSLog.getWritableEntry(sentenceId);
 		logEntry.addTTSinput(transformed);
 		logEntry.setActualVoice(voice);
-		return tts.synthesize(transformed, ssml, voice, threadResources, marks, expectedMarks,
-		        mAudioBufferTracker, false);
+		return mExecutor.synthesizeWithTimeout(
+			timeout, interrupter, logEntry, transformed, ssml, sentenceSize, tts, voice,
+			threadResources, marks, expectedMarks, mAudioBufferTracker, false);
 	}
 
 	/**
 	 * Wrapper around synthesizeSSML() to handle marks
 	 */
-	public Iterable<AudioBuffer> synthesize(TTSEngine tts, XdmNode ssml, String sentenceId,
-	        Voice voice, TTSResource threadResources, List<Mark> marks, List<String> expectedMarks)
-	        throws SaxonApiException, SynthesisException, InterruptedException,
-	        MemoryException {
-		TTSLog.Entry logEntry = mTTSLog.getWritableEntry(sentenceId);
+	private Iterable<AudioBuffer> synthesize(
+			TTSTimeout timeout, TTSTimeout.ThreadFreeInterrupter interrupter, TTSLog.Entry logEntry,
+			Sentence sentence, TTSEngine tts, Voice voice, TTSResource threadResources,
+			List<Mark> marks, List<String> expectedMarks
+	) throws SaxonApiException, SynthesisException, TimeoutException, MemoryException {
 		logEntry.resetTTSinput();
 		if (tts.endingMark() != null
 		        && voice.getMarkSupport() != MarkSupport.MARK_NOT_SUPPORTED){
 			//can handle mark
 			expectedMarks.set(expectedMarks.size()-1, tts.endingMark());
-			return synthesizeSSML(tts, ssml, sentenceId, voice, threadResources, marks, expectedMarks);
+			return synthesizeSSML(timeout, interrupter, logEntry, sentence.getText(),
+			                      sentence.getID(), sentence.getSize(), tts, voice,
+			                      threadResources, marks, expectedMarks);
 		}
 		else {
-			Collection<Chunk> chunks = mSSMLSplitter.split(ssml);
+			Collection<Chunk> chunks = mSSMLSplitter.split(sentence.getText());
 			Iterable<AudioBuffer> result = new ArrayList<AudioBuffer>();
 			int offset = 0;
 			for (Chunk chunk : chunks) {
 				Collection<AudioBuffer> buffers = null;
 				try {
-					buffers = synthesizeSSML(tts, chunk.ssml(), sentenceId, voice,
-					        threadResources, new ArrayList<Mark>(), expectedMarks);
+					buffers = synthesizeSSML(timeout, interrupter, logEntry, chunk.ssml(),
+					                         sentence.getID(), Sentence.computeSize(chunk.ssml()),
+					                         tts, voice, threadResources, new ArrayList<Mark>(),
+					                         expectedMarks);
 				} catch (MemoryException | SaxonApiException | SynthesisException
-				        | InterruptedException e) {
+				        | TimeoutException e) {
 					//TODO: flush the buffers here
 					SoundUtil.cancelFootPrint(result, mAudioBufferTracker);
 					throw e;
@@ -342,8 +349,6 @@ public class TextToPcmThread implements FormatSpecifications {
 
 		//convert the input sentence into PCM using the TTS processor
 		Iterable<AudioBuffer> pcm = null;
-		int timeoutSecs = 1 + 3 * tts.expectedMillisecPerWord() * sentence.getSize()
-		        / (6 * 1000); //~6 chars/word
 		final TTSResource fresource = resource;
 		TTSTimeout.ThreadFreeInterrupter interrupter = new ThreadFreeInterrupter() {
 			@Override
@@ -356,9 +361,8 @@ public class TextToPcmThread implements FormatSpecifications {
 				tts.interruptCurrentWork(fresource);
 			}
 		};
-		mTTSLog.getWritableEntry(sentence.getID()).setTimeout(timeoutSecs);
+		TTSLog.Entry logEntry = mTTSLog.getWritableEntry(sentence.getID());
 		try {
-			timeout.enableForCurrentThread(interrupter, timeoutSecs);
 			synchronized (resource) {
 				if (resource.invalid) {
 					String msg = "Resource of "
@@ -369,18 +373,19 @@ public class TextToPcmThread implements FormatSpecifications {
 					        new TTSLog.Error(ErrorCode.WARNING, msg));
 					return null;
 				}
-				pcm = synthesize(tts, sentence.getText(), sentence.getID(), v, resource, marks, expectedMarks);
+				pcm = synthesize(timeout, interrupter, logEntry,
+				                 sentence, tts, v, resource, marks, expectedMarks);
 			}
-		} catch (InterruptedException e) {
-			mTTSLog.getWritableEntry(sentence.getID()).addError(
-			        new TTSLog.Error(ErrorCode.WARNING, "timeout (" + timeoutSecs
+		} catch (TimeoutException e) {
+			logEntry.addError(
+			        new TTSLog.Error(ErrorCode.WARNING, "timeout (" + e.getSeconds()
 			                + " seconds) fired while speaking with "
 			                + TTSServiceUtil.displayName(tts.getProvider())));
 			return null;
 		} catch (SynthesisException e) {
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			mTTSLog.getWritableEntry(sentence.getID()).addError(
+			logEntry.addError(
 			        new TTSLog.Error(ErrorCode.WARNING, "error while speaking with "
 			                + TTSServiceUtil.displayName(tts.getProvider()) + " : " + e + ":"
 			                + sw.toString()));
@@ -389,21 +394,19 @@ public class TextToPcmThread implements FormatSpecifications {
 		} catch (MemoryException e) {
 			throw e;
 		} catch (SaxonApiException e) {
-			mTTSLog.getWritableEntry(sentence.getID()).addError(
+			logEntry.addError(
 			        new TTSLog.Error(ErrorCode.WARNING,
 			                "error while transforming SSML with the XSLT of "
 			                        + TTSServiceUtil.displayName(tts.getProvider()) + " : "
 			                        + e));
 			return null;
-		} finally {
-			timeout.disable();
 		}
 
 		//check validity of the result by using the ending mark
 		if (marks.size() == 0 || (tts.endingMark() != null && !tts.endingMark().equals(
 		                marks.get(marks.size() - 1).name))) {
 			SoundUtil.cancelFootPrint(pcm, mAudioBufferTracker);
-			mTTSLog.getWritableEntry(sentence.getID()).addError(
+			logEntry.addError(
 			        new TTSLog.Error(ErrorCode.WARNING, "missing ending mark with "
 			                + TTSServiceUtil.displayName(tts.getProvider())
 			                + ". Number of marks received: " + marks.size()));

@@ -3,6 +3,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:re="regex-utils"
+                xmlns:java="implemented-in-java"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -311,17 +312,27 @@
     <xsl:template match="css:property" mode="css:property-as-attribute" as="attribute()">
         <xsl:attribute name="css:{replace(@name,'^-','_')}" select="@value"/>
     </xsl:template>
-    
-    <!--
-        css:parse-stylesheet implemented in Java
-    -->
-    <!--
-    <xsl:function name="css:parse-stylesheet" as="css:rule*">
+
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Parse a style sheet.</p>
+        </desc>
+    </doc>
+    <java:function name="css:parse-stylesheet" as="element(css:rule)*">
+        <xsl:param name="stylesheet" as="xs:string?"/>
+    </java:function>
+    <java:function name="css:parse-stylesheet" as="element(css:rule)*">
+        <xsl:param name="stylesheet" as="xs:string?"/>
+        <xsl:param name="deep" as="xs:boolean"/>
+    </java:function>
+    <java:function name="css:parse-stylesheet" as="element(css:rule)*">
         <xsl:param name="stylesheet" as="xs:string?"/>
         <xsl:param name="deep" as="xs:boolean"/>
         <xsl:param name="context" as="xs:QName?"/>
-    </xsl:function>
-    -->
+        <!--
+            Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
+        -->
+    </java:function>
     
     <xsl:function name="css:parse-declaration-list" as="element()*"> <!-- css:property* -->
         <xsl:param name="declaration-list" as="xs:string?"/>
@@ -933,7 +944,7 @@
                                       then string(@style)
                                       else css:serialize-stylesheet(*,(),$level,$indent)"/>
             </xsl:when>
-            <xsl:when test="exists($base) and not(matches(@selector,'^&amp;:'))">
+            <xsl:when test="exists($base) and not(matches(@selector,'^&amp;'))">
                 <xsl:sequence select="string-join((
                                         string-join($base,', '),' {',$newline,$indent,
                                         css:serialize-stylesheet(
@@ -945,7 +956,7 @@
                                           $indent),
                                         $newline,'}'),'')"/>
             </xsl:when>
-            <xsl:otherwise> <!-- matches(@selector,'^&amp;:') -->
+            <xsl:otherwise> <!-- matches(@selector,'^&amp;') -->
                 <xsl:sequence select="css:serialize-stylesheet(
                                         if (@style)
                                           then css:deep-parse-stylesheet(@style)
@@ -1082,14 +1093,15 @@
         <xsl:variable name="newline" as="xs:string"
                       select="if (exists($indent)) then string-join(('&#xa;',for $i in 2 to $level return $indent),'') else ' '"/>
         <xsl:variable name="serialized-pseudo-rules" as="xs:string*">
-            <xsl:apply-templates select="$rules[self::css:rule and @selector[matches(.,'^&amp;:')]]" mode="css:serialize">
+            <!-- also includes rules with relative selector -->
+            <xsl:apply-templates select="$rules[self::css:rule and @selector[matches(.,'^&amp;')]]" mode="css:serialize">
                 <xsl:with-param name="base" select="$base"/>
                 <xsl:with-param name="level" select="$level"/>
                 <xsl:with-param name="indent" select="$indent"/>
             </xsl:apply-templates>
         </xsl:variable>
         <xsl:variable name="serialized-at-rules" as="xs:string*">
-            <xsl:apply-templates select="$rules[self::css:rule and @selector[not(matches(.,'^&amp;:'))]]" mode="css:serialize">
+            <xsl:apply-templates select="$rules[self::css:rule and @selector[not(matches(.,'^&amp;'))]]" mode="css:serialize">
                 <xsl:with-param name="level" select="if (exists($base)) then $level+1 else $level"/>
                 <xsl:with-param name="indent" select="$indent"/>
             </xsl:apply-templates>

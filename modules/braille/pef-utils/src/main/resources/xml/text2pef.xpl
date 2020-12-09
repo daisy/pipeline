@@ -6,7 +6,7 @@
     version="1.0">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p>Convert an ASCII-based Braille format into PEF.</p>
+        <p>Convert an ASCII-based braille format into PEF.</p>
     </p:documentation>
     
     <p:input port="source" sequence="false" primary="true"/>
@@ -18,7 +18,7 @@
     <p:option name="duplex" required="false"/>
     
     <!--
-        implemented in Java (org.daisy.pipeline.braille.pef.calabash.impl.Text2PEFStep)
+        Implemented in ../../org/daisy/pipeline/braille/pef/calabash/impl/Text2PEFStep.java
     -->
     
 </p:declare-step>

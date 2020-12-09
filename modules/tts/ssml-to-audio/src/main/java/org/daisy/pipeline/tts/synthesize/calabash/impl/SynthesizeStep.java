@@ -308,8 +308,10 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 				if (le.getSelectedVoice() != null)
 					xmlLog.addAttribute(Log_attr_selected_voice, le.getSelectedVoice()
 					        .toString());
-				if (le.getActualVoice() != null)
+				if (le.getActualVoice() != null) {
 					xmlLog.addAttribute(Log_attr_actual_voice, le.getActualVoice().toString());
+					xmlLog.addAttribute(Log_attr_time_elapsed, "" + le.getTimeElapsed() + "s");
+				}
 
 				for (TTSLog.Error err : le.getReadOnlyErrors())
 					writeXMLerror(xmlLog, err);

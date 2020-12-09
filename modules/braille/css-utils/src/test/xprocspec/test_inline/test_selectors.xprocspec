@@ -325,6 +325,7 @@
                 li:last-child { margin-right: 1 }
                 li:nth-child(3) { margin-top: 1 }
                 li:only-child { margin-bottom: 1 }
+                pagenum:top-of-page { display: none }
               </style>
             </head>
             <body>
@@ -338,6 +339,7 @@
                 </li>
                 <li/>
               </ul>
+              <pagenum/>
             </body>
           </document>
         </x:document>
@@ -359,6 +361,7 @@
             </li>
             <li style="margin-right: 1;"/>
           </ul>
+          <pagenum style="&amp;:top-of-page { display: none; }"/>
         </body>
       </x:document>
     </x:expect>

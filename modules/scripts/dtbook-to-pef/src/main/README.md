@@ -1,22 +1,20 @@
-# dtbook-to-pef API
+# dtbook-to-pef
 
-## <a href="resources/META-INF/catalog.xml" class="source">catalog.xml</a>
+## [catalog.xml](resources/META-INF/catalog.xml)
 
-- <a href="resources/xml/xproc/library.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl`</a>
+### XProc
 
-### Scripts
-
-- <a href="resources/xml/xproc/dtbook-to-pef.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl`</a>
+- [`http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl`](resources/xml/xproc/library.xpl)
 
 ### Style sheets
 
 - [`http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/reset.css`](resources/css/reset.css)
 
-## OSGi services
+## Script definitions ([org.daisy.pipeline.script.XProcScriptService](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/XProcScriptService.html))
 
-### Scripts ([org.daisy.pipeline.script.XProcScriptService](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/XProcScriptService.html))
+- [DTBook to PEF](resources/xml/xproc/dtbook-to-pef.xpl)
 
-- <a href="resources/xml/xproc/dtbook-to-pef.xpl" class="userdoc">`dtbook-to-pef`</a>
+  See [user documentation](../../doc/)
 
 
 <link rev="dp2:doc" href="./"/>

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.13.8-SNAPSHOT</version>
+    <version>1.14.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>common-utils</artifactId>
-  <version>8.0.1-SNAPSHOT</version>
+  <version>8.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: common-utils</name>
@@ -25,6 +25,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.dotify</groupId>
@@ -68,6 +72,7 @@
       org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
       org.daisy.pipeline.braille.common.saxon.impl.MessageDefinition,
       org.daisy.pipeline.braille.common.saxon.impl.ProgressDefinition,
+      org.daisy.pipeline.braille.common.calabash.impl.PxParseQueryStep$StepProvider,
       org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider
     </expose-services>
   </properties>
@@ -128,54 +133,95 @@
               <moduleName>braille-${project.artifactId}</moduleName>
             </configuration>
           </execution>
-          <execution>
-            <id>package-list</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>dependencies-package-list</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
-              <includes>
-                org.daisy.pipeline.*,
-                org.daisy.common.*
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <offlineLinks>
-                <offlineLink>
-                  <url>http://daisy.github.io/pipeline/api/</url>
-                  <location>${project.build.directory}/dependencies-package-list/</location>
-                </offlineLink>
-                <offlineLink>
-                  <!-- javadoc.io does not contain package-list file -->
-                  <url>http://javadoc.io/doc/org.slf4j/slf4j-api/1.7.2</url>
-                  <location>https://www.slf4j.org/apidocs</location>
-                </offlineLink>
-              </offlineLinks>
-              <links>
-                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
-                <link>http://brailleapps.github.io/dotify.api/4.1.0/javadoc</link>
-                <link>https://osgi.org/javadoc/r5/core</link>
-                <link>https://osgi.org/javadoc/r5/cmpn</link>
-              </links>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
-  
+
+  <profiles>
+    <profile>
+      <id>module-with-documentation</id>
+      <activation>
+        <property>
+          <name>documentation</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>package-list</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>dependencies-package-list</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+                  <includes>
+                    org.daisy.pipeline.*,
+                    org.daisy.common.*
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>xprocdoc</id>
+                <configuration>
+                  <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <offlineLinks>
+                    <offlineLink>
+                      <url>http://daisy.github.io/pipeline/api/</url>
+                      <location>${project.build.directory}/dependencies-package-list/</location>
+                    </offlineLink>
+                    <offlineLink>
+                      <!-- javadoc.io does not contain package-list file -->
+                      <url>http://javadoc.io/doc/org.slf4j/slf4j-api/1.7.2</url>
+                      <location>https://www.slf4j.org/apidocs</location>
+                    </offlineLink>
+                    <offlineLink>
+                      <!-- for some reason link does not work -->
+                      <url>https://docs.osgi.org/javadoc/r5/core</url>
+                      <location>https://docs.osgi.org/javadoc/r5/core</location>
+                    </offlineLink>
+                    <offlineLink>
+                      <!-- for some reason link does not work -->
+                      <url>https://docs.osgi.org/javadoc/r5/cmpn</url>
+                      <location>https://docs.osgi.org/javadoc/r5/cmpn</location>
+                    </offlineLink>
+                  </offlineLinks>
+                  <links>
+                    <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+                    <link>http://brailleapps.github.io/dotify.api/4.1.0/javadoc</link>
+                  </links>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

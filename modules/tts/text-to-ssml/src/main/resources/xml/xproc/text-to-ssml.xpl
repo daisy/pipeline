@@ -54,7 +54,7 @@
   </p:import>
   <p:import href="annotate.xpl">
     <p:documentation>
-      px:annotate
+      pxi:annotate
     </p:documentation>
   </p:import>
   <p:import href="css-to-ssml.xpl">
@@ -90,14 +90,14 @@
        the document must have been kept intact as much as possible, because annotations
        are authored by end-users according to their expectations of the output and its
        format (e.g. DTBook, HTML). This is why annotating should be performed first. -->
-  <px:annotate name="annotate">
+  <pxi:annotate name="annotate">
     <p:input port="annotations">
       <p:pipe port="annotations" step="main"/>
     </p:input>
     <p:input port="sentence-ids">
       <p:pipe port="sentence-ids" step="main"/>
     </p:input>
-  </px:annotate>
+  </pxi:annotate>
 
   <!-- Replace sentences and words with their SSML counterparts so that it will be much
        simpler and faster to apply transformations later.  -->

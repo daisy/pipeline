@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+
+  <!--
+      see https://www.w3.org/TR/CSS2/cascade.html#specificity
+      see https://specificity.keegan.st
+  -->
+
+  <x:scenario label="!important">
+    <x:documentation>
+      Test that declarations with !important are chosen over other declararations, even when their
+      selectors are more specific.
+
+      See https://www.w3.org/TR/CSS2/cascade.html#important-rules
+    </x:documentation>
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css">
+                /* (0,0,0,1) */
+                p {
+                  display: block;
+                  margin-left: 2 !important;
+                }
+                /* (0,0,0,2) */
+                h1 + p {
+                  display: inline;
+                  margin-left: 1;
+                }
+              </style>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="display: inline; margin-left: 2;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

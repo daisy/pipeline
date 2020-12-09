@@ -44,8 +44,8 @@
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
-            px:message
             px:assert
+            px:log-error
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -57,10 +57,6 @@
         <p:documentation>
             px:transform
             px:merge-parameters
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
-        <p:documentation>
             px:apply-stylesheets
         </p:documentation>
     </p:import>
@@ -118,6 +114,15 @@
         <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
         <px:apply-stylesheets px:progress="1">
             <p:with-option name="stylesheets" select="$stylesheets-to-be-inlined"/>
+            <p:with-option name="media"
+                           select="concat(
+                                     'embossed AND (width: ',
+                                     (//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1],
+                                     ') AND (height: ',
+                                     (//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1],
+                                     ')')">
+                <p:pipe port="result" step="parameters"/>
+            </p:with-option>
             <p:input port="parameters">
                 <p:pipe port="result" step="parameters"/>
             </p:input>
@@ -159,8 +164,8 @@
                     </p:input>
                 </px:transform>
             </p:group>
-            <p:try name="try-pef">
-                <p:group px:message="Transforming from OBFL to PEF" px:progress=".5">
+            <p:try name="try-pef" px:message="Transforming from OBFL to PEF" px:progress=".5">
+                <p:group>
                     <p:output port="pef" primary="true"/>
                     <p:output port="status">
                         <p:inline>
@@ -177,15 +182,28 @@
                         </p:input>
                     </px:transform>
                 </p:group>
-                <p:catch>
+                <p:catch name="catch">
                     <p:output port="pef" primary="true">
                         <p:empty/>
                     </p:output>
                     <p:output port="status">
-                        <p:inline>
-                            <d:status result="error"/>
-                        </p:inline>
+                        <p:pipe step="status" port="result"/>
                     </p:output>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:inline>
+                                <d:status result="error"/>
+                            </p:inline>
+                        </p:input>
+                    </p:identity>
+                    <px:log-error severity="ERROR">
+                        <p:input port="error">
+                            <p:pipe step="catch" port="error"/>
+                        </p:input>
+                    </px:log-error>
+                    <p:identity px:message="Failed to convert OBFL to PEF (Please see detailed log for more info.)"
+                                px:message-severity="ERROR"/>
+                    <p:identity name="status"/>
                     <p:sink/>
                 </p:catch>
             </p:try>

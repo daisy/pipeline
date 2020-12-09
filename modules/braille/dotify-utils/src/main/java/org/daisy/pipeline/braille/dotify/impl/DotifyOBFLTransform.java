@@ -11,7 +11,6 @@ import com.google.common.collect.ImmutableMap;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
 
-import static org.daisy.common.file.URIs.asURI;
 import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
@@ -45,7 +44,7 @@ public interface DotifyOBFLTransform {
 		
 		@Activate
 		protected void activate(final Map<?,?> properties) {
-			href = asURI(URLs.getResourceFromJAR("xml/transform/obfl-to-pef.xpl", DotifyOBFLTransform.class));
+			href = URLs.asURI(URLs.getResourceFromJAR("xml/transform/obfl-to-pef.xpl", DotifyOBFLTransform.class));
 		}
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();

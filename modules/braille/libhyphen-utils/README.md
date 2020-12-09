@@ -1,11 +1,10 @@
 libhyphen-utils
 ===============
 
-Building blocks related to the hyphenation library
-[Hyphen][libhyphen], used in OpenOffice/LibreOffice, Firefox,
-Chromium, etc.
+Building blocks related to the [Hyphen][] hyphenation library, used in
+OpenOffice/LibreOffice, Firefox, Chromium, etc.
 
-[API](src/main)
+[Module content](src/main)
 
 
 ## Regenerating table files
@@ -17,4 +16,4 @@ mv target/generated-resources/hyphen/* src/main/resources/hyphen/
 ```
 
 
-[libhyphen]: http://sourceforge.net/projects/hunspell
+[Hyphen]: http://hunspell.github.io/

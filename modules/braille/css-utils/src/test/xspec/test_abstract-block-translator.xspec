@@ -7,7 +7,8 @@
     <x:context>
       <doc>
         <h css:display="block" style="string-set: running-footer content()">foobar</h>
-        <p css:display="block" style="&amp;::after {{ content: 'bar' }}">foo</p>
+        <p css:display="block" style="&amp;::before {{ content: 'bar' counter(page) }}
+                                      &amp;::after {{ content: 'bar' }}">foo</p>
         <pagenum style="display: none; string-set: print-page content(), foo 'bar'">ii</pagenum>
       </doc>
     </x:context>
@@ -15,7 +16,7 @@
       <_ style="text-transform: none">
         <doc>
           <h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
-          <p style="display: block &amp;::after {{ content: &quot;BAR&quot;; text-transform: auto }}">FOO</p>
+          <p style="display: block &amp;::after {{ content: &quot;BAR&quot; }} &amp;::before {{ content: &quot;bar&quot; counter(page); text-transform: auto }}">FOO</p>
           <pagenum style="display: none; string-set: print-page &quot;ii&quot;, foo &quot;bar&quot;">II</pagenum>
         </doc>
       </_>
@@ -31,7 +32,7 @@
     <x:expect label="result">
       <_ style="text-transform: none">
         <doc xml:lang="en-Brai">
-          <br style="&amp;::before {{ content: &quot;\A &quot;; white-space: pre-line; text-transform: auto }}"/>
+          <br style="&amp;::before {{ content: &quot;\A &quot;; white-space: pre-line }}"/>
         </doc>
       </_>
     </x:expect>
@@ -61,7 +62,7 @@
     <x:expect label="result">
       <_ style="text-transform: none">
         <doc>
-          <div style="&amp;::after {{ content: &quot;FOO&quot;; text-transform: auto }} &amp;::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
+          <div style="&amp;::after {{ content: &quot;FOO&quot; }} &amp;::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
         </doc>
       </_>
     </x:expect>

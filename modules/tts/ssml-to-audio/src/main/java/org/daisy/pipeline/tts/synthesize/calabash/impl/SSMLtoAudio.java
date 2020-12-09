@@ -26,12 +26,12 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.xslt.CompiledStylesheet;
 import org.daisy.common.xslt.XslTransformCompiler;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.audio.AudioServices;
-import org.daisy.pipeline.event.ProgressMessage;
-import org.daisy.pipeline.event.ProgressMessageBuilder;
 import org.daisy.pipeline.tts.AudioBufferTracker;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
 import org.daisy.pipeline.tts.StraightBufferAllocator;
@@ -102,6 +102,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 	private Processor mProc;
 	private Logger ServerLogger = LoggerFactory.getLogger(TTSRegistry.class);
 	private VoiceManager mVoiceManager;
+	private TimedTTSExecutor mExecutor = new TimedTTSExecutor();
 	private Map<TTSService, CompiledStylesheet> mSSMLtransformers;
 	private Map<String, String> mProperties;
 	private TTSLog mTTSlog;
@@ -298,9 +299,9 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		if (engine.endingMark() != null)
 			expectedMarks.add(engine.endingMark());
 		try {
-			timeout.enableForCurrentThread(interrupter, 2);
-			audioBuffers = engine.synthesize(ttsInput, testingXML, firstVoice, res, marks,
-			        expectedMarks, new StraightBufferAllocator(), false);
+			audioBuffers = mExecutor.synthesizeWithTimeout(
+				timeout, interrupter, null, ttsInput, testingXML, Sentence.computeSize(testingXML),
+				engine, firstVoice, res, marks, expectedMarks, new StraightBufferAllocator(), false);
 		} catch (Exception e) {
 			String msg = "Error while testing " + TTSServiceUtil.displayName(service) + "; "
 			        + e.getMessage() + ": " + getStack(e);
@@ -308,7 +309,6 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
 			return null;
 		} finally {
-			timeout.disable();
 			if (res != null)
 				try {
 					timeout.enableForCurrentThread(2);
@@ -462,12 +462,12 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		mCurrentSection = null;
 	}
 
-	private ProgressMessage progress;
+	private MessageAppender progress;
 
 	public Iterable<SoundFileLink> blockingRun(AudioServices audioServices)
 	        throws SynthesisException, InterruptedException, EncodingException {
 
-		progress = ProgressMessage.getActiveBlock().post(new ProgressMessageBuilder().withProgress(BigDecimal.ONE));
+		progress = MessageAppender.getActiveBlock().append(new MessageBuilder().withProgress(BigDecimal.ONE));
 		try {
 
 		//SSML mark splitter shared by the threads:
@@ -513,9 +513,8 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		int i = 0;
 		for (; i < regularTTSthreadNum; ++i) {
 			tpt[i] = new TextToPcmThread();
-			tpt[i].start(stext, pcmQueue, mTTSRegistry, mVoiceManager, ssmlSplitter, this,
-			        mLogger, mAudioBufferTracker, maxMemPerTTSThread, mSSMLtransformers,
-			        mTTSlog);
+			tpt[i].start(stext, pcmQueue, mExecutor, mTTSRegistry, mVoiceManager, ssmlSplitter, this,
+			             mLogger, mAudioBufferTracker, maxMemPerTTSThread, mSSMLtransformers, mTTSlog);
 		}
 		for (Map.Entry<TTSEngine, List<ContiguousText>> e : mOrganizedText.entrySet()) {
 			TTSEngine tts = e.getKey();
@@ -523,9 +522,9 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				stext = new ConcurrentLinkedQueue<ContiguousText>(e.getValue());
 				for (int j = 0; j < tts.reservedThreadNum(); ++i, ++j) {
 					tpt[i] = new TextToPcmThread();
-					tpt[i].start(stext, pcmQueue, mTTSRegistry, mVoiceManager, ssmlSplitter,
-					        this, mLogger, mAudioBufferTracker, maxMemPerTTSThread,
-					        mSSMLtransformers, mTTSlog);
+					tpt[i].start(stext, pcmQueue, mExecutor, mTTSRegistry, mVoiceManager, ssmlSplitter,
+					        this, mLogger, mAudioBufferTracker, maxMemPerTTSThread, mSSMLtransformers,
+					        mTTSlog);
 				}
 			}
 		}
@@ -582,8 +581,8 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 	@Override
 	synchronized public void notifyFinished(ContiguousText section) {
-		progress.post(
-			new ProgressMessageBuilder()
+		progress.append(
+			new MessageBuilder()
 				.withProgress(
 					new BigDecimal(section.getStringSize()).divide(new BigDecimal(mTotalTextSize), MathContext.DECIMAL128))
 		).close();

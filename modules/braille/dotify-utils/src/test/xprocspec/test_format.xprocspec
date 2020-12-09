@@ -12726,7 +12726,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_111" pending="temporarily disabled">
+  <x:scenario label="test_111">
     <x:documentation>
       Tests negative text indent on the last line on the right side.
     </x:documentation>
@@ -15090,4 +15090,247 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_128">
+    <x:documentation>
+      Tests :top-of-page pseudo class.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <body style="display: block;
+                       text-transform: none;
+                       @page { size: 10 5 }">
+            ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+            <pagenum style="display: block; &amp;:top-of-page { display: none; }">⠿</pagenum>
+            ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+            <pagenum style="display: block; &amp;:top-of-page { display: none; }">⠿</pagenum>
+            ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="main" duplex="true" page-width="10" page-height="5">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="main">
+            <block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+              <block display-when="(! $starts-at-top-of-page)" keep="page">⠿</block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+              <block display-when="(! $starts-at-top-of-page)" keep="page">⠿</block>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠿</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_129">
+    <x:documentation>
+      Tests empty table of contents.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <body style="text-transform: none;
+                       @volume { @begin { content: flow(front); }}">
+            <list style="display: -obfl-toc; flow: front"/>
+            <h1 style="display: block">⠿⠿⠿</h1>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="master" duplex="true" page-width="40" page-height="25">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <table-of-contents name="toc">
+            <toc-block/>
+          </table-of-contents>
+          <volume-template sheets-in-volume-max="1000">
+            <pre-content>
+              <toc-sequence master="master" range="document" toc="toc"/>
+            </pre-content>
+          </volume-template>
+          <sequence master="master">
+            <block>⠿⠿⠿</block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+            <section>
+                <page>
+                    <row>⠿⠿⠿</row>
+                </page>
+            </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_130">
+    <x:documentation>
+      Tests omitting of an empty table of contents entry.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <body style="text-transform: none;
+                       @volume { @begin { content: flow(front); }}">
+            <list style="display: -obfl-toc; flow: front">
+              <li style="display: block"/>
+              <li style="display: block">
+                <a href="chapter" style="&amp;::after {
+                                      text-transform: auto;
+                                      content: ' ' target-counter(attr(href), page) }">⠿⠿⠿</a>
+              </li>
+            </list>
+            <h1 id="chapter" style="display: block">⠿⠿⠿</h1>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="master" duplex="true" page-width="40" page-height="25">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <table-of-contents name="toc">
+            <toc-block>
+              <toc-block/>
+              <toc-block>
+                <toc-entry ref-id="chapter">
+                  ⠿⠿⠿
+                  <span translate="">
+                    <style name="">
+                      <page-number ref-id="chapter" number-format="default"/>
+                    </style>
+                  </span>
+                </toc-entry>
+              </toc-block>
+            </toc-block>
+          </table-of-contents>
+          <volume-template sheets-in-volume-max="1000">
+            <pre-content>
+              <toc-sequence master="master" range="document" toc="toc"/>
+            </pre-content>
+          </volume-template>
+          <sequence master="master">
+            <block>
+              <block>
+                <span id="chapter"/>
+              </block>
+              ⠿⠿⠿
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠀⠼⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
 </x:description>

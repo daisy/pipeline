@@ -97,7 +97,7 @@ public class TTSTimeout extends Thread {
 			try {
 				sleep(mSeconds * 1000);
 			} catch (InterruptedException e) {
-				//interrupted by the TTS thread with cancel() because the watched job is finished
+				//interrupted by the TTS thread with disable() because the watched job is finished
 				notifyFinished();
 				continue;
 			}
@@ -108,7 +108,7 @@ public class TTSTimeout extends Thread {
 			try {
 				sleep(1000);
 			} catch (InterruptedException e) {
-				//interrupted by the TTS thread with cancel()
+				//interrupted by the TTS thread with disable()
 				notifyFinished();
 				continue;
 			}
@@ -126,7 +126,7 @@ public class TTSTimeout extends Thread {
 			try {
 				sleep(Long.MAX_VALUE);
 			} catch (InterruptedException e) {
-				//interrupted by the TTS thread with cancel()
+				//interrupted by the TTS thread with disable()
 				notifyFinished();
 				continue;
 			}

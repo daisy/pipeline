@@ -12,7 +12,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 to DAISY 2.02</h1>
         <p px:role="desc">Transforms an EPUB 3 publication into DAISY 2.02.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/epub3-to-daisy202">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy202/">
             Online documentation
         </a>
     </p:documentation>

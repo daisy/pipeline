@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
 	       xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/"
 	       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	       xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
@@ -8,7 +8,7 @@
                script="../../main/resources/xml/xproc/annotate.xpl">
 
   <x:scenario label="Empty stylesheet">
-    <x:call step="px:annotate">
+    <x:call step="pxi:annotate">
       <x:input port="annotations"/>
       <x:input port="source">
   	<x:document type="inline">
@@ -32,7 +32,7 @@
   </x:scenario>
 
   <x:scenario label="Annotation Test">
-    <x:call step="px:annotate">
+    <x:call step="pxi:annotate">
       <x:input port="annotations">
 	<x:document type="inline">
 	  <xsl:stylesheet xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">

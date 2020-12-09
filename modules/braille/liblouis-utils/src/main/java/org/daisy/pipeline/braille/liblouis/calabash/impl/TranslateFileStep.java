@@ -16,7 +16,7 @@ import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
-import static org.daisy.common.file.URLs.decode;
+import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
@@ -194,14 +194,14 @@ public class TranslateFileStep extends DefaultStep implements XProcStep {
 					URI baseURI = fileset.getBaseURI();
 					XdmSequenceIterator files = fileset.axisIterator(Axis.CHILD, d_file);
 					while (files != null && files.hasNext()) {
-						URI uri = baseURI.resolve(((XdmNode)files.next()).getAttributeValue(_href));
-						URI path = uri.resolve(".");
+						URI uri = URLs.resolve(baseURI, URLs.asURI(((XdmNode)files.next()).getAttributeValue(_href)));
+						URI path = URLs.resolve(uri, URLs.asURI("."));
 						if (configPath == null)
 							configPath = path;
 						else if (!configPath.equals(path))
 							throw new XProcException(step.getNode(),
 									"All configuration files and semantic action files must be placed in " + configPath);
-						configFileNames.add(decode(path.relativize(uri).toString())); }}}
+						configFileNames.add(URLs.relativize(path, uri).getPath()); }}}
 			
 			// Get semantic action files
 			List<String> semanticFileNames = new ArrayList<String>();
@@ -211,14 +211,14 @@ public class TranslateFileStep extends DefaultStep implements XProcStep {
 					URI baseURI = fileset.getBaseURI();
 					XdmSequenceIterator files = fileset.axisIterator(Axis.CHILD, d_file);
 					while (files != null && files.hasNext()) {
-						URI uri = baseURI.resolve(((XdmNode)files.next()).getAttributeValue(_href));
-						URI path = uri.resolve(".");
+						URI uri = URLs.resolve(baseURI, URLs.asURI(((XdmNode)files.next()).getAttributeValue(_href)));
+						URI path = URLs.resolve(uri, URLs.asURI("."));
 						if (configPath == null)
 							configPath = path;
 						else if (!configPath.equals(path))
 							throw new XProcException(step.getNode(),
 									"All configuration files and semantic action files must be placed in " + configPath);
-						semanticFileNames.add(decode(path.relativize(uri).toString())); }}}
+						semanticFileNames.add(path.relativize(uri).getPath()); }}}
 			
 			LiblouisTable table = null;
 			if (getOption(_table) != null)

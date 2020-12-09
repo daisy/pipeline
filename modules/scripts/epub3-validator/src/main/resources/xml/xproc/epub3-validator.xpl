@@ -13,7 +13,7 @@
                 (organization: <span px:role="organization">NLB</span>,
                 e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).</p>
         </address>
-        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/epub3-validator">Online Documentation</a></p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-validator/">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">

@@ -44,6 +44,12 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of the <code>{http://code.google.com/p/dotify/}obfl-to-pef</code> step.
+ *
+ * @see <a href="../../../../../../../../resources/xml/library.xpl">The XProc library
+ *      <code>http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl</code></a>.
+ */
 public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	
 	private static final QName _locale = new QName("locale");

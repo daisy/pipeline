@@ -4,7 +4,7 @@ import java.net.URL;
 import java.net.URI;
 import java.util.Hashtable;
 
-import org.daisy.common.file.URIs;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.NativePath;
 
 import org.osgi.framework.BundleActivator;
@@ -33,7 +33,7 @@ public class LiblouisExternalNativePath implements NativePath {
 			throw new RuntimeException("Using external Liblouis is not allowed");
 	}
 	
-	public URI getIdentifier() { return URIs.asURI("http://www.liblouis.org/native/EXTERNAL"); }
+	public URI getIdentifier() { return URLs.asURI("http://www.liblouis.org/native/EXTERNAL"); }
 	public URI canonicalize(URI resource) { throw new UnsupportedOperationException(); }
 	public URL resolve(URI resource) { throw new UnsupportedOperationException(); }
 	public Iterable<URI> get(String query) { throw new UnsupportedOperationException(); }

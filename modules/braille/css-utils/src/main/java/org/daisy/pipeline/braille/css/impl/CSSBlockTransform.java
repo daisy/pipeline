@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.net.URI;
+import java.net.URL;
 import javax.xml.namespace.QName;
 
 import com.google.common.base.MoreObjects;
@@ -19,9 +20,8 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.TermIdent;
+import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermURI;
-
-import static org.daisy.common.file.URIs.asURI;
 
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.RuleTextTransform;
@@ -69,6 +69,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+/**
+ * @see <a href="../../../../../../../README.md">Documentation</a>
+ * @see <a href="../../../../../../../resources/xml/transform/block-translator.xpl">XProc code</a>
+ */
 public interface CSSBlockTransform {
 	
 	@Component(
@@ -84,7 +88,7 @@ public interface CSSBlockTransform {
 		
 		@Activate
 		protected void activate(final Map<?,?> properties) {
-			href = asURI(URLs.getResourceFromJAR("xml/transform/block-translator.xpl", CSSBlockTransform.class));
+			href = URLs.asURI(URLs.getResourceFromJAR("xml/transform/block-translator.xpl", CSSBlockTransform.class));
 		}
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
@@ -241,18 +245,24 @@ public interface CSSBlockTransform {
 									;
 								else if (!dd.getProperty().equals("system")
 								         && dd.size() == 1
-								         && (dd.get(0) instanceof TermIdent || dd.get(0) instanceof TermURI)) {
+								         && (dd.get(0) instanceof TermIdent
+								             || dd.get(0) instanceof TermURI
+								             || dd.get(0) instanceof TermInteger)) {
 									String key = dd.getProperty();
 									String value;
-									if (dd.get(0) instanceof TermIdent) {
-										value = ((TermIdent)dd.get(0)).getValue();
+									if (dd.get(0) instanceof TermURI) {
+										URL base = ((TermURI)dd.get(0)).getBase();
+										URI baseURI = base != null ? URLs.asURI(base) : URLs.asURI(((Document)doc).getBaseURI());
+										value = URLs.resolve(baseURI,
+										                     URLs.asURI(((TermURI)dd.get(0)).getValue()))
+										            .toASCIIString();
+									} else {
+										if (dd.get(0) instanceof TermInteger)
+											value = "" + ((TermInteger)dd.get(0)).getIntValue();
+										else
+											value = "" + dd.get(0).getValue();
 										if (query.containsKey(key))
 											query.removeAll(key);
-									} else {
-										URI base = asURI(((TermURI)dd.get(0)).getBase());
-										if (base == null)
-											base = asURI(((Document)doc).getBaseURI());
-										value = base.resolve(((TermURI)dd.get(0)).getValue()).toASCIIString();
 									}
 									if (key.equals("contraction") && value.equals("no"))
 										query.removeAll("grade");

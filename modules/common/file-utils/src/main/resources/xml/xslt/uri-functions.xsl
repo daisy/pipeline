@@ -91,7 +91,7 @@
             4. query
             5. fragment
         -->
-        <xsl:analyze-string select="concat('X',$uri)" regex="^X(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?">
+        <xsl:analyze-string select="concat('X',$uri)" regex="^X((jar:file|[^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?">
             <xsl:matching-substring>
                 <xsl:sequence select="(
                     if (regex-group(1)) then regex-group(2) else '',
@@ -109,7 +109,7 @@
         <xsl:sequence
             select="string-join((
             if($tokens[1]) then ($tokens[1],':') else (),
-            if($tokens[2]) then ('//',$tokens[2]) else if($tokens[1] and not($tokens[1]=('mailto','file'))) then '/' else (),
+            if($tokens[2]) then ('//',$tokens[2]) else if($tokens[1] and not($tokens[1]=('mailto','file','jar:file'))) then '/' else (),
             $tokens[3],
             if($tokens[4]) then ('?',$tokens[4]) else (),
             if($tokens[5]) then ('#',$tokens[5]) else ()

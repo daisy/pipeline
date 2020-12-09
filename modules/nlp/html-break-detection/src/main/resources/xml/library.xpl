@@ -47,7 +47,8 @@
     <p:documentation>Remove the word markups from the input document.</p:documentation>
     <p:input port="source" primary="true"/>
     <p:output port="result" primary="true"/>
-    <p:unwrap match="xhtml:span[@role='word']" />
+    <p:unwrap match="html:span[@role='word' and not(@* except @role)]"/>
+    <p:delete match="html:span/@role[.='word']"/>
   </p:declare-step>
 
 </p:library>

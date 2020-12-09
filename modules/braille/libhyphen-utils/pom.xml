@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.13.8-SNAPSHOT</version>
+    <version>1.14.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>libhyphen-utils</artifactId>
-  <version>2.0.3-SNAPSHOT</version>
+  <version>2.0.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: libhyphen-utils</name>
@@ -240,7 +240,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.linux.LibhyphenNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-linux</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.linux
                 </Private-Package>
@@ -264,7 +264,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.mac.LibhyphenNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-mac</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.mac
                 </Private-Package>
@@ -288,7 +288,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.windows.LibhyphenNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-windows</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.windows
                 </Private-Package>
@@ -313,67 +313,110 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>modules-build-helper</artifactId>
-        <executions>
-          <execution>
-            <id>package-list</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>dependencies-package-list</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
-              <includes>
-                org.daisy.pipeline.*,
-                org.daisy.common.*
-              </includes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>htmlize-sources</id>
-            <configuration>
-              <sourceDirectory>${project.build.directory}/classes</sourceDirectory>
-              <outputDirectory>${project.build.directory}/doc/src/main/resources</outputDirectory>
-              <includes>
-                META-INF/catalog.xml,
-                **/*.xpl,
-                **/*.xsl,
-                hyphen/,
-                hyphen/*
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <offlineLinks>
-                <offlineLink>
-                  <url>http://daisy.github.io/pipeline/api/</url>
-                  <location>${project.build.directory}/dependencies-package-list/</location>
-                </offlineLink>
-              </offlineLinks>
-              <links>
-                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
-              </links>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 
   <profiles>
+    <profile>
+      <id>module-with-documentation</id>
+      <activation>
+        <property>
+          <name>documentation</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>linux-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>mac-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>windows-bundle</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>package-list</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>dependencies-package-list</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+                  <includes>
+                    org.daisy.pipeline.*,
+                    org.daisy.common.*
+                  </includes>
+                </configuration>
+              </execution>
+              <execution>
+                <id>htmlize-sources</id>
+                <configuration>
+                  <!--
+                      include tables
+                  -->
+                  <includes>
+                    src/main/resources/META-INF/catalog.xml,
+                    src/main/resources/**/*.xpl,
+                    src/main/resources/**/*.xsl,
+                    src/main/resources/hyphen/,
+                    src/main/resources/hyphen/*
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>xprocdoc</id>
+                <configuration>
+                  <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <offlineLinks>
+                    <offlineLink>
+                      <url>http://daisy.github.io/pipeline/api/</url>
+                      <location>${project.build.directory}/dependencies-package-list/</location>
+                    </offlineLink>
+                  </offlineLinks>
+                  <links>
+                    <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+                  </links>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>generate-table-files</id>
       <activation>
@@ -391,13 +434,13 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <mkdir dir="target/checkout" />
-                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true" />
+                    <mkdir dir="target/checkout"/>
+                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true"/>
                     <unzip dest="target/generated-resources/hyphen" src="target/checkout/dictionaries.zip">
                       <patternset>
-                        <include name="**/hyph_*.dic" />
+                        <include name="**/hyph_*.dic"/>
                       </patternset>
-                      <mapper type="flatten" />
+                      <mapper type="flatten"/>
                     </unzip>
                   </tasks>
                 </configuration>

@@ -10,8 +10,8 @@
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">HTML to PEF</h1>
-        <p px:role="desc">Transforms a HTML document into a PEF.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/braille/html-to-pef">
+        <p px:role="desc">Transforms a HTML document into an embosser ready braille document.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/">
             Online documentation
         </a>
         <dl px:role="author">
@@ -57,6 +57,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         </p:pipeinfo>
     </p:option>
     
+    <p:option name="stylesheet-parameters"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
@@ -87,34 +88,28 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-        <p:documentation>
-            
-        </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
-            
+            px:delete-parameters
+            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl">
+        <!-- FIXME: we cannot use a relative url to import px:html-to-pef directly here because this
+             script uses px:extends-script in the XML catalog which changes the base URI of the
+             script at build time. -->
         <p:documentation>
-            
+            px:html-to-pef
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
         <p:documentation>
-            
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
-        <p:documentation>
-            
+            px:xml-to-pef.store
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
-            
+            px:tempdir
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -138,7 +133,9 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- ================================================= -->
     <p:in-scope-names name="in-scope-names"/>
     <px:delete-parameters name="input-options" px:message="Collecting parameters" px:progress=".01"
-                          parameter-names="stylesheet
+                          parameter-names="html
+                                           stylesheet
+                                           stylesheet-parameters
                                            transform
                                            ascii-file-format
                                            ascii-table
@@ -148,12 +145,17 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
                                            pef-output-dir
                                            brf-output-dir
                                            preview-output-dir
-                                           obfl-dir
+                                           obfl-output-dir
                                            temp-dir">
         <p:input port="source">
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
+    <p:sink/>
+    <px:parse-query name="stylesheet-parameters">
+        <p:with-option name="query" select="$stylesheet-parameters"/>
+    </px:parse-query>
+    <p:sink/>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
@@ -187,6 +189,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
+            <p:pipe port="result" step="stylesheet-parameters"/>
         </p:input>
     </px:html-to-pef>
     

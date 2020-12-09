@@ -965,73 +965,25 @@
     <xsl:template priority="0.8"
                   mode="toc-block"
                   match="css:box[@type='block']">
-        <!--
-            Automatically compute the toc-entry's ref-id by searching for target-counter(),
-            target-text() and target-string() values within the current block, descendant blocks,
-            following blocks or preceding blocks (in that order). It is currently not possible to
-            define the ref-id directly in CSS which means a table-of-contents can not be constructed
-            if no references are used for rendering content (such as braille page numbers or print
-            page numbers).
-        -->
-        <!--
-            TODO: warning when not all references in a block point to the same element
-            TODO: warning when a block has no references or descendant blocks with references
-        -->
         <xsl:variable name="descendant-refs" as="attribute()*"
                       select="((descendant::css:box)/@css:anchor
                                |(descendant::css:string)/@target
                                |(descendant::css:counter)/@target)"/>
-        <xsl:variable name="following-refs" as="attribute()*"
-                      select="((following::css:box)/@css:anchor
-                               |(following::css:string)/@target
-                               |(following::css:counter)/@target)"/>
-        <xsl:variable name="preceding-refs" as="attribute()*"
-                      select="(preceding::css:box/@css:anchor
-                               |preceding::css:string/@target
-                               |preceding::css:counter/@target)"/>
         <xsl:choose>
-            <xsl:when test="exists($descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])">
-                <xsl:variable name="ref-id" as="xs:string"
-                              select="$descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]"/>
-                <toc-block>
-                    <xsl:next-match>
-                        <xsl:with-param name="toc-entry-ref-id" select="$ref-id" tunnel="yes"/>
-                    </xsl:next-match>
-                </toc-block>
-            </xsl:when>
-            <xsl:when test="exists($descendant-refs)">
+            <xsl:when test="exists($descendant-refs) and
+                            not(exists($descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]]))">
                 <!--
-                    if the entry references an element in a named flow, we assume that element is
+                    If an entry references an element in a named flow, we assume that element is
                     part of the volume begin or end area, and is therefore omitted from the table of
-                    contents
+                    contents (together with all parent blocks that contain no other entries).
+
+                    FIXME: show a warning
                 -->
             </xsl:when>
-            <xsl:when test="exists($following-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])">
-                <xsl:variable name="ref-id" as="xs:string"
-                              select="$following-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]"/>
-                <toc-block>
-                    <xsl:next-match>
-                        <xsl:with-param name="toc-entry-ref-id" select="$ref-id" tunnel="yes"/>
-                    </xsl:next-match>
-                </toc-block>
-            </xsl:when>
-            <xsl:when test="exists($preceding-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])">
-                <xsl:variable name="ref-id" as="xs:string"
-                              select="$preceding-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][last()]"/>
-                <toc-block>
-                    <xsl:next-match>
-                        <xsl:with-param name="toc-entry-ref-id" select="$ref-id" tunnel="yes"/>
-                    </xsl:next-match>
-                </toc-block>
-            </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="pf:warn">
-                    <xsl:with-param name="msg">
-                        An element with display: -obfl-toc must have at least one descendant
-                        target-counter(), target-string() or target-text() value (that references an
-                        element that does not participate in a named flow).
-                    </xsl:with-param>
-                </xsl:call-template>
+                <toc-block>
+                    <xsl:next-match/>
+                </toc-block>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1189,7 +1141,6 @@
     <xsl:template priority="0.591"
                   mode="toc-block"
                   match="css:box[@type='block'][child::css:box[@type='inline']]">
-        <xsl:param name="toc-entry-ref-id" as="xs:string" tunnel="yes"/>
         <xsl:choose>
             <xsl:when test="ancestor-or-self::*/@css:_obfl-on-resumed or descendant::*/@css:_obfl-on-resumed">
                 <toc-entry-on-resumed>
@@ -1200,9 +1151,48 @@
                 </toc-entry-on-resumed>
             </xsl:when>
             <xsl:otherwise>
-                <toc-entry ref-id="{$toc-entry-ref-id}">
-                    <xsl:apply-templates mode="toc-entry"/>
-                </toc-entry>
+                <!--
+                    Automatically compute the toc-entry's ref-id by searching for target-counter(),
+                    target-text() and target-string() values within the current block. It is currently not
+                    possible to define the ref-id directly in CSS which means a table-of-contents can not be
+                    constructed if no references are used for rendering content (such as braille page
+                    numbers or print page numbers).
+                -->
+                <xsl:variable name="descendant-refs" as="attribute()*"
+                              select="((descendant::css:box)/@css:anchor
+                                       |(descendant::css:string)/@target
+                                       |(descendant::css:counter)/@target)"/>
+                <xsl:choose>
+                    <xsl:when test="exists($descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])">
+                        <!--
+                            FIXME: show a warning when not all references point to the same element
+                        -->
+                        <toc-entry ref-id="{$descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]}">
+                            <xsl:apply-templates mode="toc-entry"/>
+                        </toc-entry>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!--
+                            If the entry does not have any references we have no ref-id to use (and
+                            we can't use references from preceding or following entries because the
+                            ref-ids need to be unique). Dotify does not allow any other content than
+                            toc-entry inside a toc-block, which means we must drop this block's
+                            content.
+                        -->
+                        <xsl:if test="child::css:box/(descendant::*|
+                                                      descendant::text()[normalize-space(.)])">
+                            <xsl:call-template name="pf:error">
+                                <xsl:with-param name="msg">
+                                    An element with display: -obfl-toc must have no inline content
+                                    with not at least one target-counter(), target-string() or
+                                    target-text() value (that references an element that does not
+                                    participate in a named flow) within the same inline formatting
+                                    context.
+                                </xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1626,6 +1616,23 @@
                          css:box[@type=('block','table')]/@css:padding-top|
                          css:box[@type=('block','table')]/@css:padding-bottom">
         <xsl:attribute name="{local-name()}" select="format-number(xs:integer(number(.)), '0')"/>
+    </xsl:template>
+    
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:top-of-page">
+        <xsl:variable name="style" as="element(css:rule)*" select="css:deep-parse-stylesheet(.)"/>
+        <xsl:choose>
+            <xsl:when test="$style[not(@selector)]/css:property[@name='display']/@value='none'">
+                <xsl:attribute name="display-when" select="'(! $starts-at-top-of-page)'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>
+                    <xsl:text>Ignoring ':top-of-page { </xsl:text>
+                    <xsl:apply-templates mode="css:serialize" select="$style"/>
+                    <xsl:text> }': can only handle 'display: none'</xsl:text>
+                </xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template mode="block-attr table-attr toc-entry-attr"

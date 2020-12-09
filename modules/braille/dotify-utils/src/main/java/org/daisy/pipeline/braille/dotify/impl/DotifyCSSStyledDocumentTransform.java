@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableMap;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
 
-import static org.daisy.common.file.URIs.asURI;
 import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
@@ -42,6 +41,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+/**
+ * @see <a href="../../../../../../../../../doc/">User documentation</a>.
+ */
 public interface DotifyCSSStyledDocumentTransform {
 	
 	@Component(
@@ -56,7 +58,7 @@ public interface DotifyCSSStyledDocumentTransform {
 		
 		@Activate
 		protected void activate(final Map<?,?> properties) {
-			href = asURI(URLs.getResourceFromJAR("xml/transform/dotify-transform.xpl", DotifyCSSStyledDocumentTransform.class));
+			href = URLs.asURI(URLs.getResourceFromJAR("xml/transform/dotify-transform.xpl", DotifyCSSStyledDocumentTransform.class));
 		}
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();

@@ -44,7 +44,11 @@
     <p:sink/>
 
     <p:xslt>
-      <p:documentation>Prepare HTML document: create text nodes for page number</p:documentation>
+      <p:documentation>
+	Prepare HTML document:
+	- create text nodes for page number
+	- handle inline SSML phonemes
+      </p:documentation>
       <p:input port="source">
 	<p:pipe step="main" port="content.in"/>
       </p:input>

@@ -12,9 +12,9 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 to PEF</h1>
-        <p px:role="desc" xml:space="preserve">Transforms a EPUB 3 publication into a PEF.</p>
+        <p px:role="desc" xml:space="preserve">Transforms a EPUB 3 publication into an embosser ready braille document.</p>
         <p>Extends <a href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl">XML to PEF</a>.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/braille/epub3-to-pef">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef/">
             Online documentation
         </a>
     </p:documentation>
@@ -77,6 +77,7 @@ even though the provided CSS is more specific.
         </p:documentation>
     </p:option>
     
+    <p:option name="stylesheet-parameters"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
@@ -110,11 +111,32 @@ even though the provided CSS is more specific.
     <!-- ======= -->
     <!-- Imports -->
     <!-- ======= -->
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl">
+        <!-- FIXME: we cannot use a relative url to import px:epub3-to-pef.load, etc. directly here
+             because this script uses px:extends-script in the XML catalog which changes the base URI of
+             the script at build time. -->
+        <p:documentation>
+            px:epub3-to-pef.load
+            px:epub3-to-pef
+            px:epub3-to-pef.store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+        <p:documentation>
+            px:delete-parameters
+            px:parse-query
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:tempdir
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+        </p:documentation>
+    </p:import>
     
     <!-- ================================================= -->
     <!-- Create a <c:param-set/> of the options            -->
@@ -124,7 +146,10 @@ even though the provided CSS is more specific.
     <!-- ================================================= -->
     <p:in-scope-names name="in-scope-names"/>
     <px:delete-parameters name="input-options" px:message="Collecting parameters" px:progress=".01"
-                          parameter-names="stylesheet
+                          parameter-names="epub
+                                           preamble
+                                           stylesheet
+                                           stylesheet-parameters
                                            apply-document-specific-stylesheets
                                            transform
                                            ascii-table
@@ -141,6 +166,11 @@ even though the provided CSS is more specific.
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
+    <p:sink/>
+    <px:parse-query name="stylesheet-parameters">
+        <p:with-option name="query" select="$stylesheet-parameters"/>
+    </px:parse-query>
+    <p:sink/>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
@@ -188,6 +218,7 @@ even though the provided CSS is more specific.
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
+            <p:pipe port="result" step="stylesheet-parameters"/>
         </p:input>
     </px:epub3-to-pef>
     <p:sink/>

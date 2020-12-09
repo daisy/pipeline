@@ -37,8 +37,7 @@
       <xsl:if test="$depth &gt; 0">
         <xsl:variable name="list" as="element()*">
           <xsl:for-each-group select="//*[local-name()=$included-heading-names]" group-starting-with="*:h1">
-            <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
-              <xsl:call-template name="list-item-attributes"/>
+            <xsl:variable name="list-item" as="element()*">
               <xsl:if test="current-group()/self::*:h1">
                 <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                   <xsl:call-template name="link-attributes">
@@ -50,8 +49,7 @@
               <xsl:if test="$depth &gt; 1">
                 <xsl:variable name="list" as="element()*">
                   <xsl:for-each-group select="current-group()[not(self::*:h1)]" group-starting-with="*:h2">
-                    <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
-                      <xsl:call-template name="list-item-attributes"/>
+                    <xsl:variable name="list-item" as="element()*">
                       <xsl:if test="current-group()/self::*:h2">
                         <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                           <xsl:call-template name="link-attributes">
@@ -63,8 +61,7 @@
                       <xsl:if test="$depth &gt; 2">
                         <xsl:variable name="list" as="element()*">
                           <xsl:for-each-group select="current-group()[not(self::*:h2)]" group-starting-with="*:h3">
-                            <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
-                              <xsl:call-template name="list-item-attributes"/>
+                            <xsl:variable name="list-item" as="element()*">
                               <xsl:if test="current-group()/self::*:h3">
                                 <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                                   <xsl:call-template name="link-attributes">
@@ -76,8 +73,7 @@
                               <xsl:if test="$depth &gt; 3">
                                 <xsl:variable name="list" as="element()*">
                                   <xsl:for-each-group select="current-group()[not(self::*:h3)]" group-starting-with="*:h4">
-                                    <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
-                                      <xsl:call-template name="list-item-attributes"/>
+                                    <xsl:variable name="list-item" as="element()*">
                                       <xsl:if test="current-group()/self::*:h4">
                                         <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                                           <xsl:call-template name="link-attributes">
@@ -89,8 +85,7 @@
                                       <xsl:if test="$depth &gt; 4">
                                         <xsl:variable name="list" as="element()*">
                                           <xsl:for-each-group select="current-group()[not(self::*:h4)]" group-starting-with="*:h5">
-                                            <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
-                                              <xsl:call-template name="list-item-attributes"/>
+                                            <xsl:variable name="list-item" as="element()*">
                                               <xsl:if test="current-group()/self::*:h5">
                                                 <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                                                   <xsl:call-template name="link-attributes">
@@ -120,7 +115,13 @@
                                                   </xsl:element>
                                                 </xsl:if>
                                               </xsl:if>
-                                            </xsl:element>
+                                            </xsl:variable>
+                                            <xsl:if test="exists($list-item)">
+                                              <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
+                                                <xsl:call-template name="list-item-attributes"/>
+                                                <xsl:sequence select="$list-item"/>
+                                              </xsl:element>
+                                            </xsl:if>
                                           </xsl:for-each-group>
                                         </xsl:variable>
                                         <xsl:if test="exists($list)">
@@ -130,7 +131,13 @@
                                           </xsl:element>
                                         </xsl:if>
                                       </xsl:if>
-                                    </xsl:element>
+                                    </xsl:variable>
+                                    <xsl:if test="exists($list-item)">
+                                      <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
+                                        <xsl:call-template name="list-item-attributes"/>
+                                        <xsl:sequence select="$list-item"/>
+                                      </xsl:element>
+                                    </xsl:if>
                                   </xsl:for-each-group>
                                 </xsl:variable>
                                 <xsl:if test="exists($list)">
@@ -140,7 +147,13 @@
                                   </xsl:element>
                                 </xsl:if>
                               </xsl:if>
-                            </xsl:element>
+                            </xsl:variable>
+                            <xsl:if test="exists($list-item)">
+                              <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
+                                <xsl:call-template name="list-item-attributes"/>
+                                <xsl:sequence select="$list-item"/>
+                              </xsl:element>
+                            </xsl:if>
                           </xsl:for-each-group>
                         </xsl:variable>
                         <xsl:if test="exists($list)">
@@ -150,7 +163,13 @@
                           </xsl:element>
                         </xsl:if>
                       </xsl:if>
-                    </xsl:element>
+                    </xsl:variable>
+                    <xsl:if test="exists($list-item)">
+                      <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
+                        <xsl:call-template name="list-item-attributes"/>
+                        <xsl:sequence select="$list-item"/>
+                      </xsl:element>
+                    </xsl:if>
                   </xsl:for-each-group>
                 </xsl:variable>
                 <xsl:if test="exists($list)">
@@ -160,7 +179,13 @@
                   </xsl:element>
                 </xsl:if>
               </xsl:if>
-            </xsl:element>
+            </xsl:variable>
+            <xsl:if test="exists($list-item)">
+              <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
+                <xsl:call-template name="list-item-attributes"/>
+                <xsl:sequence select="$list-item"/>
+              </xsl:element>
+            </xsl:if>
           </xsl:for-each-group>
         </xsl:variable>
         <xsl:if test="exists($list)">
@@ -270,6 +295,7 @@
         <xsl:attribute name="xml:base" select="$header-base-uri"/>
       </xsl:if>
     </xsl:if>
+    <xsl:attribute name="title" select="normalize-space(string(.))"/>
   </xsl:template>
   
 </xsl:stylesheet>

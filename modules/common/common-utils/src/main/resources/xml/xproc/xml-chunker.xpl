@@ -63,7 +63,7 @@
 	</p:output>
 	
 	<!--
-	    implemented in Java
+	    Implemented in ../../../java/org/daisy/pipeline/common/calabash/impl/ChunkerStep.java
 	-->
 	
 </p:declare-step>

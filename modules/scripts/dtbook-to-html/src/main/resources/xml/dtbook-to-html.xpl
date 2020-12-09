@@ -10,7 +10,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to HTML</h1>
         <p px:role="desc">Transforms DTBook XML into HTML.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-html">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html/">
             Online documentation
         </a>
     </p:documentation>

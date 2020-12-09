@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
 
-import static org.daisy.common.file.URIs.asURI;
 import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
@@ -33,6 +32,9 @@ import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
+/**
+ * @see <a href="../../../../../../../README.md">Documentation</a>
+ */
 public interface LiblouisMathMLTransform {
 	
 	public enum MathCode {
@@ -51,7 +53,7 @@ public interface LiblouisMathMLTransform {
 		
 		@Activate
 		protected void activate(final Map<?,?> properties) {
-			href = asURI(URLs.getResourceFromJAR("xml/translate-mathml.xpl", LiblouisMathMLTransform.class));
+			href = URLs.asURI(URLs.getResourceFromJAR("xml/translate-mathml.xpl", LiblouisMathMLTransform.class));
 		}
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();

@@ -9,20 +9,22 @@
 
 Must be a space separated list of URIs, absolute or relative to the input.
 
-Style sheets can also be associated with the source in other ways: linked (using an
+Style sheets specified through this option are called "[user style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be attached to the
+source document. These are referred to as "[author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". They can be linked (using an
 ['xml-stylesheet' processing instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
 element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
 element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '[style'
 attributes](https://www.w3.org/TR/css-style-attr/)).
 
 Style sheets are applied to the document in the following way: XSLT style sheets are applied before
-CSS/SASS style sheets. XSLT style sheets are applied one by one, first the ones specified through
-this option, then the ones associated with the source document, in the order in which they are
-specified.
+CSS/SASS style sheets. XSLT style sheets are applied one by one, first the user style sheets, then
+the author style sheets, in the order in which they are specified.
 
-All CSS/SASS style sheets are applied at once, but the order in which they are specified (first the
-ones specified through this option, then the ones associated with the source document) has an
-influence on the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
+All CSS/SASS style sheets are applied at once, but the order in which they are specified (first user
+style sheets, then author style sheets) has an influence on the [cascading
+order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
 
 CSS/SASS style sheets are interpreted according to [braille
 CSS](http://braillespecs.github.io/braille-css) rules.
@@ -31,10 +33,24 @@ For info on how to use SASS (Syntactically Awesome StyleSheets) see the [SASS
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
+    <p:option name="stylesheet-parameters" required="false" px:type="transform-query" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Style sheet parameters</h2>
+            <p px:role="desc" xml:space="preserve">A list of parameters passed to the style sheets.
+
+Style sheets, whether they're specified with the "stylesheets" option or associated with the source,
+may have parameters (variables in case of SASS). The "stylesheet-parameters" option can be used to
+set these parameters.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="transform" required="false" px:type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Transformer query</h2>
-            <p px:role="desc">The transformer query.</p>
+            <p px:role="desc" xml:space="preserve">The transformer query.
+
+A query for selecting the [braille
+transformer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) to be used for creating
+the paginated braille document from the CSS styled input document.</p>
         </p:documentation>
     </p:option>
     <p:option name="include-preview" required="false" px:type="boolean" select="'false'">

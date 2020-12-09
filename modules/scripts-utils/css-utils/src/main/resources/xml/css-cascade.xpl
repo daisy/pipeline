@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0"
-                type="px:css-cascade"
-                xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-inline-prefixes="#all"
+                type="px:css-cascade"
                 name="main">
 	
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<p>Inline a CSS stylesheet in XML.</p>
-		<p>CSS cascading and inlining happens according to <a
-		href="http://braillespecs.github.io/braille-css/#h2_cascade">http://braillespecs.github.io/braille-css/#h2_cascade</a>
-		and <a
-		href="http://braillespecs.github.io/braille-css/#h2_style-attribute">http://braillespecs.github.io/braille-css/#h2_style-attribute</a>.
-		</p>
+		<p><a href="http://braillespecs.github.io/braille-css/#h2_cascade">Cascade</a> and inline
+		CSS and <a href="https://sass-lang.com/documentation">SCSS</a> style sheets in XML.</p>
+		<p>Inlining is done with <code>style</code> attributes with the <a
+		href="http://braillespecs.github.io/braille-css/#h2_style-attribute">syntax</a> described in
+		braille CSS.</p>
 	</p:documentation>
 	
 	<p:input port="source" sequence="false" primary="true">
-		<p:documentation>
-			Style sheets can be attached to the source in several ways: linked (using the 'link'
-			element), embedded (using the 'style' element) and/or inlined (using 'style'
-			attributes).
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Style sheets can be attached to the source in several ways: linked (using the
+			<code>link</code> element), embedded (using the <code>style</code> element) and/or
+			inlined (using <code>style</code> attributes).</p>
 		</p:documentation>
 	</p:input>
 	
 	<p:input port="context" sequence="true">
-		<p:documentation>
-			Style sheets that are linked to from the source document, or included via the
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Style sheets that are linked to from the source document, or included via the
 			'default-stylesheet' option, must either exist on disk, or must be provided in memory
 			via this port. Style sheets on this port must be wrapped in &lt;c:result
 			content-type="text/plain"&gt; elements. Style sheet URIs are resolved by matching
-			against the context documents's base URIs.
+			against the context documents's base URIs.</p>
 		</p:documentation>
 		<p:empty/>
 	</p:input>
@@ -62,28 +61,38 @@
 	</p:output>
 	
 	<p:option name="default-stylesheet" required="false" select="''">
-		<p:documentation>
-			Space separated list of URIs, absolute or relative to source. Applied prior to all other
-			style sheets defined within the source.
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Space separated list of URIs, absolute or relative to source. Applied prior to all
+			other style sheets defined within the source.</p>
+		</p:documentation>
+	</p:option>
+	
+	<p:option name="type" required="false" select="'text/css text/x-scss'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>The type of associated style sheets to apply. May be a space separated list. Allowed
+			values are "text/css" and "text/x-scss". If omitted, all CSS and SCSS style sheets are
+			applied.</p>
 		</p:documentation>
 	</p:option>
 	
 	<p:option name="media" required="false" select="'embossed'">
-		<p:documentation>
-			The target medium. All rules that are contained in a stylesheet that matches the
-			specified medium is included. Supported values are `embossed` and `print`.
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/">media
+			query</a>. All rules that are contained in a style sheet that matches the specified
+			medium are included. Supported media types are "embossed" and "print". When the target
+			medium is embossed, CSS is interpreted according to the rules of <a
+			href="http://braillespecs.github.io/braille-css">braille CSS</a>. Supported media
+			features are '<a href="https://www.w3.org/TR/mediaqueries-4/#width">width</a>' and '<a
+			href="https://www.w3.org/TR/mediaqueries-4/#height">height</a>'.</p>
 		</p:documentation>
 	</p:option>
 	
 	<p:option name="attribute-name" required="false" select="'style'">
-		<p:documentation>
-			Name of attribute to use for inlined styles. Default name is 'style'.
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Name of attribute to use for inlined styles. Default name is 'style'.</p>
 		</p:documentation>
 	</p:option>
 	
-	<!--
-	    implemented in Java
-	-->
 	<p:declare-step type="pxi:css-cascade">
 		<p:input port="source" primary="true"/>
 		<p:input port="context" sequence="true"/>
@@ -91,19 +100,41 @@
 		<p:output port="result"/>
 		<p:option name="default-stylesheet"/>
 		<p:option name="media"/>
+		<p:option name="type"/>
 		<p:option name="attribute-name"/>
+		<!--
+		    Implemented in ../../java/org/daisy/pipeline/css/calabash/impl/CssCascadeStep.java
+		-->
 	</p:declare-step>
 	
-	<pxi:css-cascade>
-		<p:input port="context">
-			<p:pipe step="main" port="context"/>
-		</p:input>
-		<p:input port="sass-variables">
-			<p:pipe step="main" port="sass-variables"/>
-		</p:input>
-		<p:with-option name="default-stylesheet" select="$default-stylesheet"/>
-		<p:with-option name="media" select="$media"/>
-		<p:with-option name="attribute-name" select="$attribute-name"/>
-	</pxi:css-cascade>
+	<p:choose>
+		<p:when test="$default-stylesheet!=''
+		              or //*[local-name()='style']
+		                    [not(@media) or pf:media-query-matches(@media,$media)]
+		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+		                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
+		              or //*[local-name()='link' and @rel='stylesheet']
+		                    [not(@media) or pf:media-query-matches($media,@media)]
+		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+		                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
+		                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]
+		              or //@style">
+			<pxi:css-cascade>
+				<p:input port="context">
+					<p:pipe step="main" port="context"/>
+				</p:input>
+				<p:input port="sass-variables">
+					<p:pipe step="main" port="sass-variables"/>
+				</p:input>
+				<p:with-option name="default-stylesheet" select="$default-stylesheet"/>
+				<p:with-option name="media" select="$media"/>
+				<p:with-option name="type" select="$type"/>
+				<p:with-option name="attribute-name" select="$attribute-name"/>
+			</pxi:css-cascade>
+		</p:when>
+		<p:otherwise>
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
 	
 </p:declare-step>

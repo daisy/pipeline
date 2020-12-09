@@ -124,6 +124,7 @@
   <p:import href="http://www.daisy.org/pipeline/modules/html-break-detection/library.xpl">
     <p:documentation>
       px:html-break-detect
+      px:html-unwrap-words
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
@@ -256,17 +257,12 @@
             <p:pipe step="isolate-skippable" port="result"/>
           </p:input>
         </px:css-speech-clean>
-        <p:unwrap match="html:span[not(@id) and @role='word']" name="rm-words">
+        <px:html-unwrap-words name="rm-words">
           <p:documentation>
-            Remove the word tags because this info is not used in the synthesize step (it depends on
-            it for some reason, but it does not synchronize on words) and because it results in
-            invalid EPUB.
-            
-            FIXME: Better to not detect words in html-break-detect in the first place but I don't
-            think it is possible to disable at the moment. Also the synthesize step seems to require
-            the words to be there.
+            Remove the word tags because it results in invalid EPUB. (The info is used in the
+            synthesize step, but not for synchronization on word level.)
           </p:documentation>
-        </p:unwrap>
+        </px:html-unwrap-words>
       </p:for-each>
       <px:ssml-to-audio name="to-audio" px:progress="8/9">
         <p:input port="config">

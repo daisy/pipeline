@@ -93,16 +93,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:transform
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
-        <p:documentation>
-            px:css-cascade
+            px:apply-stylesheets
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
         <p:documentation>
-            css:apply-stylesheets
             css:delete-stylesheets
             css:extract
         </p:documentation>
@@ -426,20 +421,22 @@
                     <p:choose>
                         <p:when test="$apply-document-specific-stylesheets='true'">
                             <px:message severity="DEBUG" message="Inlining document-specific CSS"/>
-                            <css:apply-stylesheets>
+                            <!-- media="braille" would be more appropriate, see https://github.com/braillespecs/braille-css/issues/1 -->
+                            <px:apply-stylesheets type="text/css text/scss" media="embossed">
                                 <p:input port="context">
                                     <p:pipe step="add-mediaoverlays" port="in-memory"/>
                                 </p:input>
-                            </css:apply-stylesheets>
+                            </px:apply-stylesheets>
                         </p:when>
                         <p:otherwise>
                             <p:delete match="@style"/>
                         </p:otherwise>
                     </p:choose>
                     <css:delete-stylesheets/>
-                    <px:css-cascade media="embossed">
-                        <p:with-option name="default-stylesheet" select="($stylesheet,$default-stylesheet)[not(.='')][1]"/>
-                    </px:css-cascade>
+                    <!-- media="braille" would be more appropriate, see https://github.com/braillespecs/braille-css/issues/1 -->
+                    <px:apply-stylesheets type="text/css text/scss" media="embossed">
+                        <p:with-option name="stylesheets" select="($stylesheet,$default-stylesheet)[not(.='')][1]"/>
+                    </px:apply-stylesheets>
                     <px:transform name="transform">
                         <p:with-option name="query" select="concat('(input:html)(input:css)(output:html)(output:css)(output:braille)',
                                                                    $braille-translator,

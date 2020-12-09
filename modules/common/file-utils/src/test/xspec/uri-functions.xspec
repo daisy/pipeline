@@ -424,6 +424,12 @@
             </x:call>
             <x:expect label="slash should not be added"  select="'file:/dir/file.epub!/'"/>
         </x:scenario>
+
+        <!-- jar:file uris -->
+        <x:scenario label="uri with jar:file">
+            <x:call><x:param name="uri" select="'jar:file:/dir/file.jar!/dir/'"/></x:call>
+            <x:expect label="should remain as is" select="'jar:file:/dir/file.jar!/dir/'"/>
+        </x:scenario>
     </x:scenario>
     
     

@@ -40,6 +40,9 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @see <a href="../../../../../../../README.md">Documentation</a>
+ */
 @Component(
 	name = "org.daisy.pipeline.braille.liblouis.impl.LiblouisHyphenatorJnaImplProvider",
 	service = {
@@ -82,7 +85,7 @@ public class LiblouisHyphenatorJnaImplProvider implements LiblouisHyphenator.Pro
 		public Iterable<LiblouisHyphenator> _get(Query query) {
 			MutableQuery q = mutableQuery(query);
 			if (q.containsKey("hyphenator"))
-				if (!"liblouis".equals(q.removeOnly("hyphenator").getValueOrNull()))
+				if (!"liblouis".equals(q.removeOnly("hyphenator").getValue().orElse(null)))
 					return empty;
 			String table = null;
 			if (q.containsKey("liblouis-table"))

@@ -39,7 +39,6 @@ import cz.vutbr.web.domassign.StyleMap;
 
 import org.apache.commons.io.input.BOMInputStream;
 
-import org.daisy.common.file.URIs;
 import org.daisy.common.file.URLs;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
@@ -64,7 +63,7 @@ import org.w3c.dom.Node;
 public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransformer {
 
 	private final String defaultStyleSheet;
-	private final String medium;
+	private final MediaSpec medium;
 	private final QName attributeName;
 	private final CSSParserFactory parserFactory;
 	private final RuleFactory ruleFactory;
@@ -77,14 +76,14 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 	public JStyleParserCssCascader(URIResolver uriResolver,
 	                               SassCompiler sassCompiler,
 	                               String defaultStyleSheet,
-	                               String medium,
+	                               Medium medium,
 	                               QName attributeName,
 	                               CSSParserFactory parserFactory,
 	                               RuleFactory ruleFactory,
 	                               SupportedCSS supportedCSS,
 	                               DeclarationTransformer declarationTransformer) {
 		this.defaultStyleSheet = defaultStyleSheet;
-		this.medium = medium;
+		this.medium = medium.asMediaSpec();
 		this.attributeName = attributeName;
 		this.parserFactory = parserFactory;
 		this.ruleFactory = ruleFactory;
@@ -96,12 +95,21 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 		 * goes wrong when resolving the source or if the SASS compilation fails.
 		 */
 		this.cssReader = new CSSSourceReader() {
-				public boolean supportsMediaType(String mediaType) {
-					return mediaType == null || "text/css".equals(mediaType) || "text/x-scss".equals(mediaType);
+				public boolean supportsMediaType(String mediaType, URL url) {
+					if ("text/css".equals(mediaType))
+						return true;
+					else if (mediaType == null && (url == null || url.toString().endsWith(".css")))
+						return true;
+					else if (sassCompiler == null)
+						return false;
+					else if ("text/x-scss".equals(mediaType))
+						return true;
+					else if (mediaType == null && url != null && url.toString().endsWith(".scss"))
+						return true;
+					else
+						return false;
 				}
 				public CSSInputStream read(CSSSource source) throws IOException {
-					if (!supportsMediaType(source.mediaType))
-						throw new IllegalArgumentException();
 					URL url = null;
 					InputStream is; {
 						switch (source.type) {
@@ -114,7 +122,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							logger.debug("Fetching style sheet: " + url);
 							Source resolved; {
 								try {
-									resolved = uriResolver.resolve(URIs.asURI(url).toString(), ""); }
+									resolved = uriResolver.resolve(URLs.asURI(url).toASCIIString(), ""); }
 								catch (javax.xml.transform.TransformerException e) {
 									throw new IOException(e); }}
 							if (resolved != null) {
@@ -131,7 +139,11 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							throw new RuntimeException("coding error");
 						}
 					}
-					if ("text/x-scss".equals(source.mediaType) || (url != null && url.toString().endsWith(".scss"))) {
+					if (!supportsMediaType(source.mediaType, url))
+						throw new IllegalArgumentException();
+					if ("text/x-scss".equals(source.mediaType)
+					    || (source.mediaType == null && url != null && url.toString().endsWith(".scss"))) {
+						// sassCompiler must be non-null
 						try {
 							is = sassCompiler.compile(is, url != null ? url : source.base, source.encoding);
 						} catch (RuntimeException e) {
@@ -187,11 +199,14 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				if (defaultStyleSheet != null) {
 					StringTokenizer t = new StringTokenizer(defaultStyleSheet);
 					while (t.hasMoreTokens()) {
-						URL u = URLs.asURL(baseURI.resolve(URIs.asURI(t.nextToken())));
-						styleSheet = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, styleSheet);
+						URL u = URLs.asURL(URLs.resolve(baseURI, URLs.asURI(t.nextToken())));
+						if (!cssReader.supportsMediaType(null, u))
+							logger.warn("Style sheet type not supported: " + u);
+						else
+							styleSheet = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, styleSheet);
 					}
 				}
-				styleSheet = CSSFactory.getUsedStyles(document, null, baseURL, new MediaSpec(medium), cssReader, styleSheet);
+				styleSheet = CSSFactory.getUsedStyles(document, null, baseURL, medium, cssReader, styleSheet);
 				styleMap = new Analyzer(styleSheet).evaluateDOM(document, medium, false);
 			}
 			writer.setBaseURI(baseURI);

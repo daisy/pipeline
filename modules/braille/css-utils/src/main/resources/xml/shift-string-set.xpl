@@ -30,9 +30,9 @@
             it.
         </p:documentation>
     </p:output>
-    
+
     <!--
-        Implemented in Java
+        Implemented in ../java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.java
     -->
-    
+
 </p:declare-step>

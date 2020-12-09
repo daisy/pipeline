@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
 
-import static org.daisy.common.file.URIs.asURI;
 import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
@@ -46,6 +45,9 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @see <a href="../../../../../../../README.md">Documentation</a>
+ */
 public interface LiblouisCSSStyledDocumentTransform {
 	
 	@Component(
@@ -60,7 +62,7 @@ public interface LiblouisCSSStyledDocumentTransform {
 			
 		@Activate
 		protected void activate(final Map<?,?> properties) {
-			href = asURI(URLs.getResourceFromJAR("xml/transform/liblouis-transform.xpl", LiblouisCSSStyledDocumentTransform.class));
+			href = URLs.asURI(URLs.getResourceFromJAR("xml/transform/liblouis-transform.xpl", LiblouisCSSStyledDocumentTransform.class));
 		}
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();

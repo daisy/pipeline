@@ -1,6 +1,7 @@
 package org.daisy.pipeline.css.calabash.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.pipeline.css.CssCascader;
+import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.SassCompiler;
 
 import org.osgi.service.component.annotations.Component;
@@ -51,10 +53,12 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	private final Iterable<CssCascader> inliners;
 
 	private static final QName _default_stylesheet = new QName("default-stylesheet");
+	private static final QName _type = new QName("type");
 	private static final QName _media = new QName("media");
 	private static final QName _attribute_name = new QName("attribute-name");
 
 	private static final String DEFAULT_MEDIUM = "embossed";
+	private static final String DEFAULT_TYPES = "text/css text/x-scss";
 	private static final QName DEFAULT_ATTRIBUTE_NAME = new QName("style");
 
 	private CssCascadeStep(XProcRuntime runtime, XAtomicStep step, Iterable<CssCascader> inliners, final URIResolver resolver) {
@@ -107,7 +111,11 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			String medium = getOption(_media, DEFAULT_MEDIUM);
+			Medium medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
+			List<String> types = Arrays.asList(getOption(_type, DEFAULT_TYPES).trim().split("\\s+"));
+			if (!types.contains("text/css"))
+				throw new IllegalArgumentException("'type' option must contain 'text/css'");
+			boolean enableSass = types.contains("text/x-scss");
 			for (CssCascader inliner : inliners)
 				if (inliner.supportsMedium(medium)) {
 					QName attributeName = getOption(_attribute_name, DEFAULT_ATTRIBUTE_NAME);
@@ -116,7 +124,7 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 						medium,
 						getOption(_default_stylesheet, ""),
 						cssURIResolver,
-						sassCompiler,
+						enableSass ? sassCompiler : null,
 						SaxonHelper.jaxpQName(attributeName)
 					).transform(
 						new XMLCalabashInputValue(sourcePipe, runtime),

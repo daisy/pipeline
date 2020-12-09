@@ -13,12 +13,12 @@ Project layout
 --------------
 Because of the very modular nature of DAISY Pipeline 2, browsing the
 code is not always easy. In order to make it more obvious where to
-find a particular piece of code, I've tried to organize the modules
-into subdirectories in a logical and consistent way.
+find a particular piece of code, the code is organized in a logical
+way.
 
-The braille modules are divided into logical *groups*:
+The code is divided into these modules:
 
-- [`common-utils`](common-utils/src/main)
+- [`common-utils`](common-utils)
 - [`css-utils`](css-utils)
 - [`dotify-utils`](dotify-utils)
 - [`libhyphen-utils`](libhyphen-utils)
@@ -27,23 +27,11 @@ The braille modules are divided into logical *groups*:
 - [`texhyph-utils`](texhyph-utils)
 - [`obfl-utils`](obfl-utils)
 
-Each of these utility modules collect all the XSLT/XPath functions and
-XProc steps of that group into one `library.xsl` and one
-`library.xpl`, so that they can be made available with a single
-import. These library files make up the interface between the scripts
-and the utils, scripts should not have to use any lower-level parts
-directly.
-
-The implementation of the functions and steps can either be found in
-the utils module itself (which is mostly the case when they are
-written in XSLT/XProc), or otherwise in a submodule. Submodules are
-grouped in a directory with the same name as the utils module minus
-the `-utils`.  They typically contain Java code. Some recurring types
-of modules are modules for Saxon XPath extension functions (ending in
-`-saxon`) and modules for custom Calabash steps (`-calabash`).
-Generally, the XPath and XProc bindings are separated from the core
-functionality (`-core` modules). Precompiled native binaries are
-bundled in `-native` modules.
+Each of these modules collect all the XSLT/XPath functions and XProc
+steps of that group into one `library.xsl` and one `library.xpl`, so
+that they can be made available with a single import. Together with
+the Java APIs, these library files make up the interface between
+utility modules and between script and utility modules..
 
 
 Building

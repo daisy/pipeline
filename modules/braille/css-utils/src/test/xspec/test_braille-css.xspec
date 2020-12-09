@@ -171,9 +171,10 @@
 				<css:rule selector="&amp;::before" style="content: &quot;foo&quot; &amp;::after {{ content: &quot;foo&quot; }}"/>
 				<css:rule selector="&amp;::table-by(foo)" style="&amp;::list-item::after {{ content: &quot;, &quot; }} &amp;::list-item:last-child::after {{ content: none }}"/>
 				<css:rule selector="@-obfl-volume-transition" style="@any-interrupted {{ content: -obfl-evaluate('$volume'); }}"/>
+				<css:rule selector="&amp;:-obfl-alternate-scenario" style="&amp; tr:blank::after {{ content: '(empty)'; }}"/>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="'display:block @page { size: 40 25 @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { min-length: 20; max-length: 100 } @volume:nth(2) { max-length: 50 } @-obfl-volume-transition { @any-interrupted { content: -obfl-evaluate(''$volume'') } } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none }'"/>
+		<x:expect label="result" select="'display:block @page { size: 40 25 @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { min-length: 20; max-length: 100 } @volume:nth(2) { max-length: 50 } @-obfl-volume-transition { @any-interrupted { content: -obfl-evaluate(''$volume'') } } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none } &amp;:-obfl-alternate-scenario tr:blank::after { content: &quot;(empty)&quot; }'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_15">
@@ -504,11 +505,13 @@
 					<css:property name="size" value="32 27"/>
 				</css:rule>
 				<css:rule selector="@bottom-center">
-					<css:property name="content" value="none"/>
+					<css:property name="content">
+						<css:counter name="page" />
+					</css:property>
 				</css:rule>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="'size: 32 27 @bottom-center { content: none }'"/>
+		<x:expect label="result" select="'size: 32 27 @bottom-center { content: counter(page) }'"/>
 	</x:scenario>
 	<x:scenario label="test_34.2">
 		<x:call function="css:serialize-stylesheet">

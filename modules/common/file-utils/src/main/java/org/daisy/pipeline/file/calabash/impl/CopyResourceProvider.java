@@ -10,7 +10,7 @@ import java.net.URI;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
-import org.daisy.common.file.URIs;
+import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
@@ -97,10 +97,10 @@ public class CopyResourceProvider implements XProcStepProvider {
 
 			// Note that href.getBaseURI() always returns the absolute path of copy-resource.xpl
 			RuntimeValue href = getOption(_href);
-			URI sourceUri= URIs.resolve(href.getBaseURI(), href.getString());
+			URI sourceUri= URLs.resolve(href.getBaseURI(), URLs.asURI(href.getString()));
 
 			href = getOption(_target);
-			URI destUri = URIs.resolve(href.getBaseURI(), href.getString());
+			URI destUri = URLs.resolve(href.getBaseURI(), URLs.asURI(href.getString()));
 
 			File target=this.getFile(destUri,sourceUri);
 

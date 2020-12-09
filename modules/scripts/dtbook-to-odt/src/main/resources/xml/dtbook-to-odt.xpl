@@ -12,7 +12,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ODT</h1>
         <p px:role="desc">Transforms a DTBook (DAISY 3 XML) document into an ODT (Open Document Text).</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-odt">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/">
             Online documentation
         </a>
         <dl px:role="author">
@@ -46,7 +46,7 @@
 
 Defaults to [default.ott](http://daisy.github.io/pipeline/modules/dtbook-to-odt/doc/templates/default.ott.html).
 
-See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templating) for more details.</p>
+See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/#templating) for more details.</p>
         </p:documentation>
     </p:option>
     

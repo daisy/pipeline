@@ -9,16 +9,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import static com.google.common.base.Functions.toStringFunction;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import static com.google.common.base.Predicates.alwaysTrue;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 
-import static org.daisy.common.file.URIs.asURI;
-import static org.daisy.common.file.URIs.relativize;
 import org.daisy.common.file.URLs;
 import static org.daisy.pipeline.braille.common.util.Iterators.partition;
 import static org.daisy.pipeline.braille.common.util.Predicates.matchesGlobPattern;
@@ -47,7 +43,7 @@ public class BundledResourcePath extends AbstractResourcePath {
 			throw new IllegalArgumentException(IDENTIFIER + " property must not be empty"); }
 		String identifierAsString = properties.get(IDENTIFIER).toString();
 		if (!identifierAsString.endsWith("/")) identifierAsString += "/";
-		try { identifier = asURI(identifierAsString); }
+		try { identifier = URLs.asURI(identifierAsString); }
 		catch (Exception e) {
 			throw new IllegalArgumentException(IDENTIFIER + " could not be parsed into a URI"); }
 		if (!identifier.isAbsolute())
@@ -58,13 +54,13 @@ public class BundledResourcePath extends AbstractResourcePath {
 		path = URLs.getResourceFromJAR(pathAsRelativeFilePath, context);
 		if (path == null)
 			throw new IllegalArgumentException("Resource path at location " + pathAsRelativeFilePath + " could not be found");
-		final Predicate<Object> includes =
+		final Predicate<URI> includes =
 			(properties.get(INCLUDES) != null
 			 && !properties.get(INCLUDES).toString().isEmpty()
 			 && !properties.get(INCLUDES).toString().equals("*")) ?
 				Predicates.compose(
 					matchesGlobPattern(properties.get(INCLUDES).toString()),
-					Functions.compose(URLs::decode, toStringFunction())) :
+					URI::getPath) :
 				alwaysTrue();
 		Function<String,Collection<String>> getFilePaths = new Function<String,Collection<String>>() {
 			public Collection<String> apply(String path) {
@@ -80,7 +76,7 @@ public class BundledResourcePath extends AbstractResourcePath {
 				Collections2.<URI>filter(
 					Collections2.<String,URI>transform(
 						getFilePaths.apply(pathAsRelativeFilePath),
-						s -> relativize(path, URLs.getResourceFromJAR(s, context))),
+						s -> URLs.relativize(URLs.asURI(path), URLs.asURI(URLs.getResourceFromJAR(s, context)))),
 					includes))
 			.build();
 		if (properties.get(UNPACK) != null && (Boolean)properties.get(UNPACK))

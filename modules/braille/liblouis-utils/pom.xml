@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.13.8-SNAPSHOT</version>
+    <version>1.14.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>liblouis-utils</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: liblouis-utils</name>
@@ -133,7 +133,7 @@
   </dependencies>
 
   <properties>
-    <liblouis.version>3.13.0</liblouis.version>
+    <liblouis.version>3.16.0</liblouis.version>
     <liblouisutdml.liblouis.version>2.6.3</liblouisutdml.liblouis.version>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_liblouis_utils,
@@ -387,26 +387,26 @@
               <tasks>
                 <copy todir="target/generated-resources/native/liblouis">
                   <fileset dir="target/dependency/liblouis">
-                    <include name="**/*.so" />
-                    <include name="**/*.dylib" />
-                    <include name="**/*.dll" />
+                    <include name="**/*.so"/>
+                    <include name="**/*.dylib"/>
+                    <include name="**/*.dll"/>
                   </fileset>
                   <mapper>
-                    <globmapper handledirsep="yes" from="bin/*" to="*" />
-                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2" />
+                    <globmapper handledirsep="yes" from="bin/*" to="*"/>
+                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2"/>
                   </mapper>
                 </copy>
                 <copy todir="target/generated-resources/native/liblouisutdml">
                   <fileset dir="target/dependency/liblouisutdml">
-                    <include name="**/*.so" />
-                    <include name="**/*.dylib" />
-                    <include name="**/*.dll" />
-                    <include name="**/file2brl" />
-                    <include name="**/file2brl.exe" />
+                    <include name="**/*.so"/>
+                    <include name="**/*.dylib"/>
+                    <include name="**/*.dll"/>
+                    <include name="**/file2brl"/>
+                    <include name="**/file2brl.exe"/>
                   </fileset>
                   <mapper>
-                    <globmapper handledirsep="yes" from="bin/*" to="*" />
-                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2" />
+                    <globmapper handledirsep="yes" from="bin/*" to="*"/>
+                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2"/>
                   </mapper>
                 </copy>
               </tasks>
@@ -509,7 +509,7 @@
               <instructions combine.self="replace">
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.linux.LiblouisNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-linux</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.linux
@@ -536,7 +536,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.mac.LiblouisNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-mac</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.mac
@@ -562,7 +562,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-windows</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.windows
@@ -594,69 +594,134 @@
         <artifactId>modules-build-helper</artifactId>
         <executions>
           <execution>
-            <id>htmlize-sources</id>
-            <configuration>
-              <sourceDirectory>${project.build.directory}/classes</sourceDirectory>
-              <outputDirectory>${project.build.directory}/doc/src/main/resources</outputDirectory>
-              <includes>
-                META-INF/catalog.xml,
-                **/*.xpl,
-                **/*.xsl,
-                tables/,
-                tables/*
-              </includes>
-            </configuration>
-          </execution>
-          <execution>
             <id>process-test-catalog</id>
             <phase>generate-test-sources</phase>
             <goals>
               <goal>process-test-catalog</goal>
             </goals>
           </execution>
-          <execution>
-            <id>package-list</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>dependencies-package-list</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
-              <includes>
-                org.daisy.pipeline.*,
-                org.daisy.common.*
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <offlineLinks>
-                <offlineLink>
-                  <url>http://daisy.github.io/pipeline/api/</url>
-                  <location>${project.build.directory}/dependencies-package-list/</location>
-                </offlineLink>
-              </offlineLinks>
-              <links>
-                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
-              </links>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
-  
+
   <profiles>
+    <profile>
+      <id>module-with-documentation</id>
+      <activation>
+        <property>
+          <name>documentation</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>linux-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>mac-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>windows-bundle</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>htmlize-sources</id>
+                <configuration>
+                  <!--
+                      include tables
+                  -->
+                  <includes>
+                    src/main/resources/META-INF/catalog.xml,
+                    src/main/resources/**/*.xpl,
+                    src/main/resources/**/*.xsl,
+                    src/main/resources/tables/,
+                    src/main/resources/tables/*
+                  </includes>
+                </configuration>
+              </execution>
+              <execution>
+                <!--
+                    include default-tables as if they were present in src/main/resources
+                -->
+                <id>htmlize-default-tables</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>htmlize-sources</goal>
+                </goals>
+                <configuration>
+                  <sourceDirectory>${project.build.directory}/dependency/share/liblouis/tables</sourceDirectory>
+                  <outputDirectory>${project.build.directory}/doc/src/main/resources/default-tables</outputDirectory>
+                  <includes>./,*</includes>
+                </configuration>
+              </execution>
+              <execution>
+                <id>package-list</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>dependencies-package-list</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+                  <includes>
+                    org.daisy.pipeline.*,
+                    org.daisy.common.*
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>xprocdoc</id>
+                <configuration>
+                  <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <offlineLinks>
+                    <offlineLink>
+                      <url>http://daisy.github.io/pipeline/api/</url>
+                      <location>${project.build.directory}/dependencies-package-list/</location>
+                    </offlineLink>
+                  </offlineLinks>
+                  <links>
+                    <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+                  </links>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
     <!--
         this is a hack to reduce snapshot dependencies to current platform only
     -->
@@ -744,28 +809,6 @@
                       <type>nar</type>
                     </artifactItem>
                   </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <version>3.0.0</version>
-            <executions>
-              <execution>
-                <id>add-tables</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>add-resource</goal>
-                </goals>
-                <configuration>
-                  <resources>
-                    <resource>
-                      <directory>target/dependency/share/liblouis/tables</directory>
-                      <targetPath>tables</targetPath>
-                    </resource>
-                  </resources>
                 </configuration>
               </execution>
             </executions>

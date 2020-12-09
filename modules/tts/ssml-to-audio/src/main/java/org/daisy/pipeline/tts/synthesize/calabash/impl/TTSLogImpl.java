@@ -106,6 +106,16 @@ public class TTSLogImpl implements TTSLog {
 			return timeout;
 		}
 
+		@Override
+		public void setTimeElapsed(float secs) {
+			this.timeElapsed = secs;
+		}
+
+		@Override
+		public float getTimeElapsed() {
+			return this.timeElapsed;
+		}
+
 		private List<Error> errors = new ArrayList<Error>();
 		private XdmNode ssml; //SSML
 		private List<String> ttsinput = new ArrayList<String>();
@@ -115,6 +125,7 @@ public class TTSLogImpl implements TTSLog {
 		private double beginInFile; //in seconds
 		private double endInFile; //in seconds
 		private float timeout;
+		private float timeElapsed;
 	}
 
 	public Entry getOrCreateEntry(String id) {

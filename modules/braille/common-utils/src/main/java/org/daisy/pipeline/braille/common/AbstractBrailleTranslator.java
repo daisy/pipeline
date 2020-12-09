@@ -155,8 +155,8 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				private final boolean precedingSpace;
 				private final boolean alwaysEmpty;
 				private final char hyphenChar;
-				// words are separated with SPACE, TAB, LF, CR, BLANK, NBSP or LS
-				private final static Pattern WORD_BOUNDARY = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0\u2028]");
+				// SPACE, TAB, LF, CR, BLANK or LS
+				private final static Pattern WORD_BOUNDARY = Pattern.compile("[\\x20\t\\n\\r\\u2800\u2028]");
 				public FullyHyphenatedAndTranslatedString(String string, int from, int to) {
 					this(string, from, to, '\u2824');
 				}
@@ -178,13 +178,19 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							throw new IllegalArgumentException();
 						to -= from;
 						len -= from;
-						int i = lastIndexOf(next, WORD_BOUNDARY);
-						if (i > 0 && i + 1 < to) {
-							lastWordPart = next.substring(i + 1, to);
-							lastWordOtherPart = next.substring(to, len);
-							next = next.substring(0, i + 1);
-						} else
+						int lastWordStart = lastIndexOf((" " + next.substring(0, to)), WORD_BOUNDARY);
+						if (lastWordStart == to) {
 							next = next.substring(0, to);
+						} else {
+							int lastWordEnd = to + indexOf((next.substring(to, len) + " "), WORD_BOUNDARY);
+							if (lastWordEnd == to) {
+								next = next.substring(0, to);
+							} else {
+								lastWordPart = next.substring(lastWordStart, to);
+								lastWordOtherPart = next.substring(to, lastWordEnd);
+								next = next.substring(0, lastWordStart);
+							}
+						}
 					}
 					if (next.replaceAll("[\u00ad\u200b]","").isEmpty())
 						next = null;
@@ -278,6 +284,16 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					} catch (CloneNotSupportedException e) {
 						throw new InternalError("coding error");
 					}
+				}
+				/**
+				 * Version of {@link String#indexOf(int)} that searched for pattern instead of character.
+				 */
+				private static int indexOf(String string, Pattern pattern) {
+					Matcher m = pattern.matcher(string);
+					if (m.find())
+						return m.start();
+					else
+						return -1;
 				}
 				/**
 				 * Version of {@link String#lastIndexOf(int)} that searched for pattern instead of character.

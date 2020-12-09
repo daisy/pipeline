@@ -10,6 +10,9 @@
 		<p:option name="paged" required="false"/>
 		<p:option name="temp-dir" required="true"/>
 		<p:output port="result" sequence="true" primary="true"/>
+		<!--
+		    Implemented in ../../java/org/daisy/pipeline/braille/liblouis/calabash/impl/TranslateFileStep.java
+		-->
 	</p:declare-step>
 	
 </p:library>

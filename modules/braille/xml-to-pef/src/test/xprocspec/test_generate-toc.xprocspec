@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               script="../../main/resources/xml/xproc/library.xpl">
+               script="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
     
     <x:scenario label="test generate-toc.xsl">
         <x:call step="px:apply-stylesheets">
@@ -9,15 +9,17 @@
                 <x:document type="inline">
                     <html xmlns="http://www.w3.org/1999/xhtml">
                         <body>
-                            <h1>Heading 1</h1>
-                            <h2 id="a">Heading 1.1</h2>
+                            <h3 id="a">Heading 1.1.1</h3>
                             <p>...</p>
-                            <h2 xml:id="b">Heading 1.2</h2>
+                            <h1>Heading 2</h1>
+                            <h2 id="b">Heading 2.1</h2>
                             <p>...</p>
-                            <h1 id="#c">Heading 2</h1>
-                            <h2>Heading 2.1</h2>
+                            <h2 xml:id="c">Heading 2.2</h2>
                             <p>...</p>
-                            <h2>Heading 2.2</h2>
+                            <h1 id="#d">Heading 3</h1>
+                            <h2>Heading 3.1</h2>
+                            <p>...</p>
+                            <h2>Heading 3.2</h2>
                             <p>...</p>
                         </body>
                     </html>
@@ -34,46 +36,48 @@
                 <html xmlns="http://www.w3.org/1999/xhtml">
                     <ol id="generated-document-toc">
                         <li>
-                            <a href="#h_1">Heading 1</a>
+                            <a href="#h_1" title="Heading 2">Heading 2</a>
                             <ol>
-                                <li><a href="#a">Heading 1.1</a></li>
-                                <li><a href="#b">Heading 1.2</a></li>
+                                <li><a href="#b" title="Heading 2.1">Heading 2.1</a></li>
+                                <li><a href="#c" title="Heading 2.2">Heading 2.2</a></li>
                             </ol>
                         </li>
                         <li>
-                            <a href="#%23c">Heading 2</a>
+                            <a href="#%23d" title="Heading 3">Heading 3</a>
                             <ol>
-                                <li><a href="#h_2">Heading 2.1</a></li>
-                                <li><a href="#h_3">Heading 2.2</a></li>
+                                <li><a href="#h_2" title="Heading 3.1">Heading 3.1</a></li>
+                                <li><a href="#h_3" title="Heading 3.2">Heading 3.2</a></li>
                             </ol>
                         </li>
                     </ol>
                     <ol id="generated-volume-toc">
                         <li>
-                            <a href="#h_1">Heading 1</a>
+                            <a href="#h_1" title="Heading 2">Heading 2</a>
                             <ol>
-                                <li><a href="#a">Heading 1.1</a></li>
-                                <li><a href="#b">Heading 1.2</a></li>
+                                <li><a href="#b" title="Heading 2.1">Heading 2.1</a></li>
+                                <li><a href="#c" title="Heading 2.2">Heading 2.2</a></li>
                             </ol>
                         </li>
                         <li>
-                            <a href="#%23c">Heading 2</a>
+                            <a href="#%23d" title="Heading 3">Heading 3</a>
                             <ol>
-                                <li><a href="#h_2">Heading 2.1</a></li>
-                                <li><a href="#h_3">Heading 2.2</a></li>
+                                <li><a href="#h_2" title="Heading 3.1">Heading 3.1</a></li>
+                                <li><a href="#h_3" title="Heading 3.2">Heading 3.2</a></li>
                             </ol>
                         </li>
                     </ol>
                     <body>
-                        <h1 xml:id="h_1">Heading 1</h1>
-                        <h2 id="a">Heading 1.1</h2>
+                        <h3 id="a">Heading 1.1.1</h3>
                         <p>...</p>
-                        <h2 xml:id="b">Heading 1.2</h2>
+                        <h1 xml:id="h_1">Heading 2</h1>
+                        <h2 id="b">Heading 2.1</h2>
                         <p>...</p>
-                        <h1 id="#c">Heading 2</h1>
-                        <h2 xml:id="h_2">Heading 2.1</h2>
+                        <h2 xml:id="c">Heading 2.2</h2>
                         <p>...</p>
-                        <h2 xml:id="h_3">Heading 2.2</h2>
+                        <h1 id="#d">Heading 3</h1>
+                        <h2 xml:id="h_2">Heading 3.1</h2>
+                        <p>...</p>
+                        <h2 xml:id="h_3">Heading 3.2</h2>
                         <p>...</p>
                     </body>
                 </html>

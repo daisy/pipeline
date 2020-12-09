@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.13.8-SNAPSHOT</version>
+    <version>1.14.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>css-utils</artifactId>
-  <version>5.0.1-SNAPSHOT</version>
+  <version>5.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: css-utils</name>
@@ -120,20 +120,6 @@
               <goal>process-test-catalog</goal>
             </goals>
           </execution>
-          <execution>
-            <id>package-list</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>dependencies-package-list</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
-              <includes>
-                org.daisy.pipeline.*,
-                org.daisy.common.*
-              </includes>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -167,30 +153,77 @@
           </instructions>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <offlineLinks>
-                <offlineLink>
-                  <url>http://daisy.github.io/pipeline/api/</url>
-                  <location>${project.build.directory}/dependencies-package-list/</location>
-                </offlineLink>
-              </offlineLinks>
-              <links>
-                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
-              </links>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
-  
+
+  <profiles>
+    <profile>
+      <id>module-with-documentation</id>
+      <activation>
+        <property>
+          <name>documentation</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>package-list</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>dependencies-package-list</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+                  <includes>
+                    org.daisy.pipeline.*,
+                    org.daisy.common.*
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>xprocdoc</id>
+                <configuration>
+                  <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <offlineLinks>
+                    <offlineLink>
+                      <url>http://daisy.github.io/pipeline/api/</url>
+                      <location>${project.build.directory}/dependencies-package-list/</location>
+                    </offlineLink>
+                  </offlineLinks>
+                  <links>
+                    <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+                  </links>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

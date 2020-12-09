@@ -976,5 +976,64 @@
   </x:scenario>
   
   </x:scenario>
-  
+
+  <x:scenario label="custom parameter">
+    <x:documentation>
+      Tests that a style sheet can be configured with custom parameters.
+    </x:documentation>
+    <x:call step="px:dtbook-to-pef.script">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en-US" version="2005-3">
+            <head>
+              <style type="text/x-scss" media="embossed">
+                $my-string: '?' !default;
+                .placeholder::after {
+                  content: $my-string;
+                  white-space: pre-wrap;
+                }
+              </style>
+            </head>
+            <book>
+              <level1>
+                <p>
+                  <span class="placeholder"/>
+                </p>
+              </level1>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="stylesheet-parameters" select="'(my-string:&quot;simple\Atest&quot;)'"/>
+      <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'parameter/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'parameter/temp-dir/')"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="parameter/output-dir/test_dtbook-to-pef.script.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:language>en-US</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠎⠊⠍⠏⠇⠑</row>
+                  <row>⠞⠑⠌</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
 </x:description>

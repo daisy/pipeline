@@ -8,7 +8,7 @@
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">EPUB Upgrader</h1>
 		<p px:role="desc">Upgrades an EPUB 2 publication to EPUB 3.</p>
-		<a px:role="homepage" href="http://daisy.github.io/pipeline/modules/epub2-to-epub3">
+		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub2-to-epub3/">
 			Online documentation
 		</a>
 	</p:documentation>

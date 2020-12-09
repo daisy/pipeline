@@ -136,11 +136,11 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			Query query = query(mode);
 			boolean isPreTranslatedQuery = false; {
 				for (Query.Feature f : query)
-					if ("input".equals(f.getKey()) && "braille".equals(f.getValueOrNull()))
+					if ("input".equals(f.getKey()) && "braille".equals(f.getValue().orElse(null)))
 						isPreTranslatedQuery = true;
 					else if (!("locale".equals(f.getKey()) ||
-					           "input".equals(f.getKey()) && "text-css".equals(f.getValueOrNull()) ||
-					           "output".equals(f.getKey()) && "braille".equals(f.getValueOrNull()))) {
+					           "input".equals(f.getKey()) && "text-css".equals(f.getValue().orElse(null)) ||
+					           "output".equals(f.getKey()) && "braille".equals(f.getValue().orElse(null)))) {
 						isPreTranslatedQuery = false;
 						break; }}
 			if (isPreTranslatedQuery)

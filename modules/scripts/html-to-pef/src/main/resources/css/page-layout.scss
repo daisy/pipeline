@@ -2,17 +2,11 @@
  * Page layout: dimensions, numbering, headers and footers.
  */
 
-$page-width: 40 !default;
-$page-height: 25 !default;
 $levels-in-footer: 6 !default;
 $show-braille-page-numbers: true !default;
 $show-print-page-numbers: true !default;
 
 @namespace epub url(http://www.idpf.org/2007/ops);
-
-@page {
-	size: $page-width $page-height;
-}
 
 @if $show-print-page-numbers {
 	.page-front,

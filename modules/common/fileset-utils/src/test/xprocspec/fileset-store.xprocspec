@@ -591,4 +591,52 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="store with indent">
+    <x:documentation>
+      See issue https://github.com/daisy/pipeline-modules-common/issues/69.
+    </x:documentation>
+    <x:call step="pxi:fileset-store">
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="a.html" media-type="application/xhtml+xml"
+                    method="xhtml" encoding="utf-8" indent="true" version="1.0" omit-xml-declaration="false"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="a.html"><h1>1 Introduction: Standpoint Theory as a Site of Political, Philosophic, and Scientific Debate</h1></x:document>
+      </x:input>
+      <x:option name="target-base" select="resolve-uri('12/',$temp-dir)"/>
+    </x:call>
+    <x:context label="The result fileset">
+      <x:document type="port" port="result.fileset"/>
+    </x:context>
+    <x:expect label="The result fileset" type="custom"
+              href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+      <x:document type="inline" base-uri="temp-dir">
+        <d:fileset>
+          <d:file href="12/a.html" original-href="12/a.html"  media-type="application/xhtml+xml"
+                  method="xhtml" encoding="utf-8" indent="true" version="1.0" omit-xml-declaration="false"/>
+        </d:fileset>
+      </x:document>
+    </x:expect>
+    <x:context label="The directory content">
+      <x:document type="directory" base-uri="temp-dir" href="12/" recursive="true"/>
+    </x:context>
+    <x:expect label="The directory content" type="compare">
+      <x:document type="inline">
+        <c:directory name="12">
+          <c:file name="a.html"/>
+        </c:directory>
+      </x:document>
+    </x:expect>
+    <x:context label="The stored file">
+      <x:document type="file" base-uri="temp-dir" href="12/a.html" method="text"/>
+    </x:context>
+    <x:expect label="The stored file" type="compare" xfail="https://github.com/daisy/pipeline-modules-common/issues/69">
+      <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:dpx="http://www.daisy.org/ns/pipeline/xproc"&gt;1 Introduction: Standpoint Theory as a Site of Political, Philosophic, and Scientific Debate&lt;/h1&gt;</body></x:document>
+        </x:expect>
+  </x:scenario>
+
 </x:description>

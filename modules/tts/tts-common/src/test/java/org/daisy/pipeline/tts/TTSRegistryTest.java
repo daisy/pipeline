@@ -432,6 +432,26 @@ public class TTSRegistryTest {
 		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
 		String fullname1 = registerVoice(vendor, voiceName, "*", "male-adult", 10,
 		        extraVoices);
+
+		VoiceManager vm = initVoiceManager(extraVoices, fullname1);
+
+		boolean[] exactMatch = new boolean[1];
+		Voice v = vm.findAvailableVoice("any-vendor", "any-voice", "fr", "female-adult",
+		        exactMatch);
+		Assert.assertFalse(exactMatch[0]);
+		Assert.assertNotNull(v);
+		Assert.assertEquals(vendor, v.engine);
+		Assert.assertEquals(voiceName, v.name);
+	}
+	
+	@Test
+	public void multiLangVoicePriority() throws MalformedURLException {
+		String vendor = "vendor";
+		String voiceName = "voice1";
+
+		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
+		String fullname1 = registerVoice(vendor, voiceName, "*", "male-adult", 10,
+		        extraVoices);
 		String fullname2 = registerVoice(vendor, "wrongvoice", "fr", "male-adult", 5,
 		        extraVoices);
 
@@ -442,7 +462,7 @@ public class TTSRegistryTest {
 		        exactMatch);
 		Assert.assertFalse(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, vendor);
+		Assert.assertEquals(vendor, v.engine);
 		Assert.assertEquals(voiceName, v.name);
 	}
 }

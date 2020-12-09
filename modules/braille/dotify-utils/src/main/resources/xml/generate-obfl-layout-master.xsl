@@ -14,6 +14,8 @@
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     <xsl:include href="marker-reference.xsl"/>
     
+    <xsl:param name="page-width" as="xs:string" required="yes"/>
+    <xsl:param name="page-height" as="xs:string" required="yes"/>
     <xsl:param name="duplex" as="xs:string" required="yes"/>
     
     <xsl:variable name="page-stylesheets" as="element(css:rule)*" select="/*/css:rule[@selector='@page']"/>
@@ -114,7 +116,7 @@
                               then $default-page-stylesheet/self::css:property
                               else $default-page-stylesheet[not(@selector)]/css:property"/>
         <xsl:variable name="size" as="xs:string"
-                      select="($default-page-properties[@name='size'][css:is-valid(.)]/@value, css:initial-value('size'))[1]"/>
+                      select="($default-page-properties[@name='size'][css:is-valid(.)]/@value,concat($page-width,' ',$page-height))[1]"/>
         <xsl:variable name="page-width" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[1]))"/>
         <xsl:variable name="page-height" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[2]))"/>
         <xsl:if test="$default-page-properties[@name='counter-set']">

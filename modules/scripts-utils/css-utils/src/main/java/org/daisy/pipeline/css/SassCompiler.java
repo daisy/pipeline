@@ -36,7 +36,6 @@ import io.bit3.jsass.Options;
 import io.bit3.jsass.Output;
 import io.bit3.jsass.OutputStyle;
 
-import org.daisy.common.file.URIs;
 import org.daisy.common.file.URLs;
 
 import org.slf4j.Logger;
@@ -57,13 +56,13 @@ public class SassCompiler {
 		this.env = env;
 		importer = new Importer() {
 				public Collection<Import> apply(String url, Import previous) {
-					URI uri = URIs.asURI(url);
+					URI uri = URLs.asURI(url);
 					URI base = previous.getAbsoluteUri();
 					logger.debug("Importing SASS style sheet: " + uri + " (base = " + base + ")");
 					try {
 						try {
 							StreamSource resolved = SassCompiler.this.resolver.resolve(uri.toString(), base.toString());
-							URI abs = URIs.asURI(resolved.getSystemId());
+							URI abs = URLs.asURI(resolved.getSystemId());
 							logger.debug("Resolved to: " + abs);
 							try {
 								return ImmutableList.of(
@@ -133,7 +132,7 @@ public class SassCompiler {
 				if (!value.matches(scssNumberColorString)) {
 					// if value contains spaces or special characters that can mess up parsing; wrap it in single quotes
 					logger.debug("scss variable '"+var+"' contains special characters: "+value);
-					value = "'"+value.replaceAll("'", "\\\\'")+"'";
+					value = "'"+value.replace("\n", "\\A").replace("'","\\27")+"'";
 					logger.debug("scss variable '"+var+"' was quoted                 : "+value);
 				} else {
 					logger.debug("scss variable '"+var+"' contains no special characters: "+value);
@@ -180,7 +179,7 @@ public class SassCompiler {
 		scss.append(CharStreams.toString(r));
 		r.close();
 		try {
-			Output result = sassCompiler.compileString(scss.toString(), StandardCharsets.UTF_8, URIs.asURI(base), null, options);
+			Output result = sassCompiler.compileString(scss.toString(), StandardCharsets.UTF_8, URLs.asURI(base), null, options);
 			if (result.getErrorStatus() != 0)
 				throw new RuntimeException("Could not compile SASS style sheet: " + result.getErrorMessage());
 			String css = result.getCss();
@@ -222,7 +221,7 @@ public class SassCompiler {
 			if (source != null && source instanceof StreamSource && systemId != null)
 				return (StreamSource)source;
 			if (systemId == null)
-				systemId = URIs.resolve(base, href).toString();
+				systemId = URLs.resolve(URLs.asURI(base), URLs.asURI(href)).toASCIIString();
 			InputStream stream;
 			if (source != null && source instanceof StreamSource)
 				stream = ((StreamSource)source).getInputStream();
