@@ -1,10 +1,9 @@
 package org.daisy.pipeline.gui;
 
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
-import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +17,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ServiceRegistryTest {
         @Mock ScriptRegistry scriptRegistry;
         @Mock JobManagerFactory jobManagerFactory;
-        @Mock EventBusProvider eventBusProvider;
         @Mock WebserviceStorage webserviceStorage;
         @Mock DatatypeRegistry datatypeRegistry;
         @Mock GUIService guiService;
@@ -40,8 +38,6 @@ public class ServiceRegistryTest {
                         }
                 };
                 t.start();
-                reg.setEventBusProvider(eventBusProvider);
-                Assert.assertTrue(t.isAlive());
                 reg.setScriptRegistry(scriptRegistry);
                 Assert.assertTrue(t.isAlive());
                 reg.setJobManagerFactory(jobManagerFactory);

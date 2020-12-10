@@ -7,12 +7,11 @@ import java.util.List;
 import com.google.common.util.concurrent.Monitor;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
-import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -43,8 +42,6 @@ public class ServiceRegistry {
         private ScriptRegistry scriptRegistry = null;
         private JobManager jobManager = null;
         private JobManagerFactory jobManagerFactory = null;
-        private EventBusProvider eventBusProvider = null;
-        private List<Object> eventBusListeners = null;
         private WebserviceStorage webserviceStorage = null;
         private Client client = null;
         private DatatypeRegistry datatypeRegistry = null;
@@ -56,7 +53,6 @@ public class ServiceRegistry {
                         return instance != null &&
                                 ServiceRegistry.this.scriptRegistry != null &&
                                 ServiceRegistry.this.jobManagerFactory != null &&
-                                ServiceRegistry.this.eventBusProvider != null &&
                                 ServiceRegistry.this.webserviceStorage != null &&
                                 ServiceRegistry.this.datatypeRegistry != null &&
                                 ServiceRegistry.this.guiService != null;
@@ -85,7 +81,9 @@ public class ServiceRegistry {
                 } catch (InterruptedException ie) {
                         throw ie;
                 } finally {
-                        monitor.leave();
+                        try {
+                                monitor.leave();
+                        } catch (Throwable e) {}
                 }
         }
 
@@ -123,32 +121,6 @@ public class ServiceRegistry {
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.monitor.enter();
                 this.jobManagerFactory = jobManagerFactory;
-                this.monitor.leave();
-        }
-
-        /**
-         * @return the eventBusProvider
-         */
-        public synchronized void registerEventBusListener(Object listener) {
-                if (eventBusListeners == null)
-                        eventBusListeners = new ArrayList<Object>();
-                eventBusListeners.add(listener);
-                if (eventBusProvider != null)
-                        eventBusProvider.get().register(listener);
-        }
-
-        /**
-         * @param eventBusProvider the eventBusProvider to set
-         */
-        public synchronized void setEventBusProvider(EventBusProvider eventBusProvider) {
-                this.monitor.enter();
-                if (this.eventBusProvider != null && eventBusListeners != null)
-                        for (Object l : eventBusListeners)
-                                this.eventBusProvider.get().unregister(l);
-                this.eventBusProvider = eventBusProvider;
-                if (eventBusProvider != null && eventBusListeners != null)
-                        for (Object l : eventBusListeners)
-                                this.eventBusProvider.get().register(l);
                 this.monitor.leave();
         }
 
@@ -227,20 +199,6 @@ public class ServiceRegistry {
                 }
                 public void unsetJobManagerFactory(JobManagerFactory jobManagerFactory) {
                         registry.setJobManagerFactory(null);
-                }
-
-                @Reference(
-                        name = "event-bus-provider",
-                        unbind = "unsetEventBusProvider",
-                        service = EventBusProvider.class,
-                        cardinality = ReferenceCardinality.MANDATORY,
-                        policy = ReferencePolicy.DYNAMIC
-                )
-                public void setEventBusProvider(EventBusProvider eventBusProvider) {
-                        registry.setEventBusProvider(eventBusProvider);
-                }
-                public void unsetEventBusProvider(EventBusProvider eventBusProvider) {
-                        registry.setEventBusProvider(null);
                 }
 
                 @Reference(

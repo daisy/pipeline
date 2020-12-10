@@ -1,6 +1,6 @@
 package org.daisy.pipeline.gui.databridge;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.Iterator;
 
 import javafx.application.Platform;
@@ -12,12 +12,13 @@ import javafx.collections.ObservableList;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.pipeline.event.ProgressMessage;
+import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
+import org.daisy.pipeline.job.JobMonitor;
 
 // translate the Pipeline2 Job object into GUI-friendly Strings and StringProperty objects
-public class ObservableJob implements Comparable<ObservableJob>, BiConsumer<MessageAccessor,Integer> {
+public class ObservableJob implements Comparable<ObservableJob> {
 
 	private final int sequenceNumber;
 	private final StringProperty status;
@@ -35,13 +36,27 @@ public class ObservableJob implements Comparable<ObservableJob>, BiConsumer<Mess
 		setStatus(job.getStatus());
 		messages = FXCollections.observableArrayList();
 		addInitialMessages();
-		job.getContext().getMonitor().getMessageAccessor().listen(this);
+		JobMonitor monitor = job.getContext().getMonitor();
+		MessageAccessor accessor = monitor.getMessageAccessor();
+		accessor.listen(new Consumer<Integer>() {
+				public void accept(Integer sequence) {
+					if (sequence != null) {
+						flattenMessages(
+							accessor.createFilter().greaterThan(sequence - 1).getMessages().iterator(), sequence);
+					}
+				}
+			});
+		monitor.getStatusUpdates().listen(new Consumer<Status>() {
+				public void accept(Status status) {
+					setStatus(status);
+				}
+			});
 	}
 	
 	public String getStatus() {
 		return status.get();
 	}
-	public void setStatus(Status status) {
+	private void setStatus(Status status) {
 		Platform.runLater(() -> {
 				this.status.set(statusToString(status));
 				updateToString();
@@ -54,7 +69,7 @@ public class ObservableJob implements Comparable<ObservableJob>, BiConsumer<Mess
 	public ObservableList<String> getMessages() {
 		return this.messages;
 	}
-	public void addMessage(String message, Level level) {
+	private void addMessage(String message, Level level) {
 		Platform.runLater(() -> {
 				this.messages.add(formatMessage(message, level));
 			});
@@ -97,13 +112,6 @@ public class ObservableJob implements Comparable<ObservableJob>, BiConsumer<Mess
 				addMessage(m.getText(), m.getLevel());
 			if (m instanceof ProgressMessage)
 				flattenMessages(((ProgressMessage)m).iterator(), firstSeq);
-		}
-	}
-	
-	@Override
-	public void accept(MessageAccessor accessor, Integer sequence) {
-		if (sequence != null) {
-			flattenMessages(accessor.createFilter().greaterThan(sequence - 1).getMessages().iterator(), sequence);
 		}
 	}
 	

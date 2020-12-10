@@ -48,38 +48,50 @@ public class PipelineApplication extends Application {
                                                         updateMessage("Starting application...");
                                                         Optional<ServiceRegistry> services = loadServices();
                                                         if (services.isPresent())
-                                                                return () -> showMainWindow(stage, services.get());
+                                                                return () -> {
+                                                                        try {
+                                                                                showMainWindow(stage, services.get());
+                                                                        } catch (RuntimeException e) {
+                                                                                handleStartFailure(e);
+                                                                        }
+                                                                };
                                                         else
                                                                 throw new RuntimeException("Gave up waiting for the Pipeline services");
                                                 } catch (RuntimeException e) {
-                                                        e.printStackTrace();
-                                                        return () -> {
-                                                                Alert alert = new Alert(AlertType.ERROR);
-                                                                alert.setTitle("DAISY Pipeline 2");
-                                                                alert.setHeaderText("An error happened while starting DAISY Pipeline 2");
-                                                                alert.setContentText(e.getMessage());
-                                                                GridPane details = new GridPane();
-                                                                details.setMaxWidth(Double.MAX_VALUE);
-                                                                details.add(new Label("Stacktrace:"), 0, 0);
-                                                                TextArea stackTrace = new TextArea(Throwables.getStackTraceAsString(e));
-                                                                stackTrace.setEditable(false);
-                                                                stackTrace.setWrapText(true);
-                                                                stackTrace.setMaxWidth(Double.MAX_VALUE);
-                                                                stackTrace.setMaxHeight(Double.MAX_VALUE);
-                                                                GridPane.setVgrow(stackTrace, Priority.ALWAYS);
-                                                                GridPane.setHgrow(stackTrace, Priority.ALWAYS);
-                                                                details.add(stackTrace, 0, 1);
-                                                                alert.getDialogPane().setExpandableContent(details);
-                                                                alert.show();
-                                                                // FIXME: exit with error code?
-                                                        };
+                                                        return () -> handleStartFailure(e);
                                                 }
                                         }
                                 }
                         );
                 } else {
-                        showMainWindow(stage, ServiceRegistry.getInstance());
+                        try {
+                                showMainWindow(stage, ServiceRegistry.getInstance());
+                        } catch (RuntimeException e) {
+                                handleStartFailure(e);
+                        }
                 }
+        }
+
+        private void handleStartFailure(RuntimeException cause) {
+                cause.printStackTrace();
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("DAISY Pipeline 2");
+                alert.setHeaderText("An error happened while starting DAISY Pipeline 2");
+                alert.setContentText(cause.getMessage());
+                GridPane details = new GridPane();
+                details.setMaxWidth(Double.MAX_VALUE);
+                details.add(new Label("Stacktrace:"), 0, 0);
+                TextArea stackTrace = new TextArea(Throwables.getStackTraceAsString(cause));
+                stackTrace.setEditable(false);
+                stackTrace.setWrapText(true);
+                stackTrace.setMaxWidth(Double.MAX_VALUE);
+                stackTrace.setMaxHeight(Double.MAX_VALUE);
+                GridPane.setVgrow(stackTrace, Priority.ALWAYS);
+                GridPane.setHgrow(stackTrace, Priority.ALWAYS);
+                details.add(stackTrace, 0, 1);
+                alert.getDialogPane().setExpandableContent(details);
+                alert.show();
+                // FIXME: exit with error code?
         }
 
         public interface Splash {
@@ -150,7 +162,7 @@ public class PipelineApplication extends Application {
                 try {
                         ServiceRegistry services = ServiceRegistry.getInstance();
                         // timeout after 20 seconds
-                        if (services.waitUntilReady(20000))
+                        if (services.waitUntilReady(60000))
                                 return Optional.of(services);
                         else
                                 return Optional.empty();

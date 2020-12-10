@@ -32,28 +32,13 @@ public class DataManager {
 	}
 	
 	
-	public void updateStatus(Job job, Status status) {
-		int i = findJob(job);
-		if (i == -1) {
-			return;
-		}
-		main.getJobData().get(i).setStatus(status);
-	}
-	
-	public void addMessage(Job job, String message, Level level) {
-		int i = findJob(job);
-		if (i == -1) {
-			return;
-		}
-		main.getJobData().get(i).addMessage(message, level);
-	}
-	
 	public ObservableJob addJob(Job job, BoundScript boundScript) {
 		ObservableJob objob = new ObservableJob(job, boundScript, ++jobCount);
 		main.getJobData().add(objob);
 		return objob;
 	}
 	
+	@SuppressWarnings("unused")
 	public void removeJob(Job job) {
 		int i = findJob(job);
 		if (i == -1) {
@@ -62,7 +47,7 @@ public class DataManager {
 		main.getJobData().remove(i);
 	}
 	
-	public int findJob(Job job) {
+	private int findJob(Job job) {
 		ObservableList<ObservableJob> jobData = main.getJobData();
 		for (ObservableJob objob : jobData) {
 			// for some reason, comparing the job objects directly doesn't work
