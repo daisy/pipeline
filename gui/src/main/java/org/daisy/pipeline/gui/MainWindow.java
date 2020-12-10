@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 
 import org.daisy.pipeline.gui.databridge.BoundScript;
 import org.daisy.pipeline.gui.databridge.DataManager;
-import org.daisy.pipeline.gui.databridge.EventBusListener;
 import org.daisy.pipeline.gui.databridge.ObservableJob;
 import org.daisy.pipeline.gui.databridge.Script;
 import org.daisy.pipeline.gui.utils.PlatformUtils;
@@ -61,7 +60,6 @@ public class MainWindow extends BorderPane {
 		jobData = FXCollections.observableArrayList();
 		scriptData = FXCollections.observableArrayList();
 		dataManager = new DataManager(this, scriptData, pipelineServices);
-		pipelineServices.registerEventBusListener(new EventBusListener(pipelineServices, dataManager));
 		
 		buildWindow();
 		
