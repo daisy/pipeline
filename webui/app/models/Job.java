@@ -161,7 +161,7 @@ public class Job extends Model implements Comparable<Job> {
 		Logger.debug("Starting new push notifications for job #"+id+" with engineId="+engineId);
 		pushNotifier = Akka.system().scheduler().schedule(
 				Duration.create(0, TimeUnit.SECONDS),
-				Duration.create(500, TimeUnit.MILLISECONDS),
+				Duration.create(1000, TimeUnit.MILLISECONDS),
 				new Runnable() {
 					public void run() {
 						refresh();
