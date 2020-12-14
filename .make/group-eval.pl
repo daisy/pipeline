@@ -10,8 +10,8 @@ sub group_commands {
 		chomp;
 		$_ =~ s/'/'"'"'/g;
 		(my $c, my @a) = `eval 'printf "%s\n" $_'`;
-	 	chomp $c;
-	 	chomp @a;
+		chomp $c;
+		chomp @a;
 		if ($c =~ /^\Q${MY_DIR}\E\/mvn-release.sh / and my @release_cmd = grep { @{$_}[0] eq $c } @commands) {
 			push @{$release_cmd[0]}, @a;
 		} elsif ($c =~ /^\Q${MY_DIR}\E\// and @{$commands[-1]} and $c eq @{$commands[-1]}[0]) {
@@ -35,10 +35,32 @@ sub pretty_print_and_eval {
 			print join(" ", @cmd), "\n";
 		}
 	}
+	print "-------------- ", color("bold yellow"), "Environment", color("reset"), ": -------------\n";
+	my %old_env; {
+		my $env_file = "$ENV{'TARGET_DIR'}/env";
+		open(my $env_file_info, $env_file) or die "Could not open $env_file";
+		while (<$env_file_info>) {
+			chomp;
+			if ($_ eq "") {
+			} elsif ($_ =~ /^([^=]+)=(.*)$/) {
+				$old_env{$1}=$2;
+			} else {
+				die "Unexpected line: $_";
+			}
+		}
+		close $env_file_info;
+	}
+	foreach $key (sort keys(%ENV)) {
+		if (not $key eq "_" and (not exists($old_env{$key}) or not $old_env{$key} eq $ENV{$key})) {
+			$value = $ENV{$key};
+			$value =~ s/"/"'"'"/g;
+			print "export $key=\"", $value, "\"\n";
+		}
+	}
 	print "-----------------------------------------\n";
 	for (@commands) {
 		my @cmd = @{$_};
-	    print "--> ", color("bold yellow");
+		print "--> ", color("bold yellow");
 		if (@cmd > 2) {
 			print join(" \\\n   ", @cmd), "\n";
 		} else {
