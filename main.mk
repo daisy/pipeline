@@ -284,6 +284,11 @@ else
 		rm $(TARGET_DIR)/commands \
 	); then \
 		if [ -n "$$commands" ]; then \
+			while true; do \
+				$(foreach V,$(sort $(filter-out MFLAGS MAKELEVEL _,$(.VARIABLES))),$(if $(filter environment%,$(origin $V)), \
+					echo $(call quote,$V=$($V));)) \
+				break; \
+			done >$(TARGET_DIR)/env && \
 			echo "$$commands" | $(MY_DIR)/group-eval.pl; \
 		fi \
 	else \
