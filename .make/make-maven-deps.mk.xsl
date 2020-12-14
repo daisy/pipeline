@@ -372,6 +372,29 @@
 							<xsl:value-of select="concat($dirname,'.install.jar')"/>
 							<xsl:text> : %/.install.jar : %/.install </xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
+							<xsl:text>&#x0A;</xsl:text>
+							<xsl:text>.SECONDARY : </xsl:text>
+							<xsl:value-of select="concat($dirname,'.install')"/>
+							<xsl:text>&#x0A;</xsl:text>
+							<xsl:value-of select="concat($dirname,'.install')"/>
+							<xsl:text> : | .maven-init .group-eval</xsl:text>
+							<xsl:text>&#x0A;</xsl:text>
+							<xsl:text>&#x09;</xsl:text>
+							<xsl:text>+$(call eval-for-host-platform,</xsl:text>
+							<xsl:value-of select="$MY_DIR"/>
+							<xsl:text>/mvn-install.sh,$$(dirname $@))</xsl:text>
+							<xsl:text>&#x0A;</xsl:text>
+							<xsl:text>&#x0A;</xsl:text>
+							<xsl:value-of select="concat($dirname,'.install')"/>
+							<xsl:text> : %/.install : %/pom.xml</xsl:text>
+							<xsl:for-each select="$main-dirs">
+								<xsl:if test="starts-with(.,$dirname)">
+									<!-- %/src/**/* does not work -->
+									<xsl:value-of select="concat(' $(call rwildcard,',.,'/,*)')"/>
+								</xsl:if>
+							</xsl:for-each>
+							<xsl:text> %/.compile-dependencies | %/.test-dependencies</xsl:text>
+							<xsl:text>&#x0A;</xsl:text>
 							<xsl:if test="$effective-pom
 							              /pom:project[pom:groupId=$groupId and
 							                           pom:artifactId=$artifactId and
@@ -385,12 +408,12 @@
 								<xsl:value-of select="concat($dirname,'.install-doc.jar')"/>
 								<xsl:text>&#x0A;</xsl:text>
 								<xsl:value-of select="concat($dirname,'.install-doc.jar')"/>
-								<xsl:text> : %/.install-doc.jar : %/.install</xsl:text>
+								<xsl:text> : %/.install-doc.jar : %/.install-doc</xsl:text>
 								<xsl:text>&#x0A;</xsl:text>
 								<xsl:for-each select="$doc-dirs">
 									<xsl:if test="starts-with(.,$dirname)">
 										<xsl:text>&#x0A;</xsl:text>
-										<xsl:value-of select="concat($dirname,'.install-doc.jar :  $(call rwildcard,',.,'/,*)')"/>
+										<xsl:value-of select="concat($dirname,'.install-doc.jar : $(call rwildcard,',.,'/,*)')"/>
 										<xsl:text>&#x0A;</xsl:text>
 									</xsl:if>
 								</xsl:for-each>
@@ -415,7 +438,7 @@
 								<xsl:value-of select="concat($dirname,'.install-xprocdoc.jar')"/>
 								<xsl:text>&#x0A;</xsl:text>
 								<xsl:value-of select="concat($dirname,'.install-xprocdoc.jar')"/>
-								<xsl:text> : %/.install-xprocdoc.jar : %/.install</xsl:text>
+								<xsl:text> : %/.install-xprocdoc.jar : %/.install-doc</xsl:text>
 								<xsl:text>&#x0A;</xsl:text>
 							</xsl:if>
 							<xsl:if test="$effective-pom
@@ -430,32 +453,32 @@
 								<xsl:value-of select="concat($dirname,'.install-javadoc.jar')"/>
 								<xsl:text>&#x0A;</xsl:text>
 								<xsl:value-of select="concat($dirname,'.install-javadoc.jar')"/>
-								<xsl:text> : %/.install-javadoc.jar : %/.install </xsl:text>
+								<xsl:text> : %/.install-javadoc.jar : %/.install-doc </xsl:text>
 								<xsl:text>&#x0A;</xsl:text>
 							</xsl:if>
 						</xsl:if>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>.SECONDARY : </xsl:text>
-						<xsl:value-of select="concat($dirname,'.install')"/>
+						<xsl:value-of select="concat($dirname,'.install-doc')"/>
 						<xsl:text>&#x0A;</xsl:text>
-						<xsl:value-of select="concat($dirname,'.install')"/>
+						<xsl:value-of select="concat($dirname,'.install-doc')"/>
 						<xsl:text> : | .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(call eval-for-host-platform,</xsl:text>
 						<xsl:value-of select="$MY_DIR"/>
-						<xsl:text>/mvn-install.sh,$$(dirname $@))</xsl:text>
+						<xsl:text>/mvn-install-doc.sh,$$(dirname $@))</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
-						<xsl:value-of select="concat($dirname,'.install')"/>
-						<xsl:text> : %/.install : %/pom.xml</xsl:text>
-						<xsl:for-each select="$main-dirs">
+						<xsl:value-of select="concat($dirname,'.install-doc')"/>
+						<xsl:text> : %/.install-doc : %/pom.xml</xsl:text>
+						<xsl:for-each select="$src-dirs">
 							<xsl:if test="starts-with(.,$dirname)">
 								<!-- %/src/**/* does not work -->
 								<xsl:value-of select="concat(' $(call rwildcard,',.,'/,*)')"/>
 							</xsl:if>
 						</xsl:for-each>
-						<xsl:text> %/.compile-dependencies | %/.test-dependencies</xsl:text>
+						<xsl:text> | %/.compile-dependencies %/.test-dependencies</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 					</xsl:if>
 					<xsl:text>&#x0A;</xsl:text>

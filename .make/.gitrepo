@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline.git
 	branch = make
 	commit = 296346221e1bc074e08c5152b92c9af7b1dedea6
-	parent = 168e6dc0efa8b9b787da61fd8cfcf57ed5ab464d
+	parent = 5c0216f37cac606f48f81abadc568bcef5f03221
 	cmdver = 0.3.1
