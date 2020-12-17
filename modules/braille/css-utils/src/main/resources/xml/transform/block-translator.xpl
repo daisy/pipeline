@@ -11,10 +11,10 @@
 	
 	<p:import href="../library.xpl"/>
 	
-	<css:parse-properties px:message="Parsing CSS properties" px:progress=".05"
+	<css:parse-properties px:message="Parsing CSS properties" px:message-severity="DEBUG" px:progress=".05"
 	                      properties="display"/>
 	
-	<p:xslt px:message="Translating CSS blocks" px:progress=".95">
+	<p:xslt px:message="Translating CSS blocks" px:message-severity="DEBUG" px:progress=".95">
 		<p:input port="stylesheet">
 			<p:document href="block-translator-from-text-transform.xsl"/>
 		</p:input>

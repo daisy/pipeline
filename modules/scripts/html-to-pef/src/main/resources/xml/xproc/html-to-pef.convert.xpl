@@ -91,7 +91,7 @@
     <px:assert message="More than one XHTML documents found." test-count-max="1" error-code="PEZE00"/>
     <p:identity name="html"/>
     
-    <p:group px:message="Inlining CSS" px:progress=".11">
+    <p:group px:message="Applying style sheets" px:progress=".11">
         <p:variable name="first-css-stylesheet"
                     select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
@@ -111,7 +111,7 @@
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
-        <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
+        <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}" px:message-severity="DEBUG"/>
         <px:apply-stylesheets px:progress="1">
             <p:with-option name="stylesheets" select="$stylesheets-to-be-inlined"/>
             <p:with-option name="media"
@@ -129,9 +129,8 @@
         </px:apply-stylesheets>
     </p:group>
     
-    <p:viewport px:message="Transforming MathML" px:progress=".10"
-                match="math:math">
-        <px:transform>
+    <p:viewport match="math:math" px:progress=".10" px:message="Transforming MathML">
+        <px:transform px:progress="1">
             <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,/*/@lang,'und')[1],')')">
                 <p:pipe step="html" port="result"/>
             </p:with-option>
@@ -142,7 +141,7 @@
         </px:transform>
     </p:viewport>
     
-    <p:choose name="transform" px:message="" px:progress=".76">
+    <p:choose name="transform" px:progress=".76">
         <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]"/>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>

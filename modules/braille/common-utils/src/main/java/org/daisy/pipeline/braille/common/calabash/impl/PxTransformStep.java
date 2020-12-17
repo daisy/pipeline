@@ -109,7 +109,7 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 			).run();
 		} catch (Exception e) {
 			logger.error("px:transform failed", e);
-			throw new XProcException(step.getNode(), e);
+			throw new XProcException(step.getNode(), "px:transform failed", e);
 		}
 		super.run();
 	}

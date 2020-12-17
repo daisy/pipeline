@@ -44,7 +44,7 @@
 		<p:pipe step="main" port="parameters"/>
 	</p:variable>
 	
-	<px:transform px:message="Translating document with {
+	<px:transform px:message="Pre-translating document with {
 	                            replace($css-block-transform,'\((input|output):css\)','')}"
 	              px:progress=".12">
 		<p:with-option name="query" select="$css-block-transform"/>
