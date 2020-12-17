@@ -2,9 +2,9 @@ package org.daisy.pipeline.gui;
 
 import javafx.application.Application;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.common.spi.CreateOnStart;
 import org.daisy.common.spi.ServiceLoader;
-import org.daisy.pipeline.properties.Properties;
 
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
