@@ -105,7 +105,7 @@ public class TestMessagesWithDerby extends Base {
 	protected Properties systemProperties() {
 		Properties p = super.systemProperties();
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
-		p.setProperty("derby.stream.error.file", new File(PIPELINE_DATA, "log/derby.log").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.logdir", new File(PIPELINE_DATA, "log").getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.messaging.cache.buffer", "5");
 		return p;
 	}

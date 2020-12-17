@@ -2,8 +2,10 @@ package org.daisy.common.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -40,47 +42,115 @@ public final class URLs {
 	
 	private static final Logger logger = LoggerFactory.getLogger(URLs.class);
 	
-	/* If object is a String, it is assumed to represent a URI */
-	public static URL asURL(Object o) {
-		if (o == null)
-			return null;
+	/**
+	 * @param file A file
+	 */
+	public static URL asURL(File file) {
+		return asURL(asURI(file));
+	}
+	
+	/**
+	 * @param url An encoded absolute URL
+	 * @throws IllegalArgumentException
+	 */
+	public static URL asURL(String url) {
+		return asURL(asURI(url));
+	}
+	
+	/**
+	 * @param url An encoded absolute URL
+	 * @throws IllegalArgumentException
+	 */
+	public static URL asURL(URI url) {
 		try {
-			if (o instanceof String)
-				return asURL(URIs.asURI(o));
-			if (o instanceof File)
-				return asURL(URIs.asURI(o));
-			if (o instanceof URL)
-				return (URL)o;
-			if (o instanceof URI)
-				return new URL(decode(o.toString())); }
-		catch (Exception e) {}
-		throw new RuntimeException("Object can not be converted to URL: " + o);
+			return url.toURL();
+		} catch (MalformedURLException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 	
-	public static URL resolve(Object base, Object url) {
-		if (url instanceof URI)
-			return asURL(URIs.asURI(base).resolve((URI)url));
-		if (url instanceof String) {
-			try { return new URL(asURL(base), url.toString()); }
-			catch (MalformedURLException e) { throw new RuntimeException(e); }}
-		return asURL(url);
+	/**
+	 * @param url A file
+	 */
+	public static URI asURI(File file) {
+		return file.toURI();
 	}
 	
-	public static String relativize(Object base, Object url) {
-		return decode(URIs.asURI(base).relativize(URIs.asURI(url)).toString());
+	/**
+	 * @param url An encoded absolute or relative URL
+	 * @throws IllegalArgumentException
+	 */
+	public static URI asURI(String url) {
+		try {
+			return new URI(url);
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 	
-	@SuppressWarnings(
-		"deprecation" // URLDecode.decode is deprecated
-	)
-	public static String decode(String uri) {
-		// URIs treat the + symbol as is, but URLDecoder will decode both + and %20 into a space
-		return URLDecoder.decode(uri.replace("+", "%2B"));
+	/**
+	 * @param url An encoded absolute or relative URL
+	 * @throws IllegalArgumentException
+	 */
+	public static URI asURI(URL url) {
+		try {
+			return url.toURI();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	/**
+	 * @param url An unencoded absolute URL
+	 * @return An encoded absolute URL
+	 */
+	public static URI encode(URL url) {
+		try {
+			if (url.getProtocol().equals("jar"))
+				return new URI("jar:" + new URI(null, url.getAuthority(), url.getPath(), url.getQuery(), url.getRef()).toASCIIString());
+			else {
+				String authority = (url.getPort() != -1) ?
+					url.getHost() + ":" + url.getPort() :
+					url.getHost();
+				return new URI(url.getProtocol(), authority, url.getPath(), url.getQuery(), url.getRef());
+			}
+		} catch (URISyntaxException e) {
+			throw new RuntimeException("coding error", e);
+		}
+	}
+	
+	/**
+	 * @param base An encoded absolute or relative URL
+	 * @param url An encoded absolute or relative URL
+	 * @return An encoded absolute or relative URL
+	 */
+	public static URI resolve(URI base, URI url) {
+		if (base.toString().startsWith("jar:") && !url.isAbsolute())
+			return asURI("jar:" + asURI(base.toASCIIString().substring(4)).resolve(url).toASCIIString());
+		else
+			return base.resolve(url);
+	}
+	
+	/**
+	 * @param base An encoded absolute or relative URL
+	 * @param url An encoded absolute or relative URL
+	 * @return An encoded absolute or relative URL
+	 */
+	public static URI relativize(URI base, URI url) {
+		if (base.toString().startsWith("jar:") && url.toString().startsWith("jar:")) {
+			base = asURI(base.toASCIIString().substring(4));
+			url = asURI(url.toASCIIString().substring(4));
+		}
+		return base.relativize(url);
 	}
 	
 	private static Map<String,Object> fsEnv = Collections.<String,Object>emptyMap();
 	
-	// "JAR" can also be a directory.
+	/**
+	 * @param resource The (not URL-encoded) path of a resource inside the specified JAR or class directory
+	 * @param context A class from the JAR or class directory that is to be searched for resources
+	 * @return An encoded absolute URL
+	 */
 	public static URL getResourceFromJAR(String resource, Class<?> context) {
 		if (OSGiHelper.inOSGiContext())
 			return OSGiHelper.getResourceFromJAR(resource, context);
@@ -88,7 +158,7 @@ public final class URLs {
 			URL jarFileURL = context.getProtectionDomain().getCodeSource().getLocation();
 			if ("location:local".equals(jarFileURL.toString()) || jarFileURL.toString().startsWith("mvn:"))
 				throw new RuntimeException("expected file URI");
-			File jarFile = new File(URIs.asURI(jarFileURL));
+			File jarFile = new File(asURI(jarFileURL));
 			logger.trace("Getting resource {} from JAR (current class: {}; JAR file: {})", resource, context, jarFile);
 			if (resource.startsWith("/"))
 				resource = resource.substring(1);
@@ -108,7 +178,7 @@ public final class URLs {
 			else {
 				FileSystem fs; {
 					try {
-						fs = FileSystems.newFileSystem(URIs.asURI("jar:" + URIs.asURI(jarFileURL)), fsEnv); }
+						fs = FileSystems.newFileSystem(asURI("jar:" + asURI(jarFileURL)), fsEnv); }
 					catch (IOException e) {
 						throw new RuntimeException(e); }}
 				try {
@@ -131,7 +201,11 @@ public final class URLs {
 		}
 	}
 	
-	// "JAR" can also be a directory.
+	/**
+	 * @param resource The (not URL-encoded) path of a directory inside the specified JAR or class directory
+	 * @param context A class from the JAR or class directory that is to be searched for resources
+	 * @return A list of resource paths (not URL-encoded)
+	 */
 	public static Iterator<String> listResourcesFromJAR(String directory, Class<?> context) {
 		if (OSGiHelper.inOSGiContext())
 			return OSGiHelper.listResourcesFromJAR(directory, context);
@@ -139,7 +213,7 @@ public final class URLs {
 			URL jarFileURL = context.getProtectionDomain().getCodeSource().getLocation();
 			if ("location:local".equals(jarFileURL.toString()) || jarFileURL.toString().startsWith("mvn:"))
 				throw new RuntimeException("expected file URI");
-			File jarFile = new File(URIs.asURI(jarFileURL));
+			File jarFile = new File(asURI(jarFileURL));
 			if (directory.startsWith("/"))
 				directory = directory.substring(1);
 			if (directory.endsWith("/"))
@@ -160,7 +234,7 @@ public final class URLs {
 			else {
 				FileSystem fs; {
 					try {
-						fs = FileSystems.newFileSystem(URIs.asURI("jar:" + URIs.asURI(jarFileURL)), fsEnv); }
+						fs = FileSystems.newFileSystem(asURI("jar:" + asURI(jarFileURL)), fsEnv); }
 					catch (IOException e) {
 						throw new RuntimeException(e); }}
 				try {
@@ -234,15 +308,13 @@ public final class URLs {
 				else {
 					url = bundle.getEntry(resource + "/");
 					if (url != null)
-						return url; }
+						return asURL(encode(url)); }
 				throw new RuntimeException("file does not exist"); }
 			else {
+				url = asURL(encode(url));
 				if (!url.toString().endsWith("/")
 				    && (resource.endsWith("/") || bundle.getEntry(resource + "/") != null))
-					try {
-						return new URL(url.toString() + "/"); }
-					catch (MalformedURLException e) {
-						throw new RuntimeException("should not happen", e); }
+					return asURL(url.toString() + "/");
 				else
 					return url; }
 		}
@@ -255,7 +327,7 @@ public final class URLs {
 			Bundle bundle = FrameworkUtil.getBundle(context);
 			if (bundle == null)
 				throw new IllegalArgumentException("no bundle can be found for class " + context);
-			Enumeration<String> resources =  bundle.getEntryPaths(directory);
+			Enumeration<String> resources = bundle.getEntryPaths(directory);
 			if (resources == null) {
 				if (bundle.getEntry(directory.substring(0, directory.length() - 1)) != null)
 					throw new RuntimeException("is not a directory");

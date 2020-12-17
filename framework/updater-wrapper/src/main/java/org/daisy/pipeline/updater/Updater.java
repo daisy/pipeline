@@ -3,7 +3,7 @@ package org.daisy.pipeline.updater;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.daisy.pipeline.properties.Properties;
+import org.daisy.common.properties.Properties;
 
 public class Updater {
 

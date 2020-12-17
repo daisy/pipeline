@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitor;
@@ -62,7 +63,7 @@ public class JobMonitorFactoryImpl implements JobMonitorFactory {
 		// use this property to configure how long messages are cached before storing them in a MessageStorage (volatile of persistent)
 		// use only for testing!
 		// to configure how long messages are cached in the volatile storage, use org.daisy.pipeline.messaging.cache
-		int timeout = Integer.valueOf(System.getProperty("org.daisy.pipeline.messaging.cache.buffer", "60"));
+		int timeout = Integer.valueOf(Properties.getProperty("org.daisy.pipeline.messaging.cache.buffer", "60"));
 		liveMonitors = CacheBuilder.newBuilder()
 			.expireAfterAccess(timeout, TimeUnit.SECONDS)
 			.removalListener(

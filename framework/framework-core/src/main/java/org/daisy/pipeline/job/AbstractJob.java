@@ -1,7 +1,5 @@
 package org.daisy.pipeline.job;
 
-import java.util.Properties;
-
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.priority.Priority;
@@ -64,12 +62,7 @@ public abstract class AbstractJob implements Job {
                     throw new RuntimeException();
                 try{
                         pipeline = engine.load(this.ctxt.getScript().getXProcPipelineInfo().getURI());
-                        Properties props = new Properties();
-                        props.setProperty(
-                                "autonamesteps",
-                                org.daisy.pipeline.properties.Properties.getProperty(
-                                        "org.daisy.pipeline.calabash.autonamesteps", "false"));
-                        if (ctxt.collectResults(pipeline.run(ctxt.input, () -> ctxt.messageBus, props)))
+                        if (ctxt.collectResults(pipeline.run(ctxt.input, () -> ctxt.messageBus, null)))
                                 changeStatus(Status.SUCCESS);
                         else
                                 changeStatus(Status.FAIL);

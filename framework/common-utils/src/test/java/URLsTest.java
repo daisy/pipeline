@@ -73,6 +73,13 @@ public class URLsTest extends AbstractTest {
 					assertEquals(testClassesDir + "dir/file1", actual);
 			}
 			{
+				String actual = URLs.getResourceFromJAR("/dir/file 2", context).toString();
+				if (OSGiHelper.inOSGiContext())
+					assertThat(actual, matchesPattern("^bundle://.*/dir/file%202$"));
+				else
+					assertEquals(testClassesDir + "dir/file%202", actual);
+			}
+			{
 				String actual = URLs.getResourceFromJAR("/dir/subdir", context).toString();
 				if (OSGiHelper.inOSGiContext())
 					assertThat(actual, matchesPattern("^bundle://.*/dir/subdir/$"));
@@ -161,8 +168,8 @@ public class URLsTest extends AbstractTest {
 				assertEquals("is not a directory", e.getMessage()); }
 			{
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/dir", context));
+				assertEquals("dir/file 2", i.next());
 				assertEquals("dir/file1", i.next());
-				assertEquals("dir/file2", i.next());
 				assertEquals("dir/subdir/", i.next());
 				assertFalse(i.hasNext());
 			}
@@ -182,7 +189,6 @@ public class URLsTest extends AbstractTest {
 				assertEquals("is not a directory", e.getMessage()); }
 			{
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/org/daisy/common/file", context));
-				assertEquals("org/daisy/common/file/URIs.class", i.next());
 				assertEquals("org/daisy/common/file/URLs$1.class", i.next());
 				assertEquals("org/daisy/common/file/URLs$OSGiHelper.class", i.next());
 				assertEquals("org/daisy/common/file/URLs.class", i.next());

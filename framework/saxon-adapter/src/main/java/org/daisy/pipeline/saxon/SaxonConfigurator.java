@@ -92,7 +92,7 @@ public class SaxonConfigurator {
 		name = "FunctionLibrary",
 		unbind = "-",
 		service = XPathFunctionRegistry.class,
-		cardinality = ReferenceCardinality.OPTIONAL,
+		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
 	public void setXPathFunctionRegistry(XPathFunctionRegistry xpathFunctions) {

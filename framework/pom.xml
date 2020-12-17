@@ -48,7 +48,6 @@
     <module>webservice-utils</module>
     <module>woodstox-osgi-adapter</module>
     <module>xproc-api</module>
-    <module>launcher</module>
   </modules>
   
   <build>

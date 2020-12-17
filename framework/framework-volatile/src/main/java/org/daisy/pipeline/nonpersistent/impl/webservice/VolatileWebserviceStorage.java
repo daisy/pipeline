@@ -1,8 +1,8 @@
 package org.daisy.pipeline.nonpersistent.impl.webservice;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.ClientStorage;
-import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.webserviceutils.requestlog.RequestLog;
 import org.daisy.pipeline.webserviceutils.storage.JobConfigurationStorage;
 import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;

@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.daisy.common.priority.Priority;
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.job.AbstractJob;
@@ -17,7 +18,6 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.properties.Properties;
 import org.daisy.pipeline.script.ScriptRegistry;
 
 import org.slf4j.Logger;

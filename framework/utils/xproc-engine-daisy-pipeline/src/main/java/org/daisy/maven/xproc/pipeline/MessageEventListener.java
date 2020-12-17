@@ -9,8 +9,8 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.ProgressMessage;
+import org.daisy.common.properties.Properties;
 import org.daisy.maven.xproc.pipeline.logging.FlattenedProgressMessage;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

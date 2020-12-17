@@ -60,6 +60,10 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	/** The entity resolver. */
 	private final EntityResolver entityResolver;
 
+	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
+		org.daisy.common.properties.Properties.getProperty(
+			"org.daisy.pipeline.calabash.autonamesteps", "false"));
+
 	/**
 	 * The pipeline supplier returns a ready-to-go pipeline instance based on
 	 * the XProcPipeline object
@@ -190,11 +194,8 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 */
 	@Override
 	public XProcResult run(XProcInput data, XProcMonitor monitor, Properties props) throws XProcErrorException {
-		boolean autoNameSteps = false;
-		if (props != null && props.getProperty("autonamesteps") != null)
-			autoNameSteps = Boolean.parseBoolean(props.getProperty("autonamesteps"));
 		if (monitor != null) {
-			MessageListenerImpl messageListener = new MessageListenerImpl(monitor.getMessageAppender(), autoNameSteps);
+			MessageListenerImpl messageListener = new MessageListenerImpl(monitor.getMessageAppender(), AUTO_NAME_STEPS);
 			try {
 				return run(data, messageListener);
 			} finally {

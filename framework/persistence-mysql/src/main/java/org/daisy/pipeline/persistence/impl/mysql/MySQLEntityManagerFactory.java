@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.persistence.ForwardingEntityManagerFactory;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

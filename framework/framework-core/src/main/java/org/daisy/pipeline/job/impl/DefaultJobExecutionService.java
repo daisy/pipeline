@@ -5,6 +5,7 @@ import org.daisy.common.priority.PrioritizableRunnable;
 import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.common.priority.timetracking.TimeFunctions;
 import org.daisy.common.priority.timetracking.TimeTrackerFactory;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
@@ -12,7 +13,6 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

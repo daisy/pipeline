@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-core</artifactId>
+      <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

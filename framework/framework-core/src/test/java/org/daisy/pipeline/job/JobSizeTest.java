@@ -26,8 +26,8 @@ public class JobSizeTest   {
         @Before
         public void setUp() throws IOException{
                 URI tmp=new File(System.getProperty("java.io.tmpdir")).toURI();
-                oldIoBase=System.getProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE);    
-                System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,Files.createTempDir().toString());     
+                oldIoBase = System.getProperty("org.daisy.pipeline.data");
+                System.setProperty("org.daisy.pipeline.data", Files.createTempDir().toString());
                 id=JobIdFactory.newId();
                 //create fake data
                 //log
@@ -52,10 +52,10 @@ public class JobSizeTest   {
         @After
         public void tearDown() {
                 if(oldIoBase!=null){
-                        for ( File f: Files.fileTreeTraverser().postOrderTraversal(new File(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE))){
+                        for (File f : Files.fileTreeTraverser().postOrderTraversal(new File("org.daisy.pipeline.data"))) {
                                 f.delete();
                         }
-                        System.setProperty(JobURIUtils.ORG_DAISY_PIPELINE_IOBASE,oldIoBase);    
+                        System.setProperty("org.daisy.pipeline.data", oldIoBase);
                 }
         }
 

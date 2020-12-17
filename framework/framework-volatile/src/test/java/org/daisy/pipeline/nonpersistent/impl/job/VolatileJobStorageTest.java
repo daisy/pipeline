@@ -38,9 +38,8 @@ public class VolatileJobStorageTest {
 
         @Before
         public void setUp() {
-                oldBase = System.getProperty("org.daisy.pipeline.iobase", "");
-                System.setProperty("org.daisy.pipeline.iobase",
-                                System.getProperty("java.io.tmpdir"));
+                oldBase = System.getProperty("org.daisy.pipeline.data", "");
+                System.setProperty("org.daisy.pipeline.data", System.getProperty("java.io.tmpdir"));
                 storage = new VolatileJobStorage();
                 ctxt1 = new Mock.MockedJobContext(cl, batchId1);
                 ctxt2 = new Mock.MockedJobContext(cl, batchId2);
@@ -50,7 +49,7 @@ public class VolatileJobStorageTest {
 
         @After
         public void tearDown() {
-                System.setProperty("org.daisy.pipeline.iobase", oldBase);
+                System.setProperty("org.daisy.pipeline.data", oldBase);
         }
 
         @Test

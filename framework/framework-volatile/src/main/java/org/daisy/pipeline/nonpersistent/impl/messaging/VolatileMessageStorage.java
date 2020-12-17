@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.event.MessageStorage;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

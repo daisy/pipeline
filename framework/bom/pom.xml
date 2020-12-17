@@ -74,11 +74,6 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
-        <artifactId>launcher</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
         <artifactId>logging-activator</artifactId>
         <version>2.0.4</version>
       </dependency>

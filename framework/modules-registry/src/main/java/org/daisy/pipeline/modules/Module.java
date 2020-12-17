@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 import com.google.common.collect.Iterators;
 
-import org.daisy.common.file.URIs;
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.xmlcatalog.XmlCatalog;
 import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
 
@@ -64,9 +63,6 @@ public abstract class Module {
 						// clashes between resources in different JARs. Alternative
 						// solution would be to have a ClassLoader for each JAR.
 						@Override
-						@SuppressWarnings(
-							"deprecation" // URLDecode.decode is deprecated
-						)
 						public URL loadResource(String path) {
 							// Paths are assumed to be relative to META-INF
 							if (!path.startsWith("../")) {
@@ -75,8 +71,8 @@ public abstract class Module {
 							path = path.substring(2);
 							try {
 								return jarFile.isDirectory() ?
-									new URL(         URLDecoder.decode((jarFile.toURI().toASCIIString() + path).replace("+", "%2B"))) :
-									new URL("jar:" + URLDecoder.decode((jarFile.toURI().toASCIIString() + "!" + path).replace("+", "%2B")));
+									new URL(jarFile.toURI().toASCIIString() + path) :
+									new URL("jar:" + jarFile.toURI().toASCIIString() + "!" + path);
 							} catch (MalformedURLException e) {
 								throw new RuntimeException(e);
 							}
@@ -137,7 +133,7 @@ public abstract class Module {
 		URL catalogURL = loader.loadResource("../META-INF/catalog.xml");
 		if (catalogURL == null)
 			throw new RuntimeException("/META-INF/catalog.xml file not found");
-		XmlCatalog catalog = parser.parse(URIs.asURI(catalogURL));
+		XmlCatalog catalog = parser.parse(URLs.asURI(catalogURL));
 		parseCatalog(catalog, loader);
 	}
 

@@ -8,7 +8,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
@@ -18,6 +17,7 @@ import com.google.common.base.Supplier;
 
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBus;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcEngine;
@@ -46,11 +46,13 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 	static {
 		try {
 			messagesThreshold = Level.valueOf(
-				org.daisy.pipeline.properties.Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+				Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
 		} catch (IllegalArgumentException e) {
 			messagesThreshold = Level.INFO;
 		}
 	}
+	private final boolean AUTO_NAME_STEPS = Boolean.parseBoolean(
+		Properties.getProperty("org.daisy.pipeline.calabash.autonamesteps", "false"));
 	
 	@Reference(
 		name = "XProcEngine",
@@ -114,12 +116,7 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 					MessageBus messageBus = new MessageBus(jobId, messagesThreshold);
 					MessageEventListener listener = new MessageEventListener(messageBus);
 					try {
-						Properties props = new Properties();
-						props.setProperty(
-							"autonamesteps",
-							org.daisy.pipeline.properties.Properties.getProperty(
-								"org.daisy.pipeline.calabash.autonamesteps", "false"));
-						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, props);
+						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, null);
 						// store messages XML
 						try {
 							Class.forName("org.daisy.pipeline.webserviceutils.xml.JobXmlWriter");

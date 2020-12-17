@@ -207,7 +207,7 @@ public class PipelineWebService extends Application {
                                         +"\n"
                                         +"************************************************************\n"
                                         +"WS mode authenticated but the client store is empty, exiting\n"
-                                        +"please provide values for the following properties in etc/system.properties: \n"
+                                        +"please provide values for the following properties:\n"
                                         +"-org.daisy.pipeline.ws.authentication.key    \n"
                                         +"-org.daisy.pipeline.ws.authentication.secret \n"
                                         +"************************************************************\n"
@@ -379,7 +379,7 @@ public class PipelineWebService extends Application {
          */
         public static void main(String[] args) {
                 if (args.length > 0) {
-                        logger.error("No arguments expected");
+                        logger.error("No arguments expected (got '" + String.join(" ", args) + "')");
                         System.exit(1);
                 }
                 PipelineWebService webservice = SPIHelper.createWebService();

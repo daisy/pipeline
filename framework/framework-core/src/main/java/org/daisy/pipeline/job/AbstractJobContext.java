@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBus;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
@@ -30,7 +31,7 @@ public abstract class AbstractJobContext implements JobContext{
         static {
                 try {
                         messagesThreshold = Level.valueOf(
-                                org.daisy.pipeline.properties.Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+                                Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
                 } catch (IllegalArgumentException e) {
                         messagesThreshold = Level.INFO;
                 }

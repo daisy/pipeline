@@ -193,6 +193,11 @@
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
+          <archive>
+            <manifest>
+              <mainClass>org.daisy.pipeline.webservice.impl.PipelineWebService</mainClass>
+            </manifest>
+          </archive>
         </configuration>
         <executions>
           <execution>

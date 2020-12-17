@@ -8,7 +8,7 @@ import ch.qos.logback.core.AppenderBase;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
-import org.daisy.pipeline.properties.Properties;
+import org.daisy.common.properties.Properties;
 
 /**
  * Append to the current job progress thread.

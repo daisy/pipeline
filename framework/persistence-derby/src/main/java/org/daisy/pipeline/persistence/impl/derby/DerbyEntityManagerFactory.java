@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.persistence.ForwardingEntityManagerFactory;
-import org.daisy.pipeline.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +34,8 @@ public class DerbyEntityManagerFactory extends ForwardingEntityManagerFactory {
 		props.put(JAVAX_PERSISTENCE_JDBC_URL,
 				DERBY_DB_URL);
 		logger.debug(DERBY_DB_URL);
+		String logdir = Properties.getProperty("org.daisy.pipeline.logdir", "${org.daisy.pipeline.data}/log");
+		System.setProperty("derby.stream.error.file", logdir + "/derby.log");
 	}
 
 	public DerbyEntityManagerFactory(){
