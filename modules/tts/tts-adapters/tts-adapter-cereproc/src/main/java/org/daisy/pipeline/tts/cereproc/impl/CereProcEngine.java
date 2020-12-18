@@ -170,15 +170,17 @@ public class CereProcEngine extends MarklessTTSEngine {
 		}
 
 		AudioBuffer readAudio(InputStream stream, AudioBufferAllocator bufferAllocator) throws IOException, MemoryException {
+			int timeout = -1; // no need for a timeout here because it is handled elsewhere (taking
+			                  // into account length of sentence)
 			// first read length of audio data
 			int len; {
 				String s = "";
 				int c;
-				waitForStreamAvailable(stream, 10000);
+				waitForStreamAvailable(stream, -1);
 				while ((c = stream.read()) != '\n') {
 					if (c < 0) throw new RuntimeException("coding error");
 					s += (char)c;
-					waitForStreamAvailable(stream, 10000);
+					waitForStreamAvailable(stream, -1);
 				}
 				len = Integer.parseInt(s);
 			}
@@ -194,7 +196,7 @@ public class CereProcEngine extends MarklessTTSEngine {
 			           // FIXME: very brittle: move AudioSystem.getAudioInputStream(...) after this
 			byte[] audio = new byte[len];
 			do {
-				waitForStreamAvailable(stream, 10000);
+				waitForStreamAvailable(stream, -1);
 				int read = stream.read(audio, audio.length - len, len);
 				if (read < 0) throw new RuntimeException("coding error");
 				len -= read;
@@ -238,7 +240,7 @@ public class CereProcEngine extends MarklessTTSEngine {
 			} catch (InterruptedException e) {
 				throw new IOException("Wait for IO interrupted", e);
 			}
-		} while (timeout > (System.currentTimeMillis() - startTime));
+		} while (timeout < 0 || timeout > (System.currentTimeMillis() - startTime));
 		throw new IOException("Wait for IO timed out after: " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 }
