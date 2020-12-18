@@ -64,14 +64,30 @@ public class CereProcEngine extends MarklessTTSEngine {
 		                        ""+new File(clientDir, "cserver-client-java.jar"),
 		                        server,
 		                        ""+port};
+		int sampleRate; // sample rate in Hz
+		int sampleBits = 16; // sample size in bits
 		switch (variant) {
 		case DNN:
+			// Not using the info from the AudioInputStream (see below) because this always gives us
+			// 22,050 kHz while in reality it is 16 kHz (DNN) or 48 kHz (standard).
+			// FIXME: This is an issue in the Java client.
+			sampleRate = 16000;
 			this.expectedMillisecPerWord = 500;
 			break;
 		case STANDARD:
 		default:
+			sampleRate = 48000;
 			this.expectedMillisecPerWord = 200;
 		}
+		// FIXME: don't hard code
+		this.audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+		                                   sampleRate,
+		                                   sampleBits,
+		                                   1,                                 // mono
+		                                   2,                                 // frame size in bytes
+		                                   sampleRate * sampleBits / (2 * 8), // frame rate
+		                                   false                              // little endian
+		                                   );
 	}
 
 	@Override
@@ -190,8 +206,12 @@ public class CereProcEngine extends MarklessTTSEngine {
 				stream = AudioSystem.getAudioInputStream(stream); }
 			catch (UnsupportedAudioFileException e) {
 				throw new IOException(e); }
-			if (CereProcEngine.this.audioFormat == null)
+			if (CereProcEngine.this.audioFormat == null) {
 				CereProcEngine.this.audioFormat = ((AudioInputStream)stream).getFormat();
+				logger.info("The audio sample rate used by "
+				            + getProvider().getName() + "-" + getProvider().getVersion()
+				            + " is: " + audioFormat.getSampleRate());
+			}
 			len -= 44; // because of the header that AudioInputStream strips
 			           // FIXME: very brittle: move AudioSystem.getAudioInputStream(...) after this
 			byte[] audio = new byte[len];
