@@ -8,7 +8,7 @@
   <baseDirectory>daisy-pipeline</baseDirectory>
   <componentDescriptors>
       <componentDescriptor>src/main/assembly/components/base.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/bin-nix.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/updater-cli-all.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/base-linux.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/updater-all.xml</componentDescriptor>
   </componentDescriptors>
 </assembly>

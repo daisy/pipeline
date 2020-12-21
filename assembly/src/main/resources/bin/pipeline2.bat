@@ -36,12 +36,13 @@ title Pipeline2
 
 if "%PIPELINE2_DATA%" == "" (
     set PIPELINE2_DATA=%appdata%/DAISY Pipeline 2
-    if not exist "%PIPELINE2_DATA%" (
-      mkdir "%PIPELINE2_DATA%"
-    )
 )
+if not exist "%PIPELINE2_DATA%" mkdir "%PIPELINE2_DATA%"
 
-if not exist "%PIPELINE2_DATA%/log" mkdir "%PIPELINE2_DATA%/log"
+if "%PIPELINE2_LOGDIR%" == "" (
+    set PIPELINE2_LOGDIR=%PIPELINE2_DATA%\log
+)
+if not exist "%PIPELINE2_LOGDIR%" mkdir "%PIPELINE2_LOGDIR%"
 
 goto BEGIN
 
@@ -51,12 +52,6 @@ rem # # SUBROUTINES # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     echo %PROGNAME%: %*
 goto :EOF
 
-:append_to_classpath
-    set filename=%~1
-    set suffix=%filename:~-4%
-    if %suffix% equ .jar set CLASSPATH=!CLASSPATH!;%PIPELINE2_HOME%\%BOOTSTRAP:/=\%\%filename%
-goto :EOF
-
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 :BEGIN
@@ -64,7 +59,7 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
     rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    if not "%PIPELINE2_HOME%" == "" call:warn Ignoring predefined value for PIPELINE2_HOME
+    if not "%PIPELINE2_HOME%" == "" call:warn Ignoring value for PIPELINE2_HOME
 
     set PIPELINE2_HOME=%DIRNAME%..
     if not exist "%PIPELINE2_HOME%" (
@@ -74,29 +69,12 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
         goto END
     )
 
-    if not "%PIPELINE2_BASE%" == "" (
-        if not exist "%PIPELINE2_BASE%" (
-            call:warn PIPELINE2_BASE is not valid: %PIPELINE2_BASE%
-            rem fatal
-            set exitCode=3
-            goto END
-        )
-    )
-
-    if "%PIPELINE2_BASE%" == "" set PIPELINE2_BASE=%PIPELINE2_HOME%
-
-    if not "%PIPELINE2_DATA%" == "" (
-        if not exist "%PIPELINE2_DATA%" (
-            mkdir "%PIPELINE2_DATA%"
-        )
-    )
-
     rem Setup the Java Virtual Machine
-    call "%~dp0\checkJavaVersion.bat" 11
+    call "%DIRNAME%\checkJavaVersion.bat" 11
     if errorLevel 1 (
         rem Fall back to Java 8 (or 9 or 10) because web server does not work with Java 11
         call:warn Java 11 not found; Trying Java 8
-        call "%~dp0\checkJavaVersion.bat" 1.8
+        call "%DIRNAME%\checkJavaVersion.bat" 1.8
         if errorLevel 1 (
             if errorLevel 2 (
                 rem fatal
@@ -120,18 +98,14 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     call:warn Enabling Java debug options: %JAVA_DEBUG_OPTS%
 :PIPELINE2_DEBUG_END
 
-    set BOOTSTRAP=system/bootstrap
-    rem Setup the classpath
-    pushd "%PIPELINE2_HOME%\%BOOTSTRAP:/=\%"
-    for %%G in (*.jar) do call:append_to_classpath %%G
-    popd
-
-    SET MAIN=org.apache.felix.main.Main
-    SET SHIFT=false
-    SET MODE=-Dorg.daisy.pipeline.main.mode=webservice
+    set MODE=webservice
+    set ENABLE_OSGI=false
+    set ENABLE_PERSISTENCE=true
+    set ENABLE_SHELL=false
 
 :RUN_LOOP
     if [%1]==[] goto :EXECUTE
+    if "%1" == "osgi" goto :EXECUTE_OSGI
     if "%1" == "remote" goto :EXECUTE_REMOTE
     if "%1" == "local" goto :EXECUTE_LOCAL
     if "%1" == "clean" goto :EXECUTE_CLEAN
@@ -143,6 +117,11 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     set exitCode=2
     goto END
 goto :EXECUTE
+
+:EXECUTE_OSGI
+    set ENABLE_OSGI=true
+    shift
+goto :RUN_LOOP
 
 :EXECUTE_REMOTE
     set PIPELINE2_WS_LOCALFS=false
@@ -162,7 +141,8 @@ goto :RUN_LOOP
 goto :RUN_LOOP
 
 :EXECUTE_GUI
-    SET MODE=-Dorg.daisy.pipeline.main.mode=gui
+    set MODE=gui
+    set ENABLE_PERSISTENCE=false
     shift
 goto :RUN_LOOP
 
@@ -173,18 +153,94 @@ goto :RUN_LOOP
 goto :RUN_LOOP
 
 :EXECUTE_SHELL
-    for /f %%F in ('dir /b "%PIPELINE2_BASE%\system\felix\gogo\*.jar"') do (
-         set GOGO_BUNDLES=!GOGO_BUNDLES! file:system\felix\gogo\%%F
-    )
-    set FELIX_OPTS=%FELIX_OPTS% -Dfelix.auto.start.1="%GOGO_BUNDLES%"
+    set ENABLE_SHELL=true
     shift
 goto :RUN_LOOP
 
 :EXECUTE
-    rem Execute the Java Virtual Machine
-    cd "%PIPELINE2_BASE%"
+    if %ENABLE_OSGI% == true (
+        set PATHS=!PATHS! system\osgi\bundles
+    ) else (
+        set PATHS=!PATHS! system\no-osgi
+    )
+    set PATHS=!PATHS! system\%MODE%
+    if %ENABLE_SHELL% == true (
+        if %ENABLE_OSGI% == true (
+            set PATHS=!PATHS! system\osgi\gogo
+        ) else (
+            call:warn Shell can only be enabled under OSGi
+        )
+    )
+    if %ENABLE_PERSISTENCE% == true (
+        set PATHS=!PATHS! system\persistence
+        if %ENABLE_OSGI% == true (
+            set PATHS=!PATHS! system\osgi\persistence
+        ) else (
+            set PATHS=!PATHS! system\no-osgi\persistence
+        )
+    ) else (
+        set PATHS=!PATHS! system\volatile
+    )
+    if %ENABLE_OSGI% == true (
+        for %%D in (system\osgi\bootstrap) do (
+            for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
+                set CLASSPATH=!CLASSPATH!;%%D\%%F
+            )
+        )
+        if %MODE% == gui (
+            for %%D in (system\gui\bootstrap) do (
+                for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
+                    set CLASSPATH=!CLASSPATH!;%%D\%%F
+                )
+            )
+        )
+        set MAIN=org.apache.felix.main.Main
+        for %%D in (%PATHS%) do (
+            for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
+                set AUTO_START_BUNDLES=!AUTO_START_BUNDLES! file:%%D\%%F
+            )
+        )
+        rem system/common is included through felix.auto.deploy.dir setting
+        rem  (see felix.properties)
+        rem modules is included through felix.fileinstall.dir settings
+        rem  (see felix.properties and org.apache.felix.fileinstall-modules.cfg)
+        set OSGI_OPTS=-Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/felix.properties" ^
+                      -Dfelix.auto.start.1="!AUTO_START_BUNDLES!"
+    ) else (
+        if %MODE% == gui (
+            set PATHS=!PATHS! system\gui\bootstrap
+        )
+        for %%D in (system\common !PATHS! modules) do (
+            if exist "%PIPELINE2_HOME%\%%D" (
+                rem Using wildcard to avoid "The input line is too long" error
+                set CLASSPATH=!CLASSPATH!;%%D\*
+                rem for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
+                rem     set CLASSPATH=!CLASSPATH!;%%D\%%F
+                rem )
+            )
+        )
+        if %MODE% == webservice (
+            set MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
+        ) else (
+            set MAIN=org.daisy.pipeline.gui.GUIService
+        )
+    )
 
-    call "%~dp0\checkJavaVersion.bat" _ :compare_versions %JAVA_VER% 9
+    rem Execute the Java Virtual Machine
+    cd "%PIPELINE2_HOME%"
+
+    rem Logback configuration file
+    set SYSTEM_PROPS=%SYSTEM_PROPS% -Dlogback.configurationFile="file:%PIPELINE2_HOME:\=/%/etc/config-logback.xml"
+    rem Workaround for encoding bugs on Windows
+    set SYSTEM_PROPS=%SYSTEM_PROPS% -Dfile.encoding=UTF8
+    rem to make ${org.daisy.pipeline.data}, ${org.daisy.pipeline.logdir} and ${org.daisy.pipeline.mode}
+    rem available in config-logback.xml and felix.properties
+    rem note that config-logback.xml is the only place where ${org.daisy.pipeline.mode} is used
+    set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" ^
+                                    -Dorg.daisy.pipeline.logdir="%PIPELINE2_LOGDIR%" ^
+                                    -Dorg.daisy.pipeline.mode=%MODE%
+
+    call "%DIRNAME%\checkJavaVersion.bat" _ :compare_versions %JAVA_VER% 9
     if %ERRORLEVEL% geq 0 (
         if errorLevel 3 (
             rem unexpected error
@@ -205,30 +261,30 @@ goto :RUN_LOOP
             --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED ^
             --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED ^
             --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED ^
-            -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" ^
-            -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" ^
-            -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" ^
-            -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" ^
-            %FELIX_OPTS% %MODE% -classpath "%CLASSPATH%" %MAIN%
+            %OSGI_OPTS% ^
+            -Dorg.daisy.pipeline.properties="%PIPELINE2_HOME%\etc\pipeline.properties" ^
+            %SYSTEM_PROPS% ^
+            -classpath "%CLASSPATH%" ^
+            %MAIN%
     ) else (
         rem version 8
         SET COMMAND="%JAVA%" %JAVA_OPTS% ^
-            -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" ^
-            -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" ^
-            -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" ^
-            -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" ^
-            %FELIX_OPTS% %MODE% -classpath "%CLASSPATH%" %MAIN%
+            %OSGI_OPTS% ^
+            -Dorg.daisy.pipeline.properties="%PIPELINE2_HOME%\etc\pipeline.properties" ^
+            %SYSTEM_PROPS% ^
+            -classpath "%CLASSPATH%" ^
+            %MAIN%
             rem skipping java.endorsed.dirs and java.ext.dirs because this requires JAVA_HOME which is not always available
             rem -Djava.endorsed.dirs="%JAVA_HOME%\jre\lib\endorsed;%JAVA_HOME%\lib\endorsed;%PIPELINE2_HOME%\lib\endorsed" ^
             rem -Djava.ext.dirs="%JAVA_HOME%\jre\lib\ext;%JAVA_HOME%\lib\ext;%PIPELINE2_HOME%\lib\ext" ^
     )
     call:warn Starting java: %COMMAND%
 
-    if not "%GOGO_BUNDLES%" == "" (
+    if %ENABLE_SHELL% == true (
         endlocal & (
             set "PIPELINE2_HOME=%PIPELINE2_HOME%"
-            set "PIPELINE2_BASE=%PIPELINE2_BASE%"
             set "PIPELINE2_DATA=%PIPELINE2_DATA%"
+            set "PIPELINE2_LOGDIR=%PIPELINE2_LOGDIR%"
             set "PIPELINE2_WS_LOCALFS=%PIPELINE2_WS_LOCALFS%"
             set "PIPELINE2_WS_AUTHENTICATION=%PIPELINE2_WS_AUTHENTICATION%"
             %COMMAND%
@@ -237,11 +293,11 @@ goto :RUN_LOOP
         call:warn Output is written to daisy-pipeline-java.log
         endlocal & (
             set "PIPELINE2_HOME=%PIPELINE2_HOME%"
-            set "PIPELINE2_BASE=%PIPELINE2_BASE%"
             set "PIPELINE2_DATA=%PIPELINE2_DATA%"
+            set "PIPELINE2_LOGDIR=%PIPELINE2_LOGDIR%"
             set "PIPELINE2_WS_LOCALFS=%PIPELINE2_WS_LOCALFS%"
             set "PIPELINE2_WS_AUTHENTICATION=%PIPELINE2_WS_AUTHENTICATION%"
-            %COMMAND% > "%PIPELINE2_DATA%/log/daisy-pipeline-java.log"
+            %COMMAND% > "%PIPELINE2_LOGDIR%\daisy-pipeline-java.log"
         )
     )
 

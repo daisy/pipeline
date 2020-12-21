@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>bin/pipeline2</include>
+      </includes>
+      <outputDirectory></outputDirectory>
+      <fileMode>0755</fileMode>
+      <filtered>true</filtered>
+    </fileSet>
+  </fileSets>
+</component>

@@ -92,6 +92,7 @@ ifeq ($(shell uname), Darwin)
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         : mvn -Punpack-cli-mac \
                                                                                                                        -Punpack-updater-mac \
                                                                                                                        -Passemble-mac-dir \
+                                                                                                                       -Ppackage-mac-app \
                                                                                                                        -Ppackage-dmg
 	test -e $@
 else
@@ -175,7 +176,8 @@ check-docker :
 # assemble-linux-zip                                                                            assemble-linux-zip
 # assemble-win-zip                                                                              assemble-win-zip
 # assemble-minimal-zip                                                                          assemble-minimal-zip
-# package-dmg                                                             install-node          javapackager
+# package-mac-app                                                                               javapackager
+# package-dmg                                                             install-node
 #                                                                         install-appdmg        package-appdmg
 #                                                                         parse-version         attach-dmg
 # package-exe                                                             copy-nsis-resources   package-exe
@@ -195,6 +197,7 @@ PROFILES :=                 \
 	assemble-minimal-zip    \
 	package-deb             \
 	package-deb-cli         \
+	package-mac-app         \
 	package-dmg             \
 	package-exe             \
 	package-rpm             \
@@ -213,7 +216,7 @@ PROFILES :=                 \
 mvn :
 ifndef DUMP_PROFILES
 	set -o pipefail; \
-	$(MVN) clean install -DskipTests $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS)) | $(MVN_LOG)
+	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS)) | $(MVN_LOG)
 endif
 
 .PHONY : $(addprefix -P,$(PROFILES))

@@ -1,5 +1,11 @@
 <configuration debug="false">
 
+  <!--
+      Variables that may be used in this file:
+      - ${org.daisy.pipeline.logdir}
+      - ${org.daisy.pipeline.mode} ("gui" or "webservice")
+  -->
+
   <!-- see http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
 
@@ -26,9 +32,9 @@
   
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <filter class="org.daisy.pipeline.logging.OSGIFilter"/>   
-    <file>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.main.mode}.log</file>
+    <file>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.mode}.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.main.mode}.%i.log.zip</fileNamePattern>
+      <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.mode}.%i.log.zip</fileNamePattern>
       <minIndex>1</minIndex>
       <maxIndex>4</maxIndex>
     </rollingPolicy>
