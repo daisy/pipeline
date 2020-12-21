@@ -104,11 +104,11 @@ dp2 : $(dp2)
 
 .PHONY : run
 run : $(dev_launcher)
-	$< shell
+	$<
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
-	$< gui shell
+	$< gui
 
 .PHONY : run-cli
 run-cli :
