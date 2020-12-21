@@ -1,6 +1,7 @@
 SHELL             := /bin/bash
 ROOT_DIR          := $(CURDIR)
 MY_DIR            := $(shell dirname $(lastword $(MAKEFILE_LIST)))
+TARGET_DIR        ?= $(MY_DIR)/target
 GRADLE_FILES      := $(shell find * -name build.gradle -o -name settings.gradle -o -name gradle.properties)
 GRADLE_MODULES    := $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADLE_FILES)))
 MODULES            = $(MAVEN_MODULES) $(GRADLE_MODULES)

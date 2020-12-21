@@ -8,7 +8,6 @@ MVN_WORKSPACE           := .maven-workspace
 MVN_CACHE               := .maven-cache
 
 # -----------------------------------
-TARGET_DIR              := .make-target
 MVN_SETTINGS            := settings.xml
 MVN_PROPERTIES          := -Dorg.ops4j.pax.url.mvn.localRepository="$(CURDIR)/$(MVN_WORKSPACE)" \
                            -Dorg.ops4j.pax.url.mvn.settings="$(CURDIR)/settings.xml"
@@ -435,7 +434,7 @@ dump-maven-cmd :
 
 .PHONY : dump-gradle-cmd
 dump-gradle-cmd :
-	echo M2_HOME=$(CURDIR)/$(SUPER_BUILD_SCRIPT_TARGET_DIR)/.gradle-settings $(GRADLE) $(MVN_PROPERTIES)
+	echo M2_HOME=$(CURDIR)/$(TARGET_DIR)/.gradle-settings $(GRADLE) $(MVN_PROPERTIES)
 
 .PHONY : help
 help :
