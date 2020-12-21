@@ -4,7 +4,6 @@
 /*.rpm
 /*.zip
 /.gradle/
-/.make-target/
 /.maven-cache/
 /.maven-workspace/
 /maven.log
