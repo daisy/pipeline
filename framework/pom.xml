@@ -45,7 +45,6 @@
     <module>persistence-mysql</module>
     <module>updater-wrapper</module>
     <module>webservice</module>
-    <module>webservice-utils</module>
     <module>woodstox-osgi-adapter</module>
     <module>xproc-api</module>
   </modules>

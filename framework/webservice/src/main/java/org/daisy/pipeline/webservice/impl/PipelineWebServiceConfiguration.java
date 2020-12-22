@@ -2,7 +2,7 @@ package org.daisy.pipeline.webservice.impl;
 
 import java.io.File;
 
-import org.daisy.pipeline.webserviceutils.Properties;
+import org.daisy.pipeline.webservice.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

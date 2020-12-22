@@ -60,9 +60,9 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>webservice-utils</artifactId>
+      <artifactId>webservice</artifactId>
       <!--
-          optional dependency (but also dependency of framework-volatile)
+          optional dependency
       -->
       <scope>provided</scope>
     </dependency>

@@ -119,7 +119,7 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, null);
 						// store messages XML
 						try {
-							Class.forName("org.daisy.pipeline.webserviceutils.xml.JobXmlWriter");
+							Class.forName("org.daisy.pipeline.webservice.xml.JobXmlWriter");
 							PrintWriter writer = new PrintWriter(
 								new File(
 									// hack to get hold of directory to store message
@@ -128,7 +128,7 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 							writer.print(MessagesXmlWriter.serializeMessages(listener.messages));
 							writer.close();
 						} catch (ClassNotFoundException e) {
-							// webservice-utils is an optional dependency
+							// webservice is an optional dependency
 						}
 					} finally {
 						listener.close();

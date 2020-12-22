@@ -1,8 +1,8 @@
 package org.daisy.pipeline.persistence.impl.webservice;
 
+import org.daisy.pipeline.clients.JobConfigurationStorage;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.persistence.impl.Database;
-import org.daisy.pipeline.webserviceutils.storage.JobConfigurationStorage;
 
 /**
  * This class implements a job storage

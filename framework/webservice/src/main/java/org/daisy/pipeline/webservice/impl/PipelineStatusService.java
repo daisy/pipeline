@@ -1,6 +1,7 @@
 package org.daisy.pipeline.webservice.impl;
 
-import org.daisy.pipeline.webserviceutils.xml.ErrorWriter.ErrorWriterBuilder;
+import org.daisy.pipeline.webservice.xml.ErrorWriter.ErrorWriterBuilder;
+
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
@@ -9,6 +10,7 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Resource;
 import org.restlet.service.StatusService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

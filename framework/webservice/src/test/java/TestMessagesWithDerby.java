@@ -126,7 +126,6 @@ public class TestMessagesWithDerby extends Base {
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:webservice-utils:?",
 			"org.daisy.pipeline:framework-persistence:?",
 			"org.daisy.pipeline:persistence-derby:?",
 			"org.daisy.pipeline:calabash-adapter:?",

@@ -9,9 +9,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.webserviceutils.xml.ClientXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
-import org.daisy.pipeline.webserviceutils.xml.XmlWriterFactory;
+import org.daisy.pipeline.webservice.xml.ClientXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlValidator;
+import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
+
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
@@ -19,10 +20,13 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 

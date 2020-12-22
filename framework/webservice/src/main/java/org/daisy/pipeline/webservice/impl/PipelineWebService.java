@@ -12,6 +12,7 @@ import org.daisy.common.spi.CreateOnStart;
 import org.daisy.common.spi.ServiceLoader;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
@@ -19,10 +20,9 @@ import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.webserviceutils.Properties;
-import org.daisy.pipeline.webserviceutils.Routes;
-import org.daisy.pipeline.webserviceutils.callback.CallbackHandler;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
+import org.daisy.pipeline.webservice.CallbackHandler;
+import org.daisy.pipeline.webservice.Properties;
+import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Application;
 import org.restlet.Component;

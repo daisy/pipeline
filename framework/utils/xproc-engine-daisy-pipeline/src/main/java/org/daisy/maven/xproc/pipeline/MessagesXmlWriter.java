@@ -17,8 +17,8 @@ import net.sf.saxon.s9api.XsltTransformer;
 import org.daisy.common.file.URLs;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.pipeline.webserviceutils.xml.JobXmlWriter;
-import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
+import org.daisy.pipeline.webservice.xml.JobXmlWriter;
+import org.daisy.pipeline.webservice.xml.XmlUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

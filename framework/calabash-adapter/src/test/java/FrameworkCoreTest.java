@@ -49,6 +49,7 @@ import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -59,7 +60,6 @@ import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -667,7 +667,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			throwable.getThrowable().printStackTrace(out);
 	}
 	
-	// FIXME: can dependencies on modules-registry, webservice-utils and framework-volatile be eliminated?
+	// FIXME: can dependencies on modules-registry, framework-volatile be eliminated?
 	@Override
 	public String[] testDependencies() {
 		return new String[]{

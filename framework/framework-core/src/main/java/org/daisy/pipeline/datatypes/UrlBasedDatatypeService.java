@@ -238,7 +238,7 @@ public class UrlBasedDatatypeService implements DatatypeService{
         }
 
         /*
-         * The following functions and classes are copied from org.daisy.pipeline.webserviceutils.xml.XmlValidator
+         * The following functions and classes are copied from org.daisy.pipeline.webservice.xml.XmlValidator
          * TODO: move to common package(s)
          */
 

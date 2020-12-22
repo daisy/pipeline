@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.daisy.pipeline.webserviceutils.requestlog.RequestLogEntry;
+import org.daisy.pipeline.clients.RequestLogEntry;
 
 // Use this class to record request nonces and timestamps
 @Entity

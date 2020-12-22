@@ -17,14 +17,17 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webserviceutils.xml.XmlUtils;
-import org.daisy.pipeline.webserviceutils.xml.XmlValidator;
+import org.daisy.pipeline.webservice.xml.XmlUtils;
+import org.daisy.pipeline.webservice.xml.XmlValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import org.xml.sax.SAXException;
 
 // TODO: Auto-generated Javadoc
