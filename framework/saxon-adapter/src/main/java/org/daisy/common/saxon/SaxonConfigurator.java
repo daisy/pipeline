@@ -1,4 +1,4 @@
-package org.daisy.pipeline.saxon;
+package org.daisy.common.saxon;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.xpath.XPathFactoryImpl;
 
-import org.daisy.pipeline.xpath.XPathFunctionRegistry;
+import org.daisy.common.xpath.saxon.XPathFunctionRegistry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,10 +84,10 @@ public class SaxonConfigurator {
 	public void configure(XPathFactoryImpl xpathFactory) {
 		xpathFactory.setConfiguration(newConfiguration());
 	}
-	
+
 	private URIResolver uriResolver = null;
 	private XPathFunctionRegistry xpathExtensionFunctions = null;
-	
+
 	@Reference(
 		name = "FunctionLibrary",
 		unbind = "-",
@@ -110,7 +110,7 @@ public class SaxonConfigurator {
 	public void setURIResolver(URIResolver resolver) {
 		uriResolver = resolver;
 	}
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(SaxonConfigurator.class);
-	
+
 }

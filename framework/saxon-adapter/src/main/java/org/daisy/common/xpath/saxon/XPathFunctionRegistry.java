@@ -1,4 +1,4 @@
-package org.daisy.pipeline.xpath;
+package org.daisy.common.xpath.saxon;
 
 import java.util.HashMap;
 import java.util.HashSet;

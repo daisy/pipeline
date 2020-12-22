@@ -21,12 +21,11 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.properties.Properties;
+import org.daisy.common.saxon.SaxonConfigurator;
 import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XProcStepRegistry;
-
-import org.daisy.pipeline.saxon.SaxonConfigurator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

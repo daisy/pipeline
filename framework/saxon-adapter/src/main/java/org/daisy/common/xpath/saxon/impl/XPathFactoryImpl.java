@@ -1,8 +1,8 @@
-package org.daisy.pipeline.saxon.impl;
+package org.daisy.common.xpath.saxon.impl;
 
-import net.sf.saxon.s9api.Processor;
+import javax.xml.xpath.XPathFactory;
 
-import org.daisy.pipeline.saxon.SaxonConfigurator;
+import org.daisy.common.saxon.SaxonConfigurator;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -11,17 +11,13 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
-	name = "saxon-processor",
-	service = { Processor.class }
+	name = "saxon-xpath-factory",
+	service = { XPathFactory.class }
 )
-public class ProcessorImpl extends Processor {
-	
-	public ProcessorImpl() {
-		super(false);
-	}
-	
+public class XPathFactoryImpl extends net.sf.saxon.xpath.XPathFactoryImpl {
+
 	private SaxonConfigurator configurator = null;
-	
+
 	@Reference(
 		name = "SaxonConfigurator",
 		unbind = "-",
@@ -32,7 +28,7 @@ public class ProcessorImpl extends Processor {
 	public void setSaxonConfigurator(SaxonConfigurator configurator) {
 		this.configurator = configurator;
 	}
-	
+
 	@Activate
 	public void activate() {
 		configurator.configure(this);
