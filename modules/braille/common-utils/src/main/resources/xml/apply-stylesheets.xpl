@@ -11,12 +11,23 @@
 		Apply CSS/SASS and/or XSLT stylesheets.
 	</p:documentation>
 	
-	<p:input port="source">
+	<p:input port="source" primary="true">
 		<p:documentation>
 			Style sheets can be associated with the source in several ways: linked (using an
 			'xml-stylesheet' processing instruction or a 'link' element), embedded (using a 'style'
 			element) and/or inlined (using 'style' attributes).
 		</p:documentation>
+	</p:input>
+	
+	<p:input port="context" sequence="true">
+		<p:documentation>
+			Style sheets that are linked to from the source document, or included via the
+			'stylesheets' option, must either exist on disk, or must be provided in memory via this
+			port. Style sheets on this port must be wrapped in &lt;c:result
+			content-type="text/plain"&gt; elements. Style sheet URIs are resolved by matching
+			against the context documents's base URIs.
+		</p:documentation>
+		<p:empty/>
 	</p:input>
 	
 	<p:output port="result">
@@ -167,6 +178,9 @@
 					<p:with-option name="default-stylesheet" select="$all-css-stylesheets"/>
 					<p:with-option name="type" select="string-join(tokenize($type,'\s')[.=('text/css','text/x-scss')],' ')"/>
 					<p:with-option name="media" select="$media"/>
+					<p:input port="context">
+						<p:pipe step="main" port="context"/>
+					</p:input>
 					<p:input port="sass-variables">
 						<p:pipe step="main" port="parameters"/>
 					</p:input>
