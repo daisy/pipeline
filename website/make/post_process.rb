@@ -3,7 +3,9 @@ require 'nokogiri'
 require 'sparql'
 require 'rdf/turtle'
 require 'rdf/rdfa'
+require 'rdf/query'
 require 'yaml'
+require 'fileutils'
 
 meta_file = ARGV[0]
 $base_dir = ARGV[1]
@@ -14,7 +16,34 @@ site_base = config['site_base']
 baseurl = config['baseurl'] || ''
 graph = RDF::Graph.load(meta_file)
 
-$src_mapping = Hash[
+q = RDF::Query.new do
+  pattern [ :src_url, RDF::URI("http://www.daisy.org/ns/pipeline/permalink"), :dest_url ]
+end
+$permalink_mapping = Hash[
+  q.execute(graph).map { |r|
+    src_url = r['src_url'].to_s
+    if not src_url.start_with?(site_base + baseurl)
+      raise "coding error"
+    end
+    src_path = src_url[site_base.length+baseurl.length..-1]
+    dest_url = r['dest_url'].to_s
+    if not dest_url.start_with?(site_base + baseurl)
+      raise "Invalid dp2:permalink value: must start with #{site_base + baseurl}: #{dest_url}"
+    end
+    dest_path = dest_url[site_base.length+baseurl.length..-1]
+    if dest_path.end_with?('/')
+      dest_path = dest_path + 'index.html'
+    else
+      dest_path.sub!(/\.md$/, '.html')
+    end
+    [src_path, dest_path]
+  }
+]
+$reverse_permalink_mapping = Hash[
+  $permalink_mapping.map { |k, v| [v, k] }
+]
+
+$collection_path_mapping = Hash[
   config['collections'].map { |name, metadata|
     ["/_#{name}/", metadata['permalink'].sub(/\/:path\/$/, '/')]
   }
@@ -33,7 +62,7 @@ collection_files = Hash[
             f[$src_base_dir.length..-1]
           ]
         }
-      ]  
+      ]
     ]
   }
 ]
@@ -41,7 +70,10 @@ collection_files = Hash[
 # accepts path of a source file (relative to src_base_dir)
 # returns path of corresponding destination file (relative to base_dir)
 def to_destination(src_path)
-  $src_mapping.each do |src_dir, dest_dir|
+  if $permalink_mapping.has_key?(src_path)
+    return $permalink_mapping[src_path]
+  end
+  $collection_path_mapping.each do |src_dir, dest_dir|
     if src_path.start_with?(src_dir)
       dest_path = dest_dir + src_path[src_dir.length..-1]
       dest_path.sub!(/\.md$/, '.html')
@@ -54,9 +86,13 @@ def to_destination(src_path)
 end
 
 # accepts path of a destination file (relative to base_dir)
+# the destination file exists and is not a directory
 # returns path of corresponding source file (relative to src_base_dir)
 def to_source(dest_path)
-  $src_mapping.each do |src_dir, dest_dir|
+  if $reverse_permalink_mapping.has_key?(dest_path)
+    return $reverse_permalink_mapping[dest_path]
+  end
+  $collection_path_mapping.each do |src_dir, dest_dir|
     if dest_path.start_with?(dest_dir)
       src_path = src_dir + dest_path[dest_dir.length..-1]
       if File.exist?($src_base_dir + src_path)
@@ -72,7 +108,7 @@ def to_source(dest_path)
       end
     end
   end
-  src_path = dest_path
+  src_path = dest_path.dup()
   if File.exist?($src_base_dir + src_path)
     return src_path
   end
@@ -99,45 +135,143 @@ def link_warning(link, href_attr, source_file)
   link['class'] = ((link['class']||'').split(' ') << 'broken-link').join(' ')
 end
 
+# move files with dp2:permalink metadata
 Dir.glob($base_dir + '/**/*.html').each do |f|
-  doc = File.open(f) { |f| Nokogiri::HTML(f) }
   if not f.start_with?($base_dir)
     raise "coding error"
   end
   f_path = f[$base_dir.length..-1]
+  if $permalink_mapping.has_key?(f_path)
+    f_new = $base_dir + $permalink_mapping[f_path]
+    FileUtils.mkdir_p(File.expand_path('..', f_new))
+    FileUtils.cp(f, f_new)
+  end
+end
+
+files = Dir.glob($base_dir + '/**/*.{html,svg}')
+file_count = files.count()
+file_idx = 0
+files.each do |f|
+  if f.end_with?('html')
+    doc = File.open(f) { |f| Nokogiri::HTML(f) }
+  else
+    doc = File.open(f) { |f| Nokogiri::XML(f) }
+  end
+  if not f.start_with?($base_dir)
+    raise "coding error"
+  end
+  f_path = f[$base_dir.length..-1]
+  # puts "- (#{file_idx += 1}/#{file_count}) #{f_path}"
   src_path = to_source(f_path)
   page_url = RDF::URI(site_base + baseurl + f_path)
-  
+  page_type = nil
+
   ## process links and images
-  doc.css('a, img, iframe, link').each do |a|
+  doc.css(f.end_with?('html') ? 'a, img, iframe, link' : 'a').each do |a|
     if a.name == 'link' and not a['type'] == 'text/css'
       next
     end
-    href_attr = (a.name == 'img' or a.name == 'iframe') ? 'src' : 'href';
+    href_attr = f.end_with?('html') ? ((a.name == 'img' or a.name == 'iframe') ? 'src' : 'href') : 'xlink:href'
     if not a[href_attr]
       next
     end
+    if a.name == 'a'
 
-    # link to source files with special class attribute
-    if a.name == 'a' and ['userdoc','apidoc','source'].include?(a['class'])
-      query = SPARQL.parse(%Q{
+      # remove target attribute because there is only one frame
+      # note that target="_blank" will be added for external pages, see below
+      a.remove_attribute('target')
+
+      if a[href_attr] =~ /^(mailto|javascript):/
+        next
+      end
+
+      # link to source files with special class attribute
+      if ['userdoc','apidoc','source'].include?(a['class'])
+        link_class = a['class']
+      elsif not a[href_attr] =~ /^https?:\/\//o or a[href_attr].start_with?(site_base + baseurl)
+
+        # when current page is of type userdoc/apidoc/source, link to pages of the same type
+        if not page_type
+
+          # pages in /api/ are implicitly of type apidoc
+          # disabled because it makes too build too slow
+          if false # src_path.start_with?('/api/')
+            page_type = 'apidoc'
+          else
+            q = RDF::Query.new do
+              pattern [ page_url, RDF.type, :type ]
+            end
+            result = q.execute(graph)
+            if not result.empty?
+              page_type = result[0]['type'].to_s
+              if page_type.start_with?('http://www.daisy.org/ns/pipeline/')
+                page_type = page_type['http://www.daisy.org/ns/pipeline/'.length..-1]
+                if not ['userdoc','apidoc','source'].include?(page_type)
+                  page_type = ''
+                end
+              else
+                page_type = ''
+              end
+            else
+              page_type = ''
+            end
+          end
+        end
+        if page_type != ''
+          link_class = page_type
+        end
+      end
+    end
+    if link_class
+      q = SPARQL.parse(%Q{
         BASE <#{page_url}>
         PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
         SELECT ?href WHERE {
-          { <#{a['href']}> dp2:doc ?href }
+          { <#{a[href_attr]}> dp2:doc ?href }
           UNION
-          { [] dp2:doc ?href ; dp2:alias <#{a['href']}> }
+          { [] dp2:doc ?href ; dp2:alias <#{a[href_attr]}> }
           UNION
-          { <#{a['href']}> dp2:alias [ dp2:doc ?href ] } .
-          ?href a dp2:#{a['class']} .
+          { <#{a[href_attr]}> dp2:alias [ dp2:doc ?href ] } .
+          ?href a dp2:#{link_class} .
         }
       })
-      result = query.execute(graph)
+      result = q.execute(graph)
       if not result.empty?
         abs_url = result[0]['href']
-      elsif a['href'] =~ /^https?:\/\//o
+        if abs_url == page_url
+
+          # it could be that a page links to a file that it documents itself
+          abs_url = nil
+        end
+      elsif link_class == a['class'] and a[href_attr] =~ /^https?:\/\//o and not a[href_attr].start_with?(site_base + baseurl)
+
+        # userdoc/apidoc/source links must be internal
         link_error(a, href_attr, f)
         next
+      end
+      if not abs_url
+
+        # if userdoc/apidoc/source page does not exist keep link to source file
+        # link to the htmlized page if present
+        # links to java files will be handled further below
+        if link_class != 'source' and not a[href_attr].end_with?('.java')
+          q = SPARQL.parse(%Q{
+            BASE <#{page_url}>
+            PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
+            SELECT ?href WHERE {
+              { <#{a[href_attr]}> dp2:doc ?href }
+              UNION
+              { [] dp2:doc ?href ; dp2:alias <#{a[href_attr]}> }
+              UNION
+              { <#{a[href_attr]}> dp2:alias [ dp2:doc ?href ] } .
+              ?href a dp2:source .
+            }
+          })
+          result = q.execute(graph)
+          if not result.empty?
+            abs_url = result[0]['href']
+          end
+        end
       end
     else
 
@@ -152,9 +286,11 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     end
     if not abs_path
       if not abs_url
-        
+
         # relative path
         rel_path = a[href_attr]
+
+        # get fragment and query
         if rel_path =~ /^([^#]*)(#.*)$/o
           rel_path = $1
           fragment = $2
@@ -167,17 +303,30 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         else
           query = ''
         end
+
+        # link within same page
         if rel_path.empty?
           next
         end
+
+        # .md -> .html
         if rel_path =~ /^(.+)\.md$/o
           rel_path = $1 + '.html'
         end
+
+        # / -> /index.html
         if rel_path =~ /\/$/o
-          rel_path.sub!(/\/$/, '')
+          rel_path = rel_path + 'index.html'
         end
+
+        # handle relative links within wikis
         collection_files.each do |name, files|
           if src_path.start_with?(name)
+
+            # links are assumed to consist of only a file name (github flattens the directories)
+            if rel_path =~ /^(.*)\/index\.html$/o
+              rel_path = $1
+            end
             if files.key?(rel_path)
               abs_path = baseurl + to_destination(files[rel_path])
             else
@@ -186,11 +335,25 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
             break
           end
         end
+
         # FIXME: support relative paths from a regular page to a wiki page (relative between source files)?
+
+        # resolve relative link
         if not abs_path
-          abs_url = page_url.join(rel_path)
+          abs_url = RDF::URI(site_base + baseurl + src_path).join(rel_path).to_s
+          if not abs_url.start_with?(site_base + baseurl)
+            puts "unexpected relative path"
+            link_error(a, href_attr, f)
+          end
+          abs_path = abs_url[site_base.length+baseurl.length..-1]
+          abs_path = baseurl + to_destination(abs_path)
+          abs_url = site_base + abs_path
         end
       end
+
+      # at this point either abs_url or abs_path is set
+
+      # resolve github wiki links
       if not abs_path
         if not abs_url.to_s.start_with?("#{site_base}#{baseurl}")
           config['collections'].each do |_, metadata|
@@ -215,6 +378,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           end
           next
         end
+
+        # relativize internal link to site base
         abs_path = abs_url.to_s[site_base.length..-1]
       end
     end
@@ -224,6 +389,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       end
       abs_path = abs_path[baseurl.length..-1]
     end
+
+    # get fragment and query
     if not fragment
       if abs_path =~ /^([^#]*)(#.*)$/o
         abs_path = $1
@@ -240,14 +407,22 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         query = ''
       end
     end
+
+    # remove index.html
     if abs_path =~ /^(.*\/)index\.html$/o
       abs_path = $1
+
+    # remove .html
     elsif abs_path =~ /^(.+)\.html$/o
       abs_path = $1
     end
+
+    # remove trailing '/'
     if abs_path.end_with?('/')
       abs_path = abs_path[0..-2]
     end
+
+    # check that no links are broken
     if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
       target_path = abs_path
     elsif File.exist?($base_dir + abs_path + '.html')
@@ -255,24 +430,29 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       abs_path = target_path
     elsif File.exist?($base_dir + abs_path + '/index.html')
       target_path = abs_path + '/index.html'
+
+    # change links to java files...
     elsif abs_path =~ /^\/modules\/.+\/java\/(.+)$/o
-      if a['class'] == 'apidoc'
-        abs_path = '/api/' + $1
-        if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
-          target_path = abs_path
-        elsif File.exist?($base_dir + abs_path + '.html')
-          target_path = abs_path + '.html'
-          abs_path = target_path
-        elsif File.exist?($base_dir + abs_path + '/index.html')
-          target_path = abs_path + '/index.html'
-        elsif File.exist?($base_dir + abs_path + '/package-summary.html')
-          target_path = abs_path + '/package-summary.html'
-          abs_path = target_path
-        elsif File.exist?($base_dir + abs_path.gsub(/\.java$/, '.html'))
-          target_path = abs_path.gsub(/\.java$/, '.html')
-          abs_path = target_path
+
+      # ... into javadoc if class is 'apidoc'
+      if link_class == 'apidoc'
+        api_path = '/api/' + $1
+        if File.exist?($base_dir + api_path) and not File.directory?($base_dir + api_path)
+          target_path = abs_path = api_path
+        elsif File.exist?($base_dir + api_path + '.html')
+          target_path = abs_path = api_path + '.html'
+        elsif File.exist?($base_dir + api_path + '/index.html')
+          abs_path = api_path
+          target_path = api_path + '/index.html'
+        elsif File.exist?($base_dir + api_path + '/package-summary.html')
+          target_path = abs_path = api_path + '/package-summary.html'
+        elsif File.exist?($base_dir + api_path.gsub(/\.java$/, '.html'))
+          target_path = abs_path = api_path.gsub(/\.java$/, '.html')
         end
-      else
+      end
+      if not link_class == 'apidoc' or (not target_path and not (link_class == a['class']))
+
+        # ... or into htmlized sources otherwise
         if File.exist?($base_dir + abs_path + '/package-summary.html')
           target_path = abs_path + '/package-summary.html'
           abs_path = target_path
@@ -282,15 +462,18 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         end
       end
     end
+
+    # some links will be broken because some javadoc files are omitted
     if not target_path
-      if ['/api/overview-summary',
+      if ['/api',
+          '/api/overview-summary',
           '/api/overview-tree',
-          '/api/index',
           '/api/index-all',
           '/api/allclasses-noframe',
           '/api/serialized-form',
           '/api/deprecated-list',
-          '/api/constant-values'].include?(abs_path)
+          '/api/constant-values',
+          '/api/help-doc'].include?(abs_path)
         # FIXME
         #link_warning(a, href_attr, f)
       else
@@ -298,7 +481,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       end
     end
     
-    # check that links between collections are absolute
+    # check that links between wikis are absolute
     if not a[href_attr] =~ /^https?:\/\//o
       ['/_wiki/', '/_wiki_gui/', '/_wiki_webui/'].each do |src_dir|
         if src_path.start_with?(src_dir)
@@ -315,7 +498,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         end
       end
     end
-    
+
+    # add fragment
     a[href_attr] = baseurl + abs_path + fragment
   end
 
@@ -354,6 +538,10 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     ul['id'] = 'nav-sitemap-left'
     break # there is at most one
   end
-  
-  File.open(f, 'w') { |f| f.write(doc.to_html) }
+
+  if f.end_with?('html')
+    File.open(f, 'w') { |f| f.write(doc.to_html) }
+  else
+    File.open(f, 'w') { |f| f.write(doc.to_s) }
+  end
 end

@@ -126,7 +126,7 @@ precedence over settings in the `system.properties` file.
 
 A number of system properties are specific to text-to-speech. These
 properties are documented
-[here](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).
+[here](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).
 
 <!--
 
