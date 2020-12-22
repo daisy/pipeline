@@ -12,9 +12,11 @@ import java.util.List;
 import org.fit.net.DataURLHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.w3c.dom.traversal.NodeFilter;
 
@@ -782,7 +784,7 @@ public final class CSSFactory {
 				// embedded style-sheet
 				if (isEmbeddedStyleSheet(elem, media)) {
 					String mediaType = getMediaType(elem);
-					if (cssReader.supportsMediaType(mediaType)) {
+					if (cssReader.supportsMediaType(mediaType, null)) {
 						result = pf.append(
 							new CSSSource(extractElementText(elem), mediaType, base),
 							cssReader,
@@ -794,7 +796,7 @@ public final class CSSFactory {
 				else if (isLinkedStyleSheet(elem, media)) {
 				    URL uri = DataURLHandler.createURL(base, ElementUtil.getAttribute(elem, "href"));
 					String mediaType = getMediaType(elem);
-					if (cssReader.supportsMediaType(mediaType)) {
+					if (cssReader.supportsMediaType(mediaType, uri)) {
 						result = pf.append(
 							new CSSSource(uri, encoding, getMediaType(elem)),
 							cssReader,
@@ -804,6 +806,7 @@ public final class CSSFactory {
 				}
 				// in-line style and default style
 				else {
+					if (cssReader.supportsMediaType(null, null)) {
     				    if (elem.getAttribute("style") != null && elem.getAttribute("style").length() > 0) {
         					result = pf.append(
         						new CSSSource(elem.getAttribute("style"), elem, base),
@@ -812,6 +815,7 @@ public final class CSSFactory {
         						result);
         					log.debug("Matched inline CSS style");
     				    }
+					}
                         if (elem.getAttribute("XDefaultStyle") != null && elem.getAttribute("XDefaultStyle").length() > 0) {
                             result = pf.append(
                             		new CSSSource(elem.getAttribute("XDefaultStyle"), elem, base),
@@ -861,10 +865,19 @@ public final class CSSFactory {
 		 * @return Element's text
 		 */
 		private static String extractElementText(Element e) {
-			Node text = e.getFirstChild();
-			if (text != null && text.getNodeType() == Node.TEXT_NODE)
-				return ((Text) text).getData();
-			return "";
+			StringBuilder s = new StringBuilder();
+			NodeList children = e.getChildNodes();
+			for (int i = 0; i < children.getLength(); i++) {
+				Node text = children.item(i);
+				if (text != null) {
+					if (text.getNodeType() == Node.TEXT_NODE
+					    || text.getNodeType() == Node.CDATA_SECTION_NODE)
+						s.append(((CharacterData)text).getData());
+					else if (text.getNodeType() == Node.COMMENT_NODE)
+						s.append("<!--").append(((CharacterData)text).getData()).append("-->");
+				}
+			}
+			return s.toString();
 		}
 
 		/**

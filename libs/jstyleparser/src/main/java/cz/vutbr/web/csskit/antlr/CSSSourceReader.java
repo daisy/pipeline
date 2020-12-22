@@ -2,6 +2,7 @@ package cz.vutbr.web.csskit.antlr;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
@@ -31,8 +32,12 @@ public interface CSSSourceReader {
 
 	/**
 	 * Whether this reader supports sources of the given media type.
+	 *
+	 * @param mediaType The media type.
+	 * @param url If the source is of type {@link CSSSource.SourceType.URL}, the URL is provided in
+	 *            case <code>mediaType</code> is null and the media type needs to be inferred.
 	 */
-	public boolean supportsMediaType(String mediaType);
+	public boolean supportsMediaType(String mediaType, URL url);
 
 	/**
 	 * Read the source.
