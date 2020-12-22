@@ -274,10 +274,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>webservice-utils</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
                   <artifactId>xmlcatalog</artifactId>
                 </artifactItem>
                 <artifactItem>
