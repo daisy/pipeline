@@ -13,7 +13,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_1.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_1.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -45,7 +45,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="http://test/css-module/sass/sass_1.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="http://test/css-module/sass/sass_1.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -111,7 +111,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_2_imports_css_1.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_2_imports_css_1.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -143,7 +143,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_3_imports_module_css_1.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_3_imports_module_css_1.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -175,7 +175,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_4_imports_sass_1.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_4_imports_sass_1.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -207,7 +207,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_5_imports_module_sass_2.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_5_imports_module_sass_2.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -239,7 +239,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="http://test/css-module/sass/sass_3_imports_css_3.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="http://test/css-module/sass/sass_3_imports_css_3.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -271,7 +271,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="http://test/css-module/sass/sass_4_imports_sass_5.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="http://test/css-module/sass/sass_4_imports_sass_5.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -303,7 +303,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_1.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_1.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -336,7 +336,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_6.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_6.scss" media="embossed"/>
             </head>
             <body>
               <h1/>
@@ -374,7 +374,7 @@
         <x:document type="inline">
           <document>
             <head>
-              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_9.scss" media="embossed"/>
+              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_9.scss" media="embossed"/>
             </head>
             <body>
               <table class="foo"/>

@@ -95,12 +95,21 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 		 * goes wrong when resolving the source or if the SASS compilation fails.
 		 */
 		this.cssReader = new CSSSourceReader() {
-				public boolean supportsMediaType(String mediaType) {
-					return mediaType == null || "text/css".equals(mediaType) || "text/x-scss".equals(mediaType);
+				public boolean supportsMediaType(String mediaType, URL url) {
+					if ("text/css".equals(mediaType))
+						return true;
+					else if (mediaType == null && (url == null || url.toString().endsWith(".css")))
+						return true;
+					else if (sassCompiler == null)
+						return false;
+					else if ("text/x-scss".equals(mediaType))
+						return true;
+					else if (mediaType == null && url != null && url.toString().endsWith(".scss"))
+						return true;
+					else
+						return false;
 				}
 				public CSSInputStream read(CSSSource source) throws IOException {
-					if (!supportsMediaType(source.mediaType))
-						throw new IllegalArgumentException();
 					URL url = null;
 					InputStream is; {
 						switch (source.type) {
@@ -130,7 +139,11 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							throw new RuntimeException("coding error");
 						}
 					}
-					if ("text/x-scss".equals(source.mediaType) || (url != null && url.toString().endsWith(".scss"))) {
+					if (!supportsMediaType(source.mediaType, url))
+						throw new IllegalArgumentException();
+					if ("text/x-scss".equals(source.mediaType)
+					    || (source.mediaType == null && url != null && url.toString().endsWith(".scss"))) {
+						// sassCompiler must be non-null
 						try {
 							is = sassCompiler.compile(is, url != null ? url : source.base, source.encoding);
 						} catch (RuntimeException e) {
@@ -187,7 +200,10 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 					StringTokenizer t = new StringTokenizer(defaultStyleSheet);
 					while (t.hasMoreTokens()) {
 						URL u = URLs.asURL(URLs.resolve(baseURI, URLs.asURI(t.nextToken())));
-						styleSheet = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, styleSheet);
+						if (!cssReader.supportsMediaType(null, u))
+							logger.warn("Style sheet type not supported: " + u);
+						else
+							styleSheet = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, styleSheet);
 					}
 				}
 				styleSheet = CSSFactory.getUsedStyles(document, null, baseURL, new MediaSpec(medium), cssReader, styleSheet);

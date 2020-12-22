@@ -36,6 +36,28 @@
 		<p:documentation>
 			A space separated list of URIs, absolute or relative to source. XSLT style sheets must
 			be specified before CSS/SASS style sheets.
+			<!--
+			    File extensions assumed to be one of:
+			    - .css
+			    - .scss
+			    - .xsl
+			    - .xslt
+			-->
+		</p:documentation>
+	</p:option>
+	
+	<p:option name="type" required="false" select="'text/css text/x-scss text/xsl'">
+		<p:documentation>
+			The type of associated style sheets to apply. May be a space separated list. Allowed
+			values are `text/css`, `text/x-scss`, `text/xsl` and `application/xslt+xml`. If omitted,
+			all CSS, SASS and XSLT style sheets are applied.
+		</p:documentation>
+	</p:option>
+	
+	<p:option name="media" required="false" select="'embossed'">
+		<p:documentation>
+			The target medium. All rules that are contained in a style sheet that matches the
+			specified medium is included. Supported values are `embossed` and `print`.
 		</p:documentation>
 	</p:option>
 	
@@ -111,13 +133,20 @@
 		<p:variable name="all-xslt-stylesheets"
 		            select="string-join((
 		                      $xslt-stylesheets,
-		                      /d:xml-stylesheets/d:xml-stylesheet[not(@type) and matches(@href,'\.xslt?$')]
+		                      /d:xml-stylesheets/d:xml-stylesheet
+		                        [('text/xsl','application/xslt+xml')=tokenize($type,'\s+')
+	                             and (
+		                           @type=('text/xsl','application/xslt+xml')
+		                           or (not(@type) and matches(@href,'\.xslt?$')))]
 		                      /@href),' ')"/>
 		<p:variable name="all-css-stylesheets"
 		            select="string-join((
 		                      $css-stylesheets,
 		                      /d:xml-stylesheets/d:xml-stylesheet
-		                        [@type=('text/css','text/x-scss') or (not(@type) and matches(@href,'\.s?css$'))]
+		                        [@media=$media or not(@media)]
+		                        [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+		                         or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
+		                         or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]
 		                      /@href),' ')"/>
 		<p:identity>
 			<p:input port="source">
@@ -130,15 +159,23 @@
 				<p:pipe step="main" port="parameters"/>
 			</p:input>
 		</pxi:recursive-xslt>
-		<px:css-cascade px:message="Applying CSS{if (exists(tokenize($all-css-stylesheets,'\s+')[not(.='')]))
-		                                         then concat(':',string-join(('',tokenize($all-css-stylesheets,'\s+')[not(.='')]),'&#x0A;- '))
-		                                         else ''}"
-		            px:progress=".50">
-			<p:with-option name="default-stylesheet" select="$all-css-stylesheets"/>
-			<p:input port="sass-variables">
-				<p:pipe step="main" port="parameters"/>
-			</p:input>
-		</px:css-cascade>
+		<p:choose px:progress=".50">
+			<p:when test="tokenize($type,'\s')=('text/css','text/x-scss')">
+				<px:css-cascade px:message="Applying CSS{if (exists(tokenize($all-css-stylesheets,'\s+')[not(.='')]))
+				                                         then concat(':',string-join(('',tokenize($all-css-stylesheets,'\s+')[not(.='')]),'&#x0A;- '))
+				                                         else ''}">
+					<p:with-option name="default-stylesheet" select="$all-css-stylesheets"/>
+					<p:with-option name="type" select="string-join(tokenize($type,'\s')[.=('text/css','text/x-scss')],' ')"/>
+					<p:with-option name="media" select="$media"/>
+					<p:input port="sass-variables">
+						<p:pipe step="main" port="parameters"/>
+					</p:input>
+				</px:css-cascade>
+			</p:when>
+			<p:otherwise>
+				<p:identity/>
+			</p:otherwise>
+		</p:choose>
 	</p:group>
 	
 </p:declare-step>

@@ -33,17 +33,20 @@ public class DefaultCSSSourceReader implements CSSSourceReader {
 	}
 
 	public CSSInputStream read(CSSSource source) throws IOException {
-		if (!supportsMediaType(source.mediaType))
-			throw new IllegalArgumentException();
 		switch (source.type) {
 		case INLINE:
 		case EMBEDDED:
+			if (!supportsMediaType(source.mediaType, null))
+				throw new IllegalArgumentException();
 			return new CSSInputStream(
 				new ByteArrayInputStream(((String)source.source).getBytes()),
 				source.encoding);
 		case URL:
+			URL url = (URL)source.source;
+			if (!supportsMediaType(source.mediaType, url))
+				throw new IllegalArgumentException();
 			return new CSSInputStream(
-				network.fetch((URL)source.source),
+				network.fetch(url),
 				source.encoding);
 		default:
 			throw new RuntimeException("coding error");

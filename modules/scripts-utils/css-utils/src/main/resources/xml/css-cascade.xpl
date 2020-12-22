@@ -68,9 +68,17 @@
 		</p:documentation>
 	</p:option>
 	
+	<p:option name="type" required="false" select="'text/css text/x-scss'">
+		<p:documentation>
+			The type of associated style sheets to apply. May be a space separated list. Allowed
+			values are `text/css` and `text/x-scss`. If omitted, all CSS and SASS style sheets are
+			applied.
+		</p:documentation>
+	</p:option>
+	
 	<p:option name="media" required="false" select="'embossed'">
 		<p:documentation>
-			The target medium. All rules that are contained in a stylesheet that matches the
+			The target medium. All rules that are contained in a style sheet that matches the
 			specified medium is included. Supported values are `embossed` and `print`.
 		</p:documentation>
 	</p:option>
@@ -91,6 +99,7 @@
 		<p:output port="result"/>
 		<p:option name="default-stylesheet"/>
 		<p:option name="media"/>
+		<p:option name="type"/>
 		<p:option name="attribute-name"/>
 	</p:declare-step>
 	
@@ -98,10 +107,13 @@
 		<p:when test="$default-stylesheet!=''
 		              or //*[local-name()='style']
 		                    [@media=$media or not(@media)]
-		                    [@type=('text/css','text/x-scss') or not(@type)]
+		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+		                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
 		              or //*[local-name()='link' and @rel='stylesheet']
 		                    [@media=$media or not(@media)]
-		                    [@type=('text/css','text/x-scss') or (not(@type) and matches(@href,'\.s?css$'))]
+		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+		                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
+		                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]
 		              or //@style">
 			<pxi:css-cascade>
 				<p:input port="context">
@@ -112,6 +124,7 @@
 				</p:input>
 				<p:with-option name="default-stylesheet" select="$default-stylesheet"/>
 				<p:with-option name="media" select="$media"/>
+				<p:with-option name="type" select="$type"/>
 				<p:with-option name="attribute-name" select="$attribute-name"/>
 			</pxi:css-cascade>
 		</p:when>

@@ -1,7 +1,7 @@
 <?xml-stylesheet href="css/css_1.css" type="text/css"?>
 <html>
 	<head>
-		<link type="text/css" rel="stylesheet" href="sass/sass_1.scss" media="embossed"/>
+		<link type="text/x-scss" rel="stylesheet" href="sass/sass_1.scss" media="embossed"/>
 		<style media="embossed" type="text/css">
 			body {
 				hyphens: auto
