@@ -1,9 +1,9 @@
 package org.daisy.pipeline.gui;
 
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.junit.Assert;
 import org.junit.Before;

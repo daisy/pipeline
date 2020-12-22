@@ -7,11 +7,11 @@ import java.util.List;
 import com.google.common.util.concurrent.Monitor;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.webserviceutils.storage.WebserviceStorage;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
