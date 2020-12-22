@@ -94,16 +94,30 @@
 		<p:option name="attribute-name"/>
 	</p:declare-step>
 	
-	<pxi:css-cascade>
-		<p:input port="context">
-			<p:pipe step="main" port="context"/>
-		</p:input>
-		<p:input port="sass-variables">
-			<p:pipe step="main" port="sass-variables"/>
-		</p:input>
-		<p:with-option name="default-stylesheet" select="$default-stylesheet"/>
-		<p:with-option name="media" select="$media"/>
-		<p:with-option name="attribute-name" select="$attribute-name"/>
-	</pxi:css-cascade>
+	<p:choose>
+		<p:when test="$default-stylesheet!=''
+		              or //*[local-name()='style']
+		                    [@media=$media or not(@media)]
+		                    [@type=('text/css','text/x-scss') or not(@type)]
+		              or //*[local-name()='link' and @rel='stylesheet']
+		                    [@media=$media or not(@media)]
+		                    [@type=('text/css','text/x-scss') or (not(@type) and matches(@href,'\.s?css$'))]
+		              or //@style">
+			<pxi:css-cascade>
+				<p:input port="context">
+					<p:pipe step="main" port="context"/>
+				</p:input>
+				<p:input port="sass-variables">
+					<p:pipe step="main" port="sass-variables"/>
+				</p:input>
+				<p:with-option name="default-stylesheet" select="$default-stylesheet"/>
+				<p:with-option name="media" select="$media"/>
+				<p:with-option name="attribute-name" select="$attribute-name"/>
+			</pxi:css-cascade>
+		</p:when>
+		<p:otherwise>
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
 	
 </p:declare-step>
