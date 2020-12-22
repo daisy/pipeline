@@ -25,10 +25,11 @@ public class DefaultCSSSourceReader implements CSSSourceReader {
 	}
 
 	/**
-	 * Returns true when mediaType is "text/css" or null.
+	 * Returns true when mediaType is "text/css" or null, unless the URL does not end with ".css".
 	 */
-	public boolean supportsMediaType(String mediaType) {
-		return mediaType == null || "text/css".equals(mediaType);
+	public boolean supportsMediaType(String mediaType, URL url) {
+		return "text/css".equals(mediaType)
+			|| (mediaType == null && (url == null || url.toString().endsWith(".css")));
 	}
 
 	public CSSInputStream read(CSSSource source) throws IOException {

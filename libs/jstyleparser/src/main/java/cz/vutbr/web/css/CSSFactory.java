@@ -782,7 +782,7 @@ public final class CSSFactory {
 				// embedded style-sheet
 				if (isEmbeddedStyleSheet(elem, media)) {
 					String mediaType = getMediaType(elem);
-					if (cssReader.supportsMediaType(mediaType)) {
+					if (cssReader.supportsMediaType(mediaType, null)) {
 						result = pf.append(
 							new CSSSource(extractElementText(elem), mediaType, base),
 							cssReader,
@@ -794,7 +794,7 @@ public final class CSSFactory {
 				else if (isLinkedStyleSheet(elem, media)) {
 				    URL uri = DataURLHandler.createURL(base, ElementUtil.getAttribute(elem, "href"));
 					String mediaType = getMediaType(elem);
-					if (cssReader.supportsMediaType(mediaType)) {
+					if (cssReader.supportsMediaType(mediaType, uri)) {
 						result = pf.append(
 							new CSSSource(uri, encoding, getMediaType(elem)),
 							cssReader,
@@ -804,6 +804,7 @@ public final class CSSFactory {
 				}
 				// in-line style and default style
 				else {
+					if (cssReader.supportsMediaType(null, null)) {
     				    if (elem.getAttribute("style") != null && elem.getAttribute("style").length() > 0) {
         					result = pf.append(
         						new CSSSource(elem.getAttribute("style"), elem, base),
@@ -812,6 +813,7 @@ public final class CSSFactory {
         						result);
         					log.debug("Matched inline CSS style");
     				    }
+					}
                         if (elem.getAttribute("XDefaultStyle") != null && elem.getAttribute("XDefaultStyle").length() > 0) {
                             result = pf.append(
                             		new CSSSource(elem.getAttribute("XDefaultStyle"), elem, base),
