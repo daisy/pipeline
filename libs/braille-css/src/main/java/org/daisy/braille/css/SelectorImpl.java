@@ -348,11 +348,10 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 			}
 			this.name = name = name.toLowerCase(); // Pseudo-element names are case-insensitive
 			this.args = new ArrayList<String>();
-			if (name.startsWith("-"))
+			if ("top-of-page".equals(name) || name.startsWith("-"))
 				for (String a : args)
 					this.args.add(a);
 			else {
-				specifiedAsClass = false; // mistake
 				PseudoElementDef def;
 				if (PSEUDO_ELEMENT_DEFS.containsKey(name))
 					def = PSEUDO_ELEMENT_DEFS.get(name);
@@ -366,6 +365,10 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 					throw new IllegalArgumentException(name + " requires " + def.minArgs
 					                                   + (def.maxArgs > def.minArgs ? ".." + def.maxArgs : "") + " "
 					                                   + (def.minArgs == 1 && def.maxArgs == 1 ? "argument" : "arguments"));
+				if (specifiedAsClass) {
+					specifiedAsClass = false;
+					log.warn("Use a double colon for pseudo element ::" + name);
+				}
 				
 				// validate ::alternate(N) and normalize ::alternate(1) to ::alternate
 				switch (def) {
