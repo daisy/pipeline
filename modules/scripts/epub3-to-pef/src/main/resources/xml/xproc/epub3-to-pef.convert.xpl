@@ -151,6 +151,15 @@
                     <p:with-option name="message" select="concat('Inlining document-specific CSS for ',replace(base-uri(/*),'.*/',''),'')"/>
                 </px:message>
                 <px:apply-stylesheets px:progress="1">
+                    <p:with-option name="media"
+                                   select="concat(
+                                             'embossed AND (width: ',
+                                             (//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1],
+                                             ') AND (height: ',
+                                             (//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1],
+                                             ')')">
+                        <p:pipe step="parameters" port="result"/>
+                    </p:with-option>
                     <p:input port="parameters">
                         <p:pipe step="parameters" port="result"/>
                     </p:input>
@@ -230,6 +239,15 @@
             <p:input port="parameters">
                 <p:pipe port="result" step="parameters"/>
             </p:input>
+            <p:with-option name="media"
+                           select="concat(
+                                     'embossed AND (width: ',
+                                     (//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1],
+                                     ') AND (height: ',
+                                     (//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1],
+                                     ')')">
+                <p:pipe port="result" step="parameters"/>
+            </p:with-option>
         </px:apply-stylesheets>
     </p:group>
     

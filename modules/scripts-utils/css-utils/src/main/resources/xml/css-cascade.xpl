@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0"
-                type="px:css-cascade"
-                xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-inline-prefixes="#all"
+                type="px:css-cascade"
                 name="main">
 	
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -78,8 +78,11 @@
 	
 	<p:option name="media" required="false" select="'embossed'">
 		<p:documentation>
-			The target medium. All rules that are contained in a style sheet that matches the
-			specified medium is included. Supported values are `embossed` and `print`.
+			The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/">media
+			query</a>. All rules that are contained in a style sheet that matches the specified
+			medium are included. Supported media types are `embossed` and `print`. Supported media
+			features are <a href="https://www.w3.org/TR/mediaqueries-4/#width">`width`</a> and <a
+			href="https://www.w3.org/TR/mediaqueries-4/#height">`height`</a>.
 		</p:documentation>
 	</p:option>
 	
@@ -106,11 +109,11 @@
 	<p:choose>
 		<p:when test="$default-stylesheet!=''
 		              or //*[local-name()='style']
-		                    [@media=$media or not(@media)]
+		                    [not(@media) or pf:media-query-matches(@media,$media)]
 		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
 		                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
 		              or //*[local-name()='link' and @rel='stylesheet']
-		                    [@media=$media or not(@media)]
+		                    [not(@media) or pf:media-query-matches($media,@media)]
 		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
 		                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
 		                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]

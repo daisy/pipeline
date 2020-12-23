@@ -19,7 +19,8 @@
     <properties>
         <expose-services>
             org.daisy.pipeline.modules.impl.Module_css_utils,
-            org.daisy.pipeline.css.calabash.impl.CssCascadeStep$Provider
+            org.daisy.pipeline.css.calabash.impl.CssCascadeStep$Provider,
+            org.daisy.pipeline.css.saxon.impl.MediaQueryMatchesDefinition
         </expose-services>
     </properties>
 
@@ -81,6 +82,19 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Import-Package>
+                            net.sf.saxon.*;version="${saxon.versionRange}",
+                            !org.daisy.common.spi,
+                            *
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.daisy.pipeline.build</groupId>
                 <artifactId>modules-build-helper</artifactId>

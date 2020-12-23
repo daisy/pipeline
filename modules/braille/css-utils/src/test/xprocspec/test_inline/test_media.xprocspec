@@ -4,7 +4,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
-  <x:scenario label="test_01">
+  <x:scenario label="media attribute on style element">
     <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
@@ -79,7 +79,7 @@
     </x:scenario>
   </x:scenario>
   
-  <x:scenario label="test_02">
+  <x:scenario label="@media rule with media type">
     <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
@@ -124,7 +124,50 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_03" xfail="true">
+  <x:scenario label="@media rule with media query">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css">
+                @media embossed AND (max-width:30) {
+                  p {
+                    display: inline;
+                  }
+                }
+                @media embossed AND (min-width:31) {
+                  p {
+                    display: block;
+                  }
+                }
+              </style>
+            </head>
+            <body>
+              <p>
+                foobar
+              </p>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'embossed AND (width:29)'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p style="display: inline;">
+            foobar
+          </p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="@page inside @media rule" xfail="true">
     <x:documentation>
       Broken: @page inside @media does not work.
     </x:documentation>

@@ -63,7 +63,7 @@ import org.w3c.dom.Node;
 public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransformer {
 
 	private final String defaultStyleSheet;
-	private final String medium;
+	private final MediaSpec medium;
 	private final QName attributeName;
 	private final CSSParserFactory parserFactory;
 	private final RuleFactory ruleFactory;
@@ -76,14 +76,14 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 	public JStyleParserCssCascader(URIResolver uriResolver,
 	                               SassCompiler sassCompiler,
 	                               String defaultStyleSheet,
-	                               String medium,
+	                               Medium medium,
 	                               QName attributeName,
 	                               CSSParserFactory parserFactory,
 	                               RuleFactory ruleFactory,
 	                               SupportedCSS supportedCSS,
 	                               DeclarationTransformer declarationTransformer) {
 		this.defaultStyleSheet = defaultStyleSheet;
-		this.medium = medium;
+		this.medium = medium.asMediaSpec();
 		this.attributeName = attributeName;
 		this.parserFactory = parserFactory;
 		this.ruleFactory = ruleFactory;
@@ -206,7 +206,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							styleSheet = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, styleSheet);
 					}
 				}
-				styleSheet = CSSFactory.getUsedStyles(document, null, baseURL, new MediaSpec(medium), cssReader, styleSheet);
+				styleSheet = CSSFactory.getUsedStyles(document, null, baseURL, medium, cssReader, styleSheet);
 				styleMap = new Analyzer(styleSheet).evaluateDOM(document, medium, false);
 			}
 			writer.setBaseURI(baseURI);

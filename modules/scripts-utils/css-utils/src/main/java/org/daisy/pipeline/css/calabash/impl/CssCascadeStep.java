@@ -30,6 +30,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.pipeline.css.CssCascader;
+import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.SassCompiler;
 
 import org.osgi.service.component.annotations.Component;
@@ -110,7 +111,7 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			String medium = getOption(_media, DEFAULT_MEDIUM);
+			Medium medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
 			List<String> types = Arrays.asList(getOption(_type, DEFAULT_TYPES).trim().split("\\s+"));
 			if (!types.contains("text/css"))
 				throw new IllegalArgumentException("'type' option must contain 'text/css'");
