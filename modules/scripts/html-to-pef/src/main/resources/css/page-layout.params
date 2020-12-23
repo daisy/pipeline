@@ -7,13 +7,8 @@
             <h2 px:role="name">Page layout: Page width</h2>
             <p px:role="desc" xml:space="preserve">The number of columns available for printing.
 
-Makes the variable `$page-width` available in style sheets and includes the following rule by default:
-
-~~~sass
-@page {
-  size: $page-width $page-height;
-}
-~~~
+Sets the default page width (this can be overwritten with `@page` rules) and makes the variable
+`$page-width` available in style sheets.
 
 See the CSS specification for more info:
 
@@ -28,13 +23,8 @@ See the CSS specification for more info:
             <h2 px:role="name">Page layout: Page height</h2>
             <p px:role="desc" xml:space="preserve">The number of rows available for printing.
 
-Makes the variable `$page-height` available in style sheets and includes the following rule by default:
-
-~~~sass
-@page {
-  size: $page-width $page-height;
-}
-~~~
+Sets the default page height (this can be overwritten with `@page` rules) and makes the variable
+`$page-height` available in style sheets.
 
 See the CSS specification for more info:
 

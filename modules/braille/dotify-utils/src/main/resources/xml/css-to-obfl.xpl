@@ -18,6 +18,8 @@
     <p:output port="result"/>
     
     <p:option name="locale" select="'und'"/>
+    <p:option name="page-width" select="'40'"/>
+    <p:option name="page-height" select="'25'"/>
     <p:option name="duplex" select="'true'"/>
     <p:option name="skip-margin-top-of-page" select="'false'"/>
     
@@ -795,6 +797,12 @@
         <p:input port="stylesheet">
             <p:document href="generate-obfl-layout-master.xsl"/>
         </p:input>
+        <p:with-param name="page-width" select="$page-width">
+            <p:empty/>
+        </p:with-param>
+        <p:with-param name="page-height" select="$page-height">
+            <p:empty/>
+        </p:with-param>
         <p:with-param name="duplex" select="$duplex">
             <p:empty/>
         </p:with-param>
