@@ -72,6 +72,7 @@
       org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
       org.daisy.pipeline.braille.common.saxon.impl.MessageDefinition,
       org.daisy.pipeline.braille.common.saxon.impl.ProgressDefinition,
+      org.daisy.pipeline.braille.common.calabash.impl.PxParseQueryStep$StepProvider,
       org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider
     </expose-services>
   </properties>

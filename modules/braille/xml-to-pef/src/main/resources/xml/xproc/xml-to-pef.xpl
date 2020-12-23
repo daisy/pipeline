@@ -31,6 +31,16 @@ For info on how to use SASS (Syntactically Awesome StyleSheets) see the [SASS
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
+    <p:option name="stylesheet-parameters" required="false" px:type="transform-query" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Style sheet parameters</h2>
+            <p px:role="desc" xml:space="preserve">A list of parameters passed to the style sheets.
+
+Style sheets, whether they're specified with the "stylesheets" option or associated with the source,
+may have parameters (variables in case of SASS). The "stylesheet-parameters" option can be used to
+set these parameters.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="transform" required="false" px:type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Transformer query</h2>

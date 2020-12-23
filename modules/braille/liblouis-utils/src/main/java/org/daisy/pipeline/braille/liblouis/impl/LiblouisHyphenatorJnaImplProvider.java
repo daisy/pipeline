@@ -82,7 +82,7 @@ public class LiblouisHyphenatorJnaImplProvider implements LiblouisHyphenator.Pro
 		public Iterable<LiblouisHyphenator> _get(Query query) {
 			MutableQuery q = mutableQuery(query);
 			if (q.containsKey("hyphenator"))
-				if (!"liblouis".equals(q.removeOnly("hyphenator").getValueOrNull()))
+				if (!"liblouis".equals(q.removeOnly("hyphenator").getValue().orElse(null)))
 					return empty;
 			String table = null;
 			if (q.containsKey("liblouis-table"))

@@ -25,8 +25,8 @@ public interface Query extends Iterable<Query.Feature> {
 	public static interface Feature {
 		public String getKey();
 		public boolean hasValue();
-		public String getValueOrNull();
 		public Optional<String> getValue();
+		public Optional<String> getLiteral();
 		@Override public String toString();
 	}
 	
@@ -57,6 +57,7 @@ public interface Query extends Iterable<Query.Feature> {
 				while(m.find()) {
 					String key = m.group("key");
 					String value = m.group("value");
+					boolean isString = false;
 					if (value != null) {
 						Matcher m2 = VALUE_RE.matcher(value);
 						if (!m2.matches())
@@ -66,13 +67,14 @@ public interface Query extends Iterable<Query.Feature> {
 						String integer = m2.group("integer");
 						if (ident != null)
 							value = ident;
-						else if (string != null && !string.equals(""))
-							value = string.substring(1,string.length()-1);
+						else if (string != null && !string.equals("")) {
+							value = string.substring(1,string.length()-1).replace("\\A", "\n").replace("\\22", "\"").replace("\\27", "'");
+							isString = true; }
 						else if (integer != null && !integer.equals(""))
 							value = integer;
 						else
 							throw new RuntimeException("Coding error"); }
-					mq.add(key, Optional.ofNullable(value)); }
+					mq.add(new FeatureImpl(key, Optional.ofNullable(value), isString)); }
 				return mq.asImmutable(); }
 			throw new RuntimeException("Could not parse query: " + query);
 		}
@@ -229,10 +231,23 @@ public interface Query extends Iterable<Query.Feature> {
 			
 			final String key;
 			final Optional<String> value;
+			final Optional<String> literal;
 			
 			private FeatureImpl(String key, Optional<String> value) {
+				this(key, value, false);
+			}
+			
+			private FeatureImpl(String key, Optional<String> value, boolean specifiedAsString) {
 				this.key = key;
 				this.value = value;
+				if (value.isPresent()) {
+					String v = value.get();
+					if (!specifiedAsString && (v.matches(IDENT_RE) || v.matches(INTEGER_RE)))
+						this.literal = Optional.of(v);
+					else
+						this.literal = Optional.of("\"" + v.replace("\n", "\\A").replace("\"","\\22") + "\"");
+				} else
+					this.literal = Optional.empty();
 			}
 			
 			public String getKey() {
@@ -243,12 +258,12 @@ public interface Query extends Iterable<Query.Feature> {
 				return getValue().isPresent();
 			}
 			
-			public String getValueOrNull() {
-				return getValue().orElse(null);
-			}
-			
 			public Optional<String> getValue() {
 				return value;
+			}
+			
+			public Optional<String> getLiteral() {
+				return literal;
 			}
 			
 			public String toString() {
@@ -258,16 +273,9 @@ public interface Query extends Iterable<Query.Feature> {
 					throw new RuntimeException();
 				b.append("(" + k);
 				if (hasValue()) {
-					String v = getValue().get();
 					b.append(":");
-					if (v.matches(IDENT_RE) || v.matches(INTEGER_RE))
-						b.append(v);
-					else if (v.contains("'")) {
-						if (v.contains("\""))
-							throw new RuntimeException();
-						b.append("\"" + v + "\""); }
-					else
-						b.append("'" + v + "'"); }
+					b.append(getLiteral().get());
+				}
 				b.append(")");
 				return b.toString();
 			}

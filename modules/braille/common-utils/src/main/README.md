@@ -16,10 +16,13 @@ General purpose building blocks.
 ### Saxon functions (`net.sf.saxon.lib.ExtensionFunctionDefinition`)
 
 - [`{http://www.daisy.org/ns/pipeline/functions}text-transform`](java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java)
+- [`{http://www.daisy.org/ns/pipeline/functions}message`](java/org/daisy/pipeline/braille/common/saxon/impl/MessageDefinition.java)
+- [`{http://www.daisy.org/ns/pipeline/functions}progress`](java/org/daisy/pipeline/braille/common/saxon/impl/ProgressDefinition.java)
 
 ### Calabash steps (`org.daisy.common.xproc.calabash.XProcStepProvider`)
 
 - [`{http://www.daisy.org/ns/pipeline/xproc}transform`](java/org/daisy/pipeline/braille/common/calabash/impl/PxTransformStep.java)
+- [`{http://www.daisy.org/ns/pipeline/xproc}parse-query`](java/org/daisy/pipeline/braille/common/calabash/impl/PxParseQueryStep.java)
 
 
 <link rev="dp2:doc" href="./"/>

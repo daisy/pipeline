@@ -77,6 +77,7 @@ even though the provided CSS is more specific.
         </p:documentation>
     </p:option>
     
+    <p:option name="stylesheet-parameters"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
@@ -123,6 +124,7 @@ even though the provided CSS is more specific.
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:delete-parameters
+            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -161,6 +163,11 @@ even though the provided CSS is more specific.
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
+    <p:sink/>
+    <px:parse-query name="stylesheet-parameters">
+        <p:with-option name="query" select="$stylesheet-parameters"/>
+    </px:parse-query>
+    <p:sink/>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
@@ -208,6 +215,7 @@ even though the provided CSS is more specific.
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
+            <p:pipe port="result" step="stylesheet-parameters"/>
         </p:input>
     </px:epub3-to-pef>
     <p:sink/>

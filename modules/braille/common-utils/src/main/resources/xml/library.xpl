@@ -27,4 +27,19 @@
         -->
     </p:declare-step>
     
+    <p:declare-step type="px:parse-query">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Parse a query string and convert it to a c:param-set document.</p>
+        </p:documentation>
+        <p:option name="query" required="true"/>
+        <p:output port="result">
+            <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+                <p>A c:param-set document.</p>
+            </p:documentation>
+        </p:output>
+        <!--
+            implemented in Java (org.daisy.pipeline.braille.common.calabash.impl.PxParseQueryStep)
+        -->
+    </p:declare-step>
+    
 </p:library>

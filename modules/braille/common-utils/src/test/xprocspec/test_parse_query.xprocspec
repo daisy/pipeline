@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/library.xpl">
+	
+	<x:scenario label="test">
+		<x:call step="px:parse-query">
+			<x:option name="query" select="'(foo:&quot;1\A2\A3&quot;)(bar)'"/>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<c:param-set>
+					<c:param name="foo" namespace="" value="1&#xa;2&#xa;3"/>
+					<c:param name="bar" namespace="" value="true"/>
+				</c:param-set>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

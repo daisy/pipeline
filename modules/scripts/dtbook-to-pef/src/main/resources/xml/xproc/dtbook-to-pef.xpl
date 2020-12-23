@@ -61,7 +61,8 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
             </px:type>
         </p:pipeinfo>
     </p:option>
-    
+
+    <p:option name="stylesheet-parameters"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
@@ -107,6 +108,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:delete-parameters
+            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -144,6 +146,11 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
+    <p:sink/>
+    <px:parse-query name="stylesheet-parameters">
+        <p:with-option name="query" select="$stylesheet-parameters"/>
+    </px:parse-query>
+    <p:sink/>
     
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
@@ -177,6 +184,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
+            <p:pipe port="result" step="stylesheet-parameters"/>
         </p:input>
     </px:dtbook-to-pef>
     
