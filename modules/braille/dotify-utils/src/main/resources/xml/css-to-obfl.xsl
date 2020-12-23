@@ -1628,6 +1628,23 @@
         <xsl:attribute name="{local-name()}" select="format-number(xs:integer(number(.)), '0')"/>
     </xsl:template>
     
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:top-of-page">
+        <xsl:variable name="style" as="element(css:rule)*" select="css:deep-parse-stylesheet(.)"/>
+        <xsl:choose>
+            <xsl:when test="$style[not(@selector)]/css:property[@name='display']/@value='none'">
+                <xsl:attribute name="display-when" select="'(! $starts-at-top-of-page)'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>
+                    <xsl:text>Ignoring ':top-of-page { </xsl:text>
+                    <xsl:apply-templates mode="css:serialize" select="$style"/>
+                    <xsl:text> }': can only handle 'display: none'</xsl:text>
+                </xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
     <xsl:template mode="block-attr table-attr toc-entry-attr"
                   match="css:box[@type='block']/@css:margin-top-skip-if-top-of-page">
         <xsl:param name="top-of-page" as="xs:boolean" tunnel="yes" select="false()"/>
