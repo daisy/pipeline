@@ -158,8 +158,7 @@ pseudo returns [Selector.PseudoPage pseudoPage]
               // which we implement via a pseudo element
               try {
                   $pseudoPage = new SelectorImpl.PseudoElementImpl(":" + name);
-                  gCSSTreeParser.warn(i, "Use a double colon for pseudo element ::" + name); }
-              catch (Exception e2) {
+              } catch (Exception e2) {
                   gCSSTreeParser.error(i, "invalid pseudo declaration :" + name);
                   $pseudoPage = null;
               }

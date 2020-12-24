@@ -61,8 +61,9 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			    || CSSFactory.getAutoImportMedia().matchesOneOf(imedia)) { //or some media query matches to the autoload media spec
 				URL url = DataURLHandler.createURL(source.base, path);
 				try {
-					parseAndImport(new CSSSource(url, source.encoding, (String)null),
-					               cssReader, sheet, preparator, imedia); }
+					if (cssReader.supportsMediaType(null, url))
+						parseAndImport(new CSSSource(url, source.encoding, (String)null),
+						               cssReader, sheet, preparator, imedia); }
 				catch (IOException e) {
 					log.warn("Couldn't read imported style sheet: {}", e.getMessage()); }}
 			else
