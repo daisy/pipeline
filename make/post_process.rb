@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'sparql'
 require 'rdf/turtle'
 require 'rdf/rdfa'
+require 'rdf/query'
 require 'yaml'
 
 meta_file = ARGV[0]
@@ -72,7 +73,7 @@ def to_source(dest_path)
       end
     end
   end
-  src_path = dest_path
+  src_path = dest_path.dup()
   if File.exist?($src_base_dir + src_path)
     return src_path
   end
@@ -107,7 +108,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
   f_path = f[$base_dir.length..-1]
   src_path = to_source(f_path)
   page_url = RDF::URI(site_base + baseurl + f_path)
-  
+  page_type = nil
+
   ## process links and images
   doc.css('a, img, iframe, link').each do |a|
     if a.name == 'link' and not a['type'] == 'text/css'
@@ -117,9 +119,46 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     if not a[href_attr]
       next
     end
+    if a.name == 'a'
 
-    # link to source files with special class attribute
-    if a.name == 'a' and ['userdoc','apidoc','source'].include?(a['class'])
+      # link to source files with special class attribute
+      if ['userdoc','apidoc','source'].include?(a['class'])
+        link_class = a['class']
+      elsif not a['href'] =~ /^https?:\/\//o
+
+        # when current page is of type userdoc/apidoc/source, link to pages of the same type
+        if not page_type
+
+          # pages in /api/ are implicitly of type apidoc
+          # disabled because it makes too build too slow
+          if false # src_path.start_with?('/api/')
+            page_type = 'apidoc'
+          else
+            query = RDF::Query.new do
+              pattern [ page_url, RDF.type, :type ]
+            end
+            result = query.execute(graph)
+            if not result.empty?
+              page_type = result[0]['type'].to_s
+              if page_type.start_with?('http://www.daisy.org/ns/pipeline/')
+                page_type = page_type['http://www.daisy.org/ns/pipeline/'.length..-1]
+                if not ['userdoc','apidoc','source'].include?(page_type)
+                  page_type = ''
+                end
+              else
+                page_type = ''
+              end
+            else
+              page_type = ''
+            end
+          end
+        end
+        if page_type != ''
+          link_class = page_type
+        end
+      end
+    end
+    if link_class
       query = SPARQL.parse(%Q{
         BASE <#{page_url}>
         PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
@@ -129,18 +168,23 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           { [] dp2:doc ?href ; dp2:alias <#{a['href']}> }
           UNION
           { <#{a['href']}> dp2:alias [ dp2:doc ?href ] } .
-          ?href a dp2:#{a['class']} .
+          ?href a dp2:#{link_class} .
         }
       })
       result = query.execute(graph)
       if not result.empty?
         abs_url = result[0]['href']
-      elsif a['href'] =~ /^https?:\/\//o
+        if abs_url == page_url
+
+          # it could be that a page links to a file that it documents itself
+          abs_url = nil
+        end
+      elsif link_class == a['class'] and a['href'] =~ /^https?:\/\//o
 
         # userdoc/apidoc/source links must be relative
         link_error(a, href_attr, f)
         next
-      end # if doc page does not exist keep link to source file
+      end # if userdoc/apidoc/source page does not exist keep link to source file
     else
 
       # absolute path
@@ -293,23 +337,22 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     elsif abs_path =~ /^\/modules\/.+\/java\/(.+)$/o
 
       # ... into javadoc if class is 'apidoc'
-      if a['class'] == 'apidoc'
-        abs_path = '/api/' + $1
-        if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
-          target_path = abs_path
-        elsif File.exist?($base_dir + abs_path + '.html')
-          target_path = abs_path + '.html'
-          abs_path = target_path
-        elsif File.exist?($base_dir + abs_path + '/index.html')
-          target_path = abs_path + '/index.html'
-        elsif File.exist?($base_dir + abs_path + '/package-summary.html')
-          target_path = abs_path + '/package-summary.html'
-          abs_path = target_path
-        elsif File.exist?($base_dir + abs_path.gsub(/\.java$/, '.html'))
-          target_path = abs_path.gsub(/\.java$/, '.html')
-          abs_path = target_path
+      if link_class == 'apidoc'
+        api_path = '/api/' + $1
+        if File.exist?($base_dir + api_path) and not File.directory?($base_dir + api_path)
+          target_path = abs_path = api_path
+        elsif File.exist?($base_dir + api_path + '.html')
+          target_path = abs_path = api_path + '.html'
+        elsif File.exist?($base_dir + api_path + '/index.html')
+          abs_path = api_path
+          target_path = api_path + '/index.html'
+        elsif File.exist?($base_dir + api_path + '/package-summary.html')
+          target_path = abs_path = api_path + '/package-summary.html'
+        elsif File.exist?($base_dir + api_path.gsub(/\.java$/, '.html'))
+          target_path = abs_path = api_path.gsub(/\.java$/, '.html')
         end
-      else
+      end
+      if not link_class == 'apidoc' or (not target_path and not (link_class == a['class']))
 
         # ... or into htmlized sources otherwise
         if File.exist?($base_dir + abs_path + '/package-summary.html')
