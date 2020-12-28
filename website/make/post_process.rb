@@ -33,7 +33,7 @@ collection_files = Hash[
             f[$src_base_dir.length..-1]
           ]
         }
-      ]  
+      ]
     ]
   }
 ]
@@ -136,9 +136,11 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       if not result.empty?
         abs_url = result[0]['href']
       elsif a['href'] =~ /^https?:\/\//o
+
+        # userdoc/apidoc/source links must be relative
         link_error(a, href_attr, f)
         next
-      end
+      end # if doc page does not exist keep link to source file
     else
 
       # absolute path
@@ -152,9 +154,11 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     end
     if not abs_path
       if not abs_url
-        
+
         # relative path
         rel_path = a[href_attr]
+
+        # get fragment and query
         if rel_path =~ /^([^#]*)(#.*)$/o
           rel_path = $1
           fragment = $2
@@ -167,17 +171,27 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         else
           query = ''
         end
+
+        # link within same page
         if rel_path.empty?
           next
         end
+
+        # .md -> .html
         if rel_path =~ /^(.+)\.md$/o
           rel_path = $1 + '.html'
         end
+
+        # remove trailing '/'
         if rel_path =~ /\/$/o
           rel_path.sub!(/\/$/, '')
         end
+
+        # handle relative links within wikis
         collection_files.each do |name, files|
           if src_path.start_with?(name)
+
+            # links are assumed to consist of only a file name (github flattens the directories)
             if files.key?(rel_path)
               abs_path = baseurl + to_destination(files[rel_path])
             else
@@ -186,11 +200,18 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
             break
           end
         end
+
         # FIXME: support relative paths from a regular page to a wiki page (relative between source files)?
+
+        # resolve relative link
         if not abs_path
           abs_url = page_url.join(rel_path)
         end
       end
+
+      # at this point either abs_url or abs_path is set
+
+      # resolve github wiki links
       if not abs_path
         if not abs_url.to_s.start_with?("#{site_base}#{baseurl}")
           config['collections'].each do |_, metadata|
@@ -215,6 +236,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           end
           next
         end
+
+        # relativize internal link to site base
         abs_path = abs_url.to_s[site_base.length..-1]
       end
     end
@@ -224,6 +247,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       end
       abs_path = abs_path[baseurl.length..-1]
     end
+
+    # get fragment and query
     if not fragment
       if abs_path =~ /^([^#]*)(#.*)$/o
         abs_path = $1
@@ -240,14 +265,22 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         query = ''
       end
     end
+
+    # remove index.html
     if abs_path =~ /^(.*\/)index\.html$/o
       abs_path = $1
+
+    # remove .html
     elsif abs_path =~ /^(.+)\.html$/o
       abs_path = $1
     end
+
+    # remove trailing '/'
     if abs_path.end_with?('/')
       abs_path = abs_path[0..-2]
     end
+
+    # check that no links are broken
     if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
       target_path = abs_path
     elsif File.exist?($base_dir + abs_path + '.html')
@@ -255,7 +288,11 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       abs_path = target_path
     elsif File.exist?($base_dir + abs_path + '/index.html')
       target_path = abs_path + '/index.html'
+
+    # change links to java files...
     elsif abs_path =~ /^\/modules\/.+\/java\/(.+)$/o
+
+      # ... into javadoc if class is 'apidoc'
       if a['class'] == 'apidoc'
         abs_path = '/api/' + $1
         if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
@@ -273,6 +310,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           abs_path = target_path
         end
       else
+
+        # ... or into htmlized sources otherwise
         if File.exist?($base_dir + abs_path + '/package-summary.html')
           target_path = abs_path + '/package-summary.html'
           abs_path = target_path
@@ -282,6 +321,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         end
       end
     end
+
+    # some links will be broken because some javadoc files are omitted
     if not target_path
       if ['/api/overview-summary',
           '/api/overview-tree',
@@ -298,7 +339,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       end
     end
     
-    # check that links between collections are absolute
+    # check that links between wikis are absolute
     if not a[href_attr] =~ /^https?:\/\//o
       ['/_wiki/', '/_wiki_gui/', '/_wiki_webui/'].each do |src_dir|
         if src_path.start_with?(src_dir)
@@ -315,7 +356,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         end
       end
     end
-    
+
+    # add fragment
     a[href_attr] = baseurl + abs_path + fragment
   end
 
