@@ -58,7 +58,7 @@ $stdout << CommaParty.markup(
         [:goals,
          [:goal, 'unpack']],
         [:configuration,
-         [:excludes, 'index-all.html,allclasses-frame.html,allclasses-noframe.html,overview-frame.html,overview-summary.html,overview-tree.html,deprecated-list.html,constant-values.html,serialized-form.html,package-list,META-INF,META-INF/**/*'],
+         [:excludes, 'index.html,index-all.html,allclasses-frame.html,allclasses-noframe.html,overview-frame.html,overview-summary.html,overview-tree.html,deprecated-list.html,constant-values.html,serialized-form.html,help-doc.html,package-list,META-INF,META-INF/**/*'],
          if api
            [:artifactItems,
             api['javadoc'].map {|mod|

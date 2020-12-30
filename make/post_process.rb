@@ -367,14 +367,15 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
 
     # some links will be broken because some javadoc files are omitted
     if not target_path
-      if ['/api/overview-summary',
+      if ['/api',
+          '/api/overview-summary',
           '/api/overview-tree',
-          '/api/index',
           '/api/index-all',
           '/api/allclasses-noframe',
           '/api/serialized-form',
           '/api/deprecated-list',
-          '/api/constant-values'].include?(abs_path)
+          '/api/constant-values',
+          '/api/help-doc'].include?(abs_path)
         # FIXME
         #link_warning(a, href_attr, f)
       else
