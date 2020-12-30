@@ -184,7 +184,30 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         # userdoc/apidoc/source links must be relative
         link_error(a, href_attr, f)
         next
-      end # if userdoc/apidoc/source page does not exist keep link to source file
+      else
+
+        # if userdoc/apidoc/source page does not exist keep link to source file
+        # link to the htmlized page if present
+        # links to java files will be handled further below
+        if link_class != 'source' and not a['href'].end_with?('.java')
+          query = SPARQL.parse(%Q{
+            BASE <#{page_url}>
+            PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
+            SELECT ?href WHERE {
+              { <#{a['href']}> dp2:doc ?href }
+              UNION
+              { [] dp2:doc ?href ; dp2:alias <#{a['href']}> }
+              UNION
+              { <#{a['href']}> dp2:alias [ dp2:doc ?href ] } .
+              ?href a dp2:source .
+            }
+          })
+          result = query.execute(graph)
+          if not result.empty?
+            abs_url = result[0]['href']
+          end
+        end
+      end
     else
 
       # absolute path
