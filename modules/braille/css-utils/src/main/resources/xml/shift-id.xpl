@@ -32,9 +32,9 @@
             reference the following css:box element.
         </p:documentation>
     </p:output>
-    
+
     <!--
-        implemented in Java
+        Implemented in ../../java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.java
     -->
-    
+
 </p:declare-step>

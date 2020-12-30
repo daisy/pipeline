@@ -16,7 +16,7 @@
     <p:option name="temp-dir" required="true" px:type="anyDirURI"/>
     
     <!--
-        implemented in Java (org.daisy.pipeline.braille.pef.calabash.impl.ValidateStep)
+        Implemented in ../../org/daisy/pipeline/braille/pef/calabash/impl/ValidateStep.java
     -->
     
 </p:declare-step>

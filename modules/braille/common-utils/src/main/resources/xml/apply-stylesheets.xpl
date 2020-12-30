@@ -9,46 +9,50 @@
                 exclude-inline-prefixes="px pxi"
                 name="main">
 	
-	<p:documentation>
-		Apply CSS/SASS and/or XSLT stylesheets.
+	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+		<p>Apply CSS, <a href="https://sass-lang.com/documentation">SCSS</a> and/or XSLT
+		stylesheets</p>.
 	</p:documentation>
 	
 	<p:input port="source" primary="true">
-		<p:documentation>
-			Style sheets can be associated with the source in several ways: linked (using an
-			'xml-stylesheet' processing instruction or a 'link' element), embedded (using a 'style'
-			element) and/or inlined (using 'style' attributes).
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Style sheets can be associated with the source in several ways: linked (using an
+			<code>xml-stylesheet</code> processing instruction or a <code>link</code> element),
+			embedded (using a <code>style</code> element) and/or inlined (using <code>style</code>
+			attributes).</p>p>
 		</p:documentation>
 	</p:input>
 	
 	<p:input port="context" sequence="true">
-		<p:documentation>
-			Style sheets that are linked to from the source document, or included via the
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Style sheets that are linked to from the source document, or included via the
 			'stylesheets' option, must either exist on disk, or must be provided in memory via this
-			port. Style sheets on this port must be wrapped in &lt;c:result
-			content-type="text/plain"&gt; elements. Style sheet URIs are resolved by matching
-			against the context documents's base URIs.
+			port. Style sheets on this port must be wrapped in <code>&lt;c:result
+			content-type="text/plain"&gt;</code> elements. Style sheet URIs are resolved by matching
+			against the context documents's base URIs.</p>
 		</p:documentation>
 		<p:empty/>
 	</p:input>
 	
 	<p:output port="result">
-		<p:documentation>
-			Style sheets are applied to the document in the following way: XSLT style sheets are
-			applied before CSS/SASS style sheets. XSLT style sheets are applied one by one, first
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Style sheets are applied to the document in the following way: XSLT style sheets are
+			applied before CSS/SCSS style sheets. XSLT style sheets are applied one by one, first
 			the ones from the 'stylesheets' option, then the ones associated with the source
-			document, in the order in which they are specified. CSS/SASS style sheets are applied by
+			document, in the order in which they are specified. CSS/SCSS style sheets are applied by
 			"inlining" them, i.e. performing the cascade and capturing the styles of individual
-			elements in 'style' attributes. All CSS/SASS style sheets are applied at once, but the
-			order in which they are specified (first the ones from the 'stylesheets' option, then
-			the ones associated with the source document) has an influence on the cascading order.
+			elements in <code>style</code> attributes, using the <a
+			href="http://braillespecs.github.io/braille-css/#h2_style-attribute">syntax</a>
+			described in braille CSS. All CSS/SCSS style sheets are applied at once, but the order
+			in which they are specified (first the ones from the 'stylesheets' option, then the ones
+			associated with the source document) has an influence on the cascading order.</p>
 		</p:documentation>
 	</p:output>
 	
 	<p:option name="stylesheets" required="false" select="''">
-		<p:documentation>
-			A space separated list of URIs, absolute or relative to source. XSLT style sheets must
-			be specified before CSS/SASS style sheets.
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>A space separated list of URIs, absolute or relative to source. XSLT style sheets
+			must be specified before CSS/SCSS style sheets.</p>
 			<!--
 			    File extensions assumed to be one of:
 			    - .css
@@ -60,27 +64,29 @@
 	</p:option>
 	
 	<p:option name="type" required="false" select="'text/css text/x-scss text/xsl'">
-		<p:documentation>
-			The type of associated style sheets to apply. May be a space separated list. Allowed
-			values are `text/css`, `text/x-scss`, `text/xsl` and `application/xslt+xml`. If omitted,
-			all CSS, SASS and XSLT style sheets are applied.
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>The type of associated style sheets to apply. May be a space separated list. Allowed
+			values are "text/css", "text/x-scss", "text/xsl" and "application/xslt+xml". If omitted,
+			all CSS, SCSS and XSLT style sheets are applied.</p>
 		</p:documentation>
 	</p:option>
 	
 	<p:option name="media" required="false" select="'embossed'">
-		<p:documentation>
-			The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/">media
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/">media
 			query</a>. All rules that are contained in a style sheet that matches the specified
-			medium are included. Supported media types are `embossed` and `print`. Supported media
-			features are <a href="https://www.w3.org/TR/mediaqueries-4/#width">`width`</a> and <a
-			href="https://www.w3.org/TR/mediaqueries-4/#height">`height`</a>.
+			medium are included. Supported media types are "embossed" and "print". When the target
+			medium is embossed, CSS is interpreted according to the rules of <a
+			href="http://braillespecs.github.io/braille-css">braille CSS</a>. Supported media
+			features are '<a href="https://www.w3.org/TR/mediaqueries-4/#width">width</a>' and '<a
+			href="https://www.w3.org/TR/mediaqueries-4/#height">height</a>'.</p>
 		</p:documentation>
 	</p:option>
 	
 	<p:input port="parameters" kind="parameter" primary="false">
-		<p:documentation>
-			These parameters are passed on to the XSLT transformations and injected as variables
-			into SASS style sheets.
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>These parameters are passed on to the XSLT transformations and injected as variables
+			into SCSS style sheets.</p>
 		</p:documentation>
 	</p:input>
 	

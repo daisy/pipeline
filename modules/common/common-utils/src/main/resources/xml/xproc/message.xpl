@@ -75,6 +75,9 @@
         <p:option name="severity" select="'INFO'"/>
         <p:input port="source" primary="true" sequence="true"/>
         <p:output port="result" sequence="true"/>
+        <!--
+            Implemented in ../../../java/org/daisy/pipeline/common/calabash/impl/Message.java
+        -->
     </p:declare-step>
 
     <p:variable name="validSeverity" use-when="not(p:system-property('p:xpath-version')='1.0')" select="if ($severity=('WARN','INFO','DEBUG')) then $severity else 'INFO'">

@@ -10,6 +10,9 @@
         <p:option name="mode" required="true"/>
         <p:option name="identifier" required="false" select="''"/>
         <p:input port="parameters" kind="parameter" primary="false"/>
+        <!--
+            Implemented in ../../java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java
+        -->
     </p:declare-step>
     
     <p:declare-step type="dotify:file-to-obfl">
@@ -22,7 +25,7 @@
             Configuration can currently be done in 3 different ways: options, parameters and query
             syntax.
             
-            TODO:
+            FIXME:
             - Use of query syntax should be limited to the selection of converters and should
               represent a list of features. The purpose of the query syntax is to have something
               universal and textual. In the context of an XProc step however it might make more sense
@@ -46,6 +49,9 @@
         <p:option name="outer-margin" required="false" select="2"/>
         <p:option name="rowgap" required="false" select="0"/>
         <p:option name="splitterMax" required="false" select="50"/>
+        <!--
+            Implemented in ../../java/org/daisy/pipeline/braille/dotify/calabash/impl/FileToOBFLStep.java
+        -->
     </p:declare-step>
     
 </p:library>

@@ -334,14 +334,15 @@
           <execution>
             <id>htmlize-sources</id>
             <configuration>
-              <sourceDirectory>${project.build.directory}/classes</sourceDirectory>
-              <outputDirectory>${project.build.directory}/doc/src/main/resources</outputDirectory>
+              <!--
+                  include tables
+              -->
               <includes>
-                META-INF/catalog.xml,
-                **/*.xpl,
-                **/*.xsl,
-                hyphen/,
-                hyphen/*
+                src/main/resources/META-INF/catalog.xml,
+                src/main/resources/**/*.xpl,
+                src/main/resources/**/*.xsl,
+                src/main/resources/hyphen/,
+                src/main/resources/hyphen/*
               </includes>
             </configuration>
           </execution>

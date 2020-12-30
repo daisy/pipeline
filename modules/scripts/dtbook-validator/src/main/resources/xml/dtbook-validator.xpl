@@ -10,7 +10,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook Validator</h1>
         <p px:role="desc">Validates DTBook documents. Supports inclusion of MathML.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-validator">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/">
             Online documentation
         </a>
         <div px:role="author maintainer">

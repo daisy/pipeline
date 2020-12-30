@@ -59,6 +59,9 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @see <a href="../../../../../../../../../doc/">User documentation</a>.
+ */
 public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements DotifyTranslator {
 	
 	private final BrailleFilter filter;

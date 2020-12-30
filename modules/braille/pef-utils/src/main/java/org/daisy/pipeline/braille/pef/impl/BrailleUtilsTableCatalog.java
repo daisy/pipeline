@@ -1,7 +1,9 @@
 package org.daisy.pipeline.braille.pef.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Optional;
 
@@ -45,7 +47,11 @@ public class BrailleUtilsTableCatalog implements TableProvider {
 					return Optional.fromNullable(p.newFactory(id)).asSet();
 		return empty;
 	}
-	
+
+	Collection<FactoryProperties> list() {
+		return providers.stream().flatMap(p -> p.list().stream()).collect(Collectors.toList());
+	}
+
 	private final static Iterable<Table> empty = Optional.<Table>absent().asSet();
 	
 	private final List<org.daisy.braille.api.table.TableProvider> providers

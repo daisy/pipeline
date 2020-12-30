@@ -1,10 +1,10 @@
 liblouis-utils
 ===============
 
-Building blocks related to the Braille translation library
-[liblouis][].
+Building blocks related to the [Liblouis][] braille transcription
+library.
 
-[API](src/main)
+[Module content](src/main)
 
 
 ## Regenerating files for math conversion
@@ -24,4 +24,4 @@ update the liblouis files:
   ```
 
 
-[liblouis]: https://code.google.com/p/liblouis
+[Liblouis]: http://liblouis.org/

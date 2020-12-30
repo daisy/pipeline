@@ -10,8 +10,8 @@
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">HTML to PEF</h1>
-        <p px:role="desc">Transforms a HTML document into a PEF.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/braille/html-to-pef">
+        <p px:role="desc">Transforms a HTML document into an embosser ready braille document.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/">
             Online documentation
         </a>
         <dl px:role="author">

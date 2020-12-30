@@ -31,7 +31,7 @@
     <p:option name="number-width" required="false"/>
     
     <!--
-        implemented in Java (org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep)
+        Implemented in ../../org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.java
     -->
     
 </p:declare-step>

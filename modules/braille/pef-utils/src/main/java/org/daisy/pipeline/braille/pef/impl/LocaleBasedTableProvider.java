@@ -27,6 +27,9 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @see <a href="../../../../../../../README.md">Documentation</a>
+ */
 @Component(
 	name = "org.daisy.pipeline.braille.pef.impl.LocaleTableProvider",
 	service = {

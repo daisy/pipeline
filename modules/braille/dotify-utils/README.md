@@ -1,10 +1,10 @@
 dotify-utils
 ============
 
-Building blocks related to the [Dotify][dotify] Braille translation
-system.
+Building blocks related to the [Dotify][] braille translation and
+formatting software.
 
-[API](src/main)
+[Module content](src/main)
 
 
-[dotify]: http://code.google.com/p/dotify/
+[Dotify]: https://github.com/mtmse/dotify.formatter.impl

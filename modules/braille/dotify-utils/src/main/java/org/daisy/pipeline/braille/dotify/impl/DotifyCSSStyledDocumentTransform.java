@@ -41,6 +41,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+/**
+ * @see <a href="../../../../../../../../../doc/">User documentation</a>.
+ */
 public interface DotifyCSSStyledDocumentTransform {
 	
 	@Component(

@@ -32,6 +32,9 @@ import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
+/**
+ * @see <a href="../../../../../../../README.md">Documentation</a>
+ */
 public interface LiblouisMathMLTransform {
 	
 	public enum MathCode {

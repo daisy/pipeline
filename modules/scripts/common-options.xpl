@@ -54,7 +54,7 @@
 			<h2 px:role="name">Text-to-speech configuration file</h2>
 			<p px:role="desc" xml:space="preserve">Configuration file for the text-to-speech.
 
-[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).</p>
+[More details on the configuration file format](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).</p>
 		</p:documentation>
 	</p:input>
 
@@ -68,7 +68,7 @@
 			<h2 px:role="name">TTS log</h2>
 			<p px:role="desc" xml:space="preserve">Log file with information about text-to-speech process.
 
-Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html#common-settings) property.
+Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings) property.
 			</p>
 		</p:documentation>
 	</p:output>

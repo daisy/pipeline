@@ -21,12 +21,14 @@
         <p:output port="result" sequence="true"/>
 
         <p:declare-step type="pxi:epubcheck">
-            <!-- step declaration for the epubcheck-adapter implemented in java -->
             <p:option name="epub" required="true"/>
             <p:option name="mode" required="false"/>
             <p:option name="version" required="false"/>
             <p:output port="result" sequence="true"/>
             <p:option name="temp-dir" required="false"/>
+            <!--
+                Implemented in ../../../java/org/daisy/pipeline/epub/calabash/impl/EpubCheckProvider.java
+            -->
         </p:declare-step>
 
         <p:declare-step type="pxi:epubcheck-locate-mimetype-dir">

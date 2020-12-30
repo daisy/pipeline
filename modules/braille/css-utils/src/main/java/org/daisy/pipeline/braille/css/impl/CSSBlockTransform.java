@@ -68,6 +68,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+/**
+ * @see <a href="../../../../../../../README.md">Documentation</a>
+ * @see <a href="../../../../../../../resources/xml/transform/block-translator.xpl">XProc code</a>
+ */
 public interface CSSBlockTransform {
 	
 	@Component(

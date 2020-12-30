@@ -3,6 +3,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:re="regex-utils"
+                xmlns:java="implemented-in-java"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -311,17 +312,27 @@
     <xsl:template match="css:property" mode="css:property-as-attribute" as="attribute()">
         <xsl:attribute name="css:{replace(@name,'^-','_')}" select="@value"/>
     </xsl:template>
-    
-    <!--
-        css:parse-stylesheet implemented in Java
-    -->
-    <!--
-    <xsl:function name="css:parse-stylesheet" as="css:rule*">
+
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Parse a style sheet.</p>
+        </desc>
+    </doc>
+    <java:function name="css:parse-stylesheet" as="element(css:rule)*">
+        <xsl:param name="stylesheet" as="xs:string?"/>
+    </java:function>
+    <java:function name="css:parse-stylesheet" as="element(css:rule)*">
+        <xsl:param name="stylesheet" as="xs:string?"/>
+        <xsl:param name="deep" as="xs:boolean"/>
+    </java:function>
+    <java:function name="css:parse-stylesheet" as="element(css:rule)*">
         <xsl:param name="stylesheet" as="xs:string?"/>
         <xsl:param name="deep" as="xs:boolean"/>
         <xsl:param name="context" as="xs:QName?"/>
-    </xsl:function>
-    -->
+        <!--
+            Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
+        -->
+    </java:function>
     
     <xsl:function name="css:parse-declaration-list" as="element()*"> <!-- css:property* -->
         <xsl:param name="declaration-list" as="xs:string?"/>

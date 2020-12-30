@@ -9,7 +9,7 @@
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">DTBook to RTF</h1>
 		<p px:role="desc">Transforms a DTBook (DAISY 3 XML) document into an RTF (Rich Text Format).</p>
-		<a href="http://daisy.github.io/pipeline/modules/dtbook-to-rtf" px:role="homepage">Online documentation</a>
+		<a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-rtf/" px:role="homepage">Online documentation</a>
 		<dl px:role="author">
       <dt>Name:</dt>
       <dd px:role="name">Markus Gylling</dd>

@@ -1,8 +1,8 @@
-# obfl-utils API
+# obfl-utils
 
-## <a href="resources/META-INF/catalog.xml" class="source">catalog.xml</a>
+## [catalog.xml](resources/META-INF/catalog.xml)
 
-- <a href="resources/xml/library.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl`</a>
+- [`http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl`](resources/xml/library.xpl)
 
 
 <link rev="dp2:doc" href="./"/>
