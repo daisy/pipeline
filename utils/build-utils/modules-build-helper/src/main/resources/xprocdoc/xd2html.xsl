@@ -198,7 +198,8 @@
       <html>
         <xsl:call-template name="head">
           <xsl:with-param name="title" select="(../@name/string(),$source-href)[1]"></xsl:with-param>
-          <xsl:with-param name="source" select="(../@name/string(),pf:relativize-uri(../@href, $result-href))[1]"/>
+          <xsl:with-param name="source" select="(parent::xd:source/@name/string(),
+                                                 parent::xd:source/@href/pf:relativize-uri(., $result-href))[1]"/>
         </xsl:call-template>
 
         <body>
@@ -306,7 +307,8 @@
       <html>
         <xsl:call-template name="head">
           <xsl:with-param name="title" select="concat($step-local-name, ' ', $step-namespace-uri)"/>
-          <xsl:with-param name="source" select="(ancestor::xd:source/@name/string(),pf:relativize-uri(../@href, $result-href))[1]"/>
+          <xsl:with-param name="source" select="(parent::xd:source/@name/string(),
+                                                 parent::xd:source/@href/pf:relativize-uri(., $result-href))[1]"/>
         </xsl:call-template>
         <body>
           <h2>
@@ -514,8 +516,8 @@
       <title property="dc:title"><xsl:value-of select="$title"/></title>
       <xsl:if test="exists($source)">
         <link rev="dp2:doc" href="{$source}"/>
-        <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>
       </xsl:if>
+      <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>
       <style type="text/css" prefix="">
         <![CDATA[
                  table                   { width: 100%; empty-cells: show; }
