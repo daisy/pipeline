@@ -5,6 +5,7 @@ require 'rdf/turtle'
 require 'rdf/rdfa'
 require 'rdf/query'
 require 'yaml'
+require 'fileutils'
 
 meta_file = ARGV[0]
 $base_dir = ARGV[1]
@@ -15,7 +16,34 @@ site_base = config['site_base']
 baseurl = config['baseurl'] || ''
 graph = RDF::Graph.load(meta_file)
 
-$src_mapping = Hash[
+q = RDF::Query.new do
+  pattern [ :src_url, RDF::URI("http://www.daisy.org/ns/pipeline/permalink"), :dest_url ]
+end
+$permalink_mapping = Hash[
+  q.execute(graph).map { |r|
+    src_url = r['src_url'].to_s
+    if not src_url.start_with?(site_base + baseurl)
+      raise "coding error"
+    end
+    src_path = src_url[site_base.length+baseurl.length..-1]
+    dest_url = r['dest_url'].to_s
+    if not dest_url.start_with?(site_base + baseurl)
+      raise "Invalid dp2:permalink value: must start with #{site_base + baseurl}: #{dest_url}"
+    end
+    dest_path = dest_url[site_base.length+baseurl.length..-1]
+    if dest_path.end_with?('/')
+      dest_path = dest_path + 'index.html'
+    else
+      dest_path.sub!(/\.md$/, '.html')
+    end
+    [src_path, dest_path]
+  }
+]
+$reverse_permalink_mapping = Hash[
+  $permalink_mapping.map { |k, v| [v, k] }
+]
+
+$collection_path_mapping = Hash[
   config['collections'].map { |name, metadata|
     ["/_#{name}/", metadata['permalink'].sub(/\/:path\/$/, '/')]
   }
@@ -42,7 +70,10 @@ collection_files = Hash[
 # accepts path of a source file (relative to src_base_dir)
 # returns path of corresponding destination file (relative to base_dir)
 def to_destination(src_path)
-  $src_mapping.each do |src_dir, dest_dir|
+  if $permalink_mapping.has_key?(src_path)
+    return $permalink_mapping[src_path]
+  end
+  $collection_path_mapping.each do |src_dir, dest_dir|
     if src_path.start_with?(src_dir)
       dest_path = dest_dir + src_path[src_dir.length..-1]
       dest_path.sub!(/\.md$/, '.html')
@@ -55,9 +86,13 @@ def to_destination(src_path)
 end
 
 # accepts path of a destination file (relative to base_dir)
+# the destination file exists and is not a directory
 # returns path of corresponding source file (relative to src_base_dir)
 def to_source(dest_path)
-  $src_mapping.each do |src_dir, dest_dir|
+  if $reverse_permalink_mapping.has_key?(dest_path)
+    return $reverse_permalink_mapping[dest_path]
+  end
+  $collection_path_mapping.each do |src_dir, dest_dir|
     if dest_path.start_with?(dest_dir)
       src_path = src_dir + dest_path[dest_dir.length..-1]
       if File.exist?($src_base_dir + src_path)
@@ -100,6 +135,19 @@ def link_warning(link, href_attr, source_file)
   link['class'] = ((link['class']||'').split(' ') << 'broken-link').join(' ')
 end
 
+# move files with dp2:permalink metadata
+Dir.glob($base_dir + '/**/*.html').each do |f|
+  if not f.start_with?($base_dir)
+    raise "coding error"
+  end
+  f_path = f[$base_dir.length..-1]
+  if $permalink_mapping.has_key?(f_path)
+    f_new = $base_dir + $permalink_mapping[f_path]
+    FileUtils.mkdir_p(File.expand_path('..', f_new))
+    FileUtils.cp(f, f_new)
+  end
+end
+
 Dir.glob($base_dir + '/**/*.html').each do |f|
   doc = File.open(f) { |f| Nokogiri::HTML(f) }
   if not f.start_with?($base_dir)
@@ -134,10 +182,10 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           if false # src_path.start_with?('/api/')
             page_type = 'apidoc'
           else
-            query = RDF::Query.new do
+            q = RDF::Query.new do
               pattern [ page_url, RDF.type, :type ]
             end
-            result = query.execute(graph)
+            result = q.execute(graph)
             if not result.empty?
               page_type = result[0]['type'].to_s
               if page_type.start_with?('http://www.daisy.org/ns/pipeline/')
@@ -159,7 +207,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       end
     end
     if link_class
-      query = SPARQL.parse(%Q{
+      q = SPARQL.parse(%Q{
         BASE <#{page_url}>
         PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
         SELECT ?href WHERE {
@@ -171,7 +219,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           ?href a dp2:#{link_class} .
         }
       })
-      result = query.execute(graph)
+      result = q.execute(graph)
       if not result.empty?
         abs_url = result[0]['href']
         if abs_url == page_url
@@ -190,7 +238,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         # link to the htmlized page if present
         # links to java files will be handled further below
         if link_class != 'source' and not a['href'].end_with?('.java')
-          query = SPARQL.parse(%Q{
+          q = SPARQL.parse(%Q{
             BASE <#{page_url}>
             PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
             SELECT ?href WHERE {
@@ -202,7 +250,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
               ?href a dp2:source .
             }
           })
-          result = query.execute(graph)
+          result = q.execute(graph)
           if not result.empty?
             abs_url = result[0]['href']
           end
@@ -249,9 +297,9 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           rel_path = $1 + '.html'
         end
 
-        # remove trailing '/'
+        # / -> /index.html
         if rel_path =~ /\/$/o
-          rel_path.sub!(/\/$/, '')
+          rel_path = rel_path + 'index.html'
         end
 
         # handle relative links within wikis
@@ -259,6 +307,9 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           if src_path.start_with?(name)
 
             # links are assumed to consist of only a file name (github flattens the directories)
+            if rel_path =~ /^(.*)\/index\.html$/o
+              rel_path = $1
+            end
             if files.key?(rel_path)
               abs_path = baseurl + to_destination(files[rel_path])
             else
@@ -272,7 +323,14 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
 
         # resolve relative link
         if not abs_path
-          abs_url = page_url.join(rel_path)
+          abs_url = RDF::URI(site_base + baseurl + src_path).join(rel_path).to_s
+          if not abs_url.start_with?(site_base + baseurl)
+            puts "unexpected relative path"
+            link_error(a, href_attr, f)
+          end
+          abs_path = abs_url[site_base.length+baseurl.length..-1]
+          abs_path = baseurl + to_destination(abs_path)
+          abs_url = site_base + abs_path
         end
       end
 

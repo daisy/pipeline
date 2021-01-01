@@ -55,12 +55,15 @@
 - `dp2:apidoc`: Documentation file of type "API documentation",
   targeted at developers (e.g. Javadoc).
 - `dp2:source`: Documentation file that includes source code.
-- `dp2:script`: XProc file that implements a Pipeline script.
+- `dp2:script`: XProc source file that implements a Pipeline script.
 
 ### Properties
 
 - `dp2:doc`: The object (documentation file) documents the subject
   (source file).
+
+- `dp2:permalink`: The object (URI) is the target location of the
+  subject (documentation file) within the published site.
 - `dp2:alias`: The object (URI) is an alias of the subject (source
   file). This can be used for example to link source files with URIs
   defined in the catalog XML.
@@ -192,8 +195,8 @@
   SELECT ?href ?title WHERE {
     []    a        dp2:script ;
           dp2:doc  ?href .
-    ?href dc:title ?title ;
-          a        dp2:userdoc .
+    ?href a        dp2:userdoc ;
+          dc:title ?title .
   }
   ORDER BY ?title
   - [&#123;&#123;title&#125;&#125;](&#123;&#123;href&#125;&#125;)

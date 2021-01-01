@@ -1,3 +1,7 @@
+require 'rdf/query'
+require 'rdf/turtle'
+require 'rdf/rdfa'
+
 module Jekyll
   class CreateSpines < Generator
     def merge_title(page, title)
@@ -12,6 +16,43 @@ module Jekyll
       pages = site.pages | site.collections.values.map(&:docs).reduce(:|)
       baseurl = site.config['baseurl']
       site_base = site.config['site_base']
+      meta_file = site.config['meta_file']
+      if File.zero?(meta_file)
+
+        # we are still generating the metadata file
+        # leave the spines data empty for now
+        site.data['spines'] = {}
+        return
+      end
+      graph = RDF::Graph.load(meta_file)
+      q = RDF::Query.new do
+        pattern [ :src_url, RDF::URI("http://www.daisy.org/ns/pipeline/permalink"), :dest_url ]
+      end
+      permalink_mapping = Hash[
+        q.execute(graph).map { |r|
+          src_url = r['src_url'].to_s
+          if not src_url.start_with?(site_base + baseurl)
+            raise "coding error"
+          end
+          src_path = src_url[site_base.length+baseurl.length..-1]
+          if src_path =~ /^(.*\/)index\.html$/o
+            src_path = $1
+          elsif src_path =~ /^(.+)\.html$/o
+            src_path = $1
+          end
+          dest_url = r['dest_url'].to_s
+          if not dest_url.start_with?(site_base + baseurl)
+            raise "Invalid dp2:base value: must start with #{site_base + baseurl}: #{dest_url}"
+          end
+          dest_path = dest_url[site_base.length+baseurl.length..-1]
+          if dest_path =~ /^(.*\/)index\.html$/o
+            dest_path = $1
+          elsif dest_path =~ /^(.+)\.html$/o
+            dest_path = $1
+          end
+          [dest_path, src_path]
+        }
+      ]
       github_wiki_to_spine_items = lambda { |sidebar|
         items = []
         acc = File.readlines(sidebar)
@@ -64,6 +105,9 @@ module Jekyll
               elsif path =~ /^(.+)\.html$/o
                 path = $1
               end
+              if permalink_mapping.has_key?(path)
+                path = permalink_mapping[path]
+              end
               page = pages.detect { |page|
                 if path.end_with?('/')
                   [path, path + 'index.html'].include?(page.url)
@@ -95,6 +139,9 @@ module Jekyll
                 elsif path =~ /^(.+)\.html$/o
                   path = $1
                 end
+                if permalink_mapping.has_key?(path)
+                  path = permalink_mapping[path]
+                end
                 page = pages.detect { |page|
                   if path.end_with?('/')
                     [path, path + 'index.html'].include?(page.url)
@@ -109,17 +156,38 @@ module Jekyll
                     Dir.glob("#{base_path}**/*").each do |f|
                       if f.end_with?('.md')
                         if href == File.basename(f).sub(/\.md$/, '')
-                          path = f
+                          page = pages.detect { |page| page.path == f }
                           break
                         end
                       end
                     end
                   end
                 end
-                if not path
-                  path = base_path + href + '.md'
+                if not page
+                  path = base_path + href
+                  if path =~ /^(.*\/)index\.html$/o
+                    path = $1
+                  elsif path =~ /^(.+)\.html$/o
+                    path = $1
+                  end
+                  if path.start_with?(Dir.pwd)
+                    path = path[Dir.pwd.length..-1]
+                  end
+                  if permalink_mapping.has_key?(path)
+                    path = permalink_mapping[path]
+                  end
+                  page = pages.detect { |page|
+                    if path.end_with?('/')
+                      [path, path + 'index.html'].include?(page.url)
+                    else
+                      [path, path + '/', path + '.html', path + '/index.html'].include?(page.url)
+                    end
+                  }
                 end
-                page = pages.detect { |page| page.path == path }
+                if not page
+                  path = base_path + href + '.md'
+                  page = pages.detect { |page| page.path == path }
+                end
               end
               if not page
                 raise "spine link can not be resolved: #{href}"
@@ -161,6 +229,9 @@ module Jekyll
             path = $1
           elsif path =~ /^(.+)\.html$/o
             path = $1
+          end
+          if permalink_mapping.has_key?(path)
+            path = permalink_mapping[path]
           end
           page = pages.detect { |page|
             if path.end_with?('/')
