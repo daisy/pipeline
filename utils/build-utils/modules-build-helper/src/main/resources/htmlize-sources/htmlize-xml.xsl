@@ -23,7 +23,7 @@
 					<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 					<meta charset="utf-8"/>
 					<meta http-equiv="content-language" content="en"/>
-					<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css"/>
+					<link rel="stylesheet" type="text/css" href="http://daisy.github.io/pipeline/css/nxml-mode.css"/>
 					<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico"/>
 					<link rev="doc" href="{pf:relativize-uri($source-uri,$output-uri)}"/>
 				</head>
