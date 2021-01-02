@@ -168,6 +168,9 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       next
     end
     if a.name == 'a'
+      if a['href'] =~ /^(mailto|javascript):/
+        next
+      end
 
       # link to source files with special class attribute
       if ['userdoc','apidoc','source'].include?(a['class'])
