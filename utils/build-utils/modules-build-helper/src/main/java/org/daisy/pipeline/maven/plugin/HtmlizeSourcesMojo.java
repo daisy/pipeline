@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -288,6 +289,7 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 				for (String f : scanner.getIncludedFiles())
 					files.add(f);
 			}
+			Collections.sort(files);
 			for (String dir : scanner.getIncludedDirectories()) {
 				File outputFile = new File(outputDirectory, dir + "/index.md");
 				outputFile.getParentFile().mkdirs();
