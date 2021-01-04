@@ -11,6 +11,8 @@ import com.google.common.collect.ImmutableMap;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.api.XProcExecutionException;
@@ -18,21 +20,24 @@ import org.daisy.maven.xproc.calabash.Calabash;
 
 import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
-/**
- * @goal xprocdoc
- */
+@Mojo(
+	name = "xprocdoc"
+)
 public class XProcDocMojo extends AbstractMojo {
 	
-	/**
-	 * @parameter expression="${project.basedir}/src/main/resources/META-INF/catalog.xml"
-	 * @required
-	 */
+	@Parameter(
+		defaultValue = "${project.basedir}/src/main/resources/META-INF/catalog.xml"
+	)
 	private File catalogXmlFile;
 	
-	/**
-	 * @parameter expression="${project.build.directory}/generated-resources/doc"
-	 * @required
-	 */
+	@Parameter(
+		defaultValue = ""
+	)
+	private String catalogXmlBaseURI;
+
+	@Parameter(
+		defaultValue = "${project.build.directory}/generated-resources/doc"
+	)
 	private File outputDirectory;
 	
 	public void execute() throws MojoFailureException {
@@ -45,7 +50,10 @@ public class XProcDocMojo extends AbstractMojo {
 			engine.run(asURI(XProcDocMojo.class.getResource("/xprocdoc/catalog-to-xprocdoc.xpl")).toASCIIString(),
 			           ImmutableMap.of("source", Collections.singletonList(asURI(catalogXmlFile).toASCIIString())),
 			           null,
-			           ImmutableMap.of("output-base-uri", asURI(outputDirectory).toASCIIString()),
+			           ImmutableMap.of("catalog-base-uri", catalogXmlBaseURI == null | "".equals(catalogXmlBaseURI)
+			                               ? ""
+			                               : asURI(catalogXmlBaseURI).toASCIIString(),
+			                           "output-base-uri", asURI(outputDirectory).toASCIIString()),
 			           null); }
 		catch (XProcExecutionException e) {
 			e.printStackTrace();
