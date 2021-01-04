@@ -96,6 +96,9 @@ $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site | gems
 		rm -f $@; \
 		exit 1; \
 	fi
+	echo "" > $@.tmp
+	cat $@ >> $@.tmp
+	mv $@.tmp $@
 
 $(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(META_JEKYLL_FILES) | gems
 	cd $(dir $@) && $(JEKYLL) build --destination $(CURDIR)/$@$(baseurl)
