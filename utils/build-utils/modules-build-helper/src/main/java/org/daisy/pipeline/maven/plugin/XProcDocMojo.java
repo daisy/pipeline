@@ -24,12 +24,6 @@ import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 public class XProcDocMojo extends AbstractMojo {
 	
 	/**
-	 * @parameter expression="${project.basedir}/src/main/resources"
-	 * @required
-	 */
-	private File sourceDirectory;
-	
-	/**
 	 * @parameter expression="${project.basedir}/src/main/resources/META-INF/catalog.xml"
 	 * @required
 	 */
@@ -51,8 +45,7 @@ public class XProcDocMojo extends AbstractMojo {
 			engine.run(asURI(XProcDocMojo.class.getResource("/xprocdoc/catalog-to-xprocdoc.xpl")).toASCIIString(),
 			           ImmutableMap.of("source", Collections.singletonList(asURI(catalogXmlFile).toASCIIString())),
 			           null,
-			           ImmutableMap.of("input-base-uri", asURI(sourceDirectory).toASCIIString(),
-			                           "output-base-uri", asURI(outputDirectory).toASCIIString()),
+			           ImmutableMap.of("output-base-uri", asURI(outputDirectory).toASCIIString()),
 			           null); }
 		catch (XProcExecutionException e) {
 			e.printStackTrace();

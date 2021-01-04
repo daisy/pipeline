@@ -9,7 +9,6 @@
             exclude-inline-prefixes="#all">
 	
 	<p:input port="source" sequence="false"/>
-	<p:option name="input-base-uri" required="true"/>
 	<p:option name="output-base-uri" required="true"/>
 	
 	<p:import href="xprocdoc.xpl"/>
@@ -40,8 +39,13 @@
 	</p:for-each>
 	
 	<xd:xprocdoc>
-		<p:with-option name="input-base-uri" select="$input-base-uri">
-			<p:empty/>
+		<!--
+		    just passing a random file URI because it does not matter: because of the px:public-name
+		    attributes no real file paths need to be included (and therefore no directory is needed
+		    to relativize them against)
+		-->
+		<p:with-option name="input-base-uri" select="resolve-uri('../',base-uri(/*))">
+			<p:pipe step="main" port="source"/>
 		</p:with-option>
 		<p:with-option name="output-base-uri" select="$output-base-uri">
 			<p:empty/>
