@@ -168,6 +168,11 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       next
     end
     if a.name == 'a'
+
+      # remove target attribute because there is only one frame
+      # note that target="_blank" will be added for external pages, see below
+      a.remove_attribute('target')
+
       if a['href'] =~ /^(mailto|javascript):/
         next
       end
