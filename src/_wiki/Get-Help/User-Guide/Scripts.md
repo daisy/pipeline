@@ -22,6 +22,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 * [EPUB 3 to DAISY 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy3/)
 * [EPUB 3 to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef/)
 * [EPUB to DAISY](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy/)
+* [HTML to DTBook](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook/)
 * [HTML to EPUB3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3/)
 * [HTML to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/)
 * [NIMAS Fileset Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator/)
@@ -39,6 +40,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
   </tr>
   <tr>
     <th colspan="2">DAISY</th>
+    <th rowspan="2">DTBook</th>
     <th rowspan="2">EPUB 3</th>
     <th rowspan="2">HTML</th>
     <th rowspan="2">ZedAI</th>
@@ -55,6 +57,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <th>2.02</th>
     <td></td>
     <td></td>
+    <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3">DAISY 2.02 to EPUB 3</a></td>
     <td></td>
     <td></td>
@@ -65,6 +68,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
   <tr>
     <th>3</th>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-daisy202">DAISY 3 to DAISY 2.02</a></td>
+    <td></td>
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-epub3">DAISY 3 to EPUB 3</a></td>
     <td></td>
@@ -77,6 +81,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <th colspan="2">DTBook</th>
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3">DTBook to DAISY 3</a></td>
+    <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3">DTBook to EPUB 3</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html">DTBook to HTML</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-zedai">DTBook to ZedAI</a></td>
@@ -88,6 +93,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <th rowspan="2">EPUB</th>
     <th>2</th>
     <td colspan="2"><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy">EPUB to DAISY</a></td>
+    <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub2-to-epub3">EPUB Upgrader</a></td>
     <td></td>
     <td></td>
@@ -101,6 +107,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
         <a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy">EPUB to DAISY</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy3">EPUB 3 to DAISY 3</a> or
         <a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy">EPUB to DAISY</a></td>
+    <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3">EPUB 3 Enhancer</a></td>
     <td></td>
     <td></td>
@@ -112,6 +119,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <th colspan="2">HTML</th>
     <td></td>
     <td></td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook">HTML to DTBook</td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3">HTML to EPUB 3</a></td>
     <td></td>
     <td></td>
@@ -121,6 +129,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
   </tr>
   <tr>
     <th colspan="2">ZedAI</th>
+    <td></td>
     <td></td>
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3">ZedAI to EPUB 3</a></td>
