@@ -83,9 +83,10 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 			List<File> sources = new ArrayList<File>();
 			if (includes == null)
 				includes = defaultIncludes;
+			String[] includesArray = includes.replaceAll("\\s", "").split(",(?![^{]*})");
 			DirectoryScanner scanner = new DirectoryScanner();
 			scanner.setBasedir(sourceDirectory);
-			scanner.setIncludes(includes.replaceAll("\\s", "").split(",(?![^{]*})"));
+			scanner.setIncludes(includesArray);
 			scanner.setExcludes(new String[]{"**/.DS_Store"});
 			scanner.scan();
 			for (String f : scanner.getIncludedFiles())
@@ -285,13 +286,16 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 				kv.getKey().run(kv.getValue(), sourceDirectory, outputDirectory);
 			
 			// Generate directory index files
-			List<String> files = new ArrayList<String>(); {
-				for (String f : scanner.getIncludedFiles())
-					files.add(f);
-			}
-			Collections.sort(files);
-			for (String dir : scanner.getIncludedDirectories()) {
-				File outputFile = new File(outputDirectory, dir + "/index.md");
+			List<String> includedFiles = new ArrayList<String>();
+			Collections.addAll(includedFiles, scanner.getIncludedFiles());
+			Collections.sort(includedFiles);
+			List<String> includedDirectories = new ArrayList<String>();
+			Collections.addAll(includedDirectories, scanner.getIncludedDirectories());
+			for (String s : includesArray)
+				if (".".equals(s) || "./".equals(s))
+					includedDirectories.add("");
+			for (String dir : includedDirectories) {
+				File outputFile = new File(outputDirectory, ("".equals(dir) ? "" : (dir + "/")) + "index.md");
 				outputFile.getParentFile().mkdirs();
 				BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 				writer.write("<link rev=\"doc\" href=\"../" + outputFile.getParentFile().getName() + "/\"/>");
@@ -300,23 +304,22 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 				int slash = dir.lastIndexOf('/');
 				if (slash > 0) {
 					String parent = dir.substring(0, slash);
-					for (String d : scanner.getIncludedDirectories()) {
-						if (parent.equals(d)) {
-							writer.write("- [../](../)");
-							writer.newLine();
-							break;
-						}
-					}
-				}
-				for (String d : scanner.getIncludedDirectories()) {
-					slash = d.lastIndexOf('/');
-					if (dir.equals(slash < 0 ? "" : d.substring(0, slash))) {
-						d = d.substring(slash + 1);
-						writer.write("- [" + d + "/](" + d + ")");
+					if (includedDirectories.contains(parent)) {
+						writer.write("- [../](../)");
 						writer.newLine();
 					}
 				}
-				for (Iterator<String> i = files.iterator(); i.hasNext();) {
+				for (String d : includedDirectories) {
+					if (!"".equals(d)) {
+						slash = d.lastIndexOf('/');
+						if (dir.equals(slash < 0 ? "" : d.substring(0, slash))) {
+							d = d.substring(slash + 1);
+							writer.write("- [" + d + "/](" + d + ")");
+							writer.newLine();
+						}
+					}
+				}
+				for (Iterator<String> i = includedFiles.iterator(); i.hasNext();) {
 					String f = i.next();
 					slash = f.lastIndexOf('/');
 					if (dir.equals(slash < 0 ? "" : f.substring(0, slash))) {
