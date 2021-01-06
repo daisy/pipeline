@@ -148,8 +148,12 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
   end
 end
 
-Dir.glob($base_dir + '/**/*.html').each do |f|
-  doc = File.open(f) { |f| Nokogiri::HTML(f) }
+Dir.glob($base_dir + '/**/*.{html,svg}').each do |f|
+  if f.end_with?('html')
+    doc = File.open(f) { |f| Nokogiri::HTML(f) }
+  else
+    doc = File.open(f) { |f| Nokogiri::XML(f) }
+  end
   if not f.start_with?($base_dir)
     raise "coding error"
   end
@@ -159,11 +163,11 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
   page_type = nil
 
   ## process links and images
-  doc.css('a, img, iframe, link').each do |a|
+  doc.css(f.end_with?('html') ? 'a, img, iframe, link' : 'a').each do |a|
     if a.name == 'link' and not a['type'] == 'text/css'
       next
     end
-    href_attr = (a.name == 'img' or a.name == 'iframe') ? 'src' : 'href';
+    href_attr = f.end_with?('html') ? ((a.name == 'img' or a.name == 'iframe') ? 'src' : 'href') : 'xlink:href'
     if not a[href_attr]
       next
     end
@@ -173,14 +177,14 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       # note that target="_blank" will be added for external pages, see below
       a.remove_attribute('target')
 
-      if a['href'] =~ /^(mailto|javascript):/
+      if a[href_attr] =~ /^(mailto|javascript):/
         next
       end
 
       # link to source files with special class attribute
       if ['userdoc','apidoc','source'].include?(a['class'])
         link_class = a['class']
-      elsif not a['href'] =~ /^https?:\/\//o or a[href_attr].start_with?(site_base + baseurl)
+      elsif not a[href_attr] =~ /^https?:\/\//o or a[href_attr].start_with?(site_base + baseurl)
 
         # when current page is of type userdoc/apidoc/source, link to pages of the same type
         if not page_type
@@ -219,11 +223,11 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         BASE <#{page_url}>
         PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
         SELECT ?href WHERE {
-          { <#{a['href']}> dp2:doc ?href }
+          { <#{a[href_attr]}> dp2:doc ?href }
           UNION
-          { [] dp2:doc ?href ; dp2:alias <#{a['href']}> }
+          { [] dp2:doc ?href ; dp2:alias <#{a[href_attr]}> }
           UNION
-          { <#{a['href']}> dp2:alias [ dp2:doc ?href ] } .
+          { <#{a[href_attr]}> dp2:alias [ dp2:doc ?href ] } .
           ?href a dp2:#{link_class} .
         }
       })
@@ -235,7 +239,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           # it could be that a page links to a file that it documents itself
           abs_url = nil
         end
-      elsif link_class == a['class'] and a['href'] =~ /^https?:\/\//o and not a['href'].start_with?(site_base + baseurl)
+      elsif link_class == a['class'] and a[href_attr] =~ /^https?:\/\//o and not a[href_attr].start_with?(site_base + baseurl)
 
         # userdoc/apidoc/source links must be internal
         link_error(a, href_attr, f)
@@ -246,16 +250,16 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         # if userdoc/apidoc/source page does not exist keep link to source file
         # link to the htmlized page if present
         # links to java files will be handled further below
-        if link_class != 'source' and not a['href'].end_with?('.java')
+        if link_class != 'source' and not a[href_attr].end_with?('.java')
           q = SPARQL.parse(%Q{
             BASE <#{page_url}>
             PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
             SELECT ?href WHERE {
-              { <#{a['href']}> dp2:doc ?href }
+              { <#{a[href_attr]}> dp2:doc ?href }
               UNION
-              { [] dp2:doc ?href ; dp2:alias <#{a['href']}> }
+              { [] dp2:doc ?href ; dp2:alias <#{a[href_attr]}> }
               UNION
-              { <#{a['href']}> dp2:alias [ dp2:doc ?href ] } .
+              { <#{a[href_attr]}> dp2:alias [ dp2:doc ?href ] } .
               ?href a dp2:source .
             }
           })
@@ -530,6 +534,10 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     ul['id'] = 'nav-sitemap-left'
     break # there is at most one
   end
-  
-  File.open(f, 'w') { |f| f.write(doc.to_html) }
+
+  if f.end_with?('html')
+    File.open(f, 'w') { |f| f.write(doc.to_html) }
+  else
+    File.open(f, 'w') { |f| f.write(doc.to_s) }
+  end
 end
