@@ -33,6 +33,7 @@
       * [[EPUB 3 to DAISY 3|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy3/]]
       * [[EPUB 3 to PEF|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef/]]
       * [[EPUB to DAISY|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy/]]
+      * [[HTML to DTBook|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook/]]
       * [[HTML to EPUB3|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3/]]
       * [[HTML to PEF|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/]]
       * [[NIMAS Fileset Validator|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator/]]
