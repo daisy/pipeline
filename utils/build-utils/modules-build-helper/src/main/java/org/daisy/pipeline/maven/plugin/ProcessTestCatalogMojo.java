@@ -75,7 +75,15 @@ public class ProcessTestCatalogMojo extends AbstractMojo {
 	)
 	private MavenProject mavenProject;
 	
+	@Parameter(
+		defaultValue = "${maven.test.skip}"
+	)
+	private boolean skip;
+
 	public void execute() throws MojoFailureException {
+		if (skip) {
+			getLog().info("Tests are skipped.");
+			return; }
 		try {
 			XProcEngine engine = new CalabashWithPipelineModules(mavenProject.getCompileClasspathElements());
 			Map<String,String> options = new HashMap<String,String>(); {

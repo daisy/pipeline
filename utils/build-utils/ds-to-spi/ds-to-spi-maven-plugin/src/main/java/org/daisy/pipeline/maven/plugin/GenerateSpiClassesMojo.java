@@ -94,6 +94,11 @@ public class GenerateSpiClassesMojo extends AbstractMojo {
 	)
 	private MavenSession mavenSession;
 	
+	@Parameter(
+		defaultValue = "${maven.main.skip}"
+	)
+	private boolean skip;
+
 	@Component
 	private CompilerManager compilerManager;
 	
@@ -107,6 +112,9 @@ public class GenerateSpiClassesMojo extends AbstractMojo {
 	private RepositorySystem repositorySystem;
 	
 	public void execute() throws MojoFailureException {
+		if (skip) {
+			getLog().info("Skipping the execution.");
+			return; }
 		try {
 			Set<String> compileSourceRoots = new HashSet<String>(); {
 				for (Object dir : mavenProject.getCompileSourceRoots())
