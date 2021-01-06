@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.net.URI;
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.Hashtable;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.common.file.URIs;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.NativePath;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.osgi.framework.BundleActivator;
@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Using external Liblouis is not allowed"</span>);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	}
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">public</strong> URI getIdentifier() { <strong class="jxr_keyword">return</strong> URIs.asURI(<span class="jxr_string">"http://www.liblouis.org/native/EXTERNAL"</span>); }
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">public</strong> URI getIdentifier() { <strong class="jxr_keyword">return</strong> URLs.asURI(<span class="jxr_string">"http://www.liblouis.org/native/EXTERNAL"</span>); }
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> URI canonicalize(URI resource) { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(); }
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">public</strong> URL resolve(URI resource) { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(); }
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> Iterable&lt;URI&gt; get(String query) { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(); }
@@ -68,6 +68,6 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

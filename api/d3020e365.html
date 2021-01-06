@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">epub3-add-mediaoverlays {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/epub-utils/src/main/resources/xml/pub/add-mediaoverlays.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">epub3-add-mediaoverlays</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Add media overlays to a EPUB publication</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/epub-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/epub-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source.fileset</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">source.in-memory</span><span class="details"> sequence</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The source fileset</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Must include the package document.</p>
+</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">mo.fileset</span><span class="details"></span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">mo.in-memory</span><span class="details"> sequence</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The media overlays fileset with the SMIL and audio files</p></td>
+</tr>
+</tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result.fileset</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">result.in-memory</span><span class="details"> sequence</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The result fileset</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">A copy of the source fileset with the media overlay files added and the package
+            document updated.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">compatibility-mode</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether to be backward compatible with <a href="http://idpf.org/epub/20/spec/OPF_2.0.1_draft.htm" class="external-link" target="_blank">Open Package Format
+            2.0.1</a>.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">reserved-prefixes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'#default'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The <a href="http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-default-vocab" class="external-link" target="_blank">reserved
+            prefix mappings</a> of the resulting package document. By default, prefixes that are
+            used but not declared in the input are also not declared in the output, and if "media"
+            is not used in the input, the "declare-media-prefix" setting determines whether it is
+            declared in the output.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">declare-media-prefix</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Determines whether the "media" prefix is declared in the output when it is not used
+            in the input.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Has no effect if the "reserved-prefixes" option is set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

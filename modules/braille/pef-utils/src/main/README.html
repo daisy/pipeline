@@ -5,55 +5,968 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
     <meta http-equiv="content-language" content="en">
-    <title>pef-utils API</title>
+    <title>pef-utils</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="pef-utils">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
     <link rel="stylesheet" href="/pipeline/css/coderay.css">
     <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
   </head>
   <body>
-    <h1 id="pef-utils-api">pef-utils API</h1>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt" tabindex="26">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-pef" tabindex="27">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-rtf" tabindex="28">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-zedai" tabindex="29">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub2-to-epub3" tabindex="30">
+      
+      EPUB 2 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3" tabindex="31">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-validator" tabindex="32">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy202" tabindex="33">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy3" tabindex="34">
+      
+      EPUB 3 to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef" tabindex="35">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy" tabindex="36">
+      
+      EPUB to DAISY
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook" tabindex="37">
+      
+      HTML to DTBook
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3" tabindex="38">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/html-to-pef" tabindex="39">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator" tabindex="40">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3" tabindex="41">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/zedai-to-html" tabindex="42">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef" tabindex="43">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="44">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="45">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="46">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="47">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="48">
+      
+      Troubleshooting on Windows
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="49">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="50">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="51">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="52">
+      Developer Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="53">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="54">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="55">
+      XProc
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/XProcExtensions" tabindex="56">
+      
+      XProc Extensions
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="57">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="58">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="59">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="60">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <h1 id="pef-utils">pef-utils</h1>
 
 <h2 id="java-api">Java API</h2>
 
 <ul>
-  <li>package <a href="/pipeline/api/org/daisy/pipeline/braille/pef/package-summary.html" class="apidoc"><code>org.daisy.pipeline.braille.pef</code></a>
+  <li>package <a href="/pipeline/api/org/daisy/pipeline/braille/pef/package-summary.html"><code>org.daisy.pipeline.braille.pef</code></a>
 </li>
 </ul>
 
-<h2 id="catalogxml"><a href="/pipeline/modules/braille/pef-utils/src/main/resources/META-INF/catalog.xml" class="source">catalog.xml</a></h2>
+<h2 id="catalogxml"><a href="/pipeline/modules/braille/pef-utils/src/main/resources/META-INF/catalog.xml">catalog.xml</a></h2>
 
 <ul>
-  <li><a href="/pipeline/modules/braille/pef-utils/src/main/resources/xml/library.xsl" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl</code></a></li>
-  <li><a href="/pipeline/api/org/daisy/pipeline/modules/braille/pef-utils/library.xpl.html" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl</code></a></li>
+  <li><a href="/pipeline/modules/braille/pef-utils/src/main/resources/xml/library.xsl"><code>http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl</code></a></li>
+  <li><a href="/pipeline/api/org/daisy/pipeline/modules/braille/pef-utils/library.xpl.html"><code>http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl</code></a></li>
 </ul>
 
-<h2 id="osgi-services">OSGi services</h2>
-
-<h3 id="pef-tables-orgdaisypipelinebraillepeftableprovider">PEF tables (<code>org.daisy.pipeline.braille.pef.TableProvider</code>)</h3>
+<h2 id="pef-tables-orgdaisypipelinebraillepeftableprovider">PEF tables (<a href="/pipeline/api/org/daisy/pipeline/braille/pef/TableProvider.html"><code>org.daisy.pipeline.braille.pef.TableProvider</code></a>)</h2>
 
 <ul>
-  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.html"><code>(id:...)</code></a></li>
-  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/LocaleBasedTableProvider.html"><code>(locale:...)</code></a></li>
+  <li>
+    <p><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.html"><code>(id:...)</code></a></p>
+
+    <p>Provides <a href="https://mtmse.github.io/dotify.api/latest/javadoc/org/daisy/dotify/api/table/Table.html" class="external-link" target="_blank">PEF
+tables</a>
+that are selectable via their unique ID (as defined by the
+<code>getIdentifier</code> method).</p>
+
+    <p>The list of known table IDs is: <!-- see listAllTables() in BrailleUtilsFileFormatCatalogTest.java --></p>
+
+    <ul>
+      <li>
+<code>com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_001_00</code>: Braillo USA 6 DOT 001.00</li>
+      <li>
+<code>com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01</code>: Braillo NETHERLANDS 6 DOT 031.01</li>
+      <li>
+<code>com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_044_00</code>: Braillo ENGLAND 6 DOT 044.00</li>
+      <li>
+<code>com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_046_01</code>: Braillo SWEDEN 6 DOT 046.01</li>
+      <li>
+<code>com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_047_01</code>: Braillo NORWAY 6 DOT 047.01</li>
+      <li>
+<code>com_indexbraille.IndexTableProvider.TableType.INDEX_TRANSPARENT_6DOT</code>: Index transparent 6 dot</li>
+      <li>
+<code>com_viewplus.ViewPlusTableProvider.TableType.TIGER_INLINE_SUBSTITUTION_8DOT</code>: Tiger inline substitution 8-dot</li>
+      <li>
+<code>com_yourdolphin.SupernovaTableProvider.TableType.SV_SE_6DOT</code>: Swedish - Supernova 6 dot</li>
+      <li>
+<code>es_once_cidat.CidatTableProvider.TableType.IMPACTO_TRANSPARENT_6DOT</code>: Transparent mode</li>
+      <li>
+<code>es_once_cidat.CidatTableProvider.TableType.IMPACTO_TRANSPARENT_8DOT</code>: Transparent mode (8 dot)</li>
+      <li>
+<code>es_once_cidat.CidatTableProvider.TableType.PORTATHIEL_TRANSPARENT_6DOT</code>: Transparent mode</li>
+      <li>
+<code>org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US</code>: US</li>
+      <li>
+<code>org_daisy.BrailleEditorsTableProvider.TableType.MICROBRAILLE</code>: MicroBraille BRL-file</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.CS_CZ</code>: Czech</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.DA_DK</code>: Danish</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.DE_DE</code>: German</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.EN_GB</code>: British</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.ES_ES_TABLE_2</code>: Spanish (modern)</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.ES_ES</code>: Spanish (classic)</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.IT_IT_FIRENZE</code>: Italian</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.MIT</code>: US (MIT)</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.NABCC_8DOT</code>: US (NABCC 8 dot)</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.NABCC</code>: US (NABCC)</li>
+      <li>
+<code>org_daisy.EmbosserTableProvider.TableType.UNICODE_BRAILLE</code>: Unicode braille</li>
+      <li>
+<code>se_tpb.CXTableProvider.TableType.SV_SE_CX</code>: Swedish CX</li>
+    </ul>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/LocaleBasedTableProvider.html"><code>(locale:...)</code></a></p>
+
+    <p>Provides PEF tables by locale. This is currently implemented using a
+fixed mapping from locale to ID:</p>
+
+    <ul>
+      <li>en: <code>org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US</code>
+</li>
+      <li>nl: <code>com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01</code>
+</li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="saxon-functions-netsfsaxonlibextensionfunctiondefinition">Saxon functions (<code>net.sf.saxon.lib.ExtensionFunctionDefinition</code>)</h3>
+<h2 id="saxon-xpath-functions-netsfsaxonlibextensionfunctiondefinition">Saxon XPath functions (<a href="https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html" class="external-link" target="_blank"><code>net.sf.saxon.lib.ExtensionFunctionDefinition</code></a>)</h2>
 
 <ul>
-  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/saxon/impl/EncodeDefinition.html"><code>{http://www.daisy.org/ns/2008/pef}encode</code></a></li>
+  <li>
+    <p><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/saxon/impl/EncodeDefinition.html"><code>{http://www.daisy.org/ns/2008/pef}encode</code></a></p>
+
+    <p>Encode a (Unicode) braille string using the specified character set, see <a href="/pipeline/modules/braille/pef-utils/src/main/resources/xml/library.xsl">XSLT documentation</a></p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/saxon/impl/DecodeDefinition.html"><code>{http://www.daisy.org/ns/2008/pef}decode</code></a></p>
+
+    <p>Decode a braille string in the specified character set (to Unicode braille), see <a href="/pipeline/modules/braille/pef-utils/src/main/resources/xml/library.xsl">XSLT documentation</a></p>
+  </li>
 </ul>
 
-<h3 id="calabash-steps-orgdaisycommonxproccalabashxprocstepprovider">Calabash steps (<code>org.daisy.common.xproc.calabash.XProcStepProvider</code>)</h3>
+<h2 id="xmlcalabash-xproc-steps-orgdaisycommonxproccalabashxprocstepprovider">XMLCalabash XProc steps (<a href="/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html"><code>org.daisy.common.xproc.calabash.XProcStepProvider</code></a>)</h2>
 
 <ul>
-  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.html"><code>{http://www.daisy.org/ns/2008/pef}pef2text</code></a></li>
-  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/Text2PEFStep.html"><code>{http://www.daisy.org/ns/2008/pef}text2pef</code></a></li>
-  <li><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/ValidateStep.html"><code>{http://www.daisy.org/ns/2008/pef}validate</code></a></li>
+  <li>
+    <p><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.html"><code>{http://www.daisy.org/ns/2008/pef}pef2text</code></a></p>
+
+    <p>Convert a PEF document into a textual (ASCII-based) format, see <a href="/pipeline/api/d898e73.html">XProc documentation</a></p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/Text2PEFStep.html"><code>{http://www.daisy.org/ns/2008/pef}text2pef</code></a></p>
+
+    <p>Convert an ASCII-based braille format into PEF, see <a href="/pipeline/api/d898e107.html">XProc documentation</a></p>
+  </li>
+  <li>
+    <p><a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/calabash/impl/ValidateStep.html"><code>{http://www.daisy.org/ns/2008/pef}validate</code></a></p>
+
+    <p>Validate a PEF document, see <a href="/pipeline/api/d898e133.html">XProc documentation</a></p>
+  </li>
 </ul>
 
 <link rev="dp2:doc" href="./">
 
+<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.java">
+
+<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/pef/calabash/impl/Text2PEFStep.java">
+
+<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/pef/calabash/impl/ValidateStep.java">
+
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 
 
+    </div>
   </body>
 </html>

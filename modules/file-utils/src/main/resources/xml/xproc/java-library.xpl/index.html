@@ -8,11 +8,11 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../java-library.xpl">
 </head>
-<body><div class="code" about="../java-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+<body><div class="code" about="../java-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the target. The step
             fails if the file represented by &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt; does not exist or if it cannot be
             copied to the specified target.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
@@ -27,7 +27,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the deleted file. The
             step fails if the file does not exist or if it cannot be deleted.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
@@ -40,7 +40,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:directory&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:file&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;, or
                 &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:other&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; (implementations may also return more specific types,
             e.g., &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:fifo&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; or &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:dev&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;). If the document doesn't
@@ -60,7 +60,7 @@
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
 
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns the first count lines of the file named in &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt;. If
                 &lt;<span class="code-xml-element-local-name">code</span>&gt;count&lt;/<span class="code-xml-element-local-name">code</span>&gt; is negative, the step returns all except those first lines. The
             step returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;c:result&lt;/<span class="code-xml-element-local-name">code</span>&gt; element containing one &lt;<span class="code-xml-element-local-name">code</span>&gt;c:line&lt;/<span class="code-xml-element-local-name">code</span>&gt; for each
@@ -78,7 +78,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Creates a directory with the name spacified in the "href" option. If the name includes
             more than one directory component, all of the intermediate components are created. The
             path separator is implementation-defined. Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;
@@ -93,7 +93,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the target. The step
             fails if the file represented by the &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt; does not exist or if it cannot be
             copied to the specified target; the source file is deleted if the copy succeeds.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
@@ -107,7 +107,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns the last &lt;<span class="code-xml-element-local-name">code</span>&gt;count&lt;/<span class="code-xml-element-local-name">code</span>&gt; lines of the file named in &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt;. If
                 &lt;<span class="code-xml-element-local-name">code</span>&gt;count&lt;/<span class="code-xml-element-local-name">code</span>&gt; is negative, the step returns all except those last lines. The
             step returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;c:result&lt;/<span class="code-xml-element-local-name">code</span>&gt; element containing one &lt;<span class="code-xml-element-local-name">code</span>&gt;c:line&lt;/<span class="code-xml-element-local-name">code</span>&gt; for each
@@ -125,7 +125,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of a temporary file. The
             temporary file is guaranteed not to already exist when &lt;<span class="code-xml-element-local-name">code</span>&gt;px:tempfile&lt;/<span class="code-xml-element-local-name">code</span>&gt; is
             called. The file is created in the directory specified by the &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt;. The
@@ -144,7 +144,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the touched file. The
             step fails if the file does not exist and cannot be created.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
@@ -156,7 +156,7 @@
 
     
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;TODO&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;TODO&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:cwd"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;

@@ -8,12 +8,12 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../java-library.xpl">
 </head>
-<body><div class="code" about="../java-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+<body><div class="code" about="../java-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">letex</span>=<span class="code-xml-attribute-value">"http://www.le-tex.de/namespace"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">pxi</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc/internal"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
     
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:zip"</span>&gt;
         
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://docbook.org/ns/docbook"</span>&gt;
             &lt;<span class="code-xml-element-local-name">para</span>&gt;A step for creating ZIP archives.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
 
             &lt;<span class="code-xml-element-local-name">para</span>&gt;The ZIP archive is identified by the &lt;<span class="code-xml-element-local-name">option</span>&gt;href&lt;/<span class="code-xml-element-local-name">option</span>&gt;. The
@@ -95,7 +95,7 @@ entry =
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:unzip"</span>&gt;
         
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://docbook.org/ns/docbook"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xlink</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xlink"</span>&gt;
             &lt;<span class="code-xml-element-local-name">para</span>&gt;A step for extracting information out of ZIP archives.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
 
             &lt;<span class="code-xml-element-local-name">para</span>&gt;The value of the &lt;<span class="code-xml-element-local-name">option</span>&gt;href&lt;/<span class="code-xml-element-local-name">option</span>&gt; option &lt;<span class="code-xml-element-local-name">rfc2119</span>&gt;must&lt;/<span class="code-xml-element-local-name">rfc2119</span>&gt; be an

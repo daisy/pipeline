@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">epub3-merge-prefix {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/epub-utils/src/main/resources/xml/pub/merge-prefix.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">epub3-merge-prefix</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Merge <code>prefix</code> attributes</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/epub-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/epub-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">OPF or HTML document that may have more than one <code>prefix</code>
+			(<code>epub:prefix</code>) attribute.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc"><code>prefix</code> attributes are allowed on any element, not only on
+			<code>package</code> or <code>html</code>.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If an element has more than one ancestor element with a <code>prefix</code>, all
+			except the closest one are ignored.</p>
+</td>
+</tr></tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The result document has at most one <code>prefix</code> attribute, on the root
+			element. The different <code>prefix</code> attributes in the input document are merged
+			in such a way that every prefix is unique and no two prefixes are mapped to the same
+			URI. The document is updated at the places where a prefix is used that was
+			renamed. Prefixes that are not used anywhere inside the document are skipped from the
+			declaration.</p></td>
+</tr></tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">implicit-input-prefixes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'a11y:      http://www.idpf.org/epub/vocab/package/a11y/#                                                    dc:        http://purl.org/dc/elements/1.1/                                                    dcterms:   http://purl.org/dc/terms/                                                    marc:      http://id.loc.gov/vocabulary/                                                    media:     http://www.idpf.org/epub/vocab/overlays/#                                                    onix:      http://www.editeur.org/ONIX/book/codelists/current.html#                                                    rendition: http://www.idpf.org/vocab/rendition/#                                                    schema:    http://schema.org/                                                    xsd:       http://www.w3.org/2001/XMLSchema#'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Prefix declarations that are assumed in the input, i.e. they don't need to be
+			declared in order to be recognized.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">implicit-output-prefixes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'#default'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Prefix declarations that will be omitted from the output.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">By default (#default) prefixes that are used but not declared (i.e. implied) in the
+			input are also implied in the output.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -24,8 +24,8 @@
             Step <span class="name">html-to-pef.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
 <h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">HTML to PEF</h1>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms a HTML document into a PEF.</p>
-<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/modules/braille/html-to-pef">
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms a HTML document into an embosser ready braille document.</p>
+<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/html-to-pef">
             Online documentation
         </a><dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author">
             <dt>Name:</dt>
@@ -33,11 +33,30 @@
             <dt>Organization:</dt>
             <dd px:role="organization" href="http://www.nlb.no/">NLB</dd>
             <dt>E-mail:</dt>
-            <dd><a px:role="contact" href="mailto:josteinaj@gmail.com" class="external-link" target="_blank">josteinaj@gmail.com</a></dd>
+            <dd><a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a></dd>
         </dl>
 <div>Defined in:
           <span class="uri">http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl</span>
 </div>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">status</span><span class="details"> primary</span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Status</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
+
+When `include-obfl` is set to true, the conversion may fail but still output a document on the
+"obfl" port.</p>
+</td>
+</tr></tbody>
+</table>
 <h3>Options</h3>
 <table border="1">
 <thead><tr>
@@ -61,6 +80,14 @@
 <tr>
 <td width="150px;" class="nowrap name">
 <span class="">stylesheet</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">stylesheet-parameters</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
