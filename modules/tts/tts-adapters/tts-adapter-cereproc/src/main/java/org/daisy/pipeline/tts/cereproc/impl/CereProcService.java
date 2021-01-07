@@ -34,14 +34,14 @@ public abstract class CereProcService extends AbstractTTSService {
 				logger.warn(prop + " property not set. Defaulting to " + server);
 			}
 		}
-		File clientDir; {
-			String prop = "org.daisy.pipeline.tts.cereproc.client.dir";
+		File client; {
+			String prop = "org.daisy.pipeline.tts.cereproc.client";
 			String val = params.get(prop);
 			if (val != null) {
-				clientDir = new File(val);
+				client = new File(val);
 			} else {
-				clientDir = new File("/opt/cspeech/client");
-				logger.warn(prop + " property not set. Defaulting to " + clientDir);
+				client = new File("/usr/bin/cspeechclient");
+				logger.warn(prop + " property not set. Defaulting to " + client);
 			}
 		}
 		int priority; {
@@ -57,11 +57,11 @@ public abstract class CereProcService extends AbstractTTSService {
 				priority = 15;
 			}
 		}
-		return newEngine(server, clientDir, priority, params);
+		return newEngine(server, client, priority, params);
 	}
 
 	protected abstract CereProcEngine newEngine(
-		String server, File clientDir, int priority, Map<String,String> params) throws Throwable;
+		String server, File client, int priority, Map<String,String> params) throws Throwable;
 
 	@Override
 	public String getName() {
@@ -87,7 +87,7 @@ public abstract class CereProcService extends AbstractTTSService {
 
 		@Override
 		protected CereProcEngine newEngine(
-				String server, File clientDir, int priority, Map<String,String> params) throws Throwable {
+				String server, File client, int priority, Map<String,String> params) throws Throwable {
 
 			int port; {
 				String prop = "org.daisy.pipeline.tts.cereproc.port";
@@ -103,7 +103,7 @@ public abstract class CereProcService extends AbstractTTSService {
 					logger.warn(prop + " property not set. Defaulting to " + port);
 				}
 			}
-			return new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, clientDir, priority);
+			return new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, client, priority);
 		}
 	}
 
@@ -134,7 +134,7 @@ public abstract class CereProcService extends AbstractTTSService {
 
 		@Override
 		protected CereProcEngine newEngine(
-				String server, File clientDir, int priority, Map<String,String> params) throws Throwable {
+				String server, File client, int priority, Map<String,String> params) throws Throwable {
 
 			int port; {
 				String prop = "org.daisy.pipeline.tts.cereproc.dnn.port";
@@ -163,7 +163,7 @@ public abstract class CereProcService extends AbstractTTSService {
 					priority = 15;
 				}
 			}
-			return new CereProcEngine(CereProcEngine.Variant.DNN, this, server, port, clientDir, priority);
+			return new CereProcEngine(CereProcEngine.Variant.DNN, this, server, port, client, priority);
 		}
 	}
 }

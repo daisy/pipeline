@@ -1,6 +1,9 @@
 package org.daisy.pipeline.tts.cereproc.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -10,15 +13,13 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import net.sf.saxon.s9api.XdmNode;
 
@@ -40,6 +41,7 @@ import org.slf4j.LoggerFactory;
 public class CereProcEngine extends MarklessTTSEngine {
 
 	private final static Logger logger = LoggerFactory.getLogger(CereProcEngine.class);
+	private static File tmpDirectory = null;
 
 	private AudioFormat audioFormat;
 	private final int priority;
@@ -51,26 +53,29 @@ public class CereProcEngine extends MarklessTTSEngine {
 		DNN
 	}
 
-	public CereProcEngine(Variant variant, CereProcService service, String server, int port, File clientDir, int priority)
+	public CereProcEngine(Variant variant, CereProcService service, String server, int port, File client, int priority)
 			throws SynthesisException {
 		super(service);
 		this.priority = priority;
-		File libDir = new File(clientDir, "lib");
-		if (!libDir.isDirectory())
-			throw new SynthesisException("No CereProc client installed in " + clientDir);
-		this.cmd = new String[]{"java",
-		                        "-Djava.library.path=" + libDir,
-		                        "-jar",
-		                        ""+new File(clientDir, "cserver-client-java.jar"),
-		                        server,
-		                        ""+port};
+		if (!client.exists())
+			throw new SynthesisException("No CereProc client installed at " + client);
+		if (tmpDirectory == null) {
+			try {
+				tmpDirectory = Files.createTempDirectory("cereproc-").toFile();
+				tmpDirectory.deleteOnExit();
+				tmpDirectory = tmpDirectory.toPath().toRealPath().normalize().toFile();
+			} catch (IOException e) {
+				throw new SynthesisException("Could not initialize CereProc engine", e);
+			}
+		}
+		this.cmd = new String[]{client.getAbsolutePath(),
+		                        "-H", server,
+		                        "-p", ""+port,
+		                        "-o", tmpDirectory.getAbsolutePath()};
 		int sampleRate; // sample rate in Hz
 		int sampleBits = 16; // sample size in bits
 		switch (variant) {
 		case DNN:
-			// Not using the info from the AudioInputStream (see below) because this always gives us
-			// 22,050 kHz while in reality it is 16 kHz (DNN) or 48 kHz (standard).
-			// FIXME: This is an issue in the Java client.
 			sampleRate = 16000;
 			this.expectedMillisecPerWord = 500;
 			break;
@@ -128,22 +133,36 @@ public class CereProcEngine extends MarklessTTSEngine {
 	                                          boolean retry)
 			throws SynthesisException, InterruptedException, MemoryException {
 		Collection<AudioBuffer> result = new ArrayList<>();
+		StringWriter out = new StringWriter();
 		StringWriter err = new StringWriter();
+		File txtFile;
 		try {
-			SubprocessIO io = new SubprocessIO();
-			String[] cmd = new String[this.cmd.length + 2];
+			txtFile = File.createTempFile("tmp", ".txt", tmpDirectory);
+		} catch (IOException e) {
+			throw new SynthesisException(e);
+		}
+		File audioFile = new File(tmpDirectory, txtFile.getName().replaceAll(".txt$", ".raw"));
+		try {
+			String[] cmd = new String[this.cmd.length + 3];
 			System.arraycopy(this.cmd, 0, cmd, 0, this.cmd.length);
-			cmd[cmd.length - 2] = "FILIBUSTER";
-			cmd[cmd.length - 1] = voice.name;
+			cmd[cmd.length - 3] = "-V";
+			cmd[cmd.length - 2] = voice.name;
+			cmd[cmd.length - 1] = txtFile.getAbsolutePath();
+			try (OutputStream os = new FileOutputStream(txtFile)) {
+				Writer w = new OutputStreamWriter(os, UTF_8);
+				w.write(sentence.replace('\n', ' '));
+				w.write("\n");
+				try {
+					w.flush();
+				} catch (IOException e) {
+				}
+			}
 			int ret = new CommandRunner(cmd)
-				.feedInput(
-					stream -> io.writeSentence(stream, sentence)
-				)
 				.consumeOutput(
 					stream -> {
-						result.add(io.readAudio(stream, bufferAllocator));
-						stream.close();
-						io.quit();
+						try (Reader r = new InputStreamReader(stream)) {
+							for (int c = r.read(); c != -1; c = r.read()) out.write((char)c);
+						}
 					}
 				)
 				.consumeError(
@@ -153,114 +172,34 @@ public class CereProcEngine extends MarklessTTSEngine {
 						}
 					}
 				)
-				.run(io::getTimeout);
+				.run();
 			if (ret != 0)
 				throw new RuntimeException("Return value was " + ret);
+			if (!audioFile.exists())
+				throw new RuntimeException("No audio file was produced");
+			if (out.getBuffer().length() > 0)
+				logger.trace(out.toString());
 			if (err.getBuffer().length() > 0)
-			  logger.trace(err.toString());
+				logger.trace(err.toString());
+			try (InputStream is = new FileInputStream(audioFile)) {
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				byte[] buf = new byte[8192];
+				int len;
+				while ((len = is.read(buf)) > 0)
+					bytes.write(buf, 0, len);
+				AudioBuffer b = bufferAllocator.allocateBuffer(bytes.size());
+				System.arraycopy(bytes.toByteArray(), 0, b.data, 0, b.data.length);
+				result.add(b);
+			}
 		} catch (MemoryException|InterruptedException e) {
 			SoundUtil.cancelFootPrint(result, bufferAllocator);
 			throw e;
 		} catch (Throwable e) {
 			SoundUtil.cancelFootPrint(result, bufferAllocator);
+			logger.error(out.toString());
 			logger.error(err.toString());
 			throw new SynthesisException(e);
 		}
 		return result;
-	}
-
-	private class SubprocessIO {
-
-		Writer writer;
-		long quitTime = -1;
-
-		void writeSentence(OutputStream stream, String sentence) throws IOException {
-			sentence = sentence.replace('\n', ' ');
-			writer = new OutputStreamWriter(stream, UTF_8);
-			writer.write(sentence);
-			writer.write("\n");
-			try {
-				writer.flush();
-			} catch (IOException e) {
-			}
-		}
-
-		AudioBuffer readAudio(InputStream stream, AudioBufferAllocator bufferAllocator) throws IOException, MemoryException {
-			int timeout = -1; // no need for a timeout here because it is handled elsewhere (taking
-			                  // into account length of sentence)
-			// first read length of audio data
-			int len; {
-				String s = "";
-				int c;
-				waitForStreamAvailable(stream, -1);
-				while ((c = stream.read()) != '\n') {
-					if (c < 0) throw new RuntimeException("coding error");
-					s += (char)c;
-					waitForStreamAvailable(stream, -1);
-				}
-				len = Integer.parseInt(s);
-			}
-			// then read the audio
-			try {
-				// this assumes stream supports mark/reset (wrap in a BufferedInputStream to be sure)
-				stream = AudioSystem.getAudioInputStream(stream); }
-			catch (UnsupportedAudioFileException e) {
-				throw new IOException(e); }
-			if (CereProcEngine.this.audioFormat == null) {
-				CereProcEngine.this.audioFormat = ((AudioInputStream)stream).getFormat();
-				logger.info("The audio sample rate used by "
-				            + getProvider().getName() + "-" + getProvider().getVersion()
-				            + " is: " + audioFormat.getSampleRate());
-			}
-			len -= 44; // because of the header that AudioInputStream strips
-			           // FIXME: very brittle: move AudioSystem.getAudioInputStream(...) after this
-			byte[] audio = new byte[len];
-			do {
-				waitForStreamAvailable(stream, -1);
-				int read = stream.read(audio, audio.length - len, len);
-				if (read < 0) throw new RuntimeException("coding error");
-				len -= read;
-			} while (len > 0);
-			AudioBuffer b = bufferAllocator.allocateBuffer(audio.length);
-			System.arraycopy(audio, 0, b.data, 0, b.data.length);
-			return b;
-		}
-
-		// make the subprocess quit
-		void quit() throws IOException {
-			// assuming that writer has been initialized
-			writer.write(System.getProperty("line.separator"));
-			try {
-				writer.flush();
-				writer.close();
-			} catch (IOException e) {
-			}
-			quitTime = System.currentTimeMillis();
-		}
-
-		// whether to wait longer for the process to return
-		Long getTimeout() {
-			return (quitTime < 0 || System.currentTimeMillis() - quitTime < 10000)
-				? 200L
-				: 0L;
-		}
-	}
-
-	/**
-	 * @param timeout in msec
-	 */
-	private static long waitForStreamAvailable(InputStream stream, long timeout) throws IOException {
-		long poll = 200; // msec
-		long startTime = System.currentTimeMillis();
-		do {
-			if (stream.available() > 0)
-				return System.currentTimeMillis() - startTime;
-			try {
-				Thread.sleep(poll);
-			} catch (InterruptedException e) {
-				throw new IOException("Wait for IO interrupted", e);
-			}
-		} while (timeout < 0 || timeout > (System.currentTimeMillis() - startTime));
-		throw new IOException("Wait for IO timed out after: " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 }
