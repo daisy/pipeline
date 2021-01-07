@@ -180,7 +180,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       # link to source files with special class attribute
       if ['userdoc','apidoc','source'].include?(a['class'])
         link_class = a['class']
-      elsif not a['href'] =~ /^https?:\/\//o
+      elsif not a['href'] =~ /^https?:\/\//o or a[href_attr].start_with?(site_base + baseurl)
 
         # when current page is of type userdoc/apidoc/source, link to pages of the same type
         if not page_type
@@ -235,12 +235,13 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           # it could be that a page links to a file that it documents itself
           abs_url = nil
         end
-      elsif link_class == a['class'] and a['href'] =~ /^https?:\/\//o
+      elsif link_class == a['class'] and a['href'] =~ /^https?:\/\//o and not a['href'].start_with?(site_base + baseurl)
 
-        # userdoc/apidoc/source links must be relative
+        # userdoc/apidoc/source links must be internal
         link_error(a, href_attr, f)
         next
-      else
+      end
+      if not abs_url
 
         # if userdoc/apidoc/source page does not exist keep link to source file
         # link to the htmlized page if present
