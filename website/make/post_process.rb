@@ -148,7 +148,10 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
   end
 end
 
-Dir.glob($base_dir + '/**/*.{html,svg}').each do |f|
+files = Dir.glob($base_dir + '/**/*.{html,svg}')
+file_count = files.count()
+file_idx = 0
+files.each do |f|
   if f.end_with?('html')
     doc = File.open(f) { |f| Nokogiri::HTML(f) }
   else
@@ -158,6 +161,7 @@ Dir.glob($base_dir + '/**/*.{html,svg}').each do |f|
     raise "coding error"
   end
   f_path = f[$base_dir.length..-1]
+  # puts "- (#{file_idx += 1}/#{file_count}) #{f_path}"
   src_path = to_source(f_path)
   page_url = RDF::URI(site_base + baseurl + f_path)
   page_type = nil
