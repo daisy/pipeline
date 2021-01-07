@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:ssml="http://www.w3.org/2001/10/synthesis"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
 

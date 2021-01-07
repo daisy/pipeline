@@ -37,6 +37,14 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>audio-common</artifactId>
     </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-encoder-lame</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <properties>
