@@ -1126,11 +1126,10 @@ class SegmentProcessor {
             // [margin][preContent][preTabText][tab][postTabText]
             //      preContentPos ^
             String tabSpace = "";
-            boolean rightAlignedLeader = false;
+            boolean hasLeader = leaderManager.hasLeader();
 
             // if a leader is pending lay it out first
-            if (leaderManager.hasLeader()) {
-                rightAlignedLeader = leaderManager.getCurrentLeader().getAlignment() == Leader.Alignment.RIGHT;
+            if (hasLeader) {
                 int preTabPos = row.getPreTabPosition(currentRow);
                 int leaderPos = leaderManager.getLeaderPosition(
                     processorContext.getAvailable() - lineProps.getReservedWidth()
@@ -1161,10 +1160,11 @@ class SegmentProcessor {
             int availableIfLastRow = row.getMaxLength(currentRow) - contentLen;
             String next = null;
             boolean onLastRow = false;
-            // This implementation does not make use the full available space for the last line
-            // unless a right aligned leader is present.
-            if (rightAlignedLeader
-                // If a right aligned leader is present and there are more segments, they are either:
+            // This implementation does not make use of the full available space for the last line
+            // unless a leader is present (and the content after the leader fits on the row).
+            if (hasLeader
+                // If a leader is present and there are more segments (after this CurrentResult),
+                // they are either:
                 // - newlines: this means we can not be on the last line
                 // - leaders: we may be on last line but this function will be called again
                 // - external references: may be on last line; currently not supported
