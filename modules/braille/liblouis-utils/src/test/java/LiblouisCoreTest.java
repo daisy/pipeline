@@ -14,6 +14,7 @@ import org.daisy.braille.api.table.Table;
 import org.daisy.braille.api.table.TableCatalogService;
 
 import static org.daisy.common.file.URLs.asURI;
+import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineIterator;
@@ -300,23 +301,34 @@ public class LiblouisCoreTest extends AbstractTest {
 	
 	@Test
 	public void testWhiteSpaceProcessing() {
-		FromStyledTextToBraille translator = provider.withContext(messageBus)
-		                                             .get(query("(table:'foobar.uti')")).iterator().next()
-		                                             .fromStyledTextToBraille();
+		BrailleTranslator translator = provider.withContext(messageBus)
+		                                       .get(query("(table:'foobar.uti')")).iterator().next();
 		assertEquals(braille("⠋⠕⠕    ⠃⠁⠗ ⠃⠁⠵"),
-		             translator.transform(text("foo    bar\nbaz")));
+		             translator.fromStyledTextToBraille()
+		                       .transform(text("foo    bar\nbaz")));
 		assertEquals(braille("⠋⠕⠕    ⠃⠁⠗\n⠃⠁⠵"),
-		             translator.transform(styledText("foo    bar\nbaz", "white-space:pre-wrap")));
+		             translator.fromStyledTextToBraille()
+		                       .transform(styledText("foo    bar\nbaz", "white-space:pre-wrap")));
 		assertEquals(braille("",
 		                     "⠋⠕⠕    ⠃⠁⠗\n\u00AD",
 		                     "",
 		                     "⠃⠁⠵"),
-		             translator.transform(styledText("",             "",
+		             translator.fromStyledTextToBraille()
+		                       .transform(styledText("",             "",
 		                                             "foo    bar\n", "white-space:pre-wrap",
 		                                             "\u00AD",       "",
 		                                             "baz",          "")));
 		assertEquals(braille("\n"),
-		             translator.transform(styledText("\n", "white-space:pre-line")));
+		             translator.fromStyledTextToBraille()
+		                       .transform(styledText("\n", "white-space:pre-line")));
+		// test no-break space
+		assertEquals(
+			"⠁⠃⠉\n" +
+			"⠙⠑⠋⠀⠛⠓⠊⠚",
+			fillLines(
+				translator.lineBreakingFromStyledText()
+				          .transform(styledText("abc def ghij", "")),
+				10));
 	}
 	
 	@Test
