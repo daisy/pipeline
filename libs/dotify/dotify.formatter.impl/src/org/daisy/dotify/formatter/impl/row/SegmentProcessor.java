@@ -1136,21 +1136,16 @@ class SegmentProcessor {
                 );
                 int offset = leaderPos - preTabPos;
                 int align = leaderManager.getLeaderAlign(btr.countRemaining());
-
                 if (
                     preTabPos > leaderPos ||
                     offset - align < 0
                 ) { // if tab position has been passed or if text does not fit within row, try on a new row
                     return Optional.ofNullable(flushCurrentRow());
-                }
-                try {
+                } else {
                     tabSpace = leaderManager.getLeaderPattern(
                         processorContext.getFormatterContext().getTranslator(mode),
                         offset - align
                     );
-                } finally {
-                    // always discard leader
-                    leaderManager.removeLeader();
                 }
             }
 
@@ -1183,12 +1178,21 @@ class SegmentProcessor {
             next = btr.nextTranslatedRow(available, force, lineProps.suppressHyphenation());
             // don't know if soft hyphens need to be replaced, but we'll keep it for now
             next = softHyphenPattern.matcher(next).replaceAll("");
-            if ("".equals(next) && "".equals(tabSpace)) {
+            // If there is a leader, insert it if the content that follows it fits on the line or if
+            // there is no following content. If there is no leader, just insert any content that
+            // fits on the line.
+            if (!next.isEmpty() || (!tabSpace.isEmpty() && !btr.hasNext())) {
+                currentRow.text(row.getLeftIndent() + currentRow.getText() + tabSpace + next);
+                if (hasLeader) {
+                    if (!tabSpace.isEmpty()) {
+                        currentRow.leaderSpace(currentRow.getLeaderSpace() + tabSpace.length());
+                    }
+                    // tabSpace has been inserted, discard the leader now
+                    leaderManager.removeLeader();
+                }
+            } else {
                 currentRow.text(
                     row.getLeftIndent() + trailingWsBraillePattern.matcher(currentRow.getText()).replaceAll(""));
-            } else {
-                currentRow.text(row.getLeftIndent() + currentRow.getText() + tabSpace + next);
-                currentRow.leaderSpace(currentRow.getLeaderSpace() + tabSpace.length());
             }
             if (btr instanceof AggregatedBrailleTranslatorResult) {
                 AggregatedBrailleTranslatorResult abtr = ((AggregatedBrailleTranslatorResult) btr);
