@@ -151,6 +151,22 @@ public class DefaultLineBreakerTest {
 					"xxx ab­cdefg",
 					0, 7, ' ', '-', 1),
 				10));
+		assertEquals(
+			"xxx\n" +
+			"abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abcdefg h",
+					0, 7, ' ', '-', 1),
+				10));
+		assertEquals(
+			"xxx\n" +
+			"abc",
+			fillLines(
+				new AbstractBrailleTranslator.util.DefaultLineBreaker.LineIterator(
+					"xxx abc defg",
+					0, 7, ' ', '-', 1),
+				10));
 	}
 	
 	private static class TestHyphenator extends AbstractHyphenator {
