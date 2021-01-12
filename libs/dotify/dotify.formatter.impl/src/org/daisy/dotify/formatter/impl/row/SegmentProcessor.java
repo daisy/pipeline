@@ -1154,20 +1154,41 @@ class SegmentProcessor {
             boolean force = contentLen == 0;
             int availableIfLastRow = row.getMaxLength(currentRow) - contentLen;
             String next = null;
+            // check whether we are on the last row of the block (only matters if there is a
+            // right-text-indent)
             boolean onLastRow = false;
-            // This implementation does not make use of the full available space for the last line
-            // unless a leader is present (and the content after the leader fits on the row).
-            if (hasLeader
-                // If a leader is present and there are more segments (after this CurrentResult),
-                // they are either:
-                // - newlines: this means we can not be on the last line
-                // - leaders: we may be on last line but this function will be called again
-                // - external references: may be on last line; currently not supported
-                && !hasMoreSegments()) {
-                BrailleTranslatorResult btrCopy = btr.copy();
-                btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
-                if (!btrCopy.hasNext()) {
-                    onLastRow = true;
+            if (rightIndentIfNotLastRow > 0) {
+                // We only support the following cases:
+                // - The current result starts with a leader and fits on the last row and there are
+                //   no following segments. All text, page number reference, marker reference,
+                //   evaluate, marker, anchor and identifier segments after a leader are combined
+                //   with the leader into a single CurrentResult, so only new line, leader or
+                //   external reference segments can immediately follow. Only in case of the two
+                //   latter we may be incorrectly assuming we are not on the last row (and therefore
+                //   may be using less space than is available).
+                if (hasLeader) {
+                    if (!hasMoreSegments()) {
+                        BrailleTranslatorResult btrCopy = btr.copy();
+                        btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
+                        if (!btrCopy.hasNext()) {
+                            onLastRow = true;
+                        }
+                    }
+                }
+                // - The current result fits on the row regardless of whether it is the last row or
+                //   not. We assume that we are on the last row because it doesn't matter. Only in
+                //   the case the current result does not fit on a row with right text indent
+                //   applied, but does fit together with all the following content on a row without
+                //   right text indent applied we are incorrectly assuming we are not on the last
+                //   row. This only becomes a problem as soon as right-text-indent exceeds the
+                //   distance between the right end of the leader and the right edge of the box.
+                else {
+                    BrailleTranslatorResult btrCopy = btr.copy();
+                    String remainder = btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
+                    if (!btrCopy.hasNext()
+                        && remainder.length() <= availableIfLastRow - rightIndentIfNotLastRow) {
+                        onLastRow = true;
+                    }
                 }
             }
             int available = availableIfLastRow;
@@ -1200,6 +1221,17 @@ class SegmentProcessor {
                 currentRow.addAnchors(abtr.getAnchors());
                 currentRow.addIdentifiers(abtr.getIdentifiers());
                 abtr.clearPending();
+            }
+            // When right-text-indent was applied and the current result fitted exactly on the row
+            // and trailing spaces were discarded, we don't want more content to be added to it
+            // (which is possible because by cutting the trailing spaces and not applying
+            // right-text-indent we could have created just enough room to fit all remaining
+            // content). Hence we flush the row.
+            if (rightIndentIfNotLastRow > 0
+                && !onLastRow
+                && !btr.hasNext()
+            ) {
+                return Optional.ofNullable(flushCurrentRow());
             }
             return Optional.empty();
         }
