@@ -1,5 +1,6 @@
 package org.daisy.dotify.formatter.impl.segment;
 
+import org.daisy.dotify.api.translator.FollowingText;
 import org.daisy.dotify.api.translator.ResolvableText;
 
 import java.util.Optional;
@@ -33,4 +34,41 @@ public interface Segment extends ResolvableText {
         return true;
     }
 
+    /**
+     * Return a version of the segment for use as context when the segment ought to be kept on a
+     * single row, possibly together with other segments. This is the case for content following a
+     * right-aligned leader.
+     *
+     * @return The "unbreakable" version of the segment.
+     */
+    public default FollowingText asUnbreakable() {
+        String value = peek();
+        String unbreakableValue = value.replaceAll("[\\s\u2800]", "\u00A0");
+        if (unbreakableValue.equals(value)) {
+            return this;
+        } else {
+            return new FollowingText() {
+                @Override
+                public String peek() {
+                    return unbreakableValue;
+                }
+                @Override
+                public boolean isStatic() {
+                    return Segment.this.isStatic();
+                }
+                @Override
+                public Optional<String> getLocale() {
+                    return Segment.this.getLocale();
+                }
+                @Override
+                public boolean shouldHyphenate() {
+                    return Segment.this.shouldHyphenate();
+                }
+                @Override
+                public boolean shouldMarkCapitalLetters() {
+                    return Segment.this.shouldMarkCapitalLetters();
+                }
+            };
+        }
+    }
 }
