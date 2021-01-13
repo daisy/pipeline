@@ -952,17 +952,33 @@ class SegmentProcessor {
         private final BrailleTranslatorResult btr;
         private final String mode;
         private boolean first;
+        private final Integer nextTabStop;
 
-        CurrentResultImpl(BrailleTranslatorResult btr, String mode) {
+        /**
+         * @param btr The translation result of a sequence of one or more segments, with as context
+         *            all preceding segments and all following segments that preceed the next
+         *            newline, tab stop, or end of block. "Tab stop" refers to the position right
+         *            after a leader in case of left alignment, or in case of right alignment the
+         *            position before the first newline or leader after the leader, or the end of
+         *            the block if the leader is not followed by any other leaders or
+         *            newlines. Centered alignment is treated as left alignment when it comes to
+         *            determining the translation context.
+         * @param nextTabStop The position, in number of cells from the left, of the next tab stop,
+         *                    or null if there is no next tab stop.
+         * @param mode The translation mode for translating list labels and leader patterns
+         */
+        CurrentResultImpl(BrailleTranslatorResult btr, Integer nextTabStop, String mode) {
             this.btr = btr;
             this.mode = mode;
             this.first = true;
+            this.nextTabStop = nextTabStop;
         }
 
         private CurrentResultImpl(CurrentResultImpl template) {
             this.btr = template.btr.copy();
             this.mode = template.mode;
             this.first = template.first;
+            this.nextTabStop = template.nextTabStop;
         }
 
         @Override
@@ -1150,10 +1166,16 @@ class SegmentProcessor {
             }
 
             // get next row from BrailleTranslatorResult
-            int contentLen = StringTools.length(tabSpace) + StringTools.length(currentRow.getText());
-            boolean force = contentLen == 0;
-            int availableIfLastRow = row.getMaxLength(currentRow) - contentLen;
-            String next = null;
+            int contentLen = StringTools.length(currentRow.getText());
+            int leaderLen = StringTools.length(tabSpace);
+            int maxLength = row.getMaxLength(currentRow);
+            boolean force = contentLen + leaderLen == 0;
+            Integer availableUntilNextTabStop = nextTabStop != null
+                ? nextTabStop - row.getPreTabPosition(currentRow) - leaderLen
+                : null;
+            int availableIfLastRow = nextTabStop != null
+                ? availableUntilNextTabStop
+                : maxLength - contentLen - leaderLen;
             // check whether we are on the last row of the block (only matters if there is a
             // right-text-indent)
             boolean onLastRow = false;
@@ -1186,19 +1208,42 @@ class SegmentProcessor {
                     BrailleTranslatorResult btrCopy = btr.copy();
                     String remainder = btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
                     if (!btrCopy.hasNext()
-                        && remainder.length() <= availableIfLastRow - rightIndentIfNotLastRow) {
+                        && contentLen + remainder.length() <= maxLength - rightIndentIfNotLastRow) {
                         onLastRow = true;
                     }
                 }
             }
-            int available = availableIfLastRow;
-            if (!onLastRow) {
-                available -= rightIndentIfNotLastRow;
-            }
             // break line
-            next = btr.nextTranslatedRow(available, force, lineProps.suppressHyphenation());
-            // don't know if soft hyphens need to be replaced, but we'll keep it for now
-            next = softHyphenPattern.matcher(next).replaceAll("");
+            String next = null;
+            // if there is a following leader, try to fit the current result together with that
+            // leader on the current row
+            if (nextTabStop != null
+                && !onLastRow // if we already know we are on the last row, the available space
+                              // calculated below will already take into account the tab stop
+                && rightIndentIfNotLastRow == 0 // otherwise we already know we are not on the last
+                                                // row
+                && availableUntilNextTabStop != availableIfLastRow // a tab stop at 100% is just
+                                                                   // like the end of the block
+            ) {
+                BrailleTranslatorResult btrCopy = btr.copy();
+                next = btrCopy.nextTranslatedRow(availableUntilNextTabStop, force, true);
+                next = softHyphenPattern.matcher(next).replaceAll("");
+                if (!next.isEmpty()
+                    && !btrCopy.hasNext()
+                    && btr.copy().nextTranslatedRow(Integer.MAX_VALUE, force, true).equals(next)) {
+                    btr.nextTranslatedRow(Integer.MAX_VALUE, force, true);
+                } else {
+                    next = null;
+                }
+            }
+            if (next == null) {
+                int available = onLastRow
+                    ? availableIfLastRow
+                    : maxLength - contentLen - leaderLen - rightIndentIfNotLastRow;
+                next = btr.nextTranslatedRow(available, force, lineProps.suppressHyphenation());
+                // don't know if soft hyphens need to be replaced, but we'll keep it for now
+                next = softHyphenPattern.matcher(next).replaceAll("");
+            }
             // If there is a leader, insert it if the content that follows it fits on the line or if
             // there is no following content. If there is no leader, just insert any content that
             // fits on the line.
