@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:snaekobbi/jsass.git
+	branch = org.daisy.libs
+	commit = 5bb6b01cbf090f892e6faf9b3a924e0937aa3bf8
+	parent = 9fb577e91b285ca6a54da1e8c42e2238a80d5f9e
+	cmdver = 0.3.1

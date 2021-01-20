@@ -1,0 +1,95 @@
+kind: pipeline
+name: test-arm-openjdk8
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+  - name: build
+    image: gradle:5.4.1-jdk8-slim
+    failure: ignore
+    commands:
+      - mkdir -p /tmp/gradle /tmp/gradle_home /tmp/gradle_build
+      - gradle --no-daemon --info --full-stacktrace --project-cache-dir /tmp/gradle --gradle-user-home "/tmp/.gradle_home" -Dorg.gradle.project.buildDir=/tmp/gradle_build clean test
+
+---
+
+kind: pipeline
+name: test-arm-openjdk11
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+  - name: build
+    image: gradle:5.4.1-jdk11-slim
+    failure: ignore
+    commands:
+      - mkdir -p /tmp/gradle /tmp/gradle_home /tmp/gradle_build
+      - gradle --no-daemon --info --full-stacktrace --project-cache-dir /tmp/gradle --gradle-user-home "/tmp/.gradle_home" -Dorg.gradle.project.buildDir=/tmp/gradle_build clean test
+
+---
+
+#kind: pipeline
+#name: test-arm-openjdk12
+#
+#platform:
+#  os: linux
+#  arch: arm
+#
+#steps:
+#  - name: build
+#    image: gradle:5.4.1-jdk12-slim
+#    commands:
+#      - mkdir -p /tmp/gradle /tmp/gradle_home /tmp/gradle_build
+#      - gradle --no-daemon --info --full-stacktrace --project-cache-dir /tmp/gradle --gradle-user-home "/tmp/.gradle_home" -Dorg.gradle.project.buildDir=/tmp/gradle_build clean test
+#
+#---
+
+kind: pipeline
+name: test-arm64-openjdk8
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: build
+    image: gradle:5.4.1-jdk8-slim
+    commands:
+      - mkdir -p /tmp/gradle /tmp/gradle_home /tmp/gradle_build
+      - gradle --no-daemon --info --full-stacktrace --project-cache-dir /tmp/gradle --gradle-user-home "/tmp/.gradle_home" -Dorg.gradle.project.buildDir=/tmp/gradle_build clean test
+
+---
+
+kind: pipeline
+name: test-arm64-openjdk11
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: build
+    image: gradle:5.4.1-jdk11-slim
+    commands:
+      - mkdir -p /tmp/gradle /tmp/gradle_home /tmp/gradle_build
+      - gradle --no-daemon --info --full-stacktrace --project-cache-dir /tmp/gradle --gradle-user-home "/tmp/.gradle_home" -Dorg.gradle.project.buildDir=/tmp/gradle_build clean test
+
+#---
+#
+#kind: pipeline
+#name: test-arm64-openjdk12
+#
+#platform:
+#  os: linux
+#  arch: arm64
+#
+#steps:
+#  - name: build
+#    image: gradle:5.4.1-jdk12-slim
+#    commands:
+#      - mkdir -p /tmp/gradle /tmp/gradle_home /tmp/gradle_build
+#      - gradle --no-daemon --info --full-stacktrace --project-cache-dir /tmp/gradle --gradle-user-home "/tmp/.gradle_home" -Dorg.gradle.project.buildDir=/tmp/gradle_build clean test
