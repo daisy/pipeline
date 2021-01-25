@@ -19,6 +19,8 @@ plugins {
   id "de.undercouch.download" version "2.0.0"
 }
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import de.undercouch.gradle.tasks.download.Download
 
 sourceCompatibility = "1.7"
@@ -451,6 +453,16 @@ install {
   }
 }
 
+ext.replaceEnv = { string ->
+  Matcher m = Pattern.compile("^\\\$\\{env\\.(?<var>.+)\\}\$").matcher(string);
+  if (m.matches()) {
+    println 'Substituting environment variable ' + m.group("var") + ' in "' + string + '"'
+    return System.getenv(m.group("var"))
+  } else {
+    return string
+  }
+}
+
 uploadArchives {
   repositories {
     mavenDeployer {
@@ -477,8 +489,8 @@ uploadArchives {
         def serverID = isReleaseVersion ? 'sonatype-nexus-staging' : 'sonatype-nexus-snapshots'
         def server = xml.servers.children().find({ it.id.text() == serverID })
         if (server) {
-          def mavenUsername = server.username.text()
-          def mavenPassword = server.password.text()
+          def mavenUsername = replaceEnv(server.username.text())
+          def mavenPassword = replaceEnv(server.password.text())
           println 'Found server definition "' + serverID + '", username: ' + mavenUsername
           if (isReleaseVersion) {
             repositories.mavenDeployer.repository.authentication.userName = mavenUsername
