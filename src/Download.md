@@ -14,7 +14,7 @@ it from
 
 {% assign stable = all | where:'state','stable' %}
 
-## Latest version: {{ stable.last.version }}
+## Latest major version: {{ stable.last.version }}
 
 {{ stable.last.description }}
 
