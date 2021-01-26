@@ -1,22 +1,13 @@
 # Configuration Files
 
-## Logback
+## User properties
 
-With the file `config-logback.xml` you can control most of the
-logging: to which files log messages are written, log rolling, the
-level of details that are logged, which log messages show up in the
-user interface, etc. See
-[Logback configuration](http://logback.qos.ch/manual/configuration.html)
-for help on the format. The location of this file is specified in
-[`system.properties`](#system-properties).
-
-## System properties
-
-All of the properties below (including the TTS properties) can also be
-set through environment variables. For example, the system property
-`org.daisy.pipeline.ws.host` can be set with the environment variable
-`PIPELINE2_WS_HOST`. The environment variable settings will have
-precedence over settings in the `system.properties` file.
+All of the properties below (including the TTS properties) can be set
+either in the `pipeline.properties` file or through environment
+variables. For example, the `org.daisy.pipeline.ws.host` property can
+be set with the environment variable `PIPELINE2_WS_HOST`. The
+environment variable settings will have precedence over settings in
+the `pipeline.properties` file.
 
 
 `org.daisy.pipeline.procs`
@@ -124,7 +115,7 @@ precedence over settings in the `system.properties` file.
 
 ### TTS configuration
 
-A number of system properties are specific to text-to-speech. These
+A number of properties are specific to text-to-speech. These
 properties are documented
 [here](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).
 
@@ -148,50 +139,13 @@ The following are used in persistence-mysql but persistence-mysql is not include
 : **Allowed values**: A non-empty string
 : **Required**: Yes
 
-
-The following should not be edited
-
-`org.daisy.pipeline.data`
-: Path to a writeable directory for storing program data
-: Automatically set based on the platform and the
-  [`PIPELINE2_DATA`](Pipeline-as-Service#environment-variables)
-  environment variable
-
-`org.daisy.pipeline.iobase`
-: Path to a writable directory for storing job data
-: **Default**: "${org.daisy.pipeline.data}/jobs"
-
-`org.daisy.pipeline.logdir`
-: Path to a writeable directory for storing global logging info
-: Property is used in [`config-logback.xml`](#logback)
-: **Default**: "/var/log/daisy-pipeline2" (on Debian/Ubuntu) or
-  "${org.daisy.pipeline.home}/log/" (on other platforms)
-
-`derby.stream.error.file`
-: Path to a writeable file for storing Derby specific logging info
-: **Default**: "/var/log/daisy-pipeline2/derby.log" (on Debian/Ubuntu)
-  or "${org.daisy.pipeline.home}/log/derby.log" (on other platforms)
-
-`logback.configurationFile`
-: Path (file URI) to Logback configuration file (see [`config-logback.xml`](#logback))
-: **Default**: "file:/etc/opt/daisy-pipeline2/config-logback.xml" (on Debian/Ubuntu) or
-  "file:${org.daisy.pipeline.home}/etc/config-logback.xml" (on other platforms)
-
-`org.daisy.pipeline.updater.bin`
-: **Default**: "${org.daisy.pipeline.home}/updater/${pipeline.updater}"
-
-`org.daisy.pipeline.updater.deployPath`
-: **Default**: "${org.daisy.pipeline.home}/"
-
-`org.daisy.pipeline.updater.releaseDescriptor`
-: **Default**: "${org.daisy.pipeline.home}/etc/releaseDescriptor.xml"
-
-`org.daisy.pipeline.xproc.configuration`
-: Path to Calabash configuration file
-: **Default**: "${org.daisy.pipeline.home}/etc/config-calabash.xml"
-
-`org.daisy.pipeline.messaging.cache`
-: Time in seconds that messages are kept in the volatile memory
-: **Default**: "60"
-
 -->
+
+## Logback
+
+With the file `config-logback.xml` you can control most of the
+logging: to which files log messages are written, log rolling, the
+level of details that are logged, which log messages show up in the
+user interface, etc. See
+[Logback configuration](http://logback.qos.ch/manual/configuration.html)
+for help on the format.
