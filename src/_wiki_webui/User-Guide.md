@@ -27,7 +27,7 @@ You can access this page through the "Jobs" menu item in the navigation bar at t
 <tr><td>Just below the "Job Summary" headline, you can click "Show details" to get more technical info about the job, such as its ID, and when it was started.</td><td><img src="images/20.png" alt=""/></td></tr>
 <tr><td><p>Further down the page, there may be a validation report, or another type of report depending on which script the job were running.</p></td><td><img src="images/36.png" alt=""/></td></tr>
 <tr><td><p>You can check the execution log to see what kind of tasks the job has performed. This is especially useful when a job fails so that you can determine why it failed.</p>
-<p>A link is also provided to a more detailed log. The detailed log is a text file with more technical information. If you encounter a problem while executing job and want to ask for help (for instance on the DAISY Pipeline 2 forum), you should ideally attach the detailed log and if possible also the input fileset and arguments used.</p></td><td><img src="images/19.png" alt=""/></td></tr>
+<p>A link is also provided to a more detailed log. The detailed log is a text file with more technical information. If you encounter a problem while executing job and want to ask for help, you should ideally attach the detailed log and if possible also the input fileset and arguments used.</p></td><td><img src="images/19.png" alt=""/></td></tr>
 <tr><td><p>At the end, there are links to download the input files, and a list of what parameters were used to run the job. There are also shortcuts for restarting the job, and for creating a new job with the same inputs and parameters.</p></td><td><img src="images/34.png" alt=""/></td></tr>
 </table>
 

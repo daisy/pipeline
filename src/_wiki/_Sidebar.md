@@ -43,7 +43,7 @@
   * [[Issue Tracker|http://daisy.github.io/pipeline/Get-Help/Issue-Tracker.html]]
   * [[Troubleshooting|Troubleshooting]]
     * [[Troubleshooting on Windows|Common-Errors-Windows]]
-  * [[Forums|http://www.daisy.org/forums/pipeline-2]]
+  * [[Contact|mailto:daisy-pipeline@mail.daisy.org]]
 * [[Contribute​|Contribute]]
   * [[Source Code|https://github.com/daisy/pipeline]]
   * [[Developers Mailing List|https://groups.google.com/forum/#!forum/daisy-pipeline-dev]]

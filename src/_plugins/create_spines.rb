@@ -129,7 +129,7 @@ module Jekyll
                   }
                 end
               end
-            elsif href =~ /^http.*/o
+            elsif href =~ /^http.*/o or href =~ /^mailto:.*/o
               page = {'external' => true, 'url' => href, 'title' => title}
             else
               if href.start_with?(baseurl)
