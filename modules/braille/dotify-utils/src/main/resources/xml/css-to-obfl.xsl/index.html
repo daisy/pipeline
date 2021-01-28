@@ -771,47 +771,15 @@
         &lt;/<span class="code-xml-element-local-name">block</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"0.8"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"toc-block"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:box[@type='block']"</span>&gt;
-        
-        
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"descendant-refs"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"attribute()*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"((descendant::css:box)/@css:anchor                                |(descendant::css:string)/@target                                |(descendant::css:counter)/@target)"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"following-refs"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"attribute()*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"((following::css:box)/@css:anchor                                |(following::css:string)/@target                                |(following::css:counter)/@target)"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"preceding-refs"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"attribute()*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"(preceding::css:box/@css:anchor                                |preceding::css:string/@target                                |preceding::css:counter/@target)"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ref-id"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]"</span>/&gt;
-                &lt;<span class="code-xml-element-local-name">toc-block</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"toc-entry-ref-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ref-id"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
-                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>&gt;
-                &lt;/<span class="code-xml-element-local-name">toc-block</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($descendant-refs)"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($descendant-refs) and                             not(exists($descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]]))"</span>&gt;
                 
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($following-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ref-id"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$following-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]"</span>/&gt;
-                &lt;<span class="code-xml-element-local-name">toc-block</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"toc-entry-ref-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ref-id"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
-                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>&gt;
-                &lt;/<span class="code-xml-element-local-name">toc-block</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($preceding-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ref-id"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$preceding-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][last()]"</span>/&gt;
-                &lt;<span class="code-xml-element-local-name">toc-block</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"toc-entry-ref-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ref-id"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
-                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>&gt;
-                &lt;/<span class="code-xml-element-local-name">toc-block</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
-                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:warn"</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"msg"</span>&gt;
-                        An element with display: -obfl-toc must have at least one descendant
-                        target-counter(), target-string() or target-text() value (that references an
-                        element that does not participate in a named flow).
-                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span>&gt;
-                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+                &lt;<span class="code-xml-element-local-name">toc-block</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">toc-block</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
         &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
@@ -905,7 +873,6 @@
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"0.591"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"toc-block"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:box[@type='block'][child::css:box[@type='inline']]"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"toc-entry-ref-id"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">tunnel</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"ancestor-or-self::*/@css:_obfl-on-resumed or descendant::*/@css:_obfl-on-resumed"</span>&gt;
                 &lt;<span class="code-xml-element-local-name">toc-entry-on-resumed</span>&gt;
@@ -914,9 +881,30 @@
                 &lt;/<span class="code-xml-element-local-name">toc-entry-on-resumed</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
-                &lt;<span class="code-xml-element-local-name">toc-entry</span> <span class="code-xml-attribute-local-name">ref-id</span>=<span class="code-xml-attribute-value">"{$toc-entry-ref-id}"</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"toc-entry"</span>/&gt;
-                &lt;/<span class="code-xml-element-local-name">toc-entry</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"descendant-refs"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"attribute()*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"((descendant::css:box)/@css:anchor                                        |(descendant::css:string)/@target                                        |(descendant::css:counter)/@target)"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"exists($descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]])"</span>&gt;
+                        
+                        &lt;<span class="code-xml-element-local-name">toc-entry</span> <span class="code-xml-attribute-local-name">ref-id</span>=<span class="code-xml-attribute-value">"{$descendant-refs[some $id in string(.) satisfies $sections/*[not(@css:flow)]//*[@css:id=$id]][1]}"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"toc-entry"</span>/&gt;
+                        &lt;/<span class="code-xml-element-local-name">toc-entry</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"child::css:box/(descendant::*|                                                       descendant::text()[normalize-space(.)])"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:error"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"msg"</span>&gt;
+                                    An element with display: -obfl-toc must have no inline content
+                                    with not at least one target-counter(), target-string() or
+                                    target-text() value (that references an element that does not
+                                    participate in a named flow) within the same inline formatting
+                                    context.
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
         &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;

@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/ConfigReader.html">ConfigReader</a>(Processor saxonproc, XdmNode doc, Extension... extensions) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		String staticConfigPath = System.getProperty(ttsConfigProperty);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		String staticConfigPath = Properties.getProperty(ttsConfigProperty);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">if</strong> (staticConfigPath != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, URLs.asURI(<strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"./"</span>)));
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">if</strong> (content != <strong class="jxr_keyword">null</strong>)
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		mAllProps = <strong class="jxr_keyword">new</strong> HashMap&lt;String, String&gt;();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		mAllProps.putAll(mStaticProps);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">if</strong> (System.getProperty(HostProtectionProperty, <span class="jxr_string">"true"</span>).equalsIgnoreCase(<span class="jxr_string">"false"</span>))
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">if</strong> (Properties.getProperty(HostProtectionProperty, <span class="jxr_string">"true"</span>).equalsIgnoreCase(<span class="jxr_string">"false"</span>))
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			mAllProps.putAll(mDynamicProps);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  

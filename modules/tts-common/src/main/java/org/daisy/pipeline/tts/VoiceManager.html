@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">for</strong> (VoiceInfo vi : voiceInfo) allLangs.add(vi.language);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 			allLangs.remove(VoiceInfo.NO_DEFINITE_LANG); }
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		mVoiceIndex = <strong class="jxr_keyword">new</strong> HashMap&lt;VoiceKey,Voice&gt;(); {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">for</strong> (VoiceInfo vi : voiceInfo)
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">for</strong> (VoiceInfo vi : voiceInfo) {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">if</strong> (vi.isMultiLang())
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 					<em class="jxr_comment">// this is to make sure that multi-lang voice wins from regular voice if it has</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 					<em class="jxr_comment">// a higher priority</em>
@@ -161,15 +161,15 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 								<strong class="jxr_keyword">if</strong> (!mVoiceIndex.containsKey(k))
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 									mVoiceIndex.put(k, vi.voice);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 							}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">boolean</strong> sameEngine : <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[]{<strong class="jxr_keyword">true</strong>, false})
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">boolean</strong> sameGender : <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[]{<strong class="jxr_keyword">true</strong>, false}) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 							VoiceKey k = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/VoiceManager.html">VoiceKey</a>(vi.language,
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 							                          sameGender ? vi.gender : <strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 							                          sameEngine ? vi.voice.engine : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 							<strong class="jxr_keyword">if</strong> (!mVoiceIndex.containsKey(k))
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 								mVoiceIndex.put(k, vi.voice);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 						}
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">boolean</strong> sameEngine : <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[]{<strong class="jxr_keyword">true</strong>, false})
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">boolean</strong> sameGender : <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[]{<strong class="jxr_keyword">true</strong>, false}) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 						VoiceKey k = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/VoiceManager.html">VoiceKey</a>(vi.language,
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 						                          sameGender ? vi.gender : <strong class="jxr_keyword">null</strong>,
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 						                          sameEngine ? vi.voice.engine : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 						<strong class="jxr_keyword">if</strong> (!mVoiceIndex.containsKey(k))
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 							mVoiceIndex.put(k, vi.voice);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 					}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<em class="jxr_comment">// log</em>

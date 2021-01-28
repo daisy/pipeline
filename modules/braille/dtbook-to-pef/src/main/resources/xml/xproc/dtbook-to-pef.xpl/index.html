@@ -672,14 +672,14 @@ is 2, etc. The resulting table of contents has the following nested structure:
 ~~~xml
 &lt;list id=&quot;generated-document-toc&quot;&gt;
   &lt;li&gt;
-      &lt;a href=&quot;#ch_1&quot;&gt;Chapter 1&lt;/a&gt;
+      &lt;a href=&quot;#ch_1&quot; title=&quot;Chapter 1&quot;&gt;Chapter 1&lt;/a&gt;
       &lt;list&gt;
           &lt;li&gt;
-              &lt;a href=&quot;#ch_1_1&quot;&gt;1.1&lt;/a&gt;
+              &lt;a href=&quot;#ch_1_1&quot; title=&quot;1.1&quot;&gt;1.1&lt;/a&gt;
               ...
           &lt;/li&gt;
           &lt;li&gt;
-              &lt;a href=&quot;#ch_1_2&quot;&gt;1.2&lt;/a&gt;
+              &lt;a href=&quot;#ch_1_2&quot; title=&quot;1.2&quot;&gt;1.2&lt;/a&gt;
               ...
           &lt;/li&gt;
           ...
@@ -746,14 +746,14 @@ is 2, etc. The resulting table of contents has the following nested structure:
 ~~~xml
 &lt;list id="generated-document-toc"&gt;
   &lt;li&gt;
-      &lt;a href="#ch_1"&gt;Chapter 1&lt;/a&gt;
+      &lt;a href="#ch_1" title="Chapter 1"&gt;Chapter 1&lt;/a&gt;
       &lt;list&gt;
           &lt;li&gt;
-              &lt;a href="#ch_1_1"&gt;1.1&lt;/a&gt;
+              &lt;a href="#ch_1_1" title="1.1"&gt;1.1&lt;/a&gt;
               ...
           &lt;/li&gt;
           &lt;li&gt;
-              &lt;a href="#ch_1_2"&gt;1.2&lt;/a&gt;
+              &lt;a href="#ch_1_2" title="1.2"&gt;1.2&lt;/a&gt;
               ...
           &lt;/li&gt;
           ...
@@ -923,7 +923,7 @@ size.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
     
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">in-scope-names</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in-scope-names"</span>/&gt;
-    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">delete-parameters</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-options"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">parameter-names</span>=<span class="code-xml-attribute-value">"stylesheet                                            transform                                            ascii-file-format                                            ascii-table                                            include-brf                                            include-preview                                            include-obfl                                            pef-output-dir                                            brf-output-dir                                            preview-output-dir                                            obfl-output-dir                                            temp-dir"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">delete-parameters</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-options"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">parameter-names</span>=<span class="code-xml-attribute-value">"stylesheet                                            stylesheet-parameters                                            transform                                            ascii-file-format                                            ascii-table                                            include-brf                                            include-preview                                            include-obfl                                            pef-output-dir                                            brf-output-dir                                            preview-output-dir                                            obfl-output-dir                                            temp-dir"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"in-scope-names"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
