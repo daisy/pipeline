@@ -279,7 +279,7 @@ fi
 
 if [ $release_dir == "assembly" ]; then
     echo " && \\"
-    echo -n "./update_rd.sh"
+    echo -n "./update_rd.sh $tag"
     if [ $github_owner == "daisy" ]; then
         echo " && \\"
         echo "pr_number=\$("
