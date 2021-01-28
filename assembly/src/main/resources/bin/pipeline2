@@ -280,7 +280,7 @@ listJars() {
     local var=$1
     shift
     local IFS=$'\n'
-    read -d '' -r -a $var < <(cd "$PIPELINE2_HOME" && find $@ -name '*.jar' -d 1 2>/dev/null)
+    read -d '' -r -a $var < <(cd "$PIPELINE2_HOME" && find $@ -maxdepth 1 -name '*.jar' 2>/dev/null)
 }
 
 join() {

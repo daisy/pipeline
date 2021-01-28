@@ -39,8 +39,7 @@ help :
 	echo "make check|check-docker:"                                             >&2
 	echo "	Tests the Docker image"                                             >&2
 
-# FIXME: don't hard-code
-assembly/VERSION     := 1.14.1
+assembly/VERSION     := $(shell xmllint --xpath "/*/*[local-name()='version']/text()" pom.xml)
 assembly/BASEDIR     := .
 MVN_LOCAL_REPOSITORY ?= $(HOME)/.m2/repository
 
@@ -114,7 +113,7 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
 	# we run package-dmg in a subsequent mvn call to avoid execution
 	# order issues when the package-mac-app and package-dmg profiles
 	# are activated together
-	$(MVN) package -Ppackage-dmg | $(MVN_LOG)
+	$(MVN) install -Ppackage-dmg | $(MVN_LOG)
 	test -e $@
 else
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         :
@@ -122,10 +121,14 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
 	exit 1
 endif
 ifeq ($(shell test -f /etc/redhat-release; echo $$?), 0)
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm   : mvn -Passemble-linux-dir \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm   : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Passemble-linux-dir \
                                                                                                                        -Ppackage-rpm
 	test -e $@
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm     : mvn -Punpack-cli-linux \
+$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm     : mvn -Pcopy-artifacts \
+                                                                                                                       -Pgenerate-release-descriptor \
+                                                                                                                       -Punpack-cli-linux \
                                                                                                                        -Ppackage-rpm-cli
 	test -e $@
 else
@@ -153,10 +156,14 @@ else
 dev-launcher : target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 endif
 
-target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Punpack-cli-mac \
+target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
+                                                                             -Pgenerate-release-descriptor \
+                                                                             -Punpack-cli-mac \
                                                                              -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
-target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Punpack-cli-linux \
+target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
+                                                                             -Pgenerate-release-descriptor \
+                                                                             -Punpack-cli-linux \
                                                                              -Punpack-updater-linux \
                                                                              -Passemble-linux-dir
 

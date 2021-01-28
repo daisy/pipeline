@@ -35,6 +35,8 @@ docker run --name pipeline --detach \
        -e PIPELINE2_WS_AUTHENTICATION_SECRET=$CLIENTSECRET \
        -p 8181:8181 daisyorg/pipeline-assembly
 
+trap "docker stop pipeline; docker rm pipeline" EXIT
+
 # wait for the pipeline to start
 sleep 5
 tries=10
@@ -45,8 +47,6 @@ while ! curl localhost:8181/ws/alive >/dev/null 2>/dev/null; do
         (( tries-- ))
     else
         docker logs pipeline
-        docker stop pipeline
-        docker rm pipeline
         exit 1
     fi
 done
@@ -63,11 +63,6 @@ if ! docker run --name cli --rm -it --link pipeline \
             dtbook-to-epub3 --source $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA --persistent;
 then
     docker logs pipeline
-    docker stop pipeline
-    docker rm pipeline
     exit 1
 fi
-
-docker stop pipeline
-docker rm pipeline
 

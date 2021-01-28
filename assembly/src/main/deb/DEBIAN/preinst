@@ -32,9 +32,9 @@ case "$1" in
             mv $SYSTEM_PROPERTIES_2 $SYSTEM_PROPERTIES.old
         fi
         if [ -e $SYSTEM_PROPERTIES.bak ]; then
-            $SYSTEM_PROPERTIES.bak $SYSTEM_PROPERTIES.bak.old
+            mv $SYSTEM_PROPERTIES.bak $SYSTEM_PROPERTIES.bak.old
         elif [ -e $SYSTEM_PROPERTIES_2.bak ]; then
-            $SYSTEM_PROPERTIES_2.bak $SYSTEM_PROPERTIES.bak.old
+            mv $SYSTEM_PROPERTIES_2.bak $SYSTEM_PROPERTIES.bak.old
         fi
     ;;
    

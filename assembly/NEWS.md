@@ -1,17 +1,33 @@
+Changes in release v1.14.2
+==========================
+
+This is a bugfix release. It fixes some installation and launch issues there were introduced in
+release v1.14.1.
+
+- **FIX** Launch script was broken on Linux.
+- **FIX** Debian installer was broken when updating from old version.
+- **FIX** Braille scripts were broken when running without OSGi.
+
+### Details
+
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.2)
+
 Changes in release v1.14.1
 ==========================
 
 ### Distribution/Installation
 
-- By default the system is now run without OSGi. An option was provided to run the system within an
-  OSGi framework (Apache Felix) like before.
-- Configuration was simplified.
+- The configuration files were simplified. Note for Debian users: if you have made changed to
+  configuration files, we recommend to first uninstall before installing the new version, and then
+  manually apply your configuration changes again.
 - The location of the user properties configuration file was changed. See the [Help
   pages](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service/#configuration-files)
   for more information.
 
 ### Framework
 
+- By default the system is now run without OSGi. An option was provided to run the system within an
+  OSGi framework (Apache Felix) like before.
 - Repetitive log messages are hidden.
 - Some improvements were made to the Java API. The long-term goal is to make Pipeline usable as Java
   library.
