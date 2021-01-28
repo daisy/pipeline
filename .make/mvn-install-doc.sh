@@ -9,7 +9,7 @@ if [ "$1" == "--dry-run" ]; then
     if [[ "${HOST_PLATFORM}" == "batch" ]]; then
         for arg in "$@"; do
             echo pushd $arg
-            echo mvn clean install -Ddocumentation
+            echo mvn clean install -Dmaven.test.skip=true -Ddocumentation -Ddocumentation-only
             echo popd
         done
     else
@@ -19,7 +19,7 @@ else
     if [[ -z ${HOST_PLATFORM} ]]; then
         for arg in "$@"; do
             cd "$ROOT_DIR/$arg"
-            eval $MVN clean install -Ddocumentation | eval $MVN_LOG
+            eval $MVN clean install -Dmaven.test.skip=true -Ddocumentation -Ddocumentation-only | eval $MVN_LOG
         done
     else
         exit 1

@@ -156,7 +156,7 @@ fi
 if [ ${#modules[@]} -gt 0 ]; then
     printf " \\
     -DpreparationGoals='clean install' \\
-    -Darguments=\"-Dorg.ops4j.pax.url.mvn.settings='$tmp_dir/settings.xml'\" \\
+    -Darguments=\"-Ddocumentation -Dorg.ops4j.pax.url.mvn.settings='$tmp_dir/settings.xml'\" \\
     --settings '$tmp_dir/settings.xml'"
 fi
 echo " && \\"
@@ -196,6 +196,7 @@ echo "mvn release:perform -DlocalCheckout=true \\
                     -Dgoals=\"verify \\
                              org.sonatype.plugins:nexus-staging-maven-plugin:1.6.8:deploy\" \\
                     -Darguments=\"-Psonatype-oss-release \\
+                                 -Ddocumentation \\
                                  -DskipTests -Dinvoker.skip=true \\
                                  -DnexusUrl=https://oss.sonatype.org/ \\
                                  -DserverId=sonatype-nexus-staging \\
