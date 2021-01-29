@@ -745,11 +745,12 @@
 			                      pom:dependencies/pom:dependency|
 			                      pom:build/pom:plugins/pom:plugin|
 			                      pom:build/pom:plugins/pom:plugin/pom:dependencies/pom:dependency|
-			                      pom:build/pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
-			                                                       and pom:artifactId='maven-dependency-plugin']
-			                                                      /pom:executions/pom:execution[pom:goals[pom:goal='copy' or
-			                                                                                              pom:goal='unpack']]
-			                                                      /pom:configuration/pom:artifactItems/pom:artifactItem">
+			                      (pom:build|pom:profiles/pom:profile/pom:build)
+			                      /pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
+			                                               and pom:artifactId='maven-dependency-plugin']
+			                                              /pom:executions/pom:execution[pom:goals[pom:goal='copy' or
+			                                                                                      pom:goal='unpack']]
+			                                              /pom:configuration/pom:artifactItems/pom:artifactItem">
 				<xsl:variable name="scope" select="if (not(exists($scope))) then
 				                                     (pom:scope/string(.),'compile')[1]
 				                                   else if ((pom:scope/string(.),'compile')[1]='compile') then
