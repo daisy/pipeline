@@ -92,19 +92,19 @@ dist-webui-rpm : assembly/.compile-dependencies
 ifeq ($(shell uname), Darwin)
 dev_launcher := assembly/target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
 dp2 := cli/build/bin/darwin_amd64/dp2
-with-java-11 = JAVA_HOME=`/usr/libexec/java_home -v 11` $(1)
 else
 dev_launcher := assembly/target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 dp2 := cli/build/bin/linux_386/dp2
-with-java-11 = $(1)
 endif
+
+java_home := $(CURDIR)/assembly/target/maven-jlink/classifiers/jre
 
 .PHONY : dp2
 dp2 : $(dp2)
 
 .PHONY : run
 run : $(dev_launcher)
-	$<
+	JAVA_HOME="$(java_home)" $<
 
 .PHONY : run-with-osgi
 run-with-osgi : $(dev_launcher)
@@ -112,7 +112,7 @@ run-with-osgi : $(dev_launcher)
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
-	$< gui
+	JAVA_HOME="$(java_home)" $< gui
 
 .PHONY : run-cli
 run-cli :
