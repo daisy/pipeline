@@ -2,11 +2,11 @@
 ## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.12.0 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
 
 - group: main
-  version: "1.14.1"
-  sort: "1.14.1"
+  version: "1.14.2"
+  sort: "1.14.2"
   state: stable
-  github_tab: "v1.14.1"
-  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.1"
+  github_tab: "v1.14.2"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.2"
   description: >
     Includes the standalone desktop application, the server, and the command line
     interface. Versions available for Windows (an installer EXE), Mac OS (a DMG
@@ -15,23 +15,30 @@
   - platform: windows
     package: installer
     content: [gui, server, cli]
-    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.1/pipeline2-1.14.1_windows.exe"
-    size: 117912205
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.2/pipeline2-1.14.2_windows.exe"
+    size: 117912502
   - platform: macosx
     package: dmg
     content: [gui, server, cli]
-    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.1/pipeline2-1.14.1_mac.dmg"
-    size: 134613715
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.2/pipeline2-1.14.2_mac.dmg"
+    size: 134614185
   - platform: linux
     package: zip
     content: [gui, server, cli]
-    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.1/pipeline2-1.14.1_linux.zip"
-    size: 94078808
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.2/pipeline2-1.14.2_linux.zip"
+    size: 94079091
   - platform: debian
     package: deb
     content: [gui, server]
-    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.1/pipeline2-1.14.1_debian.deb"
-    size: 120000556
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.2/pipeline2-1.14.2_debian.deb"
+    size: 120000826
+
+- group: main
+  version: "1.14.1"
+  sort: "1.14.1"
+  state: stable
+  github_tab: "v1.14.1"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.1"
 
 - group: main
   version: "1.13.6"
