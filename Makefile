@@ -106,6 +106,10 @@ dp2 : $(dp2)
 run : $(dev_launcher)
 	$<
 
+.PHONY : run-with-osgi
+run-with-osgi : $(dev_launcher)
+	$< osgi
+
 .PHONY : run-gui
 run-gui : $(dev_launcher)
 	$< gui
