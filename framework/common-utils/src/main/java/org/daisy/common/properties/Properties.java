@@ -104,17 +104,17 @@ public final class Properties {
 			return expand(v);
 		// and finally properties defined in the pipeline.properties file
 		if (key.startsWith("org.daisy.pipeline.")) {
-			if (!internalProperties.contains(key)) {
-				if (propertiesFromFile == null)
-					propertiesFromFile = readPropertiesFromFile();
-				if (propertiesFromFile != null) {
-					v = propertiesFromFile.getProperty(key);
-					if (v != null)
+			if (propertiesFromFile == null)
+				propertiesFromFile = readPropertiesFromFile();
+			if (propertiesFromFile != null) {
+				v = propertiesFromFile.getProperty(key);
+				if (v != null)
+					if (!internalProperties.contains(key))
 						return expand(v);
-				}
-			} else
-				logger().warn("Property '{}' in pipeline.properties file ignored; "
-				              + "expected to be specified through system property", key);
+					else
+						logger().warn("Property '{}' in pipeline.properties file ignored; "
+						              + "expected to be specified through system property", key);
+			}
 		}
 		return defaultValue != null ? expand(defaultValue) : null;
 	}

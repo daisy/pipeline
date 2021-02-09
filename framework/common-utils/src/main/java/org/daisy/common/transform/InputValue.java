@@ -54,8 +54,9 @@ public class InputValue<V> {
 			throw new NoSuchElementException();
 		else {
 			objectSupplied = true;
+			V ret = object;
 			object = null;
-			return object;
+			return ret;
 		}
 	}
 

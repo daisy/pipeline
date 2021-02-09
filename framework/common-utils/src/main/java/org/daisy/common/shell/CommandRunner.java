@@ -10,6 +10,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
 
 import com.google.common.io.CharStreams;
 
@@ -87,6 +90,10 @@ public class CommandRunner {
 	 * @return The exit value.
 	 */
 	public int run() throws Throwable {
+		return run((Supplier<Long>)null);
+	}
+
+	public int run(Supplier<Long> timeout) throws TimeoutException, Throwable {
 		ProcessBuilder pb = new ProcessBuilder();
 		pb.command(command);
 		if (outputConsumer == null)
@@ -113,7 +120,18 @@ public class CommandRunner {
 				errorConsumer.accept(p.getErrorStream());
 			else if (outputConsumer != null)
 				outputConsumer.accept(p.getInputStream());
-			return p.waitFor();
+			if (timeout == null)
+				return p.waitFor();
+			else {
+				long wait = 0;
+				do {
+					wait = timeout.get();
+					boolean terminated = p.waitFor(wait, TimeUnit.MILLISECONDS);
+					if (terminated)
+						return p.exitValue();
+				} while (wait > 0);
+				throw new TimeoutException();
+			}
 		} catch (Throwable e) {
 			if (e instanceof InterruptedException)
 				throw new InterruptedException("Interrupted while running command `" + String.join(" ", command) + "`");
