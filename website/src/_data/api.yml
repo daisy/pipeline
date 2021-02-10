@@ -101,8 +101,6 @@ xprocdoc:
 - group: org.daisy.pipeline.modules.braille
   artifact: epub3-to-pef
 - group: org.daisy.pipeline.modules.braille
-  artifact: xml-to-pef
-- group: org.daisy.pipeline.modules.braille
   artifact: common-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: css-utils
@@ -171,8 +169,6 @@ xprocdoc:
   artifact: mathml-to-ssml
 - group: org.daisy.pipeline.modules
   artifact: text-to-ssml
-- group: org.daisy.pipeline.modules
-  artifact: ssml-to-audio
 - group: org.daisy.pipeline.modules
   artifact: nlp-common
 - group: org.daisy.pipeline.modules
