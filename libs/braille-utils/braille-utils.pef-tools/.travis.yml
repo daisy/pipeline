@@ -1,8 +1,0 @@
-language: java
-jdk: oraclejdk11
-after_success:
-- ./upload.sh
-- ./publish-javadoc.sh
-before_install:
-- openssl aes-256-cbc -K $encrypted_4ffb6ece4dcf_key -iv $encrypted_4ffb6ece4dcf_iv
-  -in secring.gpg.enc -out secring.gpg -d

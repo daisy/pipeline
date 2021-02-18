@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="sv">
-	<table>
-		<tr><td colspan="2">1A</td><td>3A</td></tr>
-		<tr><td rowspan="2">1B</td><td colspan="2">2B</td></tr>
-		<tr><td>1C</td><td>2C</td></tr>
-	</table>
-</dtbook>

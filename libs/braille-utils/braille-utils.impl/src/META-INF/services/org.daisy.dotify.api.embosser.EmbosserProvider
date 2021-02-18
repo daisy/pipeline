@@ -1,7 +1,0 @@
-org.daisy.braille.utils.impl.provider.braillo.BrailloEmbosserProvider
-org.daisy.braille.utils.impl.provider.indexbraille.IndexEmbosserProvider
-org.daisy.braille.utils.impl.provider.cidat.CidatEmbosserProvider
-org.daisy.braille.utils.impl.provider.brailler.EnablingTechnologiesEmbosserProvider
-org.daisy.braille.utils.impl.provider.GenericEmbosserProvider
-org.daisy.braille.utils.impl.provider.viewplus.ViewPlusEmbosserProvider
-org.daisy.braille.utils.impl.provider.harpo.HarpoEmbosserProvider

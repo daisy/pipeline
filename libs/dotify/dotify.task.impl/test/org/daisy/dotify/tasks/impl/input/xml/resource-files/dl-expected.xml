@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><obfl xmlns="http://www.daisy.org/ns/2011/obfl" hyphenate="true" version="2011-1" xml:lang=""><sequence initial-page-number="1" master="main"><block>
-    		<block>A</block>
-    		<block text-indent="3"><style name="dd">1</style></block>
-    		<block text-indent="3"><style name="dd">2</style></block>
-    		<block>B</block>
-    		<block text-indent="3"><style name="dd">1</style></block>
-    		<block text-indent="3"><style name="dd">2</style></block>
-    	</block></sequence></obfl>
