@@ -17,6 +17,7 @@
             </p:identity>
             <xsl:for-each select="(//*[@name='test'])[1]/p:with-option">
                 <p:add-attribute match="/*/c:options" attribute-name="{@name}">
+                    <xsl:copy-of select="namespace::*"/>
                     <p:with-option name="attribute-value" select="{@select}">
                         <xsl:copy-of select="./*"/>
                     </p:with-option>
@@ -24,6 +25,7 @@
             </xsl:for-each>
             <xsl:for-each select="(//*[@name='test'])[1]/p:with-param">
                 <p:add-attribute match="/*/c:params" attribute-name="{@name}">
+                    <xsl:copy-of select="namespace::*"/>
                     <p:with-option name="attribute-value" select="{@select}">
                         <xsl:copy-of select="./*"/>
                     </p:with-option>

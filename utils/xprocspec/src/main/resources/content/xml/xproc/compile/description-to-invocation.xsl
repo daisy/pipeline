@@ -152,7 +152,11 @@
                                                     </p:inline>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <p:document href="{resolve-uri(@href,base-uri(.))}"/>
+                                                    <xsl:variable name="href" select="resolve-uri(@href,base-uri(.))"/>
+                                                    <xsl:variable name="href" select="if (contains($href,'!/'))
+                                                                                      then replace($href,'^file:','jar:file:')
+                                                                                      else $href"/>
+                                                    <p:document href="{$href}"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </xsl:for-each>
