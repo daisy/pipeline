@@ -1,7 +1,8 @@
 MVN ?= mvn
 JEKYLL_SRC_DIR := src
 SHELL := bash
-RUBY := bundle exec
+# RUBYOPT='-W:no-deprecated' does not work for some reason (https://stackoverflow.com/questions/60350374/cannot-suppress-ruby-2-7-0-warnings)
+RUBY := RUBYOPT=-W0 bundle exec
 JEKYLL := $(RUBY) jekyll
 JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_gui,_wiki_webui} -type f -not -name '_*' -not -name '*.png' )
 JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/ -type f -name '_Sidebar.md')
@@ -29,7 +30,7 @@ baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-ifeq ($(RUBY),bundle exec)
+ifneq (,$(findstring bundle exec,$(RUBY)))
 .SECONDARY : gems
 gems : Gemfile.lock
 	bundle install --path gems

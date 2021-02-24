@@ -46,7 +46,7 @@ installation. To shut down the service press `Ctrl-C`.
 When using DAISY Pipeline 2 as a service, especially when integrating
 it in a custom setup, you probably want to configure a thing or
 two. Two files are intended to be edited by you for this purpose:
-`system.properties` and `config-logback.xml`. See
+`pipeline.properties` and `config-logback.xml`. See
 [Configuration files](Configuration-Files) for details. Where on the
 file system these files are located depends on the installation.
 
@@ -57,7 +57,7 @@ file system these files are located depends on the installation.
 ### Debian/Ubuntu
 
 If the Pipeline was installed via the Debian package,
-`system.properties` and `config-logback.xml` are located in
+`pipeline.properties` and `config-logback.xml` are located in
 `/etc/opt/daisy-pipeline2`. In addition there is a third configuration
 file available: `/etc/default/daisy-pipeline2`. All available
 [environment variables](#environment-variables) listed below, except
@@ -113,12 +113,11 @@ A number of environment variables will influence the program:
 -->
 
 In addition to the environment variable listed above, all available
-[system properties](Configuration-Files/#system-properties)
-that start with `org.daisy.pipeline` can be set through environment
-variables as well. For example, the system property
-`org.daisy.pipeline.ws.host` can be set with the environment variable
-`PIPELINE2_WS_HOST`. The environment variable settings will have
-precedence over settings in the `system.properties` file.
+[user properties](Configuration-Files/#user-properties) can be set
+through environment variables as well. For example, the
+`org.daisy.pipeline.ws.host` property can be set with the environment
+variable `PIPELINE2_WS_HOST`. The environment variable settings will
+have precedence over settings in the `pipeline.properties` file.
 
 #### Arguments for `pipeline2` executable
 
@@ -132,17 +131,20 @@ The following command line arguments are available. Combinations are possible.
 : Run Pipeline server in "local" mode. Has the same effect as setting
   `PIPELINE2_WS_LOCALFS=true` and `PIPELINE2_WS_AUTHENTICATION=false`.
 
+`gui`
+: Launch the graphical user interface instead of the web service. See
+  also [Desktop Application](http://daisy.github.io/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/).
+
 `clean`
 : Clean the program data.
 
 `debug`
 : Enable debugging. Has the same effect as setting `PIPELINE2_DEBUG=true`.
 
+`osgi`
+: Run Pipeline inside an OSGi framework (Apache Felix).
+
 `shell`
 : Enable an interactive shell for low-level system manipulation. Run
   `help` for a list of commands, `help COMMAND` for more info about a
   specific command.
-  
-- `gui`
-: Launch the graphical user interface instead of the web service. See
-  also [Desktop Application](http://daisy.github.io/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/).

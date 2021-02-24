@@ -26,6 +26,16 @@ script that allows you to build everything with one simple
 command. The script also supports building incrementally which is an
 indispensable feature for a project this size.
 
+**Important**: the super-build script is intended to be run on MacOS
+or Linux. In theory it could also be run with Cygwin although some
+issues are definitely expected there. Contact us if you have ideas for
+making the script cross-platform.
+
+For typical modifications coming from external contributors, it is
+enough to recompile only a small part of Pipeline, i.e. one or two
+components, so the super-build script is not really required in these
+cases.
+
 
 ## Prerequisites
 
@@ -35,10 +45,8 @@ only needed for some components.
 - Java >= 8
 - Maven >= 3.0.0
 - Go (for cli and updater)
-- Make (for super-project, Liblouis, ...)
-- Ruby (for super-project and website)
-- `gem install nokogiri:1.5.6 commaparty:0.0.2` (for super-project and website)
-- `gem install jekyll:3.3.0 rdf:1.1.15 rdf-xsd:1.1.4 rdf-aggregate-repo:1.1.0 sparql-client:1.1.6 sparql:1.1.8 rdf-turtle:1.1.7 rdf-rdfa:1.1.6 mustache:1.0.2 github-markup:1.4.0 coderay:1.1.0` (for website)
+- GNU Make (for super-project, Liblouis, ...)
+- Ruby and Bundler (for super-project and website)
 
 
 ## Building individual components
