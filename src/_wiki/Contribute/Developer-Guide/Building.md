@@ -46,7 +46,7 @@ only needed for some components.
 - Maven >= 3.0.0
 - Go (for cli and updater)
 - GNU Make (for super-project, Liblouis, ...)
-- Ruby and Bundler (for super-project and website)
+- Ruby and [Bundler](https://bundler.io/) (for website)
 
 
 ## Building individual components
