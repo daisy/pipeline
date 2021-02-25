@@ -407,7 +407,9 @@ checked :
 
 poms : website/target/maven/pom.xml
 website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
-	$(MAKE) -C website target/maven/pom.xml
+	if which bundle >/dev/null || ! [ -f $@ ]; then \
+		$(MAKE) -C website target/maven/pom.xml; \
+	fi
 
 .PHONY : website
 website :
