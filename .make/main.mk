@@ -251,7 +251,7 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 	# assuming that command grouping is not needed in this case, so we just print the commands
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) --no-print-directory -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
@@ -274,7 +274,7 @@ ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
 else
 	set -o pipefail; \
 	if commands=$$( \
-		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
+		$(MAKE) --no-print-directory -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
 		cat $(TARGET_DIR)/commands \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
