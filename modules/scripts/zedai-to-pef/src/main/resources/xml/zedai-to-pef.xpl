@@ -130,7 +130,7 @@ If left blank, the locale information in the input document will be used to sele
             px:zedai-to-pef
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
+    <p:import href="xml-to-pef.store.xpl">
         <p:documentation>
             px:xml-to-pef.store
         </p:documentation>

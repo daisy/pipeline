@@ -102,9 +102,9 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
             px:html-to-pef
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
+    <p:import href="html-to-pef.store.xpl">
         <p:documentation>
-            px:xml-to-pef.store
+            px:html-to-pef.store
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -196,13 +196,13 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- ========= -->
     <!-- STORE PEF -->
     <!-- ========= -->
-    <px:xml-to-pef.store px:message="Storing PEF" px:progress=".05">
+    <px:html-to-pef.store px:message="Storing PEF" px:progress=".05">
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
-        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
+        <p:input port="html">
             <p:pipe step="html" port="result"/>
-        </p:with-option>
+        </p:input>
         <p:with-option name="include-brf" select="$include-brf"/>
         <p:with-option name="include-preview" select="$include-preview"/>
         <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
@@ -211,6 +211,6 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
         <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
-    </px:xml-to-pef.store>
+    </px:html-to-pef.store>
     
 </p:declare-step>

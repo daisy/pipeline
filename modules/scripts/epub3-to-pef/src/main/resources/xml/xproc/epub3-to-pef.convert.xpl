@@ -220,10 +220,7 @@
                     select="(index-of(tokenize($abs-stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
-                              if (tokenize($stylesheet,'\s+')
-                                  ='http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl')
-                                then ()
-                                else resolve-uri('../xslt/generate-toc.xsl'),
+                              resolve-uri('../xslt/generate-toc.xsl'),
                               (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
                               'http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl',
                               if ($default-stylesheet!='#default')

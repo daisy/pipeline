@@ -117,6 +117,19 @@
           </execution>
         </executions>
       </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>module-with-documentation</id>
+      <activation>
+        <property>
+          <name>documentation</name>
+        </property>
+      </activation>
+      <build>
+      <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -128,6 +141,8 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
+              <!-- to overrule maven.resources.skip if documentation-only is also specified -->
+              <skip>false</skip>
               <resources>
                 <resource>
                   <directory>src</directory>
@@ -182,4 +197,7 @@
       </plugin>
     </plugins>
   </build>
+  </profile>
+  </profiles>
+
 </project>

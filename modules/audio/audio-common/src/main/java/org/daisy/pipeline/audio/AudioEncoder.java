@@ -40,8 +40,8 @@ public interface AudioEncoder {
 	 * @param params stores the options in their raw format. Note that the map
 	 *            can contain more options than necessary. In such cases, the
 	 *            AudioEncoder must ignore them. In the particular case of the
-	 *            Daisy Pipeline, parseEncodingOptions() is called by
-	 *            ssml-to-audio with the TTS config file's properties as input.
+	 *            DAISY Pipeline, parseEncodingOptions() is called by
+	 *            px:ssml-to-audio with the TTS config file's properties as input.
 	 * @return non-null object containing the ready-to-use options.
 	 */
 	EncodingOptions parseEncodingOptions(Map<String, String> params);

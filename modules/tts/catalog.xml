@@ -4,7 +4,6 @@
   <nextCatalog catalog="./zedai-to-ssml/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./epub3-to-ssml/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./text-to-ssml/src/main/resources/META-INF/catalog.xml"/>
-  <nextCatalog catalog="./ssml-to-audio/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./css-speech/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./tts-common/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./dtbook-to-ssml/src/main/resources/META-INF/catalog.xml"/>

@@ -73,11 +73,6 @@
       px:dtbook-to-ssml
     </p:documentation>
   </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/ssml-to-audio/library.xpl">
-    <p:documentation>
-      px:ssml-to-audio
-    </p:documentation>
-  </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl">
     <p:documentation>
       px:dtbook-break-detect
@@ -85,6 +80,7 @@
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
     <p:documentation>
+      px:ssml-to-audio
       px:isolate-skippable
     </p:documentation>
   </p:import>

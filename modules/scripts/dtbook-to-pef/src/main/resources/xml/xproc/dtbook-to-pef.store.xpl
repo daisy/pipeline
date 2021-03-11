@@ -23,7 +23,7 @@
     <p:option name="ascii-file-format" select="''"/>
     <p:option name="ascii-table" select="''"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl">
+    <p:import href="xml-to-pef.store.xpl">
         <p:documentation>
             px:xml-to-pef.store
         </p:documentation>

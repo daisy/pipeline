@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================================================================= -->
+<!-- There are 4 copies of this file:                                          -->
+<!-- * scripts/dtbook-to-pef/src/main/resources/xml/xproc/xml-to-pef.store.xpl -->
+<!-- * scripts/html-to-pef/src/main/resources/xml/xproc/xml-to-pef.store.xpl   -->
+<!-- * scripts/epub3-to-pef/src/main/resources/xml/xproc/xml-to-pef.store.xpl  -->
+<!-- * scripts/zedai-to-pef/src/main/resources/xml/xml-to-pef.store.xpl        -->
+<!-- Whenever you update this file, also update the other copies.              -->
+<!-- ========================================================================= -->
 <p:declare-step type="px:xml-to-pef.store" version="1.0"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"

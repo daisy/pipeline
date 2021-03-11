@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 @Component(
 	name = "ssml-to-audio",
 	service = { XProcStepProvider.class },
-	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}synthesize" }
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}ssml-to-audio" }
 )
 public class SynthesizeProvider implements XProcStepProvider {
 	private TTSRegistry mRegistry;

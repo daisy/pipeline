@@ -4,7 +4,7 @@
   <!-- scripts -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl" uri="../xml/xproc/dtbook-to-pef.xpl"
        px:content-type="script" px:id="dtbook-to-pef"
-       px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl
+       px:extends="../../../../../common-options.xpl
                    ../css/default.params
                    ../css/page-layout.params
                    ../css/generate-toc.params
@@ -18,7 +18,6 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/reset.css" uri="../css/reset.css"/>
   
   <!-- dependencies -->
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:xml-to-pef"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>

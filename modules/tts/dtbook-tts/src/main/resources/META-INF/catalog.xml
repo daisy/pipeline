@@ -4,7 +4,6 @@
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-tts/library.xpl" uri="../xml/library.xpl"/>
 
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-break-detection"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:ssml-to-audio"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:css-speech"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:tts-common"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />

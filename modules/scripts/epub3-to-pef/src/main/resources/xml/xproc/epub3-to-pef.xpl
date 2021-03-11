@@ -13,7 +13,6 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 to PEF</h1>
         <p px:role="desc" xml:space="preserve">Transforms a EPUB 3 publication into an embosser ready braille document.</p>
-        <p>Extends <a href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl">XML to PEF</a>.</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef/">
             Online documentation
         </a>

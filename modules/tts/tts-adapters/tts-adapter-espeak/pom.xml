@@ -32,11 +32,6 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>ssml-to-audio</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>audio-encoder-lame</artifactId>
       <scope>test</scope>
     </dependency>

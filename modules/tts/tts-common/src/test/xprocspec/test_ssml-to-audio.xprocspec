@@ -4,7 +4,7 @@
                xmlns:ssml="http://www.w3.org/2001/10/synthesis"
                xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="http://www.daisy.org/pipeline/modules/ssml-to-audio/library.xpl">
+               script="../../main/resources/xml/xproc/library.xpl">
 
 	<x:scenario label="synthesize with mock engine">
 		<x:call step="px:ssml-to-audio">
