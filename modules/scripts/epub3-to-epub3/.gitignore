@@ -12,3 +12,6 @@ buildNumber.properties
 *.iml
 /.idea
 *.epub
+*.zip
+/*.opf
+/*.xhtml
