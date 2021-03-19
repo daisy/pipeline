@@ -37,15 +37,19 @@ public class AppendLegal {
     private static final String FILE_POSTFIX = "-mtminfo.xhtml";
 
     private String prepareLegalDoc(
-        String lang,
-        String identifier,
-        String title,
-        String author,
-        int pages,
-        int levels,
-        String voice
+            String lang,
+            String identifier,
+            String title,
+            String author,
+            int pages,
+            int levels,
+            String voice,
+            String guideline
     ) throws Exception {
-        String filename = "sv".equalsIgnoreCase(lang.substring(0, 2)) ? "/mtm-legal-sv.xhtml" : "/mtm-legal-en.xhtml";
+        String langAbbreviation = "sv".equalsIgnoreCase(lang.substring(0, 2)) ? "sv" : "en";
+
+
+        String filename = "/mtm-legal-" + langAbbreviation + "-" + guideline + ".xhtml";
         InputStream is = AppendLegal.class.getResourceAsStream(filename);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -112,6 +116,29 @@ public class AppendLegal {
         return nl.item(0).getTextContent();
     }
 
+    public String getGuidelines(Document doc) {
+        NodeList metaList = doc.getElementsByTagName("meta");
+        String foundName = null;
+        for (int i = 0; i < metaList.getLength(); i++) {
+            Element item = (Element) metaList.item(i);
+            if (item.hasAttribute("property")) {
+                if (!"nordic:guidelines".equals(item.getAttribute("property"))) continue;
+                foundName = item.getTextContent();
+                break;
+            }
+            if (item.hasAttribute("name")) {
+                if (!"nordic:guidelines".equals(item.getAttribute("name"))) continue;
+                foundName = item.getAttribute("content");
+                break;
+            }
+        }
+        String guidelineName = "2020-1";
+        if("2015-1".equalsIgnoreCase(foundName)) {
+            guidelineName = "2015-1";
+        }
+        return guidelineName;
+    }
+
     public void appendLegalDoc(File input, File output, String voice) throws Exception {
         ZipFile zipFile = new ZipFile(input);
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(output));
@@ -132,6 +159,7 @@ public class AppendLegal {
         String language = getElementValue(packageDoc, "dc:language");
         String identifier = getElementValue(packageDoc, "dc:identifier");
         String creator = getElementValue(packageDoc, "dc:creator");
+        String guideline = getGuidelines(packageDoc);
 
         String fileCount = insertDocumentInPackage(packageDoc, identifier);
         int[] pageAndLevel = insertDocumentInNav(navDoc, title, language, identifier, fileCount);
@@ -143,7 +171,7 @@ public class AppendLegal {
         zos.putNextEntry(legalFile);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
         String legalInfo = prepareLegalDoc(
-                language, identifier, title, creator, pageAndLevel[0], pageAndLevel[1], voice
+                language, identifier, title, creator, pageAndLevel[0], pageAndLevel[1], voice, guideline
         );
         bw.write(legalInfo);
         bw.flush();
