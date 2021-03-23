@@ -34,7 +34,7 @@ public class AppendLegal {
     private static final String EPUB_PATH = "EPUB/";
     private static final String NAV_DOCUMENT = "EPUB/nav.xhtml";
     private static final String PACKAGE_DOCUMENT = "EPUB/package.opf";
-    private static final String FILE_POSTFIX = "-mtminfo.xhtml";
+    private static final String FILE_POSTFIX = "-colophon.xhtml";
 
     private String prepareLegalDoc(
             String lang,
