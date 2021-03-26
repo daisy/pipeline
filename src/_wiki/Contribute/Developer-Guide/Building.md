@@ -44,9 +44,10 @@ only needed for some components.
 
 - Java >= 8
 - Maven >= 3.0.0
-- Go (for cli and updater)
+- Go (for CLI and updater)
 - GNU Make (for super-project, Liblouis, ...)
 - Ruby and [Bundler](https://bundler.io/) (for website)
+- NSIS (for Windows installer)
 
 
 ## Building individual components
