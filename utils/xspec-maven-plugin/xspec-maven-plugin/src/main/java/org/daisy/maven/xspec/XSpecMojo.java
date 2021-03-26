@@ -32,18 +32,28 @@ package org.daisy.maven.xspec;
  */
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.ServiceLoader;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.utils.io.DirectoryScanner;
 
 import com.google.common.base.Preconditions;
@@ -58,7 +68,12 @@ import com.google.common.io.Files;
  * Run XSpec tests and produce various reports.
  * 
  */
-@Mojo(name = "test", defaultPhase = LifecyclePhase.TEST)
+@Mojo(
+	name = "test",
+	defaultPhase = LifecyclePhase.TEST,
+	requiresDependencyResolution = ResolutionScope.TEST
+
+)
 public class XSpecMojo extends AbstractMojo {
 
 	private static final String pluginName = "XSpec";
@@ -142,7 +157,10 @@ public class XSpecMojo extends AbstractMojo {
 	@Parameter
 	private List<String> excludes;
 
-	private XSpecRunner xspecRunner = new XSpecRunner();
+	@Parameter(readonly = true, defaultValue = "${project}")
+	private MavenProject project;
+
+	private XSpecRunner xspecRunner = null;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -152,7 +170,8 @@ public class XSpecMojo extends AbstractMojo {
 
 			logHeader();
 			try {
-				xspecRunner.init();
+				if (xspecRunner == null)
+					xspecRunner = newXSpecRunner();
 				TestResults testResults = xspecRunner.run(scanTests(),
 						reportsDirectory);
 				System.out.println(testResults.toDetailedString());
@@ -168,6 +187,7 @@ public class XSpecMojo extends AbstractMojo {
 			} catch (MojoFailureException me) {
 				throw me;
 			} catch (Exception e) {
+				e.printStackTrace();
 				getLog().error(e.getMessage());
 				throw new MojoExecutionException(e.getMessage());
 			}
@@ -177,6 +197,39 @@ public class XSpecMojo extends AbstractMojo {
 
 	private boolean isSkipExecution() {
 		return skip || skipTests;
+	}
+
+	/** Find XSpecRunner service or create one. */
+	private XSpecRunner newXSpecRunner() {
+		ClassLoader restoreClassLoader = Thread.currentThread().getContextClassLoader();
+		try {
+			URLClassLoader classLoader; {
+				List<URL> classPathURLs = new ArrayList<URL>(); {
+					for (String path : project.getTestClasspathElements())
+						classPathURLs.add(new File(path).toURI().toURL());
+					for (Artifact artifact : project.getArtifacts())
+						classPathURLs.add(artifact.getFile().toURI().toURL());
+				}
+				classLoader = new URLClassLoader(classPathURLs.toArray(new URL[classPathURLs.size()]),
+				                                 Thread.currentThread().getContextClassLoader());
+			}
+			Thread.currentThread().setContextClassLoader(classLoader);
+			XSpecRunner runner; {
+				try {
+					runner = ServiceLoader.load(XSpecRunner.class).iterator().next();
+				} catch (NoSuchElementException e) {
+					runner = new XSpecRunner();
+					runner.init();
+				}
+			}
+			return runner;
+		} catch (DependencyResolutionRequiredException e) {
+			throw new RuntimeException(e);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			Thread.currentThread().setContextClassLoader(restoreClassLoader);
+		}
 	}
 
 	private void logHeader() {
@@ -293,7 +346,7 @@ public class XSpecMojo extends AbstractMojo {
 		this.excludes = excludes;
 	}
 
-	protected void setXSpecRunner(XSpecRunner xspecRunner) {
+	void setXSpecRunner(XSpecRunner xspecRunner) {
 		this.xspecRunner = xspecRunner;
 	}
 }

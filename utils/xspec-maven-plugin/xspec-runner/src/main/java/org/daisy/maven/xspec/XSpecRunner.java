@@ -90,7 +90,7 @@ public class XSpecRunner {
 	private static final QName JUNIT_NAME_PARAM = new QName("name");;
 	private static final QName JUNIT_TIME_PARAM = new QName("time");;
 
-	private Processor processor;
+	private Processor processor = null;
 	private URIResolver defaultResolver;
 	private XPathCompiler xpathCompiler;
 	private XsltExecutable xspecCompilerLoader;
@@ -103,7 +103,7 @@ public class XSpecRunner {
 		name = "Processor",
 		unbind = "-",
 		service = Processor.class,
-		cardinality = ReferenceCardinality.MANDATORY,
+		cardinality = ReferenceCardinality.OPTIONAL,
 		policy = ReferencePolicy.STATIC
 	)
 	public void setProcessor(Processor processor) {
