@@ -290,7 +290,8 @@ else
 					echo $(call quote,$V=$($V));)) \
 				break; \
 			done >$(TARGET_DIR)/env && \
-			echo "$$commands" | $(MY_DIR)/group-eval.pl; \
+			echo "$$commands" | $(MY_DIR)/group-eval.pl && \
+			rm $(TARGET_DIR)/env; \
 		fi \
 	else \
 		rv=$$? && \
@@ -334,4 +335,8 @@ endif
 endif
 
 # put at the end because quotes mess up syntax highlighting of following lines in Emacs
-quote = '$(subst ','"'"',$(1))'
+define \n
+
+
+endef
+quote = '$(subst ${\n},'"\n"',$(subst \,\\,$(subst ','"'"',$(1))))'
