@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import cz.vutbr.web.css.CSSFactory;
+import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.SupportedCSS;
@@ -70,8 +71,8 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			public PropertyValue next() {
 				String prop = props.next();
 				return new PropertyValue(
-						SimpleInlineStyle.this.getProperty(prop),
-						SimpleInlineStyle.this.getValue(prop));
+					SimpleInlineStyle.this.getProperty(prop),
+					SimpleInlineStyle.this.getValue(prop));
 			}
 			public void remove() {
 				props.remove();
@@ -79,6 +80,13 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		};
 	}
 	
+	public PropertyValue get(String property) {
+		CSSProperty p = getProperty(property);
+		if (p == null)
+			return null;
+		return new PropertyValue(p, getValue(property));
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

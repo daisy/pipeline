@@ -48,17 +48,6 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				if (lastPart instanceof PseudoElement) {
 					if (!(lastPart instanceof PseudoElementImpl))
 						throw new RuntimeException(); // should not happen
-					
-					// FIXME: hack!
-					// SASS may reverse the order of pseudo-elements and pseudo-classes (see
-					// https://github.com/sass/libsass/issues/1539). We recover from this bug by
-					// reversing the order again here. We can do this because it does not make sense
-					// for pseudo-elements to have a custom pseudo-class.
-					if (((PseudoElementImpl)part).specifiedAsClass && !((PseudoElementImpl)lastPart).specifiedAsClass) {
-						set(size() - 1, part);
-						part = lastPart;
-						lastPart = get(size() - 1);
-					}
 					return ((PseudoElementImpl)lastPart).add((PseudoElementImpl)part);
 				}
 			}
@@ -68,31 +57,7 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				if (lastPart instanceof PseudoElement) {
 					if (!(lastPart instanceof PseudoElementImpl))
 						throw new RuntimeException(); // should not happen
-					PseudoElementImpl pseudoElem = ((PseudoElementImpl)lastPart);
-					while (pseudoElem.hasStackedPseudoElement())
-						pseudoElem = pseudoElem.getStackedPseudoElement();
-					
-					// FIXME: hack!
-					// SASS may reverse the order of pseudo-elements and pseudo-classes (see
-					// https://github.com/sass/libsass/issues/1539). We recover from this bug by
-					// trying to reverse the order again here. We can do this because it only makes
-					// sense in a few cases that pseudo-elements have a pseudo-class.
-					if (pseudoElem.getName().equals(PseudoElementImpl.PseudoElementDef.LIST_ITEM.name) ||
-					    pseudoElem.getName().equals(PseudoElementImpl.PseudoElementDef.LIST_HEADER.name)) {
-						PseudoClassImpl pseudoClass = null;
-						if (part instanceof PseudoClassImpl)
-							pseudoClass = (PseudoClassImpl)part;
-						else if (part instanceof NegationPseudoClassImpl) {
-							SelectorPart p = ((NegationPseudoClassImpl)part).negatedSelector.get(0).get(0);
-							if (p instanceof PseudoClassImpl)
-								pseudoClass = (PseudoClassImpl)p; }
-						// Trick to test whether it's :first-child, :last-child, :only-child,
-						// :nth-child(n) or :nth-last-child(n). Only in these cases it makes sense
-						// for ::list-item and ::list-header to have a pseudo-class.
-						if (pseudoClass != null && pseudoClass.matchesPosition(1, 1)) {
-							return pseudoElem.add((PseudoClass)part);
-						}
-					}
+					return ((PseudoElementImpl)lastPart).add((PseudoClass)part);
 				}
 			}
 		}
