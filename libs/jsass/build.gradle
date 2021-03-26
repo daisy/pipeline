@@ -1,6 +1,15 @@
 import java.nio.file.Paths
 import java.nio.file.Path
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.1.0'
+    }
+}
+
 plugins {
     id 'com.github.ben-manes.versions' version '0.25.0'
     id 'net.researchgate.release' version '2.8.1'
@@ -11,6 +20,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'signing'
+apply plugin: 'biz.aQute.bnd.builder'
 
 group = 'org.daisy.libs'
 description = 'SASS compiler using libsass.'
@@ -20,8 +30,13 @@ targetCompatibility = 1.8
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'jsass',
-                'Implementation-Version': version
+        attributes(
+            'Implementation-Title': 'jsass',
+            'Implementation-Version': version,
+            'Bundle-Name': 'org.daisy.libs:io.bit3.jsass',
+            'Bundle-SymbolicName': 'org.daisy.libs.io.bit3.jsass',
+            '-exportcontents': 'io.bit3.jsass,io.bit3.jsass.importer'
+        )
     }
 }
 
