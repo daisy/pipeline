@@ -22,6 +22,7 @@ public class XGroup extends XCompoundStep {
     public void run() throws SaxonApiException {
         if (!(parent instanceof XTry)) {
             try {
+                inScopeOptions = parent.getInScopeOptions();
                 XProcMessageListenerHelper.openStep(runtime, this);
             } catch (Throwable e) {
                 throw handleException(e);

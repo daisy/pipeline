@@ -87,7 +87,16 @@ public class Parameters extends DefaultStep {
 
         for (QName param : parameters.keySet()) {
             String value = parameters.get(param).getStringValue().getStringValue();
-            treeWriter.addStartElement(c_param);
+            Hashtable<String,String> namespaceBindings = parameters.get(param).getNamespaceBindings();
+            treeWriter.addStartElement(
+                value.contains("c:") && namespaceBindings != null && namespaceBindings.containsKey("c")
+                    ? new QName(XProcConstants.NS_XPROC_STEP, "param")
+                    : c_param);
+            if (namespaceBindings != null) {
+                for (String prefix : namespaceBindings.keySet())
+                    if (value.contains(prefix + ":"))
+                        treeWriter.addNamespace(prefix, namespaceBindings.get(prefix));
+            }
             treeWriter.addAttribute(_name, param.getLocalName());
             if (param.getNamespaceURI() != null && !"".equals(param.getNamespaceURI())) {
                 treeWriter.addAttribute(_namespace, param.getNamespaceURI());
