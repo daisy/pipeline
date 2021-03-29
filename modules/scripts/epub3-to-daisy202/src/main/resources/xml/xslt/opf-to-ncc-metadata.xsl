@@ -56,7 +56,7 @@
             <meta name="ncc:pageSpecial" content="{count($ncc.body/html:span['page-special'=tokenize(@class,'\s+')])}"/>
             <meta name="ncc:sidebars" content="0"/>
             <meta name="ncc:prodNotes" content="0"/>
-            <meta name="ncc:footnotes" content="0"/>
+            <meta name="ncc:footnotes" content="{count($ncc.body/html:span['noteref'=tokenize(@class,'\s+')])}"/>
             <meta name="ncc:totalTime" content="{pf:mediaoverlay-seconds-to-full-clock-value(
                                                    sum($smil/body/seq/@dur/xs:decimal(replace(.,'^(.+)s$','$1'))))}"/>
 

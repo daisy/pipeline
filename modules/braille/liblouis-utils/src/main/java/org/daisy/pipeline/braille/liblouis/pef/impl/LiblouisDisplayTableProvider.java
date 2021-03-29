@@ -9,9 +9,9 @@ import com.google.common.collect.ImmutableSet;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 
-import org.daisy.braille.api.factory.AbstractFactory;
-import org.daisy.braille.api.table.BrailleConverter;
-import org.daisy.braille.api.table.Table;
+import org.daisy.dotify.api.factory.AbstractFactory;
+import org.daisy.dotify.api.table.BrailleConverter;
+import org.daisy.dotify.api.table.Table;
 
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 	name = "org.daisy.pipeline.braille.liblouis.pef.impl.LiblouisDisplayTableProvider",
 	service = {
 		TableProvider.class
-		// org.daisy.braille.api.table.TableProvider.class
+		// org.daisy.dotify.api.table.TableProvider.class
 	}
 )
 public class LiblouisDisplayTableProvider extends AbstractTableProvider {

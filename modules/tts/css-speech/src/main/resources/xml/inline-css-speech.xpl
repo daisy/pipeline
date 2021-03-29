@@ -5,14 +5,27 @@
                 exclude-inline-prefixes="#all">
 
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-    <p>CSS cascading and inlining of CSS Aural stylesheets</p>
+    <p>CSS cascading and inlining of CSS Aural style sheets</p>
     <p>The inlining is done through special <code>@tts:*</code> attributes for each of the
     properties.</p>
+    <p>Style sheets can be attached to the source or provided through the "config" port.</p>
   </p:documentation>
 
   <p:input port="source.fileset" primary="true"/>
-  <p:input port="source.in-memory" sequence="true"/>
-  <p:input port="config"/>
+  <p:input port="source.in-memory" sequence="true">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Style sheets can be associated with the source in several ways: linked (using an
+      <code>xml-stylesheet</code> processing instruction or a <code>link</code> element) and/or
+      inlined (using <code>style</code> attributes).</p>
+    </p:documentation>
+  </p:input>
+  <p:input port="config">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Style sheets are specified using a <code>css</code> element with text content, see <a
+      href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#css">TTS
+      configuration</a>.</p>
+    </p:documentation>
+  </p:input>
   <p:output port="result.fileset" primary="true"/>
   <p:output port="result.in-memory" sequence="true">
     <p:pipe step="update" port="result.in-memory"/>

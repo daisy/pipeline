@@ -83,4 +83,13 @@ See the CSS specification for more info:
         </p:documentation>
     </p:option>
 
+    <p:option name="toc-exclude-class" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Table of contents: Exclude headings</h2>
+            <p px:role="desc" xml:space="preserve">Class name for excluding headings from the table of contents.
+
+If specified, heading elements with this class name are excluded from the generated tables of contents.</p>
+        </p:documentation>
+    </p:option>
+
 </p:declare-step>

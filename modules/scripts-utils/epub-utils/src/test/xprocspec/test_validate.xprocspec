@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
                script="../../main/resources/xml/validate/epub-validate.xpl">
 
     <x:scenario label="moby dick">
@@ -14,11 +15,17 @@
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>
         </x:context>
-        <x:expect label="the validation should succeed" type="compare">
+        <x:expect label="the validation should fail" type="compare">
             <x:document type="inline">
-                <d:validation-status result="ok"/>
-            </x:document>
-        </x:expect>
+                <d:validation-status result="error"/>
+             </x:document>
+         </x:expect>
+        <x:context label="the html report output">
+            <x:document type="port" port="html-report"/>
+        </x:context>
+        <x:expect label="there should be a html document and it should report two errors" type="xpath"
+                  test="/html:html/html:body/html:section[1]/html:div[@class='document-info']/html:p/string(.)"
+                  equals="'2 issues found.'"/>
         <x:context label="the ace report output">
             <x:document type="port" port="ace-report"/>
         </x:context>
@@ -34,9 +41,9 @@
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>
         </x:context>
-        <x:expect label="the validation should succeed" type="compare">
+        <x:expect label="the validation should fail" type="compare">
             <x:document type="inline">
-                <d:validation-status result="ok"/>
+                <d:validation-status result="error"/>
             </x:document>
         </x:expect>
     </x:scenario>

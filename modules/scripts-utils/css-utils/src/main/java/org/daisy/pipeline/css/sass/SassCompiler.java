@@ -1,4 +1,4 @@
-package org.daisy.pipeline.css;
+package org.daisy.pipeline.css.sass;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -36,12 +36,31 @@ import io.bit3.jsass.Options;
 import io.bit3.jsass.Output;
 import io.bit3.jsass.OutputStyle;
 
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+
 import org.daisy.common.file.URLs;
+import org.daisy.pipeline.css.CssPreProcessor;
+import org.daisy.pipeline.css.sass.impl.SassPostProcessLexer;
+import org.daisy.pipeline.css.sass.impl.SassPostProcessParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SassCompiler {
+/**
+ * {@link CssPreProcessor} that handles media type "text/x-scss".
+ */
+public class SassCompiler implements CssPreProcessor {
+
+	public boolean supportsMediaType(String mediaType, URL url) {
+		if ("text/x-scss".equals(mediaType))
+			return true;
+		else if (mediaType == null && url != null && url.toString().endsWith(".scss"))
+			return true;
+		else
+			return false;
+	}
 
 	private final Importer importer;
 	private final StreamSourceURIResolver resolver;
@@ -67,8 +86,9 @@ public class SassCompiler {
 							try {
 								return ImmutableList.of(
 									new Import(uri, abs,
-									           byteSource(resolved.getInputStream())
-									           .asCharSource(StandardCharsets.UTF_8).read())); }
+									           preProcess(
+										           byteSource(resolved.getInputStream())
+										           .asCharSource(StandardCharsets.UTF_8).read()))); }
 							catch (RuntimeException e) {
 								throw new IOException(e); }}
 						catch (TransformerException e) {
@@ -114,6 +134,7 @@ public class SassCompiler {
 	 * @throws IOException if something goes wrong reading the input
 	 * @throws RuntimeException if the compilation fails.
 	 */
+	@Override
 	public InputStream compile(InputStream sass, URL base, Charset encoding) throws IOException {
 		Compiler sassCompiler = new Compiler();
 		Options options = new Options();
@@ -179,10 +200,8 @@ public class SassCompiler {
 		scss.append(CharStreams.toString(r));
 		r.close();
 		try {
-			Output result = sassCompiler.compileString(scss.toString(), StandardCharsets.UTF_8, URLs.asURI(base), null, options);
-			if (result.getErrorStatus() != 0)
-				throw new RuntimeException("Could not compile SASS style sheet: " + result.getErrorMessage());
-			String css = result.getCss();
+			Output result = sassCompiler.compileString(preProcess(scss.toString()), URLs.asURI(base), null, options);
+			String css = postProcess(result.getCss());
 			logger.debug(base + " compiled to:\n\n" + css);
 			return new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8)); }
 		catch (CompilationException e) {
@@ -239,4 +258,37 @@ public class SassCompiler {
 
 	private static final Logger logger = LoggerFactory.getLogger(SassCompiler.class);
 
+	/**
+	 * In order to fully support stacked pseudo-elements and pseudo-classes on pseudo-elements (also
+	 * in combination with @extend), we need to pre-processed the SASS before it is compiled to
+	 * CSS. Pseudo-elements are replaced with a child selector followed by a pseudo-element. This is
+	 * reverted in {@link #postProcess(String)}.
+	 */
+	private static String preProcess(String sass) {
+		return sass.replaceAll("::", ">::");
+	}
+
+	/**
+	 * Replace child selector followed by a pseudo-element with the pseudo-element.
+	 */
+	private static String postProcess(String css) {
+		if (!css.contains("::"))
+			return css;
+		try {
+			ANTLRInputStream input;
+			try {
+				input = new ANTLRInputStream(
+					new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8)),
+					StandardCharsets.UTF_8.name());
+			} catch (IOException e) {
+				throw new RuntimeException(e); // should not happen
+			}
+			SassPostProcessLexer lexer = new SassPostProcessLexer(input);
+			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			SassPostProcessParser parser = new SassPostProcessParser(tokens);
+			return parser.stylesheet();
+		} catch (RecognitionException e) {
+			throw new RuntimeException("Error happened while parsing the CSS", e);
+		}
+	}
 }

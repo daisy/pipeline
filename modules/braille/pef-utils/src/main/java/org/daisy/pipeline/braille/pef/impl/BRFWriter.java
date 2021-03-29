@@ -2,11 +2,10 @@ package org.daisy.pipeline.braille.pef.impl;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import org.daisy.braille.api.embosser.Contract;
-import org.daisy.braille.api.embosser.ContractNotSupportedException;
-import org.daisy.braille.api.embosser.EmbosserWriter;
-import org.daisy.braille.api.embosser.LineBreaks;
-import org.daisy.braille.api.table.BrailleConverter;
+
+import org.daisy.dotify.api.embosser.EmbosserWriter;
+import org.daisy.dotify.api.embosser.LineBreaks;
+import org.daisy.dotify.api.table.BrailleConverter;
 
 /*
  * Initially copied from AbstractEmbosserWriter because it is in a private package
@@ -59,16 +58,6 @@ public abstract class BRFWriter implements EmbosserWriter {
 	}
 	
 	public void open(boolean duplex) throws IOException {
-		try {
-			open(duplex, new Contract.Builder().build());
-		} catch (ContractNotSupportedException e) {
-			IOException ex = new IOException("Could not open embosser.");
-			ex.initCause(e);
-			throw ex;
-		}
-	}
-	
-	public void open(boolean duplex, Contract contract) throws IOException, ContractNotSupportedException {
 		charsOnRow = 0;
 		rowsOnPage = 0;
 		rowgap = 0;
@@ -122,14 +111,14 @@ public abstract class BRFWriter implements EmbosserWriter {
 	}
 	
 	public void newPage() throws IOException {
-		if (supportsDuplex() && !currentDuplex && (currentPage % 2)==1) {
+		if (!currentDuplex && (currentPage % 2)==1) {
 			formFeed();
 		}
 		formFeed();
 	}
 
 	public void newSectionAndPage(boolean duplex) throws IOException {
-		if (supportsDuplex() && (currentPage % 2)==1) {
+		if ((currentPage % 2)==1) {
 			formFeed();
 		}
 		newPage();
@@ -156,27 +145,7 @@ public abstract class BRFWriter implements EmbosserWriter {
 		return Integer.MAX_VALUE;
 	}
 
-	public boolean supports8dot() {
-		return false;
-	}
-
 	public boolean supportsAligning() {
-		return false;
-	}
-
-	public boolean supportsDuplex() {
-		return true;
-	}
-
-	public boolean supportsVolumes() {
-		return false;
-	}
-	
-	public boolean supportsZFolding() {
-		return false;
-	}
-	
-	public boolean supportsPrintMode(PrintMode mode) {
 		return false;
 	}
 }

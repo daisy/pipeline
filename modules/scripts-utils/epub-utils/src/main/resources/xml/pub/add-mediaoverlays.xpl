@@ -31,9 +31,7 @@
             <p>A copy of the source fileset with the media overlay files added and the package
             document updated.</p>
         </p:documentation>
-        <p:pipe step="update-metadata" port="result"/>
-        <p:pipe step="filter-package-doc" port="not-matched.in-memory"/>
-        <p:pipe step="main" port="mo.in-memory"/>
+        <p:pipe step="update-metadata" port="result.in-memory"/>
     </p:output>
 
     <p:option name="compatibility-mode" required="false" select="'true'" px:type="boolean">
@@ -70,16 +68,12 @@
         <p:documentation>
             px:fileset-filter
             px:fileset-load
+            px:fileset-join
         </p:documentation>
     </p:import>
-    <p:import href="merge-metadata.xpl">
+    <p:import href="add-metadata.xpl">
         <p:documentation>
-            pxi:merge-metadata
-        </p:documentation>
-    </p:import>
-    <p:import href="opf3-to-opf2-metadata.xpl">
-        <p:documentation>
-            pxi:opf3-to-opf2-metadata
+            px:epub3-add-metadata
         </p:documentation>
     </p:import>
 
@@ -132,134 +126,6 @@
             </p:input>
         </p:xslt>
     </p:group>
-
-    <p:documentation>Update metadata with duration information</p:documentation>
-    <p:group name="update-metadata">
-        <p:output port="result"/>
-        <p:delete match="opf:meta[@property='media:duration']"/>
-        <p:label-elements match="/*[@prefix]/opf:metadata" attribute="prefix" label="../@prefix"/>
-        <p:viewport match="/*/opf:metadata">
-            <p:identity name="metadata"/>
-            <p:sink/>
-            <p:group name="duration-metadata">
-                <p:documentation>Extract "duration" metadata from media overlay documents.</p:documentation>
-                <p:output port="result"/>
-                <p:for-each name="metadata.durations">
-                    <p:iteration-source>
-                        <p:pipe step="smil" port="result"/>
-                    </p:iteration-source>
-                    <p:output port="result" sequence="true"/>
-                    <p:variable name="base" select="base-uri(/*)"/>
-                    <p:xslt>
-                        <p:input port="parameters">
-                            <p:empty/>
-                        </p:input>
-                        <p:input port="stylesheet">
-                            <p:document href="create-package-doc.estimate-mediaoverlay-duration.xsl"/>
-                        </p:input>
-                    </p:xslt>
-                    <p:add-attribute match="/*" attribute-name="refines">
-                        <p:with-option name="attribute-value"
-                                       select="concat('#',/*/opf:manifest/opf:item[resolve-uri(@href,base-uri(.))=$base]/@id)">
-                            <p:pipe step="update-manifest" port="result"/>
-                        </p:with-option>
-                    </p:add-attribute>
-                </p:for-each>
-                <p:sink/>
-                <p:group name="metadata.total-duration">
-                    <p:output port="result" sequence="true"/>
-                    <p:count>
-                        <p:input port="source">
-                            <p:pipe step="metadata.durations" port="result"/>
-                        </p:input>
-                    </p:count>
-                    <p:choose>
-                        <p:when test="/*=0">
-                            <p:identity>
-                                <p:input port="source">
-                                    <p:empty/>
-                                </p:input>
-                            </p:identity>
-                        </p:when>
-                        <p:otherwise>
-                            <p:wrap-sequence wrapper="_">
-                                <p:input port="source">
-                                    <p:pipe step="metadata.durations" port="result"/>
-                                </p:input>
-                            </p:wrap-sequence>
-                            <p:xslt>
-                                <p:input port="parameters">
-                                    <p:empty/>
-                                </p:input>
-                                <p:input port="stylesheet">
-                                    <p:document href="create-package-doc.sum-mediaoverlay-durations.xsl"/>
-                                </p:input>
-                            </p:xslt>
-                        </p:otherwise>
-                    </p:choose>
-                </p:group>
-                <p:sink/>
-                <p:insert match="/*" position="last-child">
-                    <p:input port="source">
-                        <p:inline>
-                            <opf:metadata/>
-                        </p:inline>
-                    </p:input>
-                    <p:input port="insertion">
-                        <p:pipe step="metadata.durations" port="result"/>
-                        <p:pipe step="metadata.total-duration" port="result"/>
-                    </p:input>
-                </p:insert>
-                <p:choose>
-                    <p:when test="$reserved-prefixes='#default' and $declare-media-prefix='true'">
-                        <p:add-attribute match="/*"
-                                         attribute-name="prefix"
-                                         attribute-value="media: http://www.idpf.org/epub/vocab/overlays/#">
-                            <!--
-                                note that if there was already "media" metadata present in the
-                                input, and the "media" prefix was not declared, pxi:merge-metadata
-                                will make sure that the prefix will not be declared in the output
-                                either
-                            -->
-                        </p:add-attribute>
-                    </p:when>
-                    <p:otherwise>
-                        <p:identity/>
-                    </p:otherwise>
-                </p:choose>
-            </p:group>
-            <p:sink/>
-            <pxi:merge-metadata>
-                <p:input port="source">
-                    <p:pipe step="metadata" port="result"/>
-                    <p:pipe step="duration-metadata" port="result"/>
-                </p:input>
-                <p:input port="manifest" select="/*/opf:manifest">
-                    <p:pipe step="update-manifest" port="result"/>
-                </p:input>
-                <p:with-option name="reserved-prefixes" select="$reserved-prefixes"/>
-            </pxi:merge-metadata>
-            <p:choose>
-                <p:when test="$compatibility-mode='true'">
-                    <pxi:opf3-to-opf2-metadata compatibility-mode="true"/>
-                </p:when>
-                <p:otherwise>
-                    <p:identity/>
-                </p:otherwise>
-            </p:choose>
-        </p:viewport>
-        <p:choose>
-            <p:when test="/*/opf:metadata/@prefix">
-                <p:add-attribute attribute-name="prefix" match="/*">
-                    <p:with-option name="attribute-value" select="/*/opf:metadata/@prefix"/>
-                </p:add-attribute>
-                <p:delete match="/*/opf:metadata/@prefix"/>
-            </p:when>
-            <p:otherwise>
-                <p:delete match="/*/@prefix"/>
-            </p:otherwise>
-        </p:choose>
-    </p:group>
     <p:sink/>
 
     <px:fileset-join>
@@ -269,5 +135,123 @@
             <p:pipe step="main" port="mo.fileset"/>
         </p:input>
     </px:fileset-join>
+
+    <p:documentation>Update metadata with duration information</p:documentation>
+    <p:group name="update-metadata">
+        <p:output port="result.fileset" primary="true">
+            <p:pipe step="add-metadata" port="result.fileset"/>
+        </p:output>
+        <p:output port="result.in-memory" sequence="true">
+            <p:pipe step="add-metadata" port="result.in-memory"/>
+        </p:output>
+        <px:epub3-add-metadata name="add-metadata">
+            <p:input port="source.in-memory">
+                <p:pipe step="update-manifest" port="result"/>
+                <p:pipe step="filter-package-doc" port="not-matched.in-memory"/>
+                <p:pipe step="main" port="mo.in-memory"/>
+            </p:input>
+            <p:input port="metadata">
+                <p:pipe step="duration-metadata" port="result"/>
+            </p:input>
+            <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
+            <p:with-option name="reserved-prefixes" select="$reserved-prefixes"/>
+        </px:epub3-add-metadata>
+        <p:sink/>
+        <p:group name="duration-metadata">
+            <p:documentation>Extract "duration" metadata from media overlay documents.</p:documentation>
+            <p:output port="result"/>
+            <p:for-each name="metadata.durations">
+                <p:iteration-source>
+                    <p:pipe step="smil" port="result"/>
+                </p:iteration-source>
+                <p:output port="result" sequence="true"/>
+                <p:variable name="base" select="base-uri(/*)"/>
+                <p:xslt>
+                    <p:input port="parameters">
+                        <p:empty/>
+                    </p:input>
+                    <p:input port="stylesheet">
+                        <p:document href="create-package-doc.estimate-mediaoverlay-duration.xsl"/>
+                    </p:input>
+                </p:xslt>
+                <p:add-attribute match="/*" attribute-name="refines">
+                    <p:with-option name="attribute-value"
+                                   select="concat('#',/*/opf:manifest/opf:item[resolve-uri(@href,base-uri(.))=$base]/@id)">
+                        <p:pipe step="update-manifest" port="result"/>
+                    </p:with-option>
+                </p:add-attribute>
+            </p:for-each>
+            <p:sink/>
+            <p:group name="metadata.total-duration">
+                <p:output port="result" sequence="true"/>
+                <p:count>
+                    <p:input port="source">
+                        <p:pipe step="metadata.durations" port="result"/>
+                    </p:input>
+                </p:count>
+                <p:choose>
+                    <p:when test="/*=0">
+                        <p:identity>
+                            <p:input port="source">
+                                <p:empty/>
+                            </p:input>
+                        </p:identity>
+                    </p:when>
+                    <p:otherwise>
+                        <p:wrap-sequence wrapper="_">
+                            <p:input port="source">
+                                <p:pipe step="metadata.durations" port="result"/>
+                            </p:input>
+                        </p:wrap-sequence>
+                        <p:xslt>
+                            <p:input port="parameters">
+                                <p:empty/>
+                            </p:input>
+                            <p:input port="stylesheet">
+                                <p:document href="create-package-doc.sum-mediaoverlay-durations.xsl"/>
+                            </p:input>
+                        </p:xslt>
+                    </p:otherwise>
+                </p:choose>
+            </p:group>
+            <p:sink/>
+            <p:insert match="/*/*" position="last-child">
+                <p:input port="source">
+                    <p:inline>
+                        <opf:package>
+                            <opf:metadata/>
+                        </opf:package>
+                    </p:inline>
+                </p:input>
+                <p:input port="insertion">
+                    <p:pipe step="metadata.durations" port="result"/>
+                    <p:pipe step="metadata.total-duration" port="result"/>
+                </p:input>
+            </p:insert>
+            <p:insert match="/*" position="last-child">
+                <p:input port="insertion" select="//opf:manifest">
+                    <p:pipe step="update-manifest" port="result"/>
+                </p:input>
+            </p:insert>
+            <p:choose>
+                <p:when test="$reserved-prefixes='#default' and $declare-media-prefix='true'">
+                    <p:add-attribute match="/*"
+                                     attribute-name="prefix"
+                                     attribute-value="media: http://www.idpf.org/epub/vocab/overlays/#">
+                        <!--
+                            note that if there was already "media" metadata present in the
+                            input, and the "media" prefix was not declared, px:epub3-add-metadata
+                            will make sure that the prefix will not be declared in the output
+                            either
+                        -->
+                    </p:add-attribute>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+        </p:group>
+        <p:sink/>
+    </p:group>
 
 </p:declare-step>

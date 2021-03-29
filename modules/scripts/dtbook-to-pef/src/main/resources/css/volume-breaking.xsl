@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ======================================================================= -->
-<!-- There are 2 copies of this file:                                        -->
-<!-- * scripts/dtbook-to-pef/src/main/resources/xml/xslt/volume-breaking.xsl -->
-<!-- * scripts/html-to-pef/src/main/resources/xml/xslt/volume-breaking.xsl   -->
-<!-- Whenever you update this file, also update the other copies.            -->
-<!-- ======================================================================= -->
+<!-- ================================================================== -->
+<!-- There are 2 copies of this file:                                   -->
+<!-- * scripts/dtbook-to-pef/src/main/resources/css/volume-breaking.xsl -->
+<!-- * scripts/html-to-pef/src/main/resources/css/volume-breaking.xsl   -->
+<!-- Whenever you update this file, also update the other copies.       -->
+<!-- ================================================================== -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"

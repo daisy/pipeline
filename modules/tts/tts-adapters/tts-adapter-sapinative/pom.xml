@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-		<version>1.14.2-SNAPSHOT</version>
+		<version>1.14.3-SNAPSHOT</version>
 		<relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.5-SNAPSHOT</version>
+  <version>3.0.6-SNAPSHOT</version>
   <artifactId>tts-adapter-sapinative</artifactId>
   <packaging>bundle</packaging>
 
@@ -114,7 +114,7 @@
               <tasks>
                 <copy todir="target/generated-resources/">
                   <fileset dir="target/dependency">
-                    <include name="**/*.dll"/>
+                    <include name="**/*.dll" />
                   </fileset>
                 </copy>
               </tasks>

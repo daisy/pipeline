@@ -45,8 +45,9 @@ class NumberBrailleTranslator extends AbstractBrailleTranslator implements Brail
 	private final static char LF = '\n';
 	private final static char TAB = '\t';
 	private final static char NBSP = '\u00a0';
+	private final static char LS = '\u2028';   // line separator
 
-	private final static Pattern VALID_INPUT = Pattern.compile("[0-9\u2800-\u28ff" + SHY + ZWSP + SPACE + LF + CR + TAB + NBSP + "]*");
+	private final static Pattern VALID_INPUT = Pattern.compile("[0-9\u2800-\u28ff" + SHY + ZWSP + SPACE + LF + CR + TAB + NBSP + LS + "]*");
 	private final static Pattern NUMBER = Pattern.compile("[0-9]+");
 	private final static String NUMSIGN = "\u283c";
 	private final static String[] DIGIT_TABLE = new String[]{
@@ -106,6 +107,7 @@ class NumberBrailleTranslator extends AbstractBrailleTranslator implements Brail
 	private String transform(CSSStyledText styledText) {
 		SimpleInlineStyle style = styledText.getStyle();
 		String text = styledText.getText();
+		boolean noTransform = false;
 		if (style != null) {
 			CSSProperty ws = style.getProperty("white-space");
 			if (ws != null) {
@@ -113,17 +115,23 @@ class NumberBrailleTranslator extends AbstractBrailleTranslator implements Brail
 					text = text.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
 					           .replaceAll("[\\x20\t\\u2800]", "\u00A0");
 				if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
-					text = text.replaceAll("[\\n\\r]", "\u2028");
+					text = text.replaceAll("[\\n\\r]", ""+LS);
 				style.removeProperty("white-space"); }
 			CSSProperty textTransform = style.getProperty("text-transform");
 			if (textTransform == TextTransform.AUTO)
 				style.removeProperty("text-transform");
+			if (textTransform == TextTransform.NONE) {
+				noTransform = true;
+				style.removeProperty("text-transform");
+			}
 			if (!style.isEmpty())
 				throw new RuntimeException("Translator does not support style '" + style + "'");
 		}
 		Map<String,String> attrs = styledText.getTextAttributes();
 		if (attrs != null && !attrs.isEmpty())
 			throw new RuntimeException("Translator does not support text attributes '" + attrs + "'");
+		if (noTransform)
+			return text;
 		return transform(text);
 	}
 

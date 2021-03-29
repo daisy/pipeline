@@ -96,19 +96,12 @@
         <!--
             Add missing sectioning elements so that there are no implied sections
         -->
-        <px:html-outline fix-sectioning="no-implied" name="fix-sectioning"
-                         output-base-uri="file:/tmp/irrelevant.html"
-                         px:progress="1/4"/>
-        <p:sink/>
+        <px:html-outline fix-sectioning="no-implied" px:progress="1/4"/>
         <!--
             Move everything one level down if step above resulted in multiple body elements
         -->
         <p:wrap match="/*/html:body[preceding-sibling::html:body|following-sibling::html:body]"
-                group-adjacent="true()" wrapper="html:body">
-            <p:input port="source">
-                <p:pipe step="fix-sectioning" port="content-doc"/>
-            </p:input>
-        </p:wrap>
+                group-adjacent="true()" wrapper="html:body"/>
         <p:rename match="/*/html:body/html:body" new-name="html:section"/>
         <!--
             Move body one level down if it contains content beside sectioning and heading elements
@@ -128,14 +121,7 @@
         -->
         <p:choose px:progress="1/4">
             <p:when test="$imply-headings='true'">
-                <px:html-outline fix-untitled-sections="imply-heading" name="fix-untitled-sections"
-                                 output-base-uri="file:/tmp/irrelevant.html"/>
-                <p:sink/>
-                <p:identity>
-                    <p:input port="source">
-                        <p:pipe step="fix-untitled-sections" port="content-doc"/>
-                    </p:input>
-                </p:identity>
+                <px:html-outline fix-untitled-sections="imply-heading"/>
             </p:when>
             <p:otherwise>
                 <p:identity/>

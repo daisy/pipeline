@@ -47,14 +47,15 @@ import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
-import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
+import org.daisy.common.transform.XMLTransformer;
 import org.daisy.pipeline.braille.common.util.Strings;
 import org.daisy.pipeline.braille.css.SupportedPrintCSS;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 import org.daisy.pipeline.css.CssCascader;
+import org.daisy.pipeline.css.CssPreProcessor;
 import org.daisy.pipeline.css.JStyleParserCssCascader;
 import org.daisy.pipeline.css.Medium;
-import org.daisy.pipeline.css.SassCompiler;
+import org.daisy.pipeline.css.XsltProcessor;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -81,17 +82,18 @@ public class BrailleCssCascader implements CssCascader {
 		}
 	}
 
-	public SingleInSingleOutXMLTransformer newInstance(Medium medium,
-	                                                   String defaultStylesheet,
-	                                                   URIResolver uriResolver,
-	                                                   SassCompiler sassCompiler,
-	                                                   QName attributeName) {
+	public XMLTransformer newInstance(Medium medium,
+	                                  String defaultStylesheet,
+	                                  URIResolver uriResolver,
+	                                  CssPreProcessor preProcessor,
+	                                  XsltProcessor xsltProcessor,
+	                                  QName attributeName) {
 		switch (medium.getType()) {
 		case EMBOSSED:
-			return new Transformer(uriResolver, sassCompiler, defaultStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, preProcessor, xsltProcessor, defaultStylesheet, medium, attributeName,
 			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
 		case PRINT:
-			return new Transformer(uriResolver, sassCompiler, defaultStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, preProcessor, xsltProcessor, defaultStylesheet, medium, attributeName,
 			                       printParserFactory, printRuleFactory, printCSS, printDeclarationTransformer);
 		default:
 			throw new IllegalArgumentException("medium not supported: " + medium);
@@ -120,11 +122,12 @@ public class BrailleCssCascader implements CssCascader {
 
 		private final boolean isBrailleCss;
 
-		private Transformer(URIResolver resolver, SassCompiler sassCompiler, String defaultStyleSheet, Medium medium,
-		                    QName attributeName, CSSParserFactory parserFactory, RuleFactory ruleFactory,
+		private Transformer(URIResolver resolver, CssPreProcessor preProcessor, XsltProcessor xsltProcessor,
+		                    String defaultStyleSheet, Medium medium, QName attributeName,
+		                    CSSParserFactory parserFactory, RuleFactory ruleFactory,
 		                    SupportedCSS supportedCss, DeclarationTransformer declarationTransformer) {
-			super(resolver, sassCompiler, defaultStyleSheet, medium, attributeName, parserFactory, ruleFactory,
-			      supportedCss, declarationTransformer);
+			super(resolver, preProcessor, xsltProcessor, defaultStyleSheet, medium, attributeName,
+			      parserFactory, ruleFactory, supportedCss, declarationTransformer);
 			this.isBrailleCss = medium.getType() == Medium.Type.EMBOSSED;
 		}
 

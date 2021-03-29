@@ -124,4 +124,36 @@
         </x:scenario>
     </x:scenario>
 
+    <x:scenario label="css with @xslt rule">
+        <x:call step="px:apply-stylesheets">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html>
+                        <head>
+                            <style media="embossed" type="text/x-scss">
+                                @xslt "../resources/stylesheet_1.xsl" {
+                                  uppercase: $uppercase;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>foobar</h1>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+            <x:param port="parameters" name="uppercase" select="true()"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result" select="//body"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <body>
+                    <h1>FOOBAR</h1>
+                </body>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

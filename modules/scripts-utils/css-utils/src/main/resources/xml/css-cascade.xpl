@@ -34,7 +34,15 @@
 		<p:empty/>
 	</p:input>
 	
-	<p:input port="sass-variables" kind="parameter" primary="false"/>
+	<p:input port="parameters" kind="parameter" primary="false">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Parameters that are passed to SCSS style sheets (as <a
+			href="https://sass-lang.com/documentation/variables#scope">global variables</a>). They
+			are also passed to XSLT transformations that are included from CSS through
+			<code>@xslt</code> rules.
+			</p>
+		</p:documentation>
+	</p:input>
 	
 	<p:output port="result" sequence="false" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -96,7 +104,7 @@
 	<p:declare-step type="pxi:css-cascade">
 		<p:input port="source" primary="true"/>
 		<p:input port="context" sequence="true"/>
-		<p:input port="sass-variables" kind="parameter" primary="false"/>
+		<p:input port="parameters" kind="parameter" primary="false"/>
 		<p:output port="result"/>
 		<p:option name="default-stylesheet"/>
 		<p:option name="media"/>
@@ -123,8 +131,8 @@
 				<p:input port="context">
 					<p:pipe step="main" port="context"/>
 				</p:input>
-				<p:input port="sass-variables">
-					<p:pipe step="main" port="sass-variables"/>
+				<p:input port="parameters">
+					<p:pipe step="main" port="parameters"/>
 				</p:input>
 				<p:with-option name="default-stylesheet" select="$default-stylesheet"/>
 				<p:with-option name="media" select="$media"/>

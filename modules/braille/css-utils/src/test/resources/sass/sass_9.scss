@@ -1,9 +1,0 @@
-%table-linearized {
-    &::table-by(row) {
-        display: block;
-        margin-left: 2;
-    }
-}
-table:not([class]) {
-    @extend %table-linearized
-}

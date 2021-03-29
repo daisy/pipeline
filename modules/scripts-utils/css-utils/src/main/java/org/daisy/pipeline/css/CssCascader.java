@@ -3,7 +3,7 @@ package org.daisy.pipeline.css;
 import javax.xml.namespace.QName;
 import javax.xml.transform.URIResolver;
 
-import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
+import org.daisy.common.transform.XMLTransformer;
 
 /**
  * Used by the <a
@@ -20,10 +20,11 @@ public interface CssCascader {
 
 	public boolean supportsMedium(Medium medium);
 
-	public SingleInSingleOutXMLTransformer newInstance(Medium medium,
-	                                                   String defaultStylesheet,
-	                                                   URIResolver uriResolver,
-	                                                   SassCompiler sassCompiler,
-	                                                   QName attributeName);
+	public XMLTransformer newInstance(Medium medium,
+	                                  String defaultStylesheet,
+	                                  URIResolver uriResolver,
+	                                  CssPreProcessor preProcessor,
+	                                  XsltProcessor xsltProcessor,
+	                                  QName attributeName);
 
 }

@@ -9,8 +9,8 @@ import java.util.Set;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 
-import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.api.table.Table;
+import org.daisy.dotify.api.factory.FactoryProperties;
+import org.daisy.dotify.api.table.Table;
 
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 	name = "org.daisy.pipeline.braille.pef.impl.LocaleTableProvider",
 	service = {
 		TableProvider.class
-		// org.daisy.braille.api.table.TableProvider.class
+		// org.daisy.dotify.api.table.TableProvider.class
 	}
 )
 public class LocaleBasedTableProvider extends AbstractTableProvider {
@@ -69,26 +69,26 @@ public class LocaleBasedTableProvider extends AbstractTableProvider {
 	
 	private final static Iterable<Table> empty = Optional.<Table>absent().asSet();
 	
-	private final List<org.daisy.braille.api.table.TableProvider> providers
-	= new ArrayList<org.daisy.braille.api.table.TableProvider>();
+	private final List<org.daisy.dotify.api.table.TableProvider> providers
+	= new ArrayList<org.daisy.dotify.api.table.TableProvider>();
 	
 	@Reference(
 		name = "TableProvider",
 		unbind = "removeTableProvider",
-		service = org.daisy.braille.api.table.TableProvider.class,
+		service = org.daisy.dotify.api.table.TableProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC
 	)
-	public void addTableProvider(org.daisy.braille.api.table.TableProvider provider) {
+	public void addTableProvider(org.daisy.dotify.api.table.TableProvider provider) {
 		providers.add(provider);
 	}
 	
-	public void removeTableProvider(org.daisy.braille.api.table.TableProvider provider) {
+	public void removeTableProvider(org.daisy.dotify.api.table.TableProvider provider) {
 		providers.remove(provider);
 	}
 	
 	private Iterable<Table> get(String id) {
-		for (org.daisy.braille.api.table.TableProvider p : providers)
+		for (org.daisy.dotify.api.table.TableProvider p : providers)
 			for (FactoryProperties fp : p.list())
 				if (fp.getIdentifier().equals(id))
 					return Optional.fromNullable(p.newFactory(id)).asSet();

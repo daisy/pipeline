@@ -1,5 +1,6 @@
 package org.daisy.pipeline.tts.espeak.impl;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,29 +27,38 @@ public class ESpeakService extends AbstractTTSService {
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
 		// settings
-		String eSpeakPath = null;
-		String prop = "org.daisy.pipeline.tts.espeak.path";
-		eSpeakPath = params.get(prop);
-		if (eSpeakPath == null) {
-			Optional<String> epath = BinaryFinder.find("espeak");
-			if (!epath.isPresent()) {
+		File eSpeakFile = null; {
+			String prop = "org.daisy.pipeline.tts.espeak.path";
+			String val = params.get(prop);
+			if (val != null) {
+				Optional<File> epath = BinaryFinder.get(val);
+				if (epath.isPresent()) {
+					eSpeakFile = epath.get();
+				}
+			}
+			if (eSpeakFile == null) {
+				Optional<String> epath = BinaryFinder.find("espeak");
+				if (epath.isPresent()) {
+					eSpeakFile = new File(epath.get());
+				}
+			}
+			if (eSpeakFile == null) {
 				throw new SynthesisException(
-				        "Cannot find eSpeak's binary using system property " + prop);
-			}
-			eSpeakPath = epath.get();
-		}
-
-		String priority = params.get("org.daisy.pipeline.tts.espeak.priority");
-		int intPriority = 2;
-		if (priority != null) {
-			try {
-				intPriority = Integer.valueOf(priority);
-			} catch (NumberFormatException e) {
-
+					"Cannot find eSpeak's binary using system property " + prop);
 			}
 		}
 
-		return new ESpeakEngine(this, eSpeakPath, intPriority);
+		int intPriority = 2; {
+			String priority = params.get("org.daisy.pipeline.tts.espeak.priority");
+			if (priority != null) {
+				try {
+					intPriority = Integer.valueOf(priority);
+				} catch (NumberFormatException e) {
+				}
+			}
+		}
+
+		return new ESpeakEngine(this, eSpeakFile, intPriority);
 	}
 
 	@Override

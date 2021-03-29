@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.2-SNAPSHOT</version>
+    <version>1.14.3-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
   
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>epub3-to-epub3</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 module :: EPUB 3 Enhancer</name>
@@ -53,12 +53,22 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>epub-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>epub3-tts</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-break-detection</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--
@@ -95,7 +105,8 @@
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_epub3_to_epub3,
       org.daisy.pipeline.script.impl.XProcScript_epub3_to_epub3,
-      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_tts
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_tts,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_ensure_pagenum_text
     </expose-services>
   </properties>
   
@@ -181,6 +192,53 @@
           <scope>test</scope>
         </dependency>
       </dependencies>
+    </profile>
+
+    <profile>
+      <id>run-script-webserver</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules</groupId>
+          <artifactId>tts-adapter-osx</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules</groupId>
+          <artifactId>audio-encoder-lame</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>ds-to-spi-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-spi-test-classes</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-webserver</id>
+                <configuration>
+                  <systemProperties combine.children="append">
+                    <systemProperty>
+                      <key>org.daisy.pipeline.tts.config</key>
+                      <value>${project.basedir}/src/test/resources/webserver-tts-config.xml</value>
+                    </systemProperty>
+                  </systemProperties>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
   

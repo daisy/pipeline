@@ -10,7 +10,7 @@ import org.ops4j.pax.exam.util.PathUtils;
 
 public class Test extends PaxExamConfig {
 	
-	@Override @org.junit.Test
+	@Override
 	public void runXProcSpec() throws Exception {
 		File baseDir = new File(PathUtils.getBaseDir());
 		Map<String,File> tests = new HashMap<String,File>();

@@ -3,6 +3,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:opf="http://www.idpf.org/2007/opf"
                 xmlns="http://www.idpf.org/2007/opf"
                 xpath-default-namespace="http://www.idpf.org/2007/opf"
                 exclude-result-prefixes="#all">
@@ -15,18 +16,18 @@
     -->
 
     <xsl:param name="reserved-prefixes" required="yes"/>
+    <xsl:param name="log-conflicts" required="yes"/>
+
+    <!-- existing ids outside metadata elements (required by f:unified-id) -->
+    <!-- if it weren't for XSpec this could have been a xsl:variable -->
+    <xsl:param name="existing-id-outside-metadata" as="xs:string*" select="//@id[not(ancestor::metadata)]"/>
 
     <!--=========================================-->
     <!--TODO: document merge rules. For now, see the tests.-->
     <!--=========================================-->
 
-    <xsl:key name="refines" match="//meta[@refines]" use="f:unified-id(@refines)"/>
-
-    <xsl:template match="/">
-        <xsl:apply-templates select="/*">
-            <xsl:with-param tunnel="yes" name="manifest" select="collection()[2]"/>
-        </xsl:apply-templates>
-    </xsl:template>
+    <xsl:key name="unified-id" match="//meta[@id]|//dc:*[@id]" use="f:unified-id(@id)"/>
+    <xsl:key name="unified-refines" match="//meta[@refines]" use="f:unified-id(@refines)"/>
 
     <xsl:template match="/*" priority="1">
         <xsl:variable name="prefix-attr" as="element(f:vocab)*" select="f:parse-prefix-decl(@prefix)"/>
@@ -47,7 +48,6 @@
         <xsl:param name="prefix-attr" as="element(f:vocab)*" tunnel="yes" required="yes"/>
         <xsl:param name="implicit-prefixes" as="element(f:vocab)*" tunnel="yes" required="yes"/>
         <xsl:param name="vocabs" as="element(f:vocab)*" tunnel="yes" required="yes"/>
-        <xsl:param name="manifest" tunnel="yes" as="document-node()?" select="()"/>
         <metadata>
             <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
             <xsl:variable name="dcterms-vocab" as="element(f:vocab)"
@@ -66,22 +66,67 @@
             </xsl:choose>
 
             <!-- dc:title(s) and refines -->
-            <xsl:variable name="title" select="(//metadata/dc:title[not(@refines)])[1]"/>
-            <xsl:apply-templates select="$title"/>
-            <xsl:apply-templates
-                select="$title/ancestor::metadata/dc:title[not(@refines) and (. != $title)]"/>
+            <xsl:variable name="titles" select="//metadata/dc:title[not(@refines)]"/>
+            <!-- Only keep first group of fields  -->
+            <xsl:variable name="first-group" as="element()*"
+                          select="$titles intersect $titles[1]/ancestor::metadata/dc:title"/>
+            <xsl:apply-templates select="$first-group"/>
+            <!-- Discard fields that are not from the same metadata document -->
+            <xsl:if test="$log-conflicts='true'">
+                <xsl:variable name="new-value" as="xs:string" select="f:serialize-value($first-group)"/>
+                <xsl:for-each-group select="$titles except $first-group"
+                                    group-by="count(ancestor::metadata/preceding::metadata)">
+                    <xsl:variable name="value" as="xs:string"
+                                  select="f:serialize-value(current-group())"/>
+                    <xsl:if test="$value!=$new-value">
+                        <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                        />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
+                        select="$new-value"/>.</xsl:message>
+                    </xsl:if>
+                </xsl:for-each-group>
+            </xsl:if>
 
             <!-- dc:identifier(s) and refines -->
-            <xsl:variable name="identifier" select="(//metadata/dc:identifier[not(@refines)])[1]"/>
-            <xsl:apply-templates select="$identifier"/>
-            <xsl:apply-templates
-                select="$identifier/ancestor::metadata/dc:identifier[not(@refines) and (. != $identifier)]"/>
+            <xsl:variable name="identifiers" select="//metadata/dc:identifier[not(@refines)]"/>
+            <!-- Only keep first group of fields  -->
+            <xsl:variable name="first-group" as="element()*"
+                          select="$identifiers intersect $identifiers[1]/ancestor::metadata/dc:identifier"/>
+            <xsl:apply-templates select="$first-group"/>
+            <!-- Discard fields that are not from the same metadata document -->
+            <xsl:if test="$log-conflicts='true'">
+                <xsl:variable name="new-value" as="xs:string" select="f:serialize-value($first-group)"/>
+                <xsl:for-each-group select="$identifiers except $first-group"
+                                    group-by="count(ancestor::metadata/preceding::metadata)">
+                    <xsl:variable name="value" as="xs:string"
+                                  select="f:serialize-value(current-group())"/>
+                    <xsl:if test="$value!=$new-value">
+                        <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                        />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
+                        select="$new-value"/>.</xsl:message>
+                    </xsl:if>
+                </xsl:for-each-group>
+            </xsl:if>
 
             <!-- dc:language(s) and refines -->
-            <xsl:variable name="language" select="(//metadata/dc:language[not(@refines)])[1]"/>
-            <xsl:apply-templates select="$language"/>
-            <xsl:apply-templates
-                select="$language/ancestor::metadata/dc:language[not(@refines) and (. != $language)]"/>
+            <xsl:variable name="languages" select="//metadata/dc:language[not(@refines)]"/>
+            <!-- Only keep first group of fields  -->
+            <xsl:variable name="first-group" as="element()*"
+                          select="$languages intersect $languages[1]/ancestor::metadata/dc:language"/>
+            <xsl:apply-templates select="$first-group"/>
+            <!-- Discard fields that are not from the same metadata document -->
+            <xsl:if test="$log-conflicts='true'">
+                <xsl:variable name="new-value" as="xs:string" select="f:serialize-value($first-group)"/>
+                <xsl:for-each-group select="$languages except $first-group"
+                                    group-by="count(ancestor::metadata/preceding::metadata)">
+                    <xsl:variable name="value" as="xs:string"
+                                  select="f:serialize-value(current-group())"/>
+                    <xsl:if test="$value!=$new-value">
+                        <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                        />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
+                        select="$new-value"/>.</xsl:message>
+                    </xsl:if>
+                </xsl:for-each-group>
+            </xsl:if>
 
             <!--generate dc:modified-->
             <meta property="dcterms:modified">
@@ -100,54 +145,164 @@
                 select="//(dc:contributor|dc:coverage|dc:creator|dc:date|dc:description|dc:format
                           |dc:publisher|dc:relation|dc:rights|dc:source|dc:subject|dc:type)[empty(@refines)]"
                 group-by="name()">
+                <!-- Only keep first field or group of fields  -->
+                <xsl:variable name="first-group" as="element()*">
+                    <xsl:variable name="first-group" as="element()*"
+                                  select="current-group()[ancestor::metadata is current()/ancestor::metadata]"/>
+                    <xsl:choose>
+                        <xsl:when test="self::dc:date|self::dc:source">
+                            <xsl:variable name="first" as="element()" select="$first-group[1]"/>
+                            <xsl:sequence select="$first"/>
+                            <!-- Discard other fields in the same metadata document -->
+                            <xsl:for-each select="$first-group except $first">
+                                <xsl:message>[WARNING] Discarding '<xsl:value-of select="name()"
+                                />' with value '<xsl:value-of select="string(.)"/>': only one '<xsl:value-of
+                                select="name()"/>' allowed.</xsl:message>
+                            </xsl:for-each>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="$first-group"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:apply-templates select="$first-group"/>
+                <!-- Discard fields that are not from the same metadata document -->
+                <xsl:if test="$log-conflicts='true'">
+                    <xsl:variable name="new-value" as="xs:string"
+                                  select="f:serialize-value($first-group)"/>
+                    <xsl:for-each-group select="current-group() except $first-group"
+                                        group-by="count(ancestor::metadata/preceding::metadata)">
+                        <xsl:variable name="value" as="xs:string"
+                                      select="f:serialize-value(current-group())"/>
+                        <xsl:if test="$value!=$new-value">
+                            <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                            />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
+                            select="$new-value"/>.</xsl:message>
+                        </xsl:if>
+                    </xsl:for-each-group>
+                </xsl:if>
+            </xsl:for-each-group>
+
+            <!--meta [0 or more]-->
+            <xsl:for-each-group select="//meta[empty(@refines)]" group-by="f:expand-property(@property,$vocabs)/@uri">
                 <xsl:choose>
-                    <xsl:when test="self::dc:date|self::dc:source">
-                        <xsl:apply-templates select="current()"/>
+                    <xsl:when test="current-grouping-key()">
+                        <xsl:variable name="property" as="xs:string" select="current-grouping-key()"/>
+                        <!-- Only keep first group of fields  -->
+                        <xsl:variable name="first-group" as="element(opf:meta)*"
+                                      select="current-group()[ancestor::metadata is current()/ancestor::metadata]"/>
+                        <xsl:variable name="first-group-processed" as="element(opf:meta)*">
+                            <xsl:apply-templates select="$first-group"/>
+                        </xsl:variable>
+                        <xsl:sequence select="$first-group-processed"/>
+                        <!-- Discard fields that are not from the same metadata document -->
+                        <xsl:if test="$log-conflicts='true'">
+                            <xsl:variable name="discarded" as="element(opf:meta)*"
+                                          select="current-group() except $first-group"/>
+                            <xsl:variable name="discarded" as="element(opf:meta)*">
+                                <xsl:for-each select="$discarded">
+                                    <xsl:choose>
+                                        <xsl:when test="$property='http://purl.org/dc/terms/modified'">
+                                            <xsl:message>[INFO] Discarding property '<xsl:value-of select="@property"
+                                            />' with value '<xsl:value-of select="."
+                                            />'. A new value is generated.</xsl:message>
+                                        </xsl:when>
+                                        <xsl:when test="not(@property) and @name and @content">
+                                            <!-- Don't mention OPF 2 fields. We assume that the corresponding OPF 3
+                                                 fields are also present. -->
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:sequence select="."/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:for-each>
+                            </xsl:variable>
+                            <xsl:if test="exists($discarded)">
+                                <!--
+                                    FIXME: also mention meta[@refines] elements that are discarded
+                                    because the element they refine is discarded
+                                -->
+                                <xsl:choose>
+                                    <xsl:when test="exists($first-group-processed)">
+                                        <xsl:variable name="new-value" as="xs:string"
+                                                      select="f:serialize-value($first-group-processed[not(@refines)])"/>
+                                        <xsl:for-each-group select="$discarded"
+                                                            group-by="count(ancestor::metadata/preceding::metadata)">
+                                            <xsl:variable name="value" as="xs:string"
+                                                          select="f:serialize-value(current-group())"/>
+                                            <xsl:if test="$value!=$new-value">
+                                                <xsl:message>[INFO] Updating property '<xsl:value-of select="@property"
+                                                />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
+                                                select="$new-value"/>.</xsl:message>
+                                            </xsl:if>
+                                        </xsl:for-each-group>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:for-each select="$discarded">
+                                            <xsl:message>[WARNING] Discarding property '<xsl:value-of
+                                            select="@property" />' with value '<xsl:value-of select="string(.)"
+                                            />'.</xsl:message>
+                                        </xsl:for-each>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:if>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="not(@property) and @name and @content">
+                        <!-- Don't mention OPF 2 fields. We assume that the corresponding OPF 3 fields are also
+                             present. -->
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates
-                            select="current-group()[ancestor::metadata is current()/ancestor::metadata]"
-                        />
+                        <xsl:message>[WARNING] Discarding property '<xsl:value-of
+                        select="@property"/>' from an undeclared vocab.</xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each-group>
 
-            <!--meta [0 or more]-->
-            <xsl:for-each-group select="//meta[empty(@refines)]"
-                group-by="f:expand-property(@property,$vocabs)/@uri">
-                <xsl:if test="current-grouping-key()">
-                    <xsl:apply-templates
-                        select="current-group()[ancestor::metadata is current()/ancestor::metadata]"
-                    />
-                </xsl:if>
-            </xsl:for-each-group>
+            <!-- process meta that refine manifest items within the same package document -->
+            <xsl:for-each select="//metadata">
+                <xsl:variable name="manifest" as="element(opf:manifest)?" select="parent::package/manifest"/>
+                <xsl:apply-templates select="meta[replace(@refines,'^#','')=$manifest//item/@id]">
+                    <xsl:with-param name="copy-refines" tunnel="yes" select="true()"/>
+                </xsl:apply-templates>
 
-            <!-- process meta that refine manifest items -->
-            <xsl:apply-templates select="//meta[replace(@refines,'^#','')=$manifest//item/@id]">
-                <xsl:with-param name="copy-refines" tunnel="yes" select="true()"/>
-            </xsl:apply-templates>
+                <xsl:for-each select="meta[@refines][not(replace(@refines,'^#','')=$manifest//item/@id) and
+                                      not(exists(key('unified-id',f:unified-id(@refines))))]">
+                    <xsl:message>[WARNING] Discarding property '<xsl:value-of select="@property"
+                    />' with broken refines attribute '<xsl:value-of select="@refines"/>'.</xsl:message>
+                </xsl:for-each>
+            </xsl:for-each>
 
             <xsl:apply-templates select="//link"/>
         </metadata>
     </xsl:template>
 
-    <xsl:template match="dc:identifier">
-        <dc:identifier id="{f:unique-id((@id,generate-id())[1],//@id except @id)}">
+    <xsl:template match="dc:identifier[not(@id)]">
+        <dc:identifier>
+            <!-- make sure there is an ID for the unique-identifier attribute to point to -->
+            <xsl:attribute name="id" select="f:unique-id(generate-id(),//@id)"/>
             <xsl:apply-templates select="node() | @* except @id"/>
         </dc:identifier>
-        <xsl:apply-templates select="key('refines',f:unified-id(@id))"/>
     </xsl:template>
 
     <xsl:template match="dc:*">
         <xsl:next-match/>
-        <xsl:apply-templates select="key('refines',f:unified-id(@id))"/>
+        <xsl:apply-templates select="key('unified-refines',f:unified-id(@id))"/>
     </xsl:template>
 
     <xsl:template match="meta">
         <xsl:param name="vocabs" as="element(f:vocab)*" tunnel="yes" required="yes"/>
         <xsl:variable name="property" select="f:expand-property(@property,$vocabs)"/>
         <xsl:choose>
-            <xsl:when test="$property/@uri='http://purl.org/dc/terms/modified'"/>
+            <xsl:when test="$property/@uri='http://purl.org/dc/terms/modified'">
+                <xsl:message>[INFO] Discarding property '<xsl:value-of select="@property"
+                    />' with value '<xsl:value-of select="."/>'. A new value is generated.</xsl:message>
+            </xsl:when>
+            <xsl:when test="not(@property) and @name and @content">
+                <!-- Discard OPF 2 fields. They will be added again later based on the OPF 3 fields
+                     if the compatibility-mode option is set. We assume that if there are OPF 2
+                     fields in the input, the corresponding OPF 3 fields are also present. -->
+            </xsl:when>
             <xsl:when test="not(normalize-space())">
                 <xsl:message>[WARNING] Discarding empty property '<xsl:value-of select="@property"
                     />'.</xsl:message>
@@ -172,7 +327,7 @@
                 <xsl:next-match/>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="key('refines',f:unified-id(@id))"/>
+        <xsl:apply-templates select="key('unified-refines',f:unified-id(@id))"/>
     </xsl:template>
 
     <xsl:template match="link">
@@ -252,10 +407,14 @@
     -->
     <xsl:function name="f:unified-id" as="xs:string">
         <xsl:param name="id" as="attribute()?"/>
-        <xsl:variable name="count" select="count($id/ancestor::metadata/preceding-sibling::*)"
+        <xsl:variable name="count" select="count($id/ancestor::metadata/preceding::metadata)"
             as="xs:integer"/>
         <xsl:sequence
-            select="concat(if (starts-with($id,'#')) then substring($id,2) else $id, if ($count) then $count+1 else '')"
+            select="f:unique-id(
+                      concat(
+                        if (starts-with($id,'#')) then substring($id,2) else $id,
+                        if ($count) then $count+1 else ''),
+                        $existing-id-outside-metadata)"
         />
     </xsl:function>
 
@@ -292,12 +451,21 @@
         <xsl:variable name="reference" select="replace($property,'(.+:)','')" as="xs:string"/>
         <xsl:variable name="vocab" as="xs:string"
                       select="($vocabs[@prefix=$prefix]/@uri,
-                               if ($prefix='') then $vocab-package-uri else (),
+                               if ($prefix='' and $reference!='') then $vocab-package-uri else (),
                                ''
                               )[1]"/>
         <f:property prefix="{$prefix}"
                     uri="{if ($vocab) then concat($vocab,$reference) else ''}"
-                    name="{if ($prefix) then concat($prefix,':',$reference)  else $reference}"/>
+                    name="{string-join(($prefix,$reference)[not(.='')],':')}"/>
+    </xsl:function>
+
+    <xsl:function name="f:serialize-value" as="xs:string">
+        <xsl:param name="elems" as="element()*"/>
+        <xsl:sequence select="if (count($elems)=0)
+                              then '[]'
+                              else if (count($elems)=1)
+                              then concat('''',$elems/string(.),'''')
+                              else concat('[''',string-join($elems/string(.),''', '''),''']')"/>
     </xsl:function>
 
 </xsl:stylesheet>

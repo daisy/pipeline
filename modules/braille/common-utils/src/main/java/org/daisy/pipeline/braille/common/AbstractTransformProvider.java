@@ -169,7 +169,7 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 							Iterator<T> i = iterable.iterator();
 							boolean first = true;
 							public boolean hasNext() {
-								if (i == null)
+								if (first)
 									return true;
 								return i.hasNext();
 							}
@@ -178,9 +178,9 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 								if (first) {
 									first = false;
 									try { t = i.next(); }
-									catch (final NoSuchElementException e) {
+									catch (NoSuchElementException e) {
 										return new WithSideEffect<T,Logger>() {
-											public T _apply() {
+											public T _apply() throws NoSuchElementException {
 												__apply(debug("No match for query " + query));
 												throw e;
 											}
@@ -373,19 +373,20 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 								else if (!iterableIterator.hasNext())
 									return endOfData();
 								nextEvaluate = new WithSideEffect<T,Logger>() {
-									public T _apply() throws Throwable {
+									public T _apply() throws NoSuchElementException {
 										if (nextEvaluate == this)
 											evaluated = true;
 										while (current == null || !current.hasNext()) {
+											WithSideEffect<? extends Iterable<T>,Logger> nextIterable = iterableIterator.next();
 											try {
-												current = __apply(iterableIterator.next()).iterator();
+												current = __apply(nextIterable).iterator();
 												break; }
-											catch (WithSideEffect.Exception e) {
+											catch (NoSuchElementException e) {
 												continue; }}
-										try {
-											return __apply(current.next()); }
-										catch (WithSideEffect.Exception e) {
-											throw e.getCause(); }
+										if (current == null)
+											throw new NoSuchElementException();
+										T result = __apply(current.next());
+										return result;
 									}
 								};
 								evaluated = false;
@@ -414,12 +415,12 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 									if (!itrA.hasNext())
 										return endOfData();
 									return new WithSideEffect<T,Logger>() {
-										public T _apply() throws Throwable {
+										public T _apply() throws NoSuchElementException {
 											while (itrA.hasNext()) {
 												T nextA; {
 													try {
 														nextA = __apply(itrA.next()); }
-													catch (WithSideEffect.Exception e) {
+													catch (NoSuchElementException e) {
 														continue; }}
 												if (returned.contains(nextA))
 													continue;
@@ -433,7 +434,7 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 														if (Objects.equal(nextA, nextB)) {
 															returned.add(nextA);
 															return nextA; }}
-													catch (WithSideEffect.Exception e) {}
+													catch (NoSuchElementException e) {}
 											}
 											throw new NoSuchElementException();
 										}

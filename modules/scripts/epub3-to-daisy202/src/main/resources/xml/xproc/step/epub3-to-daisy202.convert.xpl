@@ -91,55 +91,14 @@
     <p:sink/>
 
     <p:documentation>
-        Convert from EPUB 3 SMIL to DAISY 2.02 SMIL.
-    </p:documentation>
-    <p:group name="convert-smil" px:progress="1/5">
-        <p:output port="fileset" primary="true"/>
-        <p:output port="in-memory" sequence="true">
-            <p:pipe step="update" port="result.in-memory"/>
-        </p:output>
-        <px:fileset-load media-types="application/smil+xml" name="epub3.smil">
-            <p:documentation>
-                Load SMIL files.
-            </p:documentation>
-            <p:input port="fileset">
-                <p:pipe step="main" port="source.fileset"/>
-            </p:input>
-            <p:input port="in-memory">
-                <p:pipe step="main" port="source.in-memory"/>
-            </p:input>
-        </px:fileset-load>
-        <p:for-each px:message="Converting SMIL 3.0 to SMIL 1.0" px:progress="1">
-            <p:variable name="smil-base" select="base-uri(/*)"/>
-            <p:variable name="smil-href" select="//d:file[resolve-uri(@href,base-uri(.))=$smil-base]/@href">
-                <p:pipe step="epub3.smil" port="result.fileset"/>
-            </p:variable>
-            <px:smil-downgrade version="1.0" px:message="Processing {$smil-href}"/>
-        </p:for-each>
-        <p:identity name="daisy202.smil.in-memory"/>
-        <p:sink/>
-        <px:fileset-update name="update">
-            <p:input port="source.fileset">
-                <p:pipe step="main" port="source.fileset"/>
-            </p:input>
-            <p:input port="source.in-memory">
-                <p:pipe step="main" port="source.in-memory"/>
-            </p:input>
-            <p:input port="update.fileset">
-                <p:pipe step="epub3.smil" port="result.fileset"/>
-            </p:input>
-            <p:input port="update.in-memory">
-                <p:pipe port="result" step="daisy202.smil.in-memory"/>
-            </p:input>
-        </px:fileset-update>
-    </p:group>
-
-    <p:documentation>
         Read the "page-list" navigation and label page break elements with epub:type="pagebreak".
     </p:documentation>
     <px:epub3-label-pagebreaks-from-nav name="label-pagebreaks-from-nav">
+        <p:input port="source.fileset">
+            <p:pipe step="main" port="source.fileset"/>
+        </p:input>
         <p:input port="source.in-memory">
-            <p:pipe step="convert-smil" port="in-memory"/>
+            <p:pipe step="main" port="source.in-memory"/>
         </p:input>
     </px:epub3-label-pagebreaks-from-nav>
 
@@ -162,7 +121,7 @@
         <p:sink/>
         <px:fileset-filter media-types="application/xhtml+xml" name="epub3.xhtml">
             <p:input port="source">
-                <p:pipe step="main" port="source.fileset"/>
+                <p:pipe step="label-pagebreaks-from-nav" port="result.fileset"/>
             </p:input>
         </px:fileset-filter>
         <p:sink/>
@@ -183,7 +142,10 @@
             <p:pipe step="update" port="result.in-memory"/>
         </p:output>
         <p:output port="page-list">
-            <p:pipe step="identify-pagebreaks" port="page-list"/>
+            <p:pipe step="identify-pagebreaks-and-noterefs" port="page-list"/>
+        </p:output>
+        <p:output port="noteref-list">
+            <p:pipe step="identify-pagebreaks-and-noterefs" port="noteref-list"/>
         </p:output>
         <px:fileset-load media-types="application/xhtml+xml" name="epub3.xhtml">
             <p:documentation>
@@ -193,21 +155,28 @@
                 <p:pipe step="label-pagebreaks-from-nav" port="result.in-memory"/>
             </p:input>
         </px:fileset-load>
-        <p:group name="identify-pagebreaks">
-            <p:documentation>Identify page break elements</p:documentation>
+        <p:group name="identify-pagebreaks-and-noterefs">
+            <p:documentation>Identify page break elements and noteref elements</p:documentation>
             <p:output port="content-docs" primary="true" sequence="true">
                 <p:pipe step="content-docs" port="result"/>
             </p:output>
             <p:output port="page-list">
                 <p:pipe step="page-list" port="result"/>
             </p:output>
+            <p:output port="noteref-list">
+                <p:pipe step="noteref-list" port="result"/>
+            </p:output>
             <p:for-each name="content-docs">
                 <p:output port="result" primary="true"/>
-                <p:output port="page-lists" sequence="true">
+                <p:output port="page-and-noteref-lists" sequence="true">
                     <p:pipe step="xslt" port="secondary"/>
                 </p:output>
-                <p:label-elements match="*[@role='doc-pagebreak']" attribute="epub:type" replace="true"
-                                  label="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"
+                <p:label-elements match="*[@role=('doc-pagebreak','doc-noteref')]" attribute="epub:type" replace="true"
+                                  label="string-join(
+                                           distinct-values((
+                                             @epub:type/tokenize(.,'\s+')[not(.='')],
+                                             replace(@role,'^doc-',''))),
+                                           ' ')"
                                   name="handle-dpub-aria">
                     <!-- Convert DPUB-ARIA roles to epub:type -->
                 </p:label-elements>
@@ -218,7 +187,7 @@
                         <p:pipe step="label-pagebreaks-from-nav" port="page-list"/>
                     </p:input>
                     <p:input port="stylesheet">
-                        <p:document href="../../xslt/identify-pagebreaks.xsl"/>
+                        <p:document href="../../xslt/identify-pagebreaks-and-noterefs.xsl"/>
                     </p:input>
                     <p:input port="parameters">
                         <p:empty/>
@@ -246,6 +215,7 @@
                             <p:pipe step="label-pagebreaks-from-nav" port="page-list"/>
                         </p:input>
                     </p:identity>
+                    <p:add-attribute match="d:anchor" attribute-name="class" attribute-value="page"/>
                 </p:when>
                 <p:otherwise>
                     <p:documentation>Get them from epub:type="pagebreak" markup.</p:documentation>
@@ -253,11 +223,22 @@
                     <p:sink/>
                     <p:wrap-sequence wrapper="d:fileset">
                         <p:input port="source">
-                            <p:pipe step="content-docs" port="page-lists"/>
+                            <p:pipe step="content-docs" port="page-and-noteref-lists"/>
                         </p:input>
                     </p:wrap-sequence>
+                    <p:delete match="d:anchor[not(@class=('page-normal','page-front','page-special'))]"/>
                 </p:otherwise>
             </p:choose>
+            <p:sink/>
+            <p:group name="noteref-list">
+                <p:output port="result"/>
+                <p:wrap-sequence wrapper="d:fileset">
+                    <p:input port="source">
+                        <p:pipe step="content-docs" port="page-and-noteref-lists"/>
+                    </p:input>
+                </p:wrap-sequence>
+                <p:delete match="d:anchor[not(@class=('noteref'))]"/>
+            </p:group>
             <p:sink/>
         </p:group>
         <p:for-each px:message="Converting HTML5 to HTML4" px:progress="1">
@@ -273,18 +254,12 @@
             <px:html-downgrade>
                 <p:documentation>Downgrade to HTML4. This preserves all ID.</p:documentation>
             </px:html-downgrade>
-            <px:html-outline name="fix-heading-ranks" fix-heading-ranks="outline-depth" output-base-uri="file:/irrelevant">
+            <px:html-outline fix-heading-ranks="outline-depth">
                 <p:documentation>Make sure heading hierarchy is correct in output</p:documentation>
                 <!-- Note that this is already done once in px:html-downgrade but we do it a second time
                      after the sectioning elements have been converted, so that if the first heading is
                      a h2 everything shifts up one level. -->
             </px:html-outline>
-            <p:sink/>
-            <p:identity>
-                <p:input port="source">
-                    <p:pipe step="fix-heading-ranks" port="content-doc"/>
-                </p:input>
-            </p:identity>
         </p:for-each>
         <p:identity name="daisy202.xhtml.in-memory"/>
         <p:sink/>
@@ -293,13 +268,84 @@
                 <p:pipe step="filter-spine" port="result"/>
             </p:input>
             <p:input port="source.in-memory">
-                <p:pipe step="convert-smil" port="in-memory"/>
+                <p:pipe step="label-pagebreaks-from-nav" port="result.in-memory"/>
             </p:input>
             <p:input port="update.fileset">
                 <p:pipe step="epub3.xhtml" port="result.fileset"/>
             </p:input>
             <p:input port="update.in-memory">
                 <p:pipe port="result" step="daisy202.xhtml.in-memory"/>
+            </p:input>
+        </px:fileset-update>
+    </p:group>
+
+    <p:documentation>
+        Convert from EPUB 3 SMIL to DAISY 2.02 SMIL.
+    </p:documentation>
+    <p:group name="convert-smil" px:progress="1/5">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="update" port="result.in-memory"/>
+        </p:output>
+        <px:fileset-load media-types="application/smil+xml" name="epub3.smil">
+            <p:documentation>
+                Load SMIL files.
+            </p:documentation>
+            <p:input port="in-memory">
+                <p:pipe step="convert-html" port="in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <p:for-each px:message="Converting SMIL 3.0 to SMIL 1.0" px:progress="1">
+            <p:variable name="smil-base" select="base-uri(/*)"/>
+            <p:variable name="smil-href" select="//d:file[resolve-uri(@href,base-uri(.))=$smil-base]/@href">
+                <p:pipe step="epub3.smil" port="result.fileset"/>
+            </p:variable>
+            <p:group px:progress="1" px:message="Processing {$smil-href}">
+                <p:identity name="smil-without-system-required"/>
+                <p:sink/>
+                <p:xslt>
+                    <p:documentation>
+                        Add systemRequired attributes (which will be converted to system-required)
+                    </p:documentation>
+                    <p:input port="source">
+                        <p:pipe step="smil-without-system-required" port="result"/>
+                        <p:pipe step="convert-html" port="page-list"/>
+                        <p:pipe step="convert-html" port="noteref-list"/>
+                        <p:pipe step="epub3.xhtml" port="result"/>
+                    </p:input>
+                    <p:input port="stylesheet">
+                        <p:document href="../../xslt/make-skippables.xsl"/>
+                    </p:input>
+                    <p:input port="parameters">
+                        <p:empty/>
+                    </p:input>
+                </p:xslt>
+                <px:smil-downgrade version="1.0" px:progress=".5"/>
+            </p:group>
+        </p:for-each>
+        <p:identity name="daisy202.smil.in-memory"/>
+        <p:sink/>
+        <px:fileset-load media-types="application/xhtml+xml" name="epub3.xhtml">
+            <p:input port="fileset">
+                <p:pipe step="label-pagebreaks-from-nav" port="result.fileset"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe step="label-pagebreaks-from-nav" port="result.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <p:sink/>
+        <px:fileset-update name="update">
+            <p:input port="source.fileset">
+                <p:pipe step="convert-html" port="fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="convert-html" port="in-memory"/>
+            </p:input>
+            <p:input port="update.fileset">
+                <p:pipe step="epub3.smil" port="result.fileset"/>
+            </p:input>
+            <p:input port="update.in-memory">
+                <p:pipe port="result" step="daisy202.smil.in-memory"/>
             </p:input>
         </px:fileset-update>
     </p:group>
@@ -339,7 +385,7 @@
     </p:documentation>
     <pxi:create-ncc name="create-ncc" px:message="Creating NCC" px:progress="2/5">
         <p:input port="source.in-memory">
-            <p:pipe step="convert-html" port="in-memory"/>
+            <p:pipe step="convert-smil" port="in-memory"/>
         </p:input>
         <p:input port="opf">
             <p:pipe step="opf" port="result"/>
@@ -347,7 +393,152 @@
         <p:input port="page-list">
             <p:pipe step="convert-html" port="page-list"/>
         </p:input>
+        <p:input port="noteref-list">
+            <p:pipe step="convert-html" port="noteref-list"/>
+        </p:input>
     </pxi:create-ncc>
+
+    <p:documentation>
+        Move notes after their corresponding note refs in the media overlays.
+        <!-- Note that this step needs to come after pxi:create-ncc because pxi:create-ncc sorts the
+             pars in document order. -->
+    </p:documentation>
+    <p:group name="rearrange-notes">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="update-links" port="result.in-memory"/>
+        </p:output>
+        <px:fileset-load media-types="application/smil+xml" name="smil">
+            <p:input port="in-memory">
+                <p:pipe step="create-ncc" port="result.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <p:sink/>
+        <p:xslt name="noterefs">
+            <p:input port="source">
+                <p:pipe step="convert-html" port="noteref-list">
+                    <!-- assumes convert-smil and create-ncc do not change base URIs of content
+                         documents and IDs of noteref and note elements -->
+                </p:pipe>
+                <p:pipe step="create-ncc" port="result.in-memory"/>
+            </p:input>
+            <p:input port="stylesheet">
+                <p:document href="../../xslt/noterefs-in-smil.xsl"/>
+            </p:input>
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+        </p:xslt>
+        <p:sink/>
+        <p:for-each name="rearrange-smil">
+            <p:iteration-source>
+                <p:pipe step="smil" port="result"/>
+            </p:iteration-source>
+            <p:output port="result" primary="true"/>
+            <p:output port="mapping">
+                <p:pipe step="xslt" port="secondary"/>
+            </p:output>
+            <p:sink/>
+            <p:xslt name="xslt">
+                <p:input port="source">
+                    <p:pipe step="rearrange-smil" port="current"/>
+                    <p:pipe step="smil" port="result"/>
+                    <p:pipe step="noterefs" port="result"/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/rearrange-notes.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <px:set-base-uri>
+                <p:with-option name="base-uri" select="base-uri(/*)">
+                    <p:pipe step="rearrange-smil" port="current"/>
+                </p:with-option>
+            </px:set-base-uri>
+        </p:for-each>
+        <p:sink/>
+        <p:wrap-sequence name="mapping" wrapper="d:fileset">
+            <p:input port="source">
+                <p:pipe step="rearrange-smil" port="mapping"/>
+            </p:input>
+        </p:wrap-sequence>
+        <p:sink/>
+        <px:fileset-update name="update">
+            <p:input port="source.fileset">
+                <p:pipe step="create-ncc" port="result.fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="create-ncc" port="result.in-memory"/>
+            </p:input>
+            <p:input port="update.fileset">
+                <p:pipe step="smil" port="result.fileset"/>
+            </p:input>
+            <p:input port="update.in-memory">
+                <p:pipe step="rearrange-smil" port="result"/>
+            </p:input>
+        </px:fileset-update>
+        <px:daisy202-update-links name="update-links">
+            <p:input port="source.in-memory">
+                <p:pipe step="update" port="result.in-memory"/>
+            </p:input>
+            <p:input port="mapping">
+                <p:pipe step="mapping" port="result"/>
+            </p:input>
+        </px:daisy202-update-links>
+    </p:group>
+
+    <p:documentation>
+        Fix SMIL metadata and pretty print
+        <!-- Note that this step needs to come after rearrange-notes because rearrange-notes affects
+             ncc:timeInThisSmil -->
+    </p:documentation>
+    <p:group name="smil-metadata">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="update" port="result.in-memory"/>
+        </p:output>
+        <px:fileset-load media-types="application/smil+xml" name="smil">
+            <p:input port="in-memory">
+                <p:pipe step="rearrange-notes" port="in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <p:for-each>
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/smil-metadata.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/pretty-print.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+        </p:for-each>
+        <p:identity name="smil-with-metadata"/>
+        <p:sink/>
+        <px:fileset-update name="update">
+            <p:input port="source.fileset">
+                <p:pipe step="rearrange-notes" port="fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="rearrange-notes" port="in-memory"/>
+            </p:input>
+            <p:input port="update.fileset">
+                <p:pipe step="smil" port="result.fileset"/>
+            </p:input>
+            <p:input port="update.in-memory">
+                <p:pipe step="smil-with-metadata" port="result"/>
+            </p:input>
+        </px:fileset-update>
+    </p:group>
 
     <p:documentation>
         Merge into single HTML document (workaround for Voice Dream Reader)
@@ -359,7 +550,7 @@
         </p:output>
         <px:fileset-filter href="*/ncc.html" name="ncc">
             <p:input port="source.in-memory">
-                <p:pipe step="create-ncc" port="result.in-memory"/>
+                <p:pipe step="smil-metadata" port="in-memory"/>
             </p:input>
         </px:fileset-filter>
         <p:sink/>
@@ -379,7 +570,7 @@
                 </p:output>
                 <px:fileset-load>
                     <p:input port="in-memory">
-                        <p:pipe step="create-ncc" port="result.in-memory"/>
+                        <p:pipe step="smil-metadata" port="in-memory"/>
                     </p:input>
                 </px:fileset-load>
                 <px:html-merge name="merge">
@@ -418,11 +609,11 @@
             <p:otherwise>
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
-                    <p:pipe step="create-ncc" port="result.in-memory"/>
+                    <p:pipe step="smil-metadata" port="in-memory"/>
                 </p:output>
                 <p:identity>
                     <p:input port="source">
-                        <p:pipe step="create-ncc" port="result.fileset"/>
+                        <p:pipe step="smil-metadata" port="fileset"/>
                     </p:input>
                 </p:identity>
             </p:otherwise>

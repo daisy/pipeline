@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-import org.daisy.braille.api.embosser.FileFormat;
-import org.daisy.braille.api.table.Table;
+import org.daisy.dotify.api.embosser.FileFormat;
+import org.daisy.dotify.api.table.Table;
 import org.daisy.pipeline.braille.common.Provider;
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
 import org.daisy.pipeline.braille.common.Query;
@@ -15,15 +15,9 @@ import org.daisy.pipeline.braille.pef.TableProvider;
 
 import org.daisy.pipeline.junit.AbstractTest;
 
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
-
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 
@@ -76,10 +70,11 @@ public class PefCoreTest extends AbstractTest {
 		return new String[] {
 			brailleModule("common-utils"),
 			pipelineModule("file-utils"),
-			"org.daisy.braille:braille-utils.api:?",
-			"org.daisy.braille:braille-utils.impl:?",
-			"org.daisy.braille:braille-utils.pef-tools:?",
+			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.pipeline:calabash-adapter:?",
+			// because the exclusion of com.fasterxml.woodstox:woodstox-core from the dotify.library
+			// dependencies causes stax2-api to be excluded too
+			"org.codehaus.woodstox:stax2-api:jar:?",
 		};
 	}
 	
@@ -88,13 +83,5 @@ public class PefCoreTest extends AbstractTest {
 		probe.setHeader("Service-Component", "OSGI-INF/dispatching-table-provider.xml,"
 		                                   + "OSGI-INF/dispatching-file-format-provider.xml");
 		return probe;
-	}
-	
-	@Override @Configuration
-	public Option[] config() {
-		return options(
-			// FIXME: BrailleUtils needs older version of jing
-			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
-			composite(super.config()));
 	}
 }

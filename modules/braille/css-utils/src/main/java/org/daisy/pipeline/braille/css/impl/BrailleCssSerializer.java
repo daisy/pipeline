@@ -34,6 +34,7 @@ import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
 import org.daisy.braille.css.PropertyValue;
+import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.pipeline.braille.common.util.Strings;
 
@@ -117,6 +118,22 @@ public final class BrailleCssSerializer {
 
 	public static String toString(InlineStyle style) {
 		return toString(BrailleCssTreeBuilder.Style.of(style));
+	}
+
+	public static String toString(SimpleInlineStyle style) {
+		List<String> declarations = new ArrayList<>();
+		for (String p : style.getPropertyNames())
+			declarations.add(p + ": " + serializePropertyValue(style.get(p)));
+		Collections.sort(declarations);
+		return Strings.join(declarations, "; ");
+	}
+
+	public static String serializePropertyValue(PropertyValue propValue) {
+		Term<?> value = propValue.getValue();
+		if (value != null)
+			return toString(value);
+		else
+			return propValue.getProperty().toString();
 	}
 
 	public static String toString(RuleMainBlock rule) {

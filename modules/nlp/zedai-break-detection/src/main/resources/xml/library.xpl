@@ -20,23 +20,28 @@
         px:break-and-reshape
       </p:documentation>
     </p:import>
-    <px:break-and-reshape name="generic">
-      <p:with-option name="inline-tags" select="'emph,span,ref,char,term,sub,sup,pagebreak,name,time,noteref,annoref,lnum,num,w,wpart,abbr'"/>
-      <p:with-option name="ensure-word-before" select="'span'"/>
-      <p:with-option name="ensure-word-after" select="'span'"/>
-      <!-- note1: For now, if an element can-contain-sentences only in
-           certain contexts, i.e. it depends on its ancestors, then
-           the best we can do is ignore them no matter which context
-           they appear in. -->
-      <!-- note2: some of the following elements are not in the ZedAI
-           namespace. -->
-      <p:with-option name="can-contain-sentences" select="'address,annoref,annotation,aside,block,caption,citation,d,definition,description,emph,entry,expansion,h,hd,hpart,item,ln,longdesc,group,label,note,noteref,object,otherwise,p,phoneme,prosody,quote,rb,ref,repeat,rt,say-as,span,spine,sub,summary,td,term,th,tour,when'"/>
-      <p:with-option name="output-ns" select="'http://www.daisy.org/ns/z3998/authoring/'"/>
-      <p:with-option name="output-word-tag" select="'w'"/>
-      <p:with-option name="output-sentence-tag" select="'s'"/>
-      <p:with-option name="output-subsentence-tag" select="'span'"/>
-      <p:with-option name="special-sentences" select="'name,time'"/>
-    </px:break-and-reshape>
+
+    <!-- Note 1: For now, if an element "can-contain-sentences" only in
+         certain contexts, i.e. it depends on its ancestors, then
+         the best we can do is ignore them no matter which context
+         they appear in. -->
+    <!-- Note 2: some of the "can-contain-sentences" elements are not in
+         the ZedAI namespace. -->
+    <px:break-and-reshape name="generic"
+        inline-tags="z:emph|z:span|z:ref|z:char|z:term|z:sub|z:sup|z:pagebreak|z:name|z:time|z:noteref|
+                     z:annoref|z:lnum|z:num|z:w|z:wpart|z:abbr"
+        ensure-word-before="span"
+        ensure-word-after="span"
+        can-contain-sentences="z:address|z:annoref|z:annotation|z:aside|z:block|z:caption|z:citation|z:d|
+                               z:definition|z:description|z:emph|z:entry|z:expansion|z:h|z:hd|z:hpart|
+                               z:item|z:ln|z:longdesc|z:group|z:label|z:note|z:noteref|z:object|
+                               z:otherwise|z:p|z:phoneme|z:prosody|z:quote|z:rb|z:ref|z:repeat|z:rt|
+                               z:say-as|z:span|z:spine|z:sub|z:summary|z:td|z:term|z:th|z:tour|z:when"
+        output-ns="http://www.daisy.org/ns/z3998/authoring/"
+        output-word-tag="w"
+        output-sentence-tag="s"
+        output-subsentence-tag="span"
+        special-sentences="z:name|z:time"/>
 
   </p:declare-step>
 

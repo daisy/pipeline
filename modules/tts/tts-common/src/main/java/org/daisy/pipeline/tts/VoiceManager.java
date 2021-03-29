@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
@@ -28,7 +27,8 @@ public class VoiceManager {
 	private Logger ServerLogger = LoggerFactory.getLogger(VoiceManager.class);
 
 	private final Map<Voice,TTSEngine> mBestEngines;
-	private final Map<Voice,Voice> mSecondaryVoices;
+	private final Map<VoiceKey,Voice> mPrimaryVoices;
+	private final Map<VoiceKey,Voice> mSecondaryVoices;
 	private final Map<VoiceKey,Voice> mVoiceIndex;
 
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> voiceInfoFromConfig) {
@@ -37,7 +37,7 @@ public class VoiceManager {
 		// services can serve the same voice
 		mBestEngines = new HashMap<Voice,TTSEngine>(); {
 			TTSTimeout timeout = new TTSTimeout();
-			int timeoutSecs = 5;
+			int timeoutSecs = 30;
 			for (TTSEngine tts : engines) {
 				try {
 					timeout.enableForCurrentThread(timeoutSecs);
@@ -73,12 +73,16 @@ public class VoiceManager {
 		voiceInfo.addAll(voiceInfoFromConfig);
 
 		// get info from engines (lowest priority)
-		for (Voice v : mBestEngines.keySet())
+		mPrimaryVoices = new HashMap<>();
+		for (Voice v : mBestEngines.keySet()) {
+			mPrimaryVoices.put(new VoiceKey(v.engine, v.name), v);
 			if (v.getLocale().isPresent() && v.getGender().isPresent())
-				voiceInfo.add(new VoiceInfo(v,
+				voiceInfo.add(new VoiceInfo(v.engine,
+				                            v.name,
 				                            v.getLocale().get(),
 				                            v.getGender().get(),
 				                            0));
+		}
 
 		// voices can also be applied to less specific locales (without region tag)
 		final float priorityVariantPenalty = 0.1f;
@@ -87,8 +91,9 @@ public class VoiceManager {
 				if (!vi.isMultiLang()) {
 					Locale shortLang = new Locale(vi.language.getLanguage());
 					if (!vi.language.equals(shortLang))
-						derivedVoiceInfo.add(new VoiceInfo(vi.voice, shortLang, vi.gender,
-						                                   vi.priority - priorityVariantPenalty));
+						derivedVoiceInfo.add(
+							new VoiceInfo(vi.voiceEngine, vi.voiceName, shortLang, vi.gender,
+							              vi.priority - priorityVariantPenalty));
 				}
 		}
 		voiceInfo.addAll(derivedVoiceInfo);
@@ -100,17 +105,20 @@ public class VoiceManager {
 				}});
 
 		// filter available voices
-		List<VoiceInfo> availableVoiceInfo = voiceInfo.stream()
-		                                              .filter(v -> mBestEngines.containsKey(v.voice))
-		                                              .collect(Collectors.toList());
+		List<VoiceInfo> availableVoiceInfo = new ArrayList<>(); {
+			for (VoiceInfo i : voiceInfo)
+				if (mPrimaryVoices.containsKey(new VoiceKey(i.voiceEngine, i.voiceName)))
+					availableVoiceInfo.add(i);
+		}
 
 		// create map of the best fallback for each voice
 		// engine is more important than gender and priority, gender is more important than priority
-		mSecondaryVoices = new HashMap<Voice,Voice>(); {
+		mSecondaryVoices = new HashMap<>(); {
 			for (boolean sameEngine : new boolean[]{true, false})
 				for (boolean sameGender : new boolean[]{true, false})
-					for (VoiceInfo best : voiceInfo)
-						if (!mSecondaryVoices.containsKey(best.voice))
+					for (VoiceInfo best : voiceInfo) {
+						VoiceKey bestKey = new VoiceKey(best.voiceEngine, best.voiceName);
+						if (!mSecondaryVoices.containsKey(bestKey))
 							for (VoiceInfo fallback : availableVoiceInfo)
 								if (!fallback.equals(best))
 									if (fallback.isMultiLang()) {
@@ -119,27 +127,30 @@ public class VoiceManager {
 											// and engine are not criteria so as to prevent the algo
 											// from choosing a multilang voice with the same engine over
 											// a regular voice with a different engine.
-											mSecondaryVoices.put(best.voice, fallback.voice);
+											mSecondaryVoices.put(bestKey,
+											                     mPrimaryVoices.get(new VoiceKey(fallback.voiceEngine,
+											                                                     fallback.voiceName)));
 											break;
 										}
 									} else if (fallback.language.equals(best.language)
 									           && (!sameGender
 									               || fallback.gender.equals(best.gender))
 									           && (!sameEngine
-									               || fallback.voice.engine.equals(best.voice.engine))) {
-										mSecondaryVoices.put(best.voice, fallback.voice);
+									               || fallback.voiceEngine.equals(best.voiceEngine))) {
+										mSecondaryVoices.put(new VoiceKey(best.voiceEngine, best.voiceName),
+										                     mPrimaryVoices.get(new VoiceKey(fallback.voiceEngine,
+										                                                     fallback.voiceName)));
 										break;
 									}
+					}
 		}
-
-		voiceInfo = availableVoiceInfo;
 
 		// create index of voices with language, engine and gender as keys
 		Set<Locale> allLangs = new HashSet<Locale>(); {
-			for (VoiceInfo vi : voiceInfo) allLangs.add(vi.language);
+			for (VoiceInfo vi : availableVoiceInfo) allLangs.add(vi.language);
 			allLangs.remove(VoiceInfo.NO_DEFINITE_LANG); }
 		mVoiceIndex = new HashMap<VoiceKey,Voice>(); {
-			for (VoiceInfo vi : voiceInfo) {
+			for (VoiceInfo vi : availableVoiceInfo) {
 				if (vi.isMultiLang())
 					// this is to make sure that multi-lang voice wins from regular voice if it has
 					// a higher priority
@@ -148,17 +159,17 @@ public class VoiceManager {
 							for (boolean sameGender : new boolean[]{true, false}) {
 								VoiceKey k = new VoiceKey(l,
 								                          sameGender ? vi.gender : null,
-								                          sameEngine ? vi.voice.engine : null);
+								                          sameEngine ? vi.voiceEngine : null);
 								if (!mVoiceIndex.containsKey(k))
-									mVoiceIndex.put(k, vi.voice);
+									mVoiceIndex.put(k, mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 							}
 				for (boolean sameEngine : new boolean[]{true, false})
 					for (boolean sameGender : new boolean[]{true, false}) {
 						VoiceKey k = new VoiceKey(vi.language,
 						                          sameGender ? vi.gender : null,
-						                          sameEngine ? vi.voice.engine : null);
+						                          sameEngine ? vi.voiceEngine : null);
 						if (!mVoiceIndex.containsKey(k))
-							mVoiceIndex.put(k, vi.voice);
+							mVoiceIndex.put(k, mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 					}
 			}
 		}
@@ -166,19 +177,21 @@ public class VoiceManager {
 		// log
 		StringBuilder sb = new StringBuilder("Available voices:");
 		for (Entry<Voice,TTSEngine> e : mBestEngines.entrySet())
-			sb.append("\n* ")
+			sb.append("\n * ")
 			  .append(e.getKey())
-			  .append(" by ")
-			  .append(TTSServiceUtil.displayName(e.getValue().getProvider()));
+			  // Commented out because engine name already included in voice and multiple engines
+			  // with the same name (but different version) are currently not well supported.
+			  /*.append(" by ")
+			  .append(TTSServiceUtil.displayName(e.getValue().getProvider()))*/;
 		ServerLogger.info(sb.toString());
 		sb = new StringBuilder("Voice selection data:");
-		for (VoiceInfo vi : voiceInfo)
-			sb.append("\n* {")
+		for (VoiceInfo vi : availableVoiceInfo)
+			sb.append("\n * {")
 			  .append("locale:").append(vi.language == NO_DEFINITE_LANG ? "*" : vi.language)
 			  .append(", gender:").append(vi.gender)
 			  .append("}")
 			  .append(" -> ")
-			  .append(vi.voice);
+			  .append(mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 		ServerLogger.info(sb.toString());
 	}
 
@@ -199,7 +212,7 @@ public class VoiceManager {
 	}
 
 	public Voice findSecondaryVoice(Voice v) {
-		return mSecondaryVoices.get(v);
+		return mSecondaryVoices.get(new VoiceKey(v.engine, v.name));
 	}
 
 	/**
@@ -215,10 +228,11 @@ public class VoiceManager {
 	                                 Gender gender, boolean[] exactMatch) {
 
 		if (voiceEngine != null && !voiceEngine.isEmpty() && voiceName != null && !voiceName.isEmpty()) {
-			Voice preferredVoice = new Voice(voiceEngine, voiceName);
-			if (mBestEngines.containsKey(preferredVoice)) {
+			VoiceKey preferredVoice = new VoiceKey(voiceEngine, voiceName);
+			Voice voice = mPrimaryVoices.get(preferredVoice);
+			if (voice != null) {
 				exactMatch[0] = true;
-				return preferredVoice;
+				return voice;
 			} else {
 				Voice fallback = mSecondaryVoices.get(preferredVoice);
 				if (fallback != null) {
@@ -281,45 +295,69 @@ public class VoiceManager {
 		return writer.toString();
 	}
 
-	static private class VoiceKey {
-		public String engine;
-		public Locale lang;
-		public Gender gender;
+	private static class VoiceKey {
+
+		private final String engine;
+		private final String name;
+		private final Locale lang;
+		private final Gender gender;
+
+		public VoiceKey(String engine, String name) {
+			this.engine = engine == null ? null : engine.toLowerCase();
+			this.name = name == null ? null : name.toLowerCase();
+			this.lang = null;
+			this.gender = null;
+		}
 
 		public VoiceKey(Locale lang) {
 			this.lang = lang;
+			this.gender = null;
+			this.engine = null;
+			this.name = null;
 		}
 
 		public VoiceKey(Locale lang, Gender gender) {
 			this.lang = lang;
 			this.gender = gender;
+			this.engine = null;
+			this.name = null;
 		}
 
 		public VoiceKey(Locale lang, String engine) {
 			this.lang = lang;
-			this.engine = engine;
+			this.engine = engine == null ? null : engine.toLowerCase();
+			this.gender = null;
+			this.name = null;
 		}
 
 		public VoiceKey(Locale lang, Gender gender, String engine) {
 			this.lang = lang;
 			this.gender = gender;
-			this.engine = engine;
+			this.engine = engine == null ? null : engine.toLowerCase();
+			this.name = null;
 		}
 
+		@Override
 		public int hashCode() {
-			int res = this.lang.hashCode();
+			int res = 0;
+			if (this.lang != null)
+				res ^=  this.lang.hashCode();
 			if (this.gender != null)
 				res ^= this.gender.hashCode();
 			if (this.engine != null)
 				res ^= this.engine.hashCode();
+			if (this.name != null)
+				res ^= this.name.hashCode();
 			return res;
 		}
 
+		@Override
 		public boolean equals(Object other) {
 			VoiceKey o = (VoiceKey) other;
-			return lang.equals(o.lang)
+			return (lang == o.lang || (lang != null && lang.equals(o.lang)))
 			        && (gender == o.gender || (gender != null && gender.equals(o.gender)))
-			        && (engine == o.engine || (engine != null && engine.equals(o.engine)));
+			        && (engine == o.engine || (engine != null && engine.equals(o.engine)))
+			        && (name == o.name || (name != null && name.equals(o.name)));
 		}
 	}
 }

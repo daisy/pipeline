@@ -7,6 +7,12 @@
                script="../../main/resources/xml/xproc/library.xpl">
 
 	<x:scenario label="synthesize with mock engine">
+		<x:documentation>
+			The sentences with xml:lang="en" are spoken with voice "mock-en", which proves that the
+			org.daisy.pipeline.tts.config property (supplied in the pom) works. The sentences with
+			xml:lang="nl" cause an error because the "mock-nl" voice does not exist, which proves
+			that the "config" port works.
+		</x:documentation>
 		<x:call step="px:ssml-to-audio">
 			<x:input port="source">
 				<x:document type="inline">
@@ -29,7 +35,8 @@
 			<x:input port="config">
 				<x:document type="inline">
 					<config>
-						<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
+						<!-- from ../resources/tts-default-config.xml: -->
+						<!-- <voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/> -->
 						<voice engine="mock-tts" name="mock-nl" lang="nl" gender="male-adult"/>
 						<!-- log can be found in "log" output -->
 						<property key="log" value="true"/>
@@ -37,10 +44,6 @@
 				</x:document>
 			</x:input>
 		</x:call>
-		<x:context label="the error">
-			<x:document type="errors"/>
-		</x:context>
-		<x:expect label="is an encoding error" type="xpath" test="/c:errors/c:error/@code='TTS01'"/>
 		<x:context label="the status port">
 			<x:document type="port" port="status"/>
 		</x:context>
@@ -57,6 +60,16 @@
 		<x:expect label="one for A" type="xpath" test="/d:audio-clips/d:clip/@idref='A'"/>
 		<x:expect label="one for B" type="xpath" test="/d:audio-clips/d:clip/@idref='B'"/>
 		<x:expect label="one for D" type="xpath" test="/d:audio-clips/d:clip/@idref='D'"/>
+		<!--
+		<x:context label="the log port">
+			<x:document type="port" port="log"/>
+		</x:context>
+		<x:expect label="the log port" type="compare">
+			<x:document type="inline">
+				<log/>
+			</x:document>
+		</x:expect>
+		-->
 	</x:scenario>
 	
 	<x:scenario label="encoding error">

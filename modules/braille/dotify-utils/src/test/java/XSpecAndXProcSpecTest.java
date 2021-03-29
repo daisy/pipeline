@@ -40,21 +40,12 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			"org.daisy.pipeline.modules.braille:libhyphen-utils:jar:" + thisPlatform() + ":?",
 			pipelineModule("css-utils"),
 			"com.google.guava:guava:?",
-			"org.daisy.dotify:dotify.api:?",
-			"org.daisy.dotify:dotify.common:?",
-			"org.daisy.dotify:dotify.task.impl:?",
-			"org.daisy.dotify:dotify.formatter.impl:?",
-			"org.daisy.dotify:dotify.text.impl:?",
-			"org.daisy.dotify:dotify.hyphenator.impl:?",
-			"org.daisy.dotify:dotify.translator.impl:?",
-			"org.daisy.streamline:streamline-api:?",
-			"org.daisy.streamline:streamline-engine:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 			"org.slf4j:jul-to-slf4j:?",
 			"org.daisy.pipeline:logging-activator:?",
 			"org.daisy.pipeline:logging-appender:?",
-			// FIXME: because otherwise the exclusion of com.fasterxml.woodstox:woodstox-core
-			// from the dotify.formatter.impl dependencies would cause stax2-api to be excluded too
+			// because the exclusion of com.fasterxml.woodstox:woodstox-core from the dotify.library
+			// dependencies causes stax2-api to be excluded too
 			"org.codehaus.woodstox:stax2-api:jar:?",
 		};
 	}
@@ -62,8 +53,8 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	@Override @Configuration
 	public Option[] config() {
 		return options(
-			// FIXME: BrailleUtils needs older version of jing
-			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
+			// apparently the liblouis-java exclusion defined in modules-bom does not have an effect
+			mavenBundle("org.daisy.dotify:dotify.library:?"),
 			composite(super.config()));
 	}
 	

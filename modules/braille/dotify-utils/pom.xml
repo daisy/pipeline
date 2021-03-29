@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.2-SNAPSHOT</version>
+    <version>1.14.3-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-utils</artifactId>
-  <version>4.0.2-SNAPSHOT</version>
+  <version>4.0.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: dotify-utils</name>
@@ -44,19 +44,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.streamline</groupId>
-      <artifactId>streamline-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.streamline</groupId>
-      <artifactId>streamline-engine</artifactId>
+      <artifactId>dotify.library</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -85,31 +73,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.formatter.impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.text.impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.hyphenator.impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.translator.impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.task.impl</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--
@@ -155,7 +118,6 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_dotify_utils,
-      org.daisy.pipeline.braille.dotify.calabash.impl.FileToOBFLStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.OBFLToPEFStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.ShiftObflMarkerStep$Provider,
       org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl,
@@ -218,8 +180,7 @@
               *
             </Import-Package>
             <Provide-Capability>
-              xproc.step;name="{http://code.google.com/p/dotify/}obfl-to-pef",
-              xproc.step;name="{http://code.google.com/p/dotify/}file-to-obfl"
+              xproc.step;name="{http://code.google.com/p/dotify/}obfl-to-pef"
             </Provide-Capability>
           </instructions>
         </configuration>

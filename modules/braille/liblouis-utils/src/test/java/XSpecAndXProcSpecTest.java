@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
 
 import org.ops4j.pax.exam.Configuration;
@@ -31,7 +30,7 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),
 			"org.liblouis:liblouis-java:?",
-			"org.daisy.braille:braille-utils.api:?",
+			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 			"org.daisy.pipeline.modules.braille:libhyphen-utils:jar:" + thisPlatform() + ":?",
 		};
@@ -48,8 +47,6 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	@Override @Configuration
 	public Option[] config() {
 		return options(
-			// FIXME: BrailleUtils needs older version of jing
-			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
 			thisBundle(thisPlatform()),
 			composite(super.config()));
 	}

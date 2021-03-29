@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import org.daisy.braille.api.embosser.FileFormat;
+import org.daisy.dotify.api.embosser.FileFormat;
 
 import org.daisy.pipeline.braille.common.Provider;
 import org.daisy.pipeline.braille.common.Provider.util.Dispatch;

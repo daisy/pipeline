@@ -64,11 +64,11 @@
     <p:for-each name="tocs">
         <p:output port="result" sequence="true" primary="true"/>
         <p:output port="content-doc" sequence="true">
-            <p:pipe step="outline" port="content-doc"/>
+            <p:pipe step="outline" port="result"/>
         </p:output>
         <!-- create an ordered list (ol) from each xhtml document -->
         <px:html-outline name="outline">
-            <p:with-option name="output-base-uri" select="$output-base-uri">
+            <p:with-option name="toc-output-base-uri" select="$output-base-uri">
                 <p:empty/>
             </p:with-option>
             <p:with-option name="fix-untitled-sections-in-outline"
@@ -76,7 +76,12 @@
                 <p:empty/>
             </p:with-option>
         </px:html-outline>
-        <p:filter select="/h:ol/h:li"/>
+        <p:sink/>
+        <p:filter select="/h:ol/h:li">
+            <p:input port="source">
+                <p:pipe step="outline" port="toc"/>
+            </p:input>
+        </p:filter>
     </p:for-each>
     <p:sink/>
 

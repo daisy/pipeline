@@ -1,3 +1,46 @@
+v1.14.2
+=======
+
+Changes
+-------
+- Option to exclude certain headings from the generated braille TOC. (You may need to use this
+  option because the way the TOC is generated is slightly different than before.)
+- Support `white-space` on `-obfl-evaluate()`
+- Improved support for laying out tables as lists
+  - Changed meaning of `::table-by()` pseudo-element (which is yet to be documented)
+  - Preserve styling of table cells when rearranging them
+  - Support noterefs in table header cells
+  - Fixed possible error when colspan/rowspan present
+- Improved volume breaking speed and quality
+  (https://github.com/mtmse/dotify.formatter.impl/pull/40)
+- Fixed stacked pseudo-elements and pseudo-classes on pseudo-elements in combination with @extend
+  (Sass)
+- Fixed several bugs related to leaders (https://github.com/mtmse/dotify.formatter.impl/pull/37)
+- Fixed `::obfl-on-resumed` bug (https://github.com/mtmse/dotify.formatter.impl/issues/42)
+- Fixed `volume-break-after` bug
+- Various other bugfixes and improvements
+
+Components
+----------
+- liblouis ([3.16.0](https://github.com/liblouis/liblouis/releases/tag/v3.16.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([4.3.1](https://github.com/liblouis/liblouis-java/releases/tag/4.3.1))
+- **dotify** ([**1.0.0**](https://github.com/mtmse/dotify.library/releases/tag/1.0.0)
+- **braille-css** ([**1.19.0**](https://github.com/daisy/braille-css/releases/tag/1.19.0))
+- **jsass** ([**5.10.4-p1**](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+Closed issues
+-------------
+- https://github.com/mtmse/dotify.formatter.impl/pull/37
+- https://github.com/mtmse/dotify.formatter.impl/issues/38
+- https://github.com/mtmse/dotify.formatter.impl/pull/39
+- https://github.com/mtmse/dotify.formatter.impl/pull/40
+- https://github.com/mtmse/dotify.formatter.impl/issues/42
+- https://github.com/mtmse/dotify.formatter.impl/pull/43
+
 v1.14.0
 =======
 
@@ -13,7 +56,7 @@ Changes
   `height`](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions))
   (https://github.com/daisy/pipeline-modules/issues/31)
 - Allow XSLT style sheets to be applied before TOC is generated
-- Add `stylesheet-parameters` option for specifying values for XSLT parameters and SASS variables
+- Add `stylesheet-parameters` option for specifying values for XSLT parameters and Sass variables
   used in style sheets that were provided through the `stylesheets` option.
 - HTML to PEF: add features that were already present on other braille scripts
   - Support for XSLT in `stylesheet` option
@@ -25,6 +68,30 @@ Changes
 - Fixed concurrency issue (mixed up braille output due to multiple concurrent Liblouis threads)
 - Fixed bug causing double application of `text-transform` on pseudo-elements
 - Various other bugfixes
+
+Components
+----------
+- **liblouis** ([**3.16.0**](https://github.com/liblouis/liblouis/releases/tag/v3.16.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  **liblouis-java** ([**4.3.1**](https://github.com/liblouis/liblouis-java/releases/tag/4.3.1))
+- **dotify** (**api** [**5.0.7**](https://github.com/mtmse/dotify.api/releases/tag/releases%2Fv5.0.7), common
+  [4.4.1](https://github.com/mtmse/dotify.common/releases/tag/releases%2Fv4.4.1), hyphenator.impl
+  [5.0.0](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv5.0.0), translator.impl
+  [5.0.0](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv5.0.0), **formatter.impl**
+  [**5.0.7**](https://github.com/mtmse/dotify.formatter.impl/releases/tag/releases%2Fv5.0.7), text.impl
+  [5.0.0](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv5.0.0), streamline-api
+  [1.5.0](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.5.0), streamline-engine
+  [1.3.0](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.3.0), task.impl
+  [5.0.0](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv5.0.0))
+- brailleutils (api
+  [3.0.1](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.1), impl
+  [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
+  [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
+- **braille-css** ([**1.18.0**](https://github.com/daisy/braille-css/releases/tag/1.18.0))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
 Closed issues
 -------------
@@ -62,6 +129,27 @@ Changes
 
 Components
 ----------
+- liblouis ([3.13.0](https://github.com/liblouis/liblouis/releases/tag/v3.13.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  **liblouis-java** ([**4.3.0**](https://github.com/liblouis/liblouis-java/releases/tag/4.3.0))
+- dotify (api 5.0.5, common
+  [4.4.1](https://github.com/mtmse/dotify.common/releases/tag/releases%2Fv4.4.1), hyphenator.impl
+  [5.0.0](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv5.0.0), translator.impl
+  [5.0.0](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv5.0.0), formatter.impl
+  [5.0.6](https://github.com/mtmse/dotify.formatter.impl/releases/tag/releases%2Fv5.0.6), text.impl
+  [5.0.0](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv5.0.0), streamline-api
+  [1.5.0](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.5.0), streamline-engine
+  [1.3.0](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.3.0), task.impl
+  [5.0.0](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv5.0.0))
+- brailleutils (api
+  [3.0.1](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.1), impl
+  [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
+  [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
+- **braille-css** ([**1.17.0**](https://github.com/daisy/braille-css/releases/tag/1.17.0))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
 Closed issues
 -------------
@@ -472,7 +560,7 @@ Changes
 - Various other small fixes <!--
   • Allow blocks within blocks with a `-obfl-underline` property
     (https://github.com/brailleapps/dotify.formatter.impl/pull/17)
-  • Fixed handling of SASS variables with spaces or special characters
+  • Fixed handling of Sass variables with spaces or special characters
   • Fixed style inheritance on `::-obfl-on-toc-start`, `::-obfl-on-toc-end`,
     `::-obfl-on-volume-start` and `::-obfl-on-volume-end` pseudo-elements
   • `content` property now only allowed on `::before`, `::after`, `::alternate` and
@@ -732,7 +820,7 @@ Changes
 -------
 - New epub3-to-pef script (https://github.com/snaekobbi/pipeline-mod-braille/issues/43,
   https://github.com/daisy/pipeline-mod-braille/pull/79)
-- Support for SASS style sheets (https://github.com/daisy/pipeline-mod-braille/pull/78)
+- Support for Sass style sheets (https://github.com/daisy/pipeline-mod-braille/pull/78)
 - New options `duplex`, `page-width`, `page-height`, `levels-in-footer`, `hyphenation`,
   `line-spacing`, `capital-letters`, `include-captions`, `include-images`, `include-line-groups`,
   `include-production-notes`, `show-braille-page-numbers`, `show-print-page-numbers` and

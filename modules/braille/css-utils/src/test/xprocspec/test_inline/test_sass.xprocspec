@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
@@ -312,7 +311,7 @@
           </document>
         </x:document>
       </x:input>
-      <x:param port="sass-variables" name="border" select="'⠿'"/>
+      <x:param port="parameters" name="border" select="'⠿'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result" select="//body"/>
@@ -345,11 +344,11 @@
           </document>
         </x:document>
       </x:input>
-      <x:param port="sass-variables" name="padding-left" select="'A great lot'':!'"/>
-      <x:param port="sass-variables" name="margin-left" select="'a lot'"/>
-      <x:param port="sass-variables" name="padding-right" select="'something'"/>
-      <x:param port="sass-variables" name="margin-right" select="'''something'''"/>
-      <x:param port="sass-variables" name="padding-top" select="''"/>
+      <x:param port="parameters" name="padding-left" select="'A great lot'':!'"/>
+      <x:param port="parameters" name="margin-left" select="'a lot'"/>
+      <x:param port="parameters" name="padding-right" select="'something'"/>
+      <x:param port="parameters" name="margin-right" select="'''something'''"/>
+      <x:param port="parameters" name="padding-top" select="''"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result" select="//body"/>
@@ -365,39 +364,6 @@
   </x:scenario>
   
   <x:scenario label="test_12">
-    <x:documentation>
-      Recover from SASS bug. SASS reverses the order of `:not([class])` and `::table-by(row)`. We
-      reverse the order again while parsing the CSS.
-    </x:documentation>
-    <x:call step="px:css-cascade">
-      <x:input port="source">
-        <x:document type="inline">
-          <document>
-            <head>
-              <link type="text/x-scss" rel="stylesheet" href="../../resources/sass/sass_9.scss" media="embossed"/>
-            </head>
-            <body>
-              <table class="foo"/>
-              <table/>
-            </body>
-          </document>
-        </x:document>
-      </x:input>
-    </x:call>
-    <x:context label="result">
-      <x:document type="port" port="result" select="//body"/>
-    </x:context>
-    <x:expect label="result" type="compare">
-      <x:document type="inline">
-        <body>
-          <table class="foo"/>
-          <table style="&amp;::table-by(row) { display: block; margin-left: 2; }"/>
-        </body>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-
-  <x:scenario label="test_13">
     <x:documentation>
       Embedded SASS.
     </x:documentation>
@@ -431,6 +397,141 @@
         <body>
           <h1 style="display: block; margin-left: 4;"/>
           <p/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_13">
+    <x:documentation>
+      Test @extend feature.
+
+      In this test a pseudo element is added to a normal element with a pseudo class.
+    </x:documentation>
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/x-scss" media="embossed">
+                <![CDATA[
+                %table-linearized {
+                    &::table-by(row) {
+                        display: block;
+                        margin-left: 2;
+                    }
+                }
+                table:not([class]) {
+                    @extend %table-linearized
+                }
+                ]]>
+              </style>
+            </head>
+            <body>
+              <table class="foo"/>
+              <table/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <table class="foo"/>
+          <table style="&amp;::table-by(row) { display: block; margin-left: 2; }"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_14">
+    <x:documentation>
+      Test that stacking a pseudo element onto another pseudo element using @extend is not supported
+      by SASS (because in plain CSS pseudo-elements can not be stacked).
+    </x:documentation>
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/x-scss" media="embossed">
+                <![CDATA[
+                %generated-content {
+                    content: 'foo';
+                    &::after {
+                        content: 'bar';
+                        text-transform: uppercase;
+                    }
+                }
+                div::after {
+                    @extend %generated-content;
+                }
+                ]]>
+              </style>
+            </head>
+            <body>
+              <div/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <div style="&amp;::after { content: 'foo'; } &amp;::after::after { content: 'bar'; text-transform: uppercase; }"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_15">
+    <x:documentation>
+      That that stacking a pseudo class onto a pseudo element using @extend is also not supported by
+      SASS. Because in plain CSS a pseudo element can not have a pseudo class, SASS moves the pseudo
+      classes to the beginning.
+    </x:documentation>
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/x-scss" media="embossed">
+                <![CDATA[
+                table::table-by(row)::list-item {
+                    @extend %table-row
+                }
+                %table-row {
+                    display: block;
+                    margin-left: 2;
+                    &:first-child {
+                        text-indent: -2;
+                    }
+                }
+                ]]>
+              </style>
+            </head>
+            <body>
+              <table/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <table style="&amp;::table-by(row)::list-item { display: block; margin-left: 2; } &amp;::table-by(row)::list-item:first-child { text-indent: -2; }"/>
         </body>
       </x:document>
     </x:expect>

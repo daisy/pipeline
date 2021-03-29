@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.2-SNAPSHOT</version>
+    <version>1.14.3-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
@@ -32,7 +32,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.hyphenator.impl</artifactId>
+      <artifactId>dotify.library</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

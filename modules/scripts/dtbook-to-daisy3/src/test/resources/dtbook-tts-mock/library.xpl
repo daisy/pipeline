@@ -29,7 +29,8 @@
         <d:validation-status result="ok"/>
       </p:inline>
     </p:output>
-	
+
+    <p:option name="include-log" select="'false'"/>
     <p:output port="log" sequence="true">
       <p:empty/>
     </p:output>

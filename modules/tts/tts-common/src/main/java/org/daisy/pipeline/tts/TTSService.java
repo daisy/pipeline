@@ -74,14 +74,21 @@ public interface TTSService {
 
 	/**
 	 * Must be thread safe.
-	 * 
-	 * @return the URL of the XSLT stylesheet used for transforming SSML into
-	 *         whatever language the TTS processor takes as input. If the TTS
-	 *         processor does not add any extra ending pauses, the XSLT might
-	 *         produce a silent break at the end (around 250ms). It should also
-	 *         add an ending SSML mark if it can handle it. The XSLT must take
-	 *         as parameters an optional voice name and an ending-mark (even if
-	 *         it doesn't use it).
+	 *
+	 * @return the URL of the XSLT stylesheet to use for transforming SSML into
+	 *         plain strings, in whatever syntax the TTS processor takes as
+	 *         input.
+	 *
+	 *         <p>If the TTS processor does not add any extra ending pauses, the
+	 *         XSLT should produce a silent break at the end (around 250ms). It
+	 *         should also add an ending SSML mark if it can handle it. The XSLT
+	 *         must take as parameters an optional voice name and an
+	 *         ending-mark.</p>
+	 *
+	 *         <p>May be <code>null</code> in which case the SSML is not
+	 *         transformed, and the <code>sentence</code> argument that is
+	 *         passed to {@link TTSEngine#synthesize} will be
+	 *         <code>null</code>.</p>
 	 */
 	public URL getSSMLxslTransformerURL();
 

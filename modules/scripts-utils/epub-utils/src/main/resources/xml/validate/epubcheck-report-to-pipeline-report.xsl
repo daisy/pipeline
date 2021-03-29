@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0" xmlns="http://hul.harvard.edu/ois/xml/ns/jhove"
-    xpath-default-namespace="http://hul.harvard.edu/ois/xml/ns/jhove" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns="http://schema.openpreservation.org/ois/xml/ns/jhove"
+                xpath-default-namespace="http://schema.openpreservation.org/ois/xml/ns/jhove">
 
     <xsl:output indent="yes"/>
 

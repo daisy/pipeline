@@ -146,7 +146,7 @@
                         <h1 class="title" id="h_1">
                             <a href="content.smil#par_1">...</a>
                         </h1>
-                        <span class="page-normal" id="p_1">
+                        <span class="page-normal" id="span_1">
                             <a href="content.smil#par_2">1</a>
                         </span>
                     </body>
@@ -168,11 +168,11 @@
                         </layout>
                     </head>
                     <body>
-                        <seq dur="0.0s">
+                        <seq dur="0s">
                             <par endsync="last" id="par_1">
                                 <text id="text_1" src="content.html#id_2"/>
                             </par>
-                            <par endsync="last" id="par_2">
+                            <par endsync="last" id="par_2" system-required="pagenumber-on">
                                 <text id="text_2" src="content.html#page1"/>
                             </par>
                         </seq>
@@ -321,7 +321,7 @@
                         <h1 class="title" id="h_1">
                             <a href="content.smil#par_1">...</a>
                         </h1>
-                        <span class="page-normal" id="p_1">
+                        <span class="page-normal" id="span_1">
                             <a href="content.smil#par_2">1</a>
                         </span>
                     </body>
@@ -343,11 +343,11 @@
                         </layout>
                     </head>
                     <body>
-                        <seq dur="0.0s">
+                        <seq dur="0s">
                             <par endsync="last" id="par_1">
                                 <text id="text_1" src="content.html#id_2"/>
                             </par>
-                            <par endsync="last" id="par_2">
+                            <par endsync="last" id="par_2" system-required="pagenumber-on">
                                 <text id="text_2" src="content.html#page1"/>
                             </par>
                         </seq>
@@ -375,6 +375,279 @@
                         </span>
                     </body>
                 </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="handle-skippables">
+        <x:call step="px:epub3-to-daisy202">
+            <x:input port="source.fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="mimetype" media-type="text/plain"/>
+                        <d:file href="META-INF/container.xml" media-type="application/xml"/>
+                        <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                        <d:file href="EPUB/content.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/content.smil" media-type="application/smil+xml"/>
+                        <d:file href="EPUB/notes.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/notes.smil" media-type="application/smil+xml"/>
+                        <d:file href="EPUB/audio.mp3" media-type="audio/mpeg"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="source.in-memory">
+                <x:document type="inline" xml:base="mimetype">
+                    <c:data content-type="text/plain">application/epub+zip</c:data>
+                </x:document>
+                <x:document type="inline" xml:base="META-INF/container.xml">
+                    <container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0">
+                        <rootfiles>
+                            <rootfile full-path="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                        </rootfiles>
+                    </container>
+                </x:document>
+                <x:document type="inline" xml:base="EPUB/package.opf">
+                    <package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="pub-id">
+                        <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+                            <dc:title id="title">minimal</dc:title>
+                            <dc:identifier id="pub-id">id</dc:identifier>
+                            <dc:date>2021-03-02</dc:date>
+                            <dc:language>en</dc:language>
+                        </metadata>
+                        <manifest>
+                            <item id="content" href="content.xhtml" media-type="application/xhtml+xml" media-overlay="content-smil"/>
+                            <item id="notes" href="notes.xhtml" media-type="application/xhtml+xml" media-overlay="notes-smil"/>
+                            <item id="content-smil" href="content.smil" media-type="application/smil+xml"/>
+                            <item id="notes-smil" href="notes.smil" media-type="application/smil+xml"/>
+                            <item id="mp3" href="audio.mp3" media-type="audio/mpeg"/>
+                        </manifest>
+                        <spine>
+                            <itemref idref="content"/>
+                            <itemref idref="notes" linear="no"/>
+                        </spine>
+                    </package>
+                </x:document>
+                <x:document type="inline" xml:base="EPUB/content.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+                        <head>
+                            <meta charset="UTF-8" />
+                            <title>minimal</title>
+                            <meta name="dc:identifier" content="id"/>
+                        </head>
+                        <body id="body">
+                            <p id="p_1">
+                                <span id="s_1">See note </span><a id="a_1" epub:type="noteref" href="notes.xhtml#aside_1"
+                                >1</a><span id="s_2">.</span>
+                            </p>
+                            <aside id="aside_1">
+                                This is a sidebar.
+                            </aside>
+                        </body>
+                    </html>
+                </x:document>
+                <x:document type="inline" xml:base="EPUB/notes.xhtml">
+                    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+                        <body id="body">
+                            <aside epub:type="footnote" id="aside_1">
+                                This is note 1.
+                            </aside>
+                        </body>
+                    </html>
+                </x:document>
+                <x:document type="inline" xml:base="EPUB/content.smil">
+                    <smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+                        <body epub:textref="content.xhtml#body">
+                            <seq epub:textref="content.xhtml#p_1">
+                                <par>
+                                    <text src="content.xhtml#s_1"/>
+                                    <audio src="audio.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.000"/>
+                                </par>
+                                <par epub:type="noteref">
+                                    <text src="content.xhtml#a_1"/>
+                                    <audio src="audio.mp3" clipBegin="0:00:01.000" clipEnd="0:00:02.000"/>
+                                </par>
+                                <par>
+                                    <text src="content.xhtml#s_2"/>
+                                    <audio src="audio.mp3" clipBegin="0:00:02.000" clipEnd="0:00:03.000"/>
+                                </par>
+                            </seq>
+                            <par>
+                                <text src="content.xhtml#aside_1"/>
+                                <audio src="audio.mp3" clipBegin="0:00:03.000" clipEnd="0:00:04.000"/>
+                            </par>
+                        </body>
+                    </smil>
+                </x:document>
+                <x:document type="inline" xml:base="EPUB/notes.smil">
+                    <smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+                        <body epub:textref="notes.xhtml#body">
+                            <par epub:type="footnote">
+                                <text src="notes.xhtml#aside_1"/>
+                                <audio src="audio.mp3" clipBegin="0:00:04.000" clipEnd="0:00:05.000"/>
+                            </par>
+                        </body>
+                    </smil>
+                </x:document>
+            </x:input>
+            <x:option name="output-dir" select="resolve-uri('result/')"/>
+        </x:call>
+        <x:context label="The DAISY 2.02 fileset">
+            <x:document type="port" port="result.fileset"/>
+        </x:context>
+        <x:expect label="The DAISY 2.02 fileset"
+                  type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="result/id/audio.mp3" media-type="audio/mpeg"/>
+                    <d:file href="result/id/content.html" media-type="application/xhtml+xml"
+                            doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+                            doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="result/id/content.smil" media-type="application/smil+xml"
+                            doctype-public="-//W3C//DTD SMIL 1.0//EN"
+                            doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                    <d:file href="result/id/ncc.html" media-type="application/xhtml+xml"
+                            doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+                            doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+                    <d:file href="result/id/notes.smil" media-type="application/smil+xml"
+                            doctype-public="-//W3C//DTD SMIL 1.0//EN"
+                            doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+        <x:context label="NCC">
+           <x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/id/ncc.html')]"/>
+        </x:context>
+        <x:expect label="NCC" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    <head>
+                        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                        <title>minimal</title>
+                        <meta name="dc:format" content="Daisy 2.02"/>
+                        <meta name="dc:identifier" content="id"/>
+                        <meta name="dc:date" content="2021-03-02"/>
+                        <meta name="ncc:charset" content="utf-8"/>
+                        <meta name="ncc:tocItems" content="3"/>
+                        <meta name="ncc:pageFront" content="0"/>
+                        <meta name="ncc:pageNormal" content="0"/>
+                        <meta name="ncc:pageSpecial" content="0"/>
+                        <meta name="ncc:sidebars" content="0"/>
+                        <meta name="ncc:prodNotes" content="0"/>
+                        <meta name="ncc:footnotes" content="1"/>
+                        <meta name="ncc:totalTime" content="00:00:05"/>
+                        <meta name="dc:title" content="minimal"/>
+                        <meta name="dc:language" content="en"/>
+                    </head>
+                    <body>
+                        <h1 class="title" id="h_1">
+                            <a href="content.smil#id_9">Untitled section</a>
+                        </h1>
+                        <span class="noteref" id="span_1">
+                            <a href="content.smil#id_10">1</a>
+                        </span>
+                        <h1 id="h_2">
+                            <a href="notes.smil#id_3">Untitled section</a>
+                        </h1>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+        <x:context label="HTML">
+           <x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/id/content.html')]"/>
+        </x:context>
+        <x:expect label="HTML" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    <head>
+                        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                        <title>minimal</title>
+                        <meta name="dc:identifier" content="id"/>
+                    </head>
+                    <body id="body">
+                        <p id="p_1">
+                            <span id="s_1">
+                                <a href="content.smil#id_9">See note </a>
+                            </span>
+                            <a id="a_1" href="#id_2">
+                                <span>
+                                    <a href="content.smil#id_10">1</a>
+                                </span>
+                            </a>
+                            <span id="s_2">
+                                <a href="content.smil#id_11">.</a>
+                            </span>
+                        </p>
+                        <div id="aside_1" class="aside">
+                            <a href="content.smil#id_12">
+                                This is a sidebar.
+                            </a>
+                        </div>
+                        <div id="id_2" class="aside">
+                            <a href="notes.smil#id_3">
+                                This is note 1.
+                            </a>
+                        </div>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+        <x:context label="content.smil">
+           <x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/id/content.smil')]"/>
+        </x:context>
+        <x:expect label="content.smil" type="compare">
+            <x:document type="inline">
+                <smil>
+                    <head>
+                        <meta name="dc:format" content="Daisy 2.02"/>
+                        <meta name="ncc:timeInThisSmil" content="00:00:05"/>
+                        <layout>
+                            <region id="txtView"/>
+                        </layout>
+                    </head>
+                    <body>
+                        <seq dur="5s">
+                            <par id="id_9" endsync="last">
+                                <text id="id_1" src="content.html#s_1"/>
+                                <audio id="id_2" src="audio.mp3" clip-begin="npt=0s" clip-end="npt=1s"/>
+                            </par>
+                            <par id="id_10" endsync="last">
+                                <text id="id_3" src="content.html#a_1"/>
+                                <audio id="id_4" src="audio.mp3" clip-begin="npt=1s" clip-end="npt=2s"/>
+                            </par>
+                            <par id="id_13" endsync="last" system-required="footnote-on">
+                                <text id="id_14" src="content.html#id_2"/>
+                                <audio id="id_15" src="audio.mp3" clip-begin="npt=4s" clip-end="npt=5s"/>
+                            </par>
+                            <par id="id_11" endsync="last">
+                                <text id="id_5" src="content.html#s_2"/>
+                                <audio id="id_6" src="audio.mp3" clip-begin="npt=2s" clip-end="npt=3s"/>
+                            </par>
+                            <par id="id_12" endsync="last" system-required="sidebar-on">
+                                <text id="id_7" src="content.html#aside_1"/>
+                                <audio id="id_8" src="audio.mp3" clip-begin="npt=3s" clip-end="npt=4s"/>
+                            </par>
+                        </seq>
+                    </body>
+                </smil>
+            </x:document>
+        </x:expect>
+        <x:context label="notes.smil">
+           <x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/id/notes.smil')]"/>
+        </x:context>
+        <x:expect label="notes.smil" type="compare">
+            <x:document type="inline">
+                <smil>
+                    <head>
+                        <meta name="dc:format" content="Daisy 2.02"/>
+                        <meta name="ncc:timeInThisSmil" content="00:00:00"/>
+                        <layout>
+                            <region id="txtView"/>
+                        </layout>
+                    </head>
+                    <body>
+                        <seq dur="0s"/>
+                    </body>
+                </smil>
             </x:document>
         </x:expect>
     </x:scenario>

@@ -79,6 +79,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="show-print-page-numbers"/>
     <p:option name="force-braille-page-break"/>
     <p:option name="toc-depth"/>
+    <p:option name="toc-exclude-class"/>
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
@@ -100,10 +101,6 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
              script at build time. -->
         <p:documentation>
             px:html-to-pef
-        </p:documentation>
-    </p:import>
-    <p:import href="html-to-pef.store.xpl">
-        <p:documentation>
             px:html-to-pef.store
         </p:documentation>
     </p:import>

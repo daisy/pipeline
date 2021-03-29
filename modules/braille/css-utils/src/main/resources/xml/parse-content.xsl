@@ -13,6 +13,8 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:key name="id" match="*[@css:id]" use="@css:id"/>
+    
     <xsl:template match="*[@css:content]">
         <xsl:variable name="context" as="element()?">
             <xsl:choose>
@@ -21,7 +23,7 @@
                 </xsl:when>
                 <xsl:when test="self::css:alternate">
                     <xsl:variable name="anchor" select="@css:anchor"/>
-                    <xsl:sequence select="//*[@css:id=$anchor]"/>
+                    <xsl:sequence select="key('id',$anchor)"/>
                 </xsl:when>
                 <xsl:when test="self::css:footnote-call">
                     <xsl:sequence select="."/>

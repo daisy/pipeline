@@ -7,11 +7,11 @@ import java.util.Map;
 
 import com.google.common.base.Optional;
 
-import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.api.factory.AbstractFactory;
-import org.daisy.braille.api.table.BrailleConverter;
-import org.daisy.braille.api.table.Table;
-import org.daisy.braille.api.table.TableProvider;
+import org.daisy.dotify.api.factory.FactoryProperties;
+import org.daisy.dotify.api.factory.AbstractFactory;
+import org.daisy.dotify.api.table.BrailleConverter;
+import org.daisy.dotify.api.table.Table;
+import org.daisy.dotify.api.table.TableProvider;
 
 import org.osgi.service.component.annotations.Component;
 

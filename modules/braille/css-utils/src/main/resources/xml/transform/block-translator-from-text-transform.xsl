@@ -10,7 +10,7 @@
 	
 	<xsl:param name="text-transform"/>
 	
-	<xsl:template match="css:block" mode="#default before after">
+	<xsl:template match="css:block">
 		<xsl:variable name="text" as="text()*" select="//text()"/>
 		<xsl:variable name="style" as="xs:string*">
 			<xsl:apply-templates mode="style"/>

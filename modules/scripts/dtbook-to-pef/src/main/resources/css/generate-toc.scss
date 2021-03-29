@@ -5,6 +5,18 @@
 $toc-depth: 0 !default;
 
 @if $toc-depth > 0 {
+	/*
+	 * Generate the TOC:
+	 */
+	@xslt "generate-toc.xsl" {
+		depth: $toc-depth;
+		exclude-class: $toc-exclude-class;
+		document-toc-id: "generated-document-toc";
+		volume-toc-id: "generated-volume-toc";
+	}
+	/*
+	 * ... and style it:
+	 */
 	#generated-document-toc {
 		flow: document-toc;
 		display: -obfl-toc;

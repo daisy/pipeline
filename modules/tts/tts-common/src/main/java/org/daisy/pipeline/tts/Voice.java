@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
+/** Voice instances are expected to be created only by TTSEngine/TTSService implementations */
 public class Voice {
 
 	public enum MarkSupport {
@@ -49,11 +50,26 @@ public class Voice {
 
 	public String toString() {
 		StringBuilder s = new StringBuilder();
+		boolean first = true;
 		s.append("{");
-		s.append("engine:").append(!engine.isEmpty() ? engine : "%unknown%");
-		s.append(", name:").append(!name.isEmpty() ? name : "%unkown%");
-		s.append(", locale:").append(locale.isPresent() ? locale.get() : "%unkown%");
-		s.append(", gender:").append(gender.isPresent() ? gender.get() : "%unkown%");
+		if (!engine.isEmpty()) {
+			s.append("engine:").append(engine);
+			first = false;
+		}
+		if (!name.isEmpty()) {
+			if (!first) s.append(", ");
+			s.append("name:").append(name);
+			first = false;
+		}
+		if (locale.isPresent()) {
+			if (!first) s.append(", ");
+			s.append("locale:").append(locale.get());
+			first = false;
+		}
+		if (gender.isPresent()) {
+			if (!first) s.append(", ");
+			s.append("gender:").append(gender.get());
+		}
 		s.append("}");
 		return s.toString();
 	}

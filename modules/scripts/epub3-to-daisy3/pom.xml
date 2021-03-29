@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.2-SNAPSHOT</version>
+    <version>1.14.3-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
@@ -57,12 +57,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>html-to-dtbook</artifactId>
-      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>epub3-to-html</artifactId>
-      <version>1.0.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

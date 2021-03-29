@@ -12,15 +12,12 @@ $maximum-number-of-sheets: 70 !default;
  * Amount with which volume breaks are allowed within "leaf sections", meaning that a
  * volume is not broken right before a heading.
  *
- * In order for this part of the style sheet to work, volume-breaking.xsl must be
- * included before volume-breaking.scss in the list of style sheets.
- *
  * A leaf section is a block of adjacent content with the same sectioning depth.
  * Which means:
  * - either; a level element with no child levels
  * - or; the content in a level (<h1>, <p>, etc.), which may have level element siblings
  *
- * If a level contains other levels, then volume-breaking.xsl wraps the normal content
+ * If a level contains other levels, then this style sheet wraps the normal content
  * (<h1>, <p>, etc.) in the level in a <div class="leaf-section"> element.
  *
  * The value of $allow-volume-break-inside-leaf-section-factor can range from 1 to 10.
@@ -43,7 +40,15 @@ $prefer-volume-break-before-higher-level-factor: 0 !default;
 $min-volume-keep-priority: min(10, max(1, round($allow-volume-break-inside-leaf-section-factor)));
 
 @if $min-volume-keep-priority < 10 {
-
+    
+    $duplex: true !default;
+    @xslt "volume-breaking.xsl" {
+        duplex: $duplex;
+        maximum-number-of-sheets: $maximum-number-of-sheets;
+        allow-volume-break-inside-leaf-section-factor: $allow-volume-break-inside-leaf-section-factor;
+        prefer-volume-break-before-higher-level-factor: $prefer-volume-break-before-higher-level-factor;
+    }
+    
     @if $prefer-volume-break-before-higher-level-factor > 0 {
         @for $level from 1 through 6 {
             $volume-keep-priority: min(10, max($min-volume-keep-priority, round(10 - $level * $prefer-volume-break-before-higher-level-factor)));

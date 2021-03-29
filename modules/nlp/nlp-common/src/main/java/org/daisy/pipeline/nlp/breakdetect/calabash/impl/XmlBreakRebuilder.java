@@ -85,7 +85,12 @@ public class XmlBreakRebuilder implements InlineSectionProcessor {
 					mPreviousNode = root;
 					mTreeWriter.addStartElement(root);
 					mTreeWriter.addAttributes(root);
-					mTreeWriter.addNamespace(mSpecs.tmpNsPrefix, mSpecs.tmpNs);
+					if (!"".equals(mSpecs.wordTag.getPrefix()))
+						mTreeWriter.addNamespace(mSpecs.wordTag.getPrefix(),
+						                         mSpecs.wordTag.getNamespaceURI());
+					if (!"".equals(mSpecs.sentenceTag.getPrefix()))
+						mTreeWriter.addNamespace(mSpecs.sentenceTag.getPrefix(),
+						                         mSpecs.sentenceTag.getNamespaceURI());
 
 					new InlineSectionFinder().find(root, mPreviousLevel, specs, this,
 					        unsplittable);

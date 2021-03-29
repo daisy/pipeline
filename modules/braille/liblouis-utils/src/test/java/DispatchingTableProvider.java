@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import org.daisy.braille.api.table.Table;
+import org.daisy.dotify.api.table.Table;
 
 import org.daisy.pipeline.braille.common.Provider;
 import org.daisy.pipeline.braille.common.Provider.util.Dispatch;

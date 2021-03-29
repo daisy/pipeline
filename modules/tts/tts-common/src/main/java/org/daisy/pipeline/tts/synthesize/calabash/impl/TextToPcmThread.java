@@ -65,7 +65,7 @@ import com.google.common.collect.Iterables;
  *
  */
 public class TextToPcmThread implements FormatSpecifications {
-	private Logger ServerLogger = LoggerFactory.getLogger(TextToPcmThread.class);
+	private Logger mLogger;
 	private Map<TTSEngine, TTSResource> mResources = new HashMap<TTSEngine, TTSResource>();
 	private Map<TTSService, ThreadUnsafeXslTransformer> mTransforms = new HashMap<TTSService, ThreadUnsafeXslTransformer>();
 	private int mFileNrInSection; //usually = 0, but incremented when a flush occurs within a section
@@ -77,7 +77,6 @@ public class TextToPcmThread implements FormatSpecifications {
 	private Thread mThread;
 	private TimedTTSExecutor mExecutor;
 	private TTSRegistry mTTSRegistry;
-	private IPipelineLogger mPipelineLogger;
 	private AudioFormat mLastFormat; //used for knowing if a flush is necessary
 	private AudioBufferTracker mAudioBufferTracker;
 	private SSMLMarkSplitter mSSMLSplitter;
@@ -90,7 +89,7 @@ public class TextToPcmThread implements FormatSpecifications {
 	void start(final ConcurrentLinkedQueue<ContiguousText> input,
 	        final BlockingQueue<ContiguousPCM> pcmOutput, TimedTTSExecutor executor,
 	        TTSRegistry ttsregistry, VoiceManager voiceManager, SSMLMarkSplitter ssmlSplitter,
-	        final IProgressListener progressListener, IPipelineLogger pLogger,
+	        final IProgressListener progressListener, Logger logger,
 	        AudioBufferTracker AudioBufferTracker, final int maxQueueEltSize,
 	        Map<TTSService, CompiledStylesheet> ssmlTransformers, TTSLog ttsLog) {
 		mSSMLTransformers = ssmlTransformers;
@@ -98,7 +97,7 @@ public class TextToPcmThread implements FormatSpecifications {
 		mSoundFileLinks = new ArrayList<SoundFileLink>();
 		mExecutor = executor;
 		mTTSRegistry = ttsregistry;
-		mPipelineLogger = pLogger;
+		mLogger = logger;
 		mAudioBufferTracker = AudioBufferTracker;
 		mVoiceManager = voiceManager;
 		mTTSLog = ttsLog;
@@ -149,7 +148,7 @@ public class TextToPcmThread implements FormatSpecifications {
 						String msg = "Error while releasing resource of "
 						        + TTSServiceUtil.displayName(e.getKey().getProvider()) + "; "
 						        + ex.getMessage();
-						ServerLogger.warn(msg);
+						mLogger.warn(msg);
 						mTTSLog.addGeneralError(ErrorCode.WARNING, msg);
 					} finally {
 						timeout.disable();
@@ -168,7 +167,7 @@ public class TextToPcmThread implements FormatSpecifications {
 				mThread.join();
 			} catch (InterruptedException e) {
 				//should not happen
-				ServerLogger.warn("TextToPCMThread interruption");
+				mLogger.warn("TextToPCMThread interruption");
 			}
 			mThread = null;
 		}
@@ -215,7 +214,7 @@ public class TextToPcmThread implements FormatSpecifications {
 					mAudioBufferTracker.transferToEncoding(mMemFootprint, pcm.sizeInBytes());
 				} catch (InterruptedException e) {
 					// Should never happen since interruptions only occur during calls to TTS processors.
-					ServerLogger.warn("interruption of memory transfer");
+					mLogger.warn("interruption of memory transfer");
 				}
 				pcmOutput.add(pcm);
 				pcm = null;
@@ -239,7 +238,8 @@ public class TextToPcmThread implements FormatSpecifications {
 			TTSResource threadResources, List<Mark> marks, List<String> expectedMarks
 	) throws SaxonApiException, SynthesisException, TimeoutException, MemoryException {
 		String transformed = transformSSML(ssml, tts, voice);
-		logEntry.addTTSinput(transformed);
+		if (transformed != null)
+			logEntry.addTTSinput(transformed);
 		logEntry.setActualVoice(voice);
 		return mExecutor.synthesizeWithTimeout(
 			timeout, interrupter, logEntry, transformed, ssml, sentenceSize, tts, voice,
@@ -343,7 +343,8 @@ public class TextToPcmThread implements FormatSpecifications {
 
 			TTSService service = tts.getProvider();
 			if (!mTransforms.containsKey(service)) {
-				mTransforms.put(service, mSSMLTransformers.get(service).newTransformer());
+				CompiledStylesheet transformer = mSSMLTransformers.get(service);
+				mTransforms.put(service, transformer != null ? transformer.newTransformer() : null);
 			}
 		}
 
@@ -355,7 +356,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			public void threadFreeInterrupt() {
 				String msg = "Forcing interruption of the current work of "
 				        + TTSServiceUtil.displayName(tts.getProvider()) + "...";
-				ServerLogger.warn(msg);
+				mLogger.warn(msg);
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
 				        new TTSLog.Error(ErrorCode.WARNING, msg));
 				tts.interruptCurrentWork(fresource);
@@ -368,7 +369,7 @@ public class TextToPcmThread implements FormatSpecifications {
 					String msg = "Resource of "
 					        + TTSServiceUtil.displayName(tts.getProvider())
 					        + " is no longer valid. The corresponding service has probably been stopped.";
-					mPipelineLogger.printInfo(msg);
+					mLogger.info(msg);
 					mTTSLog.getWritableEntry(sentence.getID()).addError(
 					        new TTSLog.Error(ErrorCode.WARNING, msg));
 					return null;
@@ -478,10 +479,11 @@ public class TextToPcmThread implements FormatSpecifications {
 			//Find another voice for this sentence
 			Voice newVoice = mVoiceManager.findSecondaryVoice(sentence.getVoice());
 			if (newVoice == null) {
+				String msg = "something went wrong but no fallback voice can be found for "
+					+ originalVoice;
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
-				        new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING,
-				                "  something went wrong but no fallback voice can be found for "
-				                        + originalVoice));
+				        new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, msg));
+				mLogger.warn(msg + " (see TTS log for more info)");
 				return false;
 			}
 			tts = mVoiceManager.getTTS(newVoice); //cannot return null in this case
@@ -496,16 +498,16 @@ public class TextToPcmThread implements FormatSpecifications {
 				return false;
 			}
 			if (pcm == null) {
+				String msg = "something went wrong with " + originalVoice
+					+ " and fallback voice " + newVoice
+					+ " didn't work either";
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
-				        new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING,
-				                " something went wrong with " + originalVoice
-				                        + " and fallback voice " + newVoice
-				                        + " didn't work either"));
+				        new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, msg));
+				mLogger.warn(msg + " (see TTS log for more info)");
 				return false;
 			}
 
-			mPipelineLogger.printInfo(IPipelineLogger.UNEXPECTED_VOICE
-			        + ": something went wrong with " + originalVoice + ". Voice " + newVoice
+			mLogger.info("something went wrong with " + originalVoice + ". Voice " + newVoice
 			        + " used instead to synthesize sentence");
 
 			if (mLastFormat != null && !tts.getAudioOutputFormat().matches(mLastFormat))
@@ -518,7 +520,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			addBuffers(pcm);
 		} catch (InterruptedException e) {
 			// Should never happen since interruptions only occur during calls to TTS processors.
-			ServerLogger.warn("interruption exception while queuing the PCM buffers");
+			mLogger.warn("interruption exception while queuing the PCM buffers");
 		}
 
 		if (marks.size() > 0) {
@@ -584,7 +586,7 @@ public class TextToPcmThread implements FormatSpecifications {
 
 	private void printMemError(Sentence sentence, MemoryException e) {
 		String msg = "out of memory when processing sentence";
-		ServerLogger.error(msg + " with @id=" + sentence.getID());
+		mLogger.error(msg + " with @id=" + sentence.getID());
 		mTTSLog.getWritableEntry(sentence.getID()).addError(
 		        new TTSLog.Error(ErrorCode.AUDIO_MISSING, msg));
 	}
@@ -603,9 +605,12 @@ public class TextToPcmThread implements FormatSpecifications {
 
 	private String transformSSML(XdmNode ssml, TTSEngine engine, Voice v)
 	        throws SaxonApiException {
+		ThreadUnsafeXslTransformer transformer = mTransforms.get(engine.getProvider());
+		if (transformer == null)
+			return null;
 		mTransformParams.put("voice", v.name);
 		if (engine.endingMark() != null)
 			mTransformParams.put("ending-mark", engine.endingMark());
-		return mTransforms.get(engine.getProvider()).transformToString(ssml, mTransformParams);
+		return transformer.transformToString(ssml, mTransformParams);
 	}
 }

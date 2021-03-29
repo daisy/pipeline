@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import com.google.common.io.CharStreams;
 
 import org.daisy.common.file.URLs;
-import org.daisy.pipeline.css.SassCompiler;
+import org.daisy.pipeline.css.sass.SassCompiler;
 
 import org.junit.Assert;
 import org.junit.Test;

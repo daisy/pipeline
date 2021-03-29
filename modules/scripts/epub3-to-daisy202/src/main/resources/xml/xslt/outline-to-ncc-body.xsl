@@ -12,7 +12,8 @@
 
     <xsl:variable name="outline" select="collection()[1]" as="document-node()"/>
     <xsl:variable name="page-list" select="collection()[2]" as="document-node()"/>
-    <xsl:variable name="content-docs" select="collection()[position()&gt;2]" as="document-node()*"/>
+    <xsl:variable name="noteref-list" select="collection()[3]" as="document-node()"/>
+    <xsl:variable name="content-docs" select="collection()[position()&gt;3]" as="document-node()*"/>
 
     <xsl:key name="referenced-element" match="*[@id]" use="@id"/>
 
@@ -30,7 +31,7 @@
             </xsl:document>
         </xsl:variable>
         <!--
-            now add missing ids (to the page number spans)
+            now add missing ids (to the page number and noteref spans)
         -->
         <xsl:apply-templates mode="add-ids" select="$body/*"/>
     </xsl:template>
@@ -53,7 +54,14 @@
                     <xsl:with-param name="relative-uri" select="$relative-uri"/>
                 </xsl:apply-templates>
             </xsl:variable>
-            <xsl:for-each select="($headings,$page-numbers)">
+            <xsl:variable name="noterefs" as="element()*">
+                <xsl:apply-templates mode="noterefs"
+                                     select="$noteref-list//d:file[pf:normalize-uri(resolve-uri(@href,base-uri(.)))=$doc-uri]/d:anchor">
+                    <xsl:with-param name="content-doc" select="$content-doc"/>
+                    <xsl:with-param name="relative-uri" select="$relative-uri"/>
+                </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:for-each select="($headings,$page-numbers,$noterefs)">
                 <xsl:sort select="key('referenced-element',
                                       substring-after(a/@href,'#'),
                                       $content-doc)
@@ -118,8 +126,8 @@
         <span>
             <xsl:variable name="value" select="if (@title) then @title
                                                else normalize-space(string-join($element//text(),' '))"/>
-            <xsl:sequence select="@class"/>
-            <xsl:if test="not(@class)">
+            <xsl:sequence select="@class[not(.='page')]"/>
+            <xsl:if test="not(@class[not(.='page')])">
                 <xsl:attribute name="class">
                     <xsl:variable name="element-class" as="xs:string*" select="$element/@class/tokenize(.,'\s+')[not(.='')]"/>
                     <xsl:choose>
@@ -141,9 +149,20 @@
         </span>
     </xsl:template>
 
+    <xsl:template mode="noterefs" match="d:anchor">
+        <xsl:param name="content-doc" required="yes"/>
+        <xsl:param name="relative-uri" required="yes"/>
+        <xsl:variable name="element" as="element()" select="key('referenced-element',@id,$content-doc)"/>
+        <span class="noteref">
+            <a href="{$relative-uri}#{@id}">
+                <xsl:value-of select="normalize-space(string-join($element//text(),' '))"/>
+            </a>
+        </span>
+    </xsl:template>
+
     <xsl:template mode="add-ids" match="/*" priority="1">
         <xsl:call-template name="pf:next-match-with-generated-ids">
-            <xsl:with-param name="prefix" select="'p_'"/>
+            <xsl:with-param name="prefix" select="'span_'"/>
             <xsl:with-param name="for-elements" select="//span[not(@id)]"/>
             <xsl:with-param name="in-use" select="()"/>
         </xsl:call-template>

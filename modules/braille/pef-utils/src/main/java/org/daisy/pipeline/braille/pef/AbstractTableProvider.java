@@ -7,12 +7,12 @@ import java.util.Map;
 
 import com.google.common.base.Optional;
 
+import org.daisy.dotify.api.table.Table;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
-import org.daisy.braille.api.table.Table;
 
-public abstract class AbstractTableProvider implements TableProvider /*, org.daisy.braille.api.table.TableProvider */ {
+public abstract class AbstractTableProvider implements TableProvider /*, org.daisy.dotify.api.table.TableProvider */ {
 	
 	protected abstract Iterable<Table> _get(Query query);
 	

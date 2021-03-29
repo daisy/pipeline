@@ -19,14 +19,16 @@
                             <h1 id="#d">Heading 3</h1>
                             <h2>Heading 3.1</h2>
                             <p>...</p>
-                            <h2>Heading 3.2</h2>
+                            <h2 class="exclude">Heading 3.2</h2>
                             <p>...</p>
                         </body>
                     </html>
                 </x:document>
             </x:input>
-            <x:option name="stylesheets" select="'../../main/resources/xml/xslt/generate-toc.xsl'"/>
-            <x:param port="parameters" name="toc-depth" select="2"/>
+            <x:option name="stylesheets" select="'../../main/resources/css/generate-toc.xsl'"/>
+            <x:param port="parameters" name="depth" select="2"/>
+            <x:param port="parameters" name="exclude-class" select="'exclude'"/>
+            <x:param port="parameters" name="document-toc-id" select="'generated-document-toc'"/>
         </x:call>
         <x:context label="result">
             <x:document type="port" port="result"/>
@@ -46,23 +48,6 @@
                             <a href="#%23d" title="Heading 3">Heading 3</a>
                             <ol>
                                 <li><a href="#h_2" title="Heading 3.1">Heading 3.1</a></li>
-                                <li><a href="#h_3" title="Heading 3.2">Heading 3.2</a></li>
-                            </ol>
-                        </li>
-                    </ol>
-                    <ol id="generated-volume-toc">
-                        <li>
-                            <a href="#h_1" title="Heading 2">Heading 2</a>
-                            <ol>
-                                <li><a href="#b" title="Heading 2.1">Heading 2.1</a></li>
-                                <li><a href="#c" title="Heading 2.2">Heading 2.2</a></li>
-                            </ol>
-                        </li>
-                        <li>
-                            <a href="#%23d" title="Heading 3">Heading 3</a>
-                            <ol>
-                                <li><a href="#h_2" title="Heading 3.1">Heading 3.1</a></li>
-                                <li><a href="#h_3" title="Heading 3.2">Heading 3.2</a></li>
                             </ol>
                         </li>
                     </ol>
@@ -77,7 +62,7 @@
                         <h1 id="#d">Heading 3</h1>
                         <h2 xml:id="h_2">Heading 3.1</h2>
                         <p>...</p>
-                        <h2 xml:id="h_3">Heading 3.2</h2>
+                        <h2 class="exclude">Heading 3.2</h2>
                         <p>...</p>
                     </body>
                 </html>

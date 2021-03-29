@@ -1,4 +1,4 @@
-import org.daisy.braille.api.table.BrailleConverter;
+import org.daisy.dotify.api.table.BrailleConverter;
 import org.daisy.pipeline.braille.pef.impl.NabccEightDotTableProvider;
 
 import org.junit.Test;

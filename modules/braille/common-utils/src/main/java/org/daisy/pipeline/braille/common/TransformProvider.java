@@ -186,9 +186,9 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 			return t;
 		}
 		
-		public static <T extends Transform> java.lang.Iterable<T> logSelect(final Query query,
-		                                                                    final TransformProvider<T> provider,
-		                                                                    final Logger context) {
+		public static <T extends Transform> Iterable<T> logSelect(final Query query,
+		                                                          final TransformProvider<T> provider,
+		                                                          final Logger context) {
 			return new Iterable<T>() {
 				public Iterator<T> iterator() {
 					return new AbstractIterator<T>() {

@@ -53,6 +53,6 @@ h2 {
   border-bottom: ⠒;
 }
 
-#foo:has( > #bar)::before {
+#foo:has(> #bar)::before {
   content: 'foo';
 }

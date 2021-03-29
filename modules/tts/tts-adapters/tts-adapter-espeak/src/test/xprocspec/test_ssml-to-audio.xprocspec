@@ -4,7 +4,7 @@
                xmlns:ssml="http://www.w3.org/2001/10/synthesis"
                xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="http://www.daisy.org/pipeline/modules/ssml-to-audio/library.xpl">
+               script="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
 
 	<x:scenario label="synthesize with espeak">
 		<x:call step="px:ssml-to-audio">
@@ -24,34 +24,70 @@
 					</speak>
 				</x:document>
 			</x:input>
-			<x:input port="config">
-				<x:document type="inline">
-					<config>
-						<voice engine="espeak" name="dutch" gender="male-adult" priority="100" lang="en"/>
-						<!-- log can be found in "log" output -->
-						<property key="log" value="true"/>
-					</config>
-				</x:document>
-			</x:input>
 		</x:call>
-		<x:context label="the result port">
-			<x:document type="port" port="result"/>
-		</x:context>
-		<x:expect label="there should be 3 audio clips" type="xpath" test="count(/d:audio-clips/d:clip)" equals="3"/>
-		<x:context label="the status port">
-			<x:document type="port" port="status"/>
-		</x:context>
-		<x:expect label="the status should be ok" type="compare">
-			<x:document type="inline">
-				<d:status result="ok"/>
-			</x:document>
-		</x:expect>
-		<!--
-		    enable this to check that the config works, i.e. that the voice is Dutch and not the default (English)
-		    (requires mpg123 to be installed)
-		-->
-		<x:expect pending=""
-		          label="the voice used should be Dutch" type="custom" href="play-audio-clips.xpl" step="x:play-audio-clips"/>
+		<x:scenario label="default voice">
+			<x:call>
+				<x:input port="config">
+					<x:document type="inline">
+						<config>
+							<!-- log can be found in "log" output -->
+							<property key="log" value="true"/>
+						</config>
+					</x:document>
+				</x:input>
+				<x:option name="temp-dir" select="resolve-uri('default/audio/',$temp-dir)"/>
+			</x:call>
+			<x:context label="the status port">
+				<x:document type="port" port="status"/>
+			</x:context>
+			<x:expect label="the status should be ok" type="compare">
+				<x:document type="inline">
+					<d:status result="ok"/>
+				</x:document>
+			</x:expect>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="there should be 3 audio clips" type="xpath" test="count(/d:audio-clips/d:clip)" equals="3"/>
+			<!--
+			    enable this to check that the config works, i.e. that the voice is Dutch and not the default (English)
+			    (requires mpg123 to be installed)
+			-->
+			<x:expect pending=""
+			          label="the voice used should be English" type="custom" href="play-audio-clips.xpl" step="x:play-audio-clips"/>
+		</x:scenario>
+		<x:scenario label="override voice">
+			<x:call>
+				<x:input port="config">
+					<x:document type="inline">
+						<config>
+							<voice engine="espeak" name="dutch" gender="male-adult" priority="100" lang="en"/>
+							<!-- log can be found in "log" output -->
+							<property key="log" value="true"/>
+						</config>
+					</x:document>
+				</x:input>
+				<x:option name="temp-dir" select="resolve-uri('override/audio/',$temp-dir)"/>
+			</x:call>
+			<x:context label="the status port">
+				<x:document type="port" port="status"/>
+			</x:context>
+			<x:expect label="the status should be ok" type="compare">
+				<x:document type="inline">
+					<d:status result="ok"/>
+				</x:document>
+			</x:expect>
+			<x:context label="the result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect label="there should be 3 audio clips" type="xpath" test="count(/d:audio-clips/d:clip)" equals="3"/>
+			<!--
+			    enable this to check that the config works, i.e. that the voice is Dutch and not the default (English)
+			    (requires mpg123 to be installed)
+			-->
+			<x:expect pending=""
+			          label="the voice used should be Dutch" type="custom" href="play-audio-clips.xpl" step="x:play-audio-clips"/>
+		</x:scenario>
 	</x:scenario>
 	
 </x:description>

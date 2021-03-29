@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.daisy.pipeline.tts.Voice.MarkSupport;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -86,28 +84,17 @@ public class VoiceInfo {
 		return locale;
 	}
 
-	public VoiceInfo(String voiceEngine, String voiceName, String language, Gender gender,
-	        float priority) throws UnknownLanguage {
-		this(voiceEngine, voiceName, MarkSupport.DEFAULT, language, gender, priority);
+	public VoiceInfo(String voiceEngine, String voiceName, String language, Gender gender, float priority)
+			throws UnknownLanguage {
+		this(voiceEngine, voiceName, tagToLocale(language), gender, priority);
 	}
 
-	public VoiceInfo(String voiceEngine, String voiceName, MarkSupport markSupport,
-	        String language, Gender gender, float priority) throws UnknownLanguage {
-		this(new Voice(voiceEngine, voiceName, markSupport), language, gender, priority);
-	}
-
-	public VoiceInfo(Voice v, String language, Gender gender, float priority) throws UnknownLanguage {
-		this(v, tagToLocale(language), gender, priority);
-	}
-
-	public VoiceInfo(Voice v, Locale language, Gender gender) {
-		this(v, language, gender, -1);
-	}
-
-	VoiceInfo(Voice v, Locale locale, Gender gender, float priority) {
-		Preconditions.checkNotNull(v);
+	VoiceInfo(String voiceEngine, String voiceName, Locale locale, Gender gender, float priority) {
 		Preconditions.checkNotNull(gender);
-		this.voice = v;
+		Preconditions.checkNotNull(voiceName);
+		Preconditions.checkNotNull(voiceEngine);
+		this.voiceEngine = voiceEngine;
+		this.voiceName = voiceName;
 		this.language = locale;
 		this.priority = priority;
 		this.gender = gender;
@@ -115,13 +102,45 @@ public class VoiceInfo {
 
 	@Override
 	public int hashCode() {
-		return this.voice.hashCode() ^ (this.language == null ? 0 : this.language.hashCode());
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+		result = prime * result + ((language == null) ? 0 : language.hashCode());
+		result = prime * result + Float.floatToIntBits(priority);
+		result = prime * result + ((voiceEngine == null) ? 0 : voiceEngine.hashCode());
+		result = prime * result + ((voiceName == null) ? 0 : voiceName.hashCode());
+		return result;
 	}
 
-	public boolean equals(Object other) {
-		VoiceInfo o = (VoiceInfo) other;
-		return voice.equals(o.voice) && ((language == null && o.language == null) ||
-				(language != null && language.equals(o.language)));
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VoiceInfo other = (VoiceInfo) obj;
+		if (gender != other.gender)
+			return false;
+		if (language == null) {
+			if (other.language != null)
+				return false;
+		} else if (!language.equals(other.language))
+			return false;
+		if (Float.floatToIntBits(priority) != Float.floatToIntBits(other.priority))
+			return false;
+		if (voiceEngine == null) {
+			if (other.voiceEngine != null)
+				return false;
+		} else if (!voiceEngine.equals(other.voiceEngine))
+			return false;
+		if (voiceName == null) {
+			if (other.voiceName != null)
+				return false;
+		} else if (!voiceName.equals(other.voiceName))
+			return false;
+		return true;
 	}
 	
 	public boolean isMultiLang(){
@@ -129,7 +148,8 @@ public class VoiceInfo {
 	}
 
 	public Gender gender;
-	public Voice voice;
+	public String voiceName;
+	public String voiceEngine;
 	public Locale language;
 	public float priority;
 	
