@@ -9,8 +9,7 @@
     <xsl:template match="metadata">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates select="*[not(self::meta)]"/>
-            <xsl:apply-templates select="meta"/>
+            <xsl:apply-templates select="*"/>
         </xsl:copy>
     </xsl:template>
 

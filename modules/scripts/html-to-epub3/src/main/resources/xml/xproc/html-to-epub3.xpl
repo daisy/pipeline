@@ -16,7 +16,7 @@
         </a>
     </p:documentation>
     
-    <p:input port="metadata" primary="false" sequence="true" px:media-type="application/xhtml+xml">
+    <p:input port="metadata" primary="false" sequence="true" px:media-type="application/xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Metadata</h2>
             <p px:role="desc" xml:space="preserve">Metadata to be included in the EPUB.

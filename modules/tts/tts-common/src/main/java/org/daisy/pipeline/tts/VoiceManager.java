@@ -218,7 +218,11 @@ public class VoiceManager {
 			Voice preferredVoice = new Voice(voiceEngine, voiceName);
 			if (mBestEngines.containsKey(preferredVoice)) {
 				exactMatch[0] = true;
-				return preferredVoice;
+				// don't return preferredVoice because it might have the wrong case
+				for (Voice v : mBestEngines.keySet())
+					if (preferredVoice.equals(v))
+						return v;
+				// never reached
 			} else {
 				Voice fallback = mSecondaryVoices.get(preferredVoice);
 				if (fallback != null) {

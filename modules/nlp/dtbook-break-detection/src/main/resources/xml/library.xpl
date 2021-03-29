@@ -3,7 +3,8 @@
     xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/">
+    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:math="http://www.w3.org/1998/Math/MathML">
 
   <p:declare-step type="px:dtbook-break-detect">
 
@@ -32,18 +33,30 @@
          are redundant, but some are necessary nonetheless
          (e.g. linenum and epigraph). -->
 
-    <px:break-and-reshape name="generic">
-      <p:with-option name="inline-tags" select="'acronym,em,strong,a,abbr,dfn,linenum,pagenum,samp,span,sup,sub,w,noteref,br,math'"/>
-      <p:with-option name="ensure-word-before" select="'acronym,span,linenum,pagenum,samp,noteref,abbr,acronym,br,math'"/>
-      <p:with-option name="ensure-word-after" select="'acronym,span,linenum,pagenum,samp,noteref,abbr,acronym,br,math'"/>
-      <p:with-option name="can-contain-sentences" select="'address,author,notice,prodnote,sidebar,line,em,strong,dfn,kdb,code,samp,cite,abbr,acronym,sub,sup,span,bdo,q,p,doctitle,docauthor,levelhd,hd,h1,h2,h3,h4,h5,h6,dt,dd,li,lic,caption,th,td,bridgehead,byline,covertitle,epigraph,dateline,a'"/>
-      <p:with-option name="cannot-be-sentence-child" select="'linenum,epigraph,td,th,tr,tfoot,thead,tbody,colgroup,col,list,li,lic,table,bridgehead,blockquote,dl,dd,div,title,author,sidebar,note,annotation,byline,dateline,linegroup,poem,p,doctitle,docauthor,covertitle,h1,h2,h3,h4,h5,h6,hd'"/>
-      <p:with-option name="special-sentences" select="'pagenum,annoref,noteref,linenum,math'"/>
-      <p:with-option name="output-ns" select="'http://www.daisy.org/z3986/2005/dtbook/'"/>
-      <p:with-option name="output-word-tag" select="'w'"/>
-      <p:with-option name="output-sentence-tag" select="'sent'"/>
-      <p:with-option name="output-subsentence-tag" select="'span'"/>
-    </px:break-and-reshape>
+    <px:break-and-reshape name="generic"
+        inline-tags="dtb:acronym|dtb:em|dtb:strong|dtb:a|dtb:abbr|dtb:dfn|dtb:linenum|dtb:pagenum|
+                     dtb:samp|dtb:span|dtb:sup|dtb:sub|dtb:w|dtb:noteref|dtb:br|dtb:math"
+        ensure-word-before="dtb:acronym|dtb:span|dtb:linenum|dtb:pagenum|dtb:samp|dtb:noteref|dtb:abbr|
+                            dtb:acronym|dtb:br|dtb:math"
+        ensure-word-after="dtb:acronym|dtb:span|dtb:linenum|dtb:pagenum|dtb:samp|dtb:noteref|dtb:abbr|
+                           dtb:acronym|dtb:br|dtb:math"
+        can-contain-sentences="dtb:address|dtb:author|dtb:notice|dtb:prodnote|dtb:sidebar|dtb:line|
+                               dtb:em|dtb:strong|dtb:dfn|dtb:kdb|dtb:code|dtb:samp|dtb:cite|dtb:abbr|
+                               dtb:acronym|dtb:sub|dtb:sup|dtb:span|dtb:bdo|dtb:q|dtb:p|dtb:doctitle|
+                               dtb:docauthor|dtb:levelhd|dtb:hd|dtb:h1|dtb:h2|dtb:h3|dtb:h4|dtb:h5|
+                               dtb:h6|dtb:dt|dtb:dd|dtb:li|dtb:lic|dtb:caption|dtb:th|dtb:td|
+                               dtb:bridgehead|dtb:byline|dtb:covertitle|dtb:epigraph|dtb:dateline|dtb:a"
+        cannot-be-sentence-child="dtb:linenum|dtb:epigraph|dtb:td|dtb:th|dtb:tr|dtb:tfoot|dtb:thead|
+                                  dtb:tbody|dtb:colgroup|dtb:col|dtb:list|dtb:li|dtb:lic|dtb:table|
+                                  dtb:bridgehead|dtb:blockquote|dtb:dl|dtb:dd|dtb:div|dtb:title|
+                                  dtb:author|dtb:sidebar|dtb:note|dtb:annotation|dtb:byline|dtb:dateline|
+                                  dtb:linegroup|dtb:poem|dtb:p|dtb:doctitle|dtb:docauthor|dtb:covertitle|
+                                  dtb:h1|dtb:h2|dtb:h3|dtb:h4|dtb:h5|dtb:h6|dtb:hd"
+        special-sentences="dtb:pagenum|dtb:annoref|dtb:noteref|dtb:linenum|math:math"
+        output-ns="http://www.daisy.org/z3986/2005/dtbook/"
+        output-word-tag="w"
+        output-sentence-tag="sent"
+        output-subsentence-tag="span"/>
 
     <!-- Add IDs to nodes holding an attribute whose value should be
          synthesized (e.g. the @alt attribute of the images). Those

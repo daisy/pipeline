@@ -140,6 +140,11 @@
                     </d:fileset>
                 </x:document>
             </x:input>
+            <x:input port="noteref-list">
+                <x:document type="inline">
+                    <d:fileset/>
+                </x:document>
+            </x:input>
         </x:call>
         <x:context label="The resulting fileset">
             <x:document type="port" port="result.fileset"/>
@@ -190,13 +195,13 @@
                         <h2 id="h_3">
                             <a href="chapter_001.smil#par_1">Chapter 1.1</a>
                         </h2>
-                        <span id="p_1" class="page-normal">
+                        <span id="span_1" class="page-normal">
                             <a href="chapter_001.smil#par_2">1</a>
                         </span>
                         <h2 id="h_4">
                             <a href="chapter_001.smil#id_1">Chapter 1.2</a>
                         </h2>
-                        <span id="p_2" class="page-normal">
+                        <span id="span_2" class="page-normal">
                             <!--
                                 FIXME: this could also point to the page number element itself
                                 (instead of the word "Chapter" of "Chapter 1.2")
@@ -236,7 +241,9 @@
                         </h1>
                         <p id="c1_p1">
                             <a href="chapter_001.smil#paragraph1">
-                                <span class="anchor">Some link</span>
+                                <span>
+                                    <a href="http://www.example.com">Some link</a>
+                                </span>
                                 ...
                             </a>
                         </p>
@@ -327,7 +334,7 @@
                             <par id="par_1" endsync="last">
                                 <text id="text_1" src="chapter_001.xhtml#c1-1"/>
                             </par>
-                            <par id="par_2" endsync="last">
+                            <par id="par_2" endsync="last" system-required="pagenumber-on">
                                 <text id="text_2" src="chapter_001.xhtml#page1"/>
                             </par>
                             <par id="paragraph2">

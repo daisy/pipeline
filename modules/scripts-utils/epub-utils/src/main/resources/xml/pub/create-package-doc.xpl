@@ -195,14 +195,9 @@
             px:epub3-add-mediaoverlays
         </p:documentation>
     </p:import>
-    <p:import href="merge-metadata.xpl">
+    <p:import href="add-metadata.xpl">
         <p:documentation>
-            pxi:merge-metadata
-        </p:documentation>
-    </p:import>
-    <p:import href="opf3-to-opf2-metadata.xpl">
-        <p:documentation>
-            pxi:opf3-to-opf2-metadata
+            px:epub3-add-metadata
         </p:documentation>
     </p:import>
     <p:import href="detect-properties.xpl">
@@ -289,49 +284,6 @@
         <px:assert message="There must be exactly one navigation document in the fileset"
                    test-count-min="1" test-count-max="1" error-code="PEPU14"/>
         <px:message severity="DEBUG" message="Navigation document extracted from fileset"/>
-    </p:group>
-    <p:sink/>
-
-    <p:documentation>Construct initial metadata element</p:documentation>
-    <p:group name="metadata">
-        <p:output port="result"/>
-        <p:uuid name="default-metadata" match="dc:identifier/text()">
-            <p:documentation>Minimal required metadata</p:documentation>
-            <p:input port="source">
-                <p:inline>
-                    <opf:metadata>
-                        <dc:title>Unknown</dc:title>
-                        <dc:identifier>generated-uuid</dc:identifier>
-                    </opf:metadata>
-                </p:inline>
-            </p:input>
-        </p:uuid>
-        <p:sink/>
-
-        <pxi:merge-metadata>
-            <p:input port="source">
-                <p:pipe step="main" port="metadata"/>
-                <p:pipe step="default-metadata" port="result"/>
-            </p:input>
-            <p:input port="manifest">
-                <p:pipe step="manifest" port="result"/>
-            </p:input>
-            <p:with-option name="reserved-prefixes" select="$reserved-prefixes">
-                <p:empty/>
-            </p:with-option>
-        </pxi:merge-metadata>
-
-        <p:documentation>For compatibility with OPF 2, add a second meta element with "name" and
-        "content" attributes for every meta element.</p:documentation>
-        <p:choose>
-            <p:when test="$compatibility-mode='true'">
-                <pxi:opf3-to-opf2-metadata compatibility-mode="true"/>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-        <px:message severity="DEBUG" message="Successfully created package document metadata"/>
     </p:group>
     <p:sink/>
 
@@ -603,28 +555,13 @@
                 </p:inline>
             </p:input>
             <p:input port="insertion">
-                <!-- TODO declare @prefix -->
-                <p:pipe step="metadata" port="result"/>
+                <p:pipe step="default-metadata" port="result"/>
                 <p:pipe step="manifest" port="result"/>
                 <p:pipe step="spine" port="result"/>
                 <p:pipe step="guide" port="result"/>
                 <p:pipe step="bindings" port="result"/>
             </p:input>
         </p:insert>
-        <p:add-attribute match="/*" attribute-name="unique-identifier">
-            <p:with-option name="attribute-value" select="/opf:package/opf:metadata/dc:identifier/@id"/>
-        </p:add-attribute>
-        <p:choose>
-            <p:when test="/opf:package/opf:metadata/@prefix">
-                <p:add-attribute attribute-name="prefix" match="/*">
-                    <p:with-option name="attribute-value" select="/opf:package/opf:metadata/@prefix"/>
-                </p:add-attribute>
-                <p:delete match="/opf:package/opf:metadata/@prefix"/>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
         <px:set-base-uri>
             <p:with-option name="base-uri" select="string(/*)">
                 <p:pipe step="output-base-uri" port="normalized"/>
@@ -640,10 +577,46 @@
             </p:input>
         </px:fileset-add-entry>
         <p:sink/>
+        <p:uuid name="default-metadata" match="dc:identifier/text()">
+            <p:documentation>Minimal required metadata</p:documentation>
+            <p:input port="source">
+                <p:inline>
+                    <opf:metadata>
+                        <dc:title>Unknown</dc:title>
+                        <dc:identifier>generated-uuid</dc:identifier>
+                    </opf:metadata>
+                </p:inline>
+            </p:input>
+        </p:uuid>
+        <p:sink/>
+    </p:group>
+
+    <p:documentation>Add metadata</p:documentation>
+    <p:group>
+        <p:sink/>
+        <px:epub3-add-metadata log-conflicts="false" name="add-metadata">
+            <p:input port="source.fileset">
+                <p:pipe step="create-package-doc" port="fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="create-package-doc" port="result"/>
+            </p:input>
+            <p:input port="metadata">
+                <p:pipe step="main" port="metadata"/>
+            </p:input>
+            <p:with-option name="reserved-prefixes" select="$reserved-prefixes"/>
+            <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
+        </px:epub3-add-metadata>
+        <px:fileset-load media-types="application/oebps-package+xml">
+            <p:input port="in-memory">
+                <p:pipe step="add-metadata" port="result.in-memory"/>
+            </p:input>
+        </px:fileset-load>
     </p:group>
 
     <p:documentation>Set navigation document</p:documentation>
     <p:group>
+        <p:identity name="package-doc"/>
         <p:sink/>
         <px:fileset-join>
             <p:input port="source">
@@ -653,7 +626,7 @@
         </px:fileset-join>
         <px:epub3-add-navigation-doc name="set-nav-doc">
             <p:input port="source.in-memory">
-                <p:pipe step="create-package-doc" port="result"/>
+                <p:pipe step="package-doc" port="result"/>
                 <p:pipe step="nav-doc" port="result"/>
             </p:input>
         </px:epub3-add-navigation-doc>

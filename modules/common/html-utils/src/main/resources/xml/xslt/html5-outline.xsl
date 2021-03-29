@@ -27,7 +27,7 @@
 
     <xsl:param name="output-base-uri" required="yes"/>
     <xsl:param name="heading-links-only" required="yes"/>
-    <xsl:param name="fix-untitled-sections-in-outline" required="yes"/>
+    <xsl:param name="fix-untitled-sections-in-outline" required="yes"/> <!-- imply-heading | unwrap -->
 
     <xsl:key name="id" match="*" use="@id"/>
 
@@ -281,9 +281,17 @@
                                 <!-- If the section has no associated heading, create implied heading -->
                                 <!-- An empty entry leads to an invalid EPUB according to epubcheck, so
                                      treat an empty heading as an absent heading. -->
-                                <xsl:call-template name="get-untitled-section-title">
-                                    <xsl:with-param name="sectioning-element" select="key('id',@owner,$html-doc)"/>
-                                </xsl:call-template>
+                                <xsl:variable name="owner" as="element()" select="key('id',@owner,$html-doc)"/>
+                                <xsl:choose>
+                                    <xsl:when test="$owner/@aria-label">
+                                        <xsl:value-of select="$owner/@aria-label"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:call-template name="get-untitled-section-title">
+                                            <xsl:with-param name="sectioning-element" select="$owner"/>
+                                        </xsl:call-template>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:sequence select="'Untitled section'"/>

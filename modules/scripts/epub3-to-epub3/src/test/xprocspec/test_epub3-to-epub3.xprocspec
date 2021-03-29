@@ -12,28 +12,31 @@
 	<x:scenario label="minimal">
 		<x:call step="px:epub3-to-epub3">
 			<x:option name="result-base" select="resolve-uri('result/')"/>
-			<x:option name="tts" select="true()"/>
 			<x:input port="tts-config">
 				<x:document type="inline">
 					<config>
 						<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
 						<!-- log can be found in "log" output -->
 						<property key="log" value="true"/>
+						<css>
+							@namespace epub url(http://www.idpf.org/2007/ops);
+							[epub|type~=pagebreak]::before {
+								content: 'page ';
+							}
+							[epub|type~=pagebreak]:empty[title]::before {
+								content: 'page ' attr(title);
+							}
+						</css>
 					</config>
 				</x:document>
 			</x:input>
-			<x:option name="braille" select="false()"/>
-			<x:option name="braille-translator" select="''"/>
-			<x:option name="stylesheet" select="''"/>
-			<x:option name="apply-document-specific-stylesheets" select="false()"/>
-			<x:option name="set-default-rendition-to-braille" select="false()"/>
 			<x:input port="epub.in.fileset">
 				<x:document type="inline">
 					<d:fileset>
 						<d:file href="mimetype" media-type="text/plain" compression-method="stored"/>
 						<d:file href="META-INF/container.xml" media-type="application/xml"/>
 						<d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
-						<d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
 						<d:file href="EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="EPUB/front.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
@@ -56,10 +59,11 @@
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
 							<dc:title id="title">minimal</dc:title>
 							<dc:identifier id="pub-id">id</dc:identifier>
+							<meta refines="#pub-id" property="identifier-type" scheme="xsd:string">uuid</meta>
 							<meta property="dcterms:modified">2020-03-06T12:00:00Z</meta>
 							<dc:date>2020-03-06</dc:date>
 							<dc:language>en</dc:language>
-							<meta property="schema:accessibilityFeature">ttsMarkup</meta>
+							<meta property="schema:accessibilityFeature">captions</meta>
 						</metadata>
 						<manifest>
 							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
@@ -148,10 +152,9 @@
 								<table>...</table>
 								<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv"/>
 							</section>
-							<section id="preface">
-								<h2 id="h_1_2">Preface</h2>
+							<section id="preface" aria-label="Preface">
 								<p>...</p>
-								<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v"/>
+								<div id="page_front_5" class="page-front"/>
 							</section>
 						</body>
 					</html>
@@ -171,309 +174,555 @@
 								<span id="page_5" class="page-normal" epub:type="pagebreak" title="5"/>
 								a page break.
 							</p>
+							<figcaption id="caption_1">
+								<strong>Illustration 1 A.</strong> This is an illustration.
+							</figcaption>
 						</body>
 					</html>
 				</x:document>
 			</x:input>
+			<x:option name="ensure-pagenum-text" select="'hidden'"/>
+			<x:option name="ensure-section-headings" select="'true'"/>
+			<x:option name="braille" select="false()"/>
+			<x:option name="braille-translator" select="''"/>
+			<x:option name="stylesheet" select="''"/>
+			<x:option name="apply-document-specific-stylesheets" select="false()"/>
+			<x:option name="set-default-rendition-to-braille" select="false()"/>
 		</x:call>
-		<x:context label="epub.out.fileset port">
-			<x:document type="port" port="epub.out.fileset"/>
-		</x:context>
-		<x:expect label="epub.out.fileset port" type="custom"
-		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
-			<x:document type="inline">
-				<d:fileset>
-					<d:file href="result/mimetype" media-type="text/plain" compression-method="stored"/>
-					<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
-					<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result/EPUB/mo/cover.smil" media-type="application/smil+xml"/>
-					<d:file href="result/EPUB/mo/front.smil" media-type="application/smil+xml"/>
-					<d:file href="result/EPUB/mo/chapter.smil" media-type="application/smil+xml"/>
-					<d:file href="result/EPUB/audio/mock.mp3" media-type="audio/mpeg"
-					        original-href="../../../target/generated-test-resources/mock.mp3"/>
-				</d:fileset>
-			</x:document>
-		</x:expect>
-		<x:expect label="mimetype is first entry" type="xpath" test="contains(/*/d:file[1]/@href,'mimetype')"/>
-		<x:context label="package.opf">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
-		</x:context>
-		<x:expect label="package.opf" type="custom"
-		          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
-			<x:document type="inline">
-				<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en">
-					<metadata>
-						<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/" id="title">minimal</dc:title>
-						<dc:identifier xmlns:dc="http://purl.org/dc/elements/1.1/" id="pub-id">id</dc:identifier>
-						<dc:language xmlns:dc="http://purl.org/dc/elements/1.1/">en</dc:language>
-						<dc:date xmlns:dc="http://purl.org/dc/elements/1.1/">2020-03-06</dc:date>
-						<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
-						<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
-						<meta property="schema:accessibilityFeature">ttsMarkup</meta>
-						<meta name="schema:accessibilityFeature" content="ttsMarkup"/>
-						<meta property="media:duration">00:00:12.23</meta>
-						<meta name="media:duration" content="00:00:12.23"/>
-						<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
-						<meta property="media:duration" refines="#item_2">00:00:06.115</meta>
-						<meta property="media:duration" refines="#item_3">00:00:04.892</meta>
-					</metadata>
-					<manifest>
-						<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
-						<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" media-overlay="item_1"/>
-						<item id="front" href="front.xhtml" media-type="application/xhtml+xml" media-overlay="item_2"/>
-						<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml" media-overlay="item_3"/>
-						<item id="item_1" href="mo/cover.smil" media-type="application/smil+xml"/>
-						<item id="item_2" href="mo/front.smil" media-type="application/smil+xml"/>
-						<item id="item_3" href="mo/chapter.smil" media-type="application/smil+xml"/>
-						<item id="item_4" href="audio/mock.mp3" media-type="audio/mpeg"/>
-					</manifest>
-					<spine>
-						<itemref idref="cover"/>
-						<itemref idref="front"/>
-						<itemref idref="chapter"/>
-					</spine>
-				</package>
-			</x:document>
-		</x:expect>
-		<x:context label="nav.xhtml">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/nav.xhtml')]"/>
-		</x:context>
-		<x:expect label="nav.xhtml" type="compare">
-			<x:document type="inline">
-				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-					<head>
-						<meta charset="UTF-8"/>
-						<title>minimal</title>
-						<meta name="dc:identifier" content="id"/>
-					</head>
-					<body>
-						<nav epub:type="toc">
-							<h1>Table of contents</h1>
-							<ol>
-								<li>
-									<a href="cover.xhtml#cover">
-										Cover
-									</a>
-								</li>
-								<li>
-									<a href="front.xhtml#contents">
-										List of contents
-									</a>
-								</li>
-								<li>
-									<a href="front.xhtml#preface">
-										Preface
-									</a>
-								</li>
-								<li>
-									<a href="chapter.xhtml#chap_1">
-										Chapter 1
-									</a>
-								</li>
-							</ol>
-						</nav>
-						<nav epub:type="page-list" hidden="">
-							<h1>List of pages</h1>
-							<ol>
-								<li>
-									<a href="front.xhtml#page_front_4">
-										vi
-									</a>
-								</li>
-								<li>
-									<a href="front.xhtml#page_front_5">
-										v
-									</a>
-								</li>
-								<li>
-									<a href="chapter.xhtml#page_5">
-										5
-									</a>
-								</li>
-							</ol>
-						</nav>
-					</body>
-				</html>
-			</x:document>
-		</x:expect>
-		<x:context label="cover.xhtml">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/cover.xhtml')]"/>
-		</x:context>
-		<x:expect label="cover.xhtml" type="compare">
-			<x:document type="inline">
-				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-					<head>
-						<meta charset="UTF-8"/>
-						<title>minimal</title>
-						<meta name="dc:identifier" content="id"/>
-						<link rel="next" href="front.xhtml"/>
-					</head>
-					<body id="cover" epub:type="cover">
-						<p>
-							<span id="st1-1">...</span>
-						</p>
-					</body>
-				</html>
-			</x:document>
-		</x:expect>
-		<x:context label="front.xhtml">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]"/>
-		</x:context>
-		<x:expect label="front.xhtml" type="compare">
-			<x:document type="inline">
-				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-					<head>
-						<meta charset="UTF-8"/>
-						<title>minimal</title>
-						<meta name="dc:identifier" content="id"/>
-						<link rel="prev" href="cover.xhtml"/>
-						<link rel="next" href="chapter.xhtml"/>
-					</head>
-					<body id="front" epub:type="frontmatter">
-						<h1 id="h_1">
-							<span id="st2-1">Title</span>
-						</h1>
-						<p>
-							<span id="st2-2">...</span>
-						</p>
-						<section id="contents">
-							<h2 id="h_1_1">
-								<span id="st2-3">List of contents</span>
-							</h2>
-							<table>...</table>
-							<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv"/>
-						</section>
-						<section id="preface">
-							<h2 id="h_1_2">
-								<span id="st2-4">Preface</span>
-							</h2>
+		<x:scenario label="tts">
+			<x:call>
+				<x:option name="tts" select="true()"/>
+			</x:call>
+			<x:context label="epub.out.fileset port">
+				<x:document type="port" port="epub.out.fileset"/>
+			</x:context>
+			<x:expect label="epub.out.fileset port" type="custom"
+			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="result/mimetype" media-type="text/plain" compression-method="stored"/>
+						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
+						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
+						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/mo/cover.smil" media-type="application/smil+xml"/>
+						<d:file href="result/EPUB/mo/front.smil" media-type="application/smil+xml"/>
+						<d:file href="result/EPUB/mo/chapter.smil" media-type="application/smil+xml"/>
+						<d:file href="result/EPUB/audio/mock.mp3" media-type="audio/mpeg"
+						        original-href="../../../target/generated-test-resources/mock.mp3"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+			<x:expect label="mimetype is first entry" type="xpath" test="contains(/*/d:file[1]/@href,'mimetype')"/>
+			<x:context label="package.opf">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
+			</x:context>
+			<x:expect label="package.opf" type="custom"
+			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
+				<x:document type="inline">
+					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id2" xml:lang="en">
+						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:title id="title2">minimal</dc:title>
+							<dc:identifier id="pub-id2">id</dc:identifier>
+							<meta refines="#pub-id2" property="identifier-type" scheme="xsd:string">uuid</meta>
+							<dc:language>en</dc:language>
+							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
+							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
+							<dc:date>2020-03-06</dc:date>
+							<meta property="media:duration">00:00:17.122</meta>
+							<meta name="media:duration" content="00:00:17.122"/>
+							<meta property="schema:accessibilityFeature">captions</meta>
+							<meta name="schema:accessibilityFeature" content="captions"/>
+							<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
+							<meta property="media:duration" refines="#item_2">00:00:08.561</meta>
+							<meta property="media:duration" refines="#item_3">00:00:07.338</meta>
+						</metadata>
+						<manifest>
+							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
+							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" media-overlay="item_1"/>
+							<item id="front" href="front.xhtml" media-type="application/xhtml+xml" media-overlay="item_2"/>
+							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml" media-overlay="item_3"/>
+							<item id="item_1" href="mo/cover.smil" media-type="application/smil+xml"/>
+							<item id="item_2" href="mo/front.smil" media-type="application/smil+xml"/>
+							<item id="item_3" href="mo/chapter.smil" media-type="application/smil+xml"/>
+							<item id="item_4" href="audio/mock.mp3" media-type="audio/mpeg"/>
+						</manifest>
+						<spine>
+							<itemref idref="cover"/>
+							<itemref idref="front"/>
+							<itemref idref="chapter"/>
+						</spine>
+					</package>
+				</x:document>
+			</x:expect>
+			<x:context label="nav.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/nav.xhtml')]"/>
+			</x:context>
+			<x:expect label="nav.xhtml" type="compare">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+						</head>
+						<body>
+							<nav epub:type="toc">
+								<h1>Table of contents</h1>
+								<ol>
+									<li> <a href="cover.xhtml#cover"> Cover </a> </li>
+									<li> <a href="front.xhtml#contents"> List of contents </a> </li>
+									<li> <a href="front.xhtml#preface"> Preface </a> </li>
+									<li> <a href="chapter.xhtml#chap_1"> Chapter 1 </a> </li>
+								</ol>
+							</nav>
+							<nav epub:type="page-list" hidden="">
+								<h1>List of pages</h1>
+								<ol>
+									<li> <a href="front.xhtml#page_front_4"> vi </a> </li>
+									<li> <a href="front.xhtml#page_front_5"> v </a> </li>
+									<li> <a href="chapter.xhtml#page_5"> 5 </a> </li>
+								</ol>
+							</nav>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+			<x:context label="cover.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/cover.xhtml')]"/>
+			</x:context>
+			<x:expect label="cover.xhtml" type="compare">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="next" href="front.xhtml"/>
+						</head>
+						<body id="cover" epub:type="cover">
 							<p>
-								<span id="st2-5">...</span>
+								<span id="st1-1">...</span>
 							</p>
-							<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v"/>
-						</section>
-					</body>
-				</html>
-			</x:document>
-		</x:expect>
-		<x:context label="chapter.xhtml">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
-		</x:context>
-		<x:expect label="chapter.xhtml" type="compare">
-			<x:document type="inline">
-				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ssml:alphabet="ipa">
-					<head>
-						<meta charset="UTF-8"/>
-						<title>minimal</title>
-						<meta name="dc:identifier" content="id"/>
-						<link rel="prev" href="front.xhtml"/>
-					</head>
-					<body id="chap_1" epub:type="bodymatter chapter">
-						<h1 id="h_1">
-							<span id="st3-1">Chapter <span ssml:ph="wʌn">I</span></span>
-						</h1>
-						<p>
-							<span id="st3-2">
-								<span id="i3st3-2-no-skippable">This paragraph contains</span>
-								<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
-								<span id="i3st3-2-page_5">a page break.</span>
-							</span>
-						</p>
-					</body>
-				</html>
-			</x:document>
-		</x:expect>
-		<x:context label="cover.smil">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/cover.smil')]"/>
-		</x:context>
-		<x:expect label="cover.smil" type="compare">
-			<x:document type="inline">
-				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
-					<body epub:textref="../cover.xhtml#cover" epub:type="cover">
-						<par>
-							<text src="../cover.xhtml#st1-1"/>
-							<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-						</par>
-					</body>
-				</smil>
-			</x:document>
-		</x:expect>
-		<x:context label="front.smil">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/front.smil')]"/>
-		</x:context>
-		<x:expect label="front.smil" type="compare">
-			<x:document type="inline">
-				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
-					<body epub:textref="../front.xhtml#front" epub:type="frontmatter">
-						<seq epub:textref="../front.xhtml#h_1">
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+			<x:context label="front.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]"/>
+			</x:context>
+			<x:expect label="front.xhtml" type="compare">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="prev" href="cover.xhtml"/>
+							<link rel="next" href="chapter.xhtml"/>
+						</head>
+						<body id="front" epub:type="frontmatter">
+							<h1 id="h_1">
+								<span id="st2-1">Title</span>
+							</h1>
+							<p>
+								<span id="st2-2">...</span>
+							</p>
+							<section id="contents">
+								<h2 id="h_1_1">
+									<span id="st2-3">List of contents</span>
+								</h2>
+								<table>...</table>
+								<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv"
+								     style="visibility: hidden">
+									<span id="st2-4">iv</span>
+								</div>
+							</section>
+							<section id="preface" aria-labelledby="aria_label_1">
+								<h1 id="aria_label_1">
+									<span id="st2-5">Preface</span>
+								</h1>
+								<p>
+									<span id="st2-6">...</span>
+								</p>
+								<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v"
+								     style="visibility: hidden">
+									<span id="st2-7">v</span>
+								</div>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+			<x:context label="chapter.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
+			</x:context>
+			<x:expect label="chapter.xhtml" type="compare">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ssml:alphabet="ipa">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="prev" href="front.xhtml"/>
+						</head>
+						<body id="chap_1" epub:type="bodymatter chapter">
+							<h1 id="h_1">
+								<span id="st3-1">Chapter <span ssml:ph="wʌn">I</span></span>
+							</h1>
+							<p>
+								<span id="st3-2">
+									<span id="i3st3-2-no-skippable">This paragraph contains</span>
+									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"
+									      style="visibility: hidden">5</span>
+									<span id="i3st3-2-page_5">a page break.</span>
+								</span>
+							</p>
+							<figcaption id="caption_1">
+								<strong>
+									<span id="st3-3">
+										Illustration 1 A.
+									</span>
+								</strong>
+								<span id="st3-4">
+									This is an illustration.
+								</span>
+							</figcaption>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+			<x:context label="cover.smil">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/cover.smil')]"/>
+			</x:context>
+			<x:expect label="cover.smil" type="compare">
+				<x:document type="inline">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:textref="../cover.xhtml#cover" epub:type="cover">
 							<par>
-								<text src="../front.xhtml#st2-1"/>
+								<text src="../cover.xhtml#st1-1"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
-						</seq>
-						<par>
-							<text src="../front.xhtml#st2-2"/>
-							<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
-						</par>
-						<seq epub:textref="../front.xhtml#contents">
-							<seq epub:textref="../front.xhtml#h_1_1">
+						</body>
+					</smil>
+				</x:document>
+			</x:expect>
+			<x:context label="front.smil">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/front.smil')]"/>
+			</x:context>
+			<x:expect label="front.smil" type="compare">
+				<x:document type="inline">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:textref="../front.xhtml#front" epub:type="frontmatter">
+							<seq epub:textref="../front.xhtml#h_1">
 								<par>
-									<text src="../front.xhtml#st2-3"/>
+									<text src="../front.xhtml#st2-1"/>
 									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 							</seq>
-						</seq>
-						<seq epub:textref="../front.xhtml#preface">
-							<seq epub:textref="../front.xhtml#h_1_2">
-								<par>
-									<text src="../front.xhtml#st2-4"/>
-									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-								</par>
-							</seq>
 							<par>
-								<text src="../front.xhtml#st2-5"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-							</par>
-						</seq>
-					</body>
-				</smil>
-			</x:document>
-		</x:expect>
-		<x:context label="chapter.smil">
-			<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/chapter.smil')]"/>
-		</x:context>
-		<x:expect label="chapter.smil" type="compare">
-			<x:document type="inline">
-				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
-					<body epub:textref="../chapter.xhtml#chap_1" epub:type="bodymatter chapter">
-						<seq epub:textref="../chapter.xhtml#h_1">
-							<par>
-								<text src="../chapter.xhtml#st3-1"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-							</par>
-						</seq>
-						<seq epub:textref="../chapter.xhtml#st3-2">
-							<par>
-								<text src="../chapter.xhtml#i3st3-2-no-skippable"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-							</par>
-							<par epub:type="pagebreak">
-								<text src="../chapter.xhtml#page_5"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-							</par>
-							<par>
-								<text src="../chapter.xhtml#i3st3-2-page_5"/>
+								<text src="../front.xhtml#st2-2"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 							</par>
-						</seq>
-					</body>
-				</smil>
-			</x:document>
-		</x:expect>
+							<seq epub:textref="../front.xhtml#contents">
+								<seq epub:textref="../front.xhtml#h_1_1">
+									<par>
+										<text src="../front.xhtml#st2-3"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
+									</par>
+								</seq>
+								<seq epub:textref="../front.xhtml#page_front_4" epub:type="pagebreak">
+									<par>
+										<text src="../front.xhtml#st2-4"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+									</par>
+								</seq>
+							</seq>
+							<seq epub:textref="../front.xhtml#preface">
+								<seq epub:textref="../front.xhtml#aria_label_1">
+									<par>
+										<text src="../front.xhtml#st2-5"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+									</par>
+								</seq>
+								<par>
+									<text src="../front.xhtml#st2-6"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+								<seq epub:textref="../front.xhtml#page_front_5" epub:type="pagebreak">
+									<par>
+										<text src="../front.xhtml#st2-7"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+									</par>
+								</seq>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+			</x:expect>
+			<x:context label="chapter.smil">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/chapter.smil')]"/>
+			</x:context>
+			<x:expect label="chapter.smil" type="compare">
+				<x:document type="inline">
+					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+						<body epub:textref="../chapter.xhtml#chap_1" epub:type="bodymatter chapter">
+							<seq epub:textref="../chapter.xhtml#h_1">
+								<par>
+									<text src="../chapter.xhtml#st3-1"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+							</seq>
+							<seq epub:textref="../chapter.xhtml#st3-2">
+								<par>
+									<text src="../chapter.xhtml#i3st3-2-no-skippable"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+								</par>
+								<par epub:type="pagebreak">
+									<text src="../chapter.xhtml#page_5"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+								<par>
+									<text src="../chapter.xhtml#i3st3-2-page_5"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
+								</par>
+							</seq>
+							<seq epub:textref="../chapter.xhtml#caption_1">
+								<par>
+									<text src="../chapter.xhtml#st3-3"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+								</par>
+								<par>
+									<text src="../chapter.xhtml#st3-4"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="sentence-detection">
+			<x:call>
+				<x:option name="tts" select="false()"/>
+				<x:option name="sentence-detection" select="true()"/>
+				<x:option name="sentence-class" select="'sentence'"/>
+			</x:call>
+			<x:context label="epub.out.fileset port">
+				<x:document type="port" port="epub.out.fileset"/>
+			</x:context>
+			<x:expect label="epub.out.fileset port" type="custom"
+			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="result/mimetype" media-type="text/plain" compression-method="stored"/>
+						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
+						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
+						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+			<x:expect label="mimetype is first entry" type="xpath" test="contains(/*/d:file[1]/@href,'mimetype')"/>
+			<x:context label="package.opf">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
+			</x:context>
+			<x:expect label="package.opf" type="custom"
+			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
+				<x:document type="inline">
+					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en">
+						<metadata>
+							<dc:title xmlns:dc="http://purl.org/dc/elements/1.1/" id="title">minimal</dc:title>
+							<dc:identifier xmlns:dc="http://purl.org/dc/elements/1.1/" id="pub-id">id</dc:identifier>
+							<meta refines="#pub-id" property="identifier-type" scheme="xsd:string">uuid</meta>
+							<meta property="dcterms:modified">2020-03-06T12:00:00Z</meta>
+							<dc:date xmlns:dc="http://purl.org/dc/elements/1.1/">2020-03-06</dc:date>
+							<dc:language xmlns:dc="http://purl.org/dc/elements/1.1/">en</dc:language>
+							<meta property="schema:accessibilityFeature">captions</meta>
+						</metadata>
+						<manifest>
+							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
+							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
+							<item id="front" href="front.xhtml" media-type="application/xhtml+xml"/>
+							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/>
+						</manifest>
+						<spine>
+							<itemref idref="cover"/>
+							<itemref idref="front"/>
+							<itemref idref="chapter"/>
+						</spine>
+					</package>
+				</x:document>
+			</x:expect>
+			<x:context label="nav.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/nav.xhtml')]"/>
+			</x:context>
+			<x:expect label="nav.xhtml" type="compare">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+						</head>
+						<body>
+							<nav epub:type="toc">
+								<h1>Table of contents</h1>
+								<ol>
+									<li> <a href="cover.xhtml#cover"> Cover </a> </li>
+									<li> <a href="front.xhtml#contents"> List of contents </a> </li>
+									<li> <a href="front.xhtml#preface"> Preface </a> </li>
+									<li> <a href="chapter.xhtml#chap_1"> Chapter 1 </a> </li>
+								</ol>
+							</nav>
+							<nav epub:type="page-list" hidden="">
+								<h1>List of pages</h1>
+								<ol>
+									<li> <a href="front.xhtml#page_front_4"> vi </a> </li>
+									<li> <a href="front.xhtml#page_front_5"> v </a> </li>
+									<li> <a href="chapter.xhtml#page_5"> 5 </a> </li>
+								</ol>
+							</nav>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+			<x:context label="chapter.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
+			</x:context>
+			<x:expect label="chapter.xhtml" type="compare">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ssml:alphabet="ipa">
+						<head>
+							<meta charset="UTF-8"/>
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="prev" href="front.xhtml"/>
+						</head>
+						<body id="chap_1" epub:type="bodymatter chapter">
+							<h1 id="h_1">
+								<span id="st3-1" class="sentence">Chapter <span ssml:ph="wʌn">I</span></span>
+							</h1>
+							<p>
+								<span id="st3-2" class="sentence">
+									This paragraph contains
+									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"
+									      style="visibility: hidden">5</span>
+									a page break.
+								</span>
+							</p>
+							<figcaption id="caption_1">
+								<strong>
+									<span id="st3-3" class="sentence">
+										Illustration 1 A.
+									</span>
+								</strong>
+								<span id="st3-4" class="sentence">
+									This is an illustration.
+								</span>
+							</figcaption>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+		<x:scenario label="inject-metadata">
+			<x:call>
+				<x:option name="tts" select="false()"/>
+				<x:option name="sentence-detection" select="false()"/>
+				<x:option name="update-lang-attributes" select="true()"/>
+				<x:input port="metadata">
+					<x:document xmlns="http://www.idpf.org/2007/opf" type="inline">
+						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:identifier id="pub-id">new-id</dc:identifier>
+							<meta refines="#title" property="title-type">main</meta> <!-- not valid -->
+							<dc:creator id="creator">Bert</dc:creator>
+							<meta refines="#creator" property="role" scheme="marc:relators">aut</meta>
+							<meta property="schema:accessModeSufficient">textual,visual</meta>
+							<meta property="schema:accessModeSufficient">textual</meta>
+							<meta property="schema:accessibilityFeature">pageNavigation</meta>
+							<dc:language>en-GB</dc:language>
+						</metadata>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="epub.out.fileset port">
+				<x:document type="port" port="epub.out.fileset"/>
+			</x:context>
+			<x:expect label="epub.out.fileset port" type="custom"
+			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="result/mimetype" media-type="text/plain" compression-method="stored"/>
+						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
+						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
+						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+			<x:context label="package.opf">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
+			</x:context>
+			<x:expect label="package.opf" type="custom"
+			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
+				<x:document type="inline">
+					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en-GB">
+						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:title id="title2">minimal</dc:title>
+							<dc:identifier id="pub-id">new-id</dc:identifier>
+							<dc:language>en-GB</dc:language>
+							<meta property="dcterms:modified">2021-02-01T16:03:09Z</meta>
+							<meta name="dcterms:modified" content="2021-02-01T16:03:09Z"/>
+							<dc:creator id="creator">Bert</dc:creator>
+							<meta refines="#creator" property="role" scheme="marc:relators">aut</meta>
+							<dc:date>2020-03-06</dc:date>
+							<meta property="schema:accessModeSufficient">textual,visual</meta>
+							<meta name="schema:accessModeSufficient" content="textual,visual"/>
+							<meta property="schema:accessModeSufficient">textual</meta>
+							<meta name="schema:accessModeSufficient" content="textual"/>
+							<meta property="schema:accessibilityFeature">pageNavigation</meta>
+							<meta name="schema:accessibilityFeature" content="pageNavigation"/>
+						</metadata>
+						<manifest>
+							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
+							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
+							<item id="front" href="front.xhtml" media-type="application/xhtml+xml"/>
+							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/>
+						</manifest>
+						<spine>
+							<itemref idref="cover"/>
+							<itemref idref="front"/>
+							<itemref idref="chapter"/>
+						</spine>
+					</package>
+				</x:document>
+			</x:expect>
+			<x:context label="cover.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/cover.xhtml')]"/>
+			</x:context>
+			<x:expect label="cover.xhtml" type="compare">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB" lang="en-GB">
+						<head>
+							<meta charset="UTF-8" />
+							<title>minimal</title>
+							<meta name="dc:identifier" content="id"/>
+							<link rel="next" href="front.xhtml" />
+						</head>
+						<body id="cover" epub:type="cover">
+							<p>...</p>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
 	</x:scenario>
 	
 	<x:scenario label="valentin">
@@ -526,6 +775,7 @@
 			<x:call>
 				<x:option name="braille" select="true()"/>
 				<x:option name="tts" select="false()"/>
+				<x:option name="sentence-detection" select="false()"/>
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -536,30 +786,20 @@
 					<d:fileset>
 						<d:file href="result/mimetype" compression-method="stored"
 						        original-href="../resources/valentin.epub!/mimetype"/>
-						<d:file href="result/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-1-cover.xhtml"/>
-						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml"
+						<d:file href="result/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"
 						        original-href="../resources/valentin.epub!/EPUB/package.opf"/>
-						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/nav.xhtml"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"
 						        original-href="../resources/valentin.epub!/EPUB/nav.ncx"/>
-						<d:file href="result/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-9-footnotes.xhtml"/>
-						<d:file href="result/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-5-chapter.xhtml"/>
-						<d:file href="result/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-6-rearnotes.xhtml"/>
-						<d:file href="result/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-7-chapter.xhtml"/>
-						<d:file href="result/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-8-conclusion.xhtml"/>
-						<d:file href="result/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-4-chapter.xhtml"/>
-						<d:file href="result/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-2-frontmatter.xhtml"/>
-						<d:file href="result/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/C00000-3-chapter.xhtml"/>
+						<d:file href="result/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/css/accessibility.css" media-type="text/css"
 						        original-href="../resources/valentin.epub!/EPUB/css/accessibility.css"/>
 						<d:file href="result/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"
@@ -598,7 +838,7 @@
 						<d:file href="result/EPUB/C00000-9-footnotes_braille.css" media-type="text/plain"/>
 						<d:file href="result/EPUB/nav_braille.css" media-type="text/plain"/>
 						<d:file href="result/META-INF/metadata.xml"/>
-						<d:file href="result/EPUB/package-braille.opf" media-type="application/oebps-package+xml"/>
+						<d:file href="result/EPUB/package-braille.opf" media-type="application/oebps-package+xml" indent="true"/>
 						<d:file href="result/EPUB/renditionMapping.html" indent="true"/>
 					</d:fileset>
 				</x:document>
@@ -801,9 +1041,8 @@
 						<d:file href="result/mimetype" compression-method="stored"
 						        original-href="../resources/valentin.epub!/mimetype"/>
 						<d:file href="result/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml"
-						        original-href="../resources/valentin.epub!/EPUB/nav.xhtml"/>
+						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"
 						        original-href="../resources/valentin.epub!/EPUB/nav.ncx"/>
 						<d:file href="result/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>

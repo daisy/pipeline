@@ -465,4 +465,19 @@ public class TTSRegistryTest {
 		Assert.assertEquals(vendor, v.engine);
 		Assert.assertEquals(voiceName, v.name);
 	}
+
+	@Test
+	public void caseInsensitivity() throws MalformedURLException {
+		String vendor = "Vendor1";
+		String voiceName = "Voice1";
+		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
+		VoiceManager vm = initVoiceManager(extraVoices,
+		                                   registerVoice(vendor, voiceName, "*", "male-adult", 10, extraVoices));
+		boolean[] exactMatch = new boolean[1];
+		Voice v = vm.findAvailableVoice(vendor, voiceName.toLowerCase(), null, null, exactMatch);
+		Assert.assertTrue(exactMatch[0]);
+		Assert.assertNotNull(v);
+		Assert.assertEquals(vendor, v.engine);
+		Assert.assertEquals(voiceName, v.name);
+	}
 }

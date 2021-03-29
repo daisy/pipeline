@@ -82,6 +82,10 @@
                                                    's'))"/>
     </xsl:template>
 
+    <xsl:template match="@systemRequired">
+        <xsl:attribute name="system-required" select="string(.)"/>
+    </xsl:template>
+
     <xsl:template match="/*/@version"/>
 
     <!-- ensure single top-level seq -->

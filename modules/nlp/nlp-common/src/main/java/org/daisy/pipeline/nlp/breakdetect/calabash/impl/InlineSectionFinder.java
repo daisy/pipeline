@@ -103,16 +103,14 @@ public class InlineSectionFinder {
 
 			XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
 			if (node.getNodeName() != null
-			        && mSpecs.inlineElements.contains(node.getNodeName().getLocalName())
+			        && mSpecs.inlineElements.test(node)
 			        && (!mUnsplittable.contains(node.getUnderlyingNode()))) {
 
-				String name = node.getNodeName().getLocalName();
-
 				//*** inline element ***
-				if (mSpecs.ensureSentenceBefore.contains(name)) {
+				if (mSpecs.ensureSentenceBefore.test(node)) {
 					addToSection(null, level, LanguageUtils.getFullStopSymbol(lang));
 				}
-				if (mSpecs.ensureWordBefore.contains(name)) {
+				if (mSpecs.ensureWordBefore.test(node)) {
 					addToSection(null, level, LanguageUtils.getCommaSymbol(lang));
 				}
 
@@ -126,10 +124,10 @@ public class InlineSectionFinder {
 					}
 				}
 
-				if (mSpecs.ensureWordAfter.contains(name)) {
+				if (mSpecs.ensureWordAfter.test(node)) {
 					addToSection(null, level, LanguageUtils.getCommaSymbol(lang));
 				}
-				if (mSpecs.ensureSentenceAfter.contains(name)) {
+				if (mSpecs.ensureSentenceAfter.test(node)) {
 					addToSection(null, level, LanguageUtils.getFullStopSymbol(lang));
 				}
 			} else {

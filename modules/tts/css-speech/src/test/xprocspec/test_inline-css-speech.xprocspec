@@ -136,4 +136,49 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="pseudo element">
+    <x:call step="px:css-speech-cascade">
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="file:/tmp/dtbook.xml">
+          <html>
+            <body>
+              <span role="doc-pagebreak" aria-label="5"/>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="file:/tmp/dtbook.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="config">
+        <x:document type="inline">
+          <config>
+            <css>
+              *[role~=doc-pagebreak]::before {
+                content: 'page ';
+              }
+              *[role~=doc-pagebreak]:blank[aria-label]::before {
+                content: 'page ' attr(aria-label);
+              }
+            </css>
+          </config>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result.in-memory" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <span role="doc-pagebreak" aria-label="5" tts:before="page 5"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>
