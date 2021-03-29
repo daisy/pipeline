@@ -26,7 +26,7 @@
     <eclipse.persistence.version>2.4.2</eclipse.persistence.version>
     <eclipse.persistence.jpa.version>2.4.2-M5</eclipse.persistence.jpa.version>
     <eclipse.persistence.eclipselink.version>2.4.0</eclipse.persistence.eclipselink.version>
-    <guava.version>24.0-android</guava.version>
+    <guava.version>29.0-android</guava.version>
     <javax.persistence.version>2.0.3</javax.persistence.version>
     <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
     <jing.version>20151127.0.1</jing.version>
