@@ -198,6 +198,7 @@
 						</config>
 					</x:document>
 				</x:input>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/tts/')"/>
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -540,6 +541,7 @@
 		<x:scenario label="ensure-pagenum-text">
 			<x:call>
 				<x:option name="ensure-pagenum-text" select="'hidden'"/>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/ensure-pagenum-text/')"/>
 			</x:call>
 			<x:context label="front.xhtml">
 				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]
@@ -559,6 +561,7 @@
 				<x:option name="tts" select="false()"/>
 				<x:option name="sentence-detection" select="true()"/>
 				<x:option name="sentence-class" select="'sentence'"/>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/sentence-detection/')"/>
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -710,6 +713,7 @@
 						</metadata>
 					</x:document>
 				</x:input>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/inject-metadata/')"/>
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -831,6 +835,7 @@
 					</config>
 				</x:document>
 			</x:input>
+			<x:option name="temp-dir" select="concat($temp-dir,'valentin/')"/>
 		</x:call>
 		<x:scenario label="braille-rendition">
 			<x:call>

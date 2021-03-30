@@ -1,5 +1,18 @@
 package com.textalk;
 
+import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.library.DefaultStep;
+import com.xmlcalabash.runtime.XAtomicStep;
+
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+
+import org.osgi.service.component.annotations.Component;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -13,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -354,6 +369,64 @@ public class AppendLegal {
             al.appendLegalDoc(new File(args[0]), new File(args[1]));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    ////////// XProc interface //////////
+
+    /**
+     * @author bertfrees
+     */
+    public static class Step extends DefaultStep implements XProcStep {
+
+        @Component(
+            name = "pxi:add-legal-doc",
+            service = { XProcStepProvider.class },
+            property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}add-legal-doc" }
+        )
+        public static class Provider implements XProcStepProvider {
+            @Override
+            public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+                return new Step(runtime, step);
+            }
+        }
+
+        public Step(XProcRuntime runtime, XAtomicStep step) {
+            super(runtime, step);
+        }
+
+        private final static QName INPUT = new QName("input");
+        private final static QName OUTPUT = new QName("output");
+
+        @Override
+        public void run() throws SaxonApiException {
+            super.run();
+            AppendLegal al = new AppendLegal();
+            File input; {
+                String i = getOption(INPUT).getString();
+                try {
+                    input = new File(new URI(i));
+                } catch (IllegalArgumentException|URISyntaxException e) {
+                    throw new XProcException(step.getStep(), "Invalid input file specified: " + i);
+                }
+            }
+            File output; {
+                String o = getOption(OUTPUT).getString();
+                try {
+                    output = new File(new URI(o));
+                } catch (IllegalArgumentException|URISyntaxException e) {
+                    throw new XProcException(step.getStep(), "Invalid output file specified: " + o);
+                }
+            }
+            try {
+                al.appendLegalDoc(input, output);
+            } catch (Exception e) {
+                throw new XProcException(step.getNode(), e);
+            }
+        }
+
+        @Override
+        public void reset() {
         }
     }
 }
