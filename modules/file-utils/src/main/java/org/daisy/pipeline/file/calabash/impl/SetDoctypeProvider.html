@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>SetDoctypeProvider xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/file-utils/src/main/java/stylesheet.css">
 </head>
 <body>
 <pre>
@@ -46,21 +47,21 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}set-doctype"</span> }
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  )
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctypeProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctypeProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Override
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctype</a>(runtime, step);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctype</a>(runtime, step);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctype</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctype</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _href = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"href"</span>);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _doctype = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"doctype"</span>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _encoding = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"encoding"</span>);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">private</strong> WritablePipe result = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">public</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctype</a>(XProcRuntime runtime, XAtomicStep step) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/SetDoctypeProvider.html">SetDoctype</a>(XProcRuntime runtime, XAtomicStep step) {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			<strong class="jxr_keyword">super</strong>(runtime,step);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		}
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
@@ -231,35 +232,35 @@
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 					
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '!' &amp;&amp; nextNextCharacter == '-' &amp;&amp; nextNextNextCharacter == '-') {
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 					<em class="jxr_comment">// "&lt;!--"</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \&quot;&lt;!--\&quot;"</span>);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;!--\""</span>);
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 					isReadingComment = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 					
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '-' &amp;&amp; nextCharacter == '-' &amp;&amp; nextNextCharacter == '&gt;' &amp;&amp; isReadingComment) {
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 					<em class="jxr_comment">// "--&gt;" and is reading comment</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \&quot;--&gt;\&quot; and is not reading comment"</span>);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"--&gt;\" and is not reading comment"</span>);
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 					isReadingComment = false;
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 					skipChars = 2;
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 					
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '?' &amp;&amp; !isReadingComment) {
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 					<em class="jxr_comment">// "&lt;?" and is not reading comment</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \&quot;&lt;?\&quot; and is not reading comment"</span>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;?\" and is not reading comment"</span>);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 					isReadingPI = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '!' &amp;&amp; <span class="jxr_string">"DdEeAaNn"</span>.indexOf(<span class="jxr_string">""</span>+nextNextCharacter) != -1 &amp;&amp; !isReadingComment) {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 					<em class="jxr_comment">// "&lt;!D" or "&lt;!E" etc. and is not reading comment</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \&quot;&lt;!D\&quot; or \&quot;&lt;!E\&quot; etc. and is not reading comment"</span>);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;!D\" or \"&lt;!E\" etc. and is not reading comment"</span>);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 					isReadingDoctype++;
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 					foundDoctype = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '?' &amp;&amp; nextCharacter == '&gt;' &amp;&amp; !isReadingComment &amp;&amp; isReadingAttribute == ' ') {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 					<em class="jxr_comment">// "?&gt;" and is not reading comment or attribute</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \&quot;?&gt;\&quot; and is not reading comment or attribute"</span>);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"?&gt;\" and is not reading comment or attribute"</span>);
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 					isReadingPI = false;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 					skipChars = 1;
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&gt;' &amp;&amp; !isReadingComment &amp;&amp; isReadingAttribute == ' ') {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 					<em class="jxr_comment">// "&gt;" and is not reading comment or attribute</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \&quot;&gt;\&quot; and is not reading comment or attribute"</span>);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&gt;\" and is not reading comment or attribute"</span>);
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 					
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 					isReadingDoctype--;
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 					
@@ -274,7 +275,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 						<strong class="jxr_keyword">break</strong>; <em class="jxr_comment">// done reading doctype</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 					}
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> ((currentCharacter == '\'' || currentCharacter == '&quot;') &amp;&amp; (isReadingElement || isReadingPI || isReadingDoctype &gt; 0) &amp;&amp; (isReadingAttribute == currentCharacter || isReadingAttribute == ' ')) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> ((currentCharacter == '\'' || currentCharacter == '"') &amp;&amp; (isReadingElement || isReadingPI || isReadingDoctype &gt; 0) &amp;&amp; (isReadingAttribute == currentCharacter || isReadingAttribute == ' ')) {
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 					<strong class="jxr_keyword">if</strong> (currentCharacter != isReadingAttribute) {
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 						<em class="jxr_comment">// found attribute value start</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 						logger.debug(<span class="jxr_string">"SetDoctype: found attribute value start"</span>);
@@ -301,7 +302,7 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 				}
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 				
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 				<strong class="jxr_keyword">if</strong> (!foundDoctype) {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 					logger.debug(<span class="jxr_string">"SetDoctype: not found doctype yet, writing: \&quot;"</span>+currentCharacter+<span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 					logger.debug(<span class="jxr_string">"SetDoctype: not found doctype yet, writing: \""</span>+currentCharacter+<span class="jxr_string">"\""</span>);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 					writer.write(currentCharacter);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 				}
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			}
@@ -339,7 +340,7 @@
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> }
 </pre>
-<hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
+<hr>
+<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

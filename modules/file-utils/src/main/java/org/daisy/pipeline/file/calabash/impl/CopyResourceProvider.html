@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>CopyResourceProvider xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/file-utils/src/main/java/stylesheet.css">
 </head>
 <body>
 <pre>
@@ -46,7 +47,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}copy-resource"</span> }
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  )
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResourceProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResourceProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_javadoccomment">/** The logger. */</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	Logger logger = LoggerFactory.getLogger(<strong class="jxr_keyword">this</strong>.getClass());
@@ -56,7 +57,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Override
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResource</a>(runtime, step);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResource</a>(runtime, step);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -71,7 +72,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResource</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResource</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _href = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"href"</span>);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _target = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"target"</span>);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _fail_on_error = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"fail-on-error"</span>);
@@ -82,7 +83,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">		 * Creates a new instance of CopyResource </em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">public</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResource</a>(XProcRuntime runtime, XAtomicStep step) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/CopyResourceProvider.html">CopyResource</a>(XProcRuntime runtime, XAtomicStep step) {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">super</strong>(runtime,step);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		}
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
@@ -169,7 +170,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> }
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 </pre>
-<hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
+<hr>
+<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

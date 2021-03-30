@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>XMLPeekProvider xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/file-utils/src/main/java/stylesheet.css">
 </head>
 <body>
 <pre>
@@ -41,17 +42,17 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}file-xml-peek"</span> }
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  )
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeekProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeekProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Override
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeek</a>(runtime, step);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeek</a>(runtime, step);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 * Returns the root element of the XML document referenced in `href`, including its attributes and namespaces.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeek</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeek</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _href = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"href"</span>);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">private</strong> WritablePipe result = <strong class="jxr_keyword">null</strong>;
@@ -70,7 +71,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">private</strong> byte byteFE = (byte) 254;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">private</strong> byte byteFF = (byte) 255;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">public</strong> <a href="../../../../../../org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeek</a>(XProcRuntime runtime, XAtomicStep step) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/XMLPeekProvider.html">XMLPeek</a>(XProcRuntime runtime, XAtomicStep step) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">super</strong>(runtime,step);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		}
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
@@ -176,7 +177,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!isReadingComment &amp;&amp; previousCharacter == '&lt;' &amp;&amp; (character != '!' &amp;&amp; character != '?')) {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 						isReadingElement = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 						
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isReadingElement &amp;&amp; (character == '\'' || character == '&quot;') &amp;&amp; (isReadingAttribute == character || isReadingAttribute == ' ')) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isReadingElement &amp;&amp; (character == '\'' || character == '"') &amp;&amp; (isReadingAttribute == character || isReadingAttribute == ' ')) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 						<strong class="jxr_keyword">if</strong> (character != isReadingAttribute) {
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 							isReadingAttribute = character;
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 						} <strong class="jxr_keyword">else</strong> {
@@ -256,7 +257,7 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> }
 </pre>
-<hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
+<hr>
+<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

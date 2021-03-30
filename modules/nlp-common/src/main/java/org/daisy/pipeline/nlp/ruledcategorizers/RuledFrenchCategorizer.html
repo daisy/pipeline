@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>RuledFrenchCategorizer xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/nlp-common/src/main/java/stylesheet.css">
 </head>
 <body>
 <pre>
@@ -16,29 +17,29 @@
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.nlp.impl.matchrules.CompactAbbrMatchRule;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.nlp.impl.matchrules.RegexMatchRule;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/daisy/pipeline/nlp/ruledcategorizers/RuledFrenchCategorizer.html">RuledFrenchCategorizer</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/daisy/pipeline/nlp/ruledcategorizers/RuledMultilangCategorizer.html">RuledMultilangCategorizer</a> {
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/ruledcategorizers/RuledFrenchCategorizer.html">RuledFrenchCategorizer</a> <strong class="jxr_keyword">extends</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/ruledcategorizers/RuledMultilangCategorizer.html">RuledMultilangCategorizer</a> {
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  	@Override
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> init(MatchMode matchMode) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  		<strong class="jxr_keyword">super</strong>.init(matchMode);
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  		RegexMatchRule rsm = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/daisy/pipeline/nlp/impl/matchrules/RegexMatchRule.html">RegexMatchRule</a>(Category.COMMON,
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  		RegexMatchRule rsm = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/impl/matchrules/RegexMatchRule.html">RegexMatchRule</a>(Category.COMMON,
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  		        RuledMultilangCategorizer.COMMON_WORD_MAX_PRIORITY + 1, <strong class="jxr_keyword">true</strong>, mMatchMode);
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  		rsm.init(CommonWordPattern + <span class="jxr_string">"[’']?"</span>);
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  		addRule(rsm);
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  		rsm = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/daisy/pipeline/nlp/impl/matchrules/RegexMatchRule.html">RegexMatchRule</a>(Category.TIME, NUMBER_COMPOSED_MAX_PRIORITY, <strong class="jxr_keyword">true</strong>, mMatchMode);
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  		rsm = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/impl/matchrules/RegexMatchRule.html">RegexMatchRule</a>(Category.TIME, NUMBER_COMPOSED_MAX_PRIORITY, <strong class="jxr_keyword">true</strong>, mMatchMode);
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  		rsm.init(<span class="jxr_string">"(2[0-4]|[01][0-9])[ ]?h[ ]?[0-6][0-9](?![0-9])"</span>);
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  		addRule(rsm);
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  		<em class="jxr_comment">//// *** common abbreviations that should not end sentences ****</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  		<strong class="jxr_keyword">final</strong> String dictFolder = <span class="jxr_string">"dictionaries"</span>;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		AbbrMatchRule amr = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/daisy/pipeline/nlp/impl/matchrules/AbbrMatchRule.html">AbbrMatchRule</a>(Category.ABBREVIATION, DICTIONARY_MAX_PRIORITY,
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		AbbrMatchRule amr = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/impl/matchrules/AbbrMatchRule.html">AbbrMatchRule</a>(Category.ABBREVIATION, DICTIONARY_MAX_PRIORITY,
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  		        <strong class="jxr_keyword">true</strong>, mMatchMode, false, Locale.FRANCE);
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  		amr.init(ResourceUtils.readLines(dictFolder, <span class="jxr_string">"dot_abbr_fr.txt"</span>));
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		addRule(amr);
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		CompactAbbrMatchRule cmr = <strong class="jxr_keyword">new</strong> <a href="../../../../../org/daisy/pipeline/nlp/impl/matchrules/CompactAbbrMatchRule.html">CompactAbbrMatchRule</a>(Category.ABBREVIATION,
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		CompactAbbrMatchRule cmr = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/impl/matchrules/CompactAbbrMatchRule.html">CompactAbbrMatchRule</a>(Category.ABBREVIATION,
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		        DICTIONARY_MAX_PRIORITY, <strong class="jxr_keyword">true</strong>, mMatchMode, false, Locale.FRANCE);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		cmr.init(ResourceUtils.readLines(dictFolder, <span class="jxr_string">"compact_abbr_fr.txt"</span>));
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		addRule(cmr);
@@ -46,7 +47,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  }
 </pre>
-<hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2020 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
+<hr>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

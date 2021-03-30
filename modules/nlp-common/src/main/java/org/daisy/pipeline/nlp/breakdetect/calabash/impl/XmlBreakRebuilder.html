@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>XmlBreakRebuilder xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/nlp-common/src/main/java/stylesheet.css">
 </head>
 <body>
 <pre>
@@ -51,32 +52,32 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * to find the common ancestor of a group of leaves.</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * </em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/XmlBreakRebuilder.html">XmlBreakRebuilder</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">InlineSectionProcessor</a> {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/XmlBreakRebuilder.html">XmlBreakRebuilder</a> <strong class="jxr_keyword">implements</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">InlineSectionProcessor</a> {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">private</strong> TreeWriter mTreeWriter;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> Map&lt;Locale, LexerToken&gt; mLexers;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">StringComposer</a> mStringComposer;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/FormatSpecifications.html">FormatSpecifications</a> mSpecs;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">StringComposer</a> mStringComposer;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/FormatSpecifications.html">FormatSpecifications</a> mSpecs;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> XdmNode mPreviousNode; <em class="jxr_comment">//last node written</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> mPreviousLevel;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/DuplicationManager.html">DuplicationManager</a> mDuplicationManager;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/DuplicationManager.html">DuplicationManager</a> mDuplicationManager;
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> String mCurrentLang;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/LangDetector.html">LangDetector</a> mLangDetector;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/LangDetector.html">LangDetector</a> mLangDetector;
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> List&lt;String&gt; mParsingErrors;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">public</strong> XdmNode rebuild(<a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/TreeWriterFactory.html">TreeWriterFactory</a> treeWriterFactory,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">public</strong> XdmNode rebuild(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/TreeWriterFactory.html">TreeWriterFactory</a> treeWriterFactory,
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	        Map&lt;Locale, LexerToken&gt; lexers, XdmNode doc, FormatSpecifications specs,
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	        LangDetector langDetector, <strong class="jxr_keyword">boolean</strong> forbidAnyDup, List&lt;String&gt; parsingErrors)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	        <strong class="jxr_keyword">throws</strong> LexerInitException {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		mLexers = lexers;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		mSpecs = specs;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		mLangDetector = langDetector;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		mStringComposer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">StringComposer</a>();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		mStringComposer = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">StringComposer</a>();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		mPreviousNode = getRoot(doc);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		mPreviousLevel = 0;
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		mParsingErrors = parsingErrors;
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		mDuplicationManager = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/DuplicationManager.html">DuplicationManager</a>(forbidAnyDup);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		mDuplicationManager = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/DuplicationManager.html">DuplicationManager</a>(forbidAnyDup);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		Set&lt;NodeInfo&gt; unsplittable = <strong class="jxr_keyword">new</strong> HashSet&lt;NodeInfo&gt;();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		List&lt;NodeInfo&gt; duplicated;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
@@ -95,7 +96,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  					mTreeWriter.addAttributes(root);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  					mTreeWriter.addNamespace(mSpecs.tmpNsPrefix, mSpecs.tmpNs);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					<strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionFinder.html">InlineSectionFinder</a>().find(root, mPreviousLevel, specs, <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionFinder.html">InlineSectionFinder</a>().find(root, mPreviousLevel, specs, <strong class="jxr_keyword">this</strong>,
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  					        unsplittable);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  					closeAllElementsUntil(root, 0);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  					<strong class="jxr_keyword">break</strong>;
@@ -130,7 +131,7 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">return</strong> res;
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addOneWord(<a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a> word, List&lt;Leaf&gt; leaves, List&lt;String&gt; text) {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addOneWord(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a> word, List&lt;Leaf&gt; leaves, List&lt;String&gt; text) {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		Leaf wordParent = deepestAncestorOf(leaves, word.firstSegment, word.lastSegment);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">if</strong> (wordParent.formatting == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">return</strong>;
@@ -257,7 +258,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		}
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 	}
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> startLexingElement(<a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a> wordOrsentenceParent, QName elementToWrite) {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> startLexingElement(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a> wordOrsentenceParent, QName elementToWrite) {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		XdmNode[] path = <strong class="jxr_keyword">new</strong> XdmNode[wordOrsentenceParent.level + 1];
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<em class="jxr_comment">//*** Find the deepest common ancestor. ***</em>
@@ -302,7 +303,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		mPreviousLevel = wordOrsentenceParent.level;
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 	}
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeTree(<a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a> leaf, String text) {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeTree(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a> leaf, String text) {
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">if</strong> (text != <strong class="jxr_keyword">null</strong> &amp;&amp; text.isEmpty())
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">return</strong>; <em class="jxr_comment">//the fillGap can call writeTree with empty strings</em>
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 
@@ -403,7 +404,7 @@
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_comment">//the return object is not really a Tree Leaf but it is convenient to carry the node's level</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a> deepestAncestorOf(List&lt;Leaf&gt; leaves, <strong class="jxr_keyword">int</strong> from, <strong class="jxr_keyword">int</strong> to) {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a> deepestAncestorOf(List&lt;Leaf&gt; leaves, <strong class="jxr_keyword">int</strong> from, <strong class="jxr_keyword">int</strong> to) {
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">if</strong> (from == to) {
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">return</strong> leaves.get(from);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		}
@@ -436,7 +437,7 @@
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			--minLevel;
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 		}
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		Leaf result = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a>();
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		Leaf result = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/InlineSectionProcessor.html">Leaf</a>();
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 		result.formatting = all[0];
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 		result.level = minLevel;
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 
@@ -459,7 +460,7 @@
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 	}
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> }
 </pre>
-<hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2020 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
+<hr>
+<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

@@ -1,8 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>CssCascadeStep xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/css-utils/src/main/java/stylesheet.css">
 </head>
 <body>
 <pre>
@@ -49,15 +50,15 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">CssCascadeStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">CssCascadeStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> ReadablePipe sourcePipe = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> ReadablePipe contextPipe = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">private</strong> WritablePipe resultPipe = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> Map&lt;String,String&gt; sassVariables = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../org/daisy/pipeline/css/calabash/impl/InMemoryURIResolver.html">InMemoryURIResolver</a> inMemoryResolver;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/InMemoryURIResolver.html">InMemoryURIResolver</a> inMemoryResolver;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> URIResolver cssURIResolver;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../org/daisy/pipeline/css/SassCompiler.html">SassCompiler</a> sassCompiler;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/SassCompiler.html">SassCompiler</a> sassCompiler;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Iterable&lt;CssCascader&gt; inliners;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _<strong class="jxr_keyword">default</strong>_stylesheet = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"default-stylesheet"</span>);
@@ -69,15 +70,15 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_TYPES = <span class="jxr_string">"text/css text/x-scss"</span>;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName DEFAULT_ATTRIBUTE_NAME = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"style"</span>);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">CssCascadeStep</a>(XProcRuntime runtime, XAtomicStep step, Iterable&lt;CssCascader&gt; inliners, <strong class="jxr_keyword">final</strong> URIResolver resolver) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">CssCascadeStep</a>(XProcRuntime runtime, XAtomicStep step, Iterable&lt;CssCascader&gt; inliners, <strong class="jxr_keyword">final</strong> URIResolver resolver) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">super</strong>(runtime, step);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">this</strong>.inliners = inliners;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// URI resolver that can resolve in-memory documents</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		inMemoryResolver = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/css/calabash/impl/InMemoryURIResolver.html">InMemoryURIResolver</a>();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		inMemoryResolver = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/InMemoryURIResolver.html">InMemoryURIResolver</a>();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<em class="jxr_comment">// URI resolver for CSS files</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// first check memory and fall back to the resolver from module-registry</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		cssURIResolver = fallback(inMemoryResolver, resolver);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		sassCompiler = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/css/SassCompiler.html">SassCompiler</a>(cssURIResolver, Collections.unmodifiableMap(sassVariables));
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		sassCompiler = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/SassCompiler.html">SassCompiler</a>(cssURIResolver, Collections.unmodifiableMap(sassVariables));
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Override
@@ -120,7 +121,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">super</strong>.run();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			Medium medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			List&lt;String&gt; types = Arrays.asList(getOption(_type, DEFAULT_TYPES).trim().split(<span class="jxr_string">"&#92;&#92;s+"</span>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			List&lt;String&gt; types = Arrays.asList(getOption(_type, DEFAULT_TYPES).trim().split(<span class="jxr_string">"\\s+"</span>));
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">if</strong> (!types.contains(<span class="jxr_string">"text/css"</span>))
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"'type' option must contain 'text/css'"</span>);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">boolean</strong> enableSass = types.contains(<span class="jxr_string">"text/x-scss"</span>);
@@ -163,14 +164,14 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}css-cascade"</span> }
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	)
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">private</strong> URIResolver resolver;
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;CssCascader&gt; inliners = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		@Override
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">CssCascadeStep</a>(runtime, step, inliners, resolver);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/calabash/impl/CssCascadeStep.html">CssCascadeStep</a>(runtime, step, inliners, resolver);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		@Reference(
@@ -191,11 +192,11 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			cardinality = ReferenceCardinality.MULTIPLE,
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			policy = ReferencePolicy.DYNAMIC
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		)
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> bindCssCascader(<a href="../../../../../../org/daisy/pipeline/css/CssCascader.html">CssCascader</a> inliner) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> bindCssCascader(<a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/CssCascader.html">CssCascader</a> inliner) {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">this</strong>.inliners.add(inliner);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> unbindCssCascader(<a href="../../../../../../org/daisy/pipeline/css/CssCascader.html">CssCascader</a> inliner) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> unbindCssCascader(<a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/CssCascader.html">CssCascader</a> inliner) {
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">this</strong>.inliners.remove(inliner);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		}
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
@@ -204,7 +205,7 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> }
 </pre>
-<hr/>
-<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
+<hr>
+<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>
