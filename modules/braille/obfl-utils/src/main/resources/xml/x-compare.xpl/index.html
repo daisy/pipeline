@@ -1,14 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta charset="utf-8">
-<meta http-equiv="content-language" content="en">
-<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
-<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
-<link rev="doc" href="../x-compare.xpl">
-</head>
-<body><div class="code" about="../x-compare.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"x:obfl-compare"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><meta charset="utf-8"/><meta http-equiv="content-language" content="en"/><link rel="stylesheet" type="text/css" href="http://daisy.github.io/pipeline/css/nxml-mode.css"/><link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico"/><link rev="doc" href="../x-compare.xpl"/></head><body><div class="code" about="../x-compare.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"x:obfl-compare"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;<span class="code-xml-element-local-name">p</span>&gt;Compare two &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://code.google.com/p/obfl"</span>&gt;OBFL&lt;/<span class="code-xml-element-local-name">a</span>&gt; documents as a custom &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://josteinaj.github.io/xprocspec"</span>&gt;XProcSpec&lt;/<span class="code-xml-element-local-name">a</span>&gt; assertion.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
@@ -20,7 +10,7 @@
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/obfl-utils/src/main/resources/xml/compare.xpl" class="source">compare.xpl</a>"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="../compare.xpl" class="source">compare.xpl</a>"</span>/&gt;
     
     &lt;<span class="code-xml-element-prefix">obfl:</span><span class="code-xml-element-local-name">compare</span> <span class="code-xml-attribute-local-name">fail-if-not-equal</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compare"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
@@ -73,5 +63,4 @@
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
     
-&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
-</html>
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body></html>

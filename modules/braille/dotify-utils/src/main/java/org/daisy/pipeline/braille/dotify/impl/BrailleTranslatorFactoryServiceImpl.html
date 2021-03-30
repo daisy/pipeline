@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>BrailleTranslatorFactoryServiceImpl xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/braille/dotify-utils/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -79,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	name = <span class="jxr_string">"org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl"</span>,
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	service = { BrailleTranslatorFactoryService.<strong class="jxr_keyword">class</strong> }
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  )
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFactoryServiceImpl</a> <strong class="jxr_keyword">implements</strong> BrailleTranslatorFactoryService {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFactoryServiceImpl</a> <strong class="jxr_keyword">implements</strong> BrailleTranslatorFactoryService {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCreatedWithSPI() {}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	
@@ -126,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">return</strong> factory;
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BrailleTranslatorFactory factory = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFactoryImpl</a>();
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BrailleTranslatorFactory factory = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFactoryImpl</a>();
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_comment">	 * Mode for pre-translated text with support for text-level CSS and line</em>
@@ -135,10 +134,10 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> String PRE_TRANSLATED_MODE = <span class="jxr_string">"pre-translated-text-css"</span>;
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFactoryImpl</a> <strong class="jxr_keyword">implements</strong> BrailleTranslatorFactory {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFactoryImpl</a> <strong class="jxr_keyword">implements</strong> BrailleTranslatorFactory {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">public</strong> BrailleTranslator newTranslator(String locale, String mode) <strong class="jxr_keyword">throws</strong> TranslatorConfigurationException {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">if</strong> (PRE_TRANSLATED_MODE.equals(mode))
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a>();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a>();
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			Matcher m = QUERY.matcher(mode);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">if</strong> (!m.matches())
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TranslatorConfigurationException();
@@ -153,12 +152,12 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 						isPreTranslatedQuery = false;
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 						<strong class="jxr_keyword">break</strong>; }}
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (isPreTranslatedQuery)
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a>();
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a>();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">if</strong> (locale != <strong class="jxr_keyword">null</strong> &amp;&amp; !<span class="jxr_string">"und"</span>.equals(locale))
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 				query = mutableQuery(query).add(<span class="jxr_string">"locale"</span>, locale);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">for</strong> (org.daisy.pipeline.braille.common.BrailleTranslator t : brailleTranslatorProvider.get(query))
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a>(mode, t); }
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a>(mode, t); }
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">catch</strong> (UnsupportedOperationException e) {}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 				MutableQuery q = mutableQuery(query);
@@ -170,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException();
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">if</strong> (!q.isEmpty())
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException();
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a>(mode, NumberBrailleTranslator.getInstance());
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a>(mode, NumberBrailleTranslator.getInstance());
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			} <strong class="jxr_keyword">catch</strong> (NoSuchElementException e) {}
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TranslatorConfigurationException(<span class="jxr_string">"Factory does not support "</span> + locale + <span class="jxr_string">"/"</span> + mode);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		}
@@ -181,8 +180,8 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * {@link BrailleTranslator} wrapper for a {@link org.daisy.pipeline.braille.common.BrailleTranslator}</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * &lt;a href="<a href="http://braillespecs.github.io/braille-css/" class="external-link" target="_blank">http://braillespecs.github.io/braille-css/</a>#h3_white-space-processing"&gt;White space</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * processing&lt;/a&gt; and &lt;a href="<a href="http://braillespecs.github.io/braille-css/" class="external-link" target="_blank">http://braillespecs.github.io/braille-css/</a>#line-breaking"&gt;line</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * &lt;a href="<a href="http://braillespecs.github.io/braille-css/" target="alexandria_uri">http://braillespecs.github.io/braille-css/</a>#h3_white-space-processing"&gt;White space</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * processing&lt;/a&gt; and &lt;a href="<a href="http://braillespecs.github.io/braille-css/" target="alexandria_uri">http://braillespecs.github.io/braille-css/</a>#line-breaking"&gt;line</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * breaking&lt;/a&gt; are done according to braille CSS.</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * White space is normalised. Preserved spaces must have been converted to</em>
@@ -200,13 +199,13 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * Support &lt;code&gt;text-transform&lt;/code&gt; value "&lt;code&gt;-dotify-counter&lt;/code&gt;" which causes numbers</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * to be formatted according to the value of the &lt;code&gt;-dotify-counter-style&lt;/code&gt; property.</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a> <strong class="jxr_keyword">implements</strong> BrailleTranslator {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a> <strong class="jxr_keyword">implements</strong> BrailleTranslator {
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">final</strong> String mode;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText lineBreakingFromStyledText;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille;
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a>(
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">private</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">BrailleTranslatorFromBrailleTranslator</a>(
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 				String mode,
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 				org.daisy.pipeline.braille.common.BrailleTranslator translator)
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<strong class="jxr_keyword">throws</strong> UnsupportedOperationException {
@@ -262,10 +261,10 @@
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 						CSSProperty ws = st.getProperty(<span class="jxr_string">"white-space"</span>);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 						<strong class="jxr_keyword">if</strong> (ws != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 							<strong class="jxr_keyword">if</strong> (ws == WhiteSpace.PRE_WRAP)
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 								s = s.replaceAll(<span class="jxr_string">"[\\x20\t\\u2800]+"</span>, <span class="jxr_string">"$0\u200B"</span>)
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 								     .replaceAll(<span class="jxr_string">"[\\x20\t\\u2800]"</span>, <span class="jxr_string">"\u00A0"</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 								s = s.replaceAll(<span class="jxr_string">"[&#92;&#92;x20\t&#92;&#92;u2800]+"</span>, <span class="jxr_string">"$0\u200B"</span>)
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 								     .replaceAll(<span class="jxr_string">"[&#92;&#92;x20\t&#92;&#92;u2800]"</span>, <span class="jxr_string">"\u00A0"</span>);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 							<strong class="jxr_keyword">if</strong> (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 								s = s.replaceAll(<span class="jxr_string">"[\\n\\r]"</span>, <span class="jxr_string">"\u2028"</span>);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 								s = s.replaceAll(<span class="jxr_string">"[&#92;&#92;n&#92;&#92;r]"</span>, <span class="jxr_string">"\u2028"</span>);
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 							st.removeProperty(<span class="jxr_string">"white-space"</span>); }}
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 					braille.add(s);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 				}
@@ -292,9 +291,9 @@
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * Same as above but assumes that input text exists of only braille and white space</em>
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * characters. Supports CSS properties "word-spacing", "hyphens" and "white-space".</em>
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a> <strong class="jxr_keyword">implements</strong> BrailleTranslator {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a> <strong class="jxr_keyword">implements</strong> BrailleTranslator {
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a>() {}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">private</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/BrailleTranslatorFactoryServiceImpl.html">PreTranslatedBrailleTranslator</a>() {}
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">public</strong> BrailleTranslatorResult translate(Translatable input) <strong class="jxr_keyword">throws</strong> TranslationException {
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">return</strong> translate(cssStyledTextFromTranslatable(input), 0, -1);
@@ -332,10 +331,10 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 						val = style.getProperty(<span class="jxr_string">"white-space"</span>);
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 						<strong class="jxr_keyword">if</strong> (val != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 							<strong class="jxr_keyword">if</strong> (val == WhiteSpace.PRE_WRAP)
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 								text = text.replaceAll(<span class="jxr_string">"[\\x20\t\\u2800]+"</span>, <span class="jxr_string">"$0\u200B"</span>)
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 								           .replaceAll(<span class="jxr_string">"[\\x20\t\\u2800]"</span>, <span class="jxr_string">"\u00A0"</span>);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 								text = text.replaceAll(<span class="jxr_string">"[&#92;&#92;x20\t&#92;&#92;u2800]+"</span>, <span class="jxr_string">"$0\u200B"</span>)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 								           .replaceAll(<span class="jxr_string">"[&#92;&#92;x20\t&#92;&#92;u2800]"</span>, <span class="jxr_string">"\u00A0"</span>);
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 							<strong class="jxr_keyword">if</strong> (val == WhiteSpace.PRE_WRAP || val == WhiteSpace.PRE_LINE)
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 								text = text.replaceAll(<span class="jxr_string">"[\\n\\r]"</span>, <span class="jxr_string">"\u2028"</span>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 								text = text.replaceAll(<span class="jxr_string">"[&#92;&#92;n&#92;&#92;r]"</span>, <span class="jxr_string">"\u2028"</span>);
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 							style.removeProperty(<span class="jxr_string">"white-space"</span>); }
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 						<strong class="jxr_keyword">for</strong> (String prop : style.getPropertyNames())
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 							logger.warn(<span class="jxr_string">"CSS property {} not supported"</span>, style.getSourceDeclaration(prop)); }
@@ -347,7 +346,7 @@
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 					Map&lt;String,String&gt; attrs = styledText.getTextAttributes();
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 					<strong class="jxr_keyword">if</strong> (attrs != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 						<strong class="jxr_keyword">for</strong> (String k : attrs.keySet())
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 							logger.warn(<span class="jxr_string">"Text attribute \"{}:{}\" ignored"</span>, k, attrs.get(k));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 							logger.warn(<span class="jxr_string">"Text attribute \&quot;{}:{}\&quot; ignored"</span>, k, attrs.get(k));
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 					braille.add(text); }
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<strong class="jxr_keyword">if</strong> (wordSpacing &lt; 0) wordSpacing = 1; }
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			StringBuilder brailleString = <strong class="jxr_keyword">new</strong> StringBuilder();
@@ -670,7 +669,7 @@
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 	}
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

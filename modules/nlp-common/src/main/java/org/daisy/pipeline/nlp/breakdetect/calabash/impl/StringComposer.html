@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>StringComposer xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/nlp-common/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -24,9 +23,9 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> * is used for splitting XML content (array of strings) with the LexService</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * interface (single string inputs).</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">StringComposer</a> {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">StringComposer</a> {
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a> {
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a> {
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  		<em class="jxr_comment">// inclusive index of the segment in which the first character is</em>
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> firstSegment;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  		<em class="jxr_comment">// inclusive index of the first character</em>
@@ -39,16 +38,16 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> properNoun;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	}
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">SentencePointer</a> {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a> boundaries;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">SentencePointer</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">public</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a> boundaries;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">public</strong> List&lt;TextPointer&gt; content; <em class="jxr_comment">//optional</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> List&lt;SentencePointer&gt; mSentencePointers = <strong class="jxr_keyword">new</strong> ArrayList&lt;SentencePointer&gt;();
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">private</strong> List&lt;TextPointer&gt; mWordPointers = <strong class="jxr_keyword">new</strong> ArrayList&lt;TextPointer&gt;();
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong>[] mCoordinates = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[2];
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> Matcher mSpaceMatcher = Pattern.compile(<span class="jxr_string">"[\\p{Z}\\s]+"</span>).matcher(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> Matcher mSpaceMatcherEnd = Pattern.compile(<span class="jxr_string">"[\\p{Z}\\s]+$"</span>).matcher(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> Matcher mSpaceMatcher = Pattern.compile(<span class="jxr_string">"[&#92;&#92;p{Z}&#92;&#92;s]+"</span>).matcher(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> Matcher mSpaceMatcherEnd = Pattern.compile(<span class="jxr_string">"[&#92;&#92;p{Z}&#92;&#92;s]+$"</span>).matcher(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> String concat(Collection&lt;String&gt; segments) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
@@ -78,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">if</strong> (s.words != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  				maxContentSize += s.words.size();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> size = mWordPointers.size(); size &lt; maxContentSize; ++size)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			mWordPointers.add(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a>());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			mWordPointers.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a>());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<em class="jxr_comment">//build a reference free of any lexer-helper</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
@@ -98,8 +97,8 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">int</strong>[] coord;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sentences.size(); ++i) {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">if</strong> (mSentencePointers.size() == nrOfSents) {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				SentencePointer sp = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">SentencePointer</a>();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				sp.boundaries = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a>();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				SentencePointer sp = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">SentencePointer</a>();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				sp.boundaries = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/nlp/breakdetect/calabash/impl/StringComposer.html">TextPointer</a>();
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  				mSentencePointers.add(sp);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			Sentence sentence = sentences.get(i);
@@ -204,7 +203,7 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2020 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>ShiftObflMarkerStep xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/braille/dotify-utils/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -56,18 +55,18 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	@Component(
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		name = <span class="jxr_string">"pxi:shift-obfl-marker"</span>,
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc/internal}shift-obfl-marker"</span> }
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	)
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/FileToOBFLStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/FileToOBFLStep.html">Provider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		@Override
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerStep</a>(runtime, step);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerStep</a>(runtime, step);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	
@@ -80,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName CSS__ = <strong class="jxr_keyword">new</strong> QName(XMLNS_CSS, <span class="jxr_string">"_"</span>);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _TYPE = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"type"</span>);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerStep</a>(XProcRuntime runtime, XAtomicStep step) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerStep</a>(XProcRuntime runtime, XAtomicStep step) {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">super</strong>(runtime, step);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	
@@ -104,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> SaxonApiException {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">super</strong>.run();
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerTransform</a>()
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerTransform</a>()
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			.transform(
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 				<strong class="jxr_keyword">new</strong> XMLCalabashInputValue(sourcePipe, runtime),
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 				<strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(resultPipe, runtime))
@@ -114,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), e); }
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerTransform</a> <strong class="jxr_keyword">extends</strong> SingleInSingleOutXMLTransformer {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftObflMarkerTransform</a> <strong class="jxr_keyword">extends</strong> SingleInSingleOutXMLTransformer {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">public</strong> Runnable transform(XMLInputValue&lt;?&gt; source, XMLOutputValue&lt;?&gt; result, InputValue&lt;?&gt; params) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">if</strong> (source == <strong class="jxr_keyword">null</strong> || result == <strong class="jxr_keyword">null</strong>)
@@ -190,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 							<strong class="jxr_keyword">if</strong> (isInlineBox) {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 								<strong class="jxr_keyword">if</strong> (shiftedMarker != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 									<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"coding error"</span>);
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 								shiftedMarker = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftedMarker</a>();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 								shiftedMarker = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftedMarker</a>();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 								writer.writeEvent(shiftedMarker); }
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 							<strong class="jxr_keyword">if</strong> (isInlineBox)
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 								insideInlineBox = false;
@@ -213,7 +212,7 @@
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e); }
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftedMarker</a> <strong class="jxr_keyword">implements</strong> FutureWriterEvent {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.html">ShiftedMarker</a> <strong class="jxr_keyword">implements</strong> FutureWriterEvent {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 			
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">private</strong> List&lt;String&gt; marker;
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> ready = false;
@@ -264,7 +263,7 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

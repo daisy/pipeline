@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>TextCategorizer xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/nlp-common/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -18,10 +17,10 @@
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> * </em>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> * - PREFIX_MATCH: try to categorize the longest prefix match</em>
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">TextCategorizer</a> {
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  	<strong class="jxr_keyword">protected</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">MatchMode</a> mMatchMode = MatchMode.FULL_MATCH;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">TextCategorizer</a> {
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  	<strong class="jxr_keyword">protected</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">MatchMode</a> mMatchMode = MatchMode.FULL_MATCH;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  	<strong class="jxr_keyword">public</strong> enum <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> {
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  	<strong class="jxr_keyword">public</strong> enum <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> {
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  		COMMON,
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  		UNKNOWN,
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  		PROPER_NOUN,
@@ -47,7 +46,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		NUMBERING_ITEM
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	};
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isProperNoun(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> c) {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isProperNoun(<a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> c) {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">switch</strong> (c) {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">case</strong> PROPER_NOUN:
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">case</strong> PROPER_NOUN_PLACE:
@@ -58,7 +57,7 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		}
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSpeakable(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> c) {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSpeakable(<a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> c) {
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">switch</strong> (c) {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">case</strong> SPACE:
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">case</strong> PUNCTUATION:
@@ -69,17 +68,17 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		}
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a> {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> category;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a> {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">public</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">Category</a> category;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">public</strong> String word;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> enum <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">MatchMode</a> {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> enum <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">MatchMode</a> {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		FULL_MATCH,
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		PREFIX_MATCH
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> init(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">MatchMode</a> mode) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> init(<a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">MatchMode</a> mode) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		mMatchMode = mode;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
@@ -105,10 +104,10 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 *         CategorizedWord will the contain the longest match (i.e. a</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 *         substring of @param fullcase) depending on the match mode.</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a> categorize(String fullcase, String lowercase);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a> categorize(String fullcase, String lowercase);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2020 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

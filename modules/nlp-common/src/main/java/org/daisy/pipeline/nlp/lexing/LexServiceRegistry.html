@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>LexServiceRegistry xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/nlp-common/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -28,7 +27,7 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  	name = <span class="jxr_string">"lexer-registry"</span>,
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  	service = { LexServiceRegistry.<strong class="jxr_keyword">class</strong> }
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  )
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexServiceRegistry.html">LexServiceRegistry</a> {
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/daisy/pipeline/nlp/lexing/LexServiceRegistry.html">LexServiceRegistry</a> {
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<strong class="jxr_keyword">private</strong> Map&lt;LexService, List&lt;LexerToken&gt;&gt; mLexerToTokens = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;LexService, List&lt;LexerToken&gt;&gt;();
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -41,14 +40,14 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		cardinality = ReferenceCardinality.MULTIPLE,
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		policy = ReferencePolicy.DYNAMIC
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addLexService(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.html">LexService</a> lexer) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addLexService(<a href="../../../../../org/daisy/pipeline/nlp/lexing/LexService.html">LexService</a> lexer) {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		mLexerToTokens.put(lexer, <strong class="jxr_keyword">new</strong> CopyOnWriteArrayList&lt;LexService.LexerToken&gt;());
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 * Component callback</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeLexService(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.html">LexService</a> lexer) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeLexService(<a href="../../../../../org/daisy/pipeline/nlp/lexing/LexService.html">LexService</a> lexer) {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		List&lt;LexerToken&gt; tokens = mLexerToTokens.get(lexer);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  			<strong class="jxr_keyword">if</strong> (tokens.size() &gt; 0) {
@@ -74,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 *         of the other pipeline jobs when this is possible.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * @throws LexerInitException</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.html">LexerToken</a> getTokenForLang(Locale lang, Collection&lt;LexerToken&gt; existingTokens)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../org/daisy/pipeline/nlp/lexing/LexService.html">LexerToken</a> getTokenForLang(Locale lang, Collection&lt;LexerToken&gt; existingTokens)
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	        <strong class="jxr_keyword">throws</strong> LexerInitException {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// Look in priority in the existing tokens</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">int</strong> bestScore = -1;
@@ -125,7 +124,7 @@
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 * Choose a LexService and get its token to be used for cases when languages</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * are unknown or not supported.</em>
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.html">LexerToken</a> getFallbackToken(Collection&lt;LexerToken&gt; existingTokens)
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../../org/daisy/pipeline/nlp/lexing/LexService.html">LexerToken</a> getFallbackToken(Collection&lt;LexerToken&gt; existingTokens)
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	        <strong class="jxr_keyword">throws</strong> LexerInitException {
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<em class="jxr_comment">// Look in priority in the existing tokens</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">int</strong> bestScore = 0;
@@ -154,7 +153,7 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		}
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">if</strong> (best == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.html">LexerInitException</a>(<span class="jxr_string">"No generic lexing service available"</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/daisy/pipeline/nlp/lexing/LexService.html">LexerInitException</a>(<span class="jxr_string">"No generic lexing service available"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">//The best fallback choice is to use a new token</em>
@@ -174,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * </em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * @param jobtokens</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> releaseToken(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/lexing/LexService.html">LexerToken</a> jobtoken) {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> releaseToken(<a href="../../../../../org/daisy/pipeline/nlp/lexing/LexService.html">LexerToken</a> jobtoken) {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">for</strong> (List&lt;LexerToken&gt; tokens : mLexerToTokens.values()) {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">if</strong> (tokens.remove(jobtoken)) {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
@@ -190,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2020 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

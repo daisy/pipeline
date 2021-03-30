@@ -1,17 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta charset="utf-8">
-<meta http-equiv="content-language" content="en">
-<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
-<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
-<link rev="doc" href="../extract-svg.xsl">
-</head>
-<body><div class="code" about="../extract-svg.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"3.0"</span> <span class="code-xml-attribute-local-name">xpath-default-namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><meta charset="utf-8"/><meta http-equiv="content-language" content="en"/><link rel="stylesheet" type="text/css" href="http://daisy.github.io/pipeline/css/nxml-mode.css"/><link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico"/><link rev="doc" href="../extract-svg.xsl"/></head><body><div class="code" about="../extract-svg.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"3.0"</span> <span class="code-xml-attribute-local-name">xpath-default-namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
 
-	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/library.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xsl</a>"</span>/&gt;
-	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xslt/generate-id.xsl" class="source">http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl</a>"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/library.xsl</a>"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl" class="source">http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl</a>"</span>/&gt;
 
 	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"base-uri(/*)"</span>/&gt;
 	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"filename"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"replace(replace($base,'^.+/([^/]+)$','$1'),'\.[^\.]+$','')"</span>/&gt;
@@ -48,5 +38,4 @@
 		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
 
-&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
-</html>
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body></html>

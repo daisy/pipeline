@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>UnZipProvider xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/zip-utils/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -78,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	property = { <span class="jxr_string">"type:String={http://www.le-tex.de/namespace}unzip"</span> }
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  )
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/zip-utils/src/main/java/org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZipProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZipProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <em class="jxr_javadoccomment">/** The logger. */</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      Logger logger = LoggerFactory.getLogger(<strong class="jxr_keyword">this</strong>.getClass());
@@ -88,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_comment">     */</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      @Override
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/zip-utils/src/main/java/org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZip</a>(runtime, step);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZip</a>(runtime, step);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>      <em class="jxr_javadoccomment">/**</em>
@@ -98,10 +97,10 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          logger.trace(<span class="jxr_string">"Activating letex:unzip provider"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/zip-utils/src/main/java/org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZip</a>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZip</a>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/zip-utils/src/main/java/org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZip</a>(XProcRuntime runtime, XAtomicStep step)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">public</strong> <a href="../../../../../../org/daisy/pipeline/zip/calabash/impl/UnZipProvider.html">UnZip</a>(XProcRuntime runtime, XAtomicStep step)
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>          {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">super</strong>(runtime,step);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>          }
@@ -152,10 +151,10 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>     					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), <span class="jxr_string">"The dest-dir URI must refer to a directory."</span>);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>     				}
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>     				<strong class="jxr_keyword">if</strong> (folder.getParentFile() == <strong class="jxr_keyword">null</strong> || folder.getParentFile().getParentFile() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>     					<em class="jxr_comment">// Basic safety valve; should catch stuff like "/", "/home/", "C:\", "C:\Windows\" etc.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     					<em class="jxr_comment">// Basic safety valve; should catch stuff like "/", "/home/", "C:\&quot;, "C:\Windows\&quot; etc.</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>     					<em class="jxr_comment">// Mainly aimed at catching typos or bugs in scripts during developent;</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a>     					<em class="jxr_comment">// running without admin-privileges is the only fairly safe option here </em>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>     					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), <span class="jxr_string">"The dest-dir URI must not be the file system root directory (or any of its children) (was: \""</span>+folder.getCanonicalPath()+<span class="jxr_string">"\")."</span>);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), <span class="jxr_string">"The dest-dir URI must not be the file system root directory (or any of its children) (was: \&quot;"</span>+folder.getCanonicalPath()+<span class="jxr_string">"\&quot;)."</span>);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a>     				}
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>     			}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>     			
@@ -183,7 +182,7 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>     			ZipEntry entry;
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>                 <strong class="jxr_keyword">int</strong> numFiles = 0;
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>     			result = <span class="jxr_string">"&lt;c:files xmlns:c=\"http://www.w3.org/ns/xproc-step\" xml:base=\""</span> + folder.toURI() + <span class="jxr_string">"\"&gt;"</span>;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     			result = <span class="jxr_string">"&lt;c:files xmlns:c=\&quot;http://www.w3.org/ns/xproc-step\&quot; xml:base=\&quot;"</span> + folder.toURI() + <span class="jxr_string">"\&quot;&gt;"</span>;
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>     			<em class="jxr_comment">//without given fileNode extract everything</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>     			<strong class="jxr_keyword">if</strong>(filename.equals(<span class="jxr_string">""</span>)) {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>                     <strong class="jxr_keyword">while</strong>((entry = zis.getNextEntry()) != <strong class="jxr_keyword">null</strong>) {
@@ -195,7 +194,7 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>                             <strong class="jxr_keyword">if</strong> (!dir.exists()) { dir.mkdirs(); }
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>                         } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>                             numFiles++;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>                             result += <span class="jxr_string">"&lt;c:file name=\""</span> + entry.getName() + <span class="jxr_string">"\"/&gt;"</span>;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>                             result += <span class="jxr_string">"&lt;c:file name=\&quot;"</span> + entry.getName() + <span class="jxr_string">"\&quot;/&gt;"</span>;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>                             File destFile = <strong class="jxr_keyword">new</strong> File(folder, entry.getName());
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>                             <strong class="jxr_keyword">if</strong> (destFile.exists()) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>                                 <strong class="jxr_keyword">if</strong> (overwrite) {
@@ -222,7 +221,7 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a>                             byte data[] = <strong class="jxr_keyword">new</strong> byte[BUFFER];
 <a class="jxr_linenumber" name="L214" href="#L214">214</a>                             
 <a class="jxr_linenumber" name="L215" href="#L215">215</a>                             numFiles++;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a>                             result += <span class="jxr_string">"&lt;c:file name=\""</span> + entry.getName() + <span class="jxr_string">"\"/&gt;"</span>;
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>                             result += <span class="jxr_string">"&lt;c:file name=\&quot;"</span> + entry.getName() + <span class="jxr_string">"\&quot;/&gt;"</span>;
 <a class="jxr_linenumber" name="L217" href="#L217">217</a>                             File destFile = <strong class="jxr_keyword">new</strong> File(folder, entry.getName());
 <a class="jxr_linenumber" name="L218" href="#L218">218</a>                             <strong class="jxr_keyword">if</strong> (destFile.exists()) {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a>                                 <strong class="jxr_keyword">if</strong> (overwrite) {
@@ -246,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a>     			
 <a class="jxr_linenumber" name="L238" href="#L238">238</a>     			zis.close();
 <a class="jxr_linenumber" name="L239" href="#L239">239</a>     			<strong class="jxr_keyword">if</strong> (numFiles == 0) {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>     			  result = <span class="jxr_string">"&lt;c:error xmlns:c=\"http://www.w3.org/ns/xproc-step\" xmlns:letex=\"http://www.le-tex.de/namespace\" code=\"zip-error\" href=\""</span>+folder.toURI()+source.toURI()+<span class="jxr_string">"\"&gt;No content processed. Zip file may empty or corrupted.&lt;/c:error&gt;"</span>;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>     			  result = <span class="jxr_string">"&lt;c:error xmlns:c=\&quot;http://www.w3.org/ns/xproc-step\&quot; xmlns:letex=\&quot;http://www.le-tex.de/namespace\&quot; code=\&quot;zip-error\&quot; href=\&quot;"</span>+folder.toURI()+source.toURI()+<span class="jxr_string">"\&quot;&gt;No content processed. Zip file may empty or corrupted.&lt;/c:error&gt;"</span>;
 <a class="jxr_linenumber" name="L241" href="#L241">241</a>     			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L242" href="#L242">242</a>     			  result += <span class="jxr_string">"&lt;/c:files&gt;"</span>;
 <a class="jxr_linenumber" name="L243" href="#L243">243</a>     			}
@@ -255,7 +254,7 @@
 <a class="jxr_linenumber" name="L246" href="#L246">246</a>     			  StringWriter stackTraceWriter = <strong class="jxr_keyword">new</strong> StringWriter();
 <a class="jxr_linenumber" name="L247" href="#L247">247</a>     			  e.printStackTrace(<strong class="jxr_keyword">new</strong> PrintWriter(stackTraceWriter));
 <a class="jxr_linenumber" name="L248" href="#L248">248</a>     			  String stackTrace = stackTraceWriter.toString().replaceAll(<span class="jxr_string">"-"</span>, <span class="jxr_string">" - "</span>); <em class="jxr_comment">// just to be sure that the comment is valid</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>     			  result = <span class="jxr_string">"&lt;c:error xmlns:c=\"http://www.w3.org/ns/xproc-step\" xmlns:letex=\"http://www.le-tex.de/namespace\" code=\"zip-error\" href=\""</span>+folder.toURI()+source.toURI()+<span class="jxr_string">"\"&gt;Zip file seems to be corrupted: "</span>+e.getMessage()+<span class="jxr_string">"&lt;!-- "</span>+stackTrace+<span class="jxr_string">" --&gt;&lt;/c:error&gt;"</span>;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     			  result = <span class="jxr_string">"&lt;c:error xmlns:c=\&quot;http://www.w3.org/ns/xproc-step\&quot; xmlns:letex=\&quot;http://www.le-tex.de/namespace\&quot; code=\&quot;zip-error\&quot; href=\&quot;"</span>+folder.toURI()+source.toURI()+<span class="jxr_string">"\&quot;&gt;Zip file seems to be corrupted: "</span>+e.getMessage()+<span class="jxr_string">"&lt;!-- "</span>+stackTrace+<span class="jxr_string">" --&gt;&lt;/c:error&gt;"</span>;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a>     		  }
 <a class="jxr_linenumber" name="L251" href="#L251">251</a>             DocumentBuilder builder = runtime.getProcessor().newDocumentBuilder();
 <a class="jxr_linenumber" name="L252" href="#L252">252</a>             Source src = <strong class="jxr_keyword">new</strong> StreamSource(<strong class="jxr_keyword">new</strong> StringReader(result));
@@ -287,7 +286,7 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">    </em>
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">}</em>
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

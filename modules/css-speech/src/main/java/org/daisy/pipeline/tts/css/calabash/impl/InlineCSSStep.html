@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>InlineCSSStep xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/css-speech/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -48,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.NetworkProcessor;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.csskit.DefaultNetworkProcessor;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/css-speech/src/main/java/org/daisy/pipeline/tts/css/calabash/impl/InlineCSSStep.html">InlineCSSStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> TreeWriterFactory, XProcStep {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../org/daisy/pipeline/tts/css/calabash/impl/InlineCSSStep.html">InlineCSSStep</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> TreeWriterFactory, XProcStep {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> Logger Logger = LoggerFactory.getLogger(InlineCSSStep.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
@@ -59,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> XProcRuntime mRuntime;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> NetworkProcessor mNetwork;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/css-speech/src/main/java/org/daisy/pipeline/tts/css/calabash/impl/InlineCSSStep.html">InlineCSSStep</a>(XProcRuntime runtime, XAtomicStep step, <strong class="jxr_keyword">final</strong> URIResolver resolver) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../../org/daisy/pipeline/tts/css/calabash/impl/InlineCSSStep.html">InlineCSSStep</a>(XProcRuntime runtime, XAtomicStep step, <strong class="jxr_keyword">final</strong> URIResolver resolver) {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">super</strong>(runtime, step);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		mRuntime = runtime;
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		mNetwork = <strong class="jxr_keyword">new</strong> DefaultNetworkProcessor() {
@@ -173,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">super</strong>.run();
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<em class="jxr_comment">//read config</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		CSSConfigExtension cssExt = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-speech/src/main/java/org/daisy/pipeline/tts/css/calabash/impl/CSSConfigExtension.html">CSSConfigExtension</a>();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		CSSConfigExtension cssExt = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/tts/css/calabash/impl/CSSConfigExtension.html">CSSConfigExtension</a>();
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		XdmNode config = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">//it is allowed to not provide any config file</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">if</strong> (mConfig.moreDocuments()) {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			config = mConfig.read();
@@ -190,8 +189,8 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		alluris.addAll(getCSSurisInContent(doc));
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		alluris.addAll(cssExt.getCSSstylesheetURIs());
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		CSSInliner inliner = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-speech/src/main/java/org/daisy/pipeline/tts/css/calabash/impl/CSSInliner.html">CSSInliner</a>();
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		SpeechSheetAnalyser analyzer = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-speech/src/main/java/org/daisy/pipeline/tts/css/calabash/impl/SpeechSheetAnalyser.html">SpeechSheetAnalyser</a>();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		CSSInliner inliner = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/tts/css/calabash/impl/CSSInliner.html">CSSInliner</a>();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		SpeechSheetAnalyser analyzer = <strong class="jxr_keyword">new</strong> <a href="../../../../../../../org/daisy/pipeline/tts/css/calabash/impl/SpeechSheetAnalyser.html">SpeechSheetAnalyser</a>();
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			analyzer.analyse(alluris, cssExt.getEmbeddedCSS(), config.getBaseURI(), mNetwork);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {
@@ -217,7 +216,7 @@
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2020 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

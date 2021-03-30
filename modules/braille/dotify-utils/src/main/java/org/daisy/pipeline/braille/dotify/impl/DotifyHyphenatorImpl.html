@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>DotifyHyphenatorImpl xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/braille/dotify-utils/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -48,11 +47,11 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * @see &lt;a href="../../../../../../../../../doc/"&gt;User documentation&lt;/a&gt;.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">DotifyHyphenatorImpl</a> <strong class="jxr_keyword">extends</strong> AbstractHyphenator <strong class="jxr_keyword">implements</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyHyphenator.html">DotifyHyphenator</a> {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">DotifyHyphenatorImpl</a> <strong class="jxr_keyword">extends</strong> AbstractHyphenator <strong class="jxr_keyword">implements</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/DotifyHyphenator.html">DotifyHyphenator</a> {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> HyphenatorInterface hyphenator;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">protected</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">DotifyHyphenatorImpl</a>(HyphenatorInterface hyphenator) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">protected</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">DotifyHyphenatorImpl</a>(HyphenatorInterface hyphenator) {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">this</strong>.hyphenator = hyphenator;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	
@@ -92,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			HyphenatorProvider.<strong class="jxr_keyword">class</strong>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		}
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyTranslator.html">Provider</a> <strong class="jxr_keyword">extends</strong> AbstractTransformProvider&lt;DotifyHyphenator&gt;
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/DotifyTranslator.html">Provider</a> <strong class="jxr_keyword">extends</strong> AbstractTransformProvider&lt;DotifyHyphenator&gt;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	                             <strong class="jxr_keyword">implements</strong> DotifyHyphenator.Provider {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">public</strong> Iterable&lt;DotifyHyphenator&gt; _get(Query query) {
@@ -124,12 +123,12 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 						<strong class="jxr_keyword">return</strong> Iterables.transform(
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 							factoryServices,
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 							<strong class="jxr_keyword">new</strong> Function&lt;HyphenatorFactoryService,DotifyHyphenator&gt;() {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 								<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyHyphenator.html">DotifyHyphenator</a> _apply(HyphenatorFactoryService service) {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 								<strong class="jxr_keyword">public</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/DotifyHyphenator.html">DotifyHyphenator</a> _apply(HyphenatorFactoryService service) {
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 									<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 										<strong class="jxr_keyword">if</strong> (service.supportsLocale(locale))
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 											<strong class="jxr_keyword">return</strong> __apply(
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 												logCreate(
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 													(<a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/DotifyHyphenator.html">DotifyHyphenator</a>)<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">DotifyHyphenatorImpl</a>(service.newFactory().newHyphenator(locale)))); }
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 													(<a href="../../../../../../org/daisy/pipeline/braille/dotify/DotifyHyphenator.html">DotifyHyphenator</a>)<strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">DotifyHyphenatorImpl</a>(service.newFactory().newHyphenator(locale)))); }
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 									<strong class="jxr_keyword">catch</strong> (HyphenatorConfigurationException e) {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 										logger.error(<span class="jxr_string">"Could not create HyphenatorInterface for locale "</span> + locale, e); }
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 									<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException();
@@ -170,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(DotifyHyphenatorImpl.Provider.<strong class="jxr_keyword">class</strong>.getName());
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">OSGiHelper</a> {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.html">OSGiHelper</a> {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> inOSGiContext() {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 					<strong class="jxr_keyword">return</strong> FrameworkUtil.getBundle(OSGiHelper.<strong class="jxr_keyword">class</strong>) != <strong class="jxr_keyword">null</strong>;
@@ -182,7 +181,7 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

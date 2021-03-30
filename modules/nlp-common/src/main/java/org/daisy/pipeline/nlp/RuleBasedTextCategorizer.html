@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>RuleBasedTextCategorizer xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/nlp-common/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -15,10 +14,10 @@
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.nlp.impl.MatchRule;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/RuleBasedTextCategorizer.html">RuleBasedTextCategorizer</a> <strong class="jxr_keyword">extends</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">TextCategorizer</a> {
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/daisy/pipeline/nlp/RuleBasedTextCategorizer.html">RuleBasedTextCategorizer</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">TextCategorizer</a> {
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  	@Override
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a> categorize(String fullcase, String lowercase) {
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a> categorize(String fullcase, String lowercase) {
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  		CategorizedWord res = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  		<strong class="jxr_keyword">int</strong> k;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  		<em class="jxr_comment">// find the first match in the priority-sorted list</em>
@@ -29,7 +28,7 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  		}
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  		<strong class="jxr_keyword">if</strong> (res == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  			res = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a>();
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  			res = <strong class="jxr_keyword">new</strong> <a href="../../../../org/daisy/pipeline/nlp/TextCategorizer.html">CategorizedWord</a>();
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  			res.category = Category.UNKNOWN;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  			res.word = fullcase.substring(0, 1);
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  			<strong class="jxr_keyword">return</strong> res;
@@ -60,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<em class="jxr_comment">// ///// internal helpers //////</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">protected</strong> ArrayList&lt;MatchRule&gt; mRules = <strong class="jxr_keyword">new</strong> ArrayList&lt;MatchRule&gt;();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> addRule(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/impl/MatchRule.html">MatchRule</a> rule) {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> addRule(<a href="../../../../org/daisy/pipeline/nlp/impl/MatchRule.html">MatchRule</a> rule) {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		mRules.add(rule);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
@@ -71,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> compile() {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		Collections.sort(mRules, <strong class="jxr_keyword">new</strong> Comparator&lt;MatchRule&gt;() {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			@Override
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compare(<a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/impl/MatchRule.html">MatchRule</a> r1, <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/impl/MatchRule.html">MatchRule</a> r2) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compare(<a href="../../../../org/daisy/pipeline/nlp/impl/MatchRule.html">MatchRule</a> r1, <a href="../../../../org/daisy/pipeline/nlp/impl/MatchRule.html">MatchRule</a> r2) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  				<strong class="jxr_keyword">if</strong> (r1.getPriority() == r2.getPriority())
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  					<strong class="jxr_keyword">return</strong> (r1 == r2 ? 0 : -1);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<strong class="jxr_keyword">return</strong> (r1.getPriority() &gt; r2.getPriority() ? -1 : 1);
@@ -88,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> mThreadsafe = false;
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2020 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

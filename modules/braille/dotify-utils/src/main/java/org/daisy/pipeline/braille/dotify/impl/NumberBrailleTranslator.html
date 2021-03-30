@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>NumberBrailleTranslator xref</title>
-<link type="text/css" rel="stylesheet" href="/pipeline/modules/braille/dotify-utils/src/main/java/stylesheet.css">
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
 </head>
 <body>
 <pre>
@@ -37,13 +36,13 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * space characters (SPACE, NBSP, BRAILLE PATTERN BLANK) and</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * pre-hyphenation characters (SHY and ZWSP).</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a> <strong class="jxr_keyword">extends</strong> AbstractBrailleTranslator <strong class="jxr_keyword">implements</strong> BrailleTranslator {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a> <strong class="jxr_keyword">extends</strong> AbstractBrailleTranslator <strong class="jxr_keyword">implements</strong> BrailleTranslator {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a> INSTANCE = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a> INSTANCE = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">static</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a> getInstance() {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">static</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a> getInstance() {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">if</strong> (INSTANCE == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			INSTANCE = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a>();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			INSTANCE = <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/daisy/pipeline/braille/dotify/impl/NumberBrailleTranslator.html">NumberBrailleTranslator</a>();
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">return</strong> INSTANCE;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	
@@ -119,10 +118,10 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			CSSProperty ws = style.getProperty(<span class="jxr_string">"white-space"</span>);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">if</strong> (ws != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (ws == WhiteSpace.PRE_WRAP)
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					text = text.replaceAll(<span class="jxr_string">"[\\x20\t\\u2800]+"</span>, <span class="jxr_string">"$0\u200B"</span>)
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 					           .replaceAll(<span class="jxr_string">"[\\x20\t\\u2800]"</span>, <span class="jxr_string">"\u00A0"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					text = text.replaceAll(<span class="jxr_string">"[&#92;&#92;x20\t&#92;&#92;u2800]+"</span>, <span class="jxr_string">"$0\u200B"</span>)
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 					           .replaceAll(<span class="jxr_string">"[&#92;&#92;x20\t&#92;&#92;u2800]"</span>, <span class="jxr_string">"\u00A0"</span>);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				<strong class="jxr_keyword">if</strong> (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 					text = text.replaceAll(<span class="jxr_string">"[\\n\\r]"</span>, <span class="jxr_string">"\u2028"</span>);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 					text = text.replaceAll(<span class="jxr_string">"[&#92;&#92;n&#92;&#92;r]"</span>, <span class="jxr_string">"\u2028"</span>);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				style.removeProperty(<span class="jxr_string">"white-space"</span>); }
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			CSSProperty textTransform = style.getProperty(<span class="jxr_string">"text-transform"</span>);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">if</strong> (textTransform == TextTransform.AUTO)
@@ -141,7 +140,7 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<em class="jxr_comment">// The input text must consist of only digits, braille pattern characters and</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<em class="jxr_comment">// pre-hyphenation characters.</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">if</strong> (!VALID_INPUT.matcher(text).matches())
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Invalid input: \""</span> + text + <span class="jxr_string">"\""</span>);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Invalid input: \&quot;"</span> + text + <span class="jxr_string">"\&quot;"</span>);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> translateNumbers(text);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
@@ -175,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> }
 </pre>
-<hr>
-<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<hr/>
+<div id="footer">Copyright &#169; 2010&#x2013;2021 <a href="http://www.daisy.org/">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>
