@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -88,6 +90,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
+            px:tempdir
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -115,6 +118,8 @@
             px:epub3-add-metadata
             px:epub3-label-pagebreaks-from-nav
             px:opf-spine-to-fileset
+            px:epub3-store
+            px:epub-load
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
@@ -145,7 +150,12 @@
             px:isolate-skippable
         </p:documentation>
     </p:import>
-    
+    <p:import href="add-legal-doc.xpl">
+        <p:documentation>
+            pxi:add-legal-doc
+        </p:documentation>
+    </p:import>
+
     <p:variable name="default-stylesheet" select="resolve-uri('../css/default.css')">
         <p:inline>
             <irrelevant/>
@@ -243,6 +253,76 @@
         </p:otherwise>
     </p:choose>
     
+    <p:group name="add-legal-doc">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+            <p:pipe step="move-2" port="result.in-memory"/>
+        </p:output>
+        <p:choose name="temp-dir">
+            <p:when test="$temp-dir!=''">
+                <p:output port="result"/>
+                <p:template>
+                    <p:input port="template">
+                        <p:inline>
+                            <c:result>{$temp-dir}</c:result>
+                        </p:inline>
+                    </p:input>
+                    <p:with-param name="temp-dir" select="concat($temp-dir,'add-legal-doc/')"/>
+                </p:template>
+            </p:when>
+            <p:otherwise>
+                <p:output port="result"/>
+                <px:tempdir delete-on-exit="true"/>
+            </p:otherwise>
+        </p:choose>
+        <p:sink/>
+        <px:fileset-copy name="move">
+            <p:input port="source.fileset">
+                <p:pipe step="add-metadata" port="fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
+                <p:pipe step="add-metadata" port="in-memory"/>
+            </p:input>
+            <p:with-option name="target" select="concat(string(/*),'input/')">
+                <p:pipe step="temp-dir" port="result"/>
+            </p:with-option>
+        </px:fileset-copy>
+        <px:epub3-store name="store">
+            <p:input port="in-memory.in">
+                <p:pipe step="move" port="result.in-memory"/>
+            </p:input>
+            <p:with-option name="href" select="concat(string(/*),'input.epub')">
+                <p:pipe step="temp-dir" port="result"/>
+            </p:with-option>
+        </px:epub3-store>
+        <pxi:add-legal-doc name="add">
+            <p:with-option name="input" select="string(/*)">
+                <p:pipe step="store" port="result"/>
+            </p:with-option>
+            <p:with-option name="output" select="concat(string(/*),'output.epub')">
+                <p:pipe step="temp-dir" port="result"/>
+            </p:with-option>
+        </pxi:add-legal-doc>
+        <px:epub-load name="load" cx:depends-on="add">
+            <p:with-option name="href" select="concat(string(/*),'output.epub')">
+                <p:pipe step="temp-dir" port="result"/>
+            </p:with-option>
+        </px:epub-load>
+        <px:fileset-rebase>
+            <p:with-option name="new-base" select="concat(string(/*),'output.epub!/')">
+                <p:pipe step="temp-dir" port="result"/>
+            </p:with-option>
+        </px:fileset-rebase>
+        <px:fileset-copy name="move-2">
+            <p:input port="source.in-memory">
+                <p:pipe step="load" port="result.in-memory"/>
+            </p:input>
+            <p:with-option name="target" select="base-uri(/*)">
+                <p:pipe step="maybe-copy" port="fileset"/>
+            </p:with-option>
+        </px:fileset-copy>
+    </p:group>
+
     <!--
         Update metadata in content documents and lang attributes in package and content documents
     -->
@@ -256,7 +336,7 @@
             </p:output>
             <px:fileset-load media-types="application/oebps-package+xml" name="package-doc">
                 <p:input port="in-memory">
-                    <p:pipe step="add-metadata" port="in-memory"/>
+                    <p:pipe step="add-legal-doc" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
             <p:choose name="update-package-doc">
@@ -272,10 +352,10 @@
                     <p:sink/>
                     <px:fileset-update name="update">
                         <p:input port="source.fileset">
-                            <p:pipe step="add-metadata" port="fileset"/>
+                            <p:pipe step="add-legal-doc" port="fileset"/>
                         </p:input>
                         <p:input port="source.in-memory">
-                            <p:pipe step="add-metadata" port="in-memory"/>
+                            <p:pipe step="add-legal-doc" port="in-memory"/>
                         </p:input>
                         <p:input port="update.fileset">
                             <p:pipe step="package-doc" port="result.fileset"/>
@@ -288,12 +368,12 @@
                 <p:otherwise>
                     <p:output port="fileset" primary="true"/>
                     <p:output port="in-memory" sequence="true">
-                        <p:pipe step="add-metadata" port="in-memory"/>
+                        <p:pipe step="add-legal-doc" port="in-memory"/>
                     </p:output>
                     <p:sink/>
                     <p:identity>
                         <p:input port="source">
-                            <p:pipe step="add-metadata" port="fileset"/>
+                            <p:pipe step="add-legal-doc" port="fileset"/>
                         </p:input>
                     </p:identity>
                 </p:otherwise>
@@ -415,7 +495,7 @@
         <p:otherwise>
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
-                <p:pipe step="add-metadata" port="in-memory"/>
+                <p:pipe step="add-legal-doc" port="in-memory"/>
             </p:output>
             <p:identity/>
         </p:otherwise>
@@ -633,7 +713,7 @@
                             <p:pipe step="main" port="tts-config"/>
                         </p:input>
                         <p:with-option name="include-log" select="$include-tts-log"/>
-                        <p:with-option name="temp-dir" select="$temp-dir"/>
+                        <p:with-option name="temp-dir" select="if ($temp-dir!='') then concat($temp-dir,'tts/') else ''"/>
                     </px:tts-for-epub3>
                     <p:sink/>
                     <px:fileset-update name="update">
