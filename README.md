@@ -16,7 +16,9 @@ The tree below shows the structure of the project:
 
 - [assembly](https://github.com/daisy/pipeline-assembly)
 - [cli](https://github.com/daisy/pipeline-cli-go)
-- [clientlib-java](https://github.com/daisy/pipeline-clientlib-java)
+- clientlib
+  - [java](https://github.com/daisy/pipeline-clientlib-java)
+  - [go](https://github.com/daisy/pipeline-clientlib-go)
 - [framework](https://github.com/daisy/pipeline-framework)
 - [gui](https://github.com/daisy/pipeline-gui)
 - [it](https://github.com/daisy/pipeline-it)
@@ -36,7 +38,9 @@ The tree below shows the structure of the project:
     - [dotify.task.impl](https://github.com/brailleapps/dotify.task.impl)
     - [dotify.task-runner](https://github.com/brailleapps/dotify.task-runner)
     - [dotify.translator.impl](https://github.com/brailleapps/dotify.translator.impl)
+  - [jsass](https://github.com/snaekobbi/jsass)
   - [jstyleparser](https://github.com/daisy/jStyleParser)
+  - [liblouis-java](https://github.com/liblouis/liblouis-java)
   - [osgi-libs](https://github.com/daisy/osgi-libs)
 - [modules](https://github.com/daisy/pipeline-modules)
 - updater
@@ -49,16 +53,13 @@ The tree below shows the structure of the project:
   - [xspec-maven-plugin](https://github.com/daisy/xspec-maven-plugin)
 - [webui](https://github.com/daisy/pipeline-webui)
 
-### Building on CentOS/Redhat
-- Install libxml (libxml needs to be at least version 20900, if already installed check version with `xmllint --version`):
-- `wget ftp://xmlsoft.org/libxml2/libxml2-2.9.0-1.src.prm`
-- `rpmbuild --rebuild libxml2-2.9.0-1.src.rpm`
-- `rpm -i --force /path/to/rpm/libxml2-2.9.0-1.rpm`
-- Run make: `make dist-rpm`
+See http://daisy.github.io/pipeline/Contribute/Developer-Guide/Sources/ for more information about the source code.
+
 
 ## Issues
 
 This is also a common issue tracker for the Pipeline. Use the individual issue trackers of the sub-projects listed above for issues that clearly belong to a specific sub-project. Before creating a new issue, please first check the [existing open issues](https://github.com/search?l=&q=is%3Aopen++repo%3Adaisy%2Fpipeline++repo%3Adaisy%2Fpipeline-assembly++repo%3Adaisy%2Fpipeline-build-utils++repo%3Adaisy%2Fpipeline-cli-go++repo%3Adaisy%2Fpipeline-clientlib-go++repo%3Adaisy%2Fpipeline-clientlib-java++repo%3Adaisy%2Fpipeline-framework++repo%3Adaisy%2Fpipeline-gui++repo%3Adaisy%2Fpipeline-it++repo%3Adaisy%2Fpipeline-mod-audio++repo%3Adaisy%2Fpipeline-mod-braille++repo%3Adaisy%2Fpipeline-mod-nlp++repo%3Adaisy%2Fpipeline-mod-tts++repo%3Adaisy%2Fpipeline-modules++repo%3Adaisy%2Fpipeline-modules-common++repo%3Adaisy%2Fpipeline-samples++repo%3Adaisy%2Fpipeline-scripts++repo%3Adaisy%2Fpipeline-scripts-utils++repo%3Adaisy%2Fpipeline-updater++repo%3Adaisy%2Fpipeline-updater-gui++repo%3Adaisy%2Fpipeline-webui++repo%3Adaisy%2Fbraille-css++repo%3Adaisy%2FjStyleParser++repo%3Adaisy%2Fosgi-libs++repo%3Adaisy%2Fxmlcalabash1++repo%3Adaisy%2Fxprocspec++repo%3Adaisy%2Fxproc-maven-plugin++repo%3Adaisy%2Fxspec-maven-plugin++repo%3Asnaekobbi%2Fpipeline-mod-braille&ref=advsearch&type=Issues&utf8=%E2%9C%93).
+
 
 ## Website
 
