@@ -11,6 +11,7 @@
       * [[Branding|https://github.com/daisy/pipeline-webui/wiki/Branding]]
     * [[Pipeline as a Service|Pipeline-as-Service]]
       * [[Configuration Files|Configuration-Files]]
+        * [[Text-To-Speech Configuration|https://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html]]
     * [[Command Line|Command-Line]]
     * [[Scripts|Scripts]]
       * [[DAISY 2.02 Validator|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-validator/]]

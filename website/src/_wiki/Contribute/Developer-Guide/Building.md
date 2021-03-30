@@ -39,15 +39,23 @@ cases.
 
 ## Prerequisites
 
-The following tools are required to build the Pipeline. Some tools are
-only needed for some components.
+The following tools are required to build Pipeline completely from
+scratch. Some tools are only needed for some components or third party
+libraries. It is propably a good idea to start with the two essential
+ones, namely Java and Maven, and install more as you go.
 
 - Java >= 8
 - Maven >= 3.0.0
 - Go (for CLI and updater)
-- GNU Make (for super-project, Liblouis, ...)
-- Ruby and [Bundler](https://bundler.io/) (for website)
+- GNU Make (for super-project, assembly, Liblouis, CLI, ...)
+- [xmllint](http://xmlsoft.org/xmllint.html) (for super-project)
+- [curl](https://curl.se/) (for assembly)
 - NSIS (for Windows installer)
+- Ruby and [Bundler](https://bundler.io/) (for website)
+- [Autotools][] and a C compiler (for Liblouis)
+
+Very common tools that most of you already have were not
+listed. Please let us know if something is missing from this list.
 
 
 ## Building individual components
@@ -151,6 +159,34 @@ individual component, or the other way around. However there is a
 trick to enable this possibility anyway: after running `eval $(make
 dump-maven-cmd)` in the super-project, `mvn` will be a shell alias
 that behaves like you expect.
+
+
+## Docker
+
+To get people started quickly, we also provide a Dockerfile. With this
+Dockerfile you create an image that has all the build prerequisites
+and runtime dependencies installed.
+
+```
+FROM debian:stretch
+RUN apt-get update && apt-get install -y openjdk-8-jdk \
+                                         maven \
+                                         golang \
+                                         ruby \
+                                         build-essential \
+                                         zip \
+                                         libxml2-utils \
+                                         git \
+                                         curl \
+                                         lame \
+                                         espeak
+RUN gem install bundle
+# the following lines are only for 64-bit systems, change to i368 if needed
+RUN curl -L -o /tmp/#1 http://ftp.br.debian.org/debian/pool/main/n/nsis/{nsis-common_3.04-1_all.deb,nsis_3.04-1_amd64.deb}
+RUN dpkg -i /tmp/nsis*.deb
+```
+
+Please let us know if something is missing from this Dockerfile.
 
 
 [Maven]: https://en.wikipedia.org/wiki/Apache_Maven
