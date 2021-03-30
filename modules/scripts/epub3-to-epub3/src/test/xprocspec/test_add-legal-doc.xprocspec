@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/add-legal-doc.xpl">
+
+	<x:scenario label="test">
+		<x:call step="pxi:add-legal-doc">
+			<x:option name="input" select="resolve-uri('../resources/valentin.epub')"/>
+			<x:option name="output" select="concat($temp-dir,'test.epub')"/>
+		</x:call>
+		<x:context label="the output EPUB">
+			<x:document type="zip" base-uri="temp-dir" href="test.epub" ordered="true"/>
+		</x:context>
+		<x:expect label="the output EPUB" type="compare">
+			<x:document type="inline">
+				<c:zipfile name="test.epub">
+					<!--
+					    FIXME
+					-->
+				</c:zipfile>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>
