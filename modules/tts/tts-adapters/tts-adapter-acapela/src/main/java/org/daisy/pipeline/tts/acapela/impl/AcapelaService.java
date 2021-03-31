@@ -8,6 +8,7 @@ import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.RoundRobinLoadBalancer;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
+import org.daisy.pipeline.tts.TTSService.SynthesisException;
 
 import com.sun.jna.Native;
 
@@ -55,8 +56,11 @@ public class AcapelaService extends AbstractTTSService {
 			throw new SynthesisException("invalid value for property " + serversProperty);
 		}
 
-		//try loading the library where we have a chance to catch errors
-		Native.loadLibrary(NscubeLibrary.JNA_LIBRARY_NAME, NscubeLibrary.class);
+		try {
+			Native.loadLibrary(NscubeLibrary.JNA_LIBRARY_NAME, NscubeLibrary.class);
+		} catch (Throwable e) {
+			throw new Exception("unable to load 'nscube' library", e);
+		}
 
 		return new AcapelaEngine(this, format, balancer, speed, reserved, priority);
 	}

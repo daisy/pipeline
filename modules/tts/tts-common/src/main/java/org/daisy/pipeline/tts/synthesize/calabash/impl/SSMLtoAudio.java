@@ -90,7 +90,7 @@ import com.google.common.collect.Iterables;
 public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 	private TTSEngine mLastTTS; //used if no TTS is found for the current sentence
 	private TTSRegistry mTTSRegistry;
-	private IPipelineLogger mLogger;
+	private Logger mLogger;
 	private ContiguousText mCurrentSection;
 	private File mAudioDir; //where all the sound files will be stored
 	private long mTotalTextSize; //used for the progress bar
@@ -100,7 +100,6 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 	private Map<TTSEngine, List<ContiguousText>> mOrganizedText;
 	private AudioBufferTracker mAudioBufferTracker;
 	private Processor mProc;
-	private Logger ServerLogger = LoggerFactory.getLogger(TTSRegistry.class);
 	private VoiceManager mVoiceManager;
 	private TimedTTSExecutor mExecutor = new TimedTTSExecutor();
 	private Map<TTSService, CompiledStylesheet> mSSMLtransformers;
@@ -108,7 +107,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 	private TTSLog mTTSlog;
 	private int mErrorCounter;
 
-	public SSMLtoAudio(File audioDir, TTSRegistry ttsregistry, IPipelineLogger logger,
+	public SSMLtoAudio(File audioDir, TTSRegistry ttsregistry, Logger logger,
 	        AudioBufferTracker audioBufferTracker, Processor proc, URIResolver uriResolver,
 	        VoiceConfigExtension configExt, TTSLog logs) {
 		mTTSRegistry = ttsregistry;
@@ -135,7 +134,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			testingXML = builder.build(source);
 		} catch (SaxonApiException e1) {
 			//that should not happen
-			ServerLogger.error("could not compile testing SSML " + ssml);
+			mLogger.error("could not compile testing SSML " + ssml);
 			return;
 		}
 
@@ -148,12 +147,13 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		XslTransformCompiler xslCompiler = new XslTransformCompiler(proc
 		        .getUnderlyingConfiguration(), uriResolver);
 		List<TTSEngine> workingEngines = new ArrayList<TTSEngine>();
+		List<String> engineStatus = new ArrayList<String>();
 		for (TTSService service : ttsregistry.getServices()) {
 			if (service.getSSMLxslTransformerURL() == null) {
 				String err = "missing SSML transformer for TTS "
 				        + TTSServiceUtil.displayName(service);
 				mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-				ServerLogger.error(err);
+				mLogger.error(err);
 				continue;
 			}
 			CompiledStylesheet transf = null;
@@ -164,46 +164,65 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				String err = "error while compiling XSLT SSML adapter of "
 				        + TTSServiceUtil.displayName(service);
 				mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-				ServerLogger.error(err);
+				mLogger.error(err);
 			} catch (IOException e) {
 				String err = "error while opening XSLT SSML adapter of "
 				        + TTSServiceUtil.displayName(service);
-				ServerLogger.error(err);
+				mLogger.error(err);
 				mTTSlog.addGeneralError(ErrorCode.WARNING, err);
 			}
 			if (transf != null) {
 				mSSMLtransformers.put(service, transf);
-				TTSEngine engine = createAndTestEngine(service, mProperties, testingXML,
-				        transf, timeout);
-				if (engine != null) {
+				TTSEngine engine = null;
+				try {
+					engine = createAndTestEngine(service, mProperties, testingXML, transf, timeout);
 					workingEngines.add(engine);
+					engineStatus.add("[x] " + TTSServiceUtil.displayName(service));
+				} catch (Throwable e) {
+					// Show the full error with stack trace only in the TTS log. A short version is included
+					// in the engine status summary. An engine that could not be activated is not an error
+					// unless no engines could be activated at all. This is to not confuse users because it
+					// is normal that only a part of the engines work.
+					String msg = TTSServiceUtil.displayName(service) + " could not be activated: " + e.getMessage();
+					String stack = getStack(e);
+					mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + stack);
+					mLogger.debug(msg);
+					mLogger.debug(stack);
+					engineStatus.add("[ ] " + msg);
 				}
 			}
 
 		}
 		timeout.close();
-		mLogger.printInfo("Number of working TTS engine(s): " + workingEngines.size() + "/"
-		        + ttsregistry.getServices().size());
+		String summary = "Number of working TTS engine(s): " + workingEngines.size() + "/"
+			+ ttsregistry.getServices().size();
+		if (workingEngines.size() == 0) {
+			mLogger.error(summary);
+			for (String s : engineStatus)
+				mLogger.error(" * " + s);
+		} else {
+			mLogger.info(summary);
+			for (String s : engineStatus)
+				mLogger.info(" * " + s);
+		}
 
 		mVoiceManager = new VoiceManager(workingEngines, configExt.getVoiceDeclarations());
 	}
 
+	/**
+	 * @throws Throwable if an engine could not be created or when the test failed. The exception is
+	 *                   included in the TTS and the message is included in the engine status
+	 *                   summary. The stack trace is printed in the detailed log.
+	 */
 	private TTSEngine createAndTestEngine(final TTSService service,
 	        Map<String, String> properties, XdmNode testingXML,
-	        CompiledStylesheet ssmlTransformer, TTSTimeout timeout) {
+	        CompiledStylesheet ssmlTransformer, TTSTimeout timeout) throws Throwable {
 
 		//create the engine
 		TTSEngine engine = null;
 		try {
 			timeout.enableForCurrentThread(2);
 			engine = service.newEngine(properties);
-		} catch (Throwable e) {
-			String err = TTSServiceUtil.displayName(service)
-			        + " could not be initialized, cause: " + e.getMessage() + ": "
-			        + getStack(e);
-			mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-			ServerLogger.error(err);
-			return null;
 		} finally {
 			timeout.disable();
 		}
@@ -216,11 +235,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				params.put("ending-mark", engine.endingMark());
 			ttsInput = ssmlTransformer.newTransformer().transformToString(testingXML, params);
 		} catch (SaxonApiException e) {
-			String err = "error while using the SSML adapter of "
-			        + TTSServiceUtil.displayName(service) + " on " + testingXML.toString();
-			ServerLogger.error(err);
-			mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-			return null;
+			throw new Exception("error while using the SSML adapter on " + testingXML, e);
 		}
 
 		//get a voice supporting SSML marks (so far as they are supported by the engine)
@@ -236,26 +251,13 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				}
 			}
 			if (firstVoice == null) {
-				String err = TTSServiceUtil.displayName(service)
-				        + " cannot be tested because no voice seems available.";
-				mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-				ServerLogger.error(err);
-				return null;
+				throw new Exception("no voices available");
 			}
 		} catch (InterruptedException e) {
-			String err = "Timeout while retrieving the voices of "
-			        + TTSServiceUtil.displayName(service) + " (exceeded " + timeoutSecs
-			        + " seconds)\n" + getStack(e);
-			mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-			ServerLogger.error(err);
-			return null;
+			throw new Exception("timeout while retrieving voices  (exceeded "
+			                    + timeoutSecs + " seconds)");
 		} catch (Exception e) {
-			String err = TTSServiceUtil.displayName(service)
-			        + " failed to return voices, cause: " + e.getMessage() + ": "
-			        + getStack(e);
-			mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-			ServerLogger.error(err);
-			return null;
+			throw new Exception("failed to retreive voices: " + e.getMessage(), e);
 		} finally {
 			timeout.disable();
 		}
@@ -267,12 +269,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			timeout.enableForCurrentThread(2);
 			resource = engine.allocateThreadResources();
 		} catch (Exception e) {
-			String err = "Could not initialize resource for "
-			        + TTSServiceUtil.displayName(service) + ", cause: " + e.getMessage()
-			        + ": " + getStack(e);
-			mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-			ServerLogger.error(err);
-			return null;
+			throw new Exception("could not allocate resources: " + e.getMessage(), e);
 		} finally {
 			timeout.disable();
 		}
@@ -286,7 +283,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				        + TTSServiceUtil.displayName(service)
 				        + ". Forcing interruption of the current work of "
 				        + TTSServiceUtil.displayName(service) + "... ";
-				ServerLogger.warn(msg);
+				mLogger.warn(msg);
 				mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
 				fengine.interruptCurrentWork(res);
 			}
@@ -303,11 +300,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				timeout, interrupter, null, ttsInput, testingXML, Sentence.computeSize(testingXML),
 				engine, firstVoice, res, marks, expectedMarks, new StraightBufferAllocator(), false);
 		} catch (Exception e) {
-			String msg = "Error while testing " + TTSServiceUtil.displayName(service) + "; "
-			        + e.getMessage() + ": " + getStack(e);
-			ServerLogger.warn(msg);
-			mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
-			return null;
+			throw new Exception("test failed: " + e.getMessage(), e);
 		} finally {
 			if (res != null)
 				try {
@@ -315,10 +308,11 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 					engine.releaseThreadResources(res);
 				} catch (Exception e) {
 					String msg = "Error while releasing resource of "
-					        + TTSServiceUtil.displayName(service) + "; " + e.getMessage()
-					        + ": " + getStack(e);
-					ServerLogger.warn(msg);
-					mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
+					        + TTSServiceUtil.displayName(service) + "; " + e.getMessage();
+					String stack = getStack(e);
+					mLogger.warn(msg);
+					mLogger.debug(stack);
+					mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + stack);
 				} finally {
 					timeout.disable();
 				}
@@ -351,11 +345,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			}
 		}
 		if (!msg.isEmpty()) {
-			msg = "Errors found while testing, " + TTSServiceUtil.displayName(service) + ": "
-			        + msg;
-			ServerLogger.warn(msg);
-			mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
-			return null;
+			throw new Exception("test failed: " + msg);
 		}
 
 		return engine;
@@ -396,11 +386,12 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		        exactMatch);
 		logEntry.setSelectedVoice(voice);
 		if (voice == null) {
-			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING,
-			        "could not find any installed voice matching with "
+			String err = "could not find any installed voice matching with "
 			                + new Voice(voiceEngine, voiceName)
-			                + " or providing the language '" + lang + "'"));
+			                + " or providing the language '" + lang + "'";
+			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
 			endSection();
+			mLogger.warn(err);
 			return false;
 		}
 
@@ -410,10 +401,11 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			 * Should not happen since findAvailableVoice() returns only a
 			 * non-null voice if a TTSService can provide it
 			 */
-			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING,
-			        "could not find any TTS engine for the voice "
-			                + new Voice(voiceEngine, voiceName)));
+			String err = "could not find any TTS engine for the voice "
+				+ new Voice(voiceEngine, voiceName);
+			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
 			endSection();
+			mLogger.warn(err);
 			return false;
 		}
 
@@ -491,12 +483,12 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		        ttsThreadNum);
 		int totalTTSThreads = regularTTSthreadNum + reservedThreadNum;
 		int maxMemPerTTSThread = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.each.memlimit", 20)*1048576; //20MB
-		mLogger.printInfo("Number of encoding threads: " + encodingThreadNum);
-		mLogger.printInfo("Number of regular text-to-speech threads: " + regularTTSthreadNum);
-		mLogger.printInfo("Number of reserved text-to-speech threads: " + reservedThreadNum);
-		mLogger.printInfo("Max TTS memory footprint (encoding excluded): "
+		mLogger.info("Number of encoding threads: " + encodingThreadNum);
+		mLogger.info("Number of regular text-to-speech threads: " + regularTTSthreadNum);
+		mLogger.info("Number of reserved text-to-speech threads: " + reservedThreadNum);
+		mLogger.info("Max TTS memory footprint (encoding excluded): "
 		        + mAudioBufferTracker.getSpaceForTTS() / 1000000 + "MB");
-		mLogger.printInfo("Max encoding memory footprint: "
+		mLogger.info("Max encoding memory footprint: "
 		        + mAudioBufferTracker.getSpaceForEncoding() / 1000000 + "MB");
 
 		//input queue common to all the threads
@@ -528,7 +520,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				}
 			}
 		}
-		mLogger.printInfo("Text-to-speech threads started.");
+		mLogger.info("Text-to-speech threads started.");
 
 		//start the encoding threads
 		EncodingThread[] encodingTh = new EncodingThread[encodingThreadNum];
@@ -537,7 +529,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			encodingTh[j].start(audioServices, pcmQueue, mLogger, mAudioBufferTracker,
 			        mProperties, mTTSlog);
 		}
-		mLogger.printInfo("Encoding threads started.");
+		mLogger.info("Encoding threads started.");
 
 		//collect the sound fragments
 		Collection<SoundFileLink>[] fragments = new Collection[tpt.length];
@@ -549,7 +541,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		}
 
 		//send END notifications and wait for the encoding threads to finish
-		mLogger.printInfo("Text-to-speech finished. Waiting for audio encoding to finish...");
+		mLogger.info("Text-to-speech finished. Waiting for audio encoding to finish...");
 		for (int k = 0; k < encodingTh.length; ++k) {
 			pcmQueue.add(ContiguousPCM.EndOfQueue);
 		}
@@ -565,7 +557,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			}
 		}
 
-		mLogger.printInfo("Audio encoding finished.");
+		mLogger.info("Audio encoding finished.");
 
 		return Iterables.concat(fragments);
 
@@ -590,7 +582,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		if (mProgress - mPrintedProgress > mTotalTextSize / 15) {
 			int TTSMem = mAudioBufferTracker.getUnreleasedTTSMem() / 1000000;
 			int EncodeMem = mAudioBufferTracker.getUnreleasedEncondingMem() / 1000000;
-			mLogger.printInfo("progress: " + 100 * mProgress / mTotalTextSize + "%  [TTS: "
+			mLogger.info("progress: " + 100 * mProgress / mTotalTextSize + "%  [TTS: "
 			        + TTSMem + "MB encoding: " + EncodeMem + "MB]");
 			mPrintedProgress = mProgress;
 		}
@@ -631,7 +623,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 			sectionCount += sections.size();
 		}
-		mLogger.printInfo("Number of synthesizable TTS sections: " + sectionCount);
+		mLogger.info("Number of synthesizable TTS sections: " + sectionCount);
 	}
 
 	//we can dispense with this function as soon as we take into consideration the size of the SSML
@@ -677,7 +669,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				defaultVal = Integer.valueOf(str);
 			} catch (NumberFormatException e) {
 				String msg = str + " is not a valid value for property " + prop;
-				ServerLogger.warn(msg);
+				mLogger.warn(msg);
 				mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
 			}
 		}
