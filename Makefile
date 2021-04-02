@@ -139,8 +139,7 @@ SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES))
 $(addprefix run-,$(SCRIPTS)) : run-% : %/.test-dependencies
 	# not using -f because that causes log file to be saved at the wrong location
 	cd $(patsubst run-%,%,$@) && \
-	mvn --settings "$(ROOT_DIR)/$(MVN_SETTINGS)" $(MVN_PROPERTIES) \
-	    clean test -Prun-script-webserver | $(MVN_LOG)
+	$(MVN) clean test -Prun-script-webserver
 
 .PHONY : check
 

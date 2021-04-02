@@ -57,11 +57,10 @@ for module in "$@"; do
     if ! [ -e $module/src/main/java ] && ! [ -e $module/src/test/java ]; then
         continue
     fi
-    eval $MVN --projects $module \
-              org.apache.maven.plugins:maven-eclipse-plugin:2.10:eclipse \
-              -Declipse.useProjectReferences=true \
-              -Declipse.projectNameTemplate=[groupId].[artifactId] \
-    | eval $MVN_LOG
+    $MVN --projects $module \
+                org.apache.maven.plugins:maven-eclipse-plugin:2.10:eclipse \
+                -Declipse.useProjectReferences=true \
+                -Declipse.projectNameTemplate=[groupId].[artifactId]
     # import project with eclim if available
     if which eclim >/dev/null; then
         if [ -e "$ROOT_DIR/$module/.project" ]; then

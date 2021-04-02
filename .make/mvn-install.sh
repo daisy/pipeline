@@ -19,7 +19,7 @@ else
     if [[ -z ${HOST_PLATFORM} ]]; then
         for arg in "$@"; do
             cd "$ROOT_DIR/$arg"
-            eval $MVN clean install -Dmaven.test.skip -Dinvoker.skip=true | eval $MVN_LOG
+            $MVN clean install -Dmaven.test.skip -Dinvoker.skip=true
         done
     else
         exit 1

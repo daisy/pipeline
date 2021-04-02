@@ -19,7 +19,7 @@ else
     if [[ -z ${HOST_PLATFORM} ]]; then
         for arg in "$@"; do
             cd "$ROOT_DIR/$arg"
-            eval $MVN org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -DpomFile=pom.xml -Dfile=./pom.xml | eval $MVN_LOG
+            $MVN org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -DpomFile=pom.xml -Dfile=./pom.xml
         done
     else
         exit 1

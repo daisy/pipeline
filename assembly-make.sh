@@ -13,8 +13,6 @@ if [ "$1" == "--dry-run" ]; then
     fi
 else
     if [[ -z ${HOST_PLATFORM} ]]; then
-        # MVN_LOG from main.mk can not be passed on correctly to assembly Makefile
-        export MVN_LOG="cat >> $ROOT_DIR/maven.log"
         # MAKECMDGOALS exported from main Makefile, but messes up recursive invocation of make
         unset MAKECMDGOALS
         # unconditionally make targets because this is what was decided by super-project based on the dependency analysis

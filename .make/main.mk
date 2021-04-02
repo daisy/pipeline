@@ -6,13 +6,12 @@ GRADLE_FILES      := $(shell find * -name build.gradle -o -name settings.gradle 
 GRADLE_MODULES    := $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADLE_FILES)))
 MODULES            = $(MAVEN_MODULES) $(GRADLE_MODULES)
 GITREPOS          := $(shell find * -name .gitrepo -exec dirname {} \;)
-MVN               := mvn --batch-mode --settings "$(ROOT_DIR)/$(MVN_SETTINGS)" $(MVN_PROPERTIES)
+MVN               := $(ROOT_DIR)/$(MY_DIR)/mvn
 MVN_LOG           := cat>>$(ROOT_DIR)/maven.log
-MVN_LOG_LOCATION  := maven.log
 GRADLE            := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(ROOT_DIR)/$(MY_DIR)/gradle.sh $(MVN_PROPERTIES)
 EVAL              := :
 
-export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST_PLATFORM MAKE
+export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST_PLATFORM MAKE
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
 export MAKECMDGOALS
 # MAKEFLAGS exported by default
@@ -40,7 +39,7 @@ $(TARGET_DIR)/effective-settings.xml : $(MVN_SETTINGS) $(TARGET_DIR)/properties
 	# cd into random directory in order to force Maven "stub" project
 	if ! [ -e $@ ] || [[ -n $$(find $^ -newer $@ 2>/dev/null) ]]; then \
 		cd $(TARGET_DIR) && \
-		$(MVN) org.apache.maven.plugins:maven-help-plugin:2.2:effective-settings -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
+		$(MVN) org.apache.maven.plugins:maven-help-plugin:2.2:effective-settings -Doutput=$(ROOT_DIR)/$@; \
 	fi
 
 .SECONDARY : poms parents aggregators
@@ -124,7 +123,7 @@ export SAXON
 $(SAXON) : | .maven-init
 	# cd into random directory in order to force Maven "stub" project
 	cd $(TARGET_DIR) && \
-	$(MVN) org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get -Dartifact=net.sf.saxon:Saxon-HE:9.4:jar >$(ROOT_DIR)/maven.log
+	$(MVN) org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get -Dartifact=net.sf.saxon:Saxon-HE:9.4:jar
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # MAVEN_MODULES computed here because maven.mk may not be up to date yet
@@ -163,7 +162,7 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(
 		then true; \
 		else \
 			rv=$$? && \
-			echo "Failed to compute Maven dependencies. See $(MVN_LOG_LOCATION) for more info." >&2 && \
+			echo "Failed to compute Maven dependencies." >&2 && \
 			exit $$rv; \
 		fi \
 	else \

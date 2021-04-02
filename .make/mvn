@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+[[ -n ${VERBOSE+x} ]] && set -x
+set -e
+set -o pipefail
+if ! eval mvn --batch-mode --settings '"$ROOT_DIR/$MVN_SETTINGS"' $MVN_PROPERTIES '"$@"' | eval $MVN_LOG; then
+	exit_val=${PIPESTATUS[0]}
+	echo "Command was: ${0#$ROOT_DIR/} $@" | eval $MVN_LOG
+	echo -n "Maven exited with value $exit_val." >&2
+	if [[ $MVN_LOG == "cat>>"* ]]; then
+		MVN_LOG=${MVN_LOG#cat>>}
+		MVN_LOG=${MVN_LOG#$ROOT_DIR/}
+		echo " See $MVN_LOG for more info." >&2
+	else
+		echo
+	fi
+	exit $exit_val
+fi

@@ -54,7 +54,7 @@ echo ": first cd to the $github_repo repo you want to release from && \\"
 echo "git fetch $remote $on_remote_branch && \\"
 
 pom=$ROOT_DIR/$release_dir/.effective-pom.xml
-eval $MVN --quiet --projects $release_dir help:effective-pom -Doutput=$pom
+$MY_DIR/mvn --quiet --projects $release_dir help:effective-pom -Doutput=$pom
 artifactId=$(xmllint --xpath "/*/*[local-name()='artifactId']/text()" $pom)
 groupId=$(xmllint --xpath "/*/*[local-name()='groupId']/text()" $pom 2>/dev/null) || \
 groupId=$(xmllint --xpath "/*/*[local-name()='parent']/*[local-name()='groupId']/text()" $pom)
