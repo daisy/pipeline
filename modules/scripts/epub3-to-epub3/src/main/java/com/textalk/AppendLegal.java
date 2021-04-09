@@ -396,7 +396,7 @@ public class AppendLegal {
         }
 
         private final static QName INPUT = new QName("input");
-        private final static QName OUTPUT = new QName("input");
+        private final static QName OUTPUT = new QName("output");
 
         @Override
         public void run() throws SaxonApiException {
