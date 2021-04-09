@@ -160,7 +160,7 @@ public class AppendLegal {
         Enumeration entryEnumeration = zipFile.entries();
         while(entryEnumeration.hasMoreElements()) {
             ZipEntry ze = (ZipEntry) entryEnumeration.nextElement();
-            if(List.of(PACKAGE_DOCUMENT, NAV_DOCUMENT).contains(ze.getName())) continue;
+            if(PACKAGE_DOCUMENT.equals(ze.getName()) || NAV_DOCUMENT.equals(ze.getName())) continue;
             copyEntry(zipFile, zos, ze);
         }
 
