@@ -8,6 +8,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.apache.commons.io.FileUtils;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
@@ -29,11 +30,8 @@ import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -155,7 +153,10 @@ public class AppendLegal {
     }
 
     public void appendLegalDoc(File input, File output, String voice) throws Exception {
-        ZipFile zipFile = new ZipFile(input);
+        File tempFile = File.createTempFile("epub3-input", "-tmpfile");
+        tempFile.deleteOnExit();
+        FileUtils.copyFile(input, tempFile);
+        ZipFile zipFile = new ZipFile(tempFile);
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(output));
         Enumeration entryEnumeration = zipFile.entries();
         while(entryEnumeration.hasMoreElements()) {
