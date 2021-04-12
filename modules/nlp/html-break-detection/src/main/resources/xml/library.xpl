@@ -18,27 +18,52 @@
 
     <p:option name="id-prefix" required="false" select="''"/>
 
+    <p:option name="sentence-attr" required="false" select="''">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Attribute to be added to sentence spans.</p>
+      </p:documentation>
+    </p:option>
+
+    <p:option name="sentence-attr-val" required="false" select="''">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Corresponding attribute value.</p>
+      </p:documentation>
+    </p:option>
+
     <p:import href="http://www.daisy.org/pipeline/modules/nlp-common/library.xpl">
       <p:documentation>
         px:break-and-reshape
       </p:documentation>
     </p:import>
 
-    <px:break-and-reshape name="generic">
-      <p:with-option name="inline-tags" select="'span,i,b,a,br,del,font,ruby,s,small,strike,strong,sup,u,q,address,abbr,em,style'"/>
-      <p:with-option name="ensure-word-before" select="'span,br,ruby,s,address,abbr,style'"/>
-      <p:with-option name="ensure-word-after" select="'span,br,ruby,s,address,abbr,style'"/>
-      <!-- Based on the containers of phrasing, flow and transparent content of HTML5 DTB: -->
-      <p:with-option name="can-contain-sentences" select="'body,section,nav,article,aside,h1,h2,h3,h4,h5,h6,header,footer,address,p,pre,blockquote,li,dt,dd,a,q,cite,em,strong,small,mark,dfn,abbr,time,progress,meter,code,var,samp,kdb,sub,sup,span,i,b,bdo,rt,ins,del,caption,td,th,form,label,input,button,datalist,output,bb,menu,legend,div'"/>
-      <p:with-option name="output-ns" select="'http://www.w3.org/1999/xhtml'"/>
-      <p:with-option name="output-word-tag" select="'span'"/>
-      <p:with-option name="word-attr" select="'role'"/>
-      <p:with-option name="word-attr-val" select="'word'"/>
-      <p:with-option name="output-sentence-tag" select="'span'"/>
-      <p:with-option name="output-subsentence-tag" select="'span'"/>
-      <p:with-option name="exclusive-sentence-tag" select="'false'"/>
-      <p:with-option name="exclusive-word-tag" select="'false'"/>
+    <!-- Based on the containers of phrasing, flow and transparent content of HTML5, the
+         "can-contain-sentences" elements are the following: -->
+    <px:break-and-reshape name="generic"
+        inline-tags="html:span|html:i|html:b|html:a|html:br|html:del|html:font|html:ruby|html:s|
+                     html:small|html:strike|html:strong|html:sup|html:u|html:q|html:address|
+                     html:abbr|html:em|html:style"
+        ensure-word-before="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
+        ensure-word-after="span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
+        can-contain-sentences="html:body|html:section|html:nav|html:article|html:aside|html:h1|html:h2|
+                               html:h3|html:h4|html:h5|html:h6|html:header|html:footer|html:address|
+                               html:p|html:pre|html:blockquote|html:li|html:dt|html:dd|html:a|html:q|
+                               html:cite|html:em|html:strong|html:small|html:mark|html:dfn|html:abbr|
+                               html:time|html:progress|html:meter|html:code|html:var|html:samp|html:kdb|
+                               html:sub|html:sup|html:span|html:i|html:b|html:bdo|html:rt|html:ins|
+                               html:del|html:caption|html:figcaption|html:td|html:th|html:form|html:label|
+                               html:input|html:button|html:datalist|html:output|html:bb|html:menu|
+                               html:legend|html:div"
+        output-ns="http://www.w3.org/1999/xhtml"
+        output-word-tag="span"
+        word-attr="role"
+        word-attr-val="word"
+        output-sentence-tag="span"
+        output-subsentence-tag="span"
+        exclusive-sentence-tag="false"
+        exclusive-word-tag="false">
       <p:with-option name="id-prefix" select="$id-prefix"/>
+      <p:with-option name="sentence-attr" select="$sentence-attr"/>
+      <p:with-option name="sentence-attr-val" select="$sentence-attr-val"/>
     </px:break-and-reshape>
 
   </p:declare-step>

@@ -2,30 +2,30 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
-               xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+               script="../../main/resources/xml/reshape.xpl">
 
-  <x:script>
-    <p:declare-step version="1.0" xmlns:p="http://www.w3.org/ns/xproc" type="px:reshape-testing-wrapper">
-      <p:import href="../../main/resources/xml/reshape.xpl"/>
-      <p:input port="source" primary="true"/>
-      <p:output port="result" primary="true"/>
-      <p:output port="sentence-ids">
-	<p:pipe port="sentence-ids" step="generic"/>
-      </p:output>
-      <px:reshape name="generic">
-	<p:with-option name="can-contain-sentences" select="'address,author,notice,prodnote,sidebar,line,em,strong,dfn,kdb,code,samp,cite,abbr,acronym,sub,sup,span,bdo,q,p,doctitle,docauthor,levelhd,hd,h1,h2,h3,h4,h5,h6,dt,dd,li,lic,caption,th,td,bridgehead,byline,covertitle,epigraph,dateline'"/>
-	<p:with-option name="cannot-be-sentence-child" select="'linenum,epigraph'"/>
-	<p:with-option name="special-sentences" select="'pagenum,annoref,noteref,linenum'"/>
-	<p:with-option name="output-ns" select="'http://www.daisy.org/z3986/2005/dtbook/'"/>
-	<p:with-option name="output-word-tag" select="'w'"/>
-	<p:with-option name="output-sentence-tag" select="'sent'"/>
-	<p:with-option name="output-subsentence-tag" select="'span'"/>
-      </px:reshape>
-    </p:declare-step>
-  </x:script>
+  <x:scenario label="_">
+    <x:call step="px:reshape">
+      <x:option name="can-contain-sentences"
+		select="'dtb:address|dtb:author|dtb:notice|dtb:prodnote|dtb:sidebar|dtb:line|dtb:em|dtb:strong|
+			 dtb:dfn|dtb:kdb|dtb:code|dtb:samp|dtb:cite|dtb:abbr|dtb:acronym|dtb:sub|dtb:sup|
+			 dtb:span|dtb:bdo|dtb:q|dtb:p|dtb:doctitle|dtb:docauthor|dtb:levelhd|dtb:hd|dtb:h1|
+			 dtb:h2|dtb:h3|dtb:h4|dtb:h5|dtb:h6|dtb:dt|dtb:dd|dtb:li|dtb:lic|dtb:caption|dtb:th|
+			 dtb:td|dtb:bridgehead|dtb:byline|dtb:covertitle|dtb:epigraph|dtb:dateline'"/>
+      <x:option name="cannot-be-sentence-child" select="'dtb:linenum|dtb:epigraph'"/>
+      <x:option name="special-sentences" select="'dtb:pagenum|dtb:annoref|dtb:noteref|dtb:linenum'"/>
+      <x:option name="output-ns" select="'http://www.daisy.org/z3986/2005/dtbook/'"/>
+      <x:option name="output-word-tag" select="'w'"/>
+      <x:option name="output-sentence-tag" select="'sent'"/>
+      <x:option name="output-subsentence-tag" select="'span'"/>
+      <x:option name="tmp-word-tag" select="'tmp:ww'"/>
+      <x:option name="tmp-sentence-tag" select="'tmp:ss'"/>
+    </x:call>
 
   <x:scenario label="Sentence no words">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -47,7 +47,7 @@
   </x:scenario>
 
   <x:scenario label="Sentence with lang">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -70,7 +70,7 @@
 
 
   <x:scenario label="Sentence with words">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -92,7 +92,7 @@
   </x:scenario>
 
   <x:scenario label="Words in sub nodes">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -114,7 +114,7 @@
   </x:scenario>
 
   <x:scenario label="Words in sub nodes 2">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -141,7 +141,7 @@
   </x:scenario>
 
   <x:scenario label="No sentence under level">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -171,7 +171,7 @@
   </x:scenario>
 
   <x:scenario label="No sentence under level (with lang)">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -202,7 +202,7 @@
 
 
   <x:scenario label="No words in pagenum">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -230,7 +230,7 @@
   </x:scenario>
 
   <x:scenario label="Silent linefeed fragments">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -260,7 +260,7 @@
   </x:scenario>
 
   <x:scenario label="Silent white space fragments">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -286,7 +286,7 @@
   </x:scenario>
 
   <x:scenario label="Silent punctuation marks">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -312,7 +312,7 @@
   </x:scenario>
 
   <x:scenario label="Split around skippable 1">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -338,7 +338,7 @@
   </x:scenario>
 
   <x:scenario label="Split around skippable 2">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -364,7 +364,7 @@
   </x:scenario>
 
   <x:scenario label="Split recycling">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -390,7 +390,7 @@
   </x:scenario>
 
   <x:scenario label="Existing sentence 1">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -416,7 +416,7 @@
   </x:scenario>
 
   <x:scenario label="Existing sentence 2">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -442,7 +442,7 @@
   </x:scenario>
 
   <x:scenario label="Existing sentence 3">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
 	<x:document type="inline">
 	  <dtbook>
@@ -468,7 +468,7 @@
   </x:scenario>
 
   <x:scenario label="Existing sentence 4">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
   	<x:document type="inline">
   	  <dtbook>
@@ -494,7 +494,7 @@
   </x:scenario>
 
   <x:scenario label="Existing word 1">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
   	<x:document type="inline">
   	  <dtbook>
@@ -520,7 +520,7 @@
   </x:scenario>
 
   <x:scenario label="Existing word 2">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
   	<x:document type="inline">
   	  <dtbook>
@@ -546,7 +546,7 @@
   </x:scenario>
 
   <x:scenario label="Existing word 3 (with attributes)">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
   	<x:document type="inline">
   	  <dtbook>
@@ -572,7 +572,7 @@
   </x:scenario>
 
   <x:scenario label="Sentence-unfriendly element 1">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
   	<x:document type="inline">
   	  <dtbook>
@@ -606,7 +606,7 @@
   </x:scenario>
 
   <x:scenario label="Sentence-unfriendly element 2">
-    <x:call step="px:reshape-testing-wrapper">
+    <x:call>
       <x:input port="source">
   	<x:document type="inline">
   	  <dtbook>
@@ -644,5 +644,6 @@
     </x:expect>
   </x:scenario>
 
+  </x:scenario>
 
 </x:description>

@@ -171,11 +171,10 @@
 					<p:pipe step="update-links" port="result"/>
 				</p:iteration-source>
 				<p:output port="result" sequence="true">
-					<p:pipe step="outline" port="content-doc"/>
+					<p:pipe step="outline" port="result"/>
 					<p:pipe step="outline" port="outline"/>
 				</p:output>
-				<px:html-outline name="outline" fix-sectioning="outline-depth"
-				                 output-base-uri="file:/tmp/irrelevant.html"/>
+				<px:html-outline name="outline" fix-sectioning="outline-depth"/>
 				<p:sink/>
 			</p:for-each>
 			<p:xslt>

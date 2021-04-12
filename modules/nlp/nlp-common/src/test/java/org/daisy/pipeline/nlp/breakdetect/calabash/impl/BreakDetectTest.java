@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -13,6 +12,7 @@ import javax.xml.transform.sax.SAXSource;
 
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.Serializer.Property;
@@ -58,7 +58,7 @@ public class BreakDetectTest implements TreeWriterFactory {
 	private String clean(String str) {
 		return str.replaceAll("<([^ ]+) [^><]+/>", "<$1/>") //remove the attributes
 		        .replaceAll("<([^ ]+) [^><]+>", "<$1>") //remove the attributes (side effect: comments are removed as well)
-		        .replaceAll("<(/?)[^:]*:", "<$1"); //remove the namespace prefixes
+		        .replaceAll("<(/?)[^>< :]*:", "<$1"); //remove the namespace prefixes
 	}
 
 	private void check(String input, String expected, boolean removeSpace,
@@ -70,10 +70,13 @@ public class BreakDetectTest implements TreeWriterFactory {
 		SAXSource source = new SAXSource(new InputSource(new StringReader(input)));
 		XdmNode document = Builder.build(source);
 
-		FormatSpecifications specs = new FormatSpecifications("http://tmp", "s", "w",
-		        "http://ns", "lang", Arrays.asList("span1", "span2", "span3", "space"), Arrays
-		                .asList("space", "span3"), Arrays.asList("space", "span3"), Arrays
-		                .asList("sentbefore"), Arrays.asList("sentafter"));
+		FormatSpecifications specs = new FormatSpecifications(
+				new QName("tmp", "http://tmp", "s"), new QName("tmp", "http://tmp", "w"), "http://ns", "lang",
+				x -> x.getNodeName().getLocalName().matches("span1|span2|span3|space"),
+				x -> x.getNodeName().getLocalName().matches("span3|space"),
+				x -> x.getNodeName().getLocalName().matches("span3|space"),
+				x -> x.getNodeName().getLocalName().equals("sentbefore"),
+				x -> x.getNodeName().getLocalName().equals("sentafter"));
 
 		XdmNode tree = new XmlBreakRebuilder().rebuild(this, Lexers, document, specs,
 		        new DummyLangDetector(), forbidAnyDuplication, new ArrayList<String>());

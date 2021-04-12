@@ -68,7 +68,8 @@
                                               self::html:h6],
                                      $page-number-elements)
                                     except $referenced-html-elements"/>
-            <xsl:with-param name="in-use" select="//*/@id[matches(.,'^(par|text|audio)_')]"/>
+            <xsl:with-param name="in-use" select="(//*/@id,
+                                                   //*/@id[matches(.,'^(text|audio)_')]/replace(.,'^(text|audio)','par'))"/>
         </xsl:call-template>
     </xsl:template>
     
@@ -167,6 +168,9 @@
                                                                            $audio-segments[$i]/@clip-end=$audio-segments[$i + 1]/@clip-begin)">
                                                     <xsl:variable name="audio-id" as="xs:string" select="replace($par-id,'par_','audio_')"/>
                                                     <par id="{$par-id}" endsync="last">
+                                                        <xsl:if test=". intersect $page-number-elements">
+                                                            <xsl:attribute name="system-required" select="'pagenumber-on'"/>
+                                                        </xsl:if>
                                                         <text id="{$text-id}" src="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}"/>
                                                         <audio id="{$audio-id}"
                                                                src="{pf:relativize-uri($audio-segments[1]/pf:resolve-uri(@src,.),$seq-base-uri)}"
@@ -190,7 +194,17 @@
                                                       replaced with the pars in the seq.
                                                   -->
                                                   <seq id="{$par-id}" textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
-                                                      <xsl:sequence select="$smil-segments"/>
+                                                      <xsl:choose>
+                                                          <xsl:when test=". intersect $page-number-elements">
+                                                              <xsl:for-each select="$smil-segments">
+                                                                  <xsl:attribute name="system-required" select="'pagenumber-on'"/>
+                                                                  <xsl:sequence select="@*|node()"/>
+                                                              </xsl:for-each>
+                                                          </xsl:when>
+                                                          <xsl:otherwise>
+                                                              <xsl:sequence select="$smil-segments"/>
+                                                          </xsl:otherwise>
+                                                      </xsl:choose>
                                                   </seq>
                                                 </xsl:otherwise>
                                             </xsl:choose>
@@ -208,6 +222,9 @@
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <par id="{$par-id}" endsync="last">
+                                        <xsl:if test=". intersect $page-number-elements">
+                                            <xsl:attribute name="system-required" select="'pagenumber-on'"/>
+                                        </xsl:if>
                                         <text id="{$text-id}" src="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}"/>
                                     </par>
                                 </xsl:otherwise>
@@ -220,10 +237,21 @@
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:apply-templates select="(par,$missing-pars)">
-                <!-- pf:base-uri will return empty sequence for $missing-pars -->
+                <!--
+                    First sort by spine order.
+
+                    (pf:base-uri will return empty sequence for $missing-pars)
+                -->
                 <xsl:sort select="index-of($html[pf:base-uri(.)=current()/pf:resolve-uri(substring-before(@textref|text/@src,'#'),
                                                                                          (pf:base-uri(.),$seq-base-uri)[1])],
                                            $html)"/>
+                <!--
+                    Then sort by document order within content document.
+
+                    In case this does not match the default reading order (such as when a note body
+                    does not come right after the corresponding note ref in the content document),
+                    this is fixed in a subsequent step.
+                -->
                 <xsl:sort select="$html[pf:html-base-uri(.)=current()/pf:resolve-uri(substring-before(@textref|text/@src,'#'),
                                                                                      (pf:base-uri(.),$seq-base-uri)[1])]
                                   //*[@id=substring-after(current()/(@textref|text/@src),'#')][1]/count(preceding::*|ancestor::*)"/>

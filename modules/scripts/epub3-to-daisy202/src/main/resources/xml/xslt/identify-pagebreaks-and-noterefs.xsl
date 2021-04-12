@@ -25,14 +25,12 @@
 
 	<xsl:template match="/*">
 		<xsl:apply-templates mode="convert" select="."/>
-		<xsl:if test="not(exists($pagebreaks-from-nav))">
-			<xsl:result-document href="page-list">
-				<d:file>
-					<xsl:attribute name="href" select="base-uri(/*)"/>
-					<xsl:apply-templates mode="list" select="."/>
-				</d:file>
-			</xsl:result-document>
-		</xsl:if>
+		<xsl:result-document href="page-and-noteref-list">
+			<d:file>
+				<xsl:attribute name="href" select="base-uri(/*)"/>
+				<xsl:apply-templates mode="list" select="."/>
+			</d:file>
+		</xsl:result-document>
 	</xsl:template>
 
 	<!--
@@ -98,21 +96,45 @@
 	              match="*[self::span|self::div|self::a|self::hr|self::br]
 	                      [@epub:type/tokenize(.,'\s+')='pagebreak']
 	                      [not(*)]">
+		<xsl:if test="not(exists($pagebreaks-from-nav))">
+			<d:anchor>
+				<xsl:sequence select="@id"/>
+				<xsl:if test="not(@id)">
+					<xsl:call-template name="pf:generate-id"/>
+				</xsl:if>
+				<xsl:variable name="title" as="xs:string">
+					<xsl:choose>
+						<xsl:when test="normalize-space(string(.))">
+							<xsl:sequence select="normalize-space(string(.))"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:sequence select="@title"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<xsl:attribute name="title" select="$title"/>
+				<xsl:variable name="classes" as="xs:string*" select="@class/tokenize(.,'\s+')[not(.='')]"/>
+				<xsl:attribute name="class">
+					<xsl:choose>
+						<xsl:when test="$classes=('page-normal','page-front','page-special')">
+							<xsl:sequence select="$classes[.=('page-normal','page-front','page-special')][1]"/>
+						</xsl:when>
+						<xsl:when test="matches(string($title),'^[0-9]+$')">
+							<xsl:sequence select="'page-normal'"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:sequence select="'page-special'"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
+			</d:anchor>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template mode="list" match="a[@href][@id][@epub:type/tokenize(.,'\s+')='noteref']">
 		<d:anchor>
 			<xsl:sequence select="@id"/>
-			<xsl:if test="not(@id)">
-				<xsl:call-template name="pf:generate-id"/>
-			</xsl:if>
-			<xsl:attribute name="title">
-				<xsl:choose>
-					<xsl:when test="normalize-space(string(.))">
-						<xsl:sequence select="normalize-space(string(.))"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:sequence select="@title"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
+			<xsl:attribute name="class" select="'noteref'"/>
 		</d:anchor>
 	</xsl:template>
 

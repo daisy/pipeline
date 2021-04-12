@@ -27,18 +27,14 @@
 	</p:import>
 
 	<p:documentation>Normalize the heading ranks to match their respective outline depth.</p:documentation>
-	<px:html-outline name="outline" fix-heading-ranks="outline-depth" output-base-uri="file:/irrelevant"/>
-	<p:sink/>
+	<px:html-outline fix-heading-ranks="outline-depth"/>
 
 	<p:xslt>
-		<p:input port="source">
-			<p:pipe step="outline" port="content-doc"/>
+		<p:input port="stylesheet">
+			<p:document href="../xslt/html5-to-html4.xsl"/>
 		</p:input>
 		<p:input port="parameters">
 			<p:empty/>
-		</p:input>
-		<p:input port="stylesheet">
-			<p:document href="../xslt/html5-to-html4.xsl"/>
 		</p:input>
 	</p:xslt>
 

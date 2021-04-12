@@ -1,9 +1,9 @@
 package org.daisy.pipeline.nlp.breakdetect.calabash.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Predicate;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +14,11 @@ import java.util.Set;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmNodeKind;
+import net.sf.saxon.sxpath.XPathExpression;
+import net.sf.saxon.trans.XPathException;
 
+import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.pipeline.nlp.DummyLangDetector;
 import org.daisy.pipeline.nlp.LangDetector;
@@ -25,6 +29,7 @@ import org.daisy.pipeline.nlp.lexing.LexServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -45,14 +50,13 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 	private XProcRuntime mRuntime = null;
 	private LexServiceRegistry mLexerRegistry;
 	private Set<Locale> mLangs;
-	private Collection<String> inlineTagsOption;
-	private Collection<String> wordBeforeOption;
-	private Collection<String> wordAfterOption;
-	private Collection<String> sentenceBeforeOption;
-	private Collection<String> sentenceAfterOption;
-	private String tmpNs;
-	private String wordTagOption;
-	private String sentenceTagOption;
+	private RuntimeValue inlineTagsOption;
+	private RuntimeValue wordBeforeOption;
+	private RuntimeValue wordAfterOption;
+	private RuntimeValue sentenceBeforeOption;
+	private RuntimeValue sentenceAfterOption;
+	private QName wordTagOption;
+	private QName sentenceTagOption;
 	private LangDetector mLangDetector = null;
 
 	public BreakDetectStep(XProcRuntime runtime, XAtomicStep step, LexServiceRegistry registry) {
@@ -71,21 +75,19 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 	public void setOption(QName name, RuntimeValue value) {
 		super.setOption(name, value);
 		if ("inline-tags".equalsIgnoreCase(name.getLocalName())) {
-			inlineTagsOption = processListOption(value.getString());
+			inlineTagsOption = value;
 		} else if ("ensure-word-before".equalsIgnoreCase(name.getLocalName())) {
-			wordBeforeOption = processListOption(value.getString());
+			wordBeforeOption = value;
 		} else if ("ensure-word-after".equalsIgnoreCase(name.getLocalName())) {
-			wordAfterOption = processListOption(value.getString());
+			wordAfterOption = value;
 		} else if ("ensure-sentence-before".equalsIgnoreCase(name.getLocalName())) {
-			sentenceBeforeOption = processListOption(value.getString());
+			sentenceBeforeOption = value;
 		} else if ("ensure-sentence-after".equalsIgnoreCase(name.getLocalName())) {
-			sentenceAfterOption = processListOption(value.getString());
+			sentenceAfterOption = value;
 		} else if ("output-word-tag".equalsIgnoreCase(name.getLocalName())) {
-			wordTagOption = value.getString();
+			wordTagOption = value.getQName();
 		} else if ("output-sentence-tag".equalsIgnoreCase(name.getLocalName())) {
-			sentenceTagOption = value.getString();
-		} else if ("tmp-ns".equalsIgnoreCase(name.getLocalName())) {
-			tmpNs = value.getString();
+			sentenceTagOption = value.getQName();
 		} else {
 			runtime.error(new RuntimeException("unrecognized option " + name));
 		}
@@ -100,8 +102,15 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 		mResult.resetWriter();
 	}
 
-	static private Collection<String> processListOption(String opt) {
-		return Arrays.asList(opt.split(","));
+	private Predicate<XdmNode> processXSLTMatchPatternOption(RuntimeValue option) throws XPathException {
+		if (!option.getString().equals("")) {
+			XPathExpression matcher = SaxonHelper.compileExpression(
+				option.getString(),
+				option.getNamespaceBindings(),
+				runtime.getProcessor().getUnderlyingConfiguration());
+			return n -> n.getNodeKind() == XdmNodeKind.ELEMENT && SaxonHelper.evaluateBoolean(matcher, n);
+		} else
+			return n -> false;
 	}
 
 	public void run() throws SaxonApiException {
@@ -119,10 +128,18 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 		}
 		langToToken.put(null, generic);
 
-		FormatSpecifications formatSpecs = new FormatSpecifications(tmpNs, sentenceTagOption,
-		        wordTagOption, "http://www.w3.org/XML/1998/namespace", "lang",
-		        inlineTagsOption, wordBeforeOption, wordAfterOption, sentenceBeforeOption,
-		        sentenceAfterOption);
+		FormatSpecifications formatSpecs;
+		try {
+			formatSpecs = new FormatSpecifications(
+				sentenceTagOption, wordTagOption, "http://www.w3.org/XML/1998/namespace", "lang",
+				processXSLTMatchPatternOption(inlineTagsOption),
+				processXSLTMatchPatternOption(wordBeforeOption),
+				processXSLTMatchPatternOption(wordAfterOption),
+				processXSLTMatchPatternOption(sentenceBeforeOption),
+				processXSLTMatchPatternOption(sentenceAfterOption));
+		} catch (XPathException e) {
+			throw new XProcException(step.getNode(), e);
+		}
 
 		XmlBreakRebuilder xmlRebuilder = new XmlBreakRebuilder();
 

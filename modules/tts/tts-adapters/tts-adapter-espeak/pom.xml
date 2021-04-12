@@ -22,10 +22,13 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
     </dependency>
-    <!-- for the binary finder -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
     </dependency>
     <!--
         test dependencies
@@ -34,10 +37,6 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>audio-encoder-lame</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/add-legal-doc.xpl">
+
+	<x:scenario label="test">
+		<x:call step="pxi:add-legal-doc">
+			<x:option name="input" select="resolve-uri('../resources/valentin.epub')"/>
+			<x:option name="output" select="concat($temp-dir,'test.epub')"/>
+		</x:call>
+		<x:context label="the output EPUB">
+			<x:document type="zip" base-uri="temp-dir" href="test.epub" ordered="true"/>
+		</x:context>
+		<x:expect label="the output EPUB" type="compare">
+			<x:document type="inline">
+				<c:zipfile name="test.epub">
+					<c:file name="EPUB/C00000-0-colophon.xhtml"/>
+					<c:file name="EPUB/C00000-1-cover.xhtml"/>
+					<c:file name="EPUB/C00000-2-frontmatter.xhtml"/>
+					<c:file name="EPUB/C00000-3-chapter.xhtml"/>
+					<c:file name="EPUB/C00000-4-chapter.xhtml"/>
+					<c:file name="EPUB/C00000-5-chapter.xhtml"/>
+					<c:file name="EPUB/C00000-6-rearnotes.xhtml"/>
+					<c:file name="EPUB/C00000-7-chapter.xhtml"/>
+					<c:file name="EPUB/C00000-8-conclusion.xhtml"/>
+					<c:file name="EPUB/C00000-9-footnotes.xhtml"/>
+					<c:file name="EPUB/css/accessibility.css"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/LICENSE.txt"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-Italic.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
+					<c:file name="EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
+					<c:file name="EPUB/images/valentin.jpg"/>
+					<c:file name="EPUB/nav.ncx"/>
+					<c:file name="EPUB/nav.xhtml"/>
+					<c:file name="EPUB/package.opf"/>
+					<c:file name="META-INF/container.xml"/>
+					<c:file name="mimetype"/>
+				</c:zipfile>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

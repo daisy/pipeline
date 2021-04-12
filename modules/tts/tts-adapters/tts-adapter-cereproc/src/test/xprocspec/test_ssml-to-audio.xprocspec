@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="http://www.daisy.org/pipeline/modules/ssml-to-audio/library.xpl">
+
+	<x:scenario label="synthesize with Cereproc">
+		<x:call step="px:ssml-to-audio">
+			<x:input port="source">
+				<x:document type="inline">
+					<speak version="1.1" xmlns="http://www.w3.org/2001/10/synthesis">
+						<s id="A" xml:lang="sv">
+							<token role="word">Det</token>
+							<token role="word">var</token>
+							<token role="word">en</token>
+							<token role="word">gång</token>
+							<token role="word">och</token>
+							<token role="word">den</token>
+							<token role="word">var</token>
+							<token role="word">sandad</token>.
+						</s>
+						<s id="B" xml:lang="fr">
+							<token role="word">Bonjour</token>
+							<token role="word">monsieur</token>,
+							<token role="word">ça</token>
+							<token role="word">va</token>?
+						</s>
+						<s id="C" xml:lang="en">
+							<token role="word">End</token>
+							<token role="word">of</token>
+							<token role="word">test</token>
+							<token role="word">book</token>.
+						</s>
+					</speak>
+				</x:document>
+			</x:input>
+			<x:input port="config">
+				<x:document type="inline">
+					<config>
+						<voice engine="cereproc-dnn" name="William" lang="en" gender="male-adult"/>
+						<voice engine="cereproc" name="Ylva" lang="sv" gender="female-adult"/>
+						<voice engine="cereproc" name="William" lang="*" gender="male-adult"/>
+						<!-- log can be found in "log" output -->
+						<property key="log" value="true"/>
+					</config>
+				</x:document>
+			</x:input>
+			<x:option name="temp-dir" select="resolve-uri('audio/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the status port">
+			<x:document type="port" port="status"/>
+		</x:context>
+		<x:expect label="the status should be ok" type="compare">
+			<x:document type="inline">
+				<d:status result="ok"/>
+			</x:document>
+		</x:expect>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="there should be 3 audio clips" type="xpath" test="count(/d:audio-clips/d:clip)" equals="3"/>
+		<!--
+		    enable this to check that the right voices are used and have the correct sample rate
+		    (requires mpg123 to be installed)
+		-->
+		<x:expect pending=""
+		          label="the right voices are used" type="custom" href="play-audio-clips.xpl" step="x:play-audio-clips"/>
+		<x:context label="the log port">
+			<x:document type="port" port="log"/>
+		</x:context>
+		<!-- enable this to see the log in the report -->
+		<x:expect label="the log" type="compare">
+			<x:document type="inline">
+				<d:log/>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

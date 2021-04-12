@@ -12,16 +12,19 @@
   
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>epub3-to-epub3</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 module :: EPUB 3 Enhancer</name>
   
   <dependencies>
-    <!-- for XProcScriptService -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
     </dependency>
     <!--
         runtime dependencies
@@ -53,6 +56,11 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>epub-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -61,17 +69,17 @@
       <artifactId>epub3-tts</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-break-detection</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <!--
         test dependencies
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>liblouis-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>calabash-adapter</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -92,10 +100,14 @@
   </dependencies>
   
   <properties>
+    <java.source.version>11</java.source.version>
+    <java.target.version>11</java.target.version>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_epub3_to_epub3,
       org.daisy.pipeline.script.impl.XProcScript_epub3_to_epub3,
-      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_tts
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_tts,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_ensure_pagenum_text,
+      com.textalk.AppendLegal$Step$Provider
     </expose-services>
   </properties>
   
@@ -129,6 +141,19 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              <mainClass>com.textalk.AppendLegal</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>

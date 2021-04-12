@@ -5,6 +5,7 @@
                xmlns="http://www.idpf.org/2007/opf"
                stylesheet="../../../main/resources/xml/pub/create-metadata.merge.xsl">
 
+    <x:param name="log-conflicts" select="'true'"/>
     <x:param name="reserved-prefixes" select="'a11y:      http://www.idpf.org/epub/vocab/package/a11y/#
                                                dcterms:   http://purl.org/dc/terms/
                                                epubsc:    http://idpf.org/epub/vocab/sc/#
@@ -14,6 +15,7 @@
                                                rendition: http://www.idpf.org/vocab/rendition/#
                                                schema:    http://schema.org/
                                                xsd:       http://www.w3.org/2001/XMLSchema#'"/>
+    <x:param name="existing-id-outside-metadata" select="()"/>
 
     <x:scenario label="IDs :: ">
         <x:scenario label="conflicting IDs">

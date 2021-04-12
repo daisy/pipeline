@@ -28,6 +28,11 @@
             A fileset XML document listing all the pagebreak elements as d:anchor elements.
         </p:documentation>
     </p:input>
+    <p:input port="noteref-list">
+        <p:documentation>
+            A fileset XML document listing all the noteref elements as d:anchor elements.
+        </p:documentation>
+    </p:input>
 
     <p:output port="result.fileset" primary="true">
         <p:documentation>
@@ -39,7 +44,7 @@
         <p:pipe step="add-ncc" port="result.in-memory"/>
     </p:output>
     <p:output port="ncc">
-        <p:pipe step="ncc-with-linkbacks" port="result"/>
+        <p:pipe step="ncc" port="result"/>
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
@@ -153,7 +158,7 @@
             <p:pipe step="drop-smil-without-associated-xhtml" port="smil"/>
         </p:output>
         <p:output port="smil-with-textref" sequence="true">
-            <!-- Possibly with textref attributes. For use in create-linkbacks.xsl of NCC. -->
+            <!-- Possibly with "textref" and "contained-in" attributes. For use in create-linkbacks.xsl of NCC. -->
             <p:pipe step="drop-smil-without-associated-xhtml" port="smil-with-textref"/>
         </p:output>
         <p:output port="xhtml.in-memory" sequence="true">
@@ -260,7 +265,10 @@
                     </p:input>
                 </p:xslt>
                 <p:sink/>
-                <p:documentation>Add linkbacks from HTML to SMIL.</p:documentation>
+                <p:documentation>
+                    Add linkbacks from HTML to SMIL. <!-- (Note that the spec does not explicitly
+                    mandate links in content documents, only in the NCC.)  -->
+                </p:documentation>
                 <p:for-each name="xhtml-with-linkbacks">
                     <p:iteration-source>
                         <p:pipe step="associated-xhtml" port="result"/>
@@ -459,11 +467,10 @@
     <p:sink/>
 
     <p:documentation>
-        Create NCC file with references to all heading elements. Note that this NCC is invalid and
-        needs to be fixed by the add-linkbacks step below.
+        Create HTML (that will later become the NCC) with references to all heading, pagenum and
+        noteref elements.
     </p:documentation>
-    <p:group name="ncc">
-        <p:output port="result"/>
+    <p:group>
         <p:variable name="ncc-base-uri" select="concat(replace(base-uri(/*),'[^/]+$',''),'ncc.html')">
             <p:pipe step="opf" port="result"/>
         </p:variable>
@@ -483,10 +490,16 @@
                     wrapper="section" wrapper-namespace="http://www.w3.org/1999/xhtml">
                 <!-- hack to get "Untitled section" rather than "Untitled document" -->
             </p:wrap>
-            <px:html-outline fix-untitled-sections-in-outline="imply-heading" heading-links-only="true">
-                <p:with-option name="output-base-uri" select="$ncc-base-uri"/>
+            <px:html-outline fix-untitled-sections-in-outline="imply-heading" heading-links-only="true"
+                             name="html-outline">
+                <p:with-option name="toc-output-base-uri" select="$ncc-base-uri"/>
             </px:html-outline>
-            <p:filter select="/html:ol/html:li/html:ol"/>
+            <p:sink/>
+            <p:filter select="/html:ol/html:li/html:ol">
+                <p:input port="source">
+                    <p:pipe step="html-outline" port="toc"/>
+                </p:input>
+            </p:filter>
         </p:for-each>
         <p:wrap-sequence wrapper="body" wrapper-namespace="http://www.w3.org/1999/xhtml"/>
         <px:set-base-uri name="outline">
@@ -500,6 +513,7 @@
             <p:input port="source">
                 <p:pipe step="outline" port="result"/>
                 <p:pipe step="main" port="page-list"/>
+                <p:pipe step="main" port="noteref-list"/>
                 <p:pipe step="content-docs" port="result"/>
             </p:input>
             <p:input port="stylesheet">
@@ -514,47 +528,22 @@
             FIXME: check that it is actually a h1 and not e.g. a page number
             FIXME: somehow ensure that the first heading is actually the book title?
         -->
-        <p:add-attribute match="html:h1[not(preceding::html:h1)]" attribute-name="class" attribute-value="title"
-                         name="body"/>
-        <p:sink/>
-        <p:documentation>
-            Create head element for NCC from package doc
-        </p:documentation>
-        <px:opf-to-ncc-metadata name="head">
-            <p:input port="source">
-                <p:pipe step="opf" port="result"/>
-            </p:input>
-            <p:input port="ncc-body">
-                <p:pipe step="body" port="result"/>
-            </p:input>
-            <p:input port="smil">
-                <p:pipe step="augment-smils" port="smil.in-memory"/>
-                <p:pipe step="new-smils" port="smil"/>
-            </p:input>
-        </px:opf-to-ncc-metadata>
-        <p:sink/>
-        <p:wrap-sequence wrapper="html" wrapper-namespace="http://www.w3.org/1999/xhtml">
-            <p:input port="source">
-                <p:pipe step="head" port="result"/>
-                <p:pipe step="body" port="result"/>
-            </p:input>
-        </p:wrap-sequence>
-        <p:add-attribute match="/*" attribute-name="lang">
-            <p:with-option name="attribute-value" select="/*/html:head/html:meta[@name='dc:language']/@content"/>
-        </p:add-attribute>
+        <p:add-attribute match="html:h1[not(preceding::html:h1)]" attribute-name="class" attribute-value="title"/>
+        <p:wrap-sequence wrapper="html" wrapper-namespace="http://www.w3.org/1999/xhtml"/>
         <px:set-base-uri>
             <p:with-option name="base-uri" select="$ncc-base-uri"/>
         </px:set-base-uri>
     </p:group>
-    <p:sink/>
+    <p:identity name="temp-ncc"/>
 
     <p:documentation>
-        Make anchors in NCC point to SMILs.
+        Make anchors in NCC point to SMILs and remove noteref links that are not present in SMIL.
     </p:documentation>
     <p:group px:message="Creating linkbacks for NCC" px:message-severity="DEBUG" px:progress="3/10">
+        <p:sink/>
         <p:xslt>
             <p:input port="source">
-                <p:pipe step="ncc" port="result"/>
+                <p:pipe step="temp-ncc" port="result"/>
                 <p:pipe step="augment-smils" port="smil-with-textref"/>
                 <p:pipe step="new-smils" port="smil"/>
             </p:input>
@@ -565,6 +554,9 @@
                 <p:empty/>
             </p:with-param>
         </p:xslt>
+        <p:delete match="html:span[@class='noteref' and not(html:a)]">
+            <!-- delete noteref spans of which child element was dropped in create-linkbacks.xsl -->
+        </p:delete>
         <p:xslt>
             <p:input port="stylesheet">
                 <p:document href="../../xslt/pretty-print.xsl"/>
@@ -575,6 +567,33 @@
         </p:xslt>
     </p:group>
     <p:identity name="ncc-with-linkbacks"/>
+
+    <p:documentation>
+        Add NCC head and lang attribute based on package doc and NCC body
+    </p:documentation>
+    <p:insert position="first-child">
+        <p:input port="insertion">
+            <p:pipe step="ncc-head" port="result"/>
+        </p:input>
+    </p:insert>
+    <p:add-attribute match="/*" attribute-name="lang">
+        <p:with-option name="attribute-value" select="/*/html:head/html:meta[@name='dc:language']/@content"/>
+    </p:add-attribute>
+    <p:identity name="ncc"/>
+    <p:sink/>
+
+    <px:opf-to-ncc-metadata name="ncc-head">
+        <p:input port="source">
+            <p:pipe step="opf" port="result"/>
+        </p:input>
+        <p:input port="ncc-body" select="//html:body">
+            <p:pipe step="ncc-with-linkbacks" port="result"/>
+        </p:input>
+        <p:input port="smil">
+            <p:pipe step="augment-smils" port="smil.in-memory"/>
+            <p:pipe step="new-smils" port="smil"/>
+        </p:input>
+    </px:opf-to-ncc-metadata>
     <p:sink/>
 
     <p:documentation>Fileset of all updated HTML</p:documentation>
@@ -632,7 +651,7 @@
             <p:pipe step="update-html" port="result.in-memory"/>
         </p:input>
         <p:input port="entry">
-            <p:pipe step="ncc-with-linkbacks" port="result"/>
+            <p:pipe step="ncc" port="result"/>
         </p:input>
     </px:fileset-add-entry>
 

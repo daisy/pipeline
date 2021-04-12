@@ -4,6 +4,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
                 exclude-inline-prefixes="#all"
                 type="px:tts-for-epub3" name="main">
 
@@ -125,7 +126,7 @@
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
     <p:documentation>
-      px:css:speech-cascade
+      px:css-speech-cascade
       px:css-speech-clean
     </p:documentation>
   </p:import>
@@ -223,6 +224,27 @@
         <p:output port="sentence-ids">
           <p:pipe port="sentence-ids" step="lexing"/>
         </p:output>
+        <p:group>
+          <p:documentation>
+            Insert "speech-only" spans from @tts:before and @tts:after attributes
+          </p:documentation>
+          <p:insert match="*[@tts:before]" position="first-child">
+            <p:input port="insertion">
+              <p:inline><tts:before>[CONTENT]</tts:before></p:inline>
+            </p:input>
+          </p:insert>
+          <p:string-replace match="tts:before/text()" replace="parent::*/parent::*/@tts:before"/>
+          <p:insert match="*[@tts:after]" position="last-child">
+            <p:input port="insertion">
+              <p:inline><tts:after>[CONTENT]</tts:after></p:inline>
+            </p:input>
+          </p:insert>
+          <p:string-replace match="tts:after/text()" replace="parent::*/parent::*/@tts:after"/>
+          <p:add-attribute match="tts:before|tts:after"
+                           attribute-name="tts:speech-only" attribute-value=""/>
+          <p:rename match="tts:before|tts:after"
+                    new-name="span" new-namespace="http://www.w3.org/1999/xhtml"/>
+        </p:group>
         <px:html-break-detect name="lexing" px:progress="1/2">
           <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
         </px:html-break-detect>
@@ -248,11 +270,19 @@
             <p:pipe port="config" step="main"/>
           </p:input>
         </px:epub3-to-ssml>
-        <px:css-speech-clean name="rm-css">
-          <p:input port="source">
-            <p:pipe step="isolate-skippable" port="result"/>
-          </p:input>
-        </px:css-speech-clean>
+        <p:group name="rm-css">
+          <p:documentation>
+            Unwrap elements with @tts:speech-only attribute and remove text content.
+          </p:documentation>
+          <p:delete match="*[@tts:speech-only]//text()">
+            <p:input port="source">
+              <p:pipe step="isolate-skippable" port="result"/>
+            </p:input>
+          </p:delete>
+          <p:unwrap match="*[@tts:speech-only][not(@id)]"/>
+          <p:documentation>Remove @tts:* attributes and tts namespace nodes</p:documentation>
+          <px:css-speech-clean/>
+        </p:group>
         <px:html-unwrap-words name="rm-words">
           <p:documentation>
             Remove the word tags because it results in invalid EPUB. (The info is used in the

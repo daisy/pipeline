@@ -99,7 +99,7 @@ public class ActualFilesTest implements TreeWriterFactory {
 		boolean toprint = false;
 		XdmSequenceIterator iter;
 		if (node.getNodeName() != null
-		        && !specs.inlineElements.contains(node.getNodeName().getLocalName())
+		        && !specs.inlineElements.test(node)
 		        && !specs.wordTag.equals(node.getNodeName())
 		        && !specs.sentenceTag.equals(node.getNodeName())) {
 			toprint = true;
@@ -204,7 +204,7 @@ public class ActualFilesTest implements TreeWriterFactory {
 		}
 		if (specs.sentenceTag.getLocalName().equals(node.getNodeName().getLocalName())) {
 			isInsideSentence = true;
-		} else if (!specs.inlineElements.contains(node.getNodeName().getLocalName())
+		} else if (!specs.inlineElements.test(node)
 		        && isInsideSentence) {
 			return true;
 		}
@@ -299,7 +299,11 @@ public class ActualFilesTest implements TreeWriterFactory {
 
 	private void check(String file, String[] inlineElements, String[] spaceEquivalents)
 	        throws SaxonApiException, LexerInitException {
+		check(file, Arrays.asList(inlineElements), Arrays.asList(spaceEquivalents));
+	}
 
+	private void check(String file, Collection<String> inlineElements, Collection<String> spaceEquivalents)
+	        throws SaxonApiException, LexerInitException {
 		for (boolean forbidAnyDuplication : new boolean[]{
 		        false, true
 		}) {
@@ -313,10 +317,13 @@ public class ActualFilesTest implements TreeWriterFactory {
 				        .getResourceAsStream(file)));
 				XdmNode document = Builder.build(source);
 
-				FormatSpecifications specs = new FormatSpecifications("http://tmp", "sss",
-				        "www", "http://ns", "lang", Arrays.asList(inlineElements), Arrays
-				                .asList(spaceEquivalents), Arrays.asList(spaceEquivalents),
-				        null, null);
+				FormatSpecifications specs = new FormatSpecifications(new QName("tmp", "http://tmp", "sss"),
+						new QName("tmp", "http://tmp", "www"), "http://ns", "lang",
+						x -> inlineElements.contains(x.getNodeName().getLocalName()),
+						x -> spaceEquivalents.contains(x.getNodeName().getLocalName()),
+						x -> spaceEquivalents.contains(x.getNodeName().getLocalName()),
+						x -> false,
+						x -> false);
 
 				XdmNode tree = new XmlBreakRebuilder()
 				        .rebuild(this, Lexers, document, specs, new DummyLangDetector(),

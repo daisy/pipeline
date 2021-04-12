@@ -57,6 +57,16 @@
 		<x:expect label="one for A" type="xpath" test="/d:audio-clips/d:clip/@idref='A'"/>
 		<x:expect label="one for B" type="xpath" test="/d:audio-clips/d:clip/@idref='B'"/>
 		<x:expect label="one for D" type="xpath" test="/d:audio-clips/d:clip/@idref='D'"/>
+		<!--
+		<x:context label="the log port">
+			<x:document type="port" port="log"/>
+		</x:context>
+		<x:expect label="the log port" type="compare">
+			<x:document type="inline">
+				<log/>
+			</x:document>
+		</x:expect>
+		-->
 	</x:scenario>
 	
 	<x:scenario label="encoding error">

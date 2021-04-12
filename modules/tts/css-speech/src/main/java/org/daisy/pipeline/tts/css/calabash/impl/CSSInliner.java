@@ -13,18 +13,29 @@ import net.sf.saxon.dom.DocumentOverNodeInfo;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
+import com.xmlcalabash.util.TreeWriter;
+
+import cz.vutbr.web.css.CSSProperty.Content;
+import cz.vutbr.web.css.NodeData;
+import cz.vutbr.web.css.Selector.PseudoElement;
+import cz.vutbr.web.css.Term;
+import cz.vutbr.web.css.TermFunction;
+import cz.vutbr.web.css.TermIdent;
+import cz.vutbr.web.css.TermList;
+import cz.vutbr.web.css.TermString;
+import cz.vutbr.web.domassign.StyleMap;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-import com.xmlcalabash.util.TreeWriter;
-
-import cz.vutbr.web.css.NodeData;
-import cz.vutbr.web.css.Term;
-import cz.vutbr.web.domassign.StyleMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CSSInliner {
+
+	private final static Logger logger = LoggerFactory.getLogger(CSSInliner.class);
 
 	private final static String mStyleNsPrefix = "tts";
 	private final static String xmlns = "http://www.w3.org/2000/xmlns/";
@@ -144,7 +155,9 @@ public class CSSInliner {
 			}
 
 			// ===== start inlining ===== //
-			NodeData nd = mStyleMap.get((Element) node);
+			Element elem = (Element) node;
+			{
+			NodeData nd = mStyleMap.get(elem);
 			if (nd != null) {
 				for (String property : nd.getPropertyNames()) {
 					if (mCSS2Properties.contains(property)) {
@@ -177,11 +190,60 @@ public class CSSInliner {
 					}
 				}
 			}
+			}
+			// process ::after and ::before pseudo elements
+
+			for (PseudoElement pseudo : mStyleMap.pseudoSet(elem)) {
+				if ("::after".equals(pseudo.toString()) || "::before".equals(pseudo.toString())) {
+					NodeData nd = mStyleMap.get(elem, pseudo);
+					for (String property : nd.getPropertyNames()) {
+						if ("content".equals(property)) {
+							switch ((Content)nd.getProperty(property)) {
+							case list_values:
+								StringBuilder value = new StringBuilder();
+								for (Term<?> t : (TermList)nd.getValue(property, false)) {
+									if (t instanceof TermString) {
+										value.append(t.getValue());
+										continue;
+									} else if (t instanceof TermFunction) {
+										TermFunction f = (TermFunction)t;
+										if ("attr".equals(f.getFunctionName().toLowerCase())
+										    && f.size() == 1
+										    && f.get(0) instanceof TermIdent) {
+											value.append(elem.getAttribute(((TermIdent)f.get(0)).getValue()));
+											continue;
+										}
+									}
+									logger.warn("Don't know how to speak content value " + t
+									            + " within ::" + pseudo.getName() + " pseudo-element");
+									value = null;
+									break;
+								}
+								if (value != null && value.length() > 0)
+									mTreeWriter.addAttribute(
+										new QName(mStyleNsPrefix, mStyleNS, pseudo.getName()), value.toString());
+								break;
+							case NORMAL:
+							case NONE:
+							case INHERIT:
+							case INITIAL:
+							default:
+								break;
+							}
+							break;
+						} else if (mCSS2Properties.contains(property)) {
+							logger.warn("Ignoring property '"+ property
+							            + "' within ::" + pseudo.getName() + " pseudo-element");
+						}
+					}
+				}
+			}
+
 			mTreeWriter.startContent();
 
 			// ===== end inlining ===== //
 
-			for (Node child = node.getFirstChild(); child != null; child = child
+			for (Node child = elem.getFirstChild(); child != null; child = child
 			        .getNextSibling())
 				rebuildRec(child);
 
