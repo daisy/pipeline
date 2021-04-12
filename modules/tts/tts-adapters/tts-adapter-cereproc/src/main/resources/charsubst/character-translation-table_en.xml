@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This table is migrated from pipline 1 -->
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>	
+	
+	<comment>
+		Key = unicode code point
+		Entry value = replacement string
+	</comment>
+
+	<entry key="03C4"> TAU </entry>
+	<entry key="2103"> DEGREE CELSIUS </entry>
+	<entry key="2227"> LOGICAL AND </entry>
+	<entry key="0117">e</entry>
+	<entry key="1D10"> open o </entry>
+	<entry key="025B"> open e </entry>
+	<entry key="010D"> c with caron </entry>
+	<entry key="0161"> s with caron </entry>
+	<entry key="017E"> z with caron </entry>
+	<entry key="01F0"> j with caron </entry>
+	<entry key="014F"> o with breve </entry>
+	<entry key="1D27"> capital lambda </entry>
+	<entry key="014B"> eng </entry>
+	<entry key="0169"> u with tilde </entry>
+	<entry key="03B1"> alpha </entry>
+	<entry key="03B2"> beta </entry>
+	<entry key="0393"> capital gamma </entry>
+	<entry key="03B4"> delta </entry>
+	<entry key="0394"> capital delta </entry>
+	<entry key="03B7"> eta </entry>
+	<entry key="0398"> capital theta </entry>
+	<entry key="03B8"> theta </entry>
+	<entry key="03BB"> lamda </entry>
+	<entry key="039B"> capital lamda </entry>
+	<entry key="03BC"> mu </entry>
+	<entry key="03BD"> nu </entry>
+	<entry key="03C0"> pi </entry>
+	<entry key="03A0"> capital pi </entry>
+	<entry key="03C1"> rho </entry>
+	<entry key="03C3"> sigma </entry>
+	<entry key="03A3"> capital sigma </entry>
+	<entry key="03C6"> phi </entry>
+	<entry key="03A7"> capital phi </entry>
+	<entry key="03C7"> chi </entry>
+	
+</properties>

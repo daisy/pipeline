@@ -1,6 +1,7 @@
 package org.daisy.pipeline.tts.cereproc.impl;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Map;
 
 import org.daisy.pipeline.tts.AbstractTTSService;
@@ -9,7 +10,6 @@ import org.daisy.pipeline.tts.TTSService;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.ComponentContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +63,7 @@ public abstract class CereProcService extends AbstractTTSService {
 	protected abstract CereProcEngine newEngine(
 		String server, File client, int priority, Map<String,String> params) throws Throwable;
 
+
 	@Override
 	public String getName() {
 		return "cereproc";
@@ -73,6 +74,11 @@ public abstract class CereProcService extends AbstractTTSService {
 		service = { TTSService.class }
 	)
 	public static class CereProcStandardService extends CereProcService {
+
+		@Override
+		public URL getSSMLxslTransformerURL() {
+			return null;
+		}
 
 		@Override
 		public String getVersion() {
@@ -103,7 +109,7 @@ public abstract class CereProcService extends AbstractTTSService {
 					logger.warn(prop + " property not set. Defaulting to " + port);
 				}
 			}
-			return new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, client, priority);
+			return new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, client, priority, super.getSSMLxslTransformerURL());
 		}
 	}
 
@@ -119,6 +125,11 @@ public abstract class CereProcService extends AbstractTTSService {
 		@Override
 		public String getName() {
 			return "cereproc-dnn";
+		}
+
+		@Override
+		public URL getSSMLxslTransformerURL() {
+			return null;
 		}
 
 		@Override
@@ -163,7 +174,9 @@ public abstract class CereProcService extends AbstractTTSService {
 					priority = 15;
 				}
 			}
-			return new CereProcEngine(CereProcEngine.Variant.DNN, this, server, port, client, priority);
+			return new CereProcEngine(CereProcEngine.Variant.DNN, this, server, port, client, priority, super.getSSMLxslTransformerURL());
 		}
 	}
+
+
 }
