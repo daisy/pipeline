@@ -18,6 +18,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>67.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
@@ -44,6 +49,11 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>audio-encoder-lame</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
     </dependency>
   </dependencies>
 
@@ -82,5 +92,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
