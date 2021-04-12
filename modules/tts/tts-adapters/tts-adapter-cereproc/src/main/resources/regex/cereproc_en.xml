@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleSet>
+    <!-- NUMERALS -->
+
+    <!-- ROMAN NUMBERS  -->
+
+    <!-- Page iii, section xi, etc. -->
+    <rule match="([Pp]arts?|[Pp]aper|[Pp]ages?|[Ss]ections?|[Ch]apter|[Nn]umber|[Ff]igures?|[Tt]ables?) (I|i|II|ii|III|iii|IV|iv|V|v|VI|vi|VII|vii|VIII|viii|IX|ix|X|x|XI|xi|XII|xii|XIII|xiii|XIV|xiv|XV|xv|XVI|xvi|XVII|xvii|XVIII|xviii|XIX|xix|XX|xx)\b" replace="$1 __ROMAN__$2__ROMAN__" />
+
+    <rule match="\b(II|ii|III|iii|IV|iv|VII|vii|VIII|viii|IX|ix|XI|xi|XII|xii|XIII|xiii|XIV|xiv|XVI|xvi|XVII|xvii|XVIII|xviii|XIX|xix)\b" replace="__ROMAN__$1__ROMAN__" />
+
+    <!-- Converter: roman -> letters, 1-20 -->
+    <rule match="__ROMAN__(I|i)__ROMAN__" replace=" one" />
+    <rule match="__ROMAN__(II|ii)__ROMAN__" replace=" two" />
+    <rule match="__ROMAN__(III|iii)__ROMAN__" replace=" three" />
+    <rule match="__ROMAN__(IV|iv)__ROMAN__" replace=" four" />
+    <rule match="__ROMAN__(V|v)__ROMAN__" replace=" five" />
+    <rule match="__ROMAN__(VI|vi)__ROMAN__" replace=" six" />
+    <rule match="__ROMAN__(VII|vii)__ROMAN__" replace=" seven" />
+    <rule match="__ROMAN__(VIII|viii)__ROMAN__" replace=" eight" />
+    <rule match="__ROMAN__(IX|ix)__ROMAN__" replace=" nine" />
+    <rule match="__ROMAN__(X|x)__ROMAN__" replace=" ten" />
+    <rule match="__ROMAN__(XI|xi)__ROMAN__" replace=" eleven" />
+    <rule match="__ROMAN__(XII|xii)__ROMAN__" replace=" twelve" />
+    <rule match="__ROMAN__(XIII|xiii)__ROMAN__" replace=" thirteen" />
+    <rule match="__ROMAN__(XIV|xiv)__ROMAN__" replace=" fourteen" />
+    <rule match="__ROMAN__(XV|xv)__ROMAN__" replace=" fifteen" />
+    <rule match="__ROMAN__(XVI|xvi)__ROMAN__" replace=" sixteen" />
+    <rule match="__ROMAN__(XVII|xvii)__ROMAN__" replace=" seventeen" />
+    <rule match="__ROMAN__(XVIII|xviii)__ROMAN__" replace=" eighteen" />
+    <rule match="__ROMAN__(XIX|xix)__ROMAN__" replace=" nineteen" />
+    <rule match="__ROMAN__(XX|xx)__ROMAN__" replace=" twenty" />
+
+
+    <!-- SPELLINGS/ACRONYMS -->
+
+    <!-- GoI - otherwise read as word -->
+    <rule match="\b([A-Z])([a-z])([A-Z])\b" replace="$1 $2 $3" />
+
+    <!-- CSa - otherwise read as word -->
+    <rule match="\b([A-Z])([A-Z])([a-z])\b" replace="$1 $2 $3" />
+
+    <!-- PAUSING -->
+
+    <!-- 2.1 Heading, 65 Interview with... - min del pause between digit and letter-->
+    <rule match="^(\d\d?) ([A-Z][a-z])" replace="$1\. $2" />
+
+    <!-- m2, cm3, km2 etc. -->
+    <rule match="([0-9]\s+)mm2\b" replace="$1 square millimeters" />
+    <rule match="([0-9]\s+)mm3\b" replace="$1 cubic millimeters" />
+    <rule match="([0-9]\s+)cm2\b" replace="$1 square centimeters" />
+    <rule match="([0-9]\s+)dm3\b" replace="$1 cubic centimeters" />
+    <rule match="([0-9]\s+)m2\b" replace="$1 square meters" />
+    <rule match="([0-9]\s+)m3\b" replace="$1 cubic meters" />
+    <rule match="([0-9]\s+)km2\b" replace="$1 square kilometers" />
+
+</ruleSet>
+

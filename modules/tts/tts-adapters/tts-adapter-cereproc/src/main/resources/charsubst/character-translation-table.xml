@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>	
+	
+	<comment>
+		Key = unicode code point
+		Entry value = replacement string
+	</comment>
+
+	<entry key="00AD">-</entry>
+	<entry key="2010">-</entry>
+	<entry key="2011">-</entry>
+	<entry key="2013">-</entry>
+	<entry key="2014">-</entry>
+	<entry key="FE63">-</entry>
+	<entry key="FF0D">-</entry>
+	<entry key="00AB">"</entry>
+	<entry key="00BB">"</entry>
+	<entry key="2018">"</entry>
+	<entry key="2019">'</entry>
+	<entry key="201A">"</entry>
+	<entry key="201B">"</entry>
+	<entry key="201C">"</entry>
+	<entry key="201D">"</entry>
+	<entry key="201E">"</entry>
+	<entry key="201F">"</entry>
+	<entry key="2039">"</entry>
+	<entry key="203A">"</entry>
+	<entry key="FF02">"</entry>
+	<entry key="02BC">'</entry>
+	<entry key="02EE">'</entry>
+	<entry key="207D">(</entry>
+	<entry key="207E">)</entry>
+	<entry key="208D">(</entry>
+	<entry key="208E">)</entry>
+	<entry key="FF08">(</entry>
+	<entry key="FF09">)</entry>
+	
+	<entry key="2026">...</entry>
+	
+	<!-- space -->
+	<entry key="2002"> </entry>
+	<entry key="2003"> </entry>
+	<entry key="2009"> </entry>
+	<entry key="200A"> </entry>
+	<entry key="200B"> </entry>
+	<entry key="202F"> </entry>
+	<entry key="3000"> </entry>
+	<entry key="303F"> </entry>
+	<entry key="FEFF"> </entry>
+	<entry key="0170">ü</entry>
+	<entry key="0171">Ü</entry>
+	
+	<!-- some kind of "oh" sound made by SAPI: -->
+	<entry key="2022"> </entry>
+	
+</properties>
