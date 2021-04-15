@@ -55,6 +55,16 @@
       <artifactId>junit</artifactId>
       <version>4.12</version>
     </dependency>
+      <dependency>
+          <groupId>net.sf.saxon</groupId>
+          <artifactId>Saxon-HE</artifactId>
+          <version>9.8.0-8</version>
+      </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-common</artifactId>
+      <version>3.2.1</version>
+    </dependency>
   </dependencies>
 
   <properties>
