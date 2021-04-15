@@ -18,13 +18,23 @@ import java.nio.file.Files;
 import java.util.*;
 
 import javax.sound.sampled.AudioFormat;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.events.XMLEvent;
 
 import net.sf.saxon.Configuration;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.saxon.SaxonInputValue;
+import org.daisy.common.saxon.SaxonOutputValue;
 import org.daisy.common.shell.CommandRunner;
 
+import org.daisy.common.stax.XMLStreamWriterHelper;
 import org.daisy.common.xslt.CompiledStylesheet;
+import org.daisy.common.xslt.XslTransformCompiler;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
 import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
@@ -274,71 +284,13 @@ public class CereProcEngine extends MarklessTTSEngine {
 	}
 
 	private void performSubstitutionRules(XMLStreamReader reader, XMLStreamWriter writer, String lang) throws XMLStreamException {
-		int i ,len;
 		while(reader.hasNext()) {
 			reader.next();
-			int et = reader.getEventType();
-			switch (et) {
-				case XMLEvent.START_ELEMENT:
-					final String localName = reader.getLocalName();
-					final String namespaceURI = reader.getNamespaceURI();
-					if (namespaceURI != null && namespaceURI.length() > 0) {
-						final String prefix = reader.getPrefix();
-						if (prefix != null)
-							writer.writeStartElement(prefix, localName, namespaceURI);
-						else
-							writer.writeStartElement(namespaceURI, localName);
-					} else {
-						writer.writeStartElement(localName);
-					}
-
-					for ( i = 0, len = reader.getNamespaceCount(); i < len; i++) {
-						writer.writeNamespace(reader.getNamespacePrefix(i), reader.getNamespaceURI(i));
-					}
-
-					for ( i = 0, len = reader.getAttributeCount(); i < len; i++) {
-						String attUri = reader.getAttributeNamespace(i);
-						if (attUri != null)
-							writer.writeAttribute(attUri, reader.getAttributeLocalName(i), reader.getAttributeValue(i));
-						else
-							writer.writeAttribute(reader.getAttributeLocalName(i), reader.getAttributeValue(i));
-					}
-					break;
-				case XMLEvent.END_ELEMENT:
-					writer.writeEndElement();
-					break;
-				case XMLEvent.SPACE:
-				case XMLEvent.CHARACTERS:
-					CereprocTTSUtil utils = this.mTtsUtils.get(lang);
-					writer.writeCharacters(utils.applyAll(reader.getText()));
-					break;
-				case XMLEvent.PROCESSING_INSTRUCTION:
-					writer.writeProcessingInstruction(reader.getPITarget(), reader.getPIData());
-					break;
-				case XMLEvent.CDATA:
-					writer.writeCData(reader.getText());
-					break;
-				case XMLEvent.COMMENT:
-					writer.writeComment(reader.getText());
-					break;
-				case XMLEvent.ENTITY_REFERENCE:
-					writer.writeEntityRef(reader.getLocalName());
-					break;
-				case XMLEvent.START_DOCUMENT:
-					String encoding = reader.getCharacterEncodingScheme();
-					String version = reader.getVersion();
-
-					if (encoding != null && version != null)
-						writer.writeStartDocument(encoding, version);
-					else if (version != null)
-						writer.writeStartDocument(reader.getVersion());
-					break;
-				case XMLEvent.END_DOCUMENT:
-					writer.writeEndDocument();
-					break;
-				case XMLEvent.DTD:
-					writer.writeDTD(reader.getText());
-					break;
+			if (reader.getEventType() == XMLEvent.CHARACTERS) {
+				CereprocTTSUtil utils = this.mTtsUtils.get(lang);
+				writer.writeCharacters(utils.applyAll(reader.getText()));
+			} else {
+				XMLStreamWriterHelper.writeEvent(writer, reader);
 			}
 		}
 	}
