@@ -1,5 +1,8 @@
 package org.daisy.pipeline.tts.cereproc.impl.util;
 
+import org.daisy.pipeline.tts.cereproc.impl.CereProcEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,6 +34,7 @@ import java.util.regex.PatternSyntaxException;
  *
  */
 public class RegexReplace {
+    private final static Logger logger = LoggerFactory.getLogger(CereProcEngine.class);
 
     private XPath xpathObj = XPathFactory.newInstance().newXPath();
     private Vector<PatternReplace> patterns = new Vector<PatternReplace>();
@@ -65,11 +69,11 @@ public class RegexReplace {
                     patterns.add(pr);
                     DEBUG(pr);
                 } catch(PatternSyntaxException pse) {
-                    System.out.println("There is a problem with the regular expression!");
-                    System.out.println("The pattern in question is: "+pse.getPattern());
-                    System.out.println("The description is: "+pse.getDescription());
-                    System.out.println("The message is: "+pse.getMessage());
-                    System.out.println("The index is: "+pse.getIndex());
+                    logger.error("There is a problem with the regular expression!");
+                    logger.error("The pattern in question is: "+pse.getPattern());
+                    logger.error("The description is: "+pse.getDescription());
+                    logger.error("The message is: "+pse.getMessage());
+                    logger.error("The index is: "+pse.getIndex());
 
                     throw new IllegalArgumentException(pse.getMessage());
                 }
@@ -119,10 +123,10 @@ public class RegexReplace {
             Matcher matcher = pattern.matcher(input);
             return matcher.replaceAll(replace);
         } catch (Exception e) {
-            System.err.println("RegexReplace:");
-            System.err.println("     pattern: " + pattern.toString());
-            System.err.println("       input: " + input);
-            System.err.println("     replace: " + replace);
+            logger.error("RegexReplace:");
+            logger.error("     pattern: " + pattern.toString());
+            logger.error("       input: " + input);
+            logger.error("     replace: " + replace);
 
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -136,7 +140,7 @@ public class RegexReplace {
 
     private void DEBUG(String msg) {
         if (DEBUG) {
-            System.err.println("RegexReplace: " + msg);
+            logger.error("RegexReplace: " + msg);
         }
     }
 }
