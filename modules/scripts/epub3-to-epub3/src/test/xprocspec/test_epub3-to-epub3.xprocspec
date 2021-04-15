@@ -609,10 +609,10 @@
 							</h1>
 							<p>
 								<span id="st3-2" class="sentence">
-									This paragraph contains
+									<span id="i3st3-2-no-skippable">This paragraph contains</span>
 									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"
 									      style="visibility: hidden">5</span>
-									a page break.
+									<span id="i3st3-2-page_5">a page break.</span>
 								</span>
 							</p>
 							<figcaption id="caption_1">

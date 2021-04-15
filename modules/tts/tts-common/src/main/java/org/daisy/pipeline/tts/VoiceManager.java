@@ -37,7 +37,7 @@ public class VoiceManager {
 		// services can serve the same voice
 		mBestEngines = new HashMap<Voice,TTSEngine>(); {
 			TTSTimeout timeout = new TTSTimeout();
-			int timeoutSecs = 5;
+			int timeoutSecs = 30;
 			for (TTSEngine tts : engines) {
 				try {
 					timeout.enableForCurrentThread(timeoutSecs);
