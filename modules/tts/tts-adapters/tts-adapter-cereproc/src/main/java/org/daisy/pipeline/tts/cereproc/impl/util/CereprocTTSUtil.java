@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Optional;
-
+import org.daisy.common.file.URLs;
 public class CereprocTTSUtil {
 
     private Optional<Locale> locale;
@@ -26,9 +26,9 @@ public class CereprocTTSUtil {
         String lang  = getCurrentLanguage();
 
         if (lang.equals("sv")) {
-            url = CereprocTTSUtil.class.getResource("/regex/cereproc_sv.xml");
+            url = URLs.getResourceFromJAR("/regex/cereproc_sv.xml", CereprocTTSUtil.class);
         } else if (lang.equals("en")) {
-            url = CereprocTTSUtil.class.getResource("/regex/cereproc_en.xml");
+            url = URLs.getResourceFromJAR("/regex/cereproc_en.xml", CereprocTTSUtil.class);
         } else {
             return;
         }
@@ -38,16 +38,16 @@ public class CereprocTTSUtil {
 
     private void initCharSubstitutionRules() throws IOException {
         this.charReplacer = new UCharReplacer();
-        URL commonSubstRulesFileUrl = CereprocTTSUtil.class.getResource("/charsubst/character-translation-table.xml");
+        URL commonSubstRulesFileUrl = URLs.getResourceFromJAR("/charsubst/character-translation-table.xml", CereprocTTSUtil.class);
 
         this.charReplacer.addSubstitutionTable(commonSubstRulesFileUrl);
 
         String lang  = getCurrentLanguage();
         URL languageSubstRulesFileUrl;
         if (lang.equals("sv")) {
-            languageSubstRulesFileUrl = CereprocTTSUtil.class.getResource("/charsubst/character-translation-table_sv.xml");
+            languageSubstRulesFileUrl = URLs.getResourceFromJAR("/charsubst/character-translation-table_sv.xml", CereprocTTSUtil.class);
         } else if (lang.equals("en")) {
-            languageSubstRulesFileUrl = CereprocTTSUtil.class.getResource("/charsubst/character-translation-table_en.xml");
+            languageSubstRulesFileUrl = URLs.getResourceFromJAR("/charsubst/character-translation-table_en.xml", CereprocTTSUtil.class);
         } else {
             return;
         }
