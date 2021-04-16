@@ -66,7 +66,7 @@ public class CereProcEngineTest extends AbstractTest {
 
 		XdmNode node = (XdmNode) ssmlProcessed.get(0);
 		Voice  v = new Voice("cereproc", "Ylva", new Locale("sv"), null, null);
-		Assert.assertEquals("This is a  gamma . test roman letter  tre, lorem ipsum Tjugosjunde kapitlet.<break time=\"250ms\"></break>",
+		Assert.assertEquals("<voice name=\"Ylva\">This is a  gamma . test roman letter  tre, lorem ipsum Tjugosjunde kapitlet.</voice><break time=\"250ms\"></break>",
 				engine.transformSSML(node, v)
 		);
 		engine.transformSSML(node, v);

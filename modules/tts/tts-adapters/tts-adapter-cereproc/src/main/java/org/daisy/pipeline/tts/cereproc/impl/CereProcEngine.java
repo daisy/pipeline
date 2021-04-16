@@ -56,7 +56,7 @@ public class CereProcEngine extends MarklessTTSEngine {
 
 	private final static Logger logger = LoggerFactory.getLogger(CereProcEngine.class);
 	private static File tmpDirectory = null;
-
+	private Map<String, Object> mTransformParams = new TreeMap<String, Object>();
 	private AudioFormat audioFormat;
 	private final int priority;
 	static final Map<String, CereprocTTSUtil> mTtsUtils = new HashMap<String , CereprocTTSUtil>() {
@@ -264,7 +264,8 @@ public class CereProcEngine extends MarklessTTSEngine {
 
 			XdmNode ssmlOut = (XdmNode) ssmlProcessed.get(0);
 			ThreadUnsafeXslTransformer transformer = getTransformer(ssmlOut.getUnderlyingNode().getConfiguration());
-			return transformer.transformToString(ssmlOut);
+			mTransformParams.put("voice", v.name);
+			return transformer.transformToString(ssmlOut, mTransformParams);
 		}
 
 	private ThreadUnsafeXslTransformer getTransformer(Configuration conf) throws SynthesisException {
