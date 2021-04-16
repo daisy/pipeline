@@ -41,11 +41,10 @@ public class CereProcEngineTest extends AbstractTest {
 				"Server",
 				9999,
 				client,
-				1
+				1,
+				CereProcEngine.class.getResource("/transform-ssml.xsl")
 		);
 		Configuration conf = new Configuration();
-		engine.setStyleSheet(CereProcEngine.class.getResource("/transform-ssml.xsl"));
-
 		List<XdmItem> ssmlProcessed = new ArrayList<>();
 		XMLStreamWriter writer = new SaxonOutputValue(
 				item -> {

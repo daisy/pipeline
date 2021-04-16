@@ -58,9 +58,7 @@ public abstract class CereProcService extends AbstractTTSService {
 				priority = 15;
 			}
 		}
-		CereProcEngine engine = newEngine(server, client, priority, params);
-		engine.setStyleSheet(this.getSSMLxslTransformerURL());
-		return engine;
+		return newEngine(server, client, priority, params);
 	}
 
 	protected abstract CereProcEngine newEngine(
@@ -106,11 +104,7 @@ public abstract class CereProcService extends AbstractTTSService {
 					logger.warn(prop + " property not set. Defaulting to " + port);
 				}
 			}
-			Configuration conf = new Configuration();
-			CereProcEngine engine = new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, client, priority);
-			engine.setStyleSheet(this.getSSMLxslTransformerURL());
-
-			return engine;
+			return new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, client, priority, this.getSSMLxslTransformerURL());
 		}
 	}
 
@@ -170,7 +164,7 @@ public abstract class CereProcService extends AbstractTTSService {
 					priority = 15;
 				}
 			}
-			return new CereProcEngine(CereProcEngine.Variant.DNN, this, server, port, client, priority);
+			return new CereProcEngine(CereProcEngine.Variant.DNN, this, server, port, client, priority, this.getSSMLxslTransformerURL());
 		}
 	}
 }

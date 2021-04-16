@@ -71,16 +71,12 @@ public class CereProcEngine extends MarklessTTSEngine {
 	private HashMap<Configuration, ThreadLocal <ThreadUnsafeXslTransformer>> mTransformer = new HashMap<>();
 	private URL ssmLxslTransformerURL;
 
-	public void setStyleSheet(URL ssmLxslTransformerURL) {
-		this.ssmLxslTransformerURL = ssmLxslTransformerURL;
-	}
-
 	enum Variant {
 		STANDARD,
 		DNN
 	}
 
-	public CereProcEngine(Variant variant, CereProcService service, String server, int port, File client, int priority)
+	public CereProcEngine(Variant variant, CereProcService service, String server, int port, File client, int priority, URL ssmlXslTransformerURL )
 			throws SynthesisException {
 		super(service);
 		this.priority = priority;
@@ -120,6 +116,8 @@ public class CereProcEngine extends MarklessTTSEngine {
 		                                   sampleRate * sampleBits / (2 * 8), // frame rate
 		                                   false                              // little endian
 		                                   );
+
+		this.ssmLxslTransformerURL = ssmlXslTransformerURL;
 	}
 
 
