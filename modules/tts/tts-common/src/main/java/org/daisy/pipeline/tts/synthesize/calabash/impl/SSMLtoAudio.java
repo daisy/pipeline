@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -149,17 +150,11 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		List<TTSEngine> workingEngines = new ArrayList<TTSEngine>();
 		List<String> engineStatus = new ArrayList<String>();
 		for (TTSService service : ttsregistry.getServices()) {
-			if (service.getSSMLxslTransformerURL() == null) {
-				String err = "missing SSML transformer for TTS "
-				        + TTSServiceUtil.displayName(service);
-				mTTSlog.addGeneralError(ErrorCode.WARNING, err);
-				mLogger.error(err);
-				continue;
-			}
 			CompiledStylesheet transf = null;
 			try {
-				transf = xslCompiler.compileStylesheet(service.getSSMLxslTransformerURL()
-				        .openStream());
+				URL transformerURL = service.getSSMLxslTransformerURL();
+				if (transformerURL != null)
+					transf = xslCompiler.compileStylesheet(transformerURL.openStream());
 			} catch (SaxonApiException e) {
 				String err = "error while compiling XSLT SSML adapter of "
 				        + TTSServiceUtil.displayName(service);
@@ -171,25 +166,24 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				mLogger.error(err);
 				mTTSlog.addGeneralError(ErrorCode.WARNING, err);
 			}
-			if (transf != null) {
-				mSSMLtransformers.put(service, transf);
-				TTSEngine engine = null;
-				try {
-					engine = createAndTestEngine(service, mProperties, testingXML, transf, timeout);
-					workingEngines.add(engine);
-					engineStatus.add("[x] " + TTSServiceUtil.displayName(service));
-				} catch (Throwable e) {
-					// Show the full error with stack trace only in the TTS log. A short version is included
-					// in the engine status summary. An engine that could not be activated is not an error
-					// unless no engines could be activated at all. This is to not confuse users because it
-					// is normal that only a part of the engines work.
-					String msg = TTSServiceUtil.displayName(service) + " could not be activated: " + e.getMessage();
-					String stack = getStack(e);
-					mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + stack);
-					mLogger.debug(msg);
-					mLogger.debug(stack);
-					engineStatus.add("[ ] " + msg);
-				}
+			TTSEngine engine = null;
+			try {
+				engine = createAndTestEngine(service, mProperties, testingXML, transf, timeout);
+				workingEngines.add(engine);
+				if (transf != null)
+					mSSMLtransformers.put(service, transf);
+				engineStatus.add("[x] " + TTSServiceUtil.displayName(service));
+			} catch (Throwable e) {
+				// Show the full error with stack trace only in the TTS log. A short version is included
+				// in the engine status summary. An engine that could not be activated is not an error
+				// unless no engines could be activated at all. This is to not confuse users because it
+				// is normal that only a part of the engines work.
+				String msg = TTSServiceUtil.displayName(service) + " could not be activated: " + e.getMessage();
+				String stack = getStack(e);
+				mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + stack);
+				mLogger.debug(msg);
+				mLogger.debug(stack);
+				engineStatus.add("[ ] " + msg);
 			}
 
 		}
@@ -229,14 +223,15 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 		//transform the SSML with the custom SSML adapter
 		String ttsInput = null;
-		try {
-			Map<String, Object> params = new TreeMap<String, Object>();
-			if (engine.endingMark() != null)
-				params.put("ending-mark", engine.endingMark());
-			ttsInput = ssmlTransformer.newTransformer().transformToString(testingXML, params);
-		} catch (SaxonApiException e) {
-			throw new Exception("error while using the SSML adapter on " + testingXML, e);
-		}
+		if (ssmlTransformer != null)
+			try {
+				Map<String, Object> params = new TreeMap<String, Object>();
+				if (engine.endingMark() != null)
+					params.put("ending-mark", engine.endingMark());
+				ttsInput = ssmlTransformer.newTransformer().transformToString(testingXML, params);
+			} catch (SaxonApiException e) {
+				throw new Exception("error while using the SSML adapter on " + testingXML, e);
+			}
 
 		//get a voice supporting SSML marks (so far as they are supported by the engine)
 		Voice firstVoice = null;
@@ -329,7 +324,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 		//check the ending mark
 		if (engine.endingMark() != null) {
-			String details = " input: "+ttsInput+", voice: "+firstVoice;
+			String details = " voice: "+firstVoice;
 			if (marks.size() != 1) {
 				msg += "One bookmark events expected, but received " + marks.size() + " events instead. "+details;
 			} else {

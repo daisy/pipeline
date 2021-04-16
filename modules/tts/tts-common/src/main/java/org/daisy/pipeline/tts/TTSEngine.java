@@ -46,7 +46,8 @@ public abstract class TTSEngine {
 	 * 
 	 * @param sentence is the sentence to synthesize. It is the serialized
 	 *            result of the SSML conversion performed by the XSLT whose URL
-	 *            is returned by TTSService.getSSMLxslTransformerURL().
+	 *            is returned by {@link TTSService#getSSMLxslTransformerURL()},
+	 *            or <code>null</code> if that method returns <code>null</code>.
 	 * @param xmlSentence is the XML version of @param sentence. It should not
 	 *            be used unless one needs information that has been lost during
 	 *            the serialization process (e.g. marks or CSS)

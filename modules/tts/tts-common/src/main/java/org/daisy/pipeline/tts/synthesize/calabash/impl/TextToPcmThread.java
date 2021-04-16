@@ -238,7 +238,8 @@ public class TextToPcmThread implements FormatSpecifications {
 			TTSResource threadResources, List<Mark> marks, List<String> expectedMarks
 	) throws SaxonApiException, SynthesisException, TimeoutException, MemoryException {
 		String transformed = transformSSML(ssml, tts, voice);
-		logEntry.addTTSinput(transformed);
+		if (transformed != null)
+			logEntry.addTTSinput(transformed);
 		logEntry.setActualVoice(voice);
 		return mExecutor.synthesizeWithTimeout(
 			timeout, interrupter, logEntry, transformed, ssml, sentenceSize, tts, voice,
@@ -342,7 +343,8 @@ public class TextToPcmThread implements FormatSpecifications {
 
 			TTSService service = tts.getProvider();
 			if (!mTransforms.containsKey(service)) {
-				mTransforms.put(service, mSSMLTransformers.get(service).newTransformer());
+				CompiledStylesheet transformer = mSSMLTransformers.get(service);
+				mTransforms.put(service, transformer != null ? transformer.newTransformer() : null);
 			}
 		}
 
@@ -603,9 +605,12 @@ public class TextToPcmThread implements FormatSpecifications {
 
 	private String transformSSML(XdmNode ssml, TTSEngine engine, Voice v)
 	        throws SaxonApiException {
+		ThreadUnsafeXslTransformer transformer = mTransforms.get(engine.getProvider());
+		if (transformer == null)
+			return null;
 		mTransformParams.put("voice", v.name);
 		if (engine.endingMark() != null)
 			mTransformParams.put("ending-mark", engine.endingMark());
-		return mTransforms.get(engine.getProvider()).transformToString(ssml, mTransformParams);
+		return transformer.transformToString(ssml, mTransformParams);
 	}
 }
