@@ -493,7 +493,6 @@
                 <artifactItem>
                   <groupId>com.ibm.icu</groupId>
                   <artifactId>icu4j</artifactId>
-                  <version>67.1</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
