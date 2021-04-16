@@ -18,6 +18,8 @@ package org.daisy.pipeline.tts.cereproc.impl.util;/*
 
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UCharacterIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -78,6 +80,8 @@ public class UCharReplacer  {
 	private Map<Integer,String> mSubstitutionTable = null;						//represents the currently selected translationTable
 	private Iterator<Map<Integer,String>> mSubstitutionTablesIterator = null;			//recycled tables map iterator
 	private Normalizer2 normalizer;
+	private final static Logger logger = LoggerFactory.getLogger(UCharReplacer.class);
+
 	/**
 	 * Default constructor.
 	 */
@@ -187,7 +191,7 @@ public class UCharReplacer  {
 				try {
 					map.put(Integer.decode("0x" + key), props.getProperty(key));
 				} catch (NumberFormatException e) {
-					System.err.println("error in translation table " 
+					logger.error("error in translation table "
 									+ tableURL.toString() + ": attribute key=\"" + key + "\" is not a hex number.");
 				}
 			}

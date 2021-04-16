@@ -34,7 +34,7 @@ import java.util.regex.PatternSyntaxException;
  *
  */
 public class RegexReplace {
-    private final static Logger logger = LoggerFactory.getLogger(CereProcEngine.class);
+    private final static Logger logger = LoggerFactory.getLogger(RegexReplace.class);
 
     private XPath xpathObj = XPathFactory.newInstance().newXPath();
     private Vector<PatternReplace> patterns = new Vector<PatternReplace>();
@@ -140,7 +140,7 @@ public class RegexReplace {
 
     private void DEBUG(String msg) {
         if (DEBUG) {
-            logger.error("RegexReplace: " + msg);
+            logger.debug("RegexReplace: " + msg);
         }
     }
 }
