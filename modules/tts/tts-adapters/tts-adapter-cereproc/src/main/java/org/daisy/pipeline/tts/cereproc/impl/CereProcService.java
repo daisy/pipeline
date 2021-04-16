@@ -3,6 +3,7 @@ package org.daisy.pipeline.tts.cereproc.impl;
 import java.io.File;
 import java.util.Map;
 
+import net.sf.saxon.Configuration;
 import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
@@ -57,7 +58,9 @@ public abstract class CereProcService extends AbstractTTSService {
 				priority = 15;
 			}
 		}
-		return newEngine(server, client, priority, params);
+		CereProcEngine engine = newEngine(server, client, priority, params);
+		engine.setStyleSheet(this.getSSMLxslTransformerURL());
+		return engine;
 	}
 
 	protected abstract CereProcEngine newEngine(
@@ -103,7 +106,11 @@ public abstract class CereProcService extends AbstractTTSService {
 					logger.warn(prop + " property not set. Defaulting to " + port);
 				}
 			}
-			return new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, client, priority);
+			Configuration conf = new Configuration();
+			CereProcEngine engine = new CereProcEngine(CereProcEngine.Variant.STANDARD, this, server, port, client, priority);
+			engine.setStyleSheet(this.getSSMLxslTransformerURL());
+
+			return engine;
 		}
 	}
 

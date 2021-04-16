@@ -43,6 +43,8 @@ public class CereProcEngineTest extends AbstractTest {
 				client,
 				1
 		);
+		Configuration conf = new Configuration();
+		engine.setStyleSheet(CereProcEngine.class.getResource("/transform-ssml.xsl"));
 
 		List<XdmItem> ssmlProcessed = new ArrayList<>();
 		XMLStreamWriter writer = new SaxonOutputValue(
@@ -52,7 +54,7 @@ public class CereProcEngineTest extends AbstractTest {
 					} else {
 						throw new RuntimeException(); // should not happen
 					}
-				}, new Configuration()).asXMLStreamWriter();
+				}, conf).asXMLStreamWriter();
 
 		writer.writeStartDocument("1.0");
 		writer.writeStartElement("ssml", "speak", "x");
@@ -68,5 +70,9 @@ public class CereProcEngineTest extends AbstractTest {
 		Assert.assertEquals("This is a  gamma . test roman letter  tre, lorem ipsum Tjugosjunde kapitlet.<break time=\"250ms\"></break>",
 				engine.transformSSML(node, v)
 		);
+		engine.transformSSML(node, v);
+		engine.transformSSML(node, v);
+		engine.transformSSML(node, v);
+		engine.transformSSML(node, v);
 	}
 }

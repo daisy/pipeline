@@ -14,6 +14,8 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -34,6 +36,7 @@ import org.daisy.common.shell.CommandRunner;
 
 import org.daisy.common.stax.XMLStreamWriterHelper;
 import org.daisy.common.xslt.CompiledStylesheet;
+import org.daisy.common.xslt.ThreadUnsafeXslTransformer;
 import org.daisy.common.xslt.XslTransformCompiler;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
@@ -56,10 +59,21 @@ public class CereProcEngine extends MarklessTTSEngine {
 
 	private AudioFormat audioFormat;
 	private final int priority;
-	private Map<String, CereprocTTSUtil> mTtsUtils;
+	static final Map<String, CereprocTTSUtil> mTtsUtils = new HashMap<String , CereprocTTSUtil>() {
+		{
+			put("sv", new CereprocTTSUtil(Optional.of(new Locale("sv"))));
+			put("en", new CereprocTTSUtil(Optional.of(new Locale("en"))));
+		}
+	};
+
 	private final String[] cmd;
 	private final int expectedMillisecPerWord;
-	private Map<Configuration, CompiledStylesheet> mStyleSheets;
+	private HashMap<Configuration, ThreadLocal <ThreadUnsafeXslTransformer>> mTransformer = new HashMap<>();
+	private URL ssmLxslTransformerURL;
+
+	public void setStyleSheet(URL ssmLxslTransformerURL) {
+		this.ssmLxslTransformerURL = ssmLxslTransformerURL;
+	}
 
 	enum Variant {
 		STANDARD,
@@ -106,13 +120,8 @@ public class CereProcEngine extends MarklessTTSEngine {
 		                                   sampleRate * sampleBits / (2 * 8), // frame rate
 		                                   false                              // little endian
 		                                   );
-
-		this.mTtsUtils = new HashMap<>();
-		this.mTtsUtils.put("sv", new CereprocTTSUtil(Optional.of(new Locale("sv"))));
-		this.mTtsUtils.put("en", new CereprocTTSUtil(Optional.of(new Locale("en"))));
-
-		this.mStyleSheets = new HashMap<>();
 	}
+
 
 	@Override
 	public int getOverallPriority() {
@@ -256,38 +265,35 @@ public class CereProcEngine extends MarklessTTSEngine {
 			}
 
 			XdmNode ssmlOut = (XdmNode) ssmlProcessed.get(0);
-
-			CompiledStylesheet styleSheet = this.getStyleSheetFromConfig(conf);
-			return styleSheet.newTransformer().transformToString(ssmlOut);
+			ThreadUnsafeXslTransformer transformer = getTransformer(ssmlOut.getUnderlyingNode().getConfiguration());
+			return transformer.transformToString(ssmlOut);
 		}
 
-	/**
-	 * Cache stylesheets so they dont need to be compiled every time.
-	 * @param conf
-	 * @return
-	 * @throws SynthesisException
-	 */
-	private CompiledStylesheet getStyleSheetFromConfig(Configuration conf) throws SynthesisException {
-		XslTransformCompiler xslCompiler = new XslTransformCompiler(conf);
-		CompiledStylesheet styleSheet;
-		styleSheet = this.mStyleSheets.get(conf);
-		if (styleSheet == null) {
+	private ThreadUnsafeXslTransformer getTransformer(Configuration conf) throws SynthesisException {
+		ThreadLocal<ThreadUnsafeXslTransformer> threadSafeTransformer;
+
+		threadSafeTransformer = this.mTransformer.get(conf);
+		if (threadSafeTransformer == null) {
 			try {
-				styleSheet = xslCompiler.compileStylesheet(CereProcEngine.class.getResourceAsStream("/transform-ssml.xsl"));
-				mStyleSheets.put(conf, styleSheet);
-			} catch (SaxonApiException e) {
-				logger.error(e.toString());
+				XslTransformCompiler xslCompiler = new XslTransformCompiler(conf);
+				CompiledStylesheet compileStylesheet = xslCompiler.compileStylesheet(this.ssmLxslTransformerURL.openStream());
+				threadSafeTransformer = new ThreadLocal<>();
+				threadSafeTransformer.set(compileStylesheet.newTransformer());
+				this.mTransformer.put(conf, threadSafeTransformer);
+			} catch (SaxonApiException | IOException e) {
 				throw new SynthesisException(e);
 			}
 		}
-		return styleSheet;
+
+		return threadSafeTransformer.get();
 	}
+
 
 	private void performSubstitutionRules(XMLStreamReader reader, XMLStreamWriter writer, String lang) throws XMLStreamException {
 		while(reader.hasNext()) {
 			reader.next();
 			if (reader.getEventType() == XMLEvent.CHARACTERS) {
-				CereprocTTSUtil utils = this.mTtsUtils.get(lang);
+				CereprocTTSUtil utils = mTtsUtils.get(lang);
 				writer.writeCharacters(utils.applyAll(reader.getText()));
 			} else {
 				XMLStreamWriterHelper.writeEvent(writer, reader);
