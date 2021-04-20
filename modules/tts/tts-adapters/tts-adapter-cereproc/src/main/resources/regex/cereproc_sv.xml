@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleSet>
+
+    <!-- ROMAN NUMBERS  -->
+
+    <!-- Page iii, section xi, etc. -->
+    <rule match="([Dd]el|DEL|[Ss]idan|SIDAN|[Ss]idorna|SIDORNA|[K]apitel|KAPITEL|[Nn]ummer|NUMMER|[Ff]igur|FIGUR|[Tt]abell|TABELL|[Aa]vdelning|AVDELNING|AVD\.|Avd\.) (I|i|II|ii|III|iii|IV|iv|V|v|VI|vi|VII|vii|VIII|viii|IX|ix|X|x|XI|xi|XII|xii|XIII|xiii|XIV|xiv|XV|xv|XVI|xvi|XVII|xvii|XVIII|xviii|XIX|xix|XX|xx|XXI|xxi|XXII|xxii|XXIII|xxiii|XXIV|xxiv|XXV|xxv|XXVI|xxvi|XXVII|xxvii|XXVIII|xxviii|XXIX|xxix|XXX|xxx)\b" replace="$1 __ROMAN__$2__ROMAN__" />
+
+    <rule match="\b(II|ii|III|iii|IV|iv|VII|vii|VIII|viii|IX|ix|XI|xi|XII|xii|XIII|xiii|XIV|xiv|XVI|xvi|XVII|xvii|XVIII|xviii|XIX|xix|XX|xx|XXI|xxi|XXII|xxii|XXIII|xxiii|XXIV|xxiv|XXV|xxv|XXVI|xxvi|XXVII|xxvii|XXVIII|xxviii|XXIX|xxix|XXX|xxx)\b" replace="__ROMAN__$1__ROMAN__" />
+
+    <!-- Converter: roman -> letters, 1-20 -->
+    <rule match="__ROMAN__(I|i)__ROMAN__" replace=" ett" />
+    <rule match="__ROMAN__(II|ii)__ROMAN__" replace=" två" />
+    <rule match="__ROMAN__(III|iii)__ROMAN__" replace=" tre" />
+    <rule match="__ROMAN__(IV|iv)__ROMAN__" replace=" fyra" />
+    <rule match="__ROMAN__(V|v)__ROMAN__" replace=" fem" />
+    <rule match="__ROMAN__(VI|vi)__ROMAN__" replace=" sex" />
+    <rule match="__ROMAN__(VII|vii)__ROMAN__" replace=" sju" />
+    <rule match="__ROMAN__(VIII|viii)__ROMAN__" replace=" åtta" />
+    <rule match="__ROMAN__(IX|ix)__ROMAN__" replace=" nio" />
+    <rule match="__ROMAN__(X|x)__ROMAN__" replace=" tio" />
+    <rule match="__ROMAN__(XI|xi)__ROMAN__" replace=" elva" />
+    <rule match="__ROMAN__(XII|xii)__ROMAN__" replace=" tolv" />
+    <rule match="__ROMAN__(XIII|xiii)__ROMAN__" replace=" tretton" />
+    <rule match="__ROMAN__(XIV|xiv)__ROMAN__" replace=" fjorton" />
+    <rule match="__ROMAN__(XV|xv)__ROMAN__" replace=" femton" />
+    <rule match="__ROMAN__(XVI|xvi)__ROMAN__" replace=" sexton" />
+    <rule match="__ROMAN__(XVII|xvii)__ROMAN__" replace=" sjutton" />
+    <rule match="__ROMAN__(XVIII|xviii)__ROMAN__" replace=" arton" />
+    <rule match="__ROMAN__(XIX|xix)__ROMAN__" replace=" nitton" />
+    <rule match="__ROMAN__(XX|xx)__ROMAN__" replace=" tjugo" />
+    <rule match="__ROMAN__(XXI|xxi)__ROMAN__" replace=" tjugoett" />
+    <rule match="__ROMAN__(XXII|xxii)__ROMAN__" replace=" tjugotvå" />
+    <rule match="__ROMAN__(XXIII|xxiii)__ROMAN__" replace=" tjugotre" />
+    <rule match="__ROMAN__(XXIV|xxiv)__ROMAN__" replace=" tjugofyra" />
+    <rule match="__ROMAN__(XXV|xxv)__ROMAN__" replace=" tjugofem" />
+    <rule match="__ROMAN__(XXVI|xxvi)__ROMAN__" replace=" tjugosex" />
+    <rule match="__ROMAN__(XXVII|xxvii)__ROMAN__" replace=" tjugosju" />
+    <rule match="__ROMAN__(XXVIII|xxviii)__ROMAN__" replace=" tjugoåtta" />
+    <rule match="__ROMAN__(XXIX|xxix)__ROMAN__" replace=" tjugonio" />
+    <rule match="__ROMAN__(XXX|xxx)__ROMAN__" replace=" trettio" />
+
+    <rule match="\b1 kap\b" replace="Första kapitlet" />
+    <rule match="\b2 kap\b" replace="Andra kapitlet" />
+    <rule match="\b3 kap\b" replace="Tredje kapitlet" />
+    <rule match="\b4 kap\b" replace="Fjärde kapitlet" />
+    <rule match="\b5 kap\b" replace="Femte kapitlet" />
+    <rule match="\b6 kap\b" replace="Sjätte kapitlet" />
+    <rule match="\b7 kap\b" replace="Sjunde kapitlet" />
+    <rule match="\b8 kap\b" replace="Åttonde kapitlet" />
+    <rule match="\b9 kap\b" replace="Nionde kapitlet" />
+    <rule match="\b10 kap\b" replace="Tionde kapitlet" />
+    <rule match="\b11 kap\b" replace="Elfte kapitlet" />
+    <rule match="\b12 kap\b" replace="Tolfte kapitlet" />
+    <rule match="\b13 kap\b" replace="Trettonde kapitlet" />
+    <rule match="\b14 kap\b" replace="Fjortonde kapitlet" />
+    <rule match="\b15 kap\b" replace="Femtonde kapitlet" />
+    <rule match="\b16 kap\b" replace="Sextonde kapitlet" />
+    <rule match="\b17 kap\b" replace="Sjuttonde kapitlet" />
+    <rule match="\b18 kap\b" replace="Artonde kapitlet" />
+    <rule match="\b19 kap\b" replace="Nittonde kapitlet" />
+    <rule match="\b20 kap\b" replace="Tjugonde kapitlet" />
+    <rule match="\b21 kap\b" replace="Tjugoförsta kapitlet" />
+    <rule match="\b22 kap\b" replace="Tjugoandra kapitlet" />
+    <rule match="\b23 kap\b" replace="Tjugotredje kapitlet" />
+    <rule match="\b24 kap\b" replace="Tjugofjärde kapitlet" />
+    <rule match="\b25 kap\b" replace="Tjugofemte kapitlet" />
+    <rule match="\b26 kap\b" replace="Tjugosjätte kapitlet" />
+    <rule match="\b27 kap\b" replace="Tjugosjunde kapitlet" />
+    <rule match="\b28 kap\b" replace="Tjugoåttonde kapitlet" />
+    <rule match="\b29 kap\b" replace="Tjugonionde kapitlet" />
+    <rule match="\b30 kap\b" replace="Trettionde kapitlet" />
+
+    <rule match="^(\d)\.(\d\d)\b" replace="$1 punkt $2" />
+    <rule match="^(1\d)\.(\d\d)\b" replace="$1 punkt $2" />
+    <rule match="^(20)\.(\d\d)\b" replace="$1 punkt $2" />
+    <rule match="^(21)\.(\d\d)\b" replace="$1 punkt $2" />
+    <rule match="^(22)\.(\d\d)\b" replace="$1 punkt $2" />
+    <rule match="^(23)\.(\d\d)\b" replace="$1 punkt $2" />
+
+    <!-- SPELLINGS/ACRONYMS -->
+    <!-- For the nyförvärvslista: s/CA\d+/C A \d/ -->
+    <rule match="\bCA(\d)" replace="C A, $1" />
+
+    <!-- For the nyförvärvslista: s/1 tim./en timme, s/\d tim./\d timmar -->
+    <rule match="\b1 tim\." replace="en timme" />
+    <rule match="\b(\d+) tim\." replace="$1 timmar" />
+
+    <!-- For the nyförvärvslista: s/1 vol./en volym, s/\d vol./\d volymer -->
+    <rule match="\b1 vol\." replace="en volym" />
+    <rule match="\b(\d+) vol\." replace="$1 volymer" />
+
+
+    <!-- 2.1 Heading, 65 Interview with... - min del pause between digit and letter-->
+    <rule match="^(\d\d?) ([A-Z][a-z])" replace="$1\. $2" />
+    <rule match="^(\d\d?\.\d\d?) ([A-Z][a-z])" replace="$1\. $2" />
+    <rule match="^(\d\d?\.\d\d?.\d\d?) ([A-Z][a-z])" replace="$1\. $2" />
+    <rule match="^(KAPITEL \d\d?) ([A-Z][a-z])" replace="$1\. $2" />
+    <rule match="^(Bilaga \d\d?) ([A-Z][a-z])" replace="$1\. $2" />
+
+
+
+    <!--  ABBREVIATIONS -->
+    <rule match="\bM\.M\b" replace="M M" />
+
+</ruleSet>
+

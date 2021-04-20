@@ -166,14 +166,16 @@ public class VoiceManager {
 		// log
 		StringBuilder sb = new StringBuilder("Available voices:");
 		for (Entry<Voice,TTSEngine> e : mBestEngines.entrySet())
-			sb.append("\n* ")
+			sb.append("\n * ")
 			  .append(e.getKey())
-			  .append(" by ")
-			  .append(TTSServiceUtil.displayName(e.getValue().getProvider()));
+			  // Commented out because engine name already included in voice and multiple engines
+			  // with the same name (but different version) are currently not well supported.
+			  /*.append(" by ")
+			  .append(TTSServiceUtil.displayName(e.getValue().getProvider()))*/;
 		ServerLogger.info(sb.toString());
 		sb = new StringBuilder("Voice selection data:");
 		for (VoiceInfo vi : voiceInfo)
-			sb.append("\n* {")
+			sb.append("\n * {")
 			  .append("locale:").append(vi.language == NO_DEFINITE_LANG ? "*" : vi.language)
 			  .append(", gender:").append(vi.gender)
 			  .append("}")

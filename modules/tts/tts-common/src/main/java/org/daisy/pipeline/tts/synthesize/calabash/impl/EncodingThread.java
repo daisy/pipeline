@@ -12,6 +12,8 @@ import org.daisy.pipeline.tts.AudioBufferTracker;
 import org.daisy.pipeline.tts.TTSTimeout;
 import org.daisy.pipeline.tts.synthesize.calabash.impl.TTSLog.ErrorCode;
 
+import org.slf4j.Logger;
+
 /**
  * Consumes a shared queue of PCM packets. PCM packets are then provided to
  * audio encoders. The thread stops when it receives an 'EndOfQueue' marker.
@@ -34,7 +36,7 @@ public class EncodingThread {
 	private Throwable criticalError;
 
 	void start(final AudioServices encoderRegistry,
-	        final BlockingQueue<ContiguousPCM> inputPCM, final IPipelineLogger logger,
+	        final BlockingQueue<ContiguousPCM> inputPCM, final Logger logger,
 	        final AudioBufferTracker audioBufferTracker, Map<String, String> TTSproperties,
 	        final TTSLog ttslog) {
 
@@ -49,7 +51,7 @@ public class EncodingThread {
 			} catch (NumberFormatException e) {
 				String msg = "wrong format for property " + speedProp
 				        + ". A float is expected, not " + speedParam;
-				logger.printInfo(msg);
+				logger.info(msg);
 				ttslog.addGeneralError(ErrorCode.WARNING, msg);
 			}
 		}
@@ -60,7 +62,7 @@ public class EncodingThread {
 		AudioEncoder.EncodingOptions encodingOptions = null;
 		if (encoder == null) {
 			String msg = "No audio encoder found";
-			logger.printInfo(msg);
+			logger.info(msg);
 			ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, msg);
 		} else {
 			encodingOptions = encoder.parseEncodingOptions(TTSproperties);
@@ -68,7 +70,7 @@ public class EncodingThread {
 				encoder.test(encodingOptions);
 			} catch (Exception e) {
 				String msg = "audio encoder does not work: " + getStack(e);
-				logger.printInfo(msg);
+				logger.info(msg);
 				ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, msg);
 				encoder = null;
 			}
@@ -89,7 +91,7 @@ public class EncodingThread {
 							job = inputPCM.take();
 						} catch (InterruptedException e) {
 							String msg = "encoding thread has been interrupted";
-							logger.printInfo(msg);
+							logger.info(msg);
 							ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, msg);
 							break; //warning: encoding bytes are not freed
 						}

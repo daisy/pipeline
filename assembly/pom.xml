@@ -490,6 +490,10 @@
                   <groupId>org.slf4j</groupId>
                   <artifactId>jcl-over-slf4j</artifactId>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>com.ibm.icu</groupId>
+                  <artifactId>icu4j</artifactId>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>

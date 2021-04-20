@@ -38,7 +38,7 @@ import com.xmlcalabash.util.TreeWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SynthesizeStep extends DefaultStep implements FormatSpecifications, IPipelineLogger, XProcStep {
+public class SynthesizeStep extends DefaultStep implements FormatSpecifications, XProcStep {
 
 	private static final Logger logger = LoggerFactory.getLogger(SynthesizeStep.class);
 
@@ -92,16 +92,6 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		mRuntime = runtime;
 		mTTSRegistry = ttsRegistry;
 		mRandGenerator = new Random();
-	}
-
-	@Override
-	synchronized public void printInfo(String message) {
-		logger.info(message);
-	}
-
-	@Override
-	synchronized public void printDebug(String message) {
-		logger.debug(message);
 	}
 
 	public void setInput(String port, ReadablePipe pipe) {
@@ -198,7 +188,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		audioOutputDir.mkdirs();
 		audioOutputDir.deleteOnExit();
 
-		SSMLtoAudio ssmltoaudio = new SSMLtoAudio(audioOutputDir, mTTSRegistry, this,
+		SSMLtoAudio ssmltoaudio = new SSMLtoAudio(audioOutputDir, mTTSRegistry, logger,
 		        mAudioBufferTracker, mRuntime.getProcessor(), mURIresolver, configExt, log);
 
 		Iterable<SoundFileLink> soundFragments = Collections.EMPTY_LIST;
@@ -256,10 +246,10 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		tw.endDocument();
 		result.write(tw.getResult());
 
-		printInfo("number of synthesized sound fragments: " + num);
-		printInfo("audio encoding unreleased bytes : "
+		logger.info("number of synthesized sound fragments: " + num);
+		logger.info("audio encoding unreleased bytes : "
 		        + mAudioBufferTracker.getUnreleasedEncondingMem());
-		printInfo("TTS unreleased bytes: " + mAudioBufferTracker.getUnreleasedTTSMem());
+		logger.info("TTS unreleased bytes: " + mAudioBufferTracker.getUnreleasedTTSMem());
 
 		/*
 		 * Write status document
@@ -283,7 +273,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		 * Write the log file
 		 */
 		if (logEnabled) {
-			printInfo("writing TTS logs...");
+			logger.info("writing TTS logs...");
 			TreeWriter xmlLog = new TreeWriter(runtime);
 			xmlLog.startDocument(runtime.getStaticBaseURI());
 			xmlLog.addStartElement(LogRootTag);
