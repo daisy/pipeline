@@ -134,6 +134,11 @@
             px:html-unwrap-words
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
+        <p:documentation>
+            px:isolate-skippable
+        </p:documentation>
+    </p:import>
     <p:import href="add-legal-doc.xpl">
         <p:documentation>
             pxi:add-legal-doc
@@ -434,13 +439,49 @@
                 <p:output port="result"/>
                 <p:choose>
                     <p:when test="(//html:body|//html:section|//html:nav|//html:article|//html:aside)/@aria-label">
-                        <px:html-outline fix-untitled-sections="imply-heading-from-aria-label"/>
+                        <px:html-outline fix-untitled-sections="imply-heading-from-aria-label">
+                            <p:input port="input-toc">
+                                <p:pipe step="toc" port="result"/>
+                            </p:input>
+                        </px:html-outline>
                     </p:when>
                     <p:otherwise>
                         <p:identity/>
                     </p:otherwise>
                 </p:choose>
             </p:for-each>
+            <p:sink/>
+            <p:group name="toc">
+                <p:output port="result"/>
+                <p:identity>
+                    <p:input port="source">
+                        <p:pipe step="update-lang-attributes" port="fileset"/>
+                    </p:input>
+                </p:identity>
+                <p:choose>
+                    <p:when test="exists(//d:file[@role='nav'])">
+                        <px:fileset-load>
+                            <p:input port="in-memory">
+                                <p:pipe step="update-lang-attributes" port="in-memory"/>
+                            </p:input>
+                            <p:with-option name="href" select="//d:file[@role='nav'][1]/@href"/>
+                        </px:fileset-load>
+                        <p:add-xml-base>
+                            <!-- Not sure why this is needed. Omitted this triggers a base URI error
+                                 in px:html-outline. Bug? -->
+                        </p:add-xml-base>
+                        <p:filter select="//html:nav[tokenize(@epub:type,'\s+')='toc'][1]/html:ol"/>
+                    </p:when>
+                    <p:otherwise>
+                        <p:identity>
+                            <p:input port="source">
+                                <p:empty/>
+                            </p:input>
+                        </p:identity>
+                    </p:otherwise>
+                </p:choose>
+            </p:group>
+            <p:sink/>
             <px:fileset-update name="update">
                 <p:input port="source.fileset">
                     <p:pipe step="update-lang-attributes" port="fileset"/>
@@ -680,11 +721,18 @@
                 </px:fileset-load>
                 <p:for-each name="sentence-detection" px:progress="1">
                     <p:output port="result"/>
-                    <px:html-break-detect>
+                    <px:html-break-detect name="break-detect">
                         <p:with-option name="id-prefix" select="concat(p:iteration-position(),'-')"/>
                         <p:with-option name="sentence-attr" select="if ($sentence-class!='') then 'class' else ''"/>
                         <p:with-option name="sentence-attr-val" select="$sentence-class"/>
                     </px:html-break-detect>
+                    <px:isolate-skippable match="*[@epub:type/tokenize(.,'\s+')='pagebreak']|
+                                                 *[@role='doc-pagebreak']">
+                        <p:input port="sentence-ids">
+                            <p:pipe step="break-detect" port="sentence-ids"/>
+                        </p:input>
+                        <p:with-option name="id-prefix" select="concat('i', p:iteration-position())"/>
+                    </px:isolate-skippable>
                     <px:html-unwrap-words>
                         <!-- only keep the sentences, not the words -->
                     </px:html-unwrap-words>

@@ -115,7 +115,7 @@ public class TTSRegistry {
 		List<Voice> result = new ArrayList<Voice>();
 		for (TTSService service : mServices) {
 			try {
-				timeout.enableForCurrentThread(2);
+				timeout.enableForCurrentThread(30);
 				TTSEngine engine = service.newEngine(cr.getStaticProperties());
 				result.addAll(engine.getAvailableVoices());
 			} catch (Throwable e) {

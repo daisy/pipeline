@@ -588,7 +588,7 @@
 			<xsl:otherwise>
 				<xsl:copy>
 					<xsl:apply-templates mode="#current" select="@* except @aria-label"/>
-					<xsl:variable name="outline-depth" as="xs:integer">
+					<xsl:variable name="rank" as="xs:integer">
 						<xsl:choose>
 							<xsl:when test="$fix-heading-ranks='outline-depth'">
 								<xsl:sequence select="min((6,count($section/ancestor-or-self::d:section)))"/>
@@ -610,13 +610,13 @@
 								<xsl:call-template name="pf:generate-id"/>
 							</xsl:variable>
 							<xsl:attribute name="aria-labelledby" select="$label-id"/>
-							<xsl:element name="h{$outline-depth}">
+							<xsl:element name="h{$rank}">
 								<xsl:sequence select="$label-id"/>
 								<xsl:value-of select="@aria-label"/>
 							</xsl:element>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:element name="h{$outline-depth}">
+							<xsl:element name="h{$rank}">
 								<xsl:call-template name="get-untitled-section-title">
 									<xsl:with-param name="sectioning-element" select="."/>
 								</xsl:call-template>
@@ -627,6 +627,11 @@
 				</xsl:copy>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<!-- ignore sectioning root elements other than body -->
+	<xsl:template mode="rename-headings add-implied-headings" match="blockquote|details|fieldset|figure|td">
+		<xsl:sequence select="."/>
 	</xsl:template>
 
 	<xsl:template mode="#default rename-headings add-implied-headings" match="@*|node()">

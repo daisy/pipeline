@@ -235,7 +235,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 		//get a voice supporting SSML marks (so far as they are supported by the engine)
 		Voice firstVoice = null;
-		int timeoutSecs = 5;
+		int timeoutSecs = 30;
 		try {
 			timeout.enableForCurrentThread(timeoutSecs);
 			for (Voice v : engine.getAvailableVoices()) {

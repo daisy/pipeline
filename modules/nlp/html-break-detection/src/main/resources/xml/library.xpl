@@ -40,7 +40,7 @@
          "can-contain-sentences" elements are the following: -->
     <px:break-and-reshape name="generic"
         inline-tags="html:span|html:i|html:b|html:a|html:br|html:del|html:font|html:ruby|html:s|
-                     html:small|html:strike|html:strong|html:sup|html:u|html:q|html:address|
+                     html:small|html:strike|html:strong|html:sup|html:sub|html:u|html:q|html:address|
                      html:abbr|html:em|html:style"
         ensure-word-before="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         ensure-word-after="span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
