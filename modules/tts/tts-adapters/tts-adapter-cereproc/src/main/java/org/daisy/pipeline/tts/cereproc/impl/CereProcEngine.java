@@ -68,7 +68,12 @@ public class CereProcEngine extends MarklessTTSEngine {
 
 	private final String[] cmd;
 	private final int expectedMillisecPerWord;
-	private HashMap<Configuration, ThreadLocal <ThreadUnsafeXslTransformer>> mTransformer = new HashMap<>();
+	private static ThreadLocal<HashMap<Configuration, ThreadUnsafeXslTransformer>> mTransformer = ThreadLocal.withInitial(() -> {
+		HashMap<Configuration, ThreadUnsafeXslTransformer> map = new HashMap<>();
+		return map;
+	});
+
+
 	private URL ssmLxslTransformerURL;
 
 	enum Variant {
@@ -269,22 +274,21 @@ public class CereProcEngine extends MarklessTTSEngine {
 		}
 
 	private ThreadUnsafeXslTransformer getTransformer(Configuration conf) throws SynthesisException {
-		ThreadLocal<ThreadUnsafeXslTransformer> threadSafeTransformer;
+		ThreadUnsafeXslTransformer threadSafeTransformer;
 
-		threadSafeTransformer = this.mTransformer.get(conf);
+		threadSafeTransformer = mTransformer.get().get(conf);
 		if (threadSafeTransformer == null) {
 			try {
 				XslTransformCompiler xslCompiler = new XslTransformCompiler(conf);
 				CompiledStylesheet compileStylesheet = xslCompiler.compileStylesheet(this.ssmLxslTransformerURL.openStream());
-				threadSafeTransformer = new ThreadLocal<>();
-				threadSafeTransformer.set(compileStylesheet.newTransformer());
-				this.mTransformer.put(conf, threadSafeTransformer);
+				threadSafeTransformer = compileStylesheet.newTransformer();
+				this.mTransformer.get().put(conf, threadSafeTransformer);
 			} catch (SaxonApiException | IOException e) {
 				throw new SynthesisException(e);
 			}
 		}
 
-		return threadSafeTransformer.get();
+		return threadSafeTransformer;
 	}
 
 
