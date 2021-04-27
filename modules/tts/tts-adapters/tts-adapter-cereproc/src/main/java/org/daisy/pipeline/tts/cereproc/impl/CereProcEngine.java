@@ -18,6 +18,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sound.sampled.AudioFormat;
 import javax.xml.stream.XMLStreamException;
@@ -68,8 +69,8 @@ public class CereProcEngine extends MarklessTTSEngine {
 
 	private final String[] cmd;
 	private final int expectedMillisecPerWord;
-	private static ThreadLocal<HashMap<Configuration, ThreadUnsafeXslTransformer>> mTransformer = ThreadLocal.withInitial(() -> {
-		HashMap<Configuration, ThreadUnsafeXslTransformer> map = new HashMap<>();
+	private static ThreadLocal<ConcurrentHashMap<Configuration, ThreadUnsafeXslTransformer>> mTransformer = ThreadLocal.withInitial(() -> {
+		ConcurrentHashMap<Configuration, ThreadUnsafeXslTransformer> map = new ConcurrentHashMap<>();
 		return map;
 	});
 
