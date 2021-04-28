@@ -66,10 +66,10 @@ public class OmnilangTest {
 
 	@Test
 	public void dontSplitURLsIntoSentences() throws LexerInitException {
-		String ref = "http://www.kkrva.se/?page_id=715";
+		String ref = "dsadas http://www.kkrva.se/?page_id=715";
 		List<Sentence> sentences = mLexerToken.split(ref, Locale.ENGLISH, new ArrayList<>());
 		String text = mPrinter.convert(sentences, ref);
-		Assert.assertEquals("{/http/:///www.kkrva.se//?/page_id//=//715/}", text);
+		Assert.assertEquals("{/dsadas/ /http/:///www.kkrva.se//?/page_id//=//715/}", text);
 	}
 
 
