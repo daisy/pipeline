@@ -71,6 +71,15 @@ public class OmnilangLexer implements LexService {
 			//replace "!)" with ",)" to prevent it from detecting a new sentence
 			input = input.replaceAll("[؟:?‥!…។៕。]\\)", ",)");
 
+			if (input.matches(".*https?://.*")) {
+				int offset = 0;
+				while((offset = input.indexOf('?', offset)) != -1) {
+					if (input.charAt(offset) == '?' && input.charAt(offset + 1) != ' ') {
+						input = input.substring(0,offset)+'_'+input.substring(offset + 1);
+					}
+				}
+			}
+
 			sentIterator.setText(input);
 			int start = sentIterator.first();
 			for (int end = sentIterator.next(); end != BreakIterator.DONE; start = end, end = sentIterator
