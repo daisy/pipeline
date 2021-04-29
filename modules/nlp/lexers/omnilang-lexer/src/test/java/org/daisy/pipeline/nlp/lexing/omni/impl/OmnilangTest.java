@@ -72,6 +72,13 @@ public class OmnilangTest {
 		Assert.assertEquals("{/dsadas/ /http/:///www.kkrva.se//?/page_id//=//715/}", text);
 	}
 
+	@Test
+	public void dontCrashOnURLsEndingWithQuestionMark() throws LexerInitException {
+		String ref = "dsadas http://www.kkrva.se/?";
+		List<Sentence> sentences = mLexerToken.split(ref, Locale.ENGLISH, new ArrayList<>());
+		String text = mPrinter.convert(sentences, ref);
+		Assert.assertEquals("{/dsadas/ /http/:///www.kkrva.se//?}", text);
+	}
 
 	@Test
 	public void mixed() throws LexerInitException {
