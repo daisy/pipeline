@@ -1,3 +1,39 @@
+Changes in release v1.14.3
+==========================
+
+### Modules
+
+- EPUBCheck updated to 4.2.5
+- Improvements to the EPUB 3 enhancer script
+  - **NEW** Option to perform sentence detection even when text-to-speech is disabled. Useful for
+    talking book production with human narration.
+  - **NEW** Option to specify class attribute for sentence spans.
+  - **NEW** Option to include additional metadata in the EPUB package document.
+  - **NEW** Option to update `lang` attributes of content documents based on metadata in the package
+    document.
+  - **NEW** Support for `::before` and `::after` pseudo-elements in speech CSS, to include
+    speech-only content.
+  - **NEW** Option to generate text content for page numbers based on the navigation document or
+    `aria-label` and `title` attributes.
+  - **NEW** Option to generate headings for untitled sections based on `aria-label` attributes.
+  - **FIX** Improvements to sentence detection.
+- Improvements to the EPUB 3 to DAISY 2.02 script
+  - **NEW** NCC now lists the noterefs present in the publication.
+  - **FIX** Page numbers, footnotes, endnotes and sidebars are now skippable.
+  - **FIX** The result does not contain nested `a` elements anymore (invalid HTML).
+- **NEW** Option to enable TTS log (without having to modify the TTS configuration)
+- **FIX** Timeout issues in TTS process
+- Changes to braille production scripts, see [release notes of braille modules v1.14.2](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1142)
+- Various other bugfixes and improvements
+
+### Details
+
+- [Closed issues in braille-css](https://github.com/issues?q=repo%3Adaisy%2Fbraille-css+milestone%3Av1.14.3)
+- [Closed issues in jStyleParser](https://github.com/issues?q=repo%3Adaisy%2FjStyleParser+milestone%3Av1.14.3)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.3)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.3)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.3)
+
 Changes in release v1.14.2
 ==========================
 
@@ -39,7 +75,7 @@ Changes in release v1.14.1
 ### Modules
 
 - Changes to braille production scripts, see [release notes of braille modules v1.14.0](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1140)
-- **NEW** Support for ssml:ph and ssml:alphabet attributes in EPUB 3 (for Text-To-Speech)
+- **NEW** Support for ssml:ph and ssml:alphabet attributes in EPUB 3 (for text-to-speech)
 - **NEW** TTS log output for EPUB 3 Enhancer script
 - **FIX** Improvements to TTS voice selection logic
 - **FIX** Timeout issues in TTS process
@@ -69,8 +105,8 @@ Changes in release v1.13.6
 
 ### Modules
 
-- **NEW** Adapter for Google Cloud Text-To-Speech
-- **NEW** New option to create media overlays with TTS in EPUB 3 enhancer script
+- **NEW** Support for Google Cloud text-to-speech engine
+- **NEW** Option to create media overlays with TTS in EPUB 3 enhancer script
 - **NEW** EPUB 3 to DAISY 3 script
 - **NEW** EPUB 2 to EPUB 3 updater script
 - **NEW** EPUB to DAISY convenience script which produces both DAISY 3 and DAISY 2.02.
@@ -323,7 +359,7 @@ Changes in release v1.11
 
 - **NEW** DTBook to ODT (OpenDocument Text) script
 - **NEW** DTBook to RTF (Rich Text Format) script
-- **NEW** Adapter for Qfrency speech engine
+- **NEW** Support for Qfrency text-to-speech engine
 - **NEW** EPUB 3 enhancer script for adding a braille rendition to an EPUB
 - various changes to braille scripts, see [release notes of braille modules v1.11.0](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1110)
 - **FIX** Issues with lost significant spaces in dtbook-to-zedai and zedai-to-html

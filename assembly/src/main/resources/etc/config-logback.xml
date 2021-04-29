@@ -24,6 +24,7 @@
         org.daisy.pipeline.job.impl.DefaultJobExecutionService=OFF
         org.daisy.pipeline.persistence.impl.job.PersistentJob=OFF
         org.daisy.pipeline.common.calabash.impl.Message=OFF
+        org.daisy.dotify=WARN
         com.xmlcalabash.runtime=OFF
         com.xmlcalabash.library.XSLT=ERROR
       </loggerLevels>

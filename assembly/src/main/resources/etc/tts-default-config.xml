@@ -1,30 +1,5 @@
 <config>
 	<!--
-	    eSpeak
-	-->
-	<voice engine="espeak" name="french" lang="fr" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="danish" lang="da" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="german" lang="de" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="greek" lang="el" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="hindi" lang="hi" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="hungarian" lang="hu" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="finnish" lang="fi" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="italian" lang="it" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="latin" lang="la" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="norwegian" lang="no" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="polish" lang="pl" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="portugal" lang="pt" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="russian_test" lang="ru" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="swedish" lang="sv" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="mandarin" lang="zh" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="turkish" lang="tr" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="afrikaans" lang="af" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="spanish" lang="es" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="spanish-latin-american" lang="es-la" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="english-us" lang="en" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="english-us" lang="en-us" gender="male-adult" priority="1"/>
-	<voice engine="espeak" name="english" lang="en-uk" gender="male-adult" priority="1"/>
-	<!--
 	    AT&T
 	-->
 	<voice engine="att" name="alain16" lang="fr" gender="male-adult" priority="10"/>
