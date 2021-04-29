@@ -73,7 +73,7 @@ public class OmnilangLexer implements LexService {
 
 			if (input.matches(".*https?://.*")) {
 				int offset = 0;
-				while((offset = input.indexOf('?', offset)) != -1) {
+				while((offset = input.indexOf('?', offset)) != -1 && offset < input.length() - 1) {
 					if (input.charAt(offset) == '?' && input.charAt(offset + 1) != ' ') {
 						input = input.substring(0,offset)+'_'+input.substring(offset + 1);
 					}
