@@ -1,5 +1,6 @@
 package org.daisy.maven.xproc.xprocspec;
 
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.library.Identity;
 import com.xmlcalabash.runtime.XAtomicStep;
@@ -13,6 +14,8 @@ public class ThrowJavaError extends Identity {
 	public void run() throws SaxonApiException {
 		super.run();
 		// this error is caught by XProcSpec
-		throw new Error("boom!");
+		throw XProcException.fromException(new Error("boom!"))
+		                    .rebase(step.getLocation(),
+		                            new RuntimeException().getStackTrace());
 	}
 }

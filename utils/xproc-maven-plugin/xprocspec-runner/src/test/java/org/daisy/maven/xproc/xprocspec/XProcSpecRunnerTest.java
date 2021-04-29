@@ -131,10 +131,10 @@ public class XProcSpecRunnerTest {
 "Running test_non_existing"                                                              + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error loading test description"                                                         + "\n" +
-"line: 464"                                                                              + "\n" +
-"column: 22"                                                                             + "\n" +
+"line: 112"                                                                              + "\n" +
+"column: 26"                                                                             + "\n" +
 ""                                                                                       + "\n" +
-"                 * unable to load script: .../test-classes/xprocspec/non_existing.xpl"  + "\n" +
+"                <message> * unable to load script: .../test-classes/xprocspec/non_existing.xpl</message>\n" +
 "            "                                                                           + "\n" +
 "<x:was...><x:description..."                                                            + "\n" +
 "..."                                                                                    + "\n" +
@@ -145,26 +145,26 @@ public class XProcSpecRunnerTest {
 "Running test_throw_error_unexpected"                                                    + "\n" +
 "Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error evaluating assertion"                                                             + "\n" +
-"line: 68"                                                                               + "\n" +
-"column: 43"                                                                             + "\n" +
+"line: 112"                                                                              + "\n" +
+"column: 26"                                                                             + "\n" +
 ""                                                                                       + "\n" +
-"                       * port not found: result"                                        + "\n" +
+"                <message>       * port not found: result</message>"                     + "\n" +
 "            "                                                                           + "\n" +
 "<x:was...><x:description..."                                                            + "\n" +
 "..."                                                                                    + "\n" +
-"...<c:error code=\"foo\"...>foobar</c:error>...</x:description>"                        + "\n" +
+"...<c:error code=\"foo\"...><message xmlns:ex=\"http://example.net/ns\">foobar</message></c:error>...</x:description>\n" +
 "        </x:was>"                                                                       + "\n" +
 "Running test_throw_java_error"                                                          + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error evaluating assertion"                                                             + "\n" +
-"line: 68"                                                                               + "\n" +
-"column: 43"                                                                             + "\n" +
+"line: 112"                                                                              + "\n" +
+"column: 26"                                                                             + "\n" +
 ""                                                                                       + "\n" +
-"                       * port not found: result"                                        + "\n" +
+"                <message>       * port not found: result</message>"                     + "\n" +
 "            "                                                                           + "\n" +
 "<x:was...><x:description..."                                                            + "\n" +
 "..."                                                                                    + "\n" +
-"...<c:error ...>boom!</c:error>...</x:description>"                                     + "\n" +
+"...<c:error href=\"ThrowJavaError.java\" line=\"17\">boom!</c:error>...</x:description>"+ "\n" +
 "        </x:was>"                                                                       + "\n" +
 ""                                                                                       + "\n" +
 "Results :"                                                                              + "\n" +
@@ -223,10 +223,10 @@ public class XProcSpecRunnerTest {
 "Running test_foo_catalog"                                                               + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error loading test description"                                                         + "\n" +
-"line: 464"                                                                              + "\n" +
-"column: 22"                                                                             + "\n" +
+"line: 112"                                                                              + "\n" +
+"column: 26"                                                                             + "\n" +
 ""                                                                                       + "\n" +
-"                 * unable to load script: http://unexisting_domain/foo.xpl"             + "\n" +
+"                <message> * unable to load script: http://unexisting_domain/foo.xpl</message>\n" +
 "            "                                                                           + "\n" +
 "<x:was...><x:description..."                                                            + "\n" +
 "..."                                                                                    + "\n" +
@@ -270,14 +270,14 @@ public class XProcSpecRunnerTest {
 "Running test_foo_java"                                                                  + "\n" +
 "Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: ... sec <<< ERROR!"     + "\n" +
 "Error evaluating assertion"                                                             + "\n" +
-"line: 68"                                                                               + "\n" +
-"column: 43"                                                                             + "\n" +
+"line: 112"                                                                              + "\n" +
+"column: 26"                                                                             + "\n" +
 ""                                                                                       + "\n" +
-"                       * port not found: result"                                        + "\n" +
+"                <message>       * port not found: result</message>"                     + "\n" +
 "            "                                                                           + "\n" +
 "<x:was...><x:description..."                                                            + "\n" +
 "..."                                                                                    + "\n" +
-"...<c:error...>Misconfigured. No 'class' in configuration for ex:foo</c:error>...</x:description>" + "\n" +
+"...<c:error>Misconfigured. No 'class' in configuration for ex:foo</c:error>...</x:description>\n" +
 "        </x:was>"                                                                       + "\n" +
 ""                                                                                       + "\n" +
 "Results :"                                                                              + "\n" +
