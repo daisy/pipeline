@@ -267,6 +267,10 @@ cli/.install : $(call rwildcard,cli/cli/,*.go) $(call rwildcard,cli/cli/,*.go.in
 .SECONDARY : cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_386.zip
 cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_386.zip : cli/.install
 
+.SECONDARY : cli/.install
+cli/.install : | .maven-init .group-eval
+	+$(call eval-for-host-platform,.make/mvn-install.sh,$$(dirname $@))
+
 updater/cli/.install : $(call rwildcard,updater/cli/,*)
 
 .SECONDARY : updater/cli/.install-darwin_amd64.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
