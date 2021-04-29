@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
 import org.slf4j.Logger;
@@ -70,6 +71,10 @@ public class Parameter extends EndPoint implements ComputableValue {
         return null;
     }
 
+    public SequenceType getSequenceType() {
+        return null;
+    }
+
     public void setPosition(int pos) {
         position = pos;
     }
@@ -106,7 +111,7 @@ public class Parameter extends EndPoint implements ComputableValue {
         boolean valid = true;
         
         if (bindings.size() > 1) {
-            error("Parameter can have at most one binding.", XProcConstants.dynamicError(8));
+            error(XProcException.dynamicError(8, "Parameter can have at most one binding."));
             valid = false;
         }
 

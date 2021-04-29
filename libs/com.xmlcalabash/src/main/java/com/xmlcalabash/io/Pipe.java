@@ -155,7 +155,7 @@ public class Pipe implements ReadablePipe, WritablePipe {
         if (stepName != null) {
             msg = "Reading " + portName + " on " + stepName;
         }
-        throw XProcException.dynamicError(errno, (String) msg);
+        throw XProcException.dynamicError(errno, reader, msg);
 
     }
 }

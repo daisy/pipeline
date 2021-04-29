@@ -126,11 +126,7 @@ public class XUntilUnchanged extends XCompoundStep {
                         }
 
                         for (XStep step : subpipeline) {
-                            try {
-                                step.run();
-                            } catch (Throwable e) {
-                                throw handleException(e);
-                            }
+                            step.run();
                         }
 
                         int docsCopied = 0;

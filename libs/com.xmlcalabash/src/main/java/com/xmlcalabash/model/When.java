@@ -20,6 +20,7 @@
 package com.xmlcalabash.model;
 
 import net.sf.saxon.s9api.XdmNode;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
 
@@ -75,7 +76,7 @@ public class When extends DeclareStep {
         boolean valid = true;
         
         if (testExpr == null || "".equals(testExpr)) {
-            runtime.error(null, node, "Test expression on p:when must be specified.", XProcConstants.staticError(38));
+            runtime.error(null, XProcException.staticError(38, node, "Test expression on p:when must be specified."));
             valid = false;
         }
 

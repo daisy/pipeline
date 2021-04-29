@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 
 import net.sf.saxon.s9api.XdmNode;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
 
@@ -115,7 +116,10 @@ public class Try  extends DeclareStep {
 
             if (p_catch.outputs().size() != outputs.size()) {
                 valid = false;
-                runtime.error(null, p_group.getNode(), "The p:group and p:catch in a p:try must declare the same outputs", XProcConstants.staticError(9));
+                runtime.error(
+                    null,
+                    XProcException.staticError(
+                        9, p_group.getNode(), "The p:group and p:catch in a p:try must declare the same outputs"));
             }
 
             for (Output output : p_catch.outputs()) {
@@ -127,22 +131,26 @@ public class Try  extends DeclareStep {
                     } else {
                         if (s1output.getPrimary() != output.getPrimary()) {
                             valid = false;
-                            runtime.error(null, p_group.getNode(), "Output port " + output.getPort() + " has different primary status.", XProcConstants.staticError(9));
+                            runtime.error(
+                                null,
+                                XProcException.staticError(
+                                    9, p_group.getNode(), "Output port " + output.getPort() + " has different primary status."));
                         }
                     }
                 } else {
                     valid = false;
-                    runtime.error(null, p_group.getNode(), "Output port " + output.getPort() + " is extra.", XProcConstants.staticError(9));
+                    runtime.error(
+                        null, XProcException.staticError(9, p_group.getNode(), "Output port " + output.getPort() + " is extra."));
                 }
             }
             for (String port : outputs.keySet()) {
                 if (!port.endsWith("|") && p_group.getOutput(port) == null) {
                     valid = false;
-                    runtime.error(null, p_group.getNode(), "Output port " + port + " missing.", XProcConstants.staticError(9));
+                    runtime.error(null, XProcException.staticError(9, p_group.getNode(), "Output port " + port + " missing."));
                 }
             }
         } else {
-           error("Try must contain a group and a catch", XProcConstants.staticError(27));
+           error(XProcException.staticError(27, "Try must contain a group and a catch"));
         }
 
         return valid;

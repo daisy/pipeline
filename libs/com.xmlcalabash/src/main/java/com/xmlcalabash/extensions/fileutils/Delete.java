@@ -95,11 +95,11 @@ public class Delete extends DefaultStep {
                 }
             } catch (FileNotFoundException e) {
                 if (fail_on_error) {
-                    throw new XProcException(step.getNode(), "Cannot delete: file does not exist", e);
+                    throw new XProcException(step, new RuntimeException("Cannot delete: file does not exist", e));
                 }
             } catch (IOException e) {
                 if (fail_on_error) {
-                    throw new XProcException(step.getNode(), e);
+                    throw new XProcException(step, e);
                 }
             }
         }
@@ -107,11 +107,11 @@ public class Delete extends DefaultStep {
             store.deleteEntry(href.getString(), base);
         } catch (FileNotFoundException e) {
             if (fail_on_error) {
-                throw new XProcException(step.getNode(), "Cannot delete: file does not exist", e);
+                throw new XProcException(step, new RuntimeException("Cannot delete: file does not exist", e));
             }
         } catch (IOException e) {
             if (fail_on_error) {
-                throw new XProcException(step.getNode(), e);
+                throw new XProcException(step, e);
             }
         }
     }

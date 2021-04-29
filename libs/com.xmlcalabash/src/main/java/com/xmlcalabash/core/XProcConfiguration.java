@@ -13,7 +13,10 @@ import com.xmlcalabash.util.LogOptions;
 import com.xmlcalabash.util.Output;
 import com.xmlcalabash.util.S9apiUtils;
 import com.xmlcalabash.util.URIUtils;
+import net.sf.saxon.Configuration;
 import net.sf.saxon.Version;
+import net.sf.saxon.functions.FunctionLibrary;
+import net.sf.saxon.functions.FunctionLibraryList;
 import net.sf.saxon.om.NoElementsSpaceStrippingRule;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.DocumentBuilder;
@@ -41,6 +44,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -52,6 +56,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -105,6 +110,11 @@ public class XProcConfiguration {
     public Hashtable<String,String> serializationOptions = new Hashtable<String,String>();
     public LogOptions logOpt = LogOptions.WRAPPED;
     public HashMap<String,SaxonExtensionFunction> extensionFunctions = new HashMap<String,SaxonExtensionFunction>();
+    /**
+     * List to hold the in scope XSLT function libraries (loaded with cx:import). Libraries that are
+     * added to this list become in scope, libraries that are removed become out scope.
+     */
+    public List<FunctionLibrary> inscopeXsltFunctions;
     public String foProcessor = null;
     public String cssProcessor = null;
     public String xprocConfigurer = null;
@@ -119,6 +129,7 @@ public class XProcConfiguration {
     public boolean extensionValues = false;
     public boolean xpointerOnText = false;
     public boolean transparentJSON = false;
+    public boolean sequenceAsContext = false;
     public String jsonFlavor = JSONtoXML.MARKLOGIC;
     public boolean useXslt10 = false;
     public boolean htmlSerializer = false;
@@ -214,6 +225,17 @@ public class XProcConfiguration {
     }
 
     private void init() {
+
+        // Add inscopeXsltFunctions list to getBuiltInExtensionLibraryList. This is the most
+        // convenient way to do it. A more appropriate place would be
+        // getIntegratedFunctionLibrary(), but that would require using reflection and extending the
+        // IntegratedFunctionLibrary class.
+        FunctionLibraryList list = new FunctionLibraryList();
+        cfgProcessor.getUnderlyingConfiguration()
+                    .getBuiltInExtensionLibraryList()
+                    .addFunctionLibrary(list);
+        inscopeXsltFunctions = list.getLibraryList();
+
         // If we got a schema aware processor, make sure it's reflected in our config
         // FIXME: are there other things that should be reflected this way?
         this.schemaAware = cfgProcessor.isSchemaAware();
@@ -294,10 +316,10 @@ public class XProcConfiguration {
         }
     }
 
-    private Iterable<Class<?>> findClasses(Class<?> type) {
+    private Iterable<Class<?>> findClasses(Class<? extends Annotation> type) {
         Iterable<Class<?>> classes = null;
         try {
-            classes = ClassFilter.only().from(ClassIndex.getAnnotated(XMLCalabash.class));
+            classes = ClassFilter.only().from(ClassIndex.getAnnotated(type));
         } catch (NoClassDefFoundError e) {
             // org.atteo.classindex package does not exist
         }
@@ -461,6 +483,7 @@ public class XProcConfiguration {
         extensionValues = "true".equals(System.getProperty("com.xmlcalabash.general-values", ""+extensionValues));
         xpointerOnText = "true".equals(System.getProperty("com.xmlcalabash.xpointer-on-text", ""+xpointerOnText));
         transparentJSON = "true".equals(System.getProperty("com.xmlcalabash.transparent-json", ""+transparentJSON));
+        sequenceAsContext = "true".equals(System.getProperty("com.xmlcalabash.sequence-as-context", ""+sequenceAsContext));
         allowTextResults = "true".equals(System.getProperty("com.xmlcalabash.allow-text-results", ""+allowTextResults));
         safeMode = "true".equals(System.getProperty("com.xmlcalabash.safe-mode", ""+safeMode));
         jsonFlavor = System.getProperty("com.xmlcalabash.json-flavor", jsonFlavor);
@@ -546,7 +569,7 @@ public class XProcConfiguration {
         try {
             return builder.build(source);
         } catch (SaxonApiException sae) {
-            throw new XProcException(XProcConstants.dynamicError(11), sae);
+            throw XProcException.dynamicError(11, sae);
         }
     }
 
@@ -801,6 +824,8 @@ public class XProcConfiguration {
             xpointerOnText = "true".equals(value);
         } else if ("transparent-json".equals(name)) {
             transparentJSON = "true".equals(value);
+        } else if ("sequence-as-context".equals(name)) {
+            sequenceAsContext = "true".equals(value);
         } else if ("json-flavor".equals(name)) {
             jsonFlavor = value;
             if (! JSONtoXML.knownFlavor(jsonFlavor)) {

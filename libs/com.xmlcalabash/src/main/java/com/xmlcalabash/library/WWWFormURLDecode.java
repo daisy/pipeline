@@ -105,7 +105,7 @@ public class WWWFormURLDecode extends DefaultStep {
                     tree.startContent();
                     tree.addEndElement();
                 } else {
-                    throw new XProcException(step.getNode(), "Badly formatted parameters");
+                    throw new XProcException(step, "Badly formatted parameters");
                 }
             }
         }

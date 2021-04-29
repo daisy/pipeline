@@ -113,7 +113,11 @@ public class AddAttribute extends DefaultStep implements ProcessMatchingNodes {
         }
 
         matcher = new ProcessMatch(runtime, this);
-        matcher.match(source.read(), getOption(_match));
+        try {
+            matcher.match(source.read(), getOption(_match));
+        } catch (XProcException e) {
+            throw new XProcException(step, "Failed to apply match pattern: " + getOption(_match).getString(), e);
+        }
 
         result.write(matcher.getResult());
     }

@@ -220,7 +220,7 @@ public class ValidateWithXSD extends DefaultStep {
             }
         } catch (SaxonApiException sae) {
             if (getOption(_assert_valid,false)) {
-                throw new XProcException(XProcConstants.stepError(53), sae);
+                throw XProcException.stepError(53, sae);
             }
         }
         
@@ -263,7 +263,7 @@ public class ValidateWithXSD extends DefaultStep {
                 }
             } catch (SAXParseException spe) {
                 if (getOption(_assert_valid, false)) {
-                    throw new XProcException(XProcConstants.stepError(53), spe);
+                    throw XProcException.stepError(53, spe);
                 }
             }
         } catch (SAXException se) {

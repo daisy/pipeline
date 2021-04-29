@@ -90,11 +90,7 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
         runtime.getXProcData().setIterationSize(sequenceLength);
 
         runtime.start(this);
-        try {
-            XProcMessageListenerHelper.openStep(runtime, this);
-        } catch (Throwable e) {
-            throw handleException(e);
-        }
+        XProcMessageListenerHelper.openStep(runtime, this);
         try {
             matcher.match(doc, match);
         } finally {
@@ -122,11 +118,7 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
     }
 
     public boolean processStartElement(XdmNode node) {
-        try {
-            runtime.getMessageListener().openStep(this, getNode(), null, null, BigDecimal.ONE.divide(new BigDecimal(sequenceLength), MathContext.DECIMAL128));
-        } catch (Throwable e) {
-            throw handleException(e);
-        }
+        runtime.getMessageListener().openStep(this, getNode(), null, null, BigDecimal.ONE.divide(new BigDecimal(sequenceLength), MathContext.DECIMAL128));
         try {
 
         // Use a TreeWriter to make the matching node into a proper document
@@ -154,8 +146,8 @@ public class XViewport extends XCompoundStep implements ProcessMatchingNodes {
             step.reset();
             try {
                 step.run();
-            } catch (Throwable e) {
-                throw handleException(e);
+            } catch (SaxonApiException sae) {
+                throw new XProcException(sae);
             }
         }
 

@@ -11,6 +11,7 @@ import com.xmlcalabash.runtime.XPipeline;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmValue;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -62,7 +63,7 @@ public class Parameter extends BaseResource {
 
         String message = "Parameter added: " + qname.toString();
 
-        RuntimeValue value = new RuntimeValue(null, nodes, null, null);
+        RuntimeValue value = new RuntimeValue(null, new XdmValue(nodes), null, null);
         xpipeline.setParameter(port, qname, value);
         pipeconfig.setGVParameter(qname);
 

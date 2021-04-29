@@ -102,7 +102,7 @@ public class Info extends DefaultStep {
 
             if (!file.exists()) {
                 if (failOnError) {
-                    throw new XProcException(err_fu01);
+                    throw new XProcException(err_fu01, err_fu01.getLocalName());
                 } else {
                     tree.addStartElement(c_error);
                     tree.addText("File not found");

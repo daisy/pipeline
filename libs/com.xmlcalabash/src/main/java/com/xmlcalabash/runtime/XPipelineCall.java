@@ -4,10 +4,15 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.model.*;
 import com.xmlcalabash.util.XProcMessageListenerHelper;
+
+import net.sf.saxon.functions.FunctionLibrary;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.XdmNode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +26,6 @@ public class XPipelineCall extends XAtomicStep {
 
     public XPipelineCall(XProcRuntime runtime, Step step, XCompoundStep parent) {
         super(runtime, step, parent);
-        this.parent = parent;
     }
 
     public void setDeclaration(DeclareStep decl) {
@@ -38,12 +42,12 @@ public class XPipelineCall extends XAtomicStep {
 
         decl.setup();
 
-        if (runtime.getErrorCode() != null) {
-            throw new XProcException(runtime.getErrorCode(), runtime.getErrorMessage());
+        if (runtime.getError() != null) {
+            throw runtime.getError().copy();
         }
 
         XRootStep root = new XRootStep(runtime);
-        XPipeline newstep = new XPipeline(runtime, decl, root);
+        XPipeline newstep = new XPipeline(runtime, decl, root, getLocation());
 
         newstep.instantiate(decl);
 
@@ -92,16 +96,22 @@ public class XPipelineCall extends XAtomicStep {
         }
 
         runtime.start(this);
-        try {
-            XProcMessageListenerHelper.openStep(runtime, this);
-        } catch (Throwable e) {
-            throw handleException(e);
-        }
+        XProcMessageListenerHelper.openStep(runtime, this);
+
+        // temporarily clear the list of in scope XSLT functions as we're gonna invoke another step
+        // (with a new scope).
+        List<FunctionLibrary> inscopeXsltFunctions
+            = new ArrayList<FunctionLibrary>(runtime.getConfiguration().inscopeXsltFunctions);
+        runtime.getConfiguration().inscopeXsltFunctions.clear();
+
         try {
             newstep.run();
-        } catch (Throwable e) {
-            throw handleException(e);
         } finally {
+            // restore the in scope XSLT functions
+            runtime.getConfiguration().inscopeXsltFunctions.addAll(inscopeXsltFunctions);
+            for (XdmNode doc : newstep.errors()) {
+                reportError(doc);
+            }
             runtime.getMessageListener().closeStep();
         }
         runtime.finish(this);

@@ -169,7 +169,7 @@ public class XQuery extends DefaultStep {
                         tree.endDocument();
                         node = tree.getResult();
                     } else {
-                        throw new XProcException(step.getNode(), "p:xquery returned atomic value");
+                        throw new XProcException(step, "p:xquery returned atomic value");
                     }
                 } else {
                     node = (XdmNode) item;
@@ -192,7 +192,7 @@ public class XQuery extends DefaultStep {
                             tree.endDocument();
                             node = tree.getResult();
                         } else {
-                            throw new XProcException(step.getStep(), "p:xquery returned non-XML result", e.getCause());
+                            throw new XProcException(step, new RuntimeException("p:xquery returned non-XML result", e.getCause()));
                         }
                     }
                 }

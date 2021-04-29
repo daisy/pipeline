@@ -1,6 +1,7 @@
 package com.xmlcalabash.util;
 
 import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcException.XProcLocator;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 import net.sf.saxon.om.StructuredQName;
@@ -11,7 +12,6 @@ import net.sf.saxon.trans.XPathException;
 import java.math.BigDecimal;
 import javax.xml.transform.SourceLocator;
 import javax.xml.transform.TransformerException;
-import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,14 +26,14 @@ public class DefaultXProcMessageListener implements XProcMessageListener {
     private static Logger defaultLogger = LoggerFactory.getLogger(DefaultXProcMessageListener.class);
     private Logger log = defaultLogger;
 
-    public void error(XProcRunnable step, XdmNode node, String message, QName code) {
+    public void error(XProcRunnable step, XProcException error) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
 
-        log.error(message(step, node, message, code));
+        log.error(message(step, error.getLocation()[0], error.getMessage(), error.getErrorCode()));
     }
 
     public void error(Throwable exception) {
@@ -77,13 +77,14 @@ public class DefaultXProcMessageListener implements XProcMessageListener {
 
         if (exception instanceof XProcException) {
             XProcException err = (XProcException) exception;
-            loc = err.getLocator()[0];
+            loc = err.getLocation()[0];
             if (err.getErrorCode() != null) {
                 QName n = err.getErrorCode();
                 qCode = new StructuredQName(n.getPrefix(),n.getNamespaceURI(),n.getLocalName());
             }
-            if (err.getStep() != null) {
-                message = message + err.getStep() + ":";
+            if (loc instanceof XProcLocator) {
+                if (((XProcLocator)loc).getStep() != null)
+                    message = message + ((XProcLocator)loc).getStep() + ":";
             }
         }
 
@@ -106,67 +107,61 @@ public class DefaultXProcMessageListener implements XProcMessageListener {
         return message;
     }
 
-    public void warning(XProcRunnable step, XdmNode node, String message) {
+    public void warning(XProcRunnable step, XdmNode location, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.warn(message(step, node, message));
+        log.warn(message(step, location, message));
     }
 
     public void warning(Throwable exception) {
         log.warn(exceptionMessage(exception) + exception.getMessage());
     }
 
-    public void info(XProcRunnable step, XdmNode node, String message) {
+    public void info(XProcRunnable step, XdmNode location, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.info(message(step, node, message));
+        log.info(message(step, location, message));
     }
 
-    public void fine(XProcRunnable step, XdmNode node, String message) {
+    public void fine(XProcRunnable step, XdmNode location, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.debug(message(step, node, message));
+        log.debug(message(step, location, message));
     }
 
-    public void finer(XProcRunnable step, XdmNode node, String message) {
+    public void finer(XProcRunnable step, XdmNode location, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.trace(message(step, node, message));
+        log.trace(message(step, location, message));
     }
 
-    public void finest(XProcRunnable step, XdmNode node, String message) {
+    public void finest(XProcRunnable step, XdmNode location, String message) {
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.trace(message(step, node, message));
+        log.trace(message(step, location, message));
     }
 
-    private String message(XProcRunnable step, XdmNode node, String message) {
-        return message(step, node, message, null);
-    }
-
-    private String message(XProcRunnable step, XdmNode node, String message, QName code) {
+    private String message(XProcRunnable step, XdmNode location, String message) {
         String prefix = "";
-        if (node != null) {
-            URI cwd = URIUtils.cwdAsURI();
-            String systemId = cwd.relativize(node.getBaseURI()).toASCIIString();
-            int line = node.getLineNumber();
-            int col = node.getColumnNumber();
-
+        if (location != null) {
+            String systemId = URIUtils.cwdAsURI().relativize(location.getBaseURI()).toASCIIString();
+            int line = location.getLineNumber();
+            int col = location.getColumnNumber();
             if (systemId != null && !"".equals(systemId)) {
                 prefix = prefix + systemId + ":";
             }
@@ -177,11 +172,29 @@ public class DefaultXProcMessageListener implements XProcMessageListener {
                 prefix = prefix + col + ":";
             }
         }
-
         return prefix + message;
     }
 
-    public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {}
+    private String message(XProcRunnable step, SourceLocator location, String message, QName code) {
+        String prefix = "";
+        if (location != null) {
+            String systemId = location.getSystemId();
+            int line = location.getLineNumber();
+            int col = location.getColumnNumber();
+            if (systemId != null && !"".equals(systemId)) {
+                prefix = prefix + systemId + ":";
+            }
+            if (line != -1) {
+                prefix = prefix + line + ":";
+            }
+            if (col != -1) {
+                prefix = prefix + col + ":";
+            }
+        }
+        return prefix + message;
+    }
+
+    public void openStep(XProcRunnable step, XdmNode location, String message, String level, BigDecimal portion) {}
 
     public void closeStep() {}
 

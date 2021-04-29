@@ -46,8 +46,6 @@ public class Delete extends DefaultStep implements ProcessMatchingNodes {
     private static final QName _match = new QName("", "match");
     private ReadablePipe source = null;
     private WritablePipe result = null;
-    private Map<QName, RuntimeValue> inScopeOptions = null;
-    private String matchPattern = null;
 
     /* Creates a new instance of Delete */
     public Delete(XProcRuntime runtime, XAtomicStep step) {
@@ -73,7 +71,7 @@ public class Delete extends DefaultStep implements ProcessMatchingNodes {
         ProcessMatch matcher = null;
 
         matcher = new ProcessMatch(runtime, this);
-        matcher.match(source.read(), getOption(_match));
+        matcher.match(source.read(), getOption(_match), step.getInScopeOptions());
 
         XdmNode tree = matcher.getResult();
         result.write(tree);

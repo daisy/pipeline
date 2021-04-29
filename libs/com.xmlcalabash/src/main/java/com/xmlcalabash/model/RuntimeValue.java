@@ -21,7 +21,6 @@ package com.xmlcalabash.model;
 
 import java.net.URI;
 import java.util.Hashtable;
-import java.util.Vector;
 
 import net.sf.saxon.lib.NamespaceConstant;
 import net.sf.saxon.s9api.Axis;
@@ -44,8 +43,8 @@ import com.xmlcalabash.core.XProcRuntime;
  * @author ndw
  */
 public class RuntimeValue {
-    private Vector<XdmItem> generalValue = null;
-    private String value = null;
+    private XdmValue value = null;
+    private String stringValue = null;
     private XdmNode node = null;
     private boolean initialized = false;
     private Hashtable<String,String> nsBindings = null;
@@ -54,8 +53,8 @@ public class RuntimeValue {
         // nop; returns an uninitialized value
     }
 
-    public RuntimeValue(String value, XdmNode node) {
-        this.value = value;
+    public RuntimeValue(String stringValue, XdmNode node) {
+        this.stringValue = stringValue;
         this.node = node;
         initialized = true;
 
@@ -76,23 +75,23 @@ public class RuntimeValue {
         }
     }
 
-    public RuntimeValue(String value, XdmNode node, Hashtable<String,String> nsBindings) {
+    public RuntimeValue(String stringValue, XdmNode node, Hashtable<String,String> nsBindings) {
+        this.stringValue = stringValue;
+        this.node = node;
+        this.nsBindings = nsBindings;
+        initialized = true;
+    }
+
+    public RuntimeValue(String stringValue, XdmValue value, XdmNode node, Hashtable<String,String> nsBindings) {
+        this.stringValue = stringValue;
         this.value = value;
         this.node = node;
         this.nsBindings = nsBindings;
         initialized = true;
     }
 
-    public RuntimeValue(String value, Vector<XdmItem> generalValue, XdmNode node, Hashtable<String,String> nsBindings) {
-        this.value = value;
-        this.generalValue = generalValue;
-        this.node = node;
-        this.nsBindings = nsBindings;
-        initialized = true;
-    }
-
-    public RuntimeValue(String value) {
-        this.value = value;
+    public RuntimeValue(String stringValue) {
+        this.stringValue = stringValue;
         initialized = true;
     }
 
@@ -111,7 +110,7 @@ public class RuntimeValue {
         try {
             ItemTypeFactory itf = new ItemTypeFactory(runtime.getProcessor());
             ItemType untypedAtomic = itf.getAtomicType(new QName(NamespaceConstant.SCHEMA, "xs:untypedAtomic"));
-            XdmAtomicValue val = new XdmAtomicValue(value, untypedAtomic);
+            XdmAtomicValue val = new XdmAtomicValue(stringValue, untypedAtomic);
             return val;
         } catch (SaxonApiException sae) {
             throw new XProcException(sae);
@@ -119,36 +118,33 @@ public class RuntimeValue {
     }
 
     public String getString() {
-        return value;
+        return stringValue;
     }
 
     public boolean hasGeneralValue() {
-        return generalValue != null;
+        return value != null;
     }
 
     public XdmValue getValue() {
-        if (generalValue == null) {
+        if (value == null) {
             // Turn the string value into an XdmValue
-            return new XdmAtomicValue(value);
-        }
-        if (generalValue.size() == 1) {
-            return generalValue.get(0);
+            return new XdmAtomicValue(stringValue);
         } else {
-            return new XdmValue(generalValue);
+            return value;
         }
     }
 
     public StringValue getStringValue() {
-        return new StringValue(value);
+        return new StringValue(stringValue);
     }
 
     public QName getQName() {
         // FIXME: Check the type
         // TypeUtils.checkType(runtime, value, )
-        if (value.contains(":")) {
-            return new QName(value, node);
+        if (stringValue.contains(":")) {
+            return new QName(stringValue, node);
         } else {
-            return new QName("", value);
+            return new QName("", stringValue);
         }
     }
 
@@ -165,22 +161,22 @@ public class RuntimeValue {
     }
 
     public boolean getBoolean() {
-        if ("true".equals(value) || "1".equals(value)) {
+        if ("true".equals(stringValue) || "1".equals(stringValue)) {
             return true;
-        } else if ("false".equals(value) || "0".equals(value)) {
+        } else if ("false".equals(stringValue) || "0".equals(stringValue)) {
             return false;
         } else {
-            throw new XProcException(node, "Non boolean string: " + value);
+            throw new XProcException(node, "Non boolean string: " + stringValue);
         }
     }
 
     public int getInt() {
-        int result = Integer.parseInt(value);
+        int result = Integer.parseInt(stringValue);
         return result;
     }
 
     public long getLong() {
-        long result = Long.parseLong(value);
+        long result = Long.parseLong(stringValue);
         return result;
     }
 

@@ -142,16 +142,16 @@ public class DefaultStep implements XProcStep {
         throw new XProcException("XProcStep implementation must override reset().");
     }
 
-    public void error(XdmNode node, String message, QName code) {
-        runtime.error(this, node, message, code);
+    public void error(XProcException error) {
+        runtime.error(this, error);
     }
 
-    public void warning(XdmNode node, String message) {
-        runtime.warning(this, node, message);
+    public void warning(XdmNode location, String message) {
+        runtime.warning(this, location, message);
     }
 
-    public void info(XdmNode node, String message) {
-        runtime.info(this, node, message);
+    public void info(XdmNode location, String message) {
+        runtime.info(this, location, message);
     }
 
     public void run() throws SaxonApiException {

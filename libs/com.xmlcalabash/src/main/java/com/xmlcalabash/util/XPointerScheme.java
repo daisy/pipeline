@@ -106,7 +106,7 @@ public class XPointerScheme {
                 try {
                     node = (XdmNode) item;
                 } catch (ClassCastException cce) {
-                    throw new XProcException ("XPointer matched non-node item?: " + schemeName + "(" + schemeData + ")");
+                    throw new XProcException("XPointer matched non-node item?: " + schemeName + "(" + schemeData + ")");
                 }
                 selectedNodes.add(node);
             }

@@ -19,9 +19,11 @@
 
 package com.xmlcalabash.core;
 
-import com.xmlcalabash.util.S9apiUtils;
-import com.xmlcalabash.util.URIUtils;
 import com.xmlcalabash.model.Step;
+import com.xmlcalabash.runtime.XStep;
+import com.xmlcalabash.util.S9apiUtils;
+import com.xmlcalabash.util.TreeWriter;
+import com.xmlcalabash.util.URIUtils;
 
 import net.sf.saxon.expr.instruct.Actor;
 import net.sf.saxon.expr.instruct.AttributeSet;
@@ -53,7 +55,6 @@ import javax.xml.transform.dom.DOMLocator;
 import javax.xml.transform.SourceLocator;
 import javax.xml.transform.TransformerException;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -62,470 +63,424 @@ import java.util.Objects;
 /**
  *
  * @author ndw
+ * @author bertfrees
  */
 public class XProcException extends RuntimeException {
+
     public static final QName err_E0001 = new QName(XProcConstants.NS_XPROC_ERROR_EX, "XE0001"); // invalid pipeline
     public static final QName err_E0002 = new QName(XProcConstants.NS_XPROC_ERROR_EX, "XE0002"); // invalid configuration
 
-    private QName error = null;
-    private Step step = null;
-    private XdmNode node = null;
+    private static final String NS_DAISY_PIPELINE_XPROC = "http://www.daisy.org/ns/pipeline/xproc";
+    private static final QName c_error = new QName("c", XProcConstants.NS_XPROC_STEP, "error");
+    private static final QName _href = new QName("", "href");
+    private static final QName _line = new QName("", "line");
+    private static final QName _column = new QName("", "column");
+    private static final QName _code = new QName("", "code");
+    private static final QName _type = new QName("", "type");
+    private static final QName _name = new QName("", "name");
+    private static final QName px_cause = new QName("px", NS_DAISY_PIPELINE_XPROC, "cause");
+    private static final QName px_location = new QName("px", NS_DAISY_PIPELINE_XPROC, "location");
+    private static final QName px_file = new QName("px", NS_DAISY_PIPELINE_XPROC, "file");
 
-    /* Creates a new instance of XProcException */
-    public XProcException() {
-        super();
+    private final QName errorCode;
+    private final XdmNode errorContent;
+    private final XProcException errorCause;
+    private final SourceLocator[] location;
+
+    private static final SourceLocator NO_LOCATOR = new SourceLocator() {
+            public String getPublicId() { return null; }
+            public String getSystemId() { return null; }
+            public int getLineNumber() { return -1; }
+            public int getColumnNumber() { return -1; }
+        };
+    private static final SourceLocator[] NO_LOCATION = new SourceLocator[]{NO_LOCATOR};
+
+    /**
+     * Create an XProc error
+     *
+     * @param code     The type of the error, or <code>null</code> if untyped.
+     * @param location The location of the error, or <code>null</code> if unknown or not
+     *                 applicable. Can be a {@link SourceLocator[]}, {@link XStep}, {@link Step},
+     *                 {@link XdmNode}, {@link TransformerException} or {@link Throwable}.
+     * @param message  The content of the error. Can be a {@link String}, {@link XdmNode}, {@link
+     *                 Throwable} or <code>null</code> if absent. In case of {@link Throwable}, this
+     *                 argument determines both the content of the error (through its {@link
+     *                 XProcException#getErrorContent()} or {@link Throwable#getMessage()} method)
+     *                 and also the cause of the Java exception. Note that the latter is different
+     *                 from the <code>cause</code> argument (see below).
+     * @param cause    The XProc error that caused this XProc error to be created. Note that this
+     *                 is not the same as the cause of the Java exception.
+     */
+    private XProcException(QName code, Object location, Object message, XProcException cause) {
+        super(
+            message instanceof String
+                ? (String)message
+                : message instanceof XdmNode
+                    ? ((XdmNode)message).getStringValue()
+                    : message instanceof Throwable
+                        ? ((Throwable)message).getMessage()
+                        : null,
+            message instanceof Throwable
+                ? (Throwable)message
+                : null);
+        errorCode = code;
+        if (!(message == null ||
+              message instanceof String ||
+              message instanceof XdmNode ||
+              message instanceof Throwable))
+            throw new IllegalStateException("coding error");
+        errorContent = message instanceof XdmNode
+            ? (XdmNode)message
+            : message instanceof XProcException
+                ? ((XProcException)message).getErrorContent()
+                : null;
+        this.location = getLocation(location);
+        this.errorCause = cause;
     }
 
-    /* Creates a new instance of XProcException */
+    private static class StaticXProcError extends XProcException {
+        private StaticXProcError(Integer code, Object location, Object message) {
+            super(code != null ? XProcConstants.staticError(code) : null,
+                  location,
+                  message,
+                  null);
+            if (code == null ||
+                !(message == null ||
+                  message instanceof String ||
+                  message instanceof Throwable))
+                throw new IllegalStateException("coding error");
+        }
+    }
+
+    private static class DynamicXProcError extends XProcException {
+        private DynamicXProcError(Object code, Object location, Object message, XProcException cause) {
+            super(code instanceof QName
+                      ? (QName)code
+                      : code instanceof Integer
+                          ? code != null
+                              ? XProcConstants.dynamicError((Integer)code)
+                              : null
+                          : null,
+                  location,
+                  message,
+                  cause);
+            if (code == null ||
+                !(code instanceof Integer ||
+                  code instanceof QName))
+                throw new IllegalStateException("coding error");
+        }
+    }
+
+    public static XProcException staticError(int code) {
+        return new StaticXProcError(code, null, null);
+    }
+
+    public static XProcException staticError(int code, String message) {
+        return new StaticXProcError(code, null, message);
+    }
+
+    public static XProcException staticError(int code, XdmNode location, String message) {
+        return new StaticXProcError(code, location, message);
+    }
+
+    public static XProcException staticError(int code, XdmNode location, Throwable message) {
+        return new StaticXProcError(code, location, message);
+    }
+
+    public static XProcException dynamicError(int code) {
+        return new DynamicXProcError(code, null, null, null);
+    }
+
+    public static XProcException dynamicError(int code, String message) {
+        return new DynamicXProcError(code, null, message, null);
+    }
+
+    public static XProcException dynamicError(int code, Throwable message) {
+        return new DynamicXProcError(code, null, message, null);
+    }
+
+    public static XProcException dynamicError(int code, XdmNode location, String message) {
+        return new DynamicXProcError(code, location, message, null);
+    }
+
+    public static XProcException dynamicError(int code, XdmNode location, Throwable message) {
+        return new DynamicXProcError(code, location, message, null);
+    }
+
+    public static XProcException dynamicError(int code, Step location, String message) {
+        return new DynamicXProcError(code, location, message, null);
+    }
+
+    public static XProcException dynamicError(int code, XStep location, String message) {
+        return new DynamicXProcError(code, location, message, null);
+    }
+
+    public static XProcException stepError(int code) {
+        return new DynamicXProcError(XProcConstants.stepError(code), null, null, null);
+    }
+
+    public static XProcException stepError(int code, String message) {
+        return new DynamicXProcError(XProcConstants.stepError(code), null, message, null);
+    }
+
+    public static XProcException stepError(int code, Throwable message) {
+        return new DynamicXProcError(XProcConstants.stepError(code), null, message, null);
+    }
+
+    public static XProcException stepError(int code, XdmNode location, String message) {
+        return new DynamicXProcError(XProcConstants.stepError(code), location, message, null);
+    }
+
+    public XProcException(QName code, XdmNode location, String message) {
+        this(code, location, message, null);
+    }
+
+    public XProcException(QName code, XStep location, String message) {
+        this(code, location, message, null);
+    }
+
+    public XProcException(QName code, XStep location, XdmNode message) {
+        this(code, location, message, null);
+    }
+
+    public XProcException(QName code, XStep location, Throwable message) {
+        this(code, location, message, null);
+    }
+
+    public XProcException(QName code, String message) {
+        this(code, null, message, null);
+    }
+
+    public XProcException(QName code, Throwable message) {
+        this(code, null, message, null);
+    }
+
     public XProcException(String message) {
-        super(message);
-    }
-    
-    /* Creates a new instance of XProcException */
-    public XProcException(Step step) {
-        super();
-        this.step = step;
+        this(null, null, message, null);
     }
 
-    /* Creates a new instance of XProcException */
-    public XProcException(Step step, String message) {
-        super(message);
-        this.step = step;
+    public XProcException(Throwable message) {
+        this(null, null, message, null);
     }
 
-    /* Creates a new instance of XProcException */
-    public XProcException(XdmNode node, String message) {
-        super(message);
-        this.node = node;
+    public XProcException(Throwable message, XProcException cause) {
+        this(null, null, message, cause);
     }
 
-    /* Creates a new instance of XProcException */
-    public XProcException(String message, Throwable cause) {
-        super(message, cause);
+    public XProcException(SourceLocator[] location, Throwable message) {
+        this(null, location, message, null);
     }
 
-    /* Creates a new instance of XProcException */
-    public XProcException(Step step, String message, Throwable cause) {
-        super(message, cause);
-        this.step = step;
+    public XProcException(XdmNode location, String message) {
+        this(null, location, message, null);
     }
 
-    /* Creates a new instance of XProcException */
-    public XProcException(Throwable cause) {
-        super(cause);
+    public XProcException(XdmNode location, Throwable message) {
+        this(null, location, message, null);
     }
 
-    /* Creates a new instance of XProcException */
-    public XProcException(XdmNode node, Throwable cause) {
-        super(cause);
-        this.node = node;
+    public XProcException(Step location, String message) {
+        this(null, location, message, null);
     }
 
-    /* Creates a new instance of XProcException */
-    public XProcException(XdmNode node, String message, Throwable cause) {
-        super(message, cause);
-        this.node = node;
+    public XProcException(XStep location, String message) {
+        this(null, location, message, null);
     }
 
-    public XProcException(QName errorCode) {
-    	super(errorCode.getLocalName());
-        error = errorCode;
+    public XProcException(XStep location, Throwable message) {
+        this(null, location, message, null);
     }
 
-    public XProcException(Step step, QName errorCode) {
-    	super(errorCode.getLocalName());
-        error = errorCode;
-        this.step = step;
+    public XProcException(XStep location, String message, XProcException cause) {
+        this(null, location, message, cause);
     }
 
-    public XProcException(QName errorCode, String message) {
-        super(message);
-        error = errorCode;
+    public XProcException(XStep location, Throwable message, XProcException cause) {
+        this(null, location, message, cause);
     }
 
-    public XProcException(Step step, QName errorCode, String message) {
-        super(message);
-        error = errorCode;
-        this.step = step;
+    public XProcException(TransformerException location, XdmNode message) {
+        this(null, location, message, null);
     }
 
-    public XProcException(QName errorCode, XdmNode node, Throwable cause, String message) {
-        super(message,cause);
-        error = errorCode;
-        this.node = node;
+    public XProcException(TransformerException location, Throwable message) {
+        this(null, location, message, null);
     }
 
-    public XProcException(QName errorCode, XdmNode node, String message) {
-        super(message);
-        error = errorCode;
-        this.node = node;
+    public XProcException(TransformerException location, XdmNode message, XProcException cause) {
+        this(null, location, message, cause);
     }
 
-    public XProcException(Step step, QName errorCode, XdmNode node, String message) {
-        super(message);
-        error = errorCode;
-        this.step = step;
-        this.node = node;
-    }
-    
-    public XProcException(QName errorCode, Throwable cause) {
-        super("XProc error err:" + errorCode.getLocalName(), cause);
-        error = errorCode;
-    }
-
-    public static XProcException staticError(int errno) {
-        return new XProcException(XProcConstants.staticError(errno));
-    }
-
-    public static XProcException staticError(int errno, String message) {
-        return new XProcException(XProcConstants.staticError(errno), message);
-    }
-
-    public static XProcException staticError(int errno, XdmNode node, String message) {
-        return new XProcException(XProcConstants.staticError(errno), node, message);
-    }
-
-    public static XProcException staticError(int errno, XdmNode node, Throwable cause, String message) {
-        return new XProcException(XProcConstants.staticError(errno), node, cause, message);
-    }
-
-    public static XProcException staticError(int errno, Exception except) {
-        return new XProcException(XProcConstants.staticError(errno), except);
-    }
-
-    public static XProcException dynamicError(int errno) {
-        return new XProcException(XProcConstants.dynamicError(errno));
-    }
-
-    public static XProcException dynamicError(Step step, int errno) {
-        return new XProcException(step, XProcConstants.dynamicError(errno));
-    }
-
-    public static XProcException dynamicError(int errno, String message) {
-        return new XProcException(XProcConstants.dynamicError(errno), message);
-    }
-
-    public static XProcException dynamicError(int errno, XdmNode node, String message) {
-        return new XProcException(XProcConstants.dynamicError(errno), node, message);
-    }
-
-    public static XProcException dynamicError(int errno, XdmNode node, Exception except, String message) {
-        return new XProcException(XProcConstants.dynamicError(errno), node, except, message);
-    }
-
-    public static XProcException dynamicError(Step step, int errno, String message) {
-        return new XProcException(step, XProcConstants.dynamicError(errno), message);
-    }
-
-    public static XProcException dynamicError(int errno, Exception except) {
-        return new XProcException(XProcConstants.dynamicError(errno), except);
-    }
-
-    public static XProcException stepError(int errno) {
-        return new XProcException(XProcConstants.stepError(errno));
-    }
-
-    public static XProcException stepError(int errno, String message) {
-        return new XProcException(XProcConstants.stepError(errno), message);
-    }
-
-    public static XProcException stepError(int errno, Exception except) {
-        return new XProcException(XProcConstants.stepError(errno), except);
+    public XProcException(TransformerException location, Throwable message, XProcException cause) {
+        this(null, location, message, cause);
     }
 
     /**
-     * @param offset Make the locator of this error start "offset" number of frames from
-     *               the point where this method is called (a positive number results in
-     *               less frames in the locator).
+     * Create a XProc error from a Java exception. The exception is used for both the message and
+     * location or the XProc error. The exception's cause is also converted to an XProc error and
+     * becomes the error cause (and this recursively).
      */
-    public static XProcException javaError(Throwable throwable, int offset) {
-        StackTraceElement[] base = new RuntimeException().getStackTrace();
-        return javaError(throwable, offset, base, 1);
-    }
-    
-    public static XProcException javaError(Throwable throwable, int offset, StackTraceElement[] base, int baseOffset) {
-        if (baseOffset < 0)
-            throw new IllegalArgumentException();
-        final SourceLocator[] location; {
-            StackTraceElement[] trace = throwable.getStackTrace();
-            int m = trace.length - 1;
-            int n = base.length - 1;
-            while (m >= 0 && n >= baseOffset && trace[m].equals(base[n])) {
-                m--;
-                n--;
-            }
-            if (m >= 0 && n >= baseOffset
-                && trace[m].getClassName().equals(base[n].getClassName())
-                && Objects.equals(trace[m].getMethodName(), base[n].getMethodName())
-                && Objects.equals(trace[m].getFileName(), base[n].getFileName())) {
-                m--;
-                n--;
-            }
-            if (n < baseOffset)
-                m += (2 - offset);
-            else
-                m = trace.length;
-            location = new SourceLocator[m];
-            for (int i = 0; i < m; i++) {
-                final StackTraceElement frame = trace[i];
-                location[i] = new SourceLocator() {
-                    public String getPublicId() {
-                        return null;
-                    }
-                    public String getSystemId() {
-                        return frame.getFileName();
-                    }
-                    public int getLineNumber() {
-                        return frame.getLineNumber();
-                    }
-                    public int getColumnNumber() {
-                        return -1;
-                    }
-                    @Override
-                    public String toString() {
-                        return frame.toString();
-                    }
-                };
-            }
-        }
-        final XProcException xprocCause; {
-            Throwable cause = throwable.getCause();
-            xprocCause = cause == null ? null : javaError(cause, offset, base, baseOffset);
-        }
-        return new XProcException(throwable.getMessage(), throwable) {
-            @Override
-            public SourceLocator[] getLocator() {
-                return location; }
-            @Override
-            public XProcException getXProcCause() {
-                return xprocCause; }};
+    public static XProcException fromException(Throwable throwable) {
+        XProcException cause = throwable.getCause() != null
+            ? fromException(throwable.getCause())
+            : null;
+        return new XProcException(null, throwable, throwable, cause);
     }
 
-    public XProcException rebaseOnto(Step step) {
-        return rebaseOnto(step, getLocator(step));
+    /**
+     * Create a new instance of the same XProc error, to allow to better track where exceptions are
+     * thrown.
+     */
+    public XProcException copy() {
+        return new XProcException(errorCode, location, this, errorCause);
     }
-    
-    public XProcException rebaseOnto(SourceLocator[] base) {
-        return rebaseOnto(getStep(), base);
+
+    public XProcException rebase(SourceLocator[] base) {
+        return rebase(base, null);
     }
-    
-    private XProcException rebaseOnto(final Step step, SourceLocator[] base) {
-        final QName error = this.getErrorCode();
-        final String message = this.getMessage();
-        final XdmNode node = this.getNode();
-        final SourceLocator[] location; {
-            SourceLocator[] l = this.getLocator();
-            int originalLength = l.length;
-            if (l.length == 1 && l[0] instanceof XMLLocation && getStep() == null && getNode() == null && base.length > 0)
-                originalLength = 0;
-            location = new SourceLocator[base.length + originalLength];
-            int i = 0;
-            if (originalLength != 0)
-                for (SourceLocator ll : l)
-                    location[i++] = ll;
-            for (SourceLocator ll : base)
-                location[i++] = ll;
+
+    public XProcException rebase(XStep base) {
+        return rebase(base, null);
+    }
+
+    public XProcException rebase(TransformerException base) {
+        return rebase(base, null);
+    }
+
+    public XProcException rebase(SourceLocator[] newBase, StackTraceElement[] oldBase) {
+        return rebase((Object)newBase, (Object)oldBase);
+    }
+
+    private XProcException rebase(Object newBaseObject, Object oldBaseObject) {
+        SourceLocator[] newBase = getLocation(newBaseObject);
+        SourceLocator[] oldBase = getLocation(oldBaseObject);
+        SourceLocator[] newLocation; {
+            int newLength = 0;
+            if (location != NO_LOCATION) {
+                if (oldBase != NO_LOCATION) {
+                    int m = location.length - 1;
+                    int n = oldBase.length - 1;
+                    while (m >= 0 && n >= 0
+                           && Objects.equals(location[m].getSystemId(), oldBase[n].getSystemId())
+                           && Objects.equals(location[m].getLineNumber(), oldBase[n].getLineNumber())
+                           && Objects.equals(location[m].getColumnNumber(), oldBase[n].getColumnNumber())) {
+                        m--;
+                        n--;
+                    }
+                    // allow top frame to differ in line number, as long as we're in the same method
+                    if (m >= 0 && n >= 0
+                        && location[m] instanceof JavaFrame
+                        && oldBase[n] instanceof JavaFrame) {
+                        StackTraceElement frame = ((JavaFrame)location[m]).frame;
+                        StackTraceElement oldFrame = ((JavaFrame)oldBase[n]).frame;
+                        if (frame.getClassName().equals(oldFrame.getClassName())
+                            && Objects.equals(frame.getMethodName(), oldFrame.getMethodName())
+                            && Objects.equals(frame.getFileName(), oldFrame.getFileName())) {
+                            m--;
+                            n--;
+                        }
+                    }
+                    if (n < 0)
+                        newLength += (m + 2);
+                    else
+                        newLength += location.length;
+                } else
+                    newLength += location.length;
+            }
+            if (newBase != NO_LOCATION) {
+                newLength += newBase.length;
+            }
+            if (newLength == 0)
+                newLocation = NO_LOCATION;
+            else {
+                newLocation = new SourceLocator[newLength];
+                int i = 0;
+                if (newBase != NO_LOCATION)
+                    newLength -= newBase.length;
+                while (i < newLength) {
+                    newLocation[i] = location[i];
+                    i++;
+                }
+                if (newBase != NO_LOCATION) {
+                    for (SourceLocator l : newBase)
+                        newLocation[i++] = l;
+                }
+            }
         }
-        final Throwable cause = this;
-        final XProcException xprocCause; {
-            XProcException xc = this.getXProcCause();
-            xprocCause = xc == null ? null : xc.rebaseOnto(base);
-        }
-        return new XProcException() {
-            @Override
-            public QName getErrorCode() {
-                return error;
-            }
-            @Override
-            public String getMessage() {
-                return message;
-            }
-            @Override
-            public Step getStep() {
-                return step;
-            }
-            @Override
-            public XdmNode getNode() {
-                return node;
-            }
-            @Override
-            public SourceLocator[] getLocator() {
-                return location;
-            }
-            @Override
-            public Throwable getCause() {
-                return cause;
-            }
-            @Override
-            public XProcException getXProcCause() {
-                return xprocCause;
-            }
-        };
+        XProcException newErrorCause = errorCause != null
+            ? errorCause.rebase(newBase, oldBase)
+            : null;
+        return new XProcException(errorCode, newLocation, this, newErrorCause);
     }
 
     public QName getErrorCode() {
-        return error;
+        return errorCode;
     }
 
-    public Step getStep() {
-        return step;
+    public XdmNode getErrorContent() {
+        return errorContent;
     }
 
-    public XdmNode getNode() {
-        return node;
+    public XProcException getErrorCause() {
+        return errorCause;
     }
 
-    public XProcException getXProcCause() {
-        return null;
-    }
-
-    public SourceLocator[] getLocator() {
-        return getLocator(getStep(), getNode());
-    }
-
-    private static SourceLocator[] getLocator(Step step) {
-        return getLocator(step, null);
-    }
-
-    private static SourceLocator[] getLocator(Step step, XdmNode node) {
-        List<Step> parents = new ArrayList<Step>(); {
-            Step s = step;
-            while (s != null) {
-                s = s.getParent();
-                if (s != null)
-                    parents.add(s);
-            }
-        }
-        SourceLocator[] location = new SourceLocator[1 + (parents.size() == 0 ? 0 : (parents.size() - 1))]; {
-            if (node == null) {
-                if (step != null)
-                    node = step.getNode();
-            }
-            location[0] = new XMLLocation(step, node);
-            for (int i = 0; i < parents.size() - 1; i++) // don't include root step
-                location[i + 1] = new XMLLocation(parents.get(i).getStep());
-        }
+    public SourceLocator[] getLocation() {
         return location;
     }
 
-    public static SourceLocator prettyLocator(final SourceLocator loc, final String instructionName) {
-        return new XMLLocationWithInstructionName() {
-            public String getPublicId() {
-                return loc.getPublicId();
-            }
-            public String getSystemId() {
-                return loc.getSystemId();
-            }
-            public int getLineNumber() {
-                return loc.getLineNumber();
-            }
-            public int getColumnNumber() {
-                return loc.getColumnNumber();
-            }
+    public static SourceLocator prettyLocator(SourceLocator locator, final String instructionName) {
+        return new SourceLocatorWithInstructionName(locator) {
             protected String getInstructionName() {
                 return instructionName;
             }
         };
     }
 
-    public static SourceLocator prettyLocator(final String systemId, final int lineNumber, final String instructionName) {
-        return new XMLLocationWithInstructionName() {
-            public String getPublicId() {
-                return null;
-            }
-            public String getSystemId() {
-                return systemId;
-            }
-            public int getLineNumber() {
-                return lineNumber;
-            }
-            public int getColumnNumber() {
-                return -1;
-            }
+    public static SourceLocator prettyLocator(final String systemId, final int lineNumber, final int columnNumber,
+                                              final String instructionName) {
+        return new SourceLocatorWithInstructionName(new SourceLocator() {
+                public String getPublicId() { return null; }
+                public String getSystemId() { return systemId; }
+                public int getLineNumber() { return lineNumber; }
+                public int getColumnNumber() { return columnNumber; }
+            }) {
             protected String getInstructionName() {
                 return instructionName;
             }
         };
     }
-    
-    private static class XMLLocation extends XMLLocationWithInstructionName {
-        private int line = -1;
-        private int col = -1;
-        private String systemId = null;
-        private QName type;
 
-        public XMLLocation(Step step) {
-            this(step, step.getNode());
-        }
-        
-        public XMLLocation(Step step, XdmNode node) {
-            if (step != null) {
-                type = step.getDeclaredType();
-            }
-            if (node != null) {
-                URI cwd = URIUtils.cwdAsURI();
-                systemId = cwd.relativize(node.getBaseURI()).toASCIIString();
-                line = node.getLineNumber();
-                if (line <= 0) {
-                    line = S9apiUtils.getDocumentElement(node).getLineNumber();
-                }
-                col = node.getColumnNumber();
-            }
-        }
-
-        public String getPublicId() {
-            return null;
-        }
-
-        public String getSystemId() {
-            return systemId;
-        }
-
-        public int getLineNumber() {
-            return line;
-        }
-
-        public int getColumnNumber() {
-            return col;
-        }
-
-        protected String getInstructionName() {
-            if (type != null)
-                return type.getClarkName();
+    private static SourceLocator[] getLocation(Object object) {
+        SourceLocator[] location; {
+            if (object == null)
+                location = null;
+            else if (object instanceof SourceLocator[])
+                location = (SourceLocator[])object;
+            else if (object instanceof XStep)
+                location = ((XStep)object).getLocation();
+            else if (object instanceof Step)
+                location = new SourceLocator[]{getLocator(((Step)object))};
+            else if (object instanceof XdmNode)
+                location = new SourceLocator[]{getLocator((XdmNode)object)};
+            else if (object instanceof XProcException)
+                location = ((XProcException)object).getLocation();
+            else if (object instanceof TransformerException)
+                location = getLocation((TransformerException)object);
+            else if (object instanceof StackTraceElement[])
+                location = getLocation((StackTraceElement[])object);
+            else if (object instanceof Throwable)
+                location = getLocation(((Throwable)object).getStackTrace());
             else
-                return null;
+                throw new IllegalStateException("coding error");
         }
+        if (location == null || location.length == 0)
+            return NO_LOCATION;
+        else
+            return location;
     }
 
-    private static abstract class XMLLocationWithInstructionName implements SourceLocator {
-
-        protected abstract String getInstructionName();
-
-        @Override
-        public String toString() {
-            StringBuilder s = new StringBuilder();
-            String instructionName = getInstructionName();
-            String fileName = getSystemId();
-            if (fileName != null && !"".equals(fileName)) {
-                if (fileName.lastIndexOf('/') >= 0)
-                    fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-                s.append(fileName);
-                int line = getLineNumber();
-                if (line > 0)
-                    s.append(":" + getLineNumber());
-            }
-            if (instructionName != null && !"".equals(instructionName)) {
-                if (s.length() > 0)
-                    s.insert(0, instructionName + "(").append(")");
-                else
-                    s.append(instructionName);
-            } else if (s.length() == 0)
-                s.append("?");
-            return s.toString();
-        }
-    }
-
-    public static SourceLocator[] getLocator(TransformerException e) {
+    private static SourceLocator[] getLocation(TransformerException e) {
 
         // This code is inspired by StandardErrorListener
         List<SourceLocator> frames = new ArrayList<SourceLocator>();
@@ -551,7 +506,7 @@ public class XProcException extends RuntimeException {
         String instructionName = getInstructionName(loc);
         if (instructionName == null && e instanceof TerminationException)
             instructionName = "xsl:message";
-        loc = XProcException.prettyLocator(loc, instructionName);
+        loc = prettyLocator(loc, instructionName);
         frames.add(loc);
 
         // now add more frames based on XPathContext
@@ -564,11 +519,45 @@ public class XProcException extends RuntimeException {
                     ContextStackFrame f = ff.next();
                     instructionName = getInstructionName(f);
                     if (instructionName != null)
-                        frames.add(XProcException.prettyLocator(f.getSystemId(), f.getLineNumber(), instructionName));
+                        frames.add(prettyLocator(f.getSystemId(), f.getLineNumber(), -1, instructionName));
                 }
             }
         }
         return frames.toArray(new SourceLocator[frames.size()]);
+    }
+
+    private static SourceLocator[] getLocation(StackTraceElement[] trace) {
+        SourceLocator[] location = new SourceLocator[trace.length];
+        for (int i = 0; i < trace.length; i++) {
+            location[i] = new JavaFrame(trace[i]);
+        }
+        return location;
+    }
+
+    private static SourceLocator getLocator(XdmNode node) {
+        if (node == null)
+            return NO_LOCATOR;
+        final String systemId = URIUtils.cwdAsURI().relativize(node.getBaseURI()).toASCIIString();
+        final int line = node.getLineNumber() > 0 ? node.getLineNumber() : S9apiUtils.getDocumentElement(node).getLineNumber();
+        final int col = node.getColumnNumber();
+        return new SourceLocator() {
+            public String getPublicId() {
+                return null;
+            }
+            public String getSystemId() {
+                return systemId;
+            }
+            public int getLineNumber() {
+                return line;
+            }
+            public int getColumnNumber() {
+                return col;
+            }
+        };
+    }
+
+    public static SourceLocator getLocator(Step step) {
+        return new XProcLocator(step);
     }
 
     private static String getInstructionName(SourceLocator loc) {
@@ -637,38 +626,202 @@ public class XProcException extends RuntimeException {
             return "procedure " + objectName;
         }
     }
-    
+
+    private static abstract class SourceLocatorWithInstructionName implements SourceLocator {
+
+        private final SourceLocator locator;
+
+        public SourceLocatorWithInstructionName(SourceLocator locator) {
+            this.locator = locator;
+        }
+
+        public String getPublicId() {
+            return locator != null ? locator.getPublicId() : null;
+        }
+
+        public String getSystemId() {
+            return locator != null ? locator.getSystemId() : null;
+        }
+
+        public int getLineNumber() {
+            return locator != null ? locator.getLineNumber() : -1;
+        }
+
+        public int getColumnNumber() {
+            return locator != null ? locator.getColumnNumber() : -1;
+        }
+
+        protected abstract String getInstructionName();
+
+        @Override
+        public String toString() {
+            StringBuilder s = new StringBuilder();
+            String instructionName = getInstructionName();
+            String fileName = getSystemId();
+            if (fileName != null && !"".equals(fileName)) {
+                if (fileName.lastIndexOf('/') >= 0)
+                    fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+                s.append(fileName);
+                int line = getLineNumber();
+                if (line > 0)
+                    s.append(":" + getLineNumber());
+            }
+            if (instructionName != null && !"".equals(instructionName)) {
+                if (s.length() > 0)
+                    s.insert(0, instructionName + "(").append(")");
+                else
+                    s.append(instructionName);
+            } else if (s.length() == 0)
+                s.append("?");
+            return s.toString();
+        }
+    }
+
+    public static class XProcLocator extends SourceLocatorWithInstructionName {
+        private final Step step;
+        private final String instructionName;
+        public XProcLocator(Step step) {
+            super(getLocator(step != null ? step.getNode() : null));
+            this.step = step;
+            if (step == null || step.getNode() == null) {
+                instructionName = null;
+            } else {
+                String name = step.getName();
+                instructionName = step.getNode().getNodeName().getClarkName()
+                + ((name.startsWith("#") || name.startsWith("!")) ? "" : (" name=\"" + name + "\""));
+            }
+        }
+        public Step getStep() {
+            return step;
+        }
+        protected String getInstructionName() {
+            return instructionName;
+        }
+    }
+
+    private static class JavaFrame implements SourceLocator {
+        public final StackTraceElement frame;
+        public JavaFrame(StackTraceElement frame) {
+            this.frame = frame;
+        }
+        public String getPublicId() {
+            return null;
+        }
+        public String getSystemId() {
+            return frame.getFileName();
+        }
+        public int getLineNumber() {
+            return frame.getLineNumber();
+        }
+        public int getColumnNumber() {
+            return -1;
+        }
+        @Override
+        public String toString() {
+            return frame.toString();
+        }
+    }
+
     // adapted from java.lang.Throwable
     private String printEnclosedLocation(SourceLocator[] enclosingLocation) {
         StringBuilder s = new StringBuilder();
-        if (getErrorCode() != null) {
-            s.append("[").append(getErrorCode()).append("]");
-            if (getMessage() != null)
-                s.append(" ").append(getMessage());
-        } else
-            s.append(getMessage());
-        SourceLocator[] loc = getLocator();
-        int m = loc.length - 1;
+        String message = getMessage();
+        if (errorCode != null) {
+            s.append("[").append(errorCode).append("]");
+            if (message != null)
+                s.append(" ");
+        }
+        if (message != null)
+            s.append(message);
+        else if (errorCode == null)
+            s.append((String)null);
+        int m = location.length - 1;
         int n = enclosingLocation.length - 1;
-        while (m >= 0 && n >=0 && loc[m].equals(enclosingLocation[n])) {
+        while (m >= 0 && n >=0 && location[m].equals(enclosingLocation[n])) {
             m--;
             n--;
         }
-        int inCommon = loc.length - 1 - m;
+        int inCommon = location.length - 1 - m;
         for (int i = 0; i <= m; i++)
-            s.append("\n\tat " + loc[i]);
+            if (location[i] != NO_LOCATOR)
+                s.append("\n\tat " + location[i]);
         if (inCommon != 0)
             s.append("\n\t... " + inCommon + " more");
-        XProcException cause = getXProcCause();
-        if (cause != null) {
+        if (errorCause != null) {
             s.append("\nCaused by: ");
-            s.append(cause.printEnclosedLocation(loc));
+            s.append(errorCause.printEnclosedLocation(location));
         }
         return s.toString();
     }
-    
+
     @Override
     public String toString() {
         return printEnclosedLocation(new SourceLocator[]{});
+    }
+
+    private static void serializeLocation(SourceLocator[] location, TreeWriter writer) {
+        boolean empty = true;
+        for (SourceLocator l : location) {
+            if (l.getSystemId() != null || l.getLineNumber() > 0) {
+                empty = false;
+                break;
+            }
+        }
+        if (empty) return;
+        writer.addStartElement(px_location);
+        writer.startContent();
+        for (SourceLocator l : location) {
+            if (l.getSystemId() != null || l.getLineNumber() > 0) {
+                writer.addStartElement(px_file);
+                if (l.getSystemId() != null)
+                    writer.addAttribute(_href, l.getSystemId());
+                int line = l.getLineNumber();
+                if (line > 0)
+                    writer.addAttribute(_line, ""+line);
+                int column = l.getColumnNumber();
+                if (column > 0)
+                    writer.addAttribute(_column, ""+column);
+                writer.addEndElement();
+            }
+        }
+        writer.addEndElement();
+    }
+
+    public void serialize(TreeWriter writer) {
+        writer.addStartElement(c_error);
+        if (errorCode != null) {
+            StructuredQName qCode = new StructuredQName(errorCode.getPrefix(), errorCode.getNamespaceURI(), errorCode.getLocalName());
+            writer.addNamespace(qCode.getPrefix(), qCode.getNamespaceBinding().getURI());
+            writer.addAttribute(_code, qCode.getDisplayName());
+        }
+        if (location[0] instanceof XProcLocator) {
+            Step step = ((XProcLocator)location[0]).step;
+            if (step != null) {
+                writer.addAttribute(_name, step.getName());
+                writer.addAttribute(_type, step.getType().toString());
+            }
+        }
+        if (location[0].getSystemId() != null)
+            writer.addAttribute(_href, location[0].getSystemId());
+        if (location[0].getLineNumber() > 0)
+            writer.addAttribute(_line, ""+location[0].getLineNumber());
+        if (location[0].getColumnNumber() > 0)
+            writer.addAttribute(_column, ""+location[0].getColumnNumber());
+        writer.startContent();
+        if (errorContent != null)
+            writer.addSubtree(errorContent);
+        else {
+            String message = getMessage();
+            if (message != null)
+                writer.addText(message);
+        }
+        serializeLocation(location, writer);
+        if (errorCause != null) {
+            writer.addStartElement(px_cause);
+            writer.startContent();
+            errorCause.serialize(writer);
+            writer.addEndElement();
+        }
+        writer.addEndElement();
     }
 }

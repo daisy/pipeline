@@ -79,12 +79,12 @@ public class Tempfile extends DefaultStep {
         if (href != null) {
             URI uri = href.getBaseURI().resolve(href.getString());
             if (!"file".equals(uri.getScheme())) {
-                throw new XProcException(step.getNode(), "Only file: scheme URIs are supported by the tempfile step.");
+                throw new XProcException(step, "Only file: scheme URIs are supported by the tempfile step.");
             } else {
                 file = URIUtils.toFile(uri);
             }
             if (!file.isDirectory()) {
-                throw new XProcException(step.getNode(), "The href on tempfile must point to an existing directory.");
+                throw new XProcException(step, "The href on tempfile must point to an existing directory.");
             }
         }
 
@@ -97,7 +97,7 @@ public class Tempfile extends DefaultStep {
         try {
             temp = File.createTempFile(prefix, suffix, file);
         } catch (IOException ioe) {
-            throw new XProcException(step.getNode(), "Failed to create temporary file" + (file != null ? (" " + file.toURI().toASCIIString()) : ""));
+            throw new XProcException(step, "Failed to create temporary file" + (file != null ? (" " + file.toURI().toASCIIString()) : ""));
         }
 
         if (delete) {

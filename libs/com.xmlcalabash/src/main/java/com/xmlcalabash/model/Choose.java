@@ -138,18 +138,20 @@ public class Choose extends DeclareStep {
                             Input s1input = inputs.get(input.getPort());
                             if (s1input.getPrimary() != input.getPrimary()) {
                                 valid = false;
-                                error("Input port " + input.getPort() + " has different primary status.", XProcConstants.staticError(7));
+                                error(
+                                    XProcException.staticError(
+                                        7, "Input port " + input.getPort() + " has different primary status."));
                             }
                         }
                     } else {
                         valid = false;
-                        error("Input port " + input.getPort() + " is extra.", XProcConstants.staticError(7));
+                        error(XProcException.staticError(7, "Input port " + input.getPort() + " is extra."));
                     }
                 }
                 for (String port : inputs.keySet()) {
                     if (!port.startsWith("|") && !port.startsWith("#") && step.getInput(port) == null) {
                         valid = false;
-                        error("Input port " + port + " missing.", XProcConstants.staticError(7));
+                        error(XProcException.staticError(7, "Input port " + port + " missing."));
                     }
                 }
                 for (Output output : step.outputs()) {
@@ -165,23 +167,25 @@ public class Choose extends DeclareStep {
                         } else {
                             if (s1output.getPrimary() != output.getPrimary()) {
                                 valid = false;
-                                error("Output port " + output.getPort() + " has different primary status.", XProcConstants.staticError(7));
+                                error(
+                                    XProcException.staticError(
+                                        7, "Output port " + output.getPort() + " has different primary status."));
                             }
                         }
                     } else {
                         valid = false;
-                        error("Output port " + output.getPort() + " is extra.", XProcConstants.staticError(7));
+                        error(XProcException.staticError(7, "Output port " + output.getPort() + " is extra."));
                     }
                 }
                 for (String port : outputs.keySet()) {
                     if (!port.endsWith("|") && step.getOutput(port) == null) {
                         valid = false;
-                        error("Output port " + port + " missing.", XProcConstants.staticError(7));
+                        error(XProcException.staticError(7, "Output port " + port + " missing."));
                     }
                 }
             }
         } else {
-            error("Choose must contain when or otherwise", XProcConstants.staticError(27));
+            error(XProcException.staticError(27, "Choose must contain when or otherwise"));
         }
 
         return valid && super.validBindings();

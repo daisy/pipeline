@@ -224,7 +224,7 @@ public class Parser {
         if (!XProcConstants.p_library.equals(node.getNodeName())
                 && !XProcConstants.p_pipeline.equals(node.getNodeName())
                 && !XProcConstants.p_declare_step.equals(node.getNodeName())) {
-            runtime.error(null, node,"Not a pipeline or library: " + node.getNodeName(), XProcConstants.staticError(52));
+            runtime.error(null, XProcException.staticError(52, node, "Not a pipeline or library: " + node.getNodeName()));
             return null;
         }
 
@@ -397,7 +397,7 @@ public class Parser {
 
                     input.setPosition(pos++);
                     if (step.getInput(input.getPort()) != null || step.getOutput(input.getPort()) != null) {
-                        runtime.error(null, node, "Duplicate port name: " + input.getPort(), XProcConstants.staticError(11));
+                        runtime.error(null, XProcException.staticError(11, node, "Duplicate port name: " + input.getPort()));
                     } else {
                         step.addInput(input);
                     }
@@ -430,7 +430,7 @@ public class Parser {
                     }
 
                     if (step.getInput(output.getPort()) != null || step.getOutput(output.getPort()) != null) {
-                        runtime.error(null, node, "Duplicate port name: " + output.getPort(), XProcConstants.staticError(11));
+                        runtime.error(null, XProcException.staticError(11, node, "Duplicate port name: " + output.getPort()));
                     } else {
                         step.addOutput(output);
                     }
@@ -599,21 +599,21 @@ public class Parser {
         }
 
         if (!"document".equals(kind) && !"parameter".equals(kind)) {
-            runtime.error(null, node, "Kind must be document or parameter", XProcConstants.staticError(33));
+            runtime.error(null, XProcException.staticError(33, node, "Kind must be document or parameter"));
         }
 
         if (primary != null &&  !"true".equals(primary) && !"false".equals(primary)) {
-            runtime.error(null, node, "Primary must be 'true' or 'false'", XProcConstants.staticError(40));
+            runtime.error(null, XProcException.staticError(40, node, "Primary must be 'true' or 'false'"));
         }
 
         if (sequence != null) {
             if ("parameter".equals(kind)) {
                 if (!"true".equals(sequence)) {
-                    runtime.error(null, node, "Sequence cannot be 'false' on a parameter input", XProcConstants.staticError(40));
+                    runtime.error(null, XProcException.staticError(40, node, "Sequence cannot be 'false' on a parameter input"));
                 }
             } else {
                 if (!"true".equals(sequence) && !"false".equals(sequence)) {
-                    runtime.error(null, node, "Sequence must be 'true' or 'false'", XProcConstants.staticError(40));
+                    runtime.error(null, XProcException.staticError(40, node, "Sequence must be 'true' or 'false'"));
                 }
             }
         }
@@ -873,6 +873,7 @@ public class Parser {
         String required = node.getAttributeValue(new QName("required"));
         String select = node.getAttributeValue(new QName("select"));
         String type = node.getAttributeValue(XProcConstants.cx_type);
+        String sequenceType = node.getAttributeValue(XProcConstants.cx_as);
 
         if (name == null) {
             throw XProcException.staticError(38, node, "Attribute \"name\" required on p:with-option");
@@ -897,7 +898,32 @@ public class Parser {
         option.setName(oname);
         option.setRequired(required);
         option.setSelect(select);
-        option.setType(type, node);
+        if (type != null) {
+            if (type.contains(":"))
+                try {
+                    option.setType(type, new QName(type, node));
+                } catch (IllegalArgumentException e) {
+                    throw new XProcException(
+                        new RuntimeException("Cannot parse type (\"type\" attribute) on " + node, e));
+                }
+            else
+                option.setType(type);
+        }
+        if (runtime.getAllowGeneralExpressions()) {
+            try {
+                if (sequenceType != null) {
+                    option.setSequenceType(SequenceType.parse(sequenceType, node));
+                } else if (type != null) {
+                    if (type.contains(":"))
+                        option.setSequenceType(SequenceType.parse(type, node));
+                    else
+                        option.setSequenceType(SequenceType.XS_STRING);
+                }
+            } catch (IllegalArgumentException e) {
+                throw new XProcException(
+                    new RuntimeException("Cannot parse type (\"as\" attribute) on " + node, e));
+            }
+        }
 
         readNamespaceBindings(parent, option, node, select);
 
@@ -914,7 +940,7 @@ public class Parser {
         String port = checkNCName(node.getAttributeValue(new QName("port")));
 
         if (name == null) {
-            runtime.error(null, node, "Attribute \"name\" required on p:with-param", XProcConstants.staticError(38));
+            runtime.error(null, XProcException.staticError(38, node, "Attribute \"name\" required on p:with-param"));
         }
 
         Parameter parameter = new Parameter(runtime, node);
@@ -941,6 +967,7 @@ public class Parser {
 
         String name = node.getAttributeValue(new QName("name"));
         String select = node.getAttributeValue(new QName("select"));
+        String sequenceType = node.getAttributeValue(XProcConstants.cx_as);
 
         QName oname = new QName(name, node);
 
@@ -956,6 +983,14 @@ public class Parser {
         Variable variable = new Variable(runtime, node);
         variable.setName(oname);
         variable.setSelect(select);
+        if (runtime.getAllowGeneralExpressions() && sequenceType != null) {
+            try {
+                variable.setSequenceType(SequenceType.parse(sequenceType, node));
+            } catch (IllegalArgumentException e) {
+                throw new XProcException(
+                    new RuntimeException("Cannot parse type (\"as\" attribute) on " + node, e));
+            }
+        }
 
         readNamespaceBindings(parent, variable, node, select);
 
@@ -1091,14 +1126,16 @@ public class Parser {
                 if ("html".equals(method) || "xhtml".equals(method) || "text".equals(method) || "xml".equals(method)) {
                     serial.setMethod(name);
                 } else {
-                    runtime.error(null, node,
-                            "Only the xml, xhtml, html, and text serialization methods are supported.",
-                            XProcConstants.stepError(1));
+                    runtime.error(
+                        null,
+                        XProcException.stepError(
+                            1, node, "Only the xml, xhtml, html, and text serialization methods are supported."));
                 }
             } else {
-                runtime.error(null, node,
-                        "Only the xml, xhtml, html, and text serialization methods are supported.",
-                        XProcConstants.stepError(1));
+                runtime.error(
+                    null,
+                    XProcException.stepError(
+                        1, node, "Only the xml, xhtml, html, and text serialization methods are supported."));
             }
         }
 
@@ -1134,7 +1171,7 @@ public class Parser {
 
     private void checkBoolean(XdmNode node, String name, String value) {
         if (value != null && !"true".equals(value) && !"false".equals(value)) {
-            runtime.error(null, node, name + " on serialization must be 'true' or 'false'", XProcConstants.staticError(40));
+            runtime.error(null, XProcException.staticError(40, node, name + " on serialization must be 'true' or 'false'"));
         }
     }
 
@@ -1352,13 +1389,17 @@ public class Parser {
         for (Input input : step.inputs()) {
             if (step.isAtomic()) {
                 if (input.getBinding().size() != 0) {
-                    runtime.error(null,input.getNode(),"Input bindings are not allowed on an atomic step",XProcConstants.staticError(42));
+                    runtime.error(
+                        null,
+                        XProcException.staticError(42, input.getNode(), "Input bindings are not allowed on an atomic step"));
                 }
             } else {
                 if (!input.getPort().startsWith("|")) {
                     for (Binding binding : input.getBinding()) {
                         if (binding.getBindingType() == Binding.PIPE_NAME_BINDING) {
-                            runtime.error(null,input.getNode(),"Default input bindings cannot use p:pipe",XProcConstants.staticError(44));
+                            runtime.error(
+                                null,
+                                XProcException.staticError(40, input.getNode(), "Default input bindings cannot use p:pipe"));
                         }
                     }
                 }
@@ -1369,7 +1410,16 @@ public class Parser {
         for (Output output : step.outputs()) {
             Input input = step.getInput("|" + output.getPort());
             if (step.isAtomic() && input != null) {
-                runtime.error(null,output.getNode(),"Output bindings are not allowed on an atomic step",XProcConstants.staticError(29));
+                runtime.error(
+                    null,
+                    XProcException.staticError(29, output.getNode(), "Output bindings are not allowed on an atomic step"));
+            }
+        }
+
+        // make XSLT functions available in child p:declare-step
+        if (declScope instanceof DeclareStep) {
+            for (XdmNode n : ((DeclareStep)declScope).getXsltFunctionImports()) {
+                step.addXsltFunctionImport(n);
             }
         }
 
@@ -1381,7 +1431,7 @@ public class Parser {
                     Variable var = readVariable(step, substepNode);
                     step.addVariable(var);
                 } else if (cx_import.equals(substepNode.getNodeName())) {
-                    importFunctions(substepNode);
+                    importFunctions(step, substepNode);
                 } else {
                     if ((XProcConstants.p_declare_step.equals(substepNode.getNodeName()))
                             || XProcConstants.p_pipeline.equals(substepNode.getNodeName())) {
@@ -1472,7 +1522,9 @@ public class Parser {
             }
         } catch (XProcException xe) {
             if (XProcConstants.dynamicError(11).equals(xe.getErrorCode())) {
-                throw XProcException.staticError(52, node, xe.getCause(), "Cannot import: " + importURI.toASCIIString());
+                throw XProcException.staticError(
+                    52, node,
+                    new RuntimeException("Cannot import: " + importURI.toASCIIString(), xe.getCause()));
             } else {
                 throw xe;
             }
@@ -1785,10 +1837,14 @@ public class Parser {
                 } else if (version > 1.0) {
                     // Ok, then, we'll just ignore it...
                 } else {
-                    runtime.error(null, node, "Attribute \"" + aname + "\" not allowed on " + node.getNodeName(), XProcConstants.staticError(8));
+                    runtime.error(
+                        null,
+                        XProcException.staticError(8, node, "Attribute \"" + aname + "\" not allowed on " + node.getNodeName()));
                 }
             } else if (XProcConstants.NS_XPROC.equals(aname.getNamespaceURI())) {
-                runtime.error(null, node, "Attribute \"" + aname + "\" not allowed on " + node.getNodeName(), XProcConstants.staticError(8));
+                runtime.error(
+                    null,
+                    XProcException.staticError(8, node, "Attribute \"" + aname + "\" not allowed on " + node.getNodeName()));
                 return null;
             }
             // Everything else is ok
@@ -1804,7 +1860,9 @@ public class Parser {
             if ("".equals(aname.getNamespaceURI())) {
                 // nop
             } else if (XProcConstants.NS_XPROC.equals(aname.getNamespaceURI())) {
-                runtime.error(null, node, "Attribute \"" + aname + "\" not allowed on " + node.getNodeName(), XProcConstants.staticError(8));
+                runtime.error(
+                    null,
+                    XProcException.staticError(8, node, "Attribute \"" + aname + "\" not allowed on " + node.getNodeName()));
             } else {
                 src.addExtensionAttribute(attr);
             }
@@ -1833,19 +1891,38 @@ public class Parser {
             try {
                 TypeUtils.checkType(runtime, name, XProcConstants.xs_NCName,null);
             } catch (XProcException xe) {
-                throw new XProcException("Invalid name: \"" + name + "\". Step and port names must be NCNames.", xe.getCause());
+                throw new XProcException(
+                    new RuntimeException("Invalid name: \"" + name + "\". Step and port names must be NCNames.",
+                                         xe.getCause()));
             }
         }
         return name;
     }
 
-    private void importFunctions(XdmNode node) {
+    private void importFunctions(DeclareStep step, XdmNode node) {
         String href = node.getAttributeValue(_href);
         String ns = node.getAttributeValue(_namespace);
         String type = node.getAttributeValue(_type);
         Processor processor = runtime.getProcessor();
 
         String sed = processor.getUnderlyingConfiguration().getEditionCode();
+
+        if (type.contains("xsl")
+            // This alternative implementation for XSLT functions does not depend on Saxon EE. We
+            // use it only when we're running Saxon HE, even though it works for all editions of
+            // Saxon.
+            && "HE".equals(sed)) {
+            try {
+                // Note that this implementation behaves like p:import-functions from XProc 3, in
+                // the sense that the loaded functions are not globally available but only within
+                // the scope of the step declaration.
+                step.addXsltFunctionImport(runtime.parse(href, node.getBaseURI().toASCIIString()));
+                return;
+            } catch (Exception e) {
+                throw new XProcException(e);
+            }
+        }
+
         if (!"EE".equals(sed)) {
             throw new XProcException("Importing functions is only supported by Saxon EE.");
         }

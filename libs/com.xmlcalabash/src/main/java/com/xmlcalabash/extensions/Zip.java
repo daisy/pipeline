@@ -148,7 +148,7 @@ public class Zip extends DefaultStep {
         }
 
         if (!c_zip_manifest.equals(man.getNodeName())) {
-            throw new XProcException(step.getNode(), "The cx:zip manifest must be a c:zip-manifest.");
+            throw new XProcException(step, "The cx:zip manifest must be a c:zip-manifest.");
         }
 
         while (source.moreDocuments()) {
@@ -244,7 +244,7 @@ public class Zip extends DefaultStep {
         } else if ("delete".equals(command)) {
             delete(inZip, outZip);
         } else {
-            throw new XProcException(step.getNode(), "Unexpected cx:zip command: " + command);
+            throw new XProcException(step, "Unexpected cx:zip command: " + command);
         }
     }
 
@@ -313,11 +313,11 @@ public class Zip extends DefaultStep {
                 if (c_entry.equals(child.getNodeName())) {
                     String name = child.getAttributeValue(_name);
                     if (name == null || "".equals(name)) {
-                        throw new XProcException(step.getNode(), "Missing or invalid name in cx:zip manifest.");
+                        throw new XProcException(step, "Missing or invalid name in cx:zip manifest.");
                     }
                     String href = child.getAttributeValue(_href);
                     if (href == null || "".equals(href)) {
-                        throw new XProcException(step.getNode(), "Missing or invalid href in cx:zip manifest.");
+                        throw new XProcException(step, "Missing or invalid href in cx:zip manifest.");
                     }
                     String hrefuri = child.getBaseURI().resolve(href).toASCIIString();
                     String comment = child.getAttributeValue(_comment);
@@ -344,10 +344,10 @@ public class Zip extends DefaultStep {
 
                     zipManifest.put(name, new FileToZip(name, hrefuri, method, level, comment, child));
                 } else {
-                    throw new XProcException(step.getNode(), "Unexpected element in cx:zip manifest: " + child.getNodeName());
+                    throw new XProcException(step, "Unexpected element in cx:zip manifest: " + child.getNodeName());
                 }
             } else {
-                    throw new XProcException(step.getNode(), "Unexpected content in cx:zip manifest.");
+                    throw new XProcException(step, "Unexpected content in cx:zip manifest.");
             }
         }
     }

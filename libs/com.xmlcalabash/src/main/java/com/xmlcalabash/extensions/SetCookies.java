@@ -74,13 +74,13 @@ public class SetCookies extends DefaultStep {
         XdmNode doc = source.read();
         XdmNode root = S9apiUtils.getDocumentElement(doc);
         if (!c_cookies.equals(root.getNodeName())) {
-            throw new XProcException(step.getNode(), "The input to cx:set-cookies must be a c:cookies document.");
+            throw new XProcException(step, "The input to cx:set-cookies must be a c:cookies document.");
         }
         
         for (XdmNode node : new AxisNodes(root, Axis.CHILD, AxisNodes.SIGNIFICANT)) {
             if (node.getNodeKind() == XdmNodeKind.ELEMENT) {
                 if (!c_cookie.equals(node.getNodeName())) {
-                    throw new XProcException(step.getNode(), "A c:cookies document must contain only c:cookie elements.");
+                    throw new XProcException(step, "A c:cookies document must contain only c:cookie elements.");
                 }
 
                 String domain = node.getAttributeValue(_domain);
@@ -90,7 +90,7 @@ public class SetCookies extends DefaultStep {
                 String expires = node.getAttributeValue(_expires);
 
                 if (name == null || value == null) {
-                    throw new XProcException(step.getNode(), "Invalid cookie: " + node);
+                    throw new XProcException(step, "Invalid cookie: " + node);
                 }
 
                 SetCookie cookie = new BasicClientCookie(name, value);
@@ -120,7 +120,7 @@ public class SetCookies extends DefaultStep {
 
             } else if (node.getNodeKind() == XdmNodeKind.TEXT) {
                 // AxisNodes will filter out empty whitespace nodes for us
-                throw new XProcException(step.getNode(), "A c:cookies document must not contain non-whitespace text nodes.");
+                throw new XProcException(step, "A c:cookies document must not contain non-whitespace text nodes.");
             }
         }
     }

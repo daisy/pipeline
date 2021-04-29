@@ -189,11 +189,11 @@ public class WrapSequence extends DefaultStep {
                 item = results.next();
 
                 if (item == null) {
-                    throw new XProcException(step.getNode(), "The group-adjacent expression returned nothing.");
+                    throw new XProcException(step, "The group-adjacent expression returned nothing.");
                 }
 
                 if (results.next() != null) {
-                    throw new XProcException(step.getNode(), "Didn't expect group-adjacent to return a sequence!");
+                    throw new XProcException(step, "Didn't expect group-adjacent to return a sequence!");
                 }
             } catch (XPathException xe) {
                 throw new XProcException(xe);

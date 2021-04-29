@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public class Variable extends EndPoint implements ComputableValue {
     private QName name = null;
     private String select = null;
-    private String type = null;
+    private SequenceType sequenceType = null;
     private Vector<NamespaceBinding> nsBindings = new Vector<NamespaceBinding> ();
 
     /* Creates a new instance of Variable */
@@ -60,6 +61,14 @@ public class Variable extends EndPoint implements ComputableValue {
         return null;
     }
 
+    public void setSequenceType(SequenceType sequenceType) {
+        this.sequenceType = sequenceType;
+    }
+
+    public SequenceType getSequenceType() {
+        return sequenceType;
+    }
+
     public void setSelect(String select) {
         this.select = select;
     }
@@ -80,12 +89,12 @@ public class Variable extends EndPoint implements ComputableValue {
         boolean valid = true;
 
         if (bindings.size() > 1) {
-            error("Variables can have at most one binding.", XProcConstants.dynamicError(8));
+            error(XProcException.dynamicError(8, "Variables can have at most one binding."));
             valid = false;
         }
 
         if (select == null) {
-            error("You must specify select on variable.", XProcConstants.staticError(16));
+            error(XProcException.staticError(16, "You must specify select on variable."));
         }
         
         return valid;

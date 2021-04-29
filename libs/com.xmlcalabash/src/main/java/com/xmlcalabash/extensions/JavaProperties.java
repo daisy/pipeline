@@ -85,9 +85,13 @@ public class JavaProperties extends DefaultStep {
                     }
                 });
             } catch (MalformedURLException mue) {
-                throw new XProcException(XProcException.err_E0001, mue);
+                throw new XProcException(
+                    XProcException.err_E0001,
+                    new RuntimeException("XProc error err:" + XProcException.err_E0001.getLocalName(), mue));
             } catch (IOException ioe) {
-                throw new XProcException(XProcException.err_E0001, ioe);
+                throw new XProcException(
+                    XProcException.err_E0001,
+                    new RuntimeException("XProc error err:" + XProcException.err_E0001.getLocalName(),ioe));
             }
         }
 

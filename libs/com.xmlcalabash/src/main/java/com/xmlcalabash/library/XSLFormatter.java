@@ -57,7 +57,7 @@ public class XSLFormatter extends DefaultStep {
 
     public void setParameter(QName name, RuntimeValue value) {
         if (!"".equals(name.getNamespaceURI())) {
-            throw new XProcException(step.getNode(), "The p:xsl-formatter parameters are in no namespace: " + name + " (" + name.getNamespaceURI() + ")");
+            throw new XProcException(step, "The p:xsl-formatter parameters are in no namespace: " + name + " (" + name.getNamespaceURI() + ")");
         }
         options.setProperty(name.getLocalName(), value.getString());
     }
@@ -99,7 +99,7 @@ public class XSLFormatter extends DefaultStep {
         }
 
         if (provider == null) {
-            throw new XProcException(step.getNode(), "Failed to instantiate FO provider", pexcept);
+            throw new XProcException(step, new RuntimeException("Failed to instantiate FO provider", pexcept));
         }
 
         final String contentType;
@@ -121,7 +121,7 @@ public class XSLFormatter extends DefaultStep {
                     try {
                         processor.format(source.read(),out,contentType);
                     } catch (SaxonApiException e) {
-                        throw new XProcException(step.getNode(), "Failed to process FO document", e);
+                        throw new XProcException(step, new RuntimeException("Failed to process FO document", e));
                     } finally {
                         out.close();
                     }
@@ -139,7 +139,7 @@ public class XSLFormatter extends DefaultStep {
         } catch (XProcException e) {
             throw e;
         } catch (Exception e) {
-            throw new XProcException(step.getNode(), "Failed to process FO document", e);
+            throw new XProcException(step, new RuntimeException("Failed to process FO document", e));
         }
     }
 }

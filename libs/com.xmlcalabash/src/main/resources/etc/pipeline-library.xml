@@ -176,7 +176,7 @@
       <p:option name="byte-order-mark" cx:type="xsd:boolean"/>
       <p:option name="cdata-section-elements" select="''" cx:type="ListOfQNames"/>
       <p:option name="doctype-public" cx:type="xsd:string"/>
-      <p:option name="doctype-system" cx:type="xsd:anyURI"/>
+      <p:option name="doctype-system" cx:as="xsd:anyURI?" cx:type="xsd:anyURI"/>
       <p:option name="encoding" cx:type="xsd:string"/>
       <p:option name="escape-uri-attributes" select="'false'" cx:type="xsd:boolean"/>
       <p:option name="include-content-type" select="'true'" cx:type="xsd:boolean"/>

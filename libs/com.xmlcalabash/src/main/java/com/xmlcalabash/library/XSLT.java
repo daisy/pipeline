@@ -90,6 +90,7 @@ public class XSLT extends DefaultStep {
     private static final QName _version = new QName("", "version");
     private static final QName _content_type = new QName("content-type");
     private static final QName cx_decode = new QName("cx", XProcConstants.NS_CALABASH_EX, "decode");
+    private static final QName cx_serialize = new QName("cx", XProcConstants.NS_CALABASH_EX, "serialize");
     private ReadablePipe sourcePipe = null;
     private ReadablePipe stylesheetPipe = null;
     private WritablePipe resultPipe = null;
@@ -136,7 +137,7 @@ public class XSLT extends DefaultStep {
 
         XdmNode stylesheet = stylesheetPipe.read();
         if (stylesheet == null) {
-            throw XProcException.dynamicError(6, step.getNode(), "No stylesheet provided.");
+            throw XProcException.dynamicError(6, step, "No stylesheet provided.");
         }
 
         Vector<XdmNode> defaultCollection = new Vector<XdmNode> ();
@@ -181,7 +182,7 @@ public class XSLT extends DefaultStep {
 
         QName initialMode = null;
         QName templateName = null;
-        String outputBaseURI = null;
+        URI outputBaseURI = null;
 
         RuntimeValue opt = getOption(_initial_mode);
         if (opt != null) {
@@ -195,7 +196,7 @@ public class XSLT extends DefaultStep {
 
         opt = getOption(_output_base_uri);
         if (opt != null) {
-            outputBaseURI = opt.getString();
+            outputBaseURI = opt.getBaseURI().resolve(opt.getString());
         }
 
         Processor processor = runtime.getProcessor();
@@ -212,11 +213,32 @@ public class XSLT extends DefaultStep {
         config.setCollectionFinder(new XProcCollectionFinder(runtime, defaultCollection, collectionFinder));
 
         XdmDestination result = null;
+        ByteArrayOutputStream outputStream = null;
+
         try {
             XsltCompiler compiler = runtime.getProcessor().newXsltCompiler();
             compiler.setSchemaAware(processor.isSchemaAware());
-            compiler.setErrorListener(new LogCompileErrors());
-            XsltExecutable exec = compiler.compile(stylesheet.asSource());
+            compiler.setErrorListener(new ReportCompileErrors());
+            XsltExecutable exec;
+            try {
+                exec = compiler.compile(stylesheet.asSource());
+            } catch (SaxonApiException sae) {
+                // catch compilation errors
+                Throwable e = sae.getCause();
+                if (e instanceof TransformerException) {
+                    // Actually this exception does not contain location info (but we pass it
+                    // anyway) and the message is always "Errors were reported during stylesheet
+                    // compilation". More info including location of the compilation errors are
+                    // contained in the TransformerException that are passed to ReportCompileErrors.
+                    TransformerException location = (TransformerException)e;
+                    Throwable cause = e.getCause();
+                    if (cause != null)
+                        throw new XProcException(location, e, XProcException.fromException(cause));
+                    else
+                        throw new XProcException(location, e);
+                }
+                throw XProcException.fromException(sae);
+            }
             XsltTransformer transformer = exec.load();
 
             for (QName name : params.keySet()) {
@@ -233,8 +255,15 @@ public class XSLT extends DefaultStep {
             }
             CatchMessages catchMessages = new CatchMessages();
             transformer.setMessageListener(catchMessages);
-            result = new XdmDestination();
-            transformer.setDestination(result);
+            if (Boolean.parseBoolean(step.getExtensionAttribute(cx_serialize))) {
+                Serializer serializer = makeSerializer();
+                outputStream = new ByteArrayOutputStream();
+                serializer.setOutputStream(outputStream);
+                transformer.setDestination(serializer);
+            } else {
+                result = new XdmDestination();
+                transformer.setDestination(result);
+            }
 
             if (initialMode != null) {
                 transformer.setInitialMode(initialMode);
@@ -245,12 +274,10 @@ public class XSLT extends DefaultStep {
             }
 
             if (outputBaseURI != null) {
-                transformer.setBaseOutputURI(outputBaseURI);
-                // The following hack works around https://saxonica.plan.io/issues/1724
-                try {
-                    result.setBaseURI(new URI(outputBaseURI));
-                } catch (URISyntaxException use) {
-                    // whatever
+                transformer.setBaseOutputURI(outputBaseURI.toASCIIString());
+                if (result != null) {
+                    // The following hack works around https://saxonica.plan.io/issues/1724
+                    result.setBaseURI(outputBaseURI);
                 }
             }
 
@@ -259,40 +286,47 @@ public class XSLT extends DefaultStep {
             try {
                 transformer.transform();
             } catch (SaxonApiException sae) {
-                final Throwable e = sae.getCause();
+                Throwable e = sae.getCause();
                 if (e instanceof TransformerException) {
-                    String message = e.getMessage();
+                    XdmNode message = null;
                     if (e instanceof TerminationException) {
-                        message = catchMessages.getTerminatingMessage().toString();
+                        message = catchMessages.getTerminatingMessage();
                     }
-                    final SourceLocator[] frames = XProcException.getLocator((TransformerException)e);
+                    TransformerException location = (TransformerException)e;
                     Throwable cause = e.getCause();
                     if (cause != null) {
-                        if (cause instanceof XProcException)
-                            throw ((XProcException)cause).rebaseOnto(frames);
+                        if (message != null)
+                            throw new XProcException(
+                                location,
+                                message,
+                                XProcException.fromException(cause)
+                                              .rebase(null, new RuntimeException().getStackTrace()));
                         else
-                            throw new XProcException(message, XProcException.javaError(cause, 0)) {
-                                @Override
-                                public SourceLocator[] getLocator() {
-                                    return frames; }};
-                    } else
-                        // passing e in order to provide some more details
-                        // (but not wrapping it in an XProcException so that it doesn't appear in locator)
-                        throw new XProcException(message, e) {
-                            @Override
-                            public SourceLocator[] getLocator() {
-                                return frames; }};
+                            throw new XProcException(
+                                location,
+                                e,
+                                XProcException.fromException(cause)
+                                              .rebase(null, new RuntimeException().getStackTrace()));
+                    } else if (message != null)
+                        throw new XProcException(location, message);
+                    else
+                        throw new XProcException(location, e);
                 } else
-                    throw XProcException.javaError(sae, 0);
+                    throw XProcException.fromException(sae);
             }
+        } catch (XProcException e) {
+            e = e.rebase(step);
+            step.reportError(e);
+            throw e;
         } finally {
             config.setOutputURIResolver(uriResolver);
             config.setCollectionFinder(collectionFinder);
         }
 
-        XdmNode xformed = result.getXdmNode();
+        XdmNode xformed = result != null ? result.getXdmNode() : null;
 
-        // Can be null when nothing is written to the principle result tree...
+        // Is null when cx:serialize attribute was specified or when nothing is written to the
+        // principle result tree
         if (xformed != null) {
             if (getOption(_output_base_uri) == null && document != null) {
                 // Before Saxon 9.8, it was possible to simply set the base uri of the
@@ -339,9 +373,22 @@ public class XSLT extends DefaultStep {
                     tree.endDocument();
                     resultPipe.write(tree.getResult());
                 } else {
-                    throw new XProcException(step.getStep(), "p:xslt returned non-XML result", e.getCause());
+                    throw new XProcException(step, new RuntimeException("p:xslt returned non-XML result", e.getCause()));
                 }
             }
+        }
+
+        if (outputStream != null) {
+            TreeWriter tree = new TreeWriter(runtime);
+            tree.startDocument(outputBaseURI != null ? outputBaseURI : document != null ? document.getBaseURI() : null);
+            tree.addStartElement(XProcConstants.c_result);
+            tree.addAttribute(_content_type, "text/plain");
+            tree.addAttribute(cx_decode,"true");
+            tree.startContent();
+            tree.addText(outputStream.toString());
+            tree.addEndElement();
+            tree.endDocument();
+            resultPipe.write(tree.getResult());
         }
     }
     
@@ -434,7 +481,8 @@ public class XSLT extends DefaultStep {
                     tree.endDocument();
                     secondaryPipe.write(tree.getResult());
                 } else {
-                    throw new XProcException(step.getStep(), "p:xslt returned non-XML secondary result", e.getCause());
+                    throw new XProcException(
+                        step, new RuntimeException("p:xslt returned non-XML secondary result", e.getCause()));
                 }
             }
         }
@@ -457,12 +505,9 @@ public class XSLT extends DefaultStep {
             treeWriter.addEndElement();
             treeWriter.endDocument();
 
-            step.reportError(treeWriter.getResult());
-
             if (!terminate)
                 step.info(step.getNode(), content.toString());
-
-            if (terminate)
+            else
                 terminatingMessage = content;
         }
 
@@ -573,14 +618,17 @@ public class XSLT extends DefaultStep {
             return myWrapped.getPipelineConfiguration();
         }
     }
-    
-    class LogCompileErrors implements ErrorListener {
+
+    private class ReportCompileErrors implements ErrorListener {
+        // log error
         public void error(TransformerException exception) {
             logger.error(exception.getMessage());
         }
+        // report fatal error
         public void fatalError(TransformerException exception) {
-            logger.error(exception.getMessage());
+            step.reportError(new XProcException(exception, exception));
         }
+        // log warning
         public void warning(TransformerException exception) {
             logger.warn(exception.getMessage());
         }

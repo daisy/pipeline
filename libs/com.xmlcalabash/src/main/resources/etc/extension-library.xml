@@ -246,7 +246,7 @@
 <p:declare-step type="cxf:touch">
    <p:output port="result" primary="false"/>
    <p:option name="href" required="true" cx:type="xsd:anyURI"/>
-   <p:option name="timestamp" cx:type="xs:dateTime"/>
+   <p:option name="timestamp" cx:type="xsd:dateTime"/>
    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
 </p:declare-step>
 
@@ -389,7 +389,7 @@
 <p:declare-step type="pxf:touch">
    <p:output port="result" primary="false"/>
    <p:option name="href" required="true" cx:type="xsd:anyURI"/>
-   <p:option name="timestamp" cx:type="xs:dateTime"/>
+   <p:option name="timestamp" cx:type="xsd:dateTime"/>
    <p:option name="fail-on-error" select="'true'" cx:type="xsd:boolean"/>
 </p:declare-step>
 

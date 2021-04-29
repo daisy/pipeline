@@ -92,19 +92,11 @@ public class XForEach extends XCompoundStep {
         runtime.start(this);
 
         try {
-            try {
-                XProcMessageListenerHelper.openStep(runtime, this);
-            } catch (Throwable e) {
-                throw handleException(e);
-            }
+            XProcMessageListenerHelper.openStep(runtime, this);
             try {
             BigDecimal numberOfNodes = new BigDecimal(nodes.size());
             for (XdmNode is_doc : nodes) {
-                try {
-                    runtime.getMessageListener().openStep(this, getNode(), null, null, BigDecimal.ONE.divide(numberOfNodes, MathContext.DECIMAL128));
-                } catch (Throwable e) {
-                    throw handleException(e);
-                }
+                runtime.getMessageListener().openStep(this, getNode(), null, null, BigDecimal.ONE.divide(numberOfNodes, MathContext.DECIMAL128));
                 try {
 
                 // Setup the current port before we compute variables!
@@ -132,11 +124,7 @@ public class XForEach extends XCompoundStep {
                 }
 
                 for (XStep step : subpipeline) {
-                    try {
-                        step.run();
-                    } catch (Throwable e) {
-                        throw handleException(e);
-                    }
+                    step.run();
                 }
 
                 for (String port : inputs.keySet()) {

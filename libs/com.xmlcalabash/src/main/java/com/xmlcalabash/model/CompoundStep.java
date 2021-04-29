@@ -282,7 +282,11 @@ public class CompoundStep extends Step {
                     input.addBinding(empty);
                 } else {
                     valid = false;
-                    error("Input " + input.getPort() + " unbound on " + getType() + " step named " + getName() + " and no default binding available.", XProcConstants.staticError(32));
+                    error(
+                        XProcException.staticError(
+                            32,
+                            "Input " + input.getPort() + " unbound on " + getType() + " step named " + getName()
+                            + " and no default binding available."));
                 }
             } else {
                 String stepName = port.getStep().getName();
@@ -301,7 +305,9 @@ public class CompoundStep extends Step {
                 PipeNameBinding pipe = (PipeNameBinding) binding;
                 Output output = env.readablePort(pipe.getStep(), pipe.getPort());
                 if (output == null) {
-                    error("Unreadable port: " + pipe.getPort() + " on " + pipe.getStep(), XProcException.err_E0001);
+                    error(
+                        new XProcException(
+                            XProcException.err_E0001, "Unreadable port: " + pipe.getPort() + " on " + pipe.getStep()));
                     valid = false;
                 }
             }
@@ -414,7 +420,7 @@ public class CompoundStep extends Step {
         valid = valid && validBindings();
 
         if (env.countVisibleSteps(getName()) > 1) {
-            error("Duplicate step name: " + getName(), XProcConstants.staticError(2));
+            error(XProcException.staticError(2, "Duplicate step name: " + getName()));
             valid = false;
         }
 
@@ -466,7 +472,7 @@ public class CompoundStep extends Step {
 
 
                 if (!ok) {
-                    error("Unbound primary output port on last step: " + getName(), XProcConstants.staticError(6));
+                    error(XProcException.staticError(6, node, "Unbound primary output port on last step: " + getName()));
                 }
             }
         }

@@ -22,6 +22,7 @@ package com.xmlcalabash.model;
 import java.util.Vector;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
 import org.slf4j.Logger;
@@ -36,7 +37,8 @@ public class Option extends EndPoint implements ComputableValue {
     private boolean required = false;
     private String select = null;
     private String type = null;
-    private XdmNode typeNode = null;
+    private QName typeAsQName = null;
+    private SequenceType sequenceType = null;
     private Vector<NamespaceBinding> nsBindings = new Vector<NamespaceBinding>();
 
     /* Creates a new instance of Option */
@@ -52,9 +54,13 @@ public class Option extends EndPoint implements ComputableValue {
         return name;
     }
 
-    public void setType(String type, XdmNode node) {
+    public void setType(String type) {
+        this.setType(type, null);
+    }
+
+    public void setType(String type, QName typeAsQName) {
         this.type = type;
-        typeNode = node;
+        this.typeAsQName = typeAsQName;
     }
 
     public String getType() {
@@ -62,7 +68,15 @@ public class Option extends EndPoint implements ComputableValue {
     }
 
     public QName getTypeAsQName() {
-        return new QName(type,typeNode);
+        return typeAsQName;
+    }
+
+    public void setSequenceType(SequenceType sequenceType) {
+        this.sequenceType = sequenceType;
+    }
+
+    public SequenceType getSequenceType() {
+        return sequenceType;
     }
 
     public void setRequired(String required) {
@@ -97,12 +111,12 @@ public class Option extends EndPoint implements ComputableValue {
         boolean valid = true;
 
         if (bindings.size() > 1) {
-            error("Option can have at most one binding.", XProcConstants.dynamicError(8));
+            error(XProcException.dynamicError(8, "Option can have at most one binding."));
             valid = false;
         }
 
         if (required && (select != null)) {
-            error("You can't specify a default value on a required option", XProcConstants.staticError(17));
+            error(XProcException.staticError(17, "You can't specify a default value on a required option"));
         }
         
         return valid;

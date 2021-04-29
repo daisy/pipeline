@@ -1,6 +1,7 @@
 package com.xmlcalabash.piperack;
 
 import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcException.XProcLocator;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.util.TreeWriter;
 import net.sf.saxon.om.StructuredQName;
@@ -80,13 +81,14 @@ public class BaseStatus extends StatusService {
 
         if (exception instanceof XProcException) {
             XProcException err = (XProcException) exception;
-            loc = err.getLocator()[0];
+            loc = err.getLocation()[0];
             if (err.getErrorCode() != null) {
                 QName n = err.getErrorCode();
                 qCode = new StructuredQName(n.getPrefix(),n.getNamespaceURI(),n.getLocalName());
             }
-            if (err.getStep() != null) {
-                message = message + err.getStep() + ":";
+            if (loc instanceof XProcLocator) {
+                if (((XProcLocator)loc).getStep() != null)
+                    message = message + ((XProcLocator)loc).getStep() + ":";
             }
         }
 

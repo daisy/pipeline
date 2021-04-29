@@ -22,10 +22,8 @@ package com.xmlcalabash.library;
 import com.xmlcalabash.core.XMLCalabash;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.RuntimeValue;
-import com.xmlcalabash.util.TreeWriter;
 import com.xmlcalabash.io.ReadablePipe;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -42,12 +40,9 @@ import com.xmlcalabash.runtime.XAtomicStep;
         type = "{http://www.w3.org/ns/xproc}error")
 
 public class Error extends DefaultStep {
-    private static final QName c_error = new QName("c", XProcConstants.NS_XPROC_STEP, "error");
-    private static final QName _name = new QName("name");
     private static final QName _code = new QName("code");
     private static final QName _code_prefix = new QName("code-prefix");
     private static final QName _code_namespace = new QName("code-namespace");
-    private static final QName _type = new QName("type");
     private ReadablePipe source = null;
 
     /* Creates a new instance of Delete */
@@ -105,26 +100,10 @@ public class Error extends DefaultStep {
         cns = errorCode.getNamespaceURI();
         
         XProcException e = (doc == null) ?
-            new XProcException(step.getStep(), errorCode) :
-            new XProcException(step.getStep(), errorCode, doc, doc.getStringValue());
+            new XProcException(errorCode, step, errorCode.getLocalName()) :
+            new XProcException(errorCode, step, doc);
         
-        TreeWriter treeWriter = new TreeWriter(runtime);
-        treeWriter.startDocument(step.getNode().getBaseURI());
-        treeWriter.addStartElement(c_error);
-        treeWriter.addNamespace(cpfx, cns);
-
-        treeWriter.addAttribute(_name, step.getName());
-        treeWriter.addAttribute(_type, "p:error");
-        treeWriter.addAttribute(_code, errorCode.toString());
-        treeWriter.startContent();
-        if (doc != null) {
-            treeWriter.addSubtree(doc);
-        }
-        treeWriter.addEndElement();
-        treeWriter.endDocument();
-
-        step.reportError(treeWriter.getResult());
-
+        step.reportError(e);
         throw e;
     }
 }

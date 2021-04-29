@@ -182,7 +182,7 @@ public class HttpRequest extends DefaultStep {
                 // nop
             } else {
                 if (XMLConstants.DEFAULT_NS_PREFIX.equals(name.getNamespaceURI())) {
-                    throw new XProcException(step.getNode(), "Unsupported attribute on c:request for p:http-request: " + name);
+                    throw new XProcException(step, "Unsupported attribute on c:request for p:http-request: " + name);
                 }
             }
         }
@@ -204,7 +204,7 @@ public class HttpRequest extends DefaultStep {
         }
 
         if (start.getAttributeValue(_href) == null) {
-            throw new XProcException(step.getNode(), "The 'href' attribute must be specified on c:request for p:http-request");
+            throw new XProcException(step, "The 'href' attribute must be specified on c:request for p:http-request");
         }
 
         requestURI = start.getBaseURI().resolve(start.getAttributeValue(_href));
@@ -494,7 +494,7 @@ public class HttpRequest extends DefaultStep {
         // Check for consistency of content-type
         String contentType = body.getAttributeValue(_content_type);
         if (contentType == null) {
-            throw new XProcException(step.getNode(), "Content-type on c:body is required.");
+            throw new XProcException(step, "Content-type on c:body is required.");
         }
 
         String bodyId = body.getAttributeValue(_id);
@@ -658,7 +658,7 @@ public class HttpRequest extends DefaultStep {
         String boundary = multipart.getAttributeValue(_boundary);
 
         if (boundary == null) {
-            throw new XProcException(step.getNode(), "A boundary value must be specified on c:multipart");
+            throw new XProcException(step, "A boundary value must be specified on c:multipart");
         }
 
         if (boundary.startsWith("--")) {
@@ -681,12 +681,12 @@ public class HttpRequest extends DefaultStep {
         //String postContent = "This is a multipart message.\r\n";
         for (XdmNode body : new AxisNodes(multipart, Axis.CHILD, AxisNodes.SIGNIFICANT)) {
             if (!XProcConstants.c_body.equals(body.getNodeName())) {
-                throw new XProcException(step.getNode(), "A c:multipart may only contain c:body elements.");
+                throw new XProcException(step, "A c:multipart may only contain c:body elements.");
             }
 
             String bodyContentType = body.getAttributeValue(_content_type);
             if (bodyContentType == null) {
-                throw new XProcException(step.getNode(), "Content-type on c:body is required.");
+                throw new XProcException(step, "Content-type on c:body is required.");
             }
 
             String bodyId = body.getAttributeValue(_id);

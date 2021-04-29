@@ -41,7 +41,7 @@ public class XWhen extends XCompoundStep {
         }
 
         // Surround testExpr with "boolean()" to force the EBV.
-        Vector<XdmItem> results = evaluateXPath(doc, nsbinding.getNamespaceBindings(), "boolean(" + testExpr + ")", globals);
+        Vector<XdmItem> results = evaluateXPath(doc, null, nsbinding.getNamespaceBindings(), "boolean(" + testExpr + ")", globals);
 
         if (results.size() != 1) {
             throw new XProcException("Attempt to compute EBV in p:when did not return a singleton!?");
@@ -70,11 +70,7 @@ public class XWhen extends XCompoundStep {
 
     @Override
     public void run() throws SaxonApiException {
-        try {
-            XProcMessageListenerHelper.openStep(runtime, this, BigDecimal.ONE, parent.getInScopeOptions());
-        } catch (Throwable e) {
-            throw handleException(e);
-        }
+        XProcMessageListenerHelper.openStep(runtime, this, BigDecimal.ONE, parent.getInScopeOptions());
         try {
             super.run();
         } finally {

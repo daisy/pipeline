@@ -295,7 +295,7 @@ public class S9apiUtils {
                 }
 
                 if (!found) {
-                    throw new XProcException(XProcConstants.staticError(57), node, "No binding for '" + pfx + ":'");
+                    throw XProcException.staticError(57, node, "No binding for '" + pfx + ":'");
                 }
             }
 

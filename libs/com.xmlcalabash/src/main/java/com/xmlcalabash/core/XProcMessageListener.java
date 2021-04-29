@@ -14,14 +14,14 @@ import net.sf.saxon.s9api.XdmNode;
  * To change this template use File | Settings | File Templates.
  */
 public interface XProcMessageListener {
-    public void error(XProcRunnable step, XdmNode node, String message, QName code);
+    public void error(XProcRunnable step, XProcException error);
     public void error(Throwable exception);
-    public void warning(XProcRunnable step, XdmNode node, String message);
+    public void warning(XProcRunnable step, XdmNode location, String message);
     public void warning(Throwable exception);
-    public void info(XProcRunnable step, XdmNode node, String message);
-    public void fine(XProcRunnable step, XdmNode node, String message);
-    public void finer(XProcRunnable step, XdmNode node, String message);
-    public void finest(XProcRunnable step, XdmNode node, String message);
+    public void info(XProcRunnable step, XdmNode location, String message);
+    public void fine(XProcRunnable step, XdmNode location, String message);
+    public void finer(XProcRunnable step, XdmNode location, String message);
+    public void finest(XProcRunnable step, XdmNode location, String message);
 
     /**
      * Begin a new step, which is either
@@ -41,7 +41,7 @@ public interface XProcMessageListener {
      *                 computation time (number between 0 and 1, for p:when and
      *                 p:otherwise always equal to 1)
      */
-    public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion);
+    public void openStep(XProcRunnable step, XdmNode location, String message, String level, BigDecimal portion);
     /**
      * End the current step
      */

@@ -195,11 +195,11 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
                 if (child.getNodeKind() == XdmNodeKind.ELEMENT) {
                     if (xi_fallback.equals(child.getNodeName())) {
                         if (fallback != null) {
-                            throw new XProcException(step.getNode(), "XInclude element must contain at most one xi:fallback element.");
+                            throw new XProcException(step, "XInclude element must contain at most one xi:fallback element.");
                         }
                         fallback = child;
                     } else if (xiNS.equals(child.getNodeName().getNamespaceURI())) {
-                        throw new XProcException(step.getNode(), "Element not allowed as child of XInclude: " + child.getNodeKind());
+                        throw new XProcException(step, "Element not allowed as child of XInclude: " + child.getNodeKind());
                     }
                 }
             }
@@ -468,9 +468,11 @@ public class XInclude extends DefaultStep implements ProcessMatchingNodes {
 
         if (fallback == null) {
             if (mostRecentException != null) {
-                throw new XProcException(step.getNode(), "XInclude resource error (" + href + ") and no fallback provided.", mostRecentException);
+                throw new XProcException(
+                    step,
+                    new RuntimeException("XInclude resource error (" + href + ") and no fallback provided.", mostRecentException));
             } else {
-                throw new XProcException(step.getNode(), "XInclude resource error (" + href + ") and no fallback provided.");
+                throw new XProcException(step, "XInclude resource error (" + href + ") and no fallback provided.");
             }
         }
 

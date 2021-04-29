@@ -15,11 +15,16 @@ import com.xmlcalabash.model.Step;
 import com.xmlcalabash.model.Variable;
 import com.xmlcalabash.util.MessageFormatter;
 import com.xmlcalabash.util.TreeWriter;
+import net.sf.saxon.functions.FunctionLibrary;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.style.StylesheetFunctionLibrary;
 
 import java.util.*;
+
+import javax.xml.transform.SourceLocator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,10 +40,17 @@ public class XPipeline extends XCompoundStep {
     private static final QName _namespace = new QName("namespace");
     private static final QName _value = new QName("value");
 
+    private Vector<XdmNode> errors = new Vector<XdmNode> ();
+
     private Hashtable<QName, RuntimeValue> optionsPassedIn = null;
 
     public XPipeline(XProcRuntime runtime, Step step, XCompoundStep parent) {
         super(runtime, step, parent);
+    }
+
+    public XPipeline(XProcRuntime runtime, Step step, XCompoundStep parent, SourceLocator[] callingLocation) {
+        super(runtime, step, parent);
+        this.parentLocation = callingLocation;
     }
 
     public DeclareStep getDeclareStep() {
@@ -226,17 +238,39 @@ public class XPipeline extends XCompoundStep {
             inScopeOptions.put(name, value);
         }
 
+        // load imported XSLT function libraries
+        List<FunctionLibrary> importedXsltFunctionLibraries = null; {
+            DeclareStep decl = getDeclareStep();
+            for (XdmNode n : decl.getXsltFunctionImports()) {
+                if (importedXsltFunctionLibraries == null)
+                    importedXsltFunctionLibraries = new ArrayList<>();
+                XsltCompiler compiler = runtime.getProcessor().newXsltCompiler();
+                compiler.setSchemaAware(runtime.getProcessor().isSchemaAware());
+                importedXsltFunctionLibraries.add(
+                    new StylesheetFunctionLibrary(compiler.compile(n.asSource())
+                                                          .getUnderlyingCompiledStylesheet()
+                                                          .getTopLevelPackage(),
+                                                  true));
+            }
+        }
+
+        // bind the imported XSLT functions at the beginning of the pipeline
+        if (importedXsltFunctionLibraries != null) {
+            runtime.getConfiguration().inscopeXsltFunctions.addAll(importedXsltFunctionLibraries);
+        }
+
         for (Variable var : step.getVariables()) {
             RuntimeValue value = computeValue(var);
             inScopeOptions.put(var.getName(), value);
         }
 
         for (XStep step : subpipeline) {
-            try {
-                step.run();
-            } catch (Throwable e) {
-                throw handleException(e);
-            }
+            step.run();
+        }
+
+        // unbind the imported XSLT functions at the end of the pipeline
+        if (importedXsltFunctionLibraries != null) {
+            runtime.getConfiguration().inscopeXsltFunctions.removeAll(importedXsltFunctionLibraries);
         }
 
         for (String port : inputs.keySet()) {
@@ -262,5 +296,19 @@ public class XPipeline extends XCompoundStep {
                 }
             }
         }
+    }
+
+    public void reportError(XdmNode doc) {
+        errors.add(doc);
+    }
+
+    public List<XdmNode> errors() {
+        return errors;
+    }
+
+    // don't include p:declare-step and p:pipeline in stack trace
+    @Override
+    public SourceLocator[] getLocation() {
+        return parentLocation;
     }
 }

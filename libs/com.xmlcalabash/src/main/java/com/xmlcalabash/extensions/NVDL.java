@@ -105,9 +105,9 @@ public class NVDL extends DefaultStep {
                 }
             }
         } catch (SAXException e) {
-            throw new XProcException("SAX Exception", e);
+            throw new XProcException(new RuntimeException("SAX Exception", e));
         } catch (IOException e) {
-            throw new XProcException("IO Exception", e);
+            throw new XProcException(new RuntimeException("IO Exception", e));
         }
 
         result.write(srcdoc); // At the moment, we don't get any augmentation

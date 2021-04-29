@@ -42,7 +42,7 @@ public class XChoose extends XCompoundStep {
                 XOtherwise newstep = new XOtherwise(runtime, substep, this);
                 newstep.instantiate(substep);
             } else {
-                throw new XProcException(step.getNode(), "This can't happen, can it? choose contains something that isn't a when or an otherwise?");
+                throw new XProcException(step, "This can't happen, can it? choose contains something that isn't a when or an otherwise?");
             }
         }
 
@@ -105,9 +105,13 @@ public class XChoose extends XCompoundStep {
         for (XStep step : subpipeline) {
             if (step instanceof XWhen) {
                 XWhen when = (XWhen) step;
-                if (when.shouldRun()) {
-                    xstep = when;
-                    break;
+                try {
+                    if (when.shouldRun()) {
+                        xstep = when;
+                        break;
+                    }
+                } catch (Exception e) {
+                    throw new XProcException(when, e);
                 }
             } else {
                 // Must be an otherwise
@@ -133,11 +137,7 @@ public class XChoose extends XCompoundStep {
         }
 
         try {
-            try {
-                XProcMessageListenerHelper.openStep(runtime, this);
-            } catch (Throwable e) {
-                throw handleException(e);
-            }
+            XProcMessageListenerHelper.openStep(runtime, this);
             try {
                 xstep.run();
             } finally {

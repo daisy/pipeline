@@ -35,6 +35,7 @@ public interface ComputableValue {
     public QName getName();
     public String getType();
     public QName getTypeAsQName();
+    public SequenceType getSequenceType();
     public XdmNode getNode();
     public String getSelect();
     public void addNamespaceBinding(NamespaceBinding nsbinding);

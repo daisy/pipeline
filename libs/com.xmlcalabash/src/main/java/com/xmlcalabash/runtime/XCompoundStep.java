@@ -260,11 +260,7 @@ public class XCompoundStep extends XAtomicStep {
 
         try {
             for (XStep step : subpipeline) {
-                try {
-                    step.run();
-                } catch (Throwable e) {
-                    throw handleException(e);
-                }
+                step.run();
             }
 
             for (String port : inputs.keySet()) {

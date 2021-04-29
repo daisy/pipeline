@@ -93,9 +93,9 @@ public class NodeToBytes {
                 stream.close();
             }
         } catch (IOException ioe) {
-            throw new XProcException("Failed to serialize as XML: " + doc, ioe);
+            throw new XProcException(new RuntimeException("Failed to serialize as XML: " + doc, ioe));
         } catch (SaxonApiException sae) {
-            throw new XProcException("Failed to serialize as XML: " + doc, sae);
+            throw new XProcException(new RuntimeException("Failed to serialize as XML: " + doc, sae));
         } 
     }
 

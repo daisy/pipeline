@@ -20,6 +20,7 @@
 package com.xmlcalabash.model;
 
 import net.sf.saxon.s9api.XdmNode;
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
 
@@ -103,12 +104,12 @@ public class Viewport extends DeclareStep {
         boolean valid = true;
         
         if (match == null || "".equals(match)) {
-            error(node, "Match expression on p:viewport must be specified.", XProcConstants.staticError(38));
+            error(XProcException.staticError(38, node, "Match expression on p:viewport must be specified."));
             valid = false;
         }
 
         if (outputs.size() == 1) {
-            error(node, "A viewport step must have a primary output", XProcConstants.staticError(6));
+            error(XProcException.staticError(6, node, "A viewport step must have a primary output"));
         }
 
         if (!super.valid()) {

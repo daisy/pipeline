@@ -236,7 +236,7 @@ public class ValidateWithSCH extends DefaultStep {
             if ("iso_schematron_skeleton_for_saxon.xsl".equals(href)) {
                 return new SAXSource(new InputSource(skeleton));
             } else {
-                throw new XProcException(step.getNode(), "Failed to resolve " + href + " from JAR file.");
+                throw new XProcException(step, "Failed to resolve " + href + " from JAR file.");
             }
         }
     }

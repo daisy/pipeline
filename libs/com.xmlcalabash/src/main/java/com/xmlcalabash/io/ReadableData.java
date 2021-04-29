@@ -122,7 +122,7 @@ public class ReadableData implements ReadablePipe {
 				// necessary.
 			}
 		} catch (IOException ioe) {
-            throw new XProcException(XProcConstants.dynamicError(29), ioe);
+            throw XProcException.dynamicError(29, ioe);
         }
         return documents;
     }

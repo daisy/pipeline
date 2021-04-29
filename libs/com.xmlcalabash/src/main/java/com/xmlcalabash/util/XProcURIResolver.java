@@ -207,7 +207,7 @@ public class XProcURIResolver implements URIResolver, EntityResolver, ModuleURIR
         try {
             source = resolve(href, base);
         } catch (TransformerException te) {
-            throw new XProcException(XProcConstants.dynamicError(9), te);
+            throw XProcException.dynamicError(9, te);
         }
 
         if (source == null) {

@@ -21,6 +21,8 @@ package com.xmlcalabash.model;
 
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.QName;
+
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 
 import java.util.Hashtable;
@@ -93,11 +95,7 @@ public abstract class SourceArtifact {
         return extnAttrs.keySet();
     }
 
-    public void error(String message, QName code) {
-        runtime.error(null, node, message, code);
-    }
-
-    public void error(XdmNode node, String message, QName code) {
-        runtime.error(null, node, message, code);
+    public void error(XProcException error) {
+        runtime.error(null, error);
     }
 }

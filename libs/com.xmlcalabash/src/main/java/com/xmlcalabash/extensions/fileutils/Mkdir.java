@@ -70,9 +70,9 @@ public class Mkdir extends DefaultStep {
             URI uri = store.createList(href.getString(), href.getBaseURI().toASCIIString());
             tree.addText(uri.toASCIIString());
         } catch (FileNotFoundException e) {
-            throw new XProcException(step.getNode(), "Cannot mkdir: file exists: " + href.getString());
+            throw new XProcException(step, "Cannot mkdir: file exists: " + href.getString());
         } catch (IOException e) {
-            throw new XProcException(step.getNode(), "Mkdir failed for: " + href.getString());
+            throw new XProcException(step, "Mkdir failed for: " + href.getString());
         }
 
         tree.addEndElement();

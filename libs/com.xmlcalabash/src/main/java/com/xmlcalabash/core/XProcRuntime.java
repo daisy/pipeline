@@ -125,9 +125,7 @@ public class XProcRuntime implements DeclarationScope {
     private Parser parser = null;
     private XProcURIResolver uriResolver = null;
     private XProcConfiguration config = null;
-    private QName errorCode = null;
-    private XdmNode errorNode = null;
-    private String errorMessage = null;
+    private XProcException error = null;
     private Hashtable<QName, DeclareStep> declaredSteps = new Hashtable<QName,DeclareStep> ();
     private DeclareStep pipeline = null;
     private XPipeline xpipeline = null;
@@ -138,6 +136,7 @@ public class XProcRuntime implements DeclarationScope {
     private boolean allowGeneralExpressions = true;
     private boolean allowXPointerOnText = true;
     private boolean allowTextResults = true;
+    private boolean allowSequenceAsContext = true;
     private boolean transparentJSON = false;
     private String jsonFlavor = JSONtoXML.MARKLOGIC;
     private boolean useXslt10 = false;
@@ -243,6 +242,7 @@ public class XProcRuntime implements DeclarationScope {
         allowGeneralExpressions = config.extensionValues;
         allowXPointerOnText = config.xpointerOnText;
         allowTextResults = config.allowTextResults;
+        allowSequenceAsContext = config.sequenceAsContext;
         transparentJSON = config.transparentJSON;
         jsonFlavor = config.jsonFlavor;
         useXslt10 = config.useXslt10;
@@ -306,6 +306,7 @@ public class XProcRuntime implements DeclarationScope {
         configurer = runtime.configurer;
         allowGeneralExpressions = runtime.allowGeneralExpressions;
         allowXPointerOnText = runtime.allowXPointerOnText;
+        allowSequenceAsContext = runtime.allowSequenceAsContext;
         transparentJSON = runtime.transparentJSON;
         jsonFlavor = runtime.jsonFlavor;
         profile = runtime.profile;
@@ -493,6 +494,10 @@ public class XProcRuntime implements DeclarationScope {
         return allowTextResults;
     }
 
+    public boolean getAllowSequenceAsContext() {
+        return allowSequenceAsContext;
+    }
+
     public boolean transparentJSON() {
         return transparentJSON;
     }
@@ -582,8 +587,7 @@ public class XProcRuntime implements DeclarationScope {
     }
 
     private synchronized void reset() {
-        errorCode = null;
-        errorMessage = null;
+        error = null;
         declaredSteps = new Hashtable<QName,DeclareStep> ();
         //explicitDeclarations = false;
         pipeline = null;
@@ -597,15 +601,15 @@ public class XProcRuntime implements DeclarationScope {
         parser = new Parser(this);
         try {
             standardLibrary = parser.loadStandardLibrary();
-            if (errorCode != null) {
-                throw new XProcException(errorCode, errorMessage);
+            if (error != null) {
+                throw error.copy();
             }
         } catch (FileNotFoundException ex) {
-            throw new XProcException(XProcConstants.dynamicError(9), ex);
+            throw XProcException.dynamicError(9, ex);
         } catch (URISyntaxException ex) {
-            throw new XProcException(XProcConstants.dynamicError(9), ex);
+            throw XProcException.dynamicError(9, ex);
         } catch (SaxonApiException ex) {
-            throw new XProcException(XProcConstants.dynamicError(9), ex);
+            throw XProcException.dynamicError(9, ex);
         }
 
         if (profile != null) {
@@ -676,23 +680,23 @@ public class XProcRuntime implements DeclarationScope {
             default:
                 throw new UnsupportedOperationException(format("Unsupported pipeline kind '%s'", pipelineInput.getKind()));
         }
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         XRootStep root = new XRootStep(this);
         DeclareStep decl = pipeline.getDeclaration();
         decl.setup();
 
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorNode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         xpipeline = new XPipeline(this, pipeline, root);
         xpipeline.instantiate(decl);
 
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         return xpipeline;
@@ -714,23 +718,23 @@ public class XProcRuntime implements DeclarationScope {
         reset();
         configurer.getXMLCalabashConfigurer().configRuntime(this);
         pipeline = parser.usePipeline(p_pipeline);
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         XRootStep root = new XRootStep(this);
         DeclareStep decl = pipeline.getDeclaration();
         decl.setup();
 
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         xpipeline = new XPipeline(this, pipeline, root);
         xpipeline.instantiate(decl);
 
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         return xpipeline;
@@ -789,14 +793,14 @@ public class XProcRuntime implements DeclarationScope {
                 throw new UnsupportedOperationException(format("Unsupported library kind '%s'", library.getKind()));
         }
 
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         XLibrary xlibrary = new XLibrary(this, plibrary);
 
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         return xlibrary;
@@ -817,14 +821,14 @@ public class XProcRuntime implements DeclarationScope {
 
     private XLibrary _useLibrary(XdmNode library) throws SaxonApiException {
         PipelineLibrary plibrary = parser.useLibrary(library);
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         XLibrary xlibrary = new XLibrary(this, plibrary);
 
-        if (errorCode != null) {
-            throw new XProcException(errorCode, errorMessage);
+        if (error != null) {
+            throw error.copy();
         }
 
         return xlibrary;
@@ -973,52 +977,41 @@ public class XProcRuntime implements DeclarationScope {
         this.httpClient = client;
     }
 
-    public QName getErrorCode() {
-        return errorCode;
+    public XProcException getError() {
+        return error;
     }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
+    
     // ===========================================================
     // This logging stuff is still accessed through XProcRuntime
     // so that messages can be formatted in a common way and so
     // that errors can be trapped.
 
-    public void error(XProcRunnable step, XdmNode node, String message, QName code) {
-        if (errorCode == null) {
-            errorCode = code;
-            errorNode = node;
-            errorMessage = message;
+    public void error(XProcRunnable step, XProcException error) {
+        if (this.error == null) {
+            this.error = error;
         }
-
-        msgListener.error(step, node, message, code);
+        msgListener.error(step, error);
     }
 
     public void error(Throwable error) {
         msgListener.error(error);
     }
 
-    public void warning(XProcRunnable step, XdmNode node, String message) {
-        msgListener.warning(step, node, message);
+    public void warning(XProcRunnable step, XdmNode location, String message) {
+        msgListener.warning(step, location, message);
     }
 
     public void warning(Throwable error) {
         msgListener.warning(error);
     }
 
-    public void info(XProcRunnable step, XdmNode node, String message) {
-        msgListener.info(step, node, message);
+    public void info(XProcRunnable step, XdmNode location, String message) {
+        msgListener.info(step, location, message);
     }
 
     // ===========================================================
 
-    private Stack<XStep> runningSteps = new Stack<XStep>();
-
     public void start(XStep step) {
-        runningSteps.push(step);
-
         if (profile == null) {
             return;
         }
@@ -1060,13 +1053,7 @@ public class XProcRuntime implements DeclarationScope {
         profileWriter.startContent();
     }
 
-    public XStep runningStep() {
-        return runningSteps.peek();
-    }
-
     public void finish(XStep step) {
-        runningSteps.pop();
-
         if (profile == null) {
             return;
         }

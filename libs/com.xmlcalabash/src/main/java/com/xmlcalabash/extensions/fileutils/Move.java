@@ -102,9 +102,9 @@ public class Move extends DefaultStep {
 
         } catch (FileNotFoundException fnfe) {
             URI uri = href.getBaseURI().resolve(href.getString());
-            throw new XProcException(step.getNode(), "Cannot copy: file does not exist: " + uri.toASCIIString());
+            throw new XProcException(step, "Cannot copy: file does not exist: " + uri.toASCIIString());
         } catch (IOException ioe) {
-            throw new XProcException(step.getNode(), ioe);
+            throw new XProcException(step, ioe);
         }
     }
 }

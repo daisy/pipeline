@@ -208,7 +208,8 @@ public class ReadableDocument implements ReadablePipe {
                     }
                 }
             } catch (Exception except) {
-                throw XProcException.dynamicError(11, node, except, "Could not read: " + uri);
+                throw XProcException.dynamicError(
+                    11, node, new RuntimeException("Could not read: " + uri, except));
             }
         }
     }

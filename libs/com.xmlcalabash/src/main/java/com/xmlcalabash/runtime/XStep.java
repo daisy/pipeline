@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.HashSet;
+import javax.xml.transform.SourceLocator;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
@@ -37,6 +38,9 @@ public abstract class XStep implements XProcRunnable {
     private Hashtable<String, Hashtable<QName, RuntimeValue>> parameters = new Hashtable<String, Hashtable<QName, RuntimeValue>> ();
     protected XCompoundStep parent = null;
     protected Hashtable<QName,RuntimeValue> inScopeOptions = new Hashtable<QName,RuntimeValue> ();
+    /* the next frames in the call stack */
+    private static final SourceLocator[] EMPTY_LOCATION = new SourceLocator[]{};
+    protected SourceLocator[] parentLocation = EMPTY_LOCATION;
 
     public XStep(XProcRuntime runtime, Step step) {
         this.runtime = runtime;
@@ -91,7 +95,7 @@ public abstract class XStep implements XProcRunnable {
         if (xinputs.containsKey(port)) {
             return xinputs.get(port);
         } else {
-            throw new XProcException(step.getNode(), "Attempt to get non-existant input '" + port + "' port from step.");
+            throw new XProcException(step, "Attempt to get non-existant input '" + port + "' port from step.");
         }
     }
 
@@ -103,7 +107,7 @@ public abstract class XStep implements XProcRunnable {
                     && step.getStep().getVersion() > 1.0) {
                 return null;
             } else {
-                throw new XProcException(step.getNode(), "Attempt to get non-existant output '" + port + "' port from step.");
+                throw new XProcException(step, "Attempt to get non-existant output '" + port + "' port from step.");
             }
         }
     }
@@ -124,14 +128,14 @@ public abstract class XStep implements XProcRunnable {
         }
 
         if (pportCount == 0) {
-            throw new XProcException(step.getNode(), "Attempt to set parameter but there's no parameter port.");
+            throw new XProcException(step, "Attempt to set parameter but there's no parameter port.");
         }
 
         if (ppport != null) {
             pport = ppport;
         } else {
             if (pportCount > 1) {
-                throw new XProcException(step.getNode(), "Attempt to set parameter w/o specifying a port (and there's more than one)");
+                throw new XProcException(step, "Attempt to set parameter w/o specifying a port (and there's more than one)");
             }
         }
 
@@ -146,14 +150,14 @@ public abstract class XStep implements XProcRunnable {
             XInput xinput = getInput(port); // Make sure there is one
             Input input = getDeclareStep().getInput(port);
             if (!input.getParameterInput()) {
-                throw new XProcException(step.getNode(), "Attempt to write parameters to non-parameter input port: " + port);
+                throw new XProcException(step, "Attempt to write parameters to non-parameter input port: " + port);
             }
             pparams = new Hashtable<QName,RuntimeValue> ();
             parameters.put(port, pparams);
         }
 
         if (pparams.containsKey(name)) {
-            throw new XProcException(step.getNode(), "Duplicate parameter: " + name);
+            throw new XProcException(step, "Duplicate parameter: " + name);
         }
 
         if (XProcConstants.NS_XPROC.equals(name.getNamespaceURI())) {
@@ -293,31 +297,26 @@ public abstract class XStep implements XProcRunnable {
     public abstract void reset();
     public abstract void run() throws SaxonApiException;
 
-    public void error(XdmNode node, String message, QName code) {
-        runtime.error(this, node, message, code);
+    public void error(XProcException error) {
+        runtime.error(this, error);
     }
 
-    public void warning(XdmNode node, String message) {
-        runtime.warning(this, node, message);
+    public void warning(XdmNode location, String message) {
+        runtime.warning(this, location, message);
     }
 
-    public void info(XdmNode node, String message) {
-        runtime.info(this, node, message);
+    public void info(XdmNode location, String message) {
+        runtime.info(this, location, message);
     }
 
-    protected XProcException handleException(Throwable e) {
-        XProcException xe = (e instanceof XProcException) ?
-            (XProcException)e :
-            XProcException.javaError(e, 1, new RuntimeException().getStackTrace(), 1);
-        if (getRootStep(xe.getStep()) != getRootStep(getStep()))
-            xe = xe.rebaseOnto(getStep());
-        return xe;
-    }
-    
-    private static Step getRootStep(Step s) {
-        if (s != null)
-            while (s.getParent() != null)
-                s = s.getParent();
-        return s;
+    public SourceLocator[] getLocation() {
+        if (step == null)
+            return parentLocation;
+        SourceLocator[] location = new SourceLocator[parentLocation.length + 1]; {
+            location[0] = XProcException.getLocator(step);
+            for (int i = 0; i < parentLocation.length; i++)
+                location[i + 1] = parentLocation[i];
+        }
+        return location;
     }
 }

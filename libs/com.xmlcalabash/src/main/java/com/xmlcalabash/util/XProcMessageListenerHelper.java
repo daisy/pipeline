@@ -106,13 +106,10 @@ public class XProcMessageListenerHelper {
 				try {
 					val = evaluateAVT(val, runtime, globals);
 				} catch (Exception e) {
-					final SourceLocator[] location
-						= new SourceLocator[]{XProcException.prettyLocator(null, -1, "@"+attName.toString())};
-					Throwable cause = new XProcException(e.getMessage(), e) {
-							@Override
-							public SourceLocator[] getLocator() {
-								return location; }};
-					throw new XProcException("Could not evaluate " + attName + " attribute: " + val, cause);
+					throw new XProcException(
+						new SourceLocator[]{XProcException.prettyLocator(null, "@"+attName.toString())},
+						new RuntimeException("Could not evaluate " + attName + " attribute: " + val, e)
+					).rebase(step);
 				}
 			}
 		}

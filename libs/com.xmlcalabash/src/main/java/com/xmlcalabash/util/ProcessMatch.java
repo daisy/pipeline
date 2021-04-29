@@ -26,20 +26,26 @@ import com.xmlcalabash.model.RuntimeValue;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.om.NamespaceResolver;
+import net.sf.saxon.om.Sequence;
 import net.sf.saxon.s9api.Axis;
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
+import net.sf.saxon.s9api.XdmValue;
+import net.sf.saxon.sxpath.IndependentContext;
 import net.sf.saxon.sxpath.XPathDynamicContext;
 import net.sf.saxon.sxpath.XPathEvaluator;
 import net.sf.saxon.sxpath.XPathExpression;
+import net.sf.saxon.sxpath.XPathVariable;
 import net.sf.saxon.trans.XPathException;
 
 import java.net.URI;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -55,6 +61,7 @@ public class ProcessMatch extends TreeWriter {
     private ProcessMatchingNodes processor = null;
     private int saw = 0;
     private XPathExpression matcher = null;
+    private Hashtable<XPathVariable,Sequence> inScopeVariables = null;
     private Configuration saxonConfig = null;
     private int count;
 
@@ -69,6 +76,10 @@ public class ProcessMatch extends TreeWriter {
     }
 
     public void match(XdmNode doc, RuntimeValue match) {
+        match(doc, match, null);
+    }
+
+    public void match(XdmNode doc, RuntimeValue match, Hashtable<QName,RuntimeValue> inScopeVariables) {
         XdmNode node = match.getNode();
         String expr = match.getString();
 
@@ -77,7 +88,29 @@ public class ProcessMatch extends TreeWriter {
             NamespaceResolver resolver = new MatchingNamespaceResolver(match.getNamespaceBindings());
             xeval.getStaticContext().setNamespaceResolver(resolver);
 
+            if (inScopeVariables != null)
+                ((IndependentContext)xeval.getStaticContext()).setAllowUndeclaredVariables(true);
+
             matcher = xeval.createPattern(match.getString());
+
+            if (inScopeVariables == null)
+                this.inScopeVariables = null;
+            else {
+                this.inScopeVariables = new Hashtable<XPathVariable,Sequence>();
+                Iterator<XPathVariable> externalVariables = ((IndependentContext)xeval.getStaticContext()).iterateExternalVariables();
+                while (externalVariables.hasNext()) {
+                    XPathVariable var = externalVariables.next();
+                    QName name = new QName(var.getVariableQName().toJaxpQName());
+                    RuntimeValue rv = inScopeVariables.get(name);
+                    if (rv == null)
+                        throw new XPathException("Undeclared variable in XPath expression: $" + name);
+                    XdmValue value = runtime.getAllowGeneralExpressions() && rv.hasGeneralValue()
+                        ? rv.getValue()
+                        : rv.getUntypedAtomic(runtime);
+                    this.inScopeVariables.put(var, value.getUnderlyingValue());
+                }
+            }
+
 
             destination = new XdmDestination();
             receiver = destination.getReceiver(saxonConfig);
@@ -102,9 +135,11 @@ public class ProcessMatch extends TreeWriter {
             throw e;
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().contains("syntax error")) {
-                throw XProcException.dynamicError(23,node,e,"Syntax error in match pattern: \"" + match.getString() + "\"");
+                throw XProcException.dynamicError(
+                    23, node,
+                    new RuntimeException("Syntax error in match pattern: \"" + match.getString() + "\"", e));
             } else {
-                throw new XProcException(e);
+                throw new XProcException(node, e);
             }
         }
     }
@@ -147,6 +182,9 @@ public class ProcessMatch extends TreeWriter {
     public boolean matches(XdmNode node) {
         try {
             XPathDynamicContext context = matcher.createDynamicContext(node.getUnderlyingNode());
+            if (inScopeVariables != null)
+                for (Map.Entry<XPathVariable,Sequence> var : inScopeVariables.entrySet())
+                    context.setVariable(var.getKey(), var.getValue());
             return matcher.effectiveBooleanValue(context);
         } catch (XPathException sae) {
             return false;

@@ -45,7 +45,7 @@ public class XLibrary {
         DeclareStep step = library.getDeclaration(stepName);
 
         if (step == null) {
-            runtime.error(null, library.getNode(), "No step named " + stepName + " in library.", null);
+            runtime.error(null, new XProcException(library.getNode(), "No step named " + stepName + " in library."));
             return null;
         }
 
@@ -112,8 +112,8 @@ public class XLibrary {
 
         XPipeline xpipeline = new XPipeline(runtime, step, root);
 
-        if (runtime.getErrorCode() != null) {
-            throw new XProcException(runtime.getErrorCode(), runtime.getErrorMessage());
+        if (runtime.getError() != null) {
+            throw runtime.getError().copy();
         }
         
         xpipeline.instantiate(step);

@@ -165,7 +165,7 @@ public class Unzip extends DefaultStep {
                 }
 
                 if (entry == null) {
-                    throw new XProcException(step.getNode(), "ZIP file does not contain '" + name + "'");
+                    throw new XProcException(step, "ZIP file does not contain '" + name + "'");
                 }
 
                 if ("application/xml".equals(contentType) || "text/xml".equals(contentType)

@@ -28,7 +28,12 @@ import com.xmlcalabash.model.ComputableValue;
 import com.xmlcalabash.model.NamespaceBinding;
 import com.xmlcalabash.model.DeclareStep;
 import com.xmlcalabash.model.Option;
+import com.xmlcalabash.model.SequenceType;
+import com.xmlcalabash.util.TreeWriter;
+import com.xmlcalabash.util.XProcCollectionFinder;
 import com.xmlcalabash.util.XProcMessageListenerHelper;
+import net.sf.saxon.Configuration;
+import net.sf.saxon.lib.CollectionFinder;
 import net.sf.saxon.om.InscopeNamespaceResolver;
 import net.sf.saxon.om.NameChecker;
 import net.sf.saxon.om.NamePool;
@@ -78,6 +83,8 @@ public class XAtomicStep extends XStep {
     public XAtomicStep(XProcRuntime runtime, Step step, XCompoundStep parent) {
         super(runtime, step);
         this.parent = parent;
+        if (parent != null)
+            this.parentLocation = parent.getLocation();
     }
 
     public XCompoundStep getParent() {
@@ -265,7 +272,7 @@ public class XAtomicStep extends XStep {
                             } else if (XProcConstants.c_param.equals(docelem.getNodeName())) {
                                 parseParameterNode(xstep,docelem);
                             } else {
-                                throw new XProcException(step.getNode(), docelem.getNodeName() + " found where c:param or c:param-set expected");
+                                throw new XProcException(step, docelem.getNodeName() + " found where c:param or c:param-set expected");
                             }
                         }
                     }
@@ -352,15 +359,14 @@ public class XAtomicStep extends XStep {
             Option option = step.getOption(name);
             RuntimeValue value = computeValue(option);
 
+            // Test to see if the option has a reasonable string value according to the declaration
             Option optionDecl = decl.getOption(name);
-            String typeName = optionDecl.getType();
-            XdmNode declNode = optionDecl.getNode();
-            if (typeName != null && declNode != null) {
-                if (typeName.contains("|")) {
-                    TypeUtils.checkLiteral(value.getString(), typeName);
-                } else {
-                    QName type = new QName(typeName, declNode);
-                    TypeUtils.checkType(runtime, value.getString(),type,option.getNode());
+            if (optionDecl.getTypeAsQName() != null) {
+                TypeUtils.checkType(runtime, value.getString(), optionDecl.getTypeAsQName(), option.getNode());
+            } else if (optionDecl.getType() != null) {
+                String type = optionDecl.getType();
+                if (type.contains("|")) {
+                    TypeUtils.checkLiteral(value.getString(), type);
                 }
             }
 
@@ -388,15 +394,22 @@ public class XAtomicStep extends XStep {
 
         runtime.start(this);
         try {
-            try {
-                XProcMessageListenerHelper.openStep(runtime, this);
-            } catch (Throwable e) {
-                throw handleException(e);
-            }
+            XProcMessageListenerHelper.openStep(runtime, this);
             try {
                 xstep.run();
-            } catch (Throwable e) {
-                throw handleException(e);
+            } catch (RuntimeException e) {
+                // If an unexpected exception happens while running a step, log the XProc stack
+                // trace in order to aid debugging. With "unexpected exception" we mean an exception
+                // that is not a XProcException or SaxonApiException: these are not allowed to
+                // happen (if they do it's due to a bug), and are not caught by p:try.
+                if (!(e instanceof XProcException)) {
+                    // creating XProcException only to get the nice XProc stack trace
+                    logger.error("An unexpected runtime exception happened: "
+                                 + XProcException.fromException(e)
+                                                 .rebase(getLocation(), new RuntimeException().getStackTrace())
+                                                 .toString());
+                }
+                throw e;
             } finally {
                 runtime.getMessageListener().closeStep();
             }
@@ -434,6 +447,14 @@ public class XAtomicStep extends XStep {
         parent.reportError(doc);
     }
 
+    public void reportError(XProcException exception) {
+        TreeWriter treeWriter = new TreeWriter(runtime);
+        treeWriter.startDocument(getNode().getBaseURI());
+        exception.serialize(treeWriter);
+        treeWriter.endDocument();
+        reportError(treeWriter.getResult());
+    }
+    
     private void parseParameterNode(XProcStep impl, XdmNode pnode) {
         String value = pnode.getAttributeValue(_value);
 
@@ -570,7 +591,7 @@ public class XAtomicStep extends XStep {
             }
         }
 
-        RuntimeValue value = new RuntimeValue(stringValue, items, pnode, new Hashtable<String,String> ());
+        RuntimeValue value = new RuntimeValue(stringValue, new XdmValue(items), pnode, new Hashtable<String,String> ());
 
         if (port != null) {
             impl.setParameter(port,pname,value);
@@ -583,6 +604,10 @@ public class XAtomicStep extends XStep {
         Hashtable<String,String> nsBindings = new Hashtable<String,String> ();
         Hashtable<QName,RuntimeValue> globals = inScopeOptions;
         XdmNode doc = null;
+        Vector<XdmNode> defaultCollection = null;
+        if (runtime.getAllowSequenceAsContext()) {
+            defaultCollection = new Vector<XdmNode>();
+        }
 
         try {
             if (var.getBinding().size() > 0) {
@@ -590,13 +615,36 @@ public class XAtomicStep extends XStep {
 
                 ReadablePipe pipe = null;
                 if (binding.getBindingType() == Binding.ERROR_BINDING) {
-                    pipe = ((XCatch) this).errorPipe;
+                    XStep step = this;
+                    while (!(step instanceof XCatch)) {
+                        step = step.getParent();
+                    }
+                    pipe = ((XCatch)step).errorPipe;
                 } else {
                     pipe = getPipeFromBinding(binding);
+                    pipe.canReadSequence(runtime.getAllowSequenceAsContext());
                 }
-                doc = pipe.read();
-                if (pipe.moreDocuments()) {
-                    throw XProcException.dynamicError(step, 8, "More than one document in context for parameter '" + var.getName() + "'");
+                if (pipe.readSequence()) {
+                    while (pipe.moreDocuments()) {
+                        if (defaultCollection != null) {
+                            if (doc == null) {
+                                doc = pipe.read();
+                                defaultCollection.add(doc);
+                            } else {
+                                defaultCollection.add(pipe.read());
+                            }
+                        } else if (doc == null) {
+                            doc = pipe.read();
+                        } else {
+                            pipe.read();
+                        }
+                    }
+                } else {
+                    doc = pipe.read();
+                    if (pipe.moreDocuments()) {
+                        throw XProcException.dynamicError(
+                            8, this, "More than one document in context for parameter '" + var.getName() + "'");
+                    }
                 }
             }
         } catch (SaxonApiException sae) {
@@ -713,23 +761,28 @@ public class XAtomicStep extends XStep {
         }
 
         String select = var.getSelect();
-        Vector<XdmItem> results = evaluateXPath(doc, nsBindings, select, globals);
-        String value = "";
+        XdmValue value = new XdmValue(evaluateXPath(doc, defaultCollection, nsBindings, select, globals));
+        String stringValue = "";
 
         try {
-            for (XdmItem item : results) {
+            for (XdmItem item : value) {
                 if (item.isAtomicValue()) {
-                    value += item.getStringValue();
-                } else {
+                    stringValue += item.getStringValue();
+                } else if (item instanceof XdmNode) {
                     XdmNode node = (XdmNode) item;
                     if (node.getNodeKind() == XdmNodeKind.ATTRIBUTE
                             || node.getNodeKind() == XdmNodeKind.NAMESPACE) {
-                        value += node.getStringValue();
+                        stringValue += node.getStringValue();
                     } else {
                         XdmDestination dest = new XdmDestination();
                         S9apiUtils.writeXdmValue(runtime,item,dest,null);
-                        value += dest.getXdmNode().getStringValue();
+                        stringValue += dest.getXdmNode().getStringValue();
                     }
+                } else {
+                    // Don't know how to create string value from item. Take empty string, and raise
+                    // an error if we're not in "general-values" mode.
+                    if (!runtime.getAllowGeneralExpressions())
+                        throw new XProcException("Can not evaluate expression when not in 'general-values' mode: " + select);
                 }
             }
         } catch (SaxonApiUncheckedException saue) {
@@ -746,16 +799,6 @@ public class XAtomicStep extends XStep {
             }
         } catch (SaxonApiException sae) {
             throw new XProcException(sae);
-        }
-
-        // Now test to see if the option is a reasonable value
-        if (var.getType() != null) {
-            String type = var.getType();
-            if (type.contains("|")) {
-                TypeUtils.checkLiteral(value, type);
-            } else if (type.contains(":")) {
-                TypeUtils.checkType(runtime, value, var.getTypeAsQName(), var.getNode());
-            }
         }
 
         // Section 5.7.5 Namespaces on variables, options, and parameters
@@ -790,25 +833,50 @@ public class XAtomicStep extends XStep {
         //
         // If the select attribute was used to specify the value and it evaluated to a node-set, then the in-scope
         // namespaces from the first node in the selected node-set (or, if it's not an element, its parent) are used.
-        if (results.size() > 0 && results.get(0) instanceof XdmNode) {
-            XdmNode node = (XdmNode) results.get(0);
-            nsBindings.clear();
-
-            XdmSequenceIterator nsIter = node.axisIterator(Axis.NAMESPACE);
-            while (nsIter.hasNext()) {
-                XdmNode ns = (XdmNode) nsIter.next();
-                nsBindings.put((ns.getNodeName()==null ? "" : ns.getNodeName().getLocalName()),ns.getStringValue());
+        if (value.size() > 0) {
+            XdmItem first = value.iterator().next();
+            if (first instanceof XdmNode) {
+                XdmNode node = (XdmNode)first;
+                nsBindings.clear();
+                XdmSequenceIterator nsIter = node.axisIterator(Axis.NAMESPACE);
+                while (nsIter.hasNext()) {
+                    XdmNode ns = (XdmNode) nsIter.next();
+                    nsBindings.put((ns.getNodeName()==null ? "" : ns.getNodeName().getLocalName()),ns.getStringValue());
+                }
             }
         }
 
+        // Cast the value if needed
         if (runtime.getAllowGeneralExpressions()) {
-            return new RuntimeValue(value,results,var.getNode(),nsBindings);
+            if (var.getSequenceType() != null) {
+                if (SequenceType.XS_STRING.equals(var.getSequenceType())) {
+                    value = null;
+                } else {
+                    value = var.getSequenceType().cast(value, var.getNode());
+                }
+            }
         } else {
-            return new RuntimeValue(value,var.getNode(),nsBindings);
+            value = null;
+        }
+
+        // Test to see if the option has a reasonable string value
+        if (var.getTypeAsQName() != null) {
+            TypeUtils.checkType(runtime, stringValue, var.getTypeAsQName(), var.getNode());
+        } else if (var.getType() != null) {
+            String type = var.getType();
+            if (type.contains("|")) {
+                TypeUtils.checkLiteral(stringValue, type);
+            }
+        }
+
+        if (value != null) {
+            return new RuntimeValue(stringValue, value, var.getNode(), nsBindings);
+        } else {
+            return new RuntimeValue(stringValue, var.getNode(), nsBindings);
         }
     }
 
-    protected Vector<XdmItem> evaluateXPath(XdmNode doc, Hashtable<String,String> nsBindings, String xpath, Hashtable<QName,RuntimeValue> globals) {
+    protected Vector<XdmItem> evaluateXPath(XdmNode doc, Vector<XdmNode> defaultCollection, Hashtable<String,String> nsBindings, String xpath, Hashtable<QName,RuntimeValue> globals) {
         Vector<XdmItem> results = new Vector<XdmItem> ();
         Hashtable<QName,RuntimeValue> boundOpts = new Hashtable<QName,RuntimeValue> ();
 
@@ -817,6 +885,14 @@ public class XAtomicStep extends XStep {
             if (v.initialized()) {
                 boundOpts.put(name, v);
             }
+        }
+
+        CollectionFinder collectionFinder = null;
+        if (defaultCollection != null) {
+            Configuration config = runtime.getProcessor().getUnderlyingConfiguration();
+            collectionFinder = config.getCollectionFinder();
+            config.setDefaultCollection(XProcCollectionFinder.DEFAULT);
+            config.setCollectionFinder(new XProcCollectionFinder(runtime, defaultCollection, collectionFinder));
         }
 
         try {
@@ -880,7 +956,16 @@ public class XAtomicStep extends XStep {
                     if ("http://www.w3.org/2005/xqt-errors".equals(xe.getErrorCodeNamespace()) && "XPDY0002".equals(xe.getErrorCodeLocalPart())) {
                         throw XProcException.dynamicError(26, step.getNode(), "Expression refers to context when none is available: " + xpath);
                     } else {
-                        throw saue;
+                        Throwable cause = sae.getCause();
+                        if (cause != null)
+                            throw new XProcException(
+                                this,
+                                sae,
+                                XProcException.fromException(cause)
+                                              .rebase(null, new RuntimeException().getStackTrace())
+                                              .rebase(this));
+                        else
+                            throw saue;
                     }
 
                 } else {
@@ -891,7 +976,13 @@ public class XAtomicStep extends XStep {
             if (S9apiUtils.xpathSyntaxError(sae)) {
                 throw XProcException.dynamicError(23, step.getNode(), sae.getCause().getMessage());
             } else {
-                throw new XProcException(sae);
+                throw new XProcException(this, sae);
+            }
+        } catch (SaxonApiUncheckedException saue) {
+            throw new XProcException(this, saue);
+        } finally {
+            if (defaultCollection != null) {
+                runtime.getProcessor().getUnderlyingConfiguration().setCollectionFinder(collectionFinder);
             }
         }
 

@@ -150,10 +150,6 @@ public class Step extends SourceArtifact {
         return this;
     }
     
-    public Step getParent() {
-        return parent;
-    }
-
     protected void setVersion(Double version) {
         this.version = version;
     }
@@ -296,7 +292,7 @@ public class Step extends SourceArtifact {
         QName optName = option.getName();
         for (Option exoption : options) {
             if (optName.equals(exoption.getName())) {
-                error(option.getNode(),"Duplication option name: " + optName,XProcConstants.staticError(4));
+                error(XProcException.staticError(4, option.getNode(), "Duplication option name: " + optName));
             }
         }
         options.add(option);
@@ -439,7 +435,7 @@ public class Step extends SourceArtifact {
             if (!port.startsWith("|")) {
                 if (!declInputs.containsKey(port)) {
                     if (getVersion() == 1.0) {
-                      error("Undeclared input port '" + port + "' on " + this, XProcConstants.staticError(10));
+                      error(XProcException.staticError(10, "Undeclared input port '" + port + "' on " + this));
                       valid = false;
                     }
                 } else {
@@ -457,7 +453,7 @@ public class Step extends SourceArtifact {
             String port = output.getPort();
             if (!port.endsWith("|")) {
                 if (!declOutputs.containsKey(port) && !declOutputs.containsKey("*")) {
-                    error("Undeclared output port: " + port, XProcConstants.staticError(10));
+                    error(XProcException.staticError(10, "Undeclared output port: " + port));
                     valid = false;
                 } else {
                     output.setPrimary(declOutputs.get(port).getPrimary());
@@ -477,11 +473,11 @@ public class Step extends SourceArtifact {
             QName pName = p.getName();
             if (pName == null) {
                 valid = false;
-                error("Option without name", XProcConstants.staticError(38));
+                error(XProcException.staticError(38, "Option without name"));
             } else {
                 if (names.contains(pName)) {
                     valid = false;
-                    error("Duplicate option name: " + pName, XProcConstants.staticError(4));
+                    error(XProcException.staticError(4, "Duplicate option name: " + pName));
                 } else {
                     names.add(pName);
                 }
@@ -496,7 +492,7 @@ public class Step extends SourceArtifact {
                 if (doption.getRequired()) {
                     if (getOption(doption.getName()) == null) {
                         valid = false;
-                        error("Required option not specified: " + doption.getName(), XProcConstants.staticError(18));
+                        error(XProcException.staticError(18, "Required option not specified: " + doption.getName()));
                     }
                 }
             }
@@ -510,7 +506,7 @@ public class Step extends SourceArtifact {
                         // nop
                     } else {
                         valid = false;
-                        error("Undeclared option specified: " + option.getName(), XProcConstants.staticError(10));
+                        error(XProcException.staticError(10, "Undeclared option specified: " + option.getName()));
                     }
                 } else {
                     okOpts.add(option);
@@ -532,11 +528,11 @@ public class Step extends SourceArtifact {
             QName pName = p.getName();
             if (pName == null) {
                 valid = false;
-                error("Parameter without name", XProcConstants.staticError(38));
+                error(XProcException.staticError(38, "Parameter without name"));
             } else {
                 if (names.contains(pName)) {
                     valid = false;
-                    error("Duplicate parameter name: " + pName, XProcConstants.staticError(4));
+                    error(XProcException.staticError(4, "Duplicate parameter name: " + pName));
                 } else {
                     names.add(pName);
                 }
@@ -553,7 +549,9 @@ public class Step extends SourceArtifact {
                     for (Input input : inputs()) {
                         if (input.getParameterInput()) {
                             if (port != null) {
-                                error("Port not specified and multiple parameter input ports", XProcException.err_E0001);
+                                error(
+                                    new XProcException(
+                                        XProcException.err_E0001, "Port not specified and multiple parameter input ports"));
                             }
                             port = input.getPort();
                         }
@@ -563,12 +561,12 @@ public class Step extends SourceArtifact {
 
             if (port == null) {
                 valid = false;
-                error("Port not specified and no primary parameter input port", XProcException.err_E0001);
+                error(new XProcException(XProcException.err_E0001, "Port not specified and no primary parameter input port"));
             } else {
                 Input input = getInput(port);
                 if (input == null || !input.getParameterInput()) {
                     valid = false;
-                    error("Port is not a parameter input port: " + port, XProcException.err_E0001);
+                    error(new XProcException(XProcException.err_E0001, "Port is not a parameter input port: " + port));
                 }
             }
         }
@@ -585,12 +583,12 @@ public class Step extends SourceArtifact {
             if (!input.getPort().startsWith("|") && input.getPrimary()) {
                 if (input.getParameterInput()) {
                     if (seenPrimaryParam) {
-                        error("At most one primary parameter input port is allowed", XProcConstants.staticError(30));
+                        error(XProcException.staticError(30, "At most one primary parameter input port is allowed"));
                     }
                     seenPrimaryParam = true;
                 } else {
                     if (seenPrimaryDoc) {
-                        error("At most one primary input port is allowed", XProcConstants.staticError(30));
+                        error(XProcException.staticError(30, "At most one primary input port is allowed"));
                     }
                     seenPrimaryDoc = true;
                 }
@@ -657,7 +655,11 @@ public class Step extends SourceArtifact {
                             input.addBinding(binding);
                         } else {
                             valid = false;
-                            error("Parameter input " + input.getPort() + " unbound on " + getType() + " step named " + getName() + " and no default binding available.", XProcConstants.staticError(55));
+                            error(
+                                XProcException.staticError(
+                                    55,
+                                    "Parameter input " + input.getPort() + " unbound on " + getType() + " step named " + getName()
+                                    + " and no default binding available."));
                         }
                     } else {
                         PipeNameBinding binding = new PipeNameBinding(runtime, node);
@@ -703,7 +705,11 @@ public class Step extends SourceArtifact {
                         }
                     } else {
                         valid = false;
-                        error("Input " + input.getPort() + " unbound on " + getType() + " step named " + getName() + " and no default binding available.", XProcConstants.staticError(32));
+                        error(
+                            XProcException.staticError(
+                                32,
+                                "Input " + input.getPort() + " unbound on " + getType() + " step named " + getName()
+                                + " and no default binding available."));
                     }
                 }
             }
@@ -729,7 +735,9 @@ public class Step extends SourceArtifact {
                             // Nevermind, it's ok to bind to unknown ports in this case
                             input.setSequence(true);
                         } else {
-                            error(binding.getNode(),"No port named \"" + pipe.getPort() + "\" on step named \"" + pipe.getStep() + "\"", XProcConstants.staticError(22));
+                            error(
+                                XProcException.staticError(
+                                    22, binding.getNode(),"No port named \"" + pipe.getPort() + "\" on step named \"" + pipe.getStep() + "\""));
                             valid = false;
                         }
                     }
@@ -791,7 +799,9 @@ public class Step extends SourceArtifact {
                     endpoint.addBinding(empty);
                 } else {
                     valid = false;
-                    error("" + endpoint + " unbound on " + getType() + " step named " + getName() + " and no default readable port.", XProcConstants.staticError(32));
+                    error(
+                        XProcException.staticError(
+                            32, "" + endpoint + " unbound on " + getType() + " step named " + getName() + " and no default readable port."));
                 }
             } else {
                 String stepName = port.getStep().getName();
@@ -816,7 +826,7 @@ public class Step extends SourceArtifact {
                     if ("error".equals(pipe.getPort()) && XProcConstants.p_catch.equals(fromstep.getType())) {
                         catchErrors = true;
                     } else {
-                        error("Unreadable port: " + pipe.getPort() + " on " + pipe.getStep(), XProcConstants.staticError(22));
+                        error(XProcException.staticError(22, "Unreadable port: " + pipe.getPort() + " on " + pipe.getStep()));
                         valid = false;
                     }
                 } else {
@@ -924,14 +934,14 @@ public class Step extends SourceArtifact {
         if (getExtensionAttribute(cx_depend) != null
             || getExtensionAttribute(cx_depends) != null
             || getExtensionAttribute(cx_dependson) != null) {
-            throw new XProcException(getNode(), "The correct spelling of the depends-on attribute is cx:depends-on.");
+            throw new XProcException(this, "The correct spelling of the depends-on attribute is cx:depends-on.");
         }
 
         String dependsOn = getExtensionAttribute(XProcConstants.cx_depends_on);
         if (dependsOn != null) {
             Step step = env.visibleStep(dependsOn);
             if (step == null) {
-                throw new XProcException(getNode(), "The value of cx:depends-on must be the name of an in-scope step: " + dependsOn);
+                throw new XProcException(this, "The value of cx:depends-on must be the name of an in-scope step: " + dependsOn);
             }
             addDependency(dependsOn);
         }
@@ -994,7 +1004,7 @@ public class Step extends SourceArtifact {
 
         if (subpipeline.size() > 0) {
             if (roots.size() == 0) {
-                error("No roots in " + getName(), XProcConstants.staticError(1));
+                error(XProcException.staticError(1, "No roots in " + getName()));
                 valid = false;
             } else {
                 // Now find the dependency order for the substeps...
@@ -1012,7 +1022,9 @@ public class Step extends SourceArtifact {
                                     nextWave.add(step);
                                 } else {
                                     noloops = false;
-                                    error("Loop in subpipeline: " + step.getName() + " points back to " + root.getName(), XProcConstants.staticError(1));
+                                    error(
+                                        XProcException.staticError(
+                                            1, "Loop in subpipeline: " + step.getName() + " points back to " + root.getName()));
                                 }
                             } else {
                                 logger.trace(MessageFormatter.nodeMessage(node, "XProcStep " + step.getName() + " does not depend on " + root.getName()));
@@ -1027,7 +1039,7 @@ public class Step extends SourceArtifact {
                     for (Step step : subpipeline) {
                         if (step.depth < 0) {
                             noloops = false;
-                            error("Closed loop in subpipeline involves: " + step.getName(), XProcConstants.staticError(1));
+                            error(XProcException.staticError(1, "Closed loop in subpipeline involves: " + step.getName()));
                         }
                     }
                 }
@@ -1077,13 +1089,13 @@ public class Step extends SourceArtifact {
         for (Log log : logs) {
             Output output = getOutput(log.getPort());
             if (output == null) {
-                error("A p:log specified for a bad port: " + log.getPort(), XProcConstants.staticError(26));
+                error(XProcException.staticError(26, "A p:log specified for a bad port: " + log.getPort()));
                 valid = false;
             }
         }
 
         if (env.countVisibleSteps(getName()) > 1) {
-            error("Duplicate step name: " + getName(), XProcConstants.staticError(2));
+            error(XProcException.staticError(2, "Duplicate step name: " + getName()));
             valid = false;
         }
         
@@ -1177,7 +1189,9 @@ public class Step extends SourceArtifact {
                     addOption(doption);
                 }
             } else {
-                option.setType(doption.getType(), doption.getNode()); // copy the type over
+                // copy the type over
+                option.setType(doption.getType(), doption.getTypeAsQName());
+                option.setSequenceType(doption.getSequenceType());
             }
         }
     }

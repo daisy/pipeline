@@ -65,7 +65,8 @@ public class CssFormatter extends DefaultStep {
 
     public void setParameter(QName name, RuntimeValue value) {
         if (!"".equals(name.getNamespaceURI())) {
-            throw new XProcException(step.getNode(), "The cx:css-formatter parameters are in no namespace: " + name + " (" + name.getNamespaceURI() + ")");
+            throw new XProcException(
+                step, "The cx:css-formatter parameters are in no namespace: " + name + " (" + name.getNamespaceURI() + ")");
         }
         options.setProperty(name.getLocalName(), value.getString());
     }
@@ -88,7 +89,7 @@ public class CssFormatter extends DefaultStep {
             provider.initialize(runtime,step,options);
         } catch (Exception e) {
             logger.debug(e.getMessage(), e);
-            throw new XProcException(step.getNode(), "Failed to instantiate CSS provider");
+            throw new XProcException(step, "Failed to instantiate CSS provider");
         }
 
         while (css != null && css.moreDocuments()) {
@@ -139,7 +140,7 @@ public class CssFormatter extends DefaultStep {
             if (e.getCause() instanceof SaxonApiException) {
                 throw (SaxonApiException) e.getCause();
             }
-            throw new XProcException(step.getNode(), "Failed to style with CSS document", e);
+            throw new XProcException(step, new RuntimeException("Failed to style with CSS document", e));
         }
     }
 }
