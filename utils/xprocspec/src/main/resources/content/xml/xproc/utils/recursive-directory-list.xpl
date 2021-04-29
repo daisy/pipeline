@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="pxi:directory-list" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:p="http://www.w3.org/ns/xproc" xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/">
+<p:declare-step version="1.0" type="pxi:directory-list" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:p="http://www.w3.org/ns/xproc" xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <p:documentation>The p:directory-list step will return the contents of a single directory. The px:directory-list step will process a directory and it's subdirectories recursively. See also:
         http://xproc.org/library/#recursive-directory-list.</p:documentation>
 
     <p:output port="result"/>
     <p:option name="path" required="true"/>
-    <p:option name="depth" select="-1"/>
+    <p:option name="depth" select="'-1'"/>
 
     <p:declare-step type="pxi:directory-list-recursive">
         <p:output port="result"/>
         <p:option name="path" required="true"/>
-        <p:option name="depth" select="-1"/>
+        <p:option name="depth" cx:as="xs:string" select="'-1'"/>
 
         <p:directory-list>
             <p:with-option name="path" select="$path"/>
@@ -21,10 +21,10 @@
             <p:variable name="name" select="/*/@name"/>
 
             <p:choose>
-                <p:when test="$depth != 0">
+                <p:when test="$depth != '0'">
                     <pxi:directory-list-recursive>
                         <p:with-option name="path" select="concat($path,'/',$name)"/>
-                        <p:with-option name="depth" select="$depth - 1"/>
+                        <p:with-option name="depth" select="number($depth) - 1"/>
                     </pxi:directory-list-recursive>
                 </p:when>
                 <p:otherwise>

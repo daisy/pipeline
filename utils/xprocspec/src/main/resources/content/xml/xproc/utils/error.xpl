@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="pxi:error" name="main" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:p="http://www.w3.org/ns/xproc" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.emc.com/documentum/xml/xproc"
+<p:declare-step type="pxi:error" name="main" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:p="http://www.w3.org/ns/xproc" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.emc.com/documentum/xml/xproc" xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/" exclude-inline-prefixes="#all" version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -23,23 +23,23 @@
         <p:pipe port="result" step="error"/>
     </p:output>
 
-    <p:option name="code" required="true"/>
+    <p:option name="code" required="true" cx:as="xs:string"/>
     <!-- QName -->
     <p:option name="code-prefix" select="''"/>
     <!-- NCName -->
     <p:option name="code-namespace" select="''"/>
     <!-- anyURI -->
-    <p:option name="message" required="true"/>
+    <p:option name="message" required="true" cx:as="xs:string"/>
     <!-- description of the error that occured. $1, $2 etc will be replaced with the contents of param1, param2 etc. -->
-    <p:option name="param1" select="''"/>
-    <p:option name="param2" select="''"/>
-    <p:option name="param3" select="''"/>
-    <p:option name="param4" select="''"/>
-    <p:option name="param5" select="''"/>
-    <p:option name="param6" select="''"/>
-    <p:option name="param7" select="''"/>
-    <p:option name="param8" select="''"/>
-    <p:option name="param9" select="''"/>
+    <p:option name="param1" select="''" cx:as="xs:string"/>
+    <p:option name="param2" select="''" cx:as="xs:string"/>
+    <p:option name="param3" select="''" cx:as="xs:string"/>
+    <p:option name="param4" select="''" cx:as="xs:string"/>
+    <p:option name="param5" select="''" cx:as="xs:string"/>
+    <p:option name="param6" select="''" cx:as="xs:string"/>
+    <p:option name="param7" select="''" cx:as="xs:string"/>
+    <p:option name="param8" select="''" cx:as="xs:string"/>
+    <p:option name="param9" select="''" cx:as="xs:string"/>
     <!-- in the unlikely event that you need more parameters you'll have to format the message string yourself -->
     <p:option name="logfile" select="''"/>
     

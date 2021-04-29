@@ -1,4 +1,4 @@
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" type="pxi:test-evaluate" name="main" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:c="http://www.w3.org/ns/xproc-step"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" type="pxi:test-evaluate" name="main" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/" exclude-inline-prefixes="#all" version="1.0" xpath-version="2.0" xmlns:x="http://www.daisy.org/ns/xprocspec">
 
     <p:input port="source" sequence="true"/>
@@ -263,10 +263,10 @@
 
                                     <p:when test="/x:expect[@type='count']">
                                         <!-- the minimum amount of documents -->
-                                        <p:variable name="min" select="/*/@min"/>
+                                        <p:variable name="min" select="/*/@min" cx:as="xs:string"/>
 
                                         <!-- the maximum amount of documents -->
-                                        <p:variable name="max" select="/*/@max"/>
+                                        <p:variable name="max" select="/*/@max" cx:as="xs:string"/>
 
                                         <p:count name="count">
                                             <p:input port="source">
@@ -426,7 +426,7 @@
                                         <p:identity name="test-result.before-evaluate"/>
                                         <p:group>
                                             <p:variable name="has-code" select="if (/*[@code]) then 'true' else 'false'"/>
-                                            <p:variable name="code" select="/*/@code"/>
+                                            <p:variable name="code" select="/*/@code" cx:as="xs:string"/>
                                             <p:variable name="has-message" select="if (/*[@message]) then 'true' else 'false'"/>
                                             <p:variable name="message" select="/*/@message"/>
                                             <p:in-scope-names name="vars"/>
@@ -587,7 +587,7 @@ Error message: "{/*/text()/normalize-space()}"
                             <!-- invert result on x:scenario/@xfail -->
                             <p:wrap-sequence wrapper="x:wrapper"/>
                             <p:group>
-                                <p:variable name="has-xfail" select="boolean(/*[@xfail])">
+                                <p:variable name="has-xfail" select="boolean(/*[@xfail])" cx:as="xs:string">
                                     <p:pipe port="result" step="scenario"/>
                                 </p:variable>
                                 <p:variable name="xfail-text" select="/*/@xfail/normalize-space()">
