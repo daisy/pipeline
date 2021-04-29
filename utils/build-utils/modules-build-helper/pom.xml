@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>modules-build-helper</artifactId>
-  <version>2.6.0</version>
+  <version>2.6.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Build Helper</name>
@@ -227,8 +227,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <tag>modules-build-helper-2.6.0</tag>
-  </scm>
 </project>
