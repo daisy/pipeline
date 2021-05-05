@@ -30,6 +30,7 @@ import com.xmlcalabash.model.DeclareStep;
 import com.xmlcalabash.model.Option;
 import com.xmlcalabash.util.XProcMessageListenerHelper;
 import net.sf.saxon.om.InscopeNamespaceResolver;
+import net.sf.saxon.om.NameChecker;
 import net.sf.saxon.om.NamePool;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.trans.XPathException;
@@ -767,16 +768,22 @@ public class XAtomicStep extends XStep {
         if (varref.matches()) {
             String varrefstr = varref.group(1);
             QName varname = null;
-            if (varrefstr.contains(":")) {
-                String vpfx = varrefstr.substring(0, varrefstr.indexOf(":"));
-                String vlocal = varrefstr.substring(varrefstr.indexOf(":")+1);
-                String vns = nsBindings.get(vpfx);
-                varname = new QName(vpfx, vns, vlocal);
-            } else {
-                varname = new QName("", varrefstr);
+            String[] qname;
+            try {
+                qname = NameChecker.checkQNameParts(varrefstr);
+                String vpfx = qname[0];
+                String vlocal = qname[1];
+                if (vpfx == null || "".equals(vpfx)) {
+                    varname = new QName("", vlocal);
+                } else {
+                    String vns = nsBindings.get(vpfx);
+                    varname = new QName(vpfx, vns, vlocal);
+                }
+                RuntimeValue val = globals.get(varname);
+                nsBindings = val.getNamespaceBindings();
+            } catch (XPathException e) {
+                // not a variable name
             }
-            RuntimeValue val = globals.get(varname);
-            nsBindings = val.getNamespaceBindings();
         }
 
         // Section 5.7.5 Namespaces on variables, options, and parameters
