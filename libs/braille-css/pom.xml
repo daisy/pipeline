@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.braille</groupId>
   <artifactId>braille-css</artifactId>
-  <version>1.18.1-SNAPSHOT</version>
+  <version>1.19.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>braille-css</name>
@@ -29,7 +29,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>jstyleparser</artifactId>
-        <version>1.20-p16</version>
+        <version>1.20-p17</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>

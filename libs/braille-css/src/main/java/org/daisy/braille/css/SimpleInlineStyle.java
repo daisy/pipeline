@@ -22,12 +22,16 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		transformerInstance = new BrailleCSSDeclarationTransformer(); }
 	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	
+	public static final SimpleInlineStyle EMPTY = new SimpleInlineStyle((List<Declaration>)null);
+
 	public SimpleInlineStyle(String style) {
 		this(style, null);
 	}
 	
 	public SimpleInlineStyle(String style, SimpleInlineStyle parentStyle) {
-		this(parserFactory.parseSimpleInlineStyle(style), parentStyle);
+		this(
+			(style != null && !"".equals(style)) ? parserFactory.parseSimpleInlineStyle(style) : (List<Declaration>)null,
+			parentStyle);
 	}
 	
 	public SimpleInlineStyle(List<Declaration> declarations) {
@@ -38,10 +42,11 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		super();
 		transformer = transformerInstance;
 		css = cssInstance;
-		for (Declaration d : declarations) {
-			// SupportedCSS injected via CSSFactory in Repeater.assignDefaults, Variator.assignDefaults
-			CSSFactory.registerSupportedCSS(css);
-			push(d); }
+		if (declarations != null)
+			for (Declaration d : declarations) {
+				// SupportedCSS injected via CSSFactory in Repeater.assignDefaults, Variator.assignDefaults
+				CSSFactory.registerSupportedCSS(css);
+				push(d); }
 		if (parentStyle != null)
 			inheritFrom(parentStyle);
 	}

@@ -74,8 +74,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	@Override
 	public List<MediaQuery> parseMediaQuery(String query) {
 		try {
-			CSSInputStream input = CSSInputStream.newInstance(query, null);
-			input.setBase(new URL("file://media/query/url"));
+			CSSInputStream input = CSSInputStream.newInstance(query, new URL("file://media/query/url"));
 			CommonTokenStream tokens = feedLexer(input);
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
 			parser.init();
@@ -180,7 +179,6 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	                                                     Preparator preparator, List<MediaQuery> media)
 			throws IOException, CSSException {
 		CSSInputStream input = getInput(source, cssReader);
-		input.setBase(source.base);
 		CommonTokenStream tokens = feedLexer(input);
 		CommonTree ast = feedParser(tokens, source.type, Context.ELEMENT);
 		return feedAST(tokens, ast, preparator, media);
