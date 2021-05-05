@@ -42,9 +42,9 @@ public class CSSParserFactory {
 		switch (source.type) {
 		case INLINE:
 		case EMBEDDED:
-			return CSSInputStream.newInstance(cssReader.read(source), null);
+			return CSSInputStream.newInstance(cssReader.read(source));
 		case URL:
-			return CSSInputStream.newInstance(() -> cssReader.read(source), (URL)source.source);
+			return CSSInputStream.newInstance(() -> cssReader.read(source));
 		default:
 			throw new RuntimeException("Coding error");
 		}
@@ -311,7 +311,6 @@ public class CSSParserFactory {
 			Preparator preparator, List<MediaQuery> media) throws IOException, CSSException {
 
 		CSSInputStream input = getInput(source, cssReader);
-		input.setBase(source.base);
 		CommonTokenStream tokens = feedLexer(input);
 		CommonTree ast = feedParser(tokens, source.type);
 		return feedAST(tokens, ast, preparator, media);
@@ -376,8 +375,10 @@ public class CSSParserFactory {
 	    try
         {
 	        //input from string
-            CSSInputStream input = CSSInputStream.newInstance(query, null);
-            input.setBase(new URL("file://media/query/url")); //this URL should not be used, just for safety
+            CSSInputStream input = CSSInputStream.newInstance(
+                query,
+                new URL("file://media/query/url") // this URL should not be used, just for safety
+            );
             //lexer
             CommonTokenStream tokens = feedLexer(input);
             //run parser - create AST

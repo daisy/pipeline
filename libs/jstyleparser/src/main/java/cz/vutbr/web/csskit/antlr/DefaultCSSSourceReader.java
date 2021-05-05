@@ -40,14 +40,16 @@ public class DefaultCSSSourceReader implements CSSSourceReader {
 				throw new IllegalArgumentException();
 			return new CSSInputStream(
 				new ByteArrayInputStream(((String)source.source).getBytes()),
-				source.encoding);
+				source.encoding,
+				source.base);
 		case URL:
-			URL url = (URL)source.source;
+			URL url = source.base;
 			if (!supportsMediaType(source.mediaType, url))
 				throw new IllegalArgumentException();
 			return new CSSInputStream(
 				network.fetch(url),
-				source.encoding);
+				source.encoding,
+				url);
 		default:
 			throw new RuntimeException("coding error");
 		}

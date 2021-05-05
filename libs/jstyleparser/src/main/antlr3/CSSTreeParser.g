@@ -6,6 +6,7 @@ options {
 }
 
 @members {
+
 	private org.slf4j.Logger log;
 
 	private static final String MDC_KEY_URL = "css.url";
@@ -280,6 +281,18 @@ scope {
 		  else 
         debug("Ignoring import: {}", iuri);
 	  }
+	| ^(XSLT
+	      ( (u=URI {
+	            $stmnt = new cz.vutbr.web.csskit.RuleXslt(extractText(u), extractBase(u));
+	        })
+	      | (s=STRING {
+	            $stmnt = new cz.vutbr.web.csskit.RuleXslt(extractTextUnescaped(s), extractBase(s));
+	        })
+	      )
+	      (decls=declarations {
+	          ((cz.vutbr.web.csskit.RuleXslt)$stmnt).replaceAll(decls);
+	      })?
+	   )
 	| ^(n=NAMESPACE
 	      (prf=namespace_prefix)?
 	      (ns=namespace_uri)

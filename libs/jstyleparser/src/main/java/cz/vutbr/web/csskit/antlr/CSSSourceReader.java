@@ -24,9 +24,15 @@ public interface CSSSourceReader {
 		 */
 		public final Charset encoding;
 
-		public CSSInputStream(InputStream inputStream, Charset encoding) {
+		/**
+		 * Base URL for resolving relative URLs against.
+		 */
+		public final URL base;
+
+		public CSSInputStream(InputStream inputStream, Charset encoding, URL base) {
 			this.stream = inputStream;
 			this.encoding = encoding;
+			this.base = base;
 		}
 	}
 

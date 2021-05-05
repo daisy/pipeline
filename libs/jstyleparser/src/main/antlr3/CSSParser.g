@@ -100,6 +100,11 @@ atstatement
 	: CHARSET
 	| IMPORT S* import_uri S* media? SEMICOLON
 	  -> ^(IMPORT media? import_uri)  
+	| XSLT S* import_uri S*
+	  ( SEMICOLON
+	  | LCURLY S* declarations RCURLY
+	  )
+	  -> ^(XSLT import_uri declarations?)
 	| namespace
 	| page
   | VIEWPORT S*

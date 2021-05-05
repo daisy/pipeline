@@ -58,8 +58,8 @@ public class CSSInputStream implements CharStream {
 		return newInstance(new ByteArrayInputStream(input.getBytes(enc)), enc, base);
 	}
 	
-	public static CSSInputStream newInstance(CSSSourceReader.CSSInputStream input, URL base) throws IOException {
-		return newInstance(input.stream, input.encoding, base);
+	public static CSSInputStream newInstance(CSSSourceReader.CSSInputStream input) throws IOException {
+		return newInstance(input.stream, input.encoding, input.base);
 	}
 	
 	public static CSSInputStream newInstance(InputStream input, Charset encoding, URL base) throws IOException {
@@ -73,7 +73,7 @@ public class CSSInputStream implements CharStream {
 		return stream;
 	}
 	
-	public static CSSInputStream newInstance(InputStreamSupplier input, URL base) throws IOException {
+	public static CSSInputStream newInstance(InputStreamSupplier input) throws IOException {
 		CSSInputStream stream = new CSSInputStream();
 		CSSSourceReader.CSSInputStream in = input.get();
 		InputStream is = in.stream;
@@ -86,7 +86,7 @@ public class CSSInputStream implements CharStream {
 		} else {
 			stream.input = new ANTLRInputStream(is, stream.encoding.name());
 		}
-		stream.base = base;
+		stream.base = in.base;
 		return stream;
 	}
 
@@ -213,14 +213,6 @@ public class CSSInputStream implements CharStream {
 	 */
 	public URL getBase() {
 		return base;
-	}
-	
-	/**
-	 * Sets the base URL used for locating the eventual imported style sheets.
-	 * @param base The new base URL.
-	 */
-	public void setBase(URL base) {
-	    this.base = base;
 	}
 	
 	/**

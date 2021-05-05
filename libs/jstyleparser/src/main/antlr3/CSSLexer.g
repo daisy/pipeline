@@ -187,6 +187,10 @@ IMPORT
 	: '@import' 
 	;
 
+XSLT
+	: '@xslt'
+	;
+
 NAMESPACE
 	: '@namespace' 
 	;
