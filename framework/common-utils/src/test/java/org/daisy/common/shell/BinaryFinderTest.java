@@ -43,6 +43,7 @@ public class BinaryFinderTest {
 		PowerMockito.whenNew(File.class).withArguments(existingFolder,
 		        existingBin + existingExtension).thenReturn(goodFileMock);
 		PowerMockito.when(goodFileMock.isFile()).thenReturn(true);
+		PowerMockito.when(goodFileMock.canExecute()).thenReturn(true);
 		PowerMockito.when(goodFileMock.getAbsolutePath()).thenReturn(expectedPath);
 
 		return BinaryFinder.find(lookForBin, availableExtensions, path);
