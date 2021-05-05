@@ -19,6 +19,10 @@ public class Table {
 		this.info = new TableInfo(table);
 	}
 	
+	public String getIdentifier() {
+		return table;
+	}
+	
 	public TableInfo getInfo() {
 		return info;
 	}
@@ -27,6 +31,11 @@ public class Table {
 		if (translator == null)
 			translator = new Translator(table);
 		return translator;
+	}
+	
+	@Override
+	public String toString() {
+		return getIdentifier();
 	}
 	
 	/**
