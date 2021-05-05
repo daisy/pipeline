@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
+/** Voice instances are expected to be created only by TTSEngine/TTSService implementations */
 public class Voice {
 
 	public enum MarkSupport {
