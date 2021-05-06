@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2011-1" xml:lang="und">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Uneven margins test</dc:title>
+		<dc:description>Tests uneven margins.</dc:description>
+	</meta>
+	<layout-master name="duplex" page-width="10" page-height="6" inner-margin="2" outer-margin="1" duplex="true">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<layout-master name="simplex" page-width="10" page-height="6" inner-margin="2" outer-margin="1" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="duplex">
+		<block><leader pattern="⠤" position="100%"/></block>
+		<block break-before="page"><leader pattern="⠤" position="100%"/></block>
+	</sequence>
+	<sequence master="simplex">
+		<block><leader pattern="⠤" position="100%"/></block>
+		<block break-before="page"><leader pattern="⠤" position="100%"/></block>
+	</sequence>
+</obfl>

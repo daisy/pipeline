@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">hanging-indentation</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests hanging indentation (text-indent &gt; first-line-indent).</dc:description>
+   </meta>
+   <layout-master name="body" page-width="15" page-height="5" duplex="true">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="body">
+      <block><block first-line-indent="2" text-indent="4">⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+              </block>
+      </block>
+   </sequence>
+</obfl>

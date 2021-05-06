@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">table-issue-147</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">see issue https://github.com/nlbdev/pipeline/issues/147</dc:description>
+   </meta>
+   <layout-master name="master" page-width="29" page-height="28">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="master">
+      <table padding-left="2" border-left-style="solid" table-col-spacing="1">
+         <tr>
+            <td>⠿⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</td>
+            <td>⠿⠿⠿⠿⠿⠿ ⠿⠿</td>
+         </tr>
+         <tr>
+            <td>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿­⠿⠿⠿⠿⠿⠿⠿⠿</td>
+            <td>⠿⠿⠿ ⠿⠿⠿⠿</td>
+         </tr>
+      </table>
+   </sequence>
+</obfl>

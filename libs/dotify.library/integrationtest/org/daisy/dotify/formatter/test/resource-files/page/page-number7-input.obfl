@@ -1,0 +1,32 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Page number counter reset each volume</dc:title>
+		<dc:description>Tests the page number counter reset.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="10" page-height="6" duplex="false">
+		<default-template>
+			<header>
+				<field><current-page/></field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<volume-template sheets-in-volume-max="5">
+		<pre-content>
+			<sequence master="body" page-number-counter="A" initial-page-number="1"><block>pre content</block></sequence>
+		</pre-content>
+		<post-content>
+			<sequence master="body" page-number-counter="A"><block>post content</block></sequence>
+		</post-content>
+	</volume-template>
+	<sequence master="body" page-number-counter="A">
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+	<sequence master="body" page-number-counter="A">
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+		<block break-before="page">⠤⠤⠤</block>
+	</sequence>
+</obfl>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">block-underline-with-child-block</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests underlining of a block with a child block.</dc:description>
+   </meta>
+   <layout-master name="main" duplex="false" page-width="15" page-height="15">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="main">
+      <block underline-style="solid">⠌⠌⠌⠌
+              <block>⠌⠌⠌⠌
+              </block>
+      </block>
+   </sequence>
+</obfl>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl version="2011-1" xml:lang="en" xmlns="http://www.daisy.org/ns/2011/obfl">
+	<layout-master name="main" page-width="40" page-height="29" inner-margin="0" outer-margin="0" row-spacing="1" duplex="true">
+		<default-template>
+			<header>
+				<field>
+					<string value=""/>
+				</field>
+				<field>
+					<current-page number-format="default"/>
+				</field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="main">
+		<block border-style="solid" border-width="2">
+			<block margin-left="2" margin-right="2"><block align="center">borders</block>
+		<block border-style="solid" margin-left="1" margin-right="3">
+					<block border-style="solid" margin-top="2" margin-bottom="2" margin-left="5" margin-right="2">This is a test of multiple borders combined with<br/>margins<br/>new line<br/>and so on.</block>
+				</block>This is a text at the end of the outer block.</block>
+		</block>
+		<block margin-top="1">If a block is empty, it should render, if borders are present.</block>
+		<block border-style="solid"/>
+	</sequence>
+</obfl>

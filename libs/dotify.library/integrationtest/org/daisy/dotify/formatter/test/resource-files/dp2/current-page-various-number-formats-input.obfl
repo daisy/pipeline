@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">current-page-various-number-formats</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests current-page with different number-formats.</dc:description>
+   </meta>
+   <layout-master name="front" page-width="15" page-height="5" duplex="true">
+      <default-template>
+         <header/>
+         <footer>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value="⠏"/>
+               <current-page number-format="default"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <layout-master name="body" page-width="15" page-height="5" duplex="true">
+      <default-template>
+         <header/>
+         <footer>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <current-page number-format="default"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <layout-master name="rear" page-width="15" page-height="5" duplex="true">
+      <default-template>
+         <header/>
+         <footer>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <current-page number-format="lower-roman"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <sequence master="front">
+      <block>⠤⠤⠤
+            </block>
+   </sequence>
+   <sequence master="body">
+      <block>⠤⠤⠤
+            </block>
+   </sequence>
+   <sequence master="rear" initial-page-number="1">
+      <block>⠤⠤⠤
+            </block>
+   </sequence>
+</obfl>

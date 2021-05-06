@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">keep-content-with-border</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests that pages are not broken between a border of a block and the content of that block. Tested with keep="page", orphans or widows on the block with the border. Also tested for two nested blocks with borders.</dc:description>
+   </meta>
+   <layout-master name="master" duplex="true" page-width="10" page-height="5">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block border-top-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block keep="page" border-top-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block orphans="2" border-top-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block widows="2" border-top-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block border-bottom-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block border-top-style="solid"><block border-top-style="solid">⠿⠿⠿⠿⠿⠿
+                  ⠿⠿⠿⠿⠿⠿
+                </block>
+      </block>
+   </sequence>
+</obfl>

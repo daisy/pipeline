@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">vertical-position-align-before-nested-blocks</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests vertical-position and vertical-align="before" on a block with two nested blocks of one line each.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="20" page-height="10" duplex="false">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block vertical-align="before" vertical-position="5"><block>⠤⠤⠤ </block>
+         <block>⠤⠤⠤ </block>
+      </block>
+   </sequence>
+</obfl>

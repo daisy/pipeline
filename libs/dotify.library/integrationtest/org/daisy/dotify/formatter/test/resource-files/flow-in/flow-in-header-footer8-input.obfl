@@ -1,0 +1,64 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>XML data with text flow into header/footer test</dc:title>
+		<dc:description>Tests XML data combined with text flow into header/footer.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="14" page-height="6" duplex="false">
+		<default-template>
+			<header/>
+			<footer>
+				<field allow-text-flow="true"/>
+				<field><string value="  ⠭"/></field>
+			</footer>
+		</default-template>
+	</layout-master>
+	<xml-processor name="matrix">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+			<xsl:template match="/">
+				<xml-processor-result>
+					<block margin-bottom="1">⠠⠍⠁⠞⠗⠊⠭</block>
+					<xsl:copy-of select="*"/>
+				</xml-processor-result>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<xml-processor name="staircase">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+			<xsl:template match="obfl:table">
+				<block>
+					<xsl:apply-templates/>
+				</block>
+			</xsl:template>
+			<xsl:template match="obfl:tr">
+				<xsl:apply-templates select="obfl:td[1]"/>
+			</xsl:template>
+			<xsl:template match="obfl:td">
+				<block margin-left="2">
+					<xsl:value-of select="text()"/>
+					<xsl:apply-templates select="following-sibling::*[1]"/>
+				</block>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<renderer name="table-renderer">
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="matrix" cost="(+ 1 $total-height)"/>
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="staircase" cost="(+ 0 $total-height)"/>
+	</renderer>
+	<sequence master="body">
+		<block>⠠⠞⠁⠃⠇⠑⠀⠼⠁</block>
+		<xml-data renderer="table-renderer">
+			<table>
+				<tr><td>⠤</td><td>⠤</td><td>⠤</td></tr>
+				<tr><td>⠤</td><td>⠤</td><td>⠤</td></tr>
+				<tr><td>⠤</td><td>⠤</td><td>⠤</td></tr>
+			</table>
+		</xml-data>
+		<block margin-top="1">⠠⠞⠁⠃⠇⠑⠀⠼⠃</block>
+		<xml-data renderer="table-renderer">
+			<table>
+				<tr><td>⠤⠤⠤⠤⠤⠤⠤</td><td>⠤⠤⠤⠤⠤⠤⠤</td><td>⠤⠤⠤⠤⠤⠤⠤</td></tr>
+				<tr><td>⠤⠤⠤⠤⠤⠤⠤</td><td>⠤⠤⠤⠤⠤⠤⠤</td><td>⠤⠤⠤⠤⠤⠤⠤</td></tr>
+			</table>
+		</xml-data>
+	</sequence>
+</obfl>

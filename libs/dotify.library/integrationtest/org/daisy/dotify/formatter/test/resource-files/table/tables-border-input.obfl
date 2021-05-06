@@ -1,0 +1,19 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Tables with borders test</dc:title>
+		<dc:description>Tests that tables with borders works as expected.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="14" page-height="6" duplex="true">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<table>
+			<tr><td>1</td><td border-left-style="solid">2</td><td border-left-style="solid">3</td></tr>
+			<tr><td>4</td><td>5</td><td>6</td></tr>
+			<tr><td>7</td><td border-left-style="solid">8</td><td border-left-style="solid">9</td></tr>
+		</table>
+	</sequence>
+</obfl>

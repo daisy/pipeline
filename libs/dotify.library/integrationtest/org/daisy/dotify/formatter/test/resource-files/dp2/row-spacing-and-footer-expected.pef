@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+   <head>
+      <meta>
+         <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">row-spacing-and-footer</dc:title>
+         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests row spacing combined with footer. The last row of a page before the footer has no rowgap. If a gap is desired an empty footer line must be inserted.</dc:description>
+         <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
+      </meta>
+   </head>
+   <body>
+      <volume cols="10" rows="10" rowgap="0" duplex="true">
+         <section>
+            <page>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row>⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row>⠼⠁</row>
+            </page>
+            <page>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row>⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row/>
+               <row/>
+               <row>⠼⠃</row>
+            </page>
+         </section>
+         <section>
+            <page>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row>⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row/>
+               <row/>
+               <row>⠼⠁</row>
+            </page>
+            <page>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row rowgap="4">⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row>⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row/>
+               <row/>
+               <row>⠼⠃</row>
+            </page>
+            <page>
+               <row>⠿⠿⠿⠿⠀⠿⠿⠿⠿</row>
+               <row/>
+               <row/>
+               <row/>
+               <row/>
+               <row/>
+               <row/>
+               <row/>
+               <row/>
+               <row>⠼⠉</row>
+            </page>
+         </section>
+      </volume>
+   </body>
+</pef>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef version="2008-1" xmlns="http://www.daisy.org/ns/2008/pef">
+<head>
+<meta xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:generator="http://daisymfc.svn.sourceforge.net/viewvc/daisymfc/trunk/dmfc/transformers/org_pef_dtbook2pef/">
+<dc:format>application/x-pef+xml</dc:format>
+<dc:identifier>identifier?</dc:identifier>
+<dc:date>2015-08-20</dc:date>
+</meta>
+</head>
+<body>
+<volume cols="10" rows="6" rowgap="0" duplex="false">
+<section>
+<page>
+<row/>
+<row/>
+<row/>
+<row>⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+<row/>
+<row>⠤⠤⠤</row>
+</page>
+</section>
+</volume>
+</body>
+</pef>

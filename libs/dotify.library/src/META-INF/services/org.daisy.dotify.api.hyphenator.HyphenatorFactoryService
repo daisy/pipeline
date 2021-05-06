@@ -1,0 +1,2 @@
+org.daisy.dotify.hyphenator.impl.LatexHyphenatorFactoryService
+org.daisy.dotify.hyphenator.impl.JHyphenatorFactoryService

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">table-colspan</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests a table cell spanning multiple columns.</dc:description>
+   </meta>
+   <layout-master name="main" page-width="20" page-height="5" duplex="true">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="main">
+      <table table-col-spacing="1" preferred-empty-space="2">
+         <tr>
+            <td>⠿⠿⠿⠿</td>
+            <td col-span="2">⠿⠿⠿⠿⠿⠿⠿⠿⠿</td>
+            <td>⠿⠿⠿⠿</td>
+         </tr>
+         <tr>
+            <td>⠿⠿</td>
+            <td>⠿⠿</td>
+            <td>⠿⠿</td>
+            <td>⠿⠿</td>
+         </tr>
+         <tr>
+            <td>⠿⠿</td>
+            <td>⠿⠿</td>
+            <td>⠿⠿</td>
+            <td>⠿⠿</td>
+         </tr>
+      </table>
+   </sequence>
+</obfl>

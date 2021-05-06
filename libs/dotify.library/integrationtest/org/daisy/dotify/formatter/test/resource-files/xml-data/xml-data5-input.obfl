@@ -1,0 +1,62 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>XML Data minimum block size with matrix table</dc:title>
+		<dc:description>Tests that the correct scenario is selected when the min-block-size variable
+		is used to determine the cost in a matrix table. The first scenario would be selected if the
+		cost were the same in both cases.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="14" page-height="9" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<xml-processor name="copy">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+			<xsl:template match="/">
+				<xml-processor-result>
+					<xsl:copy-of select="*"/>
+				</xml-processor-result>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<xml-processor name="reverse">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl" xmlns="http://www.daisy.org/ns/2011/obfl" exclude-result-prefixes="obfl">    
+		    <xsl:template match="/">
+		        <xml-processor-result>
+		            <xsl:apply-templates select="*"/>
+		        </xml-processor-result>
+		    </xsl:template>
+		    <xsl:template match="obfl:table">
+		        <table>
+		            <xsl:apply-templates select="." mode="inner"/>
+		        </table>
+		    </xsl:template>
+		    <xsl:template match="obfl:table" mode="inner">
+		        <xsl:param name="pos" select="1"/>
+		        <tr>
+		            <xsl:for-each select="obfl:tr">
+		                <xsl:copy-of select="obfl:td[$pos]"/>
+		            </xsl:for-each>
+		        </tr>
+		        <xsl:if test="obfl:tr/obfl:td[$pos+1]">
+		            <xsl:apply-templates select="." mode="inner">
+		                <xsl:with-param name="pos" select="$pos+1"/>
+		            </xsl:apply-templates>
+		        </xsl:if>
+		    </xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<renderer name="table-renderer">
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="copy" cost="(- 14 $min-block-width)"/>
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="reverse" cost="(- 14 $min-block-width)"/>
+	</renderer>
+	<sequence master="body">
+		<xml-data renderer="table-renderer">
+			<table>
+				<tr><td>1</td><td>2</td><td>3</td></tr>
+				<tr><td>4</td><td>5</td><td>6</td></tr>
+			</table>
+		</xml-data>
+	</sequence>
+</obfl>

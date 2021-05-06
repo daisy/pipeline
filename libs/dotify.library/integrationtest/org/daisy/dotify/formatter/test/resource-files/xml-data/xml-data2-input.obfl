@@ -1,0 +1,63 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>XML Data 2</dc:title>
+		<dc:description>[add description]</dc:description>
+	</meta>
+	<layout-master name="body" page-width="14" page-height="6" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<xml-processor name="matrix">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+			<xsl:template match="/">
+				<xml-processor-result>
+					<block margin-bottom="1">Matrix table: <xsl:value-of select="count(/obfl:table/obfl:tr[1]/obfl:td)"/>x<xsl:value-of select="count(/obfl:table/obfl:tr)"/></block>
+					<xsl:copy-of select="*"/>
+				</xml-processor-result>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<xml-processor name="staircase">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+			<xsl:template match="obfl:table">
+				<block>
+					<xsl:apply-templates/>
+				</block>
+			</xsl:template>
+			<xsl:template match="obfl:tr">
+				<xsl:apply-templates select="obfl:td[1]"/>
+			</xsl:template>
+			<xsl:template match="obfl:td">
+				<block margin-left="2">
+					<xsl:value-of select="text()"/>
+					<xsl:apply-templates select="following-sibling::*[1]"/>
+				</block>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<renderer name="table-renderer">
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="matrix" cost="(+ 1 $total-height)"/>
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="staircase" cost="(+ 0 $total-height)"/>
+	</renderer>
+	<sequence master="body">
+		<block>Table 1</block>
+		<xml-data renderer="table-renderer">
+			<table>
+				<tr><td>1</td><td>2</td><td>3</td></tr>
+				<tr><td>4</td><td>5</td><td>6</td></tr>
+				<tr><td>7</td><td>8</td><td>9</td></tr>
+			</table>
+		</xml-data>
+		<block>Table 2</block>
+		<xml-data renderer="table-renderer">
+			<table>
+				<tr><td>1234567</td><td>1234567</td><td>1234567</td></tr>
+				<tr><td>1234567</td><td>1234567</td><td>1234567</td></tr>
+				<tr><td>1234567</td><td>1234567</td><td>1234567</td></tr>
+			</table>
+		</xml-data>
+		<block>End</block>
+	</sequence>
+</obfl>

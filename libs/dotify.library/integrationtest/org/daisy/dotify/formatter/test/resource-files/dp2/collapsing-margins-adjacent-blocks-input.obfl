@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">collapsing-margins-adjacent-blocks</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests collapsing of margins of adjacent sibling blocks.</dc:description>
+   </meta>
+   <layout-master name="body" page-width="20" page-height="15" duplex="true">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="body">
+      <block margin-bottom="1">⠿⠿⠿⠿
+            </block>
+      <block margin-top="1">⠿⠿⠿⠿
+            </block>
+   </sequence>
+</obfl>

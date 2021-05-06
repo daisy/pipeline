@@ -1,0 +1,3 @@
+# Process overview
+First, the formatter performs a whitespace normalization. The document is then formatted. The translator and hyphenator API's are used in this process. Implementations for writing the result to a PEF or text file are included in this project, but other formats can be added at runtime using the [org.daisy.dotify.api.writer](http://brailleapps.github.io/dotify.api/latest/javadoc/?org/daisy/dotify/api/writer/package-summary.html) API.
+![https://docs.google.com/drawings/d/1EivBBGtQBnX1TvCvyO8u3-TjpuwS6vNZ5HGDdlgUt6M/pub?w=1048&h=457&dummy=.jpg](https://docs.google.com/drawings/d/1EivBBGtQBnX1TvCvyO8u3-TjpuwS6vNZ5HGDdlgUt6M/pub?w=1048&h=457&dummy=.jpg)

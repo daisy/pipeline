@@ -1,0 +1,20 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Nested borders margin test</dc:title>
+		<dc:description>Tests margins with multiple borders. This test verifies that margins that are separated by
+		borders aren't collapsed.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="18" page-height="10" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<block border-style="solid" border-width="1" margin-left="2" margin-right="2">
+			<block border-style="solid" border-width="1" margin-left="2" margin-right="2" margin-top="1" margin-bottom="1">
+				<block margin-left="1" margin-right="1" margin-top="1" margin-bottom="1">⠤&#x200b;⠤&#x200b;⠤&#x200b;⠤&#x200b;⠤&#x200b;⠤</block>
+			</block>
+		</block>
+	</sequence>
+</obfl>

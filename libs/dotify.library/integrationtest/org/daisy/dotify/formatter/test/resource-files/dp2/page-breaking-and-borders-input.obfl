@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">page-breaking-and-borders</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests borders in combination with page break control. Tests two blocks following each other in various situations: with or without keep="page" on the first block, with or without a bottom border on the first block, and with keep="page", orphans or widows on the second block.</dc:description>
+   </meta>
+   <layout-master name="master" duplex="true" page-width="10" page-height="6">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block keep="page">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block keep="page">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block keep="page">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block border-bottom-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block keep="page">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block keep="page" border-bottom-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block keep="page">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block orphans="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block keep="page">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block orphans="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block border-bottom-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block orphans="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block keep="page" border-bottom-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block orphans="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block>⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block widows="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block keep="page">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block widows="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block border-bottom-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block widows="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+   <sequence master="master">
+      <block keep="page" border-bottom-style="solid">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+      <block widows="2">⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+                ⠿⠿⠿⠿⠿⠿
+              </block>
+   </sequence>
+</obfl>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" xmlns:example="http://example.com">
+   <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <dc:title>Tests external-reference element</dc:title>
+      <dc:description>Tests that white space before a external-reference element not stripped.</dc:description>
+   </meta>
+   <layout-master name="master" page-width="10" page-height="5" duplex="true">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="master">
+      <block>
+        <external-reference example:id1="exampleValue"/>⠁⠁⠁
+        <external-reference example:id2="exampleValue"/>⠁⠁⠁
+      </block>
+   </sequence>
+</obfl>

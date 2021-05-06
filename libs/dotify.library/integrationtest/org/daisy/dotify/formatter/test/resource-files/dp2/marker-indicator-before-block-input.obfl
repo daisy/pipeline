@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-indicator-before-block</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-indicator directly followed by a block. Broken: marker does not create an indicator: see https://github.com/joeha480/dotify/issues/194</dc:description>
+   </meta>
+   <layout-master name="body" page-width="15" page-height="5" duplex="true">
+      <default-template>
+         <header/>
+         <footer/>
+         <margin-region align="left" width="2">
+            <indicators>
+               <marker-indicator markers="foo" indicator="⠿"/>
+            </indicators>
+         </margin-region>
+      </default-template>
+   </layout-master>
+   <sequence master="body">
+      <block><marker class="foo" value="x"/><block>⠤⠤⠤
+                </block>
+      </block>
+   </sequence>
+</obfl>

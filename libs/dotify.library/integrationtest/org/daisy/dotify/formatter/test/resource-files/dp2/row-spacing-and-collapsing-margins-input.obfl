@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">row-spacing-and-collapsing-margins</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests combinations of row-spacing and collapsing top/bottom margins, including on nested blocks with different row-spacing.</dc:description>
+   </meta>
+   <layout-master name="a" duplex="true" page-width="40" page-height="35">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block margin-bottom="1" row-spacing="2.0">⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁<br/>
+                ⠁<br/>
+                ⠁<br/>
+                ⠁<br/>
+                ⠁
+              </block>
+      <block margin-top="1" margin-bottom="1" row-spacing="2.0">⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁<br/>
+                ⠁<br/>
+                ⠁<br/>
+                ⠁<br/>
+                ⠁
+              </block>
+      <block margin-top="1" row-spacing="1.0"><block margin-top="0" row-spacing="2.0">⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁⠁<br/>
+                  ⠁<br/>
+                  ⠁<br/>
+                  ⠁<br/>
+                  ⠁
+                </block>
+      </block>
+   </sequence>
+</obfl>

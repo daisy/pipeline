@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">header-vary-height-left-right-pages</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests different height of header on left and right pages.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="40" page-height="25" duplex="true">
+      <template use-when="(= (% $page 2) 1)">
+         <header>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+         </header>
+         <footer/>
+      </template>
+      <template use-when="(= (% $page 2) 0)">
+         <header>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+         </header>
+         <header>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+         </header>
+         <footer/>
+      </template>
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block>⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
+            </block>
+      <block break-before="page">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿
+            </block>
+   </sequence>
+</obfl>

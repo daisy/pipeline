@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:mtmse/dotify.library
+	branch = main
+	commit = 7375da576d07504b75c6ee8b4a153a81e5bbacf7
+	parent = 1119de2e8e38548dbf6e23725df5e1762b76fc3c
+	cmdver = 0.3.1

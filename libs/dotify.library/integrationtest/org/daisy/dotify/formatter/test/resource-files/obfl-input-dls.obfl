@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl version="2011-1" xml:lang="sv" xmlns="http://www.daisy.org/ns/2011/obfl">
+		<layout-master name="front" page-width="32" page-height="29" inner-margin="0" outer-margin="0" row-spacing="2" duplex="false">
+			<default-template>
+				<header>
+					<field>
+						<string value=""/>
+					</field>
+					<field>
+						<current-page number-format="roman"/>
+					</field>
+				</header>
+				<footer>
+					<field>
+						<string value=""/>
+					</field>
+					<field>
+						<evaluate expression="footer"/>
+					</field>
+					<field>
+						<string value=""/>
+					</field>
+				</footer>
+			</default-template>
+		</layout-master>
+		<layout-master name="main" page-width="32" page-height="29" inner-margin="0" outer-margin="0" row-spacing="2" duplex="true">
+			<template use-when="(= (% $page 2) 0)">
+				<header>
+					<field>
+						<current-page number-format="default"/>
+					</field>
+					<field>
+						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
+						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
+					</field>
+				</header>
+				<footer/>
+			</template>
+			<default-template>
+				<header row-spacing="1">
+					<field>
+						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
+						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
+					</field>
+					<field>
+						<current-page number-format="default"/>
+					</field>
+				</header>
+				<footer/>
+			</default-template>
+		</layout-master>
+		<layout-master name="rear" page-width="32" page-height="29" outer-margin="0" row-spacing="2" duplex="false">
+			<default-template>
+				<header>
+					<field>
+						<current-page number-format="default"/>
+					</field>
+				</header>
+				<footer/>
+			</default-template>
+		</layout-master>
+		<sequence master="front" initial-page-number="1">
+			<block margin-top="3" margin-bottom="1">
+				<leader align="center" position="50%"/>Test file</block>
+			<block>This file contains some examples of the attributes and elements that can occur in the input file of the LayoutEngineTask. It will also showcase some of the more complex block structures.</block>
+		</sequence>
+		<sequence master="main" initial-page-number="7">
+			<block margin-top="2" margin-bottom="1">Initial page number</block>
+			<block margin-bottom="0">Notice that this sequence is starting on page seven, rather than one.</block>
+			<block margin-top="2" margin-bottom="1">Paragraphs<anchor float-item="note1"/>
+			</block>
+			<block>One common style is to start the first paragraph with a single new line before, or rather, an empty line after the preceding block.</block>
+			<block first-line-indent="2" margin-bottom="1">Following paragraphs usually have the first line indented, such as this one.</block>
+			<block margin-left="2" margin-bottom="0">Block quotes or poems are examples where it could be desired to apply a margin to a whole block.</block>
+			<block margin-top="2" margin-bottom="1">Leaders<anchor float-item="note2"/>
+			</block>
+			<block margin-bottom="1">Leaders can be used for many things, such as creating a table of contents:</block>
+			<block margin-bottom="1">
+				<block>Chapter 1<leader position="100%" align="right" pattern="."/>9</block>
+				<block>Chapter 2<leader position="100%" align="right" pattern="."/>27</block>
+				<block>Chapter 3<leader position="100%" align="right" pattern="."/>34</block>
+			</block>
+			<block>
+				<leader position="33%"/>
+				<leader position="66%" pattern="-"/>
+			</block>
+			<block margin-top="1" margin-bottom="1">Leader can also be used to center shorter sections of text, such as the title of this document, and to create dividers, such as the one above.</block>
+			<block margin-bottom="1">Leaders can even be used to create boxes:</block>
+			<block>
+				<leader position="20%"/>
+				<leader position="80%" pattern="*"/>
+			</block>
+			<block>
+				<leader position="20%"/>*<leader position="80%" align="right"/>*</block>
+			<block>
+				<leader position="20%"/>*<leader position="50%" align="center"/>Notice<leader position="80%" align="right"/>*</block>
+			<block>
+				<leader position="20%"/>*<leader position="80%" align="right"/>*</block>
+			<block>
+				<leader position="20%"/>
+				<leader position="80%" pattern="*"/>
+			</block>
+			<block margin-top="2" margin-bottom="1">Lists</block>
+			<block>Three types of lists have been implemented: ordered, unordered and pre formatted lists. Here's an example of an ordered list with three list items:</block>
+			<block list-type="ol" margin-left="2" margin-top="1" margin-bottom="1">
+				<block first-line-indent="3" text-indent="3" block-indent="3">Apples - It's always nice to have a green, round fruit around.</block>
+				<block first-line-indent="3" text-indent="3" block-indent="3">Oranges have a distinctive smell when peeled.</block>
+				<block first-line-indent="3" text-indent="3" block-indent="3">Bananas - Dry, but full of energy.</block>
+			</block>
+			<block>Or, as an unordered list, if you prefer:</block>
+			<block list-type="ul" margin-left="2" margin-top="1" margin-bottom="1">
+				<block first-line-indent="3" text-indent="3" block-indent="3">Apples - It's always nice to have a green, round fruit around.</block>
+				<block first-line-indent="3" text-indent="3" block-indent="3">Oranges have a distinctive smell when peeled.</block>
+				<block first-line-indent="3" text-indent="3" block-indent="3">Bananas - Dry, but full of energy.</block>
+			</block>
+			<block>Pre-formatted lists can be used too:</block>
+			<block list-type="pl" margin-left="2" margin-top="1" margin-bottom="1">
+				<block first-line-indent="3" text-indent="3" block-indent="3">A)<leader position="5"/>Apples - It's always nice to have a green, round fruit around.</block>
+				<block first-line-indent="3" text-indent="3" block-indent="3">B) Oranges have a distinctive smell when peeled.</block>
+				<block first-line-indent="3" text-indent="3" block-indent="3" keep="page">C) Bananas - Dry, but full of energy.</block>
+			</block>
+			<block break-before="page" margin-top="2" margin-bottom="1">New page</block>
+			<block>This heading is so important, that it has to start on a new page.</block>
+			<block margin-top="2" margin-bottom="1">New line</block>
+			<block>You can break a line<br/>wherever<br/>you<br/>want.</block>
+			<!-- 
+			<float-item name="note1">
+				<block text-indent="3" margin-top="2">1<leader position="3"/>This is a note. It will be placed at the bottom of the page.</block>
+			</float-item>
+			<float-item name="note2">
+				<block text-indent="3" margin-top="2">2<leader position="3"/>This is a second note. It will be placed at the bottom of the page.</block>
+			</float-item>
+			 -->
+		</sequence>
+		<sequence master="rear">
+			<block row-spacing="1">This is part of a new sequence. Note that this sequence does not have an initial page number. Page numbering continues from the preceding section.</block>
+		</sequence>
+</obfl>

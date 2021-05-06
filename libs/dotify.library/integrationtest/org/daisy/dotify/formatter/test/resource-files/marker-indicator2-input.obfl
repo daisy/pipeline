@@ -1,0 +1,40 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Margin region indicators test</dc:title>
+		<dc:description>Tests that margin region indicators work.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="20" page-height="6" duplex="true" inner-margin="2" outer-margin="2">
+		<template use-when="(= (% $page 2) 0)">
+			<header/>
+			<footer/>
+			<margin-region align="left" width="3">
+				<indicators>
+					<marker-indicator markers="pages" indicator="⠿"/>
+				</indicators>
+			</margin-region>
+			<margin-region align="right" width="2">
+				<indicators>
+					<marker-indicator markers="sections" indicator="⠤"/>
+				</indicators>
+			</margin-region>
+		</template>
+		<default-template>
+			<header/>
+			<footer/>
+			<margin-region align="left" width="2">
+				<indicators>
+					<marker-indicator markers="sections" indicator="⠤"/>
+				</indicators>
+			</margin-region>
+			<margin-region align="right" width="3">
+				<indicators>
+					<marker-indicator markers="pages" indicator="⠿"/>
+				</indicators>
+			</margin-region>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<block><marker class="sections" value="1"/><marker class="pages" value="1"/>⠶&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;<marker class="pages" value="2"/>⠶&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤</block>
+		<block><marker class="sections" value="2"/>⠶&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;<marker class="pages" value="3"/>⠶&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;⠤&#x00ad;</block>
+	</sequence>
+</obfl>
