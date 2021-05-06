@@ -16,9 +16,9 @@ public class TextSegmentTest {
    public void testGetLocaleReturnEmptyOptionalIfLocaleIsNull() {
         // Test that verifies that getLocale does not crash if locale is null.
         TextProperties.Builder builder = new TextProperties.Builder(null);
-        TextProperties tp = builder.build();
+        TextProperties tp = builder.markCapitalLetters(false).build();
         String chars = "";
-        TextSegment ts = new TextSegment(chars, tp, false);
+        TextSegment ts = new TextSegment(chars, tp);
         Optional<String> locale = ts.getLocale();
         assertEquals(Optional.empty(), locale);
     }
@@ -27,9 +27,9 @@ public class TextSegmentTest {
     public void testVerifyComparisonWIthOptionals() {
         // Test comparison with Optionals.
         TextProperties.Builder builder = new TextProperties.Builder(null);
-        TextProperties tp = builder.build();
+        TextProperties tp = builder.markCapitalLetters(false).build();
         String chars = "";
-        TextSegment ts = new TextSegment(chars, tp, false);
+        TextSegment ts = new TextSegment(chars, tp);
         Optional<String> locale = ts.getLocale();
         String localeSwe = "sv_SE";
         assertNotEquals(locale, localeSwe);

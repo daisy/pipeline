@@ -12,11 +12,9 @@ import org.daisy.dotify.formatter.impl.page.BlockSequence;
 import org.daisy.dotify.formatter.impl.page.PageImpl;
 import org.daisy.dotify.formatter.impl.page.PageSequenceBuilder2;
 import org.daisy.dotify.formatter.impl.page.RestartPaginationException;
-import org.daisy.dotify.formatter.impl.search.BlockAddress;
 import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.DocumentSpace;
-import org.daisy.dotify.formatter.impl.search.PageDetails;
 import org.daisy.dotify.formatter.impl.search.SequenceId;
 import org.daisy.dotify.formatter.impl.search.SheetIdentity;
 import org.daisy.dotify.formatter.impl.search.TransitionProperties;
@@ -24,6 +22,8 @@ import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,14 +54,14 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
     private DefaultContext rcontext;
     private final Integer volumeGroup;
     private final List<BlockSequence> seqsIterator;
-    private final int sheetOffset;
     //Local state
     private int seqsIndex;
     private SequenceId seqId;
     private PageSequenceBuilder2 psb;
     private int psbCurStartIndex; // index of first page of current psb in current volume
     private SectionProperties sectionProperties;
-    private int sheetIndex;
+    private int sheetIndex; // sheets created from current sequence or being created
+    private Deque<SheetIdentity> previousSheets; // all sheets created from the current sequence
     private int pageIndex;
     private String counter;
     private int initialPageOffset;
@@ -71,8 +71,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
     private boolean isFirst;
     private boolean wasSplitInsideSequence;
     private boolean volumeEnded;
-    //Output buffer
-    private List<Sheet> sheetBuffer;
+    private List<Sheet> sheetBuffer; // output buffer
 
     public SheetDataSource(
         PageCounter pageCounter,
@@ -88,13 +87,13 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
         this.seqsIterator = seqsIterator;
         this.sheetBuffer = new ArrayList<>();
         this.volBreakAllowed = true;
-        this.sheetOffset = 0;
         this.seqsIndex = 0;
         this.seqId = null;
         this.psb = null;
         this.psbCurStartIndex = 0;
         this.sectionProperties = null;
         this.sheetIndex = 0;
+        this.previousSheets = new LinkedList<>();
         this.pageIndex = 0;
         this.counter = null;
         this.initialPageOffset = 0;
@@ -130,9 +129,9 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
         this.psb = tail ? template.psb : PageSequenceBuilder2.copyUnlessNull(template.psb);
         this.psbCurStartIndex = template.psbCurStartIndex;
         this.sectionProperties = template.sectionProperties;
-        this.sheetOffset = template.sheetOffset + offset;
         this.sheetIndex = template.sheetIndex;
         this.pageIndex = template.pageIndex;
+        this.previousSheets = new LinkedList<>(template.previousSheets);
         if (template.sheetBuffer.size() > offset) {
             this.sheetBuffer = new ArrayList<>(template.sheetBuffer.subList(offset, template.sheetBuffer.size()));
         } else {
@@ -202,8 +201,8 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
      * @return returns true if the index element was available, false otherwise
      */
     private boolean ensureBuffer(int index) {
-        Sheet.Builder s = null;
-        SheetIdentity si = null;
+        Sheet.Builder s = null; // sheet currently being built
+        SheetIdentity si = null; // sheet currently being built
         while (index < 0 || sheetBuffer.size() < index) {
             // this happens when a new volume is started
             if (updateCounter) {
@@ -221,6 +220,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
                 if (s != null) {
                     //Last page in the sequence doesn't need volume keep priority
                     sheetBuffer.add(s.build());
+                    previousSheets.push(si);
                     s = null;
                     continue;
                 }
@@ -246,9 +246,6 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
                     new DocumentSpace(rcontext.getSpace(), rcontext.getCurrentVolume()),
                     volumeGroup
                 );
-                BlockLineLocation cbl = psb != null ?
-                    psb.currentBlockLineLocation() :
-                    new BlockLineLocation(new BlockAddress(-1, -1), -1);
                 psbCurStartIndex = pageCounter.getPageCount();
                 psb = new PageSequenceBuilder2(
                     psbCurStartIndex,
@@ -258,20 +255,23 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
                     context,
                     rcontext,
                     seqId,
-                    cbl
+                    psb != null ? psb.currentBlockLineLocation() : null
                 );
                 sectionProperties = bs.getLayoutMaster().newSectionProperties();
                 s = null;
                 si = null;
                 sheetIndex = 0;
                 pageIndex = 0;
+                if (!previousSheets.isEmpty()) {
+                    previousSheets = new LinkedList<>();
+                }
             }
             int currentSize = sheetBuffer.size();
             while (psb.hasNext() && currentSize == sheetBuffer.size()) {
                 if (!sectionProperties.duplex() || pageIndex % 2 == 0 || volumeEnded || s == null) {
                     if (s != null) {
-                        Sheet r = s.build();
-                        sheetBuffer.add(r);
+                        sheetBuffer.add(s.build());
+                        previousSheets.push(si);
                         s = null;
                         if (volumeEnded) {
                             pageIndex += pageIndex % 2 == 1 ? 1 : 0;
@@ -283,10 +283,10 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
                     volBreakAllowed = true;
                     s = new Sheet.Builder(sectionProperties);
                     si = new SheetIdentity(
-                            rcontext.getSpace(),
-                            rcontext.getCurrentVolume(),
-                            volumeGroup,
-                            sheetBuffer.size() + sheetOffset
+                        psb.currentBlockLineLocation(),
+                        rcontext.getSpace(),
+                        rcontext.getCurrentVolume(),
+                        volumeGroup
                     );
                     sheetIndex++;
                 }
@@ -302,19 +302,20 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
                         ) {
                             // This id is the same id as the one created below in the call to nextPage
                             BlockLineLocation thisPageId = psb.currentBlockLineLocation();
-                            // This gets the page details for the next page in this sequence (if any)
-                            Optional<PageDetails> next = rcontext.getRefs().getNextPageDetailsInSequence(thisPageId);
-                            // If there is a page details in this sequence and volume break is preferred on this page
-                            if (next.isPresent()) {
+                            // This gets the page location for the next page in this sequence (if any)
+                            Optional<BlockLineLocation> nextPageId = thisPageId != null
+                                ? rcontext.getRefs().getNextPageLocationInSequence(thisPageId)
+                                : Optional.empty();
+                            if (nextPageId.isPresent()) {
+                                // there is a next page in this sequence and a volume break is preferred on this page
                                 Optional<TransitionProperties> st1 = rcontext.getRefs().getTransitionProperties(
-                                        thisPageId
+                                    thisPageId
                                 );
                                 TransitionProperties p = st1.orElse(TransitionProperties.empty());
                                 double v1 = p.getVolumeKeepPriority()
                                     .orElse(10) + (p.hasBlockBoundary() ? 0.5 : 0);
-
                                 Optional<TransitionProperties> st2 = rcontext.getRefs().getTransitionProperties(
-                                    next.get().getPageLocation()
+                                    nextPageId.get()
                                 );
                                 p = st2.orElse(TransitionProperties.empty());
                                 double v2 = p.getVolumeKeepPriority()
@@ -379,12 +380,7 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
                     }
                     s.breakable(br);
                 }
-
-                setPreviousSheet(
-                    si.getSheetIndex() - 1,
-                    Math.min(p.keepPreviousSheets(), sheetIndex - 1),
-                    rcontext
-                );
+                keepWithPreviousSheets(previousSheets, p.keepPreviousSheets(), rcontext);
                 volBreakAllowed &= p.allowsVolumeBreak();
                 if (!sectionProperties.duplex() || pageIndex % 2 == 1 || volumeEnded) {
                     rcontext.getRefs().keepBreakable(si, volBreakAllowed);
@@ -420,13 +416,25 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
         return true;
     }
 
-    private void setPreviousSheet(int start, int p, DefaultContext rcontext) {
-        int i = 0;
-        //TODO: simplify this?
-        for (int x = start; i < p && x > 0; x--) {
-            SheetIdentity si = new SheetIdentity(rcontext.getSpace(), rcontext.getCurrentVolume(), volumeGroup, x);
-            rcontext.getRefs().keepBreakable(si, false);
-            i++;
+    /**
+     * Keep the sheet that is currently being built together with the <code>n</code> previous
+     * sheets.
+     *
+     * @param previousSheets All the sheets previously created from the current block sequence,
+     *                       starting with the most recent one (the one before the sheet we are
+     *                       currently building).
+     * @param n              The number of sheets to keep together, excluding the one currently
+     *                       being built.
+     * @param rcontext       The current {@link DefaultContext}.
+     */
+    private static void keepWithPreviousSheets(Iterable<SheetIdentity> previousSheets, int n, DefaultContext rcontext) {
+        for (SheetIdentity s : previousSheets) {
+            if (n > 0) {
+                rcontext.getRefs().keepBreakable(s, false);
+                n--;
+            } else {
+                break;
+            }
         }
     }
 

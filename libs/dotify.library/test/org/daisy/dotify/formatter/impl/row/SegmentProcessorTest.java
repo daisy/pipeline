@@ -51,15 +51,15 @@ public class SegmentProcessorTest {
         TextProperties tp = new TextProperties.Builder("und").hyphenate(false).build();
         List<Segment> segments = new ArrayList<>();
         List<Segment> expecteds = new ArrayList<>();
-        t = new TextSegment("abc", tp, true);
+        t = new TextSegment("abc", tp);
         segments.add(t);
         expecteds.add(t);
         Style s = new Style("em");
         segments.add(s);
-        t = new TextSegment("def", tp, true);
+        t = new TextSegment("def", tp);
         s.add(t);
         expecteds.add(t);
-        t = new TextSegment("ghi", tp, true);
+        t = new TextSegment("ghi", tp);
         segments.add(t);
         expecteds.add(t);
         FormatterContext fc = new FormatterContext(BrailleTranslatorFactoryMaker.newInstance(), null, conf);
@@ -83,13 +83,13 @@ public class SegmentProcessorTest {
         Segment t;
         TextProperties tp = new TextProperties.Builder("und").hyphenate(false).build();
         List<Segment> segments = new ArrayList<>();
-        t = new TextSegment("abc", tp, true);
+        t = new TextSegment("abc", tp);
         segments.add(t);
         Style s = new Style("em");
         segments.add(s);
-        t = new TextSegment("def", tp, true);
+        t = new TextSegment("def", tp);
         s.add(t);
-        t = new TextSegment("ghi", tp, true);
+        t = new TextSegment("ghi", tp);
         segments.add(t);
 
 
@@ -117,12 +117,12 @@ public class SegmentProcessorTest {
         TextProperties tp = new TextProperties.Builder("und").hyphenate(false).build();
         List<Segment> segments = new ArrayList<>();
         List<Segment> expecteds = new ArrayList<>();
-        t = new TextSegment("abc", tp, true);
+        t = new TextSegment("abc", tp);
         segments.add(t);
-        expecteds.add(new TextSegment("abcxdefy", tp, true));
+        expecteds.add(new TextSegment("abcxdefy", tp));
         Style s = new Style("em");
         segments.add(s);
-        t = new TextSegment("def", tp, true);
+        t = new TextSegment("def", tp);
         s.add(t);
         t = new AnchorSegment("ref-id");
         s.add(t);

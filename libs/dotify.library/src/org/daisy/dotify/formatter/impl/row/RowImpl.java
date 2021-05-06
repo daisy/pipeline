@@ -108,6 +108,11 @@ public final class RowImpl implements Row {
             return this;
         }
 
+        //TODO: this isn't according to the builder pattern, but we'll allow it as a transition
+        MarginProperties getRightMargin() {
+            return rightMargin;
+        }
+
         public Builder alignment(Alignment value) {
             this.alignment = value;
             return this;

@@ -7,5 +7,5 @@
 	remote = git@github.com:mtmse/dotify.library
 	branch = main
 	commit = 7375da576d07504b75c6ee8b4a153a81e5bbacf7
-	parent = 1119de2e8e38548dbf6e23725df5e1762b76fc3c
+	parent = 1c48ca9438a79d49110e7a705f9ccd7c9814edeb
 	cmdver = 0.3.1

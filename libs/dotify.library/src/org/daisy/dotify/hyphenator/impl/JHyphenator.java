@@ -30,13 +30,11 @@ class JHyphenator extends AbstractHyphenator {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (String s : phrase.split(" ")) {
-            if (!first) {
-                sb.append(" ");
-            }
-
             if (s.isEmpty()) {
                 sb.append(" ");
                 continue;
+            } else if (!first) {
+                sb.append(" ");
             }
 
             if (!hyphCache.containsKey(s)) {
@@ -46,7 +44,10 @@ class JHyphenator extends AbstractHyphenator {
             first = false;
         }
 
-        if (phrase.endsWith(" ")) {
+        for (int i = phrase.length() - 1; i >= 0; i--) {
+            if (phrase.charAt(i) != ' ') {
+                break;
+            }
             sb.append(" ");
         }
 

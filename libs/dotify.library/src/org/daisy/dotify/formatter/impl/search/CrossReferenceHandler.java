@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class CrossReferenceHandler {
     private final LookupHandler<BlockAddress, List<Marker>> groupMarkers;
     private final LookupHandler<BlockAddress, List<String>> groupIdentifiers;
     private final LookupHandler<BlockLineLocation, TransitionProperties> transitionProperties;
-    private final LookupHandler<BlockLineLocation, PageDetails> nextPageDetails;
+    private final Map<BlockLineLocation, PageDetails> nextPageDetails;
     private final Map<Integer, Overhead> volumeOverhead;
     private final Map<String, Integer> counters;
     private final SearchInfo searchInfo;
@@ -52,7 +53,7 @@ public class CrossReferenceHandler {
         this.groupMarkers = new LookupHandler<>();
         this.groupIdentifiers = new LookupHandler<>();
         this.transitionProperties = new LookupHandler<>();
-        this.nextPageDetails = new LookupHandler<>();
+        this.nextPageDetails = new HashMap<>();
         this.volumeOverhead = new HashMap<>();
         this.counters = new HashMap<>();
         this.searchInfo = new SearchInfo();
@@ -353,15 +354,26 @@ public class CrossReferenceHandler {
         return searchInfo.findStartAndMarker(id, spec);
     }
 
-    public Optional<PageDetails> getNextPageDetailsInSequence(BlockLineLocation id) {
-        return Optional.ofNullable(nextPageDetails.get(id, null, readOnly));
+    public Optional<BlockLineLocation> getNextPageLocationInSequence(BlockLineLocation id) {
+        PageDetails details = nextPageDetails.get(id);
+        return details != null ? Optional.of(details.getPageLocation()) : Optional.empty();
     }
 
     public void setNextPageDetailsInSequence(BlockLineLocation id, PageDetails details) {
         if (readOnly) {
             return;
         }
+        Objects.requireNonNull(details);
         nextPageDetails.put(id, details);
+    }
+
+    /**
+     * Indicate that a page is the last one in the sequence or that the next page is empty.
+     *
+     * @param id The BlockLineLocation that identifies the page.
+     */
+    public void setNextPageInSequenceEmptyOrAbsent(BlockLineLocation id) {
+        nextPageDetails.remove(id);
     }
 
     /**

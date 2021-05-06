@@ -218,7 +218,9 @@ class Table extends Block {
                 while (results[x] == null) {
                     x = (x + 1) % columnCount;
                     if (x == start) {
-                        throw new RuntimeException("Failed to solve table.");
+                        throw new RuntimeException("Failed to solve table. "
+                                + "Table can not be fit into an area smaller than " + tableWidth + " cells wide.\n"
+                                + "The smallest possible column widths are: " + Arrays.toString(currentResult.widths));
                     }
                 }
                 min = min(results[x], results);

@@ -255,13 +255,13 @@ class LiblouisBrailleFilter implements BrailleFilter {
                 return;
             }
             String text = toTranslate.toString();
-            String hyphText = text;
             if (!markCapitals) {
                 //TODO: toLowerCase may not always do what we want here,
                 //it depends on the lower case algorithm and the rules
                 //of the braille for that language
                 text = text.toLowerCase(Locale.ROOT);
             }
+            String hyphText = text;
             if (hyphenate) {
                 String locale = processorLocale.orElse(loc);
                 HyphenatorInterface hx = hyphenators.get(locale);
@@ -295,6 +295,10 @@ class LiblouisBrailleFilter implements BrailleFilter {
     static LiblouisTranslatable toLiblouisSpecification(String hyphStr, String inputStr) {
         if (hyphStr.length() < inputStr.length()) {
             throw new IllegalArgumentException("The hyphenated string cannot be shorter than the input string");
+        }
+
+        if (inputStr.isEmpty()) {
+            return new LiblouisTranslatable(inputStr, new int[0], new int[0]);
         }
 
         int[] cpHyph = hyphStr.codePoints().toArray();

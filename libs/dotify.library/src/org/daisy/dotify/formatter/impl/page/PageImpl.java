@@ -44,6 +44,7 @@ public class PageImpl implements Page {
     private final PageAreaContent pageAreaTemplate;
     private final List<RowImpl> pageArea;
     private final List<String> anchors;
+    private final List<Marker> markersForNextMarkerIndicator;
     private final int flowHeight;
     private final PageTemplate template;
     private final BorderManager finalRows;
@@ -90,6 +91,7 @@ public class PageImpl implements Page {
         this.renderedFooterRows = 0;
         this.topPageAreaProcessed = false;
         this.bottomPageAreaProcessed = false;
+        this.markersForNextMarkerIndicator = hasMarkerIndicatorRegion(template) ? new ArrayList<>() : null;
     }
 
     void addToPageArea(List<RowImpl> block) {
@@ -100,21 +102,24 @@ public class PageImpl implements Page {
     }
 
     void newRow(RowImpl r) {
+        boolean rowAdded = false;
         hasRows = true;
         while (renderedHeaderRows < template.getHeader().size()) {
             FieldList fields = template.getHeader().get(renderedHeaderRows);
             renderedHeaderRows++;
             if (fields.getFields().stream().anyMatch(v -> v instanceof NoField)) {
-                //
+                // render content row combined with header fields
                 RowImpl r2 = fieldResolver.renderField(getDetails(), fields, filter, Optional.of(r));
                 finalRows.addRow(r2.shouldAdjustForMargin() ? addMarginRegion(r2) : r2);
                 addRowDetails(r);
-                return;
+                rowAdded = true;
+                break;
             } else {
+                // render header fields
                 finalRows.addRow(fieldResolver.renderField(getDetails(), fields, filter, Optional.empty()));
             }
         }
-        if (renderedHeaderRows >= template.getHeader().size()) {
+        if (!rowAdded && renderedHeaderRows >= template.getHeader().size()) {
             if (!topPageAreaProcessed) {
                 addTopPageArea();
                 getDetails().startsContentMarkers();
@@ -127,8 +132,9 @@ public class PageImpl implements Page {
                 topPageAreaProcessed = true;
             }
             if (hasBodyRowsLeft()) {
-                //
+                // render content row
                 finalRows.addRow(r.shouldAdjustForMargin() ? addMarginRegion(r) : r);
+                rowAdded = true;
             } else {
                 if (!bottomPageAreaProcessed) {
                     addBottomPageArea();
@@ -138,17 +144,21 @@ public class PageImpl implements Page {
                     FieldList fields = template.getFooter().get(renderedFooterRows);
                     renderedFooterRows++;
                     if (fields.getFields().stream().anyMatch(v -> v instanceof NoField)) {
-                        //
+                        // render content row combined with footer fields
                         RowImpl r2 = fieldResolver.renderField(getDetails(), fields, filter, Optional.of(r));
                         finalRows.addRow(r2.shouldAdjustForMargin() ? addMarginRegion(r2) : r2);
-                        addRowDetails(r);
-                        return;
+                        rowAdded = true;
+                        break;
                     } else {
+                        // render footer fields
                         finalRows.addRow(fieldResolver.renderField(getDetails(), fields, filter, Optional.empty()));
                     }
                 }
             }
             addRowDetails(r);
+        }
+        if (rowAdded && markersForNextMarkerIndicator != null) {
+            markersForNextMarkerIndicator.clear();
         }
     }
 
@@ -157,16 +167,28 @@ public class PageImpl implements Page {
         boolean hasMarkerWithName(String name);
     }
 
-    private RowImpl addMarginRegion(RowImpl r) {
+    private RowImpl addMarginRegion(final RowImpl r) {
         RowImpl.Builder b = new RowImpl.Builder(r);
-        MarkerRef rf = r::hasMarkerWithName;
+        MarkerRef rf = name -> {
+            if (r.hasMarkerWithName(name)) {
+                return true;
+            }
+            if (markersForNextMarkerIndicator != null) {
+                for (Marker m : markersForNextMarkerIndicator) {
+                    if (m.getName().equals(name)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
         MarginProperties margin = r.getLeftMargin();
-        for (MarginRegion mr : getPageTemplate().getLeftMarginRegion()) {
+        for (MarginRegion mr : template.getLeftMarginRegion()) {
             margin = getMarginRegionValue(mr, rf, false).append(margin);
         }
         b.leftMargin(margin);
         margin = r.getRightMargin();
-        for (MarginRegion mr : getPageTemplate().getRightMarginRegion()) {
+        for (MarginRegion mr : template.getRightMarginRegion()) {
             margin = margin.append(getMarginRegionValue(mr, rf, true));
         }
         b.rightMargin(margin);
@@ -232,16 +254,26 @@ public class PageImpl implements Page {
         getDetails().getIdentifiers().addAll(r.getIdentifiers());
     }
 
-    void addMarkers(List<Marker> m) {
-        getDetails().getMarkers().addAll(m);
+    /**
+     * Add markers from a {@link RowGroup}, that is, markers that are not attached to a {@link
+     * RowImpl}. The markers are added to the {@link PageDetails} object, for resolving {@link
+     * org.daisy.dotify.api.formatter.MarkerReferenceField} and {@link
+     * org.daisy.dotify.formatter.impl.segment.MarkerReferenceSegment}, and they are also used for
+     * resolving {@link MarkerIndicatorRegion} on the first following (content) row.
+     */
+    void addMarkers(RowGroup m) {
+        getDetails().getMarkers().addAll(m.getMarkers());
+        if (markersForNextMarkerIndicator != null) {
+            markersForNextMarkerIndicator.addAll(m.getMarkers());
+        }
     }
 
     public List<String> getAnchors() {
         return anchors;
     }
 
-    void addIdentifiers(List<String> ids) {
-        getDetails().getIdentifiers().addAll(ids);
+    void addIdentifiers(RowGroup ids) {
+        getDetails().getIdentifiers().addAll(ids.getIdentifiers());
     }
 
     public List<String> getIdentifiers() {
@@ -451,5 +483,14 @@ public class PageImpl implements Page {
 
     boolean hasRows() {
         return hasRows;
+    }
+    
+    private static boolean hasMarkerIndicatorRegion(PageTemplate template) {
+        for (MarginRegion mr : template.getLeftMarginRegion()) {
+            if (mr instanceof MarkerIndicatorRegion) {
+                return true;
+            }
+        }
+        return false;
     }
 }

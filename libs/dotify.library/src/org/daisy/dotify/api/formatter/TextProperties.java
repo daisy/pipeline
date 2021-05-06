@@ -18,6 +18,7 @@ public class TextProperties {
     private final String locale;
     private final String translationMode;
     private final boolean hyphenate;
+    private final boolean markCapitalLetters;
 
     /**
      * Provides a builder for creating text properties instances.
@@ -28,6 +29,7 @@ public class TextProperties {
         private final String locale;
         private String translationMode = null;
         private boolean hyphenate = true;
+        private boolean markCapitalLetters = true;
 
         /**
          * Creates a new builder with the specified locale.
@@ -46,6 +48,25 @@ public class TextProperties {
          */
         public Builder hyphenate(boolean value) {
             this.hyphenate = value;
+            return this;
+        }
+
+        /**
+         * Sets the markCapitalLetters value for this builder.
+         *
+         * Mark capital letters are a method for some languages to add marks for the reader to read upper
+         * case letters. For instance, the beginning of a sentence could start with an upper case mark
+         * before the first word indicating that the first letter is upper case.
+         *
+         * In some productions, these marks are not appreciated. For instance, new readers might not
+         * have learned how to interpret these marks, making the reading experience harder. This field
+         * could be changed to false to make all text lower cases to ensure no marks are added.
+         *
+         * @param value the value, default value is true
+         * @return returns this object
+         */
+        public Builder markCapitalLetters(boolean value) {
+            this.markCapitalLetters = value;
             return this;
         }
 
@@ -75,6 +96,7 @@ public class TextProperties {
         this.locale = builder.locale;
         this.translationMode = builder.translationMode;
         this.hyphenate = builder.hyphenate;
+        this.markCapitalLetters = builder.markCapitalLetters;
     }
 
     /**
@@ -104,11 +126,21 @@ public class TextProperties {
         return hyphenate;
     }
 
+    /**
+     * Returns true if the mark capital letters property is true, false otherwise.
+     *
+     * @return returns true if the mark capital letters property is true
+     */
+    public boolean shouldMarkCapitalLetters() {
+        return markCapitalLetters;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (hyphenate ? 1231 : 1237);
+        result = prime * result + (markCapitalLetters ? 1249 : 1259);
         result = prime * result + ((locale == null) ? 0 : locale.hashCode());
         result = prime * result + ((translationMode == null) ? 0 : translationMode.hashCode());
         return result;
@@ -127,6 +159,9 @@ public class TextProperties {
         }
         TextProperties other = (TextProperties) obj;
         if (hyphenate != other.hyphenate) {
+            return false;
+        }
+        if (markCapitalLetters != other.markCapitalLetters) {
             return false;
         }
         if (locale == null) {

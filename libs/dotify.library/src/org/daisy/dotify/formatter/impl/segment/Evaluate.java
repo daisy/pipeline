@@ -15,19 +15,16 @@ import java.util.function.Function;
 public class Evaluate implements Segment {
     private final DynamicContent expression;
     private final TextProperties props;
-    private final boolean markCapitalLetters;
     private Function<Evaluate, String> value = (x) -> "";
     private String resolved;
 
     /**
      * @param expression         the expression
      * @param props              the text properties
-     * @param markCapitalLetters true if capital letters should be marked
      */
-    public Evaluate(DynamicContent expression, TextProperties props, boolean markCapitalLetters) {
+    public Evaluate(DynamicContent expression, TextProperties props) {
         this.expression = expression;
         this.props = props;
-        this.markCapitalLetters = markCapitalLetters;
     }
 
     public DynamicContent getExpression() {
@@ -115,7 +112,7 @@ public class Evaluate implements Segment {
 
     @Override
     public boolean shouldMarkCapitalLetters() {
-        return markCapitalLetters;
+        return props.shouldMarkCapitalLetters();
     }
 
 }

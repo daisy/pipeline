@@ -8,8 +8,8 @@ class RowInfo {
     private final int available;
 
     /**
-     * @param leftIndent The left indentation, possibly with list label inside
-     * @param available  The total space available on a row for left margin, left indentation and content.
+     * @param leftIndent The left text indent, possibly with list label inside
+     * @param available  The total space available on a row for left margin, content and left and right text indent.
      */
     RowInfo(String leftIndent, int available) {
         this.leftIndent = leftIndent;
@@ -18,7 +18,7 @@ class RowInfo {
 
     /**
      * @param row a row
-     * @return the space available on the row for actual content.
+     * @return the space available on the row for content and right text indent.
      */
     int getMaxLength(RowImpl.Builder row) {
         int maxLenText = available - row.getLeftMargin().getContent().length() - StringTools.length(leftIndent);
@@ -30,7 +30,7 @@ class RowInfo {
 
     /**
      * @param row a row
-     * @return the column after the last character in the row (including left margin and left indentation)
+     * @return the column after the last character in the row (including left margin and left text indent)
      */
     int getPreTabPosition(RowImpl.Builder row) {
         return

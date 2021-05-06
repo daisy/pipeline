@@ -1,16 +1,37 @@
 package org.daisy.dotify.formatter.impl.search;
 
 /**
- * TODO: Write java doc.
+ * Sheet starting at a specific location within a block.
  */
 public class SheetIdentity {
     private final Space space;
     private final Integer volumeIndex;
     private final Integer volumeGroup;
-    private final int sheetIndex;
+    private final BlockLineLocation blockLineLocation;
 
-    public SheetIdentity(Space s, Integer volumeIndex, Integer volumeGroup, int sheetIndex) {
-        this.space = s;
+    /**
+     * Create a SheetIdentity from a BlockLineLocation. The BlockLineLocation points to the last
+     * line of the preceding sheet within the current volume group or pre-/post-content
+     * section. Additional arguments are needed to uniquely identify the sheet when it is the first
+     * of the current volume group or pre-/post-content section.
+     *
+     * @param blockLineLocation location of the last line of the preceding sheet within the current
+     *                          volume group or pre-/post-content section, or null if there is no
+     *                          preceding sheet.
+     * @param space             the space ({@link Space#BODY}, {@link Space#PRE_CONTENT} or {@link
+     *                          Space#POST_CONTENT}).
+     * @param volumeIndex       the volume index if <code>space</code> is {@link Space#PRE_CONTENT}
+     *                          or {@link Space#POST_CONTENT}.
+     * @param volumeGroup       the volume group index if <code>space</code> is
+     *                          {@link Space#BODY}.
+     */
+    public SheetIdentity(
+        BlockLineLocation blockLineLocation,
+        Space space,
+        Integer volumeIndex,
+        Integer volumeGroup
+    ) {
+        this.space = space;
         if (space == Space.BODY) {
             if (volumeIndex != null) {
                 volumeIndex = null;
@@ -25,27 +46,15 @@ public class SheetIdentity {
         }
         this.volumeIndex = volumeIndex;
         this.volumeGroup = volumeGroup;
-        this.sheetIndex = sheetIndex;
-    }
-
-    public Space getSpace() {
-        return space;
-    }
-
-    public Integer getVolumeIndex() {
-        return volumeIndex;
-    }
-
-    public int getSheetIndex() {
-        return sheetIndex;
+        this.blockLineLocation = blockLineLocation;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((space == null) ? 0 : space.hashCode());
-        result = prime * result + sheetIndex;
+        result = prime * result + (space == null ? 0 : space.hashCode());
+        result = prime * result + (blockLineLocation == null ? 0 : blockLineLocation.hashCode());
         result = prime * result + (volumeIndex == null ? 0 : volumeIndex);
         result = prime * result + (volumeGroup == null ? 0 : volumeGroup);
         return result;
@@ -66,7 +75,11 @@ public class SheetIdentity {
         if (space != other.space) {
             return false;
         }
-        if (sheetIndex != other.sheetIndex) {
+        if (blockLineLocation == null) {
+            if (other.blockLineLocation != null) {
+                return false;
+            }
+        } else if (!blockLineLocation.equals(other.blockLineLocation)) {
             return false;
         }
         if (volumeIndex == null) {
@@ -91,7 +104,7 @@ public class SheetIdentity {
         return "SheetIdentity [space=" + space
                 + (volumeIndex == null ? "" : ", volumeIndex=" + volumeIndex)
                 + (volumeGroup == null ? "" : ", volumeGroup=" + volumeGroup)
-                + ", sheetIndex=" + sheetIndex + "]";
+                + ", blockLineLocation=" + blockLineLocation + "]";
     }
 
 }

@@ -40,7 +40,7 @@ public class BlockContentManagerTest {
         Stack<Segment> segments = new Stack<>();
         for (int i = 0; i < 6; i++) {
             segments.push(
-                new TextSegment("... ", new TextProperties.Builder("sv-SE").build(), true)
+                new TextSegment("... ", new TextProperties.Builder("sv-SE").build())
             );
         }
         RowDataProperties rdp = new RowDataProperties.Builder().firstLineIndent(1).textIndent(3).build();
@@ -80,7 +80,7 @@ public class BlockContentManagerTest {
                 .build()
         ));
         segments.push(
-            new TextSegment("...", new TextProperties.Builder("sv-SE").build(), true)
+            new TextSegment("...", new TextProperties.Builder("sv-SE").build())
         );
 
         RowDataProperties rdp = new RowDataProperties.Builder().firstLineIndent(1).textIndent(3).build();
@@ -102,11 +102,11 @@ public class BlockContentManagerTest {
             FormatterConfiguration.with("sv-SE", TranslatorType.UNCONTRACTED.toString()).build()
         );
         Stack<Segment> segments = new Stack<>();
-        segments.push(new TextSegment("... ... ...", new TextProperties.Builder("sv-SE").build(), true));
+        segments.push(new TextSegment("... ... ...", new TextProperties.Builder("sv-SE").build()));
         segments.push(new NewLineSegment());
-        segments.push(new TextSegment("...", new TextProperties.Builder("sv-SE").build(), true));
+        segments.push(new TextSegment("...", new TextProperties.Builder("sv-SE").build()));
         segments.push(new NewLineSegment());
-        segments.push(new TextSegment("...", new TextProperties.Builder("sv-SE").build(), true));
+        segments.push(new TextSegment("...", new TextProperties.Builder("sv-SE").build()));
 
         RowDataProperties rdp = new RowDataProperties.Builder().firstLineIndent(1).textIndent(3).build();
         CrossReferenceHandler refs = mock(CrossReferenceHandler.class);

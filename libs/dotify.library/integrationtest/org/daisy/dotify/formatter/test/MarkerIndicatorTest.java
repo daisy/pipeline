@@ -78,4 +78,15 @@ public class MarkerIndicatorTest extends AbstractFormatterEngineTest {
             false
         );
     }
+    @Test
+    public void testMarkerIndicatorEmptyBlock() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/marker-indicator-empty-block-input.obfl",
+            "resource-files/marker-indicator-empty-block-expected.pef",
+            false
+        );
+    }
 }

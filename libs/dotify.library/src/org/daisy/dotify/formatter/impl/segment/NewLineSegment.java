@@ -15,12 +15,12 @@ public class NewLineSegment implements Segment {
 
     @Override
     public String peek() {
-        return "";
+        return "\n";
     }
 
     @Override
     public String resolve() {
-        return "";
+        return "\n";
     }
 
     @Override

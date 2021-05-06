@@ -356,7 +356,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
             //list item has been used now, discard
             listItem = null;
         }
-        bl.addSegment(new TextSegment(c.toString(), p, fc.getConfiguration().isMarkingCapitalLetters()));
+        bl.addSegment(new TextSegment(c.toString(), p));
     }
 
     @Override
@@ -409,7 +409,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
         if (table != null) {
             throw new IllegalStateException("A table is open.");
         }
-        Evaluate e = new Evaluate(exp, t, fc.getConfiguration().isMarkingCapitalLetters());
+        Evaluate e = new Evaluate(exp, t);
         getCurrentBlock().addSegment(e);
     }
 

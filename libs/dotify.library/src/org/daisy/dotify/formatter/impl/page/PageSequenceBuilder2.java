@@ -21,7 +21,6 @@ import org.daisy.dotify.formatter.impl.core.FormatterContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.core.PaginatorException;
 import org.daisy.dotify.formatter.impl.core.TransitionContent;
-import org.daisy.dotify.formatter.impl.core.TransitionContent.Type;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
@@ -94,12 +93,9 @@ public class PageSequenceBuilder2 {
     private int dataGroupsIndex;
     private boolean nextEmpty = false;
 
-    // BlockLineLocation of the last line of the previous page
-    // (produced by this PageSequenceBuilder2 or the previous one)
     private BlockLineLocation cbl;
-    // BlockLineLocation of the last line of the page before the previous page,
-    // or null if no page has been produced yet
-    private BlockLineLocation pcbl;
+    private BlockLineLocation prevCbl; // value of cbl in effect before the last call to nextPage(),
+                                       // or null if nextPage() has not been called yet
 
     //From view, temporary
     private final int fromIndex;
@@ -120,7 +116,8 @@ public class PageSequenceBuilder2 {
      * @param context    ?
      * @param rcontext   ?
      * @param seqId      identifier/position of the block sequence
-     * @param blc        The {@link BlockLineLocation} of the last line of the previous PageSequenceBuilder2.
+     * @param blc        The {@link BlockLineLocation} of the last line of the previous PageSequenceBuilder2, or
+     *                   null if there is no previous PageSequenceBuilder2.
      */
     public PageSequenceBuilder2(
         int fromIndex,
@@ -161,7 +158,7 @@ public class PageSequenceBuilder2 {
         this.dataGroupsIndex = 0;
         this.seqId = seqId;
         this.cbl = blc;
-        this.pcbl = null;
+        this.prevCbl = null;
         PageDetails details = new PageDetails(
             master.duplex(),
             new PageId(pageCount, getGlobalStartIndex(), seqId),
@@ -192,7 +189,7 @@ public class PageSequenceBuilder2 {
         this.fromIndex = template.fromIndex;
         this.toIndex = template.toIndex;
         this.cbl = template.cbl;
-        this.pcbl = template.pcbl;
+        this.prevCbl = template.prevCbl;
     }
 
     public static PageSequenceBuilder2 copyUnlessNull(PageSequenceBuilder2 template) {
@@ -216,6 +213,10 @@ public class PageSequenceBuilder2 {
         return new PageId(pageCount + offset, getGlobalStartIndex(), seqId);
     }
 
+    /**
+     * @return The BlockLineLocation of the last line of the page that was produced last (by this
+     *         PageSequenceBuilder2 or the previous one), or null if no page has been produced yet.
+     */
     public BlockLineLocation currentBlockLineLocation() {
         return cbl;
     }
@@ -300,22 +301,45 @@ public class PageSequenceBuilder2 {
     ) throws PaginatorException, RestartPaginationException { // pagination must be restarted in
         // PageStructBuilder.paginateInner
         PageImpl current = newPage(pageNumberOffset);
-        if (
-            pcbl != null &&
-            // Store a mapping from the BlockLineLocation of the last line of the page before the
-            // previous page to the BlockLineLocation of the last line of the previous page. This
-            // info is used (in the next iteration) in SheetDataSource to obtain info about the
-            // verso page of a sheet when we are on a recto page of that sheet.
+        // whether this is the last page of the volume and a volume transition was provided
+        boolean interruptContentPresent =
+            context.getTransitionBuilder().getProperties().getApplicationRange() != ApplicationRange.NONE &&
             transitionContent.isPresent() &&
-            transitionContent.get().getType() == TransitionContent.Type.INTERRUPT
-        ) {
-
-            blockContext.getRefs().setNextPageDetailsInSequence(pcbl, current.getDetails());
-        }
+            transitionContent.get().getType() == TransitionContent.Type.INTERRUPT;
         if (nextEmpty) {
+            // Return an empty page because the next row should be on a new sheet and we are
+            // currently on the back of a sheet. (We are in duplex mode.)
+            // Note that we don't update cbl here, so the page after this one will have the same
+            // identity. Luckily it does not matter for SheetIdentity: there can't be two empty
+            // verso pages after each other so every SheetIdentity is still unique.
+            // Also note that we don't call keepTransitionProperties().
             nextEmpty = false;
+            if (prevCbl != null && interruptContentPresent) {
+                // By calling setNextPageInSequenceEmptyOrAbsent() we tell SheetDataSource
+                // (in the next iteration) two things:
+                // 1. to not use this page's currentBlockLineLocation to look up its
+                //    transitionProperties because that info is not available (so could result in
+                //    CrossReferenceHandler staying dirty forever) and the currentBlockLineLocation
+                //    is not unique.
+                // 2. If the volume must be broken on a sheet that is empty on the back, we prefer
+                //    to put the transition content on the back of the sheet, not on the front.
+                blockContext.getRefs().setNextPageInSequenceEmptyOrAbsent(prevCbl);
+                // Set prevCbl to null so that the command above can not be undone with a
+                // setNextPageDetailsInSequence() in the next nextPage() call.
+                prevCbl = null;
+            }
             return current;
         }
+        // Store a mapping from the BlockLineLocation of the last line of the page before the
+        // previous page to the BlockLineLocation of the last line of the previous page. This info
+        // is used (in the next iteration) in SheetDataSource to obtain info about the verso page of
+        // a sheet when we are on a recto page of that sheet and we need to determine whether to
+        // break the volume after the current page or the next.
+        if (prevCbl != null && interruptContentPresent) {
+            blockContext.getRefs().setNextPageDetailsInSequence(prevCbl, current.getDetails());
+        }
+        prevCbl = cbl;
+
         // The purpose of this is to prevent supplements from combining with header/footer
         cd.setExtraOverhead(
             current.getPageTemplate().validateAndAnalyzeHeader() +
@@ -333,10 +357,10 @@ public class PageSequenceBuilder2 {
         // correct under all the assumptions made.
         blockContext = new BlockContext.Builder(blockContext).topOfPage(true).build();
 
-        // while there are more rows in the current block, or there are more blocks...
+        // while there are more rows in the current RowGroupSequence, or there are more RowGroupSequences
         while (dataGroupsIndex < dataGroups.size() || (data != null && !data.isEmpty())) {
             if ((data == null || data.isEmpty()) && dataGroupsIndex < dataGroups.size()) {
-                // pick up next block (as RowGroupSequence)
+                // pick up next RowGroupSequence
                 RowGroupSequence rgs = dataGroups.get(dataGroupsIndex);
                 //TODO: This assumes that all page templates have margin regions that are of the same width
                 BlockContext bc = BlockContext.from(blockContext)
@@ -437,7 +461,7 @@ public class PageSequenceBuilder2 {
                 // First find the optimal break point
                 SplitPointSpecification spec;
                 boolean addTransition = true;
-                if (transitionContent.isPresent() && transitionContent.get().getType() == Type.INTERRUPT) {
+                if (interruptContentPresent) {
                     // Subtract the height of the transition text from the available height.
                     // We need to account for the last unit size here (because this is the last unit) instead
                     // of the one below. The transition text may have a smaller row spacing than the last row of
@@ -565,7 +589,6 @@ public class PageSequenceBuilder2 {
                 if (!head.isEmpty()) {
                     int s = head.size();
                     RowGroup gr = head.get(s - 1);
-                    pcbl = cbl;
                     cbl = gr.getLineProperties().getBlockLineLocation();
                 }
                 // Add the body rows to the page.
@@ -581,25 +604,20 @@ public class PageSequenceBuilder2 {
                 );
                 // Store info about this volume transition for use in the next iteration (used in SheetDataSource).
                 // No need to do this unless there is an active transition builder.
-                if (context.getTransitionBuilder().getProperties().getApplicationRange() != ApplicationRange.NONE) {
+                if (interruptContentPresent) {
                     // Determine whether there is a block boundary on the page, with enough space
                     // available after this point for sequence-interrupted and any-interrupted.
                     boolean hasBlockBoundary =
                         blockBoundary.isPresent() ?
                         blockBoundary.get() :
                         res.getHead().stream().filter(r -> r.isLastRowGroupInBlock()).findFirst().isPresent();
-                    if (
-                            transitionContent.isPresent() &&
-                                    transitionContent.get().getType() == TransitionContent.Type.INTERRUPT
-                    ) {
-                        bc.getRefs().keepTransitionProperties(
-                                current.getDetails().getPageLocation(),
-                                new TransitionProperties(
-                                        current.getAvoidVolumeBreakAfter(),
-                                        hasBlockBoundary
-                                )
-                        );
-                    }
+                    bc.getRefs().keepTransitionProperties(
+                        current.getDetails().getPageLocation(),
+                        new TransitionProperties(
+                            current.getAvoidVolumeBreakAfter(),
+                            hasBlockBoundary
+                        )
+                    );
                 }
                 // Discard collapsed margins, but retain their properties (identifiers, markers,
                 // keep-with-next-sheets, keep-with-previous-sheets).
@@ -622,15 +640,17 @@ public class PageSequenceBuilder2 {
                     BreakBefore nextStart = dataGroups.get(dataGroupsIndex).getBreakBefore();
                     switch (nextStart) {
                         case SHEET:
+                            // next row starts on new sheet
                             if (master.duplex()) {
-                                if (pageCount % 2 == 1) { // on recto page
+                                if (pageCount % 2 == 1) { // we are on a recto page
                                     if (current.hasRows()) {
+                                        // indicate that the next page (the verso page) should be empty
                                         nextEmpty = true;
                                         return current;
                                     } else {
                                         break; // we are already at the beginning of a recto page
                                     }
-                                } else { // on verso page
+                                } else { // we are on a verso page
                                     return current;
                                 }
                             }
@@ -644,6 +664,7 @@ public class PageSequenceBuilder2 {
                             break; // we are already at the beginning of a page
 
                         case PAGE:
+                            // next row starts on new page
                             if (current.hasRows()) {
                                 return current;
                             }
@@ -790,8 +811,8 @@ public class PageSequenceBuilder2 {
     }
 
     private void addProperties(PageImpl p, RowGroup rg) {
-        p.addIdentifiers(rg.getIdentifiers());
-        p.addMarkers(rg.getMarkers());
+        p.addIdentifiers(rg);
+        p.addMarkers(rg);
         //TODO: addGroupAnchors
         keepNextSheets = Math.max(rg.getKeepWithNextSheets(), keepNextSheets);
         if (keepNextSheets > 0) {

@@ -88,4 +88,9 @@ public class LiblouisBrailleFilterTest {
         assertEquals(hyph, res);
     }
 
+
+    @Test
+    public void testToBrailleFilterStringShouldNotCrash() {
+        LiblouisBrailleFilter.toLiblouisSpecification("", "");
+    }
 }
