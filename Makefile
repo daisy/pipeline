@@ -207,4 +207,6 @@ publish-wiki :
 
 .PHONY : clean
 clean :
-	rm -rf target
+	# delete target except target/maven/pom.xml
+	find target -depth 1 -not -name 'maven' -exec rm -r {} \; 2>/dev/null
+	find target/maven -depth 1 -not -name 'pom.xml' -exec rm -r {} \; 2>/dev/null
