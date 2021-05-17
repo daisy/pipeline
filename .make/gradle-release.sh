@@ -25,6 +25,28 @@ if [ $1 == "libs/com.xmlcalabash" ]; then
     echo ": login and close stage"
     echo ": checkout subrepo and cherry-pick commit"
     echo "git tag -as -m \"XML Calabash $version\" $distVersion"
+elif [ $1 == "libs/jsass" ]; then
+    remote=$(git config --file $1/.gitrepo --get subrepo.remote)
+    github_repo=$(
+        echo "$remote" | perl -e 'while (<>) {
+                                    $_ =~ /^(?:https?:\/\/github\.com\/|git\@github\.com:)([^\.\/]+)\/([^\.\/]+)(\.git)?$/
+                                      or die "not a github remote: $_";
+                                    print "$2\n"; }')
+    base_commit=$(.git-utils/git-subrepo-status --fetch --sha-only $1 | sed "s|^$1 @ ||")
+    on_remote_branch=$(git branch -r --contains $base_commit | sed -n "s|^  subrepo/$1/\(.*\)\$|\1|p" | head -n1)
+    if [[ -z $on_remote_branch ]]; then
+        echo "commit $base_commit is not on a remote branch" >&2
+        exit 1
+    fi
+    echo ": first cd to the $github_repo repo you want to release from && \\"
+    echo "git fetch $remote $on_remote_branch && \\"
+    version=$(cat $1/gradle.properties | grep '^version' | sed 's/.*=//' | sed 's/-SNAPSHOT//')
+    echo "git checkout org.daisy.libs && git merge $base_commit && \\"
+    echo "./gradlew clean release && \\"
+    echo ": make sure you enter a SNAPSHOT version as the next version && \\"
+    echo "git checkout \$(git describe --abbrev=0) && \\"
+    echo "./gradlew clean uploadArchives && \\"
+    echo ": go to https://oss.sonatype.org, login and close and release stage"
 fi
 
 exit 100
