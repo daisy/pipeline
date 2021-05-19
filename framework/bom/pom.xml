@@ -30,7 +30,7 @@
     <javax.persistence.version>2.0.3</javax.persistence.version>
     <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
     <jing.version>20151127.0.1</jing.version>
-    <jetty.version>7.6.5.v20120716</jetty.version>
+    <jetty.version>9.3.27.v20190418</jetty.version>
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
     <mockito.version>2.25.1</mockito.version>
