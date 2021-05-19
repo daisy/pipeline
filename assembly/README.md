@@ -50,6 +50,37 @@ The `exe` target will package the DAISY Pipeline into an executable installer.
 
 The installer is created with [NSIS](http://nsis.sourceforge.net/Main_Page). 
 
+Note that for some reason the build script doesn't work with newer
+versions of NSIS. We've tested with NSIS 3.02.1 on MacOS, NSIS 3.04 on
+Debian Stretch, and NSIS 3.02.1 on CentOS 7.
+
+To install NSIS 3.02.1 on MacOS:
+
+    brew install bertfrees/pipeline/makensis@3.02.1
+
+To install NSIS 3.04 on Debian Buster:
+
+    apt-get install nsis
+
+To install NSIS 3.04 on Debian Stretch:
+
+    curl -L http://ftp.br.debian.org/debian/pool/main/n/nsis/{nsis-common_3.04-1_all.deb,nsis_3.04-1_amd64.deb} -o /tmp/#1
+    dpkg -i /tmp/nsis*.deb
+
+To install NSIS 3.02.1 on CentOS 7 (from http://blog.shahada.abubakar.net/post/build-nsis-for-centos):
+
+    curl -L https://jaist.dl.sourceforge.net/project/nsis/NSIS%203/3.02.1/{nsis-3.02.1-src.tar.bz2,nsis-3.02.1.zip} -o /tmp/#1
+    cd /usr/local
+    unzip /tmp/nsis-3.02.1.zip
+    rpm -Uvh http://prdownloads.sourceforge.net/scons/scons-2.5.0-1.noarch.rpm
+    yum install -y gcc gcc-c++ zlib-devel
+    cd /tmp/nsis-3.02.1-src \
+    scons SKIPSTUBS=all SKIPPLUGINS=all SKIPUTILS=all SKIPMISC=all \
+         NSIS_CONFIG_CONST_DATA_PATH=no \
+         PREFIX=/usr/local/nsis-3.02.1/bin \
+         install-compiler
+    ln -s /usr/local/nsis-3.02.1/bin/makensis /usr/local/bin/makensis
+
 Debian Distribution
 -------------------
 

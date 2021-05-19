@@ -1,5 +1,4 @@
 MVN ?= mvn
-MVN_LOG ?= cat
 DOCKER := docker
 SHELL  := /bin/bash
 
@@ -113,7 +112,7 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
 	# we run package-dmg in a subsequent mvn call to avoid execution
 	# order issues when the package-mac-app and package-dmg profiles
 	# are activated together
-	$(MVN) install -Ppackage-dmg | $(MVN_LOG)
+	$(MVN) install -Ppackage-dmg
 	test -e $@
 else
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         :
@@ -268,7 +267,7 @@ PROFILES :=                     \
 mvn :
 ifndef DUMP_PROFILES
 	set -o pipefail; \
-	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS)) | $(MVN_LOG)
+	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS))
 endif
 
 .PHONY : $(addprefix -P,$(PROFILES))

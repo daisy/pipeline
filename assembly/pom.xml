@@ -83,14 +83,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.1-SNAPSHOT</version>
+        <version>1.14.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.2-SNAPSHOT</version>
+        <version>1.14.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -447,6 +447,8 @@
                 <artifactItem>
                   <groupId>com.google.guava</groupId>
                   <artifactId>guava</artifactId>
+                  <!-- FIXME: remove when framework-bom updated -->
+                  <version>24.1.1-android</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>commons-codec</groupId>
@@ -1232,6 +1234,10 @@
                   <artifactId>commons-lang3</artifactId>
                 </artifactItem>
                 <artifactItem>
+                  <groupId>org.apache.commons</groupId>
+                  <artifactId>commons-text</artifactId>
+                </artifactItem>
+                <artifactItem>
                   <groupId>com.googlecode.texhyphj</groupId>
                   <artifactId>texhyphj</artifactId>
                 </artifactItem>
@@ -1244,52 +1250,8 @@
                   <artifactId>braille-css</artifactId>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.daisy.braille</groupId>
-                  <artifactId>braille-utils.api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.braille</groupId>
-                  <artifactId>braille-utils.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.braille</groupId>
-                  <artifactId>braille-utils.pef-tools</artifactId>
-                </artifactItem>
-                <artifactItem>
                   <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.common</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.formatter.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.hyphenator.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.task.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.text.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.translator.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.streamline</groupId>
-                  <artifactId>streamline-api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.streamline</groupId>
-                  <artifactId>streamline-engine</artifactId>
+                  <artifactId>dotify.library</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
@@ -1298,6 +1260,10 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>liblouis-java</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.sharegov</groupId>
+                  <artifactId>mjson</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.unbescape</groupId>
@@ -1313,6 +1279,8 @@
                 <artifactItem>
                   <groupId>org.apache.commons</groupId>
                   <artifactId>commons-compress</artifactId>
+                  <!-- FIXME: remove when modules-bom updated -->
+                  <version>1.20</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.codehaus.jackson</groupId>
@@ -1341,7 +1309,7 @@
               <outputDirectory>${project.build.directory}/jars/osgi/bundles</outputDirectory>
               <artifactItems>
                 <!--
-                    Dotify and epubcheck require older version of Jing
+                    epubcheck requires older version of Jing
                 -->
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
