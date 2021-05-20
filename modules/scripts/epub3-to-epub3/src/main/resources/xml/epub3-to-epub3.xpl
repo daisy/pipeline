@@ -6,7 +6,7 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 exclude-inline-prefixes="#all"
                 name="main">
-    
+
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 Enhancer</h1>
         <p px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with audio and/or a braille rendition.</p>
@@ -17,7 +17,7 @@
             <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
         </dl>
     </p:documentation>
-    
+
     <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/epub+zip text/plain">
         <p:documentation>
             <h2 px:role="name">Input EPUB 3</h2>
@@ -26,7 +26,7 @@
 You may alternatively use the "mimetype" document if your input is a unzipped/"exploded" version of an EPUB.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:input port="metadata" primary="false" sequence="true" px:media-type="application/xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Metadata</h2>
@@ -168,13 +168,24 @@ the navigation document.</p>
         </p:documentation>
     </p:option>
 
+    <p:option name="add-legal-doc" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Add colophon with legal information</h2>
+            <p px:role="desc">
+                In order to ensure the information about who created the document and have the license to
+                distribute it is clear we need to add an extra colophon with the information about MTMs
+                production, time of production and voice.
+            </p>
+        </p:documentation>
+    </p:option>
+
     <p:option name="braille" required="false" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Translate to braille</h2>
             <p px:role="desc">Whether to produce a braille rendition.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="tts" required="false" px:type="boolean" select="'default'">
         <p:pipeinfo>
             <px:type>
@@ -195,7 +206,7 @@ the navigation document.</p>
 This will remove any existing media overlays in the EPUB.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="sentence-detection" required="false" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Perform sentence detection</h2>
@@ -211,7 +222,7 @@ marked up.</p>
             <h2 px:role="name">Braille translator query</h2>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="stylesheet" required="false" px:type="string" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Style sheets</h2>
@@ -225,7 +236,7 @@ applied before the ones specified through this option (see below).
 </p>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="apply-document-specific-stylesheets" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Apply document-specific CSS</h2>
@@ -244,19 +255,19 @@ specific.
 </p>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="set-default-rendition-to-braille" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Set default rendition to braille.</h2>
             <p px:role="desc">Make the generated braille rendition the default rendition.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:input port="tts-config" primary="false">
         <!-- defined in common-options.xpl -->
         <p:inline><d:config/></p:inline>
     </p:input>
-    
+
     <p:option name="sentence-class" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Sentence class</h2>
@@ -272,22 +283,23 @@ elements that represent the sentences.</p>
             <h2 px:role="name">Output EPUB 3</h2>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Temporary directory</h2>
             <p px:role="desc">Directory used for temporary files.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="include-tts-log" select="'false'">
         <!-- defined in common-options.xpl -->
     </p:option>
+
     <p:output port="tts-log" sequence="true">
         <!-- defined in common-options.xpl -->
         <p:pipe step="convert" port="tts-log"/>
     </p:output>
-    
+
     <p:import href="epub3-to-epub3.load.xpl">
         <p:documentation>
             px:epub3-to-epub3.load
@@ -308,7 +320,7 @@ elements that represent the sentences.</p>
     <px:epub3-to-epub3.load name="load" px:progress="0.1">
         <p:with-option name="epub" select="$source"/>
     </px:epub3-to-epub3.load>
-    
+
     <px:epub3-to-epub3 name="convert" px:progress="0.8">
         <p:input port="epub.in.in-memory">
             <p:pipe step="load" port="in-memory"/>
@@ -330,6 +342,7 @@ elements that represent the sentences.</p>
         <p:with-option name="update-title-in-content-docs" select="$update-title-in-content-docs"/>
         <p:with-option name="ensure-pagenum-text" select="$ensure-pagenum-text"/>
         <p:with-option name="ensure-section-headings" select="$ensure-section-headings"/>
+        <p:with-option name="add-legal-doc" select="$add-legal-doc"/>
         <p:with-option name="sentence-class" select="$sentence-class"/>
         <p:with-option name="include-tts-log" select="$include-tts-log"/>
         <p:input port="tts-config">
@@ -337,17 +350,17 @@ elements that represent the sentences.</p>
         </p:input>
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:epub3-to-epub3>
-    
+
     <px:fileset-store name="store" px:progress="0.1">
         <p:input port="in-memory.in">
             <p:pipe step="convert" port="epub.out.in-memory"/>
         </p:input>
     </px:fileset-store>
-    
+
     <px:fileset-delete cx:depends-on="store">
         <p:input port="source">
             <p:pipe step="convert" port="temp-audio-files"/>
         </p:input>
     </px:fileset-delete>
-    
+
 </p:declare-step>

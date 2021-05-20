@@ -15,19 +15,19 @@
                 exclude-inline-prefixes="#all"
                 type="px:epub3-to-epub3"
                 name="main">
-    
+
     <p:input port="epub.in.fileset" primary="true"/>
     <p:input port="epub.in.in-memory" sequence="true"/>
-    
+
     <p:output port="epub.out.fileset" primary="true"/>
     <p:output port="epub.out.in-memory" sequence="true">
         <p:pipe step="add-braille-rendition" port="in-memory"/>
     </p:output>
-    
+
     <p:input port="metadata" sequence="true">
         <p:empty/>
     </p:input>
-    
+
     <p:option name="result-base" required="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>If not specified, will not copy EPUB before modifying it.</p>
@@ -38,6 +38,7 @@
     <p:option name="update-title-in-content-docs" required="false" select="'false'"/>
     <p:option name="ensure-pagenum-text" required="false" select="'false'"/>
     <p:option name="ensure-section-headings" required="false" select="'false'"/>
+    <p:option name="add-legal-doc" required="false" select="'false'"/>
     <p:option name="braille" required="false" select="'false'"/>
     <p:option name="tts" required="false" select="'default'"/>
     <p:option name="sentence-detection" required="false" select="'false'"/>
@@ -78,7 +79,7 @@
             automatically created.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:error
@@ -159,13 +160,13 @@
             <irrelevant/>
         </p:inline>
     </p:variable>
-    
+
     <p:identity>
         <p:input port="source">
             <p:pipe step="main" port="epub.in.fileset"/>
         </p:input>
     </p:identity>
-    
+
     <!--
         Make sure that the base uri of the fileset is the directory containing the mimetype
         file. This will normally also eliminate any relative hrefs starting with "..", which is
@@ -183,7 +184,7 @@
             <px:error code="XXXXX" message="Fileset must contain a 'mimetype' file"/>
         </p:otherwise>
     </p:choose>
-    
+
     <!--
         copy EPUB to new location
     -->
@@ -208,7 +209,7 @@
             <p:identity/>
         </p:otherwise>
     </p:choose>
-    
+
     <!--
         Add metadata
     -->
@@ -250,76 +251,90 @@
             </px:epub3-add-metadata>
         </p:otherwise>
     </p:choose>
-    
-    <p:group name="add-legal-doc">
-        <p:output port="fileset" primary="true"/>
-        <p:output port="in-memory" sequence="true">
-            <p:pipe step="move-2" port="result.in-memory"/>
-        </p:output>
-        <p:choose name="temp-dir">
-            <p:when test="$temp-dir!=''">
-                <p:output port="result"/>
-                <p:template>
-                    <p:input port="template">
-                        <p:inline>
-                            <c:result>{$temp-dir}</c:result>
-                        </p:inline>
-                    </p:input>
-                    <p:with-param name="temp-dir" select="concat($temp-dir,'add-legal-doc/')"/>
-                </p:template>
-            </p:when>
-            <p:otherwise>
-                <p:output port="result"/>
-                <px:tempdir delete-on-exit="true"/>
-            </p:otherwise>
-        </p:choose>
-        <p:sink/>
-        <px:fileset-copy name="move">
-            <p:input port="source.fileset">
-                <p:pipe step="add-metadata" port="fileset"/>
-            </p:input>
-            <p:input port="source.in-memory">
+
+
+    <p:choose name="add-legal-doc">
+        <p:when test="$add-legal-doc='true'">
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="move-2" port="result.in-memory"/>
+            </p:output>
+            <p:choose name="temp-dir">
+                <p:when test="$temp-dir!=''">
+                    <p:output port="result"/>
+                    <p:template>
+                        <p:input port="template">
+                            <p:inline>
+                                <c:result>{$temp-dir}</c:result>
+                            </p:inline>
+                        </p:input>
+                        <p:with-param name="temp-dir" select="concat($temp-dir,'add-legal-doc/')"/>
+                    </p:template>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="result"/>
+                    <px:tempdir delete-on-exit="true"/>
+                </p:otherwise>
+            </p:choose>
+            <p:sink/>
+            <px:fileset-copy name="move">
+                <p:input port="source.fileset">
+                    <p:pipe step="add-metadata" port="fileset"/>
+                </p:input>
+                <p:input port="source.in-memory">
+                    <p:pipe step="add-metadata" port="in-memory"/>
+                </p:input>
+                <p:with-option name="target" select="concat(string(/*),'input/')">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </px:fileset-copy>
+            <px:epub3-store name="store">
+                <p:input port="in-memory.in">
+                    <p:pipe step="move" port="result.in-memory"/>
+                </p:input>
+                <p:with-option name="href" select="concat(string(/*),'input.epub')">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </px:epub3-store>
+            <pxi:add-legal-doc name="add">
+                <p:with-option name="input" select="string(/*)">
+                    <p:pipe step="store" port="result"/>
+                </p:with-option>
+                <p:with-option name="output" select="concat(string(/*),'output.epub')">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </pxi:add-legal-doc>
+            <px:epub-load name="load" cx:depends-on="add">
+                <p:with-option name="href" select="concat(string(/*),'output.epub')">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </px:epub-load>
+            <px:fileset-rebase>
+                <p:with-option name="new-base" select="concat(string(/*),'output.epub!/')">
+                    <p:pipe step="temp-dir" port="result"/>
+                </p:with-option>
+            </px:fileset-rebase>
+            <px:fileset-copy name="move-2">
+                <p:input port="source.in-memory">
+                    <p:pipe step="load" port="result.in-memory"/>
+                </p:input>
+                <p:with-option name="target" select="base-uri(/*)">
+                    <p:pipe step="maybe-copy" port="fileset"/>
+                </p:with-option>
+            </px:fileset-copy>
+        </p:when>
+        <p:otherwise>
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
                 <p:pipe step="add-metadata" port="in-memory"/>
-            </p:input>
-            <p:with-option name="target" select="concat(string(/*),'input/')">
-                <p:pipe step="temp-dir" port="result"/>
-            </p:with-option>
-        </px:fileset-copy>
-        <px:epub3-store name="store">
-            <p:input port="in-memory.in">
-                <p:pipe step="move" port="result.in-memory"/>
-            </p:input>
-            <p:with-option name="href" select="concat(string(/*),'input.epub')">
-                <p:pipe step="temp-dir" port="result"/>
-            </p:with-option>
-        </px:epub3-store>
-        <pxi:add-legal-doc name="add">
-            <p:with-option name="input" select="string(/*)">
-                <p:pipe step="store" port="result"/>
-            </p:with-option>
-            <p:with-option name="output" select="concat(string(/*),'output.epub')">
-                <p:pipe step="temp-dir" port="result"/>
-            </p:with-option>
-        </pxi:add-legal-doc>
-        <px:epub-load name="load" cx:depends-on="add">
-            <p:with-option name="href" select="concat(string(/*),'output.epub')">
-                <p:pipe step="temp-dir" port="result"/>
-            </p:with-option>
-        </px:epub-load>
-        <px:fileset-rebase>
-            <p:with-option name="new-base" select="concat(string(/*),'output.epub!/')">
-                <p:pipe step="temp-dir" port="result"/>
-            </p:with-option>
-        </px:fileset-rebase>
-        <px:fileset-copy name="move-2">
-            <p:input port="source.in-memory">
-                <p:pipe step="load" port="result.in-memory"/>
-            </p:input>
-            <p:with-option name="target" select="base-uri(/*)">
-                <p:pipe step="maybe-copy" port="fileset"/>
-            </p:with-option>
-        </px:fileset-copy>
-    </p:group>
+            </p:output>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="add-metadata" port="fileset"/>
+                </p:input>
+            </p:identity>
+        </p:otherwise>
+    </p:choose>
 
     <!--
         Update metadata in content documents and lang attributes in package and content documents
@@ -852,7 +867,7 @@
             </p:otherwise>
         </p:choose>
     </p:group>
-    
+
     <p:choose name="add-braille-rendition" px:progress="1/2">
         <p:when test="not($braille='true')">
             <p:output port="fileset" primary="true"/>
@@ -866,11 +881,11 @@
             <p:output port="in-memory" sequence="true">
                 <p:pipe step="update-container" port="in-memory"/>
             </p:output>
-            
+
             <!--
                 load default rendition package document
             -->
-            
+
             <px:fileset-filter media-types="application/oebps-package+xml"/>
             <p:delete match="d:file[preceding::d:file]"/>
             <px:fileset-load name="default-rendition.package-document">
@@ -878,11 +893,11 @@
                     <p:pipe step="add-mediaoverlays" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
-            
+
             <!--
                 create braille rendition file set
             -->
-            
+
             <p:group name="braille-rendition.fileset">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
@@ -928,11 +943,11 @@
                     </p:input>
                 </px:fileset-apply>
             </p:group>
-            
+
             <!--
                 process braille rendition xhtml documents
             -->
-            
+
             <p:group name="braille-rendition.process-html" px:message="Translating to braille">
                 <p:output port="result.fileset" primary="true"/>
                 <p:output port="result.in-memory" sequence="true">
@@ -1100,11 +1115,11 @@
                     </p:input>
                 </px:fileset-update>
             </p:group>
-            
+
             <!--
                 process braille rendition package document
             -->
-            
+
             <p:group name="braille-rendition.process-package-doc">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
@@ -1148,7 +1163,7 @@
                     </p:input>
                 </px:fileset-update>
             </p:group>
-            
+
             <!--
                 final braille rendition package document
             -->
@@ -1158,11 +1173,11 @@
                 </p:input>
             </px:fileset-load>
             <p:sink/>
-            
+
             <!--
                 add braille rendition
             -->
-            
+
             <p:group name="add-rendition">
                 <p:output port="fileset" primary="true"/>
                 <p:output port="in-memory" sequence="true">
@@ -1176,11 +1191,11 @@
                     </p:input>
                 </px:fileset-join>
             </p:group>
-            
+
             <!--
                 create and add metadata.xml
             -->
-            
+
             <p:group name="add-metadata-xml">
                 <p:output port="fileset" primary="true">
                     <p:pipe step="add-entry" port="result"/>
@@ -1229,7 +1244,7 @@
                 </p:group>
                 <p:sink/>
             </p:group>
-            
+
             <!--
                 create and add rendition mapping document
             -->
@@ -1303,11 +1318,11 @@
                 </p:group>
                 <p:sink/>
             </p:group>
-            
+
             <!--
                 update container.xml
             -->
-            
+
             <p:group name="update-container">
                 <p:output port="fileset" primary="true">
                     <p:pipe step="update-fileset" port="result.fileset"/>
