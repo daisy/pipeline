@@ -1,0 +1,161 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------< org.daisy.pipeline.modules:epub3-to-epub3 >--------------
+[INFO] Building DAISY Pipeline 2 module :: EPUB 3 Enhancer 3.1.0-SNAPSHOT
+[INFO] -------------------------------[ bundle ]-------------------------------
+[WARNING] The POM for com.sun.xml.bind:jaxb-extra-osgi:jar:2.2.11 is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+[INFO] 
+[INFO] --- maven-clean-plugin:3.0.0:clean (default-clean) @ epub3-to-epub3 ---
+[INFO] Deleting /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.4.1:enforce (enforce-maven) @ epub3-to-epub3 ---
+[INFO] 
+[INFO] --- modules-build-helper:2.6.0:process-catalog (process-catalog) @ epub3-to-epub3 ---
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.SetCookies
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Head
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.Eval
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Unwrap
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.ValidateJing
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.GetCookies
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.ValidateWithXSD
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Replace
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Tail
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.StringReplace
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.XInclude
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Hash
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Move
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.UriInfo
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Rename
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.AddAttribute
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Filter
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.SplitSequence
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Touch
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.EscapeMarkup
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.MakeAbsoluteURIs
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.CollectionManager
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Copy
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.DirectoryList
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.JavaProperties
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Store
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.Uncompress
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.CssFormatter
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Compare
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.InScopeNames
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Delete
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Load
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.HttpRequest
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.ValidateWithSCH
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.osutils.Env
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Parameters
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Identity
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.UnescapeMarkup
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Count
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.SetAttributes
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Wrap
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Delete
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.PrettyPrint
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.Unzip
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.WaitForUpdate
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.NamespaceDelete
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.Compress
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Template
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Mkdir
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.WWWFormURLEncode
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Tempfile
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.osutils.Cwd
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.XSLT
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Error
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.Zip
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.Message
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.SetBaseURI
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.XSLFormatter
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Pack
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.AddXmlBase
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Exec
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.WWWFormURLDecode
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.osutils.Info
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.LabelElements
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.NamespaceRename
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Sink
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.ReportErrors
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.Insert
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.fileutils.Info
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.WrapSequence
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.UUID
+[INFO] Failed to instantiate extension function: com.xmlcalabash.library.XQuery
+[INFO] Failed to instantiate extension function: com.xmlcalabash.extensions.NVDL
+[WARNING] Failed to load content types: /opt/openjdk-bin-11.0.10_p9/lib/content-types.properties
+[INFO] 
+[INFO] --- ds-to-spi-maven-plugin:1.1.2:generate-spi-classes (generate-spi-classes) @ epub3-to-epub3 ---
+[INFO] Compiling 5 source files to /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/classes
+[INFO] 
+[INFO] --- maven-paxexam-plugin:1.2.4:generate-depends-file (generate-depends-file) @ epub3-to-epub3 ---
+[INFO] Created: /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/classes/META-INF/maven/dependencies.properties
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.1:resources (default-resources) @ epub3-to-epub3 ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 14 resources
+[INFO] Copying 4 resources
+[INFO] Copying 4 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:compile (default-compile) @ epub3-to-epub3 ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 10 source files to /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/classes
+[INFO] /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/generated-sources/spi/com/textalk/AppendLegal_Step_Provider_SPI.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/generated-sources/spi/com/textalk/AppendLegal_Step_Provider_SPI.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- ds-to-spi-maven-plugin:1.1.2:generate-spi-test-classes (generate-spi-test-classes) @ epub3-to-epub3 ---
+[INFO] Compiling 3 source files to /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/test-classes
+[INFO] 
+[INFO] --- maven-bundle-plugin:4.1.0:bundle (bundle-before-test) @ epub3-to-epub3 ---
+[WARNING] Bundle org.daisy.pipeline.modules:epub3-to-epub3:bundle:3.1.0-SNAPSHOT : Invalid component name: pxi:add-legal-doc
+[WARNING] Bundle org.daisy.pipeline.modules:epub3-to-epub3:bundle:3.1.0-SNAPSHOT : Invalid component name: px:epub3-to-epub3.script-ensure-pagenum-text
+[WARNING] Bundle org.daisy.pipeline.modules:epub3-to-epub3:bundle:3.1.0-SNAPSHOT : Invalid component name: px:epub3-to-epub3.script-tts
+[INFO] 
+[INFO] --- maven-resources-plugin:3.0.1:testResources (default-testResources) @ epub3-to-epub3 ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 29 resources
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:testCompile (default-testCompile) @ epub3-to-epub3 ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 5 source files to /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/test-classes
+[INFO] /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/generated-test-sources/spi/MockTTS_SPI.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/generated-test-sources/spi/MockTTS_SPI.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.16:test (default-test) @ epub3-to-epub3 ---
+[INFO] Surefire report directory: /home/danielp/github/pipeline/modules/scripts/epub3-to-epub3/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running XProcSpecTest
+Skipping tests with OSGi
+Running test without OSGi
+-------------------------------------------------------
+ X P R O C S P E C   T E S T S
+-------------------------------------------------------
+Running test_epub3-to-epub3
+Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 240 sec
+Running test_epub3-to-epub3.load
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7 sec
+Running test_epub3-to-epub3.script
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 130 sec
+Running test_add-legal-doc
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+
+Results :
+
+Tests run: 48, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 389.817 sec - in XProcSpecTest
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  06:46 min
+[INFO] Finished at: 2021-05-20T15:20:28+02:00
+[INFO] ------------------------------------------------------------------------

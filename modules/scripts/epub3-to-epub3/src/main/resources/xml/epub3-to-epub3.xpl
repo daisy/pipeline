@@ -132,11 +132,12 @@ the navigation document.</p>
 
     <p:option name="add-legal-doc" required="false" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Add colophon with legal information</h2>
-            <p px:role="desc" xml:space="preserve">
-                In order to ensure the information about who created the document and have the license to
-                distribute it is clear we need to add an extra colophon with the information about MTMs
-                production, time of production and voice.
+            <h2 px:role="name">Add colophon with legal information and production details</h2>
+            <p px:role="desc">
+                Adds an extra colophon with MTM legal information and production details.
+                The information present in the colophon is title, author(s), information about the
+                Swedish copyright act and the terms of the 17§ exception, number of pages and
+                heading levels, time of production, and voice used.
             </p>
         </p:documentation>
     </p:option>
