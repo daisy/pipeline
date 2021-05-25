@@ -14,6 +14,7 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
 import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
+import org.daisy.pipeline.tts.sapinative.SAPILib;
 import org.daisy.pipeline.tts.SimpleTTSEngine;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;

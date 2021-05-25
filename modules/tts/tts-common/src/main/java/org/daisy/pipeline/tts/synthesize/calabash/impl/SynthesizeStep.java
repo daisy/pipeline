@@ -62,6 +62,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	private AudioBufferTracker mAudioBufferTracker;
 	private URIResolver mURIresolver;
 	private String mTempDirOpt;
+	private boolean mIncludeLogOpt;
 	private int mSentenceCounter = 0;
 	private int mErrorCounter = 0;
 
@@ -116,6 +117,8 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	public void setOption(QName name, RuntimeValue value) {
 		if ("temp-dir".equals(name.getLocalName())) {
 			mTempDirOpt = value.getString();
+		} else if ("include-log".equals(name.getLocalName())) {
+			mIncludeLogOpt = value.getBoolean();
 		} else
 			super.setOption(name, value);
 	}
@@ -155,10 +158,13 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		VoiceConfigExtension configExt = new VoiceConfigExtension();
 		ConfigReader cr = new ConfigReader(mRuntime.getProcessor(), config.read(), configExt);
 
-		String logEnabledProp = cr.getDynamicProperties().get("org.daisy.pipeline.tts.log");
-		if (logEnabledProp == null)
-			logEnabledProp = cr.getStaticProperties().get("org.daisy.pipeline.tts.log");
-		boolean logEnabled = "true".equalsIgnoreCase(logEnabledProp);
+		boolean logEnabled = mIncludeLogOpt;
+		if (!logEnabled) {
+			String logEnabledProp = cr.getDynamicProperties().get("org.daisy.pipeline.tts.log");
+			if (logEnabledProp == null)
+				logEnabledProp = cr.getStaticProperties().get("org.daisy.pipeline.tts.log");
+			logEnabled = "true".equalsIgnoreCase(logEnabledProp);
+		}
 		TTSLog log;
 		if (logEnabled) {
 			log = new TTSLogImpl();

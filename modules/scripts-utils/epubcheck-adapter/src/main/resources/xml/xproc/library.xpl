@@ -96,7 +96,7 @@
                 <p:template>
                     <p:input port="template">
                         <p:inline>
-                            <jhove xmlns="http://hul.harvard.edu/ois/xml/ns/jhove" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="epubcheck-adapter" release="x.x"
+                            <jhove xmlns="http://schema.openpreservation.org/ois/xml/ns/jhove" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="epubcheck-adapter" release="x.x"
                                 date="{tokenize(string(current-date()),'\+')[1]}">
                                 <date>{current-dateTime()}</date>
                                 <repInfo uri="{$epub}">

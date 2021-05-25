@@ -30,12 +30,11 @@ public class DotifyCoreTest extends AbstractTest {
 			brailleModule("common-utils"),
 			brailleModule("css-utils"),
 			pipelineModule("css-utils"),
-			"org.daisy.dotify:dotify.api:?",
-			"org.daisy.dotify:dotify.translator.impl:?",
-			"org.daisy.dotify:dotify.hyphenator.impl:?",
-			"org.daisy.streamline:streamline-api:?",
-			"org.daisy.streamline:streamline-engine:?",
-			"org.daisy.pipeline:calabash-adapter:?"
+			"org.daisy.dotify:dotify.library:?",
+			"org.daisy.pipeline:calabash-adapter:?",
+			// because the exclusion of com.fasterxml.woodstox:woodstox-core from the dotify.library
+			// dependencies causes stax2-api to be excluded too
+			"org.codehaus.woodstox:stax2-api:jar:?",
 		};
 	}
 	

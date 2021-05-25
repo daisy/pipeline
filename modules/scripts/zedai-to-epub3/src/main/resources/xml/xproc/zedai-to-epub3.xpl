@@ -32,6 +32,9 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
       <p:pipe step="load-convert-store" port="validation-status"/>
     </p:output>
 
+    <p:option name="include-tts-log" select="'false'">
+      <!-- defined in common-options.xpl -->
+    </p:option>
     <p:output port="tts-log" sequence="true">
       <!-- defined in common-options.xpl -->
       <p:pipe step="load-convert-store" port="tts-log"/>
@@ -114,6 +117,7 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
             </p:input>
             <p:with-option name="output-dir" select="$temp-dir"/>
 	    <p:with-option name="audio" select="$audio"/>
+            <p:with-option name="include-tts-log" select="$include-tts-log"/>
         </px:zedai-to-epub3>
 
         <px:epub3-store>

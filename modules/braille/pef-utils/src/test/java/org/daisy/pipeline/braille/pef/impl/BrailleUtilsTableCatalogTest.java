@@ -3,9 +3,9 @@ package org.daisy.pipeline.braille.pef.impl;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.api.table.TableProvider;
 import org.daisy.common.spi.ServiceLoader;
+import org.daisy.dotify.api.factory.FactoryProperties;
+import org.daisy.dotify.api.table.TableProvider;
 
 import org.junit.Test;
 import org.junit.Assert;

@@ -10,7 +10,6 @@ import java.net.URI;
 
 import javax.xml.transform.stream.StreamSource;
 
-import org.daisy.braille.pef.PEFValidator;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
@@ -86,8 +85,11 @@ public class ValidateStep extends DefaultStep implements XProcStep {
 			serializer.close();
 			pefStream.close();
 			
-			// Run validation
-			PEFValidator validator = new PEFValidator();
+			// FIXME: PEFValidator has moved to dotify.task.impl and should be created through the
+			// streamline API.
+			throw new UnsupportedOperationException("PEF validation currently not supported");
+			
+			/*PEFValidator validator = new PEFValidator();
 			boolean valid = validator.validate(pefFile.toURI().toURL());
 			InputStreamReader is = new InputStreamReader(validator.getReportStream());
 			LineNumberReader lnr = new LineNumberReader(is);
@@ -104,9 +106,9 @@ public class ValidateStep extends DefaultStep implements XProcStep {
 				XdmNode validationResult = runtime.getProcessor().newDocumentBuilder().build(new StreamSource(new StringReader(validationXML)));
 				validationStatus.write(validationResult);
 			}
-			result.write(pef); }
+			result.write(pef);*/
 		
-		catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("pef:validate failed", e);
 			throw new XProcException(step.getNode(), e); }
 	}

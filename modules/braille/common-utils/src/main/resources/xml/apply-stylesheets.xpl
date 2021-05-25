@@ -85,8 +85,8 @@
 	
 	<p:input port="parameters" kind="parameter" primary="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>These parameters are passed on to the XSLT transformations and injected as variables
-			into SCSS style sheets.</p>
+			<p>Parameters that are passed to XSLT transformations and SCSS style sheets (as <a
+			href="https://sass-lang.com/documentation/variables#scope">global variables</a>).</p>
 		</p:documentation>
 	</p:input>
 	
@@ -192,7 +192,7 @@
 					<p:input port="context">
 						<p:pipe step="main" port="context"/>
 					</p:input>
-					<p:input port="sass-variables">
+					<p:input port="parameters">
 						<p:pipe step="main" port="parameters"/>
 					</p:input>
 				</px:css-cascade>

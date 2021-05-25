@@ -407,7 +407,8 @@
 			<x:param name="stylesheet"
 			         select="'display:block
 			                  &amp;::before { content: &quot;x&quot; }
-			                  &amp;::before::after { content: target-counter(attr(href), page) }
+			                  &amp;::before::after::after { content: target-counter(attr(href), page) }
+			                  &amp;::table-by(column)::list-item::after { content: &quot;x&quot; }
 			                  &amp;::after { @page { size: 10 10 }}
 			                  @page { size: 40 25 @top-right { content: &quot;x&quot; }}
 			                  @volume { @begin { content: flow(titlepage); @page { size: 15 5; } @page:left { size: 15 5; @top-right { content: none; }}}}
@@ -471,9 +472,20 @@
 					</css:property>
 				</css:rule>
 				<css:rule selector="&amp;::after">
-					<css:property name="content">
-						<css:counter target="#foo" name="page" />
-					</css:property>
+					<css:rule selector="&amp;::after">
+						<css:property name="content">
+							<css:counter target="#foo" name="page" />
+						</css:property>
+					</css:rule>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="&amp;::table-by(column)">
+				<css:rule selector="&amp;::list-item">
+					<css:rule selector="&amp;::after">
+						<css:property name="content">
+							<css:string value="x"/>
+						</css:property>
+					</css:rule>
 				</css:rule>
 			</css:rule>
 		</x:expect>

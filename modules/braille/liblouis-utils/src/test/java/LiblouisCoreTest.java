@@ -9,11 +9,12 @@ import java.util.Properties;
 
 import javax.inject.Inject;
 
-import org.daisy.braille.api.table.BrailleConverter;
-import org.daisy.braille.api.table.Table;
-import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.dotify.api.table.BrailleConverter;
+import org.daisy.dotify.api.table.Table;
+import org.daisy.dotify.api.table.TableCatalogService;
 
 import static org.daisy.common.file.URLs.asURI;
+import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineIterator;
@@ -33,7 +34,6 @@ import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 
 import org.daisy.pipeline.junit.AbstractTest;
 
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -81,7 +81,7 @@ public class LiblouisCoreTest extends AbstractTest {
 			pipelineModule("fileset-utils"),
 			pipelineModule("common-utils"),
 			"org.liblouis:liblouis-java:?",
-			"org.daisy.braille:braille-utils.api:?",
+			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 		};
 	}
@@ -99,8 +99,6 @@ public class LiblouisCoreTest extends AbstractTest {
 	@Override @Configuration
 	public Option[] config() {
 		return options(
-			// FIXME: BrailleUtils needs older version of jing
-			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
 			thisBundle(thisPlatform()),
 			composite(super.config()));
 	}
@@ -300,23 +298,34 @@ public class LiblouisCoreTest extends AbstractTest {
 	
 	@Test
 	public void testWhiteSpaceProcessing() {
-		FromStyledTextToBraille translator = provider.withContext(messageBus)
-		                                             .get(query("(table:'foobar.uti')")).iterator().next()
-		                                             .fromStyledTextToBraille();
+		BrailleTranslator translator = provider.withContext(messageBus)
+		                                       .get(query("(table:'foobar.uti')")).iterator().next();
 		assertEquals(braille("⠋⠕⠕    ⠃⠁⠗ ⠃⠁⠵"),
-		             translator.transform(text("foo    bar\nbaz")));
+		             translator.fromStyledTextToBraille()
+		                       .transform(text("foo    bar\nbaz")));
 		assertEquals(braille("⠋⠕⠕    ⠃⠁⠗\n⠃⠁⠵"),
-		             translator.transform(styledText("foo    bar\nbaz", "white-space:pre-wrap")));
+		             translator.fromStyledTextToBraille()
+		                       .transform(styledText("foo    bar\nbaz", "white-space:pre-wrap")));
 		assertEquals(braille("",
 		                     "⠋⠕⠕    ⠃⠁⠗\n\u00AD",
 		                     "",
 		                     "⠃⠁⠵"),
-		             translator.transform(styledText("",             "",
+		             translator.fromStyledTextToBraille()
+		                       .transform(styledText("",             "",
 		                                             "foo    bar\n", "white-space:pre-wrap",
 		                                             "\u00AD",       "",
 		                                             "baz",          "")));
 		assertEquals(braille("\n"),
-		             translator.transform(styledText("\n", "white-space:pre-line")));
+		             translator.fromStyledTextToBraille()
+		                       .transform(styledText("\n", "white-space:pre-line")));
+		// test no-break space
+		assertEquals(
+			"⠁⠃⠉\n" +
+			"⠙⠑⠋⠀⠛⠓⠊⠚",
+			fillLines(
+				translator.lineBreakingFromStyledText()
+				          .transform(styledText("abc def ghij", "")),
+				10));
 	}
 	
 	@Test
@@ -524,14 +533,24 @@ public class LiblouisCoreTest extends AbstractTest {
 			//                   |<- 20
 			"foobar\n" +
 			"quux",
-			fillLines(translator.transform(styledText("foobar quux", "word-spacing:2")), 20)); // words are split up using U+2028
+			fillLines(translator.transform(text("foobar\u2028quux")), 20));
+		assertEquals(
+			//                   |<- 20
+			"foobar\n" +
+			"quux",
+			fillLines(translator.transform(styledText("foobar\nquux", "white-space:pre-line")), 20));
+		assertEquals(
+			//                   |<- 20
+			"foobar\n" +
+			"quux",
+			fillLines(translator.transform(styledText("foobar\u2028quux", "word-spacing:2")), 20));
 		assertEquals(
 			//                   |<- 20
 			"norf\n" +
 			"quux\n" +
 			"foobar\n" +
 			"xyzzy",
-			fillLines(translator.transform(styledText("norf quux foobar xyzzy", "word-spacing:2")), 20)); // words are split up using U+2028
+			fillLines(translator.transform(styledText("norf\u2028quux\u2028foobar\u2028xyzzy", "word-spacing:2")), 20));
 	}
 	
 	@Inject

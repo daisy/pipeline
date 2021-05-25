@@ -2,7 +2,7 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-               stylesheet="../../main/resources/xml/xslt/volume-breaking.xsl">
+               stylesheet="../../main/resources/css/volume-breaking.xsl">
 
 	<x:param name="allow-volume-break-inside-leaf-section-factor" select="3"/>
 

@@ -211,7 +211,9 @@ public class CompoundTranslator extends AbstractBrailleTranslator {
 			String row = "";
 			while (limit > row.length()) {
 				if (current == null) break;
-				row += current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
+				String s = current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
+				if (s.isEmpty()) break;
+				row += s;
 				computeCurrent(); }
 			return row;
 		}

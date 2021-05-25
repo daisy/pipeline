@@ -72,6 +72,14 @@ public final class BrailleCssTreeBuilder {
 			return this;
 		}
 
+		Style add(String[] selector, Style nestedStyle) {
+			if (selector.length == 0)
+				return this;
+			for (int i = selector.length - 1; i > 0; i--)
+				nestedStyle = new Style().add(selector[i], nestedStyle);
+			return add(selector[0], nestedStyle);
+		}
+
 		private Style add(Style style) {
 			add(style.declarations);
 			if (style.nestedStyles != null)
@@ -153,10 +161,7 @@ public final class BrailleCssTreeBuilder {
 							else
 								throw new RuntimeException("coding error");
 					}
-					style.add(selector[0],
-					          selector.length == 2
-					              ? new Style().add(selector[1], decls)
-					              : decls); }
+					style.add(selector, decls); }
 				else if (rule instanceof RulePage)
 					style.add("@page", Style.of((RulePage)rule));
 				else if (rule instanceof RuleVolume)
@@ -190,22 +195,12 @@ public final class BrailleCssTreeBuilder {
 		}
 	}
 
-	/* Split the first selector part from the rest and serialize */
+	/* Split the selector parts and serialize */
 	private static String[] serializeSelector(List<Selector> combinedSelector) {
-		String head = null;
-		StringBuilder b = new StringBuilder();
-		for (CombinatorSelectorPart part : flattenSelector(combinedSelector)) {
-			if (b.length() == 0)
-				b.append("&");
-			b.append(part);
-			if (head == null) {
-				head = b.toString();
-				b = new StringBuilder();
-			}
-		}
-		return b.length() == 0
-			? new String[]{head}
-			: new String[]{head, b.toString()};
+		List<String> selector = new ArrayList<>();
+		for (CombinatorSelectorPart part : flattenSelector(combinedSelector))
+			selector.add("&" + part);
+		return selector.toArray(new String[selector.size()]);
 	}
 
 	/* Convert a combined selector, which may contain pseudo element parts with other pseudo

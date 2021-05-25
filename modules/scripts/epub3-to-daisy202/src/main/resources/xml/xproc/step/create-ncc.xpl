@@ -131,14 +131,15 @@
         Add missing IDs to heading elements. Page number elements already have an ID thanks to
         identify-pagebreaks.xsl
     </p:documentation>
-    <px:html-add-ids name="xhtml-with-ids"
-                     match="html:h1|
-                            html:h2|
-                            html:h3|
-                            html:h4|
-                            html:h5|
-                            html:h6"
-                     px:progress="1/10"/>
+    <p:for-each name="xhtml-with-ids" px:progress="1/10">
+        <p:output port="result"/>
+        <px:html-add-ids match="html:h1|
+                                html:h2|
+                                html:h3|
+                                html:h4|
+                                html:h5|
+                                html:h6"/>
+    </p:for-each>
     <p:sink/>
 
     <p:documentation>
@@ -224,7 +225,8 @@
                         <p:pipe step="load-smil" port="result.fileset"/>
                     </p:variable>
                     <p:sink/>
-                    <p:documentation>Make sure pars have an id attribute (needed for augment-smils.xsl and create-linkbacks.xsl)</p:documentation>
+                    <p:documentation>Make sure pars have an id attribute (needed for augment-smils.xsl and
+                    create-linkbacks.xsl and also later by rearrange-notes.xsl)</p:documentation>
                     <px:add-ids match="par" name="smil-with-ids">
                         <p:input port="source">
                             <p:pipe step="augment-smils" port="current"/>
@@ -246,24 +248,7 @@
                     </p:xslt>
                 </p:group>
                 <p:identity name="smil-with-textref"/>
-                <p:unwrap match="*[@textref]"/>
-                <p:documentation>Fix metadata</p:documentation>
-                <p:xslt>
-                    <p:input port="stylesheet">
-                        <p:document href="../../xslt/smil-metadata.xsl"/>
-                    </p:input>
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                </p:xslt>
-                <p:xslt name="smil">
-                    <p:input port="stylesheet">
-                        <p:document href="../../xslt/pretty-print.xsl"/>
-                    </p:input>
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                </p:xslt>
+                <p:unwrap match="*[@textref]" name="smil"/>
                 <p:sink/>
                 <p:documentation>
                     Add linkbacks from HTML to SMIL. <!-- (Note that the spec does not explicitly
@@ -397,15 +382,6 @@
             </p:input>
             <p:input port="stylesheet">
                 <p:document href="../../xslt/augment-smil.xsl"/>
-            </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-        </p:xslt>
-        <p:documentation>Fix metadata</p:documentation>
-        <p:xslt>
-            <p:input port="stylesheet">
-                <p:document href="../../xslt/smil-metadata.xsl"/>
             </p:input>
             <p:input port="parameters">
                 <p:empty/>

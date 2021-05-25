@@ -6643,10 +6643,6 @@
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                 </page>
-              </section>
-            </volume>
-            <volume cols="10" rows="6" rowgap="0" duplex="true">
-              <section>
                 <page>
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
@@ -6663,15 +6659,19 @@
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
                 </page>
-                <page>
-                  <row>⠤⠤⠤⠤⠤</row>
-                  <row>⠤⠤⠤⠤⠤</row>
-                </page>
               </section>
               <section>
                 <page>
                   <row>⠭⠭⠭</row>
                   <row>⠿⠿⠿⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="6" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
                 </page>
               </section>
             </volume>
@@ -11655,14 +11655,14 @@
           <body style="@page { size: 10 20 }">
             <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
                    style="display: block;
-                          render-table-by: row;
+                          render-table-by: row, column;
                           text-transform: none;
-                          &amp;::table-by(row) {
+                          &amp;::table-by(row)::list-item {
                             display:block;
                             margin-left:2; }
-                          &amp;::table-by(row)::list-item {
+                          &amp;::table-by(column)::list-item {
                             display:block; }
-                          &amp;::table-by(row)::list-item:first-child {
+                          &amp;::table-by(column)::list-item:first-child {
                             text-indent:-2; }">
               <thead>
                 <tr>
@@ -11721,27 +11721,27 @@
             <block>
               <block>
                 <block first-line-indent="0" text-indent="2">⠿⠁⠤⠁⠤⠁</block>
-                <block padding-left="2">⠤⠁⠤⠃</block>
+                <block padding-left="2">⠿⠁⠤⠁⠤⠃</block>
                 <block padding-left="2">⠿⠉⠤⠁⠤⠉</block>
               </block>
               <block>
                 <block first-line-indent="0" text-indent="2">⠿⠁⠤⠃⠤⠁</block>
-                <block padding-left="2">⠤⠃⠤⠃</block>
+                <block padding-left="2">⠿⠁⠤⠃⠤⠃</block>
                 <block padding-left="2">⠿⠉⠤⠃⠤⠉</block>
               </block>
               <block>
                 <block first-line-indent="0" text-indent="2">⠿⠁⠤⠉⠤⠁</block>
-                <block padding-left="2">⠤⠉⠤⠃</block>
+                <block padding-left="2">⠿⠁⠤⠉⠤⠃</block>
                 <block padding-left="2">⠿⠉⠤⠉⠤⠉</block>
               </block>
               <block>
                 <block first-line-indent="0" text-indent="2">⠿⠁⠤⠉⠤⠁</block>
-                <block padding-left="2">⠤⠙⠤⠃</block>
+                <block padding-left="2">⠿⠁⠤⠙⠤⠃</block>
                 <block padding-left="2">⠿⠉⠤⠙⠤⠉</block>
               </block>
               <block>
                 <block first-line-indent="0" text-indent="2">⠿⠁⠶⠁</block>
-                <block padding-left="2">⠶⠃</block>
+                <block padding-left="2">⠿⠁⠶⠃</block>
                 <block padding-left="2">⠿⠉⠶⠉</block>
               </block>
             </block>
@@ -11765,19 +11765,19 @@
               <section>
                 <page>
                   <row>⠿⠁⠤⠁⠤⠁</row>
-                  <row>⠀⠀⠤⠁⠤⠃</row>
+                  <row>⠀⠀⠿⠁⠤⠁⠤⠃</row>
                   <row>⠀⠀⠿⠉⠤⠁⠤⠉</row>
                   <row>⠿⠁⠤⠃⠤⠁</row>
-                  <row>⠀⠀⠤⠃⠤⠃</row>
+                  <row>⠀⠀⠿⠁⠤⠃⠤⠃</row>
                   <row>⠀⠀⠿⠉⠤⠃⠤⠉</row>
                   <row>⠿⠁⠤⠉⠤⠁</row>
-                  <row>⠀⠀⠤⠉⠤⠃</row>
+                  <row>⠀⠀⠿⠁⠤⠉⠤⠃</row>
                   <row>⠀⠀⠿⠉⠤⠉⠤⠉</row>
                   <row>⠿⠁⠤⠉⠤⠁</row>
-                  <row>⠀⠀⠤⠙⠤⠃</row>
+                  <row>⠀⠀⠿⠁⠤⠙⠤⠃</row>
                   <row>⠀⠀⠿⠉⠤⠙⠤⠉</row>
                   <row>⠿⠁⠶⠁</row>
-                  <row>⠀⠀⠶⠃</row>
+                  <row>⠀⠀⠿⠁⠶⠃</row>
                   <row>⠀⠀⠿⠉⠶⠉</row>
                 </page>
               </section>
@@ -12939,15 +12939,15 @@
                           &amp;:-obfl-alternate-scenario {
                             -obfl-scenario-cost: 2;
                             display: block;
-                            render-table-by:row; }
+                            render-table-by: row, column; }
                           &amp;:-obfl-alternate-scenario td:blank::after {
                             content: '⠪⠕'; }
-                          &amp;:-obfl-alternate-scenario::table-by(row) {
+                          &amp;:-obfl-alternate-scenario::table-by(row)::list-item {
                             display:block;
                             margin-left:2; }
-                          &amp;:-obfl-alternate-scenario::table-by(row)::list-item {
+                          &amp;:-obfl-alternate-scenario::table-by(column)::list-item {
                             display:block; }
-                          &amp;:-obfl-alternate-scenario::table-by(row)::list-item:first-child {
+                          &amp;:-obfl-alternate-scenario::table-by(column)::list-item:first-child {
                             text-indent:-2; }">
               <thead>
                 <tr>
@@ -13184,6 +13184,20 @@
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿</row>
                   <row>⠒⠒⠒⠀⠼⠁⠀⠒⠒⠒</row>
                 </page>
               </section>
@@ -13192,20 +13206,6 @@
               <section>
                 <page>
                   <row>⠒⠒⠒⠀⠼⠃⠀⠒⠒⠒</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                </page>
-                <page>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
-                </page>
-                <page>
-                  <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
@@ -14151,7 +14151,7 @@
                 <page>
                   <row>⠼⠁⠀⠐⠐⠐⠐⠐⠐⠐⠐⠐⠀⠼⠁</row>
                   <row>⠀⠼⠁⠲⠁⠀⠐⠐⠐⠐⠐⠐⠀⠼⠁</row>
-                  <row>⠼⠁⠀⠄⠄⠄⠀⠐⠐⠐⠐⠐⠀⠼⠑</row>
+                  <row>⠼⠁⠀⠄⠄⠄⠀⠐⠐⠐⠐⠐⠀⠼⠉</row>
                   <row>⠀⠼⠁⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠉</row>
                   <row>⠼⠁⠀⠄⠄⠄⠀⠐⠐⠐⠐⠐⠀⠼⠑</row>
                   <row>⠼⠃⠀⠐⠐⠐⠐⠐⠐⠐⠐⠐⠀⠼⠑</row>
@@ -14786,7 +14786,6 @@
           <doc style="text-transform: none; @page { size: 20 5 }">
             <p style="display: block">
               <span style="&amp;::before {
-                             text-transform: auto;
                              content: '⠿⠿⠿⠿ ' leader('⠁') ' '; }">
                 ⠿⠿⠿⠿
               </span>
@@ -14809,8 +14808,7 @@
           </layout-master>
           <sequence master="body">
             <block>
-              <span translate="">⠿⠿⠿⠿ </span>
-              <leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿⠿
+              ⠿⠿⠿⠿ <leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿⠿
             </block>
           </sequence>
         </obfl>
@@ -15324,6 +15322,412 @@
               <section>
                 <page>
                   <row>⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_131">
+    <x:documentation>
+      Tests leader on a line with reduced width. It should work also if there is a soft wrap before
+      the leader.
+
+      See https://github.com/mtmse/dotify.formatter.impl/pull/37.
+    </x:documentation>
+      <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none;
+                      @page {
+                        size: 10 2;
+                        @bottom-right { content: '⠉⠉⠉' }}">
+            <p style="display: block">
+              ⠤⠤⠤⠤⠤⠤⠤⠤ <span style="&amp;::before { content: leader('⠁') }">⠿⠿</span>
+            </p>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="body" page-width="10" page-height="2" duplex="true">
+            <default-template>
+              <header/>
+              <footer>
+                <field allow-text-flow="true"/>
+                <field>
+                  <string value="⠉⠉⠉"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
+          <sequence master="body">
+            <block>
+              ⠤⠤⠤⠤⠤⠤⠤⠤ <leader pattern="⠁" position="100%" align="right"/>⠿⠿
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="2" cols="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠁⠁⠁⠁⠁⠿⠿⠉⠉⠉</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_132">
+    <x:documentation>
+      Tests keeping a leader together with the preceding word.
+
+      Broken: see https://github.com/mtmse/dotify.formatter.impl/issues/41.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none; @page { size: 10 5 }">
+            <p style="display: block">
+              ⠤⠤⠤ ⠤⠤⠤⠤<span style="&amp;::before { content: leader('⠁') }">⠿⠿⠿</span>
+            </p>
+            <p style="display: block">
+              ⠤⠤⠤ ⠤⠤⠤⠤<span style="&amp;::before { content: leader('⠁') ' '}">⠿⠿⠿</span>
+            </p>
+            <p style="display: block">
+              ⠤⠤⠤ ⠤⠤⠤<span style="&amp;::before { content: leader('⠁') ' ' }">⠿⠿⠿</span>
+            </p>
+            <p style="display: block">
+              ⠤⠤⠤ ⠤⠤⠤ <span style="&amp;::before { content: leader('⠁') ' ' }">⠿⠿⠿</span>
+            </p>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="body" page-width="10" page-height="5" duplex="true">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="body">
+            <block>
+              ⠤⠤⠤ ⠤⠤⠤⠤<leader pattern="⠁" position="100%" align="right"/>⠿⠿⠿
+            </block>
+            <block>
+              ⠤⠤⠤ ⠤⠤⠤⠤<leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿
+            </block>
+            <block>
+              ⠤⠤⠤ ⠤⠤⠤<leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿
+            </block>
+            <block>
+              ⠤⠤⠤ ⠤⠤⠤ <leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare"
+              xfail="https://github.com/mtmse/dotify.formatter.impl/issues/41">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="5" cols="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠁⠁⠁⠿⠿⠿</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠁⠁⠀⠿⠿⠿</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠁⠁⠁⠀⠿⠿⠿</row>
+                  <row>⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠀⠁⠁⠀⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_133">
+    <x:documentation>
+      Tests -obfl-right-text-indent with leader and left aligned text.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none; @page { size: 10 5 }">
+            <p style="display: block; -obfl-right-text-indent: 3; page-break-before: always">
+              ⠤⠤⠤⠤⠤⠤⠤ <span style="&amp;::before { content: leader('⠁', 7, left) }">⠿⠿</span>
+            </p>
+            <p style="display: block; -obfl-right-text-indent: 3; page-break-before: always">
+              ⠤⠤⠤⠤⠤⠤ <span style="&amp;::before { content: leader('⠁', 7, left) }">⠿⠿</span>
+            </p>
+            <p style="display: block; -obfl-right-text-indent: 3; page-break-before: always">
+              ⠤⠤⠤⠤⠤ <span style="&amp;::before { content: leader('⠁', 7, left) }">⠿⠿</span>
+            </p>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="body" page-width="10" page-height="5" duplex="true">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="body">
+            <block break-before="page" right-text-indent="3">
+              ⠤⠤⠤⠤⠤⠤⠤ <leader pattern="⠁" position="7" align="left"/>⠿⠿
+            </block>
+            <block break-before="page" right-text-indent="3">
+              ⠤⠤⠤⠤⠤⠤ <leader pattern="⠁" position="7" align="left"/>⠿⠿
+            </block>
+            <block break-before="page" right-text-indent="3">
+              ⠤⠤⠤⠤⠤ <leader pattern="⠁" position="7" align="left"/>⠿⠿
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="5" cols="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row>⠁⠁⠁⠁⠁⠁⠁⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠤⠀⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠀⠁⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_134">
+    <x:documentation>
+      Tests white-space:pre-line on -obfl-evaluate().
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform: none;
+                      &amp;::before {
+                        display: block;
+                        white-space: pre-line;
+                        content: -obfl-evaluate('&quot;⠤⠤⠤⠤⠤\A\A⠤⠤⠤⠤⠤&quot;') }"/>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="master" duplex="true" page-width="40" page-height="25">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="master">
+            <block>
+              <style name="white-space: pre-line">
+                <evaluate expression="&quot;⠤⠤⠤⠤⠤&#xA;&#xA;⠤⠤⠤⠤⠤&quot;"/>
+              </style>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row/>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_135">
+    <x:documentation>
+      Tests note in repeated table header.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <body style="text-transform: none;
+                       @page {
+                         size: 10 10;
+                         @footnotes { content: flow(footnotes) }}">
+            <table style="display: block;
+                          render-table-by: row, column;
+                          &amp;::table-by(row)::list-item {
+                            display: block; }
+                          &amp;::table-by(column)::list-item {
+                            display: block; }">
+              <tr>
+                <th>⠛</th>
+                <th><note style="flow: footnotes;
+                               display: block;
+                               &amp;::footnote-call { content: '⠶' }">⠤⠤⠤</note></th>
+              </tr>
+              <tr>
+                <td>⠁⠁⠁</td>
+                <td>⠄⠄⠄</td>
+              </tr>
+              <tr>
+                <td>⠁⠁⠁</td>
+                <td>⠄⠄⠄</td>
+              </tr>
+            </table>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="master" duplex="true" page-width="10" page-height="10">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+            <page-area align="bottom" max-height="5" collection="footnotes"/>
+          </layout-master>
+          <collection name="footnotes">
+            <item id="item">
+              <block>⠤⠤⠤</block>
+            </item>
+          </collection>
+          <sequence master="master">
+            <block>
+              <block>
+                <block>⠛⠁⠁⠁</block>
+                <block>⠶<anchor item="item"/>⠄⠄⠄</block>
+              </block>
+              <block>
+                <block>⠛⠁⠁⠁</block>
+                <block>⠶<anchor item="item"/>⠄⠄⠄</block>
+              </block>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠛⠁⠁⠁</row>
+                  <row>⠶⠄⠄⠄</row>
+                  <row>⠛⠁⠁⠁</row>
+                  <row>⠶⠄⠄⠄</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠤⠤⠤</row>
                 </page>
               </section>
             </volume>

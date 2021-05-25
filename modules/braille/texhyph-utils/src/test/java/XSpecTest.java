@@ -8,7 +8,7 @@ public class XSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("common-utils"),
 			brailleModule("common-utils"),
 			"com.googlecode.texhyphj:texhyphj:?",
-			"org.daisy.dotify:dotify.hyphenator.impl:?",
+			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.libs:saxon-he:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 		};

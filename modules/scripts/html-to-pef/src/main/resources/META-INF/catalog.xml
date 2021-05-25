@@ -16,8 +16,10 @@
   
   <!-- style sheets -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css" uri="../css/reset.css"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/default.scss" uri="../css/default.scss"/> <!-- for epub3-to-pef -->
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl" uri="../xml/xslt/volume-breaking.xsl"/>
+  <!-- for epub3-to-pef -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/default.scss" uri="../css/default.scss"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl" uri="../css/volume-breaking.xsl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/generate-toc.xsl" uri="../css/generate-toc.xsl"/>
   
   <!-- dependencies -->
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>

@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-parent</artifactId>
-  <version>1.14.2-SNAPSHOT</version>
+  <version>1.14.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Parent POM</name>
@@ -228,7 +228,7 @@
             <dependency>
               <groupId>org.daisy.libs</groupId>
               <artifactId>com.xmlcalabash</artifactId>
-              <version>1.1.20-p5-98-SNAPSHOT</version>
+              <version>1.1.20-p5-98</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
@@ -420,14 +420,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.2-SNAPSHOT</version>
+        <version>1.14.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.1-SNAPSHOT</version>
+        <version>1.14.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -842,7 +842,7 @@
       <id>module-with-documentation-only</id>
       <activation>
         <property>
-          <name>documentation</name>
+          <name>documentation-only</name>
         </property>
       </activation>
       <properties>

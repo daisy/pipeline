@@ -1,5 +1,7 @@
 package org.daisy.pipeline.tts.sapinative.impl;
 
+import org.daisy.pipeline.tts.sapinative.SAPILib;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;

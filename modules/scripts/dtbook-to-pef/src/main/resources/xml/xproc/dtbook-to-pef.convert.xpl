@@ -102,9 +102,7 @@
                     select="(index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
-                              resolve-uri('../xslt/generate-toc.xsl'),
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
-                              resolve-uri('../xslt/volume-breaking.xsl'),
                               if ($default-stylesheet!='#default')
                                 then $default-stylesheet
                                 else resolve-uri('../../css/default.css'),

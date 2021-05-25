@@ -150,11 +150,15 @@
                                     <!--
                                         The SMIL already references a contained element. Happens if the
                                         granularity is too fine, e.g. for word-level synchronization. Merge
-                                        all the segments into a single par.
+                                        all the segments into a single par. (Note that we can't wrap the
+                                        segments in a seq because the NCC may only reference par or text.)
                                     -->
                                     <xsl:variable name="segments" as="element()*"
                                                   select="$referenced-html-elements[ancestor::* intersect current()]"/>
                                     <xsl:choose>
+                                        <!--
+                                            Test whether the segments make up the whole heading or page number
+                                        -->
                                         <xsl:when test="replace(string-join($segments/string(.),''),'[\s\p{Z}]+','')
                                                         =replace(string(.),'[\s\p{Z}]+','')">
                                             <xsl:variable name="smil-segments" as="element()*"
@@ -163,6 +167,10 @@
                                                                   $smil//text[pf:normalize-uri(pf:resolve-uri(@src,.))=$id]/parent::*"/>
                                             <xsl:variable name="audio-segments" as="element()*" select="$smil-segments/audio"/>
                                             <xsl:choose>
+                                                <!--
+                                                    Test whether the audio clips are from the same audio file and follow each
+                                                    other directly.
+                                                -->
                                                 <xsl:when test="every $i in 1 to count($audio-segments) - 1
                                                                 satisfies ($audio-segments[$i]/@src=$audio-segments[$i + 1]/@src and
                                                                            $audio-segments[$i]/@clip-end=$audio-segments[$i + 1]/@clip-begin)">
@@ -182,6 +190,9 @@
                                                   <!--
                                                       Not terminating here because we can recover from it in create-linkbacks.xsl,
                                                       by linking to the first segment.
+
+                                                      An alternative would be to merge the audio segments by wrapping them in a
+                                                      seq (seq can be child of par and parent of audio).
                                                   -->
                                                   <xsl:message select="concat(
                                                                          'SMIL &quot;',replace($smil-base-uri,'^.*/([^/]+)^','$1'),

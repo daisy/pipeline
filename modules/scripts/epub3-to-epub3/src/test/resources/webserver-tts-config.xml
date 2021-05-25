@@ -1,0 +1,4 @@
+<config>
+	<voice engine="osx-speech" name="Alex" lang="en-us" gender="male-adult" priority="5"/>
+	<voice engine="osx-speech" name="Alva" lang="sv-se" gender="female-adult" priority="5"/>
+</config>

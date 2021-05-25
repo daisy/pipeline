@@ -12,15 +12,12 @@ $maximum-number-of-sheets: 70 !default;
  * Amount with which volume breaks are allowed within "leaf sections", meaning that a
  * volume is not broken right before a heading.
  *
- * In order for this part of the style sheet to work, volume-breaking.xsl must be
- * included before volume-breaking.scss in the list of style sheets.
- *
  * A leaf section is a block of adjacent content with the same sectioning depth.
  * Which means:
  * - either; a section element with no child sections
  * - or; the content in a section (<h1>, <p>, etc.), which may have section element siblings
  *
- * If a section contains other sections, then volume-breaking.xsl wraps the normal content
+ * If a section contains other sections, then this style sheet wraps the normal content
  * (<h1>, <p>, etc.) in the section in a <div class="leaf-section"> element.
  */
 $allow-volume-break-inside-leaf-section-factor: 10 !default;
@@ -40,6 +37,14 @@ $prefer-volume-break-before-higher-level-factor: 0 !default;
 @if $allow-volume-break-inside-leaf-section-factor < 10 {
     
     $min-volume-keep-priority: min(10, max(1, round($allow-volume-break-inside-leaf-section-factor)));
+    
+    $duplex: true !default;
+    @xslt "http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl" {
+        duplex: $duplex;
+        maximum-number-of-sheets: $maximum-number-of-sheets;
+        allow-volume-break-inside-leaf-section-factor: $allow-volume-break-inside-leaf-section-factor;
+        prefer-volume-break-before-higher-level-factor: $prefer-volume-break-before-higher-level-factor;
+    }
     
     @if $min-volume-keep-priority < 10 {
         

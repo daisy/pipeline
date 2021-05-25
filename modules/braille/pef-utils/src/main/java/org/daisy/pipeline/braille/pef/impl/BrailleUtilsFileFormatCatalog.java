@@ -13,13 +13,13 @@ import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 
-import org.daisy.braille.api.embosser.Embosser;
-import org.daisy.braille.api.embosser.EmbosserProvider;
-import org.daisy.braille.api.embosser.EmbosserWriter;
-import org.daisy.braille.api.embosser.FileFormat;
-import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.api.table.Table;
-import org.daisy.braille.api.table.TableFilter;
+import org.daisy.dotify.api.embosser.Embosser;
+import org.daisy.dotify.api.embosser.EmbosserProvider;
+import org.daisy.dotify.api.embosser.EmbosserWriter;
+import org.daisy.dotify.api.embosser.FileFormat;
+import org.daisy.dotify.api.factory.FactoryProperties;
+import org.daisy.dotify.api.table.Table;
+import org.daisy.dotify.api.table.TableFilter;
 
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
 import static org.daisy.pipeline.braille.common.Provider.util.memoize;
@@ -95,7 +95,7 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 	
 	private Iterable<Supplier<FileFormat>> getFileFormat(final String id) {
 		List<Supplier<FileFormat>> formats = new ArrayList<Supplier<FileFormat>>();
-		for (final org.daisy.braille.api.embosser.FileFormatProvider p : providers)
+		for (final org.daisy.dotify.api.embosser.FileFormatProvider p : providers)
 			for (FactoryProperties fp : p.list())
 				if (fp.getIdentifier().equals(id))
 					formats.add(new Supplier<FileFormat>() {
@@ -117,23 +117,23 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 	
 	private final static Iterable<FileFormat> empty = Optional.<FileFormat>absent().asSet();
 	
-	private final List<org.daisy.braille.api.embosser.FileFormatProvider> providers
-	= new ArrayList<org.daisy.braille.api.embosser.FileFormatProvider>();
+	private final List<org.daisy.dotify.api.embosser.FileFormatProvider> providers
+	= new ArrayList<org.daisy.dotify.api.embosser.FileFormatProvider>();
 	
 	@Reference(
 		name = "FileFormatProvider",
 		unbind = "removeFileFormatProvider",
-		service = org.daisy.braille.api.embosser.FileFormatProvider.class,
+		service = org.daisy.dotify.api.embosser.FileFormatProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC
 	)
-	public void addFileFormatProvider(org.daisy.braille.api.embosser.FileFormatProvider provider) {
+	public void addFileFormatProvider(org.daisy.dotify.api.embosser.FileFormatProvider provider) {
 		if (!OSGiHelper.inOSGiContext())
 			provider.setCreatedWithSPI();
 		providers.add(provider);
 	}
 	
-	public void removeFileFormatProvider(org.daisy.braille.api.embosser.FileFormatProvider provider) {
+	public void removeFileFormatProvider(org.daisy.dotify.api.embosser.FileFormatProvider provider) {
 		providers.remove(provider);
 	}
 	

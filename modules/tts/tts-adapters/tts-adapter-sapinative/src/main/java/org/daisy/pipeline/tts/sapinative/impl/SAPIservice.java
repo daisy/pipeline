@@ -6,6 +6,7 @@ import javax.naming.directory.InvalidAttributeValueException;
 import javax.sound.sampled.AudioFormat;
 
 import org.daisy.pipeline.tts.AbstractTTSService;
+import org.daisy.pipeline.tts.sapinative.SAPILib;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 

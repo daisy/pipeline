@@ -329,7 +329,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 								text = text.replaceAll("[\\n\\r]", "\u2028");
 							style.removeProperty("white-space"); }
 						for (String prop : style.getPropertyNames())
-							logger.warn("CSS property {} not supported", style.getSourceDeclaration(prop)); }
+							logger.warn("{}: {} not supported", prop, style.get(prop)); }
 					if (wordSpacing < 0)
 						wordSpacing = spacing;
 					else if (wordSpacing != spacing)

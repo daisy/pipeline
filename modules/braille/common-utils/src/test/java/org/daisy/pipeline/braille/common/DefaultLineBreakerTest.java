@@ -80,6 +80,16 @@ public class DefaultLineBreakerTest {
 	}
 	
 	@Test
+	public void testNoBreakSpace() {
+		TestHyphenator hyphenator = new TestHyphenator();
+		TestTranslator translator = new TestTranslator(hyphenator);
+		assertEquals(
+			"ABC\n" +
+			"DEF GHIJ",
+			fillLines(translator.lineBreakingFromStyledText().transform(text("abc def ghij")), 10));
+	}
+
+	@Test
 	public void testHardLineBreak() {
 		TestHyphenator hyphenator = new TestHyphenator();
 		TestTranslator translator = new TestTranslator(hyphenator);

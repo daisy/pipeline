@@ -35,6 +35,9 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
     <p:pipe step="convert" port="validation-status"/>
   </p:output>
 
+  <p:option name="include-tts-log" select="'false'">
+    <!-- defined in common-options.xpl -->
+  </p:option>
   <p:output port="tts-log" sequence="true">
     <!-- defined in common-options.xpl -->
     <p:pipe step="convert" port="tts-log"/>
@@ -107,6 +110,7 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
     </p:with-option>
     <p:with-option name="audio" select="$audio"/>
     <p:with-option name="audio-only" select="$with-text = 'false'"/>
+    <p:with-option name="include-tts-log" select="$include-tts-log"/>
   </px:dtbook-to-daisy3>
 
   <px:fileset-store name="store">

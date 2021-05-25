@@ -45,11 +45,10 @@
 			<xsl:variable name="content-doc-uri" select="pf:normalize-uri(base-uri(.))"/>
 			<xsl:for-each select="$noteref-list//d:file[pf:normalize-uri(resolve-uri(@href,base-uri(.)))=$content-doc-uri]/d:anchor">
 				<xsl:variable name="noteref-element" as="element()?" select="key('id',@id,$content-doc)"/>
-				<!--
-				    for now only note references within the same document are supported
-				-->
-				<xsl:if test="$noteref-element/self::html:a[starts-with(@href,'#')]">
-					<xsl:sequence select="key('id',substring($noteref-element/@href,2),$content-doc)"/>
+				<xsl:if test="exists($noteref-element)">
+					<xsl:variable name="absolute-href"
+					              select="pf:normalize-uri(resolve-uri($noteref-element/self::html:a/@href,$content-doc-uri))"/>
+					<xsl:sequence select="collection()/html:*/key('absolute-id',$absolute-href)"/>
 				</xsl:if>
 			</xsl:for-each>
 		</xsl:for-each>

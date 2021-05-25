@@ -63,7 +63,7 @@
         <x:context label="the validation-report port">
             <x:document type="port" port="validation-report"/>
         </x:context>
-        <x:expect label="the input should be valid EPUB" type="count" max="0"/>
+        <x:expect label="the input should be invalid EPUB" type="count" min="1" max="1"/>
         <x:context label="the output directory">
             <x:document type="directory" base-uri="temp-dir" href="issue-529/output-dir/" recursive="true"/>
         </x:context>

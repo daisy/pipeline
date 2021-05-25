@@ -98,6 +98,7 @@ even though the provided CSS is more specific.
     <p:option name="show-print-page-numbers"/>
     <p:option name="force-braille-page-break"/>
     <p:option name="toc-depth"/>
+    <p:option name="toc-exclude-class"/>
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>

@@ -19,11 +19,12 @@
             - other css styles must be declared in style attributes. styles that will be recognized are:
               - ::table-by(<axis>) pseudo-elements on table element
               - ::list-item pseudo-elements on table element or ::table-by(<axis>) pseudo-elements
-            - function returns copy of table element with inside a multi-level list of anonymous
-              elements and copies of the td and th elements contained within the leaf elements
+            - function returns copy of table element with inside a multi-level list of css:table-by
+              and css:list-item elements and copies of the td and th elements contained within the
+              leaf elements
             - render-table-by and table-header-policy properties not copied to output
-            - ::table-by(<axis>) and ::list-item styles are moved to style attributes of appropriate
-              anonymous elements
+            - ::table-by(<axis>) and ::list-item styles are moved to style attributes of corresponding
+              generated elements
             - tr, tbody, thead, tfoot, col and colgroup elements not copied to output
             - other elements (caption, pagenum?) copied to output before or after the generated list
         -->

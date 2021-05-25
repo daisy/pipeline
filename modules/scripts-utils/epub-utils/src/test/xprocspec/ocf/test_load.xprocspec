@@ -202,9 +202,9 @@
 		<x:context label="the validation status">
 			<x:document type="port" port="validation-status"/>
 		</x:context>
-		<x:expect label="the validation should succeed" type="compare">
+		<x:expect label="the validation should fail" type="compare">
 			<x:document type="inline">
-				<d:validation-status result="ok"/>
+				<d:validation-status result="error"/>
 			</x:document>
 		</x:expect>
 		<x:context label="the result fileset">

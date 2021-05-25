@@ -18,6 +18,13 @@
       </p>
     </p:documentation>
   </p:output>
+  <p:option name="include-log" select="'false'">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Whether or not to make the TTS log available on the "log" port.</p>
+      <p>Note that if this option is set to false, it can still be overwritten by the
+      "org.daisy.pipeline.tts.log" property.</p>
+    </p:documentation>
+  </p:option>
   <p:output port="log" sequence="true"/>
   <p:option name="temp-dir" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">

@@ -35,6 +35,13 @@
         </p:documentation>
         <p:pipe step="html-to-epub3" port="temp-audio-files"/>
     </p:output>
+    <p:option name="include-tts-log" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Whether or not to make the TTS log available on the "tts-log" port.</p>
+            <p>Note that if this option is set to false, it can still be overwritten by the
+            "org.daisy.pipeline.tts.log" property.</p>
+        </p:documentation>
+    </p:option>
     <p:output port="tts-log" sequence="true">
         <p:pipe step="html-to-epub3" port="tts-log"/>
     </p:output>
@@ -195,6 +202,7 @@
             <p:pipe step="main" port="tts-config"/>
         </p:input>
         <p:with-option name="audio" select="$audio"/>
+        <p:with-option name="include-tts-log" select="$include-tts-log"/>
         <p:with-option name="output-dir" select="concat($output-dir,'epub/')"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:html-to-epub3>

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.nio.charset.Charset;
 
-import org.daisy.braille.api.table.BrailleConverter;
+import org.daisy.dotify.api.table.BrailleConverter;
 
 import org.liblouis.Translator;
 

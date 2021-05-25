@@ -12,14 +12,14 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Optional;
 
-import org.daisy.braille.api.embosser.EmbosserWriter;
-import org.daisy.braille.api.embosser.FileFormat;
-import org.daisy.braille.api.embosser.LineBreaks;
-import org.daisy.braille.api.embosser.StandardLineBreaks;
-import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.api.table.BrailleConverter;
-import org.daisy.braille.api.table.Table;
-import org.daisy.braille.api.table.TableFilter;
+import org.daisy.dotify.api.embosser.EmbosserWriter;
+import org.daisy.dotify.api.embosser.FileFormat;
+import org.daisy.dotify.api.embosser.LineBreaks;
+import org.daisy.dotify.api.embosser.StandardLineBreaks;
+import org.daisy.dotify.api.factory.FactoryProperties;
+import org.daisy.dotify.api.table.BrailleConverter;
+import org.daisy.dotify.api.table.Table;
+import org.daisy.dotify.api.table.TableFilter;
 
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
 import static org.daisy.pipeline.braille.common.Provider.util.memoize;

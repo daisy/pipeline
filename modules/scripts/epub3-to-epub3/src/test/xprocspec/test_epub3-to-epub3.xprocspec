@@ -12,24 +12,6 @@
 	<x:scenario label="minimal">
 		<x:call step="px:epub3-to-epub3">
 			<x:option name="result-base" select="resolve-uri('result/')"/>
-			<x:input port="tts-config">
-				<x:document type="inline">
-					<config>
-						<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
-						<!-- log can be found in "log" output -->
-						<property key="log" value="true"/>
-						<css>
-							@namespace epub url(http://www.idpf.org/2007/ops);
-							[epub|type~=pagebreak]::before {
-								content: 'page ';
-							}
-							[epub|type~=pagebreak]:empty[title]::before {
-								content: 'page ' attr(title);
-							}
-						</css>
-					</config>
-				</x:document>
-			</x:input>
 			<x:input port="epub.in.fileset">
 				<x:document type="inline">
 					<d:fileset>
@@ -177,11 +159,17 @@
 							<figcaption id="caption_1">
 								<strong>Illustration 1 A.</strong> This is an illustration.
 							</figcaption>
+							<p>
+								This paragraph contains a note reference.<a epub:type="noteref"
+								href="#note_1">*</a> This is the second sentence.
+							</p>
+							<p id="note_1">
+								This is a note.
+							</p>
 						</body>
 					</html>
 				</x:document>
 			</x:input>
-			<x:option name="ensure-pagenum-text" select="'hidden'"/>
 			<x:option name="ensure-section-headings" select="'true'"/>
 			<x:option name="braille" select="false()"/>
 			<x:option name="braille-translator" select="''"/>
@@ -192,6 +180,25 @@
 		<x:scenario label="tts">
 			<x:call>
 				<x:option name="tts" select="true()"/>
+				<x:input port="tts-config">
+					<x:document type="inline">
+						<config>
+							<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
+							<!-- log can be found in "log" output -->
+							<property key="log" value="true"/>
+							<css>
+								@namespace epub url(http://www.idpf.org/2007/ops);
+								[epub|type~=pagebreak]::before {
+									content: 'page ';
+								}
+								[epub|type~=pagebreak]:empty[title]::before {
+									content: 'page ' attr(title);
+								}
+							</css>
+						</config>
+					</x:document>
+				</x:input>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/tts/')"/>
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -231,13 +238,13 @@
 							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
 							<dc:date>2020-03-06</dc:date>
-							<meta property="media:duration">00:00:17.122</meta>
-							<meta name="media:duration" content="00:00:17.122"/>
+							<meta property="media:duration">00:00:22.014</meta>
+							<meta name="media:duration" content="00:00:22.014"/>
 							<meta property="schema:accessibilityFeature">captions</meta>
 							<meta name="schema:accessibilityFeature" content="captions"/>
 							<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
 							<meta property="media:duration" refines="#item_2">00:00:08.561</meta>
-							<meta property="media:duration" refines="#item_3">00:00:07.338</meta>
+							<meta property="media:duration" refines="#item_3">00:00:12.23</meta>
 						</metadata>
 						<manifest>
 							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
@@ -335,9 +342,8 @@
 									<span id="st2-3">List of contents</span>
 								</h2>
 								<table>...</table>
-								<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv"
-								     style="visibility: hidden">
-									<span id="st2-4">iv</span>
+								<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv">
+									<span id="st2-4"/>
 								</div>
 							</section>
 							<section id="preface" aria-labelledby="aria_label_1">
@@ -347,9 +353,8 @@
 								<p>
 									<span id="st2-6">...</span>
 								</p>
-								<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v"
-								     style="visibility: hidden">
-									<span id="st2-7">v</span>
+								<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v">
+									<span id="st2-7"/>
 								</div>
 							</section>
 						</body>
@@ -375,8 +380,7 @@
 							<p>
 								<span id="st3-2">
 									<span id="i3st3-2-no-skippable">This paragraph contains</span>
-									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"
-									      style="visibility: hidden">5</span>
+									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
 									<span id="i3st3-2-page_5">a page break.</span>
 								</span>
 							</p>
@@ -390,6 +394,16 @@
 									This is an illustration.
 								</span>
 							</figcaption>
+							<p>
+								<span id="st3-5">
+									<span id="i3st3-5-no-skippable">This paragraph contains a note reference.</span>
+									<a id="id_1" epub:type="noteref" href="#note_1">*</a>
+									<span id="i3st3-5-id_1"> This is the second sentence.</span>
+								</span>
+							</p>
+							<p id="note_1">
+								<span id="st3-6">This is a note.</span>
+							</p>
 						</body>
 					</html>
 				</x:document>
@@ -449,12 +463,12 @@
 								</seq>
 								<par>
 									<text src="../front.xhtml#st2-6"/>
-									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
 								</par>
 								<seq epub:textref="../front.xhtml#page_front_5" epub:type="pagebreak">
 									<par>
 										<text src="../front.xhtml#st2-7"/>
-										<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 									</par>
 								</seq>
 							</seq>
@@ -482,7 +496,7 @@
 								</par>
 								<par epub:type="pagebreak">
 									<text src="../chapter.xhtml#page_5"/>
-									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 								</par>
 								<par>
 									<text src="../chapter.xhtml#i3st3-2-page_5"/>
@@ -492,10 +506,30 @@
 							<seq epub:textref="../chapter.xhtml#caption_1">
 								<par>
 									<text src="../chapter.xhtml#st3-3"/>
-									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 								<par>
 									<text src="../chapter.xhtml#st3-4"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+							</seq>
+							<seq epub:textref="../chapter.xhtml#st3-5">
+								<par>
+									<text src="../chapter.xhtml#i3st3-5-no-skippable"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								</par>
+								<par epub:type="noteref">
+									<text src="../chapter.xhtml#id_1"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
+								</par>
+								<par>
+									<text src="../chapter.xhtml#i3st3-5-id_1"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+								</par>
+							</seq>
+							<seq epub:textref="../chapter.xhtml#note_1">
+								<par>
+									<text src="../chapter.xhtml#st3-6"/>
 									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 							</seq>
@@ -504,11 +538,30 @@
 				</x:document>
 			</x:expect>
 		</x:scenario>
+		<x:scenario label="ensure-pagenum-text">
+			<x:call>
+				<x:option name="ensure-pagenum-text" select="'hidden'"/>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/ensure-pagenum-text/')"/>
+			</x:call>
+			<x:context label="front.xhtml">
+				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]
+				                                                          //html:div[@id='page_front_4']"/>
+			</x:context>
+			<x:expect label="front.xhtml" type="compare">
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv"
+					     style="visibility: hidden">
+						<span id="st2-4">iv</span>
+					</div>
+				</x:document>
+			</x:expect>
+		</x:scenario>
 		<x:scenario label="sentence-detection">
 			<x:call>
 				<x:option name="tts" select="false()"/>
 				<x:option name="sentence-detection" select="true()"/>
 				<x:option name="sentence-class" select="'sentence'"/>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/sentence-detection/')"/>
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -610,8 +663,7 @@
 							<p>
 								<span id="st3-2" class="sentence">
 									<span id="i3st3-2-no-skippable">This paragraph contains</span>
-									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"
-									      style="visibility: hidden">5</span>
+									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
 									<span id="i3st3-2-page_5">a page break.</span>
 								</span>
 							</p>
@@ -625,6 +677,16 @@
 									This is an illustration.
 								</span>
 							</figcaption>
+							<p>
+								<span id="st3-5" class="sentence">
+									<span id="i3st3-5-no-skippable">This paragraph contains a note reference.</span>
+									<a id="id_1" epub:type="noteref" href="#note_1">*</a>
+									<span id="i3st3-5-id_1"> This is the second sentence.</span>
+								</span>
+							</p>
+							<p id="note_1">
+								<span id="st3-6" class="sentence">This is a note.</span>
+							</p>
 						</body>
 					</html>
 				</x:document>
@@ -649,6 +711,7 @@
 						</metadata>
 					</x:document>
 				</x:input>
+				<x:option name="temp-dir" select="concat($temp-dir,'minimal/inject-metadata/')"/>
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -770,6 +833,7 @@
 					</config>
 				</x:document>
 			</x:input>
+			<x:option name="temp-dir" select="concat($temp-dir,'valentin/')"/>
 		</x:call>
 		<x:scenario label="braille-rendition">
 			<x:call>

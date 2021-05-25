@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import ch.sbs.jhyphen.CompilationException;
@@ -190,11 +191,11 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 	private WithSideEffect<LibhyphenHyphenator,Logger> get(final URI table) {
 		try {
 			return logCreate((LibhyphenHyphenator)new LibhyphenHyphenatorImpl(table)); }
-		catch (final Throwable e) {
+		catch (CompilationException|FileNotFoundException e) {
 			return new WithSideEffect<LibhyphenHyphenator,Logger>() {
-				public LibhyphenHyphenator _apply() throws CompilationException, FileNotFoundException {
+				public LibhyphenHyphenator _apply() throws NoSuchElementException {
 					__apply(debug("Could not create hyphenator for table " + table));
-					throw e;
+					throw new NoSuchElementException();
 				}
 			};
 		}
@@ -343,10 +344,10 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 		}
 	}
 	
-	private File resolveTable(URI table) {
+	private File resolveTable(URI table) throws FileNotFoundException {
 		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableResolver.resolve(table);
 		if (resolvedTable == null)
-			throw new RuntimeException("Hyphenation table " + table + " could not be resolved");
+			throw new FileNotFoundException("Hyphenation table " + table + " could not be resolved");
 		return asFile(resolvedTable);
 	}
 	

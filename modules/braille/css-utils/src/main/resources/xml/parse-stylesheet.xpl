@@ -19,8 +19,9 @@
     
     <p:output port="result">
         <p:documentation>
-            Elements in the output will get a css:* attribute for each pseudo-element, pseudo-class
-            or at-rule in the element's style attribute. Rules with the same keyword but different
+            Elements in the output will get a css:* attribute for every pseudo-element, pseudo-class
+            or at-rule in the element's style attribute, with the exception of ::table-by(),
+            ::list-item and ::list-header pseudo-elements. Rules with the same keyword but different
             pseudo-classes are combined into a single attribute. For example, the rule `@page {
             size: 40 25 }' becomes the attribute css:page="size: 40 25", the rules `@volume {
             max-length: 100 } @volume:first { max-length: 50 }` become the attribute css:volume="{

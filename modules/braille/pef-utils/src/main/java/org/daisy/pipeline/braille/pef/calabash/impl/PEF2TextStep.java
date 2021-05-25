@@ -30,18 +30,15 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 
-import org.daisy.braille.api.embosser.EmbosserWriter;
-import org.daisy.braille.api.embosser.FileFormat;
-import org.daisy.braille.api.table.Table;
-import org.daisy.braille.api.validator.ValidatorFactoryService;
-import org.daisy.braille.pef.PEFFileSplitter;
-import org.daisy.braille.pef.PEFHandler;
-import org.daisy.braille.pef.PEFHandler.Alignment;
-import org.daisy.braille.pef.UnsupportedWidthException;
-
+import org.daisy.braille.utils.pef.PEFFileSplitter;
+import org.daisy.braille.utils.pef.PEFHandler;
+import org.daisy.braille.utils.pef.PEFHandler.Alignment;
+import org.daisy.braille.utils.pef.UnsupportedWidthException;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
+import org.daisy.dotify.api.embosser.EmbosserWriter;
+import org.daisy.dotify.api.embosser.FileFormat;
+import org.daisy.dotify.api.table.Table;
 import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
 import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
@@ -78,19 +75,16 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 	
 	private final org.daisy.pipeline.braille.common.Provider<Query,FileFormat> fileFormatProvider;
 	private final org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider;
-	private final ValidatorFactoryService validatorFactory;
 	
 	private ReadablePipe source = null;
 	
 	private PEF2TextStep(XProcRuntime runtime,
 	                     XAtomicStep step,
 	                     org.daisy.pipeline.braille.common.Provider<Query,FileFormat> fileFormatProvider,
-	                     org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider,
-	                     ValidatorFactoryService validatorFactory) {
+	                     org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider) {
 		super(runtime, step);
 		this.fileFormatProvider = fileFormatProvider;
 		this.tableProvider = tableProvider;
-		this.validatorFactory = validatorFactory;
 	}
 	
 	@Override
@@ -167,7 +161,9 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 					match = pattern.indexOf("{}");
 					File splitDir = new File(textDir, "split");
 					splitDir.mkdir();
-					PEFFileSplitter splitter = new PEFFileSplitter(validatorFactory);
+					// FIXME: to validating the result PEFs, get a PEFValidator instance
+					// (implemented in dotify.task.impl) through the streamline API.
+					PEFFileSplitter splitter = new PEFFileSplitter(x -> true);
 					String prefix = PEFFileSplitter.PREFIX;
 					String postfix = PEFFileSplitter.POSTFIX;
 					splitter.split(pefStream, splitDir, prefix, postfix);
@@ -244,7 +240,7 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 		
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-			return new PEF2TextStep(runtime, step, fileFormatProvider, tableProvider, validatorFactory);
+			return new PEF2TextStep(runtime, step, fileFormatProvider, tableProvider);
 		}
 		
 		@Reference(
@@ -287,17 +283,6 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 		private org.daisy.pipeline.braille.common.Provider.util.MemoizingProvider<Query,Table> tableProvider
 		= memoize(dispatch(tableProviders));
 		
-		@Reference(
-			name = "ValidatorFactoryService",
-			service = ValidatorFactoryService.class,
-			cardinality = ReferenceCardinality.MANDATORY,
-			policy = ReferencePolicy.STATIC
-		)
-		protected void bindValidatorFactory(ValidatorFactoryService factory) {
-			validatorFactory = factory;
-		}
-		
-		private ValidatorFactoryService validatorFactory = null;
 	}
 	
 	// copied from org.daisy.braille.facade.PEFConverterFacade because it is no longer static

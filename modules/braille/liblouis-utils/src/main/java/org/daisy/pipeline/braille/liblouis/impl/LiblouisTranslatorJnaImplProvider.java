@@ -4,8 +4,10 @@ import java.net.URI;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 
 import static com.google.common.collect.Iterables.size;
 import static com.google.common.collect.Iterables.toArray;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -221,7 +224,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			String contraction = q.containsKey("contraction")
 				? q.removeAll("contraction").iterator().next().getValue().get()
 				: null;
-			if (!"no".equals(contraction)) {
+			boolean computer = q.containsKey("type")
+				&& "computer".equals(q.get("type").iterator().next().getValue().orElse(null));
+			if (!computer && !"no".equals(contraction)) {
 				q.add("contraction", "no");
 				q.removeAll("grade");
 				Iterable<LiblouisTranslator> nonContractingTranslators = Iterables.memoize(
@@ -231,15 +236,29 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						hyphenator,
 						handleNonStandardHyphenation));
 				if (nonContractingTranslators.iterator().hasNext())
-					return Iterables.transform(
-						combinations(
-							Maps.toMap(
-								ImmutableList.<Boolean>of(Boolean.TRUE, Boolean.FALSE),
-								contracted -> contracted ? translators : nonContractingTranslators)),
-						new Function<Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>>,LiblouisTranslator>() {
-							public LiblouisTranslator _apply(Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>> translators) {
-								return new HandleTextTransformUncontracted(__apply(translators.get(true)),
-								                                           __apply(translators.get(false))); }});
+					return concat(
+						Iterables.transform(
+							combinations(
+								Maps.toMap(
+									ImmutableList.<Boolean>of(Boolean.TRUE, Boolean.FALSE),
+									contracted -> contracted ? translators : nonContractingTranslators)),
+							new Function<Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>>,LiblouisTranslator>() {
+								public LiblouisTranslator _apply(Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>> translators)
+									throws NoSuchElementException {
+									LiblouisTranslator t;
+									try {
+										t = __apply(translators.get(true));
+									} catch (NoSuchElementException e) {
+										// make sure all elements that we get from an iterator are also
+										// dereferenced (because AbstractTransformProvider.util.concat
+										// requires it)
+										__apply(translators.get(false));
+										throw e;
+									}
+									return new HandleTextTransformUncontracted(t, __apply(translators.get(false)));
+								}
+							}),
+						translators);
 			}
 		}
 		return translators;
@@ -491,10 +510,23 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					                             styledText,
 					                             from,
 					                             to); }
+				// style is mutated and may not be empty
+				Iterator<SimpleInlineStyle> style = Iterators.transform(styledTextCopy.iterator(), CSSStyledText::getStyle);
 				StringBuilder brailleString = new StringBuilder();
 				int fromChar = 0;
 				int toChar = to >= 0 ? 0 : -1;
 				for (String s : braille) {
+					// the only property expected in the output is white-space
+					// ignore other properties
+					SimpleInlineStyle st = style.next();
+					if (st != null) {
+						CSSProperty ws = st.getProperty("white-space");
+						if (ws != null) {
+							if (ws == WhiteSpace.PRE_WRAP)
+								s = s.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
+									.replaceAll("[\\x20\t\\u2800]", "\u00A0");
+							if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
+								s = s.replaceAll("[\\n\\r]", "\u2028"); }}
 					brailleString.append(s);
 					if (--from == 0)
 						fromChar = brailleString.length();
@@ -655,7 +687,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 											logger.warn("letter-spacing: {} not supported, must be non-negative", val);
 											letterSpacing[i] = 0; }}
 									style.removeProperty("letter-spacing"); }
-								typeform[i] = typeform[i].add(typeformFromInlineCSS(style, liblouisTranslator, supportedTypeforms)); }
+								typeform[i] = typeform[i].add(typeformFromInlineCSS(style, liblouisTranslator, supportedTypeforms));
+								for (String prop : style.getPropertyNames())
+									logger.warn("{}: {} not supported", prop, style.get(prop)); }
 							else
 								someTransform = true; }
 					}
@@ -776,7 +810,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						if (segmentInBraille.length() <= available || !hyphenate[textWithWsMapping[curSegment]]
 						    || (fullHyphenator == null && lineBreaker == null)) {
 							if (hyphenate[textWithWsMapping[curSegment]] || segmentInBraille.length() > available)
-								logger.warn("hyphens:auto not supported");
+								logger.warn("hyphens: auto not supported");
 							
 							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
 							next += segmentInBraille;
@@ -1181,7 +1215,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								logger.warn("letter-spacing: {} not supported, must be non-negative", val);
 								letterSpacing[i] = 0; }}
 						style.removeProperty("letter-spacing"); }
-					typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms)); }
+					typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));
+					for (String prop : style.getPropertyNames())
+						if (!"white-space".equals(prop))
+							logger.warn("{}: {} not supported", prop, style.get(prop)); }
 				else
 					someTransform = true; }
 			
@@ -1320,7 +1357,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					byte[] hyphens = null;
 					try {
 						if (fullHyphenator == null) {
-							logger.warn("hyphens:auto not supported");
+							logger.warn("hyphens: auto not supported");
 							if (lineBreaker != null)
 								throw new RuntimeException(); }
 						else {
@@ -1725,9 +1762,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (t != null)
 						typeform = typeform.add(t);
 					else
-						logger.warn("Inline CSS property {} not supported: emphclass 'italic' not defined in table {}",
-						            style.getSourceDeclaration(prop),
+						logger.warn("{}: {} not supported: emphclass 'italic' not defined in table {}",
+						            prop, style.get(prop),
 						            table.getTable());
+					style.removeProperty(prop);
 					continue; }}
 			else if (prop.equals("font-weight")) {
 				CSSProperty value = style.getProperty(prop);
@@ -1736,9 +1774,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (t != null)
 						typeform = typeform.add(t);
 					else
-						logger.warn("Inline CSS property {} not supported: emphclass 'bold' not defined in table {}",
-						            style.getSourceDeclaration(prop),
+						logger.warn("{}: {} not supported: emphclass 'bold' not defined in table {}",
+						            prop, style.get(prop),
 						            table.getTable());
+					style.removeProperty(prop);
 					continue; }}
 			else if (prop.equals("text-decoration")) {
 				CSSProperty value = style.getProperty(prop);
@@ -1747,11 +1786,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (t != null)
 						typeform = typeform.add(t);
 					else
-						logger.warn("Inline CSS property {} not supported: emphclass 'underline' not defined in table {}",
-						            style.getSourceDeclaration(prop),
+						logger.warn("{}: {} not supported: emphclass 'underline' not defined in table {}",
+						            prop, style.get(prop),
 						            table.getTable());
-					continue; }}
-			logger.warn("Inline CSS property {} not supported", style.getSourceDeclaration(prop)); }
+					style.removeProperty(prop);
+					continue; }}}
 		return typeform;
 	}
 	

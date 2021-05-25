@@ -75,12 +75,26 @@
 	    dtbook-to-epub3
 	    zedai-to-epub3
 	-->
+	<p:option name="include-tts-log" select="'false'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Enable TTS log</h2>
+			<p px:role="desc">Whether or not to make the TTS log available.</p>
+		</p:documentation>
+	</p:option>
+
+	<!--
+	    dtbook-to-daisy3
+	    dtbook-to-epub3
+	    zedai-to-epub3
+	-->
 	<p:output port="tts-log" sequence="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">TTS log</h2>
 			<p px:role="desc" xml:space="preserve">Log file with information about text-to-speech process.
 
-Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings) property.
+Can be enabled with the "Include TTS log" option or the
+[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
+property.
 			</p>
 		</p:documentation>
 	</p:output>

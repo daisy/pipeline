@@ -77,7 +77,7 @@
     <x:expect label="result">
       <_ style="text-transform: none">
         <doc>
-          <div style="&amp;::table-by(foo)::list-item::after {{ content: &quot;, &quot;; text-transform: auto }} &amp;::table-by(foo)::list-item:last-child::after {{ content: none; text-transform: auto }}"/>
+          <div style="&amp;::table-by(foo)::list-item::after {{ content: &quot;,&quot; }} &amp;::table-by(foo)::list-item:last-child::after {{ content: none }}"/>
         </doc>
       </_>
     </x:expect>

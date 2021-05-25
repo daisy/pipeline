@@ -291,8 +291,6 @@
             <x:document type="inline">
                 <smil>
                     <head>
-                        <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:timeInThisSmil" content="00:00:01"/>
                         <layout>
                             <region id="txtView"/>
                         </layout>
@@ -315,8 +313,6 @@
             <x:document type="inline">
                 <smil>
                     <head>
-                        <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:timeInThisSmil" content="00:00:05"/>
                         <layout>
                             <region id="txtView"/>
                         </layout>
@@ -361,8 +357,6 @@
             <x:document type="inline">
                 <smil>
                     <head>
-                        <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:timeInThisSmil" content="00:00:00"/>
                         <meta name="ncc:generator" content="DAISY Pipeline 2"/>
                         <layout>
                             <region id="txtView"/>
