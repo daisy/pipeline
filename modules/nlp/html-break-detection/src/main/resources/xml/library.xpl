@@ -42,9 +42,11 @@
         inline-tags="html:span|html:i|html:b|html:a|html:br|html:del|html:font|html:ruby|html:s|
                      html:small|html:strike|html:strong|html:sup|html:sub|html:u|html:q|html:address|
                      html:abbr|html:em|html:style"
-        cannot-be-sentence-child="html:span[@class='lic']"
         ensure-word-before="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         ensure-word-after="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
+        cannot-be-sentence-child="html:span[@class='lic']|
+                                  html:a[@epub:type/tokenize(.,'\s+')='noteref']|
+                                  html:a[@class/tokenize(.,'\s+')='noteref']"
         can-contain-sentences="html:body|html:section|html:nav|html:article|html:aside|html:h1|html:h2|
                                html:h3|html:h4|html:h5|html:h6|html:header|html:footer|html:address|
                                html:p|html:pre|html:blockquote|html:li|html:dt|html:dd|html:a|html:q|

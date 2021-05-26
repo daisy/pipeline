@@ -1216,27 +1216,30 @@
 								<span id="st1-1">Gro försöker att få Runa på gott humör igen.</span></p>
 							<p>
 								<span id="st1-2">– Vi har det bara så långtråkigt.</span>
-								<span id="st1-3">Du har tur.</span>
-								<span id="st1-4">Du får gå ut och in i tornet.</span>
-								<span id="st1-5">Alvilda och jag måste sitta här dag ut och dag in.</span>
-								<span id="st1-6">Bara om natten får vi komma till kvinnosalen.</span>
-								<span id="st1-7">Om det bara snart ville kommma någon som kan slå ihjäl ormen.</span></p>
+                                <span id="st1-3">Du har tur.</span>
+                                <a epub:type="noteref" id="dtb155111" class="noteref">
+                                    <span id="st1-4">90</span>
+                                </a>
+                                <span id="st1-5"> Du får gå ut och in i tornet.</span>
+								<span id="st1-6">Alvilda och jag måste sitta här dag ut och dag in.</span>
+								<span id="st1-7">Bara om natten får vi komma till kvinnosalen.</span>
+								<span id="st1-8">Om det bara snart ville kommma någon som kan slå ihjäl ormen.</span></p>
 							<p>
-								<span id="st1-8">Gro suckar djupt.</span>
-								<span id="st1-9">Liksom Alvilda är hon trött på att vara inspärrad.</span></p>
+								<span id="st1-9">Gro suckar djupt.</span>
+								<span id="st1-10">Liksom Alvilda är hon trött på att vara inspärrad.</span></p>
 							<p>
-								<span id="st1-10">Alvilda tittar ner på sina bröder igen.</span></p>
+								<span id="st1-11">Alvilda tittar ner på sina bröder igen.</span></p>
 							<p>
-								<span id="st1-11">– Jag vill hellre lära mig att slåss, mumlar hon.</span>
-								<span id="st1-12">Då skulle jag själv kunna slå ihjäl odjuret.</span></p>
+								<span id="st1-12">– Jag vill hellre lära mig att slåss, mumlar hon.</span>
+								<span id="st1-13">Då skulle jag själv kunna slå ihjäl odjuret.</span></p>
 							<p>
-								<span id="st1-13">– Jag hörde nog vad du sa.</span>
-								<span id="st1-14">Runa ruskar på huvudet.</span>
-								<span id="st1-15">Du vet inte vad som är bäst för dig.</span>
-								<span id="st1-16">Tänk på allt det besvär din pappa och mamma har haft.</span>
-								<span id="st1-17">Först byggde de det här tornet av koppar.</span>
-								<span id="st1-18">Sedan har de skaffat en orm, som kan vakta din dygd.</span>
-								<span id="st1-19">Många unga män har mist sina liv för din skull.</span></p>
+								<span id="st1-14">– Jag hörde nog vad du sa.</span>
+								<span id="st1-15">Runa ruskar på huvudet.</span>
+								<span id="st1-16">Du vet inte vad som är bäst för dig.</span>
+								<span id="st1-17">Tänk på allt det besvär din pappa och mamma har haft.</span>
+								<span id="st1-18">Först byggde de det här tornet av koppar.</span>
+								<span id="st1-19">Sedan har de skaffat en orm, som kan vakta din dygd.</span>
+								<span id="st1-20">Många unga män har mist sina liv för din skull.</span></p>
 						</section>
 					</body>
 				</x:document>
@@ -1262,10 +1265,12 @@
 									<text src="../C00000-1-cover.xhtml#st1-3"/>
 									<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
 								</par>
-								<par>
-									<text src="../C00000-1-cover.xhtml#st1-4"/>
-									<audio src="../audio/mock.mp3" clipBegin="0:00:03.669" clipEnd="0:00:04.892"/>
-								</par>
+								<seq epub:textref="../C00000-1-cover.xhtml#dtb155111" epub:type="noteref">
+									<par>
+										<text src="../C00000-1-cover.xhtml#st1-4"/>
+										<audio src="../audio/mock.mp3" clipBegin="0:00:03.669" clipEnd="0:00:04.892"/>
+									</par>
+								</seq>
 								<par>
 									<text src="../C00000-1-cover.xhtml#st1-5"/>
 									<audio src="../audio/mock.mp3" clipBegin="0:00:04.892" clipEnd="0:00:06.115"/>
@@ -1325,6 +1330,10 @@
 								<par>
 									<text src="../C00000-1-cover.xhtml#st1-19"/>
 									<audio src="../audio/mock.mp3" clipBegin="0:00:22.015" clipEnd="0:00:23.238"/>
+								</par>
+								<par>
+									<text src="../C00000-1-cover.xhtml#st1-20"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:23.238" clipEnd="0:00:24.461"/>
 								</par>
 							</seq>
 						</body>
