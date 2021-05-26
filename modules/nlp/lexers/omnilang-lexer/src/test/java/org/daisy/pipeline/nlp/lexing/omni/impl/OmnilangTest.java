@@ -151,4 +151,36 @@ public class OmnilangTest {
 		Assert.assertEquals(
 		        "{/Bracket/ /example/ (/this/ /is/ /not/ /a/ /sentence/!), /after/.}", text);
 	}
+
+	@Test
+	public void testThatTitlesWontSplitASentence()  {
+		String ref_mr = "Hej Mr. Walinder, hur mår du idag.";
+		List<Sentence> sentences = mLexerToken.split(ref_mr, Locale.ENGLISH, new ArrayList<>());
+		String text = mPrinter.convert(sentences, ref_mr);
+		Assert.assertEquals("{/Hej/ /Mr./ /Walinder/, /hur/ /mår/ /du/ /idag/.}", text);
+	}
+
+	@Test
+	public void testThatMultipleTitlesWontSplitASentence()  {
+		String ref_mr = "Mr. Swanson and Mrs. Swanson did not visit the lake";
+		List<Sentence> sentences = mLexerToken.split(ref_mr, Locale.ENGLISH, new ArrayList<>());
+		String text = mPrinter.convert(sentences, ref_mr);
+		Assert.assertEquals("{/Mr./ /Swanson/ /and/ /Mrs./ /Swanson/ /did/ /not/ /visit/ /the/ /lake/}", text);
+	}
+
+	@Test
+	public void testThatTitlesWontSplitASentenceInTheBeginning()  {
+		String ref_mr = "Dr. Jekyll did not attend the meeting";
+		List<Sentence> sentences = mLexerToken.split(ref_mr, Locale.ENGLISH, new ArrayList<>());
+		String text = mPrinter.convert(sentences, ref_mr);
+		Assert.assertEquals("{/Dr./ /Jekyll/ /did/ /not/ /attend/ /the/ /meeting/}", text);
+	}
+
+	@Test
+	public void testThatAWordContainingATitleWontMatch()  {
+		String ref_mr = "Professor Snape has black hair";
+		List<Sentence> sentences = mLexerToken.split(ref_mr, Locale.ENGLISH, new ArrayList<>());
+		String text = mPrinter.convert(sentences, ref_mr);
+		Assert.assertEquals("{/Professor/ /Snape/ /has/ /black/ /hair/}", text);
+	}
 }
