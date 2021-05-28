@@ -144,6 +144,7 @@
         <p:documentation>
             px:html-break-detect
             px:html-unwrap-words
+            px:remove-empty-lic
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
@@ -833,6 +834,9 @@
                     <px:html-unwrap-words>
                         <!-- only keep the sentences, not the words -->
                     </px:html-unwrap-words>
+                    <px:remove-empty-lic>
+                        <!-- Remove all the empty lic tags -->
+                    </px:remove-empty-lic>
                 </p:for-each>
                 <p:sink/>
                 <px:fileset-update name="update">
