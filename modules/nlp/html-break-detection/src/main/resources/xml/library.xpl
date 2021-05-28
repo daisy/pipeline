@@ -42,6 +42,7 @@
         inline-tags="html:span|html:i|html:b|html:a|html:br|html:del|html:font|html:ruby|html:s|
                      html:small|html:strike|html:strong|html:sup|html:sub|html:u|html:q|html:address|
                      html:abbr|html:em|html:style"
+        cannot-be-sentence-child="html:span[@class='lic']"
         ensure-word-before="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         ensure-word-after="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         can-contain-sentences="html:body|html:section|html:nav|html:article|html:aside|html:h1|html:h2|
@@ -49,7 +50,7 @@
                                html:p|html:pre|html:blockquote|html:li|html:dt|html:dd|html:a|html:q|
                                html:cite|html:em|html:strong|html:small|html:mark|html:dfn|html:abbr|
                                html:time|html:progress|html:meter|html:code|html:var|html:samp|html:kdb|
-                               html:sub|html:sup|html:span[@class!='lic']|html:i|html:b|html:bdo|html:rt|html:ins|
+                               html:sub|html:sup|html:span|html:i|html:b|html:bdo|html:rt|html:ins|
                                html:del|html:caption|html:figcaption|html:td|html:th|html:form|html:label|
                                html:input|html:button|html:datalist|html:output|html:bb|html:menu|
                                html:legend|html:div"
@@ -74,6 +75,13 @@
     <p:output port="result" primary="true"/>
     <p:unwrap match="html:span[@role='word' and not(@* except @role)]"/>
     <p:delete match="html:span/@role[.='word']"/>
+  </p:declare-step>
+
+  <p:declare-step type="px:remove-empty-lic">
+    <p:documentation>Remove empty lic elements.</p:documentation>
+    <p:input port="source" primary="true"/>
+    <p:output port="result" primary="true"/>
+    <p:delete match="html:span[@class = 'lic' and normalize-space(.) = '']"/>
   </p:declare-step>
 
 </p:library>

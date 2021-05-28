@@ -166,6 +166,18 @@
 							<p id="note_1">
 								This is a note.
 							</p>
+							<ul>
+								<li>
+									<a href="DTB38216-007-preface.xhtml#p-1">
+										<span class="lic">
+											<strong>Preface to the First Edition</strong>
+										</span>
+										<span class="lic">
+											<strong>xi</strong>
+										</span>
+									</a>
+								</li>
+							</ul>
 						</body>
 					</html>
 				</x:document>
@@ -238,13 +250,13 @@
 							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
 							<dc:date>2020-03-06</dc:date>
-							<meta property="media:duration">00:00:22.014</meta>
-							<meta name="media:duration" content="00:00:22.014"/>
+							<meta property="media:duration">00:00:24.46</meta>
+							<meta name="media:duration" content="00:00:24.46"/>
 							<meta property="schema:accessibilityFeature">captions</meta>
 							<meta name="schema:accessibilityFeature" content="captions"/>
 							<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
 							<meta property="media:duration" refines="#item_2">00:00:08.561</meta>
-							<meta property="media:duration" refines="#item_3">00:00:12.23</meta>
+							<meta property="media:duration" refines="#item_3">00:00:14.676</meta>
 						</metadata>
 						<manifest>
 							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
@@ -404,6 +416,25 @@
 							<p id="note_1">
 								<span id="st3-6">This is a note.</span>
 							</p>
+							<ul>
+								<li>
+									<a href="DTB38216-007-preface.xhtml#p-1">
+										<span class="lic"></span>
+										<span class="lic">
+											<span id="st3-7">
+												<strong>Preface to the First Edition</strong>
+											</span>
+										</span>
+										<span id="st3-8"></span>
+										<span class="lic">
+											<span id="st3-9">
+												<strong>xi</strong>
+											</span>
+										</span>
+										<span class="lic"></span>
+									</a>
+								</li>
+							</ul>
 						</body>
 					</html>
 				</x:document>
@@ -510,7 +541,7 @@
 								</par>
 								<par>
 									<text src="../chapter.xhtml#st3-4"/>
-									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+									<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 								</par>
 							</seq>
 							<seq epub:textref="../chapter.xhtml#st3-5">
@@ -533,6 +564,14 @@
 									<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 							</seq>
+							<par>
+								<text src="../chapter.xhtml#st3-7"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+							</par>
+							<par>
+								<text src="../chapter.xhtml#st3-9"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+							</par>
 						</body>
 					</smil>
 				</x:document>
@@ -687,6 +726,23 @@
 							<p id="note_1">
 								<span id="st3-6" class="sentence">This is a note.</span>
 							</p>
+							<ul>
+								<li>
+									<a href="DTB38216-007-preface.xhtml#p-1">
+										<span class="lic">
+											<span id="st3-7" class="sentence">
+												<strong>Preface to the First Edition</strong>
+											</span>
+										</span>
+										<span id="st3-8" class="sentence"></span>
+										<span class="lic">
+											<span id="st3-9" class="sentence">
+												<strong>xi</strong>
+											</span>
+										</span>
+									</a>
+								</li>
+							</ul>
 						</body>
 					</html>
 				</x:document>
