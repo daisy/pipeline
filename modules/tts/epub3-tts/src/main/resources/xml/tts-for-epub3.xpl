@@ -226,7 +226,7 @@
           <p:pipe step="ssml" port="result"/>
         </p:output>
         <p:output port="html">
-          <p:pipe port="result" step="rm-words"/>
+          <p:pipe port="result" step="remove-empty-lic"/>
         </p:output>
         <p:output port="sentence-ids">
           <p:pipe port="sentence-ids" step="lexing"/>
@@ -293,12 +293,15 @@
           <p:documentation>Remove @tts:* attributes and tts namespace nodes</p:documentation>
           <px:css-speech-clean/>
         </p:group>
-        <px:html-unwrap-words name="rm-words">
+        <px:html-unwrap-words>
           <p:documentation>
             Remove the word tags because it results in invalid EPUB. (The info is used in the
             synthesize step, but not for synchronization on word level.)
           </p:documentation>
         </px:html-unwrap-words>
+        <px:remove-empty-lic name="remove-empty-lic">
+          <!-- Remove all the empty lic tags -->
+        </px:remove-empty-lic>
       </p:for-each>
       <px:ssml-to-audio name="to-audio" px:progress="8/9">
         <p:input port="config">
