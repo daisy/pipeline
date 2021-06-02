@@ -136,7 +136,7 @@ run-docker : dist-docker-image
 SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES))
 
 .PHONY : $(addprefix run-,$(SCRIPTS))
-$(addprefix run-,$(SCRIPTS)) : run-% : %/.test-dependencies
+$(addprefix run-,$(SCRIPTS)) : run-% : %/.compile-dependencies %/.test-dependencies
 	# not using -f because that causes log file to be saved at the wrong location
 	cd $(patsubst run-%,%,$@) && \
 	$(MVN) clean test -Prun-script-webserver
