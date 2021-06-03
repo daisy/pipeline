@@ -44,9 +44,7 @@
                      html:abbr|html:em|html:style"
         ensure-word-before="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         ensure-word-after="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
-        cannot-be-sentence-child="html:span[@class='lic']|
-                                  html:a[@epub:type/tokenize(.,'\s+')='noteref']|
-                                  html:a[@class/tokenize(.,'\s+')='noteref']"
+        cannot-be-sentence-child="html:span[@class='lic']"
         can-contain-sentences="html:body|html:section|html:nav|html:article|html:aside|html:h1|html:h2|
                                html:h3|html:h4|html:h5|html:h6|html:header|html:footer|html:address|
                                html:p|html:pre|html:blockquote|html:li|html:dt|html:dd|html:a|html:q|
