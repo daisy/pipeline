@@ -1,4 +1,5 @@
-package org.daisy.pipeline.tts.cereproc.impl.util;/*
+package org.daisy.pipeline.tts.cereproc.impl.util;
+/*
  * org.daisy.util (C) 2005-2008 Daisy Consortium
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -15,14 +16,11 @@ package org.daisy.pipeline.tts.cereproc.impl.util;/*
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
-import com.ibm.icu.text.Normalizer2;
-import com.ibm.icu.text.UCharacterIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -65,10 +63,8 @@ import java.util.Set;
  * <p>Note - there is a significant difference between a unicode codepoint (32 bit int)
  * and a UTF16 codeunit (=char) - a codepoint consists of one or two codeunits.</p>  
  * <p>To make sure an int represents a codepoint and not a codeunit, use for example
- * <code>com.ibm.icu.text.Normalizer2</code> With Nfc mode.
- * <code>com.ibm.icu.text.UCharacterIterator</code> to retrieve possibly non-BMP codepoints 
- * from a string.</p>
- *  
+ * <code>import java.text.Normalizer</code> With Nfc mode.</p>
+ *
  * [1] http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html
  * [2] http://java.sun.com/dtd/properties.dtd
  *
@@ -82,7 +78,6 @@ import java.util.Set;
 
 public class UCharReplacer  {
 	private ArrayList<Map<Integer,String>> mSubstitutionTables; 					//ArrayList<HashMap:<int codepoint>,<replaceString>>: all loaded translationtables
-	private Normalizer2 normalizer;
 	private final static Logger logger = LoggerFactory.getLogger(UCharReplacer.class);
 
 	/**
@@ -90,8 +85,6 @@ public class UCharReplacer  {
 	 */
 	public UCharReplacer() {
 		mSubstitutionTables = new ArrayList<Map<Integer,String>>();
-		this.normalizer = Normalizer2.getNFDInstance();
-
 	}
 
 	/**
@@ -118,25 +111,22 @@ public class UCharReplacer  {
 	 * have been replaced by substitution characters, depending on settings and substitution success.
 	 */
 	public CharSequence replace(CharSequence input) {
-		int codePoint;
-		
-		StringBuilder sb = new StringBuilder(input.length());
-		
+
 		//normalize to eliminate any ambiguities vis-a-vis the user tables
-		this.normalizer.normalize(input.toString());
-		
-		//iterate over each codepoint in the input string
-		UCharacterIterator uci = UCharacterIterator.getInstance(input.toString());							
-		while((codePoint=uci.nextCodePoint())!=UCharacterIterator.DONE){									
-			CharSequence substitution = getSubstitutionChars(codePoint);
-			if(null!=substitution && substitution.length()>0) {
-				//a replacement occured
-				sb.append(substitution);
-			}else{
-				//a replacement didnt occur
-				sb.appendCodePoint(codePoint);
+		String normalized_input = Normalizer.normalize(input.toString(), Normalizer.Form.NFD);
+		StringBuilder sb = new StringBuilder(normalized_input.length());
+
+		normalized_input.codePoints().forEach(c -> {
+				CharSequence substitution = getSubstitutionChars(c);
+				if (null != substitution && substitution.length() > 0) {
+					//a replacement occured
+					sb.append(substitution);
+				} else {
+					//a replacement didnt occur
+					sb.appendCodePoint(c);
+				}
 			}
-		}					
+		);
 		return sb;
 	}
 	
