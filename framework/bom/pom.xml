@@ -32,7 +32,7 @@
     <jing.version>20151127.0.1</jing.version>
     <jetty.version>7.6.5.v20120716</jetty.version>
     <junit.version>4.10</junit.version>
-    <logback.version>1.0.11</logback.version>
+    <logback.version>1.2.0</logback.version>
     <mockito.version>2.25.1</mockito.version>
     <osgi.version>5.0.0</osgi.version>
     <powermock.version>2.0.2</powermock.version>
