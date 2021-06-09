@@ -104,8 +104,7 @@ public abstract class CereProcService extends AbstractTTSService {
 						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
 					}
 				} else {
-					port = 8991;
-					logger.warn(prop + " property not set. Defaulting to " + port);
+					throw new SynthesisException(prop + " property not set.");
 				}
 			}
 			return new CereProcEngine(CereProcEngine.Variant.STANDARD,
@@ -157,8 +156,7 @@ public abstract class CereProcService extends AbstractTTSService {
 						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
 					}
 				} else {
-					port = 8992;
-					logger.warn(prop + " property not set. Defaulting to " + port);
+					throw new SynthesisException(prop + " property not set.");
 				}
 			}
 			{
