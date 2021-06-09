@@ -1,3 +1,11 @@
+Changes in release v1.14.4
+==========================
+
+### Modules
+
+- **NEW** Support for CereProc text-to-speech engine
+
+
 Changes in release v1.14.3
 ==========================
 
