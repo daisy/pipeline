@@ -1,39 +1,41 @@
 package org.daisy.pipeline.tts.cereproc.impl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import javax.xml.stream.XMLStreamWriter;
+
 import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
+
 import org.daisy.common.saxon.SaxonOutputValue;
 import org.daisy.pipeline.tts.Voice;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.xml.stream.XMLStreamWriter;
-import java.io.File;
-import java.util.*;
-
-
 public class CereProcEngineTest {
 
-
 	private static final Map<String,String> params = new HashMap<>();
-
 	static {
 		params.put("org.daisy.pipeline.tts.cereproc.server", System.getProperty("org.daisy.pipeline.tts.cereproc.server"));
 		params.put("org.daisy.pipeline.tts.cereproc.port", System.getProperty("org.daisy.pipeline.tts.cereproc.port"));
 		params.put("org.daisy.pipeline.tts.cereproc.dnn.port", System.getProperty("org.daisy.pipeline.tts.cereproc.dnn.port"));
 	}
 
-
 	@Test
 	public void TestSSMLFormatter() throws Throwable {
 		CereProcService service = new CereProcService() {
 			@Override
-			protected CereProcEngine newEngine(String server, File client, int priority, Map<String, String> params) throws Throwable {
+			protected CereProcEngine newEngine(String server, File client, int priority, Map<String,String> params)
+					throws Throwable {
 				return null;
 			}
 		};
-
 		File client = new File(CereProcEngineTest.class.getResource("/ClientMock").toURI());
 		CereProcEngine engine = new CereProcEngine(CereProcEngine.Variant.STANDARD,
 				service,
@@ -63,10 +65,12 @@ public class CereProcEngineTest {
 		writer.flush();
 		writer.close();
 
-		XdmNode node = (XdmNode) ssmlProcessed.get(0);
+		XdmNode node = (XdmNode)ssmlProcessed.get(0);
 		Voice  v = new Voice("cereproc", "Ylva", new Locale("sv"), null, null);
-		Assert.assertEquals("<voice name=\"Ylva\">This is a  gamma . test roman letter  tre, lorem ipsum Tjugosjunde kapitlet.</voice><break time=\"250ms\"></break>",
-				engine.transformSSML(node, v)
+		Assert.assertEquals(
+			"<voice name=\"Ylva\">This is a  gamma . test roman letter  tre, lorem ipsum Tjugosjunde kapitlet.</voice>" +
+			"<break time=\"250ms\"></break>",
+			engine.transformSSML(node, v)
 		);
 	}
 }

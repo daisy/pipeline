@@ -4,26 +4,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.net.URL;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.Locale;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sound.sampled.AudioFormat;
@@ -40,7 +39,6 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.saxon.SaxonOutputValue;
 import org.daisy.common.shell.CommandRunner;
-
 import org.daisy.common.stax.XMLStreamWriterHelper;
 import org.daisy.common.xslt.CompiledStylesheet;
 import org.daisy.common.xslt.ThreadUnsafeXslTransformer;
@@ -55,7 +53,6 @@ import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
-import org.daisy.pipeline.tts.cereproc.impl.util.CereprocTTSUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,20 +62,19 @@ public class CereProcEngine extends MarklessTTSEngine {
 	private static File tmpDirectory = null;
 	private AudioFormat audioFormat;
 	private final int priority;
-	private static final Map<String, CereprocTTSUtil> mTtsUtils = new HashMap<String , CereprocTTSUtil>() {
+	private static final Map<String,CereprocTTSUtil> ttsUtils = new HashMap<String,CereprocTTSUtil>() {
 		{
 			put("sv", new CereprocTTSUtil(Optional.of(new Locale("sv"))));
 			put("en", new CereprocTTSUtil(Optional.of(new Locale("en"))));
 		}
 	};
-
 	private final String[] cmd;
 	private final int expectedMillisecPerWord;
-	private static ThreadLocal<ConcurrentHashMap<Configuration, ThreadUnsafeXslTransformer>> mTransformer = ThreadLocal.withInitial(() -> {
-		ConcurrentHashMap<Configuration, ThreadUnsafeXslTransformer> map = new ConcurrentHashMap<>();
-		return map;
-	});
-
+	// Normally the same thread uses only one Configuration so
+	// ThreadLocal<ThreadUnsafeXslTransformer> would also work, but we do it this way to be safe.
+	private static ThreadLocal<ConcurrentHashMap<Configuration,ThreadUnsafeXslTransformer>> mTransformer
+		= ThreadLocal.withInitial(() -> {
+				return new ConcurrentHashMap<Configuration,ThreadUnsafeXslTransformer>(); });
 
 	private URL ssmLxslTransformerURL;
 
@@ -87,7 +83,13 @@ public class CereProcEngine extends MarklessTTSEngine {
 		DNN
 	}
 
-	public CereProcEngine(Variant variant, CereProcService service, String server, int port, File client, int priority, URL ssmlXslTransformerURL )
+	public CereProcEngine(Variant variant,
+	                      CereProcService service,
+	                      String server,
+	                      int port,
+	                      File client,
+	                      int priority,
+	                      URL ssmlXslTransformerURL)
 			throws SynthesisException {
 		super(service);
 		this.priority = priority;
@@ -127,7 +129,6 @@ public class CereProcEngine extends MarklessTTSEngine {
 		                                   sampleRate * sampleBits / (2 * 8), // frame rate
 		                                   false                              // little endian
 		                                   );
-
 		this.ssmLxslTransformerURL = ssmlXslTransformerURL;
 	}
 
@@ -169,7 +170,6 @@ public class CereProcEngine extends MarklessTTSEngine {
 	                                          AudioBufferAllocator bufferAllocator,
 	                                          boolean retry)
 			throws SynthesisException, InterruptedException, MemoryException {
-
 		Collection<AudioBuffer> result = new ArrayList<>();
 		StringWriter out = new StringWriter();
 		StringWriter err = new StringWriter();
@@ -186,10 +186,10 @@ public class CereProcEngine extends MarklessTTSEngine {
 			cmd[cmd.length - 3] = "-V";
 			cmd[cmd.length - 2] = voice.name;
 			cmd[cmd.length - 1] = txtFile.getAbsolutePath();
-			String filteredSentence = this.transformSSML(xmlSentence, voice);
+			String filteredSentence = transformSSML(xmlSentence, voice);
 			try (OutputStream os = new FileOutputStream(txtFile)) {
 				Writer w = new OutputStreamWriter(os, UTF_8);
-			 	w.write(filteredSentence.replace('\n', ' '));
+				w.write(filteredSentence.replace('\n', ' '));
 				w.write("\n");
 				try {
 					w.flush();
@@ -243,67 +243,53 @@ public class CereProcEngine extends MarklessTTSEngine {
 	}
 
 	/**
-	 * Function to transform ssml to String and also perform Regex rules and char substitutions.
-	 *
-	 * @param
-	 * @return
-	 * @throws SaxonApiException
+	 * Function to transform SSML to String and also perform regex rules and char substitutions.
 	 */
-		String transformSSML(XdmNode ssmlIn, Voice v) throws SynthesisException, SaxonApiException, XMLStreamException {
-
-		    List<XdmItem> ssmlProcessed = new ArrayList<>();
-
-			Configuration conf = ssmlIn.getUnderlyingNode().getConfiguration();
-
-			XMLStreamReader reader = new SaxonInputValue(ssmlIn, conf).asXMLStreamReader();
-			XMLStreamWriter writer = new SaxonOutputValue(item -> {
+	String transformSSML(XdmNode ssmlIn, Voice v) throws SynthesisException, SaxonApiException, XMLStreamException {
+		List<XdmItem> ssmlProcessed = new ArrayList<>();
+		Configuration conf = ssmlIn.getUnderlyingNode().getConfiguration();
+		XMLStreamReader reader = new SaxonInputValue(ssmlIn, conf).asXMLStreamReader();
+		XMLStreamWriter writer = new SaxonOutputValue(item -> {
 				if (item instanceof XdmNode) {
 					ssmlProcessed.add(item);
 				} else {
 					throw new RuntimeException(); // should not happen
 				}
 			}, conf).asXMLStreamWriter();
-
-			performSubstitutionRules(reader, writer, v.getLocale().get().getLanguage());
-
-			if ( ssmlProcessed.size() != 1) {
-				throw new RuntimeException("Something went wrong");
-			}
-			if (!(ssmlProcessed.get(0) instanceof XdmNode)) {
-				throw new RuntimeException("Incorrect type");
-			}
-
-			XdmNode ssmlOut = (XdmNode) ssmlProcessed.get(0);
-			ThreadUnsafeXslTransformer transformer = getTransformer(ssmlOut.getUnderlyingNode().getConfiguration());
-			Map<String, Object> mTransformParams = new TreeMap<>();
-			mTransformParams.put("voice", v.name);
-			return transformer.transformToString(ssmlOut, mTransformParams);
+		performSubstitutionRules(reader, writer, v.getLocale().get().getLanguage());
+		if (ssmlProcessed.size() != 1) {
+			throw new RuntimeException("Something went wrong");
 		}
+		if (!(ssmlProcessed.get(0) instanceof XdmNode)) {
+			throw new RuntimeException("Incorrect type");
+		}
+		XdmNode ssmlOut = (XdmNode)ssmlProcessed.get(0);
+		ThreadUnsafeXslTransformer transformer = getTransformer(ssmlOut.getUnderlyingNode().getConfiguration());
+		Map<String,Object> params = new TreeMap<>();
+		params.put("voice", v.name);
+		return transformer.transformToString(ssmlOut, params);
+	}
 
 	private ThreadUnsafeXslTransformer getTransformer(Configuration conf) throws SynthesisException {
-		ThreadUnsafeXslTransformer threadSafeTransformer;
-
-		threadSafeTransformer = mTransformer.get().get(conf);
+		ThreadUnsafeXslTransformer threadSafeTransformer = mTransformer.get().get(conf);
 		if (threadSafeTransformer == null) {
 			try {
 				XslTransformCompiler xslCompiler = new XslTransformCompiler(conf);
-				CompiledStylesheet compileStylesheet = xslCompiler.compileStylesheet(this.ssmLxslTransformerURL.openStream());
+				CompiledStylesheet compileStylesheet = xslCompiler.compileStylesheet(ssmLxslTransformerURL.openStream());
 				threadSafeTransformer = compileStylesheet.newTransformer();
-				this.mTransformer.get().put(conf, threadSafeTransformer);
-			} catch (SaxonApiException | IOException e) {
+				mTransformer.get().put(conf, threadSafeTransformer);
+			} catch (SaxonApiException|IOException e) {
 				throw new SynthesisException(e);
 			}
 		}
-
 		return threadSafeTransformer;
 	}
-
 
 	private void performSubstitutionRules(XMLStreamReader reader, XMLStreamWriter writer, String lang) throws XMLStreamException {
 		while(reader.hasNext()) {
 			reader.next();
 			if (reader.getEventType() == XMLEvent.CHARACTERS) {
-				CereprocTTSUtil utils = mTtsUtils.get(lang);
+				CereprocTTSUtil utils = ttsUtils.get(lang);
 				writer.writeCharacters(utils.applyAll(reader.getText()));
 			} else {
 				XMLStreamWriterHelper.writeEvent(writer, reader);

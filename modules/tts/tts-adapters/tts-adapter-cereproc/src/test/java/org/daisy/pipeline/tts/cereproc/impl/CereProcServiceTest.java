@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
 
-public class CereProcTest extends AbstractTest {
+public class CereProcServiceTest extends AbstractTest {
 
 	@Inject
 	public TTSService ttsService;

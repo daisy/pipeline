@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.cereproc.impl.util;
+package org.daisy.pipeline.tts.cereproc.impl;
 
 import org.junit.Assert;
 import org.junit.Test;
