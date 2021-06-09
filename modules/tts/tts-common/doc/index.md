@@ -284,9 +284,37 @@ tts-adapter-attbin:
 
 `org.daisy.pipeline.tts.google.samplerate`
 : Sample rate (in Hz)
-: Defaults to 22050
+: Defaults to "22050"
 
 `org.daisy.pipeline.tts.google.priority`
+: This engine is chosen over another engine that serves the same voice
+  if this one has a higher priority.
+: Defaults to "15"
+
+### CereProc
+
+`org.daisy.pipeline.tts.cereproc.server`
+: Host address of CereProc server
+: Defaults to "localhost"
+
+`org.daisy.pipeline.tts.cereproc.port`
+: Port of CereProc server for regular voices
+: Mandatory
+
+`org.daisy.pipeline.tts.cereproc.client`
+: Location of client program for communicating with CereProc server
+: Defaults to "/usr/bin/cspeechclient"
+
+`org.daisy.pipeline.tts.cereproc.priority`
+: This engine is chosen over another engine that serves the same voice
+  if this one has a higher priority.
+: Defaults to "15"
+
+`org.daisy.pipeline.tts.cereproc.dnn.port`
+: Port of CereProc server for DNN voices
+: Mandatory
+
+`org.daisy.pipeline.tts.cereproc.dnn.priority`
 : This engine is chosen over another engine that serves the same voice
   if this one has a higher priority.
 : Defaults to "15"
