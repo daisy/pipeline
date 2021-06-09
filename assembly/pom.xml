@@ -20,7 +20,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.4</cli.version>
+    <cli.version>2.1.5-SNAPSHOT</cli.version>
     <javafx.version>11.0.1</javafx.version>
     <!--
         for package-exe
@@ -83,14 +83,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.1</version>
+        <version>1.14.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.2</version>
+        <version>1.14.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -223,6 +223,11 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>rpm-maven-plugin</artifactId>
           <version>2.0.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jlink-plugin</artifactId>
+          <version>3.1.0</version>
         </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
@@ -2620,6 +2625,43 @@
                       rm -rf ${rpm.pipeline.cli.home}
                     </script>
                   </postremoveScriptlet>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>build-jre</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-jlink-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>jlink</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jlink</goal>
+                </goals>
+                <configuration>
+                  <classifier>jre</classifier>
+                  <addModules>
+                    <addModule>java.base</addModule>
+                    <addModule>java.desktop</addModule>
+                    <addModule>java.instrument</addModule>
+                    <addModule>java.sql</addModule>
+                    <addModule>java.xml</addModule>
+                    <addModule>jdk.management.agent</addModule>
+                    <addModule>jdk.zipfs</addModule>
+                  </addModules>
+                  <modulePaths>
+                    <!-- otherwise build fails with "Error: no value given for -module-path" -->
+                    <modulePath>xxx</modulePath>
+                  </modulePaths>
+                  <noHeaderFiles>true</noHeaderFiles>
+                  <noManPages>true</noManPages>
                 </configuration>
               </execution>
             </executions>

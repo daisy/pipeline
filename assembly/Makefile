@@ -63,7 +63,9 @@ zip-minimal : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VER
 deb-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb
 rpm-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm
 
-release-descriptor : mvn -Pgenerate-release-descriptor
+.PHONY : release-descriptor
+release-descriptor : target/release-descriptor/releaseDescriptor.xml
+target/release-descriptor/releaseDescriptor.xml : mvn -Pgenerate-release-descriptor
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe         : mvn -Pcopy-artifacts \
                                                                                                                        -Pgenerate-release-descriptor \
@@ -155,12 +157,14 @@ else
 dev-launcher : target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 endif
 
-target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
+target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pbuild-jre \
+                                                                             -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-mac \
                                                                              -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
-target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
+target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pbuild-jre \
+                                                                             -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-linux \
                                                                              -Punpack-updater-linux \
@@ -211,6 +215,7 @@ check-docker :
 #                         copy-modules-win
 # generate-release-descriptor                  generate-effective-pom
 #                                              generate-release-descriptor
+# build-jre                                                                                                         jlink
 # unpack-cli-mac                               unpack-cli-mac
 # unpack-cli-linux                             unpack-cli-linux
 # unpack-cli-win                               unpack-cli-win
@@ -234,11 +239,11 @@ check-docker :
 # package-deb-cli                                                                                                   package-deb-cli
 # package-rpm                                                                                                       package-rpm
 # package-rpm-cli                                                                                                   package-rpm-cli
-# dev-launcher                                 generate-fileinstall-cfg-files                 assemble-dev-dir
 
 PROFILES :=                     \
 	copy-artifacts              \
 	generate-release-descriptor \
+	build-jre                   \
 	assemble-linux-dir          \
 	assemble-linux-zip          \
 	assemble-mac-dir            \
@@ -260,8 +265,7 @@ PROFILES :=                     \
 	unpack-updater-mac          \
 	unpack-updater-win          \
 	unpack-updater-gui-win      \
-	without-persistence         \
-	dev-launcher
+	without-persistence
 
 .PHONY : mvn
 mvn :
