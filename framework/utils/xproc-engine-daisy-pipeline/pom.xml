@@ -123,6 +123,7 @@
             <Import-Package>
               org.daisy.pipeline.webserviceutils.xml;resolution:=optional,
               !org.daisy.common.spi,
+              !org.daisy.pipeline.webservice.xml,
               *
             </Import-Package>
             <_dsannotations>
