@@ -47,6 +47,13 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <!--
+        OSGi runtime dependency of dotify.library
+    -->
+    <dependency>
+      <groupId>org.liblouis</groupId>
+      <artifactId>liblouis-java</artifactId>
+    </dependency>
+    <!--
         for processing org.daisy.pipeline.braille.pef.impl.TableCatalog_SPI in generate-spi-classes
         FIXME: in generate-spi-classes, skip compilation of excluded classes completely (currently
         only the processing of annotations is skipped)

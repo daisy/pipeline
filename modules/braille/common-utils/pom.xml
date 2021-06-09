@@ -63,6 +63,14 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
     </dependency>
+    <!--
+        OSGi runtime dependency of dotify.library
+    -->
+    <dependency>
+      <groupId>org.liblouis</groupId>
+      <artifactId>liblouis-java</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   
   <properties>
