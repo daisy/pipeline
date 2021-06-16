@@ -129,6 +129,7 @@
     <p:documentation>
       px:html-break-detect
       px:html-unwrap-words
+      px:remove-empty-lic
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
@@ -141,6 +142,11 @@
     <p:documentation>
       px:fileset-load
       px:fileset-update
+    </p:documentation>
+  </p:import>
+  <p:import href="prepare-for-tts.xpl">
+    <p:documentation>
+      px:prepare-for-tts
     </p:documentation>
   </p:import>
 
@@ -235,6 +241,9 @@
           <p:documentation>
             Insert "speech-only" spans from @tts:before and @tts:after attributes
           </p:documentation>
+          <px:prepare-for-tts>
+            <!-- Add extra line numbers to ordered lists -->
+          </px:prepare-for-tts>
           <p:insert match="*[@tts:before]" position="first-child">
             <p:input port="insertion">
               <p:inline><tts:before>[CONTENT]</tts:before></p:inline>
@@ -252,6 +261,7 @@
           <p:rename match="tts:before|tts:after"
                     new-name="span" new-namespace="http://www.w3.org/1999/xhtml"/>
         </p:group>
+
         <px:html-break-detect name="lexing" px:progress="1/2">
           <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
         </px:html-break-detect>
