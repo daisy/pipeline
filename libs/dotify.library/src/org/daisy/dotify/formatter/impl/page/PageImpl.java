@@ -272,6 +272,10 @@ public class PageImpl implements Page {
         return anchors;
     }
 
+    /**
+     * Add identifiers from a {@link RowGroup}, that is, identifiers that are not attached to a
+     * {@link RowImpl}.
+     */
     void addIdentifiers(RowGroup ids) {
         getDetails().getIdentifiers().addAll(ids.getIdentifiers());
     }

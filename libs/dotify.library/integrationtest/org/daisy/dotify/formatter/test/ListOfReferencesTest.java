@@ -2,6 +2,8 @@ package org.daisy.dotify.formatter.test;
 
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,8 +20,8 @@ public class ListOfReferencesTest extends AbstractFormatterEngineTest {
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
-            "resource-files/dp2/list-of-references-input.obfl",
-            "resource-files/dp2/list-of-references-expected.pef",
+            "resource-files/list-of-references-input.obfl",
+            "resource-files/list-of-references-expected.pef",
             false
         );
     }
@@ -30,9 +32,21 @@ public class ListOfReferencesTest extends AbstractFormatterEngineTest {
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
-            "resource-files/dp2/list-of-references-document-range-input.obfl",
-            "resource-files/dp2/list-of-references-document-range-expected.pef",
+            "resource-files/list-of-references-document-range-input.obfl",
+            "resource-files/list-of-references-document-range-expected.pef",
             false
+        );
+    }
+
+    @Test @Ignore // this test is ignored because it demonstrates a bug
+    public void testAnchorInEmptyBlock() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/list-of-references-anchor-in-empty-block-input.obfl",
+            "resource-files/list-of-references-anchor-in-empty-block-expected.pef",
+            true
         );
     }
 }

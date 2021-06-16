@@ -134,7 +134,9 @@ class RowGroupProvider {
                     new RowGroup.Builder(master.getRowSpacing(), bcm.getCollapsiblePreContentRows())
                         .mergeable(true)
                         .lineProperties(lineProps)
-                        .collapsible(true).skippable(false).breakable(false)
+                        .collapsible(true)
+                        .skippable(false)
+                        .breakable(false)
                         .displayWhen(g.getRowDataProperties().getDisplayWhen()),
                     hasNext(),
                     g).build();
@@ -165,7 +167,9 @@ class RowGroupProvider {
                     new RowGroup.Builder(master.getRowSpacing(), new ArrayList<RowImpl>())
                         .mergeable(true)
                         .lineProperties(lineProps)
-                        .skippable(true)
+                        .collapsible(false)
+                        .skippable(false)
+                        .breakable(false)
                         .displayWhen(g.getRowDataProperties().getDisplayWhen()),
                     bc.getRefs(),
                     g
@@ -187,7 +191,9 @@ class RowGroupProvider {
                 RowGroup.Builder rgb = new RowGroup.Builder(master.getRowSpacing()).add(r)
                         .mergeable(bcm.supportsVariableWidth())
                         .lineProperties(lineProps)
-                        .collapsible(false).skippable(false).breakable(
+                        .collapsible(false)
+                        .skippable(false)
+                        .breakable(
                             r.allowsBreakAfter() &&
                             owc.allowsBreakAfter(rowIndex - 1) &&
                             keepWithNext <= 0 &&

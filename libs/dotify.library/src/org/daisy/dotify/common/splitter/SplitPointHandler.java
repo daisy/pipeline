@@ -242,16 +242,16 @@ public class SplitPointHandler<T extends SplitPointUnit, U extends SplitPointDat
     private SplitPointSpecification findBreakpoint(
         U data,
         boolean force,
-        int startPos,
+        int pos,
         SplitPointCost<T> cost,
         boolean trimTrailing
     ) {
-        int strPos = forwardSkippable(data, startPos);
+        pos = forwardSkippable(data, pos);
         // check next unit to see if it can be removed.
-        if (!data.hasElementAt(strPos + 1)) { // last unit?
+        if (!data.hasElementAt(pos + 1)) { // last unit?
             return SplitPointSpecification.all();
         } else {
-            return findBreakpointFromPosition(data, strPos, force, cost, trimTrailing);
+            return findBreakpointFromPosition(data, pos, force, cost, trimTrailing);
         }
     }
 
@@ -304,77 +304,6 @@ public class SplitPointHandler<T extends SplitPointUnit, U extends SplitPointDat
         List<T> discarded = trimmed.getDiscarded();
         discarded.addAll(head.getSecondPart());
         return new SplitPoint<>(trimmed.getResult(), trimmed.getSupplements(), tail, discarded, hard);
-    }
-
-    /**
-     * Trims leading skippable units in the supplied list. The result is backed by the
-     * original list.
-     *
-     * @param in  the list to trim
-     * @param <T> the type of split list
-     * @return the list split in two parts, one with the leading skippable units, one with
-     * the remainder
-     */
-    public static <T extends SplitPointUnit> SplitList<T> trimLeading(List<T> in) {
-        int i;
-        for (i = 0; i < in.size(); i++) {
-            if (!in.get(i).isSkippable()) {
-                break;
-            }
-        }
-        return SplitList.split(in, i);
-    }
-
-    /**
-     * Trims leading skippable units in the supplied data source. The result is backed by the
-     * original data source.
-     *
-     * @param in  the list to trim
-     * @param <T> the type of split list
-     * @param <U> the type of data source
-     * @return a split point, the leading skippable units are placed in {@link SplitPoint#getDiscarded()}, the
-     * remainder are placed in {@link SplitPoint#getTail()}
-     */
-    public static <T extends SplitPointUnit, U extends SplitPointDataSource<T, U>> SplitPoint<T, U> trimLeading(U in) {
-        return skipLeading(in, findLeading(in));
-    }
-
-    /**
-     * Skips leading units in the supplied list. The result is backed by the original data source.
-     * No data is beyond index is produced using this method.
-     *
-     * @param in    the list to trim
-     * @param index the index of the split point
-     * @param <T>   the type of object
-     * @param <U>   the type of data source
-     * @return a split point, the leading units are placed in {@link SplitPoint#getDiscarded()}, the
-     * remainder are placed in {@link SplitPoint#getTail()}
-     */
-    public static <T extends SplitPointUnit, U extends SplitPointDataSource<T, U>> SplitPoint<T, U> skipLeading(
-        U in,
-        int index
-    ) {
-        SplitResult<T, U> res = in.split(index);
-        return new SplitPoint<>(null, null, res.tail(), res.head(), false);
-    }
-
-    /**
-     * Finds leading skippable units in the supplied data source.
-     *
-     * @param in  the data source to search
-     * @param <T> the type of object
-     * @param <U> the type of data source
-     * @return returns the index of the first non-skippable unit
-     */
-    public static <T extends SplitPointUnit, U extends SplitPointDataSource<T, U>> int findLeading(U in) {
-        int i;
-        for (i = 0; in.hasElementAt(i); i++) {
-            if (!in.get(i).isSkippable()) {
-                break;
-            }
-        }
-        ;
-        return i;
     }
 
     static <T extends SplitPointUnit> T maxSize(T u1, T u2) {
@@ -444,31 +373,27 @@ public class SplitPointHandler<T extends SplitPointUnit, U extends SplitPointDat
         return units;
     }
 
+    /**
+     * Starting from a unit at a certain position, pass over as many skippable units as possible,
+     * with the last one being a breakable unit or the last unit in the source.
+     */
     static int forwardSkippable(
         SplitPointDataSource<? extends SplitPointUnit,
         ? extends SplitPointDataSource<?, ?>> data,
-        final int pos
+        int pos
     ) {
         SplitPointUnit c;
-        int ret = pos;
-        if (data.hasElementAt(ret) && !(c = data.get(ret)).isBreakable()) {
-            ret++;
-            while (data.hasElementAt(ret) && (c = data.get(ret)).isSkippable()) {
-                if (c.isBreakable()) {
-                    return ret;
-                } else {
-                    ret++;
-                }
+        int p = pos;
+        while (data.hasElementAt(++p)) {
+            c = data.get(p);
+            if (!c.isSkippable()) {
+                return pos; // break after last encountered breakable unit or start unit
             }
-            //have we passed last element?
-            if (!data.hasElementAt(ret)) {
-                return ret - 1;
-            } else {
-                return pos;
+            if (c.isBreakable()) {
+                pos = p;
             }
-        } else {
-            return ret;
         }
+        return p - 1; // break after last unit in source
     }
 
     static <T extends SplitPointUnit, U extends SplitPointDataSource<T, U>> BreakPointScannerResult

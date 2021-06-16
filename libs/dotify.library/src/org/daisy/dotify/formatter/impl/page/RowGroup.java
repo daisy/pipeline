@@ -22,7 +22,6 @@ import java.util.Objects;
 class RowGroup implements SplitPointUnit {
     private final List<RowImpl> rows;
     private final List<Marker> markers;
-    private final List<String> anchors;
     private final List<String> identifiers;
     private final float unitSize, lastUnitSize;
     private final boolean breakable, skippable, collapsible, lazyCollapse;
@@ -159,7 +158,6 @@ class RowGroup implements SplitPointUnit {
     private RowGroup(Builder builder) {
         this.rows = builder.rows;
         this.markers = builder.markers;
-        this.anchors = builder.anchors;
         this.identifiers = builder.identifiers;
         this.breakable = builder.breakable;
         this.skippable = builder.skippable;
@@ -169,6 +167,7 @@ class RowGroup implements SplitPointUnit {
             (rows.isEmpty() ? 0 : Math.max(0, getRowSpacing(builder.rowDefault, rows.get(rows.size() - 1)) - 1));
         this.ids = new ArrayList<>();
         this.lazyCollapse = builder.lazyCollapse;
+        ids.addAll(builder.anchors);
         for (RowImpl r : rows) {
             ids.addAll(r.getAnchors());
         }
@@ -189,7 +188,6 @@ class RowGroup implements SplitPointUnit {
     RowGroup(RowGroup template) {
         this.rows = new ArrayList<>(template.rows);
         this.markers = new ArrayList<>(template.markers);
-        this.anchors = new ArrayList<>(template.anchors);
         this.identifiers = new ArrayList<>(template.identifiers);
         this.breakable = template.breakable;
         this.skippable = template.skippable;
@@ -313,10 +311,6 @@ class RowGroup implements SplitPointUnit {
 
     public List<Marker> getMarkers() {
         return markers;
-    }
-
-    public List<String> getAnchors() {
-        return anchors;
     }
 
     public List<String> getIdentifiers() {

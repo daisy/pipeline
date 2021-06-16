@@ -412,16 +412,6 @@ public class PageSequenceBuilder2 {
             Optional<Boolean> blockBoundary = Optional.empty();
             if (!data.isEmpty()) {
                 RowGroupDataSource copy = new RowGroupDataSource(data);
-                // Using a copy to find the skippable data, so that only the required data is rendered
-                int index = SplitPointHandler.findLeading(copy);
-                // Now apply the information to the live data
-                SplitPoint<RowGroup, RowGroupDataSource> sl = SplitPointHandler.skipLeading(data, index);
-                for (RowGroup rg : sl.getDiscarded()) {
-                    addProperties(current, rg);
-                }
-                data = sl.getTail();
-                // And on copy...
-                copy = SplitPointHandler.skipLeading(copy, index).getTail();
                 // Content of sequence-interrupted or sequence-resumed (which of the two depends on
                 // whether we are at the beginning or the end of the volume)
                 List<RowGroup> seqTransitionText = transitionContent.isPresent() ?
@@ -553,6 +543,7 @@ public class PageSequenceBuilder2 {
                 force = res.getHead().size() == 0;
                 data = res.getTail();
                 List<RowGroup> head;
+                int firstPageContentRow = 0;
                 // If there is a sequence-interrupted or sequence-resumed, it is added to the end of
                 // current page or the beginning of the next respectively.
                 if (addTransition && transitionContent.isPresent()) {
@@ -565,6 +556,7 @@ public class PageSequenceBuilder2 {
                     ) {
                         head = new ArrayList<>(seqTransitionText);
                         head.addAll(res.getHead());
+                        firstPageContentRow += seqTransitionText.size();
                     } else {
                         head = res.getHead();
                     }
@@ -582,6 +574,7 @@ public class PageSequenceBuilder2 {
                             // Adding to the top of the list isn't very efficient.
                             // When combined with the if statement above, this isn't necessary.
                             head.addAll(0, anyTransitionText);
+                            firstPageContentRow += anyTransitionText.size();
                             break;
                     }
                 }
@@ -592,7 +585,15 @@ public class PageSequenceBuilder2 {
                     cbl = gr.getLineProperties().getBlockLineLocation();
                 }
                 // Add the body rows to the page.
-                bc = addRows(head, current, bc);
+                if (firstPageContentRow > 0) {
+                    bc = addRows(head.subList(0, firstPageContentRow), current, bc, false);
+                    if (!current.getDetails().getMarkers().isEmpty()) {
+                        throw new RuntimeException();
+                    }
+                    bc = addRows(head.subList(firstPageContentRow, head.size()), current, bc, true);
+                } else {
+                    bc = addRows(head, current, bc, false);
+                }
                 // The VolumeKeepPriority of the page is the maximum value (lowest priority) of all
                 // RowGroups. Discarded RowGroups (i.e. collapsed margins) are also taken into
                 // account.
@@ -720,7 +721,11 @@ public class PageSequenceBuilder2 {
         }
     }
 
-    private BlockContext addRows(List<RowGroup> head, PageImpl p, BlockContext blockContext) {
+    /**
+     * @param resetPageContent Whether to reset the start of the page-content scope of page
+     *        <code>p</code> to the first row from <code>head</code>.
+     */
+    private BlockContext addRows(List<RowGroup> head, PageImpl p, BlockContext blockContext, boolean resetPageContent) {
         int i = head.size();
         for (RowGroup rg : head) {
 
@@ -764,7 +769,12 @@ public class PageSequenceBuilder2 {
 
             List<RowImpl> rows = rg.getRows();
             int j = rows.size();
+            boolean visibleRowAdded = false;
             for (RowImpl r : rows) {
+                if (resetPageContent) {
+                    p.getDetails().startsContentMarkers();
+                    resetPageContent = false;
+                }
                 j--;
                 if ((i == 0 && j == 0)) {
                     // clone the row as not to append the margins twice
@@ -775,12 +785,17 @@ public class PageSequenceBuilder2 {
                 } else {
                     p.newRow(r);
                 }
+                if (!r.isInvisible()) {
+                    visibleRowAdded = true;
+                }
             }
 
-            // After we have written the row we are no longer at the top of the page so the mutable
+            // After we have written one or more rows we are no longer at the top of the page so the mutable
             // value topOfPage needs to change so we will rebuild an object in order to change this context
             // to false.
-            blockContext = new BlockContext.Builder(blockContext).topOfPage(false).build();
+            if (visibleRowAdded) {
+                blockContext = new BlockContext.Builder(blockContext).topOfPage(false).build();
+            }
         }
 
         return blockContext;
@@ -813,7 +828,6 @@ public class PageSequenceBuilder2 {
     private void addProperties(PageImpl p, RowGroup rg) {
         p.addIdentifiers(rg);
         p.addMarkers(rg);
-        //TODO: addGroupAnchors
         keepNextSheets = Math.max(rg.getKeepWithNextSheets(), keepNextSheets);
         if (keepNextSheets > 0) {
             p.setAllowsVolumeBreak(false);

@@ -1,6 +1,5 @@
 package org.daisy.dotify.common.splitter;
 
-import org.daisy.dotify.common.collection.SplitList;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -149,59 +148,9 @@ public class SplitPointHandlerTest {
                 Arrays.asList(c, c, c, e, e, e, e, e, c, c, c, t, c, c, c, c)
             );
         assertEquals(Arrays.asList(c, c, c), bp.getHead());
-        assertEquals(
-            Arrays.asList(c, c, c, t, c, c, c, c),
-            SplitPointHandler.trimLeading(bp.getTail().getRemaining()).getSecondPart()
-        );
+        assertEquals(Arrays.asList(e, e, e, e, e), bp.getDiscarded());
+        assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), bp.getTail().getRemaining());
         assertTrue(!bp.isHardBreak());
-    }
-
-    @Test
-    public void testTrimLeading_01() {
-        DummySplitPoint t = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
-        SplitList<DummySplitPoint> res = SplitPointHandler.trimLeading(
-            Arrays.asList(e, e, e, e, e, c, c, c, t, c, c, c, c)
-        );
-        assertEquals(Arrays.asList(e, e, e, e, e), res.getFirstPart());
-        assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), res.getSecondPart());
-    }
-
-    @Test
-    public void testTrimLeading_02() {
-        DummySplitPoint t = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
-        SplitPoint<DummySplitPoint, SplitPointDataList<DummySplitPoint>> res = SplitPointHandler.trimLeading(
-            new SplitPointDataList<>(e, e, e, e, e, c, c, c, t, c, c, c, c)
-        );
-        assertEquals(Arrays.asList(e, e, e, e, e), res.getDiscarded());
-        assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), res.getTail().getRemaining());
-        assertEquals(Collections.emptyList(), res.getHead());
-        assertEquals(Collections.emptyList(), res.getSupplements());
-        assertEquals(false, res.isHardBreak());
-    }
-
-    @Test
-    public void testTrimLeading_03() {
-        DummySplitPoint t = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
-        SplitPoint<DummySplitPoint, SplitPointDataList<DummySplitPoint>> res = SplitPointHandler.trimLeading(
-            new SplitPointDataList<>(c, c, c, t, c, c, c, c)
-        );
-        assertEquals(Collections.emptyList(), res.getDiscarded());
-        assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), res.getTail().getRemaining());
-        assertEquals(Collections.emptyList(), res.getHead());
-        assertEquals(Collections.emptyList(), res.getSupplements());
-        assertEquals(false, res.isHardBreak());
-    }
-
-    @Test
-    public void testTrimLeading_04() {
-        SplitPoint<DummySplitPoint, SplitPointDataList<DummySplitPoint>> res = SplitPointHandler.trimLeading(
-            new SplitPointDataList<>(e, e, e, e, e)
-        );
-        assertEquals(Arrays.asList(e, e, e, e, e), res.getDiscarded());
-        assertEquals(Collections.emptyList(), res.getTail().getRemaining());
-        assertEquals(Collections.emptyList(), res.getHead());
-        assertEquals(Collections.emptyList(), res.getSupplements());
-        assertEquals(false, res.isHardBreak());
     }
 
     @Test
@@ -267,7 +216,8 @@ public class SplitPointHandlerTest {
         SplitPoint<DummySplitPoint, SplitPointDataList<DummySplitPoint>> bp =
             SplitPointHandler.split(6, Arrays.asList(c, c, x, y, c));
         assertEquals(Arrays.asList(c, c), bp.getHead());
-        assertEquals(Arrays.asList(c), SplitPointHandler.trimLeading(bp.getTail().getRemaining()).getSecondPart());
+        assertEquals(Arrays.asList(x, y), bp.getDiscarded());
+        assertEquals(Arrays.asList(c), bp.getTail().getRemaining());
     }
 
     @Test

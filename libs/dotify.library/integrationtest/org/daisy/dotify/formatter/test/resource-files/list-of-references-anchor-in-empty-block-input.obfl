@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" translate="pre-translated">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:description>Tests that an item referenced in an empty block gets added to the list.</dc:description>
+	</meta>
+	<layout-master name="master" duplex="true" page-width="20" page-height="10">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<volume-template sheets-in-volume-max="1000">
+		<post-content>
+			<dynamic-sequence master="main">
+				<list-of-references collection="footnotes" range="volume"/>
+			</dynamic-sequence>
+		</post-content>
+	</volume-template>
+	<collection name="footnotes">
+		<item id="item_1">
+			<block>
+				⠿⠿⠿
+			</block>
+		</item>
+	</collection>
+	<sequence master="master">
+		<block>
+			<anchor item="item_1"/>
+		</block>
+		<block>
+			⠉⠉⠉
+		</block>
+	</sequence>
+</obfl>

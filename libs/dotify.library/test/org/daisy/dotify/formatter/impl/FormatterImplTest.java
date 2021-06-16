@@ -153,7 +153,7 @@ public class FormatterImplTest {
 
 
     @Test
-    public void testTwoBlocksWithoutExpression() throws TranslatorConfigurationException {
+    public void testBlocksWithoutDisplayWhen() throws TranslatorConfigurationException {
         String loc = "und";
 
         TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
@@ -173,7 +173,7 @@ public class FormatterImplTest {
     }
 
     @Test
-    public void testTwoBlocksWithDisplayWhenTrue() throws TranslatorConfigurationException {
+    public void testDisplayWhenTrue() throws TranslatorConfigurationException {
         String loc = "und";
 
         TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
@@ -201,7 +201,7 @@ public class FormatterImplTest {
     }
 
     @Test
-    public void testTwoBlocksWithDisplayWhenFalse() throws TranslatorConfigurationException {
+    public void testDisplayWhenFalse() throws TranslatorConfigurationException {
         String loc = "und";
 
         TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
@@ -229,7 +229,7 @@ public class FormatterImplTest {
     }
 
     @Test
-    public void testTwoBlocksWithDisplayWhenExpressionEvaluateToTrue() throws TranslatorConfigurationException {
+    public void testDisplayWhenExpressionEvaluateToTrue() throws TranslatorConfigurationException {
         String loc = "und";
 
         TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
@@ -257,7 +257,7 @@ public class FormatterImplTest {
     }
 
     @Test
-    public void testTwoBlocksWithDisplayWhenExpressionEvaluateToFalse() throws TranslatorConfigurationException {
+    public void testDisplayWhenExpressionEvaluateToFalse() throws TranslatorConfigurationException {
         String loc = "und";
 
         TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
@@ -284,7 +284,7 @@ public class FormatterImplTest {
     }
 
     @Test
-    public void testTwoBlocksWithDisplayWhenExpressionStartedPageNumberIsOne() throws TranslatorConfigurationException {
+    public void testDisplayWhenStartedPageNumberIsOne() throws TranslatorConfigurationException {
         String loc = "und";
 
         TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
@@ -313,16 +313,16 @@ public class FormatterImplTest {
 
 
     /**
-     * This test is now ignored because the code that handled changing the value of the top of the page
-     * was changed and makes this test fail. The code we used changed the value when we had written the
-     * first row group to the page which was deemed to be the incorrect solution to this problem and
-     * therefore reverted. We will keep this test here for future reference if we implement this feature.
+     * This test is ignored because the current implementation makes certain assumptions which are
+     * not met when display-when="$starts-at-top-of-page". The OBFL parser enforces that the
+     * assumptions are met. We keep this test here for future reference if we implement this
+     * feature.
      *
      * @throws TranslatorConfigurationException
      */
     @Test
     @Ignore
-    public void testTwoBlocksWithDisplayWhenAsTrue() throws TranslatorConfigurationException {
+    public void testDisplayWhenStartsAtTopOfPage() throws TranslatorConfigurationException {
         String loc = "und";
 
         TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
@@ -351,38 +351,7 @@ public class FormatterImplTest {
     }
 
     @Test
-    public void testTwoBlocksWithDisplayWhenExpressionStartsAtTopOfPage() throws TranslatorConfigurationException {
-        String loc = "und";
-
-        TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
-        final OBFLCondition condition = new OBFLCondition(
-                "(! $starts-at-top-of-page)",
-                ExpressionFactoryMaker.newInstance().getFactory(),
-                OBFLVariable.STARTS_AT_TOP_OF_PAGE
-        );
-        String res = testingFormatter((f1) -> {
-            FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
-            BlockProperties nb = new BlockProperties.Builder().build();
-
-            f.startBlock(bb);
-            f.addChars("Testing1", tp);
-            f.endBlock();
-            f.startBlock(nb);
-            f.addChars("Testing2", tp);
-            f.endBlock();
-            return null;
-        });
-
-        assertEquals("Testing2\n", res);
-    }
-
-    @Test
-    public void testTwoBlocksWithDisplayWhenExpressionStartsAtTopOfPageMultiPage()
-        throws TranslatorConfigurationException {
+    public void testDisplayWhenDoesNotStartAtTopOfPage() throws TranslatorConfigurationException {
 
         String loc = "und";
 
@@ -400,75 +369,36 @@ public class FormatterImplTest {
                     .build();
             BlockProperties nb = new BlockProperties.Builder().build();
 
+            // The first block is not rendered because of the "display-when" condition which
+            // evaluates to false at the top of the page.
             f.startBlock(bb);
             f.addChars("Testing1", tp);
             f.endBlock();
+            // This block becomes is the first row of the page
             f.startBlock(nb);
             f.addChars("Testing2", tp);
             f.endBlock();
 
-            for (int i = 0; i < 18; i++) {
-                f.startBlock(nb);
-                f.addChars(".", tp);
-                f.endBlock();
-            }
-
-            f.startBlock(bb);
-            f.addChars("Testing1", tp);
-            f.endBlock();
-            f.startBlock(bb);
-            f.addChars("Testing2", tp);
-            f.endBlock();
-            f.startBlock(nb);
-            f.addChars("Testing3", tp);
-            f.endBlock();
-
-            return null;
-        });
-
-        assertEquals("Testing2\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\nTesting2\nTesting3\n", res);
-    }
-
-    @Test
-    public void testBlockFlowingOverTwoPages()
-            throws TranslatorConfigurationException {
-
-        String loc = "und";
-
-        TextProperties tp = new TextProperties.Builder(loc).hyphenate(false).build();
-        final OBFLCondition condition = new OBFLCondition(
-                "(! $starts-at-top-of-page)",
-                ExpressionFactoryMaker.newInstance().getFactory(),
-                OBFLVariable.STARTS_AT_TOP_OF_PAGE
-        );
-        String res = testingFormatter((f1) -> {
-            FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
-            BlockProperties nb = new BlockProperties.Builder().build();
-
-            f.startBlock(bb);
-            f.addChars("Testing1", tp);
-            f.endBlock();
-            f.startBlock(nb);
-            f.addChars("Testing2", tp);
-            f.endBlock();
-
+            // We render another 18 rows so that we end up on the second to last (19th) row of the page.
             for (int i = 0; i < 17; i++) {
                 f.startBlock(nb);
                 f.addChars(".", tp);
                 f.endBlock();
             }
 
+            // The next block takes up 4 rows so would normally be split over two pages, but thanks
+            // to the "keep" property it is moved to the second page, where it is not rendered
+            // because of the "display-when" condition.
             f.startBlock(bb);
             f.addChars("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus facilisis elit id " +
                     "tellus lacinia fermentum. In sed arcu at eros scelerisque elementum quis ac velit.", tp);
             f.endBlock();
+            // The next block is also not rendered because it also has the "display-when" condition
+            // and we are still at the top of the page.
             f.startBlock(bb);
             f.addChars("Testing2", tp);
             f.endBlock();
+            // This block becomes is the first row of the second page
             f.startBlock(nb);
             f.addChars("Testing3", tp);
             f.endBlock();
@@ -476,16 +406,12 @@ public class FormatterImplTest {
             return null;
         });
 
-        assertEquals("Testing2\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n" +
-                "elit.⠀Vivamus⠀facilisis⠀elit⠀id⠀tellus⠀lacinia\n" +
-                "fermentum.⠀In⠀sed⠀arcu⠀at⠀eros⠀scelerisque\n" +
-                "elementum⠀quis⠀ac⠀velit.\n" +
-                "Testing2\nTesting3\n", res);
+        assertEquals("Testing2\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\nTesting3\n", res);
     }
 
 
     @Test
-    public void testBlocksWithMarkers()
+    public void testBlockWithMarkersAndDisplayWhenDoesNotStartAtTopOfPage()
             throws TranslatorConfigurationException {
 
         String loc = "und";
