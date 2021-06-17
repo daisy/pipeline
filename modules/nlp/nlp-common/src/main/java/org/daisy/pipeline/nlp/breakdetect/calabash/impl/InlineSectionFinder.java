@@ -56,6 +56,10 @@ public class InlineSectionFinder {
 	}
 
 	private void addToSection(XdmNode node, int level, String text) {
+	    if (text != null && text.trim().isEmpty()) {
+	        return;
+        }
+
 		if (mCurrentSectionSize == mCurrentSection.size()) {
 			mCurrentSection.add(new Leaf());
 			mCurrentText.add(null);

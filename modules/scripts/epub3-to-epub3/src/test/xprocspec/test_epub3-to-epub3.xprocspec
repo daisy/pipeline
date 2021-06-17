@@ -420,9 +420,8 @@
 												<strong>Preface to the First Edition</strong>
 											</span>
 										</span>
-										<span id="st3-8"></span>
 										<span class="lic">
-											<span id="st3-9">
+											<span id="st3-8">
 												<strong>xi</strong>
 											</span>
 										</span>
@@ -563,7 +562,7 @@
 								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 							</par>
 							<par>
-								<text src="../chapter.xhtml#st3-9"/>
+								<text src="../chapter.xhtml#st3-8"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 						</body>
@@ -724,9 +723,8 @@
 												<strong>Preface to the First Edition</strong>
 											</span>
 										</span>
-										<span id="st3-8" class="sentence"></span>
 										<span class="lic">
-											<span id="st3-9" class="sentence">
+											<span id="st3-8" class="sentence">
 												<strong>xi</strong>
 											</span>
 										</span>
