@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
                script="../../main/resources/xml/prepare-for-tts.xpl">
 
     <x:scenario label="list-numbering">
@@ -61,15 +62,15 @@
                     </head>
                     <body>
                         <ol>
-                            <li><span class="formatted_number">1. </span>Det var en mörk och ljuv kväll.</li>
-                            <li><span class="formatted_number">2. </span><span>Solen hade inte riktigt gått ner i horizonten.</span>
+                            <li><span tts:speech-only="">1. </span>Det var en mörk och ljuv kväll.</li>
+                            <li><span tts:speech-only="">2. </span><span>Solen hade inte riktigt gått ner i horizonten.</span>
                                 <ol start="10" type="I">
-                                    <li><span class="formatted_number">X.</span> Fåglarna hade tystnat och satt lugnt i trädet och väntade.</li>
-                                    <li><span class="formatted_number">XI.</span> Poolens vatten krusade i lugn bris.</li>
-                                    <li><span class="formatted_number">XII.</span> Vattnet var kallt men inbjudande.</li>
+                                    <li><span tts:speech-only="">X.</span> Fåglarna hade tystnat och satt lugnt i trädet och väntade.</li>
+                                    <li><span tts:speech-only="">XI.</span> Poolens vatten krusade i lugn bris.</li>
+                                    <li><span tts:speech-only="">XII.</span> Vattnet var kallt men inbjudande.</li>
                                 </ol>
                             </li>
-                            <li><span class="formatted_number">3.</span> I förd badbyxor blötte han fötterna i det mörka vattnet.</li>
+                            <li><span tts:speech-only="">3.</span> I förd badbyxor blötte han fötterna i det mörka vattnet.</li>
                         </ol>
                         <ul class="none">
                             <li>Huuu, här var det kallt.</li>
