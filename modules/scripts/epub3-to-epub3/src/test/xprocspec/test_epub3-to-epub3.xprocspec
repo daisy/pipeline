@@ -266,13 +266,13 @@
 							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
 							<dc:date>2020-03-06</dc:date>
-							<meta property="media:duration">00:00:41.582</meta>
-							<meta name="media:duration" content="00:00:41.582"/>
+							<meta property="media:duration">00:00:35.467</meta>
+							<meta name="media:duration" content="00:00:35.467"/>
 							<meta property="schema:accessibilityFeature">captions</meta>
 							<meta name="schema:accessibilityFeature" content="captions"/>
 							<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
 							<meta property="media:duration" refines="#item_2">00:00:08.561</meta>
-							<meta property="media:duration" refines="#item_3">00:00:31.798</meta>
+							<meta property="media:duration" refines="#item_3">00:00:25.683</meta>
 						</metadata>
 						<manifest>
 							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>
@@ -447,42 +447,37 @@
 							</ul>
 							<ol>
 								<li>
-									<span id="st3-10">1.</span>
-									<span id="st3-11">Det var en mörk och ljuv kväll.</span>
+									<span id="st3-10">Det var en mörk och ljuv kväll.</span>
 								</li>
 								<li>
-									<span id="st3-12">2.
+									<span id="st3-11">
 										<span>Solen hade inte riktigt gått ner i horizonten.</span>
 									</span>
 									<ol>
 										<li>
-											<span id="st3-13">2.1.</span>
-											<span id="st3-14">Fåglarna hade tystnat och satt lugnt i trädet och väntade.</span>
+											<span id="st3-12">Fåglarna hade tystnat och satt lugnt i trädet och väntade.</span>
 										</li>
 										<li>
-											<span id="st3-15">2.2.</span>
-											<span id="st3-16">Poolens vatten krusade i lugn bris.</span>
+											<span id="st3-13">Poolens vatten krusade i lugn bris.</span>
 										</li>
 										<li>
-											<span id="st3-17">2.3.</span>
-											<span id="st3-18">Vattnet var kallt men inbjudande.</span>
+											<span id="st3-14">Vattnet var kallt men inbjudande.</span>
 										</li>
 									</ol>
 								</li>
 								<li>
-									<span id="st3-19">3.</span>
-									<span id="st3-20">I förd badbyxor blötte han fötterna i det mörka vattnet.</span>
+									<span id="st3-15">I förd badbyxor blötte han fötterna i det mörka vattnet.</span>
 								</li>
 							</ol>
 							<ul class="none">
 								<li>
-									<span id="st3-21">Huuu, här var det kallt.</span>
+									<span id="st3-16">Huuu, här var det kallt.</span>
 								</li>
 								<li>
-									<span id="st3-22">Långsamt satte han sig ner, vattnet gick upp till naveln.</span>
+									<span id="st3-17">Långsamt satte han sig ner, vattnet gick upp till naveln.</span>
 								</li>
 								<li>
-									<span id="st3-23">Efter många djupa andetag tog han mod och lade sig ned.</span>
+									<span id="st3-18">Efter många djupa andetag tog han mod och lade sig ned.</span>
 								</li>
 							</ul>
 						</body>
@@ -632,7 +627,7 @@
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-12"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-13"/>
@@ -648,34 +643,14 @@
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-16"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-17"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-18"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:03.669" clipEnd="0:00:04.892"/>
-							</par>
-							<par>
-								<text src="../chapter.xhtml#st3-19"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-							</par>
-							<par>
-								<text src="../chapter.xhtml#st3-20"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
-							</par>
-							<par>
-								<text src="../chapter.xhtml#st3-21"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-							</par>
-							<par>
-								<text src="../chapter.xhtml#st3-22"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
-							</par>
-							<par>
-								<text src="../chapter.xhtml#st3-23"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 						</body>
