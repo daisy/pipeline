@@ -3,6 +3,7 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
     xmlns="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="#all">
 
@@ -39,7 +40,7 @@
                         <xsl:otherwise><xsl:number format="1" value="$number"/></xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <li><xsl:copy-of select="@*" /><span class="formatted_number"><xsl:value-of select="concat($number_format, '.', ' ')"/></span>
+                <li><xsl:copy-of select="@*" /><span tts:speech-only=""><xsl:value-of select="concat($number_format, '.', ' ')"/></span>
                     <xsl:apply-templates select="node()"/>
                 </li>
             </xsl:for-each>
