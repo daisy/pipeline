@@ -82,6 +82,7 @@
     <p:input port="source" primary="true"/>
     <p:output port="result" primary="true"/>
     <p:delete match="html:span[@class = 'lic' and normalize-space(.) = '']"/>
+    <p:delete match="html:span[@class = 'formatted_number']"/>
   </p:declare-step>
 
 </p:library>
