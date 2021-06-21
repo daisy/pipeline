@@ -129,7 +129,7 @@
 	</p:viewport>
 	<p:add-attribute match="/*" attribute-name="unique-identifier">
 		<!-- this assumes there is at least one dc:identifier in source or metadata (required for valid EPUB) -->
-		<!-- and we know that if there is a dc:identifier with a @refines, pxi:merge-metadata puts it first -->
+		<!-- and we know that if there is a dc:identifier without a @refines, pxi:merge-metadata puts it first -->
 		<p:with-option name="attribute-value" select="/opf:package/opf:metadata/dc:identifier[1]/@id"/>
 	</p:add-attribute>
 	<p:choose>

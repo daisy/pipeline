@@ -32,9 +32,11 @@
         </p:documentation>
     </p:option>
     <p:option name="update-lang-attributes" required="false" select="'false'"/>
+    <p:option name="update-identifier-in-content-docs" required="false" select="'false'"/>
+    <p:option name="update-title-in-content-docs" required="false" select="'false'"/>
     <p:option name="ensure-pagenum-text" required="false" select="'false'"/>
     <p:option name="ensure-section-headings" required="false" select="'false'"/>
-    <p:option name="braille" required="false" select="'true'"/>
+    <p:option name="braille" required="false" select="'false'"/>
     <p:option name="tts" required="false" select="'default'"/>
     <p:option name="sentence-detection" required="false" select="'false'"/>
     <p:option name="braille-translator" select="''"/>
@@ -240,65 +242,33 @@
     </p:choose>
     
     <!--
-        Update lang attributes
+        Update metadata in content documents and lang attributes in package and content documents
     -->
-    <p:choose name="update-lang-attributes">
-        <p:when test="$update-lang-attributes='true'">
+    <p:choose name="update-lang-attributes-and-html-meta">
+        <p:when test="'true'=($update-lang-attributes,
+                              $update-identifier-in-content-docs,
+                              $update-title-in-content-docs)">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
-                <p:pipe step="choose" port="in-memory"/>
+                <p:pipe step="update-html" port="in-memory"/>
             </p:output>
             <px:fileset-load media-types="application/oebps-package+xml" name="package-doc">
                 <p:input port="in-memory">
                     <p:pipe step="add-metadata" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
-            <p:choose>
-                <p:when test="count(/*/opf:metadata/dc:language)&gt;1">
-                    <p:identity px:message-severity="WARNING"
-                                px:message="Not updating 'lang' attributes. More than one dc:language present in package document."/>
-                </p:when>
-                <p:otherwise>
-                    <p:identity/>
-                </p:otherwise>
-            </p:choose>
-            <p:choose name="choose">
+            <p:choose name="update-package-doc">
                 <!-- only do something when there is exactly one dc:language -->
-                <p:when test="count(/*/opf:metadata/dc:language)=1">
+                <p:when test="($update-lang-attributes='true' and count(/*/opf:metadata/dc:language)=1)">
                     <p:output port="fileset" primary="true"/>
                     <p:output port="in-memory" sequence="true">
-                        <p:pipe step="update-html" port="result.in-memory"/>
+                        <p:pipe step="update" port="result.in-memory"/>
                     </p:output>
-                    <p:variable name="language" select="/*/opf:metadata/dc:language/string(.)"/>
-                    <p:add-attribute match="/*" attribute-name="xml:lang">
-                        <p:with-option name="attribute-value" select="$language"/>
+                    <p:add-attribute match="/*" attribute-name="xml:lang" name="package-doc-with-new-lang">
+                        <p:with-option name="attribute-value" select="/*/opf:metadata/dc:language/string(.)"/>
                     </p:add-attribute>
-                    <p:identity name="package-doc-with-new-lang"/>
                     <p:sink/>
-                    <px:opf-spine-to-fileset>
-                        <p:input port="source.fileset">
-                            <p:pipe step="add-metadata" port="fileset"/>
-                        </p:input>
-                        <p:input port="source.in-memory">
-                            <p:pipe step="add-metadata" port="in-memory"/>
-                        </p:input>
-                    </px:opf-spine-to-fileset>
-                    <px:fileset-load media-types="application/xhtml+xml" name="html">
-                        <p:input port="in-memory">
-                            <p:pipe step="add-metadata" port="in-memory"/>
-                        </p:input>
-                    </px:fileset-load>
-                    <p:for-each name="html-with-new-lang" px:message="Updating 'lang' attributes to '{$language}'">
-                        <p:output port="result"/>
-                        <p:add-attribute match="/*" attribute-name="xml:lang">
-                            <p:with-option name="attribute-value" select="$language"/>
-                        </p:add-attribute>
-                        <p:add-attribute match="/*" attribute-name="lang">
-                            <p:with-option name="attribute-value" select="$language"/>
-                        </p:add-attribute>
-                    </p:for-each>
-                    <p:sink/>
-                    <px:fileset-update name="update-package-doc">
+                    <px:fileset-update name="update">
                         <p:input port="source.fileset">
                             <p:pipe step="add-metadata" port="fileset"/>
                         </p:input>
@@ -312,20 +282,8 @@
                             <p:pipe step="package-doc-with-new-lang" port="result"/>
                         </p:input>
                     </px:fileset-update>
-                    <px:fileset-update name="update-html">
-                        <p:input port="source.in-memory">
-                            <p:pipe step="update-package-doc" port="result.in-memory"/>
-                        </p:input>
-                        <p:input port="update.fileset">
-                            <p:pipe step="html" port="result.fileset"/>
-                        </p:input>
-                        <p:input port="update.in-memory">
-                            <p:pipe step="html-with-new-lang" port="result"/>
-                        </p:input>
-                    </px:fileset-update>
                 </p:when>
-                <p:otherwise px:message-severity="WARNING"
-                             px:message="Not updating 'lang' attributes. No dc:language present in package document.">
+                <p:otherwise>
                     <p:output port="fileset" primary="true"/>
                     <p:output port="in-memory" sequence="true">
                         <p:pipe step="add-metadata" port="in-memory"/>
@@ -336,6 +294,119 @@
                             <p:pipe step="add-metadata" port="fileset"/>
                         </p:input>
                     </p:identity>
+                </p:otherwise>
+            </p:choose>
+            <p:choose name="update-html">
+                <p:xpath-context>
+                    <p:pipe step="package-doc" port="result"/>
+                </p:xpath-context>
+                <!--
+                    * only update lang attributes when there is exactly one dc:language
+                    * only update title element if there is at least one dc:title
+                -->
+                <p:when test="($update-lang-attributes='true' and count(/*/opf:metadata/dc:language)=1)
+                              or $update-identifier-in-content-docs='true'
+                              or ($update-title-in-content-docs='true' and exists(/*/opf:metadata/dc:title))">
+                    <p:output port="fileset" primary="true"/>
+                    <p:output port="in-memory" sequence="true">
+                        <p:pipe step="update" port="result.in-memory"/>
+                    </p:output>
+                    <px:opf-spine-to-fileset>
+                        <p:input port="source.in-memory">
+                            <p:pipe step="update-package-doc" port="in-memory"/>
+                        </p:input>
+                    </px:opf-spine-to-fileset>
+                    <px:fileset-load media-types="application/xhtml+xml" name="html">
+                        <p:input port="in-memory">
+                            <p:pipe step="update-package-doc" port="in-memory"/>
+                        </p:input>
+                    </px:fileset-load>
+                    <p:sink/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe step="package-doc" port="result"/>
+                        </p:input>
+                    </p:identity>
+                    <p:choose>
+                        <p:when test="$update-lang-attributes='true' and count(/*/opf:metadata/dc:language)=1">
+                            <p:variable name="language" select="/*/opf:metadata/dc:language/string(.)"/>
+                            <p:identity px:message="Updating 'lang' attributes to '{$language}'"/>
+                        </p:when>
+                        <p:when test="$update-lang-attributes='true' and count(/*/opf:metadata/dc:language)=0">
+                            <p:identity px:message-severity="WARNING"
+                                        px:message="Not updating 'lang' attributes. No dc:language present in package document."/>
+                        </p:when>
+                        <p:when test="$update-lang-attributes='true'">
+                            <p:identity px:message-severity="WARNING"
+                                        px:message="Not updating 'lang' attributes. More than one dc:language present in package document."/>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
+                    <p:choose>
+                        <p:when test="$update-identifier-in-content-docs='true'">
+                            <p:variable name="identifier"
+                                        select="/*/opf:metadata/dc:identifier[@id=root()/*/@unique-identifier]/string(.)"/>
+                            <p:identity px:message="Updating &lt;meta name='dc:identifier'&gt; elements to '{$identifier}'"/>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
+                    <p:choose>
+                        <p:when test="$update-title-in-content-docs='true' and exists(/*/opf:metadata/dc:title)">
+                            <p:variable name="title" select="(/*/opf:metadata/dc:title)[1]/string(.)"/>
+                            <p:identity px:message="Updating &lt;title&gt; elements to '{$title}'"/>
+                        </p:when>
+                        <p:when test="$update-lang-attributes='true' and count(/*/opf:metadata/dc:title)=0">
+                            <p:identity px:message-severity="WARNING"
+                                        px:message="Not updating &lt;title&gt; elements. No dc:title present in package document."/>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity/>
+                        </p:otherwise>
+                    </p:choose>
+                    <p:for-each name="updated-html">
+                        <p:iteration-source>
+                            <p:pipe step="html" port="result"/>
+                        </p:iteration-source>
+                        <p:output port="result"/>
+                        <p:xslt>
+                            <p:input port="source">
+                                <p:pipe step="updated-html" port="current"/>
+                                <p:pipe step="package-doc" port="result"/>
+                            </p:input>
+                            <p:input port="stylesheet">
+                                <p:document href="html-derive-meta-from-package-doc.xsl"/>
+                            </p:input>
+                            <p:with-param name="update-lang-attributes" select="$update-lang-attributes"/>
+                            <p:with-param name="update-identifier-in-content-docs" select="$update-identifier-in-content-docs"/>
+                            <p:with-param name="update-title-in-content-docs" select="$update-title-in-content-docs"/>
+                        </p:xslt>
+                    </p:for-each>
+                    <p:sink/>
+                    <px:fileset-update name="update">
+                        <p:input port="source.fileset">
+                            <p:pipe step="update-package-doc" port="fileset"/>
+                        </p:input>
+                        <p:input port="source.in-memory">
+                            <p:pipe step="update-package-doc" port="in-memory"/>
+                        </p:input>
+                        <p:input port="update.fileset">
+                            <p:pipe step="html" port="result.fileset"/>
+                        </p:input>
+                        <p:input port="update.in-memory">
+                            <p:pipe step="updated-html" port="result"/>
+                        </p:input>
+                    </px:fileset-update>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="fileset" primary="true"/>
+                    <p:output port="in-memory" sequence="true">
+                        <p:pipe step="update-package-doc" port="in-memory"/>
+                    </p:output>
+                    <p:identity/>
                 </p:otherwise>
             </p:choose>
         </p:when>
@@ -359,7 +430,7 @@
             </p:output>
             <px:fileset-load media-types="application/xhtml+xml" name="html">
                 <p:input port="in-memory">
-                    <p:pipe step="update-lang-attributes" port="in-memory"/>
+                    <p:pipe step="update-lang-attributes-and-html-meta" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
             <p:for-each name="fixed-html">
@@ -382,14 +453,14 @@
                 <p:output port="result"/>
                 <p:identity>
                     <p:input port="source">
-                        <p:pipe step="update-lang-attributes" port="fileset"/>
+                        <p:pipe step="update-lang-attributes-and-html-meta" port="fileset"/>
                     </p:input>
                 </p:identity>
                 <p:choose>
                     <p:when test="exists(//d:file[@role='nav'])">
                         <px:fileset-load>
                             <p:input port="in-memory">
-                                <p:pipe step="update-lang-attributes" port="in-memory"/>
+                                <p:pipe step="update-lang-attributes-and-html-meta" port="in-memory"/>
                             </p:input>
                             <p:with-option name="href" select="//d:file[@role='nav'][1]/@href"/>
                         </px:fileset-load>
@@ -411,10 +482,10 @@
             <p:sink/>
             <px:fileset-update name="update">
                 <p:input port="source.fileset">
-                    <p:pipe step="update-lang-attributes" port="fileset"/>
+                    <p:pipe step="update-lang-attributes-and-html-meta" port="fileset"/>
                 </p:input>
                 <p:input port="source.in-memory">
-                    <p:pipe step="update-lang-attributes" port="in-memory"/>
+                    <p:pipe step="update-lang-attributes-and-html-meta" port="in-memory"/>
                 </p:input>
                 <p:input port="update.fileset">
                     <p:pipe step="html" port="result.fileset"/>
@@ -427,7 +498,7 @@
         <p:otherwise>
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
-                <p:pipe step="update-lang-attributes" port="in-memory"/>
+                <p:pipe step="update-lang-attributes-and-html-meta" port="in-memory"/>
             </p:output>
             <p:identity/>
         </p:otherwise>

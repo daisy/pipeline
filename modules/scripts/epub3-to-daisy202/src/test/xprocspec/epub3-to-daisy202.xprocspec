@@ -450,6 +450,7 @@
                         <body id="body">
                             <aside epub:type="footnote" id="aside_1">
                                 This is note 1.
+                                <a role="doc-backlink" href="content.xhtml#a_1">(back to text)</a>
                             </aside>
                         </body>
                     </html>
@@ -568,7 +569,7 @@
                             <span id="s_1">
                                 <a href="content.smil#id_9">See note </a>
                             </span>
-                            <a id="a_1" href="#id_2">
+                            <a id="a_1">
                                 <span>
                                     <a href="content.smil#id_10">1</a>
                                 </span>
