@@ -1,6 +1,5 @@
-package org.daisy.pipeline.tts.cereproc.impl.util;
+package org.daisy.pipeline.tts.cereproc.impl;
 
-import org.daisy.pipeline.junit.AbstractTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,7 +7,7 @@ import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.Optional;
 
-public class CereprocTTSUtilTest extends AbstractTest{
+public class CereprocTTSUtilTest {
 
     @Test
     public void testApplyRegexForSwedish() throws MalformedURLException {

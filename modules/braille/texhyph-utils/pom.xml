@@ -31,17 +31,28 @@
       <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.daisy.dotify</groupId>
-      <artifactId>dotify.library</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.dotify</groupId>
+      <artifactId>dotify.library</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        OSGi runtime dependency of dotify.library
+    -->
+    <dependency>
+      <groupId>org.liblouis</groupId>
+      <artifactId>liblouis-java</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   

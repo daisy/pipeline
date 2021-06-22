@@ -743,6 +743,8 @@
 				<x:option name="tts" select="false()"/>
 				<x:option name="sentence-detection" select="false()"/>
 				<x:option name="update-lang-attributes" select="true()"/>
+				<x:option name="update-identifier-in-content-docs" select="true()"/>
+				<x:option name="update-title-in-content-docs" select="true()"/>
 				<x:input port="metadata">
 					<x:document xmlns="http://www.idpf.org/2007/opf" type="inline">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -822,7 +824,7 @@
 						<head>
 							<meta charset="UTF-8" />
 							<title>minimal</title>
-							<meta name="dc:identifier" content="id"/>
+							<meta name="dc:identifier" content="new-id"/>
 							<link rel="next" href="front.xhtml" />
 						</head>
 						<body id="cover" epub:type="cover">

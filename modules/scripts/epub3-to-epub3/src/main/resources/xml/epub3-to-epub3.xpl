@@ -53,10 +53,16 @@ There are a number of fields that result in addional changes in the EPUB (apart 
 `metadata` section in the package document):
 
 - If the provided metadata document contains one or more
-  [`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier) fields, the
-  first one with a `refines` attribute will be used to update the
+  [`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+  fields, the first one without a `refines` attribute will be used to update the
   [`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
-  attribute on the package document.
+  attribute on the package document. The `dc:identifier` metadata in the content documents can also be
+  aligned with it. This behavior can be enabled or disabled with the "Update &lt;meta
+  name='dc:identifier'&gt; elements based on EPUB metadata" option.
+- If the provided metadata document contains one or more
+  [`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) fields, the
+  first one can also be used as the `title` element in the content documents. This behavior can be
+  enabled or disabled with the "Update &lt;title&gt; elements based on EPUB metadata" option.
 - If the provided metadata document contains exactly one
   [`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) field,
   it can be used to update the `xml:lang` and `lang` attributes of the content documents. This
@@ -80,6 +86,38 @@ If there is exactly one
 [`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) element,
 use its value to create `xml:lang` and `lang` attributes on the root elements of all content
 documents (overwriting any existing attributes)
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="update-identifier-in-content-docs" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Update &lt;meta name='dc:identifier'&gt; elements based on EPUB metadata</h2>
+            <p px:role="desc" xml:space="preserve">Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
+
+Use the primary identifier (provided by the
+[`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+element identified by the
+[`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+attribute) to create a `&lt;meta name='dc:identifier'&gt;` element in all content documents
+(overwriting any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="update-title-in-content-docs" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Update &lt;title&gt; elements based on EPUB metadata</h2>
+            <p px:role="desc" xml:space="preserve">Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
+
+If there is one or more
+[`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) element, use
+the value of the first one to create a `&lt;title&gt;` element in all content documents (overwriting
+any existing elements with the same name).
 
 If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
 used to generate the attributes.</p>
@@ -301,6 +339,8 @@ elements that represent the sentences.</p>
         <p:with-option name="tts" select="$tts"/>
         <p:with-option name="sentence-detection" select="$sentence-detection"/>
         <p:with-option name="update-lang-attributes" select="$update-lang-attributes"/>
+        <p:with-option name="update-identifier-in-content-docs" select="$update-identifier-in-content-docs"/>
+        <p:with-option name="update-title-in-content-docs" select="$update-title-in-content-docs"/>
         <p:with-option name="ensure-pagenum-text" select="$ensure-pagenum-text"/>
         <p:with-option name="ensure-section-headings" select="$ensure-section-headings"/>
         <p:with-option name="add-legal-doc" select="$add-legal-doc"/>
