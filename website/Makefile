@@ -167,10 +167,9 @@ $(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
 	rm -rf $(MAVEN_DIR)/xprocdoc
 	rm -rf $(MAVEN_DIR)/sources
 	cd $(MAVEN_DIR) && \
-	if ! $(MVN) "process-sources" >../maven.log ; then \
+	if ! $(MVN) "process-sources" ; then \
 		rm -rf $(MAVEN_DIR)/doc; \
 		rm -rf $(MAVEN_DIR)/javadoc; \
-		cat ../maven.log; \
 		exit 1; \
 	fi
 	cd $(MAVEN_DIR)/doc && \
@@ -207,4 +206,6 @@ publish-wiki :
 
 .PHONY : clean
 clean :
-	rm -rf target
+	# delete target except target/maven/pom.xml
+	find target -depth 1 -not -name 'maven' -exec rm -r {} \; 2>/dev/null
+	find target/maven -depth 1 -not -name 'pom.xml' -exec rm -r {} \; 2>/dev/null
