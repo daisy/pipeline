@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.1-SNAPSHOT</version>
+    <version>1.14.2-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -100,27 +100,8 @@
           <name>documentation</name>
         </property>
       </activation>
-      <properties>
-        <maven.main.skip>true</maven.main.skip>
-        <maven.resources.skip>true</maven.resources.skip>
-        <maven.test.skip>true</maven.test.skip>
-      </properties>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>maven-bundle-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>default-bundle</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>bundle-before-test</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <groupId>org.daisy.pipeline.build</groupId>
             <artifactId>modules-build-helper</artifactId>
@@ -162,6 +143,41 @@
                   </links>
                   <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
                 </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>module-with-documentation-only</id>
+      <activation>
+        <property>
+          <name>documentation-only</name>
+        </property>
+      </activation>
+      <properties>
+        <maven.main.skip>true</maven.main.skip>
+        <maven.resources.skip>true</maven.resources.skip>
+        <maven.test.skip>true</maven.test.skip>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>default-install</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>bundle-before-test</id>
+                <phase>none</phase>
               </execution>
             </executions>
           </plugin>

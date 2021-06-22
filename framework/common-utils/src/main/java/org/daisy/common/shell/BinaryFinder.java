@@ -27,7 +27,7 @@ public class BinaryFinder {
 	
 	/**
 	 * Look for a given executable in the PATH environment variable.
-	 * 
+	 *
 	 * @return the absolute path of the executable if it exists, an absent
 	 *         optional otherwise.
 	 */
@@ -38,6 +38,33 @@ public class BinaryFinder {
 		            getPath());
 	}
 	
+	/**
+	 * Test whether a path points to a file that is executable, and return the {@link File} if it
+	 * is. Otherwise log a warning message.
+	 */
+	public static Optional<File> get(String executablePath) {
+		return get(new File(executablePath));
+	}
+
+	private static Optional<File> get(File executableFile) {
+		try {
+			if (executableFile.canExecute()) {
+				return Optional.of(executableFile);
+			}
+		} catch (SecurityException e) {
+		}
+		if (!executableFile.exists()) {
+			logger.warn("File does not exist: " + executableFile);
+		} else if (executableFile.isDirectory()) {
+			logger.warn("Expected a file, but got a directory: " + executableFile);
+		} else if (!executableFile.isFile()) {
+			logger.warn("Not a file: " + executableFile);
+		} else {
+			logger.warn("File is not executable: " + executableFile);
+		}
+		return Optional.empty();
+	}
+
 	private static Iterable<String> path;
 	
 	private static Iterable<String> getPath() {
@@ -63,8 +90,11 @@ public class BinaryFinder {
 				logger.debug("... in " + pathDir);
 				File file = new File(pathDir, fullname);
 				if (file.isFile()) {
-					logger.debug("found: " + file.getAbsolutePath());
-					return Optional.of(file.getAbsolutePath());
+					Optional<File> executableFile = BinaryFinder.get(file);
+					if (executableFile.isPresent()) {
+						logger.debug("found: " + file.getAbsolutePath());
+						return Optional.of(executableFile.get().getAbsolutePath());
+					}
 				}
 			}
 		}

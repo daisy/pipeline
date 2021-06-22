@@ -72,7 +72,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 			}
 			try {
 				XProcStep.this.run();
-			} catch (SaxonApiException e) {
+			} catch (SaxonApiException|XProcException e) {
 				throw new TransformerException(e);
 			}
 		};
