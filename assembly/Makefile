@@ -63,7 +63,9 @@ zip-minimal : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VER
 deb-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb
 rpm-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm
 
-release-descriptor : mvn -Pgenerate-release-descriptor
+.PHONY : release-descriptor
+release-descriptor : target/release-descriptor/releaseDescriptor.xml
+target/release-descriptor/releaseDescriptor.xml : mvn -Pgenerate-release-descriptor
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe         : mvn -Pcopy-artifacts \
                                                                                                                        -Pgenerate-release-descriptor \
@@ -138,22 +140,39 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
 endif
 
 .PHONY : docker
-docker : target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 src/main/docker/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz
-	cp Dockerfile.without_builder target/assembly-$(assembly/VERSION)-linux/Dockerfile
-	tar -zxvf src/main/docker/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz -C target/assembly-$(assembly/VERSION)-linux/
-	cd target/assembly-$(assembly/VERSION)-linux && \
+docker : target/maven-jlink/classifiers/jre-linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+	mkdir target/docker
+	cp Dockerfile.without_builder target/docker/Dockerfile
+	cp -r target/assembly-$(assembly/VERSION)-linux/daisy-pipeline target/docker/
+	cp -r $< target/docker/jre
+	cd target/docker && \
 	$(DOCKER) build -t daisyorg/pipeline-assembly .
+
+src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28/jdk-11+28 : src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz
+	mkdir -p $@
+	tar -zxvf $< -C $(dir $@)/
 
 src/main/docker/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz :
 	mkdir -p $(dir $@)
 	curl -L -o $@ "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/$(notdir $@)"
 
 .PHONY : dev-launcher
+dev-launcher : target/dev-launcher/pipeline2
+target/dev-launcher/pipeline2 : pom.xml
 ifeq ($(shell uname), Darwin)
-dev-launcher : target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
 else
-dev-launcher : target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 endif
+	mkdir -p $(dir $@)
+	echo "#!/usr/bin/env bash"                  >$@
+	echo "JAVA_HOME=$(CURDIR)/$(word 1,$^) \\" >>$@
+	echo "$(CURDIR)/$(word 2,$^)"              >>$@
+	chmod +x $@
+
+target/maven-jlink/classifiers/jre                                     : mvn -Pbuild-jre
+target/maven-jlink/classifiers/jre-linux                               : src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28/jdk-11+28 \
+                                                                         mvn -Pbuild-jre-linux
 
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
@@ -211,6 +230,8 @@ check-docker :
 #                         copy-modules-win
 # generate-release-descriptor                  generate-effective-pom
 #                                              generate-release-descriptor
+# build-jre                                                                                                         jlink
+# build-jre-linux                                                                                                   jlink-linux
 # unpack-cli-mac                               unpack-cli-mac
 # unpack-cli-linux                             unpack-cli-linux
 # unpack-cli-win                               unpack-cli-win
@@ -234,11 +255,12 @@ check-docker :
 # package-deb-cli                                                                                                   package-deb-cli
 # package-rpm                                                                                                       package-rpm
 # package-rpm-cli                                                                                                   package-rpm-cli
-# dev-launcher                                 generate-fileinstall-cfg-files                 assemble-dev-dir
 
 PROFILES :=                     \
 	copy-artifacts              \
 	generate-release-descriptor \
+	build-jre                   \
+	build-jre-linux             \
 	assemble-linux-dir          \
 	assemble-linux-zip          \
 	assemble-mac-dir            \
@@ -260,8 +282,7 @@ PROFILES :=                     \
 	unpack-updater-mac          \
 	unpack-updater-win          \
 	unpack-updater-gui-win      \
-	without-persistence         \
-	dev-launcher
+	without-persistence
 
 .PHONY : mvn
 mvn :
