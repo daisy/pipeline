@@ -114,6 +114,7 @@ public abstract class AbstractTest {
 						testDependencies,
 						// logging
 						logbackClassic(),
+						mavenBundle("org.daisy.pipeline:logging-activator:?"), // jul-to-slf4j
 						mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2")) // required by httpclient (FIXME: add to runtime dependencies of calabash)
 				);
 			} catch (RuntimeException e) {
