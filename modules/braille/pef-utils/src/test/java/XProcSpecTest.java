@@ -9,8 +9,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("file-utils"),
 			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.pipeline:calabash-adapter:?",
-			"org.daisy.pipeline:logging-activator:?",
-			"org.daisy.pipeline:logging-appender:?",
 			// because the exclusion of com.fasterxml.woodstox:woodstox-core from the dotify.library
 			// dependencies causes stax2-api to be excluded too
 			"org.codehaus.woodstox:stax2-api:jar:?",

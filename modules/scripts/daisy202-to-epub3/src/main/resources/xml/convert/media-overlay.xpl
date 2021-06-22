@@ -136,14 +136,14 @@
                                         <xsl:apply-templates select="@*|node()"/>
                                     </xsl:copy>
                                 </xsl:template>
-                                <xsl:template match="mo:text">
+                                <xsl:template match="mo:text[@src]">
                                     <xsl:copy>
                                         <xsl:copy-of select="@*"/>
                                         <xsl:attribute name="src" select="replace(@src,'^(.+)\.[^\.]*#(.*)$','$1.xhtml#$2')"/>
                                         <xsl:apply-templates select="node()"/>
                                     </xsl:copy>
                                 </xsl:template>
-                                <xsl:template match="mo:seq[@epub:textref]">
+                                <xsl:template match="*[@epub:textref]">
                                     <xsl:copy>
                                         <xsl:apply-templates select="@*"/>
                                         <xsl:attribute name="epub:textref" select="replace(@epub:textref,'^(.+)\.[^\.]*#(.*)$','$1.xhtml#$2')"/>

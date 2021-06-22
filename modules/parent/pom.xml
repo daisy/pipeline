@@ -447,7 +447,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>2.1.0</version>
+        <version>2.1.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.maven</groupId>
@@ -679,6 +679,29 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+      <id>module-with-test-logback</id>
+      <activation>
+        <file>
+          <exists>src/test/resources/logback.xml</exists>
+        </file>
+      </activation>
+      <dependencies>
+        <!-- for org.daisy.pipeline.logging.JobProgressAppender -->
+        <dependency>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>logging-appender</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <!-- for java.util.logging -->
+        <dependency>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>logging-activator</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
     </profile>
 
     <profile>

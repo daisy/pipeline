@@ -20,7 +20,6 @@ public class ZedaiToPefTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("fileset-utils"),
 			pipelineModule("zedai-utils"),
 			pipelineModule("zedai-to-epub3"),
-			"org.daisy.pipeline:logging-activator:?",
 		};
 	}
 }

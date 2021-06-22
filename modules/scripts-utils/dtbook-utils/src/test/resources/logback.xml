@@ -1,44 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-   
-  <appender name="JOB" class="org.daisy.pipeline.logging.JobProgressAppender">
-    <filter class="org.daisy.pipeline.logging.ThresholdFilter">
-      <rootLevel>INFO</rootLevel>
-      <loggerLevels>
-        org.daisy.common.xproc.calabash.steps.Message=OFF
-        com.xmlcalabash=OFF
-      </loggerLevels>
-    </filter>
-  </appender>
-  
-  <appender name="FROM_XPROCSPEC" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder class="org.daisy.maven.xproc.pipeline.logging.ProgressMessageEncoder">
-      <pattern>    | %-5level | %indent{  }%msg%n</pattern>
-    </encoder>
-  </appender>
-  
-  <logger name="org.daisy.maven.xproc.pipeline.MessageEventListener" level="INFO" additivity="false">
-    <appender-ref ref="FROM_XPROCSPEC"/>
-  </logger>
-  
-  <appender name="TEST_LOG" class="ch.qos.logback.core.FileAppender">
-    <file>target/test.log</file>
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-  
-  <root level="WARNING">
-    <appender-ref ref="TEST_LOG"/>
-    <appender-ref ref="JOB"/>
-  </root>
-  
-  <logger name="org.daisy" level="DEBUG"/>
-  
+  <include file="../../logback.xml"/>
 </configuration>

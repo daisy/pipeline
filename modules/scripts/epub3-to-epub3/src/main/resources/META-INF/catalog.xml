@@ -11,4 +11,5 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-tts"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:tts-common"/>
 </catalog>

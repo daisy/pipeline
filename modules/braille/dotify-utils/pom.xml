@@ -111,16 +111,6 @@
       <artifactId>jul-to-slf4j</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>logging-activator</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>logging-appender</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   
   <properties>

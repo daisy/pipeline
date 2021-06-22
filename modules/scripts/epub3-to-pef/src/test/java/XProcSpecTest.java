@@ -19,7 +19,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("common-utils"),
 			pipelineModule("mediatype-utils"),
 			pipelineModule("epub-utils"),
-			"org.daisy.pipeline:logging-activator:?",
 		};
 	}
 }

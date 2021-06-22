@@ -66,14 +66,6 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>file-utils</artifactId>
     </dependency>
-    <!--
-        test dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>logging-appender</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <properties>
