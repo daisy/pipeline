@@ -70,6 +70,7 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 					nestedStyles.add(new RuleRelativeBlock(relativeSelector, set));
 				}
 			} else if (block instanceof RuleTextTransform
+			           || block instanceof RuleCounterStyle
 			           || block instanceof RulePage
 			           || block instanceof RuleVolume
 			           || block instanceof RuleMargin

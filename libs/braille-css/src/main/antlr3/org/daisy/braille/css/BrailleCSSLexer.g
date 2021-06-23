@@ -42,4 +42,6 @@ HAS : 'has(' ;
 
 TEXT_TRANSFORM : '@text-transform' ;
 
+COUNTER_STYLE : '@counter-style' ;
+
 VENDOR_ATRULE : '@' MINUS IDENT_MACR ;

@@ -69,4 +69,14 @@ public class Preparator extends SimplePreparator {
 		log.info("Create @text-transform with:\n{}", rtt);
 		return rtt;
 	}
+	
+	public RuleCounterStyle prepareRuleCounterStyle(String name, List<Declaration> declarations) {
+		if ((declarations == null || declarations.isEmpty())) {
+			log.debug("Empty RuleCounterStyle was omited");
+			return null; }
+		RuleCounterStyle rcs = new RuleCounterStyle(name);
+		rcs.replaceAll(declarations);
+		log.info("Create @counter-style with:\n{}", rcs);
+		return rcs;
+	}
 }

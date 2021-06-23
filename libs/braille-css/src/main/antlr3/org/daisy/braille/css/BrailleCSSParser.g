@@ -17,10 +17,11 @@ import CSSParser;
 }
 
 // @Override
-// Added volume, text_transform_def and vendor_atrule
+// Added volume, text_transform_def, counter_style_def and vendor_atrule
 unknown_atrule
     : volume
     | text_transform_def
+    | counter_style_def
     | vendor_atrule
     | ATKEYWORD S* LCURLY any* RCURLY -> INVALID_ATSTATEMENT
     ;
@@ -44,6 +45,11 @@ text_transform_def
         -> ^(TEXT_TRANSFORM IDENT? declarations)
     ;
 
+counter_style_def
+    : COUNTER_STYLE S* IDENT S* LCURLY S* declarations RCURLY
+        -> ^(COUNTER_STYLE IDENT declarations)
+    ;
+
 vendor_atrule
     : VENDOR_ATRULE S* LCURLY S* declarations any_atrule* RCURLY
       -> ^(VENDOR_ATRULE declarations ^(SET any_atrule*))
@@ -62,7 +68,7 @@ pseudo
         MINUS? IDENT
       | NOT S!* selector (COMMA! S!* selector)* RPAREN!
       | HAS S!* relative_selector (COMMA! S!* relative_selector)* RPAREN!
-      | FUNCTION S!* (IDENT | MINUS? NUMBER | MINUS? INDEX) S!* RPAREN!
+      | MINUS? FUNCTION S!* (IDENT | MINUS? NUMBER | MINUS? INDEX) S!* RPAREN!
       )
     ;
   catch [RecognitionException re] {
@@ -167,6 +173,7 @@ inlineset
     : relative_or_chained_selector LCURLY S* declarations (anonymous_page S*)* RCURLY
       -> ^(AMPERSAND ^(RULE relative_or_chained_selector declarations anonymous_page*))
     | text_transform_def
+    | counter_style_def
     | anonymous_page
     | inline_volume
     | vendor_atrule
