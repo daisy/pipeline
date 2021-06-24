@@ -18,7 +18,7 @@
                             <ol>
                                 <li>Det var en mörk och ljuv kväll.</li>
                                 <li><span>Solen hade inte riktigt gått ner i horizonten.</span>
-                                    <ol start="10" type="I">
+                                    <ol>
                                         <li>Fåglarna hade tystnat och satt lugnt i trädet och väntade.</li>
                                         <li>Poolens vatten krusade i lugn bris.</li>
                                         <li>Vattnet var kallt men inbjudande.</li>
@@ -31,17 +31,6 @@
                                 <li>Långsamt satte han sig ner, vattnet gick upp till naveln.</li>
                                 <li>Efter många djupa andetag tog han mod och lade sig ned.</li>
                             </ul>
-                            <ol class="plain">
-                                <li>Natt himlen skimrade.</li>
-                                <li><span>Han letade efter karlavagnen utan lycka.</span>
-                                    <ol start="10" type="I">
-                                        <li>Astronomi hade aldrig varit hans starka sida.</li>
-                                        <li>Men borde man inte känna igen denna kända konstellation.</li>
-                                        <li>Nåja man vinner några och förlorar några.</li>
-                                    </ol>
-                                </li>
-                                <li>Polstjärnan lyste i alla fall med sin frånvaro.</li>
-                            </ol>
                         </body>
                     </html>
                 </x:document>
@@ -61,32 +50,21 @@
                     </head>
                     <body>
                         <ol>
-                            <li><span class="formatted_number">1. </span>Det var en mörk och ljuv kväll.</li>
-                            <li><span class="formatted_number">2. </span><span>Solen hade inte riktigt gått ner i horizonten.</span>
-                                <ol start="10" type="I">
-                                    <li><span class="formatted_number">X.</span> Fåglarna hade tystnat och satt lugnt i trädet och väntade.</li>
-                                    <li><span class="formatted_number">XI.</span> Poolens vatten krusade i lugn bris.</li>
-                                    <li><span class="formatted_number">XII.</span> Vattnet var kallt men inbjudande.</li>
+                            <li>1. Det var en mörk och ljuv kväll.</li>
+                            <li>2. <span>Solen hade inte riktigt gått ner i horizonten.</span>
+                                <ol>
+                                    <li>2.1. Fåglarna hade tystnat och satt lugnt i trädet och väntade.</li>
+                                    <li>2.2. Poolens vatten krusade i lugn bris.</li>
+                                    <li>2.3. Vattnet var kallt men inbjudande.</li>
                                 </ol>
                             </li>
-                            <li><span class="formatted_number">3.</span> I förd badbyxor blötte han fötterna i det mörka vattnet.</li>
+                            <li>3. I förd badbyxor blötte han fötterna i det mörka vattnet.</li>
                         </ol>
                         <ul class="none">
                             <li>Huuu, här var det kallt.</li>
                             <li>Långsamt satte han sig ner, vattnet gick upp till naveln.</li>
                             <li>Efter många djupa andetag tog han mod och lade sig ned.</li>
                         </ul>
-                        <ol class="plain">
-                            <li>Natt himlen skimrade.</li>
-                            <li><span>Han letade efter karlavagnen utan lycka.</span>
-                                <ol start="10" type="I">
-                                    <li>Astronomi hade aldrig varit hans starka sida.</li>
-                                    <li>Men borde man inte känna igen denna kända konstellation.</li>
-                                    <li>Nåja man vinner några och förlorar några.</li>
-                                </ol>
-                            </li>
-                            <li>Polstjärnan lyste i alla fall med sin frånvaro.</li>
-                        </ol>
                     </body>
                 </html>
             </x:document>

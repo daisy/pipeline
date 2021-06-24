@@ -13,34 +13,16 @@
         <xsl:copy><xsl:apply-templates select="@*|node()"/></xsl:copy>
     </xsl:template>
 
-    <xsl:template match="html:ol[not(@class='plain') and not(ancestor::html:ol[@class='plain'])]">
-        <xsl:variable name="startpos">
-            <xsl:choose>
-                <xsl:when test="@start"><xsl:value-of select="@start - 1"/></xsl:when>
-                <xsl:otherwise>0</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="format_type">
-            <xsl:choose>
-                <xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
-                <xsl:otherwise>1</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
+    <xsl:template match="html:ol">
+        <xsl:param name="parentNumber" />
         <ol>
             <xsl:copy-of select="@*" />
             <xsl:for-each select="./html:li">
-                <xsl:variable name="number" select="$startpos + position()"/>
-                <xsl:variable name="number_format">
-                    <xsl:choose>
-                        <xsl:when test="$format_type = 'a'"><xsl:number format="a" value="$number"/></xsl:when>
-                        <xsl:when test="$format_type = 'A'"><xsl:number format="A" value="$number"/></xsl:when>
-                        <xsl:when test="$format_type = 'i'"><xsl:number format="i" value="$number"/></xsl:when>
-                        <xsl:when test="$format_type = 'I'"><xsl:number format="I" value="$number"/></xsl:when>
-                        <xsl:otherwise><xsl:number format="1" value="$number"/></xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <li><xsl:copy-of select="@*" /><span class="formatted_number"><xsl:value-of select="concat($number_format, '.', ' ')"/></span>
-                    <xsl:apply-templates select="node()"/>
+                <xsl:variable name="number" select="concat($parentNumber, position(), '.')"/>
+                <li><xsl:copy-of select="@*" /><xsl:value-of select="concat($number, ' ')"/>
+                    <xsl:apply-templates select="node()">
+                        <xsl:with-param name="parentNumber" select="$number"/>
+                    </xsl:apply-templates>
                 </li>
             </xsl:for-each>
         </ol>
