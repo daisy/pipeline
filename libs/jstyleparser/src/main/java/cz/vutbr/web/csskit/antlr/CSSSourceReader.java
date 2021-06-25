@@ -25,14 +25,23 @@ public interface CSSSourceReader {
 		public final Charset encoding;
 
 		/**
-		 * Base URL for resolving relative URLs against.
+		 * Base URL for resolving relative URLs against if <code>sourceMap</code> is
+		 * <code>null</code>, if there is no mapping for a certain token, or when the base URL is
+		 * needed in contexts where there is no current token.
 		 */
 		public final URL base;
 
-		public CSSInputStream(InputStream inputStream, Charset encoding, URL base) {
+		/**
+		 * Maps locations within this {@link CSSInputStream} to locations within the original
+		 * sources from which the {@link CSSInputStream} was read or compiled.
+		 */
+		public final SourceMap sourceMap;
+
+		public CSSInputStream(InputStream inputStream, Charset encoding, URL base, SourceMap sourceMap) {
 			this.stream = inputStream;
 			this.encoding = encoding;
 			this.base = base;
+			this.sourceMap = sourceMap;
 		}
 	}
 

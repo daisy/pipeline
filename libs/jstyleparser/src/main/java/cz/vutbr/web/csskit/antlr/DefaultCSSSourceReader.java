@@ -41,7 +41,8 @@ public class DefaultCSSSourceReader implements CSSSourceReader {
 			return new CSSInputStream(
 				new ByteArrayInputStream(((String)source.source).getBytes()),
 				source.encoding,
-				source.base);
+				source.base,
+				null);
 		case URL:
 			URL url = source.base;
 			if (!supportsMediaType(source.mediaType, url))
@@ -49,7 +50,8 @@ public class DefaultCSSSourceReader implements CSSSourceReader {
 			return new CSSInputStream(
 				network.fetch(url),
 				source.encoding,
-				url);
+				url,
+				null);
 		default:
 			throw new RuntimeException("coding error");
 		}

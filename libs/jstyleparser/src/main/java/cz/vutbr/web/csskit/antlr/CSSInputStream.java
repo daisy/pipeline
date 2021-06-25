@@ -34,6 +34,11 @@ public class CSSInputStream implements CharStream {
 	private URL base = null;
 	
 	/**
+	 * Source map
+	 */
+	private SourceMap sourceMap = null;
+	
+	/**
 	 * For resetting input stream to read with different encoding.
 	 */
 	private InputStreamSupplier streamSupplier = null;
@@ -55,14 +60,14 @@ public class CSSInputStream implements CharStream {
 	
 	public static CSSInputStream newInstance(String input, URL base) throws IOException {
 		Charset enc = Charset.defaultCharset();
-		return newInstance(new ByteArrayInputStream(input.getBytes(enc)), enc, base);
+		return newInstance(new ByteArrayInputStream(input.getBytes(enc)), enc, base, null);
 	}
 	
 	public static CSSInputStream newInstance(CSSSourceReader.CSSInputStream input) throws IOException {
-		return newInstance(input.stream, input.encoding, input.base);
+		return newInstance(input.stream, input.encoding, input.base, input.sourceMap);
 	}
 	
-	public static CSSInputStream newInstance(InputStream input, Charset encoding, URL base) throws IOException {
+	public static CSSInputStream newInstance(InputStream input, Charset encoding, URL base, SourceMap sourceMap) throws IOException {
 		CSSInputStream stream = new CSSInputStream();
 		if (encoding == null)
 			encoding = Charset.defaultCharset();
@@ -70,6 +75,7 @@ public class CSSInputStream implements CharStream {
 		BufferedReader br = new BufferedReader(new InputStreamReader(input, encoding));
 		stream.input = new ANTLRReaderStream(br);
 		stream.base = base;
+		stream.sourceMap = sourceMap;
 		return stream;
 	}
 	
@@ -87,6 +93,7 @@ public class CSSInputStream implements CharStream {
 			stream.input = new ANTLRInputStream(is, stream.encoding.name());
 		}
 		stream.base = in.base;
+		stream.sourceMap = in.sourceMap;
 		return stream;
 	}
 
@@ -205,13 +212,34 @@ public class CSSInputStream implements CharStream {
 	 */
 	public String getSourceName() {
 		return base!=null ? base.toString() : "";
-	}	
+	}
 	
 	/**
-	 * Obtains the current base URL used for locating the eventual imported style sheets.
-	 * @return The base URL.
+	 * Obtain the source location for resolving relative URLs.
+	 */
+	public SourceLocator getSourceLocator() {
+		int line = getLine();
+		int column = getCharPositionInLine();
+		SourceLocator loc = null;
+		if (sourceMap != null)
+			loc = sourceMap.floor(line, column);
+		if (loc == null)
+			loc = new SourceLocator() {
+				public URL getURL() { return base; }
+				public int getLineNumber() { return line; }
+				public int getColumnNumber() { return column; }};
+		return loc;
+	}
+	
+	/**
+	 * Obtain the base URL for resolving relative URLs.
 	 */
 	public URL getBase() {
+		if (sourceMap != null) {
+			SourceLocator loc = sourceMap.floor(getLine(), getCharPositionInLine());
+			if (loc != null)
+				return loc.getURL();
+		}
 		return base;
 	}
 	

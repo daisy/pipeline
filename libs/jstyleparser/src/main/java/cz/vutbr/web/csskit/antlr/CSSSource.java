@@ -29,12 +29,13 @@ public class CSSSource {
 	public Object source;
 
 	/**
-	 * Element that inline style is attached to, or null if type is not INLINE.
+	 * Element that inline style is attached to, or null if type is not <code>INLINE</code>.
 	 */
 	public Element inlineElement;
 
 	/**
-	 * Byte encoding of content at URL, or null if type is not URL or if the encoding is not known.
+	 * Byte encoding of content at URL, or <code>null</code> if type is not URL or if the encoding
+	 * is not known.
 	 */
 	public Charset encoding;
 
@@ -44,8 +45,8 @@ public class CSSSource {
 	public URL base;
 
 	/**
-	 * The media type as specified on the style or link element ("text/css", "text/x-scss", ...), or
-	 * null if not specified.
+	 * The media type as specified on the <code>style</code> or <code>link</code> element
+	 * ("text/css", "text/x-scss", ...), or <code>null</code> if not specified.
 	 */
 	public String mediaType;
 
