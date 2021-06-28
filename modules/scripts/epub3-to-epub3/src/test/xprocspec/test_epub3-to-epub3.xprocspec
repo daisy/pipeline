@@ -446,37 +446,37 @@
 							</ul>
 							<ol>
 								<li>
-									<span id="st3-10">Det var en mörk och ljuv kväll.</span>
+									<span id="st3-9">Det var en mörk och ljuv kväll.</span>
 								</li>
 								<li>
-									<span id="st3-11">
+									<span id="st3-10">
 										<span>Solen hade inte riktigt gått ner i horizonten.</span>
 									</span>
 									<ol>
 										<li>
-											<span id="st3-12">Fåglarna hade tystnat och satt lugnt i trädet och väntade.</span>
+											<span id="st3-11">Fåglarna hade tystnat och satt lugnt i trädet och väntade.</span>
 										</li>
 										<li>
-											<span id="st3-13">Poolens vatten krusade i lugn bris.</span>
+											<span id="st3-12">Poolens vatten krusade i lugn bris.</span>
 										</li>
 										<li>
-											<span id="st3-14">Vattnet var kallt men inbjudande.</span>
+											<span id="st3-13">Vattnet var kallt men inbjudande.</span>
 										</li>
 									</ol>
 								</li>
 								<li>
-									<span id="st3-15">I förd badbyxor blötte han fötterna i det mörka vattnet.</span>
+									<span id="st3-14">I förd badbyxor blötte han fötterna i det mörka vattnet.</span>
 								</li>
 							</ol>
 							<ul class="none">
 								<li>
-									<span id="st3-16">Huuu, här var det kallt.</span>
+									<span id="st3-15">Huuu, här var det kallt.</span>
 								</li>
 								<li>
-									<span id="st3-17">Långsamt satte han sig ner, vattnet gick upp till naveln.</span>
+									<span id="st3-16">Långsamt satte han sig ner, vattnet gick upp till naveln.</span>
 								</li>
 								<li>
-									<span id="st3-18">Efter många djupa andetag tog han mod och lade sig ned.</span>
+									<span id="st3-17">Efter många djupa andetag tog han mod och lade sig ned.</span>
 								</li>
 							</ul>
 						</body>
@@ -613,12 +613,16 @@
 								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 							</par>
 							<par>
-								<text src="../chapter.xhtml#st3-9"/>
+								<text src="../chapter.xhtml#st3-8"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
 							</par>
 							<par>
-								<text src="../chapter.xhtml#st3-10"/>
+								<text src="../chapter.xhtml#st3-9"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:03.669" clipEnd="0:00:04.892"/>
+							</par>
+							<par>
+								<text src="../chapter.xhtml#st3-10"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-11"/>
@@ -630,11 +634,11 @@
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-13"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-14"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
+								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-15"/>
@@ -642,14 +646,10 @@
 							</par>
 							<par>
 								<text src="../chapter.xhtml#st3-16"/>
-								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
-							</par>
-							<par>
-								<text src="../chapter.xhtml#st3-17"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 							</par>
 							<par>
-								<text src="../chapter.xhtml#st3-18"/>
+								<text src="../chapter.xhtml#st3-17"/>
 								<audio src="../audio/mock.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 						</body>
@@ -820,37 +820,37 @@
 							</ul>
 							<ol>
 								<li>
-									<span id="st3-10" class="sentence">Det var en mörk och ljuv kväll.</span>
+									<span id="st3-9" class="sentence">Det var en mörk och ljuv kväll.</span>
 								</li>
 								<li>
 									<span>
-										<span id="st3-11" class="sentence">Solen hade inte riktigt gått ner i horizonten.</span>
+										<span id="st3-10" class="sentence">Solen hade inte riktigt gått ner i horizonten.</span>
 									</span>
 									<ol>
 										<li>
-											<span id="st3-12" class="sentence">Fåglarna hade tystnat och satt lugnt i trädet och väntade.</span>
+											<span id="st3-11" class="sentence">Fåglarna hade tystnat och satt lugnt i trädet och väntade.</span>
 										</li>
 										<li>
-											<span id="st3-13" class="sentence">Poolens vatten krusade i lugn bris.</span>
+											<span id="st3-12" class="sentence">Poolens vatten krusade i lugn bris.</span>
 										</li>
 										<li>
-											<span id="st3-14" class="sentence">Vattnet var kallt men inbjudande.</span>
+											<span id="st3-13" class="sentence">Vattnet var kallt men inbjudande.</span>
 										</li>
 									</ol>
 								</li>
 								<li>
-									<span id="st3-15" class="sentence">I förd badbyxor blötte han fötterna i det mörka vattnet.</span>
+									<span id="st3-14" class="sentence">I förd badbyxor blötte han fötterna i det mörka vattnet.</span>
 								</li>
 							</ol>
 							<ul class="none">
 								<li>
-									<span id="st3-16" class="sentence">Huuu, här var det kallt.</span>
+									<span id="st3-15" class="sentence">Huuu, här var det kallt.</span>
 								</li>
 								<li>
-									<span id="st3-17" class="sentence">Långsamt satte han sig ner, vattnet gick upp till naveln.</span>
+									<span id="st3-16" class="sentence">Långsamt satte han sig ner, vattnet gick upp till naveln.</span>
 								</li>
 								<li>
-									<span id="st3-18" class="sentence">Efter många djupa andetag tog han mod och lade sig ned.</span>
+									<span id="st3-17" class="sentence">Efter många djupa andetag tog han mod och lade sig ned.</span>
 								</li>
 							</ul>
 						</body>
