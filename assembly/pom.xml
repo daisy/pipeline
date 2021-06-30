@@ -20,7 +20,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.5-SNAPSHOT</cli.version>
+    <cli.version>2.1.4</cli.version>
     <javafx.version>11.0.1</javafx.version>
     <!--
         for package-exe
