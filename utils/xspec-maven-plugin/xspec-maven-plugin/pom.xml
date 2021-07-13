@@ -10,7 +10,7 @@
 
   <groupId>org.daisy.maven</groupId>
   <artifactId>xspec-maven-plugin</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <packaging>maven-plugin</packaging>
 
   <name>XSpec Maven Plugin</name>
@@ -43,7 +43,7 @@
     <url>http://github.com/daisy/xspec-maven-plugin</url>
     <connection>scm:git:git@github.com:daisy/xspec-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:daisy/xspec-maven-plugin.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>xspec-maven-plugin-1.0.1</tag>
   </scm>
 
   <issueManagement>
@@ -73,7 +73,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xspec-runner</artifactId>
-      <version>1.0.5-SNAPSHOT</version>
+      <version>1.0.5</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -124,9 +124,26 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5.2</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.scm</groupId>
+              <artifactId>maven-scm-provider-gitexe</artifactId>
+              <version>1.9.1</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.5</version>
         <configuration>
           <goalPrefix>xspec</goalPrefix>
           <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
