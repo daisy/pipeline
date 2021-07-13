@@ -211,13 +211,16 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		name := getFlagName(input.Name, "i-", command.Flags())
 		shortDesc := input.ShortDesc
 		longDesc := input.LongDesc
+		// FIXME: assumes markdown without html
+		if (longDesc != "" && shortDesc != "" && strings.HasPrefix(longDesc, shortDesc + "\n\n")) {
+			// don't interpret first line as markdown
+			longDesc = shortDesc + "\n\n" + blackterm.MarkdownString(longDesc[len(shortDesc)+2:])
+		} else {
+			longDesc = blackterm.MarkdownString(longDesc)
+		}
 		if (shortDesc == "") {
 			shortDesc = input.NiceName
-		} else if len(longDesc) > len(shortDesc) {
 		}
-		shortDesc = blackterm.MarkdownString(shortDesc)
-		// FIXME: assumes markdown without html
-		longDesc = blackterm.MarkdownString(longDesc)
 		command.AddOption(name, "", shortDesc, longDesc, italic("FILE"), inputFunc(jobRequest, link)).Must(input.Required)
 	}
 
@@ -226,11 +229,6 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		name := getFlagName(option.Name, "x-", command.Flags())
 		shortDesc := option.ShortDesc
 		longDesc := option.LongDesc
-		if (shortDesc == "") {
-			shortDesc = option.NiceName
-		} else if len(longDesc) > len(shortDesc) {
-		}
-		shortDesc = blackterm.MarkdownString(shortDesc)
 		longDesc += ("\n\nPossible values: " + optionTypeToDetailedHelp(option.Type))
 		if ! option.Required {
 			longDesc += "\n\nDefault value: "
@@ -241,7 +239,15 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 			}
 		}
 		// FIXME: assumes markdown without html
-		longDesc = blackterm.MarkdownString(longDesc)
+		if (longDesc != "" && shortDesc != "" && strings.HasPrefix(longDesc, shortDesc + "\n\n")) {
+			// don't interpret first line as markdown
+			longDesc = shortDesc + "\n\n" + blackterm.MarkdownString(longDesc[len(shortDesc)+2:])
+		} else {
+			longDesc = blackterm.MarkdownString(longDesc)
+		}
+		if (shortDesc == "") {
+			shortDesc = option.NiceName
+		}
 		command.AddOption(
 			name, "", shortDesc, longDesc, optionTypeToString(option.Type, name, option.Default),
 			optionFunc(jobRequest, link, option.Type, option.Sequence)).Must(option.Required)
