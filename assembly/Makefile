@@ -167,7 +167,7 @@ endif
 	mkdir -p $(dir $@)
 	echo "#!/usr/bin/env bash"                  >$@
 	echo "JAVA_HOME=$(CURDIR)/$(word 1,$^) \\" >>$@
-	echo "$(CURDIR)/$(word 2,$^)"              >>$@
+	echo "$(CURDIR)/$(word 2,$^) \"\$$@\""     >>$@
 	chmod +x $@
 
 target/maven-jlink/classifiers/jre                                     : mvn -Pbuild-jre

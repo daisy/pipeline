@@ -3,8 +3,32 @@ Changes in release v1.14.4
 
 ### Modules
 
+- **NEW** DAISY 2.02 to DAISY 3 upgrader script
 - **NEW** Support for CereProc text-to-speech engine
+- Improvements to the EPUB 3 enhancer script
+  - **NEW** Options to update `dc:identifier` and `title` in content documents based on EPUB
+    metadata.
+  - **FIX** Error when processing EPUB with double-occurrence page numbers in navigation document.
+  - **FIX** Don't strip doctype from XHTML documents.
+- Improvements to the EPUB 3 to DAISY 2.02 script
+  - **FIX** Improved handling of anchor elements: `href` attributes are dropped in cases where
+    navigation between elements is handled through SMIL.
+- Improvements to the DAISY 2.02 to EPUB 3 script
+  - **FIX** broken `epub:textref` links in SMILs.
+- Changes to braille production scripts, see [release notes of braille modules v1.14.3](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1143)
 
+### Details
+
+- [Closed issues in braille-css](https://github.com/issues?q=repo%3Adaisy%2Fbraille-css+milestone%3Av1.14.4)
+- [Closed issues in jStyleParser](https://github.com/issues?q=repo%3Adaisy%2FjStyleParser+milestone%3Av1.14.4)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.14.4)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.4)
+- [Closed issues in pipeline-build-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-build-utils+milestone%3Av1.14.4)
+- [Closed issues in pipeline-cli-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-cli-go+milestone%3Av1.14.4)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.4)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.4)
+- [Closed issues in xprocspec](https://github.com/issues?q=repo%3Adaisy%2Fxprocspec+milestone%3Av1.14.4)
+- [Closed issues in xspec-maven-plugin](https://github.com/issues?q=repo%3Adaisy%2Fxspec-maven-plugin+milestone%3Av1.14.4)
 
 Changes in release v1.14.3
 ==========================

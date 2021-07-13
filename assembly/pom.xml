@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.4-SNAPSHOT</version>
+  <version>1.14.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -20,7 +20,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.5-SNAPSHOT</cli.version>
+    <cli.version>2.1.5</cli.version>
     <javafx.version>11.0.1</javafx.version>
     <!--
         for package-exe
@@ -83,14 +83,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.2-SNAPSHOT</version>
+        <version>1.14.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.3-SNAPSHOT</version>
+        <version>1.14.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -949,6 +949,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>daisy202-validator</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>daisy202-to-daisy3</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -2655,6 +2659,7 @@
                     <addModule>java.base</addModule>
                     <addModule>java.desktop</addModule>
                     <addModule>java.instrument</addModule>
+                    <addModule>java.security.jgss</addModule>
                     <addModule>java.sql</addModule>
                     <addModule>java.xml</addModule>
                     <addModule>jdk.management.agent</addModule>
