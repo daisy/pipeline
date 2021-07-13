@@ -109,14 +109,16 @@ public class FrameworkCoreTest extends AbstractTest {
 					"^\\Q" +
 					"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
 					"<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
-					  "<c:error code=\"FOO\" href=\"\\E.+\\Q/module/catch-xproc-error.xpl\"" +
-					          " line=\"18\" column=\"18\">" +
-					    "foobar" +
+					  "<c:error code=\"FOO\" name=\"!1.2\" type=\"p:error\" " +
+					           "href=\"\\E.+\\Q/module/error.xpl\" line=\"8\" column=\"25\">" +
+					    "<message xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\">" +
+					      "foobar" +
+					    "</message>" +
 					    "<px:location xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\">" +
-					      "<px:file href=\"\\E.+\\Q/module/error.xpl\" line=\"10\"/>" +
-					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"19\"/>" +
-					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"18\"/>" +
-					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"17\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/error.xpl\" line=\"8\" column=\"25\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"19\" column=\"24\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"18\" column=\"18\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xproc-error.xpl\" line=\"17\" column=\"12\"/>" +
 					    "</px:location>" +
 					  "</c:error>" +
 					"</c:errors>" +
@@ -166,7 +168,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "[FOO] foobar\n" +
-			                 "	at {http://www.w3.org/ns/xproc}error(error.xpl:10)\n" +
+			                 "	at {http://www.w3.org/ns/xproc}error(error.xpl:8)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}error(xproc-error.xpl:10)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
@@ -201,7 +203,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "[FOO] foobar\n" +
-			                 "	at {http://www.w3.org/ns/xproc}error(error.xpl:10)\n" +
+			                 "	at {http://www.w3.org/ns/xproc}error(error.xpl:8)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}error(xproc-error.xpl:10)\n" +
 			                 "	at {http://xmlcalabash.com/ns/extensions}eval(cx-eval-error.xpl:15)");
 			Assert.assertFalse(log.hasNext());
@@ -223,13 +225,25 @@ public class FrameworkCoreTest extends AbstractTest {
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
-			Assert.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
-			                    "<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
-			                      "<c:error>" +
-			                        "Runtime Error" +
-			                      "</c:error>" +
-			                    "</c:errors>",
-			                    CharStreams.toString(results.next()));
+			String errorXml = CharStreams.toString(results.next());
+			System.out.println(errorXml);
+			Assert.assertTrue(
+				Predicates.containsPattern(
+					"^\\Q" +
+					"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+					"<c:errors xmlns:c=\"http://www.w3.org/ns/xproc-step\">" +
+					  "<c:error href=\"\\E.+\\Q/module/catch-xslt-terminate-error.xpl\" line=\"25\">" +
+					    "Runtime Error" +
+					    "<px:location xmlns:px=\"http://www.daisy.org/ns/pipeline/xproc\">" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xslt-terminate-error.xpl\" line=\"25\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xslt-terminate-error.xpl\" line=\"17\" column=\"43\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xslt-terminate-error.xpl\" line=\"16\" column=\"18\"/>" +
+					      "<px:file href=\"\\E.+\\Q/module/catch-xslt-terminate-error.xpl\" line=\"15\" column=\"12\"/>" +
+					    "</px:location>" +
+					  "</c:error>" +
+					"</c:errors>" +
+					"\\E$"
+				).apply(errorXml));
 			Assert.assertFalse(results.hasNext());
 			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
 			MessageAccessor accessor = monitor.getMessageAccessor();
@@ -307,7 +321,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
-			                 "	at JavaStep.run(JavaStep.java:55)\n" +
+			                 "	at JavaStep.run(JavaStep.java:56)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
 		} finally {
@@ -331,7 +345,9 @@ public class FrameworkCoreTest extends AbstractTest {
 				seq++; // p:xslt
 				assertMessage(next(messages), seq++, Message.Level.INFO, "inside pf:java-function");
 				assertMessage(next(messages), seq++, Message.Level.INFO, "going to throw an exception");
-				assertMessage(next(messages), seq++, Message.Level.ERROR, "foobar (Please see detailed log for more info.)");
+				assertMessage(next(messages), seq++, Message.Level.ERROR,
+				              "Unexpected error in {http://www.daisy.org/ns/pipeline/functions}java-function " +
+				              "(Please see detailed log for more info.)");
 				Assert.assertFalse(messages.hasNext());
 			} catch (Throwable e) {
 				// print remaining messages
@@ -340,15 +356,16 @@ public class FrameworkCoreTest extends AbstractTest {
 			}
 			Iterator<ILoggingEvent> log = collectLog.get();
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
-			                 "job finished with error state\n" +
-			                 "foobar\n" +
-			                 "	at JavaFunction$1.call(JavaFunction.java:64)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
-			                 "	at xsl:value-of/@select(java-function-runtime-error.xpl:26)\n" +
-			                 "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +
-			                 "	at xsl:call-template name=\"b\"(java-function-runtime-error.xpl:20)\n" +
-			                 "	at xsl:call-template name=\"a\"(java-function-runtime-error.xpl:17)\n" +
-			                 "	at {http://www.w3.org/ns/xproc}xslt(java-function-runtime-error.xpl:9)");
+			                 m -> m.startsWith(
+			                     "job finished with error state\n" +
+			                     "Unexpected error in {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
+			                     "	at xsl:value-of/@select(java-function-runtime-error.xpl:26)\n" +
+			                     "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +
+			                     "	at xsl:call-template name=\"b\"(java-function-runtime-error.xpl:20)\n" +
+			                     "	at xsl:call-template name=\"a\"(java-function-runtime-error.xpl:17)\n" +
+			                     "	at {http://www.w3.org/ns/xproc}xslt(java-function-runtime-error.xpl:9)\n" +
+			                     "Caused by: foobar\n" +
+			                     "	at JavaFunction$1.call(JavaFunction.java:62)\n"));
 			Assert.assertFalse(log.hasNext());
 		} finally {
 			logger.detachAppender(collectLog);

@@ -1,7 +1,5 @@
 import javax.xml.transform.SourceLocator;
 
-import com.xmlcalabash.core.XProcException;
-
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -63,9 +61,7 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 					}
 					throw new RuntimeException("foobar");
 				} catch (Throwable e) {
-					throw new XPathException(
-						XProcException.javaError(e, 0)
-							.rebaseOnto(new SourceLocator[]{XProcException.prettyLocator(null, -1, funcname.getClarkName())}));
+					throw new XPathException("Unexpected error in " + funcname.getClarkName(), e);
 				}
 			}
 		};

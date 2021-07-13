@@ -292,12 +292,12 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		}
 		
 		public XProcError getCause() {
-			XProcException cause = e.getXProcCause();
+			XProcException cause = e.getErrorCause();
 			return cause == null ? null : new CalabashXProcError(cause);
 		}
 		
 		public SourceLocator[] getLocation() {
-			return e.getLocator();
+			return e.getLocation();
 		}
 	}
 

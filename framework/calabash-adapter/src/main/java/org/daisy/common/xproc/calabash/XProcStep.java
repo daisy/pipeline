@@ -1,5 +1,6 @@
 package org.daisy.common.xproc.calabash;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.RuntimeValue;
+import com.xmlcalabash.runtime.XAtomicStep;
 
 import net.sf.saxon.s9api.SaxonApiException;
 
@@ -81,7 +83,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 	/**
 	 * Port names of regular and parameter inputs are expected to not collide.
 	 */
-	public static XProcStep of(XMLTransformer transformer, XProcRuntime runtime) {
+	public static XProcStep of(XMLTransformer transformer, XProcRuntime runtime, XAtomicStep step) {
 		return new XProcStep() {
 
 			private Map<String,ReadablePipe> inputs = null;
@@ -108,7 +110,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 			}
 
 			public void setParameter(net.sf.saxon.s9api.QName name, RuntimeValue value) {
-				throw new XProcException("A port should be specified for a parameter.");
+				throw new XProcException(step, "A port should be specified for a parameter.");
 			}
 
 			public void setParameter(String port, net.sf.saxon.s9api.QName name, RuntimeValue value) {
@@ -146,8 +148,8 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 						for (String port : outputs.keySet())
 							output.put(new QName(port), new XMLCalabashOutputValue(outputs.get(port), runtime));
 					transformer.transform(input, output).run();
-				} catch (TransformerException e) {
-					throw new XProcException(e);
+				} catch (Throwable e) {
+					throw raiseError(e, step);
 				}
 			}
 
@@ -156,5 +158,30 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 				return transformer.transform(input, output);
 			}
 		};
+	}
+
+	public static XProcException raiseError(Throwable e, XAtomicStep step) {
+		if (e instanceof XProcException)
+			throw (XProcException)e;
+		else {
+			StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+			stackTrace = Arrays.copyOfRange(stackTrace, 1, stackTrace.length);
+			if (e instanceof TransformerException) {
+				XProcException cause = e.getCause() != null
+					? XProcException.fromException(e.getCause())
+					                .rebase(step.getLocation(), stackTrace)
+					: null;
+				return e.getMessage() != null
+					? cause != null
+						? new XProcException(step, e.getMessage(), cause)
+						: new XProcException(step, e.getMessage())
+					: cause;
+			} else {
+				throw new XProcException(step,
+				                         "Unexpected error in " + step.getType(),
+				                         XProcException.fromException(e)
+				                                       .rebase(step.getLocation(), stackTrace));
+			}
+		}
 	}
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               stylesheet="test_reflexive-extension-function.xsl">
+
+  <x:scenario label="test">
+    <x:call function="x:test"/>
+    <x:expect label="result" select="'FOOBAR'"/>
+  </x:scenario>
+
+</x:description>

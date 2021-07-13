@@ -3,7 +3,6 @@ package org.daisy.common.xproc.calabash;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.DocumentSequence;
 import com.xmlcalabash.io.ReadablePipe;

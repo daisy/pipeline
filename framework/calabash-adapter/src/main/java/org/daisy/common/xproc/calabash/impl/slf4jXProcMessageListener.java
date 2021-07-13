@@ -8,6 +8,7 @@ import net.sf.saxon.s9api.XdmNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 
@@ -32,16 +33,24 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
      * @see com.xmlcalabash.core.XProcMessageListener#error(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String, net.sf.saxon.s9api.QName)
      */
     @Override
-	public void error(XProcRunnable step, XdmNode node, String message, QName code) {
-
+	public void error(XProcRunnable step, XProcException error) {
         Logger log;
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
+        log.error(XprocMessageHelper.logLine(step, error.getLocation()[0], error.getMessage(), error.getErrorCode()));
+    }
 
-        log.error(XprocMessageHelper.logLine(step, node, message, code));
+    private void error(XProcRunnable step, XdmNode location, String message, QName code) {
+        Logger log;
+        if (step != null) {
+            log = LoggerFactory.getLogger(step.getClass());
+        } else {
+            log = defaultLogger;
+        }
+        log.error(XprocMessageHelper.logLine(step, location, message, code));
     }
 
     /* (non-Javadoc)
@@ -49,8 +58,6 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
      */
     @Override
 	public void error(Throwable exception) {
-
-
         Logger log = defaultLogger;
         log.error(XprocMessageHelper.errorLogline(exception));
     }
@@ -59,70 +66,70 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
      * @see com.xmlcalabash.core.XProcMessageListener#warning(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
     @Override
-	public void warning(XProcRunnable step, XdmNode node, String message) {
+	public void warning(XProcRunnable step, XdmNode location, String message) {
         Logger log;
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.warn(XprocMessageHelper.logLine(step, node, message));
+        log.warn(XprocMessageHelper.logLine(step, location, message));
     }
 
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#info(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
     @Override
-	public void info(XProcRunnable step, XdmNode node, String message) {
+	public void info(XProcRunnable step, XdmNode location, String message) {
         Logger log;
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.info(XprocMessageHelper.logLine(step, node, message));
+        log.info(XprocMessageHelper.logLine(step, location, message));
     }
 
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#fine(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
     @Override
-	public void fine(XProcRunnable step, XdmNode node, String message) {
+	public void fine(XProcRunnable step, XdmNode location, String message) {
         Logger log;
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.debug(XprocMessageHelper.logLine(step, node, message));
+        log.debug(XprocMessageHelper.logLine(step, location, message));
     }
 
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#finer(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
     @Override
-	public void finer(XProcRunnable step, XdmNode node, String message) {
+	public void finer(XProcRunnable step, XdmNode location, String message) {
         Logger log;
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.debug(XprocMessageHelper.logLine(step, node, message));
+        log.debug(XprocMessageHelper.logLine(step, location, message));
     }
 
     /* (non-Javadoc)
      * @see com.xmlcalabash.core.XProcMessageListener#finest(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
      */
     @Override
-	public void finest(XProcRunnable step, XdmNode node, String message) {
+	public void finest(XProcRunnable step, XdmNode location, String message) {
         Logger log;
         if (step != null) {
             log = LoggerFactory.getLogger(step.getClass());
         } else {
             log = defaultLogger;
         }
-        log.debug(XprocMessageHelper.logLine(step, node, message));
+        log.debug(XprocMessageHelper.logLine(step, location, message));
     }
 
 	/* (non-Javadoc)
@@ -136,21 +143,21 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
 	}
 
 	@Override
-	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
+	public void openStep(XProcRunnable step, XdmNode location, String message, String level, BigDecimal portion) {
 		if (message == null)
 			return;
 		if (level == null || level.equals("INFO")) {
-			info(step, node, message);
+			info(step, location, message);
 		} else if (level.equals("ERROR")) {
-			error(step, node, message, null);
+			error(step, location, message, null);
 		} else if (level.equals("WARN")) {
-			warning(step, node, message);
+			warning(step, location, message);
 		} else if (level.equals("DEBUG")) {
-			fine(step, node, message);
+			fine(step, location, message);
 		} else if (level.equals("TRACE")) {
-			finest(step, node, message);
+			finest(step, location, message);
 		} else {
-			info(step, node, "Message with invalid level '" + level + "': " + message);
+			info(step, location, "Message with invalid level '" + level + "': " + message);
 		}
 	}
 

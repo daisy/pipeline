@@ -11,6 +11,7 @@ import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
 
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 import com.xmlcalabash.runtime.XStep;
@@ -66,11 +67,9 @@ public class MessageListenerImpl implements XProcMessageListener {
 	 * net.sf.saxon.s9api.QName)
 	 */
 	@Override
-	public void error(XProcRunnable step, XdmNode node, String message,
-			QName qName) {
-		MessageBuilder builder = new MessageBuilder()
-				.withLevel(Level.ERROR);
-		builder = XprocMessageHelper.message(step, node, message, builder);
+	public void error(XProcRunnable step, XProcException error) {
+		MessageBuilder builder = new MessageBuilder().withLevel(Level.ERROR);
+		builder = XprocMessageHelper.message(step, error.getLocation()[0], error.getMessage(), builder);
 		append(builder, true);
 	}
 
@@ -81,10 +80,9 @@ public class MessageListenerImpl implements XProcMessageListener {
 	 * XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
 	@Override
-	public void fine(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = new MessageBuilder()
-				.withLevel(Level.DEBUG);
-		builder = XprocMessageHelper.message(step, node, message, builder);
+	public void fine(XProcRunnable step, XdmNode location, String message) {
+		MessageBuilder builder = new MessageBuilder().withLevel(Level.DEBUG);
+		builder = XprocMessageHelper.message(step, location, message, builder);
 		append(builder, true);
 	}
 
@@ -96,10 +94,9 @@ public class MessageListenerImpl implements XProcMessageListener {
 	 * XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
 	@Override
-	public void finer(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = new MessageBuilder()
-				.withLevel(Level.TRACE);
-		builder = XprocMessageHelper.message(step, node, message, builder);
+	public void finer(XProcRunnable step, XdmNode location, String message) {
+		MessageBuilder builder = new MessageBuilder().withLevel(Level.TRACE);
+		builder = XprocMessageHelper.message(step, location, message, builder);
 		append(builder, true);
 	}
 
@@ -111,10 +108,9 @@ public class MessageListenerImpl implements XProcMessageListener {
 	 * .XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
 	@Override
-	public void finest(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = new MessageBuilder()
-				.withLevel(Level.TRACE);
-		builder = XprocMessageHelper.message(step, node, message, builder);
+	public void finest(XProcRunnable step, XdmNode location, String message) {
+		MessageBuilder builder = new MessageBuilder().withLevel(Level.TRACE);
+		builder = XprocMessageHelper.message(step, location, message, builder);
 		append(builder, true);
 	}
 
@@ -125,10 +121,9 @@ public class MessageListenerImpl implements XProcMessageListener {
 	 * XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
 	@Override
-	public void info(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = new MessageBuilder()
-				.withLevel(Level.INFO);
-		builder = XprocMessageHelper.message(step, node, message, builder);
+	public void info(XProcRunnable step, XdmNode location, String message) {
+		MessageBuilder builder = new MessageBuilder().withLevel(Level.INFO);
+		builder = XprocMessageHelper.message(step, location, message, builder);
 		append(builder, true);
 	}
 
@@ -140,10 +135,9 @@ public class MessageListenerImpl implements XProcMessageListener {
 	 * .XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String)
 	 */
 	@Override
-	public void warning(XProcRunnable step, XdmNode node, String message) {
-		MessageBuilder builder = new MessageBuilder()
-				.withLevel(Level.WARNING);
-		builder = XprocMessageHelper.message(step, node, message, builder);
+	public void warning(XProcRunnable step, XdmNode location, String message) {
+		MessageBuilder builder = new MessageBuilder().withLevel(Level.WARNING);
+		builder = XprocMessageHelper.message(step, location, message, builder);
 		append(builder, true);
 	}
 
@@ -155,14 +149,13 @@ public class MessageListenerImpl implements XProcMessageListener {
 	 */
 	@Override
 	public void warning(Throwable exception) {
-		MessageBuilder builder = new MessageBuilder()
-				.withLevel(Level.WARNING);
+		MessageBuilder builder = new MessageBuilder().withLevel(Level.WARNING);
 		XprocMessageHelper.errorMessage(exception, builder);
 		append(builder, true);
 	}
 
 	@Override
-	public void openStep(XProcRunnable step, XdmNode node, String message, String level, BigDecimal portion) {
+	public void openStep(XProcRunnable step, XdmNode location, String message, String level, BigDecimal portion) {
 		MessageBuilder builder = new MessageBuilder().withProgress(portion);
 		if (message == null && autoNameSteps && portion != null && portion.compareTo(BigDecimal.ZERO) > 0) {
 			// FIXME: not if there is a an ancestor block with portion 0!
@@ -188,7 +181,7 @@ public class MessageListenerImpl implements XProcMessageListener {
 			builder.withLevel(Level.INFO);
 			message = "Message with invalid level '" + level + "': " + message;
 		}
-		XprocMessageHelper.message(step, node, message, builder);
+		XprocMessageHelper.message(step, location, message, builder);
 		append(builder, false);
 	}
 

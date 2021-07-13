@@ -7,6 +7,7 @@ import java.util.List;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcMessageListener;
 import com.xmlcalabash.core.XProcRunnable;
 
@@ -56,9 +57,9 @@ public class XProcMessageListenerAggregator implements XProcMessageListener{
 	 * @see com.xmlcalabash.core.XProcMessageListener#error(com.xmlcalabash.core.XProcRunnable, net.sf.saxon.s9api.XdmNode, java.lang.String, net.sf.saxon.s9api.QName)
 	 */
 	@Override
-	public void error(XProcRunnable runnable, XdmNode xnode, String str, QName qname) {
+	public void error(XProcRunnable runnable, XProcException error) {
 		for(XProcMessageListener l:mListeners){
-			l.error(runnable,xnode,str,qname);
+			l.error(runnable, error);
 		}
 
 	}

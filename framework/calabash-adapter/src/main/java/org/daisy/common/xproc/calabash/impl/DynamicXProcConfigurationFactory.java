@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
 
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
@@ -35,7 +34,6 @@ import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
-import com.xmlcalabash.util.Input;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -54,19 +52,13 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 		XProcStepRegistry.class
 	}
 )
-public class DynamicXProcConfigurationFactory implements
-		XProcConfigurationFactory, XProcStepRegistry {
+public class DynamicXProcConfigurationFactory implements XProcConfigurationFactory, XProcStepRegistry {
 
-	/** The Constant CONFIG_PATH. */
 	public static final String CONFIG_PATH = "org.daisy.pipeline.xproc.configuration";
 
-	/** The Constant logger. */
-	private static final Logger logger = LoggerFactory
-			.getLogger(DynamicXProcConfigurationFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(DynamicXProcConfigurationFactory.class);
 
-	/** The step providers. */
 	private final Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
-
 	private SaxonConfigurator saxonConfigurator = null;
 	private final List<ConfigurationFileProvider> configurationFiles = new ArrayList<>();
 
@@ -80,80 +72,24 @@ public class DynamicXProcConfigurationFactory implements
 	@Override
 	public XProcConfiguration newConfiguration() {
 		System.setProperty("com.xmlcalabash.config.user", ""); // skip loading configuration from ~/.calabash
-		XProcConfiguration config = new DynamicXProcConfiguration(
-			new Input(null, null, Input.Type.XML) {
-				@Override
-				public InputStream getInputStream() {
-					return saxonConfigurator.getConfigurationAsStream(); }},
-			this);
+		Processor processor = new Processor(false);
+		saxonConfigurator.configure(processor);
+		XProcConfiguration config = new DynamicXProcConfiguration(processor, this);
 		loadMainConfigurationFile(config);
 		for (ConfigurationFileProvider f : configurationFiles) {
 			logger.debug("Reading {}", f);
 			loadConfigurationFile(config, f.get());
 		}
-		registerExtensionFunctions(config);
 		return config;
 	}
 
-	/**
-	 * Activate (OSGI)
-	 */
 	@Activate
 	public void activate() {
 		logger.trace("Activating XProc Configuration Factory");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration
-	 * (boolean)
-	 */
-	@Override
-	public XProcConfiguration newConfiguration(boolean schemaAware) {
-		System.setProperty("com.xmlcalabash.config.user", "");
-		XProcConfiguration config = new DynamicXProcConfiguration(schemaAware,
-				this);
-		loadMainConfigurationFile(config);
-		for (ConfigurationFileProvider f : configurationFiles) {
-			logger.debug("Reading {}", f);
-			loadConfigurationFile(config, f.get());
-		}
-		registerExtensionFunctions(config);
-		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
-		return config;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.daisy.common.xproc.calabash.XProcConfigurationFactory#newConfiguration
-	 * (net.sf.saxon.s9api.Processor)
-	 */
-	@Override
-	public XProcConfiguration newConfiguration(Processor processor) {
-		System.setProperty("com.xmlcalabash.config.user", "");
-		XProcConfiguration config = new DynamicXProcConfiguration(processor,
-				this);
-		loadMainConfigurationFile(config);
-		for (ConfigurationFileProvider f : configurationFiles) {
-			logger.debug("Reading {}", f);
-			loadConfigurationFile(config, f.get());
-		}
-		registerExtensionFunctions(config);
-		// config.getProcessor().getUnderlyingConfiguration().addExtensionBinders(mFunctionLibrary);
-		return config;
-	}
-
 	/**
-	 * Adds the step.
-	 *
-	 * @param stepProvider
-	 *            the step provider
-	 * @param properties
-	 *            the properties
+	 * Adds a step to the registry.
 	 */
 	@Reference(
 		name = "XProcStepProvider",
@@ -169,12 +105,7 @@ public class DynamicXProcConfigurationFactory implements
 	}
 
 	/**
-	 * Removes the step from the registry
-	 *
-	 * @param stepProvider
-	 *            the step provider
-	 * @param properties
-	 *            the properties
+	 * Removes a step from the registry.
 	 */
 	public void removeStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
@@ -183,7 +114,7 @@ public class DynamicXProcConfigurationFactory implements
 	}
 
 	/**
-	 * Adds a configuration file
+	 * Add a configuration file
 	 */
 	@Reference(
 		name = "ConfigurationFileProvider",
@@ -234,9 +165,6 @@ public class DynamicXProcConfigurationFactory implements
 
 	/**
 	 * Loads the custom configuration file located in CONFIG_PATH
-	 *
-	 * @param conf
-	 *            the conf
 	 */
 	private void loadMainConfigurationFile(XProcConfiguration conf) {
 		// TODO cleanup and cache
@@ -282,11 +210,5 @@ public class DynamicXProcConfigurationFactory implements
 	public void setSaxonConfigurator(SaxonConfigurator configurator) {
 		logger.debug("Setting Saxon configurator");
 		saxonConfigurator = configurator;
-	}
-
-	private void registerExtensionFunctions(XProcConfiguration config) {
-		for (ExtensionFunctionDefinition func : saxonConfigurator.getExtensionFunctions()) {
-			config.getProcessor().registerExtensionFunction(func);
-		}
 	}
 }

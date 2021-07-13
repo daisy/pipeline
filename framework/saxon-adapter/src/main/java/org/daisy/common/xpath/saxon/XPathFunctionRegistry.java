@@ -39,9 +39,26 @@ public class XPathFunctionRegistry  {
 		mFunctions.put(functionDefinition.getFunctionQName().toJaxpQName(), functionDefinition);
 	}
 
-	public void removeFunction(ExtensionFunctionDefinition functionDefinition){
+	public void removeFunction(ExtensionFunctionDefinition functionDefinition) {
 		mLogger.info("Deleting extension function definition to registry {}",functionDefinition.getFunctionQName().toString());
 		mFunctions.remove(functionDefinition.getFunctionQName().toJaxpQName());
+	}
+
+	@Reference(
+		name = "ExtensionFunctionProvider",
+		unbind = "removeFunctionProvider",
+		service = ExtensionFunctionProvider.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC
+	)
+	public void addFunctionProvider(ExtensionFunctionProvider functionProvider) throws XPathException {
+		for (ExtensionFunctionDefinition f : functionProvider.getDefinitions())
+			addFunction(f);
+	}
+
+	public void removeFunctionProvider(ExtensionFunctionProvider functionProvider) {
+		for (ExtensionFunctionDefinition f : functionProvider.getDefinitions())
+			removeFunction(f);
 	}
 
 	public Set<ExtensionFunctionDefinition> getFunctions() {

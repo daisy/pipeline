@@ -3,6 +3,7 @@ import java.math.BigDecimal;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.library.Identity;
 import com.xmlcalabash.runtime.XAtomicStep;
@@ -52,7 +53,9 @@ public class JavaStep extends Identity implements XProcStep {
 		}
 		if (getOption(_throw_error, "false").equals("true")) {
 			logger.info("going to throw an exception");
-			throw new RuntimeException("foobar");
+			throw XProcException.fromException(new RuntimeException("foobar"))
+			                    .rebase(step.getLocation(),
+			                            new RuntimeException().getStackTrace());
 		}
 		super.run();
 	}

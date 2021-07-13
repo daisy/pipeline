@@ -66,7 +66,7 @@ public abstract class AbstractJob implements Job {
                                 changeStatus(Status.SUCCESS);
                         else
                                 changeStatus(Status.FAIL);
-                }catch(Exception e){
+                } catch (Throwable e) {
                         changeStatus( Status.ERROR);
                         ctxt.messageBus.append(new MessageBuilder()
                                                .withLevel(Level.ERROR)
