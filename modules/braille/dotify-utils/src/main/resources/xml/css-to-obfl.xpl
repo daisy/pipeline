@@ -3,6 +3,7 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -21,11 +22,12 @@
     <p:option name="page-width" select="'40'"/>
     <p:option name="page-height" select="'25'"/>
     <p:option name="duplex" select="'true'"/>
-    <p:option name="skip-margin-top-of-page" select="'false'"/>
+    <p:option name="skip-margin-top-of-page" select="'false'" cx:as="xs:string"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         px:error
+        px:assert
       </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
@@ -85,30 +87,31 @@
         pxi:deep-parse-page-and-volume-stylesheets
       </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl" type="application/xslt+xml">
+      <p:documentation>
+        css:parse-counter-styles
+      </p:documentation>
+    </cx:import>
     
     <p:declare-step type="pxi:recursive-parse-stylesheet-and-make-pseudo-elements">
         <p:input port="source"/>
         <p:output port="result"/>
         <css:parse-stylesheet>
             <p:documentation>
-                Make css:page, css:volume, css:after, css:before, css:footnote-call, css:duplicate,
-                css:alternate, css:top-of-page, css:_obfl-alternate-scenario,
-                css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
-                css:_obfl-on-toc-end, css:_obfl-volume-transition and css:_obfl-on-resumed
-                attributes.
+                Make css:page, css:volume, css:text-transform, css:counter-style, css:after,
+                css:before, css:footnote-call, css:duplicate, css:alternate, css:top-of-page,
+                css:_obfl-alternate-scenario*, css:_obfl-on-toc-start,
+                css:_obfl-on-collection-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
+                css:_obfl-on-collection-end, css:_obfl-on-toc-end, css:_obfl-volume-transition and
+                css:_obfl-on-resumed attributes.
             </p:documentation>
         </css:parse-stylesheet>
-        <p:delete match="@css:*[matches(local-name(),'^text-transform-')]">
-            <p:documentation>
-                For now, ignore @text-transform definitions.
-            </p:documentation>
-        </p:delete>
         <css:parse-properties properties="flow">
             <p:documentation>
                 Make css:flow attributes.
             </p:documentation>
         </css:parse-properties>
-        <p:delete match="css:_obfl-alternate-scenario/@css:flow">
+        <p:delete match="*[@css:_obfl-scenario]/@css:flow">
             <p:documentation>
                 ::-obfl-alternate-scenario pseudo-elements must participate in the normal flow.
             </p:documentation>
@@ -120,11 +123,13 @@
                           //*/@css:alternate|
                           //*/@css:footnote-call|
                           //*/@css:_obfl-on-toc-start|
+                          //*/@css:_obfl-on-collection-start|
                           //*/@css:_obfl-on-volume-start|
                           //*/@css:_obfl-on-volume-end|
+                          //*/@css:_obfl-on-collection-end|
                           //*/@css:_obfl-on-toc-end|
                           //*/@css:_obfl-on-resumed[not(.='_')]|
-                          //*/@css:_obfl-alternate-scenario
+                          //*/@css:*[matches(local-name(),'^_obfl-alternate-scenario(-[1-9][0-9]*)?$')]
                           ">
                 <css:make-pseudo-elements>
                     <p:documentation>
@@ -135,9 +140,10 @@
                 </css:make-pseudo-elements>
                 <pxi:make-obfl-pseudo-elements>
                     <p:documentation>
-                        Make css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-                        css:_obfl-on-volume-end, css:_obfl-on-toc-end, css:_obfl-on-resumed and
-                        css:_obfl-alternate-scenario pseudo-elements.
+                        Make css:_obfl-on-toc-start, css:_obfl-on-collection-start,
+                        css:_obfl-on-volume-start, css:_obfl-on-volume-end,
+                        css:_obfl-on-collection-end, css:_obfl-on-toc-end, css:_obfl-on-resumed and
+                        *[@css:_obfl-scenario] pseudo-elements.
                     </p:documentation>
                 </pxi:make-obfl-pseudo-elements>
                 <p:viewport match="//*[@css:_obfl-scenario and @style]">
@@ -187,15 +193,43 @@
     </p:xslt>
     -->
     
+    <p:wrap match="/*" wrapper="_">
+        <!--
+            Wrap everything in new root element so that css:make-pseudo-elements below can not fail
+            (it may otherwise try to output multiple documents).
+        -->
+    </p:wrap>
+
     <pxi:recursive-parse-stylesheet-and-make-pseudo-elements px:progress=".04">
         <p:documentation>
-            Make css:page, css:volume, css:top-of-page and css:_obfl-volume-transition attributes,
-            css:after, css:before, css:duplicate, css:alternate, css:footnote-call,
-            css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
-            css:_obfl-on-toc-end, css:_obfl-on-resumed and css:_obfl-alternate-scenario
-            pseudo-elements.
+            Make css:page, css:volume, css:text-transform, css:counter-style, css:top-of-page and
+            css:_obfl-volume-transition attributes, css:after, css:before, css:duplicate,
+            css:alternate, css:footnote-call, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
+            css:_obfl-on-volume-end, css:_obfl-on-toc-end, css:_obfl-on-resumed and
+            css:_obfl-alternate-scenario pseudo-elements.
         </p:documentation>
     </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+    
+    <px:assert name="assert-text-transform-only-on-root"
+               error-code="XXX" message="@text-transform rules are only allowed on root element">
+        <p:with-option name="test" select="not(/_/*//*/@css:text-transform)"/>
+    </px:assert>
+    <px:assert name="assert-counter-style-only-on-root"
+               error-code="XXX" message="@counter-style rules are only allowed on root element">
+        <p:with-option name="test" select="not(/_/*//*/@css:counter-style)"/>
+    </px:assert>
+    <px:assert name="assert-volume-transition-only-on-root"
+               error-code="XXX" message="@-obfl-volume-transition rules are only allowed on root element">
+        <p:with-option name="test" select="not(/_/*//*/@css:_obfl-volume-transition)"/>
+    </px:assert>
+    <p:delete match="@css:text-transform|
+                     @css:counter-style|
+                     @css:_obfl-volume-transition">
+        <p:documentation>
+            Delete @css:text-transform, @css:counter-style and @css:_obfl-volume-transition
+            attributes.
+        </p:documentation>
+    </p:delete>
     
     <css:parse-properties px:progress=".02"
                           properties="display render-table-by table-header-policy">
@@ -232,17 +266,17 @@
         <p:sink/>
     </p:group>
     
-    <p:delete match="@css:_obfl-volume-transition">
-        <p:documentation>
-            Delete @css:_obfl-volume-transition attributes.
-        </p:documentation>
-    </p:delete>
-    <pxi:extract-obfl-pseudo-elements px:progress=".02">
-        <p:documentation>
-            Extract css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end
-            and css:_obfl-on-toc-end pseudo-elements into their own documents.
-        </p:documentation>
-    </pxi:extract-obfl-pseudo-elements>
+    <p:filter select="/_/*"/>
+
+    <p:for-each px:progress=".02">
+        <pxi:extract-obfl-pseudo-elements>
+            <p:documentation>
+                Extract css:_obfl-on-toc-start, css:_obfl-on-collection-start,
+                css:_obfl-on-volume-start, css:_obfl-on-volume-end, css:_obfl-on-collection-end and
+                css:_obfl-on-toc-end pseudo-elements into their own documents.
+            </p:documentation>
+        </pxi:extract-obfl-pseudo-elements>
+    </p:for-each>
     
     <p:for-each px:progress=".04">
         <css:parse-properties px:progress=".50"
@@ -280,8 +314,8 @@
                 </p:documentation>
             </css:parse-properties>
         </p:for-each>
-        <p:split-sequence test="/*[not(@css:flow)]" name="_1"/>
-        <p:wrap wrapper="_" match="/*"/>
+        <p:split-sequence test="not(/css:_[@css:flow])" name="_1"/>
+        <p:wrap-sequence wrapper="_"/>
         <css:flow-into name="_2" px:progress=".50">
             <p:documentation>
                 Extract named flows based on css:flow attributes and place anchors (css:id
@@ -304,6 +338,10 @@
         </p:documentation>
     </css:label-targets>
     
+    <p:for-each>
+      <p:delete match="@xml:base"/>
+    </p:for-each>
+    
     <css:eval-target-content px:progress=".005">
         <p:documentation>
             Evaluate css:content elements. <!-- depends on parse-content and label-targets -->
@@ -323,7 +361,7 @@
             </p:documentation>
         </css:preserve-white-space>
         <p:add-attribute px:progress=".01"
-                         match="*[@css:_obfl-scenario and not(@css:display[.=('block','table')])]"
+                         match="*[@css:_obfl-scenario and not(@css:display[.=('block','table','none')])]"
                          attribute-name="css:display"
                          attribute-value="block">
             <p:documentation>
@@ -338,7 +376,7 @@
             </p:documentation>
         </p:add-attribute>
         <p:add-attribute px:progress=".01"
-                         match="css:alternate[@css:display='-obfl-list-of-references']"
+                         match="*[@css:display='-obfl-list-of-references']"
                          attribute-name="css:_obfl-list-of-references" attribute-value="_">
             <p:documentation>
                 Mark display:-obfl-list-of-references elements.
@@ -439,6 +477,9 @@
         </p:documentation>
         <p:with-option name="exclude-counters" select="$page-counters">
             <p:empty/>
+        </p:with-option>
+        <p:with-option name="counter-styles" select="css:parse-counter-styles(/_/*/@css:counter-style)">
+            <p:pipe step="assert-counter-style-only-on-root" port="result"/>
         </p:with-option>
     </css:eval-counter>
     
@@ -792,8 +833,11 @@
         <p:with-param name="page-counters" select="$page-counters">
             <p:empty/>
         </p:with-param>
-        <p:with-param name="volume-transition" select="(//@css:_obfl-volume-transition)[last()]">
-            <p:pipe step="extract-page-and-volume-styles" port="result"/>
+        <p:with-param name="volume-transition" select="/_/*/@css:_obfl-volume-transition">
+            <p:pipe step="assert-volume-transition-only-on-root" port="result"/>
+        </p:with-param>
+        <p:with-param name="text-transforms" select="/_/*/@css:text-transform">
+            <p:pipe step="assert-text-transform-only-on-root" port="result"/>
         </p:with-param>
     </p:xslt>
     
@@ -873,15 +917,14 @@
     <!--
         move table-of-contents elements to the right place
     -->
-    <p:group px:progress=".005">
-        <p:identity name="_1"/>
-        <p:insert match="/obfl:obfl/obfl:volume-template[not(preceding-sibling::obfl:volume-template)]" position="before">
-            <p:input port="insertion" select="//obfl:toc-sequence/obfl:table-of-contents">
-                <p:pipe step="_1" port="result"/>
-            </p:input>
-        </p:insert>
-        <p:delete match="obfl:toc-sequence/obfl:table-of-contents"/>
-    </p:group>
+    <p:xslt px:progress=".005">
+        <p:input port="stylesheet">
+            <p:document href="move-table-of-contents.xsl"/>
+        </p:input>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+    </p:xslt>
     
     <!--
         display-when="..." also requires keep="page"

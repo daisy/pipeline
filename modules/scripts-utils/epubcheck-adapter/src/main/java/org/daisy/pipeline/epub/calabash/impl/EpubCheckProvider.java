@@ -14,7 +14,6 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -214,8 +213,8 @@ public class EpubCheckProvider implements XProcStepProvider {
 				}
 			}
 
-			catch (Exception e) {
-				throw new XProcException(step.getNode(), e);
+			catch (Throwable e) {
+				throw XProcStep.raiseError(e, step);
 			}
 
 			finally {

@@ -1,0 +1,10 @@
+@import "misc.css";
+
+@font-face {
+	font-family: "My font";
+	src: url("font.ttf");
+}
+
+div {
+	background-image: url("bg.png");
+}

@@ -388,7 +388,6 @@
 					        doctype-public="-//NISO//DTD ncx 2005-1//EN"
 					        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"/>
 					<d:file href="result/resources.res" media-type="application/x-dtbresource+xml"
-					        indent="true"
 					        doctype-public="-//NISO//DTD resource 2005-1//EN"
 					        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd"/>
 					<d:file href="result/EPUB/audio/mock.mp3" media-type="audio/mpeg"/>

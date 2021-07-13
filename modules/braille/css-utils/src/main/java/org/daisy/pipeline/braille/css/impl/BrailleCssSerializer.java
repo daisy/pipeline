@@ -25,11 +25,13 @@ import cz.vutbr.web.css.TermNumber;
 import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermString;
+import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.OutputUtil;
 
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 
+import org.daisy.common.file.URLs;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
@@ -75,6 +77,13 @@ public final class BrailleCssSerializer {
 			TermPair<?,?> pair = (TermPair<?,?>)term;
 			Object val = pair.getValue();
 			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val) : val.toString()); }
+		else if (term instanceof TermURI) {
+			TermURI uri = (TermURI)term;
+			return "url(\""
+				+ (uri.getBase() == null
+					? URLs.asURI(uri.getValue())
+					: URLs.resolve(URLs.asURI(uri.getBase()), URLs.asURI(uri.getValue())))
+				+ "\")"; }
 		else if (term instanceof TermString) {
 			TermString string = (TermString)term;
 			return "'" + string.getValue().replaceAll("\n", "\\\\A ").replaceAll("'", "\\\\27 ") + "'"; }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/eval-target-content.xpl">
+
+  <x:scenario label="test_01">
+    <x:call step="css:eval-target-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <body>
+            <div style="text-transform: none">
+              <css:content target="x"/>
+            </div>
+            <div css:id="x">
+              content
+            </div>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <div style="text-transform: none">
+            <css:box type="inline" style="text-transform: auto">
+              content
+            </css:box>
+          </div>
+          <div css:id="x">
+            content
+          </div>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

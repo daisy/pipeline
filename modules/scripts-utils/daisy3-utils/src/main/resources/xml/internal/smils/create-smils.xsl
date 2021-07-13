@@ -67,6 +67,7 @@
 	<smil>
 	  <head>
 	     <meta content="{$uid}" name="dtb:uid"/>
+	     <!-- this value will be corrected in px:daisy3-smil-add-elapsed-time-->
 	     <meta content="00:00:00" name="dtb:totalElapsedTime"/>
 	     <meta content="DAISY Pipeline 2" name="dtb:generator"/>
 	     <xsl:copy-of select="$custom-attrs"/>

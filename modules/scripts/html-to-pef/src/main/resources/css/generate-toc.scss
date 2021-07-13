@@ -8,7 +8,7 @@ $toc-depth: 0 !default;
 	/*
 	 * Generate the TOC:
 	 */
-	@xslt "http://www.daisy.org/pipeline/modules/braille/html-to-pef/generate-toc.xsl" {
+	@xslt "generate-toc.xsl" {
 		depth: $toc-depth;
 		exclude-class: $toc-exclude-class;
 		document-toc-id: "generated-document-toc";

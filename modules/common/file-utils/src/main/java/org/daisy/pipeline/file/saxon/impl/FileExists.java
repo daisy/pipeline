@@ -54,8 +54,8 @@ public class FileExists extends ExtensionFunctionDefinition {
 					boolean result = (path.isEmpty()) ? true : new File(path)
 							.exists();
 					return new BooleanValue(result, BuiltInAtomicType.BOOLEAN);
-				} catch (Exception e) {
-					throw new XPathException("pf:file-exists failed", e);
+				} catch (Throwable e) {
+					throw new XPathException("Unexpected error in pf:file-exists", e);
 				}
 			}
 		};

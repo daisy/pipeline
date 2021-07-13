@@ -34,6 +34,7 @@ import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.antlr.CSSSource;
 import cz.vutbr.web.csskit.antlr.CSSSourceReader;
+import cz.vutbr.web.csskit.antlr.SourceMap;
 import cz.vutbr.web.csskit.DefaultNetworkProcessor;
 import cz.vutbr.web.csskit.RuleXslt;
 import cz.vutbr.web.domassign.Analyzer;
@@ -115,7 +116,8 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				}
 				public CSSInputStream read(CSSSource source) throws IOException {
 					URL url = null;
-					InputStream is; {
+					InputStream is;
+					SourceMap sourceMap = null; {
 						switch (source.type) {
 						case INLINE:
 						case EMBEDDED:
@@ -143,20 +145,25 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							throw new RuntimeException("coding error");
 						}
 					}
+					URL base = url != null ? url : source.base;
 					if (!supportsMediaType(source.mediaType, url))
 						throw new IllegalArgumentException();
 					if (!("text/css".equals(source.mediaType)
 					      || source.mediaType == null && (url == null || url.toString().endsWith(".css")))) {
 						// preProcessor must be non-null
 						try {
-							is = preProcessor.compile(is, url != null ? url : source.base, source.encoding);
+							CssPreProcessor.PreProcessingResult result
+								= preProcessor.compile(is, url != null ? url : source.base, source.encoding);
+							is = result.stream;
+							if (result.sourceMap != null)
+								sourceMap = SourceMapReader.read(result.sourceMap, result.base);
 						} catch (RuntimeException e) {
 							throw new IOException(
 								(source.mediaType != null ? (source.mediaType + " p") : "P")
-								+ "re-processing failed", e);
+								+ "re-processing failed: " + e.getMessage(), e);
 						}
 					}
-					return new CSSInputStream(is, source.encoding, url != null ? url : source.base);
+					return new CSSInputStream(is, source.encoding, base, sourceMap);
 				}
 			};
 	}

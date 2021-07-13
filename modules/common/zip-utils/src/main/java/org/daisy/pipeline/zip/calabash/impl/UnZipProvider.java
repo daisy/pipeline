@@ -124,29 +124,29 @@ public class UnZipProvider implements XProcStepProvider {
                 URI destinationUri = href.getBaseURI().resolve(href.getString());
     			
     			if (!"file".equals(sourceUri.getScheme())) {
-    				throw new XProcException(step.getNode(), "Only file: scheme URIs are supported by zip URI.");
+    				throw new XProcException(step, "Only file: scheme URIs are supported by zip URI.");
     			} else {
     				source = new File(sourceUri.getPath());
     				if (!source.isFile()) {
-    					throw new XProcException(step.getNode(), "The zip URI must refer to a file.");
+    					throw new XProcException(step, "The zip URI must refer to a file.");
     				}
     			}
     			
     			if (!"file".equals(destinationUri.getScheme())) {
-    				throw new XProcException(step.getNode(), "Only file: scheme URIs are supported by dest-dir URI.");
+    				throw new XProcException(step, "Only file: scheme URIs are supported by dest-dir URI.");
     			} else {
     				folder = new File(destinationUri.getPath());
     				if (!folder.exists()) {
     					folder.mkdirs();
     				}
     				if (!folder.isDirectory()) {
-    					throw new XProcException(step.getNode(), "The dest-dir URI must refer to a directory.");
+    					throw new XProcException(step, "The dest-dir URI must refer to a directory.");
     				}
     				if (folder.getParentFile() == null || folder.getParentFile().getParentFile() == null) {
     					// Basic safety valve; should catch stuff like "/", "/home/", "C:\", "C:\Windows\" etc.
     					// Mainly aimed at catching typos or bugs in scripts during developent;
     					// running without admin-privileges is the only fairly safe option here 
-    					throw new XProcException(step.getNode(), "The dest-dir URI must not be the file system root directory (or any of its children) (was: \""+folder.getCanonicalPath()+"\").");
+    					throw new XProcException(step, "The dest-dir URI must not be the file system root directory (or any of its children) (was: \""+folder.getCanonicalPath()+"\").");
     				}
     			}
     			

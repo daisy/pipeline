@@ -63,9 +63,8 @@ public class ImageDimensions extends ExtensionFunctionDefinition {
 							new ArrayIterator (new IntegerValue[] {
 									new BigIntegerValue(image.getWidth()),
 									new BigIntegerValue(image.getHeight()) }));
-				} catch (Exception e) {
-					logger.error("pf:image-dimensions", e);
-					throw new XPathException("pf:image-dimensions failed", e);
+				} catch (Throwable e) {
+					throw new XPathException("Unexpected error in pf:image-dimensions", e);
 				}
 			}
 		};

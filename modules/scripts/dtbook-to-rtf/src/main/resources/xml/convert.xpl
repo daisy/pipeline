@@ -3,6 +3,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:dtbook-to-rtf" name="main">
 	
 	<p:input port="source.fileset" primary="true"/>
@@ -12,8 +13,8 @@
 	
 	<p:output port="result"/>
 	
-	<p:option name="include-table-of-content" required="true"/>
-	<p:option name="include-page-number" required="true"/>
+	<p:option name="include-table-of-content" required="true" cx:as="xs:string"/>
+	<p:option name="include-page-number" required="true" cx:as="xs:string"/>
 	
 	<p:option name="temp-dir" required="true"/>
 	

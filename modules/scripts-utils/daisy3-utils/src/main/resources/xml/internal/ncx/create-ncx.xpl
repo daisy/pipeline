@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:daisy3-create-ncx" name="main">
 
     <p:input port="content" primary="true">
@@ -37,7 +39,7 @@
       </p:documentation>
     </p:option>
 
-    <p:option name="fail-if-missing-smilref" select="'false'">
+    <p:option name="fail-if-missing-smilref" select="'false'" cx:as="xs:string">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>If this option is set, <code>h1</code>, <code>h2</code>, <code>h3</code>,
         <code>h4</code>, <code>h5</code>, <code>h6</code>, <code>levelhd</code>, <code>hd</code> and

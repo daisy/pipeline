@@ -10,7 +10,7 @@
     <xsl:include href="library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
     
-    <xsl:template match="css:_">
+    <xsl:template match="css:_|css:box">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
@@ -45,12 +45,12 @@
                                     <xsl:when test="matches($list-style-type,re:exact($css:BRAILLE_STRING_RE))">
                                         <xsl:attribute name="css:text-transform" select="'none'"/>
                                         <xsl:value-of select="substring($list-style-type,2,string-length($list-style-type)-2)"/>
+                                        <xsl:text> </xsl:text>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <css:counter name="list-item" style="{$list-style-type}"/>
                                     </xsl:otherwise>
                                 </xsl:choose>
-                                <xsl:text> </xsl:text>
                             </css:box>
                         </xsl:if>
                     </xsl:if>

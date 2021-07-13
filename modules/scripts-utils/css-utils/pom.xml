@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-parent</artifactId>
-        <version>1.14.3-SNAPSHOT</version>
+        <version>1.14.4-SNAPSHOT</version>
         <relativePath>../../parent/</relativePath>
     </parent>
 
     <artifactId>css-utils</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: CSS Utils</name>
@@ -21,6 +21,7 @@
             org.daisy.pipeline.modules.impl.Module_css_utils,
             org.daisy.pipeline.css.calabash.impl.CssCascadeStep$Provider,
             org.daisy.pipeline.css.saxon.impl.MediaQueryMatchesDefinition
+            <!-- org.daisy.common.saxon.impl.PackageDetails_http___www_daisy_org_pipeline_modules_css_utils_library_xsl -->
         </expose-services>
     </properties>
 
@@ -32,6 +33,10 @@
         <dependency>
             <groupId>org.daisy.libs</groupId>
             <artifactId>io.bit3.jsass</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.sharegov</groupId>
+            <artifactId>mjson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
@@ -66,20 +71,24 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <!--
+            runtime dependencies
+        -->
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>file-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>mediatype-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!--
             test dependencies
         -->
         <dependency>
-            <groupId>org.daisy.maven</groupId>
-            <artifactId>xproc-engine-daisy-pipeline</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <!--
-            for MessageStorage, needed by JobMonitorFactory
-            FIXME: make optional
-        -->
-        <dependency>
-            <groupId>org.daisy.pipeline</groupId>
-            <artifactId>framework-volatile</artifactId>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>fileset-utils</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

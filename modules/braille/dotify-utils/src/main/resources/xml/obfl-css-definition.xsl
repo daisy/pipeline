@@ -9,15 +9,16 @@
                   select="('margin-left',           'page-break-before', 'text-indent', 'text-transform', '-obfl-vertical-align',
                            'margin-right',          'page-break-after',  'text-align',  'hyphens',        '-obfl-vertical-position',
                            'margin-top',            'page-break-inside', 'line-height', 'white-space',    '-obfl-toc-range',
-                           'margin-bottom',         'orphans',                          'word-spacing',   '-obfl-table-col-spacing',
-                           'padding-left',          'widows',                           'letter-spacing', '-obfl-table-row-spacing',
-                           'padding-right',         'volume-break-before',                                '-obfl-preferred-empty-space',
-                           'padding-top',           'volume-break-after',                                 '-obfl-use-when-collection-not-empty',
-                           'padding-bottom',        'volume-break-inside',                                '-obfl-underline',
-                           'border-left-pattern',   'border-left-style',                                  '-obfl-keep-with-previous-sheets',
-                           'border-right-pattern',  'border-right-style',                                 '-obfl-keep-with-next-sheets',
-                           'border-top-pattern',    'border-top-style',                                   '-obfl-scenario-cost',
-                           'border-bottom-pattern', 'border-bottom-style',                                '-obfl-right-text-indent'
+                           'margin-bottom',         'orphans',                          'word-spacing',   '-obfl-list-of-references-range',
+                           'padding-left',          'widows',                           'letter-spacing', '-obfl-table-col-spacing',
+                           'padding-right',         'volume-break-before',                                '-obfl-table-row-spacing',
+                           'padding-top',           'volume-break-after',                                 '-obfl-preferred-empty-space',
+                           'padding-bottom',        'volume-break-inside',                                '-obfl-use-when-collection-not-empty',
+                           'border-left-pattern',   'border-left-style',                                  '-obfl-underline',
+                           'border-right-pattern',  'border-right-style',                                 '-obfl-keep-with-previous-sheets',
+                           'border-top-pattern',    'border-top-style',                                   '-obfl-keep-with-next-sheets',
+                           'border-bottom-pattern', 'border-bottom-style',                                '-obfl-scenario-cost',
+                                                                                                          '-obfl-right-text-indent'
                            )"/>
     
     <xsl:variable name="_OBFL_KEEP_FN_RE">-obfl-keep\(\s*[1-9]\s*\)</xsl:variable>
@@ -37,6 +38,8 @@
                                 then matches($css:property/@value,'^auto|0|[1-9][0-9]*$')
                                 else if ($css:property/@name='-obfl-toc-range')
                                 then ($context/@css:_obfl-toc and $css:property/@value=('document','volume'))
+                                else if ($css:property/@name='-obfl-list-of-references-range')
+                                then ($context/@css:_obfl-list-of-references and $css:property/@value=('document','volume'))
                                 else if ($css:property/@name='-obfl-use-when-collection-not-empty')
                                 then matches($css:property/@value,re:exact($css:IDENT_RE))
                                 else if ($css:property/@name='-obfl-underline')
@@ -74,7 +77,7 @@
                               then 'after'
                               else if ($property='-obfl-vertical-position')
                               then 'auto'
-                              else if ($property='-obfl-toc-range')
+                              else if ($property=('-obfl-toc-range','-obfl-list-of-references-range'))
                               then 'document'
                               else if ($property=('-obfl-table-col-spacing','-obfl-table-row-spacing'))
                               then '0'
@@ -83,8 +86,6 @@
                               else if ($property='-obfl-use-when-collection-not-empty')
                               then 'normal'
                               else if ($property='-obfl-underline')
-                              then 'none'
-                              else if ($property='text-transform')
                               then 'none'
                               else if ($property=('-obfl-keep-with-previous-sheets','-obfl-keep-with-next-sheets'))
                               then '0'

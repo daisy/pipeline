@@ -3,6 +3,8 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="pxi:daisy202-to-epub3-resources"
                 name="resources">
 
@@ -24,7 +26,7 @@
     <p:option name="content-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">URI to the EPUB3 Content directory.</p:documentation>
     </p:option>
-    <p:option name="include-mediaoverlay-resources" required="true">
+    <p:option name="include-mediaoverlay-resources" required="true" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">Whether or not to include audio files associated with media overlays. Can be either 'true' or 'false'.</p:documentation>
     </p:option>
 

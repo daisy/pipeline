@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.3-SNAPSHOT</version>
+    <version>1.14.4-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>libhyphen-utils</artifactId>
-  <version>2.0.4-SNAPSHOT</version>
+  <version>2.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: libhyphen-utils</name>
@@ -24,6 +24,11 @@
         <artifactId>hyphen</artifactId>
         <version>2.8.8</version>
         <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>ch.sbs.pipeline</groupId>
+        <artifactId>sbs-hyphenation-tables</artifactId>
+        <version>1.23</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -77,27 +82,27 @@
           this is only needed for testing without OSGi, actual inclusion of resources is handled by maven-bundle-plugin
       -->
       <resource>
-        <directory>${project.build.directory}/dependency/lib/i386-Linux-gpp/shared/</directory>
+        <directory>${project.build.directory}/dependency/libhyphen/lib/i386-Linux-gpp/shared/</directory>
         <targetPath>native/linux/x86/</targetPath>
       </resource>
       <resource>
-        <directory>${project.build.directory}/dependency/lib/amd64-Linux-gpp/shared/</directory>
+        <directory>${project.build.directory}/dependency/libhyphen/lib/amd64-Linux-gpp/shared/</directory>
         <targetPath>native/linux/x86_64/</targetPath>
       </resource>
       <resource>
-        <directory>${project.build.directory}/dependency/lib/i386-MacOSX-gpp/shared/</directory>
+        <directory>${project.build.directory}/dependency/libhyphen/lib/i386-MacOSX-gpp/shared/</directory>
         <targetPath>native/macosx/x86/</targetPath>
       </resource>
       <resource>
-        <directory>${project.build.directory}/dependency/lib/x86_64-MacOSX-gpp/shared/</directory>
+        <directory>${project.build.directory}/dependency/libhyphen/lib/x86_64-MacOSX-gpp/shared/</directory>
         <targetPath>native/macosx/x86_64/</targetPath>
       </resource>
       <resource>
-        <directory>${project.build.directory}/dependency/bin/i586-mingw32msvc-gpp/</directory>
+        <directory>${project.build.directory}/dependency/libhyphen/bin/i586-mingw32msvc-gpp/</directory>
         <targetPath>native/windows/x86/</targetPath>
       </resource>
       <resource>
-        <directory>${project.build.directory}/dependency/bin/x86_64-w64-mingw32-gpp/</directory>
+        <directory>${project.build.directory}/dependency/libhyphen/bin/x86_64-w64-mingw32-gpp/</directory>
         <targetPath>native/windows/x86_64/</targetPath>
       </resource>
     </resources>
@@ -106,11 +111,13 @@
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
+            <id>unpack-libhyphen</id>
             <phase>generate-resources</phase>
             <goals>
               <goal>unpack</goal>
             </goals>
             <configuration>
+              <outputDirectory>${project.build.directory}/dependency/libhyphen</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
@@ -152,6 +159,22 @@
               <excludes>
                 **/substrings.pl
               </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-sbs-tables</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependency/sbs-hyphenation-tables</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>ch.sbs.pipeline</groupId>
+                  <artifactId>sbs-hyphenation-tables</artifactId>
+                </artifactItem>
+              </artifactItems>
             </configuration>
           </execution>
         </executions>
@@ -209,6 +232,8 @@
             -->
             <Include-Resource>
               src/main/resources/,
+              tables/hyph_de_DE.dic
+               =target/dependency/sbs-hyphenation-tables/tables/hyph_de_DE.dic,
               META-INF/catalog.xml
                =target/generated-resources/process-catalog/META-INF/catalog.xml,
               META-INF/services
@@ -240,15 +265,15 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.linux.LibhyphenNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-linux</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.linux
                 </Private-Package>
                 <Include-Resource>
                   META-INF/services/org.daisy.pipeline.braille.common.NativePath;literal
                    ='org.daisy.pipeline.braille.libhyphen.impl.linux.LibhyphenNativePathForLinux_SPI',
-                  native/linux/x86=target/dependency/lib/i386-Linux-gpp/shared,
-                  native/linux/x86_64=target/dependency/lib/amd64-Linux-gpp/shared
+                  native/linux/x86=target/dependency/libhyphen/lib/i386-Linux-gpp/shared,
+                  native/linux/x86_64=target/dependency/libhyphen/lib/amd64-Linux-gpp/shared
                 </Include-Resource>
               </instructions>
             </configuration>
@@ -264,15 +289,15 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.mac.LibhyphenNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-mac</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.mac
                 </Private-Package>
                 <Include-Resource>
                   META-INF/services/org.daisy.pipeline.braille.common.NativePath;literal
                    ='org.daisy.pipeline.braille.libhyphen.impl.mac.LibhyphenNativePathForMacOS_SPI',
-                  native/macosx/x86=target/dependency/lib/i386-MacOSX-gpp/shared,
-                  native/macosx/x86_64=target/dependency/lib/x86_64-MacOSX-gpp/shared
+                  native/macosx/x86=target/dependency/libhyphen/lib/i386-MacOSX-gpp/shared,
+                  native/macosx/x86_64=target/dependency/libhyphen/lib/x86_64-MacOSX-gpp/shared
                 </Include-Resource>
               </instructions>
             </configuration>
@@ -288,15 +313,15 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.windows.LibhyphenNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-windows</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.windows
                 </Private-Package>
                 <Include-Resource>
                   META-INF/services/org.daisy.pipeline.braille.common.NativePath;literal
                    ='org.daisy.pipeline.braille.libhyphen.impl.windows.LibhyphenNativePathForWindows_SPI',
-                  native/windows/x86=target/dependency/bin/i586-mingw32msvc-gpp,
-                  native/windows/x86_64=target/dependency/bin/x86_64-w64-mingw32-gpp
+                  native/windows/x86=target/dependency/libhyphen/bin/i586-mingw32msvc-gpp,
+                  native/windows/x86_64=target/dependency/libhyphen/bin/x86_64-w64-mingw32-gpp
                 </Include-Resource>
               </instructions>
             </configuration>
@@ -434,13 +459,14 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <mkdir dir="target/checkout"/>
-                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true"/>
-                    <unzip dest="target/generated-resources/hyphen" src="target/checkout/dictionaries.zip">
+                    <mkdir dir="target/checkout" />
+                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true" />
+                    <unzip dest="target/generated-resources/tables" src="target/checkout/dictionaries.zip">
                       <patternset>
-                        <include name="**/hyph_*.dic"/>
+                        <include name="**/hyph_*.dic" />
+                        <exclude name="**/hyph_de.dic" />
                       </patternset>
-                      <mapper type="flatten"/>
+                      <mapper type="flatten" />
                     </unzip>
                   </tasks>
                 </configuration>

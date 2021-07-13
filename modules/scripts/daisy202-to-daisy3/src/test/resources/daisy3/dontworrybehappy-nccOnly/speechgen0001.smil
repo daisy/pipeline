@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-1//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-1.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+   <head>
+      <meta name="dtb:uid" content="F00000"/>
+      <meta name="dtb:totalElapsedTime" content="0:00:00"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2"/>
+   </head>
+   <body>
+      <seq dur="0:00:21.773" id="seq_1">
+         <par id="doctitle">
+            <audio id="doctitleAudio" src="speechgen0001.mp3" clipBegin="npt=0.000s"
+                   clipEnd="npt=2.658s"/>
+         </par>
+         <par id="tcp1">
+            <audio id="audd1e10" src="speechgen0001.mp3" clipBegin="npt=0.000s"
+                   clipEnd="npt=2.658s"/>
+         </par>
+         <par id="tcp2">
+            <audio id="audd1e13" src="speechgen0001.mp3" clipBegin="npt=2.658s"
+                   clipEnd="npt=6.163s"/>
+         </par>
+         <par id="tcp3">
+            <audio id="audd1e16" src="speechgen0001.mp3" clipBegin="npt=6.163s"
+                   clipEnd="npt=8.497s"/>
+         </par>
+         <par id="tcp4">
+            <audio id="audd1e19" src="speechgen0001.mp3" clipBegin="npt=8.497s"
+                   clipEnd="npt=11.746s"/>
+         </par>
+         <par id="tcp5">
+            <audio id="audd1e22" src="speechgen0001.mp3" clipBegin="npt=11.746s"
+                   clipEnd="npt=14.291s"/>
+         </par>
+         <par id="tcp6">
+            <audio id="audd1e25" src="speechgen0001.mp3" clipBegin="npt=14.291s"
+                   clipEnd="npt=19.115s"/>
+         </par>
+      </seq>
+   </body>
+</smil>

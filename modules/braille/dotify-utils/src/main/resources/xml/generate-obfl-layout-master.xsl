@@ -29,6 +29,7 @@
     <xsl:template match="/*">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
+            <xsl:apply-templates select="obfl:meta"/>
             <xsl:variable name="sequences" as="element()*" select="//obfl:sequence|//obfl:toc-sequence|//obfl:dynamic-sequence"/>
             <xsl:for-each select="distinct-values($sequences/@css:page)">
                 <xsl:variable name="layout-master-name" select="pxi:layout-master-name(.)"/>
@@ -59,7 +60,7 @@
                     </xsl:variable>
                 </xsl:for-each>
             </xsl:for-each>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="* except obfl:meta"/>
         </xsl:copy>
     </xsl:template>
     
@@ -225,7 +226,16 @@
                         </fallback>
                     </xsl:if>
                     <xsl:if test="$footnotes-border-top!='none'">
-                        <before><leader pattern="{$footnotes-border-top}" position="100%" align="right"/></before>
+                        <before>
+                            <block translate="pre-translated-text-css">
+                                <leader pattern="{$footnotes-border-top}" position="100%" align="right"/>
+                                <!-- We add a single instance of the pattern in order to have some
+                                     text after the leader and to make sure that the
+                                     translate="pre-translated-text-css" has an effect on the leader
+                                     (Dotify bug). -->
+                                <xsl:value-of select="$footnotes-border-top"/>
+                            </block>
+                        </before>
                     </xsl:if>
                 </page-area>
             </xsl:for-each>

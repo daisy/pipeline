@@ -122,7 +122,7 @@ public class CopyResourceProvider implements XProcStepProvider {
 		File getFile(URI destUri,URI sourceUri){
 			File target=null;
 			if (!"file".equals(destUri.getScheme())) {
-				throw new XProcException(step.getNode(), "Only file: scheme URIs are supported by taget.");
+				throw new XProcException(step, "Only file: scheme URIs are supported by taget.");
 			} else {
 				target = new File(destUri.getPath());
 			}
@@ -135,7 +135,7 @@ public class CopyResourceProvider implements XProcStepProvider {
 					target = new File(target, sourceUri.getPath());
 				}
 				if (target.isDirectory()) {
-					throw new XProcException(step.getNode(), "Cannot copy: target is a directory: " + target.getAbsolutePath());
+					throw new XProcException(step, "Cannot copy: target is a directory: " + target.getAbsolutePath());
 				}
 			}
 			return target;
@@ -151,9 +151,9 @@ public class CopyResourceProvider implements XProcStepProvider {
 				src.close();
 				dst.close();
 			} catch (FileNotFoundException fnfe) {
-				throw new XProcException(fnfe);
+				throw new XProcException(step, fnfe);
 			} catch (IOException ioe) {
-				throw new XProcException(ioe);
+				throw new XProcException(step, ioe);
 			}
 		}
 	}

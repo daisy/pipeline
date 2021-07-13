@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-1//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-1.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+   <head>
+      <meta name="dtb:uid" content="F00000"/>
+      <meta name="dtb:totalElapsedTime" content="0:02:38.397"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2"/>
+      <customAttributes>
+         <customTest id="footnote" defaultState="true" override="visible"/>
+      </customAttributes>
+   </head>
+   <body>
+      <seq dur="0:00:23.325" id="seq_1">
+         <par id="tcp55">
+            <audio id="audd103e12" src="speechgen0007.mp3" clipBegin="npt=0.000s"
+                   clipEnd="npt=1.629s"/>
+         </par>
+         <par id="tcp57" customTest="footnote">
+            <audio id="audd103e16" src="speechgen0007.mp3" clipBegin="npt=1.629s"
+                   clipEnd="npt=11.237s"/>
+         </par>
+         <par id="tcp59" customTest="footnote">
+            <audio id="audd103e20" src="speechgen0007.mp3" clipBegin="npt=11.237s"
+                   clipEnd="npt=15.450s"/>
+         </par>
+         <par id="tcp60" customTest="footnote">
+            <audio id="audd103e23" src="speechgen0007.mp3" clipBegin="npt=15.450s"
+                   clipEnd="npt=23.325s"/>
+         </par>
+      </seq>
+   </body>
+</smil>

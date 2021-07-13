@@ -18,6 +18,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLTransformer;
 import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
@@ -99,7 +100,7 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 						break; }}
 			catch (NoSuchElementException e) {}
 			if (xmlTransformer == null)
-				throw new RuntimeException("Could not find a Transform for query: " + query);
+				throw new XProcException(step, "Could not find a Transform for query: " + query);
 			xmlTransformer.transform(
 				ImmutableMap.of(
 					new QName("source"), new XMLCalabashInputValue(source, runtime),
@@ -107,9 +108,12 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 				ImmutableMap.of(
 					new QName("result"), new XMLCalabashOutputValue(result, runtime))
 			).run();
-		} catch (Exception e) {
-			logger.error("px:transform failed", e);
-			throw new XProcException(step.getNode(), e);
+		} catch (Throwable e) {
+			if (e instanceof TransformerException && e.getCause() instanceof XProcException)
+				// assuming xmlTransformer is cx:eval based
+				throw (XProcException)e.getCause();
+			else
+				throw XProcStep.raiseError(e, step);
 		}
 		super.run();
 	}

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.Set;
 
@@ -20,14 +19,12 @@ import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
-import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermString;
 
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
-import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.dotify.api.translator.AttributeWithContext;
@@ -51,8 +48,6 @@ import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Provider;
 import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
-import org.daisy.pipeline.braille.common.Query.Feature;
-import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.QUERY;
@@ -129,40 +124,17 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	private class BrailleTranslatorFactoryImpl implements BrailleTranslatorFactory {
 		public BrailleTranslator newTranslator(String locale, String mode) throws TranslatorConfigurationException {
 			if (PRE_TRANSLATED_MODE.equals(mode))
-				return new PreTranslatedBrailleTranslator();
+				mode = "(input:braille)(input:text-css)(output:braille)";
 			Matcher m = QUERY.matcher(mode);
 			if (!m.matches())
 				throw new TranslatorConfigurationException();
 			Query query = query(mode);
-			boolean isPreTranslatedQuery = false; {
-				for (Query.Feature f : query)
-					if ("input".equals(f.getKey()) && "braille".equals(f.getValue().orElse(null)))
-						isPreTranslatedQuery = true;
-					else if (!("locale".equals(f.getKey()) ||
-					           "input".equals(f.getKey()) && "text-css".equals(f.getValue().orElse(null)) ||
-					           "output".equals(f.getKey()) && "braille".equals(f.getValue().orElse(null)))) {
-						isPreTranslatedQuery = false;
-						break; }}
-			if (isPreTranslatedQuery)
-				return new PreTranslatedBrailleTranslator();
 			if (locale != null && !"und".equals(locale))
 				query = mutableQuery(query).add("locale", locale);
 			for (org.daisy.pipeline.braille.common.BrailleTranslator t : brailleTranslatorProvider.get(query))
 				try {
 					return new BrailleTranslatorFromBrailleTranslator(mode, t); }
 				catch (UnsupportedOperationException e) {}
-			try {
-				MutableQuery q = mutableQuery(query);
-				for (Feature f : q.removeAll("input"))
-					if (!"text-css".equals(f.getValue().get()))
-						throw new NoSuchElementException();
-				for (Feature f : q.removeAll("output"))
-					if (!"braille".equals(f.getValue().get()))
-						throw new NoSuchElementException();
-				if (!q.isEmpty())
-					throw new NoSuchElementException();
-				return new BrailleTranslatorFromBrailleTranslator(mode, NumberBrailleTranslator.getInstance());
-			} catch (NoSuchElementException e) {}
 			throw new TranslatorConfigurationException("Factory does not support " + locale + "/" + mode);
 		}
 	}
@@ -276,86 +248,6 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 		
 		public String getTranslatorMode() {
 			return mode;
-		}
-	}
-	
-	/**
-	 * Same as above but assumes that input text exists of only braille and white space
-	 * characters. Supports CSS properties "word-spacing", "hyphens" and "white-space".
-	 */
-	private static class PreTranslatedBrailleTranslator implements BrailleTranslator {
-		
-		private PreTranslatedBrailleTranslator() {}
-		
-		public BrailleTranslatorResult translate(Translatable input) throws TranslationException {
-			return translate(cssStyledTextFromTranslatable(input), 0, -1);
-		}
-			
-		public BrailleTranslatorResult translate(TranslatableWithContext input) throws TranslationException {
-			int from = input.getPrecedingText().size();
-			int to = from + input.getTextToTranslate().size();
-			return translate(cssStyledTextFromTranslatable(input), from, to);
-		}
-		
-		private BrailleTranslatorResult translate(Iterable<CSSStyledText> input, int from, int to) throws TranslationException {
-			List<String> braille = new ArrayList<>();
-			int wordSpacing; {
-				wordSpacing = -1;
-				for (CSSStyledText styledText : input) {
-					SimpleInlineStyle style = styledText.getStyle();
-					int spacing = 1;
-					String text = styledText.getText();
-					if (style != null) {
-						CSSProperty val = style.getProperty("word-spacing");
-						if (val != null) {
-							if (val == WordSpacing.length) {
-								spacing = style.getValue(TermInteger.class, "word-spacing").getIntValue();
-								if (spacing < 0) {
-									if (logger != null)
-										logger.warn("word-spacing: {} not supported, must be non-negative", val);
-									spacing = 1; }}
-									
-							// FIXME: assuming style is mutable and text.iterator() does not create copies
-							style.removeProperty("word-spacing"); }
-						if (style.getProperty("hyphens") == Hyphens.NONE) {
-							text = text.replaceAll("[\u00AD\u200B]","");
-							style.removeProperty("hyphens"); }
-						val = style.getProperty("white-space");
-						if (val != null) {
-							if (val == WhiteSpace.PRE_WRAP)
-								text = text.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
-								           .replaceAll("[\\x20\t\\u2800]", "\u00A0");
-							if (val == WhiteSpace.PRE_WRAP || val == WhiteSpace.PRE_LINE)
-								text = text.replaceAll("[\\n\\r]", "\u2028");
-							style.removeProperty("white-space"); }
-						for (String prop : style.getPropertyNames())
-							logger.warn("{}: {} not supported", prop, style.get(prop)); }
-					if (wordSpacing < 0)
-						wordSpacing = spacing;
-					else if (wordSpacing != spacing)
-						throw new RuntimeException("word-spacing must be constant, but both "
-						                           + wordSpacing + " and " + spacing + " specified");
-					Map<String,String> attrs = styledText.getTextAttributes();
-					if (attrs != null)
-						for (String k : attrs.keySet())
-							logger.warn("Text attribute \"{}:{}\" ignored", k, attrs.get(k));
-					braille.add(text); }
-				if (wordSpacing < 0) wordSpacing = 1; }
-			StringBuilder brailleString = new StringBuilder();
-			int fromChar = 0;
-			int toChar = to >= 0 ? 0 : -1;
-			for (String s : braille) {
-				brailleString.append(s);
-				if (--from == 0)
-					fromChar = brailleString.length();
-				if (--to == 0)
-					toChar = brailleString.length();
-			}
-			return new DefaultLineBreaker.LineIterator(brailleString.toString(), fromChar, toChar, '\u2800', '\u2824', wordSpacing);
-		}
-		
-		public String getTranslatorMode() {
-			return PRE_TRANSLATED_MODE;
 		}
 	}
 	

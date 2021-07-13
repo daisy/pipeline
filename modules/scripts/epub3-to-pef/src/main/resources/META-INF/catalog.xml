@@ -9,7 +9,8 @@
                    ../../../../../html-to-pef/src/main/resources/css/page-layout.params
                    ../../../../../html-to-pef/src/main/resources/css/generate-toc.params
                    ../../../../../html-to-pef/src/main/resources/css/page-breaking.params
-                   ../../../../../html-to-pef/src/main/resources/css/volume-breaking.params"/>
+                   ../../../../../html-to-pef/src/main/resources/css/volume-breaking.params
+                   ../../../../../html-to-pef/src/main/resources/css/notes.params"/>
   
   <!-- xproc library -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>

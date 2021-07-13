@@ -2,7 +2,9 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:opf="http://www.idpf.org/2007/opf"
@@ -74,6 +76,12 @@
             pxi:create-ncc
         </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:html-base-uri
+            pf:normalize-uri
+        </p:documentation>
+    </cx:import>
     
     <p:documentation>
         Extract and verify the OPF.
@@ -486,18 +494,14 @@
         </px:fileset-load>
         <p:for-each name="html-without-href">
             <p:output port="result"/>
-            <p:xslt>
-                <p:input port="source">
-                    <p:pipe step="html-without-href" port="current"/>
-                    <p:pipe step="convert-html" port="noteref-list"/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/remove-href-from-noterefs.xsl"/>
-                </p:input>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-            </p:xslt>
+            <p:variable name="base-uri" select="pf:normalize-uri(pf:html-base-uri(/*))"/>
+            <!--
+                list of IDs of noterefs contained in this HTML file
+            -->
+            <p:variable name="noteref-list" select="//d:file[pf:normalize-uri(resolve-uri(@href,base-uri(.)))=$base-uri]/d:anchor/@id">
+                <p:pipe step="convert-html" port="noteref-list"/>
+            </p:variable>
+            <p:delete match="html:a[@href][@id][@id=$noteref-list]/@href"/>
         </p:for-each>
         <p:sink/>
         <px:fileset-update name="update-1">

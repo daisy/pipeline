@@ -1,3 +1,55 @@
+v1.14.3
+=======
+
+Changes
+-------
+- Update to Liblouis [3.17.0](https://github.com/liblouis/liblouis/releases/tag/v3.17.0)
+- New option to choose from a list of braille codes (Liblouis tables).
+- Possibility to specify the braille code's locale as a transformer feature
+  (e.g. `(locale:nl)`). The input document's language is only used if no locale or Liblouis table
+  has been specified.
+- By default text is transcribed to braille during formatting. A `force-pre-translation` transformer
+  feature was added to override this behavior.
+- Option to specify the layout of notes
+- CSS module (Sass partial) for table styling
+- Support for `@counter-style` rules.
+- Support for relative `url()` values
+- Support for `:-obfl-alternate-scenario(2)` etc.
+- Support for `-obfl-list-of-references-range: volume`
+- Support for new `::-obfl-on-collection-start` and `::-obfl-on-collection-end` pseudo-elements
+- Support for `display: -obfl-list-of-references` on any element (not only on `::alternate`
+  elements)
+- Improved hyphenation of German text.
+- Fixed bug in handling of `-obfl-marker` property resulting in missing markers in page margin
+  (https://github.com/mtmse/dotify.library/pull/19)
+- Fixed translation of text around `<br/>` elements (https://github.com/daisy/pipeline/issues/603,
+  https://github.com/mtmse/dotify.library/pull/17)
+- Various other bugfixes (https://github.com/mtmse/dotify.library/pull/9,
+  https://github.com/mtmse/dotify.library/pull/14, https://github.com/mtmse/dotify.library/pull/15)
+
+Components
+----------
+- **liblouis** ([**3.17.0**](https://github.com/liblouis/liblouis/releases/tag/v3.17.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([4.3.1](https://github.com/liblouis/liblouis-java/releases/tag/4.3.1))
+- **dotify** ([**1.0.1**](https://github.com/mtmse/dotify.library/releases/tag/1.0.1)
+- braille-css ([1.19.0](https://github.com/daisy/braille-css/releases/tag/1.19.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+Closed issues
+-------------
+- https://github.com/daisy/pipeline/issues/603
+- https://github.com/mtmse/dotify.library/pull/9
+- https://github.com/mtmse/dotify.library/pull/10
+- https://github.com/mtmse/dotify.library/pull/14
+- https://github.com/mtmse/dotify.library/pull/15
+- https://github.com/mtmse/dotify.library/pull/17
+- https://github.com/mtmse/dotify.library/pull/19
+
+
 v1.14.2
 =======
 

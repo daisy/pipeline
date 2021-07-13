@@ -10,12 +10,6 @@
 	<xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
 	
 	<!--
-		Don't wrap document with <"_" style="text-transform:none"/>. This is useful e.g. when the
-		translated document needs to be valid HTML.
-	-->
-	<xsl:param name="no-wrap" required="no" select="'false'"/>
-	
-	<!--
 	    API: implement xsl:template match="css:block"
 	-->
 	<xsl:template match="css:block">
@@ -27,37 +21,17 @@
 	</xsl:template>
 	
 	<xsl:template mode="identify-blocks" match="/*">
-		<xsl:variable name="source-style" as="element()*">
+		<xsl:variable name="initial-style" as="element()*">
 			<xsl:call-template name="css:computed-properties">
 				<xsl:with-param name="properties" select="$text-properties"/>
 				<xsl:with-param name="context" select="$dummy-element"/>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="result-style" as="element()*">
-			<xsl:call-template name="css:computed-properties">
-				<xsl:with-param name="properties" select="$text-properties"/>
-				<xsl:with-param name="context" select="$dummy-element"/>
-				<xsl:with-param name="cascaded-properties" tunnel="yes" select="css:property('text-transform','none')"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="$no-wrap='false'">
-				<_ style="text-transform: none">
-					<xsl:next-match>
-						<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
-						<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
-						<xsl:with-param name="portion" select="1.0"/>
-					</xsl:next-match>
-				</_>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:next-match>
-					<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
-					<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
-					<xsl:with-param name="portion" select="1.0"/>
-				</xsl:next-match>
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:next-match>
+			<xsl:with-param name="source-style" tunnel="yes" select="$initial-style"/>
+			<xsl:with-param name="result-style" tunnel="yes" select="$initial-style"/>
+			<xsl:with-param name="portion" select="1.0"/>
+		</xsl:next-match>
 	</xsl:template>
 	
 	<xsl:variable name="text-properties" as="xs:string*"
@@ -72,14 +46,18 @@
 		<xsl:param name="result-style" as="element(css:property)*" tunnel="yes"/>
 		<xsl:param name="portion" required="yes"/>
 		<xsl:variable name="style" as="element(css:rule)*">
-			<xsl:if test="@css:*">
-				<css:rule>
-					<xsl:apply-templates mode="css:attribute-as-property" select="@css:*"/>
-				</css:rule>
-			</xsl:if>
 			<xsl:call-template name="css:deep-parse-stylesheet">
 				<xsl:with-param name="stylesheet" select="@style"/>
 			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="style" as="element(css:rule)*">
+			<css:rule>
+				<xsl:if test="@css:*">
+					<xsl:apply-templates mode="css:attribute-as-property" select="@css:*"/>
+				</xsl:if>
+				<xsl:sequence select="$style[not(@selector)]/*"/>
+			</css:rule>
+			<xsl:sequence select="$style[@selector]"/>
 		</xsl:variable>
 		<xsl:variable name="context" as="element()" select="."/>
 		<xsl:variable name="translated-style" as="element(css:rule)*">
@@ -194,6 +172,10 @@
 		<xsl:variable name="translated-main-style" as="element(css:rule)*">
 			<xsl:apply-templates mode="translate-style" select="$main-style"/>
 		</xsl:variable>
+		<!--
+		    FIXME: move this to the template for ::before and ::after rules, so that it is also done
+		    for e.g. ::list-item::after
+		-->
 		<xsl:variable name="source-style" as="element()*">
 			<xsl:call-template name="css:computed-properties">
 				<xsl:with-param name="properties" select="$text-properties"/>
@@ -230,9 +212,11 @@
 	</xsl:template>
 	
 	<xsl:template mode="translate-style"
-	              match="css:rule[matches(@selector,'^&amp;::(after|before)')]
+	              match="css:rule[@selector=('&amp;::after','&amp;::before',
+	                                         '@top-left','@top-center','@top-right','@right',
+	                                         '@bottom-right','@bottom-center','@bottom-left','@left')]
 	                             [css:property[@name='content']/*[not(self::css:string[@value]|self::css:attr)]]|
-	                     css:rule[matches(@selector,'^&amp;::(after|before)')]
+	                     css:rule[@selector=('&amp;::after','&amp;::before')]
 	                             /css:rule[not(@selector)]
 	                             [css:property[@name='content']/*[not(self::css:string[@value]|self::css:attr)]]">
 		<xsl:next-match>
@@ -265,9 +249,9 @@
 								<xsl:with-param name="parent-properties" tunnel="yes" select="$source-style"/>
 							</xsl:call-template>
 						</xsl:variable>
+						<xsl:variable name="properties" as="element()*" select="css:property"/>
 						<xsl:choose>
 							<xsl:when test="$restore-text-style">
-								<xsl:variable name="properties" as="element()*" select="css:property"/>
 								<xsl:apply-templates mode="restore-text-style-and-translate-other-style"
 								                     select="($properties,$source-style[not(@name=$properties/@name)])">
 									<xsl:with-param name="source-style" tunnel="yes"
@@ -275,7 +259,7 @@
 								</xsl:apply-templates>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:apply-templates mode="#current" select="css:property">
+								<xsl:apply-templates mode="#current" select="($properties,$source-style[not(@name=$properties/@name)])">
 									<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 								</xsl:apply-templates>
 							</xsl:otherwise>

@@ -10,6 +10,7 @@ $include-production-notes: false !default;
 @import "generate-toc.scss";
 @import "page-breaking.scss";
 @import "volume-breaking.scss";
+@import "notes.scss";
 
 @namespace epub url(http://www.idpf.org/2007/ops);
 

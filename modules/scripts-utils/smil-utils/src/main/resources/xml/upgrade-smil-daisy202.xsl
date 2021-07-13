@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mo="http://www.w3.org/ns/SMIL" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                exclude-result-prefixes="#all">
     <xsl:output encoding="UTF-8" method="xml" indent="yes"/>
     <xsl:include href="clock-functions.xsl"/>
     <xsl:template match="@*|node()">
@@ -48,16 +50,16 @@
             <xsl:variable name="audio" select="descendant::audio"/>
             <audio xmlns="http://www.w3.org/ns/SMIL" src="{$audio[1]/@src}">
                 <xsl:apply-templates select="$audio[1]/@id"/>
-                <xsl:variable name="clip-begin" select="pf:mediaoverlay-clock-value-to-seconds($audio[1]/@clip-begin)"/>
-                <xsl:variable name="clip-end" select="pf:mediaoverlay-clock-value-to-seconds($audio[@src=$audio[1]/@src][last()]/@clip-end)"/>
+                <xsl:variable name="clip-begin" select="pf:smil-clock-value-to-seconds($audio[1]/@clip-begin)"/>
+                <xsl:variable name="clip-end" select="pf:smil-clock-value-to-seconds($audio[@src=$audio[1]/@src][last()]/@clip-end)"/>
                 <xsl:attribute name="clipBegin"
-                    select="if ($clip-begin &lt; 60) then pf:mediaoverlay-seconds-to-timecount($clip-begin)
-                                else if ($clip-begin &lt; 3600) then pf:mediaoverlay-seconds-to-partial-clock-value($clip-begin)
-                                else pf:mediaoverlay-seconds-to-full-clock-value($clip-begin)"/>
+                    select="if ($clip-begin &lt; 60) then pf:smil-seconds-to-timecount($clip-begin)
+                                else if ($clip-begin &lt; 3600) then pf:smil-seconds-to-partial-clock-value($clip-begin)
+                                else pf:smil-seconds-to-full-clock-value($clip-begin)"/>
                 <xsl:attribute name="clipEnd"
-                    select="if ($clip-end &lt; 60) then pf:mediaoverlay-seconds-to-timecount($clip-end)
-                                else if ($clip-end &lt; 3600) then pf:mediaoverlay-seconds-to-partial-clock-value($clip-end)
-                                else pf:mediaoverlay-seconds-to-full-clock-value($clip-end)"
+                    select="if ($clip-end &lt; 60) then pf:smil-seconds-to-timecount($clip-end)
+                                else if ($clip-end &lt; 3600) then pf:smil-seconds-to-partial-clock-value($clip-end)
+                                else pf:smil-seconds-to-full-clock-value($clip-end)"
                 />
             </audio>
         </par>

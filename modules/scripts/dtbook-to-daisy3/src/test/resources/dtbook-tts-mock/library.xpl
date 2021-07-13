@@ -2,6 +2,8 @@
   <p:declare-step version="1.0" name="main" type="px:tts-for-dtbook"
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:math="http://www.w3.org/1998/Math/MathML"
@@ -35,8 +37,8 @@
       <p:empty/>
     </p:output>
 
-    <p:option name="audio" required="false" px:type="boolean" select="'true'"/>
-    <p:option name="process-css" required="false" px:type="boolean" select="'true'">
+    <p:option name="audio" required="false" px:type="boolean" select="'true'" cx:as="xs:string"/>
+    <p:option name="process-css" required="false" px:type="boolean" select="'true'" cx:as="xs:string">
       <!-- ignored -->
     </p:option>
 

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-1//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-1.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+   <head>
+      <meta name="dtb:uid" content="F00000"/>
+      <meta name="dtb:totalElapsedTime" content="0:00:21.773"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2"/>
+      <customAttributes>
+         <customTest id="footnote" defaultState="true" override="visible"/>
+      </customAttributes>
+   </head>
+   <body>
+      <seq dur="0:00:28.901" id="seq_1">
+         <par id="tcp7">
+            <text src="content.xml#dtb7" id="txtd13e12"/>
+            <audio id="audd13e13" src="speechgen0002.mp3" clipBegin="npt=0.000s"
+                   clipEnd="npt=2.197s"/>
+         </par>
+         <par id="tcp8">
+            <text src="content.xml#dtb8" id="txtd13e15"/>
+            <audio id="audd13e16" src="speechgen0002.mp3" clipBegin="npt=2.197s"
+                   clipEnd="npt=4.428s"/>
+         </par>
+         <par id="tcp9">
+            <text src="content.xml#dtb9" id="txtd13e18"/>
+            <audio id="audd13e19" src="speechgen0002.mp3" clipBegin="npt=4.428s"
+                   clipEnd="npt=6.657s"/>
+         </par>
+         <seq id="seq_2">
+            <par id="tcp10">
+               <text src="content.xml#dtb10" id="txtd13e21"/>
+               <audio id="audd13e23" src="speechgen0002.mp3" clipBegin="npt=6.657s"
+                      clipEnd="npt=7.592s"/>
+            </par>
+            <par id="forcelinkstruct64" customTest="footnote">
+               <text src="content.xml#fn1" id="txtd13e24"/>
+               <audio id="audd13e27" src="speechgen0007.mp3" clipBegin="npt=1.629s"
+                      clipEnd="npt=11.237s"/>
+            </par>
+         </seq>
+         <par id="tcp11">
+            <text src="content.xml#dtb11" id="txtd13e29"/>
+            <audio id="audd13e30" src="speechgen0002.mp3" clipBegin="npt=7.592s"
+                   clipEnd="npt=8.795s"/>
+         </par>
+         <par id="tcp12">
+            <text src="content.xml#dtb12" id="txtd13e32"/>
+            <audio id="audd13e33" src="speechgen0002.mp3" clipBegin="npt=8.795s"
+                   clipEnd="npt=10.526s"/>
+         </par>
+         <par id="tcp13">
+            <text src="content.xml#dtb13" id="txtd13e35"/>
+            <audio id="audd13e36" src="speechgen0002.mp3" clipBegin="npt=10.526s"
+                   clipEnd="npt=13.080s"/>
+         </par>
+         <par id="tcp14">
+            <text src="content.xml#dtb14" id="txtd13e38"/>
+            <audio id="audd13e39" src="speechgen0002.mp3" clipBegin="npt=13.080s"
+                   clipEnd="npt=15.235s"/>
+         </par>
+         <par id="tcp15">
+            <text src="content.xml#dtb15" id="txtd13e41"/>
+            <audio id="audd13e42" src="speechgen0002.mp3" clipBegin="npt=15.235s"
+                   clipEnd="npt=19.293s"/>
+         </par>
+      </seq>
+   </body>
+</smil>

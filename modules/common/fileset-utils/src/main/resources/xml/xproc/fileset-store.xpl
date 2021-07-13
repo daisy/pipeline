@@ -186,6 +186,13 @@
         </p:otherwise>
     </p:choose>
 
+    <p:documentation>Add doctype to XHTML 5.0 because XProc does not do it.</p:documentation>
+    <p:add-attribute match="d:file[not(@doctype|@doctype-public|@doctype-system|@method) and
+                                   @media-type='application/xhtml+xml' and
+                                   @media-version='5.0']"
+                     attribute-name="doctype"
+                     attribute-value="&lt;!DOCTYPE html&gt;"/>
+
     <p:documentation>Zip files.</p:documentation>
     <p:choose>
         <p:when test="//d:file[contains(resolve-uri(@href, base-uri(.)),'!/')]">

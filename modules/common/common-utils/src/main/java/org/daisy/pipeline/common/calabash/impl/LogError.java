@@ -18,7 +18,6 @@ import javax.xml.transform.SourceLocator;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.library.Identity;
@@ -87,9 +86,8 @@ public class LogError implements XProcStepProvider {
 						ImmutableMap.of(new QName("source"), new XMLCalabashInputValue(errorPipe, runtime)),
 						ImmutableMap.of())
 					.run();
-			} catch (Exception e) {
-				logger.error("px:report-error", e);
-				throw new XProcException(step.getNode(), e);
+			} catch (Throwable e) {
+				throw XProcStep.raiseError(e, step);
 			}
 		}
 
@@ -137,7 +135,7 @@ public class LogError implements XProcStepProvider {
 							case START_ELEMENT:
 								if (C_ERROR.equals(reader.getName())) {
 									XProcError xprocError = parseXProcError(reader);
-									log(xprocError.getMessage());
+									log(xprocError.getMessage() + " (Please see detailed log for more info.)");
 									LOGGER.debug(xprocError.toString());
 								}
 								break;

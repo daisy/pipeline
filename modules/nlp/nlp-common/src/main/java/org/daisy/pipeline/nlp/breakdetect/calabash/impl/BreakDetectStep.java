@@ -138,7 +138,7 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 				processXSLTMatchPatternOption(sentenceBeforeOption),
 				processXSLTMatchPatternOption(sentenceAfterOption));
 		} catch (XPathException e) {
-			throw new XProcException(step.getNode(), e);
+			throw new XProcException(step, e);
 		}
 
 		XmlBreakRebuilder xmlRebuilder = new XmlBreakRebuilder();

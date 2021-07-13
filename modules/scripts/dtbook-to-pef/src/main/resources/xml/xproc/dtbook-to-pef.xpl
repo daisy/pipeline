@@ -63,6 +63,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     </p:option>
 
     <p:option name="stylesheet-parameters"/>
+    <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
@@ -88,6 +89,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
+    <p:option name="notes-placement"/>
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
@@ -134,6 +136,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
                           parameter-names="stylesheet
                                            stylesheet-parameters
                                            transform
+                                           braille-code
                                            ascii-file-format
                                            ascii-table
                                            include-brf
@@ -182,7 +185,8 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>
         <p:with-option name="stylesheet" select="$stylesheet"/>
-        <p:with-option name="transform" select="$transform"/>
+        <p:with-option name="transform"
+                       select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
@@ -193,7 +197,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- ===== -->
     <!-- STORE -->
     <!-- ===== -->
-    <px:dtbook-to-pef.store px:message="Storing" px:progress=".06">
+    <px:dtbook-to-pef.store px:message="Storing results" px:progress=".06">
         <p:input port="dtbook">
             <p:pipe step="main" port="source"/>
         </p:input>

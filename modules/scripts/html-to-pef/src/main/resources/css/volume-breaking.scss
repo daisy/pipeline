@@ -39,7 +39,7 @@ $prefer-volume-break-before-higher-level-factor: 0 !default;
     $min-volume-keep-priority: min(10, max(1, round($allow-volume-break-inside-leaf-section-factor)));
     
     $duplex: true !default;
-    @xslt "http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl" {
+    @xslt "volume-breaking.xsl" {
         duplex: $duplex;
         maximum-number-of-sheets: $maximum-number-of-sheets;
         allow-volume-break-inside-leaf-section-factor: $allow-volume-break-inside-leaf-section-factor;

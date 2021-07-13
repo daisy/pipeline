@@ -5,6 +5,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container"
                 type="px:epub-load" name="main">
 	
@@ -25,7 +26,7 @@
 			<p>If not specified, the version will be detected automatically.</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="store-to-disk" required="false" select="'false'">
+	<p:option name="store-to-disk" required="false" select="'false'" cx:as="xs:string">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Ensure that all files from the result fileset exist on disk. It is an error if this
 			option is true and the value of the <code>temp-dir</code> option does not identify a

@@ -2,9 +2,11 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:fileset-load" name="main"
                 exclude-inline-prefixes="px">
 
@@ -64,6 +66,12 @@
       px:message
     </p:documentation>
   </p:import>
+  <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" type="application/xslt+xml">
+    <p:documentation>
+      pf:unescape-uri
+    </p:documentation>
+  </cx:import>
+
 
   <p:add-attribute match="/*" attribute-name="href">
     <p:with-option name="attribute-value" select="$href"/>
@@ -190,58 +198,36 @@
                   <p:when test="contains($on-disk, '!/')">
                     <p:variable name="file" select="replace($on-disk, '^(jar:)?([^!]+)!/(.+)$', '$2')"/>
                     <p:variable name="path-in-zip" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
+                    <p:variable name="escaped-path-in-zip" select="pf:unescape-uri($path-in-zip)"/>
                     <p:sink/>
-                    <p:xslt template-name="main">
-                      <p:input port="source">
-                        <p:empty/>
-                      </p:input>
-                      <p:input port="stylesheet">
-                        <p:inline>
-                          <xsl:stylesheet version="2.0" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
-                            <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-                            <xsl:param name="uri" required="yes"/>
-                            <xsl:template name="main">
-                              <c:result>
-                                <xsl:value-of select="pf:unescape-uri($uri)"/>
-                              </c:result>
-                            </xsl:template>
-                          </xsl:stylesheet>
-                        </p:inline>
-                      </p:input>
-                      <p:with-param name="uri" select="$path-in-zip"/>
-                    </p:xslt>
-                    <p:group>
-                      <p:variable name="escaped-path-in-zip" select="."/>
-                      <p:sink/>
-                      <p:choose px:message="Loading {$escaped-path-in-zip} from ZIP {$file}" px:message-severity="DEBUG">
-                        <p:when test="$method='html' or ($method='' and $media-type='text/html')">
-                          <!-- can not use px:unzip; use workaround instead -->
-                          <pxi:load-html>
-                            <p:with-option name="href" select="concat('jar:',$on-disk)"/>
-                          </pxi:load-html>
-                        </p:when>
-                        <p:when test="$method='text' or ($method=''
-                                                         and matches($media-type,'^text/')
-                                                         and not(matches($media-type,'.*/xml$') or matches($media-type,'.*\+xml$')))">
-                          <!-- can not use px:unzip; use workaround instead -->
-                          <px:data content-type="text/plain; charset=utf-8">
-                            <p:with-option name="href" select="concat('jar:',$on-disk)"/>
-                          </px:data>
-                        </p:when>
-                        <p:otherwise>
-                          <px:unzip>
-                            <p:with-option name="href" select="$file"/>
-                            <p:with-option name="file" select="$escaped-path-in-zip"/>
-                            <p:with-option name="content-type" select="if ($method='xml') then 'application/xml'
-                                                                       else if ($method='binary') then 'binary/octet-stream'
-                                                                       else $media-type"/>
-                          </px:unzip>
-                          <px:set-base-uri>
-                            <p:with-option name="base-uri" select="$target"/>
-                          </px:set-base-uri>
-                        </p:otherwise>
-                      </p:choose>
-                    </p:group>
+                    <p:choose px:message="Loading {$escaped-path-in-zip} from ZIP {$file}" px:message-severity="DEBUG">
+                      <p:when test="$method='html' or ($method='' and $media-type='text/html')">
+                        <!-- can not use px:unzip; use workaround instead -->
+                        <pxi:load-html>
+                          <p:with-option name="href" select="concat('jar:',$on-disk)"/>
+                        </pxi:load-html>
+                      </p:when>
+                      <p:when test="$method='text' or ($method=''
+                                                       and matches($media-type,'^text/')
+                                                       and not(matches($media-type,'.*/xml$') or matches($media-type,'.*\+xml$')))">
+                        <!-- can not use px:unzip; use workaround instead -->
+                        <px:data content-type="text/plain; charset=utf-8">
+                          <p:with-option name="href" select="concat('jar:',$on-disk)"/>
+                        </px:data>
+                      </p:when>
+                      <p:otherwise>
+                        <px:unzip>
+                          <p:with-option name="href" select="$file"/>
+                          <p:with-option name="file" select="$escaped-path-in-zip"/>
+                          <p:with-option name="content-type" select="if ($method='xml') then 'application/xml'
+                                                                     else if ($method='binary') then 'binary/octet-stream'
+                                                                     else $media-type"/>
+                        </px:unzip>
+                        <px:set-base-uri>
+                          <p:with-option name="base-uri" select="$target"/>
+                        </px:set-base-uri>
+                      </p:otherwise>
+                    </p:choose>
                   </p:when>
 
                   <!-- Force HTML -->
@@ -468,7 +454,7 @@
       <p:variable name="base-uri" select="string(/*)">
         <p:pipe step="normalize-uri" port="normalized"/>
       </p:variable>
-      <p:variable name="base-uri-changed" select="not($base-uri=base-uri(/))"/>
+      <p:variable name="base-uri-changed" cx:as="xs:string" select="not($base-uri=base-uri(/))"/>
   
       <px:fileset-add-entry name="normalized.fileset">
         <p:with-option name="href" select="$base-uri"/>

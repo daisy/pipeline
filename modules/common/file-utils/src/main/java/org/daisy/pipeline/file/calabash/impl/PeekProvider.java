@@ -68,7 +68,7 @@ public class PeekProvider implements XProcStepProvider {
 			File file = new File(sourceUri.getPath());
 			
 			if (file.isDirectory()) {
-				throw new XProcException(step.getNode(), "Cannot peek into file: file is a directory: " + file.getAbsolutePath());
+				throw new XProcException(step, "Cannot peek into file: file is a directory: " + file.getAbsolutePath());
 			}
 			
 			byte[] resultBytes = null;

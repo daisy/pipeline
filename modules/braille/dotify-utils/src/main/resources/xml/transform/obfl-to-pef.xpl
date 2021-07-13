@@ -2,7 +2,6 @@
 <p:declare-step type="px:dotify-obfl-to-pef" version="1.0"
             xmlns:p="http://www.w3.org/ns/xproc"
             xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-            xmlns:dotify="http://code.google.com/p/dotify/"
             xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
             xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
             exclude-inline-prefixes="#all"
@@ -19,7 +18,7 @@
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
 	<p:import href="../library.xpl">
 		<p:documentation>
-			dotify:obfl-to-pef
+			px:obfl-to-pef
 		</p:documentation>
 	</p:import>
 	
@@ -52,12 +51,12 @@
 		</p:input>
 	</pxi:obfl-normalize-space>
 	
-	<dotify:obfl-to-pef px:progress=".90">
+	<px:obfl-to-pef px:progress=".90">
 		<p:with-option name="locale" select="$locale"/>
 		<p:with-option name="mode" select="$mode"/>
 		<p:input port="parameters">
 			<p:pipe step="parameters" port="result"/>
 		</p:input>
-	</dotify:obfl-to-pef>
+	</px:obfl-to-pef>
 	
 </p:declare-step>

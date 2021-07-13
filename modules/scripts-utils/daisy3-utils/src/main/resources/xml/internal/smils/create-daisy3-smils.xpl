@@ -36,7 +36,7 @@
              fragment, the pagenum element does not get a smilref attribute. -->
       </p:documentation>
       <p:pipe step="copy-smilrefs" port="result"/>
-      <p:pipe step="smil-with-durations" port="result"/>
+      <p:pipe step="smil-maybe-without-text" port="result"/>
     </p:output>
 
     <p:output port="dtbook.fileset">
@@ -56,7 +56,7 @@
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Fileset with only the SMIL files.</p>
       </p:documentation>
-      <p:pipe step="smil-with-durations" port="result"/>
+      <p:pipe step="smil-maybe-without-text" port="result"/>
     </p:output>
 
     <p:option name="smil-dir">
@@ -87,6 +87,11 @@
         px:fileset-create
         px:fileset-add-entry
         px:fileset-join
+      </p:documentation>
+    </p:import>
+    <p:import href="add-elapsed-time.xpl">
+      <p:documentation>
+        px:daisy3-smil-add-elapsed-time
       </p:documentation>
     </p:import>
 
@@ -185,46 +190,25 @@
       </p:xslt>
     </p:for-each>
 
-    <p:xslt name="compute-durations" px:progress="1/6">
-      <p:input port="source">
-	<p:pipe port="result" step="all-smils"/>
-      </p:input>
-      <p:input port="stylesheet">
-	<p:document href="compute-elapsed-time.xsl"/>
-      </p:input>
-      <p:input port="parameters">
-	<p:empty/>
-      </p:input>
-    </p:xslt>
-    <px:message severity="DEBUG" message="Durations computed."/><p:sink/>
+    <px:daisy3-smil-add-elapsed-time px:progress="1/6"/>
+    <px:message severity="DEBUG" message="Durations computed."/>
 
-    <p:for-each name="smil-with-durations">
-      <p:output port="result"/>
-      <p:iteration-source>
-	<p:pipe port="result" step="all-smils"/>
-      </p:iteration-source>
-      <p:variable name="doc-uri" select="base-uri(/*)"/>
-      <p:viewport match="smil:head/smil:meta[@name='dtb:totalElapsedTime']">
-	<p:add-attribute attribute-name="content" match="/*">
-	  <p:with-option name="attribute-value" select="//*[@doc=$doc-uri]/@duration">
-	    <p:pipe port="result" step="compute-durations"/>
-	  </p:with-option>
-	</p:add-attribute>
-      </p:viewport>
-      <p:choose>
-	<p:when test="$audio-only = 'true'">
-	  <p:delete match="smil:text"/>
-	</p:when>
-	<p:otherwise>
-	  <p:identity/>
-	</p:otherwise>
-      </p:choose>
-    </p:for-each>
+    <p:choose>
+      <p:xpath-context>
+	<p:empty/>
+      </p:xpath-context>
+      <p:when test="$audio-only='true'">
+        <p:for-each>
+          <p:delete match="smil:text"/>
+        </p:for-each>
+      </p:when>
+      <p:otherwise>
+        <p:identity/>
+      </p:otherwise>
+    </p:choose>
+    <p:identity name="smil-maybe-without-text"/>
 
     <p:for-each>
-      <p:iteration-source>
-	<p:pipe port="result" step="all-smils"/>
-      </p:iteration-source>
       <p:identity name="smil"/>
       <p:sink/>
       <px:fileset-create>

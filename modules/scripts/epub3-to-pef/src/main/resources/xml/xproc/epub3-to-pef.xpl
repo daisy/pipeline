@@ -77,6 +77,7 @@ even though the provided CSS is more specific.
     </p:option>
     
     <p:option name="stylesheet-parameters"/>
+    <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
@@ -102,6 +103,7 @@ even though the provided CSS is more specific.
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
+    <p:option name="notes-placement"/>
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
@@ -152,6 +154,7 @@ even though the provided CSS is more specific.
                                            stylesheet-parameters
                                            apply-document-specific-stylesheets
                                            transform
+                                           braille-code
                                            ascii-table
                                            ascii-file-format
                                            include-brf
@@ -214,7 +217,8 @@ even though the provided CSS is more specific.
         </p:with-option>
         <p:with-option name="stylesheet" select="$stylesheet"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
-        <p:with-option name="transform" select="$transform"/>
+        <p:with-option name="transform"
+                       select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
@@ -232,7 +236,7 @@ even though the provided CSS is more specific.
         </p:input>
     </p:identity>
     <p:delete match="/*/@xml:base"/>
-    <px:epub3-to-pef.store px:message="Storing PEF" px:progress=".05">
+    <px:epub3-to-pef.store px:message="Storing results" px:progress=".05">
         <p:with-option name="epub" select="$epub"/>
         <p:input port="opf">
             <p:pipe step="opf" port="result"/>

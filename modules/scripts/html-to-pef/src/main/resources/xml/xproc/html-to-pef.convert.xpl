@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:html-to-pef" version="1.0"
-                xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:math="http://www.w3.org/1998/Math/MathML"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-inline-prefixes="#all"
-                name="main">
+                type="px:html-to-pef" name="main">
     
     <p:input port="source.fileset" primary="true">
         <p:documentation>HTML fileset</p:documentation>
@@ -37,7 +38,7 @@
     <p:option name="default-stylesheet" required="false" select="'#default'"/>
     <p:option name="stylesheet" select="''"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
-    <p:option name="include-obfl" select="'false'"/>
+    <p:option name="include-obfl" select="'false'" cx:as="xs:string"/>
     
     <!-- Empty temporary directory dedicated to this conversion -->
     <p:option name="temp-dir" required="true"/>
@@ -55,6 +56,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
+            px:parse-query
             px:transform
             px:merge-parameters
             px:apply-stylesheets
@@ -77,7 +79,14 @@
             <p:pipe step="main" port="parameters"/>
         </p:input>
     </px:merge-parameters>
+    <p:sink/>
     
+    <!-- Parse transform query to a c:param-set -->
+    <px:parse-query name="parsed-transform-query">
+        <p:with-option name="query" select="$transform"/>
+    </px:parse-query>
+    <p:sink/>
+
     <!-- Load HTML -->
     <px:fileset-load media-types="application/xhtml+xml">
         <p:input port="fileset">
@@ -91,11 +100,14 @@
     <px:assert message="More than one XHTML documents found." test-count-max="1" error-code="PEZE00"/>
     <p:identity name="html"/>
     
-    <p:group px:message="Inlining CSS" px:progress=".11">
+    <p:group px:message="Applying style sheets" px:progress=".11">
         <p:variable name="first-css-stylesheet"
                     select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
-                    select="(index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
+                    select="(if (exists($first-css-stylesheet))
+                               then index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet)
+                               else (),
+                             10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
@@ -106,7 +118,7 @@
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
-        <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
+        <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}" px:message-severity="DEBUG"/>
         <px:apply-stylesheets px:progress="1">
             <p:with-option name="stylesheets" select="$stylesheets-to-be-inlined"/>
             <p:with-option name="media"
@@ -124,9 +136,8 @@
         </px:apply-stylesheets>
     </p:group>
     
-    <p:viewport px:message="Transforming MathML" px:progress=".10"
-                match="math:math">
-        <px:transform>
+    <p:viewport match="math:math" px:progress=".10" px:message="Transforming MathML">
+        <px:transform px:progress="1">
             <p:with-option name="query" select="concat('(input:mathml)(locale:',(/*/@xml:lang,/*/@lang,'und')[1],')')">
                 <p:pipe step="html" port="result"/>
             </p:with-option>
@@ -137,8 +148,11 @@
         </px:transform>
     </p:viewport>
     
-    <p:choose name="transform" px:message="" px:progress=".76">
+    <p:choose name="transform" px:progress=".76">
         <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]"/>
+        <p:variable name="locale-query" select="if (//c:param[@name='locale']) then '' else concat('(locale:',$lang,')')">
+            <p:pipe step="parsed-transform-query" port="result"/>
+        </p:variable>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>
             <p:output port="obfl">
@@ -149,7 +163,7 @@
             </p:output>
             <p:group name="obfl" px:message="Transforming from XML with CSS to OBFL" px:progress=".5">
                 <p:output port="result"/>
-                <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
+                <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
                 <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                 <px:transform px:progress="1">
                     <p:with-option name="query" select="$transform-query"/>
@@ -167,7 +181,7 @@
                             <d:status result="ok"/>
                         </p:inline>
                     </p:output>
-                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,$locale-query)"/>
                     <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                     <px:transform px:progress="1">
                         <p:with-option name="query" select="$transform-query"/>
@@ -196,8 +210,7 @@
                             <p:pipe step="catch" port="error"/>
                         </p:input>
                     </px:log-error>
-                    <p:identity px:message="Failed to convert OBFL to PEF (Please see detailed log for more info.)"
-                                px:message-severity="ERROR"/>
+                    <p:identity px:message="Failed to convert OBFL to PEF" px:message-severity="ERROR"/>
                     <p:identity name="status"/>
                     <p:sink/>
                 </p:catch>
@@ -213,7 +226,7 @@
                     <d:status result="ok"/>
                 </p:inline>
             </p:output>
-            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,$locale-query)"/>
             <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
             <px:transform px:progress="1">
                 <p:with-option name="query" select="$transform-query"/>

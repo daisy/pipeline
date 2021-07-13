@@ -2,8 +2,10 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 exclude-inline-prefixes="px"
                 type="px:fileset-add-entry" name="main">
 
@@ -57,9 +59,9 @@
   <p:option name="media-type" select="''"/>
   <p:option name="ref" select="''"><!-- if relative; will be resolved relative to the file --></p:option>
   <p:option name="original-href" select="''"><!-- if relative; will be resolved relative to the file --></p:option>
-  <p:option name="first" select="'false'"/>
-  <p:option name="replace" select="'false'"/>
-  <p:option name="replace-attributes" select="'false'"/>
+  <p:option name="first" cx:as="xs:string" select="'false'"/>
+  <p:option name="replace" cx:as="xs:string" select="'false'"/>
+  <p:option name="replace-attributes" cx:as="xs:string" select="'false'"/>
 
   <p:input port="file-attributes" kind="parameter" primary="false">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -86,7 +88,7 @@
     </p:documentation>
   </p:import>
 
-  <p:variable name="fileset-base" select="/*/@xml:base"/>
+  <p:variable name="fileset-base" cx:as="xs:string" select="/*/@xml:base"/>
 
   <px:assert message="Expected $1 on the entry port" error-code="XXXXX">
     <p:input port="source">

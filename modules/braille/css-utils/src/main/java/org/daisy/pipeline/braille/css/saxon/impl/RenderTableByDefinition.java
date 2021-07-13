@@ -3,10 +3,6 @@ package org.daisy.pipeline.braille.css.saxon.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.transform.TransformerException;
-
-import com.xmlcalabash.core.XProcException;
-
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -20,6 +16,7 @@ import net.sf.saxon.value.SequenceType;
 
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.saxon.SaxonOutputValue;
+import org.daisy.common.transform.TransformerException;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -64,10 +61,13 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 						new SaxonOutputValue(result::add, context.getConfiguration()))
 					.run();
 					if (result.size() != 1 || !(result.get(0) instanceof XdmNode))
-						throw new TransformerException(new RuntimeException()); // should not happen
+						throw new RuntimeException(); // should not happen
 					return ((XdmNode)result.get(0)).getUnderlyingNode();
 				} catch (TransformerException e) {
-					throw new XPathException("css:render-table-by failed", XProcException.javaError(e, 0)); }
+					throw new XPathException(e.getMessage(), e.getCause());
+				} catch (Throwable e) {
+					throw new XPathException("Unexpected error in css:render-table-by", e);
+				}
 			}
 		};
 	}

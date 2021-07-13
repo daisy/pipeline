@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy202-validator"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
@@ -14,7 +15,7 @@
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
 
-    <p:option name="timeToleranceMs" select="500" px:type="xs:integer"/>
+    <p:option name="timeToleranceMs" select="'500'" cx:as="xs:string" px:type="xs:integer"/>
     <p:option name="ncc" required="true"/>
 
     <p:output port="fileset.out" primary="true">
@@ -39,7 +40,8 @@
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
     <p:variable name="start" select="current-dateTime()"/>
-    <p:variable name="timeToleranceMsValid" select="if (matches($timeToleranceMs,'^\d+')) then $timeToleranceMs else 500"/>
+    <p:variable name="timeToleranceMsValid" cx:as="xs:integer"
+                select="if (matches($timeToleranceMs,'^\d+')) then $timeToleranceMs else 500"/>
 
     <px:mediatype-detect name="fileset.in">
         <p:input port="source">
@@ -338,7 +340,7 @@
             <p:xpath-context>
                 <p:pipe port="current" step="smil-times.iterate"/>
             </p:xpath-context>
-            <p:when test="abs(/*/number(@calculated-totalTime) - /*/number(@meta-totalTime)) &gt; number($timeToleranceMsValid) div 1000">
+            <p:when test="abs(/*/number(@calculated-totalTime) - /*/number(@meta-totalTime)) &gt; $timeToleranceMsValid div 1000">
                 <p:output port="result" sequence="true"/>
                 <p:identity>
                     <p:input port="source">
@@ -389,7 +391,7 @@
             <p:xpath-context>
                 <p:pipe port="current" step="smil-times.iterate"/>
             </p:xpath-context>
-            <p:when test="abs(/*/number(@calculated-duration) - /*/number(@meta-duration)) &gt; number($timeToleranceMsValid) div 1000">
+            <p:when test="abs(/*/number(@calculated-duration) - /*/number(@meta-duration)) &gt; $timeToleranceMsValid div 1000">
                 <p:output port="result" sequence="true"/>
                 <p:identity>
                     <p:input port="source">
@@ -446,7 +448,7 @@
             <p:xpath-context>
                 <p:pipe port="result" step="smil-times"/>
             </p:xpath-context>
-            <p:when test="abs(/*/number(@calculated-totalTime) - /*/number(@ncc-meta-totalTime)) &gt; number($timeToleranceMsValid) div 1000">
+            <p:when test="abs(/*/number(@calculated-totalTime) - /*/number(@ncc-meta-totalTime)) &gt; $timeToleranceMsValid div 1000">
                 <p:identity>
                     <p:input port="source">
                         <p:inline exclude-inline-prefixes="#all">
@@ -506,10 +508,7 @@
         </p:input>
     </p:identity>
     <p:group>
-        <p:variable name="end" select="current-dateTime()">
-            <p:empty/>
-        </p:variable>
-        <p:variable name="duration" select="xs:dateTime($end) - xs:dateTime($start)">
+        <p:variable name="duration" cx:as="xs:string" select="current-dateTime() - $start">
             <p:empty/>
         </p:variable>
         <px:message message="Validation completed in $1">

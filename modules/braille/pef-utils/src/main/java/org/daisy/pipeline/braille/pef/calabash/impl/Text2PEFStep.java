@@ -88,7 +88,7 @@ public class Text2PEFStep extends DefaultStep implements XProcStep {
 			try {
 				table = tableProvider.get(tableQuery).iterator().next(); }
 			catch (NoSuchElementException e) {
-				throw new RuntimeException("Could not find a table for query: " + tableQuery); }
+				throw new XProcException(step, "Could not find a table for query: " + tableQuery); }
 			
 			File tempDir = new File(new URI(getOption(_temp_dir).getString()));
 			XdmNode text = source.read();
@@ -116,9 +116,8 @@ public class Text2PEFStep extends DefaultStep implements XProcStep {
 			pefFile.delete();
 			result.write(pef); }
 		
-		catch (Exception e) {
-			logger.error("pef:text2pef failed", e);
-			throw new XProcException(step.getNode(), e); }
+		catch (Throwable e) {
+			throw XProcStep.raiseError(e, step); }
 	}
 	
 	@Component(

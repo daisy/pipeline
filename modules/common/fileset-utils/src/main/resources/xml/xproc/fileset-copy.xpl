@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-inline-prefixes="#all"
                 type="px:fileset-copy" name="main">
@@ -43,7 +45,7 @@
             <p>The target directory.</p>
         </p:documentation>
     </p:option>
-    <p:option name="flatten" required="false" select="'false'">
+    <p:option name="flatten" cx:as="xs:string" required="false" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Move all files to a single directory.</p>
             <p>Renames files when needed to avoid that files would overwrite each other.</p>
@@ -55,7 +57,7 @@
             <p>Only if "flatten" option is set.</p>
         </p:documentation>
     </p:option>
-    <p:option name="dry-run" required="false" select="'false'">
+    <p:option name="dry-run" cx:as="xs:string" required="false" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Don't actually perform the copy operation, only return the list of intended rename
             actions on the "mapping" port.</p>

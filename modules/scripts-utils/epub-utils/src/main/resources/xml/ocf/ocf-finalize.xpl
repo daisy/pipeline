@@ -3,6 +3,8 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc-internal"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:err="http://www.w3.org/ns/xproc-error"
                 type="px:epub3-ocf-finalize" name="main">
     
@@ -16,7 +18,7 @@
     <p:input port="signature" sequence="true">
         <p:empty/>
     </p:input>
-    <p:option name="create-odf-manifest" select="'false'"/>
+    <p:option name="create-odf-manifest" select="'false'"  cx:as="xs:string"/>
     <p:option name="epub-dir"/>
     <p:output port="result" primary="true">
         <p:pipe port="result" step="fileset-finalized"/>

@@ -243,10 +243,10 @@
 						<meta property="dcterms:modified">2019-10-17T17:37:04Z</meta>
 						<meta name="dcterms:modified" content="2019-10-17T17:37:04Z"/>
 						<dc:publisher>unknown</dc:publisher>
-						<meta property="media:duration">00:00:30.048</meta>
-						<meta name="media:duration" content="00:00:30.048"/>
-						<meta property="media:duration" refines="#item_12">00:00:08.585</meta>
-						<meta property="media:duration" refines="#item_13">00:00:21.463</meta>
+						<meta property="media:duration">0:00:30.048</meta>
+						<meta name="media:duration" content="0:00:30.048"/>
+						<meta property="media:duration" refines="#item_12">0:00:08.585</meta>
+						<meta property="media:duration" refines="#item_13">0:00:21.463</meta>
 					</metadata>
 					<manifest>
 						<item id="item_1" href="cover.xhtml" media-type="application/xhtml+xml" media-overlay="item_12"/>

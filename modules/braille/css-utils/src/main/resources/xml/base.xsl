@@ -661,7 +661,7 @@
         <!-- true means input is valid and result should be valid too -->
         <xsl:param name="validate" as="xs:boolean"/>
         <xsl:param name="compute" as="xs:boolean" select="false()"/>
-        <xsl:param name="context" as="element()"/>
+        <xsl:param name="context" as="node()"/>
         <xsl:choose>
             <xsl:when test="@value='inherit'">
                 <xsl:call-template name="css:parent-property">
@@ -707,7 +707,7 @@
             true means input is valid and result should be valid too
         -->
         <xsl:param name="validate" as="xs:boolean"/>
-        <xsl:param name="context" as="element()"/>
+        <xsl:param name="context" as="node()"/>
         <xsl:sequence select="."/>
     </xsl:template>
     
@@ -729,7 +729,7 @@
             css:parent-property, and if css:parent-property is overridden it may have its own set of
             tunnel parameters)
         -->
-        <xsl:param name="context" as="element()" select="."/>
+        <xsl:param name="context" as="node()" select="."/>
         <xsl:variable name="parent" as="element()?" select="$context/ancestor::*[not(self::css:_)][1]"/>
         <xsl:choose>
             <xsl:when test="exists($parent) and $compute">
@@ -762,7 +762,7 @@
     <xsl:template name="css:cascaded-properties" as="element()*">
         <xsl:param name="properties" as="xs:string*" select="('#all')"/>
         <xsl:param name="validate" as="xs:boolean" select="false()"/>
-        <xsl:param name="context" as="element()" select="."/>
+        <xsl:param name="context" as="node()" select="."/>
         <xsl:variable name="declarations" as="element()*">
             <xsl:apply-templates select="$context/@css:*[replace(local-name(),'^_','-')=$properties]" mode="css:attribute-as-property"/>
         </xsl:variable>
@@ -791,7 +791,7 @@
         <xsl:param name="concretize-inherit" as="xs:boolean" select="true()"/>
         <xsl:param name="concretize-initial" as="xs:boolean" select="true()"/>
         <xsl:param name="validate" as="xs:boolean" select="false()"/>
-        <xsl:param name="context" as="element()" select="."/>
+        <xsl:param name="context" as="node()" select="."/>
         <xsl:variable name="properties" as="xs:string*"
                       select="if ($properties instance of xs:string)
                               then tokenize(normalize-space($properties), ' ')
@@ -840,7 +840,7 @@
         <xsl:param name="concretize-inherit" as="xs:boolean"/>
         <xsl:param name="concretize-initial" as="xs:boolean"/>
         <xsl:param name="validate" as="xs:boolean"/>
-        <xsl:param name="context" as="element()"/>
+        <xsl:param name="context" as="node()"/>
         <xsl:call-template name="css:specified-properties">
             <xsl:with-param name="properties" select="$properties"/>
             <xsl:with-param name="concretize-inherit" select="$concretize-inherit"/>
@@ -855,7 +855,7 @@
         <xsl:param name="concretize-inherit" as="xs:boolean" select="true()"/>
         <xsl:param name="concretize-initial" as="xs:boolean" select="true()"/>
         <xsl:param name="validate" as="xs:boolean" select="false()"/>
-        <xsl:param name="context" as="element()" select="."/>
+        <xsl:param name="context" as="node()" select="."/>
         <xsl:variable name="declarations" as="element()*">
             <xsl:call-template name="css:specified-properties">
                 <xsl:with-param name="properties" select="$properties"/>
@@ -902,7 +902,7 @@
         <xsl:param name="concretize-inherit" as="xs:boolean"/>
         <xsl:param name="concretize-initial" as="xs:boolean"/>
         <xsl:param name="validate" as="xs:boolean"/>
-        <xsl:param name="context" as="element()"/>
+        <xsl:param name="context" as="node()"/>
         <xsl:call-template name="css:computed-properties">
             <xsl:with-param name="properties" select="$properties"/>
             <xsl:with-param name="concretize-inherit" select="$concretize-inherit"/>
@@ -915,7 +915,7 @@
     <xsl:function name="css:computed-properties" as="element()*">
         <xsl:param name="properties"/>
         <xsl:param name="validate" as="xs:boolean"/>
-        <xsl:param name="context" as="element()"/>
+        <xsl:param name="context" as="node()"/>
         <xsl:sequence select="css:computed-properties($properties, true(), true(), $validate, $context)"/>
     </xsl:function>
     

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.3-SNAPSHOT</version>
+    <version>1.14.4-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>html-to-pef</artifactId>
-  <version>4.1.2-SNAPSHOT</version>
+  <version>4.2.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: HTML to PEF</name>
@@ -81,7 +81,8 @@
       org.daisy.pipeline.modules.impl.Module_html_to_pef,
       org.daisy.pipeline.script.impl.XProcScript_html_to_pef,
       org.daisy.pipeline.datatypes.impl.Datatype_px_html_to_pef_script_stylesheet,
-      org.daisy.pipeline.datatypes.impl.Datatype_px_html_to_pef_script_line_spacing
+      org.daisy.pipeline.datatypes.impl.Datatype_px_html_to_pef_script_line_spacing,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_html_to_pef_script_notes_placement
     </expose-services>
   </properties>
   

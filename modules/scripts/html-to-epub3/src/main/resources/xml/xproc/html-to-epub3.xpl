@@ -88,19 +88,23 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
         <p:variable name="epub-file-uri"
             select="concat($output-dir-uri,if (ends-with($html,'/')) then 'result' else replace($html,'^.*/([^/]*)\.[^/\.]*$','$1'),'.epub')"/>
 
-        <px:tokenize regex="\s+">
-            <p:with-option name="string" select="$html"/>
-        </px:tokenize>
-        <p:for-each name="html">
-            <p:output port="result" sequence="true"/>
-            <p:variable name="single-html" select="."/>
-            <px:fileset-create/>
-            <px:fileset-add-entry media-type="application/xhtml+xml">
-                <p:with-option name="href" select="$single-html"/>
-            </px:fileset-add-entry>
-            <px:fileset-load/>
-        </p:for-each>
-        <p:group>
+        <p:group name="load">
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="html" port="result"/>
+            </p:output>
+            <px:tokenize regex="\s+">
+                <p:with-option name="string" select="$html"/>
+            </px:tokenize>
+            <p:for-each name="html">
+                <p:output port="result" sequence="true"/>
+                <p:variable name="single-html" select="."/>
+                <px:fileset-create/>
+                <px:fileset-add-entry media-type="application/xhtml+xml">
+                    <p:with-option name="href" select="$single-html"/>
+                </px:fileset-add-entry>
+                <px:fileset-load/>
+            </p:for-each>
             <p:for-each>
                 <px:html-to-fileset/>
             </p:for-each>
@@ -109,7 +113,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
 
         <px:html-to-epub3 name="convert">
             <p:input port="input.in-memory">
-                <p:pipe step="html" port="result"/>
+                <p:pipe step="load" port="in-memory"/>
             </p:input>
             <p:with-option name="output-dir" select="concat($output-dir-uri,'epub/')">
                 <p:empty/>

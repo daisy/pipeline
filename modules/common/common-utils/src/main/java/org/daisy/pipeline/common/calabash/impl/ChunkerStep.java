@@ -1,6 +1,5 @@
 package org.daisy.pipeline.common.calabash.impl;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -111,9 +110,8 @@ public class ChunkerStep extends DefaultStep implements XProcStep {
 					},
 					runtime))
 			.run();
-		} catch (Exception e) {
-			logger.error("px:chunker failed", e);
-			throw new XProcException(step.getNode(), e);
+		} catch (Throwable e) {
+			throw XProcStep.raiseError(e, step);
 		}
 	}
 	

@@ -241,6 +241,7 @@
             <p:input port="entry">
                 <p:pipe step="html-with-head" port="result"/>
             </p:input>
+            <p:with-param port="file-attributes" name="media-version" select="'5.0'"/>
         </px:fileset-add-entry>
     </p:group>
 
@@ -455,12 +456,13 @@
                 <p:pipe step="voice-dream-workaround" port="page-list"/>
             </p:input>
         </px:daisy3-create-ncx>
+        <p:sink/>
 
         <p:documentation>
             Create resources file
         </p:documentation>
         <px:daisy3-create-res-file name="res">
-            <p:with-option name="output-dir" select="$output-dir"/>
+            <p:with-option name="output-base-uri" select="concat($output-dir,'resources.res')"/>
         </px:daisy3-create-res-file>
 
         <p:documentation>
@@ -548,7 +550,7 @@
             <p:input port="source">
                 <p:pipe step="mo" port="result.in-memory"/>
                 <p:pipe step="ncx" port="result"/>
-                <p:pipe step="res" port="result"/>
+                <p:pipe step="res" port="result.in-memory"/>
                 <p:pipe step="daisy3-opf" port="result"/>
                 <p:pipe step="dtbook" port="not-matched.in-memory"/>
             </p:input>

@@ -4,8 +4,6 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xpl" uri="../xml/library.xpl"/>
   <uri name="http://www.liblouis.org/tables/" uri="../default-tables/"
        px:content-type="liblouis-tables" px:id="default-liblouis-tables"/>
-  <uri name="http://www.liblouis.org/tables/" uri="../default-tables/"
-       px:content-type="libhyphen-tables" px:include="hyph_*.dic" px:id="liblouis-hyphen-tables"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>

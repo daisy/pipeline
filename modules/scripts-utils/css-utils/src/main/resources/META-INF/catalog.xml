@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         xmlns:px="http://www.daisy.org/ns/pipeline">
     <uri name="http://www.daisy.org/pipeline/modules/css-utils/library.xpl" uri="../xml/library.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" uri="../xml/library.xsl"/>
+    <!-- <uri uri="../xml/library.xsl" px:content-type="xslt-package"/> -->
+    <uri uri="../xml/library.xsl" name="http://www.daisy.org/pipeline/modules/css-utils/library.xsl"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
 </catalog>

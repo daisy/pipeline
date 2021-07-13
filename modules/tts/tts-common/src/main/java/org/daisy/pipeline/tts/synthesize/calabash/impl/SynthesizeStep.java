@@ -212,7 +212,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			logger.error("Synthesis failed", e);
 			return;
 		} catch (EncodingException e) {
-			throw new XProcException(ENCODING_ERROR, step.getNode(), e, e.getMessage());
+			throw new XProcException(ENCODING_ERROR, step, e);
 		} catch (InterruptedException e) {
 			logger.error("Interrupted", e);
 			return;

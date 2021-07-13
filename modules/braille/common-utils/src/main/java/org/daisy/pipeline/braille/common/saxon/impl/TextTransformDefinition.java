@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.xmlcalabash.core.XProcException;
-
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -111,11 +109,11 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 					if (arguments.length > 2) {
 						List<String> style = sequenceToList(arguments[2]);
 						if (style.size() != text.size())
-							throw new RuntimeException("Lengths of text and style sequences must match");
+							throw new XPathException("Lengths of text and style sequences must match");
 						if (arguments.length > 3) {
 							List<String> lang = sequenceToList(arguments[3]);
 							if (lang.size() != text.size())
-								throw new RuntimeException("Lengths of text and lang sequences must match");
+								throw new XPathException("Lengths of text and lang sequences must match");
 							for (int i = 0; i < text.size(); i++) {
 								Map<String,String> attrs = new HashMap<String,String>();
 								attrs.put("lang", lang.get(i));
@@ -139,9 +137,9 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 							logger.debug("Failed to translate string with translator " + t);
 							throw e; }
 					}
-					throw new RuntimeException("Could not find a BrailleTranslator for query: " + query); }
-				catch (Exception e) {
-					throw new XPathException("pf:text-transform failed", XProcException.javaError(e, 0)); }
+					throw new XPathException("Could not find a BrailleTranslator for query: " + query); }
+				catch (Throwable e) {
+					throw new XPathException("Unexpected error in pf:text-transform", e); }
 			}
 		};
 	}

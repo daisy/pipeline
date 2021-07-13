@@ -52,6 +52,7 @@ public interface DotifyOBFLTransform {
 		protected Iterable<Transform> _get(Query query) {
 			try {
 				MutableQuery q = mutableQuery(query);
+				q.removeAll("force-pre-translation");
 				if (q.containsKey("formatter"))
 					if (!"dotify".equals(q.removeOnly("formatter").getValue().get()))
 						return empty;

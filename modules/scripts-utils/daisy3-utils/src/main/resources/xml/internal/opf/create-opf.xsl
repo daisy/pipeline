@@ -6,15 +6,17 @@
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/"
                 xmlns="http://openebook.org/namespaces/oeb-package/1.0/"
-                exclude-result-prefixes="xsl d pf xs c dc dtb">
+                exclude-result-prefixes="xsl d pf xs c dc dtb oebpackage">
 
   <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
   <!--
       input:
        - the fileset
-       - Dublin Core metadata (c:param-set)
+       - metadata element in the "http://openebook.org/namespaces/oeb-package/1.0/" namespace
+       - c:param-set with Dublin Core metadata
        - DTBook
        output: the opf file
   -->
@@ -26,20 +28,26 @@
   <xsl:template match="/">
     <xsl:variable name="has-audio" as="xs:boolean" select="exists(//d:file[contains(@media-type, 'audio')])"/>
     <xsl:variable name="has-image" as="xs:boolean" select="exists(//d:file[contains(@media-type, 'image')])"/>
-    <xsl:variable name="audio-only" as="xs:boolean" select="not(exists(//d:file[@media-type='application/x-dtbook+xml']))"/>
+    <xsl:variable name="has-text" as="xs:boolean" select="exists(//d:file[@media-type='application/x-dtbook+xml'])"/>
 
-    <xsl:variable name="dtbook" as="document-node(element(dtb:dtbook))?" select="collection()[3]"/>
+    <xsl:variable name="dtbook" as="document-node(element(dtb:dtbook))?" select="collection()[4]"/>
+    <xsl:variable name="metadata" as="document-node(element(oebpackage:metadata))?" select="collection()[2]"/>
 
     <xsl:variable name="dc-metadata-from-params" as="element(c:param)*"
-                  select="collection()[2]//c:param[@namespace='http://purl.org/dc/elements/1.1/'][@value[not(.='')]]"/>
+                  select="collection()[3]//c:param[@namespace='http://purl.org/dc/elements/1.1/'][@value[not(.='')]]"/>
+    <xsl:variable name="dc-metadata-from-metadata" as="element()*"
+                  select="$metadata/*/oebpackage:dc-metadata/dc:*"/>
     <xsl:variable name="dc-metadata-from-dtbook" as="element(dtb:meta)*"
                   select="$dtbook//dtb:meta[matches(@name,'^dc:')]"/>
+
     <xsl:variable name="dc-metadata" as="element()*"> <!-- element(dc:*)* -->
       <xsl:for-each select="distinct-values(($dc-metadata-from-params/@name/lower-case(.),
+                                             $dc-metadata-from-metadata/lower-case(substring(name(.),4)),
                                              $dc-metadata-from-dtbook/@name/lower-case(substring(.,4))))">
         <xsl:element name="dc:{concat(upper-case(substring(.,1,1)),lower-case(substring(.,2)))}">
           <xsl:variable name="name" select="."/>
           <xsl:value-of select="($dc-metadata-from-params[lower-case(@name)=lower-case($name)]/@value,
+                                 $dc-metadata-from-metadata[lower-case(substring(name(.),4))=lower-case($name)]/string(.),
                                  $dc-metadata-from-dtbook[lower-case(substring(@name,4))=lower-case($name)]/@content)[1]"/>
         </xsl:element>
       </xsl:for-each>
@@ -115,13 +123,15 @@
 	</dc-metadata>
 	<x-metadata>
 	  <meta name="dtb:multimediaType"
-		content="{if ($audio-only) then 'audioOnly' else
-			 (if ($has-audio) then 'audioFullText' else 'textNCX')}"/>
+		content="{if ($has-text and $has-audio) then 'audioFullText'
+			  else if ($has-text) then 'textNCX'
+			  else 'audioNCX'}"/>
 	  <meta name="dtb:totalTime" content="{$total-time}"/>
 	  <meta name="dtb:multimediaContent"
-		content="{concat(
-			 if ($audio-only) then 'audio' else (if ($has-audio) then 'audio,text' else 'text'),
-			 if ($has-image) then ',image' else '')}"/>
+		content="{string-join((
+			    if ($has-audio) then 'audio' else (),
+			    if ($has-text) then 'text' else (),
+			    if ($has-image) then 'image' else ()),',')}"/>
 	  <xsl:if test="//d:file[@role='mathml-xslt-fallback']">
 	    <meta name="z39-86-extension-version"
 		  scheme="http://www.w3.org/1998/Math/MathML"
@@ -131,6 +141,11 @@
 		  content="{pf:relativize-uri(//d:file[@role='mathml-xslt-fallback']
                                       /resolve-uri(@href,base-uri(.)), $output-base-uri)}" />
 	  </xsl:if>
+	  <xsl:sequence select="$metadata/*/oebpackage:x-metadata/*[not(@name=('dtb:multimediaType',
+	                                                                       'dtb:totalTime',
+	                                                                       'dtb:multimediaContent',
+	                                                                       'z39-86-extension-version',
+	                                                                       'DTBook-XSLTFallback'))]"/>
 	</x-metadata>
       </metadata>
       <manifest>

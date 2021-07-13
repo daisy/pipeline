@@ -1,7 +1,5 @@
 package org.daisy.pipeline.css.saxon.impl;
 
-import com.xmlcalabash.core.XProcException;
-
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -58,8 +56,9 @@ public class MediaQueryMatchesDefinition extends ExtensionFunctionDefinition {
 					String mediaQuery = arguments[0].head().getStringValue();
 					Medium medium = Medium.parse(arguments[1].head().getStringValue());
 					return BooleanValue.get(medium.matches(mediaQuery));
-				} catch (Exception e) {
-					throw new XPathException("pf:media-query-matches", XProcException.javaError(e, 0)); }
+				} catch (Throwable e) {
+					throw new XPathException("Unexpected error in pf:media-query-matches", e);
+				}
 			}
 		};
 	}

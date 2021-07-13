@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.xmlcalabash.core.XProcException;
-
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -106,12 +104,10 @@ public class DecodeDefinition extends ExtensionFunctionDefinition {
 						try {
 							table = tableProvider.get(fallbackQuery).iterator().next(); }
 						catch (NoSuchElementException e2) {
-							throw new RuntimeException("Could not find a table for query: " + tableQuery); }}
+							throw new XPathException("Could not find a table for query: " + tableQuery); }}
 					return new StringValue(table.newBrailleConverter().toBraille(text)); }
-				catch (IllegalArgumentException e) {
-					throw new XPathException("pef:decode failed: " + e.getMessage()); }
-				catch (Exception e) {
-					throw new XPathException("pef:decode failed", XProcException.javaError(e, 0)); }
+				catch (Throwable e) {
+					throw new XPathException("Unexpected error in pef:decode", e); }
 			}
 		};
 	}

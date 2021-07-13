@@ -187,14 +187,25 @@ set these parameters.</p>
 		</p:documentation>
 	</p:option>
 
+	<p:option name="braille-code" px:type="liblouis-table-query" required="false" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Braille code</h2>
+			<p px:role="desc" xml:space="preserve">Braille code to be used for braille transcription.
+
+If set, [braille transcription](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) is
+done with the selected braille code. If left empty, the braille code is determined by the document
+language and the "Transformer features" option.</p>
+		</p:documentation>
+	</p:option>
+
 	<p:option name="transform" required="false" px:type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">Transformer query</h2>
-			<p px:role="desc" xml:space="preserve">The transformer query.
+			<h2 px:role="name">Transformer features</h2>
+			<p px:role="desc" xml:space="preserve">Features of the braille transformer.
 
-A query for selecting the [braille
-transformer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) to be used for creating
-the paginated braille document from the CSS styled input document.</p>
+Features of the [braille transformer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/)
+to be used for creating the paginated braille document from the CSS styled input document. Together
+with the "Braille code" option this determines the transformer that is selected.</p>
 		</p:documentation>
 	</p:option>
 

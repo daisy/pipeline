@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.util.Optional;
 import javax.xml.transform.stream.StreamSource;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -129,9 +128,7 @@ public class AceProvider implements XProcStepProvider {
 				writeCResult(jsonReport, jsonReportFile.toURI());
 
 			} catch (Throwable e) {
-				logger.error("Exception raised while checking the epub with Ace: " + e.getMessage());
-				e.printStackTrace();
-				throw new XProcException(step.getNode(), e);
+				throw XProcStep.raiseError(e, step);
 			}
 		}
 

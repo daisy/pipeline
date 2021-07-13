@@ -82,7 +82,7 @@ public class XMLPeekProvider implements XProcStepProvider {
 			File file = new File(sourceUri.getPath());
 
 			if (file.isDirectory()) {
-				throw new XProcException(step.getNode(), "Cannot peek into XML-file: file is a directory: " + file.getAbsolutePath());
+				throw new XProcException(step, "Cannot peek into XML-file: file is a directory: " + file.getAbsolutePath());
 			}
 
 			String bomType = null;

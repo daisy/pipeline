@@ -4,6 +4,8 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:mo="http://www.w3.org/ns/SMIL"
                 xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="pxi:daisy202-to-epub3-mediaoverlay" name="mediaoverlay">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -39,7 +41,7 @@
             <pre><code class="example">file:/home/user/epub3/epub/Publication/Content/</code></pre>
         </p:documentation>
     </p:option>
-    <p:option name="include-mediaoverlay" required="true">
+    <p:option name="include-mediaoverlay" required="true" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="desc">Whether or not to include media overlays. Can be either 'true' or 'false'.</p>
         </p:documentation>

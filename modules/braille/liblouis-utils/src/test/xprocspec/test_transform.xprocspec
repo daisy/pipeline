@@ -20,12 +20,10 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <_ xmlns="" style="text-transform: none">
-                    <doc>
-                        <p style="display: block">⠋⠥⠃⠁⠗</p>
-                        <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
-                    </doc>
-                </_>
+                <doc style="text-transform: none">
+                    <p style="display: block">⠋⠥⠃⠁⠗</p>
+                    <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                </doc>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -47,12 +45,10 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <_ xmlns="" style="text-transform: none">
-                    <doc style="@text-transform my-uncontracted { system: braille-translator; contraction: no }">
-                        <p style="display: block">⠋⠥⠃⠁⠗</p>
-                        <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
-                    </doc>
-                </_>
+                <doc style="text-transform: none @text-transform my-uncontracted { system: braille-translator; contraction: no }">
+                    <p style="display: block">⠋⠥⠃⠁⠗</p>
+                    <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                </doc>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -73,11 +69,9 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <_ xmlns="" style="text-transform: none">
-                    <doc style="@text-transform { system: braille-translator; contraction: no }">
-                        <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
-                    </doc>
-                </_>
+                <doc style="text-transform: none @text-transform { system: braille-translator; contraction: no }">
+                    <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                </doc>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -99,12 +93,10 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <_ xmlns="" style="text-transform: none">
-                    <doc style="@text-transform my-uncontracted { system: braille-translator; liblouis-table: url('../resources/tables/foobar.utb') }">
-                        <p style="display: block">⠋⠥⠃⠁⠗</p>
-                        <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
-                    </doc>
-                </_>
+                <doc style="text-transform: none @text-transform my-uncontracted { system: braille-translator; liblouis-table: url(&quot;../resources/tables/foobar.utb&quot;) }">
+                    <p style="display: block">⠋⠥⠃⠁⠗</p>
+                    <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                </doc>
             </x:document>
         </x:expect>
     </x:scenario>

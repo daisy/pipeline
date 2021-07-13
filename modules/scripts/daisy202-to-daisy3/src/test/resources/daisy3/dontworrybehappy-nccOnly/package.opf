@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE package PUBLIC "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"
+                         "http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd">
+<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+   <metadata>
+      <dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/">
+         <dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+         <dc:Language>en-US</dc:Language>
+         <dc:Date>2007-05-21</dc:Date>
+         <dc:Publisher>Ferrin press</dc:Publisher>
+         <dc:Title>Don't Worry, Be Happy Lyrics</dc:Title>
+         <dc:Identifier id="uid">F00000</dc:Identifier>
+         <dc:Creator>Bobby McFerrin</dc:Creator>
+      </dc-metadata>
+      <x-metadata>
+         <meta name="dtb:multimediaType" content="audioNCX"/>
+         <meta name="dtb:totalTime" content="0:03:01.722"/>
+         <meta name="dtb:multimediaContent" content="audio"/>
+         <meta name="dtb:narrator" content="Inläst med talsyntes."/>
+      </x-metadata>
+   </metadata>
+   <manifest>
+      <item href="package.opf" id="opf" media-type="text/xml"/>
+      <item href="speechgen0001.mp3" id="opf-1" media-type="audio/mpeg"/>
+      <item href="speechgen0002.mp3" id="opf-2" media-type="audio/mpeg"/>
+      <item href="speechgen0003.mp3" id="opf-3" media-type="audio/mpeg"/>
+      <item href="speechgen0004.mp3" id="opf-4" media-type="audio/mpeg"/>
+      <item href="speechgen0005.mp3" id="opf-5" media-type="audio/mpeg"/>
+      <item href="speechgen0006.mp3" id="opf-6" media-type="audio/mpeg"/>
+      <item href="speechgen0007.mp3" id="opf-7" media-type="audio/mpeg"/>
+      <item href="speechgen0001.smil" id="speechgen0001" media-type="application/smil+xml"/>
+      <item href="speechgen0002.smil" id="speechgen0002" media-type="application/smil+xml"/>
+      <item href="speechgen0003.smil" id="speechgen0003" media-type="application/smil+xml"/>
+      <item href="speechgen0004.smil" id="speechgen0004" media-type="application/smil+xml"/>
+      <item href="speechgen0005.smil" id="speechgen0005" media-type="application/smil+xml"/>
+      <item href="speechgen0006.smil" id="speechgen0006" media-type="application/smil+xml"/>
+      <item href="speechgen0007.smil" id="speechgen0007" media-type="application/smil+xml"/>
+      <item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+      <item href="text.res" id="resource" media-type="application/x-dtbresource+xml"/>
+   </manifest>
+   <spine>
+      <itemref idref="speechgen0001"/>
+      <itemref idref="speechgen0002"/>
+      <itemref idref="speechgen0003"/>
+      <itemref idref="speechgen0004"/>
+      <itemref idref="speechgen0005"/>
+      <itemref idref="speechgen0006"/>
+      <itemref idref="speechgen0007"/>
+   </spine>
+</package>

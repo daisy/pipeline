@@ -3,6 +3,8 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:l="http://xproc.org/library"
@@ -62,8 +64,8 @@
     </p:output>
     
     <p:option name="mathml-version" select="'3.0'"/>
-    <p:option name="check-images" select="'false'"/>
-    <p:option name="nimas" select="'false'"/>
+    <p:option name="check-images" select="'false'" cx:as="xs:string"/>
+    <p:option name="nimas" select="'false'" cx:as="xs:string"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>

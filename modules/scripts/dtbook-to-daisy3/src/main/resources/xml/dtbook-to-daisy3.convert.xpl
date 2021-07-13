@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
@@ -107,14 +109,14 @@
     </p:documentation>
   </p:option>
 
-  <p:option name="audio" required="false" px:type="boolean" select="'true'">
+  <p:option name="audio" required="false" px:type="boolean" select="'true'" cx:as="xs:string">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">Enable text-to-speech</h2>
       <p px:role="desc">Whether to use a speech synthesizer to produce audio files.</p>
     </p:documentation>
   </p:option>
 
-  <p:option name="audio-only" required="false" px:type="boolean" select="'true'">
+  <p:option name="audio-only" required="false" px:type="boolean" select="'true'" cx:as="xs:string">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">Audio only</h2>
       <p px:role="desc">SMIL files are not attached to any DTBook</p>
@@ -288,7 +290,7 @@
 
     <!-- ===== RESOURCE FILE ===== -->
     <px:daisy3-create-res-file name="res-file">
-      <p:with-option name="output-dir" select="$output-fileset-base"/>
+      <p:with-option name="output-base-uri" select="concat($output-fileset-base,'resources.res')"/>
     </px:daisy3-create-res-file>
     <p:sink/>
 
@@ -393,7 +395,7 @@
       <p:input port="source">
         <p:pipe step="mo" port="result.in-memory"/>
         <p:pipe step="ncx" port="result"/>
-        <p:pipe step="res-file" port="result"/>
+        <p:pipe step="res-file" port="result.in-memory"/>
         <p:pipe step="opf" port="result"/>
       </p:input>
     </p:identity>

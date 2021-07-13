@@ -95,8 +95,8 @@ public class Expand83 extends ExtensionFunctionDefinition {
 					path = path + "!" + new URI(null, null, zipPath, null, null).getPath();
 				return new URI(protocol, null, path, query, fragment);
 			}
-		} catch (Exception e) {
-			throw new XPathException("pf:file-expand83("+uri+") failed", e);
+		} catch (Throwable e) {
+			throw new XPathException("Unexpected error in pf:file-expand83("+uri+")", e);
 		}
 	}
 
@@ -126,8 +126,8 @@ public class Expand83 extends ExtensionFunctionDefinition {
 				}
 				return URLs.asURI(file);
 			}
-		} catch (Exception e) {
-			throw new XPathException("pf:file-expand83("+file+") failed", e);
+		} catch (Throwable e) {
+			throw new XPathException("Unexpected error in pf:file-expand83("+file+")", e);
 		}
 	}
 

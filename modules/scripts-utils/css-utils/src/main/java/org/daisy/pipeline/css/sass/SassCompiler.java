@@ -3,6 +3,7 @@ package org.daisy.pipeline.css.sass;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +13,7 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -102,22 +104,26 @@ public class SassCompiler implements CssPreProcessor {
 			};
 	}
 
-	static final String scssNumber = "\\d*\\.\\d+";
-	static final String scssColor = "(#[\\da-zA-Z]+|(rgb|hsl)a?\\([^)]*\\))";
-	static final String scssBadStringChars = "!\"#$'()*+,\\.\\/:<=>?@\\[\\\\\\]^`{|}~-";
-	static final String scssNumberColorString = "\\s*("+ scssNumber
-	                                                +"|"+ scssColor
-	                                                +"|[^\\s"+scssBadStringChars+"]+"
-	                                                +"|\"([^\"]|\\\")*\""
-	                                                +"|'([^']|\\')*'"
-	                                                +")\\s*";
-
+	private static final String scssNumber = "\\d*\\.\\d+";
+	private static final String scssColor = "(#[\\da-zA-Z]+|(rgb|hsl)a?\\([^)]*\\))";
+	private static final String scssBadStringChars = "!\"#$'()*+,\\.\\/:<=>?@\\[\\\\\\]^`{|}~-";
+	private static final String scssNumberColorString = "\\s*("+ scssNumber
+	                                                       +"|"+ scssColor
+	                                                       +"|[^\\s"+scssBadStringChars+"]+"
+	                                                       +"|\"([^\"]|\\\")*\""
+	                                                       +"|'([^']|\\')*'"
+	                                                       +")\\s*";
+	private static final Pattern charsetRule = Pattern.compile("(@charset +\"(.+)\";?).*");
+	private static final Pattern sourceMappingComment
+		= Pattern.compile("/\\*# sourceMappingURL=data:application/json;base64,(.+)=* \\*/");
+	private static final Base64.Decoder base64Decoder = Base64.getDecoder();
+	
 	/**
 	 * @param encoding the encoding of the input or null if unknown
 	 * @throws IOException if something goes wrong reading the input
 	 * @throws RuntimeException if the compilation fails.
 	 */
-	public InputStream compile(Source sass, Charset encoding) throws IOException {
+	public PreProcessingResult compile(Source sass, Charset encoding) throws IOException {
 		String base = sass.getSystemId();
 		if (sass instanceof StreamSource)
 			return compile(((StreamSource)sass).getInputStream(), URLs.asURL(base), encoding);
@@ -135,17 +141,19 @@ public class SassCompiler implements CssPreProcessor {
 	 * @throws RuntimeException if the compilation fails.
 	 */
 	@Override
-	public InputStream compile(InputStream sass, URL base, Charset encoding) throws IOException {
+	public PreProcessingResult compile(InputStream sass, URL base, Charset encoding) throws IOException {
 		Compiler sassCompiler = new Compiler();
 		Options options = new Options();
 		options.setIsIndentedSyntaxSrc(false);
 		options.setOutputStyle(OutputStyle.EXPANDED);
 		options.setSourceMapContents(false);
-		options.setSourceMapEmbed(false);
+		options.setSourceMapEmbed(true);
 		options.setSourceComments(false);
 		options.setPrecision(5);
-		options.setOmitSourceMapUrl(true);
+		options.setOmitSourceMapUrl(false);
 		options.getImporters().add(importer);
+		// FIXME: Note that the addition of these variables breaks the original line info in
+		// sourceMap. Luckily this is not a real problem because only the base info is used.
 		StringBuilder scss = new StringBuilder();
 		if (env != null) {
 			for (String var : env.keySet()) {
@@ -167,7 +175,6 @@ public class SassCompiler implements CssPreProcessor {
 		BufferedReader r = new BufferedReader(new InputStreamReader(bufferedStream,
 		                                                            encoding != null ? encoding : StandardCharsets.UTF_8));
 		String firstLine = r.readLine();
-		Pattern charsetRule = Pattern.compile("(@charset +\"(.+)\";?).*");
 		Matcher m = charsetRule.matcher(firstLine);
 		if (m.matches()) {
 			String charset = m.group(2);
@@ -200,10 +207,29 @@ public class SassCompiler implements CssPreProcessor {
 		scss.append(CharStreams.toString(r));
 		r.close();
 		try {
+			// FIXME: Note that preProcess() breaks the original column info in sourceMap. Luckily
+			// this is not a real problem because only the base info is used.
 			Output result = sassCompiler.compileString(preProcess(scss.toString()), URLs.asURI(base), null, options);
-			String css = postProcess(result.getCss());
+			String css = result.getCss();
+			String sourceMap = null; {
+				int lastNewlineIdx = css.lastIndexOf('\n');
+				String lastLine = css.substring(lastNewlineIdx + 1);
+				if ((m = sourceMappingComment.matcher(lastLine)).matches()) {
+					sourceMap = new String(base64Decoder.decode(m.group(1)));
+					css = css.substring(0, lastNewlineIdx);
+				}
+			}
+			// FIXME: Note that postProcess() breaks the column info in sourceMap. Luckily this only
+			// happens in selectors, not in url() values.
+			css = postProcess(css);
 			logger.debug(base + " compiled to:\n\n" + css);
-			return new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8)); }
+			return new PreProcessingResult(
+				new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8)),
+				sourceMap,
+				// in source map files are relative to the current working directory
+				sourceMap != null
+					? URLs.asURI(new File("").getAbsoluteFile())
+					: URLs.asURI(base)); }
 		catch (CompilationException e) {
 			throw new RuntimeException("Could not compile SASS style sheet", e); }
 	}

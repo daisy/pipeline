@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/xproc/normalize-uri.xpl">
+    
+    <x:scenario label="test">
+        <x:call step="px:normalize-uri">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc/>
+                </x:document>
+            </x:input>
+            <x:option name="href" select="'HTTP://www.Example.com/'"/>
+        </x:call>
+        <x:context label="the normalized port">
+            <x:document type="port" port="normalized"/>
+        </x:context>
+        <x:expect label="the result" type="compare">
+            <x:document type="inline">
+                <c:result>http://www.example.com/</c:result>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

@@ -9,13 +9,17 @@
                    ../css/page-layout.params
                    ../css/generate-toc.params
                    ../css/page-breaking.params
-                   ../css/volume-breaking.params"/>
+                   ../css/volume-breaking.params
+                   ../css/notes.params"/>
   
   <!-- xproc library -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
   
   <!-- style sheets -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/reset.css" uri="../css/reset.css"/>
+  
+  <!-- partials -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_tables.scss" uri="../css/_tables.scss"/>
   
   <!-- dependencies -->
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>

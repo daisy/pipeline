@@ -1,0 +1,96 @@
+/*
+ * Tables
+ */
+
+@mixin table-matrix(
+    $transpose: false
+) {
+    @if $transpose == auto {
+        display: none;
+        &:-obfl-alternate-scenario(1) {
+            display: table;
+            render-table-by: row, column;
+            -obfl-scenario-cost: -obfl-evaluate("$total-height");
+        }
+        &:-obfl-alternate-scenario(2) {
+            display: table;
+            render-table-by: column, row;
+            -obfl-scenario-cost: -obfl-evaluate("(+ 0.01 $total-height)");
+        }
+    } @else if $transpose {
+        display: table;
+        render-table-by: column, row;
+    } @else {
+        display: table;
+        render-table-by: row, column;
+    }
+    -obfl-table-col-spacing: 2;
+    -obfl-preferred-empty-space: 0;
+}
+
+@mixin _table-nested-list($axis1, $axis2) {
+    display: block;
+    render-table-by: $axis1, $axis2;
+    &::table-by(#{$axis1}) {
+        @extend %outer-list !optional;
+        &::list-item {
+            @extend %outer-list-item !optional;
+        }
+    }
+    &::table-by(#{$axis2}) {
+        @extend %inner-list !optional;
+        &::list-item {
+            @extend %inner-list-item !optional;
+        }
+    }
+}
+
+@mixin table-nested-list(
+    $transpose: false,
+    $header-suffix: none,
+    $blank-cell-text: none
+) {
+    @if $transpose == auto {
+        display: none;
+        &:-obfl-alternate-scenario(1) {
+            @include _table-nested-list(row, column);
+            -obfl-scenario-cost: -obfl-evaluate("$total-height");
+        }
+        &:-obfl-alternate-scenario(2) {
+            @include _table-nested-list(column, row);
+            -obfl-scenario-cost: -obfl-evaluate("(+ 0.01 $total-height)");
+        }
+    } @else if $transpose {
+        @include _table-nested-list(column, row);
+    } @else {
+        @include _table-nested-list(row, column);
+    }
+    th::after {
+        content: $header-suffix;
+    }
+    td:blank::after {
+        content: $blank-cell-text;
+    }
+    // note that we don't need to use a content block to add stuff at
+    // the top level, but it makes for a slightly nicer syntax
+    @content;
+}
+
+@mixin table-optimal($cost1, $cost2, $costs...) {
+    display: none;
+    &:-obfl-alternate-scenario(1) {
+        @extend %layout1;
+        -obfl-scenario-cost: -obfl-evaluate($cost1);
+    }
+    &:-obfl-alternate-scenario(2) {
+        @extend %layout2;
+        -obfl-scenario-cost: -obfl-evaluate($cost2);
+    }
+    @for $i from 3 to length($costs) + 3 {
+        $cost: nth($costs, $i - 2);
+        &:-obfl-alternate-scenario(#{$i}) {
+            @extend %layout#{$i};
+            -obfl-scenario-cost: -obfl-evaluate($cost);
+        }
+    }
+}

@@ -20,15 +20,21 @@
     
     <xsl:param name="locale" as="xs:string" required="yes"/>
     <xsl:param name="page-counters" as="xs:string" required="yes"/>
-    <xsl:param name="volume-transition" as="xs:string" required="no" select="''"/>
+    <xsl:param name="volume-transition" as="xs:string?" required="no"/>
+    <xsl:param name="text-transforms" as="xs:string?" required="no"/>
     
     <xsl:variable name="sections" select="collection()[position() &lt; last()]"/>
     <xsl:variable name="page-and-volume-styles" select="collection()[position()=last()]/*/*"/>
     <xsl:variable name="page-counter-names" as="xs:string*" select="tokenize($page-counters,' ')"/>
     
     <xsl:variable name="volume-transition-rule" as="element()?">
-        <xsl:if test="not($volume-transition='')">
+        <xsl:if test="exists($volume-transition)">
             <xsl:sequence select="css:deep-parse-stylesheet(concat('@-obfl-volume-transition { ',$volume-transition,' }'))"/>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="text-transform-rule" as="element()?">
+        <xsl:if test="exists($text-transforms) and not($text-transforms='')">
+            <css:rule selector="@text-transform" style="{$text-transforms}"/>
         </xsl:if>
     </xsl:variable>
     
@@ -157,7 +163,7 @@
     
     <xsl:function name="pxi:renderer-to-string" as="xs:string">
         <xsl:param name="elem" as="element()"/>
-        <xsl:sequence select="string-join($elem/child::*/(@css:_obfl-scenario-cost,'none')[1],' ')"/>
+        <xsl:sequence select="string-join($elem/child::*/(@css:_obfl-scenario-cost/string(.),'none')[1],' ')"/>
     </xsl:function>
     
     <xsl:variable name="renderers" as="xs:string*"
@@ -217,7 +223,9 @@
                              xs:bogus="">
                 <_xsl:param name="n" as="xs:integer"/>
                 <_xsl:template match="/">
-                    <_xsl:sequence select="/*/d:scenario[position()=$n]"/>
+                    <xml-processor-result>
+                        <_xsl:sequence select="/*/d:scenario[position()=$n]/node()"/>
+                    </xml-processor-result>
                 </_xsl:template>
             </_xsl:stylesheet>
         </xml-processor>
@@ -242,7 +250,11 @@
     <!-- Start -->
     <!-- ===== -->
     
-    <xsl:variable name="initial-text-transform" as="xs:string" select="'none'"/>
+    <!-- these defaults must match initial values defined in obfl-css-definition.xsl -->
+    <xsl:variable name="initial-text-transform" as="xs:string"
+                  select="if ($sections/css:_/css:box[not(@css:text-transform='none')])
+                          then 'auto'
+                          else 'none'"/>
     <xsl:variable name="initial-hyphens" as="xs:string" select="'manual'"/>
     <xsl:variable name="initial-word-spacing" as="xs:integer" select="1"/>
     
@@ -273,6 +285,16 @@
             <xsl:if test="$translate!=''">
                 <xsl:attribute name="translate" select="$translate"/>
             </xsl:if>
+            <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
+                <dp2:style-type>text/css</dp2:style-type>
+                <xsl:if test="exists($text-transform-rule)">
+                    <dp2:css-text-transform-definitions>
+                        <xsl:text>&#xa;</xsl:text>
+                        <xsl:value-of select="css:serialize-stylesheet($text-transform-rule,(),1,'    ')"/>
+                        <xsl:text>&#xa;</xsl:text>
+                    </dp2:css-text-transform-definitions>
+                </xsl:if>
+            </meta>
             <xsl:call-template name="_start">
                 <xsl:with-param name="text-transform" tunnel="yes" select="$initial-text-transform"/>
                 <xsl:with-param name="hyphens" tunnel="yes" select="$initial-hyphens"/>
@@ -439,7 +461,6 @@
                                                                         <xsl:variable name="toc" as="element()?"
                                                                                       select="current-group()/self::css:box[@type='block' and @css:_obfl-toc]"/>
                                                                         <xsl:if test="exists($toc)">
-                                                                            <xsl:variable name="toc-name" select="generate-id($toc)"/>
                                                                             <xsl:variable name="toc-range" as="xs:string"
                                                                                           select="($toc/@css:_obfl-toc-range,'document')[1]"/>
                                                                             <xsl:variable name="on-toc-start" as="element()*"
@@ -476,7 +497,7 @@
                                                                                     <xsl:sequence select="$before-toc"/>
                                                                                 </xsl:element>
                                                                             </xsl:if>
-                                                                            <toc-sequence css:page="{$page-style/@style}" range="{$toc-range}" toc="{$toc-name}">
+                                                                            <toc-sequence css:page="{$page-style/@style}" range="{$toc-range}">
                                                                                 <xsl:if test="position()=1
                                                                                               or (exists($before-toc) and $toc-range='document' and not($before-toc/self::obfl:list-of-references))">
                                                                                     <xsl:sequence select="$initial-page-number"/>
@@ -486,7 +507,7 @@
                                                                                     Inserting table-of-contents here as child of toc-sequence. Will be moved to the
                                                                                     right place (child of obfl) later.
                                                                                 -->
-                                                                                <table-of-contents name="{$toc-name}">
+                                                                                <table-of-contents>
                                                                                     <xsl:apply-templates mode="table-of-contents" select="$toc">
                                                                                         <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
                                                                                         <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
@@ -791,17 +812,42 @@
                                     </xsl:message>
                                 </xsl:if>
                                 <xsl:variable name="self" as="element()" select="."/>
+                                <xsl:variable name="range" as="xs:string" select="(@css:_obfl-list-of-references-range,'document')[1]"/>
+                                <xsl:variable name="on-collection-start" as="element()*"
+                                              select="if (@css:_obfl-on-collection-start)
+                                                      then $sections/*[@css:flow=concat('-obfl-on-collection-start/',
+                                                                                        $self/@css:_obfl-on-collection-start)]/*
+                                                      else ()"/>
+                                <xsl:variable name="on-collection-end" as="element()*"
+                                              select="if (@css:_obfl-on-collection-end)
+                                                      then $sections/*[@css:flow=concat('-obfl-on-collection-end/',
+                                                                                        $self/@css:_obfl-on-collection-end)]/*
+                                                      else ()"/>
                                 <xsl:variable name="on-volume-start" as="element()*"
-                                              select="if (@css:_obfl-on-volume-start)
+                                              select="if ($range='document' and @css:_obfl-on-volume-start)
                                                       then $sections/*[@css:flow=concat('-obfl-on-volume-start/',
                                                                                         $self/@css:_obfl-on-volume-start)]/*
                                                       else ()"/>
                                 <xsl:variable name="on-volume-end" as="element()*"
-                                              select="if (@css:_obfl-on-volume-end)
+                                              select="if ($range='document' and @css:_obfl-on-volume-end)
                                                       then $sections/*[@css:flow=concat('-obfl-on-volume-end/',
                                                                                         $self/@css:_obfl-on-volume-end)]/*
                                                       else ()"/>
-                                <list-of-references collection="{$collection/@arg1}" range="document">
+                                <list-of-references collection="{$collection/@arg1}" range="{$range}">
+                                    <xsl:if test="exists($on-collection-start)">
+                                        <on-collection-start>
+                                            <xsl:for-each select="$on-collection-start">
+                                                <xsl:apply-templates mode="sequence" select="."/>
+                                            </xsl:for-each>
+                                        </on-collection-start>
+                                    </xsl:if>
+                                    <xsl:if test="exists($on-collection-end)">
+                                        <on-collection-end>
+                                            <xsl:for-each select="$on-collection-end">
+                                                <xsl:apply-templates mode="sequence" select="."/>
+                                            </xsl:for-each>
+                                        </on-collection-end>
+                                    </xsl:if>
                                     <xsl:if test="exists($on-volume-start)">
                                         <on-volume-start>
                                             <xsl:for-each select="$on-volume-start">
@@ -880,7 +926,12 @@
                   match="/css:_
                          /css:box[@type='block' and @css:_obfl-list-of-references]">
         <xsl:apply-templates mode="assert-nil-attr" select="@* except (@type|
+                                                                       @css:text-transform|
+                                                                       @css:hyphens|
                                                                        @css:_obfl-list-of-references|
+                                                                       @css:_obfl-list-of-references-range|
+                                                                       @css:_obfl-on-collection-start|
+                                                                       @css:_obfl-on-collection-end|
                                                                        @css:_obfl-on-volume-start|
                                                                        @css:_obfl-on-volume-end)"/>
         <xsl:apply-templates mode="#current"/>
@@ -933,7 +984,7 @@
     <xsl:template mode="block-attr span-attr td-attr table-attr assert-nil-attr"
                   match="css:box/@part"/>
     
-    <xsl:template mode="block-attr span-attr td-attr table-attr assert-nil-attr"
+    <xsl:template mode="block-attr span-attr td-attr table-attr assert-nil-attr display-obfl-list-of-references"
                   match="css:box/@name|
                          css:box/css:_/@name|
                          css:_/css:_/@name"/>
@@ -1298,16 +1349,23 @@
                   match="css:box[@type='table']">
         <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:render-table-by|
                                                                   @css:text-transform|@css:hyphens)"/>
-        <xsl:if test="@css:render-table-by and not(@css:render-table-by='column')">
+        <xsl:variable name="render-table-by" as="xs:string*" select="tokenize(@css:render-table-by,'\s*,\s*')[not(.='')]"/>
+        <xsl:variable name="render-table-by" as="xs:string" select="string-join($render-table-by,', ')"/>
+        <xsl:if test="not($render-table-by=('',
+                                            'column',
+                                            'row',
+                                            'column, row',
+                                            'row, column'))">
             <xsl:call-template name="pf:warn">
                 <xsl:with-param name="msg">
-                    'render-table-by' property with a value other than 'column' is not supported on
-                    elements with 'display: table'.
+                    <xsl:text>'render-table-by' property with a value of '</xsl:text>
+                    <xsl:value-of select="$render-table-by"/>
+                    <xsl:text>' is not supported on elements with 'display: table'.</xsl:text>
                 </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
         <xsl:choose>
-            <xsl:when test="@css:render-table-by='column'">
+            <xsl:when test="$render-table-by=('column','column, row')">
                 <xsl:for-each-group select="css:box[@type='table-cell']" group-by="@css:table-column">
                     <xsl:sort select="xs:integer(current-grouping-key())"/>
                     <tr>
@@ -1317,7 +1375,9 @@
                                               if (@css:table-footer-group) then 3 else ()"/>
                             <xsl:sort select="xs:integer((@css:table-header-group,@css:table-row-group,@css:table-footer-group)[1])"/>
                             <xsl:sort select="xs:integer(@css:table-row)"/>
-                            <xsl:apply-templates mode="tr" select="."/>
+                            <xsl:apply-templates mode="tr" select=".">
+                                <xsl:with-param name="render-table-by" tunnel="yes" select="$render-table-by"/>
+                            </xsl:apply-templates>
                         </xsl:for-each>
                     </tr>
                 </xsl:for-each-group>
@@ -1392,12 +1452,13 @@
     
     <xsl:template mode="tr"
                   match="css:box[@type='table-cell']">
+        <xsl:param name="render-table-by" tunnel="yes" select="''"/>
         <xsl:if test="@css:table-row-span">
-            <xsl:attribute name="{if (parent::*/@css:render-table-by='column') then 'col-span' else 'row-span'}"
+            <xsl:attribute name="{if ($render-table-by=('column','column, row')) then 'col-span' else 'row-span'}"
                            select="@css:table-row-span"/>
         </xsl:if>
         <xsl:if test="@css:table-column-span">
-            <xsl:attribute name="{if (parent::*/@css:render-table-by='column') then 'row-span' else 'col-span'}"
+            <xsl:attribute name="{if ($render-table-by=('column','column, row')) then 'row-span' else 'col-span'}"
                            select="@css:table-column-span"/>
         </xsl:if>
         <xsl:apply-templates mode="td-attr"

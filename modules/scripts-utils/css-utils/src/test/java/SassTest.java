@@ -35,7 +35,7 @@ public class SassTest {
 		File scssFile = getTestResource(scssPath);
 		File expectedCssFile = getTestResource(expectedCssPath);
 		SassCompiler compiler = new SassCompiler(null, null);
-		InputStream css = compiler.compile(new FileInputStream(scssFile), URLs.asURL(scssFile), null);
+		InputStream css = compiler.compile(new FileInputStream(scssFile), URLs.asURL(scssFile), null).stream;
 		Assert.assertEquals(new String(Files.readAllBytes(expectedCssFile.toPath()), StandardCharsets.UTF_8),
 		                    CharStreams.toString(new InputStreamReader(css)));
 	}

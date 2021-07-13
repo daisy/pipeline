@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns="http://www.w3.org/1999/xhtml"
+               script="../../main/resources/xml/xproc/html-to-fileset.xpl">
+
+	<x:scenario label="For a regular document">
+		<x:call step="px:html-to-fileset"/>
+
+		<x:scenario label="the base URI of the HTML document is set to the fileset">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html/>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="non-resources text nodes and attributes are ignored">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<p class="foo">bar</p>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+	<x:scenario label="'img' element">
+		<x:call step="px:html-to-fileset"/>
+
+		<x:scenario label="with no @src">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="with an empty @src">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src=""/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="with a relative URI">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src="my-image.png" xml:base="file:/example/images/"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+						<d:file href="images/my-image.png" media-type="image/png"
+						        original-href="file:/example/images/my-image.png" kind="image"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="with an absolute file URI">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src="file:/example/my-image.png"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+						<d:file href="my-image.png" media-type="image/png"
+						        original-href="file:/example/my-image.png" kind="image"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="with a 'data' URI">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src="data:image/png;base64,ABCDEFG"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="with an absolute remote URI">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src="http:/www.example.org/my-image.png"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+	<x:scenario label="'longdesc' attribute">
+		<x:call step="px:html-to-fileset"/>
+
+		<x:scenario label="pointing to an external resource">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src="my-image.png" xml:base="file:/example/images/" longdesc="desc.xml"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+						<d:file href="images/my-image.png" original-href="file:/example/images/my-image.png"
+						        media-type="image/png" kind="image"/>
+						<d:file href="images/desc.xml" original-href="file:/example/images/desc.xml"
+						        media-type="application/xml" kind="description"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="pointing to local content">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src="my-image.png" xml:base="file:/my-base/" longdesc="#foo"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+						<d:file href="../my-base/my-image.png" original-href="file:/my-base/my-image.png"
+						        media-type="image/png" kind="image"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+	<x:scenario label="'aria-descrbedat' attribute">
+		<x:call step="px:html-to-fileset"/>
+
+		<x:scenario label="on an image">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<img src="my-image.png" xml:base="file:/example/images/"
+							     aria-describedat="desc.xml"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+						<d:file href="images/my-image.png" original-href="file:/example/images/my-image.png"
+						        media-type="image/png" kind="image"/>
+						<d:file href="images/desc.xml" original-href="file:/example/images/desc.xml"
+						        media-type="application/xml" kind="description"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+
+		<x:scenario label="on any element">
+			<x:call>
+				<x:input port="source">
+					<x:document type="inline" xml:base="file:/example/doc.html">
+						<html>
+							<span xml:base="file:/example/images/" aria-describedat="desc.xml"/>
+						</html>
+					</x:document>
+				</x:input>
+			</x:call>
+			<x:context label="result">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/example/">
+						<d:file href="doc.html" media-type="application/xhtml+xml"/>
+						<d:file href="images/desc.xml" original-href="file:/example/images/desc.xml"
+						        media-type="application/xml" kind="description"/>
+					</d:fileset>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+	<x:scenario label="nested structure">
+		<x:call step="px:html-to-fileset">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/example/doc.html">
+					<html>
+						<a href="#">
+							<img src="my-image.png" xml:base="file:/example/images/"/>
+						</a>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect type="compare" label="result">
+			<x:document type="inline">
+				<d:fileset xml:base="file:/example/">
+					<d:file href="doc.html" media-type="application/xhtml+xml"/>
+					<d:file href="images/my-image.png" media-type="image/png"
+					        original-href="file:/example/images/my-image.png" kind="image"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="various">
+		<x:call step="px:html-to-fileset">
+			<x:input port="source">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<head>
+							<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"/>
+							<title>This is a test basic html file</title>
+							<style type="text/css">
+								@import url("foo.css");
+							</style>
+						</head>
+						<body>
+							<img src="img.png"/>
+							<svg xmlns="http://www.w3.org/2000/svg">
+								<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="img2.jpg"/>
+							</svg>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+			<x:input port="context.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="foo.css" media-type="text/css"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="context.in-memory">
+				<x:document type="inline" xml:base="foo.css">
+					<c:data content-type="text/plain">
+						@font-face {
+							font-family: "My font";
+							src: url("font.ttf");
+						}
+					</c:data>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the fileset">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the fileset"
+		          type="custom" href="../../../../../common/fileset-utils/src/main/resources/xml/xproc/fileset-library.xpl"
+		          step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="test_html-to-fileset.xprocspec" media-type="application/xhtml+xml"/>
+					<d:file href="foo.css" media-type="text/css"/>
+					<d:file href="font.ttf" original-href="font.ttf" media-type="application/x-font-ttf"/>
+					<d:file href="img.png" original-href="img.png" media-type="image/png" kind="image"/>
+					<d:file href="img2.jpg" original-href="img2.jpg" media-type="image/jpeg" kind="image"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

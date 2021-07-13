@@ -1,0 +1,73 @@
+$notes-placement: end-of-volume !default;
+
+@namespace epub 'http://www.idpf.org/2007/ops';
+
+a[epub|type~='noteref']::alternate {
+	display: block;
+	content: target-content(attr(href));
+}
+
+// notes that are not referenced are not rendered
+*[epub|type~='note'],
+*[epub|type~='footnote'],
+*[epub|type~='endnote'],
+*[epub|type~='rearnote'] {
+	display: none;
+}
+
+// also remove collections of notes
+*[epub|type~='notes'],
+*[epub|type~='footnotes'],
+*[epub|type~='endnotes'],
+*[epub|type~='rearnotes'] {
+	display: none;
+}
+
+/*
+ * - Generate a div element to contain all the notes and to attach a title.
+ */
+@xslt "notes.xsl" {
+	endnotes-section-id: "endnotes-section";
+}
+
+#endnotes-section {
+	display: -obfl-list-of-references;
+	flow: endnotes-container;
+	&::after {
+		content: -obfl-collection(endnotes);
+	}
+}
+
+@if $notes-placement == bottom-of-page {
+	a[epub|type~='noteref']::alternate {
+		flow: footnotes;
+	}
+	@page {
+		@footnotes {
+			content: flow(footnotes);
+            -obfl-fallback-collection: endnotes;
+		}
+	}
+
+} @else {
+	a[epub|type~='noteref']::alternate {
+		flow: endnotes;
+	}
+}
+
+@if $notes-placement == end-of-book {
+	@volume:last {
+		@end {
+			content: flow(endnotes-container);
+		}
+	}
+} @else {
+	#endnotes-section {
+		-obfl-list-of-references-range: volume;
+	}
+	@volume {
+		@end {
+			content: flow(endnotes-container);
+		}
+	}
+}

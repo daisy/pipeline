@@ -4,6 +4,8 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:math="http://www.w3.org/1998/Math/MathML"
@@ -43,9 +45,9 @@
     
     <p:option name="default-stylesheet" required="false" select="'#default'"/>
     <p:option name="stylesheet" select="''"/>
-    <p:option name="apply-document-specific-stylesheets" select="'false'"/>
+    <p:option name="apply-document-specific-stylesheets" select="'false'" cx:as="xs:string"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
-    <p:option name="include-obfl" select="'false'"/>
+    <p:option name="include-obfl" select="'false'" cx:as="xs:string"/>
     <p:option name="content-media-types" select="'application/xhtml+xml'">
         <!--
             space separated list of content document media-types to include for braille transcription
@@ -71,6 +73,7 @@
             px:merge-parameters
             px:apply-stylesheets
             px:transform
+            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
@@ -102,7 +105,14 @@
             <p:pipe step="main" port="parameters"/>
         </p:input>
     </px:merge-parameters>
-    
+    <p:sink/>
+
+    <!-- Parse transform query to a c:param-set -->
+    <px:parse-query name="parsed-transform-query">
+        <p:with-option name="query" select="$transform"/>
+    </px:parse-query>
+    <p:sink/>
+
     <!-- Load XHTML documents in spine order. -->
     <px:opf-spine-to-fileset ignore-missing="true">
         <p:input port="source.fileset">
@@ -212,20 +222,23 @@
     
     <p:group px:message="Inlining global CSS" px:progress=".11">
         <p:variable name="abs-stylesheet"
-                    select="string-join(for $s in tokenize($stylesheet,'\s+')[not(.='')]
-                                        return resolve-uri($s,$epub),' ')"/>
+                    select="for $s in tokenize($stylesheet,'\s+')[not(.='')]
+                            return resolve-uri($s,$epub)"/>
         <p:variable name="first-css-stylesheet"
-                    select="tokenize($abs-stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
+                    select="$abs-stylesheet[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
-                    select="(index-of(tokenize($abs-stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
+                    select="(if (exists($first-css-stylesheet))
+                               then index-of($abs-stylesheet, $first-css-stylesheet)
+                               else (),
+                             10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
-                              (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
+                              $abs-stylesheet[position()&lt;$first-css-stylesheet-index],
                               if ($default-stylesheet!='#default')
                                 then $default-stylesheet
                                 else resolve-uri('../../css/default.css'),
                               resolve-uri('../../css/default.scss'),
-                              (tokenize($abs-stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
+                              $abs-stylesheet[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
         <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
@@ -250,10 +263,13 @@
         <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
             <p:pipe port="result" step="opf"/>
         </p:variable>
+        <p:variable name="locale-query" select="if (//c:param[@name='locale']) then '' else concat('(locale:',$lang,')')">
+            <p:pipe step="parsed-transform-query" port="result"/>
+        </p:variable>
         <p:viewport px:progress="1"
                     match="math:math">
             <px:transform>
-                <p:with-option name="query" select="concat('(input:mathml)(locale:',$lang,')')"/>
+                <p:with-option name="query" select="concat('(input:mathml)',$locale-query)"/>
                 <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
             </px:transform>
         </p:viewport>
@@ -262,6 +278,9 @@
     <p:choose name="transform" px:progress=".61">
         <p:variable name="lang" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
             <p:pipe port="result" step="opf"/>
+        </p:variable>
+        <p:variable name="locale-query" select="if (//c:param[@name='locale']) then '' else concat('(locale:',$lang,')')">
+            <p:pipe step="parsed-transform-query" port="result"/>
         </p:variable>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>
@@ -273,7 +292,7 @@
             </p:output>
             <p:group name="obfl" px:message="Transforming from XML with inline CSS to OBFL" px:progress=".40">
                 <p:output port="result"/>
-                <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
+                <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
                 <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                 <px:transform px:progress="1">
                     <p:with-option name="query" select="$transform-query"/>
@@ -291,7 +310,7 @@
                             <d:status result="ok"/>
                         </p:inline>
                     </p:output>
-                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,$locale-query)"/>
                     <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                     <px:transform px:progress="1">
                         <p:with-option name="query" select="$transform-query"/>
@@ -320,8 +339,7 @@
                             <p:pipe step="catch" port="error"/>
                         </p:input>
                     </px:log-error>
-                    <p:identity px:message="Failed to convert OBFL to PEF (Please see detailed log for more info.)"
-                                px:message-severity="ERROR"/>
+                    <p:identity px:message="Failed to convert OBFL to PEF" px:message-severity="ERROR"/>
                     <p:identity name="status"/>
                     <p:sink/>
                 </p:catch>
@@ -337,7 +355,7 @@
                     <d:status result="ok"/>
                 </p:inline>
             </p:output>
-            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,$locale-query)"/>
             <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
             <px:transform px:progress="1">
                 <p:with-option name="query" select="$transform-query"/>

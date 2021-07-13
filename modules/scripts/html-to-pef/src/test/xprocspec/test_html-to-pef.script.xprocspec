@@ -4,7 +4,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl">
   
-  <x:scenario label="alice.xhtml with default.css">
+  <x:scenario label="alice.xhtml with default.css" pending="">
     <x:call step="px:html-to-pef.script">
       <x:option name="html" select="resolve-uri('../resources/alice.xhtml')"/>
       <x:option name="include-preview" select="'true'"/>

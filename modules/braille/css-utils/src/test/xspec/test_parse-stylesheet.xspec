@@ -65,8 +65,7 @@
       <doc style="@text-transform  foo  {{ system: foo; x: &quot;'y'&quot; }} @text-transform  bar  {{ system: bar }} "/>
     </x:context>
     <x:expect label="result">
-      <doc css:text-transform-foo="system: foo; x: '\27 y\27 ';"
-           css:text-transform-bar="system: bar;"/>
+      <doc css:text-transform="&amp; bar {{ system: bar; }} &amp; foo {{ system: foo; x: '\27 y\27 '; }}"/>
     </x:expect>
   </x:scenario>
   
@@ -135,6 +134,16 @@
     </x:context>
     <x:expect label="result">
       <pagenum css:top-of-page="display: none;" />
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_13">
+    <x:context>
+      <doc style="@counter-style trinary {{ system: numeric; symbols: '0' '1' '2'; }}
+                  @counter-style dice {{ system: additive; additive-symbols: 6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀; }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:counter-style="&amp; dice {{ system: additive; additive-symbols: 6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀; }} &amp; trinary {{ system: numeric; symbols: '0' '1' '2'; }}"/>
     </x:expect>
   </x:scenario>
   

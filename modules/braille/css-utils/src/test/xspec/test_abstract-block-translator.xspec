@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
-                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                stylesheet="../resources/uppercase-block-translator.xsl">
   
   <x:scenario label="test_01">
@@ -13,13 +13,11 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-        <doc>
-          <h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
-          <p style="display: block &amp;::after {{ content: &quot;BAR&quot; }} &amp;::before {{ content: &quot;bar&quot; counter(page); text-transform: auto }}">FOO</p>
-          <pagenum style="display: none; string-set: print-page &quot;ii&quot;, foo &quot;bar&quot;">II</pagenum>
-        </doc>
-      </_>
+      <doc style="text-transform: none">
+        <h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
+        <p style="display: block &amp;::after {{ content: &quot;BAR&quot; }} &amp;::before {{ content: &quot;bar&quot; counter(page); text-transform: auto }}">FOO</p>
+        <pagenum style="display: none; string-set: print-page &quot;ii&quot;, foo &quot;bar&quot;">II</pagenum>
+      </doc>
     </x:expect>
   </x:scenario>
   
@@ -30,11 +28,9 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-        <doc xml:lang="en-Brai">
-          <br style="&amp;::before {{ content: &quot;\A &quot;; white-space: pre-line }}"/>
-        </doc>
-      </_>
+      <doc xml:lang="en-Brai" style="text-transform: none">
+        <br style="&amp;::before {{ content: &quot;\A &quot;; white-space: pre-line }}"/>
+      </doc>
     </x:expect>
   </x:scenario>
   
@@ -45,11 +41,9 @@
       </div>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-        <div>
-          <p>FOO=BAR</p>
-        </div>
-      </_>
+      <div style="text-transform: none">
+        <p>FOO=BAR</p>
+      </div>
     </x:expect>
   </x:scenario>
   
@@ -60,11 +54,9 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-        <doc>
-          <div style="&amp;::after {{ content: &quot;FOO&quot; }} &amp;::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
-        </doc>
-      </_>
+      <doc style="text-transform: none">
+        <div style="&amp;::after {{ content: &quot;FOO&quot; }} &amp;::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
+      </doc>
     </x:expect>
   </x:scenario>
   
@@ -75,11 +67,9 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-        <doc>
-          <div style="&amp;::table-by(foo)::list-item::after {{ content: &quot;,&quot; }} &amp;::table-by(foo)::list-item:last-child::after {{ content: none }}"/>
-        </doc>
-      </_>
+      <doc style="text-transform: none">
+        <div style="&amp;::table-by(foo)::list-item::after {{ content: &quot;,&quot; }} &amp;::table-by(foo)::list-item:last-child::after {{ content: none }}"/>
+      </doc>
     </x:expect>
   </x:scenario>
   
@@ -93,11 +83,23 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-        <doc>
-          <a href="foo" style="&amp;::after {{ content: target-counter(url(&quot;#foo&quot;), page) target-string(url(&quot;foo&quot;), print-page) target-text(url(&quot;foo&quot;)) target-content(url(&quot;foo&quot;)); text-transform: auto }}"/>
-        </doc>
-      </_>
+      <doc style="text-transform: none">
+        <a href="foo" style="&amp;::after {{ content: target-counter(url(&quot;#foo&quot;), page) target-string(url(&quot;foo&quot;), print-page) target-text(url(&quot;foo&quot;)) target-content(url(&quot;foo&quot;)); text-transform: auto }}"/>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_07">
+    <x:context>
+      <doc style="@page {{
+                    @bottom-right {{
+                      content: counter(page, lower-roman);
+                      text-transform: uncontracted; }} }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc style="text-transform: none @page {{ @bottom-right {{ content: counter(page, lower-roman); text-transform: uncontracted }} }}">
+
+      </doc>
     </x:expect>
   </x:scenario>
   

@@ -40,9 +40,9 @@
 	</xsl:template>
 
 	<xsl:template name="timeInThisSmil">
-		<meta name="ncc:timeInThisSmil" content="{pf:mediaoverlay-seconds-to-full-clock-value(
+		<meta name="ncc:timeInThisSmil" content="{pf:smil-seconds-to-full-clock-value(
 		                                            round(
-		                                              pf:mediaoverlay-clock-value-to-seconds(
+		                                              pf:smil-clock-value-to-seconds(
 		                                                /smil/body/seq/@dur)))}"/>
 	</xsl:template>
 

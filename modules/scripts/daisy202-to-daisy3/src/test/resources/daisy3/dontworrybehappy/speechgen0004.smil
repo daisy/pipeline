@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-1//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-1.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+   <head>
+      <meta name="dtb:uid" content="F00000"/>
+      <meta name="dtb:totalElapsedTime" content="0:01:34.964"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2"/>
+   </head>
+   <body>
+      <seq dur="0:00:22.143" id="seq_1">
+         <par id="tcp30">
+            <text src="content.xml#dtb30" id="txtd60e9"/>
+            <audio id="audd60e10" src="speechgen0004.mp3" clipBegin="npt=0.000s"
+                   clipEnd="npt=2.490s"/>
+         </par>
+         <par id="tcp31">
+            <text src="content.xml#dtb31" id="txtd60e12"/>
+            <audio id="audd60e13" src="speechgen0004.mp3" clipBegin="npt=2.490s"
+                   clipEnd="npt=6.021s"/>
+         </par>
+         <par id="tcp32">
+            <text src="content.xml#dtb32" id="txtd60e15"/>
+            <audio id="audd60e16" src="speechgen0004.mp3" clipBegin="npt=6.021s"
+                   clipEnd="npt=8.948s"/>
+         </par>
+         <par id="tcp33">
+            <text src="content.xml#dtb33" id="txtd60e18"/>
+            <audio id="audd60e19" src="speechgen0004.mp3" clipBegin="npt=8.948s"
+                   clipEnd="npt=10.897s"/>
+         </par>
+         <par id="tcp34">
+            <text src="content.xml#dtb34" id="txtd60e21"/>
+            <audio id="audd60e22" src="speechgen0004.mp3" clipBegin="npt=10.897s"
+                   clipEnd="npt=12.537s"/>
+         </par>
+         <par id="tcp35">
+            <text src="content.xml#dtb35" id="txtd60e24"/>
+            <audio id="audd60e25" src="speechgen0004.mp3" clipBegin="npt=12.537s"
+                   clipEnd="npt=14.591s"/>
+         </par>
+         <par id="tcp36">
+            <text src="content.xml#dtb36" id="txtd60e27"/>
+            <audio id="audd60e28" src="speechgen0004.mp3" clipBegin="npt=14.591s"
+                   clipEnd="npt=17.288s"/>
+         </par>
+         <par id="tcp37">
+            <text src="content.xml#dtb37" id="txtd60e30"/>
+            <audio id="audd60e31" src="speechgen0004.mp3" clipBegin="npt=17.288s"
+                   clipEnd="npt=22.143s"/>
+         </par>
+      </seq>
+   </body>
+</smil>

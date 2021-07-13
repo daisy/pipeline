@@ -5,6 +5,9 @@
 ## [catalog.xml](resources/META-INF/catalog.xml)
 
 - [`http://www.daisy.org/pipeline/modules/css-utils/library.xpl`](resources/xml/library.xpl)
+
+## XSLT packages
+
 - [`http://www.daisy.org/pipeline/modules/css-utils/library.xsl`](resources/xml/library.xsl)
 
 ## Saxon XPath functions ([`net.sf.saxon.lib.ExtensionFunctionDefinition`](https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html))

@@ -33,7 +33,10 @@
       <x:param port="parameters" name="line-spacing" select="'single'"/>
       <x:param port="parameters" name="left-margin" select="0"/>
       <x:param port="parameters" name="footnotes-placement" select="''"/>
-      <x:param port="parameters" name="toc-depth" select="0"/>
+      -->
+      <x:param port="parameters" name="toc-depth" select="1"/>
+      <x:param port="parameters" name="toc-exclude-class" select="''"/>
+      <!--
       <x:param port="parameters" name="maximum-number-of-sheets" select="70"/>
       <x:param port="parameters" name="rear-cover-placement" select="''"/>
       <x:param port="parameters" name="duplex" select="true()"/>

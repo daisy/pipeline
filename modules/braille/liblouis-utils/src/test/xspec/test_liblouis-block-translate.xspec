@@ -16,15 +16,13 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-      <doc xml:lang="en-Brai">
+      <doc xml:lang="en-Brai" style="text-transform: none">
         <p style="display: block">
           <span style="white-space: pre-wrap">
             ⠋⠕⠕­<span>⠃⠜</span>
           </span>
         </p>
       </doc>
-      </_>
     </x:expect>
   </x:scenario>
   
@@ -35,9 +33,7 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-      <doc xml:lang="en-Brai">         ⠋⠕⠕<br style="&amp;::before {{ content: &quot;\A &quot;; white-space: pre-line }}"/>⠃⠜       </doc>
-      </_>
+      <doc xml:lang="en-Brai" style="text-transform: none">         ⠋⠕⠕<br style="&amp;::before {{ content: &quot;\A &quot;; white-space: pre-line }}"/>⠃⠜       </doc>
     </x:expect>
   </x:scenario>
   
@@ -52,15 +48,13 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <_ style="text-transform: none">
-      <doc xml:lang="en-Brai">
+      <doc xml:lang="en-Brai" style="text-transform: none">
         <p style="display: block">
           <span>
             ⠋⠕⠕ <span>⠃⠜</span>
           </span>
         </p>
       </doc>
-      </_>
     </x:expect>
   </x:scenario>
   

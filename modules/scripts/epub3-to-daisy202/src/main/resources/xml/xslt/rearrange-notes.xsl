@@ -127,11 +127,7 @@
 
 	<!-- there should only be a dur attribute on the root seq -->
 	<xsl:template mode="recompute-dur" match="/smil/body/seq/@dur">
-		<xsl:variable name="total-time" as="xs:double"
-		              select="sum(for $audio in //audio
-		                          return pf:mediaoverlay-clock-value-to-seconds($audio/@clip-end)
-		                               - pf:mediaoverlay-clock-value-to-seconds($audio/@clip-begin))"/>
-		<xsl:attribute name="dur" select="pf:mediaoverlay-seconds-to-timecount($total-time,'s')"/>
+		<xsl:attribute name="dur" select="pf:smil-seconds-to-timecount(pf:smil-total-seconds(/*),'s')"/>
 	</xsl:template>
 
 	<xsl:template mode="recompute-dur" match="/smil/body/seq">

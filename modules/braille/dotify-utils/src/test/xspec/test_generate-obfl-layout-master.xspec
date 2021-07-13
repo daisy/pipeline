@@ -489,7 +489,7 @@
           <footer/>
         </default-template>
         <page-area align="bottom" max-height="10" collection="footnote">
-          <before><leader pattern="⠒" position="100%" align="right"/></before>
+          <before><block translate="pre-translated-text-css"><leader pattern="⠒" position="100%" align="right" />⠒</block></before>
         </page-area>
       </layout-master>
     </x:expect>
@@ -537,7 +537,7 @@
           <footer/>
         </default-template>
         <page-area align="bottom" max-height="10" collection="footnote">
-          <before><leader pattern="⠒" position="100%" align="right"/></before>
+          <before><block translate="pre-translated-text-css"><leader pattern="⠒" position="100%" align="right"/>⠒</block></before>
         </page-area>
       </layout-master>
     </x:expect>

@@ -15,8 +15,8 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="../resources/dontworrybehappy/ncc.html" media-type="application/xhtml+xml"/>
-					<d:file href="../resources/dontworrybehappy/content.html" media-type="application/xhtml+xml"/>
+					<d:file href="../resources/dontworrybehappy/ncc.html" media-type="application/xhtml+xml" media-version="4.0"/>
+					<d:file href="../resources/dontworrybehappy/content.html" media-type="application/xhtml+xml" media-version="4.0"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0001.smil" media-type="application/smil+xml"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0002.smil" media-type="application/smil+xml"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0003.smil" media-type="application/smil+xml"/>

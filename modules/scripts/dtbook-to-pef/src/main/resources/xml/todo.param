@@ -42,12 +42,6 @@
             <p px:role="desc" xml:space="preserve">**Not implemented**</p>
         </p:documentation>
     </p:option>
-    <p:option name="footnotes-placement" required="false" px:type="string" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Placement of content: Footnotes placement</h2>
-            <p px:role="desc" xml:space="preserve">**Not implemented**</p>
-        </p:documentation>
-    </p:option>
     <p:option name="colophon-metadata-placement" required="false" px:type="string" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Placement of content: Colophon/metadata placement</h2>

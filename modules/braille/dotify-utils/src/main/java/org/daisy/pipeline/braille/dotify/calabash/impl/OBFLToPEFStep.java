@@ -4,11 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.xml.transform.stream.StreamSource;
+
+import com.google.common.collect.Maps;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
@@ -21,6 +25,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
@@ -33,6 +38,18 @@ import org.daisy.dotify.api.writer.MetaDataItem;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryService;
+
+import org.daisy.pipeline.braille.common.BrailleTranslator;
+import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
+import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
+import static org.daisy.pipeline.braille.common.Provider.util.memoize;
+import org.daisy.pipeline.braille.common.Query;
+import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
+import static org.daisy.pipeline.braille.common.Query.util.query;
+import org.daisy.pipeline.braille.common.util.Function0;
+import org.daisy.pipeline.braille.common.util.Functions;
+import org.daisy.pipeline.braille.css.CompoundTranslator;
+import org.daisy.pipeline.braille.css.TextTransformParser;
 
 import org.osgi.framework.FrameworkUtil;
 
@@ -55,21 +72,33 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	private static final QName _locale = new QName("locale");
 	private static final QName _mode = new QName("mode");
 	private static final QName _identifier = new QName("identifier");
+	private static final QName _style_type = new QName("style-type");
+	private static final QName _css_text_transform_definitions = new QName("css-text-transform-definitions");
 	
+	/** Code for Dotify formatting errors caused by invalid input or input that can not be handled. */
+	private static final QName DOTIFY_ERROR = new QName("DOTIFY");
+
 	private ReadablePipe source = null;
 	private WritablePipe result = null;
 	private final Map<String,String> params = new HashMap<String,String>();
 	
 	private final Iterable<PagedMediaWriterFactoryService> writerFactoryServices;
 	private final Iterable<FormatterEngineFactoryService> engineFactoryServices;
+	private final org.daisy.pipeline.braille.common.Provider<Query,BrailleTranslator> brailleTranslatorProvider;
+	private final TemporaryBrailleTranslatorProvider temporaryBrailleTranslatorProvider;
 	
 	public OBFLToPEFStep(XProcRuntime runtime,
 	                     XAtomicStep step,
 	                     Iterable<PagedMediaWriterFactoryService> writerFactoryServices,
-	                     Iterable<FormatterEngineFactoryService> engineFactoryServices) {
+	                     Iterable<FormatterEngineFactoryService> engineFactoryServices,
+	                     org.daisy.pipeline.braille.common.Provider<Query,BrailleTranslator> brailleTranslatorProvider,
+	                     TemporaryBrailleTranslatorProvider temporaryBrailleTranslatorProvider) {
 		super(runtime, step);
 		this.writerFactoryServices = writerFactoryServices;
 		this.engineFactoryServices = engineFactoryServices;
+		this.brailleTranslatorProvider = brailleTranslatorProvider;
+		if (temporaryBrailleTranslatorProvider == null) throw new IllegalStateException();
+		this.temporaryBrailleTranslatorProvider = temporaryBrailleTranslatorProvider;
 	}
 	
 	@Override
@@ -105,14 +134,73 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	@Override
 	public void run() throws SaxonApiException {
 		super.run();
+		Function0<Void> evictTempTranslator = Functions.noOp; // any temporary translators that are created specially
+		                                                      // for this conversion need to be destroyed afterwards
 		try {
+			
+			XdmNode obflNode = source.read();
+			String styleType = getOption(_style_type, "");
+			String mode = getOption(_mode).getString();
+			String locale = getOption(_locale).getString();
+			
+			if ("text/css".equals(styleType)) {
+				
+				// We're assuming that no other translators than the DAISY Pipeline implementations
+				// support text/css.
+				Query mainQuery;
+				try {
+					mainQuery = query(mode);
+				} catch (Exception e) {
+					throw new IllegalArgumentException("Expected mode in query format: " + mode, e);
+				}
+				if (locale != null && !"und".equals(locale))
+					mainQuery = mutableQuery(mainQuery).add("locale", locale);
+				BrailleTranslator mainTranslator;
+				try {
+					mainTranslator = brailleTranslatorProvider.get(mainQuery).iterator().next();
+				} catch (NoSuchElementException e) {
+					throw new XProcException(
+						step.getNode(),
+						"No translator available for mode '" + mode + "' and locale '" + locale + "' "
+						+ "that supports style type " + styleType);
+				}
+				String textTransformDefinitions = getOption(_css_text_transform_definitions, "");
+				if (!"".equals(textTransformDefinitions)) {
+					Map<String,Query> subQueries = TextTransformParser.getBrailleTranslatorQueries(textTransformDefinitions,
+					                                                                               obflNode.getBaseURI(),
+					                                                                               mainQuery);
+					if (subQueries != null && !subQueries.isEmpty()) {
+						BrailleTranslator defaultTranslator = mainTranslator;
+						Query defaultQuery = subQueries.remove("auto");
+						if (defaultQuery != null && !defaultQuery.equals(mainQuery))
+							try {
+								defaultTranslator = brailleTranslatorProvider.get(defaultQuery).iterator().next();
+							} catch (NoSuchElementException e) {
+								throw new XProcException(
+									step.getNode(), "No translator available for " + defaultQuery + "");
+							}
+						if (defaultTranslator != mainTranslator || !subQueries.isEmpty()) {
+							Map<String,Supplier<BrailleTranslator>> subTranslators
+								= Maps.transformValues(
+									subQueries,
+									q -> () -> brailleTranslatorProvider.get(q).iterator().next());
+							BrailleTranslator compoundTranslator = new CompoundTranslator(defaultTranslator, subTranslators);
+							evictTempTranslator = temporaryBrailleTranslatorProvider.provideTemporarily(compoundTranslator);
+							mode = mutableQuery().add("id", compoundTranslator.getIdentifier()).toString();
+							locale = "und";
+						}
+					}
+				}
+			} else if (!"".equals(styleType)) {
+				throw new XProcException(step.getNode(), "Value of style-type option not recognized: " + styleType);
+			}
 			
 			// Read OBFL
 			ByteArrayOutputStream s = new ByteArrayOutputStream();
 			Serializer serializer = runtime.getProcessor().newSerializer();
 			serializer.setOutputStream(s);
 			serializer.setCloseOnCompletion(true);
-			serializer.serializeNode(source.read());
+			serializer.serializeNode(obflNode);
 			serializer.close();
 			InputStream obflStream = new ByteArrayInputStream(s.toByteArray());
 			s.close();
@@ -120,8 +208,6 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			// Convert
 			// FIXME: duplication with DotifyTaskSystem! => use that class in
 			// here (like in XMLToOBFL) when it supports setting of the mode
-			String locale = getOption(_locale).getString();
-			String mode = getOption(_mode).getString();
 			String identifier = getOption(_identifier, "");
 			boolean markCapitalLetters; {
 				String p = params.get("mark-capital-letters");
@@ -156,10 +242,13 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			// Write PEF
 			result.write(runtime.getProcessor().newDocumentBuilder().build(new StreamSource(pefStream)));
 			pefStream.close(); }
-			
+		
 		catch (Throwable e) {
-			logger.error("dotify:obfl-to-pef failed", e);
-			throw new XProcException(step.getNode(), e); }
+			if (e.getMessage().contains("Failed to solve table"))
+				throw new XProcException(DOTIFY_ERROR, step, e);
+			throw XProcStep.raiseError(e, step); }
+		finally {
+			evictTempTranslator.apply(); }
 	}
 	
 	private PagedMediaWriter newPagedMediaWriter(String target) throws PagedMediaWriterConfigurationException {
@@ -190,18 +279,23 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	}
 	
 	@Component(
-		name = "dotify:obfl-to-pef",
+		name = "pxi:obfl-to-pef",
 		service = { XProcStepProvider.class },
-		property = { "type:String={http://code.google.com/p/dotify/}obfl-to-pef" }
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}obfl-to-pef" }
 	)
-	public static class Provider implements XProcStepProvider {
+	public static class Provider implements XProcStepProvider  {
 		
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-			return new OBFLToPEFStep(runtime, step, writerFactoryServices, engineFactoryServices);
+			return new OBFLToPEFStep(runtime,
+			                         step,
+			                         writerFactoryServices,
+			                         engineFactoryServices,
+			                         brailleTranslatorProvider,
+			                         temporaryBrailleTranslatorProvider);
 		}
 		
-		private List<PagedMediaWriterFactoryService> writerFactoryServices
+		private final List<PagedMediaWriterFactoryService> writerFactoryServices
 			= new ArrayList<PagedMediaWriterFactoryService>();
 		
 		@Reference(
@@ -221,7 +315,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			writerFactoryServices.remove(service);
 		}
 		
-		private List<FormatterEngineFactoryService> engineFactoryServices
+		private final List<FormatterEngineFactoryService> engineFactoryServices
 			= new ArrayList<FormatterEngineFactoryService>();
 		
 		@Reference(
@@ -236,9 +330,46 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 				service.setCreatedWithSPI();
 			engineFactoryServices.add(service);
 		}
-	
+		
 		protected void unbindFormatterEngineFactoryService(FormatterEngineFactoryService service) {
 			engineFactoryServices.remove(service);
+		}
+		
+		private final List<BrailleTranslatorProvider<BrailleTranslator>> brailleTranslatorProviders
+			= new ArrayList<BrailleTranslatorProvider<BrailleTranslator>>();
+		
+		private final org.daisy.pipeline.braille.common.Provider.util.MemoizingProvider<Query,BrailleTranslator> brailleTranslatorProvider
+			= memoize(dispatch(brailleTranslatorProviders));
+		
+		@Reference(
+			name = "BrailleTranslatorProvider",
+			unbind = "unbindBrailleTranslatorProvider",
+			service = BrailleTranslatorProvider.class,
+			cardinality = ReferenceCardinality.MULTIPLE,
+			policy = ReferencePolicy.DYNAMIC
+		)
+		@SuppressWarnings(
+			"unchecked" // safe cast to BrailleTranslatorProvider<BrailleTranslator>
+		)
+		protected void bindBrailleTranslatorProvider(BrailleTranslatorProvider<?> provider) {
+			brailleTranslatorProviders.add((BrailleTranslatorProvider<BrailleTranslator>)provider);
+		}
+
+		protected void unbindBrailleTranslatorProvider(BrailleTranslatorProvider<?> provider) {
+			brailleTranslatorProviders.remove(provider);
+			brailleTranslatorProvider.invalidateCache();
+		}
+
+		private TemporaryBrailleTranslatorProvider temporaryBrailleTranslatorProvider = null;
+
+		@Reference(
+			name = "TemporaryBrailleTranslatorProvider",
+			service = TemporaryBrailleTranslatorProvider.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
+		)
+		protected void bindTemporaryBrailleTranslatorProvider(TemporaryBrailleTranslatorProvider provider) {
+			temporaryBrailleTranslatorProvider = provider;
 		}
 	}
 	

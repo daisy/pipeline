@@ -19,12 +19,8 @@
                 <xsl:apply-templates select="/*"/>
             </xsl:document>
         </xsl:variable>
-        <xsl:variable name="total-time" as="xs:double"
-                      select="sum(for $audio in $smil//audio
-                                  return pf:mediaoverlay-clock-value-to-seconds($audio/@clip-end)
-                                       - pf:mediaoverlay-clock-value-to-seconds($audio/@clip-begin))"/>
         <xsl:apply-templates mode="dur" select="$smil/*">
-            <xsl:with-param name="total-time" tunnel="yes" select="$total-time"/>
+            <xsl:with-param name="total-time" tunnel="yes" select="pf:smil-total-seconds($smil/*)"/>
         </xsl:apply-templates>
     </xsl:template>
 
@@ -69,16 +65,16 @@
     <xsl:template match="@clipBegin">
         <xsl:attribute name="clip-begin" select="concat(
                                                    'npt=',
-                                                   pf:mediaoverlay-seconds-to-timecount(
-                                                     pf:mediaoverlay-clock-value-to-seconds(.),
+                                                   pf:smil-seconds-to-timecount(
+                                                     pf:smil-clock-value-to-seconds(.),
                                                      's'))"/>
     </xsl:template>
 
     <xsl:template match="@clipEnd">
         <xsl:attribute name="clip-end" select="concat(
                                                  'npt=',
-                                                 pf:mediaoverlay-seconds-to-timecount(
-                                                   pf:mediaoverlay-clock-value-to-seconds(.),
+                                                 pf:smil-seconds-to-timecount(
+                                                   pf:smil-clock-value-to-seconds(.),
                                                    's'))"/>
     </xsl:template>
 
@@ -122,7 +118,7 @@
     
     <xsl:template mode="dur" match="/smil/body/seq/@dur">
         <xsl:param name="total-time" as="xs:double" tunnel="yes" required="yes"/>
-        <xsl:attribute name="{name()}" select="pf:mediaoverlay-seconds-to-timecount($total-time,'s')"/>
+        <xsl:attribute name="{name()}" select="pf:smil-seconds-to-timecount($total-time,'s')"/>
     </xsl:template>
 
     <xsl:template mode="dur" match="@*|node()">

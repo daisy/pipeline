@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-parent</artifactId>
-  <version>1.14.3-SNAPSHOT</version>
+  <version>1.14.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Parent POM</name>
@@ -149,7 +149,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>modules-build-helper</artifactId>
-          <version>2.6.0</version>
+          <version>2.7.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -223,12 +223,17 @@
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>calabash-adapter</artifactId>
-              <version>4.1.0</version>
+              <version>4.4.0</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.libs</groupId>
               <artifactId>com.xmlcalabash</artifactId>
-              <version>1.1.20-p5-98</version>
+              <version>1.1.20-p8-98</version>
+            </dependency>
+            <dependency>
+              <groupId>org.daisy.xprocspec</groupId>
+              <artifactId>xprocspec</artifactId>
+              <version>1.4.2</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
@@ -420,14 +425,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.3-SNAPSHOT</version>
+        <version>1.14.4-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.2-SNAPSHOT</version>
+        <version>1.14.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -447,12 +452,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-engine-daisy-pipeline</artifactId>
-        <version>1.14.0</version>
+        <version>1.14.1</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
@@ -468,6 +473,8 @@
       </activation>
       <properties>
         <generated-packages>
+          $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/common/saxon/impl);org.daisy.common.saxon.impl\;-split-package:=first,)
+          $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/common/xpath/saxon/impl);org.daisy.common.xpath.saxon.impl\;-split-package:=first,)
           $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/common/xproc/calabash/impl);org.daisy.common.xproc.calabash.impl\;-split-package:=first,)
           $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/pipeline/datatypes/impl);org.daisy.pipeline.datatypes.impl\;-split-package:=first,)
           $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/pipeline/modules/impl);org.daisy.pipeline.modules.impl\;-split-package:=first,)
@@ -492,6 +499,7 @@
             <directory>src/main/resources</directory>
             <excludes>
               <exclude>META-INF/catalog.xml</exclude>
+              <exclude>**/*.md</exclude>
             </excludes>
           </resource>
         </resources>
@@ -751,7 +759,7 @@
                       <directory>${project.basedir}</directory>
                       <includes>
                         <include>index.md</include>
-                        <include>src/main/README.md</include>
+                        <include>src/main/**/*.md</include>
                         <include>doc/**/*</include>
                       </includes>
                     </resource>

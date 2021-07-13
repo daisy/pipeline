@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-aggregator</artifactId>
-  <version>1.14.3-SNAPSHOT</version>
+  <version>1.14.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for all the modules</name>
@@ -24,7 +24,6 @@
     <module>common/common-utils</module>
     <module>common/file-utils</module>
     <module>common/fileset-utils</module>
-    <module>common/html-utils</module>
     <module>common/image-utils</module>
     <module>common/mediatype-utils</module>
     <module>common/validation-utils</module>
@@ -32,13 +31,13 @@
     <module>scripts-utils/ace-adapter</module>
     <module>scripts-utils/asciimath-utils</module>
     <module>scripts-utils/css-utils</module>
+    <module>scripts-utils/html-utils</module>
     <module>scripts-utils/daisy202-utils</module>
     <module>scripts-utils/daisy3-utils</module>
     <module>scripts-utils/dtbook-utils</module>
     <module>scripts-utils/epub-utils</module>
     <module>scripts-utils/epubcheck-adapter</module>
     <module>scripts-utils/epub3-to-html</module>
-    <module>scripts-utils/html-to-dtbook</module>
     <module>scripts-utils/mathml-utils</module>
     <module>scripts-utils/smil-utils</module>
     <module>scripts-utils/metadata-utils</module>
@@ -80,6 +79,7 @@
     <module>braille/texhyph-utils</module>
     <module>scripts/daisy202-to-epub3</module>
     <module>scripts/daisy202-validator</module>
+    <module>scripts/daisy202-to-daisy3</module>
     <module>scripts/daisy3-to-daisy202</module>
     <module>scripts/daisy3-to-epub3</module>
     <module>scripts/dtbook-to-daisy3</module>
@@ -97,6 +97,7 @@
     <module>scripts/epub3-to-epub3</module>
     <module>scripts/epub3-to-pef</module>
     <module>scripts/epub3-validator</module>
+    <module>scripts/html-to-dtbook</module>
     <module>scripts/html-to-epub3</module>
     <module>scripts/html-to-pef</module>
     <module>scripts/nimas-fileset-validator</module>
@@ -137,5 +138,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

@@ -1,5 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:l="http://xproc.org/library"
                 type="px:validate-with-relax-ng-and-report"
                 name="validate-with-relax-ng-and-report">
@@ -7,9 +10,9 @@
     <p:input port="source" primary="true"/>
     <p:input port="schema"/>
     <p:output port="result" primary="true"/>
-    <p:option name="assert-valid" select="'true'"/>
-    <p:option name="dtd-attribute-values" select="'false'"/>
-    <p:option name="dtd-id-idref-warnings" select="'false'"/>
+    <p:option name="assert-valid" select="'true'" cx:as="xs:string"/>
+    <p:option name="dtd-attribute-values" select="'false'" cx:as="xs:string"/>
+    <p:option name="dtd-id-idref-warnings" select="'false'" cx:as="xs:string"/>
 
     <p:import href="relax-ng-report.xpl">
         <p:documentation>

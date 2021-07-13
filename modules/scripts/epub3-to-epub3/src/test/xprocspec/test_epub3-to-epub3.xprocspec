@@ -237,13 +237,13 @@
 							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
 							<dc:date>2020-03-06</dc:date>
-							<meta property="media:duration">00:00:22.014</meta>
-							<meta name="media:duration" content="00:00:22.014"/>
+							<meta property="media:duration">0:00:22.014</meta>
+							<meta name="media:duration" content="0:00:22.014"/>
 							<meta property="schema:accessibilityFeature">captions</meta>
 							<meta name="schema:accessibilityFeature" content="captions"/>
-							<meta property="media:duration" refines="#item_1">00:00:01.223</meta>
-							<meta property="media:duration" refines="#item_2">00:00:08.561</meta>
-							<meta property="media:duration" refines="#item_3">00:00:12.23</meta>
+							<meta property="media:duration" refines="#item_1">0:00:01.223</meta>
+							<meta property="media:duration" refines="#item_2">0:00:08.561</meta>
+							<meta property="media:duration" refines="#item_3">0:00:12.230</meta>
 						</metadata>
 						<manifest>
 							<item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>

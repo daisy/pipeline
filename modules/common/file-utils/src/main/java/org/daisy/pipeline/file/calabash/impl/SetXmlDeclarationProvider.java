@@ -75,7 +75,7 @@ public class SetXmlDeclarationProvider implements XProcStepProvider {
 			File file = new File(sourceUri.getPath());
 			
 			if (file.isDirectory()) {
-				throw new XProcException(step.getNode(), "Cannot set xml declaration of file: file is a directory: " + file.getAbsolutePath());
+				throw new XProcException(step, "Cannot set xml declaration of file: file is a directory: " + file.getAbsolutePath());
 			}
 			
 			boolean ok = false;

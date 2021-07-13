@@ -215,8 +215,7 @@
 					<p:pipe step="catch" port="error"/>
 				</p:input>
 			</px:log-error>
-			<p:identity px:message="Failed to convert to DAISY 2.02 and DAISY 3 (Please see detailed log for more info.)"
-			            px:message-severity="ERROR"/>
+			<p:identity px:message="Failed to convert to DAISY 2.02 and DAISY 3" px:message-severity="ERROR"/>
 		</p:catch>
 	</p:try>
 

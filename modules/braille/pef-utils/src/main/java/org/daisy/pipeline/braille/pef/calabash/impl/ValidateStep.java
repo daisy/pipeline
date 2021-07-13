@@ -87,7 +87,7 @@ public class ValidateStep extends DefaultStep implements XProcStep {
 			
 			// FIXME: PEFValidator has moved to dotify.task.impl and should be created through the
 			// streamline API.
-			throw new UnsupportedOperationException("PEF validation currently not supported");
+			throw new XProcException(step, "PEF validation currently not supported");
 			
 			/*PEFValidator validator = new PEFValidator();
 			boolean valid = validator.validate(pefFile.toURI().toURL());
@@ -108,9 +108,9 @@ public class ValidateStep extends DefaultStep implements XProcStep {
 			}
 			result.write(pef);*/
 		
-		} catch (Exception e) {
-			logger.error("pef:validate failed", e);
-			throw new XProcException(step.getNode(), e); }
+		} catch (Throwable e) {
+			throw XProcStep.raiseError(e, step);
+		}
 	}
 	
 	@Component(

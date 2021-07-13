@@ -121,7 +121,7 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 			Medium medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
 			List<String> types = Arrays.asList(getOption(_type, DEFAULT_TYPES).trim().split("\\s+"));
 			if (!types.contains("text/css"))
-				throw new IllegalArgumentException("'type' option must contain 'text/css'");
+				throw new XProcException(step, "'type' option must contain 'text/css'");
 			boolean enableSass = types.contains("text/x-scss");
 			for (CssCascader inliner : inliners)
 				if (inliner.supportsMedium(medium)) {
@@ -141,10 +141,9 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 						new XMLCalabashOutputValue(resultPipe, runtime)
 					).run();
 					return; }
-			throw new RuntimeException("No CSS inliner implementation found for medium " + medium); }
-		catch (Exception e) {
-			logger.error("px:css-cascade failed", e);
-			throw new XProcException(step.getNode(), e); }
+			throw new XProcException(step, "No CSS inliner implementation found for medium " + medium); }
+		catch (Throwable e) {
+			throw XProcStep.raiseError(e, step); }
 	}
 
 	private static URIResolver fallback(final URIResolver... resolvers) {
@@ -178,7 +177,8 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 			XMLInputValue<Void> stylesheet = new SaxonInputValue(runtime.parse(stylesheetURI.toASCIIString(), null), conf);
 			Map<javax.xml.namespace.QName,InputValue<?>> params = new HashMap<>(); {
 				for (String p : parameters.keySet())
-					params.put(new javax.xml.namespace.QName(p), new InputValue(parameters.get(p))); }
+					params.put(new javax.xml.namespace.QName(p),
+					           new SaxonInputValue(new RuntimeValue(parameters.get(p)).getUntypedAtomic(runtime), conf)); }
 			SaxonBuffer buf = new SaxonBuffer(conf);
 			transform(
 				ImmutableMap.of(

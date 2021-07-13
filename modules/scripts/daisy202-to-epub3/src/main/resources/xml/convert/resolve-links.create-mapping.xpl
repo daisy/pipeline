@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" type="pxi:daisy202-to-epub3-resolve-links-create-mapping" name="resolve-links-create-mapping" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                type="pxi:daisy202-to-epub3-resolve-links-create-mapping">
 
     <p:documentation>
         <h1 px:role="desc">Creates a reusable mapping for pxi:daisy202-to-epub3-resolve-links</h1>
@@ -68,9 +72,9 @@
         </p:viewport>-->
         <p:for-each>
             <p:iteration-source select="//*[local-name()='par']"/>
-            <p:variable name="par-id" select="/*/@id"/>
-            <p:variable name="text-id" select="/*/*[local-name()='text']/@id"/>
-            <p:variable name="text-src" select="/*/*[local-name()='text']/resolve-uri(@src,base-uri(.))"/>
+            <p:variable name="par-id" cx:as="xs:string" select="/*/@id"/>
+            <p:variable name="text-id" cx:as="xs:string" select="/*/*[local-name()='text']/@id"/>
+            <p:variable name="text-src" cx:as="xs:string" select="/*/*[local-name()='text']/resolve-uri(@src,base-uri(.))"/>
             <p:identity name="current-smil"/>
             <p:in-scope-names name="vars"/>
             <p:template>

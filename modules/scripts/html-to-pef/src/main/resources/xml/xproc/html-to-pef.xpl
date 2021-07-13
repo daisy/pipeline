@@ -58,6 +58,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     </p:option>
     
     <p:option name="stylesheet-parameters"/>
+    <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
@@ -83,6 +84,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
+    <p:option name="notes-placement"/>
     <p:option name="pef-output-dir"/>
     <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
@@ -129,11 +131,12 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- pass all the variables all the time.              -->
     <!-- ================================================= -->
     <p:in-scope-names name="in-scope-names"/>
-    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:progress=".01"
+    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:message-severity="DEBUG" px:progress=".01"
                           parameter-names="html
                                            stylesheet
                                            stylesheet-parameters
                                            transform
+                                           braille-code
                                            ascii-file-format
                                            ascii-table
                                            include-brf
@@ -157,7 +160,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- =============== -->
     <!-- CREATE TEMP DIR -->
     <!-- =============== -->
-    <px:tempdir name="temp-dir" px:message="Creating temporary directory" px:progress=".01">
+    <px:tempdir name="temp-dir" px:message="Creating temporary directory" px:message-severity="DEBUG" px:progress=".01">
         <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
     </px:tempdir>
     
@@ -182,7 +185,8 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>
         <p:with-option name="stylesheet" select="$stylesheet"/>
-        <p:with-option name="transform" select="$transform"/>
+        <p:with-option name="transform"
+                       select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
@@ -193,7 +197,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- ========= -->
     <!-- STORE PEF -->
     <!-- ========= -->
-    <px:html-to-pef.store px:message="Storing PEF" px:progress=".05">
+    <px:html-to-pef.store px:message="Storing results" px:progress=".05">
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>

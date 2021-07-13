@@ -199,7 +199,7 @@ public class TranslateFileStep extends DefaultStep implements XProcStep {
 						if (configPath == null)
 							configPath = path;
 						else if (!configPath.equals(path))
-							throw new XProcException(step.getNode(),
+							throw new XProcException(step,
 									"All configuration files and semantic action files must be placed in " + configPath);
 						configFileNames.add(URLs.relativize(path, uri).getPath()); }}}
 			
@@ -216,7 +216,7 @@ public class TranslateFileStep extends DefaultStep implements XProcStep {
 						if (configPath == null)
 							configPath = path;
 						else if (!configPath.equals(path))
-							throw new XProcException(step.getNode(),
+							throw new XProcException(step,
 									"All configuration files and semantic action files must be placed in " + configPath);
 						semanticFileNames.add(path.relativize(uri).getPath()); }}}
 			
@@ -255,8 +255,8 @@ public class TranslateFileStep extends DefaultStep implements XProcStep {
 					break; }
 			reader.close(); }
 		
-		catch (Exception e) {
-			throw new XProcException(step.getNode(), e); }
+		catch (Throwable e) {
+			throw XProcStep.raiseError(e, step); }
 	}
 	
 	private void writeDocument(URI baseURI, String textContent, int pageCount) {

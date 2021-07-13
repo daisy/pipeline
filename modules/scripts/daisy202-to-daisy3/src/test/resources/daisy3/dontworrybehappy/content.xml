@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="dtbook.2005.basic.css"?><!DOCTYPE dtbook
+  PUBLIC "-//NISO//DTD dtbook 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-2" xml:lang="en">
+   <head>
+      <meta name="dtb:uid" content="F00000"/>
+      <meta name="dc:Title" content="Don't Worry, Be Happy Lyrics"/>
+      <meta name="dc:Creator" content="Bobby McFerrin"/>
+      <meta name="dc:Publisher" content="Ferrin press"/>
+      <meta name="dc:Language" content="en-US"/>
+      <meta name="dc:Date" content="1992-03-23"/>
+   </head>
+   <book>
+      <frontmatter>
+         <doctitle>Don't Worry, Be Happy Lyrics</doctitle>
+      </frontmatter>
+      <bodymatter>
+         <level1 class="title">
+            <h1 id="h1classtitle" smilref="speechgen0001.smil#doctitle">
+			Don't Worry, Be Happy
+		</h1>
+            <div class="doctitle">
+               <p class="inserted-by-transformer">
+			               <sent id="dtb1" smilref="speechgen0001.smil#tcp1">
+				Don't Worry, Be Happy
+			</sent>
+		             </p>
+            </div>
+            <div class="docauthor">
+               <p class="inserted-by-transformer">
+			               <sent id="dtb2" smilref="speechgen0001.smil#tcp2">
+				Bobby McFerrin
+			</sent>
+		             </p>
+            </div>
+            <div class="level1">
+			            <p>
+				              <sent id="dtb3" smilref="speechgen0001.smil#tcp3">
+					From the Movie "Cocktails".
+				</sent>
+			            </p>
+			            <p>
+				              <sent id="dtb4" smilref="speechgen0001.smil#tcp4">
+					originally Performed by Bobby McFerrin.
+				</sent>
+			            </p>
+			            <p>
+				              <sent id="dtb5" smilref="speechgen0001.smil#tcp5">
+					With commentary by Professor S. 
+				</sent>
+				              <sent id="dtb6" smilref="speechgen0001.smil#tcp6">
+					Boork Boork, Oxford Cambridge.
+				</sent>
+			            </p>
+		          </div>
+            <div class="level1">
+			            <level1>
+                  <h1>
+				                 <sent id="dtb7" smilref="speechgen0002.smil#tcp7">
+					Introductio
+				</sent>
+			               </h1>
+                  <div class="linegroup">
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb8" smilref="speechgen0002.smil#tcp8">
+						Here is a little song I wrote
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent smilref="speechgen0002.smil#tcp10">
+						                        <span id="dtb9" smilref="speechgen0002.smil#tcp9">
+							You might want to sing it note
+						</span>
+						1
+						<span id="dtb11" smilref="speechgen0002.smil#tcp11">
+							 for note 
+						</span>
+					                      </sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb12" smilref="speechgen0002.smil#tcp12">
+						Don't worry be happy
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb13" smilref="speechgen0002.smil#tcp13">
+						In every life we have some trouble
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb14" smilref="speechgen0002.smil#tcp14">
+						When you worry you make it double
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb15" smilref="speechgen0002.smil#tcp15">
+						Don't worry, be happy......
+					</sent>
+				                    </p>
+                     </div>
+			               </div>
+               </level1>
+			            <div class="linegroup">
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb8" smilref="speechgen0002.smil#tcp8">
+						Here is a little song I wrote
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent smilref="speechgen0002.smil#tcp10">
+						                     <span id="dtb9" smilref="speechgen0002.smil#tcp9">
+							You might want to sing it note
+						</span>
+						1
+						<span id="dtb11" smilref="speechgen0002.smil#tcp11">
+							 for note 
+						</span>
+					                   </sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb12" smilref="speechgen0002.smil#tcp12">
+						Don't worry be happy
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb13" smilref="speechgen0002.smil#tcp13">
+						In every life we have some trouble
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb14" smilref="speechgen0002.smil#tcp14">
+						When you worry you make it double
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb15" smilref="speechgen0002.smil#tcp15">
+						Don't worry, be happy......
+					</sent>
+				                 </p>
+                  </div>
+			            </div>
+		          </div>
+            <div class="level1">
+			            <level1>
+                  <h1>
+				                 <sent id="dtb16" smilref="speechgen0003.smil#tcp16">
+					Versa media, pre peripetum
+				</sent>
+			               </h1>
+                  <div class="linegroup">
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb17" smilref="speechgen0003.smil#tcp17">
+						Ain't got no place to lay your head
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb18" smilref="speechgen0003.smil#tcp18">
+						Somebody came and took your bed
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb19" smilref="speechgen0003.smil#tcp19">
+						Don't worry, be happy
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent smilref="speechgen0003.smil#tcp21">
+						                        <span id="dtb20" smilref="speechgen0003.smil#tcp20">
+							The land lord say your rent is late
+						</span>
+						2
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb22" smilref="speechgen0003.smil#tcp22">
+						He may have to litigate
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb23" smilref="speechgen0003.smil#tcp23">
+						Don't worry, be happy
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb24" smilref="speechgen0003.smil#tcp24">
+						Lood at me I am happy
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb25" smilref="speechgen0003.smil#tcp25">
+						Don't worry, be happy
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb26" smilref="speechgen0003.smil#tcp26">
+						Here I give you my phone number
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb27" smilref="speechgen0003.smil#tcp27">
+						When you worry call me
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb28" smilref="speechgen0003.smil#tcp28">
+						I make you happy
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb29" smilref="speechgen0003.smil#tcp29">
+						Don't worry, be happy
+					</sent>
+				                    </p>
+                     </div>
+			               </div>
+                  <div class="level2">
+				                 <level2>
+                        <h2>
+					                      <sent id="dtb30" smilref="speechgen0004.smil#tcp30">
+						Culmen interludiaris
+					</sent>
+				                    </h2>
+                        <div class="linegroup">
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb31" smilref="speechgen0004.smil#tcp31">
+							Ain't got no cash, ain't got no style
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb32" smilref="speechgen0004.smil#tcp32">
+							Ain't got not girl to make you smile
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb33" smilref="speechgen0004.smil#tcp33">
+							But don't worry be happy
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb34" smilref="speechgen0004.smil#tcp34">
+							Cause when you worry
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb35" smilref="speechgen0004.smil#tcp35">
+							Your face will frown
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb36" smilref="speechgen0004.smil#tcp36">
+							And that will bring everybody down
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb37" smilref="speechgen0004.smil#tcp37">
+							So don't worry, be happy (now).....
+						</sent>
+					                         </p>
+                           </div>
+				                    </div>
+                     </level2>
+				                 <div class="linegroup">
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb31" smilref="speechgen0004.smil#tcp31">
+							Ain't got no cash, ain't got no style
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb32" smilref="speechgen0004.smil#tcp32">
+							Ain't got not girl to make you smile
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb33" smilref="speechgen0004.smil#tcp33">
+							But don't worry be happy
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb34" smilref="speechgen0004.smil#tcp34">
+							Cause when you worry
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb35" smilref="speechgen0004.smil#tcp35">
+							Your face will frown
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb36" smilref="speechgen0004.smil#tcp36">
+							And that will bring everybody down
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb37" smilref="speechgen0004.smil#tcp37">
+							So don't worry, be happy (now).....
+						</sent>
+					                      </p>
+                        </div>
+				                 </div>
+			               </div>
+               </level1>
+			            <div class="linegroup">
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb17" smilref="speechgen0003.smil#tcp17">
+						Ain't got no place to lay your head
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb18" smilref="speechgen0003.smil#tcp18">
+						Somebody came and took your bed
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb19" smilref="speechgen0003.smil#tcp19">
+						Don't worry, be happy
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent smilref="speechgen0003.smil#tcp21">
+						                     <span id="dtb20" smilref="speechgen0003.smil#tcp20">
+							The land lord say your rent is late
+						</span>
+						2
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb22" smilref="speechgen0003.smil#tcp22">
+						He may have to litigate
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb23" smilref="speechgen0003.smil#tcp23">
+						Don't worry, be happy
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb24" smilref="speechgen0003.smil#tcp24">
+						Lood at me I am happy
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb25" smilref="speechgen0003.smil#tcp25">
+						Don't worry, be happy
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb26" smilref="speechgen0003.smil#tcp26">
+						Here I give you my phone number
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb27" smilref="speechgen0003.smil#tcp27">
+						When you worry call me
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb28" smilref="speechgen0003.smil#tcp28">
+						I make you happy
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb29" smilref="speechgen0003.smil#tcp29">
+						Don't worry, be happy
+					</sent>
+				                 </p>
+                  </div>
+			            </div>
+			            <div class="level2">
+				              <level2>
+                     <h2>
+					                   <sent id="dtb30" smilref="speechgen0004.smil#tcp30">
+						Culmen interludiaris
+					</sent>
+				                 </h2>
+                     <div class="linegroup">
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb31" smilref="speechgen0004.smil#tcp31">
+							Ain't got no cash, ain't got no style
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb32" smilref="speechgen0004.smil#tcp32">
+							Ain't got not girl to make you smile
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb33" smilref="speechgen0004.smil#tcp33">
+							But don't worry be happy
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb34" smilref="speechgen0004.smil#tcp34">
+							Cause when you worry
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb35" smilref="speechgen0004.smil#tcp35">
+							Your face will frown
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb36" smilref="speechgen0004.smil#tcp36">
+							And that will bring everybody down
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb37" smilref="speechgen0004.smil#tcp37">
+							So don't worry, be happy (now).....
+						</sent>
+					                      </p>
+                        </div>
+				                 </div>
+                  </level2>
+				              <div class="linegroup">
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb31" smilref="speechgen0004.smil#tcp31">
+							Ain't got no cash, ain't got no style
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb32" smilref="speechgen0004.smil#tcp32">
+							Ain't got not girl to make you smile
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb33" smilref="speechgen0004.smil#tcp33">
+							But don't worry be happy
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb34" smilref="speechgen0004.smil#tcp34">
+							Cause when you worry
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb35" smilref="speechgen0004.smil#tcp35">
+							Your face will frown
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb36" smilref="speechgen0004.smil#tcp36">
+							And that will bring everybody down
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb37" smilref="speechgen0004.smil#tcp37">
+							So don't worry, be happy (now).....
+						</sent>
+					                   </p>
+                     </div>
+				              </div>
+			            </div>
+		          </div>
+            <div class="level1">
+			            <level1>
+                  <h1>
+				                 <sent id="dtb38" smilref="speechgen0005.smil#tcp38">
+					Concludio
+				</sent>
+			               </h1>
+                  <div class="linegroup">
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb39" smilref="speechgen0005.smil#tcp39">
+						There is this little song I wrote
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb40" smilref="speechgen0005.smil#tcp40">
+						I hope you learn it note for note
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb41" smilref="speechgen0005.smil#tcp41">
+						Like good little children
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb42" smilref="speechgen0005.smil#tcp42">
+						Don't worry, be happy
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb43" smilref="speechgen0005.smil#tcp43">
+						Listen to what I say
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb44" smilref="speechgen0005.smil#tcp44">
+						In your life expect some trouble
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb45" smilref="speechgen0005.smil#tcp45">
+						But when you worry
+					</sent>
+				                    </p>
+                     </div>
+				                 <div class="line">
+                        <p class="inserted-by-transformer">
+					                      <sent id="dtb46" smilref="speechgen0005.smil#tcp46">
+						You make it double
+					</sent>
+				                    </p>
+                     </div>
+			               </div>
+                  <div class="level2">
+				                 <level2>
+                        <h2>
+					                      <sent id="dtb47" smilref="speechgen0006.smil#tcp47">
+						Repetitio ad nauseam
+					</sent>
+				                    </h2>
+                        <div class="linegroup">
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb48" smilref="speechgen0006.smil#tcp48">
+							Don't worry, be happy......
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb49" smilref="speechgen0006.smil#tcp49">
+							Don't worry don't do it, be happy
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb50" smilref="speechgen0006.smil#tcp50">
+							Put a smile on your face
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb51" smilref="speechgen0006.smil#tcp51">
+							Don't bring everybody down like this
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb52" smilref="speechgen0006.smil#tcp52">
+							Don't worry, it will soon past
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb53" smilref="speechgen0006.smil#tcp53">
+							Whatever it is
+						</sent>
+					                         </p>
+                           </div>
+					                      <div class="line">
+                              <p class="inserted-by-transformer">
+						                           <sent id="dtb54" smilref="speechgen0006.smil#tcp54">
+							Don't worry, be happy
+						</sent>
+					                         </p>
+                           </div>
+				                    </div>
+                     </level2>
+				                 <div class="linegroup">
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb48" smilref="speechgen0006.smil#tcp48">
+							Don't worry, be happy......
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb49" smilref="speechgen0006.smil#tcp49">
+							Don't worry don't do it, be happy
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb50" smilref="speechgen0006.smil#tcp50">
+							Put a smile on your face
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb51" smilref="speechgen0006.smil#tcp51">
+							Don't bring everybody down like this
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb52" smilref="speechgen0006.smil#tcp52">
+							Don't worry, it will soon past
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb53" smilref="speechgen0006.smil#tcp53">
+							Whatever it is
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb54" smilref="speechgen0006.smil#tcp54">
+							Don't worry, be happy
+						</sent>
+					                      </p>
+                        </div>
+				                 </div>
+			               </div>
+               </level1>
+			            <div class="linegroup">
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb39" smilref="speechgen0005.smil#tcp39">
+						There is this little song I wrote
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb40" smilref="speechgen0005.smil#tcp40">
+						I hope you learn it note for note
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb41" smilref="speechgen0005.smil#tcp41">
+						Like good little children
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb42" smilref="speechgen0005.smil#tcp42">
+						Don't worry, be happy
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb43" smilref="speechgen0005.smil#tcp43">
+						Listen to what I say
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb44" smilref="speechgen0005.smil#tcp44">
+						In your life expect some trouble
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb45" smilref="speechgen0005.smil#tcp45">
+						But when you worry
+					</sent>
+				                 </p>
+                  </div>
+				              <div class="line">
+                     <p class="inserted-by-transformer">
+					                   <sent id="dtb46" smilref="speechgen0005.smil#tcp46">
+						You make it double
+					</sent>
+				                 </p>
+                  </div>
+			            </div>
+			            <div class="level2">
+				              <level2>
+                     <h2>
+					                   <sent id="dtb47" smilref="speechgen0006.smil#tcp47">
+						Repetitio ad nauseam
+					</sent>
+				                 </h2>
+                     <div class="linegroup">
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb48" smilref="speechgen0006.smil#tcp48">
+							Don't worry, be happy......
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb49" smilref="speechgen0006.smil#tcp49">
+							Don't worry don't do it, be happy
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb50" smilref="speechgen0006.smil#tcp50">
+							Put a smile on your face
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb51" smilref="speechgen0006.smil#tcp51">
+							Don't bring everybody down like this
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb52" smilref="speechgen0006.smil#tcp52">
+							Don't worry, it will soon past
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb53" smilref="speechgen0006.smil#tcp53">
+							Whatever it is
+						</sent>
+					                      </p>
+                        </div>
+					                   <div class="line">
+                           <p class="inserted-by-transformer">
+						                        <sent id="dtb54" smilref="speechgen0006.smil#tcp54">
+							Don't worry, be happy
+						</sent>
+					                      </p>
+                        </div>
+				                 </div>
+                  </level2>
+				              <div class="linegroup">
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb48" smilref="speechgen0006.smil#tcp48">
+							Don't worry, be happy......
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb49" smilref="speechgen0006.smil#tcp49">
+							Don't worry don't do it, be happy
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb50" smilref="speechgen0006.smil#tcp50">
+							Put a smile on your face
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb51" smilref="speechgen0006.smil#tcp51">
+							Don't bring everybody down like this
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb52" smilref="speechgen0006.smil#tcp52">
+							Don't worry, it will soon past
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb53" smilref="speechgen0006.smil#tcp53">
+							Whatever it is
+						</sent>
+					                   </p>
+                     </div>
+					                <div class="line">
+                        <p class="inserted-by-transformer">
+						                     <sent id="dtb54" smilref="speechgen0006.smil#tcp54">
+							Don't worry, be happy
+						</sent>
+					                   </p>
+                     </div>
+				              </div>
+			            </div>
+		          </div>
+            <div class="level1">
+			            <level1>
+                  <h1>
+				                 <sent id="dtb55" smilref="speechgen0007.smil#tcp55">
+					Notes
+				</sent>
+			               </h1>
+                  <note id="fn1">
+				                 <p>
+					                   <sent id="dtb56">The author makes a plump reference to Homeros, Iliad, book 4 Chapter 4, verse 3.</sent>
+				                 </p>
+			               </note>
+                  <note id="fn2">
+				                 <p>
+					                   <sent id="dtb57">This was initially expressed in T.S. </sent>
+					                   <sent id="dtb58">Eliot, The Wasteland, and in Hugh Selwyn Mauberley, stanza 4, line 3.</sent>
+				                 </p>
+			               </note>
+               </level1>
+			            <note id="fn1">
+				              <p>
+					                <sent id="dtb56">The author makes a plump reference to Homeros, Iliad, book 4 Chapter 4, verse 3.</sent>
+				              </p>
+			            </note>
+			            <note id="fn2">
+				              <p>
+					                <sent id="dtb57">This was initially expressed in T.S. </sent>
+					                <sent id="dtb58">Eliot, The Wasteland, and in Hugh Selwyn Mauberley, stanza 4, line 3.</sent>
+				              </p>
+			            </note>
+		          </div>
+         </level1>
+      </bodymatter>
+   </book>
+</dtbook>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 type="px:daisy202-to-epub3"
                 name="main">
 
@@ -53,6 +53,11 @@
     <p:import href="media-overlay.xpl"/>
     <p:import href="resources.xpl"/>
     <p:import href="package.xpl"/>
+    <cx:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:daisy202-identifier
+        </p:documentation>
+    </cx:import>
 
     <p:variable name="epub-dir" select="concat($output-dir,'epub/')"/>
     <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>
@@ -179,7 +184,7 @@
     </p:identity>
     <px:message message="Extracting dc:identifier from NCC"/>
     <p:add-attribute name="pub-id" match="/*" attribute-name="value">
-        <p:with-option name="attribute-value" select="/html:html/html:head/html:meta[@name='dc:identifier']/@content"/>
+        <p:with-option name="attribute-value" select="pf:daisy202-identifier(/)"/>
         <p:input port="source">
             <p:inline>
                 <d:meta name="pub-id"/>

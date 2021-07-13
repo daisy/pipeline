@@ -84,21 +84,32 @@ public interface DotifyCSSStyledDocumentTransform {
 							return empty;
 					if ((pef && obfl) || !(pef || obfl))
 						return empty;
-					final MutableQuery blockTransformQuery = mutableQuery(q).add("input", "css").add("output", "css");
-					if (obfl && braille)
-						blockTransformQuery.add("output", "braille");
-					Iterable<BrailleTranslator> blockTransforms = logSelect(blockTransformQuery, brailleTranslatorProvider);
+					boolean forcePretranslation = false;
+					if (q.containsKey("force-pre-translation")) {
+						forcePretranslation = true;
+						q.removeOnly("force-pre-translation");
+					}
 					final Query textTransformQuery = mutableQuery(q).add("input", "text-css").add("output", "braille");
 					final boolean _obfl = obfl;
-					return transform(
-						blockTransforms,
-						new Function<BrailleTranslator,Transform>() {
-							public Transform _apply(BrailleTranslator blockTransform) {
-								return __apply(
-									logCreate(new TransformImpl(_obfl,
-									                            blockTransformQuery.toString(),
-									                            blockTransform,
-									                            textTransformQuery))); }}); }}
+					
+					// only pre-translate if an intermediary OBFL with braille content is requested
+					if (obfl && braille || forcePretranslation) {
+						final MutableQuery blockTransformQuery = mutableQuery(q).add("input", "css")
+						                                                        .add("output", "css")
+						                                                        .add("output", "braille");
+						Iterable<BrailleTranslator> blockTransforms = logSelect(blockTransformQuery, brailleTranslatorProvider);
+						return transform(
+							blockTransforms,
+							new Function<BrailleTranslator,Transform>() {
+								public Transform _apply(BrailleTranslator blockTransform) {
+									return __apply(
+										logCreate(new TransformImpl(_obfl,
+										                            blockTransformQuery.toString(),
+										                            blockTransform,
+										                            textTransformQuery))); }}); }
+					else
+						return AbstractTransformProvider.util.Iterables.of(
+								logCreate(new TransformImpl(_obfl, "", null, textTransformQuery))); }}
 			catch (IllegalStateException e) {}
 			return empty;
 		}

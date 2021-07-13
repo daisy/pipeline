@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
-                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
                 xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:dtbook-to-zedai" name="main"
                 exclude-inline-prefixes="#all">
 
@@ -81,13 +83,13 @@
             Language code of the input document.
         </p:documentation>
     </p:option>
-    <p:option name="opt-assert-valid" required="false" px:type="boolean" select="'true'">
+    <p:option name="opt-assert-valid" required="false" px:type="boolean" select="'true'" cx:as="xs:string">
         <p:documentation>
             Whether to stop processing and raise an error on validation issues.
         </p:documentation>
     </p:option>
 
-    <p:option name="opt-copy-external-resources" select="'true'">
+    <p:option name="opt-copy-external-resources" select="'true'" cx:as="xs:string">
         <p:documentation>
             Whether or not to include any referenced external resources like images and CSS-files in the output.
         </p:documentation>

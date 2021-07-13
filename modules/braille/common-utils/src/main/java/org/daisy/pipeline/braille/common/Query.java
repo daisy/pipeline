@@ -4,13 +4,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
+import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
+import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+
 import com.google.common.collect.ForwardingList;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+
+import static com.xmlcalabash.core.XProcConstants.NS_XPROC_STEP;
+
+import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
+import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 
 public interface Query extends Iterable<Query.Feature> {
 	
@@ -79,6 +92,10 @@ public interface Query extends Iterable<Query.Feature> {
 			throw new RuntimeException("Could not parse query: " + query);
 		}
 		
+		public static Query query(XMLStreamReader query) throws XMLStreamException {
+			return unmarshallQuery(query);
+		}
+
 		/* mutableQuery() */
 		
 		public static MutableQuery mutableQuery() {
@@ -91,6 +108,71 @@ public interface Query extends Iterable<Query.Feature> {
 			return q;
 		}
 		
+		/* marshallQuery & unmarshallQuery */
+
+		private static final QName C_PARAM_SET = new QName(NS_XPROC_STEP, "param-set", "c");
+		private static final QName C_PARAM = new QName(NS_XPROC_STEP, "param", "c");
+		private static final QName _NAME = new QName("name");
+		private static final QName _NAMESPACE = new QName("namespace");
+		private static final QName _VALUE = new QName("value");
+
+		/**
+		 * Convert query to c:param-set document
+		 */
+		public static void marshallQuery(Query query, XMLStreamWriter writer) throws XMLStreamException {
+			writeStartElement(writer, C_PARAM_SET);
+			for (Feature f : query) {
+				writeStartElement(writer, C_PARAM);
+				writeAttribute(writer, _NAME, f.getKey());
+				writeAttribute(writer, _NAMESPACE, "");
+				writeAttribute(writer, _VALUE, f.getValue().orElse("true"));
+				writer.writeEndElement();
+			}
+			writer.writeEndElement();
+		}
+
+		/**
+		 * Convert c:param-set document to query
+		 */
+		public static Query unmarshallQuery(XMLStreamReader reader) throws XMLStreamException {
+			MutableQuery query = mutableQuery();
+			int depth = 0;
+			int event = reader.next();
+			while (true)
+				try {
+					switch (event) {
+					case START_ELEMENT:
+						if (depth == 0 && C_PARAM.equals(reader.getName())) {
+							String name = null;
+							String namespace = null;
+							String value = null;
+							for (int i = 0; i < reader.getAttributeCount(); i++) {
+								QName attrName = reader.getAttributeName(i);
+								String attrValue = reader.getAttributeValue(i);
+								if (_NAME.equals(attrName))
+									name = attrValue;
+								else if (_NAMESPACE.equals(attrName))
+									namespace = attrValue;
+								else if (_VALUE.equals(attrName))
+									value = attrValue;
+							}
+							if ((namespace == null || "".equals(namespace)) && name != null && value != null)
+								query.add(name, value);
+						}
+						depth++;
+						break;
+					case END_ELEMENT:
+						depth--;
+						break;
+					default:
+					}
+					event = reader.next();
+				} catch (NoSuchElementException e) {
+					break;
+				}
+			return query.asImmutable();
+		}
+
 		private static abstract class AbstractQueryImpl extends ForwardingList<Feature> implements Query {
 			
 			public boolean containsKey(String key) {

@@ -14,8 +14,8 @@ that internally converts the input document (styled with CSS) into the
 OBFL format. Scripts provide the option to retreive this intermediary
 OBFL document.
 
-The formatting is preceded by a "pre-translation" step in which text
-is transcribed to braille if possible,
+The formatting is preceded by an optional "pre-translation" step in
+which text is transcribed to braille if possible,
 [block](https://www.w3.org/TR/2007/WD-css3-box-20070809/#block-level)
 per block. The result of this step is a copy of the input document
 with some text nodes translated to braille, and some text-level CSS
@@ -63,6 +63,9 @@ can be selected using a transformer query that contains
   or not at all. A value not equal to "none" or "auto" will match
   every Dotify translator that uses an external hyphenator that
   matches this feature.
+
+`force-pre-translation`
+: A value "true" will enable the pre-translation step. Disabled by default.
 
 No other features are allowed.
 

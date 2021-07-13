@@ -10,7 +10,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -72,9 +71,8 @@ public class ASCIIMathMLProvider implements XProcStepProvider {
 				logger.info("Translating `" + ascii + "` to MathML ...");
 				result.write(runtime.getProcessor().newDocumentBuilder().build(
 					new StreamSource(new StringReader(Serializer.serialize(ASCIIMathML.convert(ascii)))))); }
-			catch (Exception e) {
-				logger.error("px:asciimathml failed", e);
-				throw new XProcException(step.getNode(), e); }
+			catch (Throwable e) {
+				throw XProcStep.raiseError(e, step); }
 		}
 	}
 	

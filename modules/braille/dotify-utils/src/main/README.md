@@ -24,11 +24,7 @@
 
 ## XMLCalabash XProc steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
 
-- [`{http://code.google.com/p/dotify/}obfl-to-pef`](java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java)
-
-  See [XProc documentation](resources/xml/library.xpl)
-
-- [`{http://code.google.com/p/dotify/}file-to-obfl`](java/org/daisy/pipeline/braille/dotify/calabash/impl/FileToOBFLStep.java)
+- [`{http://www.daisy.org/ns/pipeline/xproc/internal}obfl-to-pef`](java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java)
 
   See [XProc documentation](resources/xml/library.xpl)
 

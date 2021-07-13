@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.3-SNAPSHOT</version>
+    <version>1.14.4-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-utils</artifactId>
-  <version>4.0.3-SNAPSHOT</version>
+  <version>4.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: dotify-utils</name>
@@ -37,6 +37,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>css-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -67,11 +71,6 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>css-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -118,12 +117,14 @@
       org.daisy.pipeline.modules.impl.Module_dotify_utils,
       org.daisy.pipeline.braille.dotify.calabash.impl.OBFLToPEFStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.ShiftObflMarkerStep$Provider,
+      org.daisy.pipeline.braille.dotify.calabash.impl.TemporaryBrailleTranslatorProvider,
       org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl,
       org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl,
       org.daisy.pipeline.braille.dotify.impl.DotifyCSSStyledDocumentTransform$Provider,
       org.daisy.pipeline.braille.dotify.impl.DotifyHyphenatorImpl$Provider,
       org.daisy.pipeline.braille.dotify.impl.DotifyOBFLTransform$Provider,
-      org.daisy.pipeline.braille.dotify.impl.DotifyTranslatorImpl$Provider
+      org.daisy.pipeline.braille.dotify.impl.DotifyTranslatorImpl$Provider,
+      org.daisy.pipeline.braille.dotify.impl.PreTranslatedBrailleTranslatorProvider
     </expose-services>
   </properties>
   

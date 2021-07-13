@@ -13,7 +13,6 @@ import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -110,9 +109,8 @@ public class CssShiftIdStep extends DefaultStep implements XProcStep {
 				new XMLCalabashInputValue(sourcePipe, runtime),
 				new XMLCalabashOutputValue(resultPipe, runtime))
 			.run(); }
-		catch (Exception e) {
-			logger.error("css:shift-id failed", e);
-			throw new XProcException(step.getNode(), e); }
+		catch (Throwable e) {
+			throw XProcStep.raiseError(e, step); }
 	}
 	
 	private static class ShiftIdTransformer extends SingleInSingleOutXMLTransformer {

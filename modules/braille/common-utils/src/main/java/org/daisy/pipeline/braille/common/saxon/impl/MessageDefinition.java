@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.google.common.base.CharMatcher;
 
-import com.xmlcalabash.core.XProcException;
-
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -98,8 +96,8 @@ public class MessageDefinition extends ExtensionFunctionDefinition {
 						logger.trace(msg, (Object[])args);
 						break; }
 					return VOID; }
-				catch (Exception e) {
-					throw new XPathException("pf:message failed", XProcException.javaError(e, 0)); }
+				catch (Throwable e) {
+					throw new XPathException("Unexpected error in pf:message", e); }
 			}
 		};
 	}

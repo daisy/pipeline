@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:fileset-update" name="main">
 	
@@ -76,7 +78,7 @@
 			</p:input>
 		</p:identity>
 		<p:group>
-			<p:variable name="file-not-in-manifest" select="/*/d:file[1]/resolve-uri(@href,base-uri(.))">
+			<p:variable name="file-not-in-manifest" cx:as="xs:string" select="/*/d:file[1]/resolve-uri(@href,base-uri(.))">
 				<p:pipe step="diff" port="result"/>
 			</p:variable>
 			<px:assert message="Trying to update a fileset with a file that is not in the source manifest: $1" error-code="XXXXX">

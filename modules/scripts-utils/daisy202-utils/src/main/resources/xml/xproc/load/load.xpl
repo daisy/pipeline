@@ -173,6 +173,9 @@
                 <p:pipe port="result" step="in-memory"/>
             </p:input>
         </px:mediatype-detect>
+        <p:label-elements match="d:file[@media-type='application/xhtml+xml'][not(@media-version)]"
+                          attribute="media-version"
+                          label="'4.0'"/>
         <p:identity name="fileset"/>
     </p:group>
 </p:declare-step>

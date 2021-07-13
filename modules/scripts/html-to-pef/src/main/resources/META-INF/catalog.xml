@@ -9,7 +9,8 @@
                    ../css/page-layout.params
                    ../css/generate-toc.params
                    ../css/page-breaking.params
-                   ../css/volume-breaking.params"/>
+                   ../css/volume-breaking.params
+                   ../css/notes.params"/>
   
   <!-- xproc library -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
@@ -18,9 +19,10 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css" uri="../css/reset.css"/>
   <!-- for epub3-to-pef -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/default.scss" uri="../css/default.scss"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl" uri="../css/volume-breaking.xsl"/>
-  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/generate-toc.xsl" uri="../css/generate-toc.xsl"/>
   
+  <!-- partials -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/_tables.scss" uri="../css/_tables.scss"/>
+
   <!-- dependencies -->
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>

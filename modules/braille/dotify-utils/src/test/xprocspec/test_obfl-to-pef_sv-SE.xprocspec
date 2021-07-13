@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:dotify="http://code.google.com/p/dotify/"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
-               script="../resources/obfl-to-pef.xpl">
+               script="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl">
   
   <x:scenario label="test_01">
     <x:documentation>
-      Tests int2text function (requires that dotify.text.impl is loaded)
+      Tests int2text function
     </x:documentation>
-    <x:call step="dotify:obfl-to-pef">
+    <x:call step="px:obfl-to-pef">
       <x:input port="source">
         <x:document type="inline">
           <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" hyphenate="true" xml:lang="sv-SE">

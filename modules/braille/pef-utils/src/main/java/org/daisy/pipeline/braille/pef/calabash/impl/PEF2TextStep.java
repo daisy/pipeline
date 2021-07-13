@@ -123,8 +123,7 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 		logger.debug("Finding file format for query: " + q);
 		Iterable<FileFormat> fileFormats = fileFormatProvider.get(q);
 		if (!fileFormats.iterator().hasNext()) {
-			logger.error("pef:pef2text failed: no file format found for query: " + q);
-			throw new XProcException(step.getNode(), "pef:pef2text failed: no file format found for query: " + q); }
+			throw new XProcException(step, "No file format found for query: " + q); }
 		for (FileFormat fileFormat : fileFormats) {
 			try {
 				logger.debug("Storing PEF to file format: " + fileFormat);
@@ -208,8 +207,7 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 				return; }
 			catch (Exception e) {
 				logger.error("Storing PEF to file format '" + fileFormat + "' failed", e); }}
-		logger.error("pef:pef2text failed");
-		throw new XProcException(step.getNode(), "pef:pef2text failed");
+		throw new XProcException(step, "pef:pef2text failed");
 	}
 	
 	private void convertPEF2Text(InputStream pefStream, File textFile, FileFormat fileFormat)

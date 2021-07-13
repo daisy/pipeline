@@ -73,4 +73,72 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_02">
+    <x:call step="css:eval-counter">
+      <x:option name="counter-styles" select="'@counter-style written-out {
+                                                 system: fixed;
+                                                 symbols: ''one'' ''two'' ''three'';
+                                                 fallback: upper-roman; }'"/>
+      <x:input port="source">
+        <x:document type="inline">
+          <body>
+            <ul css:counter-reset="list-item">
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+            </ul>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <ul>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto">one </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto">two </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto">three </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto">IV </css:box>
+              </css:marker>
+            </li>
+          </ul>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

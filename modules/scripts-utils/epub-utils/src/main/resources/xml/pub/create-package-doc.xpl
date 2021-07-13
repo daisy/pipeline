@@ -4,6 +4,8 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:opf="http://www.idpf.org/2007/opf"
                 xmlns:html="http://www.w3.org/1999/xhtml"
@@ -85,14 +87,14 @@
         </p:documentation>
         <p:empty/>
     </p:input>
-    <p:option name="compatibility-mode" required="false" select="'true'">
+    <p:option name="compatibility-mode" required="false" select="'true'" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Whether to be backward compatible with <a
             href="http://idpf.org/epub/20/spec/OPF_2.0.1_draft.htm">Open Package Format
             2.0.1</a>.</p>
         </p:documentation>
     </p:option>
-    <p:option name="detect-properties" required="false" select="'true'">
+    <p:option name="detect-properties" required="false" select="'true'" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Whether to automatically detect <a
             href="http://www.idpf.org/epub/301/spec/epub-publications.html#sec-item-property-values">manifest

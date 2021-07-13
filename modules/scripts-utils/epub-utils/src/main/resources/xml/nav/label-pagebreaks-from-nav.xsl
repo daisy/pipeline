@@ -28,7 +28,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[@id][exists(key('id',@id,$pagebreaks-from-nav-in-doc))]">
-		<xsl:variable name="from-nav" as="element(d:anchor)?" select="key('id',@id,$pagebreaks-from-nav-in-doc)"/>
+		<!--
+		    A page number could in theory be listed more than once. Only take the first occurence.
+		-->
+		<xsl:variable name="from-nav" as="element(d:anchor)?" select="key('id',@id,$pagebreaks-from-nav-in-doc)[1]"/>
 		<xsl:copy>
 			<xsl:apply-templates select="@* except @epub:type"/>
 			<xsl:if test="not(@title)">

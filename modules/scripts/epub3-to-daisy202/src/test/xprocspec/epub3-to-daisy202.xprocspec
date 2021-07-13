@@ -138,7 +138,7 @@
                         <meta name="ncc:sidebars" content="0"/>
                         <meta name="ncc:prodNotes" content="0"/>
                         <meta name="ncc:footnotes" content="0"/>
-                        <meta name="ncc:totalTime" content="00:00:00"/>
+                        <meta name="ncc:totalTime" content="0:00:00"/>
                         <meta name="dc:title" content="minimal"/>
                         <meta name="dc:language" content="en"/>
                     </head>
@@ -161,7 +161,7 @@
                 <smil>
                     <head>
                         <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:timeInThisSmil" content="00:00:00"/>
+                        <meta name="ncc:timeInThisSmil" content="0:00:00"/>
                         <meta name="ncc:generator" content="DAISY Pipeline 2"/>
                         <layout>
                             <region id="txtView"/>
@@ -313,7 +313,7 @@
                         <meta name="ncc:sidebars" content="0"/>
                         <meta name="ncc:prodNotes" content="0"/>
                         <meta name="ncc:footnotes" content="0"/>
-                        <meta name="ncc:totalTime" content="00:00:00"/>
+                        <meta name="ncc:totalTime" content="0:00:00"/>
                         <meta name="dc:title" content="minimal"/>
                         <meta name="dc:language" content="en"/>
                     </head>
@@ -336,7 +336,7 @@
                 <smil>
                     <head>
                         <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:timeInThisSmil" content="00:00:00"/>
+                        <meta name="ncc:timeInThisSmil" content="0:00:00"/>
                         <meta name="ncc:generator" content="DAISY Pipeline 2"/>
                         <layout>
                             <region id="txtView"/>
@@ -535,7 +535,7 @@
                         <meta name="ncc:sidebars" content="0"/>
                         <meta name="ncc:prodNotes" content="0"/>
                         <meta name="ncc:footnotes" content="1"/>
-                        <meta name="ncc:totalTime" content="00:00:05"/>
+                        <meta name="ncc:totalTime" content="0:00:05"/>
                         <meta name="dc:title" content="minimal"/>
                         <meta name="dc:language" content="en"/>
                     </head>
@@ -600,7 +600,7 @@
                 <smil>
                     <head>
                         <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:timeInThisSmil" content="00:00:05"/>
+                        <meta name="ncc:timeInThisSmil" content="0:00:05"/>
                         <layout>
                             <region id="txtView"/>
                         </layout>
@@ -640,7 +640,7 @@
                 <smil>
                     <head>
                         <meta name="dc:format" content="Daisy 2.02"/>
-                        <meta name="ncc:timeInThisSmil" content="00:00:00"/>
+                        <meta name="ncc:timeInThisSmil" content="0:00:00"/>
                         <layout>
                             <region id="txtView"/>
                         </layout>

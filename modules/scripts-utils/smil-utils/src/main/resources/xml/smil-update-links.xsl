@@ -16,7 +16,7 @@
         A fileset defines the relocation of resources.
     -->
     <xsl:variable name="mapping" as="element(d:fileset)">
-        <xsl:apply-templates mode="normalize" select="collection()[/d:fileset][1]"/>
+        <xsl:apply-templates mode="normalize" select="collection()[/d:fileset][1]/*"/>
     </xsl:variable>
 
     <xsl:variable name="original-doc-base" as="xs:string"

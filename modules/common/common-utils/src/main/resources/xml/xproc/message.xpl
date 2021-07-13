@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:x="http://www.emc.com/documentum/xml/xproc"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 exclude-inline-prefixes="#all"
@@ -25,17 +26,17 @@
         <p:pipe port="result" step="result"/>
     </p:output>
 
-    <p:option name="severity" select="'INFO'"/>                 <!-- one of either: WARN, INFO, DEBUG. Defaults to "INFO". Use px:error to throw errors. -->
-    <p:option name="message" required="true"/>                  <!-- message to be logged. $1, $2 etc will be replaced with the contents of param1, param2 etc. -->
-    <p:option name="param1" select="''"/>
-    <p:option name="param2" select="''"/>
-    <p:option name="param3" select="''"/>
-    <p:option name="param4" select="''"/>
-    <p:option name="param5" select="''"/>
-    <p:option name="param6" select="''"/>
-    <p:option name="param7" select="''"/>
-    <p:option name="param8" select="''"/>
-    <p:option name="param9" select="''"/>
+    <p:option name="severity" select="'INFO'"/>                  <!-- one of either: WARN, INFO, DEBUG. Defaults to "INFO". Use px:error to throw errors. -->
+    <p:option name="message" required="true" cx:as="xs:string"/> <!-- message to be logged. $1, $2 etc will be replaced with the contents of param1, param2 etc. -->
+    <p:option name="param1" select="''" cx:as="xs:string"/>
+    <p:option name="param2" select="''" cx:as="xs:string"/>
+    <p:option name="param3" select="''" cx:as="xs:string"/>
+    <p:option name="param4" select="''" cx:as="xs:string"/>
+    <p:option name="param5" select="''" cx:as="xs:string"/>
+    <p:option name="param6" select="''" cx:as="xs:string"/>
+    <p:option name="param7" select="''" cx:as="xs:string"/>
+    <p:option name="param8" select="''" cx:as="xs:string"/>
+    <p:option name="param9" select="''" cx:as="xs:string"/>
     <!-- in the unlikely event that you need more parameters you'll have to format the message string yourself -->
 
     <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" use-when="p:system-property('p:product-name') = 'XML Calabash'">

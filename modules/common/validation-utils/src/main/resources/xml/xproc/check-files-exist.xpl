@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="check-files-exist" type="px:check-files-exist"
-    xmlns:p="http://www.w3.org/ns/xproc" 
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"    
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" 
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-inline-prefixes="#all"
+                type="px:check-files-exist">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Check that files exist on disk</h1>
@@ -61,7 +61,7 @@
     <p:import href="create-validation-report-error-for-file.xpl"/>
     <p:import href="validation-status.xpl"/>
     
-    <p:variable name="base" select="/*/@xml:base"/>
+    <p:variable name="base" cx:as="xs:string" select="/*/@xml:base"/>
     
     <p:for-each name="check-each-file">
         <p:iteration-source select="//d:file"/>

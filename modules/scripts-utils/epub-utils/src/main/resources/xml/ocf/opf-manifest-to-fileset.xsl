@@ -27,6 +27,9 @@
             <xsl:if test="tokenize(@properties,'\s+')='nav'">
                 <xsl:attribute name="role" select="'nav'"/>
             </xsl:if>
+            <xsl:if test="@media-type='application/xhtml+xml' and /opf:package/@version='3.0'">
+                <xsl:attribute name="media-version" select="'5.0'"/>
+            </xsl:if>
         </d:file>
     </xsl:template>
 

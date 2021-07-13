@@ -3,8 +3,10 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 exclude-inline-prefixes="#all"
                 type="pxi:fileset-fix-original-hrefs" name="main">
 
@@ -27,7 +29,7 @@
 		<p:pipe step="in-memory-fileset" port="result.in-memory"/>
 	</p:output>
 
-	<p:option name="detect-existing" select="'false'">
+	<p:option name="detect-existing" select="'false'" cx:as="xs:string">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Whether to set original-href attributes of files that exist on disk according to
 			@href. Any existing original-href attributes will be overwritten, so by setting this
@@ -35,12 +37,12 @@
 			documents).</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="fail-on-missing" select="'false'">
+	<p:option name="fail-on-missing" select="'false'" cx:as="xs:string">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Whether to raise an error for files that are neither on disk or exist in memory.</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="purge" select="'false'">
+	<p:option name="purge" select="'false'" cx:as="xs:string">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Whether to remove files that are neither on disk or exist in memory.</p>
 		</p:documentation>
@@ -90,7 +92,7 @@
 		<p:sink/>
 		<p:try>
 			<p:group>
-				<p:variable name="file" select="replace($href, '^([^!]+)!/(.+)$', '$1')"/>
+				<p:variable name="file" select="replace(replace($href,'^(jar|bundle):',''),'^([^!]+)!/(.+)$', '$1')"/>
 				<px:info>
 					<p:with-option name="href" select="$file"/>
 				</px:info>

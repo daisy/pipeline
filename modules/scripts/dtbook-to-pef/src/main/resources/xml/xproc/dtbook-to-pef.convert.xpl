@@ -5,6 +5,8 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:math="http://www.w3.org/1998/Math/MathML"
                 exclude-inline-prefixes="#all"
@@ -38,7 +40,7 @@
     <p:option name="default-stylesheet" required="false" select="'#default'"/>
     <p:option name="stylesheet" select="''"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
-    <p:option name="include-obfl" select="'false'"/>
+    <p:option name="include-obfl" select="'false'" cx:as="xs:string"/>
     
     <!-- Empty temporary directory dedicated to this conversion -->
     <p:option name="temp-dir" required="true"/>
@@ -54,6 +56,7 @@
             px:merge-parameters
             px:apply-stylesheets
             px:transform
+            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl">
@@ -80,6 +83,12 @@
     </px:merge-parameters>
     <p:sink/>
     
+    <!-- Parse transform query to a c:param-set -->
+    <px:parse-query name="parsed-transform-query">
+        <p:with-option name="query" select="$transform"/>
+    </px:parse-query>
+    <p:sink/>
+    
     <!-- Find the first and only DTBook file -->
     <p:group name="dtbook" px:message="Loading DTBook" px:progress=".04">
         <p:output port="result"/>
@@ -99,7 +108,10 @@
         <p:variable name="first-css-stylesheet"
                     select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
-                    select="(index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
+                    select="(if (exists($first-css-stylesheet))
+                               then index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet)
+                               else (),
+                             10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
@@ -150,6 +162,9 @@
     
     <p:choose name="transform" px:progress=".83">
         <p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
+        <p:variable name="locale-query" select="if (//c:param[@name='locale']) then '' else concat('(locale:',$lang,')')">
+            <p:pipe step="parsed-transform-query" port="result"/>
+        </p:variable>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>
             <p:output port="obfl">
@@ -160,7 +175,7 @@
             </p:output>
             <p:group name="obfl" px:message="Transforming from DTBook XML with inline CSS to OBFL" px:progress=".95">
                 <p:output port="result"/>
-                <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,'(locale:',$lang,')')"/>
+                <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
                 <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                 <px:transform px:progress="1">
                     <p:with-option name="query" select="$transform-query"/>
@@ -178,7 +193,7 @@
                             <d:status result="ok"/>
                         </p:inline>
                     </p:output>
-                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+                    <p:variable name="transform-query" select="concat('(input:obfl)(input:text-css)(output:pef)',$transform,$locale-query)"/>
                     <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
                     <px:transform px:progress="1">
                         <p:with-option name="query" select="$transform-query"/>
@@ -207,8 +222,7 @@
                             <p:pipe step="catch" port="error"/>
                         </p:input>
                     </px:log-error>
-                    <p:identity px:message="Failed to convert OBFL to PEF (Please see detailed log for more info.)"
-                                px:message-severity="ERROR"/>
+                    <p:identity px:message="Failed to convert OBFL to PEF" px:message-severity="ERROR"/>
                     <p:identity name="status"/>
                     <p:sink/>
                 </p:catch>
@@ -224,7 +238,7 @@
                     <d:status result="ok"/>
                 </p:inline>
             </p:output>
-            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,'(locale:',$lang,')')"/>
+            <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,$locale-query)"/>
             <p:identity px:message-severity="DEBUG" px:message="px:transform query={$transform-query}"/>
             <px:transform px:progress="1">
                 <p:with-option name="query" select="$transform-query"/>

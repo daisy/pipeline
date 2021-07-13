@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:dtbook-to-epub3" version="1.0" name="main">
 
@@ -21,8 +23,8 @@
 	<p:input port="tts-config"/>
 
 	<p:option name="language" required="true"/>
-	<p:option name="assert-valid" required="true"/>
-	<p:option name="audio" required="true"/>
+	<p:option name="assert-valid" required="true" cx:as="xs:string"/>
+	<p:option name="audio" required="true" cx:as="xs:string"/>
 	<p:option name="chunk-size" required="false" select="'-1'"/>
 
 	<p:option name="output-name" required="true"/>

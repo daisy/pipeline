@@ -2,7 +2,6 @@ package org.daisy.pipeline.braille.common.saxon.impl;
 
 import java.math.BigDecimal;
 
-import com.xmlcalabash.core.XProcException;
 import static com.xmlcalabash.util.XProcMessageListenerHelper.parseNumber;
 
 import net.sf.saxon.expr.XPathContext;
@@ -59,8 +58,8 @@ public class ProgressDefinition extends ExtensionFunctionDefinition {
 				catch (ArithmeticException e) {
 					// probably divided by null, ignore progress info
 					return VOID; }
-				catch (Exception e) {
-					throw new XPathException("pf:progress failed", XProcException.javaError(e, 0)); }
+				catch (Throwable e) {
+					throw new XPathException("Unexpected error in pf:progress", e); }
 			}
 		};
 	}

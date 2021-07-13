@@ -41,6 +41,7 @@ import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
+import org.daisy.braille.css.RuleCounterStyle;
 import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
@@ -134,6 +135,7 @@ public class BrailleCssCascader implements CssCascader {
 		private Map<String,Map<String,RulePage>> pageRules = null;
 		private Map<String,Map<String,RuleVolume>> volumeRules = null;
 		private Iterable<RuleTextTransform> textTransformRules = null;
+		private Iterable<RuleCounterStyle> counterStyleRules = null;
 		private Iterable<AnyAtRule> otherAtRules = null;
 
 		protected String serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context) {
@@ -172,6 +174,7 @@ public class BrailleCssCascader implements CssCascader {
 					}
 				}
 				textTransformRules = Iterables.filter(styleSheet, RuleTextTransform.class);
+				counterStyleRules = Iterables.filter(styleSheet, RuleCounterStyle.class);
 				otherAtRules = Iterables.filter(styleSheet, AnyAtRule.class);
 			}
 			StringBuilder style = new StringBuilder();
@@ -197,6 +200,8 @@ public class BrailleCssCascader implements CssCascader {
 						insertVolumeStyle(style, volumeRule, pageRules);
 					for (RuleTextTransform r : textTransformRules)
 						insertTextTransformDefinition(style, r);
+					for (RuleCounterStyle r : counterStyleRules)
+						insertCounterStyleDefinition(style, r);
 					for (AnyAtRule r : otherAtRules) {
 						if (style.length() > 0 && !style.toString().endsWith("} ")) {
 							style.insert(0, "{ ");
@@ -428,6 +433,14 @@ public class BrailleCssCascader implements CssCascader {
 		String name = rule.getName();
 		if (name != null) builder.append(' ').append(name);
 		builder.append(" { ");
+		for (Declaration decl : rule)
+			insertDeclaration(builder, decl);
+		builder.append("} ");
+	}
+
+	private static void insertCounterStyleDefinition(StringBuilder builder, RuleCounterStyle rule) {
+		String name = rule.getName();
+		builder.append("@counter-style ").append(name).append(" { ");
 		for (Declaration decl : rule)
 			insertDeclaration(builder, decl);
 		builder.append("} ");

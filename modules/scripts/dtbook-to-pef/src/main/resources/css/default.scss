@@ -10,6 +10,7 @@ $include-production-notes: false !default;
 @import "generate-toc.scss";
 @import "page-breaking.scss";
 @import "volume-breaking.scss";
+@import "notes.scss";
 
 @if $hyphenation {
 	:root {

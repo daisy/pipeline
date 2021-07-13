@@ -234,6 +234,7 @@
         <xsl:param name="name" as="xs:string" required="yes"/>
         <xsl:param name="style" as="xs:string?" select="()"/>
         <xsl:param name="context" as="element()" select="."/>
+        <xsl:param name="default-marker-contents" as="xs:boolean" select="false()"/>
         <xsl:variable name="value" as="xs:integer?" select="css:counter-value($name, $context)"/>
         <xsl:if test="exists($value)">
             <xsl:choose>
@@ -244,6 +245,7 @@
                     <xsl:call-template name="css:counter-representation">
                         <xsl:with-param name="value" select="$value"/>
                         <xsl:with-param name="style" select="css:counter-style($style)"/>
+                        <xsl:with-param name="with-prefix-suffix" select="$default-marker-contents"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>

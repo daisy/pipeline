@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:zedai-to-html"
                 name="main"
                 exclude-inline-prefixes="#all">
@@ -28,7 +30,7 @@
     </p:output>
 
     <p:option name="output-dir" required="true"/>
-    <p:option name="chunk" select="'false'"/>
+    <p:option name="chunk" select="'false'" cx:as="xs:string"/>
     <p:option name="chunk-size" required="false" select="'-1'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">

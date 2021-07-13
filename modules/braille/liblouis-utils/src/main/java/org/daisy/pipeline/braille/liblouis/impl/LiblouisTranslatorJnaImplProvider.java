@@ -112,7 +112,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	)
 	protected void bindLiblouisTableJnaImplProvider(LiblouisTableJnaImplProvider provider) {
 		tableProvider = provider;
-		logger.debug("Registering Liblouis JNA translator provider: " + provider);
+		logger.debug("Registering Liblouis table provider: " + provider);
 	}
 	
 	protected void unbindLiblouisTableJnaImplProvider(LiblouisTableJnaImplProvider provider) {
@@ -1379,7 +1379,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								if (forceBraille) {
 									logger.error("hyphens:auto can not be applied due to non-standard hyphenation points.");
 									throw e; }
-								logger.info("Deferring hyphenation to formatting phase due to non-standard hyphenation points.");
+								logger.debug("Deferring hyphenation to formatting phase due to non-standard hyphenation points.");
 								
 								// TODO: split up text in words and only defer the words with non-standard hyphenation
 								return text; }}

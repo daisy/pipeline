@@ -1,462 +1,637 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns="http://www.w3.org/1999/xhtml"
                stylesheet="../resources/phony.xsl">
   
   <!--
-      Simple table: data cells only
-      
-      The table is rendered row by row.
+      Render table by row
   -->
   <x:scenario label="by-row">
-    <x:call function="css:render-table-by">
-      <x:param select="'row'"/>
-      <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
-          <tr>
-            <td>Cell 1.1</td>
-            <td>Cell 1.2</td>
-            <td>Cell 1.3</td>
-          </tr>
-          <tr>
-            <td>Cell 2.1</td>
-            <td>Cell 2.2</td>
-            <td>Cell 2.3</td>
-          </tr>
-          <tr>
-            <td>Cell 3.1</td>
-            <td>Cell 3.2</td>
-            <td>Cell 3.3</td>
-          </tr>
-        </table>
-      </x:param>
-    </x:call>
-    <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
-        <css:table-by axis="row">
-          <css:list-item>
-            <td>Cell 1.1</td>
-            <td>Cell 1.2</td>
-            <td>Cell 1.3</td>
-          </css:list-item>
-          <css:list-item>
-            <td>Cell 2.1</td>
-            <td>Cell 2.2</td>
-            <td>Cell 2.3</td>
-          </css:list-item>
-          <css:list-item>
-            <td>Cell 3.1</td>
-            <td>Cell 3.2</td>
-            <td>Cell 3.3</td>
-          </css:list-item>
-        </css:table-by>
-      </table>
-    </x:expect>
-  </x:scenario>
-  
-  <!--
-      Standard table: column headings
+    
+    <!--
+        Row axis not marked up explicitly
+    -->
+    <x:scenario label="implicit">
       
-      The table is rendered row by row. Each data cell is preceded by the appropriate column
-      heading. The row containing the column headings is discarded.
-  -->
-  <x:scenario label="by-row-with-column-headers">
-    <x:call function="css:render-table-by">
-      <x:param select="'row'"/>
-      <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
-          <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-          </tr>
-          <tr>
-            <td>Cell 1.1</td>
-            <td>Cell 1.2</td>
-            <td>Cell 1.3</td>
-          </tr>
-          <tr>
-            <td>Cell 2.1</td>
-            <td>Cell 2.2</td>
-            <td>Cell 2.3</td>
-          </tr>
-          <tr>
-            <td>Cell 3.1</td>
-            <td>Cell 3.2</td>
-            <td>Cell 3.3</td>
-          </tr>
-        </table>
-      </x:param>
-    </x:call>
-    <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
-        <css:table-by axis="row">
-          <css:list-item>
-            <th>Column 1</th>
-            <td>Cell 1.1</td>
-            <th>Column 2</th>
-            <td>Cell 1.2</td>
-            <th>Column 3</th>
-            <td>Cell 1.3</td>
-          </css:list-item>
-          <css:list-item>
-            <th>Column 1</th>
-            <td>Cell 2.1</td>
-            <th>Column 2</th>
-            <td>Cell 2.2</td>
-            <th>Column 3</th>
-            <td>Cell 2.3</td>
-          </css:list-item>
-          <css:list-item>
-            <th>Column 1</th>
-            <td>Cell 3.1</td>
-            <th>Column 2</th>
-            <td>Cell 3.2</td>
-            <th>Column 3</th>
-            <td>Cell 3.3</td>
-          </css:list-item>
-        </css:table-by>
-      </table>
-    </x:expect>
-  </x:scenario>
-  
-  <!--
-      Standard table: column and row headings
+      <!--
+          Simple table with data cells only
+      -->
+      <x:scenario label="no-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'row'"/>
+          <x:param>
+            <table>
+              <tr>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="row">
+              <css:list-item>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </css:list-item>
+              <css:list-item>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </css:list-item>
+              <css:list-item>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
       
-      The table is rendered row by row. A row is preceded by its heading.
-  -->
-  <x:scenario label="by-row-with-column-and-row-headers">
-    <x:call function="css:render-table-by">
-      <x:param select="'row'"/>
-      <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
-          <tr>
-            <th/>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-          </tr>
-          <tr>
-            <th axis="row">Row 1</th>
-            <td>Cell 1.1</td>
-            <td>Cell 1.2</td>
-            <td>Cell 1.3</td>
-          </tr>
-          <tr>
-            <th axis="row">Row 2</th>
-            <td>Cell 2.1</td>
-            <td>Cell 2.2</td>
-            <td>Cell 2.3</td>
-          </tr>
-          <tr>
-            <th axis="row">Row 3</th>
-            <td>Cell 3.1</td>
-            <td>Cell 3.2</td>
-            <td>Cell 3.3</td>
-          </tr>
-        </table>
-      </x:param>
-    </x:call>
-    <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
-        <css:table-by axis="row">
-          <css:list-item>
-            <th axis="row">Row 1</th>
-            <th>Column 1</th>
-            <td>Cell 1.1</td>
-            <th>Column 2</th>
-            <td>Cell 1.2</td>
-            <th>Column 3</th>
-            <td>Cell 1.3</td>
-          </css:list-item>
-          <css:list-item>
-            <th axis="row">Row 2</th>
-            <th>Column 1</th>
-            <td>Cell 2.1</td>
-            <th>Column 2</th>
-            <td>Cell 2.2</td>
-            <th>Column 3</th>
-            <td>Cell 2.3</td>
-          </css:list-item>
-          <css:list-item>
-            <th axis="row">Row 3</th>
-            <th>Column 1</th>
-            <td>Cell 3.1</td>
-            <th>Column 2</th>
-            <td>Cell 3.2</td>
-            <th>Column 3</th>
-            <td>Cell 3.3</td>
-          </css:list-item>
-        </css:table-by>
-      </table>
-    </x:expect>
+      <!--
+          Table with column headers
+          
+          Each data cell is preceded by the appropriate column heading. The row containing the column
+          headings is discarded.
+      -->
+      <x:scenario label="with-column-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'row'"/>
+          <x:param>
+            <table>
+              <tr>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+              </tr>
+              <tr>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="row">
+              <css:list-item>
+                <th>Column 1</th>
+                <td>Cell 1.1</td>
+                <th>Column 2</th>
+                <td>Cell 1.2</td>
+                <th>Column 3</th>
+                <td>Cell 1.3</td>
+              </css:list-item>
+              <css:list-item>
+                <th>Column 1</th>
+                <td>Cell 2.1</td>
+                <th>Column 2</th>
+                <td>Cell 2.2</td>
+                <th>Column 3</th>
+                <td>Cell 2.3</td>
+              </css:list-item>
+              <css:list-item>
+                <th>Column 1</th>
+                <td>Cell 3.1</td>
+                <th>Column 2</th>
+                <td>Cell 3.2</td>
+                <th>Column 3</th>
+                <td>Cell 3.3</td>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
+    
+    <!--
+        Row axis marked up explicitly
+    -->
+    <x:scenario label="explicit">
+      
+      <!--
+          Table with row and column headers
+          
+          A cell is preceded by its column heading. A row is preceded by its row heading.
+      -->
+      <x:scenario label="with-column-and-row-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'row'"/>
+          <x:param>
+            <table>
+              <tr>
+                <th/>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+              </tr>
+              <tr>
+                <th axis="row">Row 1</th>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <th axis="row">Row 2</th>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <th axis="row">Row 3</th>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="row">
+              <css:list-item>
+                <th axis="row">Row 1</th>
+                <th>Column 1</th>
+                <td>Cell 1.1</td>
+                <th>Column 2</th>
+                <td>Cell 1.2</td>
+                <th>Column 3</th>
+                <td>Cell 1.3</td>
+              </css:list-item>
+              <css:list-item>
+                <th axis="row">Row 2</th>
+                <th>Column 1</th>
+                <td>Cell 2.1</td>
+                <th>Column 2</th>
+                <td>Cell 2.2</td>
+                <th>Column 3</th>
+                <td>Cell 2.3</td>
+              </css:list-item>
+              <css:list-item>
+                <th axis="row">Row 3</th>
+                <th>Column 1</th>
+                <td>Cell 3.1</td>
+                <th>Column 2</th>
+                <td>Cell 3.2</td>
+                <th>Column 3</th>
+                <td>Cell 3.3</td>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
   </x:scenario>
   
   <!--
-      Rendering by column
+      Render table by column
       
       If a table has few columns compared to the number of rows, it may be better to render it
       column by column. Note: This requires markup; it is not enabled automatically for a certain
       row/column ratio.
   -->
   <x:scenario label="by-column">
-    <x:call function="css:render-table-by">
-      <x:param select="'column'"/>
-      <x:param>
-        <table class="render_by_column" xmlns="http://www.w3.org/1999/xhtml">
-          <tr>
-            <th/>
-            <th axis="column">Column 1</th>
-            <th axis="column">Column 2</th>
-            <th axis="column">Column 3</th>
-          </tr>
-          <tr>
-            <th>Row 1</th>
-            <td>Cell 1.1</td>
-            <td>Cell 1.2</td>
-            <td>Cell 1.3</td>
-          </tr>
-          <tr>
-            <th>Row 2</th>
-            <td>Cell 2.1</td>
-            <td>Cell 2.2</td>
-            <td>Cell 2.3</td>
-          </tr>
-          <tr>
-            <th>Row 3</th>
-            <td>Cell 3.1</td>
-            <td>Cell 3.2</td>
-            <td>Cell 3.3</td>
-          </tr>
-          <tr>
-            <th>Row 4</th>
-            <td>Cell 4.1</td>
-            <td>Cell 4.2</td>
-            <td>Cell 4.3</td>
-          </tr>
-          <tr>
-            <th>Row 5</th>
-            <td>Cell 5.1</td>
-            <td>Cell 5.2</td>
-            <td>Cell 5.3</td>
-          </tr>
-          <tr>
-            <th>Row 6</th>
-            <td>Cell 6.1</td>
-            <td>Cell 6.2</td>
-            <td>Cell 6.3</td>
-          </tr>
-          <tr>
-            <th>Row 7</th>
-            <td>Cell 7.1</td>
-            <td>Cell 7.2</td>
-            <td>Cell 7.3</td>
-          </tr>
-          <tr>
-            <th>Row 8</th>
-            <td>Cell 8.1</td>
-            <td>Cell 8.2</td>
-            <td>Cell 8.3</td>
-          </tr>
-          <tr>
-            <th>Row 9</th>
-            <td>Cell 9.1</td>
-            <td>Cell 9.2</td>
-            <td>Cell 9.3</td>
-          </tr>
-        </table>
-      </x:param>
-    </x:call>
-    <x:expect label="result">
-      <table class="render_by_column" xmlns="http://www.w3.org/1999/xhtml">
-        <css:table-by axis="column">
-          <css:list-item>
-            <th axis="column">Column 1</th>
-            <th>Row 1</th>
-            <td>Cell 1.1</td>
-            <th>Row 2</th>
-            <td>Cell 2.1</td>
-            <th>Row 3</th>
-            <td>Cell 3.1</td>
-            <th>Row 4</th>
-            <td>Cell 4.1</td>
-            <th>Row 5</th>
-            <td>Cell 5.1</td>
-            <th>Row 6</th>
-            <td>Cell 6.1</td>
-            <th>Row 7</th>
-            <td>Cell 7.1</td>
-            <th>Row 8</th>
-            <td>Cell 8.1</td>
-            <th>Row 9</th>
-            <td>Cell 9.1</td>
-          </css:list-item>
-          <css:list-item>
-            <th axis="column">Column 2</th>
-            <th>Row 1</th>
-            <td>Cell 1.2</td>
-            <th>Row 2</th>
-            <td>Cell 2.2</td>
-            <th>Row 3</th>
-            <td>Cell 3.2</td>
-            <th>Row 4</th>
-            <td>Cell 4.2</td>
-            <th>Row 5</th>
-            <td>Cell 5.2</td>
-            <th>Row 6</th>
-            <td>Cell 6.2</td>
-            <th>Row 7</th>
-            <td>Cell 7.2</td>
-            <th>Row 8</th>
-            <td>Cell 8.2</td>
-            <th>Row 9</th>
-            <td>Cell 9.2</td>
-          </css:list-item>
-          <css:list-item>
-            <th axis="column">Column 3</th>
-            <th>Row 1</th>
-            <td>Cell 1.3</td>
-            <th>Row 2</th>
-            <td>Cell 2.3</td>
-            <th>Row 3</th>
-            <td>Cell 3.3</td>
-            <th>Row 4</th>
-            <td>Cell 4.3</td>
-            <th>Row 5</th>
-            <td>Cell 5.3</td>
-            <th>Row 6</th>
-            <td>Cell 6.3</td>
-            <th>Row 7</th>
-            <td>Cell 7.3</td>
-            <th>Row 8</th>
-            <td>Cell 8.3</td>
-            <th>Row 9</th>
-            <td>Cell 9.3</td>
-          </css:list-item>
-        </css:table-by>
-      </table>
-    </x:expect>
+    
+    <!--
+        Column axis marked up explicitly
+    -->
+    <x:scenario label="explicit">
+      
+      <!--
+          Table with column and row headers
+      -->
+      <x:scenario label="with-column-and-row-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'column'"/>
+          <x:param>
+            <table>
+              <tr>
+                <th/>
+                <th axis="column">Column 1</th>
+                <th axis="column">Column 2</th>
+                <th axis="column">Column 3</th>
+              </tr>
+              <tr>
+                <th>Row 1</th>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <th>Row 2</th>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <th>Row 3</th>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="column">
+              <css:list-item>
+                <th axis="column">Column 1</th>
+                <th>Row 1</th>
+                <td>Cell 1.1</td>
+                <th>Row 2</th>
+                <td>Cell 2.1</td>
+                <th>Row 3</th>
+                <td>Cell 3.1</td>
+              </css:list-item>
+              <css:list-item>
+                <th axis="column">Column 2</th>
+                <th>Row 1</th>
+                <td>Cell 1.2</td>
+                <th>Row 2</th>
+                <td>Cell 2.2</td>
+                <th>Row 3</th>
+                <td>Cell 3.2</td>
+              </css:list-item>
+              <css:list-item>
+                <th axis="column">Column 3</th>
+                <th>Row 1</th>
+                <td>Cell 1.3</td>
+                <th>Row 2</th>
+                <td>Cell 2.3</td>
+                <th>Row 3</th>
+                <td>Cell 3.3</td>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
+    
+    <!--
+        Column axis not marked up explicitly
+    -->
+    <x:scenario label="implicit">
+      
+      <!--
+          Table with column headers
+      -->
+      <x:scenario label="with-column-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'column'"/>
+          <x:param>
+            <table>
+              <tr>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+              </tr>
+              <tr>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="column">
+              <css:list-item>
+                <th>Column 1</th>
+                <td>Cell 1.1</td>
+                <td>Cell 2.1</td>
+                <td>Cell 3.1</td>
+              </css:list-item>
+              <css:list-item>
+                <th>Column 2</th>
+                <td>Cell 1.2</td>
+                <td>Cell 2.2</td>
+                <td>Cell 3.2</td>
+              </css:list-item>
+              <css:list-item>
+                <th>Column 3</th>
+                <td>Cell 1.3</td>
+                <td>Cell 2.3</td>
+                <td>Cell 3.3</td>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
+      
+      <!--
+          Table with column and row headers
+      -->
+      <x:scenario label="with-column-and-row-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'column'"/>
+          <x:param>
+            <table>
+              <tr>
+                <th/>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+              </tr>
+              <tr>
+                <th>Row 1</th>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <th>Row 2</th>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <th>Row 3</th>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="column">
+              <css:list-item>
+                <th>Column 1</th>
+                <th>Row 1</th>
+                <td>Cell 1.1</td>
+                <th>Row 2</th>
+                <td>Cell 2.1</td>
+                <th>Row 3</th>
+                <td>Cell 3.1</td>
+              </css:list-item>
+              <css:list-item>
+                <th>Column 2</th>
+                <th>Row 1</th>
+                <td>Cell 1.2</td>
+                <th>Row 2</th>
+                <td>Cell 2.2</td>
+                <th>Row 3</th>
+                <td>Cell 3.2</td>
+              </css:list-item>
+              <css:list-item>
+                <th>Column 3</th>
+                <th>Row 1</th>
+                <td>Cell 1.3</td>
+                <th>Row 2</th>
+                <td>Cell 2.3</td>
+                <th>Row 3</th>
+                <td>Cell 3.3</td>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
   </x:scenario>
-  
-  <x:scenario label="by-column-implicit">
-    <x:call function="css:render-table-by">
-      <x:param select="'column'"/>
-      <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
-          <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-          </tr>
-          <tr>
-            <td>Cell 1.1</td>
-            <td>Cell 1.2</td>
-            <td>Cell 1.3</td>
-          </tr>
-          <tr>
-            <td>Cell 2.1</td>
-            <td>Cell 2.2</td>
-            <td>Cell 2.3</td>
-          </tr>
-          <tr>
-            <td>Cell 3.1</td>
-            <td>Cell 3.2</td>
-            <td>Cell 3.3</td>
-          </tr>
-        </table>
-      </x:param>
-    </x:call>
-    <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
-        <css:table-by axis="column">
-          <css:list-item>
-            <th>Column 1</th>
-            <td>Cell 1.1</td>
-            <td>Cell 2.1</td>
-            <td>Cell 3.1</td>
-          </css:list-item>
-          <css:list-item>
-            <th>Column 2</th>
-            <td>Cell 1.2</td>
-            <td>Cell 2.2</td>
-            <td>Cell 3.2</td>
-          </css:list-item>
-          <css:list-item>
-            <th>Column 3</th>
-            <td>Cell 1.3</td>
-            <td>Cell 2.3</td>
-            <td>Cell 3.3</td>
-          </css:list-item>
-        </css:table-by>
-      </table>
-    </x:expect>
-  </x:scenario>
-  
-  <x:scenario label="by-column-implicit-with-column-and-row-headers">
-    <x:call function="css:render-table-by">
-      <x:param select="'column'"/>
-      <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
-          <tr>
-            <th/>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th>Column 3</th>
-          </tr>
-          <tr>
-            <th>Row 1</th>
-            <td>Cell 1.1</td>
-            <td>Cell 1.2</td>
-            <td>Cell 1.3</td>
-          </tr>
-          <tr>
-            <th>Row 2</th>
-            <td>Cell 2.1</td>
-            <td>Cell 2.2</td>
-            <td>Cell 2.3</td>
-          </tr>
-          <tr>
-            <th>Row 3</th>
-            <td>Cell 3.1</td>
-            <td>Cell 3.2</td>
-            <td>Cell 3.3</td>
-          </tr>
-        </table>
-      </x:param>
-    </x:call>
-    <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
-        <css:table-by axis="column">
-          <css:list-item>
-              <th>Column 1</th>
-              <th>Row 1</th>
-              <td>Cell 1.1</td>
-              <th>Row 2</th>
-              <td>Cell 2.1</td>
-              <th>Row 3</th>
-              <td>Cell 3.1</td>
-          </css:list-item>
-          <css:list-item>
-            <th>Column 2</th>
-            <th>Row 1</th>
-            <td>Cell 1.2</td>
-            <th>Row 2</th>
-            <td>Cell 2.2</td>
-            <th>Row 3</th>
-            <td>Cell 3.2</td>
-          </css:list-item>
-          <css:list-item>
-            <th>Column 3</th>
-            <th>Row 1</th>
-            <td>Cell 1.3</td>
-            <th>Row 2</th>
-            <td>Cell 2.3</td>
-            <th>Row 3</th>
-            <td>Cell 3.3</td>
-          </css:list-item>
-        </css:table-by>
-      </table>
-    </x:expect>
+
+  <!--
+      Render table by column and group each column by row
+  -->
+  <x:scenario label="by-column-and-row">
+    
+    <!--
+        Column axis marked up explicitly
+    -->
+    <x:scenario label="explicit">
+      
+      <!--
+          Table with column and row headers
+      -->
+      <x:scenario label="with-column-and-row-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'column, row'"/>
+          <x:param>
+            <table>
+              <tr>
+                <th/>
+                <th axis="column">Column 1</th>
+                <th axis="column">Column 2</th>
+                <th axis="column">Column 3</th>
+              </tr>
+              <tr>
+                <th>Row 1</th>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <th>Row 2</th>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <th>Row 3</th>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="column">
+              <css:list-item>
+                <th axis="column">Column 1</th>
+                <css:table-by axis="row">
+                  <css:list-item>
+                    <th>Row 1</th>
+                    <td>Cell 1.1</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 2</th>
+                    <td>Cell 2.1</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 3</th>
+                    <td>Cell 3.1</td>
+                  </css:list-item>
+                </css:table-by>
+              </css:list-item>
+              <css:list-item>
+                <th axis="column">Column 2</th>
+                <css:table-by axis="row">
+                  <css:list-item>
+                    <th>Row 1</th>
+                    <td>Cell 1.2</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 2</th>
+                    <td>Cell 2.2</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 3</th>
+                    <td>Cell 3.2</td>
+                  </css:list-item>
+                </css:table-by>
+              </css:list-item>
+              <css:list-item>
+                <th axis="column">Column 3</th>
+                <css:table-by axis="row">
+                  <css:list-item>
+                    <th>Row 1</th>
+                    <td>Cell 1.3</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 2</th>
+                    <td>Cell 2.3</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 3</th>
+                    <td>Cell 3.3</td>
+                  </css:list-item>
+                </css:table-by>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
+    
+    <!--
+        Column axis not marked up explicitly
+    -->
+    <x:scenario label="implicit">
+      
+      <!--
+          Table with column and row headers
+      -->
+      <x:scenario label="with-column-and-row-headers">
+        <x:call function="css:render-table-by">
+          <x:param select="'column, row'"/>
+          <x:param>
+            <table>
+              <tr>
+                <th/>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+              </tr>
+              <tr>
+                <th>Row 1</th>
+                <td>Cell 1.1</td>
+                <td>Cell 1.2</td>
+                <td>Cell 1.3</td>
+              </tr>
+              <tr>
+                <th>Row 2</th>
+                <td>Cell 2.1</td>
+                <td>Cell 2.2</td>
+                <td>Cell 2.3</td>
+              </tr>
+              <tr>
+                <th>Row 3</th>
+                <td>Cell 3.1</td>
+                <td>Cell 3.2</td>
+                <td>Cell 3.3</td>
+              </tr>
+            </table>
+          </x:param>
+        </x:call>
+        <x:expect label="result">
+          <table>
+            <css:table-by axis="column">
+              <css:list-item>
+                <css:table-by axis="row">
+                  <css:list-item>
+                    <th>Column 1</th>
+                    <th>Row 1</th>
+                    <td>Cell 1.1</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 2</th>
+                    <td>Cell 2.1</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 3</th>
+                    <td>Cell 3.1</td>
+                  </css:list-item>
+                </css:table-by>
+              </css:list-item>
+              <css:list-item>
+                <css:table-by axis="row">
+                  <css:list-item>
+                    <th>Column 2</th>
+                    <th>Row 1</th>
+                    <td>Cell 1.2</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 2</th>
+                    <td>Cell 2.2</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 3</th>
+                    <td>Cell 3.2</td>
+                  </css:list-item>
+                </css:table-by>
+              </css:list-item>
+              <css:list-item>
+                <css:table-by axis="row">
+                  <css:list-item>
+                    <th>Column 3</th>
+                    <th>Row 1</th>
+                    <td>Cell 1.3</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 2</th>
+                    <td>Cell 2.3</td>
+                  </css:list-item>
+                  <css:list-item>
+                    <th>Row 3</th>
+                    <td>Cell 3.3</td>
+                  </css:list-item>
+                </css:table-by>
+              </css:list-item>
+            </css:table-by>
+          </table>
+        </x:expect>
+      </x:scenario>
+    </x:scenario>
   </x:scenario>
   
   <!--
@@ -472,7 +647,7 @@
     <x:call function="css:render-table-by">
       <x:param select="'area'"/>
       <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
+        <table>
           <tr>
             <th/>
             <th axis="type-of-place" css:table-header-policy="always" colspan="2">Cities</th>
@@ -499,7 +674,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
+      <table>
         <css:table-by axis="area">
           <css:list-item>
             <th axis="area">Europe</th>
@@ -543,7 +718,7 @@
     <x:call function="css:render-table-by">
       <x:param select="'area, sub-area'"/>
       <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
+        <table>
           <tr>
             <th/>
             <th/>
@@ -573,7 +748,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
+      <table>
         <css:table-by axis="area">
           <css:list-item>
             <th axis="area">Earth</th>
@@ -627,7 +802,7 @@
     <x:call function="css:render-table-by">
       <x:param select="'area, type-of-place, sub-area'"/>
       <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
+        <table>
           <tr>
             <th/>
             <th/>
@@ -664,7 +839,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
+      <table>
         <css:table-by axis="area">
           <css:list-item>
             <css:table-by axis="type-of-place">
@@ -750,8 +925,7 @@
         <TABLE border="1"
                summary="This table summarizes travel expenses
                         incurred during August trips to
-                        San Jose and Seattle"
-               xmlns="http://www.w3.org/1999/xhtml">
+                        San Jose and Seattle">
           <CAPTION>
             Travel Expense Report
           </CAPTION>
@@ -829,8 +1003,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <TABLE xmlns="http://www.w3.org/1999/xhtml"
-             border="1"
+      <TABLE border="1"
              summary="This table summarizes travel expenses
                         incurred during August trips to
                         San Jose and Seattle">
@@ -926,8 +1099,7 @@
     <x:call function="css:render-table-by">
       <x:param select="'row, column'"/>
       <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml"
-               style="display: a;
+        <table style="display: a;
                       &amp;::table-by(row)::list-item {{ display: b }}
                       &amp;::table-by(column) {{ display: c }}
                       &amp;::table-by(column)::list-item {{ display: d }}
@@ -952,7 +1124,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml" style="display: a">
+      <table style="display: a">
         <css:table-by axis="row">
           <css:list-item style="display: b">
             <css:table-by axis="column" style="display: c">
@@ -1002,7 +1174,7 @@
     <x:call function="css:render-table-by">
       <x:param select="'row'"/>
       <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
+        <table>
           <tr>
             <th colspan="2">Column 1</th>
             <th>Column 2</th>
@@ -1025,7 +1197,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
+      <table>
         <css:table-by axis="row">
           <css:list-item>
             <th>Column 1</th>
@@ -1054,7 +1226,7 @@
     <x:call function="css:render-table-by">
       <x:param select="'row'"/>
       <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
+        <table>
           <caption>Fünf Länder im Vergleich</caption>
           <thead>
             <tr>
@@ -1110,7 +1282,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
+      <table>
         <caption>Fünf Länder im Vergleich</caption>
         <css:table-by axis="row">
           <css:list-header>
@@ -1158,7 +1330,7 @@
     <x:call function="css:render-table-by">
       <x:param select="'row'"/>
       <x:param>
-        <table xmlns="http://www.w3.org/1999/xhtml">
+        <table>
           <tr>
             <th colspan="2">Column 1</th>
             <th css:table-header-policy="front">Column 2</th>
@@ -1181,7 +1353,7 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table xmlns="http://www.w3.org/1999/xhtml">
+      <table>
         <css:table-by axis="row">
           <css:list-header>
             <th>Column 1</th>
@@ -1451,7 +1623,7 @@
   <x:scenario label="style-inheriting">
     <x:call function="css:render-table-by">
       <x:param select="'row'"/>
-      <x:param xmlns="http://www.w3.org/1999/xhtml">
+      <x:param>
         <table>
           <tbody style="word-spacing: 2">
             <tr style="text-transform: foo">
@@ -1473,7 +1645,7 @@
         </table>
       </x:param>
     </x:call>
-    <x:expect label="result" xmlns="http://www.w3.org/1999/xhtml">
+    <x:expect label="result">
       <table>
         <css:table-by axis="row">
           <css:list-item>

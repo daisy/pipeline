@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container"
@@ -31,18 +33,18 @@
             <p>If not specified, will not copy EPUB before modifying it.</p>
         </p:documentation>
     </p:option>
-    <p:option name="update-lang-attributes" required="false" select="'false'"/>
-    <p:option name="update-identifier-in-content-docs" required="false" select="'false'"/>
-    <p:option name="update-title-in-content-docs" required="false" select="'false'"/>
-    <p:option name="ensure-pagenum-text" required="false" select="'false'"/>
-    <p:option name="ensure-section-headings" required="false" select="'false'"/>
-    <p:option name="braille" required="false" select="'false'"/>
-    <p:option name="tts" required="false" select="'default'"/>
-    <p:option name="sentence-detection" required="false" select="'false'"/>
+    <p:option name="update-lang-attributes" required="false" select="'false'" cx:as="xs:string"/>
+    <p:option name="update-identifier-in-content-docs" required="false" select="'false'" cx:as="xs:string"/>
+    <p:option name="update-title-in-content-docs" required="false" select="'false'" cx:as="xs:string"/>
+    <p:option name="ensure-pagenum-text" required="false" select="'false'" cx:as="xs:string"/>
+    <p:option name="ensure-section-headings" required="false" select="'false'" cx:as="xs:string"/>
+    <p:option name="braille" required="false" select="'false'" cx:as="xs:string"/>
+    <p:option name="tts" required="false" select="'default'" cx:as="xs:string"/>
+    <p:option name="sentence-detection" required="false" select="'false'" cx:as="xs:string"/>
     <p:option name="braille-translator" select="''"/>
     <p:option name="stylesheet" select="''"/>
-    <p:option name="apply-document-specific-stylesheets" select="'false'"/>
-    <p:option name="set-default-rendition-to-braille" select="'false'"/>
+    <p:option name="apply-document-specific-stylesheets" select="'false'" cx:as="xs:string"/>
+    <p:option name="set-default-rendition-to-braille" select="'false'" cx:as="xs:string"/>
     <p:option name="content-media-types" select="'application/xhtml+xml'">
         <!--
             space separated list of content document media-types to include in the braille rendition
