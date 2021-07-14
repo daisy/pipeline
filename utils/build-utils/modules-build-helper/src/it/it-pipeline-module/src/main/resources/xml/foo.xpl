@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 type="px:foo" name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -42,5 +43,9 @@
     </p:xslt>
     
     <px:java-step/>
+    
+    <p:rename match="/*">
+        <p:with-option name="new-name" select="pf:xslt-function(local-name(/*))"/>
+    </p:rename>
     
 </p:declare-step>

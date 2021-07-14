@@ -8,7 +8,7 @@
 		<x:call step="px:foo">
 			<x:input port="source">
 				<x:document type="inline">
-					<hello/>
+					<hello>world</hello>
 				</x:document>
 			</x:input>
 		</x:call>
@@ -17,7 +17,7 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<hello/>
+				<HELLO>WORLD</HELLO>
 			</x:document>
 		</x:expect>
 	</x:scenario>
