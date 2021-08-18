@@ -13,7 +13,7 @@ public class DefaultTablesTest {
 	public void testTranslateDutch() throws Exception {
 		assertEquals(
 			"⠨foobar",
-			Translator.find("locale:nl").translate("Foobar", null, null, null).getBraille());
+			Translator.find("locale:nl grade:0").translate("Foobar", null, null, null).getBraille());
 	}
 	
 	@Test
@@ -21,7 +21,7 @@ public class DefaultTablesTest {
 		Set<String> locales = new HashSet<String>();
 		for (Table t : Louis.listTables())
 			locales.add(t.getInfo().get("locale"));
-		assertEquals(86, locales.size());
+		assertEquals(92, locales.size());
 	}
 	
 	@Test
@@ -31,6 +31,6 @@ public class DefaultTablesTest {
 			t.getTranslator();
 			count++;
 		}
-		assertEquals(143, count);
+		assertEquals(158, count);
 	}
 }

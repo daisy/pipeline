@@ -92,27 +92,32 @@ public final class WideString extends PointerType implements NativeMapped {
 		synchronized (decoder) {
 			if (length > length())
 				throw new IOException("Maximum length is " + length());
-			char[] ca = new char[length];
-			if (length > 0) {
-				byte[] ba = getPointer().getByteArray(0, length * WideChar.SIZE);
-				ByteBuffer bb = ByteBuffer.wrap(ba);
-				CharBuffer cb = CharBuffer.wrap(ca);
-				decoder.reset();
-				CoderResult cr = decoder.decode(bb, cb, true);
+			if (length == 0)
+				return "";
+			decoder.reset();
+			ByteBuffer bytes = ByteBuffer.wrap(getPointer().getByteArray(0, length * WideChar.SIZE));
+			CharBuffer chars = CharBuffer.allocate((int)(bytes.limit() * decoder.averageCharsPerByte()));
+			for (;;) {
+				CoderResult cr = bytes.hasRemaining()
+					? decoder.decode(bytes, chars, true)
+					: decoder.flush(chars);
+				if (cr.isUnderflow())
+					break;
+				if (cr.isOverflow()) {
+					CharBuffer b = CharBuffer.allocate(chars.limit() * 2);
+					chars.flip();
+					b.put(chars);
+					chars = b;
+					continue;
+				}
 				try {
-					if (!cr.isUnderflow())
-						cr.throwException();
-					cr = decoder.flush(cb);
-					if (!cr.isUnderflow())
-						cr.throwException(); }
-				catch (BufferOverflowException e) {
-					throw new RuntimeException("invalid Charset", e); }
-				catch (MalformedInputException e) {
-					throw new RuntimeException("Liblouis coding error", e); }
-				if (cb.hasRemaining())
-					throw new RuntimeException("invalid Charset"); // can happen if fallback == IGNORE
+					cr.throwException();
+				} catch (MalformedInputException e) {
+					throw new RuntimeException("Liblouis coding error", e);
+				}
 			}
-			return new String(ca);
+			chars.flip();
+			return chars.toString();
 		}
 	}
 	
@@ -139,7 +144,7 @@ public final class WideString extends PointerType implements NativeMapped {
 		return write(value, StandardDisplayTables.UNICODE);
 	}
 	
-	WideString write(String value, DisplayTable displayTable) throws UnmappableCharacterException, IOException {
+	private WideString write(String value, DisplayTable displayTable) throws UnmappableCharacterException, IOException {
 		Charset charset = displayTable.asCharset();
 		if (encoders == null)
 			encoders = new IdentityHashMap<Charset,CharsetEncoder>();
@@ -156,9 +161,19 @@ public final class WideString extends PointerType implements NativeMapped {
 	// using CharsetEncoder because behavior of String.getBytes() is undefined when characters can not be encoded
 	private WideString write(String value, CharsetEncoder encoder) throws UnmappableCharacterException, IOException {
 		synchronized (encoder) {
-			if (value.length() > length)
+			// We are sure that the following condition is always met because the write(String,
+			// DisplayTable) method is private.
+			if (!(encoder.charset() == StandardDisplayTables.DEFAULT.asCharset()
+			      || encoder.charset() == StandardDisplayTables.UNICODE.asCharset()))
+				throw new IllegalStateException();
+			// The following is true for the encoders of both StandardDisplayTables.DEFAULT and
+			// StandardDisplayTables.UNICODE.
+			int encodedLength = WideChar.SIZE * (WideChar.SIZE == 2
+				? value.length()
+				: value.codePoints().toArray().length);
+			if (encodedLength > length * WideChar.SIZE)
 				throw new IOException("Maximum string length is " + length());
-			byte[] ba = new byte[value.length() * WideChar.SIZE];
+			byte[] ba = new byte[encodedLength];
 			if (ba.length > 0) {
 				ByteBuffer bb = ByteBuffer.wrap(ba);
 				CharBuffer cb = CharBuffer.wrap(value);

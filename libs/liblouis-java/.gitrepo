@@ -7,5 +7,5 @@
 	remote = git@github.com:liblouis/liblouis-java.git
 	branch = master
 	commit = 6f22ff1a9e48a5b5a28f8223ca33561683cc8b25
-	parent = 64de41dc31127f7e27ecdb1246c90265f401015a
+	parent = ef4bc83b3a80ac211384fb20aba5df47f705a492
 	cmdver = 0.3.1

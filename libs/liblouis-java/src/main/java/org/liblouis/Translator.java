@@ -23,6 +23,8 @@ public class Translator {
 	public static final byte SHY = 1;
 	public static final byte ZWSP = 2;
 	
+	private static final int MODE_DOTSIO = 4;
+	
 	private final String table;
 	
 	/**
@@ -83,18 +85,18 @@ public class Translator {
 	/**
 	 * @param text The text to translate.
 	 * @param typeform Array with typeform information about the text. Must have the same length as
-	 *                 <code>text</code>. May be null.
+	 *                 <code>text</code> (number of code points). May be null.
 	 * @param characterAttributes Array with other information about the text that will be passed on
 	 *                            to the output. May for example be used for numbering all
 	 *                            characters in the input text in order to obtain a full mapping
 	 *                            between input and output. Array must have the same length as
-	 *                            <code>text</code>. May be null.
+	 *                            <code>text</code> (number of code points). May be null.
 	 * @param interCharacterAttributes Array with information about the positions between characters
 	 *                                 that will be passed on to the output. May for example be used
 	 *                                 to track hyphenation points (e.g. `0` for no hyphenation
 	 *                                 point opportunity, `1` for soft hyphen and `2` for zero-width
 	 *                                 space). Length must be equal to the <code>text</code> length
-	 *                                 minus 1.
+	 *                                 (number of code points) minus 1.
 	 * @return A TranslationResult containing the braille translation, the output character
 	 *         attributes (or <code>null</code> if <code>characterAttributes</code> was
 	 *         <code>null</code>), and the output inter-character attributes (or <code>null</code>
@@ -147,29 +149,50 @@ public class Translator {
 	                                    int[] interCharacterAttributes,
 	                                    DisplayTable displayTable)
 			throws TranslationException, DisplayException {
+		int textLength = text.codePoints().toArray().length;
+		if (WideChar.SIZE == 2 && textLength != text.length()) {
+			// This means the Java char array contains surrogate pairs, so the UCS-2 encoded string
+			// that is sent to Liblouis will also contain surrogate pairs.
+			textLength = text.length();
+			// Because Liblouis is unaware of surrogate pairs, handling the "typeform",
+			// "characterAttributes" and "interCharacterAttributes" arguments correctly becomes a
+			// bit of a challenge. For now we simply don't support it.
+			if (typeform != null)
+				throw new IllegalArgumentException(
+					"Unicode characters above U+FFFF are not supported when typeform is specified");
+			if (characterAttributes != null)
+				throw new IllegalArgumentException(
+					"Unicode characters above U+FFFF are not supported when characterAttributes is specified");
+			if (interCharacterAttributes != null)
+				throw new IllegalArgumentException(
+					"Unicode characters above U+FFFF are not supported when interCharacterAttributes is specified");
+		}
 		if (typeform != null)
-			if (typeform.length != text.length())
-				throw new IllegalArgumentException("typeform length must be equal to text length");
+			if (typeform.length != textLength)
+				throw new IllegalArgumentException(
+					"typeform length must be equal to the text length (number of code points)");
 		if (characterAttributes != null)
-			if (characterAttributes.length != text.length())
-				throw new IllegalArgumentException("characterAttributes length must be equal to text length");
+			if (characterAttributes.length != textLength)
+				throw new IllegalArgumentException(
+					"characterAttributes length must be equal to text length (number of code points)");
 		if (interCharacterAttributes != null)
-			if (interCharacterAttributes.length != text.length() - 1)
-				throw new IllegalArgumentException("interCharacterAttributes length must be equal to text length minus 1");
+			if (interCharacterAttributes.length != textLength - 1)
+				throw new IllegalArgumentException(
+					"interCharacterAttributes length must be equal to text length (number of code points) minus 1");
 		WideString inbuf;
 		try {
-			inbuf = getWideCharBuffer("text-in", text.length()).write(text); }
+			inbuf = getWideCharBuffer("text-in", textLength).write(text); }
 		catch (IOException e) {
 			throw new RuntimeException("should not happen", e); }
-		WideString outbuf = getWideCharBuffer("text-out", text.length() * OUTLEN_MULTIPLIER);
-		IntByReference inlen = new IntByReference(text.length());
+		WideString outbuf = getWideCharBuffer("text-out", textLength * OUTLEN_MULTIPLIER);
+		IntByReference inlen = new IntByReference(textLength);
 		IntByReference outlen = new IntByReference(outbuf.length());
 		int[] inputPos = null;
 		if (typeform != null)
 			typeform = Arrays.copyOf(typeform, outbuf.length());
 		if (characterAttributes != null || interCharacterAttributes != null)
-			inputPos = getIntegerBuffer("inputpos", text.length() * OUTLEN_MULTIPLIER);
-		int mode = displayTable != StandardDisplayTables.DEFAULT ? 4 : 0;
+			inputPos = getIntegerBuffer("inputpos", textLength * OUTLEN_MULTIPLIER);
+		int mode = displayTable != StandardDisplayTables.DEFAULT ? MODE_DOTSIO : 0;
 		if (Louis.getLibrary().lou_translate(table, inbuf, inlen, outbuf, outlen, typeform,
 		                                     null, null, inputPos, null, mode) == 0)
 			throw new TranslationException("Unable to complete translation");
@@ -177,13 +200,16 @@ public class Translator {
 	}
 	
 	public String backTranslate(String text) throws TranslationException {
+		int textLength = WideChar.SIZE == 2
+			? text.length()
+			: text.codePoints().toArray().length;
 		WideString inbuf;
 		try {
-			inbuf = getWideCharBuffer("text-in", text.length()).write(text); }
+			inbuf = getWideCharBuffer("text-in", textLength).write(text); }
 		catch (IOException e) {
 			throw new RuntimeException("should not happen", e); }
-		WideString outbuf = getWideCharBuffer("text-out", text.length() * OUTLEN_MULTIPLIER);
-		IntByReference inlen = new IntByReference(text.length());
+		WideString outbuf = getWideCharBuffer("text-out", textLength * OUTLEN_MULTIPLIER);
+		IntByReference inlen = new IntByReference(textLength);
 		IntByReference outlen = new IntByReference(outbuf.length());
 		
 		if (Louis.getLibrary().lou_backTranslate(table, inbuf, inlen, outbuf, outlen,
@@ -199,15 +225,23 @@ public class Translator {
 	 * @param text The text to hyphenate. Can be multiple words.
 	 * @return The hyphenation points. Possible values are `0` for no hyphenation point, `1` for a
 	 *         hyphenation point (soft hyphen), or `2` for a zero-width space (which are inserted
-	 *         after hard hyphens). Length is equal to the <code>text</code> length minus 1.
+	 *         after hard hyphens). Length is equal to the <code>text</code> length (number of code
+	 *         points) minus 1.
 	 */
 	public byte[] hyphenate(String text) throws TranslationException {
+		int inlen = text.codePoints().toArray().length;
+		if (WideChar.SIZE == 2 && inlen != text.length()) {
+			// This means the Java char array contains surrogate pairs, so the UCS-2 encoded string
+			// that is sent to Liblouis will also contain surrogate pairs. Because Liblouis is
+			// unaware of surrogate pairs, hyphenation becomes a bit of a challenge. For now we
+			// simply don't support it.
+			throw new IllegalArgumentException("Unicode characters above U+FFFF are not supported");
+		}
 		WideString inbuf;
 		try {
-			inbuf = getWideCharBuffer("text-in", text.length()).write(text); }
+			inbuf = getWideCharBuffer("text-in", inlen).write(text); }
 		catch (IOException e) {
 			throw new RuntimeException("should not happen", e); }
-		int inlen = text.length();
 		byte[] hyphens = getByteBuffer("hyphens-out", inlen);
 		for (int i = 0; i < inlen; i++) hyphens[i] = '0';
 		
@@ -222,7 +256,7 @@ public class Translator {
 				throw new TranslationException("Unable to complete hyphenation");
 			for (int i = 0; i < end - start; i++) hyphens[start + i] = wordHyphens[i]; }
 		
-		byte[] hyphenPositions = readHyphens(new byte[text.length() - 1], hyphens);
+		byte[] hyphenPositions = readHyphens(new byte[inlen - 1], hyphens);
 		
 		// add a zero-width space after hard hyphens
 		matcher = Pattern.compile("[\\p{L}\\p{N}]-(?=[\\p{L}\\p{N}])").matcher(text);

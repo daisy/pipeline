@@ -163,7 +163,7 @@ public interface DisplayTable {
 					super(UnicodeBrailleCharset.this, charsize, charsize,
 					      charsize == 2
 					      ? new byte[]{(byte)0x00,(byte)0x80}
-					      : new byte[]{(byte)0x00,(byte)0x00,(byte)0x00,(byte)0x80});
+					      : new byte[]{(byte)0x00,(byte)0x80,(byte)0x00,(byte)0x00});
 				}
 				@Override
 				protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
@@ -193,11 +193,10 @@ public interface DisplayTable {
 				protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
 					int k = 0;
 					while (in.remaining() >= charsize) {
-						k++;
-						byte b1 = in.get(k * charsize - 1);
+						byte b1 = in.get(k * charsize + 1);
 						if ((b1 & 0x80) == 0)
 							return CoderResult.malformedForLength(charsize);
-						byte b2 = in.get(k * charsize - 2);
+						byte b2 = in.get(k * charsize);
 						Character c = (char)((b2 & 0xff) | '\u2800');
 						if ((b1 & 0xff) != 0x80)
 							// virtual dots present
@@ -221,6 +220,7 @@ public interface DisplayTable {
 						// ignoring byte 3 and 4 if present
 						for (int i = 0; i < charsize; i++)
 							in.get();
+						k++;
 					}
 					return CoderResult.UNDERFLOW;
 				};
