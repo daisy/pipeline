@@ -10,6 +10,9 @@ for module in "$@"; do
         a=$(cat $module/settings.gradle | grep '^rootProject.name' | sed "s/^rootProject\.name *= *['\"]\(.*\)['\"]/\1/")
     fi
     g=$(cat $module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/")
+    if [[ -z $g ]]; then
+        g=$(cat $module/gradle.properties | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/")
+    fi
     echo "  <project xmlns=\"http://maven.apache.org/POM/4.0.0\">"
     echo "    <groupId>$g</groupId>"
     echo "    <artifactId>$a</artifactId>"

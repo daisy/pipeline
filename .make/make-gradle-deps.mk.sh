@@ -7,9 +7,12 @@ v=$((cat $module/gradle.properties | grep '^distVersion' ||
      cat $module/gradle.properties | grep '^version' ) | sed 's/.*=//')
 a=$(basename $module)
 if [ -e $module/settings.gradle ] && cat $module/settings.gradle | grep "rootProject.name" >/dev/null; then
-    a=$(cat $module/settings.gradle | grep '^rootProject.name' | sed "s/^rootProject\.name *= *['\"]\(.*\)['\"]/\1/")
+	a=$(cat $module/settings.gradle | grep '^rootProject.name' | sed "s/^rootProject\.name *= *['\"]\(.*\)['\"]/\1/")
 fi
 g=$(cat $module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/")
+if [[ -z $g ]]; then
+	g=$(cat $module/gradle.properties | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/")
+fi
 echo "$module/VERSION := $v"
 echo ""
 echo "$module/.last-tested : %/.last-tested : %/.test | .group-eval"
