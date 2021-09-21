@@ -105,7 +105,7 @@ run : $(dev_launcher)
 
 .PHONY : run-with-osgi
 run-with-osgi : $(dev_launcher)
-	$< osgi
+	$< osgi shell
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
