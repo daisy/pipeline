@@ -29,9 +29,11 @@ start =
 documentation =
   element documentation {
     attribute xml:lang { text }?,
+    attribute xml:space { text }?,
     text
   }
   | element a:documentation {
       attribute xml:lang { text }?,
+      attribute xml:space { text }?,
       text
     }
