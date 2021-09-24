@@ -40,3 +40,6 @@ sass:
 baseurl: "/pipeline"
 site_base: "http://daisy.github.io"
 meta_file: _meta.ttl
+include:
+  - modules/braille/dtbook-to-pef/src/main/resources/css/_tables.scss/index.md
+  - modules/braille/html-to-pef/src/main/resources/css/_tables.scss/index.md

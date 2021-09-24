@@ -31,7 +31,7 @@ module Jekyll
       context.stack do
         solutions.each do |solution|
           context[@variable_name] = Hash[
-            solution.to_hash.map { |k, v|
+            solution.to_h.map { |k, v|
               [
                 k.to_s,
                 case v
@@ -43,7 +43,7 @@ module Jekyll
               ]
             }
           ]
-          result << render_all(@nodelist, context)
+          result << @body.render(context)
         end
       end
       result
