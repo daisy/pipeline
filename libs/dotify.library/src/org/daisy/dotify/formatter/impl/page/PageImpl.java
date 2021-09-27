@@ -3,10 +3,12 @@ package org.daisy.dotify.formatter.impl.page;
 import org.daisy.dotify.api.formatter.FieldList;
 import org.daisy.dotify.api.formatter.MarginRegion;
 import org.daisy.dotify.api.formatter.Marker;
+import org.daisy.dotify.api.formatter.MarkerIndicator;
 import org.daisy.dotify.api.formatter.MarkerIndicatorRegion;
 import org.daisy.dotify.api.formatter.NoField;
 import org.daisy.dotify.api.formatter.PageAreaProperties;
 import org.daisy.dotify.api.translator.BrailleTranslator;
+import org.daisy.dotify.api.translator.DefaultTextAttribute;
 import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.api.writer.Row;
@@ -26,7 +28,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //TODO: scope spread is currently implemented using document wide scope, i.e. across volume boundaries.
 // This is wrong, but is better than the previous sequence scope.
@@ -37,6 +40,9 @@ import java.util.Optional;
  * @author Joel Håkansson
  */
 public class PageImpl implements Page {
+
+    private static final Logger logger = Logger.getLogger(PageImpl.class.getCanonicalName());
+
     private final FieldResolver fieldResolver;
     private final PageDetails details;
     private final LayoutMaster master;
@@ -200,19 +206,22 @@ public class PageImpl implements Page {
         MarkerRef r,
         boolean rightSide
     ) throws PaginatorException {
-        String ret = "";
         int w = mr.getWidth();
         if (mr instanceof MarkerIndicatorRegion) {
-            ret = firstMarkerForRow(r, (MarkerIndicatorRegion) mr);
-            if (ret.length() > 0) {
+            String ret = "";
+            MarkerIndicator marker = firstMarkerForRow(r, (MarkerIndicatorRegion) mr);
+            if (marker != null) {
                 try {
-                    ret = fcontext.getDefaultTranslator().translate(
-                        Translatable.text(
-                            fcontext.getConfiguration().isMarkingCapitalLetters() ?
-                            ret :
-                            ret.toLowerCase()
-                        ).build()
-                    ).getTranslatedRemainder();
+                    String indicator = marker.getIndicator();
+                    if (!fcontext.getConfiguration().isMarkingCapitalLetters()) {
+                        indicator = indicator.toLowerCase();
+                    }
+                    Translatable.Builder translatable = Translatable.text(indicator);
+                    if (marker.getTextStyle() != null) {
+                        translatable = translatable.attributes(
+                            new DefaultTextAttribute.Builder(marker.getTextStyle()).build(indicator.length()));
+                    }
+                    ret = fcontext.getDefaultTranslator().translate(translatable.build()).getTranslatedRemainder();
                 } catch (TranslationException e) {
                     throw new PaginatorException("Failed to translate: " + ret, e);
                 }
@@ -233,7 +242,15 @@ public class PageImpl implements Page {
                 }
                 ret = sb.toString();
             } else if (ret.length() > w) {
-                throw new PaginatorException("Cannot fit " + ret + " into a margin-region of size " + mr.getWidth());
+                if (fcontext.getConfiguration().isAllowingTextOverflowTrimming()) {
+                    String trimmed = ret.substring(0, mr.getWidth());
+                    logger.log(Level.WARNING, "Cannot fit \"" + ret + "\" into a margin-region of size " + mr.getWidth()
+                               + ", trimming to \"" + trimmed + "\"");
+                    ret = trimmed;
+                } else {
+                    throw new PaginatorException(
+                        "Cannot fit \"" + ret + "\" into a margin-region of size " + mr.getWidth());
+                }
             }
             return new MarginProperties(ret, spaceOnly);
         } else {
@@ -241,11 +258,10 @@ public class PageImpl implements Page {
         }
     }
 
-    private String firstMarkerForRow(MarkerRef r, MarkerIndicatorRegion mrr) {
+    private MarkerIndicator firstMarkerForRow(MarkerRef r, MarkerIndicatorRegion mrr) {
         return mrr.getIndicators().stream()
                 .filter(mi -> r.hasMarkerWithName(mi.getName()))
-                .map(mi -> mi.getIndicator())
-                .findFirst().orElse("");
+                .findFirst().orElse(null);
     }
 
     private void addRowDetails(RowImpl r) {

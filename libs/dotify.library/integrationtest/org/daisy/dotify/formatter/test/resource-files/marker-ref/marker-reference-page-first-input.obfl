@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
    <meta>
-      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-page-first-workaround</dc:title>
-      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests (hypothetical) marker-reference type that corresponds with 'page-first' in CSS. This type is not yet directly supported in OBFL. As a workaround I do a forward page search (left corner in this test), and if that does not return a value, a backward sequence search (right corner). Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break.</dc:description>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-page-first</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests (hypothetical) marker-reference type that corresponds with 'page-first' in CSS. This type is not yet directly supported in OBFL. As a workaround I do a forward page search, and if that does not return a value, a backward sequence search. Tested with markers at the beginning of the sequence, in the middle of a page, at a soft page break within a block, at a soft page break between two blocks, and at a hard page break.</dc:description>
    </meta>
    <layout-master name="a" page-width="10" page-height="5" duplex="true">
       <default-template>
          <header>
             <field>
-               <marker-reference marker="foo" direction="forward" scope="page"/>
+               <compound-marker-reference>
+                  <marker-reference marker="foo" direction="forward" scope="page"/>
+                  <marker-reference marker="foo" direction="backward" scope="sequence"/>
+               </compound-marker-reference>
             </field>
             <field/>
-            <field>
-               <marker-reference marker="foo" direction="backward" scope="sequence"/>
-            </field>
          </header>
          <footer/>
       </default-template>

@@ -1,18 +1,22 @@
 package org.daisy.dotify.formatter.impl.segment;
 
 import org.daisy.dotify.api.formatter.Leader;
+import org.daisy.dotify.api.formatter.TextProperties;
 
 /**
  * TODO: Write java doc.
  */
 public class LeaderSegment extends Leader implements Segment {
 
-    protected LeaderSegment(Builder builder) {
-        super(builder);
+    private final TextProperties tp;
+
+    public LeaderSegment(Leader leader, TextProperties tp) {
+        super(leader);
+        this.tp = tp;
     }
 
-    public LeaderSegment(Leader leader) {
-        super(leader);
+    public TextProperties getTextProperties() {
+        return tp;
     }
 
     @Override

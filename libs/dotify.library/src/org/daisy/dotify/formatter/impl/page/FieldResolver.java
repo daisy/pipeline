@@ -1,6 +1,7 @@
 package org.daisy.dotify.formatter.impl.page;
 
 import org.daisy.dotify.api.formatter.CompoundField;
+import org.daisy.dotify.api.formatter.CompoundMarkerReferenceField;
 import org.daisy.dotify.api.formatter.CurrentPageField;
 import org.daisy.dotify.api.formatter.Field;
 import org.daisy.dotify.api.formatter.FieldList;
@@ -180,6 +181,8 @@ class FieldResolver {
         DefaultTextAttribute.Builder b2 = new DefaultTextAttribute.Builder(field.getTextStyle());
         if (field instanceof CompoundField) {
             ret = resolveCompoundField((CompoundField) field, p, b2, noField);
+        } else if (field instanceof CompoundMarkerReferenceField) {
+            ret = resolveCompoundMarkerReferenceField((CompoundMarkerReferenceField) field, p, b2, noField);
         } else if (field instanceof MarkerReferenceField) {
             ret = crh.findMarker(p.getPageId(), (MarkerReferenceField) field);
         } else if (field instanceof CurrentPageField) {
@@ -200,6 +203,23 @@ class FieldResolver {
         Optional<String> noField
     ) {
         return f.stream().map(f2 -> resolveField(f2, p, b, noField)).collect(Collectors.joining());
+    }
+
+    private String resolveCompoundMarkerReferenceField(
+        CompoundMarkerReferenceField f,
+        PageDetails p,
+        DefaultTextAttribute.Builder b,
+        Optional<String> noField
+    ) {
+        for (MarkerReferenceField ff : f) {
+            DefaultTextAttribute.Builder b2 = new DefaultTextAttribute.Builder(ff.getTextStyle());
+            String resolved = resolveField(ff, p, b2, noField);
+            if (!"".equals(resolved)) {
+                b.add(b2.build(resolved.length()));
+                return resolved;
+            }
+        }
+        return "";
     }
 
     private static String resolveCurrentPageField(CurrentPageField f, PageDetails p) {

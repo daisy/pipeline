@@ -13,32 +13,47 @@ import java.util.List;
  * @author Joel Håkansson
  */
 public class VolumeImpl implements Volume {
-    private List<Section> body;
+    private List<Section> bodyVolData;
     private List<Section> preVolData;
     private List<Section> postVolData;
+    /**
+     * The number of sheets allocated for pre- and post-content, which may be more than the actual
+     * number. This value is never decreased in order to avoid oscillation.
+     */
     private Overhead overhead;
+    /**
+     * The actual number of pre-content sheets.
+     */
+    private int preVolSize;
+    /**
+     * The actual number of post-content sheets.
+     */
+    private int postVolSize;
     private int bodyVolSize;
 
     public VolumeImpl(Overhead overhead) {
         this.overhead = overhead;
-        this.bodyVolSize = 0;
+        postVolSize = 0;
+        bodyVolSize = 0;
     }
 
     public void setBody(SectionBuilder body) {
+        bodyVolData = body.getSections();
         bodyVolSize = body.getSheetCount();
-        this.body = body.getSections();
     }
 
     public void setPreVolData(SectionBuilder preVolData) {
-        //use the highest value to avoid oscillation
-        overhead = overhead.withPreContentSize(Math.max(overhead.getPreContentSize(), preVolData.getSheetCount()));
         this.preVolData = preVolData.getSections();
+        preVolSize = preVolData.getSheetCount();
+        // use the highest value to avoid oscillation
+        overhead = overhead.withPreContentSize(Math.max(overhead.getPreContentSize(), preVolSize));
     }
 
     public void setPostVolData(SectionBuilder postVolData) {
-        //use the highest value to avoid oscillation
-        overhead = overhead.withPostContentSize(Math.max(overhead.getPostContentSize(), postVolData.getSheetCount()));
         this.postVolData = postVolData.getSections();
+        postVolSize = postVolData.getSheetCount();
+        // use the highest value to avoid oscillation
+        overhead = overhead.withPostContentSize(Math.max(overhead.getPostContentSize(), postVolSize));
     }
 
     public Overhead getOverhead() {
@@ -49,15 +64,18 @@ public class VolumeImpl implements Volume {
         return bodyVolSize;
     }
 
+    /**
+     * @return The actual size of the whole volume in sheets.
+     */
     public int getVolumeSize() {
-        return overhead.total() + bodyVolSize;
+        return preVolSize + bodyVolSize + postVolSize;
     }
 
     @Override
     public Iterable<? extends Section> getSections() {
         List<Section> contents = new ArrayList<>();
         contents.addAll(preVolData);
-        contents.addAll(body);
+        contents.addAll(bodyVolData);
         contents.addAll(postVolData);
         return contents;
     }

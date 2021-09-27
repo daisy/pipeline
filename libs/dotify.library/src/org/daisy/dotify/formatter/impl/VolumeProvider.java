@@ -151,14 +151,13 @@ public class VolumeProvider {
         List<AnchorData> ad = new ArrayList<>();
         volume.setPreVolData(updateVolumeContents(currentVolumeNumber, ad, true));
         volume.setBody(nextBodyContents(currentVolumeNumber, volume.getOverhead().total(), ad));
-
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Sheets  in volume " + currentVolumeNumber + ": " + (volume.getVolumeSize()) +
-                    ", content:" + volume.getBodySize() +
-                    ", overhead:" + volume.getOverhead());
-        }
         volume.setPostVolData(updateVolumeContents(currentVolumeNumber, ad, false));
-        crh.setSheetsInVolume(currentVolumeNumber, volume.getBodySize() + volume.getOverhead().total());
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Sheets in volume " + currentVolumeNumber + ": " + (volume.getVolumeSize()) +
+                    " (content:" + volume.getBodySize() +
+                    ", overhead (allocated):" + volume.getOverhead().total() + ")");
+        }
+        crh.setSheetsInVolume(currentVolumeNumber, volume.getVolumeSize());
         //crh.setPagesInVolume(i, value);
         crh.setAnchorData(currentVolumeNumber, ad);
         crh.setOverhead(currentVolumeNumber, volume.getOverhead());

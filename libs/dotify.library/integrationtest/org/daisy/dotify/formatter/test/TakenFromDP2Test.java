@@ -574,18 +574,6 @@ public class TakenFromDP2Test extends AbstractFormatterEngineTest {
             false
         );
     }
-    @Ignore // see https://github.com/joeha480/dotify/issues/195
-    @Test
-    public void testMarginRegionAndBorders() throws
-            LayoutEngineException,
-            IOException,
-            PagedMediaWriterConfigurationException {
-        testPEF(
-            "resource-files/dp2/margin-region-and-borders-input.obfl",
-            "resource-files/dp2/margin-region-and-borders-expected.pef",
-            false
-        );
-    }
     @Test
     public void testRowSpacingAndFooter() throws
             LayoutEngineException,

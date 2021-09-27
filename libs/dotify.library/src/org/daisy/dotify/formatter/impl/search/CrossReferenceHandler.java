@@ -28,7 +28,7 @@ public class CrossReferenceHandler {
     private final LookupHandler<BlockAddress, List<String>> groupIdentifiers;
     private final LookupHandler<BlockLineLocation, TransitionProperties> transitionProperties;
     private final Map<BlockLineLocation, PageDetails> nextPageDetails;
-    private final Map<Integer, Overhead> volumeOverhead;
+    private final LookupHandler<Integer, Overhead> volumeOverhead;
     private final Map<String, Integer> counters;
     private final SearchInfo searchInfo;
     private static final String VOLUMES_KEY = "volumes";
@@ -39,8 +39,8 @@ public class CrossReferenceHandler {
     private static final String PAGE_NUMBER_OF_FIRST_CONTENT_PAGE_OF_VOLUME =
             "page-number-of-first-content-page-of-volume-";
     private Set<String> pageIds;
-    private boolean overheadDirty = false;
     private boolean readOnly = false;
+    private static final Overhead INITIAL_OVERHEAD = new Overhead(0, 0);
 
     public CrossReferenceHandler() {
         this.pageRefs = new LookupHandler<>();
@@ -54,7 +54,7 @@ public class CrossReferenceHandler {
         this.groupIdentifiers = new LookupHandler<>();
         this.transitionProperties = new LookupHandler<>();
         this.nextPageDetails = new HashMap<>();
-        this.volumeOverhead = new HashMap<>();
+        this.volumeOverhead = new LookupHandler<>();
         this.counters = new HashMap<>();
         this.searchInfo = new SearchInfo();
         this.pageIds = new HashSet<>();
@@ -211,14 +211,7 @@ public class CrossReferenceHandler {
         if (volumeNumber < 1) {
             throw new IndexOutOfBoundsException("Volume must be greater than or equal to 1");
         }
-        if (volumeOverhead.get(volumeNumber) == null) {
-            if (readOnly) {
-                return new Overhead(0, 0);
-            }
-            volumeOverhead.put(volumeNumber, new Overhead(0, 0));
-            overheadDirty = true;
-        }
-        return volumeOverhead.get(volumeNumber);
+        return volumeOverhead.get(volumeNumber, INITIAL_OVERHEAD, readOnly);
     }
 
     public void setOverhead(int volumeNumber, Overhead overhead) {
@@ -389,7 +382,7 @@ public class CrossReferenceHandler {
             anchorRefs.isDirty() ||
             variables.isDirty() ||
             breakable.isDirty() ||
-            overheadDirty ||
+            volumeOverhead.isDirty() ||
             searchInfo.isDirty() ||
             transitionProperties.isDirty();
         //|| groupAnchors.isDirty()
@@ -419,7 +412,7 @@ public class CrossReferenceHandler {
         //rowCount.setDirty(value);
         //groupAnchors.setDirty(value);
         //groupMarkers.setDirty(value);
-        overheadDirty = value;
+        volumeOverhead.setDirty(value);
         counters.clear();
     }
 

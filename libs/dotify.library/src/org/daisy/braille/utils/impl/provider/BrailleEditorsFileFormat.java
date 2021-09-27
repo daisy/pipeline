@@ -111,6 +111,11 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
     }
 
     @Override
+    public boolean supportsVolumes() {
+        return false;
+    }
+
+    @Override
     public EmbosserWriter newEmbosserWriter(OutputStream os) {
 
         if (!supportsTable(table)) {

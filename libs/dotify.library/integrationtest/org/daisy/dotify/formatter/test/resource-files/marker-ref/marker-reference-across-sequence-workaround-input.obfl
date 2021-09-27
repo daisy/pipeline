@@ -9,12 +9,12 @@
          <header/>
          <footer>
             <field>
-               <marker-reference marker="foo" direction="backward" scope="sequence"/>
+               <compound-marker-reference>
+                  <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                  <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+               </compound-marker-reference>
             </field>
             <field/>
-            <field>
-               <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
-            </field>
          </footer>
       </default-template>
    </layout-master>

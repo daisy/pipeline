@@ -1,7 +1,6 @@
 package org.daisy.dotify.formatter.impl.page;
 
 import org.daisy.dotify.api.formatter.BlockPosition;
-import org.daisy.dotify.api.formatter.Condition;
 import org.daisy.dotify.api.formatter.FallbackRule;
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.api.formatter.PageAreaProperties;
@@ -36,6 +35,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -77,7 +77,7 @@ public class PageSequenceBuilder2 {
     private final PageAreaProperties areaProps;
 
     private final ContentCollectionImpl collection;
-    private BlockContext blockContext;
+    private BlockContext initialContext;
     private final CollectionData cd;
     private final LayoutMaster master;
     private final List<RowGroupSequence> dataGroups;
@@ -142,19 +142,19 @@ public class PageSequenceBuilder2 {
         }
         keepNextSheets = 0;
 
-        this.blockContext = BlockContext.from(rcontext)
+        initialContext = BlockContext.from(rcontext)
                 .flowWidth(seq.getLayoutMaster().getFlowWidth())
                 .formatterContext(context)
                 .build();
-        this.staticAreaContent = new PageAreaContent(seq.getLayoutMaster().getPageAreaBuilder(), blockContext);
+        this.staticAreaContent = new PageAreaContent(seq.getLayoutMaster().getPageAreaBuilder(), initialContext);
         //For the scenario processing, it is assumed that all page templates
         //have margin regions that are of the same width.
         //However, it is unlikely to have a big impact on the selection.
-        BlockContext bc = BlockContext.from(blockContext)
+        BlockContext bc = BlockContext.from(initialContext)
                 .flowWidth(master.getFlowWidth() - master.getTemplate(1).getTotalMarginRegionWidth())
                 .build();
         this.dataGroups = seq.selectScenario(master, bc, true);
-        this.cd = new CollectionData(staticAreaContent, blockContext, master, collection);
+        this.cd = new CollectionData(staticAreaContent, initialContext, master, collection);
         this.dataGroupsIndex = 0;
         this.seqId = seqId;
         this.cbl = blc;
@@ -173,7 +173,7 @@ public class PageSequenceBuilder2 {
         this.staticAreaContent = template.staticAreaContent;
         this.areaProps = template.areaProps;
         this.collection = template.collection;
-        this.blockContext = template.blockContext;
+        this.initialContext = template.initialContext;
         this.master = template.master;
         this.dataGroups = template.dataGroups;
         this.cd = template.cd;
@@ -196,11 +196,26 @@ public class PageSequenceBuilder2 {
         return template == null ? null : new PageSequenceBuilder2(template);
     }
 
-    public void setCurrentVolumeNumber(int volume) {
-        blockContext = BlockContext.from(blockContext).currentVolume(volume).build();
+    private BlockContext getContext() {
         if (data != null) {
-            data.setContext(blockContext);
+            return data.getContext();
+        } else {
+            return initialContext;
         }
+    }
+
+    private void modifyContext(Consumer<? super BlockContext.Builder> modifier) {
+        if (data != null) {
+            data.modifyContext(modifier);
+        } else {
+            BlockContext.Builder b = BlockContext.from(initialContext);
+            modifier.accept(b);
+            initialContext = b.build();
+        }
+    }
+
+    public void setCurrentVolumeNumber(int volume) {
+        modifyContext(c -> c.currentVolume(volume));
     }
 
     /**
@@ -284,9 +299,9 @@ public class PageSequenceBuilder2 {
             wasSplitInSequence,
             isFirst
         );
-        blockContext.getRefs().keepPageDetails(ret.getDetails());
+        getContext().getRefs().keepPageDetails(ret.getDetails());
         for (String id : ret.getIdentifiers()) {
-            blockContext.getRefs().setPageNumber(id, ret.getPageNumber());
+            getContext().getRefs().setPageNumber(id, ret.getPageNumber());
         }
         toIndex++;
         return ret;
@@ -323,7 +338,7 @@ public class PageSequenceBuilder2 {
                 //    is not unique.
                 // 2. If the volume must be broken on a sheet that is empty on the back, we prefer
                 //    to put the transition content on the back of the sheet, not on the front.
-                blockContext.getRefs().setNextPageInSequenceEmptyOrAbsent(prevCbl);
+                getContext().getRefs().setNextPageInSequenceEmptyOrAbsent(prevCbl);
                 // Set prevCbl to null so that the command above can not be undone with a
                 // setNextPageDetailsInSequence() in the next nextPage() call.
                 prevCbl = null;
@@ -336,7 +351,7 @@ public class PageSequenceBuilder2 {
         // a sheet when we are on a recto page of that sheet and we need to determine whether to
         // break the volume after the current page or the next.
         if (prevCbl != null && interruptContentPresent) {
-            blockContext.getRefs().setNextPageDetailsInSequence(prevCbl, current.getDetails());
+            getContext().getRefs().setNextPageDetailsInSequence(prevCbl, current.getDetails());
         }
         prevCbl = cbl;
 
@@ -347,15 +362,10 @@ public class PageSequenceBuilder2 {
         );
 
         // At the beginning here before we start printing the page for this iteration we will set
-        // the value topOfPage and because this is a mutable context value we need to build a
-        // new object. This value will be changed later on when we aren't at the top of
-        // the page anymore. This is signified by that we have written a full row group.
-        // Setting .topOfPage(true) here will in the general case NOT be correct
-        // (according to the definition of the OBFL variable $starts-at-top-of-page),
-        // however in the specific case when the value is read (when evaluating a
-        // display-when="(! $starts-at-top-of-page)", refer to addRows() below) it WILL be
-        // correct under all the assumptions made.
-        blockContext = new BlockContext.Builder(blockContext).topOfPage(true).build();
+        // the value topOfPage. This value will be changed later on when we aren't at the top of the
+        // page anymore (when we have written one or more visible rows - refer to
+        // RowGroupDataSource#ensureBuffer).
+        modifyContext(c -> c.topOfPage(true));
 
         // while there are more rows in the current RowGroupSequence, or there are more RowGroupSequences
         while (dataGroupsIndex < dataGroups.size() || (data != null && !data.isEmpty())) {
@@ -363,7 +373,7 @@ public class PageSequenceBuilder2 {
                 // pick up next RowGroupSequence
                 RowGroupSequence rgs = dataGroups.get(dataGroupsIndex);
                 //TODO: This assumes that all page templates have margin regions that are of the same width
-                BlockContext bc = BlockContext.from(blockContext)
+                BlockContext bc = BlockContext.from(getContext())
                         .flowWidth(
                             master.getFlowWidth() -
                             master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth()
@@ -394,14 +404,15 @@ public class PageSequenceBuilder2 {
                 }
                 force = false;
             }
-            BlockContext bc = BlockContext.from(data.getContext())
-                .currentPage(current.getDetails().getPageId(), current.getDetails().getPageNumber())
-                .flowWidth(
-                    master.getFlowWidth() -
-                    master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth()
-                )
-                .build();
-            data.setContext(bc);
+            modifyContext(
+                c -> {
+                    c.currentPage(current.getDetails().getPageId(), current.getDetails().getPageNumber());
+                    c.flowWidth(
+                        master.getFlowWidth() -
+                        master.getTemplate(current.getPageNumber()).getTotalMarginRegionWidth()
+                    );
+                }
+            );
             // This function returns the space that header or footer fields take up in a row at a
             // certain position on the page. RowGroupDataSource needs this information in order to
             // know where to break the line.
@@ -417,7 +428,7 @@ public class PageSequenceBuilder2 {
                 List<RowGroup> seqTransitionText = transitionContent.isPresent() ?
                     new RowGroupDataSource(
                         master,
-                        bc,
+                        getContext(),
                         transitionContent.get().getInSequence(),
                         BreakBefore.AUTO,
                         null,
@@ -437,7 +448,7 @@ public class PageSequenceBuilder2 {
                     ) {
                         anyTransitionText = new RowGroupDataSource(
                             master,
-                            bc,
+                            getContext(),
                             transitionContent.get().getInAny(),
                             BreakBefore.AUTO,
                             null,
@@ -586,13 +597,15 @@ public class PageSequenceBuilder2 {
                 }
                 // Add the body rows to the page.
                 if (firstPageContentRow > 0) {
-                    bc = addRows(head.subList(0, firstPageContentRow), current, bc, false);
+                    addRows(head.subList(0, firstPageContentRow), current, false);
                     if (!current.getDetails().getMarkers().isEmpty()) {
-                        throw new RuntimeException();
+                        // this means that there were markers in any-resumed or sequence-resumed,
+                        // which is disallowed by the OBFL parser (so should in theory not happen)
+                        throw new RuntimeException("Markers in any-resumed or sequence-resumed are not supported");
                     }
-                    bc = addRows(head.subList(firstPageContentRow, head.size()), current, bc, true);
+                    addRows(head.subList(firstPageContentRow, head.size()), current, true);
                 } else {
-                    bc = addRows(head, current, bc, false);
+                    addRows(head, current, false);
                 }
                 // The VolumeKeepPriority of the page is the maximum value (lowest priority) of all
                 // RowGroups. Discarded RowGroups (i.e. collapsed margins) are also taken into
@@ -612,7 +625,7 @@ public class PageSequenceBuilder2 {
                         blockBoundary.isPresent() ?
                         blockBoundary.get() :
                         res.getHead().stream().filter(r -> r.isLastRowGroupInBlock()).findFirst().isPresent();
-                    bc.getRefs().keepTransitionProperties(
+                    getContext().getRefs().keepTransitionProperties(
                         current.getDetails().getPageLocation(),
                         new TransitionProperties(
                             current.getAvoidVolumeBreakAfter(),
@@ -636,7 +649,9 @@ public class PageSequenceBuilder2 {
                 // break-before="sheet" we insert an empty page if needed. If there is no next block
                 // we are also finished (the while loop will end).
                 if (!data.isEmpty()) {
-                    return current;
+                    if (current.hasRows()) {
+                        return current;
+                    }
                 } else if (current != null && dataGroupsIndex < dataGroups.size()) {
                     BreakBefore nextStart = dataGroups.get(dataGroupsIndex).getBreakBefore();
                     switch (nextStart) {
@@ -725,51 +740,14 @@ public class PageSequenceBuilder2 {
      * @param resetPageContent Whether to reset the start of the page-content scope of page
      *        <code>p</code> to the first row from <code>head</code>.
      */
-    private BlockContext addRows(List<RowGroup> head, PageImpl p, BlockContext blockContext, boolean resetPageContent) {
+    private void addRows(List<RowGroup> head, PageImpl p, boolean resetPageContent) {
         int i = head.size();
         for (RowGroup rg : head) {
-
-            /*
-                At this point we expect keep="page" is set when the condition evaluates to false, which means that
-                each block should not be spanning multiple pages. This is required so we don't print just a part
-                of the block when the display-when attribute is set to false.
-                We expect display-when is either set to "true" (or missing, which is the same) or
-                "(! $starts-at-top-of-page)". Other values are not permitted.
-                These restrictions are added in the OBFL Parser and will lead to exceptions being thrown.
-
-                Above assumption deserves some more explanation for a good understanding:
-                we need it because we evaluate display-when for each RowGroup while normally
-                it should be evaluated only once per block.
-
-                This is fine in the two mentioned cases:
-                    - display-when="true": trivial.
-                    - display-when="(! $starts-at-top-of-page)":
-                        - if this evaluates to true, it means the page must already contain a RowImpl(*),
-                          so regardless of whether the current RowGroup belongs to the same block or a new
-                          block, it must be rendered.
-                        - if it evaluates to false, it means the page does not already contain a RowImpl,
-                          so we know it must be the start of a new page and block (because keep="page" in
-                          this case).
-                (*) Refer to the line below where we set .topOfPage(false).
-             */
-            Condition dc = rg.getDisplayWhen();
-            if (dc != null && !dc.evaluate(blockContext)) {
-                List<RowImpl> newRows = new ArrayList<>();
-                for (RowImpl row : rg.getRows()) {
-                    RowImpl newRow = new RowImpl.Builder(row)
-                            .invisible(true)
-                            .build();
-                    newRows.add(newRow);
-                }
-                rg = new RowGroup.Builder(master.getRowSpacing(), newRows).build();
-            }
-
             i--;
             addProperties(p, rg);
 
             List<RowImpl> rows = rg.getRows();
             int j = rows.size();
-            boolean visibleRowAdded = false;
             for (RowImpl r : rows) {
                 if (resetPageContent) {
                     p.getDetails().startsContentMarkers();
@@ -785,20 +763,8 @@ public class PageSequenceBuilder2 {
                 } else {
                     p.newRow(r);
                 }
-                if (!r.isInvisible()) {
-                    visibleRowAdded = true;
-                }
-            }
-
-            // After we have written one or more rows we are no longer at the top of the page so the mutable
-            // value topOfPage needs to change so we will rebuild an object in order to change this context
-            // to false.
-            if (visibleRowAdded) {
-                blockContext = new BlockContext.Builder(blockContext).topOfPage(false).build();
             }
         }
-
-        return blockContext;
     }
 
     private VolumeKeepPriority getVolumeKeepPriority(List<RowGroup> list, VolumeKeepPriority def) {

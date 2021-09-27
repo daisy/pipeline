@@ -184,10 +184,7 @@ public class FormatterImplTest {
 
         String res = testingFormatter((f1) -> {
             FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
+            BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
             f.startBlock(bb);
             f.addChars("Testing1", tp);
             f.endBlock();
@@ -212,10 +209,7 @@ public class FormatterImplTest {
 
         String res = testingFormatter((f1) -> {
             FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
+            BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
             f.startBlock(bb);
             f.addChars("Testing1", tp);
             f.endBlock();
@@ -240,10 +234,7 @@ public class FormatterImplTest {
 
         String res = testingFormatter((f1) -> {
             FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
+            BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
             f.startBlock(bb);
             f.addChars("Testing1", tp);
             f.endBlock();
@@ -267,10 +258,7 @@ public class FormatterImplTest {
         );
         String res = testingFormatter((f1) -> {
             FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
+            BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
             f.startBlock(bb);
             f.addChars("Testing1", tp);
             f.endBlock();
@@ -295,10 +283,7 @@ public class FormatterImplTest {
         );
         String res = testingFormatter((f1) -> {
             FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
+            BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
             f.startBlock(bb);
             f.addChars("Testing1", tp);
             f.endBlock();
@@ -333,10 +318,7 @@ public class FormatterImplTest {
         );
         String res = testingFormatter((f1) -> {
             FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
-                    .displayWhen(condition)
-                    .keep(FormattingTypes.Keep.PAGE)
-                    .build();
+            BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
             f.startBlock(bb);
             f.addChars("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus facilisis elit id " +
                     "tellus lacinia fermentum. In sed arcu at eros scelerisque elementum quis ac velit.", tp);
@@ -363,7 +345,8 @@ public class FormatterImplTest {
         );
         String res = testingFormatter((f1) -> {
             FormatterSequence f = f1.newSequence(new SequenceProperties.Builder("main").build());
-            BlockProperties bb = new BlockProperties.Builder()
+            BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
+            BlockProperties kb = new BlockProperties.Builder()
                     .displayWhen(condition)
                     .keep(FormattingTypes.Keep.PAGE)
                     .build();
@@ -374,24 +357,48 @@ public class FormatterImplTest {
             f.startBlock(bb);
             f.addChars("Testing1", tp);
             f.endBlock();
-            // This block becomes is the first row of the page
+            // This (unconditional) block becomes is the first row of the page
             f.startBlock(nb);
             f.addChars("Testing2", tp);
             f.endBlock();
-
-            // We render another 18 rows so that we end up on the second to last (19th) row of the page.
+            // This block with "display-when" condition is rendered and becomes is the third row of the page
+            f.startBlock(bb);
+            f.addChars("Testing3", tp);
+            f.endBlock();
+            // We render another 17 rows so that we end up on the 19th row of the page (of 20 rows).
             for (int i = 0; i < 17; i++) {
                 f.startBlock(nb);
                 f.addChars(".", tp);
                 f.endBlock();
             }
-
+            // The next block takes up 4 rows and is split over two pages. It is rendered in its entirety, also
+            // the part at the top of the next page, even though it has a "display-when" condition.
+            f.startBlock(bb);
+            f.addChars("Testing4", tp);
+            f.newLine();
+            f.addChars("Testing4", tp);
+            f.newLine();
+            f.addChars("Testing4", tp);
+            f.newLine();
+            f.addChars("Testing4", tp);
+            f.endBlock();
+            // We render another 17 rows so that we end up on the 19th (last) row of the page.
+            for (int i = 0; i < 17; i++) {
+                f.startBlock(nb);
+                f.addChars(".", tp);
+                f.endBlock();
+            }
             // The next block takes up 4 rows so would normally be split over two pages, but thanks
             // to the "keep" property it is moved to the second page, where it is not rendered
             // because of the "display-when" condition.
-            f.startBlock(bb);
-            f.addChars("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus facilisis elit id " +
-                    "tellus lacinia fermentum. In sed arcu at eros scelerisque elementum quis ac velit.", tp);
+            f.startBlock(kb);
+            f.addChars("Testing4", tp);
+            f.newLine();
+            f.addChars("Testing4", tp);
+            f.newLine();
+            f.addChars("Testing4", tp);
+            f.newLine();
+            f.addChars("Testing4", tp);
             f.endBlock();
             // The next block is also not rendered because it also has the "display-when" condition
             // and we are still at the top of the page.
@@ -406,7 +413,10 @@ public class FormatterImplTest {
             return null;
         });
 
-        assertEquals("Testing2\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\nTesting3\n", res);
+        assertEquals("Testing2\nTesting3\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\nTesting4\nTesting4\n" +
+                     "Testing4\nTesting4\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n" +
+                     "Testing3\n",
+                     res);
     }
 
 
@@ -423,10 +433,7 @@ public class FormatterImplTest {
                 OBFLVariable.STARTS_AT_TOP_OF_PAGE
         );
 
-        BlockProperties bb = new BlockProperties.Builder()
-                .displayWhen(condition)
-                .keep(FormattingTypes.Keep.PAGE)
-                .build();
+        BlockProperties bb = new BlockProperties.Builder().displayWhen(condition).build();
         BlockProperties nb = new BlockProperties.Builder().build();
 
         String res = testingFormatter((f1) -> {
@@ -465,6 +472,6 @@ public class FormatterImplTest {
             return null;
         });
 
-        assertEquals("1⠤\n\nTesting2\n2⠤\nTesting2\n", res);
+        assertEquals("1⠤\nTesting2\n2⠤\nTesting2\n", res);
     }
 }

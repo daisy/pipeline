@@ -77,7 +77,8 @@ public class BlockContentManagerTest {
                 .align(org.daisy.dotify.api.formatter.Leader.Alignment.RIGHT)
                 .pattern(" ")
                 .position(new Position(1.0, true))
-                .build()
+                .build(),
+            new TextProperties.Builder("sv-SE").build()
         ));
         segments.push(
             new TextSegment("...", new TextProperties.Builder("sv-SE").build())

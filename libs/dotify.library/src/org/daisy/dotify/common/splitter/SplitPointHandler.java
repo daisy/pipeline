@@ -276,6 +276,10 @@ public class SplitPointHandler<T extends SplitPointUnit, U extends SplitPointDat
             if (force) {
                 hard = true;
                 tailStart = result.bestSplitPoint + 1;
+                // move break point after skippable
+                while (data.hasElementAt(tailStart) && data.get(tailStart).isSkippable()) {
+                    tailStart++;
+                }
             } else {
                 tailStart = 0;
             }

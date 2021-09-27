@@ -76,10 +76,10 @@ public class XSLTRenderingScenario implements RenderingScenario {
                 } else if (event.isCharacters()) {
                     formatter.addChars(event.asCharacters().getData(), tp);
                 } else if (ObflParserImpl.equalsStart(event, ObflQName.BLOCK)) {
-                    parser.parseBlock(event, input, formatter, tp);
+                    parser.parseBlock(event, input, formatter, tp, false);
                 } else if (ObflParserImpl.equalsStart(event, ObflQName.TABLE)) {
-                    parser.parseTable(event, input, formatter, tp);
-                } else if (parser.processAsBlockContents(formatter, event, input, tp, false)) {
+                    parser.parseTable(event, input, formatter, tp, false);
+                } else if (parser.processAsBlockContents(formatter, event, input, tp, false, false)) {
                     //done
                 } else if (ObflParserImpl.equalsEnd(event, ObflQName.XML_PROCESSOR_RESULT)) {
                     break;

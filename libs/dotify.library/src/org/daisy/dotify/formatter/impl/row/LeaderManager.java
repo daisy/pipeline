@@ -1,9 +1,6 @@
 package org.daisy.dotify.formatter.impl.row;
 
 import org.daisy.dotify.api.formatter.Leader;
-import org.daisy.dotify.api.translator.BrailleTranslator;
-import org.daisy.dotify.api.translator.Translatable;
-import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.common.text.StringTools;
 
 import java.util.ArrayDeque;
@@ -67,19 +64,11 @@ class LeaderManager {
         return 0;
     }
 
-    String getLeaderPattern(BrailleTranslator translator, int len) {
+    String getLeaderPattern(int len) {
         if (!hasLeader()) {
             return "";
         } else if (len > 0) {
-            String leaderPattern;
-            try {
-                leaderPattern = translator.translate(
-                    Translatable.text(getCurrentLeader().getPattern()).build()
-                ).getTranslatedRemainder();
-            } catch (TranslationException e) {
-                throw new RuntimeException(e);
-            }
-            return StringTools.fill(leaderPattern, len);
+            return StringTools.fill(getCurrentLeader().getPattern(), len);
         } else {
             logger.fine(
                 "Leader position has been passed on an empty row or text does not fit on an empty row, ignoring..."

@@ -1,0 +1,44 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated">
+  <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:title>Maximum number of sheets per volume test</dc:title>
+    <dc:description>Tests that volumes do not exceed the maximum allowed number of sheets. This is
+    a regression test for a bug that was fixed. Before, this OBFL would result in a volume of 4
+    sheets and a second volume of 5 sheets (even though the maximum is set to 4).
+    </dc:description>
+  </meta>
+  <layout-master name="main" duplex="true" page-width="10" page-height="6">
+    <default-template>
+      <header/>
+      <footer/>
+    </default-template>
+  </layout-master>
+  <volume-template sheets-in-volume-max="4">
+    <post-content>
+      <sequence master="main">
+        <block>⠭⠭⠭</block>
+      </sequence>
+      <dynamic-sequence master="main">
+        <list-of-references collection="collection" range="volume"/>
+      </dynamic-sequence>
+    </post-content>
+  </volume-template>
+  <collection name="collection">
+    <item id="a">
+      <block> ⠿⠿⠿ </block>
+    </item>
+    <item id="b">
+      <block> ⠿⠿⠿⠿⠿⠿ </block>
+    </item>
+  </collection>
+  <sequence master="main">
+    <block>
+      ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠶<anchor item="a"/>
+      ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+      ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+    </block>
+    <block>
+      ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠶<anchor item="b"/>
+      ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+    </block>
+  </sequence>
+</obfl>

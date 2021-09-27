@@ -20,6 +20,13 @@ public interface FileFormatProperties {
     public boolean supportsDuplex();
 
     /**
+     * Returns true if a single file can contain multiple volumes, false otherwise.
+     *
+     * @return returns true if a single file can contain multiple volumes, false otherwise
+     */
+    public boolean supportsVolumes();
+
+    /**
      * Gets the file extension.
      *
      * @return returns the file extension

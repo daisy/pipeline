@@ -1,0 +1,16 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Violate keep test</dc:title>
+		<dc:description>Tests that some keep or keep-with-next properties may need to be violated in order to fit everything on the page. Also tests that such forced page breaks may not result in empty pages, and that a page should not start with a bottom margin.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="10" page-height="6" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<block keep="page" keep-with-next="1" margin-bottom="1">⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤</block>
+		<block>⠤⠤⠤ ⠤⠤⠤</block>
+	</sequence>
+</obfl>

@@ -220,9 +220,9 @@ public class TableOfContentsImpl extends FormatterCoreImpl implements TableOfCon
     }
 
     @Override
-    public void insertLeader(Leader leader) {
+    public void insertLeader(Leader leader, TextProperties props) {
         assertInEntry();
-        super.insertLeader(leader);
+        super.insertLeader(leader, props);
     }
 
     @Override
@@ -274,7 +274,7 @@ public class TableOfContentsImpl extends FormatterCoreImpl implements TableOfCon
     }
 
     @Override
-    public void insertMarkerReference(MarkerReference ref, TextProperties t) {
+    public void insertMarkerReference(Iterable<? extends MarkerReference> ref, TextProperties t) {
         assertInEntry();
         super.insertMarkerReference(ref, t);
     }

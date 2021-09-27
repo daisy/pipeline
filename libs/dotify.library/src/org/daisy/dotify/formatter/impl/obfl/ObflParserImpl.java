@@ -5,6 +5,7 @@ import org.daisy.dotify.api.formatter.BlockContentBuilder;
 import org.daisy.dotify.api.formatter.BlockPosition.VerticalAlignment;
 import org.daisy.dotify.api.formatter.BlockProperties;
 import org.daisy.dotify.api.formatter.CompoundField;
+import org.daisy.dotify.api.formatter.CompoundMarkerReferenceField;
 import org.daisy.dotify.api.formatter.ContentCollection;
 import org.daisy.dotify.api.formatter.CurrentPageField;
 import org.daisy.dotify.api.formatter.DynamicSequenceBuilder;
@@ -61,6 +62,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -425,8 +427,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             if (event.isCharacters()) {
                 fc.addChars(event.asCharacters().getData(), tp);
             } else if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, fc, tp);
-            } else if (processAsBlockContents(fc, event, input, tp, false)) {
+                parseBlock(event, input, fc, tp, false);
+            } else if (processAsBlockContents(fc, event, input, tp, false, false)) {
                 //done!
             } else if (equalsEnd(event, ObflQName.BEFORE, ObflQName.AFTER)) {
                 fc.endBlock();
@@ -559,6 +561,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                 compound.add(new CurrentPageField(getNumeralStyle(event), getAttr(event, ObflQName.ATTR_TEXT_STYLE)));
             } else if (equalsStart(event, ObflQName.MARKER_REFERENCE)) {
                 compound.add(parseMarkerReferenceField(event, true));
+            } else if (equalsStart(event, ObflQName.COMPOUND_MARKER_REFERENCE)) {
+                compound.add(parseCompoundMarkerReferenceField(event, true, input));
             } else if (equalsEnd(event, ObflQName.FIELD)) {
                 break;
             } else {
@@ -587,6 +591,25 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             allowTextStyle ? textStyle : null,
             toInt(getAttr(event, ObflQName.ATTR_START_OFFSET), 0)
         );
+    }
+
+    private CompoundMarkerReferenceField parseCompoundMarkerReferenceField(
+        XMLEvent event,
+        boolean allowTextStyle,
+        XMLEventIterator input
+    ) throws XMLStreamException {
+        List<MarkerReferenceField> compound = new ArrayList<>();
+        while (input.hasNext()) {
+            event = input.nextEvent();
+            if (equalsStart(event, ObflQName.MARKER_REFERENCE)) {
+                compound.add(parseMarkerReferenceField(event, allowTextStyle));
+            } else if (equalsEnd(event, ObflQName.COMPOUND_MARKER_REFERENCE)) {
+                break;
+            } else {
+                report(event);
+            }
+        }
+        return new CompoundMarkerReferenceField(compound);
     }
 
     private MarginRegion parseMarginRegion(XMLEvent event, XMLEventIterator input) throws XMLStreamException {
@@ -628,6 +651,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             if (equalsStart(event, ObflQName.MARKER_INDICATOR)) {
                 String markers = getAttr(event, "markers");
                 String indicator = getAttr(event, "indicator");
+                String textStyle = getAttr(event, ObflQName.ATTR_TEXT_STYLE);
                 if (markers == null || "".equals(markers)) {
                     warning(event, "@markers missing / has no value");
                 } else {
@@ -637,7 +661,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                         String[] names = markers.split("\\s+");
                         for (String name : names) {
                             if (!"".equals(name)) {
-                                builder.addIndicator(name, indicator);
+                                builder.addIndicator(name, indicator, textStyle);
                             }
                         }
                     }
@@ -681,9 +705,9 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         while (input.hasNext()) {
             event = input.nextEvent();
             if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, seq, tp);
+                parseBlock(event, input, seq, tp, false);
             } else if (equalsStart(event, ObflQName.TABLE)) {
-                parseTable(event, input, seq, tp);
+                parseTable(event, input, seq, tp, false);
             } else if (equalsStart(event, ObflQName.XML_DATA)) {
                 parseXMLData(seq, event, input, tp);
             } else if (equalsEnd(event, ObflQName.SEQUENCE)) {
@@ -896,7 +920,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEvent event,
         XMLEventIterator input,
         FormatterCore fc,
-        TextProperties tp
+        TextProperties tp,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         externalReferenceObject = null;
 
@@ -907,12 +932,12 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             if (event.isCharacters()) {
                 fc.addChars(event.asCharacters().getData(), tp);
             } else if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, fc, tp);
+                parseBlock(event, input, fc, tp, inTransitionSequence);
             } else if (equalsStart(event, ObflQName.XML_DATA)) {
                 parseXMLData(fc, event, input, tp);
             } else if (equalsStart(event, ObflQName.TABLE)) {
-                parseTable(event, input, fc, tp);
-            } else if (processAsBlockContents(fc, event, input, tp, false)) {
+                parseTable(event, input, fc, tp, inTransitionSequence);
+            } else if (processAsBlockContents(fc, event, input, tp, false, inTransitionSequence)) {
                 //done
             } else if (equalsEnd(event, ObflQName.BLOCK)) {
                 fc.endBlock();
@@ -927,7 +952,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEvent event,
         XMLEventIterator input,
         BlockBuilder fc,
-        TextProperties tp
+        TextProperties tp,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         tp = getTextProperties(event, tp);
         fc.startBlock(blockBuilder(event.asStartElement()));
@@ -936,8 +962,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             if (event.isCharacters()) {
                 fc.addChars(event.asCharacters().getData(), tp);
             } else if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, fc, tp);
-            } else if (processAsBlockContents(fc, event, input, tp, false)) {
+                parseBlock(event, input, fc, tp, inTransitionSequence);
+            } else if (processAsBlockContents(fc, event, input, tp, false, inTransitionSequence)) {
                 //done
             } else if (equalsEnd(event, ObflQName.BLOCK)) {
                 fc.endBlock();
@@ -953,7 +979,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEventIterator input,
         BlockContentBuilder fc,
         TextProperties tp,
-        boolean inTocEntryOnResumed
+        boolean inTocEntryOnResumed,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         tp = getTextProperties(event, tp);
         String id = getAttr(event, ObflQName.ATTR_ID);
@@ -967,11 +994,11 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             if (event.isCharacters()) {
                 fc.addChars(event.asCharacters().getData(), tp);
             } else if (equalsStart(event, ObflQName.STYLE)) {
-                parseStyle(event, input, fc, tp, inTocEntryOnResumed);
+                parseStyle(event, input, fc, tp, inTocEntryOnResumed, inTransitionSequence);
             } else if (equalsStart(event, ObflQName.LEADER)) {
-                parseLeader(fc, event, input);
+                parseLeader(fc, event, input, tp);
             } else if (equalsStart(event, ObflQName.MARKER)) {
-                parseMarker(fc, event);
+                parseMarker(fc, event, inTransitionSequence);
             } else if (equalsStart(event, ObflQName.BR)) {
                 fc.newLine();
                 scanEmptyElement(input, ObflQName.BR);
@@ -991,7 +1018,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEventIterator input,
         BlockContentBuilder fc,
         TextProperties tp,
-        boolean inTocEntryOnResumed
+        boolean inTocEntryOnResumed,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         String name = getAttr(event, "name");
         boolean ignore = formatter.getConfiguration().getIgnoredStyles().contains(name);
@@ -1004,9 +1032,9 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             if (event.isCharacters()) {
                 fc.addChars(event.asCharacters().getData(), tp);
             } else if (equalsStart(event, ObflQName.STYLE)) {
-                parseStyle(event, input, fc, tp, inTocEntryOnResumed);
+                parseStyle(event, input, fc, tp, inTocEntryOnResumed, inTransitionSequence);
             } else if (equalsStart(event, ObflQName.MARKER)) {
-                parseMarker(fc, event);
+                parseMarker(fc, event, inTransitionSequence);
             } else if (equalsStart(event, ObflQName.BR)) {
                 fc.newLine();
                 scanEmptyElement(input, ObflQName.BR);
@@ -1018,6 +1046,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                 parsePageNumber(fc, event, input);
             } else if (equalsStart(event, ObflQName.MARKER_REFERENCE)) {
                 parseMarkerReference(fc, event, input, tp);
+            } else if (equalsStart(event, ObflQName.COMPOUND_MARKER_REFERENCE)) {
+                parseCompoundMarkerReference(fc, event, input, tp);
             } else if (equalsEnd(event, ObflQName.STYLE)) {
                 if (!ignore) {
                     if (!hasEvents) {
@@ -1129,6 +1159,16 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                 if (!att.getValue().replaceAll(" ", "")
                         .equalsIgnoreCase("(!$starts-at-top-of-page)")
                 ) {
+                    // This check should ideally be done in FormatterImpl because in theory a document
+                    // may be constructed directly through the Formatter API rather than through an
+                    // OBFL. Note that, unlike before when we had the original implementation, we could
+                    // support any condition. In fact any condition that is allowed by the OBFL spec is
+                    // already supported (because "starts-at-top-of-page" is the only variable that is
+                    // allowed in display-when). To validate the condition we should ideally parse it
+                    // and check that no other variables are used. However because no other condition
+                    // than "(! $starts-at-top-of-page)" actually makes sense, we stuck with the easy
+                    // way (the string comparison). Note that the OBFL parser also does not validate the
+                    // "use-when" and "expression" attributes. Ideally that should happen too.
                     throw new IllegalArgumentException(
                         "At the moment we only support the condition '(! $starts-at-top-of-page)'"
                     );
@@ -1175,14 +1215,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             builder.underlineStyle(underlinePattern);
         }
 
-        BlockProperties bp = builder.build();
-        if (bp.getDisplayWhen() != null && bp.getKeepType() != FormattingTypes.Keep.PAGE) {
-            throw new IllegalArgumentException(
-                "When a display-when condition is supplied you need to use the keep='page' attribute as well."
-            );
-        }
-
-        return bp;
+        return builder.build();
     }
 
     private Border borderBuilder(Iterator<?> atts) {
@@ -1201,7 +1234,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
     private void parseLeader(
         BlockContentBuilder fc,
         XMLEvent event,
-        XMLEventIterator input
+        XMLEventIterator input,
+        TextProperties tp
     ) throws XMLStreamException {
         Leader.Builder builder = new Leader.Builder();
         @SuppressWarnings("unchecked")
@@ -1220,10 +1254,17 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             }
         }
         scanEmptyElement(input, ObflQName.LEADER);
-        fc.insertLeader(builder.build());
+        fc.insertLeader(builder.build(), tp);
     }
 
-    private static void parseMarker(BlockContentBuilder fc, XMLEvent event) throws XMLStreamException {
+    private static void parseMarker(
+        BlockContentBuilder fc,
+        XMLEvent event,
+        boolean inTransitionSequence
+    ) throws XMLStreamException {
+        if (inTransitionSequence) {
+            throw new UnsupportedOperationException("Markers are not supported within a volume-transition");
+        }
         String markerName = getAttr(event, "class");
         String markerValue = getAttr(event, "value");
         fc.insertMarker(new Marker(markerName, markerValue));
@@ -1237,7 +1278,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEvent event,
         XMLEventIterator input,
         FormatterCore fc,
-        TextProperties tp
+        TextProperties tp,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         int tableColSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_COL_SPACING), 0);
         int tableRowSpacing = toInt(getAttr(event, ObflQName.ATTR_TABLE_ROW_SPACING), 0);
@@ -1262,11 +1304,11 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         while (input.hasNext()) {
             event = input.nextEvent();
             if (equalsStart(event, ObflQName.THEAD)) {
-                parseTHeadTBody(event, input, fc, tp);
+                parseTHeadTBody(event, input, fc, tp, inTransitionSequence);
             } else if (equalsStart(event, ObflQName.TBODY)) {
-                parseTHeadTBody(event, input, fc, tp);
+                parseTHeadTBody(event, input, fc, tp, inTransitionSequence);
             } else if (equalsStart(event, ObflQName.TR)) {
-                parseTR(event, input, fc, tp);
+                parseTR(event, input, fc, tp, inTransitionSequence);
             } else if (equalsEnd(event, ObflQName.TABLE)) {
                 fc.endTable();
                 break;
@@ -1280,7 +1322,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEvent event,
         XMLEventIterator input,
         FormatterCore fc,
-        TextProperties tp
+        TextProperties tp,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         if (equalsStart(event, ObflQName.THEAD)) {
             fc.beginsTableHeader();
@@ -1290,7 +1333,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         while (input.hasNext()) {
             event = input.nextEvent();
             if (equalsStart(event, ObflQName.TR)) {
-                parseTR(event, input, fc, tp);
+                parseTR(event, input, fc, tp, inTransitionSequence);
             } else if (equalsEnd(event, ObflQName.THEAD, ObflQName.TBODY)) {
                 break;
             } else {
@@ -1303,13 +1346,14 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEvent event,
         XMLEventIterator input,
         FormatterCore fc,
-        TextProperties tp
+        TextProperties tp,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         fc.beginsTableRow();
         while (input.hasNext()) {
             event = input.nextEvent();
             if (equalsStart(event, ObflQName.TD)) {
-                parseTD(event, input, fc, tp);
+                parseTD(event, input, fc, tp, inTransitionSequence);
             } else if (equalsEnd(event, ObflQName.TR)) {
                 break;
             } else {
@@ -1322,7 +1366,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEvent event,
         XMLEventIterator input,
         FormatterCore fs,
-        TextProperties tp
+        TextProperties tp,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         tp = getTextProperties(event, tp);
         int colSpan = toInt(getAttr(event, ObflQName.ATTR_COL_SPAN), 1);
@@ -1342,8 +1387,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             if (event.isCharacters()) {
                 fc.addChars(event.asCharacters().getData(), tp);
             } else if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, fc, tp);
-            } else if (processAsBlockContents(fc, event, input, tp, false)) {
+                parseBlock(event, input, fc, tp, inTransitionSequence);
+            } else if (processAsBlockContents(fc, event, input, tp, false, inTransitionSequence)) {
                 //done
             } else if (equalsEnd(event, ObflQName.TD)) {
                 break;
@@ -1430,7 +1475,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             event = input.nextEvent();
             if (event.isCharacters()) {
                 toc.addChars(event.asCharacters().getData(), tp);
-            } else if (processAsBlockContents(toc, event, input, tp, false)) {
+            } else if (processAsBlockContents(toc, event, input, tp, false, false)) {
                 //done!
             } else if (equalsEnd(event, ObflQName.TOC_ENTRY)) {
                 toc.endEntry();
@@ -1454,7 +1499,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             event = input.nextEvent();
             if (event.isCharacters()) {
                 toc.addChars(event.asCharacters().getData(), tp);
-            } else if (processAsBlockContents(toc, event, input, tp, true)) {
+            } else if (processAsBlockContents(toc, event, input, tp, true, false)) {
                 //done!
             } else if (equalsEnd(event, ObflQName.TOC_ENTRY_ON_RESUMED)) {
                 toc.endEntry();
@@ -1481,8 +1526,8 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                 parseCollectionItem(event, input, coll, tp);
                 Logger.getLogger(this.getClass().getCanonicalName()).warning("Nested collection items.");
             } else if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, coll, tp);
-            } else if (processAsBlockContents(coll, event, input, tp, false)) {
+                parseBlock(event, input, coll, tp, false);
+            } else if (processAsBlockContents(coll, event, input, tp, false, false)) {
                 //done!
             } else if (equalsEnd(event, ObflQName.ITEM)) {
                 coll.endItem();
@@ -1498,13 +1543,14 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         XMLEvent event,
         XMLEventIterator input,
         TextProperties tp,
-        boolean inTocEntryOnResumed
+        boolean inTocEntryOnResumed,
+        boolean inTransitionSequence
     ) throws XMLStreamException {
         if (equalsStart(event, ObflQName.LEADER)) {
-            parseLeader(fc, event, input);
+            parseLeader(fc, event, input, tp);
             return true;
         } else if (equalsStart(event, ObflQName.MARKER)) {
-            parseMarker(fc, event);
+            parseMarker(fc, event, inTransitionSequence);
             return true;
         } else if (equalsStart(event, ObflQName.BR)) {
             fc.newLine();
@@ -1514,10 +1560,10 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             parseEvaluate(fc, event, input, tp, inTocEntryOnResumed);
             return true;
         } else if (equalsStart(event, ObflQName.STYLE)) {
-            parseStyle(event, input, fc, tp, inTocEntryOnResumed);
+            parseStyle(event, input, fc, tp, inTocEntryOnResumed, inTransitionSequence);
             return true;
         } else if (equalsStart(event, ObflQName.SPAN)) {
-            parseSpan(event, input, fc, tp, inTocEntryOnResumed);
+            parseSpan(event, input, fc, tp, inTocEntryOnResumed, inTransitionSequence);
             return true;
         } else if (equalsStart(event, ObflQName.ANCHOR)) {
             fc.insertAnchor(parseAnchor(event));
@@ -1530,6 +1576,9 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
             return true;
         } else if (equalsStart(event, ObflQName.MARKER_REFERENCE)) {
             parseMarkerReference(fc, event, input, tp);
+            return true;
+        } else if (equalsStart(event, ObflQName.COMPOUND_MARKER_REFERENCE)) {
+            parseCompoundMarkerReference(fc, event, input, tp);
             return true;
         } else {
             return false;
@@ -1675,14 +1724,21 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         return false;
     }
 
-
     private void parseMarkerReference(
         BlockContentBuilder fc,
         XMLEvent event, XMLEventIterator input,
         TextProperties tp
     ) throws XMLStreamException {
-        fc.insertMarkerReference(parseMarkerReferenceField(event, false), tp);
+        fc.insertMarkerReference(Collections.singleton(parseMarkerReferenceField(event, false)), tp);
         scanEmptyElement(input, ObflQName.MARKER_REFERENCE);
+    }
+
+    private void parseCompoundMarkerReference(
+        BlockContentBuilder fc,
+        XMLEvent event, XMLEventIterator input,
+        TextProperties tp
+    ) throws XMLStreamException {
+        fc.insertMarkerReference(parseCompoundMarkerReferenceField(event, false, input), tp);
     }
 
     private void parseEvaluate(
@@ -1825,7 +1881,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         while (input.hasNext()) {
             event = input.nextEvent();
             if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, builder, tp);
+                parseBlock(event, input, builder, tp, true);
             } else if (
                 equalsEnd(
                     event,
@@ -1885,9 +1941,9 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         while (input.hasNext()) {
             event = input.nextEvent();
             if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, template, tp);
+                parseBlock(event, input, template, tp, false);
             } else if (equalsStart(event, ObflQName.TABLE)) {
-                parseTable(event, input, template, tp);
+                parseTable(event, input, template, tp, false);
             } else if (equalsStart(event, ObflQName.XML_DATA)) {
                 parseXMLData(template, event, input, tp);
             } else if (equalsEnd(event, ObflQName.SEQUENCE)) {
@@ -2016,7 +2072,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
                 if (context == null) {
                     context = dsb.newStaticContext();
                 }
-                parseBlock(event, input, context, tp);
+                parseBlock(event, input, context, tp, false);
             } else if (equalsEnd(event, ObflQName.DYNAMIC_SEQUENCE)) {
                 break;
             } else {
@@ -2071,7 +2127,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         while (input.hasNext()) {
             event = input.nextEvent();
             if (equalsStart(event, ObflQName.BLOCK)) {
-                parseBlock(event, input, fc, tp);
+                parseBlock(event, input, fc, tp, false);
             } else if (equalsEnd(event, end)) {
                 break;
             } else {

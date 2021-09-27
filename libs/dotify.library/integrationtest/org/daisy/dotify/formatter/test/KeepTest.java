@@ -24,4 +24,15 @@ public class KeepTest extends AbstractFormatterEngineTest {
         );
     }
 
+    @Test
+    public void testViolateKeep() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/keep-violate-input.obfl",
+            "resource-files/keep-violate-expected.pef",
+            false
+        );
+    }
 }

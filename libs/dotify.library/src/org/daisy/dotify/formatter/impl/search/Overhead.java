@@ -3,6 +3,8 @@ package org.daisy.dotify.formatter.impl.search;
 /**
  * Provides the overhead associated with a volume of braille.
  *
+ * Objects are immutable.
+ *
  * @author Joel Håkansson
  */
 public final class Overhead {
@@ -69,5 +71,33 @@ public final class Overhead {
         return preContentSize + postContentSize;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + preContentSize;
+        result = prime * result + postContentSize;
+        return result;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Overhead other = (Overhead) obj;
+        if (preContentSize != other.preContentSize) {
+            return false;
+        }
+        if (postContentSize != other.postContentSize) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -27,9 +27,10 @@ public interface BlockContentBuilder {
      * Insert a leader at the current position in the flow.
      *
      * @param leader the leader to insert
+     * @param props the TextProperties including the mode to translate the pattern
      * @throws IllegalStateException if the current state does not allow this call to be made
      */
-    public void insertLeader(Leader leader);
+    public void insertLeader(Leader leader, TextProperties props);
 
     /**
      * Add chars to the current block.
@@ -87,12 +88,12 @@ public interface BlockContentBuilder {
     public void insertPageReference(String identifier, NumeralStyle numeralStyle);
 
     /**
-     * Inserts a marker reference.
+     * Inserts a (compound) marker reference.
      *
-     * @param ref the reference
+     * @param ref the reference(s)
      * @param t   the text properties
      */
-    public void insertMarkerReference(MarkerReference ref, TextProperties t);
+    public void insertMarkerReference(Iterable<? extends MarkerReference> ref, TextProperties t);
 
     /**
      * Inserts an expression to evaluate.

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -45,6 +46,7 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
     private final RowGroupSequence data;
     private BlockContext bc;
     private Function<Integer, Integer> reservedWidths = x -> 0;
+    private static final Function<Integer, Boolean> topOfPage = x -> x == 0;
     private int blockIndex;
     private boolean allowHyphenateLastLine;
     private int offsetInBlock;
@@ -143,8 +145,10 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
         return bc;
     }
 
-    void setContext(BlockContext c) {
-        this.bc = c;
+    void modifyContext(Consumer<? super BlockContext.Builder> modifier) {
+        BlockContext.Builder b = BlockContext.from(getContext());
+        modifier.accept(b);
+        bc = b.build();
     }
 
     void setReservedWidths(Function<Integer, Integer> func) {
@@ -181,16 +185,17 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
                 Block b = data.getBlocks().get(blockIndex);
                 blockIndex++;
                 offsetInBlock = 0;
-                blockProcessor.loadBlock(master, b, bc, hasSequence(), hasResult(), this::newRowGroupSequence, v -> {
-                });
+                modifyContext(c -> c.topOfPage(topOfPage.apply(position())));
+                blockProcessor.loadBlock(master, b, getContext(), hasSequence(), hasResult(),
+                                         this::newRowGroupSequence, v -> { });
             }
             // Requesting all items implies that no special last line hyphenation processing is needed.
             // This is reasonable: The very last line in a result would never be hyphenated, so suppressing
             // hyphenation is unnecessary. Also, actively doing this would be difficult, because we do not know
             // if the line produced below is the last line or not, until after the call has already been made.
-            Optional<RowGroup> added = blockProcessor.getNextRowGroup(bc, new LineProperties.Builder()
+            Optional<RowGroup> added = blockProcessor.getNextRowGroup(getContext(), new LineProperties.Builder()
                     .suppressHyphenation(!allowHyphenateLastLine && index > -1 && groupSize() >= index - 1)
-                    .reservedWidth(reservedWidths.apply(countRows()))
+                    .reservedWidth(reservedWidths.apply(position()))
                     .lineBlockLocation(new BlockLineLocation(blockProcessor.getBlockAddress(), offsetInBlock))
                     .build());
             added.ifPresent(rg -> data.getGroup().add(rg));
@@ -222,7 +227,7 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
     public RowGroupDataSource createEmpty() {
         return new RowGroupDataSource(
             master,
-            bc,
+            getContext(),
             Collections.emptyList(),
             data.getBreakBefore(),
             data.getVerticalSpacing(),
@@ -259,7 +264,13 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
         return data.getGroup() == null ? 0 : data.getGroup().size();
     }
 
-    private int countRows() {
-        return data.getGroup() == null ? 0 : data.getGroup().stream().mapToInt(v -> v.getRows().size()).sum();
+    /**
+     * Vertical position of the next row measured from the top of the data source in terms of
+     * rows with normal row spacing.
+     */
+    private int position() {
+        // FIX ME: this is not totally accurate if non-integer row spacings are used
+        return data.getGroup() == null ? 0 : (int) Math.floor(
+            data.getGroup().stream().mapToDouble(v -> (int) v.getUnitSize()).sum());
     }
 }

@@ -39,14 +39,15 @@ public class MarkerIndicatorRegion implements MarginRegion {
          *
          * @param name      the name of the markers to indicate
          * @param indicator the string indicating an occurrence
+         * @param textStyle the text style
          * @return a new builder
          * @throws IllegalStateException if the builder has already transitioned to the built state
          */
-        public Builder addIndicator(String name, String indicator) {
+        public Builder addIndicator(String name, String indicator, String textStyle) {
             if (built) {
                 throw new IllegalStateException();
             }
-            indicators.add(new MarkerIndicator(name, indicator));
+            indicators.add(new MarkerIndicator(name, indicator, textStyle));
             return this;
         }
 

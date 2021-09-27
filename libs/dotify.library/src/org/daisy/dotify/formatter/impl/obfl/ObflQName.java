@@ -19,6 +19,7 @@ interface ObflQName {
     static final QName EVALUATE = new QName(OBFL_NS, "evaluate");
     static final QName CURRENT_PAGE = new QName(OBFL_NS, "current-page");
     static final QName MARKER_REFERENCE = new QName(OBFL_NS, "marker-reference");
+    static final QName COMPOUND_MARKER_REFERENCE = new QName(OBFL_NS, "compound-marker-reference");
     static final QName XML_DATA = new QName(OBFL_NS, "xml-data");
     static final QName XML_PROCESSOR_RESULT = new QName(OBFL_NS, "xml-processor-result");
     static final QName BLOCK = new QName(OBFL_NS, "block");

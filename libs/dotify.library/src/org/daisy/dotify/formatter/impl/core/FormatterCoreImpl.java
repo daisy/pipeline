@@ -335,11 +335,11 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
     }
 
     @Override
-    public void insertLeader(Leader leader) {
+    public void insertLeader(Leader leader, TextProperties p) {
         if (table != null) {
             throw new IllegalStateException("A table is open.");
         }
-        getCurrentBlock().addSegment(new LeaderSegment(leader));
+        getCurrentBlock().addSegment(new LeaderSegment(leader, p));
     }
 
     @Override
@@ -396,7 +396,7 @@ public class FormatterCoreImpl extends Stack<Block> implements FormatterCore, Bl
     }
 
     @Override
-    public void insertMarkerReference(MarkerReference ref, TextProperties t) {
+    public void insertMarkerReference(Iterable<? extends MarkerReference> ref, TextProperties t) {
         if (table != null) {
             throw new IllegalStateException("A table is open.");
         }

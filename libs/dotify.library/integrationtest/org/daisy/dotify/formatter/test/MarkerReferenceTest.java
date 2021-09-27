@@ -236,35 +236,35 @@ public class MarkerReferenceTest extends AbstractFormatterEngineTest {
         );
     }
     @Test
-    public void testMarkerReferencePageFirstWorkaround() throws
+    public void testMarkerReferencePageFirst() throws
             LayoutEngineException,
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
-            "resource-files/marker-ref/marker-reference-page-first-workaround-input.obfl",
-            "resource-files/marker-ref/marker-reference-page-first-workaround-expected.pef",
+            "resource-files/marker-ref/marker-reference-page-first-input.obfl",
+            "resource-files/marker-ref/marker-reference-page-first-expected.pef",
             false
         );
     }
     @Test
-    public void testMarkerReferencePageStartWorkaround() throws
+    public void testMarkerReferencePageStart() throws
             LayoutEngineException,
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
-            "resource-files/marker-ref/marker-reference-page-start-workaround-input.obfl",
-            "resource-files/marker-ref/marker-reference-page-start-workaround-expected.pef",
+            "resource-files/marker-ref/marker-reference-page-start-input.obfl",
+            "resource-files/marker-ref/marker-reference-page-start-expected.pef",
             false
         );
     }
     @Test
-    public void testMarkerReferenceSpreadStartWorkaround() throws
+    public void testMarkerReferenceSpreadStart() throws
             LayoutEngineException,
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
-            "resource-files/marker-ref/marker-reference-spread-start-workaround-input.obfl",
-            "resource-files/marker-ref/marker-reference-spread-start-workaround-expected.pef",
+            "resource-files/marker-ref/marker-reference-spread-start-input.obfl",
+            "resource-files/marker-ref/marker-reference-spread-start-expected.pef",
             false
         );
     }

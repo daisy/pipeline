@@ -170,4 +170,16 @@ public class VolumeBreaksTest extends AbstractFormatterEngineTest {
         );
     }
 
+    @Test
+    public void testVolumeMaxSheets() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/volume-break/volume-max-sheets-input.obfl",
+            "resource-files/volume-break/volume-max-sheets-expected.pef",
+            false
+        );
+    }
+
 }

@@ -122,8 +122,8 @@ class VolumeContentBuilderImpl extends Stack<VolumeSequence> implements VolumeCo
     }
 
     @Override
-    public void insertLeader(Leader leader) {
-        current().insertLeader(leader);
+    public void insertLeader(Leader leader, TextProperties props) {
+        current().insertLeader(leader, props);
     }
 
     @Override
@@ -142,7 +142,7 @@ class VolumeContentBuilderImpl extends Stack<VolumeSequence> implements VolumeCo
     }
 
     @Override
-    public void insertMarkerReference(MarkerReference ref, TextProperties t) {
+    public void insertMarkerReference(Iterable<? extends MarkerReference> ref, TextProperties t) {
         current().insertMarkerReference(ref, t);
     }
 

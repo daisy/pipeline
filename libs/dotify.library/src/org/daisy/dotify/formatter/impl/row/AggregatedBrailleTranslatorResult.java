@@ -122,10 +122,13 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
             String s = current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
             if (s.isEmpty()) {
                 break;
+            } else {
+                force = false;
             }
             row += s;
+            BrailleTranslatorResult prev = current;
             current = computeNext();
-            if (current == null) {
+            if (current == null || current == prev) {
                 break;
             }
         }

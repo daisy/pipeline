@@ -1,6 +1,5 @@
 package org.daisy.dotify.formatter.impl.page;
 
-import org.daisy.dotify.api.formatter.Condition;
 import org.daisy.dotify.api.formatter.Marker;
 import org.daisy.dotify.api.writer.Row;
 import org.daisy.dotify.common.splitter.SplitPointUnit;
@@ -31,7 +30,6 @@ class RowGroup implements SplitPointUnit {
     private final boolean lastInBlock;
     private final boolean mergeable;
     private final LineProperties lineProps;
-    private final Condition displayWhen;
 
     static class Builder {
         private final List<RowImpl> rows;
@@ -46,7 +44,6 @@ class RowGroup implements SplitPointUnit {
         private boolean lastInBlock = false;
         private boolean mergeable = false;
         private LineProperties lineProps = LineProperties.DEFAULT;
-        private Condition displayWhen;
 
 
         Builder(float rowDefault, RowImpl... rows) {
@@ -145,11 +142,6 @@ class RowGroup implements SplitPointUnit {
             return this;
         }
 
-        Builder displayWhen(Condition value) {
-            this.displayWhen = value;
-            return this;
-        }
-
         RowGroup build() {
             return new RowGroup(this);
         }
@@ -163,8 +155,8 @@ class RowGroup implements SplitPointUnit {
         this.skippable = builder.skippable;
         this.collapsible = builder.collapsible;
         this.unitSize = calcUnitSize(builder.rowDefault, rows);
-        this.lastUnitSize = unitSize -
-            (rows.isEmpty() ? 0 : Math.max(0, getRowSpacing(builder.rowDefault, rows.get(rows.size() - 1)) - 1));
+        this.lastUnitSize = unitSize == 0 ? 0 : unitSize -
+              (rows.isEmpty() ? 0 : Math.max(0, getRowSpacing(builder.rowDefault, rows.get(rows.size() - 1)) - 1));
         this.ids = new ArrayList<>();
         this.lazyCollapse = builder.lazyCollapse;
         ids.addAll(builder.anchors);
@@ -177,7 +169,6 @@ class RowGroup implements SplitPointUnit {
         this.lastInBlock = builder.lastInBlock;
         this.mergeable = builder.mergeable;
         this.lineProps = builder.lineProps;
-        this.displayWhen = builder.displayWhen;
     }
 
     /**
@@ -202,7 +193,6 @@ class RowGroup implements SplitPointUnit {
         this.lastInBlock = template.lastInBlock;
         this.mergeable = template.mergeable;
         this.lineProps = template.lineProps;
-        this.displayWhen = template.displayWhen;
     }
 
     private static float getRowSpacing(float rowDefault, RowImpl r) {
@@ -212,7 +202,9 @@ class RowGroup implements SplitPointUnit {
     private static float calcUnitSize(float rowDefault, List<RowImpl> rows) {
         float t = 0;
         for (RowImpl r : rows) {
-            t += getRowSpacing(rowDefault, r);
+            if (!r.isInvisible()) {
+                t += getRowSpacing(rowDefault, r);
+            }
         }
         return t;
     }
@@ -356,9 +348,5 @@ class RowGroup implements SplitPointUnit {
 
     LineProperties getLineProperties() {
         return lineProps;
-    }
-
-    public Condition getDisplayWhen() {
-        return displayWhen;
     }
 }

@@ -1,5 +1,6 @@
 package org.daisy.dotify.formatter.impl.page;
 
+import org.daisy.dotify.api.formatter.Condition;
 import org.daisy.dotify.api.formatter.FormattingTypes.Keep;
 import org.daisy.dotify.formatter.impl.core.Block;
 import org.daisy.dotify.formatter.impl.core.BlockContext;
@@ -14,7 +15,9 @@ import org.daisy.dotify.formatter.impl.search.DefaultContext;
 import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Used by {@link RowGroupDataSource} to generate {@link RowGroup}s from a {@link Block}.
@@ -46,6 +49,7 @@ class RowGroupProvider {
     private int rowIndex;
     private int phase;
     private int keepWithNext;
+    private final boolean invisible;
 
     RowGroupProvider(RowGroupProvider template) {
         this.master = template.master;
@@ -57,6 +61,7 @@ class RowGroupProvider {
         this.rowIndex = template.rowIndex;
         this.phase = template.phase;
         this.keepWithNext = template.keepWithNext;
+        this.invisible = template.invisible;
     }
 
     RowGroupProvider(LayoutMaster master, Block g, AbstractBlockContentManager bcm, BlockContext bc, int keepWithNext) {
@@ -74,6 +79,8 @@ class RowGroupProvider {
             !bc.getRefs().getGroupIdentifiers(g.getBlockAddress()).isEmpty() ||
             g.getKeepWithNextSheets() > 0 || g.getKeepWithPreviousSheets() > 0;
         this.keepWithNext = keepWithNext;
+        Condition dc = g.getRowDataProperties().getDisplayWhen();
+        this.invisible = dc != null && !dc.evaluate(bc);
     }
 
     int getKeepWithNext() {
@@ -118,7 +125,7 @@ class RowGroupProvider {
         // if the block does not support variable width (e.g. when there are left or right borders)
         // and header or footer fields are present on the line, insert an empty row
         if (lineProps.getReservedWidth() > 0 && !bcm.supportsVariableWidth()) {
-            return new RowGroup.Builder(master.getRowSpacing()).add(new RowImpl())
+            return new RowGroup.Builder(master.getRowSpacing()).add(makeInvisible(new RowImpl()))
                     .mergeable(false)
                     .lineProperties(lineProps)
                     .collapsible(false)
@@ -131,13 +138,12 @@ class RowGroupProvider {
             //if there is a row group, return it (otherwise, try next phase)
             if (bcm.hasCollapsiblePreContentRows()) {
                 return setPropertiesThatDependOnHasNext(
-                    new RowGroup.Builder(master.getRowSpacing(), bcm.getCollapsiblePreContentRows())
+                    new RowGroup.Builder(master.getRowSpacing(), makeInvisible(bcm.getCollapsiblePreContentRows()))
                         .mergeable(true)
                         .lineProperties(lineProps)
                         .collapsible(true)
                         .skippable(false)
-                        .breakable(false)
-                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
+                        .breakable(false),
                     hasNext(),
                     g).build();
             }
@@ -147,13 +153,12 @@ class RowGroupProvider {
             //if there is a row group, return it (otherwise, try next phase)
             if (bcm.hasInnerPreContentRows()) {
                 return setPropertiesThatDependOnHasNext(
-                    new RowGroup.Builder(master.getRowSpacing(), bcm.getInnerPreContentRows())
+                    new RowGroup.Builder(master.getRowSpacing(), makeInvisible(bcm.getInnerPreContentRows()))
                         .mergeable(false)
                         .lineProperties(lineProps)
                         .collapsible(false)
                         .skippable(false)
-                        .breakable(false)
-                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
+                        .breakable(false),
                     hasNext(),
                     g
                 ).build();
@@ -169,8 +174,7 @@ class RowGroupProvider {
                         .lineProperties(lineProps)
                         .collapsible(false)
                         .skippable(false)
-                        .breakable(false)
-                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
+                        .breakable(false),
                     bc.getRefs(),
                     g
                 );
@@ -188,6 +192,7 @@ class RowGroupProvider {
                     keepWithNext = g.getKeepWithNext();
                     bc.getRefs().setRowCount(g.getBlockAddress(), bcm.getRowCount());
                 }
+                r = makeInvisible(r);
                 RowGroup.Builder rgb = new RowGroup.Builder(master.getRowSpacing()).add(r)
                         .mergeable(bcm.supportsVariableWidth())
                         .lineProperties(lineProps)
@@ -199,8 +204,7 @@ class RowGroupProvider {
                             keepWithNext <= 0 &&
                             (Keep.AUTO == g.getKeepType() || !hasNext) &&
                             (hasNext || !bcm.hasPostContentRows())
-                        )
-                        .displayWhen(g.getRowDataProperties().getDisplayWhen());
+                        );
                 if (rowIndex == 1) { //First item
                     setPropertiesForFirstContentRowGroup(rgb, bc.getRefs(), g);
                 }
@@ -214,13 +218,12 @@ class RowGroupProvider {
             phase++;
             if (bcm.hasPostContentRows()) {
                 return setPropertiesThatDependOnHasNext(
-                    new RowGroup.Builder(master.getRowSpacing(), bcm.getPostContentRows())
+                    new RowGroup.Builder(master.getRowSpacing(), makeInvisible(bcm.getPostContentRows()))
                         .mergeable(false)
                         .lineProperties(lineProps)
                         .collapsible(false)
                         .skippable(false)
-                        .breakable(keepWithNext < 0)
-                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
+                        .breakable(keepWithNext < 0),
                     hasNext(),
                     g
                 ).build();
@@ -230,13 +233,12 @@ class RowGroupProvider {
             phase++;
             if (bcm.hasSkippablePostContentRows()) {
                 return setPropertiesThatDependOnHasNext(
-                    new RowGroup.Builder(master.getRowSpacing(), bcm.getSkippablePostContentRows())
+                    new RowGroup.Builder(master.getRowSpacing(), makeInvisible(bcm.getSkippablePostContentRows()))
                         .mergeable(true)
                         .lineProperties(lineProps)
                         .collapsible(true)
                         .skippable(true)
-                        .breakable(keepWithNext < 0)
-                        .displayWhen(g.getRowDataProperties().getDisplayWhen()),
+                        .breakable(keepWithNext < 0),
                     hasNext(),
                     g
                 ).build();
@@ -275,4 +277,20 @@ class RowGroupProvider {
         }
     }
 
+    /**
+     * Make rows invisible based on the block context and the "display-when" property of the block.
+     */
+    private RowImpl makeInvisible(RowImpl row) {
+        if (invisible) {
+            row = new RowImpl.Builder(row).invisible(true).build();
+        }
+        return row;
+    }
+
+    private List<RowImpl> makeInvisible(List<RowImpl> rows) {
+        if (invisible && rows.size() > 0) {
+            rows = rows.stream().map(this::makeInvisible).collect(Collectors.toList());
+        }
+        return rows;
+    }
 }

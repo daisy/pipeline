@@ -11,12 +11,12 @@ import java.util.function.Function;
  */
 public class MarkerReferenceSegment implements Segment {
 
-    private final MarkerReference ref;
+    private final Iterable<? extends MarkerReference> ref;
     private final TextProperties props;
-    private Function<MarkerReference, String> value = (x) -> "";
+    private Function<Iterable<? extends MarkerReference>, String> value = (x) -> "";
     private String resolved;
 
-    public MarkerReferenceSegment(MarkerReference ref, TextProperties props) {
+    public MarkerReferenceSegment(Iterable<? extends MarkerReference> ref, TextProperties props) {
         if (ref == null) {
             throw new IllegalArgumentException();
         }
@@ -71,7 +71,7 @@ public class MarkerReferenceSegment implements Segment {
         return resolved;
     }
 
-    public void setResolver(Function<MarkerReference, String> v) {
+    public void setResolver(Function<Iterable<? extends MarkerReference>, String> v) {
         this.resolved = null;
         this.value = v;
     }
