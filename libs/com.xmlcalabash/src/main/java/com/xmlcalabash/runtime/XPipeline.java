@@ -44,6 +44,8 @@ public class XPipeline extends XCompoundStep {
 
     private Hashtable<QName, RuntimeValue> optionsPassedIn = null;
 
+    private List<FunctionLibrary> importedXsltFunctionLibraries = null;
+
     public XPipeline(XProcRuntime runtime, Step step, XCompoundStep parent) {
         super(runtime, step, parent);
     }
@@ -239,7 +241,7 @@ public class XPipeline extends XCompoundStep {
         }
 
         // load imported XSLT function libraries
-        List<FunctionLibrary> importedXsltFunctionLibraries = null; {
+        if (importedXsltFunctionLibraries == null) {
             DeclareStep decl = getDeclareStep();
             for (XdmNode n : decl.getXsltFunctionImports()) {
                 if (importedXsltFunctionLibraries == null)

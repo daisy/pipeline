@@ -23,13 +23,12 @@ import java.util.List;
  */
 public class XPipelineCall extends XAtomicStep {
     private DeclareStep decl = null;
+	private XPipeline pipeline = null;
+	private HashSet<QName> pipeOpts = null;
 
     public XPipelineCall(XProcRuntime runtime, Step step, XCompoundStep parent) {
         super(runtime, step, parent);
-    }
-
-    public void setDeclaration(DeclareStep decl) {
-        this.decl = decl;
+        decl = step.getDeclaration();
     }
 
     public XCompoundStep getParent() {
@@ -46,18 +45,30 @@ public class XPipelineCall extends XAtomicStep {
             throw runtime.getError().copy();
         }
 
-        XRootStep root = new XRootStep(runtime);
-        XPipeline newstep = new XPipeline(runtime, decl, root, getLocation());
-
-        newstep.instantiate(decl);
+        if (pipeline == null) {
+            XRootStep root = new XRootStep(runtime);
+            pipeline = new XPipeline(runtime, decl, root, getLocation());
+            pipeline.instantiate(decl);
+            pipeOpts = new HashSet<QName>();
+            for (QName name : pipeline.step.getOptions()) {
+                pipeOpts.add(name);
+            }
+            for (String port : inputs.keySet()) {
+                if (!port.startsWith("|")) {
+                    pipeline.inputs.put(port, inputs.get(port));
+                }
+            }
+            for (String port : outputs.keySet()) {
+                if (!port.endsWith("|")) {
+                    pipeline.outputs.put(port, outputs.get(port));
+                }
+            }
+        } else {
+            pipeline.reset();
+        }
 
         // Calculate all the options
         inScopeOptions = parent.getInScopeOptions();
-
-        HashSet<QName> pipeOpts = new HashSet<QName> ();
-        for (QName name : newstep.step.getOptions()) {
-            pipeOpts.add(name);
-        }
 
         for (QName name : step.getOptions()) {
             Option option = step.getOption(name);
@@ -65,7 +76,7 @@ public class XPipelineCall extends XAtomicStep {
             setOption(name, value);
 
             if (pipeOpts.contains(name)) {
-                newstep.passOption(name, value);
+                pipeline.passOption(name, value);
             }
 
             inScopeOptions.put(name, value);
@@ -77,21 +88,9 @@ public class XPipelineCall extends XAtomicStep {
 
             String port = param.getPort();
             if (port == null) {
-                newstep.setParameter(name, value);
+                pipeline.setParameter(name, value);
             } else {
-                newstep.setParameter(port, name, value);
-            }
-        }
-
-        for (String port : inputs.keySet()) {
-            if (!port.startsWith("|")) {
-                newstep.inputs.put(port, inputs.get(port));
-            }
-        }
-
-        for (String port : outputs.keySet()) {
-            if (!port.endsWith("|")) {
-                newstep.outputs.put(port, outputs.get(port));
+                pipeline.setParameter(port, name, value);
             }
         }
 
@@ -105,11 +104,11 @@ public class XPipelineCall extends XAtomicStep {
         runtime.getConfiguration().inscopeXsltFunctions.clear();
 
         try {
-            newstep.run();
+            pipeline.run();
         } finally {
             // restore the in scope XSLT functions
             runtime.getConfiguration().inscopeXsltFunctions.addAll(inscopeXsltFunctions);
-            for (XdmNode doc : newstep.errors()) {
+            for (XdmNode doc : pipeline.errors()) {
                 reportError(doc);
             }
             runtime.getMessageListener().closeStep();

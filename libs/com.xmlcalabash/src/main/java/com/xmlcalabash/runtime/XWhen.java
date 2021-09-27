@@ -37,7 +37,7 @@ public class XWhen extends XCompoundStep {
         doc = reader.read();
 
         if (reader.moreDocuments() || inputs.get("#xpath-context").size() > 1) {
-            throw XProcException.dynamicError(5);
+            throw XProcException.dynamicError(5, step);
         }
 
         // Surround testExpr with "boolean()" to force the EBV.

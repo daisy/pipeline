@@ -187,7 +187,7 @@ public class PipeLogger {
         logging = false;
     }
 
-    public void log(XdmNode node) {
+    public void log(XdmNode document) {
         if (logstyle == LogOptions.OFF) {
             // there's nothing to do here...
             return;
@@ -199,9 +199,9 @@ public class PipeLogger {
 
         switch (logstyle) {
             case WRAPPED:
-                stream.print("<px:document>");
+                stream.print("<px:document base-uri='" + document.getBaseURI() + "'>");
                 try {
-                    S9apiUtils.serialize(runtime, node, serializer);
+                    S9apiUtils.serialize(runtime, document, serializer);
                 } catch (SaxonApiException sae) {
                     System.err.println("Logging failed: " + sae);
                 }
@@ -209,7 +209,7 @@ public class PipeLogger {
                 break;
             case PLAIN:
                 try {
-                    S9apiUtils.serialize(runtime, node, serializer);
+                    S9apiUtils.serialize(runtime, document, serializer);
                 } catch (SaxonApiException sae) {
                     System.err.println("Logging failed: " + sae);
                 }
@@ -229,7 +229,7 @@ public class PipeLogger {
 
                     stream.println("<!-- Start of Calabash output " + log + " on " + dateTime() + " -->");
 
-                    S9apiUtils.serialize(runtime, node, serializer);
+                    S9apiUtils.serialize(runtime, document, serializer);
                 } catch (SaxonApiException sae) {
                     System.err.println("Logging failed: " + sae);
                 } finally {

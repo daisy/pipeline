@@ -110,6 +110,8 @@ public class XChoose extends XCompoundStep {
                         xstep = when;
                         break;
                     }
+                } catch (XProcException e) {
+                    throw e;
                 } catch (Exception e) {
                     throw new XProcException(when, e);
                 }

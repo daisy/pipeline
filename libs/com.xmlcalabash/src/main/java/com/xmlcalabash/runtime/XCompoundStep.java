@@ -123,12 +123,11 @@ public class XCompoundStep extends XAtomicStep {
                 XUntilUnchanged newstep = new XUntilUnchanged(runtime,substep,this);
                 newstep.instantiate(substep);
             } else if (substep.isPipelineCall()) {
-                DeclareStep subdecl = substep.getDeclaration();
                 XPipelineCall newstep = new XPipelineCall(runtime, substep, this);
-                newstep.setDeclaration(subdecl);
                 newstep.instantiate(substep);
 
                 /*
+                DeclareStep subdecl = substep.getDeclaration();
                 // Make sure the caller's inputs and outputs have the right sequence values
                 for (Input input : subdecl.inputs()) {
                     String port = input.getPort();
