@@ -11,7 +11,7 @@
     
     <groupId>org.daisy.xprocspec</groupId>
     <artifactId>xprocspec</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>xprocspec</name>
@@ -47,7 +47,7 @@
         <url>http://github.com/daisy/xprocspec</url>
         <connection>scm:git:git@github.com:daisy/xprocspec.git</connection>
         <developerConnection>scm:git:git@github.com:daisy/xprocspec.git</developerConnection>
-        <tag>v1.4.2</tag>
+        <tag>HEAD</tag>
     </scm>
     
     <properties>
